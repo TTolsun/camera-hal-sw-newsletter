@@ -1695,14 +1695,31 @@ function omitLinkedEvidencePromptFields(candidate = {}) {
 
 function reporterInputFromShortlist(shortlistReport) {
   const selectedUrls = new Set(ensureArray(shortlistReport.selected_articles).map(candidate => candidate.normalized_url));
+  const shortlisted = ensureArray(shortlistReport.shortlisted_candidates);
+  const baseIds = shortlisted.map(candidate =>
+    text(candidate.source_candidate_hash) ||
+    text(candidate.url_hash) ||
+    (candidateUrl(candidate) ? normalizedUrlHash(candidateUrl(candidate)) : '') ||
+    text(candidate.article_identity_key) ||
+    'candidate'
+  );
+  const baseIdCounts = baseIds.reduce((counts, id) => {
+    counts.set(id, (counts.get(id) || 0) + 1);
+    return counts;
+  }, new Map());
   return {
     date: shortlistReport.date,
-    candidates: ensureArray(shortlistReport.shortlisted_candidates).map(candidate => ({
-      ...omitLinkedEvidencePromptFields(candidate),
-      selected: false,
-      final_selected: selectedUrls.has(candidate.normalized_url),
-      selected_for_editor: selectedUrls.has(candidate.normalized_url)
-    }))
+    candidates: shortlisted.map((candidate, index) => {
+      const baseId = baseIds[index];
+      const candidateId = baseIdCounts.get(baseId) > 1 ? `${baseId}-${index + 1}` : baseId;
+      return {
+        ...omitLinkedEvidencePromptFields(candidate),
+        candidate_id: candidateId,
+        selected: false,
+        final_selected: selectedUrls.has(candidate.normalized_url),
+        selected_for_editor: selectedUrls.has(candidate.normalized_url)
+      };
+    })
   };
 }
 

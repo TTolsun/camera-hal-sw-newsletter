@@ -379,6 +379,7 @@ function buildArticleCapsule(candidate, contextCandidates = []) {
     ...linkedEvidenceDoNotClaim(fieldCandidate)
   ].map(item => compactText(item, 140));
   const capsule = {
+    candidate_id: text(candidate.candidate_id || candidate.source_candidate_hash || candidate.url_hash),
     title: compactText(candidate.title, 180),
     url: candidateUrl(candidate),
     source: compactText(candidate.source || candidate.source_name, 120),

@@ -8,6 +8,9 @@ const {
   publicArticleContractPrompt,
   sourceExtractionPromptGuardrails
 } = require('../../scripts/gemini-newsroom-newsletter');
+const {
+  reporterSchema
+} = require('../../scripts/newsroom/render/newsletter-schema');
 
 function promptHostSource() {
   return fs.readFileSync(
@@ -25,6 +28,20 @@ function assertStagePromptUsesFactCheckHelpers(source, stageAnchor) {
 
   assert.match(stagePrompt, /factCheckSeverityPrompt\(\),/);
   assert.match(stagePrompt, /cameraDeveloperToolingFactCheckPrompt\(\),/);
+}
+
+function schemaStats(schema, depth = 0, stats = { bytes: 0, properties: 0, required: 0, maxDepth: 0 }) {
+  if (!schema || typeof schema !== 'object') return stats;
+  stats.maxDepth = Math.max(stats.maxDepth, depth);
+  if (schema.properties) {
+    stats.properties += Object.keys(schema.properties).length;
+    for (const value of Object.values(schema.properties)) {
+      schemaStats(value, depth + 1, stats);
+    }
+  }
+  if (Array.isArray(schema.required)) stats.required += schema.required.length;
+  if (schema.items) schemaStats(schema.items, depth + 1, stats);
+  return stats;
 }
 
 test('article section contract prompt fixes the five normalized keys and guardrails', () => {
@@ -177,6 +194,51 @@ test('LLM reporter, editor, repair, completion, and fact-check prompts include s
   const usageCount = (source.match(/sourceExtractionPromptGuardrails\(\),/g) || []).length;
 
   assert.ok(usageCount >= 7);
+});
+
+test('LLM reporter prompt stays evidence-only and avoids editor/public bloat', () => {
+  const source = promptHostSource();
+  const start = source.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI reporter입니다.');
+  assert.notEqual(start, -1);
+  const end = source.indexOf('schema와 일치하는 JSON만 반환하세요.', start);
+  assert.notEqual(end, -1);
+  const reporterPrompt = source.slice(start, end);
+  const reporterCall = source.slice(start, source.indexOf('reporterSchema', end));
+
+  assert.match(reporterPrompt, /sourceExtractionPromptGuardrails\(\),/);
+  assert.match(reporterPrompt, /evidence-backed candidate facts/);
+  assert.match(reporterPrompt, /candidate_id, title, source, url은 matching을 위한 echo-only field/);
+  assert.match(reporterPrompt, /score, selection flag, imageCandidates, source_quality는 출력하지 마세요/);
+  assert.doesNotMatch(reporterPrompt, /public-facing impact wording/);
+  assert.doesNotMatch(reporterPrompt, /numeric score/);
+  assert.doesNotMatch(reporterPrompt, /camera_hal_relevance_score: 0-5/);
+  assert.doesNotMatch(reporterPrompt, /image URL을 만들거나/);
+  assert.doesNotMatch(reporterPrompt, /selected는 reporter-stage judgment/);
+  assert.match(reporterCall, /\$\{reporterContext\}/);
+  assert.doesNotMatch(reporterCall, /\$\{commonContext\}/);
+});
+
+test('reporter schema remains slim for Gemini structured output', () => {
+  const candidateSchema = reporterSchema.properties.candidates.items;
+  const stats = schemaStats(reporterSchema);
+  stats.bytes = Buffer.byteLength(JSON.stringify(reporterSchema));
+
+  assert.ok(stats.bytes < 1700, `reporterSchema bytes=${stats.bytes}`);
+  assert.ok(stats.properties <= 18, `reporterSchema properties=${stats.properties}`);
+  assert.ok(stats.required <= 14, `reporterSchema required=${stats.required}`);
+  assert.ok(stats.maxDepth <= 4, `reporterSchema maxDepth=${stats.maxDepth}`);
+  assert.ok(candidateSchema.required.includes('candidate_id'));
+  for (const removed of [
+    'summary',
+    'source_quality',
+    'source_quality_status',
+    'camera_hal_relevance_score',
+    'imageCandidates',
+    'selected',
+    'final_selected'
+  ]) {
+    assert.equal(Object.hasOwn(candidateSchema.properties, removed), false, removed);
+  }
 });
 
 test('LLM fact-check prompts map findings to schema fields and allow camera developer tooling coverage', () => {

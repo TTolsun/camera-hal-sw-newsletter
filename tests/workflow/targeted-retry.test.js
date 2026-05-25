@@ -14,6 +14,7 @@ const {
   recordLastKnownValidEditor,
   sectionsMatchingRepairPlan,
   sectionsOutsideRepairPlan,
+  validateReporter,
   validateTargetedRepairResult,
   writeReviewableRepairFailureArtifacts
 } = require('../../scripts/gemini-newsroom-newsletter');
@@ -361,6 +362,179 @@ test('completion pool keeps reserve candidates closed until replacement is allow
 
   assert.deepEqual(available.map(candidate => candidate.url), ['https://example.com/primary']);
   assert.equal(rejections.length, 0);
+});
+
+test('reporter merge uses candidate id first and preserves deterministic fields', () => {
+  const deterministic = [
+    reporterCandidate({
+      candidate_id: 'candidate-a',
+      title: 'Deterministic CameraX update',
+      url: 'https://example.com/camera',
+      summary: 'Deterministic summary stays.',
+      source_quality_status: 'allowed',
+      imageCandidates: [{
+        url: 'https://example.com/image.png',
+        sourceUrl: 'https://example.com/camera',
+        articleUrl: 'https://example.com/camera',
+        sourceKind: 'article',
+        licenseStatus: 'unknown',
+        attribution: 'Example',
+        validationStatus: 'ok'
+      }],
+      final_selected: true,
+      selected_for_editor: true,
+      version_or_release: 'base-version',
+      evidence_notes: ['base note']
+    }),
+    reporterCandidate({
+      candidate_id: 'candidate-b',
+      title: 'URL fallback update',
+      url: 'https://example.com/fallback',
+      version_or_release: 'base-fallback'
+    }),
+    reporterCandidate({
+      candidate_id: 'candidate-c',
+      title: 'Duplicate URL one',
+      url: 'https://example.com/duplicate',
+      version_or_release: 'duplicate-one-base'
+    }),
+    reporterCandidate({
+      candidate_id: 'candidate-d',
+      title: 'Duplicate URL two',
+      url: 'https://example.com/duplicate'
+    })
+  ];
+
+  const reporter = validateReporter({
+    date: DATE,
+    candidates: [
+      {
+        candidate_id: 'candidate-a',
+        title: 'LLM rewritten title ignored',
+        source: 'LLM Source',
+        url: 'https://example.com/rewritten',
+        summary: 'LLM summary must not win.',
+        version_or_release: 'llm-version',
+        api_or_component: 'CameraX',
+        behavior_change: 'LLM evidence-backed behavior.',
+        evidence_notes: ['llm note'],
+        cross_check_status: 'official-source',
+        relevance_reason: 'LLM relevance note.',
+        impact_areas: ['preview'],
+        do_not_overstate: ['Do not claim HAL runtime change.']
+      },
+      {
+        candidate_id: 'missing-id',
+        title: 'URL fallback update',
+        source: 'Example Source',
+        url: 'https://example.com/fallback/',
+        version_or_release: 'url-fallback-version',
+        api_or_component: 'Camera2',
+        behavior_change: 'URL fallback evidence.',
+        evidence_notes: ['fallback note'],
+        cross_check_status: 'cross-checked',
+        relevance_reason: 'URL fallback relevance.',
+        impact_areas: ['capture'],
+        do_not_overstate: []
+      },
+      {
+        candidate_id: 'candidate-a',
+        title: 'Duplicate output should skip',
+        source: 'Example Source',
+        url: 'https://example.com/camera',
+        version_or_release: 'duplicate-version',
+        api_or_component: '',
+        behavior_change: '',
+        evidence_notes: [],
+        cross_check_status: 'needs-cross-check',
+        relevance_reason: '',
+        impact_areas: [],
+        do_not_overstate: []
+      },
+      {
+        candidate_id: 'missing-duplicate-url',
+        title: 'Ambiguous duplicate URL',
+        source: 'Example Source',
+        url: 'https://example.com/duplicate',
+        version_or_release: 'ambiguous-version',
+        api_or_component: '',
+        behavior_change: '',
+        evidence_notes: [],
+        cross_check_status: 'needs-cross-check',
+        relevance_reason: '',
+        impact_areas: [],
+        do_not_overstate: []
+      },
+      {
+        candidate_id: 'ghost',
+        title: 'Unmatched ghost candidate',
+        source: 'Example Source',
+        url: 'https://example.com/ghost',
+        version_or_release: 'ghost-version',
+        api_or_component: '',
+        behavior_change: '',
+        evidence_notes: [],
+        cross_check_status: 'needs-cross-check',
+        relevance_reason: '',
+        impact_areas: [],
+        do_not_overstate: []
+      }
+    ]
+  }, DATE, deterministic);
+
+  const byId = new Map(reporter.candidates.map(candidate => [candidate.candidate_id, candidate]));
+  assert.equal(reporter.candidates.length, deterministic.length);
+  assert.equal(byId.get('candidate-a').title, 'Deterministic CameraX update');
+  assert.equal(byId.get('candidate-a').url, 'https://example.com/camera');
+  assert.equal(byId.get('candidate-a').summary, 'Deterministic summary stays.');
+  assert.equal(byId.get('candidate-a').source_quality_status, 'allowed');
+  assert.deepEqual(byId.get('candidate-a').imageCandidates.map(image => image.url), ['https://example.com/image.png']);
+  assert.equal(byId.get('candidate-a').final_selected, true);
+  assert.equal(byId.get('candidate-a').version_or_release, 'llm-version');
+  assert.deepEqual(byId.get('candidate-a').evidence_notes, ['base note', 'llm note']);
+  assert.equal(byId.get('candidate-b').version_or_release, 'url-fallback-version');
+  assert.equal(byId.get('candidate-c').version_or_release, 'duplicate-one-base');
+  assert.deepEqual(
+    reporter.reporter_merge_warnings.map(warning => warning.reason),
+    ['duplicate_output_candidate_id', 'duplicate_input_url', 'unmatched_reporter_candidate']
+  );
+});
+
+test('reporter selection fields separate evidence eligibility from final selection', () => {
+  const reporter = validateReporter({
+    date: DATE,
+    candidates: [{
+      candidate_id: 'candidate-evidence-only',
+      title: 'Evidence eligible but not final selected',
+      source: 'Example Source',
+      url: 'https://example.com/evidence-only',
+      version_or_release: '1.0',
+      api_or_component: 'Camera HAL',
+      behavior_change: 'Evidence backed behavior.',
+      evidence_notes: ['source-backed evidence'],
+      cross_check_status: 'official-source',
+      relevance_reason: 'Camera HAL scope.',
+      impact_areas: ['metadata'],
+      do_not_overstate: []
+    }]
+  }, DATE, [reporterCandidate({
+    candidate_id: 'candidate-evidence-only',
+    title: 'Evidence eligible but not final selected',
+    url: 'https://example.com/evidence-only',
+    final_selected: false,
+    primary_selected: false,
+    selected_for_editor: false,
+    reserve_candidate: false
+  })]);
+
+  const candidate = reporter.candidates[0];
+  assert.equal(candidate.evidence_eligible, true);
+  assert.equal(candidate.reporter_selected, true);
+  assert.equal(candidate.selected, true);
+  assert.equal(candidate.selected_for_editor, false);
+  assert.equal(candidate.primary_selected, false);
+  assert.equal(candidate.reserve_candidate, false);
+  assert.equal(candidate.final_selected, false);
 });
 
 test('targeted repair rejects output that shrinks 3 sections to 2', () => {

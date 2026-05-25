@@ -795,9 +795,116 @@ function candidatePriority(candidate = {}) {
   return BUCKET_PRIORITY[candidate.relevance_bucket] || 99;
 }
 
+function reporterCandidateId(candidate = {}) {
+  const url = candidate.url || candidate.article_url || candidate.articleUrl;
+  return stringOrEmpty(
+    candidate.candidate_id ||
+    candidate.source_candidate_hash ||
+    candidate.url_hash ||
+    (url ? normalizedUrlHash(url) : '')
+  );
+}
+
+function reporterTitleUrlKey(candidate = {}) {
+  const url = normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl);
+  const title = normalizeTitle(candidate.title);
+  return url && title ? `${url}\n${title}` : '';
+}
+
+function addReporterIndexEntry(index, key, candidate) {
+  if (!key) return;
+  if (!index.has(key)) index.set(key, []);
+  index.get(key).push(candidate);
+}
+
+function buildReporterCandidateIndexes(candidates = []) {
+  const byId = new Map();
+  const byUrl = new Map();
+  const byTitleUrl = new Map();
+  for (const candidate of ensureArray(candidates)) {
+    addReporterIndexEntry(byId, reporterCandidateId(candidate), candidate);
+    addReporterIndexEntry(byUrl, normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl), candidate);
+    addReporterIndexEntry(byTitleUrl, reporterTitleUrlKey(candidate), candidate);
+  }
+  return { byId, byUrl, byTitleUrl };
+}
+
+function reporterMergeWarning(candidate, reason, extra = {}) {
+  return {
+    reason,
+    candidate_id: stringOrEmpty(candidate?.candidate_id),
+    title: stringOrEmpty(candidate?.title),
+    url: stringOrEmpty(candidate?.url || candidate?.article_url || candidate?.articleUrl),
+    ...extra
+  };
+}
+
+function uniqueStrings(values = []) {
+  return [...new Set(ensureArray(values).map(stringOrEmpty).filter(Boolean))];
+}
+
+function mergeReporterEvidenceFields(base, llmCandidate = null) {
+  if (!llmCandidate) return { ...base };
+  const merged = { ...base };
+  for (const key of ['version_or_release', 'api_or_component', 'behavior_change', 'cross_check_status', 'relevance_reason']) {
+    const value = stringOrEmpty(llmCandidate[key]);
+    if (value) merged[key] = value;
+  }
+  for (const key of ['evidence_notes', 'impact_areas', 'do_not_overstate']) {
+    const values = uniqueStrings([
+      ...ensureArray(base[key]),
+      ...ensureArray(llmCandidate[key])
+    ]);
+    if (values.length > 0) merged[key] = values;
+  }
+  return merged;
+}
+
+function reporterMatchFromIndex(index, key, warningCandidate, warnings, duplicateReason) {
+  if (!key) return null;
+  const matches = index.get(key) || [];
+  if (matches.length === 1) return matches[0];
+  if (matches.length > 1) {
+    warnings.push(reporterMergeWarning(warningCandidate, duplicateReason, { match_count: matches.length }));
+  }
+  return null;
+}
+
+function matchReporterOutputCandidate(candidate, indexes, warnings) {
+  const candidateId = stringOrEmpty(candidate.candidate_id);
+  if (candidateId) {
+    const idMatches = indexes.byId.get(candidateId) || [];
+    if (idMatches.length === 1) return idMatches[0];
+    if (idMatches.length > 1) {
+      warnings.push(reporterMergeWarning(candidate, 'duplicate_input_candidate_id', { match_count: idMatches.length }));
+      return null;
+    }
+  }
+
+  const url = normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl);
+  const urlMatches = url ? indexes.byUrl.get(url) || [] : [];
+  if (urlMatches.length === 1) return urlMatches[0];
+  if (urlMatches.length > 1) {
+    const titleUrl = reporterMatchFromIndex(
+      indexes.byTitleUrl,
+      reporterTitleUrlKey(candidate),
+      candidate,
+      warnings,
+      'duplicate_input_title_url'
+    );
+    if (titleUrl) return titleUrl;
+    warnings.push(reporterMergeWarning(candidate, 'duplicate_input_url', { match_count: urlMatches.length }));
+    return null;
+  }
+
+  warnings.push(reporterMergeWarning(candidate, 'unmatched_reporter_candidate'));
+  return null;
+}
+
 function validateReporter(value, date, collectedCandidates = []) {
+  const deterministicCandidates = ensureArray(collectedCandidates);
   const collectedByUrl = new Map();
-  for (const candidate of ensureArray(collectedCandidates)) {
+  for (const candidate of deterministicCandidates) {
     if (candidate.url) collectedByUrl.set(candidate.url, candidate);
     if (candidate.article_url) collectedByUrl.set(candidate.article_url, candidate);
     if (candidate.articleUrl) collectedByUrl.set(candidate.articleUrl, candidate);
@@ -807,12 +914,40 @@ function validateReporter(value, date, collectedCandidates = []) {
   if (!Array.isArray(value.candidates) || value.candidates.length === 0) {
     fail('Reporter output must contain at least one candidate.');
   }
+  const reporterMergeWarnings = [];
+  const matchedByCandidate = new Map();
+  const seenOutputIds = new Set();
+  const indexes = buildReporterCandidateIndexes(deterministicCandidates.length > 0 ? deterministicCandidates : value.candidates);
+  for (const outputCandidate of value.candidates) {
+    const outputId = stringOrEmpty(outputCandidate.candidate_id);
+    if (outputId) {
+      if (seenOutputIds.has(outputId)) {
+        reporterMergeWarnings.push(reporterMergeWarning(outputCandidate, 'duplicate_output_candidate_id'));
+        continue;
+      }
+      seenOutputIds.add(outputId);
+    }
+    const deterministic = matchReporterOutputCandidate(outputCandidate, indexes, reporterMergeWarnings);
+    if (!deterministic) continue;
+    if (matchedByCandidate.has(deterministic)) {
+      reporterMergeWarnings.push(reporterMergeWarning(outputCandidate, 'duplicate_output_match', {
+        matched_candidate_id: reporterCandidateId(deterministic)
+      }));
+      continue;
+    }
+    matchedByCandidate.set(deterministic, outputCandidate);
+  }
+
   const rejectedMainIneligible = [];
-  for (const candidate of value.candidates) {
+  const normalizedCandidates = [];
+  const outputBase = deterministicCandidates.length > 0 ? deterministicCandidates : value.candidates;
+  for (const baseCandidate of outputBase) {
+    const candidate = mergeReporterEvidenceFields(baseCandidate, matchedByCandidate.get(baseCandidate));
     if (!candidate.title || !candidate.url || !candidate.source) {
       fail('Reporter candidate is missing title, source, or url.');
     }
     const collected = collectedCandidateFor(candidate, collectedByUrl);
+    candidate.candidate_id = reporterCandidateId(candidate);
     candidate.camera_hal_relevance_score = numberOrDefault(candidate.camera_hal_relevance_score);
     candidate.android_camera_relevance_score = numberOrDefault(candidate.android_camera_relevance_score);
     candidate.practical_actionability_score = numberOrDefault(candidate.practical_actionability_score);
@@ -880,20 +1015,12 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.native_workflow_evidence_score = numberOrDefault(collected.native_workflow_evidence_score ?? candidate.native_workflow_evidence_score);
     candidate.related_context_candidates = ensureArray(collected.related_context_candidates || candidate.related_context_candidates);
     candidate.imageCandidates = imageCandidatesForReporterCandidate(candidate, collectedByUrl);
-    if (typeof candidate.selected !== 'boolean') {
-      const total =
-        candidate.camera_hal_relevance_score +
-        candidate.android_camera_relevance_score +
-        candidate.practical_actionability_score +
-        candidate.source_reliability_score +
-        candidate.freshness_score +
-        candidate.ai_required_slot_fit_score +
-        candidate.cpp_fallback_value_score;
-      candidate.selected = total >= 12;
-    }
     const rejectionReason = reporterCandidateRejectionReason(candidate);
-    if (candidate.selected && rejectionReason) {
-      candidate.selected = false;
+    candidate.evidence_eligible = !rejectionReason;
+    // Keep legacy aliases, but final/editor selection is owned by final_selected/selected_for_editor.
+    candidate.reporter_selected = candidate.evidence_eligible;
+    candidate.selected = candidate.evidence_eligible;
+    if (rejectionReason) {
       rejectedMainIneligible.push({
         title: candidate.title,
         url: candidate.url,
@@ -901,7 +1028,10 @@ function validateReporter(value, date, collectedCandidates = []) {
         reason: rejectionReason
       });
     }
+    normalizedCandidates.push(candidate);
   }
+  value.candidates = normalizedCandidates;
+  value.reporter_merge_warnings = reporterMergeWarnings;
   value.rejected_main_ineligible_candidates = rejectedMainIneligible;
   return value;
 }
@@ -3122,6 +3252,17 @@ async function main() {
     '',
     'golden example은 style과 structure reference로만 사용하세요. 현재 candidate JSON에 없는 facts, dates, versions, API/component names, behavior changes, sources, action items는 복사하지 마세요.'
   ].join('\n');
+  const reporterContext = [
+    `Newsletter date: ${date}`,
+    'Audience: AOSP Camera / Camera HAL / Camera Driver / SoC Platform / C++ engineer',
+    '수집된 article capsule JSON과 deterministic selection context만 사용하세요. web browsing은 하지 마세요.',
+    'Reporter stage는 deterministic 후보의 source-backed evidence fields만 보강합니다.',
+    'source names, source URLs, title, candidate_id는 echo-only matching key로 그대로 유지하세요.',
+    '한국어 evidence note를 작성할 수 있지만, public newsletter prose나 최종 기사 문장은 작성하지 마세요.',
+    '',
+    'docs/editorial-policy.md:',
+    editorialPolicy
+  ].join('\n');
 
   const maxQualityRetries = runtimeConfig.newsroomMaxQualityRetries;
   const totalAttempts = 1 + maxQualityRetries;
@@ -3148,35 +3289,22 @@ async function main() {
       [
         '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI reporter입니다.',
         'local deterministic selector가 이미 final article inputs를 filtering, ranking, choosing했습니다. 최종 selection decision을 다시 하지 마세요.',
-        'selected는 reporter-stage judgment에만 사용하세요. deterministic final article inputs는 validation 이후 final_selected=true 및 selected_for_editor=true로 별도 표시됩니다.',
-        'primary_selected와 reserve_candidate flags를 정확히 보존하세요. Reserve candidates는 replacement pool inputs이지 초기 main article 선택지가 아닙니다.',
-        '제공된 shortlisted article capsules에 대해서만 evidence fields를 요약, tag, refine하세요.',
-        'article capsule fields, risk, score, selection, imageCandidates, evidence는 context로만 사용하세요. 생략된 source text가 있다고 가정하지 마세요.',
+        'candidate_id, title, source, url은 matching을 위한 echo-only field입니다. 입력값과 다르게 만들거나 canonical URL로 바꾸지 마세요.',
+        '제공된 shortlisted article capsules에 대해서만 evidence fields를 요약하고 보강하세요.',
+        'article capsule fields, risk, score, selection, imageCandidates, evidence는 context로만 사용하세요. score, selection flag, imageCandidates, source_quality는 출력하지 마세요.',
         linkedEvidencePromptGuardrails(),
         sourceExtractionPromptGuardrails(),
         'Reporter stage는 evidence-backed candidate facts와 guardrails만 제공해야 합니다. final article-level claims[]를 만들지 마세요. article claims[]는 editor가 담당합니다.',
-        '모든 final_selected candidate에 대해 가능하면 version_or_release, api_or_component, behavior_change, evidence_notes, cross_check_status 같은 concrete evidence를 추출하세요.',
-        'article capsule의 eligibility와 risk value를 보존하세요. required schema field가 없으면 capsule evidence와 risk object에서만 추론하세요.',
+        '가능하면 version_or_release, api_or_component, behavior_change, evidence_notes, cross_check_status 같은 concrete evidence를 추출하세요.',
         'source가 rolling page, release-note watch page, documentation watch page, homepage 또는 다른 watch page이면 evidence_notes에 명시하세요. candidate가 date/version/API/component/behavior evidence를 제공하지 않으면 dated release처럼 쓰지 마세요.',
-        'rolling release-note page는 정확한 date, version/release, API/component, behavior change를 evidence_notes에 명명해야만 선택할 수 있습니다.',
+        'rolling release-note page는 정확한 date, version/release, API/component, behavior change를 evidence_notes에 명명하세요. 없으면 누락 사실을 적고 만들어내지 마세요.',
         'cross_check_status는 not-required, official-source, cross-checked, needs-cross-check 중 하나여야 합니다.',
-        'Candidate-only 또는 requiresCrossCheck lead는 cross_check_status가 official-source 또는 cross-checked가 아니면 선택하지 마세요.',
-        'SoC/platform, C++, native, toolchain, Linux, AI fallback item은 reporter-stage evidence와 relevance rule을 만족할 때만 reporter-selected 상태로 남길 수 있습니다.',
-        '각 candidate의 public-facing impact wording은 source facts를 보고 evidence_notes와 behavior_change에 설명하세요. HAL/driver 직접 영향이 아니면 앱/API/tooling/debug/repro 맥락의 참고 의미로 제한하세요.',
-        'capsule/candidate metadata의 editorial_priority, relevance_bucket, aosp_camera_directness, driver_stack_relevance, soc_platform_relevance, native_tooling_relevance, counts_as_* flags, evidence_origin, source_hint를 보존하세요.',
-        'collected candidate JSON의 imageCandidates를 정확히 보존하세요. image URL을 만들거나, image URL을 다시 쓰거나, image candidate를 추가하지 마세요.',
-        lockedSections.length > 0 ? 'retry context에 있는 locked article URLs, titles, sources, source-date-title 조합과 중복되는 candidate를 선택하지 마세요.' : '',
-        '모든 candidate에 대해 다음 numeric score를 제공하세요:',
-        '- camera_hal_relevance_score: 0-5',
-        '- android_camera_relevance_score: 0-5',
-        '- practical_actionability_score: 0-5',
-        '- source_reliability_score: 0-5',
-        '- freshness_score: 0-3',
-        '- ai_required_slot_fit_score: 0-3',
-        '- cpp_fallback_value_score: 0-3',
+        'Candidate-only 또는 requiresCrossCheck lead는 cross_check_status에 검증 필요 상태를 명시하고 unsupported fact를 만들지 마세요.',
+        'HAL/driver 직접 영향이 아니면 evidence_notes와 do_not_overstate에서 app/API/tooling/debug/repro 맥락으로 제한하세요.',
+        lockedSections.length > 0 ? 'retry context에 있는 locked article URLs, titles, sources, source-date-title 조합과 중복되는 candidate는 evidence_notes에 중복 가능성을 명시하세요.' : '',
         'schema와 일치하는 JSON만 반환하세요.'
       ].filter(Boolean).join('\n'),
-      `${commonContext}\n\n${lockedContext}\n\nArticle capsule shortlist JSON:\n${JSON.stringify(capsuleInputFromReport(articleCapsuleReport, 'shortlisted'), null, 2)}\n\nCompact selection context JSON:\n${JSON.stringify(compactSelectionContext(shortlistReport), null, 2)}`,
+      `${reporterContext}\n\n${lockedContext}\n\nArticle capsule shortlist JSON:\n${JSON.stringify(capsuleInputFromReport(articleCapsuleReport, 'shortlisted'), null, 2)}\n\nCompact selection context JSON:\n${JSON.stringify(compactSelectionContext(shortlistReport), null, 2)}`,
       reporterSchema
     ), date, reporterInput.candidates);
     reporter = enforceDeterministicReporterSelection(reporter, shortlistReport);
@@ -4139,6 +4267,7 @@ module.exports = {
   sectionsOutsideRepairPlan,
   validateCompletionSections,
   validateEditor,
+  validateReporter,
   validateTargetedRepairResult,
   writeReviewableRepairFailureArtifacts,
   selectionStatusExtra,
