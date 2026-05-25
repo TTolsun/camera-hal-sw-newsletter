@@ -1035,8 +1035,7 @@ pre code {
   gap: var(--space-2);
 }
 
-.archive-sort-control select,
-.filter-shortcut {
+.archive-sort-control select {
   min-height: 42px;
   border: 1px solid var(--line);
   border-radius: var(--radius-xs);
@@ -1052,17 +1051,14 @@ pre code {
   padding: 0 34px 0 14px;
 }
 
-.filter-shortcut {
-  padding: 0 16px;
-  cursor: pointer;
-}
-
-.filter-shortcut:hover,
-.filter-shortcut:focus-visible,
 .archive-sort-control select:hover,
 .archive-sort-control select:focus-visible {
   border-color: rgba(24, 128, 56, 0.32);
   background: var(--chip);
+}
+
+.archive-controls .section-link {
+  white-space: nowrap;
 }
 
 .archive-card {
@@ -1132,6 +1128,80 @@ pre code {
 
 .archive-empty-state .muted {
   margin-bottom: 0;
+}
+
+.archive-page-section {
+  min-height: 560px;
+}
+
+.archive-page-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.archive-page-heading h1 {
+  margin-bottom: 0;
+  font-size: clamp(2rem, 4vw, 3.1rem);
+}
+
+.archive-status,
+.archive-result-summary {
+  color: var(--muted);
+}
+
+.archive-status {
+  margin-bottom: var(--space-5);
+}
+
+.archive-page-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(170px, auto);
+  align-items: end;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.archive-page-controls[hidden] {
+  display: none;
+}
+
+.archive-control-group {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.archive-control-label {
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 850;
+}
+
+.archive-topic-list {
+  align-items: center;
+}
+
+.archive-topic-chip[disabled] {
+  cursor: not-allowed;
+  opacity: 0.54;
+}
+
+.archive-topic-chip.is-active[disabled] {
+  opacity: 1;
+}
+
+.archive-page-sort {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.archive-result-summary {
+  margin-bottom: var(--space-5);
+}
+
+.archive-error-state {
+  border-color: rgba(185, 28, 28, 0.24);
 }
 
 @media (min-width: 700px) {
@@ -2076,9 +2146,18 @@ pre code {
   }
 
   .archive-sort-control,
-  .archive-sort-control select,
-  .filter-shortcut {
+  .archive-sort-control select {
     width: 100%;
+  }
+
+  .archive-page-heading,
+  .archive-page-controls {
+    align-items: stretch;
+    grid-template-columns: 1fr;
+  }
+
+  .archive-page-heading {
+    flex-direction: column;
   }
 
   .site-hero {
@@ -2119,7 +2198,7 @@ pre code {
     filter: drop-shadow(0 12px 22px rgba(15, 23, 42, 0.1)) drop-shadow(0 0 14px rgba(24, 128, 56, 0.07));
   }
 
-  #archive-list .archive-card-summary {
+  main:not([data-page="archive"]) #archive-list .archive-card-summary {
     display: none;
   }
 

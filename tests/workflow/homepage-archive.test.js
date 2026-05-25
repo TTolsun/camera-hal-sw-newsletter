@@ -5,6 +5,7 @@ const test = require('node:test');
 const vm = require('node:vm');
 
 const root = path.join(__dirname, '..', '..');
+const NewsletterArchive = require('../../assets/js/newsletter-archive');
 
 function extractHomepageScript() {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -60,33 +61,6 @@ function createElement(overrides = {}) {
   };
 }
 
-function createTopicButton(key) {
-  const button = createElement({
-    'data-homepage-topic': key,
-    closest(selector) {
-      assert.equal(selector, '[data-homepage-topic]');
-      return button;
-    }
-  });
-  return button;
-}
-
-function clickHomepageTopic(elements, key) {
-  const handler = elements['topic-filter-list'].listeners.click;
-  assert.equal(typeof handler, 'function', 'homepage topic click handler should be bound');
-  const button = elements['topic-filter-list'].topicButtons.find(item => item.getAttribute('data-homepage-topic') === key);
-  assert.ok(button, `topic button ${key} should exist`);
-  handler({ target: button });
-}
-
-function changeArchiveSort(elements, value) {
-  const sortEl = elements['archive-sort'];
-  const handler = sortEl.listeners.change;
-  assert.equal(typeof handler, 'function', 'archive sort change handler should be bound');
-  sortEl.value = value;
-  handler({ currentTarget: sortEl });
-}
-
 function updateLocationFromUrl(location, url) {
   const parsed = new URL(url, 'https://example.com');
   location.pathname = parsed.pathname;
@@ -97,21 +71,10 @@ function updateLocationFromUrl(location, url) {
 async function renderHomepage(newsletters, headlineState = null, options = {}) {
   const script = extractHomepageScript();
   const errors = [];
-  const topicButtons = ['all', 'camera-hal', 'android', 'driver', 'image-processing', 'ai', 'soc-platform']
-    .map(createTopicButton);
   const elements = {
     headline: createElement(),
     'headline-card': createElement(),
     'latest-card': createElement(),
-    'topic-filter-list': createElement({
-      topicButtons,
-      querySelectorAll(selector) {
-        assert.equal(selector, '[data-homepage-topic]');
-        return topicButtons;
-      }
-    }),
-    'archive-sort': createElement({ value: 'latest' }),
-    'archive-filter-shortcut': createElement(),
     'archive-list': createElement()
   };
   const historyUpdates = [];
@@ -122,6 +85,7 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
   };
   const window = {
     location,
+    NewsletterArchive,
     history: {
       replaceState(_state, _title, url) {
         historyUpdates.push(url);
@@ -379,7 +343,7 @@ test('archive preview ignores old topic and sort query parameters without mutati
   assert.equal(location.hash, '#archive');
 });
 
-test('homepage topic chips and archive sort update preview cards without URL mutation', async () => {
+test('homepage archive preview keeps filter and sort controls delegated to archive page', async () => {
   const items = [
     newsletter('2026-05-11', 'Latest issue'),
     { ...newsletter('2026-05-10', 'Camera archive issue'), tags: ['Camera HAL'] },
@@ -389,19 +353,15 @@ test('homepage topic chips and archive sort update preview cards without URL mut
 
   const { elements, historyUpdates } = await renderHomepage(items);
 
-  clickHomepageTopic(elements, 'android');
-  let archiveHtml = elements['archive-list'].innerHTML;
-  assert.match(archiveHtml, /Older Android archive issue/);
+  const archiveHtml = elements['archive-list'].innerHTML;
+  assert.match(archiveHtml, /Camera archive issue/);
   assert.match(archiveHtml, /Newer Android archive issue/);
-  assert.doesNotMatch(archiveHtml, /Camera archive issue/);
-  assert.equal(
-    elements['topic-filter-list'].topicButtons.find(button => button.getAttribute('data-homepage-topic') === 'android').getAttribute('aria-pressed'),
-    'true'
-  );
-
-  changeArchiveSort(elements, 'oldest');
-  archiveHtml = elements['archive-list'].innerHTML;
-  assert.ok(archiveHtml.indexOf('Older Android archive issue') < archiveHtml.indexOf('Newer Android archive issue'));
+  assert.match(archiveHtml, /Older Android archive issue/);
+  assert.ok(archiveHtml.indexOf('Camera archive issue') < archiveHtml.indexOf('Newer Android archive issue'));
+  assert.ok(archiveHtml.indexOf('Newer Android archive issue') < archiveHtml.indexOf('Older Android archive issue'));
+  assert.equal(elements['topic-filter-list'], undefined);
+  assert.equal(elements['archive-sort'], undefined);
+  assert.equal(elements['archive-filter-shortcut'], undefined);
   assert.deepEqual(historyUpdates, []);
 });
 
@@ -770,20 +730,20 @@ test('homepage exposes clear Featured and Latest heading rows without changing h
   assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="#latest">Latest<\/a>[\s\S]*href="#archive">Archive<\/a>[\s\S]*href="https:\/\/github\.com\/TTolsun\/camera-hal-sw-newsletter">GitHub<\/a>/);
   assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search|Archive로 이동|Archive 탐색/);
   assert.match(html, /<section id="headline"[\s\S]*?<div class="section-heading section-heading-row">[\s\S]*?<h2 id="headline-title">Featured Headline<\/h2>/);
-  assert.match(html, /<section id="latest"[\s\S]*?<span class="section-icon section-icon-latest" aria-hidden="true"><\/span>[\s\S]*?<h2 id="latest-title">Latest Newsletter<\/h2>/);
-  assert.match(html, /<section id="archive"[\s\S]*?<span class="section-icon section-icon-archive" aria-hidden="true"><\/span>[\s\S]*?<h2 id="archive-title">Archive<\/h2>/);
+  assert.match(html, /<section id="latest"[\s\S]*?<span class="section-icon section-icon-latest" aria-hidden="true"><\/span>[\s\S]*?<h2 id="latest-title">Latest Newsletter<\/h2>[\s\S]*?<\/div>\s*<\/div>\s*<a id="latest-card"/);
+  assert.match(html, /<section id="archive"[\s\S]*?<span class="section-icon section-icon-archive" aria-hidden="true"><\/span>[\s\S]*?<h2 id="archive-title">Archive<\/h2>[\s\S]*?<div class="archive-controls">\s*<a class="section-link" href="archive\.html">전체 보기<\/a>\s*<\/div>/);
   assert.match(html, /<article id="headline-card" class="headline-card"><\/article>/);
   assert.match(html, /<a id="latest-card" class="newsletter-card latest-newsletter-card loading-card">/);
 });
 
-test('homepage exposes local archive controls without managed query behavior', () => {
+test('homepage removes local archive controls and delegates browsing to archive.html', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
-  assert.match(html, /id="topic-filter-list"[\s\S]*data-homepage-topic="all"[\s\S]*data-homepage-topic="soc-platform"/);
-  assert.match(html, /<select id="archive-sort" aria-label="Archive sort order">[\s\S]*?<option value="latest">최신순<\/option>[\s\S]*?<option value="oldest">오래된순<\/option>/);
-  assert.match(html, /id="archive-filter-shortcut"/);
+  assert.doesNotMatch(html, /주제 키워드로 빠르게 탐색하세요|id="topic-filter-list"|data-homepage-topic/);
+  assert.doesNotMatch(html, /id="archive-sort"|id="archive-filter-shortcut"|Archive sort order/);
   assert.doesNotMatch(html, /archive-toolbar|archive-result-summary/);
-  assert.doesNotMatch(html, /readArchiveStateFromUrl|replaceArchiveUrl|URLSearchParams/);
+  assert.doesNotMatch(html, /readArchiveStateFromUrl|replaceArchiveUrl|URLSearchParams|normalizeArchiveState|filterEntries/);
+  assert.match(html, /<div class="archive-controls">\s*<a class="section-link" href="archive\.html">전체 보기<\/a>\s*<\/div>/);
 });
 
 test('archive grid CSS caps columns and preserves card interaction layout contracts', () => {
@@ -838,10 +798,11 @@ test('latest and archive card CSS preserves whole-card links and mobile summary 
   assertCssDeclaration(cardLink, 'text-decoration', 'none');
   assert.match(latestFocus, /outline\s*:\s*3px solid var\(--focus-ring\)\s*;/);
   assertCssDeclaration(emptyState, 'grid-column', '1 / -1');
-  assert.match(mobile, /#archive-list \.archive-card-summary\s*\{[\s\S]*?display\s*:\s*none\s*;/);
+  assert.match(mobile, /main:not\(\[data-page="archive"\]\) #archive-list \.archive-card-summary\s*\{[\s\S]*?display\s*:\s*none\s*;/);
   assert.doesNotMatch(mobile, /latest-card-summary\s*\{[\s\S]*?display\s*:\s*none\s*;/);
-  assert.doesNotMatch(css, /archive-toolbar|archive-topic-chip|archive-result-summary/);
-  assert.match(css, /\.archive-sort-control select,\n\.filter-shortcut\s*\{/);
+  assert.doesNotMatch(css, /archive-toolbar/);
+  assert.match(css, /main:not\(\[data-page="archive"\]\) #archive-list \.archive-card-summary/);
+  assert.doesNotMatch(css, /filter-shortcut/);
 });
 
 test('newsletter issue page CSS uses homepage shell with issue landing layout', () => {

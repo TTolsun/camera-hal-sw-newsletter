@@ -51,23 +51,6 @@
       </figure>
     </section>
 
-    <section class="focus-brief content-wrap" aria-label="Focus Keywords">
-      <div class="focus-band">
-        <div class="focus-copy">
-          <h2 class="focus-title">주제 키워드로 빠르게 탐색하세요</h2>
-        </div>
-        <div id="topic-filter-list" class="keyword-row" role="group" aria-label="Archive topic filter">
-          <button type="button" class="keyword is-active" data-homepage-topic="all" aria-pressed="true">전체</button>
-          <button type="button" class="keyword" data-homepage-topic="camera-hal" aria-pressed="false">Camera HAL</button>
-          <button type="button" class="keyword" data-homepage-topic="android" aria-pressed="false">Android</button>
-          <button type="button" class="keyword" data-homepage-topic="driver" aria-pressed="false">Driver</button>
-          <button type="button" class="keyword" data-homepage-topic="image-processing" aria-pressed="false">Image Processing</button>
-          <button type="button" class="keyword" data-homepage-topic="ai" aria-pressed="false">AI</button>
-          <button type="button" class="keyword" data-homepage-topic="soc-platform" aria-pressed="false">SoC Platform</button>
-        </div>
-      </div>
-    </section>
-
     <section id="headline" class="section headline-section content-wrap" aria-labelledby="headline-title" hidden>
       <div class="section-heading section-heading-row">
         <span class="section-icon section-icon-star" aria-hidden="true">☆</span>
@@ -84,7 +67,6 @@
         <div>
           <h2 id="latest-title">Latest Newsletter</h2>
         </div>
-        <a class="section-link" href="#archive">전체 보기</a>
       </div>
       <a id="latest-card" class="newsletter-card latest-newsletter-card loading-card">
         <p class="muted">최신 뉴스레터를 불러오는 중입니다.</p>
@@ -98,14 +80,7 @@
           <h2 id="archive-title">Archive</h2>
         </div>
         <div class="archive-controls">
-          <label class="archive-sort-control" for="archive-sort">
-            <span class="sr-only">Archive sort order</span>
-            <select id="archive-sort" aria-label="Archive sort order">
-              <option value="latest">최신순</option>
-              <option value="oldest">오래된순</option>
-            </select>
-          </label>
-          <button type="button" id="archive-filter-shortcut" class="filter-shortcut" aria-controls="topic-filter-list">필터</button>
+          <a class="section-link" href="archive.html">전체 보기</a>
         </div>
       </div>
       <div id="archive-list" class="archive-grid">
@@ -128,6 +103,7 @@
     </nav>
   </footer>
 
+  <script src="assets/js/newsletter-archive.js"></script>
   <script>
     const escapeHtml = (value) => String(value ?? '')
       .replaceAll('&', '&amp;')
@@ -150,22 +126,6 @@
       return tagHtml ? `<div class="${classes}">${tagHtml}</div>` : '';
     };
 
-    const renderArchiveTags = (tags = []) => {
-      const normalizedTags = visibleTags(tags);
-      if (normalizedTags.length === 0) return '';
-
-      const visibleArchiveTags = normalizedTags.slice(0, 3);
-      const hiddenArchiveTags = normalizedTags.slice(3);
-      const hiddenTagNames = hiddenArchiveTags.join(', ');
-      const hiddenTagChip = hiddenArchiveTags.length > 0
-        ? `<span class="tag tag-more" aria-label="${escapeHtml(`추가 태그 ${hiddenArchiveTags.length}개: ${hiddenTagNames}`)}" title="${escapeHtml(hiddenTagNames)}">+${hiddenArchiveTags.length}</span>`
-        : '';
-
-      return `<div class="tag-row archive-tags">${
-        visibleArchiveTags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')
-      }${hiddenTagChip}</div>`;
-    };
-
     const isExternalUrl = value => /^https?:\/\//i.test(String(value || ''));
     const isHttpsUrl = value => /^https:\/\//i.test(String(value || ''));
 
@@ -181,54 +141,10 @@
     };
 
     const ARCHIVE_PREVIEW_LIMIT = 6;
-    const ARCHIVE_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
-    const HOMEPAGE_ARCHIVE_TOPICS = [
-      { key: 'all', tag: '' },
-      { key: 'camera-hal', tag: 'Camera HAL' },
-      { key: 'android', tag: 'Android' },
-      { key: 'driver', tag: 'Driver' },
-      { key: 'image-processing', tag: 'Image Processing' },
-      { key: 'ai', tag: 'AI' },
-      { key: 'soc-platform', tag: 'SoC Platform' }
-    ];
-    const HOMEPAGE_ARCHIVE_TOPIC_KEYS = new Set(HOMEPAGE_ARCHIVE_TOPICS.map(topic => topic.key));
-    const HOMEPAGE_ARCHIVE_SORT_KEYS = new Set(['latest', 'oldest']);
-    const DEFAULT_ARCHIVE_STATE = { topic: 'all', sort: 'latest' };
-
-    function normalizeTopicKey(value) {
-      const key = String(value || '').trim();
-      return HOMEPAGE_ARCHIVE_TOPIC_KEYS.has(key) ? key : DEFAULT_ARCHIVE_STATE.topic;
-    }
-
-    function normalizeSortKey(value) {
-      const key = String(value || '').trim();
-      return HOMEPAGE_ARCHIVE_SORT_KEYS.has(key) ? key : DEFAULT_ARCHIVE_STATE.sort;
-    }
-
-    function archiveTopicByKey(key) {
-      return HOMEPAGE_ARCHIVE_TOPICS.find(topic => topic.key === key) || HOMEPAGE_ARCHIVE_TOPICS[0];
-    }
-
-    function sortableArchiveDate(item) {
-      const date = String(item && item.date || '').trim();
-      return ARCHIVE_DATE_PATTERN.test(date) ? date : '';
-    }
-
-    function compareArchiveItems(left, right, sort = DEFAULT_ARCHIVE_STATE.sort) {
-      const leftDate = sortableArchiveDate(left);
-      const rightDate = sortableArchiveDate(right);
-      if (leftDate && rightDate) {
-        return sort === 'oldest'
-          ? leftDate.localeCompare(rightDate)
-          : rightDate.localeCompare(leftDate);
-      }
-      if (leftDate) return -1;
-      if (rightDate) return 1;
-      return String(left && left.title || '').localeCompare(String(right && right.title || ''));
-    }
+    const archiveHelpers = window.NewsletterArchive;
 
     function getArchiveItems(newsletters) {
-      const sortedNewsletters = [...newsletters].sort((a, b) => compareArchiveItems(a, b, 'latest'));
+      const sortedNewsletters = archiveHelpers.sortEntries(newsletters, 'latest');
       return {
         latest: sortedNewsletters[0] || null,
         archiveItems: sortedNewsletters.slice(1)
@@ -236,114 +152,25 @@
     }
 
     function newsletterHtmlHref(item) {
-      return safeInternalPath(item && item.html);
+      return archiveHelpers.getSafeNewsletterHref(item);
     }
 
-    function archiveItemMatchesTopic(item, topicKey) {
-      const topic = archiveTopicByKey(topicKey);
-      if (topic.key === 'all') return true;
-      return visibleTags(item && item.tags).includes(topic.tag);
+    function renderArchiveEmptyState() {
+      return '<div class="archive-empty-state"><p class="muted">이전 뉴스레터가 없습니다.</p></div>';
     }
 
-    function visibleArchivePreviewItems(items, state = DEFAULT_ARCHIVE_STATE) {
-      const topic = normalizeTopicKey(state.topic);
-      const sort = normalizeSortKey(state.sort);
-      return items
-        .filter(item => archiveItemMatchesTopic(item, topic))
-        .sort((a, b) => compareArchiveItems(a, b, sort))
-        .slice(0, ARCHIVE_PREVIEW_LIMIT);
-    }
-
-    function renderArchiveCards(items) {
-      return items.map(item => {
-        const href = newsletterHtmlHref(item);
-        const accessibleName = `${item.date || ''} ${item.title || ''} 뉴스레터 열기`.trim();
-        return `
-          <a class="archive-card" href="${escapeHtml(href)}" aria-label="${escapeHtml(accessibleName)}">
-            <div class="card-meta archive-card-meta">
-              <span class="issue-date">${escapeHtml(item.date)}</span>
-            </div>
-            ${renderArchiveTags(item.tags)}
-            <h3 class="card-title clamp-2">${escapeHtml(item.title)}</h3>
-            <p class="card-summary archive-card-summary clamp-3">${escapeHtml(item.summary)}</p>
-            <span class="card-bookmark" aria-hidden="true"></span>
-          </a>
-        `;
-      }).join('');
-    }
-
-    function renderArchiveEmptyState(state) {
-      const topic = archiveTopicByKey(state.topic);
-      const label = topic.key === 'all' ? '이전 뉴스레터가 없습니다.' : '선택한 주제의 아카이브가 없습니다.';
-      return `<div class="archive-empty-state"><p class="muted">${label}</p></div>`;
-    }
-
-    function updateTopicButtons(topicList, activeTopic) {
-      if (!topicList || typeof topicList.querySelectorAll !== 'function') return;
-      for (const button of topicList.querySelectorAll('[data-homepage-topic]')) {
-        const isActive = button.getAttribute('data-homepage-topic') === activeTopic;
-        button.classList.toggle('is-active', isActive);
-        button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-      }
-    }
-
-    function renderArchivePreview(archiveEl, archiveItems, state) {
-      const visibleItems = visibleArchivePreviewItems(archiveItems, state);
+    function renderArchivePreview(archiveEl, archiveItems) {
+      const visibleItems = archiveHelpers.sortEntries(archiveItems, 'latest').slice(0, ARCHIVE_PREVIEW_LIMIT);
       archiveEl.innerHTML = visibleItems.length > 0
-        ? renderArchiveCards(visibleItems)
-        : renderArchiveEmptyState(state);
+        ? visibleItems.map(item => archiveHelpers.renderArchiveCard(item)).join('')
+        : renderArchiveEmptyState();
     }
 
     function initializeArchivePreview(archiveItems) {
       const archiveEl = document.getElementById('archive-list');
-      const topicList = document.getElementById('topic-filter-list');
-      const sortEl = document.getElementById('archive-sort');
-      const filterShortcut = document.getElementById('archive-filter-shortcut');
       if (!archiveEl) return;
 
-      let currentState = { ...DEFAULT_ARCHIVE_STATE };
-
-      const applyState = nextState => {
-        currentState = {
-          topic: normalizeTopicKey(nextState.topic),
-          sort: normalizeSortKey(nextState.sort)
-        };
-        if (sortEl) sortEl.value = currentState.sort;
-        updateTopicButtons(topicList, currentState.topic);
-        renderArchivePreview(archiveEl, archiveItems, currentState);
-      };
-
-      if (topicList && typeof topicList.addEventListener === 'function') {
-        topicList.addEventListener('click', event => {
-          const button = event.target && typeof event.target.closest === 'function'
-            ? event.target.closest('[data-homepage-topic]')
-            : null;
-          if (!button) return;
-          applyState({
-            topic: button.getAttribute('data-homepage-topic'),
-            sort: currentState.sort
-          });
-        });
-      }
-
-      if (sortEl && typeof sortEl.addEventListener === 'function') {
-        sortEl.addEventListener('change', () => {
-          applyState({
-            topic: currentState.topic,
-            sort: sortEl.value
-          });
-        });
-      }
-
-      if (filterShortcut && typeof filterShortcut.addEventListener === 'function') {
-        filterShortcut.addEventListener('click', () => {
-          if (topicList && typeof topicList.scrollIntoView === 'function') {
-            topicList.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        });
-      }
-
-      applyState(currentState);
+      renderArchivePreview(archiveEl, archiveItems);
     }
 
     async function fetchHomepageNewsletters() {
