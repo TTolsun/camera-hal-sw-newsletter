@@ -608,7 +608,7 @@ function validateHalSignalCapsules(value) {
   }
 }
 
-function validateClaimBindingContract(value, reporter = {}, strictClaims = false) {
+function validateClaimBindingContract(value, reporter = {}, strictClaims = false, seedEvidencePack = null) {
   if (strictClaims !== true) return;
   const candidateIndex = buildCandidateIndex(reporter);
   const issues = [];
@@ -617,7 +617,8 @@ function validateClaimBindingContract(value, reporter = {}, strictClaims = false
       section,
       candidate: candidateForSection(section, candidateIndex) || {},
       articleIndex: index,
-      strict: true
+      strict: true,
+      seedEvidencePack
     });
     const blockingIssues = [
       ...ensureArray(result.issues),
@@ -912,7 +913,7 @@ function validateEditorOutputContract(value, date, options = {}) {
   validateArticleSectionContract(value);
   validateHalSignalCapsules(value);
   validateFieldHygiene(value);
-  validateClaimBindingContract(value, reporter, options.strictClaims === true);
+  validateClaimBindingContract(value, reporter, options.strictClaims === true, options.seedEvidencePack || null);
   validateEditorArticlePolicy(value, reporter);
   validateBlockedContextUsage(value, reporter);
   validateSelectedGroupCoverage(value, reporter);
@@ -1036,6 +1037,7 @@ async function repairEditorOutputContract({
   normalizeSection,
   strictClaims = false,
   requireStoryContract = false,
+  seedEvidencePack = null,
   repairFn
 }) {
   const invalidEditor = cloneJson(value);
@@ -1043,7 +1045,8 @@ async function repairEditorOutputContract({
     reporter,
     normalizeSection,
     strictClaims,
-    requireStoryContract
+    requireStoryContract,
+    seedEvidencePack
   });
   const unsupportedStoryMarkerPreflightIssues = unsupportedStoryMarkerIssues(invalidEditor);
   if (unsupportedStoryMarkerPreflightIssues.length > 0) {

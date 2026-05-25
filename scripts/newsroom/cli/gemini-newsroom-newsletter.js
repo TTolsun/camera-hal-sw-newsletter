@@ -302,6 +302,10 @@ function articleClaimContractPrompt() {
     'claims[].impact_level은 candidate metadata enum을 복사하지 말고 source facts, behavior_change, source_extraction, article_sections.hal_driver_impact를 보고 직접 판단하세요.',
     'source-backed verified_facts[], confirmed_facts[], 또는 구체적인 evidence_summary text에는 대응되는 claim_type=fact claim이 최소 1개 있어야 합니다.',
     'Fact claims는 제공된 seed_evidence.primary_evidence_ids, seed_evidence.linked_evidence_ids, candidate evidence_ids, source_extraction facts의 item-level evidence ids를 cite해야 합니다. evidence_pack_ids만으로 fact support를 만들지 마세요.',
+    'claims[].evidence_ids는 같은 article capsule의 allowed_claim_evidence[].evidence_id 값만 정확히 복사하세요. evidence id를 만들거나 변형하지 마세요.',
+    'claims[].source_urls는 선택한 allowed_claim_evidence[].source_urls에서만 가져오세요.',
+    'behavior_change: ... 같은 설명문, confirmed_facts[0], article_sections.verified_facts[0] 같은 JSON field path, URL 문자열 자체를 evidence_id로 쓰지 마세요.',
+    'Repair 중에는 이전 invalid output의 evidence_ids를 신뢰하거나 재사용하지 말고 현재 prompt의 allowed_claim_evidence[]에서 전부 다시 선택하세요.',
     'evidence URL에 fragment가 있으면 source_urls에서 release/version/section URL fragment를 보존하세요. 특히 CameraX release-note anchor를 보존해야 합니다.',
     'do_not_claim 또는 do_not_overstate guardrails와 모순되지 않게 쓰세요. Direct HAL/API/runtime 표현은 direct source evidence가 필요합니다.'
   ].join('\n');
@@ -1134,16 +1138,16 @@ function enforceDeterministicReporterSelection(reporter, shortlistReport) {
   return normalizeReporterReport(reporter, shortlistReport);
 }
 
-function selectedReporterCapsules(date, reporter, capsuleReport) {
-  return capsuleInputForCandidates(date, ensureArray(reporter.candidates).filter(isFinalSelected), capsuleReport);
+function selectedReporterCapsules(date, reporter, capsuleReport, options = {}) {
+  return capsuleInputForCandidates(date, ensureArray(reporter.candidates).filter(isFinalSelected), capsuleReport, options);
 }
 
-function reserveReporterCapsules(date, reporter, capsuleReport) {
-  return capsuleInputForCandidates(date, ensureArray(reporter.candidates).filter(isReserveCandidate), capsuleReport);
+function reserveReporterCapsules(date, reporter, capsuleReport, options = {}) {
+  return capsuleInputForCandidates(date, ensureArray(reporter.candidates).filter(isReserveCandidate), capsuleReport, options);
 }
 
-function reporterCandidateCapsules(date, candidates, capsuleReport) {
-  return capsuleInputForCandidates(date, candidates, capsuleReport);
+function reporterCandidateCapsules(date, candidates, capsuleReport, options = {}) {
+  return capsuleInputForCandidates(date, candidates, capsuleReport, options);
 }
 
 function reporterImageCandidatesForSection(section, reporter) {
@@ -1298,7 +1302,8 @@ function validateEditor(value, date, reporter = { candidates: [] }, options = {}
     reporter,
     normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
     strictClaims: options.strictClaims === true,
-    requireStoryContract: options.requireStoryContract === true
+    requireStoryContract: options.requireStoryContract === true,
+    seedEvidencePack: options.seedEvidencePack || null
   });
 }
 
@@ -1398,9 +1403,14 @@ function recordLastKnownValidEditor(editor, {
   qualityReport = null,
   attempt = 0,
   strictClaims = true,
-  requireStoryContract = false
+  requireStoryContract = false,
+  seedEvidencePack = null
 } = {}) {
-  const validated = validateEditor(cloneJson(editor), date, reporter, { strictClaims, requireStoryContract });
+  const validated = validateEditor(cloneJson(editor), date, reporter, {
+    strictClaims,
+    requireStoryContract,
+    seedEvidencePack
+  });
   generationRunState.lastKnownValidEditor = cloneJson(validated);
   generationRunState.lastKnownValidReporter = cloneJson(reporter);
   generationRunState.lastKnownValidFactCheck = cloneJson(factCheck);
@@ -1890,6 +1900,9 @@ async function repairEditorSemanticWithLlm({
   editorStage,
   commonContext,
   lockedContext,
+  reporter,
+  articleCapsuleReport,
+  seedEvidencePack = null,
   invalidEditor,
   validationError
 }) {
@@ -1903,11 +1916,12 @@ async function repairEditorSemanticWithLlm({
       'Article을 추가, 제거, 재정렬, 교체하지 마세요.',
       'Validation error가 명시적으로 해당 field를 가리키지 않으면 article headline, category, source URL, image field, action_items, references를 변경하지 마세요.',
       publicArticleContractPrompt(),
+      articleClaimContractPrompt(),
       'sections.group_coverage failure는 missing selected representative group을 selected capsule만 사용해 article로 복구하세요. 해당 group을 render할 수 없으면 article_group_key, reason_code, reason text를 포함해 explicitly_demoted_groups[] 또는 hard_blocked_groups[]에 기록하세요.',
       'sections.blocked_context failure는 article sources와 headline에서 blocked context URL/title을 제거하세요. Blocked context는 diagnostic context로만 남길 수 있습니다.',
       'sections.claims failure는 source-backed verified_facts[], confirmed_facts[], concrete evidence_summary field마다 matching claim_type=fact claim이 있도록 claims를 추가하거나 조정하세요.',
       'Claim repair에는 허용된 claim_type과 impact_level 값만 사용하세요. 직접 HAL contract를 뒷받침하는 근거가 없으면 CameraX/adaptive UI impact는 app_api_or_framework_adjacent로 매핑하세요.',
-      'source_urls가 누락된 경우 section source URL을 재사용하세요. Fact claim은 존재하는 경우 seed_evidence.primary_evidence_ids, seed_evidence.linked_evidence_ids, candidate evidence_ids, source_extraction evidence ids를 cite하고, evidence id를 만들지 마세요.',
+      'source_urls가 누락된 경우 현재 article capsule의 allowed_claim_evidence[].source_urls에서 선택하세요. 이전 invalid output의 evidence_ids/source_urls를 허용 목록처럼 취급하지 마세요.',
       'briefing failure는 briefing을 정확히 3개 item으로 고치고 draft의 나머지는 보존하세요.',
       'Source fact 또는 source material을 만들지 마세요.',
       'Schema-compliant JSON만 반환하세요.'
@@ -1915,6 +1929,7 @@ async function repairEditorSemanticWithLlm({
     [
       commonContext,
       lockedContext,
+      `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter || { candidates: [] }, articleCapsuleReport, { seedEvidencePack }), null, 2)}`,
       `Editor semantic validation error JSON:\n${JSON.stringify(validationError, null, 2)}`,
       `Invalid editor draft JSON:\n${JSON.stringify(invalidEditor, null, 2)}`
     ].filter(Boolean).join('\n\n'),
@@ -2242,7 +2257,9 @@ async function validateOrRepairEditor(value, {
   editorStage,
   commonContext,
   lockedContext,
-  newsroomDir
+  newsroomDir,
+  articleCapsuleReport = null,
+  seedEvidencePack = null
 }) {
   const result = await repairEditorOutputContract({
     value,
@@ -2253,12 +2270,16 @@ async function validateOrRepairEditor(value, {
     newsroomDir,
     strictClaims: true,
     requireStoryContract: true,
+    seedEvidencePack,
     normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
     repairFn: async ({ invalidEditor, validationError }) => repairEditorSemanticWithLlm({
       date,
       editorStage,
       commonContext,
       lockedContext,
+      reporter,
+      articleCapsuleReport,
+      seedEvidencePack,
       invalidEditor,
       validationError
     })
@@ -3498,6 +3519,7 @@ async function main() {
   const newsletterTemplate = readTextIfExists(newsletterTemplatePath);
   const goldenExample = readTextIfExists(goldenExamplePath);
   const sourceRegistry = fs.existsSync(sourceRegistryPath) ? readJson(sourceRegistryPath) : null;
+  const seedEvidencePack = readSeedEvidencePackForDate(date);
   fs.mkdirSync(newsroomDir, { recursive: true });
   fs.mkdirSync(newsletterDir, { recursive: true });
 
@@ -3513,7 +3535,9 @@ async function main() {
   reporterInput.candidates = annotateCandidatesWithCache(reporterInput.candidates, cacheDir);
   const summaryCacheDiagnostics = reporterInput.candidates.cache_diagnostics || [];
   writeSummaryCacheReport(date, summaryCacheDiagnostics);
-  let articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, reporterInput);
+  let articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, reporterInput, {
+    seedEvidencePack
+  });
   writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
   if (shortlistReport.candidate_shortage_reviewable === true) {
     const failureReason = ensureArray(shortlistReport.shortage_reason_codes).join('; ') ||
@@ -3712,7 +3736,9 @@ async function main() {
     generationRunState.selectedInputs = shortlistReport.selected_articles;
     writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
     writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
-    articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates });
+    articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates }, {
+      seedEvidencePack
+    });
     writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
     backgroundContextReport = await buildBackgroundContextReport({
       date,
@@ -3790,7 +3816,7 @@ async function main() {
         commonContext,
         lockedContext,
         editorRetryContract ? `Editor retry output contract JSON:\n${JSON.stringify(editorRetryContract, null, 2)}` : '',
-        `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}`,
+        `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}`,
         `Background context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}`
       ].filter(Boolean).join('\n\n'),
       editorSchema
@@ -3803,7 +3829,9 @@ async function main() {
         editorStage,
         commonContext,
         lockedContext,
-        newsroomDir
+        newsroomDir,
+        articleCapsuleReport,
+        seedEvidencePack
       });
       assertEditorRetryOutputContract(editor, editorRetryContract, reporter);
     } catch (error) {
@@ -3832,7 +3860,7 @@ async function main() {
     attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
     await resolveIssueArticleImages(editor, { root });
     warnResolvedImageFallbacks(editor);
-    editor = recordLastKnownValidEditor(editor, { date, reporter, attempt, requireStoryContract: true });
+    editor = recordLastKnownValidEditor(editor, { date, reporter, attempt, requireStoryContract: true, seedEvidencePack });
     writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor });
     writeJson(path.join(newsroomDir, `editor-draft-attempt-${attempt}.json`), editor);
     fs.writeFileSync(path.join(newsroomDir, `editor-draft-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
@@ -3862,7 +3890,7 @@ async function main() {
         'style rewrite는 하지 마세요. factual errors, source problems, editorial-policy violations에만 집중하세요.',
         'schema와 일치하는 JSON만 반환하세요.'
       ].join('\n'),
-      `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+      `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
       factCheckSchema
     ));
     let eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
@@ -3876,10 +3904,10 @@ async function main() {
       threshold: qualityGatePolicy.threshold,
       shortlistReport,
       strictClaimValidation: true,
-      seedEvidencePack: readSeedEvidencePackForDate(date)
+      seedEvidencePack
     });
     generationRunState.qualityReport = qualityReport;
-    editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true });
+    editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true, seedEvidencePack });
     writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
     writeJson(path.join(newsroomDir, `quality-report-attempt-${attempt}.json`), qualityReport);
     fs.writeFileSync(path.join(newsroomDir, `quality-report-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
@@ -3959,7 +3987,7 @@ async function main() {
           'golden example은 article structure와 evidence/actionability style 참고로만 사용하세요. 현재 reporter candidates에 없는 facts는 복사하지 마세요.',
           'schema와 일치하는 JSON만 반환하세요.'
         ].join('\n'),
-        `${commonContext}\n\n${lockedContext}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nLocked/passing sections JSON:\n${JSON.stringify(preservedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nFailed sections JSON:\n${JSON.stringify(failedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nReserve candidate capsule pool JSON:\n${JSON.stringify(reporterCandidateCapsules(date, repairCandidatePool, articleCapsuleReport), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCandidate rejection diagnostics JSON:\n${JSON.stringify(repairCandidateRejections, null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
+        `${commonContext}\n\n${lockedContext}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nLocked/passing sections JSON:\n${JSON.stringify(preservedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nFailed sections JSON:\n${JSON.stringify(failedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nReserve candidate capsule pool JSON:\n${JSON.stringify(reporterCandidateCapsules(date, repairCandidatePool, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCandidate rejection diagnostics JSON:\n${JSON.stringify(repairCandidateRejections, null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
           editorCompletionSchema
         ), date, reporter);
         const repairMerged = mergeLockedSections(preservedSections, repairSections, excludedSections.concat(demotedSections));
@@ -4028,7 +4056,7 @@ async function main() {
           'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
           'schema와 일치하는 JSON만 반환하세요.'
         ].join('\n'),
-        `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nReserve article capsule pool JSON:\n${JSON.stringify(reserveReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+        `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nReserve article capsule pool JSON:\n${JSON.stringify(reserveReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
           factCheckSchema
         ));
         eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections, {
@@ -4044,10 +4072,10 @@ async function main() {
           threshold: qualityGatePolicy.threshold,
           shortlistReport,
           strictClaimValidation: true,
-          seedEvidencePack: readSeedEvidencePackForDate(date)
+          seedEvidencePack
         });
         generationRunState.qualityReport = qualityReport;
-        editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true });
+        editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true, seedEvidencePack });
         writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
         writeJson(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.json`), qualityReport);
         fs.writeFileSync(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
@@ -4118,7 +4146,7 @@ async function main() {
             '각 article은 해당 article imageCandidates에서 selectedImage를 최대 하나만 선택하세요. attribution 또는 relevance가 불확실하면 selectedImage는 empty string을 사용하세요.',
             '최종 newsletter text는 한국어로 작성하세요. schema와 일치하는 JSON만 반환하세요.'
           ].join('\n'),
-          `${commonContext}\n\nCompletion exclusion context JSON:\n${buildCompletionExclusionContext(lockedSections, editor.sections, completionExcludedSections)}\n\nCurrent editor section summaries JSON:\n${JSON.stringify(editor.sections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nEligible primary/reserve article capsules for additional articles JSON:\n${JSON.stringify(reporterCandidateCapsules(date, completionCandidates, articleCapsuleReport), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCandidate rejection diagnostics JSON:\n${JSON.stringify(completionCandidateRejections, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
+          `${commonContext}\n\nCompletion exclusion context JSON:\n${buildCompletionExclusionContext(lockedSections, editor.sections, completionExcludedSections)}\n\nCurrent editor section summaries JSON:\n${JSON.stringify(editor.sections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nEligible primary/reserve article capsules for additional articles JSON:\n${JSON.stringify(reporterCandidateCapsules(date, completionCandidates, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCandidate rejection diagnostics JSON:\n${JSON.stringify(completionCandidateRejections, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
             editorCompletionSchema
           ), date, reporter);
           const completionMerged = mergeLockedSections(editor.sections, completionSections, completionExcludedSections);
@@ -4172,7 +4200,7 @@ async function main() {
             'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
             'schema와 일치하는 JSON만 반환하세요.'
           ].join('\n'),
-          `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nReserve article capsule pool JSON:\n${JSON.stringify(reserveReporterCapsules(date, reporter, articleCapsuleReport), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+          `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nReserve article capsule pool JSON:\n${JSON.stringify(reserveReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
             factCheckSchema
           ));
           eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections, {
@@ -4188,10 +4216,10 @@ async function main() {
             threshold: qualityGatePolicy.threshold,
             shortlistReport,
             strictClaimValidation: true,
-            seedEvidencePack: readSeedEvidencePackForDate(date)
+            seedEvidencePack
           });
           generationRunState.qualityReport = qualityReport;
-          editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true });
+          editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true, seedEvidencePack });
           writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
           writeJson(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.json`), qualityReport);
           fs.writeFileSync(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
@@ -4321,7 +4349,7 @@ async function main() {
     shortlistReport,
     staleClaimReport: staleScrub.report,
     strictClaimValidation: true,
-    seedEvidencePack: readSeedEvidencePackForDate(date)
+    seedEvidencePack
   });
   generationRunState.qualityReport = qualityReport;
 
@@ -4676,6 +4704,7 @@ module.exports = {
   failureClassFromError,
   failureStageFromError,
   hasTooFewMainArticlesDeduction,
+  articleClaimContractPrompt,
   articleSectionContractPrompt,
   linkedEvidencePromptGuardrails,
   publicArticleContractPrompt,

@@ -8,6 +8,9 @@ const {
   capsuleInputFromReport,
   compactSelectionContext
 } = require('../../../scripts/newsroom/generate/article-capsules');
+const {
+  stableSourceExtractionItemId
+} = require('../../../scripts/newsroom/validate/claim-source-binding');
 
 function candidate(overrides = {}) {
   return {
@@ -90,7 +93,7 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   assert.equal(capsule.source_fact_bundle.source_url, 'https://example.com/camera-hal-metadata?utm=1');
   assert.deepEqual(capsule.source_fact_bundle.facts, []);
   assert.ok(capsule.evidence.length > 0);
-  assert.ok(capsule.estimated_tokens <= 1100);
+  assert.ok(capsule.estimated_tokens <= 1200);
   assert.equal(Object.hasOwn(capsule, 'impact_claim_level'), false);
 });
 
@@ -294,6 +297,39 @@ test('article capsule carries compact seed evidence by id instead of full eviden
   assert.equal(capsule.seed_evidence.packs, undefined);
   assert.equal(capsule.seed_evidence.primary_evidence, undefined);
   assert.equal(capsule.do_not_claim.includes('Keyword hints are discovery hints only.'), true);
+});
+
+test('article capsule exposes allowed claim evidence from validator helper', () => {
+  const blockText = 'Jetpack Compose includes CameraX for correct camera previews across any window size.';
+  const capsule = buildArticleCapsule(candidate({
+    source_candidate_hash: 'adaptive-hash',
+    primary_evidence_ids: [],
+    linked_evidence_ids: [],
+    evidence_ids: [],
+    evidence_pack_ids: ['provenance-pack'],
+    source_extraction: {
+      evidence_blocks: [{
+        heading: 'Adaptive apps with CameraX',
+        text: blockText,
+        links: [{ url: 'https://developer.android.com/media/camera/camerax' }]
+      }]
+    }
+  }));
+
+  const ids = capsule.allowed_claim_evidence.map(item => item.evidence_id);
+  assert.ok(ids.includes(stableSourceExtractionItemId(
+    { source_candidate_hash: 'adaptive-hash' },
+    'evidence_blocks',
+    blockText
+  )));
+  assert.ok(ids.includes('candidate:adaptive-hash:source-summary'));
+  assert.equal(ids.includes('provenance-pack'), false);
+  assert.ok(capsule.allowed_claim_evidence.every(item =>
+    item.evidence_id &&
+    item.kind &&
+    Array.isArray(item.source_urls) &&
+    typeof item.text === 'string'
+  ));
 });
 
 test('article capsule report separates shortlist and selected capsule inputs', () => {

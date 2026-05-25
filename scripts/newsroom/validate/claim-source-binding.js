@@ -144,6 +144,12 @@ function stableCandidateSummaryEvidenceId(candidate = {}) {
   return `candidate:${sourceCandidateHash(candidate)}:source-summary`;
 }
 
+function compactEvidencePromptText(value, max = 360) {
+  const raw = text(value).replace(/\s+/g, ' ');
+  if (raw.length <= max) return raw;
+  return `${raw.slice(0, max - 1).trim()}...`;
+}
+
 function sourceExtractionItems(candidate = {}) {
   const extraction = objectValue(candidate.source_extraction);
   const groups = [
@@ -837,6 +843,38 @@ function buildEvidenceIndex(candidate = {}, section = {}, options = {}) {
   return index;
 }
 
+const ALLOWED_EVIDENCE_KIND_ORDER = Object.freeze({
+  primary_evidence: 10,
+  seed_primary_evidence: 10,
+  source_extraction_item: 20,
+  candidate_evidence: 30,
+  linked_evidence: 40,
+  seed_linked_evidence: 40,
+  linked_evidence_item: 40,
+  source_aware_linked_evidence_item: 40,
+  candidate_source_summary: 50
+});
+
+function buildAllowedClaimEvidence(candidate = {}, section = {}, options = {}) {
+  const evidenceIndex = buildEvidenceIndex(candidate, section, {
+    seedEvidencePack: options.seedEvidencePack || null
+  });
+  return [...evidenceIndex.byId.values()]
+    .filter(item => item && item.status === 'allowed' && item.provenance_only !== true)
+    .map(item => ({
+      evidence_id: item.id,
+      kind: item.kind || 'evidence',
+      source_urls: uniqueTexts(item.urls).slice(0, 4),
+      text: compactEvidencePromptText(ensureArray(item.texts)[0] || '')
+    }))
+    .sort((left, right) => {
+      const leftRank = ALLOWED_EVIDENCE_KIND_ORDER[left.kind] ?? 100;
+      const rightRank = ALLOWED_EVIDENCE_KIND_ORDER[right.kind] ?? 100;
+      if (leftRank !== rightRank) return leftRank - rightRank;
+      return left.evidence_id.localeCompare(right.evidence_id);
+    });
+}
+
 function normalizeClaim(raw = {}, index) {
   const claimId = text(raw.claim_id || raw.claimId);
   const impactLevel = lower(raw.impact_level || raw.impactLevel);
@@ -1400,6 +1438,7 @@ module.exports = {
   CLAIM_IMPACT_LEVELS,
   CLAIM_TYPES,
   OVERCLAIM_RISKS,
+  buildAllowedClaimEvidence,
   buildEvidenceIndex,
   normalizeSeedEvidencePack,
   normalizeSeedPackEvidenceItem,

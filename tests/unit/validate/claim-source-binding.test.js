@@ -2,6 +2,8 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  buildAllowedClaimEvidence,
+  buildEvidenceIndex,
   normalizeSeedPackStatus,
   stableLinkedEvidenceItemId,
   stableSourceExtractionItemId,
@@ -110,6 +112,63 @@ test('source extraction item id remains stable when item order changes', () => {
   );
   assert.equal(first, second);
   assert.match(first, /^sx:hash-a:release-bug-fixes:[a-f0-9]{16}$/);
+});
+
+test('allowed claim evidence exposes only validator-allowed item ids', () => {
+  const sourceText = 'CameraX 1.6.1 fixes preview behavior for foldable window resizing.';
+  const claimCandidate = candidate({
+    summary: 'CameraX 1.6.1 release summary.',
+    behavior_change: 'CameraX preview behavior changed.',
+    evidence_pack_ids: ['seed-camerax-pack'],
+    primary_evidence_ids: ['seed-camerax-primary-01'],
+    linked_evidence_ids: ['seed-camerax-linked-01'],
+    evidence_ids: ['candidate-evidence-1'],
+    source_extraction: {
+      evidence_blocks: [{
+        heading: 'CameraX 1.6.1',
+        text: sourceText,
+        links: [{ url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1' }]
+      }]
+    },
+    linked_evidence: [{
+      evidence_id: 'blocked-linked-1',
+      fetch_status: 'failed',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+      source_text: 'Failed linked context should not be exposed as allowed claim evidence.'
+    }],
+    unsupported_linked_evidence_ids: ['unsupported-linked-1'],
+    unsupported_linked_evidence_urls: ['https://example.com/unsupported']
+  });
+  const seedPackData = seedEvidencePack([
+    seedPack({ linkedEvidenceId: 'seed-camerax-linked-01', linkedStatus: 'allowed' })
+  ]);
+
+  const allowed = buildAllowedClaimEvidence(claimCandidate, section(), {
+    seedEvidencePack: seedPackData
+  });
+  const allowedIds = allowed.map(item => item.evidence_id);
+  const expectedIds = [...buildEvidenceIndex(claimCandidate, section(), {
+    seedEvidencePack: seedPackData
+  }).byId.values()]
+    .filter(item => item.status === 'allowed' && item.provenance_only !== true)
+    .map(item => item.id)
+    .sort();
+
+  assert.deepEqual([...allowedIds].sort(), expectedIds);
+  assert.ok(allowedIds.includes('seed-camerax-primary-01'));
+  assert.ok(allowedIds.includes('seed-camerax-linked-01'));
+  assert.ok(allowedIds.includes('candidate-evidence-1'));
+  assert.ok(allowedIds.includes(stableSourceExtractionItemId(claimCandidate, 'evidence_blocks', sourceText)));
+  assert.ok(allowedIds.includes('candidate:candidate-hash:source-summary'));
+  assert.equal(allowedIds.includes('seed-camerax-pack'), false);
+  assert.equal(allowedIds.includes('blocked-linked-1'), false);
+  assert.equal(allowedIds.includes('unsupported-linked-1'), false);
+  assert.ok(allowed.every(item =>
+    typeof item.evidence_id === 'string' &&
+    typeof item.kind === 'string' &&
+    Array.isArray(item.source_urls) &&
+    typeof item.text === 'string'
+  ));
 });
 
 test('pack fallback is migration-only and reports derived_evidence_mapping', () => {

@@ -11,6 +11,7 @@ const {
 } = require('../../scripts/newsroom/validate/editor-output-contract');
 const { editorSchema } = require('../../scripts/newsroom/render/newsletter-schema');
 const {
+  articleClaimContractPrompt,
   buildGenerationStatus,
   editorSemanticStatusExtra,
   linkedEvidencePromptGuardrails,
@@ -699,6 +700,128 @@ test('strict editor claim binding requires a fact claim for factual article fiel
       return true;
     }
   );
+});
+
+test('strict editor claim binding accepts allowed claim evidence ids', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        claims: [{
+          claim_id: 'claim-1',
+          text: 'Fact 1',
+          claim_type: 'fact',
+          evidence_ids: ['evidence-1'],
+          source_urls: ['https://example.com/source-1'],
+          impact_level: 'app_api_or_framework_adjacent',
+          overclaim_risk: 'low'
+        }]
+      })
+    ]
+  });
+
+  assert.doesNotThrow(() => validateEditorOutputContract(draft, DATE, {
+    normalizeSection,
+    reporter: reporterForClaimTests(),
+    strictClaims: true
+  }));
+});
+
+test('strict editor claim binding uses seed evidence pack input when validating editor output', () => {
+  const url = 'https://example.com/source-1';
+  const draft = editor({
+    sections: [
+      section(1, {
+        claims: [{
+          claim_id: 'claim-1',
+          text: 'Fact 1',
+          claim_type: 'fact',
+          evidence_ids: ['seed-primary-1'],
+          source_urls: [url],
+          impact_level: 'app_api_or_framework_adjacent',
+          overclaim_risk: 'low'
+        }]
+      })
+    ]
+  });
+  const reporter = {
+    candidates: [{
+      title: 'Source 1',
+      url,
+      source_candidate_hash: 'hash-1',
+      relevance_bucket: 'direct_aosp_camera',
+      counts_as_primary_camera_topic: true,
+      evidence_pack_ids: ['seed-pack-1'],
+      finalSelectionEligibility: 'main',
+      hasDatedEvidence: true,
+      source_gap_risk: false,
+      main_eligible: true
+    }]
+  };
+  const seedEvidencePack = {
+    packs: [{
+      evidence_pack_id: 'seed-pack-1',
+      seed_url: url,
+      final_url: url,
+      title: 'Source 1',
+      primary_evidence: [{
+        evidence_id: 'seed-primary-1',
+        url,
+        title: 'Source 1',
+        source_backed_items: ['Fact 1']
+      }],
+      linked_evidence: []
+    }]
+  };
+
+  assert.doesNotThrow(() => validateEditorOutputContract(draft, DATE, {
+    normalizeSection,
+    reporter,
+    strictClaims: true,
+    seedEvidencePack
+  }));
+});
+
+test('strict editor claim binding rejects field paths as evidence ids', () => {
+  const draft = editor({
+    sections: [
+      section(1, {
+        claims: [{
+          claim_id: 'claim-1',
+          text: 'Fact 1',
+          claim_type: 'fact',
+          evidence_ids: ['article_sections.verified_facts[0]'],
+          source_urls: ['https://example.com/source-1'],
+          impact_level: 'app_api_or_framework_adjacent',
+          overclaim_risk: 'low'
+        }]
+      })
+    ]
+  });
+
+  assert.throws(
+    () => validateEditorOutputContract(draft, DATE, {
+      normalizeSection,
+      reporter: reporterForClaimTests(),
+      strictClaims: true
+    }),
+    error => {
+      const reasonCodes = error.details.issues.flatMap(issue =>
+        issue.issues.map(item => item.reason_code)
+      );
+      assert.ok(reasonCodes.includes('unknown_evidence_id'));
+      return true;
+    }
+  );
+});
+
+test('claim prompt restricts editor and repair evidence ids to allowed evidence', () => {
+  const prompt = articleClaimContractPrompt();
+
+  assert.match(prompt, /allowed_claim_evidence\[\]\.evidence_id/);
+  assert.match(prompt, /allowed_claim_evidence\[\]\.source_urls/);
+  assert.match(prompt, /confirmed_facts\[0\]/);
+  assert.match(prompt, /article_sections\.verified_facts\[0\]/);
+  assert.match(prompt, /Repair/);
 });
 
 test('strict editor claim binding rejects duplicate claim ids and invalid enums', () => {
