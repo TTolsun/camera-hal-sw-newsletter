@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "report_type": "source_discovery_feedback",
+  "date": "2026-05-25",
+  "status": "PASS",
+  "parser_gap_count": 0,
+  "duplicate_discovery_gap_count": 0,
+  "gemini_parser_failure_count": 0,
+  "gemini_parser_failures": [],
+  "items": []
+}
