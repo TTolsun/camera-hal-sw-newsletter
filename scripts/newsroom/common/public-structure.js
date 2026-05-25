@@ -141,10 +141,6 @@ function publicNewsletterStructureStatus(root, date) {
     errors.push(...dataIndex.pathErrors);
   }
 
-  if (newsletterHtml?.text && !/<a\s+[^>]*href=["'](?:\.\/)?newsletter\.md["']/i.test(newsletterHtml.text)) {
-    errors.push(`Newsletter HTML missing newsletter.md link: newsletters/${date}/index.html`);
-  }
-
   errors.push(...rootIndexContractErrors(root));
 
   if (newsletterMd?.nonEmpty && newsletterHtml?.nonEmpty) {

@@ -16,8 +16,8 @@
         <span class="brand-subtitle">Newsletter</span>
       </a>
       <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
-        <a href="#latest">Latest</a>
-        <a href="#archive">Archive</a>
+        <a href="index.html">Home</a>
+        <a href="archive.html">Archive</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </div>
@@ -80,7 +80,7 @@
           <h2 id="archive-title">Archive</h2>
         </div>
         <div class="archive-controls">
-          <a class="section-link" href="archive.html">전체 보기</a>
+          <a class="section-link" href="archive.html">전체 아카이브 보기</a>
         </div>
       </div>
       <div id="archive-list" class="archive-grid">
@@ -96,8 +96,8 @@
         <span class="brand-subtitle">Newsletter</span>
       </a>
       <div class="footer-links">
-        <a href="#latest">Latest</a>
-        <a href="#archive">Archive</a>
+        <a href="index.html">Home</a>
+        <a href="archive.html">Archive</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </nav>
@@ -140,7 +140,7 @@
       return isHttpsUrl(raw) ? raw : safeInternalPath(raw);
     };
 
-    const ARCHIVE_PREVIEW_LIMIT = 6;
+    const ARCHIVE_PREVIEW_LIMIT = 4;
     const archiveHelpers = window.NewsletterArchive;
 
     function getArchiveItems(newsletters) {

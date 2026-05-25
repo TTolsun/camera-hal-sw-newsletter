@@ -70,6 +70,25 @@ function createTopicTarget(key, disabled = false) {
   return button;
 }
 
+function createPageTarget(page, disabled = false) {
+  const button = createElement({
+    'data-archive-page': String(page),
+    disabled,
+    closest(selector) {
+      assert.equal(selector, '[data-archive-page]');
+      return button;
+    },
+    getAttribute(name) {
+      if (name === 'data-archive-page') return String(page);
+      return '';
+    },
+    hasAttribute(name) {
+      return name === 'disabled' && disabled;
+    }
+  });
+  return button;
+}
+
 function updateLocationFromUrl(location, url) {
   const parsed = new URL(url, 'https://example.com');
   location.pathname = parsed.pathname;
@@ -86,6 +105,10 @@ async function renderArchivePage(newsletters, options = {}) {
     '[data-sort-control]': createElement({ value: 'latest' }),
     '[data-result-summary]': createElement(),
     '[data-archive-grid]': createElement(),
+    '[data-archive-pagination]': createElement({ hidden: true }),
+    '[data-archive-count]': createElement(),
+    '[data-archive-topic-label]': createElement(),
+    '[data-archive-sort-label]': createElement(),
     '[data-empty-state]': createElement({ hidden: true }),
     '[data-error-state]': createElement({ hidden: true })
   };
@@ -162,15 +185,24 @@ test('archive page uses homepage shell, shared footer, metadata, and stable hook
   assert.match(html, /<meta name="description" content="Camera HAL, Android Camera, Driver, Image Processing, AI 뉴스레터 아카이브"/);
   assert.match(html, /<body class="homepage">/);
   assert.match(html, /<header class="site-header homepage-site-header">/);
-  assert.match(html, /<footer class="site-footer">[\s\S]*href="index\.html#latest">Latest<\/a>[\s\S]*href="archive\.html">Archive<\/a>[\s\S]*GitHub/);
+  assert.match(html, /<section class="archive-hero content-wrap" aria-labelledby="archive-page-title">/);
+  assert.match(html, /<h1 id="archive-page-title">Archive<\/h1>/);
+  assert.match(html, /assets\/images\/brand\/HALley\.png/);
+  assert.doesNotMatch(html, /archive-hero-actions|<a class="button button-primary" href="index\.html">Home<\/a>/);
+  assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">Home<\/a>[\s\S]*href="archive\.html">Archive<\/a>[\s\S]*GitHub/);
+  assert.match(html, /<footer class="site-footer">[\s\S]*href="index\.html">Home<\/a>[\s\S]*href="archive\.html">Archive<\/a>[\s\S]*GitHub/);
   for (const hook of [
     'data-page="archive"',
     'data-archive-status',
     'data-archive-controls',
+    'data-archive-count',
+    'data-archive-topic-label',
+    'data-archive-sort-label',
     'data-topic-filter',
     'data-sort-control',
     'data-result-summary',
     'data-archive-grid',
+    'data-archive-pagination',
     'data-empty-state',
     'data-error-state'
   ]) {
@@ -195,8 +227,8 @@ test('archive helper canonicalizes managed query params and preserves unrelated 
       pathname: '/archive.html',
       search: '?utm_source=x',
       hash: '#section'
-    }, { topic: 'android', sort: 'oldest' }),
-    '/archive.html?utm_source=x&topic=android&sort=oldest#section'
+    }, { topic: 'android', sort: 'oldest', page: 2 }),
+    '/archive.html?utm_source=x&topic=android&sort=oldest&page=2#section'
   );
 });
 
@@ -234,9 +266,46 @@ test('archive page renders all newsletters including latest in date-descending o
   assert.ok(html.indexOf('Latest issue') < html.indexOf('Middle issue'));
   assert.ok(html.indexOf('Middle issue') < html.indexOf('Older issue'));
   assert.match(elements['[data-result-summary]'].textContent, /전체 3개 아카이브를 최신순으로 표시 중입니다/);
+  assert.equal(elements['[data-archive-count]'].textContent, '3개');
+  assert.equal(elements['[data-archive-topic-label]'].textContent, '전체');
+  assert.equal(elements['[data-archive-sort-label]'].textContent, '최신순');
   assert.equal(elements['[data-archive-controls]'].hidden, false);
   assert.equal(elements['[data-empty-state]'].hidden, true);
   assert.equal(elements['[data-error-state]'].hidden, true);
+  assert.equal(elements['[data-archive-pagination]'].hidden, true);
+});
+
+test('archive page paginates newsletters eight per page and keeps page in the URL', async () => {
+  const items = Array.from({ length: 11 }, (_, index) => {
+    const day = String(25 - index).padStart(2, '0');
+    return newsletter(`2026-05-${day}`, `Issue ${day}`);
+  });
+  const rendered = await renderArchivePage(items);
+  const pageHandler = rendered.elements['[data-archive-pagination]'].listeners.click;
+  let html = rendered.elements['[data-archive-grid]'].innerHTML;
+  let cards = archiveCards(html);
+
+  assert.equal(cards.length, 8);
+  assert.match(html, /Issue 25/);
+  assert.match(html, /Issue 18/);
+  assert.doesNotMatch(html, /Issue 17/);
+  assert.match(rendered.elements['[data-result-summary]'].textContent, /전체 11개 아카이브 중 1-8개를 최신순으로 표시 중입니다/);
+  assert.equal(rendered.elements['[data-archive-count]'].textContent, '11개');
+  assert.equal(rendered.elements['[data-archive-pagination]'].hidden, false);
+  assert.match(rendered.elements['[data-archive-pagination]'].innerHTML, /data-archive-page="1" aria-current="page"/);
+  assert.match(rendered.elements['[data-archive-pagination]'].innerHTML, /data-archive-page="2"/);
+
+  pageHandler({ target: createPageTarget(2) });
+  html = rendered.elements['[data-archive-grid]'].innerHTML;
+  cards = archiveCards(html);
+
+  assert.equal(cards.length, 3);
+  assert.match(html, /Issue 17/);
+  assert.match(html, /Issue 15/);
+  assert.doesNotMatch(html, /Issue 18/);
+  assert.match(rendered.elements['[data-result-summary]'].textContent, /전체 11개 아카이브 중 9-11개를 최신순으로 표시 중입니다/);
+  assert.equal(rendered.location.search, '?page=2');
+  assert.deepEqual(rendered.historyUpdates, ['/archive.html?page=2']);
 });
 
 test('archive page filters by topic, updates aria-pressed, and changes sort order', async () => {
@@ -255,19 +324,45 @@ test('archive page filters by topic, updates aria-pressed, and changes sort orde
   assert.doesNotMatch(html, /Camera issue/);
   assert.match(rendered.elements['[data-topic-filter]'].innerHTML, /data-archive-topic="android" aria-pressed="true"/);
   assert.match(rendered.elements['[data-result-summary]'].textContent, /Android 2개 아카이브를 최신순으로 표시 중입니다/);
+  assert.equal(rendered.elements['[data-archive-count]'].textContent, '2/3개');
+  assert.equal(rendered.elements['[data-archive-topic-label]'].textContent, 'Android');
+  assert.equal(rendered.elements['[data-archive-sort-label]'].textContent, '최신순');
+  assert.equal(rendered.elements['[data-archive-pagination]'].hidden, true);
 
   rendered.elements['[data-sort-control]'].value = 'oldest';
   sortHandler();
   html = rendered.elements['[data-archive-grid]'].innerHTML;
   assert.ok(html.indexOf('Older Android issue') < html.indexOf('Newer Android issue'));
   assert.match(rendered.elements['[data-result-summary]'].textContent, /Android 2개 아카이브를 오래된순으로 표시 중입니다/);
+  assert.equal(rendered.elements['[data-archive-sort-label]'].textContent, '오래된순');
+});
+
+test('archive page clamps stale page URLs and resets page when filters change', async () => {
+  const items = Array.from({ length: 10 }, (_, index) => {
+    const day = String(25 - index).padStart(2, '0');
+    const tags = index < 2 ? ['Android'] : ['Camera HAL'];
+    return newsletter(`2026-05-${day}`, `Issue ${day}`, tags);
+  });
+  const rendered = await renderArchivePage(items, { search: '?page=9' });
+  const topicHandler = rendered.elements['[data-topic-filter]'].listeners.click;
+
+  assert.equal(rendered.location.search, '?page=2');
+  assert.deepEqual(rendered.historyUpdates, ['/archive.html?page=2']);
+  assert.equal(archiveCards(rendered.elements['[data-archive-grid]'].innerHTML).length, 2);
+  assert.match(rendered.elements['[data-result-summary]'].textContent, /전체 10개 아카이브 중 9-10개를 최신순으로 표시 중입니다/);
+
+  topicHandler({ target: createTopicTarget('android') });
+
+  assert.equal(rendered.location.search, '?topic=android');
+  assert.match(rendered.elements['[data-result-summary]'].textContent, /Android 2개 아카이브를 최신순으로 표시 중입니다/);
+  assert.equal(rendered.elements['[data-archive-pagination]'].hidden, true);
 });
 
 test('archive page canonicalizes invalid and default query state with replaceState', async () => {
   const { historyUpdates, location, elements } = await renderArchivePage([
     newsletter('2026-05-25', 'Latest issue')
   ], {
-    search: '?topic=invalid&sort=latest&utm_source=x&keep=1',
+    search: '?topic=invalid&sort=latest&page=0&utm_source=x&keep=1',
     hash: '#archive'
   });
 
@@ -286,7 +381,9 @@ test('archive page shows no-result state for direct topic URL with no matches', 
 
   assert.equal(elements['[data-archive-grid]'].innerHTML, '');
   assert.equal(elements['[data-empty-state]'].hidden, false);
+  assert.equal(elements['[data-archive-pagination]'].hidden, true);
   assert.match(elements['[data-result-summary]'].textContent, /SoC Platform 결과가 없습니다/);
+  assert.equal(elements['[data-archive-count]'].textContent, '0/1개');
   assert.match(elements['[data-topic-filter]'].innerHTML, /data-archive-topic="soc-platform" aria-pressed="true" disabled aria-disabled="true"/);
 });
 
@@ -296,6 +393,7 @@ test('archive page shows fetch error state without exposing controls', async () 
   assert.equal(elements['[data-archive-controls]'].hidden, true);
   assert.equal(elements['[data-empty-state]'].hidden, true);
   assert.equal(elements['[data-error-state]'].hidden, false);
+  assert.equal(elements['[data-archive-pagination]'].hidden, true);
   assert.match(elements['[data-archive-status]'].textContent, /아카이브를 불러오지 못했습니다/);
   assert.equal(errors.length, 1);
 });

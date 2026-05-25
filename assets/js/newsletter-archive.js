@@ -8,8 +8,8 @@
     { key: 'ai', label: 'AI', tag: 'AI' },
     { key: 'soc-platform', label: 'SoC Platform', tag: 'SoC Platform' }
   ];
-  const DEFAULT_STATE = { topic: 'all', sort: 'latest' };
-  const MANAGED_QUERY_KEYS = ['topic', 'sort'];
+  const DEFAULT_STATE = { topic: 'all', sort: 'latest', page: 1 };
+  const MANAGED_QUERY_KEYS = ['topic', 'sort', 'page'];
   const TOPIC_KEYS = new Set(TOPICS.map(topic => topic.key));
   const SORT_KEYS = new Set(['latest', 'oldest']);
   const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
@@ -54,10 +54,16 @@
     return SORT_KEYS.has(key) ? key : DEFAULT_STATE.sort;
   }
 
+  function normalizePageNumber(value) {
+    const page = Number.parseInt(String(value || '').trim(), 10);
+    return Number.isFinite(page) && page > 0 ? page : DEFAULT_STATE.page;
+  }
+
   function normalizeArchiveState(source = {}) {
     return {
       topic: normalizeTopicKey(sourceValue(source, 'topic')),
-      sort: normalizeSortKey(sourceValue(source, 'sort'))
+      sort: normalizeSortKey(sourceValue(source, 'sort')),
+      page: normalizePageNumber(sourceValue(source, 'page'))
     };
   }
 
@@ -127,6 +133,9 @@
     if (normalized.sort !== DEFAULT_STATE.sort) {
       params.set('sort', normalized.sort);
     }
+    if (normalized.page !== DEFAULT_STATE.page) {
+      params.set('page', String(normalized.page));
+    }
     const query = params.toString();
     return `${pathname}${query ? `?${query}` : ''}${hash}`;
   }
@@ -175,7 +184,6 @@
         ${tagHtml}
         <h3 class="card-title clamp-2">${escapeHtml(entry && entry.title)}</h3>
         <p class="card-summary ${escapeHtml(summaryClass)} clamp-3">${escapeHtml(entry && entry.summary)}</p>
-        <span class="card-bookmark" aria-hidden="true"></span>
       </a>
     `;
   }

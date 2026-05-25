@@ -204,7 +204,6 @@ function childKind(tag, attrs) {
   if (classes.includes('archive-tags')) return 'archive-tags';
   if (classes.includes('card-title')) return 'card-title';
   if (classes.includes('card-summary')) return 'card-summary';
-  if (classes.includes('card-bookmark')) return 'card-bookmark';
   if (classes.includes('card-actions')) return 'card-actions';
   return tag;
 }
@@ -373,7 +372,7 @@ test('archive preview shows fetch error without toolbar state', async () => {
   assert.equal(errors.length, 1);
 });
 
-test('renders at most six archive preview cards after sorting and excluding the latest newsletter', async () => {
+test('renders at most four archive preview cards after sorting and excluding the latest newsletter', async () => {
   const items = [
     newsletter('2026-05-19'),
     newsletter('2026-05-20'),
@@ -388,12 +387,14 @@ test('renders at most six archive preview cards after sorting and excluding the 
   const { elements } = await renderHomepage(items);
   const cards = archiveCards(elements['archive-list'].innerHTML);
 
-  assert.equal(cards.length, 6);
+  assert.equal(cards.length, 4);
   assert.match(elements['latest-card'].innerHTML, /2026-05-26/);
   assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-26/);
-  for (const date of ['2026-05-25', '2026-05-24', '2026-05-23', '2026-05-22', '2026-05-21', '2026-05-20']) {
+  for (const date of ['2026-05-25', '2026-05-24', '2026-05-23', '2026-05-22']) {
     assert.match(elements['archive-list'].innerHTML, new RegExp(date));
   }
+  assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-21/);
+  assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-20/);
   assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-19/);
 });
 
@@ -413,8 +414,7 @@ test('archive card order, clamps, and tag overflow keep archive cards scannable'
     'card-meta',
     'archive-tags',
     'card-title',
-    'card-summary',
-    'card-bookmark'
+    'card-summary'
   ]);
   assert.match(card, /<h3 class="card-title clamp-2">Archive card title<\/h3>/);
   assert.match(card, /<p class="card-summary archive-card-summary clamp-3">Archive card summary<\/p>/);
@@ -438,8 +438,7 @@ test('archive cards omit empty tag rows while preserving the remaining child ord
   assert.deepEqual(topLevelChildKinds(card), [
     'card-meta',
     'card-title',
-    'card-summary',
-    'card-bookmark'
+    'card-summary'
   ]);
   assert.doesNotMatch(card, /archive-tags/);
 });
@@ -727,11 +726,12 @@ test('homepage exposes clear Featured and Latest heading rows without changing h
 
   assert.match(html, /모바일 카메라의[\s\S]*hero-title-nowrap[\s\S]*어제와 오늘,[\s\S]*그리고 내일/);
   assert.match(html, /Camera HAL, Android, Linux Driver, AI 기술을 중심으로 모바일 카메라 기술의 변화를 추적합니다\./);
-  assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="#latest">Latest<\/a>[\s\S]*href="#archive">Archive<\/a>[\s\S]*href="https:\/\/github\.com\/TTolsun\/camera-hal-sw-newsletter">GitHub<\/a>/);
+  assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">Home<\/a>[\s\S]*href="archive\.html">Archive<\/a>[\s\S]*href="https:\/\/github\.com\/TTolsun\/camera-hal-sw-newsletter">GitHub<\/a>/);
+  assert.match(html, /<a class="button button-secondary" href="#archive">/);
   assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search|Archive로 이동|Archive 탐색/);
   assert.match(html, /<section id="headline"[\s\S]*?<div class="section-heading section-heading-row">[\s\S]*?<h2 id="headline-title">Featured Headline<\/h2>/);
   assert.match(html, /<section id="latest"[\s\S]*?<span class="section-icon section-icon-latest" aria-hidden="true"><\/span>[\s\S]*?<h2 id="latest-title">Latest Newsletter<\/h2>[\s\S]*?<\/div>\s*<\/div>\s*<a id="latest-card"/);
-  assert.match(html, /<section id="archive"[\s\S]*?<span class="section-icon section-icon-archive" aria-hidden="true"><\/span>[\s\S]*?<h2 id="archive-title">Archive<\/h2>[\s\S]*?<div class="archive-controls">\s*<a class="section-link" href="archive\.html">전체 보기<\/a>\s*<\/div>/);
+  assert.match(html, /<section id="archive"[\s\S]*?<span class="section-icon section-icon-archive" aria-hidden="true"><\/span>[\s\S]*?<h2 id="archive-title">Archive<\/h2>[\s\S]*?<div class="archive-controls">\s*<a class="section-link" href="archive\.html">전체 아카이브 보기<\/a>\s*<\/div>/);
   assert.match(html, /<article id="headline-card" class="headline-card"><\/article>/);
   assert.match(html, /<a id="latest-card" class="newsletter-card latest-newsletter-card loading-card">/);
 });
@@ -743,14 +743,20 @@ test('homepage removes local archive controls and delegates browsing to archive.
   assert.doesNotMatch(html, /id="archive-sort"|id="archive-filter-shortcut"|Archive sort order/);
   assert.doesNotMatch(html, /archive-toolbar|archive-result-summary/);
   assert.doesNotMatch(html, /readArchiveStateFromUrl|replaceArchiveUrl|URLSearchParams|normalizeArchiveState|filterEntries/);
-  assert.match(html, /<div class="archive-controls">\s*<a class="section-link" href="archive\.html">전체 보기<\/a>\s*<\/div>/);
+  assert.match(html, /<div class="archive-controls">\s*<a class="section-link" href="archive\.html">전체 아카이브 보기<\/a>\s*<\/div>/);
 });
 
 test('archive grid CSS caps columns and preserves card interaction layout contracts', () => {
   const css = readStylesheet();
   const archiveGrid = exactSelectorBlock(css, '.archive-grid');
   const archiveCard = exactSelectorBlock(css, '.archive-card');
+  const archivePageSection = exactSelectorBlock(css, '.archive-page-section');
+  const archivePageGrid = exactSelectorBlock(css, '.archive-page .archive-grid');
+  const archivePageCard = exactSelectorBlock(css, '.archive-page .archive-card');
   const archiveFocus = exactSelectorBlock(css, '.archive-card:focus-visible');
+  const archivePagination = exactSelectorBlock(css, '.archive-pagination');
+  const archivePageButton = exactSelectorBlock(css, '.archive-page-button');
+  const archivePageCurrent = exactSelectorBlock(css, '.archive-page-button.is-current');
   const mediumGrid = exactSelectorBlock(mediaBlock(css, '(min-width: 700px)'), '.archive-grid');
 
   assertCssDeclaration(archiveGrid, 'display', 'grid');
@@ -759,8 +765,15 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   assert.doesNotMatch(css, /@media \(min-width: 1100px\)[\s\S]*?\.archive-grid[\s\S]*?repeat\(3, minmax\(0, 1fr\)\)/);
   assertCssDeclaration(archiveCard, 'display', 'flex');
   assertCssDeclaration(archiveCard, 'flex-direction', 'column');
+  assertCssDeclaration(archivePageSection, 'min-height', '520px');
+  assertCssDeclaration(archivePageGrid, 'gap', 'var(--space-5)');
+  assertCssDeclaration(archivePageCard, 'padding', '22px 24px');
   assert.match(archiveFocus, /outline\s*:\s*3px solid var\(--focus-ring\)\s*;/);
   assertCssDeclaration(archiveFocus, 'outline-offset', '4px');
+  assertCssDeclaration(archivePagination, 'justify-content', 'center');
+  assertCssDeclaration(archivePageButton, 'min-width', '42px');
+  assertCssDeclaration(archivePageButton, 'border-radius', 'var(--radius-xs)');
+  assertCssDeclaration(archivePageCurrent, 'background', '#0f8f49');
 });
 
 test('homepage shell stays wide while hero second line remains unwrapped', () => {
@@ -812,9 +825,6 @@ test('newsletter issue page CSS uses homepage shell with issue landing layout', 
   const issueWrap = exactSelectorBlock(css, '.newsletter-issue-page .wrap');
   const issueHero = exactSelectorBlock(css, '.newsletter-issue-page .issue-hero');
   const issueHeroGlow = exactSelectorBlock(css, '.newsletter-issue-page .issue-hero::before');
-  const issueActions = exactSelectorBlock(css, '.newsletter-issue-page .issue-actions');
-  const issueActionButtons = exactSelectorBlock(css, '.newsletter-issue-page .issue-actions .button,\n.newsletter-issue-page .bottom-nav .button');
-  const issuePrimaryCta = exactSelectorBlock(css, '.newsletter-issue-page .issue-actions .button-primary,\n.newsletter-issue-page .bottom-nav .button-primary');
   const issueMascotContainer = exactSelectorBlock(css, '.issue-hero-mascot');
   const issueMascot = exactSelectorBlock(css, '.issue-hero-mascot img');
   const issueTitle = exactSelectorBlock(css, '.newsletter-issue-page .article-header h1');
@@ -827,13 +837,12 @@ test('newsletter issue page CSS uses homepage shell with issue landing layout', 
   const issueMobileHeroAndRow = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.newsletter-issue-page .issue-hero,\n  .newsletter-issue-page .article-feature-row');
   const issueMobileArticlePage = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.newsletter-issue-page .article-page');
   const issueMobileHero = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.newsletter-issue-page .issue-hero');
-  const issueMobileHeroGlow = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.site-hero::before,\n  .newsletter-issue-page .issue-hero::before');
+  const issueMobileHeroGlow = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.site-hero::before,\n  .archive-hero::before,\n  .newsletter-issue-page .issue-hero::before');
   const issueMobileMascot = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.issue-hero-mascot');
   const issueMobileMascotImage = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.issue-hero-mascot img');
   const issueCompactHero = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.newsletter-issue-page .issue-hero');
-  const issueCompactMascot = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.issue-hero-mascot');
-  const issueCompactMascotImage = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.hero-mascot img,\n  .issue-hero-mascot img');
-  const issueCompactActionButtons = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.newsletter-issue-page .issue-actions .button');
+  const issueCompactMascot = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.archive-hero-mascot,\n  .issue-hero-mascot');
+  const issueCompactMascotImage = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.hero-mascot img,\n  .archive-hero-mascot img,\n  .issue-hero-mascot img');
 
   assert.match(pageBackground, /radial-gradient\(circle at 50% -80px, rgba\(24, 128, 56, 0\.09\), transparent 34%\)/);
   assertCssDeclaration(issueArticlePage, 'padding', '52px 0 0');
@@ -843,14 +852,8 @@ test('newsletter issue page CSS uses homepage shell with issue landing layout', 
   assertCssDeclaration(issueHero, 'padding', '46px 0 42px');
   assertCssDeclaration(issueHeroGlow, 'width', 'min(38vw, 440px)');
   assert.match(issueHeroGlow, /rgba\(24, 128, 56, 0\.12\)/);
-  assertCssDeclaration(issueActions, 'gap', 'var(--space-5)');
-  assertCssDeclaration(issueActionButtons, 'min-width', '184px');
-  assertCssDeclaration(issueActionButtons, 'min-height', '54px');
-  assertCssDeclaration(issueActionButtons, 'border-radius', 'var(--radius-xs)');
-  assertCssDeclaration(issueActionButtons, 'font-weight', '850');
-  assertCssDeclaration(issuePrimaryCta, 'border-color', '#0f8f49');
-  assert.match(issuePrimaryCta, /background\s*:\s*linear-gradient\(135deg, #0c9650 0%, #08783a 100%\)\s*;/);
-  assertCssDeclaration(issueMascotContainer, 'transform', 'translateY(-18px)');
+  assert.doesNotMatch(css, /issue-actions|bottom-nav|newsletter-actions/);
+  assertCssDeclaration(issueMascotContainer, 'transform', 'none');
   assertCssDeclaration(issueMascot, 'width', 'min(100%, clamp(260px, 32vw, 420px))');
   assert.match(issueMascot, /drop-shadow\(0 16px 28px rgba\(15, 23, 42, 0\.11\)\)/);
   assertCssDeclaration(issueTitle, 'font-size', 'clamp(1.75rem, 3.55vw, 2.95rem)');
@@ -866,12 +869,10 @@ test('newsletter issue page CSS uses homepage shell with issue landing layout', 
   assertCssDeclaration(issueMobileHero, 'padding-bottom', '30px');
   assertCssDeclaration(issueMobileHeroGlow, 'width', 'min(64vw, 340px)');
   assertCssDeclaration(issueMobileMascot, 'justify-content', 'center');
-  assertCssDeclaration(issueMobileMascot, 'transform', 'translateY(-8px)');
+  assertCssDeclaration(issueMobileMascot, 'transform', 'none');
   assertCssDeclaration(issueMobileMascotImage, 'width', 'min(100%, 340px)');
   assertCssDeclaration(issueCompactHero, 'padding-top', '18px');
   assertCssDeclaration(issueCompactHero, 'padding-bottom', '24px');
-  assertCssDeclaration(issueCompactActionButtons, 'width', 'auto');
-  assertCssDeclaration(issueCompactActionButtons, 'flex', '1 1 150px');
-  assertCssDeclaration(issueCompactMascot, 'transform', 'translateY(-4px)');
+  assertCssDeclaration(issueCompactMascot, 'transform', 'none');
   assertCssDeclaration(issueCompactMascotImage, 'width', 'min(100%, 300px)');
 });

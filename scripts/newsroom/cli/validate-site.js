@@ -272,7 +272,7 @@ function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
 }
 
 function siteHeaderExpectedLabels() {
-  return ['Latest', 'Archive', 'GitHub'];
+  return ['Home', 'Archive', 'GitHub'];
 }
 
 function escapeRegex(value) {
@@ -431,8 +431,8 @@ function validateRootHomepageContract(newsletters) {
       fail(`root index.html hardcodes stale newsletter exposure for ${date}. ${buildRemediationMessage(date)}`);
     }
   }
-  if (!/<a\b[^>]*\bhref=["']archive\.html["'][^>]*>\s*전체 보기\s*<\/a>/i.test(html)) {
-    fail('root index.html must link the 전체 보기 archive action to archive.html.');
+  if (!/<a\b[^>]*\bhref=["']archive\.html["'][^>]*>\s*전체 아카이브 보기\s*<\/a>/i.test(html)) {
+    fail('root index.html must link the 전체 아카이브 보기 archive action to archive.html.');
   }
 }
 
@@ -447,8 +447,8 @@ function validateArchivePageContract(newsletters) {
   if (!/<body\b[^>]*class=["'][^"']*\bhomepage\b[^"']*["']/i.test(html)) {
     fail('archive.html must use the same body.homepage shell as index.html.');
   }
-  if (!/<footer\b[^>]*class=["'][^"']*\bsite-footer\b[^"']*["'][\s\S]*Latest[\s\S]*Archive[\s\S]*GitHub/i.test(html)) {
-    fail('archive.html must keep the shared site-footer with Latest / Archive / GitHub links.');
+  if (!/<footer\b[^>]*class=["'][^"']*\bsite-footer\b[^"']*["'][\s\S]*Home[\s\S]*Archive[\s\S]*GitHub/i.test(html)) {
+    fail('archive.html must keep the shared site-footer with Home / Archive / GitHub links.');
   }
   if (!/assets\/js\/newsletter-archive\.js/.test(html)) {
     fail('archive.html must load assets/js/newsletter-archive.js.');
@@ -464,6 +464,7 @@ function validateArchivePageContract(newsletters) {
     'data-sort-control',
     'data-result-summary',
     'data-archive-grid',
+    'data-archive-pagination',
     'data-empty-state',
     'data-error-state'
   ]) {
@@ -724,12 +725,6 @@ for (const relPath of htmlFiles) {
       if (!/<a\s+[^>]*href=["']https?:\/\//i.test(block)) {
         fail(`Newsletter HTML source-list has no source links: ${relPath}`);
       }
-    }
-    if (!hasAny(content, ['Archive로 돌아가기', '아카이브로 돌아가기', 'Archive'])) {
-      fail(`Newsletter HTML missing archive link text: ${relPath}`);
-    }
-    if (!hasAny(content, ['MD 원본 보기', 'MD'])) {
-      fail(`Newsletter HTML missing markdown source link text: ${relPath}`);
     }
   }
 }

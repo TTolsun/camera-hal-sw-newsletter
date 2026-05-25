@@ -163,7 +163,7 @@ test('newsletter renderer keeps generated issue nav labels in English', () => {
   assert.match(html, /<span>Camera SW<\/span>\s*<span class="brand-subtitle">Newsletter<\/span>/);
   assert.match(html, /<title>Camera SW Newsletter - 2026-05-03<\/title>/);
   assert.doesNotMatch(html, /data-site-header|site-header\.js/);
-  assert.deepEqual(labels.slice(0, 3), ['Latest', 'Archive', 'GitHub']);
+  assert.deepEqual(labels.slice(0, 3), ['Home', 'Archive', 'GitHub']);
   assert.equal(labels.includes('Sources'), false);
   assert.equal(labels.includes('\ucd5c\uc2e0\ud638'), false);
   assert.equal(labels.includes('\uc544\uce74\uc774\ube0c'), false);
@@ -174,12 +174,14 @@ test('shared site header renders consistent root-relative links', () => {
   const homeHeader = siteHeaderHtml();
   const issueHeader = siteHeaderHtml({ rootPath: '../../' });
 
-  assert.match(homeHeader, /href="index\.html#latest"/);
+  assert.match(homeHeader, /href="index\.html">Home<\/a>/);
+  assert.match(homeHeader, /href="archive\.html">Archive<\/a>/);
   assert.doesNotMatch(homeHeader, /docs\/news-sources\.md/);
-  assert.match(issueHeader, /href="\.\.\/\.\.\/index\.html#latest"/);
+  assert.match(issueHeader, /href="\.\.\/\.\.\/index\.html">Home<\/a>/);
+  assert.match(issueHeader, /href="\.\.\/\.\.\/archive\.html">Archive<\/a>/);
   assert.doesNotMatch(issueHeader, /\.\.\/\.\.\/docs\/news-sources\.md/);
   assert.deepEqual(siteNavLabels(`<header class="site-header" data-site-header data-site-root="../../"></header><script src="../../assets/js/site-header.js" defer></script>`).slice(0, 3), [
-    'Latest',
+    'Home',
     'Archive',
     'GitHub'
   ]);
@@ -225,9 +227,8 @@ test('newsletter renderer structures issue pages as homepage-shell landing artic
   assert.match(html, /<div class="article-feature-row">/);
   assert.match(html, /<h2 id="article-camerax-release-gives-hal-teams-a-target-title" class="article-title">CameraX release gives HAL teams a target<\/h2>/);
   assert.match(html, /<section class="section issue-references" aria-labelledby="issue-references-title">/);
-  assert.match(html, /<a href="\.\.\/\.\.\/index\.html#archive">Archive<\/a>/);
-  assert.match(html, /<a class="button button-primary" href="\.\.\/\.\.\/index\.html#archive">아카이브로 돌아가기<\/a>/);
-  assert.match(html, /<a class="button button-secondary" href="newsletter\.md">MD 원본 보기<\/a>/);
+  assert.match(html, /<a href="\.\.\/\.\.\/archive\.html">Archive<\/a>/);
+  assert.doesNotMatch(html, /아카이브로 돌아가기|MD 원본 보기|newsletter\.md|bottom-nav|issue-actions/);
 });
 
 test('newsletter renderer article structure table uses shared row semantics', () => {

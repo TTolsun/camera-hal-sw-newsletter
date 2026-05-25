@@ -247,8 +247,8 @@ function homepageHeaderHtml(rootPath = '') {
         <span class="brand-subtitle">Newsletter</span>
       </a>
       <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
-        <a href="${escapeHtml(rootPath)}index.html#latest">Latest</a>
-        <a href="${escapeHtml(rootPath)}index.html#archive">Archive</a>
+        <a href="${escapeHtml(rootPath)}index.html">Home</a>
+        <a href="${escapeHtml(rootPath)}archive.html">Archive</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </div>
@@ -263,8 +263,8 @@ function siteFooterHtml(rootPath = '') {
         <span class="brand-subtitle">Newsletter</span>
       </a>
       <div class="footer-links">
-        <a href="${escapeHtml(rootPath)}index.html#latest">Latest</a>
-        <a href="${escapeHtml(rootPath)}index.html#archive">Archive</a>
+        <a href="${escapeHtml(rootPath)}index.html">Home</a>
+        <a href="${escapeHtml(rootPath)}archive.html">Archive</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </nav>
@@ -473,10 +473,6 @@ function issueHeroHtml(issue) {
           </div>
           <h1 class="issue-title">${issueTitleHtml(issue)}</h1>
           <p class="subtitle">${escapeHtml(issue.summary)}</p>
-          <div class="actions newsletter-actions issue-actions">
-            <a class="button button-primary" href="../../index.html#archive">아카이브로 돌아가기</a>
-            <a class="button button-secondary" href="newsletter.md">MD 원본 보기</a>
-          </div>
         </div>
         <figure class="issue-hero-mascot" aria-label="HALley mascot">
           <img
@@ -533,9 +529,6 @@ ${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, anch
         <div class="card reference-list"><ul>${sourceListHtml(issue.references)}</ul></div>
       </section>
 
-      <nav class="bottom-nav" aria-label="Issue navigation">
-        <a class="button button-primary" href="../../index.html#archive">아카이브로 돌아가기</a>
-      </nav>
     </article>
   </main>
   ${siteFooterHtml(rootPath)}
