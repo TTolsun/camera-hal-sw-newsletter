@@ -42,6 +42,9 @@ const {
 const {
   renderEditorPrSummary
 } = require('../common/editor-pr-summary');
+const {
+  toLegacyEditorIssue
+} = require('../domain/newsletter-domain-normalize');
 
 const EDITOR_BRIEF_ALLOWED_SECTIONS = new Set([
   '이번 주 핵심 메시지',
@@ -2578,7 +2581,7 @@ function renderFallbackPublicIssueNotes(root, date) {
 
 function renderArticleStructureContract(root, date) {
   if (!date) return '';
-  const editor = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'));
+  const editor = toLegacyEditorIssue(readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), { date });
   if (!editor || !Array.isArray(editor.sections)) return '';
   const qualityReport = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'quality-report.json'));
   return [

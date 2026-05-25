@@ -52,6 +52,10 @@ const {
 const {
   normalizeSourceQuality
 } = require('../collect/source-quality-classifier');
+const {
+  isDomainDraftArtifact,
+  toLegacyEditorIssue
+} = require('../domain/newsletter-domain-normalize');
 
 const REQUIRED_BRIEFING_COUNT = 3;
 
@@ -882,6 +886,9 @@ function validateEditorOutputContract(value, date, options = {}) {
       actualType: actualType(value),
       sectionCount: null
     });
+  }
+  if (isDomainDraftArtifact(value)) {
+    value = toLegacyEditorIssue(value, { date });
   }
   if (value.date !== date) value.date = date;
   value.title = value.title || `Camera HAL / SW Newsletter - ${date}`;

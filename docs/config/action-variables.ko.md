@@ -14,7 +14,7 @@ Secret과 Variable은 분리해서 관리합니다. Secret은 로그, commit, PR
 
 기본 provider는 `gemini`입니다. current scheduled workflow는 `Newsroom 01 - Manual Source Collection PR` (`.github/workflows/01-newsroom-manual-source-collect-pr.yml`)이며 RAW candidate collection만 수행합니다. 이 Stage 1 workflow는 LLM credentials, provider/model 설정, `npm run generate`를 사용하지 않습니다.
 
-LLM provider/model 설정은 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`) 수동 final generation에서 적용됩니다. Stage 3 manual 입력의 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS`가 비어 있으면 `scripts/newsroom/common/runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`를 따릅니다. 기본 provider/model을 바꾸려면 code default를 변경합니다.
+LLM provider/model 설정은 LLM 호출 경로가 있는 수동 workflow에서만 적용됩니다. `Newsroom 02 - Gemini Source Discovery PR` (`.github/workflows/02-newsroom-gemini-source-discovery-pr.yml`)은 optional source discovery가 켜진 경우 provider를 사용하고, `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)은 final generation에서 provider를 사용합니다. Stage 2/3 manual 입력의 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS`가 비어 있으면 `scripts/newsroom/common/runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`를 따릅니다. 기본 provider/model을 바꾸려면 code default를 변경합니다.
 
 기존 `GEMINI_MODEL`과 `GEMINI_FALLBACK_MODELS`는 runtime compatibility alias로 유지됩니다. 다만 Stage 3 manual final generation의 provider/model 기본값을 바꾸는 경로는 더 이상 GitHub repo variable이 아니라 code default입니다.
 
@@ -24,11 +24,11 @@ Stage별 primary model은 `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `N
 
 | input | 기본값 | runtime env | 설명 |
 | --- | --- | --- | --- |
-| `llm_provider` | `default` | `LLM_PROVIDER` | `default` 또는 빈 값은 code default provider로 normalize됩니다. 선택값은 `gemini`, `internal`입니다. |
+| `llm_provider` | `default` | `LLM_PROVIDER` | `default` 또는 빈 값은 code default provider로 normalize됩니다. 선택값은 `gemini`, `openapi`, `internal`입니다. `openapi`는 reserved provider enum이며 전용 구현 전에는 `provider_not_implemented`로 fail-fast합니다. |
 | `llm_model` | 빈 값 | `LLM_MODEL` | 수동 실행에서만 primary model을 override합니다. |
 | `llm_fallback_models` | 빈 값 | `LLM_FALLBACK_MODELS` | 수동 실행에서만 fallback model 목록을 comma-separated string으로 override합니다. |
 
-`LLM_PROVIDER=gemini`일 때는 `INTERNAL_LLM_API_KEY`와 `INTERNAL_LLM_ENDPOINT`를 요구하지 않습니다. `LLM_PROVIDER=internal`일 때만 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, explicit `LLM_MODEL`을 필수로 검증합니다. internal provider를 code default provider로 승격하는 작업은 별도 PR에서 `DEFAULT_RUNTIME_CONFIG`와 validation rule을 함께 수정해야 합니다.
+`LLM_PROVIDER=gemini`일 때는 `INTERNAL_LLM_API_KEY`와 `INTERNAL_LLM_ENDPOINT`를 요구하지 않습니다. `LLM_PROVIDER=internal`일 때만 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, explicit `LLM_MODEL`을 필수로 검증합니다. `LLM_PROVIDER=openapi`는 이번 범위에서 HTTP client, `OPENAPI_LLM_API_KEY`, `OPENAPI_LLM_ENDPOINT`, retry/backoff, response parser를 제공하지 않습니다. internal provider 또는 openapi provider를 code default provider로 승격하는 작업은 별도 PR에서 `DEFAULT_RUNTIME_CONFIG`와 validation rule을 함께 수정해야 합니다.
 
 Gemini Pro 계열 모델명은 사용하지 않습니다. `LLM_MODEL`, `GEMINI_MODEL`, `LLM_FALLBACK_MODELS`, `GEMINI_FALLBACK_MODELS`, `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `NEWSROOM_FACTCHECK_MODEL`, `NEWSROOM_REPAIR_MODEL`, `NEWSROOM_JUDGE_MODEL`에 Gemini Pro 계열 모델명이 들어오면 provider와 관계없이 `doctor:config` / runtime validation이 실패합니다.
 

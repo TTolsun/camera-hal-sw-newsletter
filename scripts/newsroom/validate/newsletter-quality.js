@@ -59,6 +59,9 @@ const {
   validateArticleClaims
 } = require('./claim-source-binding');
 const {
+  toLegacyEditorIssue
+} = require('../domain/newsletter-domain-normalize');
+const {
   STORY_CONTRACT_VERSION,
   STORY_PUBLIC_CONTRACT_VERSION
 } = require('../common/public-article-contract');
@@ -1682,6 +1685,7 @@ function briefingStoryStructureFindings(briefing = [], editor = {}) {
 }
 
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
+  editor = toLegacyEditorIssue(editor, { date });
   const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : qualityGatePolicy.threshold;
   const sections = ensureArray(editor.sections);
   const state = { deductions: [] };

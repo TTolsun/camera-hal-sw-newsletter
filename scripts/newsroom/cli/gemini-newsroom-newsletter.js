@@ -131,6 +131,9 @@ const {
   issueTags,
   ensureArray
 } = require('../render/newsletter-renderer');
+const {
+  toEditorDraftArtifact
+} = require('../domain/newsletter-domain-normalize');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -157,6 +160,27 @@ const generationRunState = {
   repairSucceeded: false,
   candidateInput: null
 };
+
+function editorDraftArtifact(editor, date, options = {}) {
+  return toEditorDraftArtifact(editor, {
+    date,
+    provider: runtimeConfig.llmProvider,
+    providerModel:
+      options.providerModel ||
+      getLlmModelUsage(options.stage || 'editor') ||
+      runtimeConfig.llmStageModels?.editor ||
+      runtimeConfig.llmModel ||
+      'unknown',
+    warnings: options.warnings,
+    repairedFields: options.repairedFields,
+    droppedFields: options.droppedFields,
+    rawResponseStored: options.rawResponseStored
+  });
+}
+
+function writeEditorDraftJson(filePath, editor, date, options = {}) {
+  writeJson(filePath, editorDraftArtifact(editor, date, options));
+}
 
 function fail(message) {
   throw new Error(message);
@@ -459,11 +483,26 @@ function failureStageFromError(error) {
   return match ? match[1] : 'generation';
 }
 
+function failureClassFromError(error) {
+  const message = String(error?.message || '');
+  if (error?.code === 'provider_not_implemented' || /provider_not_implemented|API failed|provider configuration failed/i.test(message)) {
+    return 'provider_failure';
+  }
+  if (error?.name === 'LlmJsonParseError' || error?.code === 'adapter_failure' || /adapter failure|not valid JSON|empty response/i.test(message)) {
+    return 'adapter_failure';
+  }
+  if (error?.name === 'NewsletterDomainValidationError' || error?.code === 'domain_validation_failure') {
+    return 'domain_validation_failure';
+  }
+  return '';
+}
+
 function buildGenerationStatus({
   date,
   status,
   failureStage = '',
   failureReason = '',
+  failureClass = '',
   retryHistory = [],
   qualityReport = null,
   factCheck = null,
@@ -477,6 +516,7 @@ function buildGenerationStatus({
     status,
     failure_stage: failureStage,
     failure_reason: failureReason,
+    failure_class: failureClass,
     fact_check_status: factCheck?.status || 'UNKNOWN',
     must_fix_count: mustFixCount,
     quality_status: qualityReport?.status || 'UNKNOWN',
@@ -1603,7 +1643,7 @@ function writeCanonicalReviewArtifacts({
     writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
   }
   if (editor) {
-    writeJson(path.join(newsroomDir, 'editor-draft.json'), editor);
+    writeEditorDraftJson(path.join(newsroomDir, 'editor-draft.json'), editor, date);
     fs.writeFileSync(path.join(newsroomDir, 'editor-draft.md'), buildMarkdown(editor), 'utf8');
   }
   if (factCheck) {
@@ -1728,7 +1768,9 @@ function writeReviewableRepairFailureArtifacts({
   fs.mkdirSync(newsroomDir, { recursive: true });
   writeJson(path.join(newsroomDir, 'repair-failure.json'), serializedError);
   writeJson(path.join(newsroomDir, 'reporter-candidates.json'), fallbackReporter);
-  writeJson(path.join(newsroomDir, 'editor-draft.json'), fallbackEditor);
+  writeEditorDraftJson(path.join(newsroomDir, 'editor-draft.json'), fallbackEditor, date, {
+    warnings: ['failed repair fallback used last known valid editor draft']
+  });
   fs.writeFileSync(path.join(newsroomDir, 'editor-draft.md'), buildMarkdown(fallbackEditor), 'utf8');
   writeJson(path.join(newsroomDir, 'fact-check-report.json'), fallbackFactCheck);
   fs.writeFileSync(path.join(newsroomDir, 'fact-check-report.md'), buildFactCheckMarkdown(date, fallbackFactCheck), 'utf8');
@@ -4284,7 +4326,7 @@ async function main() {
   generationRunState.qualityReport = qualityReport;
 
   writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
-  writeJson(path.join(newsroomDir, 'editor-draft.json'), editor);
+  writeEditorDraftJson(path.join(newsroomDir, 'editor-draft.json'), editor, date);
   fs.writeFileSync(path.join(newsroomDir, 'editor-draft.md'), buildMarkdown(editor), 'utf8');
   writeJson(path.join(newsroomDir, 'fact-check-report.json'), factCheck);
   fs.writeFileSync(path.join(newsroomDir, 'fact-check-report.md'), buildFactCheckMarkdown(date, factCheck), 'utf8');
@@ -4595,6 +4637,7 @@ function writeTerminalFailureStatus(error) {
     status: failedRawArtifactValidation ? 'FAILED_RAW_ARTIFACT_VALIDATION' : 'FAILED',
     failureStage: failureStageFromError(error),
     failureReason: String(error?.message || error || 'Unknown generation failure.'),
+    failureClass: failureClassFromError(error),
     retryHistory: generationRunState.retryHistory,
     qualityReport: generationRunState.qualityReport,
     factCheck: generationRunState.factCheck,
@@ -4630,6 +4673,7 @@ module.exports = {
   buildGenerationStatus,
   buildSectionRepairPlan,
   editorSemanticStatusExtra,
+  failureClassFromError,
   failureStageFromError,
   hasTooFewMainArticlesDeduction,
   articleSectionContractPrompt,

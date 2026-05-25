@@ -14,13 +14,14 @@ on:
         default: ""
         type: string
       llm_provider:
-        description: "LLM provider override for manual runs. default uses code defaults."
+        description: "LLM provider override for manual runs. Current code default: Gemini. Choices: default(code default), gemini, openapi(reserved fail-fast), internal."
         required: false
         default: "default"
         type: choice
         options:
           - "default"
           - "gemini"
+          - "openapi"
           - "internal"
       llm_model:
         description: "Optional LLM model override for this manual run."

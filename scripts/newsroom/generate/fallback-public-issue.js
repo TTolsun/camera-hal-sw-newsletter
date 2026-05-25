@@ -64,6 +64,9 @@ const {
 const {
   buildArticleSourceFactBundle
 } = require('./source-fact-bundle');
+const {
+  toEditorDraftArtifact
+} = require('../domain/newsletter-domain-normalize');
 
 const REQUIRED_PRESERVE_FIELDS = [
   'headline',
@@ -2080,7 +2083,11 @@ function buildFallbackPublicIssue(options = {}) {
     }
   };
 
-  writeJson(path.join(newsroomDir, 'editor-draft.json'), issue);
+  writeJson(path.join(newsroomDir, 'editor-draft.json'), toEditorDraftArtifact(issue, {
+    date,
+    provider: 'deterministic-fallback-public-issue',
+    providerModel: 'deterministic'
+  }));
   writeText(path.join(newsroomDir, 'editor-draft.md'), buildMarkdown(issue));
   writeJson(path.join(newsroomDir, 'fact-check-report.json'), fallbackFactCheck);
   writeText(path.join(newsroomDir, 'fact-check-report.md'), buildFactCheckMarkdown(date, fallbackFactCheck));

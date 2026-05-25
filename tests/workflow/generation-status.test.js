@@ -4,10 +4,14 @@ const test = require('node:test');
 const {
   backgroundContextStageEnabled,
   buildGenerationStatus,
+  failureClassFromError,
   failureStageFromError,
   selectionStatusExtra,
   validateCompletionSections
 } = require('../../scripts/gemini-newsroom-newsletter');
+const {
+  NewsletterDomainValidationError
+} = require('../../scripts/newsroom/domain/newsletter-domain-errors');
 const { qualityGatePolicy } = require('../../scripts/lib/newsletter-policy');
 const { backgroundContextSchema } = require('../../scripts/newsroom/render/newsletter-schema');
 
@@ -17,6 +21,7 @@ test('failure status includes required Gemini diagnostic fields', () => {
     status: 'FAILED',
     failureStage: 'editor attempt 1/4',
     failureReason: 'Gemini output was not valid JSON.',
+    failureClass: 'adapter_failure',
     retryHistory: [{ attempt: 1 }],
     qualityReport: {
       status: 'NEEDS_FIX',
@@ -33,6 +38,7 @@ test('failure status includes required Gemini diagnostic fields', () => {
   assert.equal(status.status, 'FAILED');
   assert.equal(status.failure_stage, 'editor attempt 1/4');
   assert.equal(status.failure_reason, 'Gemini output was not valid JSON.');
+  assert.equal(status.failure_class, 'adapter_failure');
   assert.equal(status.quality_attempt_count, 1);
   assert.equal(status.quality_score, qualityGatePolicy.threshold + 1);
   assert.equal(status.quality_threshold, qualityGatePolicy.threshold);
@@ -46,6 +52,25 @@ test('failure stage is extracted from bracketed Gemini errors', () => {
     failureStageFromError(new Error('[fact-checker attempt 1/4] Gemini API failed.')),
     'fact-checker attempt 1/4'
   );
+});
+
+test('generation failure classes distinguish provider, adapter, and domain failures', () => {
+  const providerError = new Error('[editor] Open API provider_not_implemented: reserved.');
+  providerError.code = 'provider_not_implemented';
+
+  const adapterError = new Error('[editor] Gemini output was not valid JSON.');
+  adapterError.name = 'LlmJsonParseError';
+
+  const domainError = new NewsletterDomainValidationError([{
+    code: 'missing_required_field',
+    path: 'articles[0].sourceRefs[0].url',
+    message: 'Article source URL is required.',
+    severity: 'error'
+  }]);
+
+  assert.equal(failureClassFromError(providerError), 'provider_failure');
+  assert.equal(failureClassFromError(adapterError), 'adapter_failure');
+  assert.equal(failureClassFromError(domainError), 'domain_validation_failure');
 });
 
 test('background context stage defaults to Gemini unless explicitly disabled', () => {

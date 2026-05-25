@@ -46,6 +46,9 @@ const {
 const {
   reconcilePublicState
 } = require('../common/public-state-reconciliation');
+const {
+  toLegacyEditorIssue
+} = require('../domain/newsletter-domain-normalize');
 
 // Contract:
 // - This command ensures the workflow has either publishable public newsletter artifacts
@@ -132,6 +135,7 @@ function parseArgs(argv) {
 
 function llmTitleCredentialConfigured(env = process.env) {
   const config = readRuntimeConfig(env);
+  if (config.llmProvider === 'openapi') return true;
   if (config.llmProvider === 'internal') return Boolean(text(env.INTERNAL_LLM_API_KEY));
   return Boolean(text(env.GEMINI_API_KEY));
 }
@@ -178,6 +182,7 @@ function fallbackTitleSystemInstruction() {
 }
 
 function fallbackTitlePrompt(issue = {}) {
+  issue = toLegacyEditorIssue(issue);
   const articles = ensureArray(issue.sections).map(fallbackHeadlineArticlePayload);
   return JSON.stringify({
     task: 'Generate source-bound Korean headlines for these fallback public newsletter articles.',
@@ -201,6 +206,7 @@ function sanitizeGeneratedHeadline(section = {}, headline = '') {
 }
 
 function normalizeLlmHeadlineOverrides(issue = {}, response = {}) {
+  issue = toLegacyEditorIssue(issue);
   const sections = ensureArray(issue.sections);
   const byHash = new Map(sections.map(section => [text(section.source_candidate_hash), section]).filter(([key]) => key));
   const urlEntries = sections.flatMap(section => [
@@ -238,7 +244,7 @@ function normalizeLlmHeadlineOverrides(issue = {}, response = {}) {
 }
 
 async function generateFallbackPublicHeadlineOverrides(options = {}) {
-  const issue = options.issue || {};
+  const issue = toLegacyEditorIssue(options.issue || {});
   if (ensureArray(issue.sections).length === 0) {
     return { used: false, skipped: true, reason: 'no_sections', overrides: {} };
   }
@@ -276,7 +282,7 @@ function hasArtifactInputs(root, date) {
 }
 
 function editorDraftSectionCount(root, date) {
-  const editor = readJsonSafely(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'));
+  const editor = toLegacyEditorIssue(readJsonSafely(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), { date });
   return ensureArray(editor.sections).length;
 }
 

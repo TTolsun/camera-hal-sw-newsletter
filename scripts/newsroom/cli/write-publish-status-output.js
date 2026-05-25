@@ -25,6 +25,7 @@ const OUTPUT_FIELDS = [
   'review_gate_passed',
   'validate_outcome',
   'validate_ok',
+  'failure_class',
   'failure_kind',
   'quality_status',
   'fact_check_status',
