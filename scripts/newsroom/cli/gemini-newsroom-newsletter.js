@@ -1590,6 +1590,15 @@ function writeCanonicalReviewArtifacts({
   }
 }
 
+function writeReporterArtifactsForAttempt(newsroomDir, reporter, attempt = null) {
+  if (!reporter) return;
+  fs.mkdirSync(newsroomDir, { recursive: true });
+  writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
+  if (Number.isInteger(attempt) && attempt > 0) {
+    writeJson(path.join(newsroomDir, `reporter-candidates-attempt-${attempt}.json`), reporter);
+  }
+}
+
 function fallbackFactCheckForRepairFailure(error, factCheck = null) {
   if (factCheck) return cloneJson(factCheck);
   return {
@@ -3326,7 +3335,7 @@ async function main() {
       writeCacheRecord(candidate, cacheDir, { stage: reporterStage, model: getLlmModelUsage(reporterStage) || 'unknown' });
     }
     const rejectedReporterDuplicates = removeDisallowedSelections(reporter, lockedSections, excludedSections);
-    writeJson(path.join(newsroomDir, `reporter-candidates-attempt-${attempt}.json`), reporter);
+    writeReporterArtifactsForAttempt(newsroomDir, reporter, attempt);
 
     const editorRetryContract = lockedSections.length > 0
       ? buildEditorRetryContract({

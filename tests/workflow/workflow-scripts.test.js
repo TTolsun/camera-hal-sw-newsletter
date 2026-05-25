@@ -5172,7 +5172,8 @@ test('fallback builder includes selected native tooling supporting article after
     final_comment: 'PASS'
   });
   writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), {
+  const canonicalReporterPath = path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json');
+  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates-attempt-1.json'), {
     date,
     candidates: [compose, aiStudio, aiStudioChild]
   });
@@ -5195,6 +5196,7 @@ test('fallback builder includes selected native tooling supporting article after
   const publicMarkdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
   const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
 
+  assert.equal(fs.existsSync(canonicalReporterPath), true);
   assert.equal(finalEditor.sections.length, 2);
   assert.equal(
     finalEditor.sections.some(section => section.headline.includes(aiStudio.title)),
@@ -5207,6 +5209,8 @@ test('fallback builder includes selected native tooling supporting article after
   assert.match(publicMarkdown, /Camera API/);
   assert.match(publicMarkdown, /Gemini API/);
   assert.match(publicMarkdown, /Camera HAL\/Driver 관점에서의 의미/);
+  assert.match(publicMarkdown, /CameraX preview의 aspect ratio, rotation, crop 동작/);
+  assert.doesNotMatch(publicMarkdown, /HAL\/driver 변경으로 해석하지 말고/);
   assert.doesNotMatch(publicMarkdown, /API\/component\/date|stream\/metadata|compatibility test scenario|현재\s+device matrix와\s+맞는지/);
   assert.equal(fallbackReport.fallback_articles.some(item => item.action === 'selected-native-tooling-supporting'), true);
   assert.equal(result.status.public_newsletter_ready, true);

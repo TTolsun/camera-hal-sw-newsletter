@@ -35,7 +35,7 @@ Android Developers Blog는 Tue, 19 May 2026 13:00:00 +0000에 8: Building seamle
 
 ### Camera HAL/Driver 관점에서의 의미
 
-이 소식은 HAL API 변경이 아니라, 다양한 화면 크기에서 CameraX preview가 어떻게 보이는지 확인하라는 app/framework 계층의 참고 신호입니다. HAL/driver 변경으로 해석하지 말고 preview aspect ratio, rotation, crop 동작의 앱 호환성만 확인하면 됩니다.
+이 소식은 HAL API 변경 고지가 아니라 app/framework 계층의 호환성 점검 신호입니다. Camera HAL / Driver 팀은 CameraX preview의 aspect ratio, rotation, crop 동작이 폴더블, 태블릿, 멀티윈도우 환경에서 기존 앱과 다르게 보이지 않는지 확인하는 참고 항목으로 보면 됩니다.
 
 **출처**
 
