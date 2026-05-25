@@ -3,27 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Camera HAL / SW Newsletter - 2026-05-20</title>
+  <title>Camera SW Newsletter - 2026-05-20</title>
   <link rel="stylesheet" href="../../css/styles.css" />
-  <script src="../../assets/js/site-header.js" defer></script>
 </head>
-<body class="newsletter-issue-page">
-  <header class="site-header" data-site-header data-site-root="../../"></header>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsletter">
+        <span>Camera SW</span>
+        <span class="brand-subtitle">Newsletter</span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../index.html#latest">Latest</a>
+        <a href="../../index.html#archive">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
 
-  <main class="article-page">
-    <article class="wrap">
-      <header class="article-header">
-        <div class="article-meta">
-          <span class="issue-kicker">주간 뉴스레터</span>
-          <span class="issue-date">2026-05-20</span>
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <div class="issue-hero-copy">
+          <div class="article-meta issue-hero-meta">
+            <span class="issue-kicker">주간 뉴스레터 2026-05-20</span>
+            <div class="tag-row issue-tags"><span class="tag">Tooling Watch Edition</span><span class="tag">Tooling Watch</span><span class="tag">Android</span></div>
+          </div>
+          <h1 class="issue-title"><span>Camera SW</span><span>Newsletter - 2026-05-20</span></h1>
+          <p class="subtitle">이번 2026-05-20호는 2개 기사(Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.</p>
+          <div class="actions newsletter-actions issue-actions">
+            <a class="button button-primary" href="../../index.html#archive">아카이브로 돌아가기</a>
+            <a class="button button-secondary" href="newsletter.md">MD 원본 보기</a>
+          </div>
         </div>
-        <h1>Camera HAL / SW Newsletter</h1>
-        <p class="subtitle">이번 2026-05-20호는 2개 기사(Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.</p>
-        <div class="tag-row issue-tags"><span class="tag">Tooling Watch Edition</span><span class="tag">Tooling Watch</span><span class="tag">Android</span></div>
-        <div class="actions newsletter-actions issue-actions">
-          <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
-          <a class="button button-primary" href="newsletter.md">MD 원본 보기</a>
-        </div>
+        <figure class="issue-hero-mascot" aria-label="HALley mascot">
+          <img
+            src="../../assets/images/brand/HALley.png"
+            alt="HALley 뉴스레터 마스코트"
+            width="1254"
+            height="1254"
+            decoding="async"
+            loading="eager"
+          />
+        </figure>
       </header>
 
       <div class="publication-notice" role="note">
@@ -32,56 +54,80 @@
           <p>Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다.</p>
         </div>
 
-      <section class="section issue-briefing">
-        <h2>1. 이번 주 3줄 브리핑</h2>
-        <div class="card">
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="card issue-briefing-card">
+          <div class="issue-section-heading">
+            <span class="section-icon section-icon-list" aria-hidden="true"></span>
+            <h2 id="issue-briefing-title">이번 주 3줄 브리핑</h2>
+          </div>
           <ul><li>GCC 16.1 release는 C++26 reflection, contracts, safety hardening, C++20 기본값 같은 C++ toolchain 변화를 묶어 보여줍니다. Android Camera HAL에는 즉시 적용할 변경이 아니라 Clang/LLVM 지원 현황과 장기 native tooling 방향을 비교할 자료입니다.</li><li>Glaze 7.2는 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML serialization 지원을 확장한 C++ library release입니다. Camera HAL에는 production dependency가 아니라 host-side 분석 도구나 standalone native utility에서 검토할 수 있는 serialization tooling 신호입니다.</li><li>첫 번째 기사는 Android branch의 Clang/LLVM, libc++, C++ standard flag가 GCC 16.1의 관심 기능과 어떻게 다른지 확인하는 것, 두 번째 기사는 metadata dump, test config, capability snapshot 같은 host-side 도구에서 serialization 문제가 실제로 있는지 확인하는 것부터 보면 실제 적용 범위를 판단하기 쉽습니다.</li></ul>
         </div>
       </section>
 
-      <section class="section">
-        <h2>2. Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</h2>
-        <div class="card issue-section article-card has-placeholder-image tooling-watch">
-          <div class="article-media article-placeholder-visual article-placeholder-tooling-watch" role="img" aria-label="Tooling Watch / Tooling Watch">
+      <section class="section issue-story" id="article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20-" aria-labelledby="article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20--title">
+        <span class="issue-story-number" aria-label="Article 1">1</span>
+        <article class="card issue-section article-card has-placeholder-image tooling-watch">
+          <div class="article-feature-row">
+            <div class="article-media article-placeholder-visual article-placeholder-tooling-watch" role="img" aria-label="Tooling Watch / Tooling Watch">
             <span></span>
           </div>
+            <div class="article-copy">
 
-          <h3>Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</h3>
-          <p class="article-lead">GCC 16.1 release는 C++26 reflection, contracts, safety hardening, C++20 기본값 같은 C++ toolchain 변화를 묶어 보여줍니다. Android Camera HAL에는 즉시 적용할 변경이 아니라 Clang/LLVM 지원 현황과 장기 native tooling 방향을 비교할 자료입니다.</p>
-          <p>Camera HAL native code는 Android platform toolchain 정책에 묶여 있으므로 GCC 16.1 기능을 production branch 요구사항으로 바로 가져올 수 없습니다. 다만 reflection/contracts 같은 흐름은 metadata table generation, request/result validation helper, debug-only invariant check를 장기적으로 어떻게 단순화할지 논의할 때 참고할 수 있습니다.</p>
-          <p>실제 action은 Android branch의 Clang/LLVM, libc++, C++ standard flag 지원 여부 확인입니다. 기능이 매력적이어도 CTS/VTS/Camera ITS나 production build 정책과 충돌하면 host utility 또는 PoC backlog에만 남겨야 합니다.</p>
-          <div class="article-block"><strong class="article-block-title">Android Native / Tooling 관점</strong><p>GCC 16.1은 HAL runtime 변경이 아니라 C++ toolchain watch 항목입니다. HAL 팀은 Android platform toolchain에서 지원되는 기능만 검토하고, metadata/helper PoC는 host-side 또는 debug-only 범위로 제한해야 합니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>Android branch의 Clang/LLVM, libc++, C++ standard flag가 GCC 16.1의 관심 기능과 어떻게 다른지 확인합니다.</li><li>reflection/contracts 관련 아이디어는 metadata table generation 또는 request/result validation helper PoC 후보로만 기록합니다.</li><li>production HAL build 변경은 platform toolchain 정책과 CTS/VTS 영향 검토 없이는 등록하지 않습니다.</li></ul></div>
+              <h2 id="article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20--title" class="article-title">Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</h2>
+
+              <p class="article-lead">GCC 16.1 release는 C++26 reflection, contracts, safety hardening, C++20 기본값 같은 C++ toolchain 변화를 묶어 보여줍니다. Android Camera HAL에는 즉시 적용할 변경이 아니라 Clang/LLVM 지원 현황과 장기 native tooling 방향을 비교할 자료입니다.</p>
+              <p>Camera HAL native code는 Android platform toolchain 정책에 묶여 있으므로 GCC 16.1 기능을 production branch 요구사항으로 바로 가져올 수 없습니다. 다만 reflection/contracts 같은 흐름은 metadata table generation, request/result validation helper, debug-only invariant check를 장기적으로 어떻게 단순화할지 논의할 때 참고할 수 있습니다.</p>
+            <p>실제 action은 Android branch의 Clang/LLVM, libc++, C++ standard flag 지원 여부 확인입니다. 기능이 매력적이어도 CTS/VTS/Camera ITS나 production build 정책과 충돌하면 host utility 또는 PoC backlog에만 남겨야 합니다.</p>
+            </div>
+          </div>
+          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>GCC 16.1은 HAL runtime 변경이 아니라 C++ toolchain watch 항목입니다. HAL 팀은 Android platform toolchain에서 지원되는 기능만 검토하고, metadata/helper PoC는 host-side 또는 debug-only 범위로 제한해야 합니다.</p></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a></li></ul></div>
-        </div>
+        </article>
       </section>
 
-      <section class="section">
-        <h2>3. Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</h2>
-        <div class="card issue-section article-card has-placeholder-image tooling-watch">
-          <div class="article-media article-placeholder-visual article-placeholder-tooling-watch" role="img" aria-label="Tooling Watch / Tooling Watch">
+      <section class="section issue-story" id="article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more" aria-labelledby="article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more-title">
+        <span class="issue-story-number" aria-label="Article 2">2</span>
+        <article class="card issue-section article-card has-placeholder-image tooling-watch">
+          <div class="article-feature-row">
+            <div class="article-media article-placeholder-visual article-placeholder-tooling-watch" role="img" aria-label="Tooling Watch / Tooling Watch">
             <span></span>
           </div>
+            <div class="article-copy">
 
-          <h3>Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</h3>
-          <p class="article-lead">Glaze 7.2는 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML serialization 지원을 확장한 C++ library release입니다. Camera HAL에는 production dependency가 아니라 host-side 분석 도구나 standalone native utility에서 검토할 수 있는 serialization tooling 신호입니다.</p>
-          <p>Camera HAL 개발에서는 metadata dump, test configuration, device capability snapshot처럼 구조화 데이터를 읽고 쓰는 보조 도구가 자주 필요합니다. Glaze 같은 library는 이런 host-side 도구의 boilerplate를 줄일 가능성이 있지만, 제품 HAL path에 직접 넣으려면 dependency, ABI, platform policy 검토가 필요합니다.</p>
-          <p>따라서 이 항목은 production HAL code 변경으로 읽지 말고, debug utility 또는 offline analysis tool에서 serialization format 선택지를 비교할 때만 사용해야 합니다. C++26 Reflection 지원은 Android toolchain support가 확인된 뒤에야 현실적인 PoC가 됩니다.</p>
-          <div class="article-block"><strong class="article-block-title">Android Native / Tooling 관점</strong><p>Glaze 7.2는 Camera HAL 제품 동작이 아니라 native tooling library 동향입니다. HAL 팀은 host-side metadata/config tooling 후보로만 검토하고, production code dependency로 승격하려면 별도 정책 검토가 필요합니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>metadata dump, test config, capability snapshot 같은 host-side 도구에서 serialization 문제가 실제로 있는지 확인합니다.</li><li>Clang/LLVM의 C++26 Reflection 지원 상태와 Android build 정책을 먼저 확인합니다.</li><li>production HAL code dependency로 쓰려면 ABI, license, platform policy, test coverage를 별도 review 항목으로 분리합니다.</li></ul></div>
+              <h2 id="article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more-title" class="article-title">Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</h2>
+
+              <p class="article-lead">Glaze 7.2는 C++26 Reflection 지원과 YAML, CBOR, MessagePack, TOML serialization 지원을 확장한 C++ library release입니다. Camera HAL에는 production dependency가 아니라 host-side 분석 도구나 standalone native utility에서 검토할 수 있는 serialization tooling 신호입니다.</p>
+              <p>Camera HAL 개발에서는 metadata dump, test configuration, device capability snapshot처럼 구조화 데이터를 읽고 쓰는 보조 도구가 자주 필요합니다. Glaze 같은 library는 이런 host-side 도구의 boilerplate를 줄일 가능성이 있지만, 제품 HAL path에 직접 넣으려면 dependency, ABI, platform policy 검토가 필요합니다.</p>
+            <p>따라서 이 항목은 production HAL code 변경으로 읽지 말고, debug utility 또는 offline analysis tool에서 serialization format 선택지를 비교할 때만 사용해야 합니다. C++26 Reflection 지원은 Android toolchain support가 확인된 뒤에야 현실적인 PoC가 됩니다.</p>
+            </div>
+          </div>
+          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>Glaze 7.2는 Camera HAL 제품 동작이 아니라 native tooling library 동향입니다. HAL 팀은 host-side metadata/config tooling 후보로만 검토하고, production code dependency로 승격하려면 별도 정책 검토가 필요합니다.</p></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more">Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</a></li></ul></div>
-        </div>
+        </article>
       </section>
 
-      <section class="section">
-        <h2>참고자료</h2>
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">참고자료</h2>
         <div class="card reference-list"><ul><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a></li><li><a href="https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more">Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</a></li></ul></div>
       </section>
 
       <nav class="bottom-nav" aria-label="Issue navigation">
-        <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
+        <a class="button button-primary" href="../../index.html#archive">아카이브로 돌아가기</a>
       </nav>
     </article>
   </main>
+  <footer class="site-footer">
+    <nav class="content-wrap footer-inner" aria-label="Footer navigation">
+      <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsletter">
+        <span>Camera SW</span>
+        <span class="brand-subtitle">Newsletter</span>
+      </a>
+      <div class="footer-links">
+        <a href="../../index.html#latest">Latest</a>
+        <a href="../../index.html#archive">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </nav>
+  </footer>
 </body>
 </html>

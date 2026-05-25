@@ -162,7 +162,7 @@ test('rendered issue structure rejects article image HTML contract failures', ()
   const html = buildHtml(editor);
   const cases = [
     ['disallowed scheme', html.replace('src="../../assets/images/fallback/android.svg"', 'src="http://example.com/image.jpg"'), /disallowed URL scheme/],
-    ['missing alt', html.replace(/alt="[^"]+"/, 'alt=""'), /missing alt text/],
+    ['missing alt', html.replace(/(<img class="article-image"[^>]*\balt=")[^"]+"/, '$1"'), /missing alt text/],
     ['missing lazy loading', html.replace('loading="lazy"', 'loading="eager"'), /loading="lazy"/],
     ['missing caption attribution', html.replace(/<figcaption class="article-image-caption">[\s\S]*?<\/figcaption>/, '<figcaption class="article-image-caption">Image source</figcaption>'), /caption attribution/],
     ['invalid fallback path', html.replace('../../assets/images/fallback/android.svg', '../assets/images/not-fallback/android.svg'), /repo-local fallback/]
