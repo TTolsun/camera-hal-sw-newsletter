@@ -3,7 +3,8 @@ const LLM_STAGE_GROUPS = Object.freeze({
   REPORTER: 'reporter',
   EDITOR: 'editor',
   FACTCHECK: 'factcheck',
-  REPAIR: 'repair'
+  REPAIR: 'repair',
+  JUDGE: 'judge'
 });
 const LLM_STAGE_GROUP_VALUES = Object.freeze(Object.values(LLM_STAGE_GROUPS));
 const UNKNOWN_STAGE_ROUTING_WARNING = 'unknown_stage_defaulted_to_reporter';
@@ -35,6 +36,9 @@ function fallbackModels(config) {
 
 function modelGroupInfoForStage(stage) {
   const normalized = normalizeModelName(stage);
+  if (/public[-\s]?article[-\s]?judge|\bjudge\b/.test(normalized)) {
+    return { group: LLM_STAGE_GROUPS.JUDGE, known: true, warning: '' };
+  }
   if (/background-context|reporter/.test(normalized)) {
     return { group: LLM_STAGE_GROUPS.REPORTER, known: true, warning: '' };
   }

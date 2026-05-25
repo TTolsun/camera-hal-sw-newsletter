@@ -31,6 +31,7 @@ const {
   editorSchema,
   editorCompletionSchema,
   factCheckSchema,
+  publicArticleJudgeSchema,
   backgroundContextSchema
 } = require('../render/newsletter-schema');
 const { isSafeExternalImageUrl } = require('../render/image-candidates');
@@ -112,6 +113,7 @@ const {
   sectionPassesArticleGate
 } = require('../validate/newsletter-quality');
 const {
+  assertSectionsAndSourcesPreserved,
   EditorSemanticValidationError,
   repairEditorOutputContract,
   serializeEditorValidationError,
@@ -150,6 +152,7 @@ const generationRunState = {
   lastKnownValidQualityReport: null,
   lastKnownValidAttempt: 0,
   editorSemanticValidation: null,
+  editorPublicArticleJudge: null,
   repairAttempted: false,
   repairSucceeded: false,
   candidateInput: null
@@ -247,6 +250,22 @@ function publicArticleContractPrompt() {
     'reader_checkpoints는 최소 2개이며 내부 QA/checklist용 필드입니다. Markdown/HTML에 직접 렌더링되지 않으므로, public body나 "Camera HAL/Driver 관점에서의 의미" 섹션을 대체하지 마세요. 독자가 실제로 확인할 행동과 source 범위 제한을 자연어로 작성하되 body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요.',
     'API/component/date, stream/metadata, compatibility test scenario처럼 validator token을 조합한 문장을 쓰지 마세요.',
     'source가 HAL/driver 변경을 직접 말하지 않으면 vendor pipeline, stream, metadata, buffer 변경으로 확대하지 마세요.'
+  ].join('\n');
+}
+
+function publicArticleJudgePrompt() {
+  return [
+    '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 public article semantic judge입니다.',
+    '역할은 article을 다시 쓰는 것이 아니라, 제공된 JSON이 독자에게 발행 가능한 의미 품질을 갖췄는지 판정하는 것입니다.',
+    '단어 매칭이나 특정 keyword 출현 여부로 판정하지 마세요. 한국어 표현, 동의어, 자연스러운 기술 문장을 의미 기준으로 평가하세요.',
+    '각 section에 대해 public_article_pass, reader_checkpoints_pass, source_boundary_pass, public_prose_pass를 boolean으로 반환하세요.',
+    'reader_checkpoints_pass는 Camera HAL / Driver / Android Camera / Camera API / native tooling 독자가 실제로 확인, 측정, 비교, 점검, 추적할 수 있는 항목이면 PASS입니다.',
+    'reader_checkpoints가 source가 말하지 않는 HAL/driver/runtime 변경을 사실처럼 단정하거나, 너무 일반적인 모니터링/공유 수준이면 FAIL입니다.',
+    'source_boundary_pass는 raw source 재검증이 아니라, 제공된 reporter_evidence, article_sections, hal_signal_capsule, claims, do_not_overstate 범위 안에서 과장 없이 해석했는지 판정하는 항목입니다.',
+    '제공된 evidence boundary 안에서만 해석하면 PASS입니다. 직접 근거 없는 HAL/driver/vendor pipeline 영향을 주장하면 FAIL입니다.',
+    'public_prose_pass는 public_article에 workflow/debug/schema/validator/publish gate 같은 내부 운영 언어가 없고 독자-facing 한국어 technical prose이면 PASS입니다.',
+    '문제가 있으면 issues[]에 field, severity(P1/P2/P3), reason, suggested_fix를 짧게 작성하세요. 문제가 없으면 issues는 빈 배열입니다.',
+    'JSON만 반환하세요. article text를 재작성하지 마세요.'
   ].join('\n');
 }
 
@@ -482,6 +501,9 @@ function recordEditorSemanticStatus(status = {}) {
   if (status.editor_semantic_validation != null) {
     generationRunState.editorSemanticValidation = status.editor_semantic_validation;
   }
+  if (status.editor_public_article_judge != null) {
+    generationRunState.editorPublicArticleJudge = status.editor_public_article_judge;
+  }
   if ('repairAttempted' in status) {
     generationRunState.repairAttempted =
       generationRunState.repairAttempted || Boolean(status.repairAttempted);
@@ -503,6 +525,10 @@ function editorSemanticStatusExtra(error = null) {
     generationRunState.repairSucceeded || Boolean(error?.repairSucceeded);
   return {
     editor_semantic_validation: editorSemanticValidation,
+    editor_public_article_judge:
+      error?.editorPublicArticleJudge ||
+      generationRunState.editorPublicArticleJudge ||
+      null,
     repairAttempted: Boolean(repairAttempted),
     repairSucceeded: Boolean(repairSucceeded)
   };
@@ -1854,6 +1880,319 @@ async function repairEditorSemanticWithLlm({
   );
 }
 
+function sourceCandidateForJudgeSection(section = {}, reporter = {}) {
+  const sectionHash = stringOrEmpty(section.source_candidate_hash || section.url_hash || section.normalized_url_hash);
+  const sectionUrlKeys = new Set(sectionUrls(section).map(normalizeUrl).filter(Boolean));
+  return ensureArray(reporter?.candidates).find(candidate => {
+    const candidateHash = stringOrEmpty(candidate.source_candidate_hash || candidate.url_hash || candidate.normalized_url_hash);
+    if (sectionHash && candidateHash && sectionHash === candidateHash) return true;
+    const candidateUrl = normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl);
+    return candidateUrl && sectionUrlKeys.has(candidateUrl);
+  }) || null;
+}
+
+function publicArticleJudgeInput(date, editor = {}, reporter = {}) {
+  return {
+    date,
+    audience: 'AOSP Camera / Camera HAL / Camera Driver / SoC Platform / C++ engineer',
+    instruction: 'Judge semantic quality only. Do not rewrite article prose.',
+    sections: ensureArray(editor.sections).map((section, index) => {
+      const candidate = sourceCandidateForJudgeSection(section, reporter) || {};
+      return {
+        section_index: index + 1,
+        headline: section.headline || section.category || `article ${index + 1}`,
+        relevance_bucket: section.relevance_bucket || candidate.relevance_bucket || '',
+        source_candidate_url: section.source_candidate_url || candidate.url || candidate.article_url || '',
+        source_candidate_hash: section.source_candidate_hash || candidate.source_candidate_hash || candidate.url_hash || '',
+        source_quality_status: section.source_quality_status || candidate.source_quality_status || candidate.source_quality?.source_quality_status || '',
+        source_quality_notes: ensureArray(candidate.source_quality_notes || candidate.source_quality?.source_quality_notes),
+        reporter_evidence: {
+          version_or_release: candidate.version_or_release || '',
+          api_or_component: candidate.api_or_component || '',
+          behavior_change: candidate.behavior_change || '',
+          evidence_notes: ensureArray(candidate.evidence_notes),
+          relevance_reason: candidate.relevance_reason || '',
+          do_not_overstate: ensureArray(candidate.do_not_overstate)
+        },
+        sources: ensureArray(section.sources).map(source => ({
+          title: source?.title || '',
+          url: source?.url || ''
+        })),
+        public_article: section.public_article || {},
+        article_sections: section.article_sections || {},
+        hal_signal_capsule: section.hal_signal_capsule || {},
+        claims: ensureArray(section.claims).map(claim => ({
+          text: claim?.text || '',
+          claim_type: claim?.claim_type || '',
+          impact_level: claim?.impact_level || '',
+          overclaim_risk: claim?.overclaim_risk || ''
+        })),
+        do_not_overstate: ensureArray(section.do_not_overstate),
+        do_not_claim: ensureArray(section.do_not_claim || section.article_sections?.do_not_claim)
+      };
+    })
+  };
+}
+
+function normalizePublicArticleJudgeReport(value = {}, editor = {}, date = '') {
+  const editorSections = ensureArray(editor.sections);
+  const sections = ensureArray(value.sections).map((section, index) => ({
+    section_index: numberOrDefault(section?.section_index, index + 1),
+    headline: stringOrEmpty(section?.headline) || editorSections[index]?.headline || `article ${index + 1}`,
+    public_article_pass: section?.public_article_pass === true,
+    reader_checkpoints_pass: section?.reader_checkpoints_pass === true,
+    source_boundary_pass: section?.source_boundary_pass === true,
+    public_prose_pass: section?.public_prose_pass === true,
+    issues: ensureArray(section?.issues).map(issue => ({
+      section_index: numberOrDefault(issue?.section_index, numberOrDefault(section?.section_index, index + 1)),
+      field: stringOrEmpty(issue?.field) || 'public_article',
+      severity: stringOrEmpty(issue?.severity).toUpperCase() || 'P2',
+      reason: stringOrEmpty(issue?.reason) || 'Public article judge reported an issue without a reason.',
+      suggested_fix: stringOrEmpty(issue?.suggested_fix)
+    }))
+  }));
+  return {
+    date: stringOrEmpty(value.date) || date || editor.date || '',
+    overall_pass: value.overall_pass === true,
+    section_count_expected: editorSections.length,
+    section_count_actual: sections.length,
+    sections
+  };
+}
+
+function publicArticleJudgeBlockingIssues(report = {}) {
+  const issues = [];
+  if (report.section_count_actual !== report.section_count_expected) {
+    issues.push({
+      section_index: 0,
+      field: 'sections',
+      severity: 'P1',
+      reason: `Judge returned ${report.section_count_actual} section verdict(s), expected ${report.section_count_expected}.`,
+      suggested_fix: 'Return one verdict per editor section.'
+    });
+  }
+  const expectedSectionCount = numberOrDefault(report.section_count_expected, 0);
+  if (Number.isInteger(expectedSectionCount) && expectedSectionCount > 0) {
+    const indexCounts = new Map();
+    const invalidIndices = [];
+    for (const section of ensureArray(report.sections)) {
+      const sectionIndex = section?.section_index;
+      if (!Number.isInteger(sectionIndex) || sectionIndex < 1 || sectionIndex > expectedSectionCount) {
+        invalidIndices.push(sectionIndex);
+        continue;
+      }
+      indexCounts.set(sectionIndex, (indexCounts.get(sectionIndex) || 0) + 1);
+    }
+    const missingIndices = [];
+    const duplicateIndices = [];
+    for (let index = 1; index <= expectedSectionCount; index += 1) {
+      const count = indexCounts.get(index) || 0;
+      if (count === 0) missingIndices.push(index);
+      if (count > 1) duplicateIndices.push(index);
+    }
+    if (invalidIndices.length > 0 || missingIndices.length > 0 || duplicateIndices.length > 0) {
+      issues.push({
+        section_index: 0,
+        field: 'sections.section_index',
+        severity: 'P1',
+        reason: [
+          duplicateIndices.length > 0 ? `duplicate section_index: ${duplicateIndices.join(', ')}` : '',
+          missingIndices.length > 0 ? `missing section_index: ${missingIndices.join(', ')}` : '',
+          invalidIndices.length > 0 ? `invalid section_index: ${invalidIndices.join(', ')}` : ''
+        ].filter(Boolean).join('; '),
+        suggested_fix: `Return section_index values 1..${expectedSectionCount} exactly once.`
+      });
+    }
+  }
+  for (const section of ensureArray(report.sections)) {
+    for (const [field, passed] of Object.entries({
+      public_article_pass: section.public_article_pass,
+      reader_checkpoints_pass: section.reader_checkpoints_pass,
+      source_boundary_pass: section.source_boundary_pass,
+      public_prose_pass: section.public_prose_pass
+    })) {
+      if (passed !== true) {
+        issues.push({
+          section_index: section.section_index,
+          headline: section.headline,
+          field,
+          severity: 'P1',
+          reason: `${field} is false.`,
+          suggested_fix: `Repair ${field.replace(/_pass$/, '')} for this section.`
+        });
+      }
+    }
+    issues.push(...ensureArray(section.issues)
+      .filter(issue => /^(P1|P2)$/i.test(issue.severity))
+      .map(issue => ({
+        headline: section.headline,
+        ...issue
+      })));
+  }
+  if (report.overall_pass !== true && issues.length === 0) {
+    issues.push({
+      section_index: 0,
+      field: 'overall_pass',
+      severity: 'P1',
+      reason: 'Judge returned overall_pass=false without a section issue.',
+      suggested_fix: 'Repair the public article fields or return explicit section issues.'
+    });
+  }
+  return issues;
+}
+
+function publicArticleJudgeError(report, stage, attempt, phase = 'attempt') {
+  const issues = publicArticleJudgeBlockingIssues(report);
+  const error = new EditorSemanticValidationError(
+    'Editor output failed public article semantic judge validation.',
+    {
+      field: 'sections.public_article',
+      judge_stage: stage,
+      judge_phase: phase,
+      actualCount: issues.length,
+      sectionCount: report.section_count_actual,
+      expectedSectionCount: report.section_count_expected,
+      issues,
+      judge_report: report
+    }
+  );
+  error.stage = stage;
+  error.attempt = attempt;
+  error.editorPublicArticleJudge = report;
+  return error;
+}
+
+function publicArticleJudgeArtifactScope(stage = '') {
+  const normalized = String(stage || '').toLowerCase();
+  if (/completion/.test(normalized)) return 'completion';
+  if (/editor repair|targeted/.test(normalized)) return 'targeted-repair';
+  return 'editor';
+}
+
+function writePublicArticleJudgeArtifact(newsroomDir, attempt, phase, report, error = null, stage = '') {
+  if (!newsroomDir) return;
+  const scope = publicArticleJudgeArtifactScope(stage);
+  const baseSuffix = phase === 'repair' ? `repair-attempt-${attempt}` : `attempt-${attempt}`;
+  const suffix = scope === 'editor' ? baseSuffix : `${scope}-${baseSuffix}`;
+  writeJson(path.join(newsroomDir, `editor-public-article-judge-${suffix}.json`), report);
+  if (error) {
+    writeJson(path.join(newsroomDir, `editor-public-article-judge-error-${suffix}.json`), serializeEditorValidationError(error, {
+      stage: error.stage || '',
+      attempt
+    }));
+  }
+}
+
+async function runPublicArticleJudge({ date, editor, reporter, stage, attempt, newsroomDir, phase = 'attempt' }) {
+  const rawReport = await callLlmJson(
+    stage,
+    publicArticleJudgePrompt(),
+    `Public article judge input JSON:\n${JSON.stringify(publicArticleJudgeInput(date, editor, reporter), null, 2)}`,
+    publicArticleJudgeSchema
+  );
+  const report = normalizePublicArticleJudgeReport(rawReport, editor, date);
+  const blockingIssues = publicArticleJudgeBlockingIssues(report);
+  if (blockingIssues.length === 0) {
+    writePublicArticleJudgeArtifact(newsroomDir, attempt, phase, report, null, stage);
+    recordEditorSemanticStatus({ editor_public_article_judge: report });
+    return { ok: true, report };
+  }
+  const error = publicArticleJudgeError(report, stage, attempt, phase);
+  writePublicArticleJudgeArtifact(newsroomDir, attempt, phase, report, error, stage);
+  return { ok: false, report, error };
+}
+
+async function validatePublicArticleJudgeOrRepair({
+  date,
+  editor,
+  reporter,
+  attempt,
+  editorStage,
+  commonContext,
+  lockedContext,
+  newsroomDir
+}) {
+  const judgeStage = `${editorStage} public article judge`;
+  const initialJudge = await runPublicArticleJudge({
+    date,
+    editor,
+    reporter,
+    stage: judgeStage,
+    attempt,
+    newsroomDir,
+    phase: 'attempt'
+  });
+  if (initialJudge.ok) return editor;
+
+  const initialDetails = serializeEditorValidationError(initialJudge.error, {
+    stage: judgeStage,
+    attempt,
+    repairAttempted: false,
+    repairSucceeded: false
+  });
+  let repairedRaw;
+  try {
+    repairedRaw = await repairEditorSemanticWithLlm({
+      date,
+      editorStage,
+      commonContext,
+      lockedContext,
+      invalidEditor: cloneJson(editor),
+      validationError: initialDetails
+    });
+    const repairedEditor = validateEditor(repairedRaw, date, reporter, {
+      strictClaims: true,
+      requireStoryContract: true
+    });
+    assertSectionsAndSourcesPreserved(editor, repairedRaw);
+    const repairedJudge = await runPublicArticleJudge({
+      date,
+      editor: repairedEditor,
+      reporter,
+      stage: `${editorStage} public article judge repair`,
+      attempt,
+      newsroomDir,
+      phase: 'repair'
+    });
+    if (repairedJudge.ok) {
+      recordEditorSemanticStatus({
+        editor_semantic_validation: initialDetails,
+        editor_public_article_judge: repairedJudge.report,
+        repairAttempted: true,
+        repairSucceeded: true
+      });
+      return repairedEditor;
+    }
+    throw repairedJudge.error;
+  } catch (repairError) {
+    const semanticRepairError = repairError instanceof EditorSemanticValidationError
+      ? repairError
+      : new EditorSemanticValidationError(`Public article judge repair failed: ${repairError.message}`, {
+        field: 'sections.public_article',
+        cause: repairError.message,
+        sectionCount: Array.isArray(repairedRaw?.sections) ? repairedRaw.sections.length : null,
+        initial: initialDetails
+      });
+    const repairDetails = {
+      ...serializeEditorValidationError(semanticRepairError),
+      stage: `${editorStage} public article judge repair`,
+      attempt,
+      initial: initialDetails
+    };
+    recordEditorSemanticStatus({
+      editor_semantic_validation: repairDetails,
+      editor_public_article_judge: semanticRepairError.editorPublicArticleJudge || initialJudge.report,
+      repairAttempted: true,
+      repairSucceeded: false
+    });
+    semanticRepairError.editorSemanticValidation = repairDetails;
+    semanticRepairError.editorPublicArticleJudge = semanticRepairError.editorPublicArticleJudge || initialJudge.report;
+    semanticRepairError.repairAttempted = true;
+    semanticRepairError.repairSucceeded = false;
+    throw semanticRepairError;
+  }
+}
+
 async function validateOrRepairEditor(value, {
   date,
   reporter,
@@ -1883,7 +2222,16 @@ async function validateOrRepairEditor(value, {
     })
   });
   recordEditorSemanticStatus(result);
-  return result.editor;
+  return validatePublicArticleJudgeOrRepair({
+    date,
+    editor: result.editor,
+    reporter,
+    attempt,
+    editorStage,
+    commonContext,
+    lockedContext,
+    newsroomDir
+  });
 }
 
 function validateFactCheck(value) {
@@ -3594,6 +3942,16 @@ async function main() {
           ...editor,
           sections: repairMerged.sections
         }, date, reporter, { strictClaims: true, requireStoryContract: true });
+        editor = await validatePublicArticleJudgeOrRepair({
+          date,
+          editor,
+          reporter,
+          attempt,
+          editorStage: repairStage,
+          commonContext,
+          lockedContext,
+          newsroomDir
+        });
         attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
         await resolveIssueArticleImages(editor, { root });
         warnResolvedImageFallbacks(editor);
@@ -3738,6 +4096,16 @@ async function main() {
             ...editor,
             sections: completionMerged.sections
           }, date, reporter, { strictClaims: true, requireStoryContract: true });
+          editor = await validatePublicArticleJudgeOrRepair({
+            date,
+            editor,
+            reporter,
+            attempt,
+            editorStage: completionStage,
+            commonContext,
+            lockedContext,
+            newsroomDir
+          });
           attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
           await resolveIssueArticleImages(editor, { root });
           warnResolvedImageFallbacks(editor);
@@ -3823,6 +4191,7 @@ async function main() {
       model: [
         `reporter=${getLlmModelUsage(reporterStage) || 'unknown'}`,
         `editor=${getLlmModelUsage(editorStage) || 'unknown'}`,
+        `public-article-judge=${getLlmModelUsage(`${editorStage} public article judge`) || 'unknown'}`,
         `fact-checker=${getLlmModelUsage(factCheckStage) || 'unknown'}`
       ].join(', '),
       score: qualityReport.score,
@@ -3955,6 +4324,7 @@ async function main() {
     newsroomRelPath(date, 'article-capsules.json'),
     newsroomRelPath(date, 'background-context.json'),
     newsroomRelPath(date, 'reporter-candidates.json'),
+    newsroomRelPath(date, `editor-public-article-judge-attempt-${generationRunState.lastKnownValidAttempt || 1}.json`),
     newsroomRelPath(date, 'editor-draft.json'),
     newsroomRelPath(date, 'editor-draft.md'),
     newsroomRelPath(date, 'fact-check-report.json'),
@@ -4265,6 +4635,9 @@ module.exports = {
   articleSectionContractPrompt,
   linkedEvidencePromptGuardrails,
   publicArticleContractPrompt,
+  publicArticleJudgeBlockingIssues,
+  publicArticleJudgeInput,
+  publicArticleJudgePrompt,
   sourceExtractionPromptGuardrails,
   main,
   recordEditorSemanticStatus,
