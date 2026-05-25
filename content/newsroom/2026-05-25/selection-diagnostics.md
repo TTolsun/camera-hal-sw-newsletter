@@ -2,9 +2,9 @@
 
 ## 후보 선택 진단
 
-- Reporter candidates: unknown
-- Reporter-selected candidates: unknown
-- Final input candidates: 40
+- Reporter candidates: 2
+- Reporter-selected candidates: 2
+- Final input candidates: 42
 - Final eligible candidates: 2
 - Final selected articles: 2
 - Deterministic primary articles: 2
@@ -15,7 +15,7 @@
 - Demoted candidates: unknown
 - Composition mode: FALLBACK_COMPOSITION
 - Editor review required: false
-- Reporter-selected but final-excluded: unknown
+- Reporter-selected but final-excluded: 0
 - direct_aosp_camera: 0
 - android_platform_camera_adjacent: 1
 - camera_driver_image_pipeline: 0
@@ -33,11 +33,11 @@ Source/parser recovery hint:
 - Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
 
 주요 final exclusion reason:
-- main_eligible=false (37)
-- source_gap_risk=true (37)
-- reference_only=true (33)
-- briefing_only=true (28)
-- finalSelectionEligibility=watchlist (28)
+- final_selection_blocked=true (39)
+- main_eligible=false (39)
+- source_gap_risk=true (39)
+- reference_only=true (35)
+- briefing_only=true (30)
 
 Homepage Headline:
 - decision: retained_current_above_margin
@@ -47,8 +47,8 @@ Homepage Headline:
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
 - runtime_decayed_score: 96
-- previous_stored_current_score: 98
-- last_scored_at: 2026-05-24
+- previous_stored_current_score: 96
+- last_scored_at: 2026-05-25
 - scored_at: 2026-05-25
 - included_as_latest: true
 - latest_inclusion_mode: selected_normally

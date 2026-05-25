@@ -1,0 +1,42 @@
+{
+  "name": "EditorSemanticValidationError",
+  "message": "Editor output failed public article contract validation.",
+  "details": {
+    "field": "sections.public_article",
+    "expectedKeys": [
+      "headline",
+      "lead",
+      "body_paragraphs",
+      "camera_hal_takeaway",
+      "reader_checkpoints",
+      "source_links",
+      "story_contract_version",
+      "source_subtitle",
+      "editorial_story",
+      "decision_metadata"
+    ],
+    "actualCount": 2,
+    "sectionCount": 2,
+    "issues": [
+      {
+        "index": 1,
+        "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 다중 창 크기 대응 카메라 미리보기 최적화",
+        "type": "insufficient_concrete_internal_reader_checkpoints",
+        "actualCount": 0,
+        "expectedMinCount": 2
+      },
+      {
+        "index": 2,
+        "headline": "Google AI Studio: 프롬프트 기반 온디바이스 AI 카메라 애플리케이션 신속 프로토타이핑 지원",
+        "type": "insufficient_concrete_internal_reader_checkpoints",
+        "actualCount": 0,
+        "expectedMinCount": 2
+      }
+    ]
+  },
+  "field": "sections.public_article",
+  "stage": "editor attempt 1/2",
+  "attempt": 1,
+  "repairAttempted": true,
+  "repairSucceeded": false
+}

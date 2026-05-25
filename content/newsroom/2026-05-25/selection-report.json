@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-25",
-  "generated_at": "2026-05-25T04:16:11.823Z",
+  "generated_at": "2026-05-25T05:35:19.292Z",
   "status": "OK",
   "failure_stage": "",
   "failure_reason": "",
@@ -83,9 +83,9 @@
     "reason": "retained_current_above_margin",
     "current_headline_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
     "replacement_headline_key": null,
-    "previous_stored_current_score": 98,
+    "previous_stored_current_score": 96,
     "runtime_decayed_score": 96,
-    "last_scored_at": "2026-05-24",
+    "last_scored_at": "2026-05-25",
     "scored_at": "2026-05-25",
     "retained": true,
     "replaced": false,
@@ -147,7 +147,7 @@
     }
   ],
   "counts": {
-    "input_candidate_count": 40,
+    "input_candidate_count": 42,
     "eligible_candidate_count": 2,
     "selected_article_count": 2,
     "deterministic_selected_count": 2,
@@ -166,24 +166,28 @@
   },
   "exclusion_reason_summary": [
     {
+      "reason": "final_selection_blocked=true",
+      "count": 39
+    },
+    {
       "reason": "main_eligible=false",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 35
     },
     {
       "reason": "briefing_only=true",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=exclude",
@@ -191,7 +195,7 @@
     },
     {
       "reason": "missing dated evidence",
-      "count": 6
+      "count": 8
     },
     {
       "reason": "watch page without dated evidence",
@@ -199,33 +203,33 @@
     },
     {
       "reason": "selection_window=unknown_not_main",
-      "count": 3
-    },
-    {
-      "reason": "source_extraction.used_fallback=true",
-      "count": 3
+      "count": 5
     }
   ],
   "final_exclusion_reason_summary": [
     {
+      "reason": "final_selection_blocked=true",
+      "count": 39
+    },
+    {
       "reason": "main_eligible=false",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 35
     },
     {
       "reason": "briefing_only=true",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=exclude",
@@ -233,7 +237,7 @@
     },
     {
       "reason": "missing dated evidence",
-      "count": 6
+      "count": 8
     },
     {
       "reason": "watch page without dated evidence",
@@ -241,11 +245,7 @@
     },
     {
       "reason": "selection_window=unknown_not_main",
-      "count": 3
-    },
-    {
-      "reason": "source_extraction.used_fallback=true",
-      "count": 3
+      "count": 5
     }
   ],
   "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."

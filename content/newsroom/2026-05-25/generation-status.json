@@ -1,8 +1,8 @@
 {
   "date": "2026-05-25",
   "status": "NEEDS_FIX",
-  "failure_stage": "reporter attempt 1/2",
-  "failure_reason": "[reporter attempt 1/2] Gemini API failed with non-retryable error on model gemini-2.5-flash: {\"error\":{\"code\":400,\"message\":\"The specified schema produces a constraint that has too many states for serving. Typical causes of this error are schemas with lots of text (for example, very long property or enum names), schemas with long array length limits (especially when nested), or schemas using complex value matchers (for example, integers or numbers with minimum/maximum bounds or strings with complex formats like date-time)\",\"status\":\"INVALID_ARGUMENT\"}}",
+  "failure_stage": "editor attempt 1/2",
+  "failure_reason": "Editor output failed public article contract validation.",
   "fact_check_status": "PASS",
   "must_fix_count": 0,
   "quality_status": "PASS",
@@ -16,10 +16,37 @@
     "reporter attempt 1/2": {
       "gemini-2.5-flash": {
         "requests": 1,
-        "successes": 0,
+        "successes": 1,
         "invalid_json": 0,
         "quota_errors": 0,
-        "api_errors": 1
+        "api_errors": 0
+      }
+    },
+    "background-context attempt 1/2": {
+      "gemini-2.5-flash": {
+        "requests": 1,
+        "successes": 1,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 0
+      }
+    },
+    "editor attempt 1/2": {
+      "gemini-3.5-flash": {
+        "requests": 1,
+        "successes": 1,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 0
+      }
+    },
+    "editor attempt 1/2 semantic repair": {
+      "gemini-3.5-flash": {
+        "requests": 1,
+        "successes": 1,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 0
       }
     }
   },
@@ -36,29 +63,153 @@
       "primary_resolved_by": "code_default",
       "resolved_by": "code_default",
       "global_override_applied": false
+    },
+    "background-context attempt 1/2": {
+      "stage": "background-context attempt 1/2",
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false
+    },
+    "editor attempt 1/2": {
+      "stage": "editor attempt 1/2",
+      "stage_group": "editor",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false
+    },
+    "editor attempt 1/2 semantic repair": {
+      "stage": "editor attempt 1/2 semantic repair",
+      "stage_group": "repair",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false
     }
   },
   "candidate_input": {
     "mode": "artifact",
-    "candidate_artifact": "content/collected-news/2026-05-25/manual-candidates.json",
-    "candidate_artifact_hash": "7df3aad620b41adc969206683735377402737ac52299745c0a7d3091d4868d82",
-    "manifest": "content/collected-news/2026-05-25/raw-candidate-manifest.json",
-    "manifest_type": "raw_candidate",
+    "candidate_artifact": "content/collected-news/2026-05-25/merged-candidates.json",
+    "candidate_artifact_hash": "b287caf49a1de01b3007061de251957ac07e49c93c49bc129028a3b6074f9b44",
+    "manifest": "content/collected-news/2026-05-25/merged-candidate-manifest.json",
+    "manifest_type": "merged_candidate",
     "manifest_status": "validated",
-    "llm_used": false,
-    "merge_mode": "",
-    "candidate_count": 40
+    "llm_used": true,
+    "merge_mode": "gemini_source_discovery",
+    "candidate_count": 42
   },
   "run_context": {
-    "github_run_id": "26382880738",
-    "github_sha": "e4ae1bb50de2fe2dfcac8b73a21f0930895867b8",
+    "github_run_id": "26385076617",
+    "github_sha": "be632abcbf04a4c77bab287198fd72cad875b28f",
     "github_ref": "refs/heads/main"
   },
   "raw_artifact_validation_error": null,
-  "editor_semantic_validation": null,
-  "repairAttempted": false,
+  "editor_semantic_validation": {
+    "name": "EditorSemanticValidationError",
+    "message": "Editor output failed public article contract validation.",
+    "details": {
+      "field": "sections.public_article",
+      "expectedKeys": [
+        "headline",
+        "lead",
+        "body_paragraphs",
+        "camera_hal_takeaway",
+        "reader_checkpoints",
+        "source_links",
+        "story_contract_version",
+        "source_subtitle",
+        "editorial_story",
+        "decision_metadata"
+      ],
+      "actualCount": 2,
+      "sectionCount": 2,
+      "issues": [
+        {
+          "index": 1,
+          "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 다중 창 크기 대응 카메라 미리보기 최적화",
+          "type": "insufficient_concrete_internal_reader_checkpoints",
+          "actualCount": 0,
+          "expectedMinCount": 2
+        },
+        {
+          "index": 2,
+          "headline": "Google AI Studio: 프롬프트 기반 온디바이스 AI 카메라 애플리케이션 신속 프로토타이핑 지원",
+          "type": "insufficient_concrete_internal_reader_checkpoints",
+          "actualCount": 0,
+          "expectedMinCount": 2
+        }
+      ]
+    },
+    "field": "sections.public_article",
+    "stage": "editor attempt 1/2",
+    "attempt": 1,
+    "initial": {
+      "name": "EditorSemanticValidationError",
+      "message": "Editor output failed public article contract validation.",
+      "details": {
+        "field": "sections.public_article",
+        "expectedKeys": [
+          "headline",
+          "lead",
+          "body_paragraphs",
+          "camera_hal_takeaway",
+          "reader_checkpoints",
+          "source_links",
+          "story_contract_version",
+          "source_subtitle",
+          "editorial_story",
+          "decision_metadata"
+        ],
+        "actualCount": 2,
+        "sectionCount": 2,
+        "issues": [
+          {
+            "index": 1,
+            "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 다중 창 크기 대응 카메라 미리보기 최적화",
+            "type": "insufficient_concrete_internal_reader_checkpoints",
+            "actualCount": 0,
+            "expectedMinCount": 2
+          },
+          {
+            "index": 2,
+            "headline": "Google AI Studio: 프롬프트 기반 온디바이스 AI 카메라 애플리케이션 신속 프로토타이핑 지원",
+            "type": "insufficient_concrete_internal_reader_checkpoints",
+            "actualCount": 0,
+            "expectedMinCount": 2
+          }
+        ]
+      },
+      "field": "sections.public_article",
+      "deterministic_repair_failure_reason_codes": [
+        "missing_why_now_context",
+        "missing_why_now",
+        "missing_concrete_two_week_check",
+        "missing_check_within_2_weeks"
+      ],
+      "stage": "editor attempt 1/2",
+      "attempt": 1
+    }
+  },
+  "repairAttempted": true,
   "repairSucceeded": false,
-  "input_candidate_count": 40,
+  "input_candidate_count": 42,
   "eligible_candidate_count": 2,
   "selected_article_count": 2,
   "deterministic_selected_count": 2,
@@ -79,12 +230,12 @@
   "demoted_article_count": 0,
   "locked_article_count": null,
   "fallback_topic_count": 1,
-  "reporter_candidate_count": null,
-  "reporter_selected_count": null,
-  "final_input_candidate_count": 40,
+  "reporter_candidate_count": 2,
+  "reporter_selected_count": 2,
+  "final_input_candidate_count": 42,
   "final_eligible_candidate_count": 2,
   "final_selected_article_count": 2,
-  "reporter_selected_but_final_excluded_count": null,
+  "reporter_selected_but_final_excluded_count": 0,
   "ai_selected_article_count": 2,
   "underfilled": false,
   "publish_ready": false,
@@ -218,9 +369,9 @@
     "reason": "retained_current_above_margin",
     "current_headline_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
     "replacement_headline_key": null,
-    "previous_stored_current_score": 98,
+    "previous_stored_current_score": 96,
     "runtime_decayed_score": 96,
-    "last_scored_at": "2026-05-24",
+    "last_scored_at": "2026-05-25",
     "scored_at": "2026-05-25",
     "retained": true,
     "replaced": false,
@@ -244,24 +395,28 @@
   "article_exposure_coverage": null,
   "exclusion_reason_summary": [
     {
+      "reason": "final_selection_blocked=true",
+      "count": 39
+    },
+    {
       "reason": "main_eligible=false",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 35
     },
     {
       "reason": "briefing_only=true",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=exclude",
@@ -269,7 +424,7 @@
     },
     {
       "reason": "missing dated evidence",
-      "count": 6
+      "count": 8
     },
     {
       "reason": "watch page without dated evidence",
@@ -277,33 +432,33 @@
     },
     {
       "reason": "selection_window=unknown_not_main",
-      "count": 3
-    },
-    {
-      "reason": "source_extraction.used_fallback=true",
-      "count": 3
+      "count": 5
     }
   ],
   "final_exclusion_reason_summary": [
     {
+      "reason": "final_selection_blocked=true",
+      "count": 39
+    },
+    {
       "reason": "main_eligible=false",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 35
     },
     {
       "reason": "briefing_only=true",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=exclude",
@@ -311,7 +466,7 @@
     },
     {
       "reason": "missing dated evidence",
-      "count": 6
+      "count": 8
     },
     {
       "reason": "watch page without dated evidence",
@@ -319,15 +474,12 @@
     },
     {
       "reason": "selection_window=unknown_not_main",
-      "count": 3
-    },
-    {
-      "reason": "source_extraction.used_fallback=true",
-      "count": 3
+      "count": 5
     }
   ],
   "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
   "generation_status": "NEEDS_FIX",
+  "failure_kind": "editorial_reviewable",
   "fallback_public_issue": true,
   "fallback_public_issue_status": "CREATED",
   "fallback_public_issue_demoted_article_count": 0,
@@ -370,6 +522,5 @@
   "public_artifact_source": "latest_run",
   "reconciliation_required": false,
   "reconciliation_action": "upserted_latest_public_entry",
-  "reconciliation_reason": "latest run created a structurally valid review-only public issue",
-  "failure_kind": "editorial_reviewable"
+  "reconciliation_reason": "latest run created a structurally valid review-only public issue"
 }

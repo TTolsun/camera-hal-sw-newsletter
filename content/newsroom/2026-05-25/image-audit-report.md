@@ -21,8 +21,8 @@
 
 | # | 기사 | 선택된 대표 이미지 | 후보 | 검증 통과 후보 | 상태 |
 | ---: | --- | --- | ---: | ---: | --- |
-| 1 | Jetpack Compose와 CameraX 기반의 다양한 화면 크기별 카메라 프리뷰 최적화 | 있음 | 3 | 2 | 대표 이미지 선택됨 (selected) |
-| 2 | Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 및 카메라 API 연동 지원 | 있음 | 3 | 2 | 대표 이미지 선택됨 (selected) |
+| 1 | Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화 | 있음 | 3 | 2 | 대표 이미지 선택됨 (selected) |
+| 2 | Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 지원 및 Camera API 연동 | 있음 | 3 | 2 | 대표 이미지 선택됨 (selected) |
 
 ## 복원 가능 기사
 
