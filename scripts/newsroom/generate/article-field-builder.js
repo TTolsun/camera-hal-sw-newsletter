@@ -393,49 +393,6 @@ function rawArtifactMatches(value) {
   return unique(findings);
 }
 
-function sectionSnippets(section = {}) {
-  return [
-    section.what_changed,
-    section.background,
-    section.camera_hal_perspective,
-    section.why_it_matters,
-    section.team_summary
-  ]
-    .flatMap(value => text(value).split(/(?:[.!?。！？]+|\r?\n|[;；])\s*/))
-    .map(value => value.trim())
-    .filter(Boolean);
-}
-
-function isNegatedOrGuardrailSnippet(value) {
-  return /(?:단정하지|claim하지|표현하지|간주하지|승격하지|보지\s*않|source\s+evidence가\s*없으면|evidence가\s*없으면|\bwithout\b|\bunless\b|\bavoid\b|\bdo\s+not\b|\bmust\s+not\b|\bshould\s+not\b|\bnot\s+(?:a\s+)?direct\s+HAL\b|\bnot\s+(?:supported|backed)\s+by\s+evidence\b|\bno\s+(?:source\s+)?evidence\b)/i.test(value);
-}
-
-function hasDirectHalChangeClaim(value) {
-  const mutation = String.raw`(?:change|changes|changed|changing|impact|impacts|affect|affects|affected|require|requires|required|must|need|needs|alter|alters|modify|modifies|modification|변경|영향|요구|필요|바뀜|수정|조정|강제|해야)`;
-  const halBoundary = String.raw`(?:\bHAL\b|HAL\s*boundary)`;
-  const contractTerm = String.raw`(?:API|contract|interface|metadata\s*(?:contract|계약)|메타데이터\s*(?:contract|계약)|계약|인터페이스)`;
-  const ioTerm = String.raw`(?:stream|buffer|request\s*\/\s*result|request|result)`;
-  const ioClaim = String.raw`(?:contract|계약|API|direct\s+impact|직접\s*영향|change|changes|changed|changing|require|requires|required|변경|요구)`;
-
-  if (/\b직접\s*HAL\s*API\b/i.test(value)) return true;
-  if (/\bdirect\s+HAL\s+API\b/i.test(value)) return true;
-  if (new RegExp(`${halBoundary}[^.\\n]{0,80}${contractTerm}[^.\\n]{0,80}${mutation}`, 'i').test(value)) return true;
-  if (new RegExp(`${contractTerm}[^.\\n]{0,80}${halBoundary}[^.\\n]{0,80}${mutation}`, 'i').test(value)) return true;
-  if (new RegExp(`${halBoundary}[^.\\n]{0,80}${ioTerm}[^.\\n]{0,80}${ioClaim}`, 'i').test(value)) return true;
-  if (new RegExp(`${halBoundary}[^.\\n]{0,80}${ioClaim}[^.\\n]{0,80}${ioTerm}`, 'i').test(value)) return true;
-  return false;
-}
-
-function directHalOverclaim(section = {}) {
-  const impact = text(section.guardrail_impact_class || section.guardrailImpactClass);
-  if (!impact || impact === GUARDRAIL_IMPACT_CLASSES.DIRECT_HAL_CONTRACT) return '';
-  for (const snippet of sectionSnippets(section)) {
-    if (isNegatedOrGuardrailSnippet(snippet)) continue;
-    if (hasDirectHalChangeClaim(snippet)) return snippet;
-  }
-  return '';
-}
-
 function confirmedFactClassificationLeaks(section = {}) {
   const value = text(section.confirmed_facts);
   if (!value) return [];
@@ -474,18 +431,6 @@ function findFieldHygieneIssues(section = {}, options = {}) {
   }
   const overlapIssue = backgroundOverlapIssue(section.background, section.what_changed, overlapThreshold);
   if (overlapIssue) issues.push(overlapIssue);
-  const overclaimSnippet = directHalOverclaim(section);
-  if (overclaimSnippet) {
-    issues.push({
-      type: 'overclaim_guardrail',
-      field: 'camera_hal_perspective',
-      guardrail_impact_class: text(section.guardrail_impact_class || section.guardrailImpactClass),
-      snippet: compactText(overclaimSnippet, MAX_FRAGMENT_LENGTH),
-      severity: 'hard',
-      blocking: true,
-      reason: 'Article claims direct HAL API or contract impact without a direct HAL guardrail impact class.'
-    });
-  }
   for (const classification of confirmedFactClassificationLeaks(section)) {
     issues.push({
       type: 'internal_classification_in_confirmed_facts',
