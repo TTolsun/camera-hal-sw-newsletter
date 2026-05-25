@@ -4,8 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       newsletter_date:
-        description: "Newsletter date in YYYY-MM-DD."
-        required: true
+        description: "Newsletter date in YYYY-MM-DD. Empty means today in KST."
+        required: false
+        default: ""
         type: string
       candidate_input_path:
         description: "Optional approved artifact path: manual-candidates.json or merged-candidates.json. Empty uses merged, manual, then legacy fallback priority."
@@ -46,7 +47,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: newsroom-final-${{ github.event.inputs.newsletter_date || github.run_id }}
+  group: newsroom-final-${{ github.event.inputs.newsletter_date || 'auto-kst-today' }}
   cancel-in-progress: false
 
 jobs:
@@ -94,6 +95,28 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Resolve newsletter date
+        id: resolve-newsletter-date
+        env:
+          INPUT_NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
+        run: |
+          set -euo pipefail
+
+          DATE="${INPUT_NEWSLETTER_DATE:-}"
+          if [ -z "$DATE" ]; then
+            DATE="$(TZ=Asia/Seoul date +%F)"
+          fi
+
+          if ! [[ "$DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "newsletter_date must be YYYY-MM-DD: $DATE"
+            exit 1
+          fi
+
+          echo "Newsletter date in YYYY-MM-DD. Empty means today in KST."
+          echo "Resolved newsletter date: $DATE"
+          echo "NEWSLETTER_DATE=$DATE" >> "$GITHUB_ENV"
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
