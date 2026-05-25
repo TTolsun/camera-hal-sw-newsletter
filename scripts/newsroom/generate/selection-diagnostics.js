@@ -57,6 +57,7 @@ function finalExclusionReasons(candidate = {}) {
 
 function isReporterSelected(candidate = {}) {
   if (typeof candidate.reporter_selected === 'boolean') return candidate.reporter_selected;
+  if (typeof candidate.evidence_eligible === 'boolean') return candidate.evidence_eligible;
   return bool(candidate.selected);
 }
 

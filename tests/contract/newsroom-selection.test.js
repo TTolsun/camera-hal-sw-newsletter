@@ -804,6 +804,10 @@ test('reporter input omits linked evidence diagnostics without changing order or
     input.candidates.map(item => item.selected_for_editor),
     input.candidates.map(item => item.final_selected)
   );
+  assert.deepEqual(
+    input.candidates.map(item => item.candidate_id),
+    report.shortlisted_candidates.map(item => item.source_candidate_hash || item.url_hash)
+  );
 
   for (const item of input.candidates) {
     assert.equal(Object.hasOwn(item, 'linked_evidence_summary'), false);
