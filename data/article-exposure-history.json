@@ -8,17 +8,17 @@
   "articles": [
     {
       "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "title": "구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동",
+      "title": "Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 및 카메라 API 연동 지원",
       "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "newsletter_date": "2026-05-24",
-      "newsletter_url": "newsletters/2026-05-24/index.html",
+      "newsletter_date": "2026-05-25",
+      "newsletter_url": "newsletters/2026-05-25/index.html",
       "exposure_type": "homepage_headline",
-      "headline_score": 98,
+      "headline_score": 96,
       "reuse_reason": "retained_current_above_margin",
-      "exposed_at": "2026-05-24",
+      "exposed_at": "2026-05-25",
       "first_exposed_at": "2026-05-24",
-      "last_exposed_at": "2026-05-24",
-      "exposure_count": 3,
+      "last_exposed_at": "2026-05-25",
+      "exposure_count": 4,
       "exposure_types": [
         "homepage_headline"
       ]
