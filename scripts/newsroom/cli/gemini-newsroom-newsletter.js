@@ -261,7 +261,8 @@ function publicArticleJudgePrompt() {
     '각 section에 대해 public_article_pass, reader_checkpoints_pass, source_boundary_pass, public_prose_pass를 boolean으로 반환하세요.',
     'reader_checkpoints_pass는 Camera HAL / Driver / Android Camera / Camera API / native tooling 독자가 실제로 확인, 측정, 비교, 점검, 추적할 수 있는 항목이면 PASS입니다.',
     'reader_checkpoints가 source가 말하지 않는 HAL/driver/runtime 변경을 사실처럼 단정하거나, 너무 일반적인 모니터링/공유 수준이면 FAIL입니다.',
-    'source_boundary_pass는 source facts, article_sections, hal_signal_capsule, do_not_overstate 범위 안에서만 해석하면 PASS입니다. 직접 근거 없는 HAL/driver/vendor pipeline 영향을 주장하면 FAIL입니다.',
+    'source_boundary_pass는 raw source 재검증이 아니라, 제공된 reporter_evidence, article_sections, hal_signal_capsule, claims, do_not_overstate 범위 안에서 과장 없이 해석했는지 판정하는 항목입니다.',
+    '제공된 evidence boundary 안에서만 해석하면 PASS입니다. 직접 근거 없는 HAL/driver/vendor pipeline 영향을 주장하면 FAIL입니다.',
     'public_prose_pass는 public_article에 workflow/debug/schema/validator/publish gate 같은 내부 운영 언어가 없고 독자-facing 한국어 technical prose이면 PASS입니다.',
     '문제가 있으면 issues[]에 field, severity(P1/P2/P3), reason, suggested_fix를 짧게 작성하세요. 문제가 없으면 issues는 빈 배열입니다.',
     'JSON만 반환하세요. article text를 재작성하지 마세요.'
@@ -1969,6 +1970,39 @@ function publicArticleJudgeBlockingIssues(report = {}) {
       reason: `Judge returned ${report.section_count_actual} section verdict(s), expected ${report.section_count_expected}.`,
       suggested_fix: 'Return one verdict per editor section.'
     });
+  }
+  const expectedSectionCount = numberOrDefault(report.section_count_expected, 0);
+  if (Number.isInteger(expectedSectionCount) && expectedSectionCount > 0) {
+    const indexCounts = new Map();
+    const invalidIndices = [];
+    for (const section of ensureArray(report.sections)) {
+      const sectionIndex = section?.section_index;
+      if (!Number.isInteger(sectionIndex) || sectionIndex < 1 || sectionIndex > expectedSectionCount) {
+        invalidIndices.push(sectionIndex);
+        continue;
+      }
+      indexCounts.set(sectionIndex, (indexCounts.get(sectionIndex) || 0) + 1);
+    }
+    const missingIndices = [];
+    const duplicateIndices = [];
+    for (let index = 1; index <= expectedSectionCount; index += 1) {
+      const count = indexCounts.get(index) || 0;
+      if (count === 0) missingIndices.push(index);
+      if (count > 1) duplicateIndices.push(index);
+    }
+    if (invalidIndices.length > 0 || missingIndices.length > 0 || duplicateIndices.length > 0) {
+      issues.push({
+        section_index: 0,
+        field: 'sections.section_index',
+        severity: 'P1',
+        reason: [
+          duplicateIndices.length > 0 ? `duplicate section_index: ${duplicateIndices.join(', ')}` : '',
+          missingIndices.length > 0 ? `missing section_index: ${missingIndices.join(', ')}` : '',
+          invalidIndices.length > 0 ? `invalid section_index: ${invalidIndices.join(', ')}` : ''
+        ].filter(Boolean).join('; '),
+        suggested_fix: `Return section_index values 1..${expectedSectionCount} exactly once.`
+      });
+    }
   }
   for (const section of ensureArray(report.sections)) {
     for (const [field, passed] of Object.entries({

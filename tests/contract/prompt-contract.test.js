@@ -5,6 +5,7 @@ const test = require('node:test');
 
 const {
   articleSectionContractPrompt,
+  publicArticleJudgeBlockingIssues,
   publicArticleJudgePrompt,
   publicArticleContractPrompt,
   sourceExtractionPromptGuardrails
@@ -171,9 +172,35 @@ test('public article judge prompt is semantic and does not require keyword vocab
   assert.match(prompt, /한국어 표현, 동의어, 자연스러운 기술 문장/);
   assert.match(prompt, /reader_checkpoints_pass/);
   assert.match(prompt, /source_boundary_pass/);
+  assert.match(prompt, /raw source 재검증이 아니라/);
+  assert.match(prompt, /provided evidence boundary|제공된 evidence boundary/);
   assert.match(prompt, /public_prose_pass/);
   assert.match(prompt, /JSON만 반환하세요/);
   assert.doesNotMatch(prompt, /ACTION_VERB_PATTERN|NON_GENERIC_ACTION_TARGET_PATTERN|regex/i);
+});
+
+test('public article judge verdicts must cover each section index exactly once', () => {
+  const passingVerdict = {
+    headline: 'Camera article',
+    public_article_pass: true,
+    reader_checkpoints_pass: true,
+    source_boundary_pass: true,
+    public_prose_pass: true,
+    issues: []
+  };
+  const issues = publicArticleJudgeBlockingIssues({
+    overall_pass: true,
+    section_count_expected: 2,
+    section_count_actual: 2,
+    sections: [
+      { ...passingVerdict, section_index: 1 },
+      { ...passingVerdict, section_index: 1 }
+    ]
+  });
+
+  assert.equal(issues.some(issue => issue.field === 'sections.section_index'), true);
+  assert.match(issues.map(issue => issue.reason).join('\n'), /duplicate section_index: 1/);
+  assert.match(issues.map(issue => issue.reason).join('\n'), /missing section_index: 2/);
 });
 
 test('public article judge schema stays compact for Flash Lite verdicts', () => {
