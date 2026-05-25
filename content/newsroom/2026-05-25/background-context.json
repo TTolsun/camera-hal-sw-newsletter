@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
   "date": "2026-05-25",
-  "generated_at": "2026-05-25T04:16:11.137Z",
-  "stage": "static-fallback",
+  "generated_at": "2026-05-25T05:34:17.911Z",
+  "stage": "gemini-background-context",
   "background_contexts": [
     {
       "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
       "relevance_bucket": "android_platform_camera_adjacent",
-      "background_context": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
-      "background_basis": "supplied article capsule metadata 기반 deterministic static fallback",
-      "background_confidence": "medium",
+      "background_context": "Jetpack Compose는 Android의 선언적 UI 프레임워크로, 다양한 화면 크기와 폼 팩터에 걸쳐 유연하고 반응적인 사용자 인터페이스를 구축하는 데 사용됩니다. CameraX는 Android Jetpack 라이브러리의 일부로, 카메라 앱 개발을 간소화하고 다양한 기기에서 일관된 카메라 경험을 제공하는 데 중점을 둡니다. CameraX는 Camera2 API 위에 구축되어 복잡성을 추상화하고, 미리보기, 이미지 캡처, 비디오 캡처, 이미지 분석과 같은 일반적인 사용 사례를 지원합니다. '모든 창 크기에서 올바른 카메라 미리보기'는 Jetpack Compose 기반 앱이 폴더블폰, 태블릿 등 다양한 기기에서 카메라 미리보기 화면이 왜곡되거나 잘리지 않고 올바르게 표시되도록 CameraX가 지원한다는 의미입니다. 이는 사용자 경험에 직접적인 영향을 미치며, HAL 계층에서는 다양한 화면 비율과 해상도에 대한 카메라 스트림 구성 및 버퍼 처리가 올바르게 이루어져야 함을 시사합니다.",
+      "background_basis": "supplied article capsule metadata와 Android Camera, CameraX, Camera2, Camera HAL에 대한 모델 지식 기반",
+      "background_confidence": "high",
       "background_warnings": []
     },
     {
@@ -19,9 +19,9 @@
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
       "relevance_bucket": "cpp_ai_tooling_fallback",
-      "background_context": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
-      "background_basis": "supplied article capsule metadata 기반 deterministic static fallback",
-      "background_confidence": "medium",
+      "background_context": "Google AI Studio는 개발자가 AI 모델을 쉽게 구축하고 배포할 수 있도록 돕는 도구입니다. '프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드'하는 기능은 개발 워크플로우를 가속화하고, 특히 온디바이스 AI 통합을 위한 코드 생성이나 스캐폴딩에 활용될 수 있습니다. Camera HAL 및 드라이버 엔지니어에게는 이러한 AI 개발 도구가 카메라 입력 스트림을 활용하는 AI 기반 기능(예: 실시간 이미지 분석, 객체 감지)을 앱에 통합하는 방식에 간접적으로 영향을 미칠 수 있습니다. 이는 주로 앱 계층의 개발 생산성 향상에 초점을 맞추며, HAL 자체의 인터페이스나 동작 변경보다는 AI 모델이 카메라 프레임을 소비하고 처리하는 방식과 관련된 최적화 및 테스트 시나리오에 대한 고려를 유도할 수 있습니다. 예를 들어, NPU/GPU 스케줄링, 메모리 대역폭, 전력 소비 등 온디바이스 AI 추론 성능에 대한 요구 사항이 증가할 수 있습니다.",
+      "background_basis": "supplied article capsule metadata와 Android Camera, Camera HAL, SoC, native build/test/debug workflows에 대한 모델 지식 기반",
+      "background_confidence": "high",
       "background_warnings": []
     }
   ]

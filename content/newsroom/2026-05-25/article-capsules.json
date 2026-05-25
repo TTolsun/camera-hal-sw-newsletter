@@ -1,13 +1,14 @@
 {
   "schema_version": 3,
   "date": "2026-05-25",
-  "generated_at": "2026-05-25T04:16:11.137Z",
+  "generated_at": "2026-05-25T05:34:13.026Z",
   "capsule_token_target": "700-1100",
   "shortlisted_capsule_count": 2,
   "selected_capsule_count": 2,
   "reserve_capsule_count": 0,
   "shortlisted_capsules": [
     {
+      "candidate_id": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
       "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "source": "Android Developers Blog",
@@ -122,7 +123,7 @@
           {
             "kind": "behavior_change",
             "role": "primary",
-            "text": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size."
+            "text": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 이러한 전환을 위한 결정적인 엔진입니다."
           },
           {
             "kind": "source_extraction",
@@ -132,18 +133,18 @@
         ],
         "supporting_source_urls": []
       },
-      "what_changed": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
+      "what_changed": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 이러한 전환을 위한 결정적인 엔진입니다.",
       "background_context_static": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
       "camera_hal_perspective_static": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)",
+      "why_hal_engineer_cares": "Android 플랫폼, 호환성, 그래픽 버퍼, Surface, 미디어 프레임워크, 전력/발열, 스케줄러, 메모리 압력 또는 카메라 영향 경로가 있는 보안 증거.",
       "evidence": [
+        "version_or_release: Google I/O 2026",
         "api_or_component: CameraX / Android camera APIs",
-        "behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...",
-        "summary_cache: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental..."
+        "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제..."
       ],
       "seed_evidence": null,
       "source_extraction": {
@@ -238,10 +239,23 @@
           "validationStatus": "ok"
         }
       ],
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal,...",
-      "estimated_tokens": 2438
+      "do_not_overstate": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
+      "do_not_claim": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
+      "fallback_promotion_reason": "Android 플랫폼, 호환성, 그래픽 버퍼, Surface, 미디어 프레임워크, 전력/발열, 스케줄러, 메모리 압력 또는 카메라 영향 경로가 있는 보안 증거.",
+      "fallback_guard_notes": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
+      "estimated_tokens": 2406
     },
     {
+      "candidate_id": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
       "title": "Build native Android apps in Google AI Studio",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
@@ -252,7 +266,78 @@
       "article_group_key": "android_native_tooling_workflow",
       "tooling_workflow_type": "native_tooling_workflow",
       "native_workflow_evidence_score": 5,
-      "related_context_candidates": [],
+      "related_context_candidates": [
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "watchlist_only",
+          "article_group_key": "android_native_tooling_workflow"
+        },
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "watchlist_only",
+          "article_group_key": "android_native_tooling_workflow"
+        }
+      ],
+      "blocked_context_candidates": [
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "watchlist_only",
+          "article_group_key": "android_native_tooling_workflow"
+        },
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "watchlist_only",
+          "article_group_key": "android_native_tooling_workflow"
+        }
+      ],
       "scope_relevance": {
         "aosp_camera_directness": 0,
         "driver_stack_relevance": 0,
@@ -309,22 +394,43 @@
         "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
         "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
         "source_title": "Build native Android apps in Google AI Studio",
-        "fact_count": 0,
-        "facts": [],
+        "fact_count": 4,
+        "facts": [
+          {
+            "kind": "behavior_change",
+            "role": "primary",
+            "text": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다."
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "Examples or APIs for integrating AI models with camera input streams"
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "Use cases for on-device computer vision powered by Google AI Studio in Android apps"
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "Performance considerations or best practices for real-time camera AI processing"
+          }
+        ],
         "supporting_source_urls": []
       },
-      "what_changed": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.",
+      "what_changed": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다.",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
       "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+      "why_hal_engineer_cares": "C++, LLVM, Clang, GCC, sanitizer, 네이티브 성능, 빌드/테스트 툴링, AI 코딩 도구, 온디바이스 AI 또는 LLM 에이전트 워크플로우 증거.",
       "evidence": [
+        "version_or_release: 2026년 5월 19일 릴리스",
         "api_or_component: Google AI Studio",
-        "behavior_change: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Andr...",
-        "summary: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps..."
+        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다."
       ],
       "seed_evidence": null,
       "source_extraction": null,
@@ -354,11 +460,11 @@
         "cross_check_status": "not_required"
       },
       "score": {
-        "total": 107.7,
-        "camera_hal_directness": 3.3,
-        "evidence_specificity": 5,
-        "freshness": 3,
-        "practical_actionability": 5,
+        "total": -5.75,
+        "camera_hal_directness": 2.25,
+        "evidence_specificity": 0,
+        "freshness": 0,
+        "practical_actionability": 0,
         "source_reliability": 5,
         "optional_ai_cpp_bonus": 4
       },
@@ -367,7 +473,7 @@
         "primary_selected": true,
         "reserve_candidate": false,
         "selected_for_editor": true,
-        "selection_slot": "android-native-tooling-supporting",
+        "selection_slot": "",
         "main_article_score_eligible": true,
         "score_filter_reasons": [],
         "exclusion_reasons": []
@@ -399,13 +505,26 @@
           "validationStatus": "ok"
         }
       ],
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device A...",
+      "do_not_overstate": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
+      "do_not_claim": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
+      "fallback_promotion_reason": "C++, LLVM, Clang, GCC, sanitizer, 네이티브 성능, 빌드/테스트 툴링, AI 코딩 도구, 온디바이스 AI 또는 LLM 에이전트 워크플로우 증거.",
+      "fallback_guard_notes": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
       "soc_signal_type": "accelerator_camera_workload",
-      "estimated_tokens": 1670
+      "estimated_tokens": 2652
     }
   ],
   "selected_capsules": [
     {
+      "candidate_id": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
       "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "source": "Android Developers Blog",
@@ -520,7 +639,7 @@
           {
             "kind": "behavior_change",
             "role": "primary",
-            "text": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size."
+            "text": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 이러한 전환을 위한 결정적인 엔진입니다."
           },
           {
             "kind": "source_extraction",
@@ -530,18 +649,18 @@
         ],
         "supporting_source_urls": []
       },
-      "what_changed": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
+      "what_changed": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 이러한 전환을 위한 결정적인 엔진입니다.",
       "background_context_static": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
       "camera_hal_perspective_static": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)",
+      "why_hal_engineer_cares": "Android 플랫폼, 호환성, 그래픽 버퍼, Surface, 미디어 프레임워크, 전력/발열, 스케줄러, 메모리 압력 또는 카메라 영향 경로가 있는 보안 증거.",
       "evidence": [
+        "version_or_release: Google I/O 2026",
         "api_or_component: CameraX / Android camera APIs",
-        "behavior_change: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experiment...",
-        "summary_cache: Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental..."
+        "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제..."
       ],
       "seed_evidence": null,
       "source_extraction": {
@@ -636,10 +755,23 @@
           "validationStatus": "ok"
         }
       ],
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal,...",
-      "estimated_tokens": 2438
+      "do_not_overstate": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
+      "do_not_claim": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
+      "fallback_promotion_reason": "Android 플랫폼, 호환성, 그래픽 버퍼, Surface, 미디어 프레임워크, 전력/발열, 스케줄러, 메모리 압력 또는 카메라 영향 경로가 있는 보안 증거.",
+      "fallback_guard_notes": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
+      "estimated_tokens": 2406
     },
     {
+      "candidate_id": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
       "title": "Build native Android apps in Google AI Studio",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
@@ -650,7 +782,78 @@
       "article_group_key": "android_native_tooling_workflow",
       "tooling_workflow_type": "native_tooling_workflow",
       "native_workflow_evidence_score": 5,
-      "related_context_candidates": [],
+      "related_context_candidates": [
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "watchlist_only",
+          "article_group_key": "android_native_tooling_workflow"
+        },
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "watchlist_only",
+          "article_group_key": "android_native_tooling_workflow"
+        }
+      ],
+      "blocked_context_candidates": [
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "watchlist_only",
+          "article_group_key": "android_native_tooling_workflow"
+        },
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "watchlist_only",
+          "article_group_key": "android_native_tooling_workflow"
+        }
+      ],
       "scope_relevance": {
         "aosp_camera_directness": 0,
         "driver_stack_relevance": 0,
@@ -707,22 +910,43 @@
         "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
         "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
         "source_title": "Build native Android apps in Google AI Studio",
-        "fact_count": 0,
-        "facts": [],
+        "fact_count": 4,
+        "facts": [
+          {
+            "kind": "behavior_change",
+            "role": "primary",
+            "text": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다."
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "Examples or APIs for integrating AI models with camera input streams"
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "Use cases for on-device computer vision powered by Google AI Studio in Android apps"
+          },
+          {
+            "kind": "evidence",
+            "role": "primary",
+            "text": "Performance considerations or best practices for real-time camera AI processing"
+          }
+        ],
         "supporting_source_urls": []
       },
-      "what_changed": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.",
+      "what_changed": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다.",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
       "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+      "why_hal_engineer_cares": "C++, LLVM, Clang, GCC, sanitizer, 네이티브 성능, 빌드/테스트 툴링, AI 코딩 도구, 온디바이스 AI 또는 LLM 에이전트 워크플로우 증거.",
       "evidence": [
+        "version_or_release: 2026년 5월 19일 릴리스",
         "api_or_component: Google AI Studio",
-        "behavior_change: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Andr...",
-        "summary: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps..."
+        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다."
       ],
       "seed_evidence": null,
       "source_extraction": null,
@@ -752,11 +976,11 @@
         "cross_check_status": "not_required"
       },
       "score": {
-        "total": 107.7,
-        "camera_hal_directness": 3.3,
-        "evidence_specificity": 5,
-        "freshness": 3,
-        "practical_actionability": 5,
+        "total": -5.75,
+        "camera_hal_directness": 2.25,
+        "evidence_specificity": 0,
+        "freshness": 0,
+        "practical_actionability": 0,
         "source_reliability": 5,
         "optional_ai_cpp_bonus": 4
       },
@@ -765,7 +989,7 @@
         "primary_selected": true,
         "reserve_candidate": false,
         "selected_for_editor": true,
-        "selection_slot": "android-native-tooling-supporting",
+        "selection_slot": "",
         "main_article_score_eligible": true,
         "score_filter_reasons": [],
         "exclusion_reasons": []
@@ -797,9 +1021,21 @@
           "validationStatus": "ok"
         }
       ],
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device A...",
+      "do_not_overstate": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
+      "do_not_claim": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
+      "fallback_promotion_reason": "C++, LLVM, Clang, GCC, sanitizer, 네이티브 성능, 빌드/테스트 툴링, AI 코딩 도구, 온디바이스 AI 또는 LLM 에이전트 워크플로우 증거.",
+      "fallback_guard_notes": [
+        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+      ],
       "soc_signal_type": "accelerator_camera_workload",
-      "estimated_tokens": 1670
+      "estimated_tokens": 2652
     }
   ],
   "reserve_capsules": []

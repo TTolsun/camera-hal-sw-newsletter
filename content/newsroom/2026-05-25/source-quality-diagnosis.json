@@ -3,14 +3,14 @@
   "report_type": "source_quality_diagnosis",
   "date": "2026-05-25",
   "input_refs": {
-    "candidate_input": "content/collected-news/2026-05-25/manual-candidates.json",
+    "candidate_input": "content/collected-news/2026-05-25/merged-candidates.json",
     "shortlisted_candidates": "content/newsroom/2026-05-25/shortlisted-candidates.json",
     "selection_report": "content/newsroom/2026-05-25/selection-report.json",
     "generation_status": "content/newsroom/2026-05-25/generation-status.json",
     "source_effectiveness_report": "content/newsroom/2026-05-25/source-effectiveness-report.json",
-    "source_quality_report": null,
-    "source_discovery_feedback_report": null,
-    "merged_candidate_manifest": null,
+    "source_quality_report": "content/newsroom/2026-05-25/source-quality-report.json",
+    "source_discovery_feedback_report": "content/newsroom/2026-05-25/source-discovery-feedback-report.json",
+    "merged_candidate_manifest": "content/collected-news/2026-05-25/merged-candidate-manifest.json",
     "evidence_pack_summary": "content/newsroom/2026-05-25/evidence-pack-summary.json"
   },
   "evidence_completeness": {
@@ -19,9 +19,9 @@
     "selection_report": true,
     "generation_status": true,
     "source_effectiveness_report": true,
-    "source_quality_report": false,
-    "source_discovery_feedback_report": false,
-    "merged_candidate_manifest": false,
+    "source_quality_report": true,
+    "source_discovery_feedback_report": true,
+    "merged_candidate_manifest": true,
     "evidence_pack_summary": true
   },
   "raw_candidate_count": 39,
@@ -34,7 +34,7 @@
     "source_gap_risk": false,
     "taxonomy_missing": false,
     "fallback_only_composition": false,
-    "duplicate_or_noop_source_discovery": false
+    "duplicate_or_noop_source_discovery": true
   },
   "diagnosis_reasons": {
     "actual_news_shortage": [],
@@ -73,7 +73,23 @@
     "source_gap_risk": [],
     "taxonomy_missing": [],
     "fallback_only_composition": [],
-    "duplicate_or_noop_source_discovery": []
+    "duplicate_or_noop_source_discovery": [
+      {
+        "reason": "Gemini discovery produced 2 candidate(s) but gemini_new_unique_url_count=0.",
+        "source_artifact": "content/collected-news/2026-05-25/merged-candidate-manifest.json",
+        "severity": "medium"
+      },
+      {
+        "reason": "Gemini discovery produced no new publishable candidates.",
+        "source_artifact": "content/collected-news/2026-05-25/merged-candidate-manifest.json",
+        "severity": "medium"
+      },
+      {
+        "reason": "Duplicate discovery signal detected: gemini_manual_duplicate_url_count=2, duplicate_discovery_gap_count=0.",
+        "source_artifact": "content/collected-news/2026-05-25/merged-candidate-manifest.json",
+        "severity": "medium"
+      }
+    ]
   },
   "source_breakdown": [
     {
@@ -1217,6 +1233,15 @@
       "raw_count": 1
     },
     {
+      "action": "REPAIR_SOURCE_DISCOVERY_DUPLICATES",
+      "action_label": "Source discovery 중복 제거/수리",
+      "source_id": "",
+      "source_name": "",
+      "reason": "Gemini discovery produced 2 candidate(s) but gemini_new_unique_url_count=0.; Gemini discovery produced no new publishable candidates.; Duplicate discovery signal detected: gemini_manual_duplicate_url_count=2, duplicate_discovery_gap_count=0.",
+      "severity": "medium",
+      "source_artifact": "content/collected-news/2026-05-25/merged-candidate-manifest.json"
+    },
+    {
       "action": "NO_ACTION_THIN_WEEK",
       "action_label": "기사 부족 주간으로 판단, 조치 없음",
       "source_id": "android-developer-newsletter",
@@ -1254,36 +1279,7 @@
       "source_reliability": "official",
       "blocked_count": 0,
       "raw_count": 0
-    },
-    {
-      "action": "NO_ACTION_THIN_WEEK",
-      "action_label": "기사 부족 주간으로 판단, 조치 없음",
-      "source_id": "android-mediarecorder-reference",
-      "source_name": "MediaRecorder Documentation",
-      "reason": "No recent candidates were collected for this source.",
-      "severity": "medium",
-      "source_artifact": "source-effectiveness-report.json",
-      "source_priority": "medium",
-      "source_reliability": "official",
-      "blocked_count": 0,
-      "raw_count": 0
     }
   ],
-  "warnings": [
-    {
-      "type": "missing_optional_artifact",
-      "message": "content/newsroom/2026-05-25/source-quality-report.json not found; partial diagnosis will continue.",
-      "source_artifact": "content/newsroom/2026-05-25/source-quality-report.json"
-    },
-    {
-      "type": "missing_optional_artifact",
-      "message": "content/newsroom/2026-05-25/source-discovery-feedback-report.json not found; partial diagnosis will continue.",
-      "source_artifact": "content/newsroom/2026-05-25/source-discovery-feedback-report.json"
-    },
-    {
-      "type": "missing_optional_artifact",
-      "message": "content/collected-news/2026-05-25/merged-candidate-manifest.json not found; partial diagnosis will continue.",
-      "source_artifact": "content/collected-news/2026-05-25/merged-candidate-manifest.json"
-    }
-  ]
+  "warnings": []
 }

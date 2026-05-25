@@ -8,7 +8,7 @@ Date: 2026-05-25
 - 최종 사용 가능 후보 수: 2
 - Primary Camera Stack 후보 수: 1
 - Android multimedia camera output 후보 수: 0
-- 주요 진단: 파서 추출 실패
+- 주요 진단: 파서 추출 실패, Source discovery 중복 또는 무효
 - 결론: 실제 뉴스 부족보다는 후보 추출/분류/source discovery 단계 손실 가능성이 큽니다.
 
 ## 진단 플래그
@@ -20,7 +20,7 @@ Date: 2026-05-25
 | 소스 풀 부족 위험 | `source_gap_risk` | false | 진단 신호 없음 |
 | 분류 체계 누락 | `taxonomy_missing` | false | 진단 신호 없음 |
 | Fallback 기사만 남음 | `fallback_only_composition` | false | 진단 신호 없음 |
-| Source discovery 중복 또는 무효 | `duplicate_or_noop_source_discovery` | false | 진단 신호 없음 |
+| Source discovery 중복 또는 무효 | `duplicate_or_noop_source_discovery` | true | Gemini discovery produced 2 candidate(s) but gemini_new_unique_url_count=0. |
 
 ## 소스별 진단
 
@@ -57,16 +57,12 @@ Date: 2026-05-25
 | 소스 유지, 파서 수정 | `KEEP_AND_FIX_PARSER` | Android Compatibility Definition Document | Generic noise candidates were detected from artifact exclusion metadata. | high |
 | 소스 유지, 파서 수정 | `KEEP_AND_FIX_PARSER` | AOSP Camera Documentation | Generic noise candidates were detected from artifact exclusion metadata. | high |
 | 소스 유지, 파서 수정 | `KEEP_AND_FIX_PARSER` | AOSP What's New / Release Notes | Generic noise candidates were detected from artifact exclusion metadata. | high |
+| Source discovery 중복 제거/수리 | `REPAIR_SOURCE_DISCOVERY_DUPLICATES` | 전체 | Gemini discovery produced 2 candidate(s) but gemini_new_unique_url_count=0.; Gemini discovery produced no new publishable candidates.; Duplicate discovery signal detected: gemini_manual_duplicate_url_count=2, duplicate_discovery_gap_count=0. | medium |
 | 기사 부족 주간으로 판단, 조치 없음 | `NO_ACTION_THIN_WEEK` | Android Developer Newsletter | No recent candidates were collected for this source. | medium |
 | 기사 부족 주간으로 판단, 조치 없음 | `NO_ACTION_THIN_WEEK` | Android Developers Blog - Camera | No recent candidates were collected for this source. | medium |
 | 기사 부족 주간으로 판단, 조치 없음 | `NO_ACTION_THIN_WEEK` | MediaCodec Reference | No recent candidates were collected for this source. | medium |
-| 기사 부족 주간으로 판단, 조치 없음 | `NO_ACTION_THIN_WEEK` | MediaRecorder Documentation | No recent candidates were collected for this source. | medium |
 
 ## 경고
 
-| 유형 | 메시지 | Source artifact | 심각도 |
-| --- | --- | --- | --- |
-| missing_optional_artifact | content/newsroom/2026-05-25/source-quality-report.json not found; partial diagnosis will continue. | content/newsroom/2026-05-25/source-quality-report.json |  |
-| missing_optional_artifact | content/newsroom/2026-05-25/source-discovery-feedback-report.json not found; partial diagnosis will continue. | content/newsroom/2026-05-25/source-discovery-feedback-report.json |  |
-| missing_optional_artifact | content/collected-news/2026-05-25/merged-candidate-manifest.json not found; partial diagnosis will continue. | content/collected-news/2026-05-25/merged-candidate-manifest.json |  |
+_없음_
 

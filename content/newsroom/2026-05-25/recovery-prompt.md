@@ -4,14 +4,14 @@ newsroom automation이 publication readiness 전에 멈췄습니다. 아래 arti
 
 ## 실패
 
-- 단계: reporter attempt 1/2
-- 사유: [reporter attempt 1/2] Gemini API failed with non-retryable error on model gemini-2.5-flash: {"error":{"code":400,"message":"The specified schema produces a constraint that has too many states for serving. Typical causes of this error are schemas with lots of text (for example, very long property or enum names), schemas with long array length limits (especially when nested), or schemas using complex value matchers (for example, integers or numbers with minimum/maximum bounds or strings with complex formats like date-time)","status":"INVALID_ARGUMENT"}}
+- 단계: editor attempt 1/2
+- 사유: Editor output failed public article contract validation.
 
 ## 후보 선택 진단
 
-- Reporter candidates: unknown
-- Reporter-selected candidates: unknown
-- Final input candidates: 40
+- Reporter candidates: 2
+- Reporter-selected candidates: 2
+- Final input candidates: 42
 - Final eligible candidates: 2
 - Final selected articles: 2
 - Deterministic primary articles: 2
@@ -22,7 +22,7 @@ newsroom automation이 publication readiness 전에 멈췄습니다. 아래 arti
 - Demoted candidates: unknown
 - Composition mode: FALLBACK_COMPOSITION
 - Editor review required: false
-- Reporter-selected but final-excluded: unknown
+- Reporter-selected but final-excluded: 0
 - direct_aosp_camera: 0
 - android_platform_camera_adjacent: 1
 - camera_driver_image_pipeline: 0
@@ -40,11 +40,11 @@ Source/parser recovery hint:
 - Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
 
 주요 final exclusion reason:
-- main_eligible=false (37)
-- source_gap_risk=true (37)
-- reference_only=true (33)
-- briefing_only=true (28)
-- finalSelectionEligibility=watchlist (28)
+- final_selection_blocked=true (39)
+- main_eligible=false (39)
+- source_gap_risk=true (39)
+- reference_only=true (35)
+- briefing_only=true (30)
 
 Homepage Headline:
 - decision: retained_current_above_margin
@@ -54,8 +54,8 @@ Homepage Headline:
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
 - runtime_decayed_score: 96
-- previous_stored_current_score: 98
-- last_scored_at: 2026-05-24
+- previous_stored_current_score: 96
+- last_scored_at: 2026-05-25
 - scored_at: 2026-05-25
 - included_as_latest: true
 - latest_inclusion_mode: selected_normally
@@ -66,7 +66,7 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 
 ## Deterministic Final Selection 상태
 
-- Final input candidate: 40
+- Final input candidate: 42
 - Final eligible candidate: 2
 - Final selected article: 2
 - Deterministic primary article: 2
@@ -85,7 +85,7 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 - cpp_ai_tooling_fallback: 1
 - Non-fallback reviewable: 1
 - Source/parser hint: Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.; Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.; Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
-- 주요 final exclusion reason: main_eligible=false (37); source_gap_risk=true (37); reference_only=true (33); briefing_only=true (28); finalSelectionEligibility=watchlist (28); finalSelectionEligibility=exclude (9); missing dated evidence (6); watch page without dated evidence (6); selection_window=unknown_not_main (3); source_extraction.used_fallback=true (3)
+- 주요 final exclusion reason: final_selection_blocked=true (39); main_eligible=false (39); source_gap_risk=true (39); reference_only=true (35); briefing_only=true (30); finalSelectionEligibility=watchlist (30); finalSelectionEligibility=exclude (9); missing dated evidence (8); watch page without dated evidence (6); selection_window=unknown_not_main (5)
 
 ## 다시 실행
 
@@ -101,8 +101,8 @@ npm.cmd run validate
 {
   "schema_version": 3,
   "date": "2026-05-25",
-  "generated_at": "2026-05-25T04:16:11.088Z",
-  "input_candidate_count": 40,
+  "generated_at": "2026-05-25T05:34:07.713Z",
+  "input_candidate_count": 42,
   "eligible_candidate_count": 2,
   "deterministic_selected_count": 2,
   "selected_article_count": 2,
@@ -200,7 +200,7 @@ npm.cmd run validate
   "selection_window_exclusion_summary": [
     {
       "reason": "unknown_not_main",
-      "count": 3
+      "count": 5
     }
   ],
   "candidate_pool_preflight_passed": true,
@@ -855,6 +855,15 @@ npm.cmd run validate
         "reason": "security_component_camera_related classified from candidate text.",
         "warnings": []
       },
+      "source_quality_score": 0.893,
+      "source_quality_bucket": "strong_candidate",
+      "source_quality_report_ref": "8edd18929c9fbdd9",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -971,7 +980,7 @@ npm.cmd run validate
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
       "reserve_candidate": false,
-      "reporter_selected": false,
+      "reporter_selected": true,
       "final_exclusion_reasons": []
     },
     {
@@ -1263,6 +1272,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.666,
+      "source_quality_bucket": "review_candidate",
+      "source_quality_report_ref": "4cd1324b82d886c6",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -1356,7 +1374,42 @@ npm.cmd run validate
       "fallback_window_promoted": false,
       "selection_window_stage": "primary",
       "selection_slot": "android-native-tooling-supporting",
-      "related_context_candidates": [],
+      "related_context_candidates": [
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "source_gap_risk",
+          "article_group_key": "android_native_tooling_workflow"
+        },
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "source_gap_risk",
+          "article_group_key": "android_native_tooling_workflow"
+        }
+      ],
       "included_as_headline_latest": true,
       "headline_latest_inclusion_mode": "selected_normally",
       "injected_from_headline_snapshot": false,
@@ -1365,7 +1418,7 @@ npm.cmd run validate
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
       "reserve_candidate": false,
-      "reporter_selected": false,
+      "reporter_selected": true,
       "final_exclusion_reasons": []
     }
   ],
@@ -1854,6 +1907,15 @@ npm.cmd run validate
         "reason": "security_component_camera_related classified from candidate text.",
         "warnings": []
       },
+      "source_quality_score": 0.893,
+      "source_quality_bucket": "strong_candidate",
+      "source_quality_report_ref": "8edd18929c9fbdd9",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -1970,7 +2032,7 @@ npm.cmd run validate
       "reserve_candidate": false,
       "selection_stage": "deterministic-primary",
       "final_selected": true,
-      "reporter_selected": false,
+      "reporter_selected": true,
       "final_exclusion_reasons": []
     },
     {
@@ -2262,6 +2324,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.666,
+      "source_quality_bucket": "review_candidate",
+      "source_quality_report_ref": "4cd1324b82d886c6",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -2355,7 +2426,42 @@ npm.cmd run validate
       "fallback_window_promoted": false,
       "selection_window_stage": "primary",
       "selection_slot": "android-native-tooling-supporting",
-      "related_context_candidates": [],
+      "related_context_candidates": [
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "source_gap_risk",
+          "article_group_key": "android_native_tooling_workflow"
+        },
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "source_gap_risk",
+          "article_group_key": "android_native_tooling_workflow"
+        }
+      ],
       "included_as_headline_latest": true,
       "headline_latest_inclusion_mode": "selected_normally",
       "injected_from_headline_snapshot": false,
@@ -2364,7 +2470,7 @@ npm.cmd run validate
       "reserve_candidate": false,
       "selection_stage": "deterministic-primary",
       "final_selected": true,
-      "reporter_selected": false,
+      "reporter_selected": true,
       "final_exclusion_reasons": []
     }
   ],
@@ -2853,6 +2959,15 @@ npm.cmd run validate
         "reason": "security_component_camera_related classified from candidate text.",
         "warnings": []
       },
+      "source_quality_score": 0.893,
+      "source_quality_bucket": "strong_candidate",
+      "source_quality_report_ref": "8edd18929c9fbdd9",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -2969,7 +3084,7 @@ npm.cmd run validate
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
       "reserve_candidate": false,
-      "reporter_selected": false,
+      "reporter_selected": true,
       "final_exclusion_reasons": []
     },
     {
@@ -3261,6 +3376,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.666,
+      "source_quality_bucket": "review_candidate",
+      "source_quality_report_ref": "4cd1324b82d886c6",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -3354,7 +3478,42 @@ npm.cmd run validate
       "fallback_window_promoted": false,
       "selection_window_stage": "primary",
       "selection_slot": "android-native-tooling-supporting",
-      "related_context_candidates": [],
+      "related_context_candidates": [
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "source_gap_risk",
+          "article_group_key": "android_native_tooling_workflow"
+        },
+        {
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "source": "Android Developers Blog",
+          "published_date": "",
+          "relevance_bucket": "cpp_ai_tooling_fallback",
+          "finalSelectionEligibility": "watchlist",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "source_gap_risk",
+          "article_group_key": "android_native_tooling_workflow"
+        }
+      ],
       "included_as_headline_latest": true,
       "headline_latest_inclusion_mode": "selected_normally",
       "injected_from_headline_snapshot": false,
@@ -3363,7 +3522,7 @@ npm.cmd run validate
       "selection_stage": "deterministic-primary",
       "primary_selected": true,
       "reserve_candidate": false,
-      "reporter_selected": false,
+      "reporter_selected": true,
       "final_exclusion_reasons": []
     }
   ],
@@ -3651,6 +3810,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.648,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "499a4a6dab8bbf43",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -3742,6 +3910,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -3761,6 +3930,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -4047,6 +4217,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.475,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "106481b888f83d2f",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -4138,6 +4317,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -4157,6 +4337,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -4446,6 +4627,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.601,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "2b43719b9f6ba6e5",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -4533,6 +4723,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false"
       ],
@@ -4550,6 +4741,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false"
       ]
@@ -4834,6 +5026,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.601,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "21447c1da9275865",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -4924,6 +5125,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -4943,6 +5145,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -5229,6 +5432,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.601,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "29e6631ce561493e",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 10,
       "selection_window_reason": "10 day(s) since published; within fallback 21 day window",
@@ -5320,6 +5532,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -5339,6 +5552,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -5625,6 +5839,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.577,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "8c8d41e8713d9d19",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -5716,6 +5939,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -5735,6 +5959,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -6021,6 +6246,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.577,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "e748338d0d9f51d0",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -6112,6 +6346,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -6131,6 +6366,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -12813,6 +13049,15 @@ npm.cmd run validate
         "reason": "documentation_only classified from candidate text.",
         "warnings": []
       },
+      "source_quality_score": 0.618,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "2a30fe242da15a49",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "unknown",
       "days_since_published": null,
       "selection_window_reason": "missing or invalid published date",
@@ -12906,6 +13151,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "reference_only=true",
@@ -12928,6 +13174,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "reference_only=true",
@@ -13244,6 +13491,15 @@ npm.cmd run validate
         "reason": "build_dependency_fix classified from candidate text.",
         "warnings": []
       },
+      "source_quality_score": 0.688,
+      "source_quality_bucket": "review_candidate",
+      "source_quality_report_ref": "6dbd3423c156db37",
+      "duplicate_of_selected_source": true,
+      "stale_claim_risk": "",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "not_checked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -13341,7 +13597,7 @@ npm.cmd run validate
       "selection_stage": "deterministic-final",
       "primary_selected": false,
       "reserve_candidate": false,
-      "reporter_selected": false,
+      "reporter_selected": true,
       "final_exclusion_reasons": [
         "duplicate URL or near-duplicate title"
       ]
@@ -13626,6 +13882,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.402,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "b07998856cd2aa1e",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -13717,6 +13982,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -13736,6 +14002,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -14022,6 +14289,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.642,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "792163396b5a0f82",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -14113,6 +14389,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -14132,6 +14409,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -14418,6 +14696,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "63205676fd4c6892",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -14508,6 +14795,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -14527,6 +14815,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -14813,6 +15102,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "514513e399563cf4",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -14904,6 +15202,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -14923,6 +15222,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -15209,6 +15509,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "e2c4f5df89c69618",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 11,
       "selection_window_reason": "11 day(s) since published; within fallback 21 day window",
@@ -15299,6 +15608,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -15318,6 +15628,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -15604,6 +15915,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "6d927f6d067f577b",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 17,
       "selection_window_reason": "17 day(s) since published; within fallback 21 day window",
@@ -15695,6 +16015,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -15714,6 +16035,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -16000,6 +16322,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "8b1d6e6623f62a02",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 18,
       "selection_window_reason": "18 day(s) since published; within fallback 21 day window",
@@ -16091,6 +16422,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -16110,6 +16442,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -16523,6 +16856,15 @@ npm.cmd run validate
         "reason": "camera_api_change classified from candidate text.",
         "warnings": []
       },
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "473c2de5968532c9",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 19,
       "selection_window_reason": "19 day(s) since published; within fallback 21 day window",
@@ -16613,6 +16955,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -16635,6 +16978,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -16976,6 +17320,15 @@ npm.cmd run validate
         "reason": "camera_api_change classified from candidate text.",
         "warnings": []
       },
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "f2f7a4ce6187ee89",
+      "duplicate_of_selected_source": true,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 19,
       "selection_window_reason": "19 day(s) since published; within fallback 21 day window",
@@ -17066,6 +17419,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -17088,6 +17442,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -17429,6 +17784,15 @@ npm.cmd run validate
         "reason": "camera_api_change classified from candidate text.",
         "warnings": []
       },
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "126b8a669e4375b9",
+      "duplicate_of_selected_source": true,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 19,
       "selection_window_reason": "19 day(s) since published; within fallback 21 day window",
@@ -17519,6 +17883,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -17541,6 +17906,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -18550,6 +18916,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.57,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "f01073bfa5c3aebb",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "unknown",
       "days_since_published": null,
       "selection_window_reason": "missing or invalid published date",
@@ -18644,6 +19019,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "reference_only=true",
@@ -18666,6 +19042,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "reference_only=true",
@@ -20863,6 +21240,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.57,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "df4d682cc51d783d",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "unknown",
       "days_since_published": null,
       "selection_window_reason": "missing or invalid published date",
@@ -20957,6 +21343,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "reference_only=true",
@@ -20979,6 +21366,7 @@ npm.cmd run validate
         "missing dated evidence",
         "watch page without dated evidence",
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "reference_only=true",
@@ -21265,6 +21653,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.354,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "69f17c5bf68f77fc",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -21356,6 +21753,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -21375,6 +21773,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -21661,6 +22060,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.504,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "5e2f25311232c1c9",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 13,
       "selection_window_reason": "13 day(s) since published; within fallback 21 day window",
@@ -21752,6 +22160,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -21771,6 +22180,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -22057,6 +22467,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.354,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "1d4750ed5f580e23",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 21,
       "selection_window_reason": "21 day(s) since published; within fallback 21 day window",
@@ -22148,6 +22567,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -22167,6 +22587,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -22453,6 +22874,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.571,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "757dfc1710715d27",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -22544,6 +22974,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -22563,6 +22994,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -22849,6 +23281,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.48,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "3003fb54deb3f282",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 6,
       "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -22940,6 +23381,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -22959,6 +23401,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -23207,6 +23650,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.551,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "c56b2068eed9cd86",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 21,
       "selection_window_reason": "21 day(s) since published; within fallback 21 day window",
@@ -23295,6 +23747,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false"
       ],
@@ -23312,6 +23765,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false"
       ]
@@ -23569,6 +24023,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.398,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "bcc2371b528699db",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 11,
       "selection_window_reason": "11 day(s) since published; within fallback 21 day window",
@@ -23660,6 +24123,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -23679,6 +24143,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -23908,6 +24373,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.455,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "82836944ff474c8d",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 3,
       "selection_window_reason": "3 day(s) since published; within primary 7 day window",
@@ -23999,6 +24473,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -24018,6 +24493,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -24229,6 +24705,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.455,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "a5487481d94ccadd",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 5,
       "selection_window_reason": "5 day(s) since published; within primary 7 day window",
@@ -24317,6 +24802,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false"
       ],
@@ -24334,6 +24820,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false"
       ]
@@ -24583,6 +25070,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.455,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "f385ac0350cd70bf",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 7,
       "selection_window_reason": "7 day(s) since published; within primary 7 day window",
@@ -24671,6 +25167,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "reference_only=true"
@@ -24689,6 +25186,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "reference_only=true"
@@ -24903,6 +25401,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.455,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "632c16d8e3837b65",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 21,
       "selection_window_reason": "21 day(s) since published; within fallback 21 day window",
@@ -24994,6 +25501,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -25013,6 +25521,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -25265,6 +25774,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.431,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "de7a8eb34f6a78ef",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "primary",
       "days_since_published": 4,
       "selection_window_reason": "4 day(s) since published; within primary 7 day window",
@@ -25356,6 +25874,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -25375,6 +25894,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -25586,6 +26106,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.431,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "48b07d6d4385f301",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 19,
       "selection_window_reason": "19 day(s) since published; within fallback 21 day window",
@@ -25674,6 +26203,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false"
       ],
@@ -25691,6 +26221,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false"
       ]
@@ -25934,6 +26465,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.407,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "727b40d00ef62c1f",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 10,
       "selection_window_reason": "10 day(s) since published; within fallback 21 day window",
@@ -26025,6 +26565,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -26044,6 +26585,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -26296,6 +26838,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.407,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "996bf578317a0117",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 12,
       "selection_window_reason": "12 day(s) since published; within fallback 21 day window",
@@ -26387,6 +26938,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -26406,6 +26958,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -26620,6 +27173,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.407,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "56a7229f2f276d3e",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 13,
       "selection_window_reason": "13 day(s) since published; within fallback 21 day window",
@@ -26709,6 +27271,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "reference_only=true"
@@ -26727,6 +27290,7 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "reference_only=true"
@@ -26978,6 +27542,15 @@ npm.cmd run validate
           "main_hint_requires_candidate_runtime_evidence"
         ]
       },
+      "source_quality_score": 0.407,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "d4aace8dcaa1a9d1",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
       "freshness_window": "fallback",
       "days_since_published": 14,
       "selection_window_reason": "14 day(s) since published; within fallback 21 day window",
@@ -27069,6 +27642,7 @@ npm.cmd run validate
       ],
       "exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
@@ -27088,10 +27662,501 @@ npm.cmd run validate
       "reporter_selected": false,
       "final_exclusion_reasons": [
         "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
         "source_gap_risk=true",
         "main_eligible=false",
         "briefing_only=true",
         "reference_only=true"
+      ]
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-fac75a8d436dc70f",
+      "source_candidate_id": "gemini-fac75a8d436dc70f",
+      "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "articleUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "article_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "source": "Android Developers Blog",
+      "source_name": "Android Developers Blog",
+      "sourceName": "Android Developers Blog",
+      "sourceUrl": "https://android-developers.googleblog.com/",
+      "source_url": "https://android-developers.googleblog.com/",
+      "source_id": "android-developers-blog",
+      "category": "android",
+      "source_category": "android",
+      "section": "android",
+      "source_section": "android",
+      "priority": "high",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "official_blog",
+      "source_type": "official_blog",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Integration of Google AI Studio with native Android app development, potentially enabling on-device AI for camera processing or computer vision tasks."
+      ],
+      "keywords": [
+        "Android AI camera",
+        "Google AI Studio computer vision",
+        "on-device AI camera processing",
+        "camera machine learning Android"
+      ],
+      "evidence": [
+        "Examples or APIs for integrating AI models with camera input streams",
+        "Use cases for on-device computer vision powered by Google AI Studio in Android apps",
+        "Performance considerations or best practices for real-time camera AI processing"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "P2",
+      "proposal_trace_id": "P2",
+      "discovery_topic_gap": "Integration of Google AI Studio with native Android app development, potentially enabling on-device AI for camera processing or computer vision tasks.",
+      "discovery_source_family": "android",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-fac75a8d436dc70f",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "editorial_priority": 6,
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 3,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": true,
+      "tooling_workflow_type": "native_tooling_workflow",
+      "native_workflow_evidence_score": 5,
+      "evidence_origin": "article_text",
+      "source_hint": "Android Developers Blog Android Developers Blog android android android android",
+      "scope_evidence_terms": [
+        "\\bGoogle\\s+AI\\s+Studio\\b",
+        "\\bAI\\s+Studio\\b[^.\\n]{0,120}\\bAndroid\\b",
+        "\\bAndroid\\b[^.\\n]{0,120}\\bAI\\s+Studio\\b",
+        "\\bnative\\s+Android\\s+app(?:s)?\\b",
+        "\\bAndroid\\b[^.\\n]{0,140}\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b",
+        "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b"
+      ],
+      "aospCameraStackBucket": "cpp_ai_tooling_fallback",
+      "aosp_camera_stack_bucket": "cpp_ai_tooling_fallback",
+      "aospCameraDirect": false,
+      "aosp_camera_direct": false,
+      "aospCameraEvidenceTerms": [
+        "\\bGoogle\\s+AI\\s+Studio\\b",
+        "\\bAI\\s+Studio\\b[^.\\n]{0,120}\\bAndroid\\b",
+        "\\bAndroid\\b[^.\\n]{0,120}\\bAI\\s+Studio\\b",
+        "\\bnative\\s+Android\\s+app(?:s)?\\b",
+        "\\bAndroid\\b[^.\\n]{0,140}\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b",
+        "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\bGoogle\\s+AI\\s+Studio\\b",
+        "\\bAI\\s+Studio\\b[^.\\n]{0,120}\\bAndroid\\b",
+        "\\bAndroid\\b[^.\\n]{0,120}\\bAI\\s+Studio\\b",
+        "\\bnative\\s+Android\\s+app(?:s)?\\b",
+        "\\bAndroid\\b[^.\\n]{0,140}\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b",
+        "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b"
+      ],
+      "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 6 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 6 article-level signal(s) from article_text.",
+      "article_group_key": "android_native_tooling_workflow",
+      "freshness_window": "unknown",
+      "days_since_published": null,
+      "selection_window_reason": "missing or invalid published date",
+      "effective_date": "",
+      "date_source": "",
+      "date_confidence": 0,
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": false,
+        "date_source": "missing",
+        "date_confidence": 0,
+        "needs_editor_date_review": true,
+        "main_article_date_eligible": false,
+        "date_field": ""
+      },
+      "selected": false,
+      "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "deterministic_score": -5.75,
+      "score_breakdown": {
+        "camera_hal_directness": 2.25,
+        "scope_relevance": 3,
+        "editorial_priority": 6,
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "aosp_camera_directness": 0,
+        "driver_stack_relevance": 0,
+        "multimedia_camera_output_relevance": 0,
+        "soc_platform_relevance": 0,
+        "native_tooling_relevance": 3,
+        "evidence_specificity": 0,
+        "freshness_score": 0,
+        "practical_actionability": 0,
+        "optional_ai_cpp_bonus": 4,
+        "generic_ai_penalty": 0,
+        "watch_page_penalty": 0,
+        "no_date_penalty": 20,
+        "no_api_component_penalty": 14,
+        "source_gap_penalty": 25,
+        "generic_tech_watchlist_penalty": 0,
+        "penalty_total": 59,
+        "main_article_score_threshold": 42,
+        "minimum_camera_hal_directness": 2,
+        "minimum_scope_relevance": 2,
+        "source_reliability": 5,
+        "freshness": 0,
+        "camera_hal_relevance": 2.25,
+        "android_camera_relevance": 0,
+        "ai_required_slot_fit": 3,
+        "cpp_fallback_value": 2,
+        "evidence_quality": 0,
+        "base_total": -5.75,
+        "linked_evidence_runtime_bonus": 0,
+        "linked_evidence_watch_penalty": 0,
+        "linked_evidence_adjustment": 0,
+        "total": -5.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -5.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "main_article_score_eligible": false,
+      "score_filter_reasons": [
+        "base_total<42",
+        "missing dated evidence",
+        "source_gap_risk=true",
+        "missing concrete API/component evidence"
+      ],
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=unknown_not_main"
+      ],
+      "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "url_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
+      "ai_slot_candidate": true,
+      "camera_platform_candidate": false,
+      "cpp_fallback_candidate": true,
+      "optional_ai_cpp_candidate": true,
+      "selection_window_exclusion_reason": "unknown_not_main",
+      "final_selected": false,
+      "related_context_candidates": [],
+      "selection_stage": "deterministic-final",
+      "primary_selected": false,
+      "reserve_candidate": false,
+      "reporter_selected": true,
+      "final_exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-fe7a2b2ca51287c9",
+      "source_candidate_id": "gemini-fe7a2b2ca51287c9",
+      "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "articleUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "article_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "source": "Android Developers Blog",
+      "source_name": "Android Developers Blog",
+      "sourceName": "Android Developers Blog",
+      "sourceUrl": "https://android-developers.googleblog.com/",
+      "source_url": "https://android-developers.googleblog.com/",
+      "source_id": "android-developers-blog",
+      "category": "android",
+      "source_category": "android",
+      "section": "android",
+      "source_section": "android",
+      "priority": "high",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "official_blog",
+      "source_type": "official_blog",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Integration of Google AI Studio with native Android app development, potentially enabling on-device AI for camera processing or computer vision tasks."
+      ],
+      "keywords": [
+        "Android AI camera",
+        "Google AI Studio computer vision",
+        "on-device AI camera processing",
+        "camera machine learning Android"
+      ],
+      "evidence": [
+        "Examples or APIs for integrating AI models with camera input streams",
+        "Use cases for on-device computer vision powered by Google AI Studio in Android apps",
+        "Performance considerations or best practices for real-time camera AI processing"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "P2",
+      "proposal_trace_id": "P2",
+      "discovery_topic_gap": "Integration of Google AI Studio with native Android app development, potentially enabling on-device AI for camera processing or computer vision tasks.",
+      "discovery_source_family": "android",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-fe7a2b2ca51287c9",
+      "duplicate_of_selected_source": true,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "editorial_priority": 6,
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 3,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": true,
+      "tooling_workflow_type": "native_tooling_workflow",
+      "native_workflow_evidence_score": 5,
+      "evidence_origin": "article_text",
+      "source_hint": "Android Developers Blog Android Developers Blog android android android android",
+      "scope_evidence_terms": [
+        "\\bGoogle\\s+AI\\s+Studio\\b",
+        "\\bAI\\s+Studio\\b[^.\\n]{0,120}\\bAndroid\\b",
+        "\\bAndroid\\b[^.\\n]{0,120}\\bAI\\s+Studio\\b",
+        "\\bnative\\s+Android\\s+app(?:s)?\\b",
+        "\\bAndroid\\b[^.\\n]{0,140}\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b",
+        "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b"
+      ],
+      "aospCameraStackBucket": "cpp_ai_tooling_fallback",
+      "aosp_camera_stack_bucket": "cpp_ai_tooling_fallback",
+      "aospCameraDirect": false,
+      "aosp_camera_direct": false,
+      "aospCameraEvidenceTerms": [
+        "\\bGoogle\\s+AI\\s+Studio\\b",
+        "\\bAI\\s+Studio\\b[^.\\n]{0,120}\\bAndroid\\b",
+        "\\bAndroid\\b[^.\\n]{0,120}\\bAI\\s+Studio\\b",
+        "\\bnative\\s+Android\\s+app(?:s)?\\b",
+        "\\bAndroid\\b[^.\\n]{0,140}\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b",
+        "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\bGoogle\\s+AI\\s+Studio\\b",
+        "\\bAI\\s+Studio\\b[^.\\n]{0,120}\\bAndroid\\b",
+        "\\bAndroid\\b[^.\\n]{0,120}\\bAI\\s+Studio\\b",
+        "\\bnative\\s+Android\\s+app(?:s)?\\b",
+        "\\bAndroid\\b[^.\\n]{0,140}\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b",
+        "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b"
+      ],
+      "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 6 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 6 article-level signal(s) from article_text.",
+      "article_group_key": "android_native_tooling_workflow",
+      "freshness_window": "unknown",
+      "days_since_published": null,
+      "selection_window_reason": "missing or invalid published date",
+      "effective_date": "",
+      "date_source": "",
+      "date_confidence": 0,
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": false,
+        "date_source": "missing",
+        "date_confidence": 0,
+        "needs_editor_date_review": true,
+        "main_article_date_eligible": false,
+        "date_field": ""
+      },
+      "selected": false,
+      "selected_for_editor": false,
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "deterministic_score": -5.75,
+      "score_breakdown": {
+        "camera_hal_directness": 2.25,
+        "scope_relevance": 3,
+        "editorial_priority": 6,
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "aosp_camera_directness": 0,
+        "driver_stack_relevance": 0,
+        "multimedia_camera_output_relevance": 0,
+        "soc_platform_relevance": 0,
+        "native_tooling_relevance": 3,
+        "evidence_specificity": 0,
+        "freshness_score": 0,
+        "practical_actionability": 0,
+        "optional_ai_cpp_bonus": 4,
+        "generic_ai_penalty": 0,
+        "watch_page_penalty": 0,
+        "no_date_penalty": 20,
+        "no_api_component_penalty": 14,
+        "source_gap_penalty": 25,
+        "generic_tech_watchlist_penalty": 0,
+        "penalty_total": 59,
+        "main_article_score_threshold": 42,
+        "minimum_camera_hal_directness": 2,
+        "minimum_scope_relevance": 2,
+        "source_reliability": 5,
+        "freshness": 0,
+        "camera_hal_relevance": 2.25,
+        "android_camera_relevance": 0,
+        "ai_required_slot_fit": 3,
+        "cpp_fallback_value": 2,
+        "evidence_quality": 0,
+        "base_total": -5.75,
+        "linked_evidence_runtime_bonus": 0,
+        "linked_evidence_watch_penalty": 0,
+        "linked_evidence_adjustment": 0,
+        "total": -5.75
+      },
+      "headline_score": 0,
+      "headline_score_breakdown": {
+        "base_score": -5.75,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 40,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 0
+      },
+      "date_evidence": {
+        "date": "",
+        "date_field": "published_date",
+        "evidence_level": "dated_release",
+        "publish_ready_date_evidence": false
+      },
+      "quality_flags": {
+        "source_gap_risk": true,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "main_article_score_eligible": false,
+      "score_filter_reasons": [
+        "base_total<42",
+        "missing dated evidence",
+        "source_gap_risk=true",
+        "missing concrete API/component evidence"
+      ],
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=unknown_not_main"
+      ],
+      "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "url_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
+      "ai_slot_candidate": true,
+      "camera_platform_candidate": false,
+      "cpp_fallback_candidate": true,
+      "optional_ai_cpp_candidate": true,
+      "selection_window_exclusion_reason": "unknown_not_main",
+      "final_selected": false,
+      "related_context_candidates": [],
+      "selection_stage": "deterministic-final",
+      "primary_selected": false,
+      "reserve_candidate": false,
+      "reporter_selected": true,
+      "final_exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=unknown_not_main"
       ]
     }
   ],
@@ -27102,9 +28167,9 @@ npm.cmd run validate
     "reason": "retained_current_above_margin",
     "current_headline_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
     "replacement_headline_key": null,
-    "previous_stored_current_score": 98,
+    "previous_stored_current_score": 96,
     "runtime_decayed_score": 96,
-    "last_scored_at": "2026-05-24",
+    "last_scored_at": "2026-05-25",
     "scored_at": "2026-05-25",
     "retained": true,
     "replaced": false,
@@ -27130,11 +28195,11 @@ npm.cmd run validate
     "updated_at": "2026-05-25T00:00:00+09:00",
     "current_headline": {
       "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "title": "구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동",
+      "title": "Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 및 카메라 API 연동 지원",
       "summary": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
       "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "newsletter_date": "2026-05-24",
-      "newsletter_url": "newsletters/2026-05-24/index.html",
+      "newsletter_url": "newsletters/2026-05-25/index.html",
       "selected_at": "2026-05-24",
       "base_score": 98,
       "current_score": 96,
@@ -27167,7 +28232,7 @@ npm.cmd run validate
         "category": "cpp_ai_tooling_fallback",
         "source_name": "Android Developers Blog"
       },
-      "newsletter_article_url": "newsletters/2026-05-24/index.html#article-ai-api",
+      "newsletter_article_url": "newsletters/2026-05-25/index.html#article-google-ai-studio-android-api",
       "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
       "image_alt": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인"
     },
@@ -27189,24 +28254,28 @@ npm.cmd run validate
   },
   "exclusion_reason_summary": [
     {
+      "reason": "final_selection_blocked=true",
+      "count": 39
+    },
+    {
       "reason": "main_eligible=false",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 35
     },
     {
       "reason": "briefing_only=true",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=exclude",
@@ -27214,7 +28283,7 @@ npm.cmd run validate
     },
     {
       "reason": "missing dated evidence",
-      "count": 6
+      "count": 8
     },
     {
       "reason": "watch page without dated evidence",
@@ -27222,7 +28291,7 @@ npm.cmd run validate
     },
     {
       "reason": "selection_window=unknown_not_main",
-      "count": 3
+      "count": 5
     },
     {
       "reason": "source_extraction.used_fallback=true",
@@ -27234,34 +28303,38 @@ npm.cmd run validate
     }
   ],
   "selection_stage": "deterministic-final",
-  "final_input_candidate_count": 40,
+  "final_input_candidate_count": 42,
   "final_eligible_candidate_count": 2,
   "final_selected_article_count": 2,
   "headline_public_render_reconciliation": null,
   "article_exposure_coverage": null,
-  "reporter_candidate_count": null,
-  "reporter_selected_count": null,
-  "reporter_selected_but_final_excluded_count": null,
+  "reporter_candidate_count": 2,
+  "reporter_selected_count": 2,
+  "reporter_selected_but_final_excluded_count": 0,
   "final_exclusion_reason_summary": [
     {
+      "reason": "final_selection_blocked=true",
+      "count": 39
+    },
+    {
       "reason": "main_eligible=false",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 37
+      "count": 39
     },
     {
       "reason": "reference_only=true",
-      "count": 33
+      "count": 35
     },
     {
       "reason": "briefing_only=true",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 28
+      "count": 30
     },
     {
       "reason": "finalSelectionEligibility=exclude",
@@ -27269,7 +28342,7 @@ npm.cmd run validate
     },
     {
       "reason": "missing dated evidence",
-      "count": 6
+      "count": 8
     },
     {
       "reason": "watch page without dated evidence",
@@ -27277,7 +28350,7 @@ npm.cmd run validate
     },
     {
       "reason": "selection_window=unknown_not_main",
-      "count": 3
+      "count": 5
     },
     {
       "reason": "source_extraction.used_fallback=true",
@@ -27779,6 +28852,15 @@ npm.cmd run validate
       "reason": "security_component_camera_related classified from candidate text.",
       "warnings": []
     },
+    "source_quality_score": 0.893,
+    "source_quality_bucket": "strong_candidate",
+    "source_quality_report_ref": "8edd18929c9fbdd9",
+    "duplicate_of_selected_source": false,
+    "stale_claim_risk": "",
+    "final_selection_blocked": false,
+    "editor_review_required": false,
+    "unsupported_claims_excluded": false,
+    "evidence_validation_status": "pass",
     "freshness_window": "primary",
     "days_since_published": 6,
     "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -27895,7 +28977,7 @@ npm.cmd run validate
     "selection_stage": "deterministic-primary",
     "primary_selected": true,
     "reserve_candidate": false,
-    "reporter_selected": false,
+    "reporter_selected": true,
     "final_exclusion_reasons": []
   },
   {
@@ -28187,6 +29269,15 @@ npm.cmd run validate
         "main_hint_requires_candidate_runtime_evidence"
       ]
     },
+    "source_quality_score": 0.666,
+    "source_quality_bucket": "review_candidate",
+    "source_quality_report_ref": "4cd1324b82d886c6",
+    "duplicate_of_selected_source": false,
+    "stale_claim_risk": "",
+    "final_selection_blocked": false,
+    "editor_review_required": false,
+    "unsupported_claims_excluded": false,
+    "evidence_validation_status": "pass",
     "freshness_window": "primary",
     "days_since_published": 6,
     "selection_window_reason": "6 day(s) since published; within primary 7 day window",
@@ -28280,7 +29371,42 @@ npm.cmd run validate
     "fallback_window_promoted": false,
     "selection_window_stage": "primary",
     "selection_slot": "android-native-tooling-supporting",
-    "related_context_candidates": [],
+    "related_context_candidates": [
+      {
+        "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+        "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "source": "Android Developers Blog",
+        "published_date": "",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "finalSelectionEligibility": "watchlist",
+        "context_role": "blocked_context_reference",
+        "context_usage_label": "blocked_context_reference",
+        "source_quality_status": "unknown",
+        "context_usage_allowed": false,
+        "can_create_independent_article": false,
+        "blocked_from_independent_main_reason": "source_gap_risk",
+        "article_group_key": "android_native_tooling_workflow"
+      },
+      {
+        "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+        "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+        "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+        "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "source": "Android Developers Blog",
+        "published_date": "",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "finalSelectionEligibility": "watchlist",
+        "context_role": "blocked_context_reference",
+        "context_usage_label": "blocked_context_reference",
+        "source_quality_status": "unknown",
+        "context_usage_allowed": false,
+        "can_create_independent_article": false,
+        "blocked_from_independent_main_reason": "source_gap_risk",
+        "article_group_key": "android_native_tooling_workflow"
+      }
+    ],
     "included_as_headline_latest": true,
     "headline_latest_inclusion_mode": "selected_normally",
     "injected_from_headline_snapshot": false,
@@ -28289,7 +29415,7 @@ npm.cmd run validate
     "selection_stage": "deterministic-primary",
     "primary_selected": true,
     "reserve_candidate": false,
-    "reporter_selected": false,
+    "reporter_selected": true,
     "final_exclusion_reasons": []
   }
 ]

@@ -1,6 +1,6 @@
 # Camera HAL / SW Newsletter - 2026-05-25
 
-이번 2026-05-25호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX 기반의 다양한 화면 크기별 카메라 프리뷰 최적화, Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 및 카메라 API 연동 지원.
+이번 2026-05-25호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화, Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 지원 및 Camera API 연동.
 
 
 > 검토 발행본입니다.
@@ -13,7 +13,7 @@
 - Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.
 - 직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.
 
-## 2. Jetpack Compose와 CameraX 기반의 다양한 화면 크기별 카메라 프리뷰 최적화
+## 2. Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화
 
 
 ![Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png)
@@ -43,7 +43,7 @@ Android Developers Blog는 Tue, 19 May 2026 13:00:00 +0000에 8: Building seamle
 
 ---
 
-## 3. Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 및 카메라 API 연동 지원
+## 3. Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 지원 및 Camera API 연동
 
 
 ![Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png)
@@ -57,7 +57,7 @@ Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Ac
 
 Android Developers Blog는 Tue, 19 May 2026 12:45:00 +0000에 Build native Android apps in Google AI Studio 내용을 공개했습니다. 원문에서 확인되는 핵심은 프롬프트 기반 생성, Emma-Louise Leavey, Group Product Manager, Mike Taylor-Cai, Product Manager Starting 관련 내용입니다.
 
-추가로 확인되는 항목은 Tue, May, Andr, like the Camera, GPS/Location, Accelerometer입니다. 이런 세부 내용은 독자가 원문 발표의 실제 범위를 파악하는 데 도움이 됩니다.
+추가로 확인되는 항목은 Tue, May, like the Camera, GPS/Location, Accelerometer, Bluetooth입니다. 이런 세부 내용은 독자가 원문 발표의 실제 범위를 파악하는 데 도움이 됩니다.
 
 원문 세부 내용으로는 Tue, May 관련 내용도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다.
 

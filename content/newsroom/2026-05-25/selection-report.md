@@ -35,9 +35,9 @@
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
-- previous_stored_current_score: 98
+- previous_stored_current_score: 96
 - runtime_decayed_score: 96
-- last_scored_at: 2026-05-24
+- last_scored_at: 2026-05-25
 - scored_at: 2026-05-25
 - latest_inclusion_mode: selected_normally
 - injected_from_snapshot: false
