@@ -438,7 +438,7 @@ for (const regression of hardFailRegressionCases.values()) {
   });
 }
 
-test('derived editorial hints do not permit direct HAL claim', () => {
+test('quality gate leaves direct HAL prose validity to LLM and editor judgment', () => {
   const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
   const cameraXSection = section({
     headline: 'CameraX direct HAL overclaim',
@@ -504,11 +504,10 @@ test('derived editorial hints do not permit direct HAL claim', () => {
     [candidate, ...reporterCandidatesFor(validSections()).slice(1)]
   );
 
-  assert.equal(report.status, 'NEEDS_FIX');
-  assert.ok(report.deductions.some(item =>
+  assert.equal(report.deductions.some(item =>
     item.category === 'source-integrity' &&
     item.reason.includes('direct HAL contract/API claim lacks direct source evidence')
-  ));
+  ), false);
 });
 
 test('strict claim validation blocks factual fields without claims', () => {

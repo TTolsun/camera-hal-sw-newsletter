@@ -211,7 +211,7 @@ test('field hygiene separates exact duplicate semantic overlap and short overlap
   assert.equal(distinct, undefined);
 });
 
-test('field hygiene detects Korean direct HAL overclaims for non-direct impact levels', () => {
+test('field hygiene does not make semantic direct-HAL validity decisions', () => {
   for (const camera_hal_perspective of [
     '이 항목은 직접 HAL API 변경입니다.',
     'HAL 메타데이터 contract 변경입니다.',
@@ -224,14 +224,15 @@ test('field hygiene detects Korean direct HAL overclaims for non-direct impact l
       camera_hal_perspective,
       guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT
     });
-    const overclaim = issues.find(item => item.type === 'overclaim_guardrail');
-    assert.ok(overclaim, `${camera_hal_perspective} should be detected`);
-    assert.equal(overclaim.severity, 'hard');
-    assert.equal(overclaim.blocking, true);
+    assert.equal(
+      issues.some(item => item.type === 'overclaim_guardrail'),
+      false,
+      `${camera_hal_perspective} should be left to LLM/editor judgment`
+    );
   }
 });
 
-test('field hygiene allows direct HAL claims only for direct HAL guardrail impact class', () => {
+test('field hygiene leaves direct HAL claim validity to LLM and editor judgment', () => {
   const directIssues = findFieldHygieneIssues({
     what_changed: 'Camera HAL changed request behavior.',
     background: 'The source is a direct HAL change.',
@@ -246,7 +247,7 @@ test('field hygiene allows direct HAL claims only for direct HAL guardrail impac
   });
 
   assert.equal(directIssues.some(item => item.type === 'overclaim_guardrail'), false);
-  assert.equal(adjacentIssues.some(item => item.type === 'overclaim_guardrail'), true);
+  assert.equal(adjacentIssues.some(item => item.type === 'overclaim_guardrail'), false);
 });
 
 test('field hygiene does not treat standalone stream buffer request result or guardrails as overclaim', () => {
@@ -267,7 +268,7 @@ test('field hygiene does not treat standalone stream buffer request result or gu
   assert.equal(guardrail.some(item => item.type === 'overclaim_guardrail'), false);
 });
 
-test('field hygiene keeps not and no from masking positive direct HAL overclaims', () => {
+test('field hygiene ignores direct HAL claim phrasing regardless of negation wording', () => {
   for (const camera_hal_perspective of [
     'No, this is direct HAL API behavior.',
     'This is not only a CameraX update; it is direct HAL API behavior.'
@@ -278,9 +279,10 @@ test('field hygiene keeps not and no from masking positive direct HAL overclaims
       camera_hal_perspective,
       guardrail_impact_class: GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT
     });
-    assert.ok(
-      issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true),
-      `${camera_hal_perspective} should remain blocking`
+    assert.equal(
+      issues.some(item => item.type === 'overclaim_guardrail'),
+      false,
+      `${camera_hal_perspective} should not be hard-failed by code`
     );
   }
 
@@ -298,7 +300,7 @@ test('field hygiene keeps not and no from masking positive direct HAL overclaims
   }
 });
 
-test('overclaim guardrails and field hygiene catch direct HAL overclaim', () => {
+test('overclaim guardrails remain LLM guidance and field hygiene does not hard-fail them', () => {
   const guardrails = buildOverclaimGuardrails(cameraXCandidate());
   const issues = findFieldHygieneIssues({
     what_changed: 'CameraX 1.6.1 updated app-facing compatibility behavior.',
@@ -308,5 +310,5 @@ test('overclaim guardrails and field hygiene catch direct HAL overclaim', () => 
   });
 
   assert.ok(guardrails.some(item => item.includes('direct HAL API')));
-  assert.ok(issues.some(item => item.type === 'overclaim_guardrail'));
+  assert.equal(issues.some(item => item.type === 'overclaim_guardrail'), false);
 });

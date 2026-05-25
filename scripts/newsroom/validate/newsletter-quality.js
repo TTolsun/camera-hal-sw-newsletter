@@ -698,13 +698,6 @@ function hasCameraXValidationChecklist(section = {}, hints = {}) {
   });
 }
 
-function hasDirectHalOverclaim(section = {}, candidate = {}) {
-  const guardrailClass = inferGuardrailImpactClass({ ...candidate, ...section });
-  if (guardrailClass === 'direct_hal_contract') return false;
-  return /\b(?:direct\s+Camera\s+HAL|direct\s+HAL|HAL\s+API|vendor\s+HAL|HAL\s+contract|camera\s+provider\s+contract)\b/i
-    .test(articleTextWithLegacyFields(section));
-}
-
 function cameraXSourceExtractionViolations(section = {}, candidate = {}) {
   if (!isCameraXReleaseArticle(section, candidate)) return [];
   const extraction = sourceExtractionFor(section, candidate);
@@ -723,9 +716,6 @@ function cameraXSourceExtractionViolations(section = {}, candidate = {}) {
   if (hasGenericCameraXFallbackText(section)) violations.push('generic CameraX fallback text used as main article body');
   if (!hasCameraXHalBoundary(section, hints)) violations.push('CameraX HAL boundary is missing from the article');
   if (!hasCameraXValidationChecklist(section, hints)) violations.push('CameraX validation checklist is missing from the article');
-  if (hasDirectHalOverclaim(section, candidate)) {
-    violations.push('direct HAL contract/API claim lacks direct source evidence');
-  }
   return [...new Set(violations)];
 }
 

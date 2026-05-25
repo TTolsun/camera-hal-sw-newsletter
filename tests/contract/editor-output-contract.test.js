@@ -2308,38 +2308,19 @@ test('editor field hygiene passes short overlap warnings and rejects semantic ov
   );
 });
 
-test('editor field hygiene rejects direct HAL contract overclaim for adjacent impact level', () => {
-  const draft = editor({
-    sections: [
-      section(1, {
-        relevance_bucket: 'android_platform_camera_adjacent',
-        camera_hal_perspective: 'This is a direct HAL API contract change for stream buffers.'
-      }),
-      section(2),
-      section(3)
-    ]
-  });
-
-  assert.throws(
-    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
-    error => {
-      assert.ok(error instanceof EditorSemanticValidationError);
-      assert.equal(error.details.field, 'sections.field_hygiene');
-      assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail'));
-      return true;
-    }
-  );
-});
-
-test('editor field hygiene does not let standalone not or no hide HAL overclaims', () => {
+test('editor field hygiene leaves semantic direct HAL claim validity to LLM and editor judgment', () => {
   for (const camera_hal_perspective of [
+    'This is a direct HAL API contract change for stream buffers.',
     'No, this is direct HAL API behavior.',
-    'This is not only a CameraX update; it is direct HAL API behavior.'
+    'This is not only a CameraX update; it is direct HAL API behavior.',
+    '이 항목은 HAL request/result에 직접 영향이 있습니다.',
+    '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.'
   ]) {
     const draft = editor({
       sections: [
         section(1, {
           relevance_bucket: 'android_platform_camera_adjacent',
+          impact_claim_level: 'direct_hal_change',
           camera_hal_perspective
         }),
         section(2),
@@ -2347,63 +2328,8 @@ test('editor field hygiene does not let standalone not or no hide HAL overclaims
       ]
     });
 
-    assert.throws(
-      () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
-      error => {
-        assert.ok(error instanceof EditorSemanticValidationError);
-        assert.equal(error.details.field, 'sections.field_hygiene');
-        assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true));
-        return true;
-      }
-    );
+    assert.equal(validateEditorOutputContract(draft, DATE, { normalizeSection }), draft);
   }
-});
-
-test('editor field hygiene rejects Korean HAL overclaim for non-direct impact level', () => {
-  const draft = editor({
-    sections: [
-      section(1, {
-        relevance_bucket: 'android_platform_camera_adjacent',
-        camera_hal_perspective: '이 항목은 HAL request/result에 직접 영향이 있습니다.'
-      }),
-      section(2),
-      section(3)
-    ]
-  });
-
-  assert.throws(
-    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
-    error => {
-      assert.ok(error instanceof EditorSemanticValidationError);
-      assert.equal(error.details.field, 'sections.field_hygiene');
-      assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true));
-      return true;
-    }
-  );
-});
-
-test('editor field hygiene ignores stale direct impact_claim_level on adjacent sections', () => {
-  const draft = editor({
-    sections: [
-      section(1, {
-        relevance_bucket: 'android_platform_camera_adjacent',
-        impact_claim_level: 'direct_hal_change',
-        camera_hal_perspective: '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.'
-      }),
-      section(2),
-      section(3)
-    ]
-  });
-
-  assert.throws(
-    () => validateEditorOutputContract(draft, DATE, { normalizeSection }),
-    error => {
-      assert.ok(error instanceof EditorSemanticValidationError);
-      assert.equal(error.details.field, 'sections.field_hygiene');
-      assert.ok(error.details.issues.some(item => item.type === 'overclaim_guardrail' && item.blocking === true));
-      return true;
-    }
-  );
 });
 
 test('editor field hygiene allows direct HAL claims for direct source scope and guardrail wording', () => {
