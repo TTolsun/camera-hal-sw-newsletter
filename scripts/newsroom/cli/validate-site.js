@@ -431,6 +431,54 @@ function validateRootHomepageContract(newsletters) {
       fail(`root index.html hardcodes stale newsletter exposure for ${date}. ${buildRemediationMessage(date)}`);
     }
   }
+  if (!/<a\b[^>]*\bhref=["']archive\.html["'][^>]*>\s*전체 보기\s*<\/a>/i.test(html)) {
+    fail('root index.html must link the 전체 보기 archive action to archive.html.');
+  }
+}
+
+function validateArchivePageContract(newsletters) {
+  const relPath = 'archive.html';
+  const archivePath = path.join(root, relPath);
+  if (!fs.existsSync(archivePath)) {
+    fail('Missing required public archive route: archive.html');
+    return;
+  }
+  const html = read(archivePath);
+  if (!/<body\b[^>]*class=["'][^"']*\bhomepage\b[^"']*["']/i.test(html)) {
+    fail('archive.html must use the same body.homepage shell as index.html.');
+  }
+  if (!/<footer\b[^>]*class=["'][^"']*\bsite-footer\b[^"']*["'][\s\S]*Latest[\s\S]*Archive[\s\S]*GitHub/i.test(html)) {
+    fail('archive.html must keep the shared site-footer with Latest / Archive / GitHub links.');
+  }
+  if (!/assets\/js\/newsletter-archive\.js/.test(html)) {
+    fail('archive.html must load assets/js/newsletter-archive.js.');
+  }
+  if (!/fetch\(\s*['"]data\/newsletters\.json['"]/.test(html)) {
+    fail('archive.html must fetch data/newsletters.json as the archive source of truth.');
+  }
+  for (const hook of [
+    'data-page="archive"',
+    'data-archive-status',
+    'data-archive-controls',
+    'data-topic-filter',
+    'data-sort-control',
+    'data-result-summary',
+    'data-archive-grid',
+    'data-empty-state',
+    'data-error-state'
+  ]) {
+    if (!html.includes(hook)) {
+      fail(`archive.html missing required archive hook: ${hook}`);
+    }
+  }
+  const exposedDates = [...html.matchAll(/newsletters\/(\d{4}-\d{2}-\d{2})\//g)]
+    .map(match => match[1]);
+  const publicDates = new Set(newsletters.map(item => item?.date).filter(Boolean));
+  for (const date of [...new Set(exposedDates)]) {
+    if (!publicDates.has(date)) {
+      fail(`archive.html hardcodes stale newsletter exposure for ${date}. ${buildRemediationMessage(date)}`);
+    }
+  }
 }
 
 function validateHomepageHeadlineData() {
@@ -549,6 +597,7 @@ if (!Array.isArray(newsletters)) {
 const seenDates = new Set();
 const strictDates = strictTargetDates({ root, newsletterDatePath });
 validateRootHomepageContract(newsletters);
+validateArchivePageContract(newsletters);
 validateHomepageHeadlineData();
 validateAllRetentionFiles();
 for (const [index, item] of newsletters.entries()) {
@@ -637,7 +686,7 @@ for (const [index, item] of newsletters.entries()) {
   }
 }
 
-const htmlFiles = ['index.html'];
+const htmlFiles = ['index.html', 'archive.html'];
 for (const item of newsletters) {
   if (item.html) htmlFiles.push(item.html);
 }

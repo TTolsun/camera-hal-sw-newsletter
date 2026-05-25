@@ -1,4 +1,5 @@
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
 const { spawnSync } = require('node:child_process');
 const path = require('node:path');
 const test = require('node:test');
@@ -122,6 +123,7 @@ function rootIndexHtml(extra = '', { navLabels = null, siteHeaderComponent = tru
   return [
     '<!doctype html><html><body>',
     navLabels ? rootNavHtml(navLabels) : (siteHeaderComponent ? rootSiteHeaderComponentHtml() : ''),
+    '<a class="section-link" href="archive.html">전체 보기</a>',
     '<div id="latest-card"></div>',
     '<div id="archive-list"></div>',
     extra,
@@ -131,6 +133,31 @@ function rootIndexHtml(extra = '', { navLabels = null, siteHeaderComponent = tru
     'loadHomepageHeadline();',
     'loadNewsletters();',
     '</script>',
+    '</body></html>'
+  ].join('\n');
+}
+
+function rootArchiveHtml(extra = '') {
+  return [
+    '<!doctype html><html><body class="homepage">',
+    '<main id="archive-page" data-page="archive">',
+    '<section data-archive-status aria-live="polite"></section>',
+    '<form data-archive-controls>',
+    '<div data-topic-filter></div>',
+    '<select data-sort-control><option value="latest">최신순</option><option value="oldest">오래된순</option></select>',
+    '</form>',
+    '<p data-result-summary></p>',
+    '<div data-archive-grid></div>',
+    '<div data-empty-state hidden></div>',
+    '<div data-error-state hidden></div>',
+    '</main>',
+    '<footer class="site-footer"><a href="index.html#latest">Latest</a><a href="archive.html">Archive</a><a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a></footer>',
+    '<script src="assets/js/newsletter-archive.js"></script>',
+    '<script>',
+    "async function loadArchiveNewsletters() { await fetch('data/newsletters.json'); }",
+    'loadArchiveNewsletters();',
+    '</script>',
+    extra,
     '</body></html>'
   ].join('\n');
 }
@@ -166,6 +193,7 @@ function writeSiteFixture(root, {
     navLabels
   }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
+  writeText(path.join(root, 'archive.html'), rootArchiveHtml());
   if (factCheckMustFix || sourceGapCount !== null) {
     writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
       status: factCheckMustFix ? 'NEEDS_FIX' : 'PASS',
@@ -267,6 +295,7 @@ function writeFallbackPublicSiteFixture(root, {
   writeText(path.join(root, 'newsletters', date, 'newsletter.md'), fallbackNewsletterMarkdown(date, articleCount, { notice }));
   writeText(path.join(root, 'newsletters', date, 'index.html'), fallbackNewsletterHtml(date, { tags, notice }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
+  writeText(path.join(root, 'archive.html'), rootArchiveHtml());
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
     publication_mode: publicationMode,
@@ -693,6 +722,58 @@ test('validate-site fails root homepage stale hardcoded newsletter exposure', ()
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /root index\.html hardcodes stale newsletter exposure for 2026-05-18/);
+});
+
+test('validate-site rejects missing required archive page route', () => {
+  const root = tempRoot('validate-site-missing-archive-route-');
+  writeSiteFixture(root, {
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  fs.unlinkSync(path.join(root, 'archive.html'));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Missing required public archive route: archive\.html/);
+});
+
+test('validate-site rejects archive page without shared helper reference', () => {
+  const root = tempRoot('validate-site-archive-helper-');
+  writeSiteFixture(root, {
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(path.join(root, 'archive.html'), rootArchiveHtml().replace('<script src="assets/js/newsletter-archive.js"></script>', ''));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /archive\.html must load assets\/js\/newsletter-archive\.js/);
+});
+
+test('validate-site rejects archive page without required hooks', () => {
+  const root = tempRoot('validate-site-archive-hooks-');
+  writeSiteFixture(root, {
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(path.join(root, 'archive.html'), rootArchiveHtml().replace('data-archive-grid', 'data-archive-list'));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /archive\.html missing required archive hook: data-archive-grid/);
+});
+
+test('validate-site rejects archive page stale hardcoded newsletter exposure', () => {
+  const root = tempRoot('validate-site-archive-stale-hardcoded-');
+  writeSiteFixture(root, {
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(path.join(root, 'archive.html'), rootArchiveHtml('<a href="newsletters/2026-05-18/index.html">stale issue</a>'));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /archive\.html hardcodes stale newsletter exposure for 2026-05-18/);
 });
 
 test('validate-site stale homepage headline score failure includes refresh remediation', () => {
