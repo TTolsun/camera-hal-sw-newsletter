@@ -13,13 +13,15 @@ const DEFAULT_LLM_STAGE_MODELS = Object.freeze({
   reporter: 'gemini-2.5-flash',
   editor: 'gemini-3.5-flash',
   factcheck: 'gemini-2.5-flash',
-  repair: 'gemini-3.5-flash'
+  repair: 'gemini-3.5-flash',
+  judge: 'gemini-2.5-flash-lite'
 });
 const LLM_STAGE_MODEL_ENV_KEYS = Object.freeze({
   reporter: 'NEWSROOM_REPORTER_MODEL',
   editor: 'NEWSROOM_EDITOR_MODEL',
   factcheck: 'NEWSROOM_FACTCHECK_MODEL',
-  repair: 'NEWSROOM_REPAIR_MODEL'
+  repair: 'NEWSROOM_REPAIR_MODEL',
+  judge: 'NEWSROOM_JUDGE_MODEL'
 });
 const LINKED_EVIDENCE_MODES = Object.freeze({
   EXTRACT_ONLY: 'extract_only',
@@ -46,7 +48,8 @@ const DEFAULT_RUNTIME_CONFIG = {
     reporter: 'code_default',
     editor: 'code_default',
     factcheck: 'code_default',
-    repair: 'code_default'
+    repair: 'code_default',
+    judge: 'code_default'
   },
   geminiModel: DEFAULT_LLM_MODEL,
   geminiFallbackModels: DEFAULT_LLM_FALLBACK_MODELS,
@@ -66,6 +69,7 @@ const DEFAULT_RUNTIME_CONFIG = {
   geminiThinkingBudgetEditor: 512,
   geminiThinkingBudgetRepair: 0,
   geminiThinkingBudgetFactcheck: 0,
+  geminiThinkingBudgetJudge: 0,
   geminiThinkingBudgetScoring: 0,
   linkedEvidenceMode: LINKED_EVIDENCE_MODES.EXTRACT_ONLY,
   linkedEvidenceMaxLinksPerCandidate: 8,
@@ -314,6 +318,11 @@ function readRuntimeConfig(env = process.env, options = {}) {
       'GEMINI_THINKING_BUDGET_FACTCHECK',
       { min: 0 }
     ),
+    geminiThinkingBudgetJudge: parseInteger(
+      envValue(env, 'GEMINI_THINKING_BUDGET_JUDGE', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetJudge),
+      'GEMINI_THINKING_BUDGET_JUDGE',
+      { min: 0 }
+    ),
     geminiThinkingBudgetScoring: parseInteger(
       envValue(env, 'GEMINI_THINKING_BUDGET_SCORING', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetScoring),
       'GEMINI_THINKING_BUDGET_SCORING',
@@ -483,6 +492,7 @@ function validateRuntimeConfig(config, options = {}) {
     [config.geminiThinkingBudgetEditor, 'GEMINI_THINKING_BUDGET_EDITOR'],
     [config.geminiThinkingBudgetRepair, 'GEMINI_THINKING_BUDGET_REPAIR'],
     [config.geminiThinkingBudgetFactcheck, 'GEMINI_THINKING_BUDGET_FACTCHECK'],
+    [config.geminiThinkingBudgetJudge, 'GEMINI_THINKING_BUDGET_JUDGE'],
     [config.geminiThinkingBudgetScoring, 'GEMINI_THINKING_BUDGET_SCORING']
   ]) {
     if (!Number.isInteger(field) || field < 0) {
@@ -599,6 +609,7 @@ function sanitizeRuntimeConfig(config) {
     geminiThinkingBudgetEditor: config.geminiThinkingBudgetEditor,
     geminiThinkingBudgetRepair: config.geminiThinkingBudgetRepair,
     geminiThinkingBudgetFactcheck: config.geminiThinkingBudgetFactcheck,
+    geminiThinkingBudgetJudge: config.geminiThinkingBudgetJudge,
     geminiThinkingBudgetScoring: config.geminiThinkingBudgetScoring,
     linkedEvidenceMode: config.linkedEvidenceMode,
     linkedEvidenceMaxLinksPerCandidate: config.linkedEvidenceMaxLinksPerCandidate,

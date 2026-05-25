@@ -443,6 +443,56 @@ const factCheckSchema = {
   required: ['status', 'must_fix', 'recommended_fixes', 'source_gaps', 'source_gap_count', 'final_comment']
 };
 
+const publicArticleJudgeIssue = {
+  type: 'OBJECT',
+  properties: {
+    section_index: number,
+    field: string,
+    severity: string,
+    reason: string,
+    suggested_fix: string
+  },
+  required: ['section_index', 'field', 'severity', 'reason']
+};
+
+const publicArticleJudgeSection = {
+  type: 'OBJECT',
+  properties: {
+    section_index: number,
+    headline: string,
+    public_article_pass: { type: 'BOOLEAN' },
+    reader_checkpoints_pass: { type: 'BOOLEAN' },
+    source_boundary_pass: { type: 'BOOLEAN' },
+    public_prose_pass: { type: 'BOOLEAN' },
+    issues: {
+      type: 'ARRAY',
+      items: publicArticleJudgeIssue
+    }
+  },
+  required: [
+    'section_index',
+    'headline',
+    'public_article_pass',
+    'reader_checkpoints_pass',
+    'source_boundary_pass',
+    'public_prose_pass',
+    'issues'
+  ]
+};
+
+const publicArticleJudgeSchema = {
+  type: 'OBJECT',
+  properties: {
+    date: string,
+    overall_pass: { type: 'BOOLEAN' },
+    sections: {
+      type: 'ARRAY',
+      items: publicArticleJudgeSection
+    }
+  },
+  required: ['date', 'overall_pass', 'sections']
+};
+
 const backgroundContextItem = {
   type: 'OBJECT',
   properties: {
@@ -483,5 +533,6 @@ module.exports = {
   editorSchema,
   editorCompletionSchema,
   factCheckSchema,
+  publicArticleJudgeSchema,
   backgroundContextSchema
 };

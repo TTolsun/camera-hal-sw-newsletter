@@ -140,6 +140,7 @@ function estimateCallCost(model, usage) {
 
 function thinkingBudgetForStage(stage, config) {
   const normalized = String(stage || '').toLowerCase();
+  if (/public[-\s]?article[-\s]?judge|\bjudge\b/.test(normalized)) return config.geminiThinkingBudgetJudge;
   if (/fact[-\s]?check|factchecker/.test(normalized)) return config.geminiThinkingBudgetFactcheck;
   if (/\brepair\b/.test(normalized)) return config.geminiThinkingBudgetRepair;
   if (/\breporter\b/.test(normalized)) return config.geminiThinkingBudgetReporter;

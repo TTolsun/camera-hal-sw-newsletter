@@ -62,7 +62,8 @@ test('defaults match workflow runtime defaults', () => {
     reporter: 'code_default',
     editor: 'code_default',
     factcheck: 'code_default',
-    repair: 'code_default'
+    repair: 'code_default',
+    judge: 'code_default'
   });
   assert.equal(config.geminiModel, 'gemini-2.5-flash');
   assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite']);
@@ -80,6 +81,7 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.geminiThinkingBudgetEditor, 512);
   assert.equal(config.geminiThinkingBudgetRepair, 0);
   assert.equal(config.geminiThinkingBudgetFactcheck, 0);
+  assert.equal(config.geminiThinkingBudgetJudge, 0);
   assert.equal(config.geminiThinkingBudgetScoring, 0);
   assert.equal(config.linkedEvidenceMode, 'extract_only');
   assert.equal(config.linkedEvidenceMaxLinksPerCandidate, 8);
@@ -191,13 +193,15 @@ test('runtime env overrides are parsed into typed config', () => {
     reporter: 'primary-model',
     editor: 'primary-model',
     factcheck: 'primary-model',
-    repair: 'primary-model'
+    repair: 'primary-model',
+    judge: 'primary-model'
   });
   assert.deepEqual(config.llmStageModelSources, {
     reporter: 'GEMINI_MODEL',
     editor: 'GEMINI_MODEL',
     factcheck: 'GEMINI_MODEL',
-    repair: 'GEMINI_MODEL'
+    repair: 'GEMINI_MODEL',
+    judge: 'GEMINI_MODEL'
   });
   assert.equal(config.geminiModel, 'primary-model');
   assert.deepEqual(config.geminiFallbackModels, []);
@@ -215,6 +219,7 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.geminiThinkingBudgetEditor, 1024);
   assert.equal(config.geminiThinkingBudgetRepair, 0);
   assert.equal(config.geminiThinkingBudgetFactcheck, 0);
+  assert.equal(config.geminiThinkingBudgetJudge, 0);
   assert.equal(config.geminiThinkingBudgetScoring, 0);
   assert.equal(config.linkedEvidenceMode, 'resolve_allowed_official_links');
   assert.equal(config.linkedEvidenceMaxLinksPerCandidate, 4);
@@ -318,6 +323,7 @@ test('linked evidence runtime config rejects invalid mode and unsafe limits', ()
     geminiThinkingBudgetEditor: 512,
     geminiThinkingBudgetRepair: 0,
     geminiThinkingBudgetFactcheck: 0,
+    geminiThinkingBudgetJudge: 0,
     geminiThinkingBudgetScoring: 0,
     linkedEvidenceMode: 'extract_only',
     linkedEvidenceMaxLinksPerCandidate: -1,
@@ -409,7 +415,8 @@ test('LLM_MODEL and LLM_FALLBACK_MODELS override Gemini compatibility aliases', 
     reporter: 'llm-primary',
     editor: 'llm-primary',
     factcheck: 'llm-primary',
-    repair: 'llm-primary'
+    repair: 'llm-primary',
+    judge: 'llm-primary'
   });
   assert.equal(config.geminiModel, 'llm-primary');
   assert.deepEqual(config.geminiFallbackModels, ['llm-fallback']);
@@ -420,25 +427,29 @@ test('stage model env vars independently override code defaults', () => {
     NEWSROOM_REPORTER_MODEL: 'reporter-model',
     NEWSROOM_EDITOR_MODEL: 'editor-model',
     NEWSROOM_FACTCHECK_MODEL: 'factcheck-model',
-    NEWSROOM_REPAIR_MODEL: 'repair-model'
+    NEWSROOM_REPAIR_MODEL: 'repair-model',
+    NEWSROOM_JUDGE_MODEL: 'judge-model'
   });
 
   assert.deepEqual(config.llmStageModels, {
     reporter: 'reporter-model',
     editor: 'editor-model',
     factcheck: 'factcheck-model',
-    repair: 'repair-model'
+    repair: 'repair-model',
+    judge: 'judge-model'
   });
   assert.deepEqual(config.llmStageModelSources, {
     reporter: 'NEWSROOM_REPORTER_MODEL',
     editor: 'NEWSROOM_EDITOR_MODEL',
     factcheck: 'NEWSROOM_FACTCHECK_MODEL',
-    repair: 'NEWSROOM_REPAIR_MODEL'
+    repair: 'NEWSROOM_REPAIR_MODEL',
+    judge: 'NEWSROOM_JUDGE_MODEL'
   });
   assert.deepEqual(configuredModelsForStage(config, 'reporter attempt 1/2'), ['reporter-model', 'gemini-2.5-flash-lite']);
   assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['editor-model', 'gemini-2.5-flash-lite']);
   assert.deepEqual(configuredModelsForStage(config, 'fact-checker attempt 1/2'), ['factcheck-model', 'gemini-2.5-flash-lite']);
   assert.deepEqual(configuredModelsForStage(config, 'editor repair attempt 1/2'), ['repair-model', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'public article judge attempt 1/2'), ['judge-model', 'gemini-2.5-flash-lite']);
 });
 
 test('global LLM model overrides stage-specific model env vars', () => {
@@ -451,13 +462,15 @@ test('global LLM model overrides stage-specific model env vars', () => {
     reporter: 'global-model',
     editor: 'global-model',
     factcheck: 'global-model',
-    repair: 'global-model'
+    repair: 'global-model',
+    judge: 'global-model'
   });
   assert.deepEqual(config.llmStageModelSources, {
     reporter: 'LLM_MODEL',
     editor: 'LLM_MODEL',
     factcheck: 'LLM_MODEL',
-    repair: 'LLM_MODEL'
+    repair: 'LLM_MODEL',
+    judge: 'LLM_MODEL'
   });
   assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['global-model', 'gemini-2.5-flash-lite']);
 });
@@ -470,6 +483,7 @@ test('stage model normalizer maps known generation stages', () => {
   assert.equal(modelGroupForStage('fact-check completion attempt 1/2'), 'factcheck');
   assert.equal(modelGroupForStage('editor repair attempt 1/2'), 'repair');
   assert.equal(modelGroupForStage('editor completion attempt 1/2'), 'repair');
+  assert.equal(modelGroupForStage('public article judge attempt 1/2'), 'judge');
   assert.equal(modelGroupForStage('unknown stage'), 'reporter');
   assert.deepEqual(modelGroupInfoForStage('unknown stage'), {
     group: 'reporter',
@@ -547,6 +561,7 @@ test('internal provider requires its own key and endpoint only when selected', (
     geminiThinkingBudgetEditor: 512,
     geminiThinkingBudgetRepair: 0,
     geminiThinkingBudgetFactcheck: 0,
+    geminiThinkingBudgetJudge: 0,
     geminiThinkingBudgetScoring: 0,
     githubEventName: '',
     geminiApiKeyConfigured: false,
@@ -592,6 +607,7 @@ test('invalid date and ranges return field-specific validation errors', () => {
     geminiThinkingBudgetEditor: -1,
     geminiThinkingBudgetRepair: -1,
     geminiThinkingBudgetFactcheck: -1,
+    geminiThinkingBudgetJudge: -1,
     geminiThinkingBudgetScoring: -1,
     githubEventName: '',
     geminiApiKeyConfigured: false,
@@ -613,6 +629,7 @@ test('invalid date and ranges return field-specific validation errors', () => {
   assert.match(result.errors.join('\n'), /GEMINI_THINKING_BUDGET_EDITOR/);
   assert.match(result.errors.join('\n'), /GEMINI_THINKING_BUDGET_REPAIR/);
   assert.match(result.errors.join('\n'), /GEMINI_THINKING_BUDGET_FACTCHECK/);
+  assert.match(result.errors.join('\n'), /GEMINI_THINKING_BUDGET_JUDGE/);
   assert.match(result.errors.join('\n'), /GEMINI_THINKING_BUDGET_SCORING/);
   assert.match(result.errors.join('\n'), /GEMINI_API_KEY/);
 });
@@ -642,6 +659,7 @@ test('validator returns structured errors for malformed fallback model input', (
     geminiThinkingBudgetEditor: 512,
     geminiThinkingBudgetRepair: 0,
     geminiThinkingBudgetFactcheck: 0,
+    geminiThinkingBudgetJudge: 0,
     geminiThinkingBudgetScoring: 0,
     githubEventName: 'schedule',
     geminiApiKeyConfigured: true,
@@ -675,7 +693,8 @@ test('sanitized diagnostics never include the raw API key', () => {
     reporter: 'code_default',
     editor: 'code_default',
     factcheck: 'code_default',
-    repair: 'code_default'
+    repair: 'code_default',
+    judge: 'code_default'
   });
   assert.deepEqual(sanitized.selectionWindowPolicy, {
     primarySelectionDays: 7,
@@ -688,6 +707,7 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.newsroomMaxCostUsd, 0.25);
   assert.equal(sanitized.newsroomMaxSectionRepairs, 1);
   assert.equal(sanitized.geminiThinkingBudgetEditor, 512);
+  assert.equal(sanitized.geminiThinkingBudgetJudge, 0);
   assert.equal(sanitized.linkedEvidenceMode, 'extract_only');
   assert.equal(sanitized.linkedEvidenceMaxLinksPerCandidate, 8);
   assert.equal(sanitized.linkedEvidenceMaxLinksPerRun, 40);

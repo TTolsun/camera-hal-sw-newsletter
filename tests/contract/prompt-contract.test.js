@@ -5,11 +5,13 @@ const test = require('node:test');
 
 const {
   articleSectionContractPrompt,
+  publicArticleJudgePrompt,
   publicArticleContractPrompt,
   sourceExtractionPromptGuardrails
 } = require('../../scripts/gemini-newsroom-newsletter');
 const {
-  reporterSchema
+  reporterSchema,
+  publicArticleJudgeSchema
 } = require('../../scripts/newsroom/render/newsletter-schema');
 
 function promptHostSource() {
@@ -158,6 +160,31 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /compatibility test scenario/);
   assert.match(prompt, /vendor pipeline, stream, metadata, buffer/);
   assert.doesNotMatch(prompt, /즉시 조치할 항목은 없습니다\. 참고 동향으로만 공유합니다\./);
+});
+
+test('public article judge prompt is semantic and does not require keyword vocabulary', () => {
+  const prompt = publicArticleJudgePrompt();
+
+  assert.match(prompt, /semantic judge/);
+  assert.match(prompt, /article을 다시 쓰는 것이 아니라/);
+  assert.match(prompt, /단어 매칭이나 특정 keyword 출현 여부로 판정하지 마세요/);
+  assert.match(prompt, /한국어 표현, 동의어, 자연스러운 기술 문장/);
+  assert.match(prompt, /reader_checkpoints_pass/);
+  assert.match(prompt, /source_boundary_pass/);
+  assert.match(prompt, /public_prose_pass/);
+  assert.match(prompt, /JSON만 반환하세요/);
+  assert.doesNotMatch(prompt, /ACTION_VERB_PATTERN|NON_GENERIC_ACTION_TARGET_PATTERN|regex/i);
+});
+
+test('public article judge schema stays compact for Flash Lite verdicts', () => {
+  const stats = schemaStats(publicArticleJudgeSchema);
+  stats.bytes = Buffer.byteLength(JSON.stringify(publicArticleJudgeSchema));
+
+  assert.ok(stats.bytes < 1400, `publicArticleJudgeSchema bytes=${stats.bytes}`);
+  assert.ok(stats.properties <= 20, `publicArticleJudgeSchema properties=${stats.properties}`);
+  assert.ok(stats.required <= 18, `publicArticleJudgeSchema required=${stats.required}`);
+  assert.ok(stats.maxDepth <= 5, `publicArticleJudgeSchema maxDepth=${stats.maxDepth}`);
+  assert.ok(publicArticleJudgeSchema.properties.sections.items.required.includes('reader_checkpoints_pass'));
 });
 
 

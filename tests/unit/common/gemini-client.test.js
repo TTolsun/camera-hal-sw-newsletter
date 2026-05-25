@@ -32,11 +32,13 @@ function loadClient(env = {}) {
     'GEMINI_THINKING_BUDGET_EDITOR',
     'GEMINI_THINKING_BUDGET_REPAIR',
     'GEMINI_THINKING_BUDGET_FACTCHECK',
+    'GEMINI_THINKING_BUDGET_JUDGE',
     'GEMINI_THINKING_BUDGET_SCORING',
     'NEWSROOM_REPORTER_MODEL',
     'NEWSROOM_EDITOR_MODEL',
     'NEWSROOM_FACTCHECK_MODEL',
     'NEWSROOM_REPAIR_MODEL',
+    'NEWSROOM_JUDGE_MODEL',
     'GITHUB_EVENT_NAME'
   ]) {
     delete process.env[key];
@@ -272,6 +274,7 @@ test('stage-specific thinking budgets are applied to Gemini request config', asy
     '{"ok":"editor"}',
     '{"ok":"repair"}',
     '{"ok":"factcheck"}',
+    '{"ok":"judge"}',
     '{"ok":"scoring"}'
   ]);
 
@@ -279,6 +282,7 @@ test('stage-specific thinking budgets are applied to Gemini request config', asy
   await client.callGeminiJson('editor attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
   await client.callGeminiJson('editor repair attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
   await client.callGeminiJson('fact-checker attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson('public article judge attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
   await client.callGeminiJson('deterministic scoring', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
 
   assert.deepEqual(
@@ -286,6 +290,7 @@ test('stage-specific thinking budgets are applied to Gemini request config', asy
     [
       { thinkingBudget: 0 },
       { thinkingBudget: 1024 },
+      { thinkingBudget: 0 },
       { thinkingBudget: 0 },
       { thinkingBudget: 0 },
       { thinkingBudget: 0 }
@@ -302,12 +307,14 @@ test('stage-specific model routing selects the configured model for each newsroo
     NEWSROOM_REPORTER_MODEL: 'reporter-model',
     NEWSROOM_EDITOR_MODEL: 'editor-model',
     NEWSROOM_FACTCHECK_MODEL: 'factcheck-model',
-    NEWSROOM_REPAIR_MODEL: 'repair-model'
+    NEWSROOM_REPAIR_MODEL: 'repair-model',
+    NEWSROOM_JUDGE_MODEL: 'judge-model'
   });
   const FakeGoogleGenAI = fakeGemini([
     '{"ok":"reporter"}',
     '{"ok":"background"}',
     '{"ok":"editor"}',
+    '{"ok":"judge"}',
     '{"ok":"factcheck"}',
     '{"ok":"factcheck-repair"}',
     '{"ok":"repair"}',
@@ -317,6 +324,7 @@ test('stage-specific model routing selects the configured model for each newsroo
   await client.callGeminiJson('reporter attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
   await client.callGeminiJson('background-context attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
   await client.callGeminiJson('editor attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson('public article judge attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
   await client.callGeminiJson('fact-checker attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
   await client.callGeminiJson('fact-checker repair attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
   await client.callGeminiJson('editor repair attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
@@ -328,6 +336,7 @@ test('stage-specific model routing selects the configured model for each newsroo
       'reporter-model',
       'reporter-model',
       'editor-model',
+      'judge-model',
       'factcheck-model',
       'factcheck-model',
       'repair-model',
@@ -358,8 +367,21 @@ test('stage-specific model routing selects the configured model for each newsroo
     resolved_by: 'NEWSROOM_FACTCHECK_MODEL',
     global_override_applied: false
   });
+  assert.deepEqual(diagnostics.model_routing['public article judge attempt 1/1'], {
+    stage: 'public article judge attempt 1/1',
+    stage_group: 'judge',
+    stage_group_known: true,
+    routing_warning: '',
+    primary_model: 'judge-model',
+    fallback_models: ['fallback-model'],
+    primary_resolved_by: 'NEWSROOM_JUDGE_MODEL',
+    resolved_by: 'NEWSROOM_JUDGE_MODEL',
+    global_override_applied: false
+  });
   assert.equal(client.getGeminiCostCalls()[2].stage_group, 'editor');
   assert.equal(client.getGeminiCostCalls()[2].resolved_by, 'NEWSROOM_EDITOR_MODEL');
+  assert.equal(client.getGeminiCostCalls()[3].stage_group, 'judge');
+  assert.equal(client.getGeminiCostCalls()[3].resolved_by, 'NEWSROOM_JUDGE_MODEL');
 });
 
 test('Pro models omit thinkingBudget 0 and record the limitation in cost report', async () => {

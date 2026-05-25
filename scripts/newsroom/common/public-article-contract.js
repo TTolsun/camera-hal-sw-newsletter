@@ -1420,7 +1420,6 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
   if (normalized.reader_checkpoints.length === 0) {
     issues.push({ index: index + 1, headline, type: 'empty_public_article_field', key: 'reader_checkpoints' });
   }
-  issues.push(...checkpointConcreteIssues(section, normalized.reader_checkpoints, index, headline));
   if (normalized.source_links.length === 0) {
     issues.push({ index: index + 1, headline, type: 'empty_public_article_field', key: 'source_links' });
   }

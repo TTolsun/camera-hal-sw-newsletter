@@ -25,7 +25,8 @@ function clearLlmEnv() {
     'NEWSROOM_REPORTER_MODEL',
     'NEWSROOM_EDITOR_MODEL',
     'NEWSROOM_FACTCHECK_MODEL',
-    'NEWSROOM_REPAIR_MODEL'
+    'NEWSROOM_REPAIR_MODEL',
+    'NEWSROOM_JUDGE_MODEL'
   ]) {
     delete process.env[key];
   }

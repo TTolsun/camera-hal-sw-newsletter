@@ -2173,6 +2173,20 @@ test('Workflow 03 enters LLM generation with one publishable candidate and zero 
         let json;
         if (required.includes('candidates')) {
           json = { date, candidates: [selectedCandidate] };
+        } else if (required.includes('overall_pass') && required.includes('sections')) {
+          json = {
+            date,
+            overall_pass: true,
+            sections: editorDraft.sections.map((section, index) => ({
+              section_index: index + 1,
+              headline: section.headline,
+              public_article_pass: true,
+              reader_checkpoints_pass: true,
+              source_boundary_pass: true,
+              public_prose_pass: true,
+              issues: []
+            }))
+          };
         } else if (required.includes('title') && required.includes('sections')) {
           json = editorDraft;
         } else if (required.includes('status') && required.includes('must_fix')) {
@@ -2259,9 +2273,11 @@ test('Workflow 03 enters LLM generation with one publishable candidate and zero 
   assert.equal(result.status, 0, combinedOutput);
   assert.equal(llmRequests.some(item => item.required.includes('candidates')), true);
   assert.equal(llmRequests.some(item => item.required.includes('title') && item.required.includes('sections')), true);
+  assert.equal(llmRequests.some(item => item.required.includes('overall_pass') && item.required.includes('sections')), true);
   assert.equal(llmRequests.some(item => item.required.includes('status') && item.required.includes('must_fix')), true);
   assert.equal(fs.existsSync(path.join(newsroomDir, 'reporter-candidates.json')), true);
   assert.equal(fs.existsSync(path.join(newsroomDir, 'editor-draft.json')), true);
+  assert.equal(fs.existsSync(path.join(newsroomDir, 'editor-public-article-judge-attempt-1.json')), true);
   assert.equal(fs.existsSync(path.join(newsroomDir, 'fact-check-report.json')), true);
   assert.equal(fs.existsSync(path.join(newsroomDir, 'quality-report.json')), true);
   assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
@@ -7141,6 +7157,8 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /NEWSROOM_EDITOR_MODEL: \$\{\{ vars\.NEWSROOM_EDITOR_MODEL \|\| '' \}\}/);
   assert.match(workflow, /NEWSROOM_FACTCHECK_MODEL: \$\{\{ vars\.NEWSROOM_FACTCHECK_MODEL \|\| '' \}\}/);
   assert.match(workflow, /NEWSROOM_REPAIR_MODEL: \$\{\{ vars\.NEWSROOM_REPAIR_MODEL \|\| '' \}\}/);
+  assert.match(workflow, /NEWSROOM_JUDGE_MODEL: \$\{\{ vars\.NEWSROOM_JUDGE_MODEL \|\| '' \}\}/);
+  assert.match(workflow, /GEMINI_THINKING_BUDGET_JUDGE: \$\{\{ vars\.GEMINI_THINKING_BUDGET_JUDGE \|\| '0' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MODE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MODE \|\| 'extract_only' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE \|\| '8' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN \|\| '40' \}\}/);

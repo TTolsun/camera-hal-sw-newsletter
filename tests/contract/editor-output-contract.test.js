@@ -1979,6 +1979,20 @@ test('reader checkpoint concrete contract requires actionable source or validati
   );
 });
 
+test('public_article deterministic validation does not hard-fail semantic checkpoint vocabulary', () => {
+  const draftSection = section(1, {
+    public_article: {
+      ...section(1).public_article,
+      reader_checkpoints: [
+        '폴더블 기기 및 태블릿 환경에서 화면 전환 시 CameraX 미리보기 스트림이 끊김 없이 재구성되는지 검증합니다.',
+        '다양한 해상도 조합(YUV/JPEG/PRIVATE)에서 스트림 재구성 시 발생하는 지연 시간과 버퍼 라이프사이클을 모니터링합니다.'
+      ]
+    }
+  });
+
+  assert.deepEqual(validatePublicArticle(draftSection, 0), []);
+});
+
 test('public_article prose quality rejects validator-token checkpoint placeholders', () => {
   const draftSection = section(1, {
     public_article: {
