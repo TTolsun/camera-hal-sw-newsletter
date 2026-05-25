@@ -353,18 +353,21 @@ test('homepage shows review publication issues when data entry paths are present
   assert.match(elements['archive-list'].innerHTML, /2026-05-13/);
 });
 
-test('latest card shows only Latest beside the date while archive keeps fallback badges', async () => {
+test('only Latest appears beside a homepage date while archive keeps fallback tags below metadata', async () => {
   const { elements } = await renderHomepage([
     fallbackNewsletter('2026-05-20', 'Archived fallback issue'),
     fallbackNewsletter('2026-05-24', 'Current fallback issue')
   ]);
   const [archiveCard] = archiveCards(elements['archive-list'].innerHTML);
   const latestMeta = elements['latest-card'].innerHTML.match(/<div class="card-meta">([\s\S]*?)<\/div>/)?.[1] || '';
+  const archiveMeta = archiveCard.match(/<div class="card-meta archive-card-meta">([\s\S]*?)<\/div>/)?.[1] || '';
 
   assert.match(latestMeta, /<span class="issue-date">2026-05-24<\/span>\s*<span class="status-chip">Latest<\/span>/);
   assert.doesNotMatch(latestMeta, /Tooling Watch Edition/);
   assert.match(elements['latest-card'].innerHTML, /Current fallback issue/);
-  assert.match(archiveCard, /<span class="status-chip">Tooling Watch Edition<\/span>/);
+  assert.match(archiveMeta, /<span class="issue-date">2026-05-20<\/span>/);
+  assert.doesNotMatch(archiveMeta, /status-chip|Tooling Watch Edition/);
+  assert.match(archiveCard, /<div class="tag-row archive-tags"><span class="tag">Tooling Watch Edition<\/span><span class="tag">Tooling Watch<\/span><\/div>/);
 });
 
 test('homepage and archive accept single-article public issues as normal entries', async () => {
