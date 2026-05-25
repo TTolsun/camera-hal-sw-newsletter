@@ -22,35 +22,106 @@ function extractHomepageScript() {
   );
 }
 
-function createElement() {
+function createElement(overrides = {}) {
+  const listeners = {};
   return {
     innerHTML: '',
     hidden: false,
+    value: '',
+    listeners,
     classList: {
       add() {},
       remove() {}
-    }
+    },
+    addEventListener(type, handler) {
+      listeners[type] = handler;
+    },
+    getAttribute(name) {
+      return this[name];
+    },
+    setAttribute(name, value) {
+      this[name] = value;
+    },
+    ...overrides
   };
 }
 
-async function renderHomepage(newsletters, headlineState = null) {
+function updateLocationFromUrl(location, url) {
+  const parsed = new URL(url, 'https://example.com');
+  location.pathname = parsed.pathname;
+  location.search = parsed.search;
+  location.hash = parsed.hash;
+}
+
+function createArchiveTopicTarget(key, disabled = false) {
+  const target = {
+    disabled,
+    closest(selector) {
+      assert.equal(selector, '[data-archive-topic]');
+      return target;
+    },
+    getAttribute(name) {
+      if (name === 'data-archive-topic') return key;
+      if (name === 'aria-disabled') return disabled ? 'true' : 'false';
+      return '';
+    }
+  };
+  return target;
+}
+
+function clickArchiveTopic(elements, key, options = {}) {
+  const handler = elements['archive-topic-list'].listeners.click;
+  assert.equal(typeof handler, 'function', 'archive topic click handler should be bound');
+  handler({ target: createArchiveTopicTarget(key, options.disabled === true) });
+}
+
+function changeArchiveSort(elements, value) {
+  const sortEl = elements['archive-sort'];
+  const handler = sortEl.listeners.change;
+  assert.equal(typeof handler, 'function', 'archive sort change handler should be bound');
+  sortEl.value = value;
+  handler({ currentTarget: sortEl });
+}
+
+async function renderHomepage(newsletters, headlineState = null, options = {}) {
   const script = extractHomepageScript();
   const errors = [];
   const elements = {
     headline: createElement(),
     'headline-card': createElement(),
     'latest-card': createElement(),
+    'archive-toolbar': createElement({ hidden: true }),
+    'archive-topic-list': createElement(),
+    'archive-sort': createElement({ value: 'latest' }),
+    'archive-result-summary': createElement(),
     'archive-list': createElement()
+  };
+  const historyUpdates = [];
+  const location = {
+    pathname: options.pathname || '/index.html',
+    search: options.search || '',
+    hash: options.hash || ''
+  };
+  const window = {
+    location,
+    history: {
+      replaceState(_state, _title, url) {
+        historyUpdates.push(url);
+        updateLocationFromUrl(location, url);
+      }
+    }
   };
 
   const context = {
+    window,
+    URLSearchParams,
     document: {
       getElementById(id) {
         return elements[id];
       }
     },
-    fetch: async (url, options) => {
-      assert.equal(options.cache, 'no-store');
+    fetch: async (url, fetchOptions) => {
+      assert.equal(fetchOptions.cache, 'no-store');
       if (url === 'data/homepage-headline.json') {
         if (headlineState === null) {
           return { ok: false, status: 404 };
@@ -69,6 +140,9 @@ async function renderHomepage(newsletters, headlineState = null) {
         };
       }
       assert.equal(url, 'data/newsletters.json');
+      if (options.newsletterFetchError) {
+        return { ok: false, status: 500 };
+      }
       return {
         ok: true,
         json: async () => newsletters
@@ -87,7 +161,7 @@ async function renderHomepage(newsletters, headlineState = null) {
   await context.__headlineReady;
   await context.__homepageReady;
 
-  return { elements, errors, context };
+  return { elements, errors, context, historyUpdates, location };
 }
 
 function newsletter(date, title = `Issue ${date}`) {
@@ -240,6 +314,157 @@ test('homepage excludes the latest issue from archive after sorting a copy', asy
   assert.match(elements['archive-list'].innerHTML, /Markdown/);
   assert.doesNotMatch(elements['archive-list'].innerHTML, /이슈 보기/);
   assert.deepEqual(items.map(item => item.date), originalOrder);
+});
+
+test('archive controls render fixed topic counts from archive items only', async () => {
+  const items = [
+    { ...newsletter('2026-05-10', 'Latest Android issue'), tags: ['Android'] },
+    { ...newsletter('2026-05-09', 'Camera issue'), tags: ['Camera HAL'] },
+    { ...newsletter('2026-05-08', 'Android archive issue'), tags: ['Android'] },
+    { ...newsletter('2026-05-07', 'AI archive issue'), tags: ['AI'] }
+  ];
+
+  const { elements } = await renderHomepage(items);
+  const topicHtml = elements['archive-topic-list'].innerHTML;
+
+  assert.equal(elements['archive-toolbar'].hidden, false);
+  assert.match(topicHtml, /data-archive-topic="all" aria-pressed="true"[^>]*>전체 \(3\)<\/button>/);
+  assert.match(topicHtml, /data-archive-topic="android" aria-pressed="false"[^>]*>Android \(1\)<\/button>/);
+  assert.match(topicHtml, /data-archive-topic="ai" aria-pressed="false"[^>]*>AI \(1\)<\/button>/);
+  assert.match(topicHtml, /data-archive-topic="soc-platform" aria-pressed="false" disabled aria-disabled="true">SoC Platform \(0\)<\/button>/);
+  assert.equal(elements['archive-result-summary'].textContent, '전체 3개 아카이브를 최신순으로 표시 중입니다.');
+});
+
+test('archive topic clicks filter cards and update the URL query', async () => {
+  const items = [
+    { ...newsletter('2026-05-10', 'Latest issue'), tags: ['Camera HAL'] },
+    { ...newsletter('2026-05-09', 'Android archive issue'), tags: ['Android'] },
+    { ...newsletter('2026-05-08', 'Camera archive issue'), tags: ['Camera HAL'] }
+  ];
+
+  const { elements, historyUpdates, location } = await renderHomepage(items);
+
+  clickArchiveTopic(elements, 'android');
+
+  assert.match(elements['archive-list'].innerHTML, /Android archive issue/);
+  assert.doesNotMatch(elements['archive-list'].innerHTML, /Camera archive issue/);
+  assert.match(elements['archive-topic-list'].innerHTML, /data-archive-topic="android" aria-pressed="true"/);
+  assert.equal(elements['archive-result-summary'].textContent, 'Android 1개 아카이브를 최신순으로 표시 중입니다.');
+  assert.deepEqual(historyUpdates, ['/index.html?topic=android']);
+  assert.equal(location.search, '?topic=android');
+});
+
+test('archive sort control changes order and uses sort=latest|oldest URL values', async () => {
+  const items = [
+    newsletter('2026-05-10', 'Latest issue'),
+    newsletter('2026-05-09', 'Newer archive issue'),
+    newsletter('2026-05-07', 'Older archive issue')
+  ];
+
+  const { elements, historyUpdates, location } = await renderHomepage(items);
+
+  changeArchiveSort(elements, 'oldest');
+
+  const archiveHtml = elements['archive-list'].innerHTML;
+  assert.ok(archiveHtml.indexOf('Older archive issue') < archiveHtml.indexOf('Newer archive issue'));
+  assert.equal(elements['archive-result-summary'].textContent, '전체 2개 아카이브를 오래된순으로 표시 중입니다.');
+  assert.deepEqual(historyUpdates, ['/index.html?sort=oldest']);
+  assert.equal(location.search, '?sort=oldest');
+  assert.doesNotMatch(historyUpdates.join(' '), /newest/);
+});
+
+test('archive disabled zero-count chip ignores clicks while direct URL can show no-result state', async () => {
+  const items = [
+    newsletter('2026-05-10', 'Latest issue'),
+    newsletter('2026-05-09', 'Camera archive issue')
+  ];
+  const rendered = await renderHomepage(items);
+
+  clickArchiveTopic(rendered.elements, 'soc-platform', { disabled: true });
+
+  assert.match(rendered.elements['archive-list'].innerHTML, /Camera archive issue/);
+  assert.equal(rendered.elements['archive-result-summary'].textContent, '전체 1개 아카이브를 최신순으로 표시 중입니다.');
+  assert.deepEqual(rendered.historyUpdates, []);
+
+  const direct = await renderHomepage(items, null, { search: '?topic=soc-platform' });
+  assert.match(direct.elements['archive-list'].innerHTML, /SoC Platform 결과가 없습니다/);
+  assert.equal(direct.elements['archive-result-summary'].textContent, 'SoC Platform 결과가 없습니다.');
+  assert.match(direct.elements['archive-topic-list'].innerHTML, /data-archive-topic="soc-platform" aria-pressed="true" disabled aria-disabled="true">SoC Platform \(0\)<\/button>/);
+});
+
+test('archive invalid query is normalized and canonicalized with replaceState', async () => {
+  const items = [
+    newsletter('2026-05-10', 'Latest issue'),
+    newsletter('2026-05-09', 'Archive issue')
+  ];
+
+  const { elements, historyUpdates, location } = await renderHomepage(items, null, {
+    search: '?topic=banana&sort=chaos&keep=1',
+    hash: '#archive'
+  });
+
+  assert.match(elements['archive-list'].innerHTML, /Archive issue/);
+  assert.equal(elements['archive-result-summary'].textContent, '전체 1개 아카이브를 최신순으로 표시 중입니다.');
+  assert.deepEqual(historyUpdates, ['/index.html?keep=1#archive']);
+  assert.equal(location.search, '?keep=1');
+  assert.equal(location.hash, '#archive');
+});
+
+test('archive canonicalizes redundant default query values with replaceState', async () => {
+  const items = [
+    newsletter('2026-05-10', 'Latest issue'),
+    {
+      ...newsletter('2026-05-09', 'Android archive issue'),
+      tags: ['Camera HAL', 'Android']
+    },
+    newsletter('2026-05-08', 'Camera archive issue')
+  ];
+
+  const defaults = await renderHomepage(items, null, {
+    search: '?topic=all&sort=latest&keep=1',
+    hash: '#archive'
+  });
+  assert.deepEqual(defaults.historyUpdates, ['/index.html?keep=1#archive']);
+  assert.equal(defaults.location.search, '?keep=1');
+  assert.equal(defaults.location.hash, '#archive');
+
+  const androidLatest = await renderHomepage(items, null, { search: '?topic=android&sort=latest' });
+  assert.match(androidLatest.elements['archive-list'].innerHTML, /Android archive issue/);
+  assert.doesNotMatch(androidLatest.elements['archive-list'].innerHTML, /Camera archive issue/);
+  assert.match(androidLatest.elements['archive-topic-list'].innerHTML, /data-archive-topic="android" aria-pressed="true"/);
+  assert.deepEqual(androidLatest.historyUpdates, ['/index.html?topic=android']);
+  assert.equal(androidLatest.location.search, '?topic=android');
+
+  const allOldest = await renderHomepage(items, null, { search: '?topic=all&sort=oldest' });
+  assert.deepEqual(allOldest.historyUpdates, ['/index.html?sort=oldest']);
+  assert.equal(allOldest.location.search, '?sort=oldest');
+  assert.equal(allOldest.elements['archive-sort'].value, 'oldest');
+});
+
+test('archive canonicalizes empty managed query values with replaceState', async () => {
+  const items = [
+    newsletter('2026-05-10', 'Latest issue'),
+    newsletter('2026-05-09', 'Archive issue')
+  ];
+
+  const emptyDefaults = await renderHomepage(items, null, { search: '?topic=&sort=' });
+  assert.deepEqual(emptyDefaults.historyUpdates, ['/index.html']);
+  assert.equal(emptyDefaults.location.search, '');
+  assert.equal(emptyDefaults.location.hash, '');
+
+  const emptyTopic = await renderHomepage(items, null, { search: '?topic=&sort=oldest' });
+  assert.deepEqual(emptyTopic.historyUpdates, ['/index.html?sort=oldest']);
+  assert.equal(emptyTopic.location.search, '?sort=oldest');
+  assert.equal(emptyTopic.elements['archive-sort'].value, 'oldest');
+});
+
+test('archive toolbar stays hidden when newsletter fetch fails', async () => {
+  const { elements, errors } = await renderHomepage([], null, { newsletterFetchError: true });
+
+  assert.equal(elements['archive-toolbar'].hidden, true);
+  assert.match(elements['latest-card'].innerHTML, /뉴스레터 정보를 불러오지 못했습니다/);
+  assert.match(elements['archive-list'].innerHTML, /아카이브 정보를 불러오지 못했습니다/);
+  assert.equal(errors.length, 1);
 });
 
 test('renders archive cards for all newsletters except the latest newsletter', async () => {
@@ -597,6 +822,14 @@ test('homepage exposes clear Featured and Latest heading rows without changing h
   assert.match(html, /<div id="latest-card" class="newsletter-card latest-newsletter-card loading-card">/);
 });
 
+test('archive toolbar starts hidden so disabled JavaScript cannot expose fake controls', () => {
+  const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+
+  assert.match(html, /<div id="archive-toolbar" class="archive-toolbar" hidden>/);
+  assert.match(html, /<div id="archive-topic-list" class="archive-topic-list" role="group" aria-label="Archive topic filter"><\/div>/);
+  assert.match(html, /<select id="archive-sort" aria-label="Archive sort order">[\s\S]*?<option value="latest">최신순<\/option>[\s\S]*?<option value="oldest">오래된순<\/option>/);
+});
+
 test('archive grid CSS caps columns and preserves card interaction layout contracts', () => {
   const css = readStylesheet();
   const archiveGrid = exactSelectorBlock(css, '.archive-grid');
@@ -615,4 +848,26 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   assertCssDeclaration(archiveActions, 'margin-top', 'auto');
   assert.match(archiveFocus, /outline\s*:\s*3px solid var\(--focus-ring\)\s*;/);
   assertCssDeclaration(archiveFocus, 'outline-offset', '4px');
+});
+
+test('archive toolbar CSS preserves accessible control and empty-state layout', () => {
+  const css = readStylesheet();
+  const toolbar = exactSelectorBlock(css, '.archive-toolbar');
+  const hiddenToolbar = exactSelectorBlock(css, '.archive-toolbar[hidden]');
+  const topicList = exactSelectorBlock(css, '.archive-topic-list');
+  const topicChip = exactSelectorBlock(css, '.archive-topic-chip');
+  const activeChip = exactSelectorBlock(css, '.archive-topic-chip.is-active');
+  const emptyState = exactSelectorBlock(css, '.archive-empty-state');
+  const mobile = mediaBlock(css, '(max-width: 640px)');
+
+  assert.match(css, /select:focus-visible/);
+  assertCssDeclaration(toolbar, 'display', 'grid');
+  assertCssDeclaration(toolbar, 'grid-template-columns', 'minmax(0, 1fr) auto');
+  assertCssDeclaration(hiddenToolbar, 'display', 'none');
+  assertCssDeclaration(topicList, 'flex-wrap', 'wrap');
+  assertCssDeclaration(topicChip, 'min-height', 'var(--control-height)');
+  assertCssDeclaration(activeChip, 'background', 'var(--primary)');
+  assert.match(css, /\.archive-topic-chip\.is-active\[aria-disabled="true"\]\s*\{[\s\S]*?opacity\s*:\s*1\s*;/);
+  assertCssDeclaration(emptyState, 'grid-column', '1 / -1');
+  assert.match(mobile, /\.archive-toolbar\s*\{[\s\S]*?grid-template-columns\s*:\s*1fr\s*;/);
 });

@@ -85,6 +85,19 @@
         <p class="eyebrow">ARCHIVE</p>
         <h2 id="archive-title">Newsletter Archive</h2>
       </div>
+      <div id="archive-toolbar" class="archive-toolbar" hidden>
+        <div class="archive-topic-panel">
+          <div id="archive-topic-list" class="archive-topic-list" role="group" aria-label="Archive topic filter"></div>
+        </div>
+        <label class="archive-sort-control" for="archive-sort">
+          <span>정렬</span>
+          <select id="archive-sort" aria-label="Archive sort order">
+            <option value="latest">최신순</option>
+            <option value="oldest">오래된순</option>
+          </select>
+        </label>
+        <p id="archive-result-summary" class="archive-result-summary" aria-live="polite"></p>
+      </div>
       <div id="archive-list" class="archive-grid">
         <p class="muted">아카이브를 불러오는 중입니다.</p>
       </div>
@@ -165,6 +178,236 @@
       const raw = String(value || '').trim();
       return isHttpsUrl(raw) ? raw : safeInternalPath(raw);
     };
+
+    const ARCHIVE_TOPICS = [
+      { key: 'all', label: '전체', tag: '' },
+      { key: 'camera-hal', label: 'Camera HAL', tag: 'Camera HAL' },
+      { key: 'android', label: 'Android', tag: 'Android' },
+      { key: 'driver', label: 'Driver', tag: 'Driver' },
+      { key: 'image-processing', label: 'Image Processing', tag: 'Image Processing' },
+      { key: 'ai', label: 'AI', tag: 'AI' },
+      { key: 'soc-platform', label: 'SoC Platform', tag: 'SoC Platform' }
+    ];
+    const ARCHIVE_TOPIC_KEYS = new Set(ARCHIVE_TOPICS.map(topic => topic.key));
+    const ARCHIVE_SORT_KEYS = new Set(['latest', 'oldest']);
+    const DEFAULT_ARCHIVE_STATE = { topic: 'all', sort: 'latest' };
+    const ARCHIVE_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+    function archiveTopicByKey(key) {
+      return ARCHIVE_TOPICS.find(topic => topic.key === key) || ARCHIVE_TOPICS[0];
+    }
+
+    function normalizeTopicKey(value) {
+      const key = String(value || '').trim();
+      return ARCHIVE_TOPIC_KEYS.has(key) ? key : DEFAULT_ARCHIVE_STATE.topic;
+    }
+
+    function normalizeSortKey(value) {
+      const key = String(value || '').trim();
+      return ARCHIVE_SORT_KEYS.has(key) ? key : DEFAULT_ARCHIVE_STATE.sort;
+    }
+
+    function currentArchiveSearch() {
+      if (typeof window === 'undefined' || !window.location) return '';
+      return window.location.search || '';
+    }
+
+    function readArchiveStateFromUrl(locationSearch = currentArchiveSearch()) {
+      if (typeof URLSearchParams === 'undefined') {
+        return { ...DEFAULT_ARCHIVE_STATE, needsCanonicalUrl: false };
+      }
+
+      const params = new URLSearchParams(locationSearch || '');
+      const hasTopic = params.has('topic');
+      const hasSort = params.has('sort');
+      const rawTopic = params.get('topic');
+      const rawSort = params.get('sort');
+      const topic = normalizeTopicKey(rawTopic || DEFAULT_ARCHIVE_STATE.topic);
+      const sort = normalizeSortKey(rawSort || DEFAULT_ARCHIVE_STATE.sort);
+      const invalidQuery = Boolean(
+        (hasTopic && rawTopic !== topic) ||
+        (hasSort && rawSort !== sort)
+      );
+      const redundantDefaultQuery = Boolean(
+        (hasTopic && topic === DEFAULT_ARCHIVE_STATE.topic) ||
+        (hasSort && sort === DEFAULT_ARCHIVE_STATE.sort)
+      );
+      return { topic, sort, needsCanonicalUrl: invalidQuery || redundantDefaultQuery };
+    }
+
+    function buildArchiveUrl(state) {
+      if (typeof window === 'undefined' || !window.location || typeof URLSearchParams === 'undefined') return '';
+
+      const params = new URLSearchParams(window.location.search || '');
+      if (state.topic && state.topic !== DEFAULT_ARCHIVE_STATE.topic) {
+        params.set('topic', state.topic);
+      } else {
+        params.delete('topic');
+      }
+
+      if (state.sort && state.sort !== DEFAULT_ARCHIVE_STATE.sort) {
+        params.set('sort', state.sort);
+      } else {
+        params.delete('sort');
+      }
+
+      const query = params.toString();
+      const pathname = window.location.pathname || '';
+      const hash = window.location.hash || '';
+      return `${pathname}${query ? `?${query}` : ''}${hash}`;
+    }
+
+    function replaceArchiveUrl(state) {
+      if (typeof window === 'undefined' || !window.history || typeof window.history.replaceState !== 'function') return;
+      const nextUrl = buildArchiveUrl(state);
+      if (nextUrl) window.history.replaceState(null, '', nextUrl);
+    }
+
+    function sortableArchiveDate(item) {
+      const date = String(item && item.date || '').trim();
+      return ARCHIVE_DATE_PATTERN.test(date) ? date : '';
+    }
+
+    function compareArchiveItems(left, right, sort = DEFAULT_ARCHIVE_STATE.sort) {
+      const leftDate = sortableArchiveDate(left);
+      const rightDate = sortableArchiveDate(right);
+      if (leftDate && rightDate) {
+        return sort === 'oldest'
+          ? leftDate.localeCompare(rightDate)
+          : rightDate.localeCompare(leftDate);
+      }
+      if (leftDate) return -1;
+      if (rightDate) return 1;
+      return String(left && left.title || '').localeCompare(String(right && right.title || ''));
+    }
+
+    function getArchiveItems(newsletters) {
+      const sortedNewsletters = [...newsletters].sort((a, b) => compareArchiveItems(a, b, 'latest'));
+      return {
+        latest: sortedNewsletters[0] || null,
+        archiveItems: sortedNewsletters.slice(1)
+      };
+    }
+
+    function countArchiveTopics(items) {
+      const counts = Object.fromEntries(ARCHIVE_TOPICS.map(topic => [topic.key, 0]));
+      counts.all = items.length;
+      for (const item of items) {
+        const tags = visibleTags(item && item.tags);
+        for (const topic of ARCHIVE_TOPICS) {
+          if (topic.key !== 'all' && tags.includes(topic.tag)) {
+            counts[topic.key] += 1;
+          }
+        }
+      }
+      return counts;
+    }
+
+    function filterArchiveItems(items, state) {
+      const topic = archiveTopicByKey(state.topic);
+      if (topic.key === 'all') return [...items];
+      return items.filter(item => visibleTags(item && item.tags).includes(topic.tag));
+    }
+
+    function sortArchiveItems(items, state) {
+      return [...items].sort((a, b) => compareArchiveItems(a, b, state.sort));
+    }
+
+    function renderArchiveCards(items) {
+      return items.map(item => `
+          <article class="archive-card">
+            <div class="card-meta archive-card-meta">
+              <span class="issue-date">${escapeHtml(item.date)}</span>
+            </div>
+            ${renderArchiveTags(item.tags)}
+            <h3 class="card-title clamp-2">${escapeHtml(item.title)}</h3>
+            <p class="card-summary clamp-3">${escapeHtml(item.summary)}</p>
+            <div class="card-actions">
+              ${renderIssueActions(item, '기사 보기', 'Markdown')}
+            </div>
+          </article>
+        `).join('');
+    }
+
+    function renderArchiveEmptyState(state) {
+      const topic = archiveTopicByKey(state.topic);
+      return `<div class="archive-empty-state"><p class="muted">${escapeHtml(topic.label)} 결과가 없습니다.</p></div>`;
+    }
+
+    function archiveSortLabel(sort) {
+      return sort === 'oldest' ? '오래된순' : '최신순';
+    }
+
+    function renderArchiveResultSummary(summaryEl, state, count) {
+      const topic = archiveTopicByKey(state.topic);
+      summaryEl.textContent = count === 0
+        ? `${topic.label} 결과가 없습니다.`
+        : `${topic.label} ${count}개 아카이브를 ${archiveSortLabel(state.sort)}으로 표시 중입니다.`;
+    }
+
+    function renderArchiveControls(state, counts) {
+      const topicList = document.getElementById('archive-topic-list');
+      const sortEl = document.getElementById('archive-sort');
+      if (!topicList || !sortEl) return false;
+
+      topicList.innerHTML = ARCHIVE_TOPICS.map(topic => {
+        const count = counts[topic.key] || 0;
+        const isActive = state.topic === topic.key;
+        const isDisabled = topic.key !== 'all' && count === 0;
+        const classes = ['archive-topic-chip', isActive ? 'is-active' : ''].filter(Boolean).join(' ');
+        const disabledAttrs = isDisabled ? ' disabled aria-disabled="true"' : '';
+        return `<button type="button" class="${classes}" data-archive-topic="${escapeHtml(topic.key)}" aria-pressed="${isActive ? 'true' : 'false'}"${disabledAttrs}>${escapeHtml(topic.label)} (${count})</button>`;
+      }).join('');
+      sortEl.value = state.sort;
+      return true;
+    }
+
+    function initializeArchiveInteraction(archiveItems, initialState) {
+      const toolbarEl = document.getElementById('archive-toolbar');
+      const archiveEl = document.getElementById('archive-list');
+      const topicList = document.getElementById('archive-topic-list');
+      const sortEl = document.getElementById('archive-sort');
+      const summaryEl = document.getElementById('archive-result-summary');
+      if (!toolbarEl || !archiveEl || !topicList || !sortEl || !summaryEl) return false;
+
+      const counts = countArchiveTopics(archiveItems);
+      let currentState = {
+        topic: normalizeTopicKey(initialState.topic),
+        sort: normalizeSortKey(initialState.sort)
+      };
+
+      function applyArchiveState(nextState, options = {}) {
+        currentState = {
+          topic: normalizeTopicKey(nextState.topic),
+          sort: normalizeSortKey(nextState.sort)
+        };
+        renderArchiveControls(currentState, counts);
+        const filteredItems = filterArchiveItems(archiveItems, currentState);
+        const visibleItems = sortArchiveItems(filteredItems, currentState);
+        archiveEl.innerHTML = visibleItems.length > 0
+          ? renderArchiveCards(visibleItems)
+          : renderArchiveEmptyState(currentState);
+        renderArchiveResultSummary(summaryEl, currentState, visibleItems.length);
+        if (options.updateUrl !== false) replaceArchiveUrl(currentState);
+      }
+
+      if (!renderArchiveControls(currentState, counts)) return false;
+      topicList.addEventListener('click', event => {
+        const button = event.target && typeof event.target.closest === 'function'
+          ? event.target.closest('[data-archive-topic]')
+          : null;
+        if (!button || button.disabled || button.getAttribute('aria-disabled') === 'true') return;
+        applyArchiveState({ topic: button.getAttribute('data-archive-topic'), sort: currentState.sort });
+      });
+      sortEl.addEventListener('change', () => {
+        applyArchiveState({ topic: currentState.topic, sort: sortEl.value });
+      });
+
+      applyArchiveState(currentState, { updateUrl: false });
+      if (initialState.needsCanonicalUrl) replaceArchiveUrl(currentState);
+      toolbarEl.hidden = false;
+      return true;
+    }
 
     async function fetchHomepageNewsletters() {
       const response = await fetch('data/newsletters.json', { cache: 'no-store' });
@@ -290,20 +533,18 @@
     async function loadNewsletters() {
       const latestEl = document.getElementById('latest-card');
       const archiveEl = document.getElementById('archive-list');
+      const toolbarEl = document.getElementById('archive-toolbar');
+      if (toolbarEl) toolbarEl.hidden = true;
 
       try {
         const newsletters = await fetchHomepageNewsletters();
+        const { latest, archiveItems } = getArchiveItems(newsletters);
 
-        const sortedNewsletters = [...newsletters].sort((a, b) => b.date.localeCompare(a.date));
-
-        if (sortedNewsletters.length === 0) {
+        if (!latest) {
           latestEl.innerHTML = '<p class="muted">등록된 뉴스레터가 없습니다.</p>';
           archiveEl.innerHTML = '<p class="muted">아카이브가 비어 있습니다.</p>';
           return;
         }
-
-        const latest = sortedNewsletters[0];
-        const archiveItems = sortedNewsletters.slice(1);
 
         latestEl.classList.remove('loading-card');
         latestEl.innerHTML = `
@@ -324,20 +565,12 @@
           return;
         }
 
-        archiveEl.innerHTML = archiveItems.map(item => `
-          <article class="archive-card">
-            <div class="card-meta archive-card-meta">
-              <span class="issue-date">${escapeHtml(item.date)}</span>
-            </div>
-            ${renderArchiveTags(item.tags)}
-            <h3 class="card-title clamp-2">${escapeHtml(item.title)}</h3>
-            <p class="card-summary clamp-3">${escapeHtml(item.summary)}</p>
-            <div class="card-actions">
-              ${renderIssueActions(item, '기사 보기', 'Markdown')}
-            </div>
-          </article>
-        `).join('');
+        const initialArchiveState = readArchiveStateFromUrl();
+        if (!initializeArchiveInteraction(archiveItems, initialArchiveState)) {
+          archiveEl.innerHTML = renderArchiveCards(sortArchiveItems(archiveItems, DEFAULT_ARCHIVE_STATE));
+        }
       } catch (error) {
+        if (toolbarEl) toolbarEl.hidden = true;
         latestEl.innerHTML = '<p class="muted">뉴스레터 정보를 불러오지 못했습니다.</p>';
         archiveEl.innerHTML = '<p class="muted">아카이브 정보를 불러오지 못했습니다.</p>';
         console.error(error);
