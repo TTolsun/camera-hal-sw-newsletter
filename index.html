@@ -214,19 +214,25 @@
 
     function readArchiveStateFromUrl(locationSearch = currentArchiveSearch()) {
       if (typeof URLSearchParams === 'undefined') {
-        return { ...DEFAULT_ARCHIVE_STATE, invalidQuery: false };
+        return { ...DEFAULT_ARCHIVE_STATE, needsCanonicalUrl: false };
       }
 
       const params = new URLSearchParams(locationSearch || '');
+      const hasTopic = params.has('topic');
+      const hasSort = params.has('sort');
       const rawTopic = params.get('topic');
       const rawSort = params.get('sort');
       const topic = normalizeTopicKey(rawTopic || DEFAULT_ARCHIVE_STATE.topic);
       const sort = normalizeSortKey(rawSort || DEFAULT_ARCHIVE_STATE.sort);
       const invalidQuery = Boolean(
-        (rawTopic && rawTopic !== topic) ||
-        (rawSort && rawSort !== sort)
+        (hasTopic && rawTopic !== topic) ||
+        (hasSort && rawSort !== sort)
       );
-      return { topic, sort, invalidQuery };
+      const redundantDefaultQuery = Boolean(
+        (hasTopic && topic === DEFAULT_ARCHIVE_STATE.topic) ||
+        (hasSort && sort === DEFAULT_ARCHIVE_STATE.sort)
+      );
+      return { topic, sort, needsCanonicalUrl: invalidQuery || redundantDefaultQuery };
     }
 
     function buildArchiveUrl(state) {
@@ -398,7 +404,7 @@
       });
 
       applyArchiveState(currentState, { updateUrl: false });
-      if (initialState.invalidQuery) replaceArchiveUrl(currentState);
+      if (initialState.needsCanonicalUrl) replaceArchiveUrl(currentState);
       toolbarEl.hidden = false;
       return true;
     }

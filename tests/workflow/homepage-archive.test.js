@@ -410,6 +410,54 @@ test('archive invalid query is normalized and canonicalized with replaceState', 
   assert.equal(location.hash, '#archive');
 });
 
+test('archive canonicalizes redundant default query values with replaceState', async () => {
+  const items = [
+    newsletter('2026-05-10', 'Latest issue'),
+    {
+      ...newsletter('2026-05-09', 'Android archive issue'),
+      tags: ['Camera HAL', 'Android']
+    },
+    newsletter('2026-05-08', 'Camera archive issue')
+  ];
+
+  const defaults = await renderHomepage(items, null, {
+    search: '?topic=all&sort=latest&keep=1',
+    hash: '#archive'
+  });
+  assert.deepEqual(defaults.historyUpdates, ['/index.html?keep=1#archive']);
+  assert.equal(defaults.location.search, '?keep=1');
+  assert.equal(defaults.location.hash, '#archive');
+
+  const androidLatest = await renderHomepage(items, null, { search: '?topic=android&sort=latest' });
+  assert.match(androidLatest.elements['archive-list'].innerHTML, /Android archive issue/);
+  assert.doesNotMatch(androidLatest.elements['archive-list'].innerHTML, /Camera archive issue/);
+  assert.match(androidLatest.elements['archive-topic-list'].innerHTML, /data-archive-topic="android" aria-pressed="true"/);
+  assert.deepEqual(androidLatest.historyUpdates, ['/index.html?topic=android']);
+  assert.equal(androidLatest.location.search, '?topic=android');
+
+  const allOldest = await renderHomepage(items, null, { search: '?topic=all&sort=oldest' });
+  assert.deepEqual(allOldest.historyUpdates, ['/index.html?sort=oldest']);
+  assert.equal(allOldest.location.search, '?sort=oldest');
+  assert.equal(allOldest.elements['archive-sort'].value, 'oldest');
+});
+
+test('archive canonicalizes empty managed query values with replaceState', async () => {
+  const items = [
+    newsletter('2026-05-10', 'Latest issue'),
+    newsletter('2026-05-09', 'Archive issue')
+  ];
+
+  const emptyDefaults = await renderHomepage(items, null, { search: '?topic=&sort=' });
+  assert.deepEqual(emptyDefaults.historyUpdates, ['/index.html']);
+  assert.equal(emptyDefaults.location.search, '');
+  assert.equal(emptyDefaults.location.hash, '');
+
+  const emptyTopic = await renderHomepage(items, null, { search: '?topic=&sort=oldest' });
+  assert.deepEqual(emptyTopic.historyUpdates, ['/index.html?sort=oldest']);
+  assert.equal(emptyTopic.location.search, '?sort=oldest');
+  assert.equal(emptyTopic.elements['archive-sort'].value, 'oldest');
+});
+
 test('archive toolbar stays hidden when newsletter fetch fails', async () => {
   const { elements, errors } = await renderHomepage([], null, { newsletterFetchError: true });
 
