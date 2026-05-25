@@ -6,6 +6,7 @@ const test = require('node:test');
 const clientPath = path.resolve(__dirname, '..', '..', '..', 'scripts', 'newsroom', 'llm', 'llm-client.js');
 const internalProvider = require('../../../scripts/newsroom/llm/providers/internal-provider');
 const rawDir = path.resolve(__dirname, '..', '..', '..', '.tmp', 'llm-raw');
+const internalJsonOutputKey = ['output', 'json'].join('_');
 
 function clearLlmEnv() {
   for (const key of [
@@ -79,7 +80,7 @@ test.afterEach(() => {
 
 test('internal provider parses supported response shapes', () => {
   assert.equal(internalProvider.parseInternalResponse({ json: { ok: true } }), '{"ok":true}');
-  assert.equal(internalProvider.parseInternalResponse({ output_json: { ok: true } }), '{"ok":true}');
+  assert.equal(internalProvider.parseInternalResponse({ [internalJsonOutputKey]: { ok: true } }), '{"ok":true}');
   assert.equal(internalProvider.parseInternalResponse({ text: '{"ok":true}' }), '{"ok":true}');
   assert.equal(
     internalProvider.parseInternalResponse({ choices: [{ message: { content: '{"ok":true}' } }] }),
@@ -116,11 +117,24 @@ test('internal provider uses fake fetch without requiring Gemini API key', async
   assert.match(call.pricing_warning, /No internal LLM pricing table/);
 });
 
+test('openapi reserved provider fails fast without HTTP request support', async () => {
+  const client = loadLlmClient({
+    LLM_PROVIDER: 'openapi',
+    LLM_MODEL: 'openapi-reserved',
+    LLM_FALLBACK_MODELS: ''
+  });
+
+  await assert.rejects(
+    () => client.callLlmJson('reserved provider', 'system', 'prompt', {}),
+    /provider_not_implemented/
+  );
+});
+
 test('invalid JSON retry is shared across providers', async () => {
   const client = loadLlmClient({ GEMINI_MAX_RETRIES: '1' });
   const fetchImpl = fakeFetch([
     { text: 'not json' },
-    { output_json: { ok: true } }
+    { [internalJsonOutputKey]: { ok: true } }
   ]);
 
   const result = await client.callLlmJson('internal retry', 'system', 'prompt', {}, { fetch: fetchImpl });

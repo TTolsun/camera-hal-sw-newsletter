@@ -4989,6 +4989,43 @@ test('fallback title helper ignores LLM headlines without stable source keys', a
   assert.deepEqual(result.overrides, {});
 });
 
+test('fallback title helper does not treat reserved openapi as missing credentials', async () => {
+  const issue = {
+    sections: [{
+      source_candidate_hash: 'camerax-161',
+      headline: 'CameraX Release Notes - CameraX 1.6.1',
+      evidence_summary: 'CameraX 1.6.1 release note.',
+      camera_hal_perspective: 'Use as source-bound validation context.',
+      action_items: ['Run a compile smoke test.'],
+      sources: [{
+        title: 'CameraX Release Notes - CameraX 1.6.1',
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
+      }],
+      public_article: {
+        headline: 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정',
+        body_paragraphs: ['CameraX 1.6.1은 ListenableFuture 컴파일 오류를 수정한 패치입니다.']
+      }
+    }]
+  };
+  let called = false;
+  const result = await generateFallbackPublicHeadlineOverrides({
+    issue,
+    env: { LLM_PROVIDER: 'openapi' },
+    llmCall: async () => {
+      called = true;
+      return {
+        headlines: [{
+          source_candidate_hash: 'camerax-161',
+          headline: 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정'
+        }]
+      };
+    }
+  });
+
+  assert.equal(called, true);
+  assert.equal(result.used, true);
+});
+
 test('fallback builder recovers run 25590436113 shape with source-bound anchor candidates', () => {
   const root = tempRoot();
   const { date, camerax14, camerax16, camerax13, libcamera, gcc } = writeRun25590436113LikeFallbackFixture(root);
@@ -7144,6 +7181,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
     '- name: Snapshot newsroom debug artifacts'
   ]);
   assert.match(workflow, /llm_provider:/);
+  assert.match(workflow, /-\s+"openapi"/);
   assert.match(workflow, /llm_model:/);
   assert.match(workflow, /llm_fallback_models:/);
   assert.doesNotMatch(workflow, /allow_pro/);
@@ -7323,6 +7361,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
 
   assert.match(stage1, /workflow_dispatch:/);
   assert.match(stage1, /collection_intent_path:/);
+  assert.doesNotMatch(stage1, /llm_provider:/);
   assert.match(stage1, /NEWSROOM_COLLECTION_INTENT_PATH: \$\{\{ github\.event\.inputs\.collection_intent_path \}\}/);
   assert.match(stage1, /^\s*schedule:/m);
   assert.match(stage1, /cron: "0 0 \* \* \*"/);
@@ -7340,6 +7379,12 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage1, /data\/source-snapshots\/\*\*/);
 
   assert.match(stage2, /NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY/);
+  assert.match(stage2, /llm_provider:/);
+  assert.match(stage2, /-\s+"openapi"/);
+  assert.match(stage2, /LLM_PROVIDER: \$\{\{ github\.event\.inputs\.llm_provider \|\| 'default' \}\}/);
+  assert.doesNotMatch(stage2, /vars\.LLM_PROVIDER/);
+  assert.doesNotMatch(stage2, /vars\.LLM_MODEL/);
+  assert.doesNotMatch(stage2, /vars\.LLM_FALLBACK_MODELS/);
   assert.doesNotMatch(stage2, /Preflight LLM credentials for enabled source discovery/);
   assert.doesNotMatch(stage2, /--preflight-only/);
   assert.doesNotMatch(stage2, /npm run doctor:config/);
@@ -7376,6 +7421,8 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage2, /merged-candidate-manifest\.json/);
 
   assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_MODE: artifact/);
+  assert.match(stage3, /llm_provider:/);
+  assert.match(stage3, /-\s+"openapi"/);
   assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_PATH: \$\{\{ github\.event\.inputs\.candidate_input_path \}\}/);
   assert.match(stage3, /manual-candidates\.json or merged-candidates\.json/);
   assert.match(stage3, /run: npm run generate/);

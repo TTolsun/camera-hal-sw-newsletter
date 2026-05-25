@@ -9,6 +9,9 @@ const {
 const { isSafeExternalImageUrl, REJECT_PATH_PATTERN } = require('../render/image-candidates');
 const { repoLocalPath } = require('../render/article-image-resolver');
 const { ensureArray } = require('../render/newsletter-renderer');
+const {
+  toLegacyEditorIssue
+} = require('../domain/newsletter-domain-normalize');
 
 const REQUIRED_NEWSLETTER_FIELDS = ['date', 'title', 'summary', 'html', 'md', 'tags'];
 const REQUIRED_ISSUE_CLASSES = ['issue-briefing', 'issue-section', 'source-list', 'reference-list'];
@@ -305,6 +308,7 @@ function validateRenderedIssueStructure({
   root = process.cwd(),
   validateDataIndex = true
 } = {}) {
+  editor = toLegacyEditorIssue(editor, { date });
   const errors = [];
   const issueDate = date || editor?.date || 'unknown';
 

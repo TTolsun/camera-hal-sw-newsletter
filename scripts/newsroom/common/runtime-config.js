@@ -7,6 +7,7 @@ const {
 } = require('./newsletter-policy');
 
 const DEFAULT_LLM_PROVIDER = 'gemini';
+const LLM_PROVIDER_VALUES = Object.freeze(['gemini', 'openapi', 'internal']);
 const DEFAULT_LLM_MODEL = 'gemini-2.5-flash';
 const DEFAULT_LLM_FALLBACK_MODELS = ['gemini-2.5-flash-lite'];
 const DEFAULT_LLM_STAGE_MODELS = Object.freeze({
@@ -427,8 +428,8 @@ function validateRuntimeConfig(config, options = {}) {
       errors.push('REFERENCE_CONTEXT_DAYS must be >= FALLBACK_SELECTION_DAYS.');
     }
   }
-  if (!['gemini', 'internal'].includes(config.llmProvider)) {
-    errors.push('LLM_PROVIDER must be one of: gemini, internal.');
+  if (!LLM_PROVIDER_VALUES.includes(config.llmProvider)) {
+    errors.push(`LLM_PROVIDER must be one of: ${LLM_PROVIDER_VALUES.join(', ')}.`);
   }
   if (!String(config.llmModel || '').trim()) {
     errors.push('LLM_MODEL/GEMINI_MODEL must be non-empty.');
@@ -623,6 +624,7 @@ function sanitizeRuntimeConfig(config) {
 
 module.exports = {
   DEFAULT_RUNTIME_CONFIG,
+  LLM_PROVIDER_VALUES,
   DEFAULT_LLM_STAGE_MODELS,
   LLM_STAGE_MODEL_ENV_KEYS,
   PRO_DISABLED_ENV_KEYS,

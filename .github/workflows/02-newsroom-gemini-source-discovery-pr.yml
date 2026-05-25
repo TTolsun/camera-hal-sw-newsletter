@@ -16,6 +16,16 @@ on:
         options:
           - "false"
           - "true"
+      llm_provider:
+        description: "LLM provider override for source discovery manual runs. Current code default: Gemini. Choices: default(code default), gemini, openapi(reserved fail-fast), internal."
+        required: false
+        default: "default"
+        type: choice
+        options:
+          - "default"
+          - "gemini"
+          - "openapi"
+          - "internal"
 
 permissions:
   contents: write
@@ -33,6 +43,7 @@ jobs:
     env:
       NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
       NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: ${{ github.event.inputs.enable_gemini_source_discovery || 'false' }}
+      LLM_PROVIDER: ${{ github.event.inputs.llm_provider || 'default' }}
 
     steps:
       - name: Checkout repository
@@ -86,9 +97,6 @@ jobs:
           INTERNAL_LLM_API_KEY: ${{ secrets.INTERNAL_LLM_API_KEY }}
           INTERNAL_LLM_ENDPOINT: ${{ vars.INTERNAL_LLM_ENDPOINT || '' }}
           INTERNAL_LLM_API_VERSION: ${{ vars.INTERNAL_LLM_API_VERSION || '' }}
-          LLM_PROVIDER: ${{ vars.LLM_PROVIDER || 'gemini' }}
-          LLM_MODEL: ${{ vars.LLM_MODEL || vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
-          LLM_FALLBACK_MODELS: ${{ vars.LLM_FALLBACK_MODELS || vars.GEMINI_FALLBACK_MODELS || 'gemini-2.5-flash-lite' }}
         run: node scripts/gemini-source-discovery-boundary.js --date "${NEWSLETTER_DATE}"
 
       - name: Prepare source discovery pull request body

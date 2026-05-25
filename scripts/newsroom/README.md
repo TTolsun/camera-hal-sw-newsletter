@@ -7,8 +7,10 @@
 | Path | Role |
 | --- | --- |
 | `cli/` | command entrypoint, workflow-facing output, validation command wrapper입니다. |
+| `adapters/` | provider raw output을 internal domain model로 변환하는 adapter boundary입니다. |
 | `collect/` | source page/RSS parsing과 candidate collection입니다. |
 | `common/` | shared runtime config, artifact paths, scope helpers입니다. |
+| `domain/` | newsletter domain model, legacy normalizer, validation error 계약입니다. |
 | `evidence/` | seed evidence, linked evidence, evidence diagnostics 관련 helper입니다. |
 | `generate/` | deterministic selection, article capsule, retry/summary cache logic입니다. |
 | `llm/` | LLM provider dispatch, model policy, retry/cost diagnostics입니다. |

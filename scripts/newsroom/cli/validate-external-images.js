@@ -15,6 +15,9 @@ const {
   newsroomDir,
   newsroomRelPath
 } = require('../common/artifact-paths');
+const {
+  toLegacyEditorIssue
+} = require('../domain/newsletter-domain-normalize');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');
@@ -143,7 +146,7 @@ function readEditor(date) {
   const editorPath = path.join(newsroomDir(root, date), 'editor-draft.json');
   if (!fs.existsSync(editorPath)) return null;
   try {
-    return readJson(editorPath);
+    return toLegacyEditorIssue(readJson(editorPath), { date });
   } catch (error) {
     fail(`Could not parse ${newsroomRelPath(date, 'editor-draft.json')}: ${error.message}`);
     return null;

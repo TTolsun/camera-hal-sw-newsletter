@@ -18,6 +18,7 @@ const {
 } = require('./llm-errors');
 const geminiProvider = require('./providers/gemini-provider');
 const internalProvider = require('./providers/internal-provider');
+const openApiProvider = require('./providers/openapi-provider');
 const {
   modelGroupInfoForStage
 } = require('./model-policy');
@@ -38,6 +39,7 @@ function fail(message) {
 
 function resolveProvider(providerId = runtimeConfig.llmProvider) {
   if (providerId === 'gemini') return geminiProvider;
+  if (providerId === 'openapi') return openApiProvider;
   if (providerId === 'internal') return internalProvider;
   fail(`Unsupported LLM provider: ${providerId}`);
 }
@@ -249,6 +251,9 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
       });
 
       if (!(error instanceof LlmJsonParseError) && !isRetryableError(error, retryableStatuses)) {
+        if (error?.code === 'provider_not_implemented') {
+          fail(`[${stage}] ${provider.displayName} provider_not_implemented: ${error.message}`);
+        }
         fail(`[${stage}] ${provider.displayName} API failed with non-retryable error on model ${modelName}: ${error.message}`);
       }
 

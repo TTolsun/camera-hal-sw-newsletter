@@ -132,15 +132,17 @@ test('boolean parsing accepts common true and false values', () => {
 test('LLM provider default values normalize to Gemini', () => {
   assert.equal(normalizeLlmProvider(''), 'gemini');
   assert.equal(normalizeLlmProvider('default'), 'gemini');
+  assert.equal(normalizeLlmProvider('openapi'), 'openapi');
   assert.equal(normalizeLlmProvider('internal'), 'internal');
   assert.equal(readRuntimeConfig({ LLM_PROVIDER: '' }).llmProvider, 'gemini');
   assert.equal(readRuntimeConfig({ LLM_PROVIDER: 'default' }).llmProvider, 'gemini');
+  assert.equal(readRuntimeConfig({ LLM_PROVIDER: 'openapi' }).llmProvider, 'openapi');
 });
 
 test('runtime config rejects unknown LLM providers', () => {
   assert.throws(
     () => readRuntimeConfig({ LLM_PROVIDER: 'unknown' }),
-    /LLM_PROVIDER must be one of: gemini, internal/
+    /LLM_PROVIDER must be one of: gemini, openapi, internal/
   );
 });
 
