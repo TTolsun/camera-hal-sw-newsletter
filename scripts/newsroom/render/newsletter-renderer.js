@@ -222,6 +222,55 @@ function articleTagsHtml(section, headingCategory) {
   return `<div class="article-tags">${tagsHtml(tags)}</div>`;
 }
 
+function issueDisplayDate(issue = {}) {
+  const explicitDate = String(issue.date || '').trim();
+  if (explicitDate) return explicitDate;
+  const titleDate = String(issue.title || '').match(/\d{4}-\d{2}-\d{2}/);
+  return titleDate ? titleDate[0] : '';
+}
+
+function issuePageTitle(issue = {}) {
+  const date = issueDisplayDate(issue);
+  return date ? `Camera SW Newsletter - ${date}` : 'Camera SW Newsletter';
+}
+
+function issueTitleHtml(issue = {}) {
+  const date = issueDisplayDate(issue);
+  return `<span>Camera SW</span><span>Newsletter${date ? ` - ${escapeHtml(date)}` : ''}</span>`;
+}
+
+function homepageHeaderHtml(rootPath = '') {
+  return `<header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="${escapeHtml(rootPath)}index.html" aria-label="Camera SW Newsletter">
+        <span>Camera SW</span>
+        <span class="brand-subtitle">Newsletter</span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="${escapeHtml(rootPath)}index.html#latest">Latest</a>
+        <a href="${escapeHtml(rootPath)}index.html#archive">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>`;
+}
+
+function siteFooterHtml(rootPath = '') {
+  return `<footer class="site-footer">
+    <nav class="content-wrap footer-inner" aria-label="Footer navigation">
+      <a class="site-brand homepage-brand" href="${escapeHtml(rootPath)}index.html" aria-label="Camera SW Newsletter">
+        <span>Camera SW</span>
+        <span class="brand-subtitle">Newsletter</span>
+      </a>
+      <div class="footer-links">
+        <a href="${escapeHtml(rootPath)}index.html#latest">Latest</a>
+        <a href="${escapeHtml(rootPath)}index.html#archive">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </nav>
+  </footer>`;
+}
+
 function normalizedSections(issue) {
   const usedAnchors = new Set();
   return ensureArray(issue.sections).map((section, index) => {
@@ -233,6 +282,7 @@ function normalizedSections(issue) {
       headingCategory: category,
       className: section.article_type || (section.is_ai_related ? 'ai' : 'article'),
       anchorId: uniqueArticleAnchorId(category, index, usedAnchors),
+      articleNumber: index + 1,
       section
     };
   });
@@ -376,37 +426,79 @@ ${sourceListMarkdown(issue.references)}
 `;
 }
 
-function publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, section) {
+function publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, articleNumber, section) {
   const publicArticle = publicArticleForSection(section, { issue });
   const perspectiveHeading = articlePerspectiveHeading(issue, section);
   const bodyParagraphs = isStoryArticle(publicArticle)
     ? storyBodyParagraphsForRender(publicArticle)
     : bodyParagraphsForRender(publicArticle);
-  if (isStoryArticle(publicArticle)) {
-    return `      <section class="section" id="${escapeHtml(anchorId)}">
-        <h2>${escapeHtml(htmlHeading)}</h2>
-        <div class="card issue-section article-card story-article ${resolvedArticleImage(section) ? 'has-image' : 'has-placeholder-image'} ${escapeHtml(className)}">
-          ${articleMediaHtml(section, publicArticle)}
-          ${articleTagsHtml(section, headingCategory)}
-          <h3>${escapeHtml(publicArticle.headline)}</h3>
-          ${publicArticle.source_subtitle ? `<p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>` : ''}
-          <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>
-          ${bodyParagraphs.map(paragraphHtml).join('\n          ')}
+  const sourceSubtitle = isStoryArticle(publicArticle) && publicArticle.source_subtitle
+    ? `<p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>`
+    : '';
+  const articleCopyBlocks = [
+    articleTagsHtml(section, headingCategory),
+    `<h2 id="${escapeHtml(anchorId)}-title" class="article-title">${escapeHtml(publicArticle.headline || htmlHeading)}</h2>`,
+    sourceSubtitle,
+    `<p class="article-lead">${escapeHtml(publicArticle.lead)}</p>`,
+    ...bodyParagraphs.map(paragraphHtml)
+  ].filter(Boolean);
+  const articleCopyHtml = articleCopyBlocks.map(block => `              ${block}`).join('\n');
+  const mediaHtml = articleMediaHtml(section, publicArticle)
+    .split('\n')
+    .map(line => `            ${line.trimStart()}`)
+    .join('\n');
+  const articleTypeClass = isStoryArticle(publicArticle) ? ' story-article' : '';
+  const articleImageClass = resolvedArticleImage(section) ? 'has-image' : 'has-placeholder-image';
+  return `      <section class="section issue-story" id="${escapeHtml(anchorId)}" aria-labelledby="${escapeHtml(anchorId)}-title">
+        <span class="issue-story-number" aria-label="Article ${escapeHtml(articleNumber)}">${escapeHtml(articleNumber)}</span>
+        <article class="card issue-section article-card${articleTypeClass} ${articleImageClass} ${escapeHtml(className)}">
+          <div class="article-feature-row">
+${mediaHtml}
+            <div class="article-copy">
+${articleCopyHtml}
+            </div>
+          </div>
           <div class="article-block camera-hal-takeaway"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
           <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
-        </div>
+        </article>
       </section>`;
-  }
-  return `      <section class="section" id="${escapeHtml(anchorId)}">
-        <h2>${escapeHtml(htmlHeading)}</h2>
-        <div class="card issue-section article-card ${resolvedArticleImage(section) ? 'has-image' : 'has-placeholder-image'} ${escapeHtml(className)}">
-          ${articleMediaHtml(section, publicArticle)}
-          ${articleTagsHtml(section, headingCategory)}
-          <h3>${escapeHtml(publicArticle.headline)}</h3>
-          <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>
-          ${bodyParagraphs.map(paragraphHtml).join('\n          ')}
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
-          <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
+}
+
+function issueHeroHtml(issue) {
+  return `<header class="article-header issue-hero">
+        <div class="issue-hero-copy">
+          <div class="article-meta issue-hero-meta">
+            <span class="issue-kicker">주간 뉴스레터 ${escapeHtml(issue.date)}</span>
+            <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
+          </div>
+          <h1 class="issue-title">${issueTitleHtml(issue)}</h1>
+          <p class="subtitle">${escapeHtml(issue.summary)}</p>
+          <div class="actions newsletter-actions issue-actions">
+            <a class="button button-primary" href="../../index.html#archive">아카이브로 돌아가기</a>
+            <a class="button button-secondary" href="newsletter.md">MD 원본 보기</a>
+          </div>
+        </div>
+        <figure class="issue-hero-mascot" aria-label="HALley mascot">
+          <img
+            src="../../assets/images/brand/HALley.png"
+            alt="HALley 뉴스레터 마스코트"
+            width="1254"
+            height="1254"
+            decoding="async"
+            loading="eager"
+          />
+        </figure>
+      </header>`;
+}
+
+function issueBriefingHtml(issue) {
+  return `<section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="card issue-briefing-card">
+          <div class="issue-section-heading">
+            <span class="section-icon section-icon-list" aria-hidden="true"></span>
+            <h2 id="issue-briefing-title">이번 주 3줄 브리핑</h2>
+          </div>
+          <ul>${bulletsHtml(issue.briefing)}</ul>
         </div>
       </section>`;
 }
@@ -414,55 +506,39 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, ancho
 function buildPublicHtml(issue) {
   const publicationNotice = publicationNoticeHtml(issue);
   const publicationNoticeBlock = publicationNotice ? `      ${publicationNotice}\n\n` : '';
+  const rootPath = '../../';
   return `<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${escapeHtml(issue.title)}</title>
+  <title>${escapeHtml(issuePageTitle(issue))}</title>
   <link rel="stylesheet" href="../../css/styles.css" />
-  <script src="../../assets/js/site-header.js" defer></script>
 </head>
-<body>
-  <header class="site-header" data-site-header data-site-root="../../"></header>
+<body class="homepage newsletter-issue-page">
+  ${homepageHeaderHtml(rootPath)}
 
-  <main class="article-page">
-    <article class="wrap">
-      <header class="article-header">
-        <div class="article-meta">
-          <span class="issue-kicker">주간 뉴스레터</span>
-          <span class="issue-date">${escapeHtml(issue.date)}</span>
-        </div>
-        <h1>Camera HAL / SW Newsletter</h1>
-        <p class="subtitle">${escapeHtml(issue.summary)}</p>
-        <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
-        <div class="actions newsletter-actions issue-actions">
-          <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
-          <a class="button button-primary" href="newsletter.md">MD 원본 보기</a>
-        </div>
-      </header>
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      ${issueHeroHtml(issue)}
 
-${publicationNoticeBlock}      <section class="section issue-briefing">
-        <h2>1. 이번 주 3줄 브리핑</h2>
-        <div class="card">
-          <ul>${bulletsHtml(issue.briefing)}</ul>
-        </div>
-      </section>
+${publicationNoticeBlock}      ${issueBriefingHtml(issue)}
 
-${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, anchorId, section }) =>
-    publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, section)
+${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, anchorId, articleNumber, section }) =>
+    publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, articleNumber, section)
   ).join('\n\n')}
 
-      <section class="section">
-        <h2>참고자료</h2>
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">참고자료</h2>
         <div class="card reference-list"><ul>${sourceListHtml(issue.references)}</ul></div>
       </section>
 
       <nav class="bottom-nav" aria-label="Issue navigation">
-        <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
+        <a class="button button-primary" href="../../index.html#archive">아카이브로 돌아가기</a>
       </nav>
     </article>
   </main>
+  ${siteFooterHtml(rootPath)}
 </body>
 </html>
 `;

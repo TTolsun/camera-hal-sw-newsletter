@@ -3,27 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Camera HAL / SW Newsletter - 2026-05-07</title>
+  <title>Camera SW Newsletter - 2026-05-07</title>
   <link rel="stylesheet" href="../../css/styles.css" />
-  <script src="../../assets/js/site-header.js" defer></script>
 </head>
-<body>
-  <header class="site-header" data-site-header data-site-root="../../"></header>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsletter">
+        <span>Camera SW</span>
+        <span class="brand-subtitle">Newsletter</span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../index.html#latest">Latest</a>
+        <a href="../../index.html#archive">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
 
-  <main class="article-page">
-    <article class="wrap">
-      <header class="article-header">
-        <div class="article-meta">
-          <span class="issue-kicker">주간 뉴스레터</span>
-          <span class="issue-date">2026-05-07</span>
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <div class="issue-hero-copy">
+          <div class="article-meta issue-hero-meta">
+            <span class="issue-kicker">주간 뉴스레터 2026-05-07</span>
+            <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+          </div>
+          <h1 class="issue-title"><span>Camera SW</span><span>Newsletter - 2026-05-07</span></h1>
+          <p class="subtitle">이번 2026-05-07호는 2개 기사(libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트, libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.</p>
+          <div class="actions newsletter-actions issue-actions">
+            <a class="button button-primary" href="../../index.html#archive">아카이브로 돌아가기</a>
+            <a class="button button-secondary" href="newsletter.md">MD 원본 보기</a>
+          </div>
         </div>
-        <h1>Camera HAL / SW Newsletter</h1>
-        <p class="subtitle">이번 2026-05-07호는 2개 기사(libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트, libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.</p>
-        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
-        <div class="actions newsletter-actions issue-actions">
-          <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
-          <a class="button button-primary" href="newsletter.md">MD 원본 보기</a>
-        </div>
+        <figure class="issue-hero-mascot" aria-label="HALley mascot">
+          <img
+            src="../../assets/images/brand/HALley.png"
+            alt="HALley 뉴스레터 마스코트"
+            width="1254"
+            height="1254"
+            decoding="async"
+            loading="eager"
+          />
+        </figure>
       </header>
 
       <div class="publication-notice" role="note">
@@ -31,58 +53,82 @@
           <p>각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.</p>
         </div>
 
-      <section class="section issue-briefing">
-        <h2>1. 이번 주 3줄 브리핑</h2>
-        <div class="card">
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="card issue-briefing-card">
+          <div class="issue-section-heading">
+            <span class="section-icon section-icon-list" aria-hidden="true"></span>
+            <h2 id="issue-briefing-title">이번 주 3줄 브리핑</h2>
+          </div>
           <ul><li>libcamera v0.7.1의 pipeline handler와 sensor configuration 업데이트는 upstream Linux camera stack의 sensor mode 설정과 pipeline setup 변화를 확인할 신호입니다. Android HAL 영향은 vendor stack이 해당 libcamera 경로를 실제로 쓰는 경우에만 검토합니다.</li><li>libcamera v0.7.1의 SoftISP debayering과 throughput 개선은 RAW image processing 경로의 upstream 변경 신호입니다. Android 제품 영향은 해당 SoftISP 경로가 vendor stack에 통합된 경우에만 image quality와 latency 검증으로 이어집니다.</li><li>첫 번째 기사는 vendor kernel 또는 libcamera fork에 v0.7.1 pipeline/sensor 변경이 포함됐는지 확인하는 것, 두 번째 기사는 vendor ISP 또는 libcamera fork가 v0.7.1 SoftISP 변경을 참조하는지 확인하는 것부터 보면 실제 적용 범위를 판단하기 쉽습니다.</li></ul>
         </div>
       </section>
 
-      <section class="section">
-        <h2>2. libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트</h2>
-        <div class="card issue-section article-card has-image camera_driver_image_pipeline">
-          <figure class="article-media">
+      <section class="section issue-story" id="article-libcamera-v0-7-1" aria-labelledby="article-libcamera-v0-7-1-title">
+        <span class="issue-story-number" aria-label="Article 1">1</span>
+        <article class="card issue-section article-card has-image camera_driver_image_pipeline">
+          <div class="article-feature-row">
+            <figure class="article-media">
             <img class="article-image" src="https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" alt="libcamera 로고가 있는 GitLab 트위터 카드 이미지" loading="lazy" decoding="async">
             <figcaption class="article-image-caption">이미지: <a href="https://gitlab.freedesktop.org/camera/libcamera/-/issues/300">libcamera Release Announcements</a></figcaption>
           </figure>
+            <div class="article-copy">
 
-          <h3>libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트</h3>
-          <p class="article-lead">libcamera v0.7.1의 pipeline handler와 sensor configuration 업데이트는 upstream Linux camera stack의 sensor mode 설정과 pipeline setup 변화를 확인할 신호입니다. Android HAL 영향은 vendor stack이 해당 libcamera 경로를 실제로 쓰는 경우에만 검토합니다.</p>
-          <p>pipeline handler는 sensor, ISP, buffer flow를 묶어 camera device를 구성하는 계층입니다. sensor configuration 변화는 해상도, frame rate, pixel format 선택과 연결될 수 있으므로 downstream fork가 libcamera를 consume한다면 stream combination과 sensor mode regression 확인이 필요합니다.</p>
-          <p>이 source만으로 Android Camera HAL API나 metadata contract 변경이 입증되지는 않습니다. 제품 branch에 관련 libcamera 변경이 들어왔는지 확인한 뒤, 적용된 platform에서만 CTS/VTS/Camera ITS와 device log를 연결해 봐야 합니다.</p>
-          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong><p>libcamera v0.7.1은 upstream camera pipeline 신호입니다. HAL 팀은 vendor kernel/libcamera fork 적용 여부를 먼저 확인하고, 적용된 장치에서만 stream configuration과 sensor mode 회귀를 검토해야 합니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>vendor kernel 또는 libcamera fork에 v0.7.1 pipeline/sensor 변경이 포함됐는지 확인합니다.</li><li>적용 platform에서 Preview + ImageCapture stream combination, sensor mode selection, frame drop log를 비교합니다.</li><li>downstream integration evidence가 없으면 upstream note로만 남기고 HAL issue를 열지 않습니다.</li></ul></div>
+              <h2 id="article-libcamera-v0-7-1-title" class="article-title">libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트</h2>
+
+              <p class="article-lead">libcamera v0.7.1의 pipeline handler와 sensor configuration 업데이트는 upstream Linux camera stack의 sensor mode 설정과 pipeline setup 변화를 확인할 신호입니다. Android HAL 영향은 vendor stack이 해당 libcamera 경로를 실제로 쓰는 경우에만 검토합니다.</p>
+              <p>pipeline handler는 sensor, ISP, buffer flow를 묶어 camera device를 구성하는 계층입니다. sensor configuration 변화는 해상도, frame rate, pixel format 선택과 연결될 수 있으므로 downstream fork가 libcamera를 consume한다면 stream combination과 sensor mode regression 확인이 필요합니다.</p>
+            <p>이 source만으로 Android Camera HAL API나 metadata contract 변경이 입증되지는 않습니다. 제품 branch에 관련 libcamera 변경이 들어왔는지 확인한 뒤, 적용된 platform에서만 CTS/VTS/Camera ITS와 device log를 연결해 봐야 합니다.</p>
+            </div>
+          </div>
+          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>libcamera v0.7.1은 upstream camera pipeline 신호입니다. HAL 팀은 vendor kernel/libcamera fork 적용 여부를 먼저 확인하고, 적용된 장치에서만 stream configuration과 sensor mode 회귀를 검토해야 합니다.</p></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://gitlab.freedesktop.org/camera/libcamera/-/issues/300">libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트</a></li></ul></div>
-        </div>
+        </article>
       </section>
 
-      <section class="section">
-        <h2>3. libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선</h2>
-        <div class="card issue-section article-card has-image camera_driver_image_pipeline">
-          <figure class="article-media">
+      <section class="section issue-story" id="article-libcamera-v0-7-1-softisp" aria-labelledby="article-libcamera-v0-7-1-softisp-title">
+        <span class="issue-story-number" aria-label="Article 2">2</span>
+        <article class="card issue-section article-card has-image camera_driver_image_pipeline">
+          <div class="article-feature-row">
+            <figure class="article-media">
             <img class="article-image" src="https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" alt="libcamera 로고가 있는 GitLab 트위터 카드 이미지" loading="lazy" decoding="async">
             <figcaption class="article-image-caption">이미지: <a href="https://gitlab.freedesktop.org/camera/libcamera/-/issues/311">libcamera Release Announcements</a></figcaption>
           </figure>
+            <div class="article-copy">
 
-          <h3>libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선</h3>
-          <p class="article-lead">libcamera v0.7.1의 SoftISP debayering과 throughput 개선은 RAW image processing 경로의 upstream 변경 신호입니다. Android 제품 영향은 해당 SoftISP 경로가 vendor stack에 통합된 경우에만 image quality와 latency 검증으로 이어집니다.</p>
-          <p>SoftISP는 Bayer RAW 데이터를 RGB/YUV로 복원하는 software ISP 경로이며, throughput 개선은 frame processing budget과 latency 관찰 지점이 될 수 있습니다. 하지만 Android 제품이 hardware ISP 또는 별도 vendor path를 쓰면 이 변경은 직접 영향이 없습니다.</p>
-          <p>제품 통합이 확인된 경우에는 RAW/YUV output, debayering 품질, frame drop, end-to-end latency를 기존 regression 범위 안에서 비교해야 합니다. 통합 근거가 없으면 upstream image pipeline 동향으로만 기록하는 것이 맞습니다.</p>
-          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong><p>SoftISP 변경은 camera image pipeline 관찰 신호이지 Android HAL contract 변경이 아닙니다. 제품에서 libcamera SoftISP를 실제로 쓰는 장치만 regression 대상으로 삼아야 합니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>vendor ISP 또는 libcamera fork가 v0.7.1 SoftISP 변경을 참조하는지 확인합니다.</li><li>통합 장치에서 RAW/YUV image quality smoke test와 frame latency log를 비교합니다.</li><li>throughput follow-up은 downstream performance regression이나 제품 요구가 있을 때만 엽니다.</li></ul></div>
+              <h2 id="article-libcamera-v0-7-1-softisp-title" class="article-title">libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선</h2>
+
+              <p class="article-lead">libcamera v0.7.1의 SoftISP debayering과 throughput 개선은 RAW image processing 경로의 upstream 변경 신호입니다. Android 제품 영향은 해당 SoftISP 경로가 vendor stack에 통합된 경우에만 image quality와 latency 검증으로 이어집니다.</p>
+              <p>SoftISP는 Bayer RAW 데이터를 RGB/YUV로 복원하는 software ISP 경로이며, throughput 개선은 frame processing budget과 latency 관찰 지점이 될 수 있습니다. 하지만 Android 제품이 hardware ISP 또는 별도 vendor path를 쓰면 이 변경은 직접 영향이 없습니다.</p>
+            <p>제품 통합이 확인된 경우에는 RAW/YUV output, debayering 품질, frame drop, end-to-end latency를 기존 regression 범위 안에서 비교해야 합니다. 통합 근거가 없으면 upstream image pipeline 동향으로만 기록하는 것이 맞습니다.</p>
+            </div>
+          </div>
+          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>SoftISP 변경은 camera image pipeline 관찰 신호이지 Android HAL contract 변경이 아닙니다. 제품에서 libcamera SoftISP를 실제로 쓰는 장치만 regression 대상으로 삼아야 합니다.</p></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://gitlab.freedesktop.org/camera/libcamera/-/issues/311">libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선</a></li></ul></div>
-        </div>
+        </article>
       </section>
 
-      <section class="section">
-        <h2>참고자료</h2>
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">참고자료</h2>
         <div class="card reference-list"><ul><li><a href="https://gitlab.freedesktop.org/camera/libcamera/-/issues/300">libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트</a></li><li><a href="https://gitlab.freedesktop.org/camera/libcamera/-/issues/311">libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선</a></li></ul></div>
       </section>
 
       <nav class="bottom-nav" aria-label="Issue navigation">
-        <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
+        <a class="button button-primary" href="../../index.html#archive">아카이브로 돌아가기</a>
       </nav>
     </article>
   </main>
+  <footer class="site-footer">
+    <nav class="content-wrap footer-inner" aria-label="Footer navigation">
+      <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsletter">
+        <span>Camera SW</span>
+        <span class="brand-subtitle">Newsletter</span>
+      </a>
+      <div class="footer-links">
+        <a href="../../index.html#latest">Latest</a>
+        <a href="../../index.html#archive">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </nav>
+  </footer>
 </body>
 </html>

@@ -115,14 +115,12 @@ function textFromHtml(html) {
 
 function siteNavLabels(html) {
   const siteNavMatch = html.match(/<nav\b[^>]*class=["'][^"']*\bsite-nav\b[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
-  const siteHeader = siteNavMatch
-    ? siteNavMatch[0]
-    : siteHeaderHtml({ rootPath: '../../' });
-  assert.match(html, /<header class="site-header" data-site-header data-site-root="\.\.\/\.\.\/"><\/header>/);
-  assert.match(html, /<script src="\.\.\/\.\.\/assets\/js\/site-header\.js" defer><\/script>/);
+  const homepageHeaderMatch = html.match(/<header\b[^>]*class=["'][^"']*\bhomepage-site-header\b[^"']*["'][^>]*>[\s\S]*?<\/header>/i);
+  const matchedHeader = siteNavMatch || homepageHeaderMatch;
+  const siteHeader = matchedHeader ? matchedHeader[0] : siteHeaderHtml({ rootPath: '../../' });
   return [...siteHeader.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
     .map(match => textFromHtml(match[1]))
-    .filter(label => label && label !== 'Camera HAL / SW Newsletter');
+    .filter(label => label && !label.startsWith('Camera HAL') && !label.startsWith('Camera SW'));
 }
 
 test('newsletter renderer uses public_article for public markdown and HTML', () => {
@@ -158,6 +156,13 @@ test('newsletter renderer keeps generated issue nav labels in English', () => {
   const html = buildHtml(issue());
   const labels = siteNavLabels(html);
 
+  assert.match(html, /<body class="homepage newsletter-issue-page">/);
+  assert.match(html, /<header class="site-header homepage-site-header">/);
+  assert.match(html, /<div class="homepage-nav content-wrap">/);
+  assert.match(html, /<footer class="site-footer">/);
+  assert.match(html, /<span>Camera SW<\/span>\s*<span class="brand-subtitle">Newsletter<\/span>/);
+  assert.match(html, /<title>Camera SW Newsletter - 2026-05-03<\/title>/);
+  assert.doesNotMatch(html, /data-site-header|site-header\.js/);
   assert.deepEqual(labels.slice(0, 3), ['Latest', 'Archive', 'GitHub']);
   assert.equal(labels.includes('Sources'), false);
   assert.equal(labels.includes('\ucd5c\uc2e0\ud638'), false);
@@ -185,7 +190,7 @@ test('newsletter renderer renders a single main article without empty sections',
   const html = buildHtml(issue());
 
   assert.match(markdown, /^## 2\. CameraX release gives HAL teams a target/m);
-  assert.match(html, /<section class="section" id="article-camerax-release-gives-hal-teams-a-target">/);
+  assert.match(html, /<section class="section issue-story" id="article-camerax-release-gives-hal-teams-a-target"/);
   assert.doesNotMatch(markdown, /^## 3\./m);
   assert.equal((html.match(/\barticle-card\b/g) || []).length, 1);
   for (const rendered of [markdown, html]) {
@@ -204,6 +209,25 @@ test('newsletter renderer keeps article anchors unique when titles repeat', () =
 
   assert.match(html, /id="article-camerax-release-gives-hal-teams-a-target"/);
   assert.match(html, /id="article-camerax-release-gives-hal-teams-a-target-2"/);
+});
+
+test('newsletter renderer structures issue pages as homepage-shell landing articles', () => {
+  const html = buildHtml(issue());
+
+  assert.match(html, /<main class="site-main article-page newsletter-main">/);
+  assert.match(html, /<article class="wrap issue-wrap">/);
+  assert.match(html, /<header class="article-header issue-hero">/);
+  assert.match(html, /<h1 class="issue-title"><span>Camera SW<\/span><span>Newsletter - 2026-05-03<\/span><\/h1>/);
+  assert.match(html, /<figure class="issue-hero-mascot" aria-label="HALley mascot">/);
+  assert.match(html, /src="\.\.\/\.\.\/assets\/images\/brand\/HALley\.png"/);
+  assert.match(html, /<div class="card issue-briefing-card">/);
+  assert.match(html, /<span class="issue-story-number" aria-label="Article 1">1<\/span>/);
+  assert.match(html, /<div class="article-feature-row">/);
+  assert.match(html, /<h2 id="article-camerax-release-gives-hal-teams-a-target-title" class="article-title">CameraX release gives HAL teams a target<\/h2>/);
+  assert.match(html, /<section class="section issue-references" aria-labelledby="issue-references-title">/);
+  assert.match(html, /<a href="\.\.\/\.\.\/index\.html#archive">Archive<\/a>/);
+  assert.match(html, /<a class="button button-primary" href="\.\.\/\.\.\/index\.html#archive">아카이브로 돌아가기<\/a>/);
+  assert.match(html, /<a class="button button-secondary" href="newsletter\.md">MD 원본 보기<\/a>/);
 });
 
 test('newsletter renderer article structure table uses shared row semantics', () => {

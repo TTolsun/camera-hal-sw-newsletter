@@ -3,27 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Camera HAL / SW Newsletter - 2026-05-21</title>
+  <title>Camera SW Newsletter - 2026-05-21</title>
   <link rel="stylesheet" href="../../css/styles.css" />
-  <script src="../../assets/js/site-header.js" defer></script>
 </head>
-<body>
-  <header class="site-header" data-site-header data-site-root="../../"></header>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsletter">
+        <span>Camera SW</span>
+        <span class="brand-subtitle">Newsletter</span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../index.html#latest">Latest</a>
+        <a href="../../index.html#archive">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
 
-  <main class="article-page">
-    <article class="wrap">
-      <header class="article-header">
-        <div class="article-meta">
-          <span class="issue-kicker">주간 뉴스레터</span>
-          <span class="issue-date">2026-05-21</span>
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <div class="issue-hero-copy">
+          <div class="article-meta issue-hero-meta">
+            <span class="issue-kicker">주간 뉴스레터 2026-05-21</span>
+            <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+          </div>
+          <h1 class="issue-title"><span>Camera SW</span><span>Newsletter - 2026-05-21</span></h1>
+          <p class="subtitle">이번 2026-05-21호는 1개 기사(libcamera Release Announcements - libcamera v0.7.1)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.</p>
+          <div class="actions newsletter-actions issue-actions">
+            <a class="button button-primary" href="../../index.html#archive">아카이브로 돌아가기</a>
+            <a class="button button-secondary" href="newsletter.md">MD 원본 보기</a>
+          </div>
         </div>
-        <h1>Camera HAL / SW Newsletter</h1>
-        <p class="subtitle">이번 2026-05-21호는 1개 기사(libcamera Release Announcements - libcamera v0.7.1)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.</p>
-        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
-        <div class="actions newsletter-actions issue-actions">
-          <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
-          <a class="button button-primary" href="newsletter.md">MD 원본 보기</a>
-        </div>
+        <figure class="issue-hero-mascot" aria-label="HALley mascot">
+          <img
+            src="../../assets/images/brand/HALley.png"
+            alt="HALley 뉴스레터 마스코트"
+            width="1254"
+            height="1254"
+            decoding="async"
+            loading="eager"
+          />
+        </figure>
       </header>
 
       <div class="publication-notice" role="note">
@@ -31,39 +53,59 @@
           <p>각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.</p>
         </div>
 
-      <section class="section issue-briefing">
-        <h2>1. 이번 주 3줄 브리핑</h2>
-        <div class="card">
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="card issue-briefing-card">
+          <div class="issue-section-heading">
+            <span class="section-icon section-icon-list" aria-hidden="true"></span>
+            <h2 id="issue-briefing-title">이번 주 3줄 브리핑</h2>
+          </div>
           <ul><li>libcamera v0.7.1 release announcement는 Raspberry Pi Atomic control lists와 Simple pipeline AGC/AWB statistics 개선을 포함한 upstream camera stack 업데이트입니다. Android HAL 팀에는 driver, sensor, ISP, frame timing 검증 범위를 좁히는 참고 신호입니다.</li><li>libcamera v0.7.1은 upstream driver/image-pipeline signal입니다. 제품 적용 evidence가 있는 경우에만 AE/AWB, metadata consistency, frame timing 검증으로 연결하고, Android HAL API 변경으로 단정하지 않습니다.</li><li>vendor kernel, BSP, libcamera fork에 v0.7.1 변경이 실제로 포함됐는지 확인하는 것부터 보면 기사 내용을 실제 검증 작업으로 옮기기 쉽습니다.</li></ul>
         </div>
       </section>
 
-      <section class="section">
-        <h2>2. libcamera Release Announcements - libcamera v0.7.1</h2>
-        <div class="card issue-section article-card has-placeholder-image camera-hal">
-          <div class="article-media article-placeholder-visual article-placeholder-camera-hal" role="img" aria-label="Camera Driver / Image Pipeline">
+      <section class="section issue-story" id="article-libcamera-release-announcements-libcamera-v0-7-1" aria-labelledby="article-libcamera-release-announcements-libcamera-v0-7-1-title">
+        <span class="issue-story-number" aria-label="Article 1">1</span>
+        <article class="card issue-section article-card has-placeholder-image camera-hal">
+          <div class="article-feature-row">
+            <div class="article-media article-placeholder-visual article-placeholder-camera-hal" role="img" aria-label="Camera Driver / Image Pipeline">
             <span></span>
           </div>
+            <div class="article-copy">
 
-          <h3>libcamera Release Announcements - libcamera v0.7.1</h3>
-          <p class="article-lead">libcamera v0.7.1 release announcement는 Raspberry Pi Atomic control lists와 Simple pipeline AGC/AWB statistics 개선을 포함한 upstream camera stack 업데이트입니다. Android HAL 팀에는 driver, sensor, ISP, frame timing 검증 범위를 좁히는 참고 신호입니다.</p>
-          <p>이번 release는 Linux camera stack의 pipeline control과 image statistics 경로를 다룹니다. vendor kernel 또는 BSP가 libcamera fork를 실제로 가져오는 제품이라면 AE/AWB 안정성, captureResult metadata consistency, frame timing log를 기존 회귀 범위에서 확인할 이유가 있습니다.</p>
-          <p>하지만 libcamera release announcement만으로 Android Camera HAL contract 변경을 주장하면 안 됩니다. Raspberry Pi reference board 결과는 upstream comparison log로 분리하고, 제품 branch 적용 여부가 확인된 platform만 regression 대상으로 삼아야 합니다.</p>
-          <div class="article-block"><strong class="article-block-title">Camera HAL / Driver 관점</strong><p>libcamera v0.7.1은 upstream driver/image-pipeline signal입니다. 제품 적용 evidence가 있는 경우에만 AE/AWB, metadata consistency, frame timing 검증으로 연결하고, Android HAL API 변경으로 단정하지 않습니다.</p></div>
-          <div class="article-block reader-checkpoints"><strong class="article-block-title">확인할 점</strong><ul><li>vendor kernel, BSP, libcamera fork에 v0.7.1 변경이 실제로 포함됐는지 확인합니다.</li><li>적용 장치에서 Preview + ImageCapture AE/AWB smoke test와 captureResult metadata consistency를 비교합니다.</li><li>Raspberry Pi reference result는 제품 camera stack 근거가 아니라 upstream comparison log로만 남깁니다.</li></ul></div>
+              <h2 id="article-libcamera-release-announcements-libcamera-v0-7-1-title" class="article-title">libcamera Release Announcements - libcamera v0.7.1</h2>
+
+              <p class="article-lead">libcamera v0.7.1 release announcement는 Raspberry Pi Atomic control lists와 Simple pipeline AGC/AWB statistics 개선을 포함한 upstream camera stack 업데이트입니다. Android HAL 팀에는 driver, sensor, ISP, frame timing 검증 범위를 좁히는 참고 신호입니다.</p>
+              <p>이번 release는 Linux camera stack의 pipeline control과 image statistics 경로를 다룹니다. vendor kernel 또는 BSP가 libcamera fork를 실제로 가져오는 제품이라면 AE/AWB 안정성, captureResult metadata consistency, frame timing log를 기존 회귀 범위에서 확인할 이유가 있습니다.</p>
+            <p>하지만 libcamera release announcement만으로 Android Camera HAL contract 변경을 주장하면 안 됩니다. Raspberry Pi reference board 결과는 upstream comparison log로 분리하고, 제품 branch 적용 여부가 확인된 platform만 regression 대상으로 삼아야 합니다.</p>
+            </div>
+          </div>
+          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>libcamera v0.7.1은 upstream driver/image-pipeline signal입니다. 제품 적용 evidence가 있는 경우에만 AE/AWB, metadata consistency, frame timing 검증으로 연결하고, Android HAL API 변경으로 단정하지 않습니다.</p></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html">libcamera Release Announcements - libcamera v0.7.1</a></li></ul></div>
-        </div>
+        </article>
       </section>
 
-      <section class="section">
-        <h2>참고자료</h2>
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">참고자료</h2>
         <div class="card reference-list"><ul><li><a href="https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html">libcamera Release Announcements - libcamera v0.7.1</a></li></ul></div>
       </section>
 
       <nav class="bottom-nav" aria-label="Issue navigation">
-        <a class="button button-secondary" href="../../index.html#archive">아카이브로 돌아가기</a>
+        <a class="button button-primary" href="../../index.html#archive">아카이브로 돌아가기</a>
       </nav>
     </article>
   </main>
+  <footer class="site-footer">
+    <nav class="content-wrap footer-inner" aria-label="Footer navigation">
+      <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsletter">
+        <span>Camera SW</span>
+        <span class="brand-subtitle">Newsletter</span>
+      </a>
+      <div class="footer-links">
+        <a href="../../index.html#latest">Latest</a>
+        <a href="../../index.html#archive">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </nav>
+  </footer>
 </body>
 </html>

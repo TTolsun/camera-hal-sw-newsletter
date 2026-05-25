@@ -75,6 +75,15 @@ function isFallbackImagePath(value) {
   return /^(?:(?:\.\.\/){1,3})?assets\/images\/fallback\//.test(String(value || '').replace(/\\/g, '/'));
 }
 
+function hasClassToken(content, className) {
+  const classPattern = /class=["']([^"']*)["']/gi;
+  let match;
+  while ((match = classPattern.exec(String(content || ''))) !== null) {
+    if (String(match[1] || '').split(/\s+/).includes(className)) return true;
+  }
+  return false;
+}
+
 function validateNewsletterIndex(root, errors) {
   const dataPath = path.join(root, 'data', 'newsletters.json');
   if (!fs.existsSync(dataPath)) {
@@ -214,7 +223,7 @@ function validateHtmlStructure(date, html, root, errors) {
   }
 
   for (const className of REQUIRED_ISSUE_CLASSES) {
-    if (!content.includes(className)) {
+    if (!hasClassToken(content, className)) {
       errors.push(`Newsletter HTML missing ${className}: ${relPath}`);
     }
   }

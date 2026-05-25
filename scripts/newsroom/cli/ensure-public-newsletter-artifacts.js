@@ -420,7 +420,10 @@ function readRenderedNewsletterArticles(root, date) {
         matchFirst(block, /<div class="source-list"[\s\S]*?<a[^>]*href="([^"]+)"/i) ||
         matchFirst(block, /<figcaption[\s\S]*?<a[^>]*href="([^"]+)"/i)
       );
-      const title = stripHtml(matchFirst(block, /<h3[^>]*>([\s\S]*?)<\/h3>/i));
+      const title = stripHtml(
+        matchFirst(block, /<h[23][^>]*class="[^"]*\barticle-title\b[^"]*"[^>]*>([\s\S]*?)<\/h[23]>/i) ||
+        matchFirst(block, /<h3[^>]*>([\s\S]*?)<\/h3>/i)
+      );
       const summary = stripHtml(
         matchFirst(block, /<p[^>]*class="[^"]*\barticle-lead\b[^"]*"[^>]*>([\s\S]*?)<\/p>/i) ||
         matchFirst(block, /<p[^>]*>([\s\S]*?)<\/p>/i)

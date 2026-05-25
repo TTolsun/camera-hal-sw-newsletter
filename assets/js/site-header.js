@@ -1,6 +1,6 @@
 (function initSiteHeader(global) {
   const GITHUB_URL = 'https://github.com/TTolsun/camera-hal-sw-newsletter';
-  const BRAND_LABEL = 'Camera HAL / SW Newsletter';
+  const BRAND_LABEL = 'Camera SW Newsletter';
   const NAV_ITEMS = [
     { label: 'Latest', path: 'index.html#latest' },
     { label: 'Archive', path: 'index.html#archive' },
@@ -33,11 +33,12 @@
     const links = NAV_ITEMS
       .map(item => `<a href="${escapeHtml(siteHref(item, rootPath))}">${escapeHtml(item.label)}</a>`)
       .join('\n        ');
-    return `<nav class="site-nav content-wrap" aria-label="Primary navigation">
-      <a class="site-brand" href="${escapeHtml(brandHref)}" aria-label="${escapeHtml(BRAND_LABEL)}">
-        <span>Camera HAL</span><span class="brand-separator" aria-hidden="true">/</span><span>SW Newsletter</span>
+    return `<nav class="site-nav content-wrap homepage-nav" aria-label="Primary navigation">
+      <a class="site-brand homepage-brand" href="${escapeHtml(brandHref)}" aria-label="${escapeHtml(BRAND_LABEL)}">
+        <span>Camera SW</span>
+        <span class="brand-subtitle">Newsletter</span>
       </a>
-      <div class="nav-links">
+      <div class="nav-links homepage-nav-links">
         ${links}
       </div>
     </nav>`;
