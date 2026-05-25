@@ -26,8 +26,16 @@ const {
 const doctorConfigScript = path.join(__dirname, '..', '..', '..', 'scripts', 'doctor-config.js');
 
 function doctorConfigEnv(overrides = {}) {
+  const baseEnv = { ...process.env };
+  for (const key of [
+    'NEWSROOM_ALLOW_PRO_ON_SCHEDULE',
+    'NEWSROOM_ALLOW_PRO_ON_MANUAL',
+    'NEWSROOM_PRO_ESCALATION'
+  ]) {
+    delete baseEnv[key];
+  }
   return {
-    ...process.env,
+    ...baseEnv,
     GEMINI_API_KEY: '',
     INTERNAL_LLM_API_KEY: '',
     LLM_PROVIDER: 'gemini',
@@ -36,7 +44,6 @@ function doctorConfigEnv(overrides = {}) {
     LLM_FALLBACK_MODELS: 'gemini-2.5-flash-lite',
     GEMINI_FALLBACK_MODELS: 'gemini-2.5-flash-lite',
     GITHUB_EVENT_NAME: 'workflow_dispatch',
-    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'false',
     ...overrides
   };
 }
@@ -74,9 +81,6 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.newsroomMaxSectionRepairs, 1);
   assert.equal(config.newsroomWarnCostUsd, 0.15);
   assert.equal(config.newsroomMaxCostUsd, 0.25);
-  assert.equal(config.newsroomAllowProOnSchedule, false);
-  assert.equal(config.newsroomAllowProOnManual, false);
-  assert.equal(config.newsroomProEscalation, 'manual');
   assert.equal(config.geminiThinkingBudgetReporter, 0);
   assert.equal(config.geminiThinkingBudgetEditor, 512);
   assert.equal(config.geminiThinkingBudgetRepair, 0);
@@ -157,9 +161,6 @@ test('runtime env overrides are parsed into typed config', () => {
     NEWSROOM_MAX_SECTION_REPAIRS: '1',
     NEWSROOM_WARN_COST_USD: '0.12',
     NEWSROOM_MAX_COST_USD: '0.2',
-    NEWSROOM_ALLOW_PRO_ON_SCHEDULE: 'false',
-    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true',
-    NEWSROOM_PRO_ESCALATION: 'manual',
     GEMINI_THINKING_BUDGET_REPORTER: '0',
     GEMINI_THINKING_BUDGET_EDITOR: '1024',
     GEMINI_THINKING_BUDGET_REPAIR: '0',
@@ -212,9 +213,6 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.newsroomMaxSectionRepairs, 1);
   assert.equal(config.newsroomWarnCostUsd, 0.12);
   assert.equal(config.newsroomMaxCostUsd, 0.2);
-  assert.equal(config.newsroomAllowProOnSchedule, false);
-  assert.equal(config.newsroomAllowProOnManual, true);
-  assert.equal(config.newsroomProEscalation, 'manual');
   assert.equal(config.geminiThinkingBudgetReporter, 0);
   assert.equal(config.geminiThinkingBudgetEditor, 1024);
   assert.equal(config.geminiThinkingBudgetRepair, 0);
@@ -316,9 +314,6 @@ test('linked evidence runtime config rejects invalid mode and unsafe limits', ()
     newsroomMaxSectionRepairs: 1,
     newsroomWarnCostUsd: 0.15,
     newsroomMaxCostUsd: 0.25,
-    newsroomAllowProOnSchedule: false,
-    newsroomAllowProOnManual: false,
-    newsroomProEscalation: 'manual',
     geminiThinkingBudgetReporter: 0,
     geminiThinkingBudgetEditor: 512,
     geminiThinkingBudgetRepair: 0,
@@ -554,9 +549,6 @@ test('internal provider requires its own key and endpoint only when selected', (
     newsroomMaxSectionRepairs: 1,
     newsroomWarnCostUsd: 0.15,
     newsroomMaxCostUsd: 0.25,
-    newsroomAllowProOnSchedule: false,
-    newsroomAllowProOnManual: false,
-    newsroomProEscalation: 'manual',
     geminiThinkingBudgetReporter: 0,
     geminiThinkingBudgetEditor: 512,
     geminiThinkingBudgetRepair: 0,
@@ -600,9 +592,6 @@ test('invalid date and ranges return field-specific validation errors', () => {
     newsroomMaxSectionRepairs: -1,
     newsroomWarnCostUsd: -0.1,
     newsroomMaxCostUsd: -0.2,
-    newsroomAllowProOnSchedule: false,
-    newsroomAllowProOnManual: false,
-    newsroomProEscalation: 'manual',
     geminiThinkingBudgetReporter: -1,
     geminiThinkingBudgetEditor: -1,
     geminiThinkingBudgetRepair: -1,
@@ -652,9 +641,6 @@ test('validator returns structured errors for malformed fallback model input', (
     newsroomMaxSectionRepairs: 1,
     newsroomWarnCostUsd: 0.15,
     newsroomMaxCostUsd: 0.25,
-    newsroomAllowProOnSchedule: false,
-    newsroomAllowProOnManual: false,
-    newsroomProEscalation: 'manual',
     geminiThinkingBudgetReporter: 0,
     geminiThinkingBudgetEditor: 512,
     geminiThinkingBudgetRepair: 0,
@@ -716,100 +702,69 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.newsroomCandidateInputMode, 'default');
   assert.equal(sanitized.newsroomCandidateInputPath, '');
   assert.equal(sanitized.newsroomEnableGeminiSourceDiscovery, false);
+  assert.equal(sanitized.proPolicy, 'disabled');
+  assert.equal(sanitized.proModelConfigured, false);
+  assert.equal(Object.prototype.hasOwnProperty.call(sanitized, 'proModelAllowed'), false);
   assert.equal(text.includes('super-secret-api-key'), false);
 });
 
-test('scheduled runs reject configured Pro models by default', () => {
-  assert.throws(
-    () => readRuntimeConfig({
-      GEMINI_MODEL: 'gemini-2.5-flash',
-      GEMINI_FALLBACK_MODELS: 'gemini-2.5-pro',
-      GITHUB_EVENT_NAME: 'schedule'
-    }),
-    /Gemini Pro models require explicit manual escalation/
-  );
+test('deprecated Pro policy environment variables are rejected', () => {
+  for (const key of [
+    'NEWSROOM_ALLOW_PRO_ON_SCHEDULE',
+    'NEWSROOM_ALLOW_PRO_ON_MANUAL',
+    'NEWSROOM_PRO_ESCALATION'
+  ]) {
+    assert.throws(
+      () => readRuntimeConfig({ [key]: key === 'NEWSROOM_PRO_ESCALATION' ? 'manual' : 'true' }),
+      new RegExp(`Gemini Pro policy settings are no longer supported; remove: ${key}`)
+    );
+  }
+
+  const result = validateRuntimeConfig({
+    ...DEFAULT_RUNTIME_CONFIG,
+    newsroomAllowProOnManual: true
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /newsroomAllowProOnManual/);
 });
 
-test('stage-specific Pro models require explicit manual escalation', () => {
-  assert.throws(
-    () => readRuntimeConfig({
-      NEWSROOM_EDITOR_MODEL: 'gemini-2.5-pro',
-      GITHUB_EVENT_NAME: 'workflow_dispatch',
-      NEWSROOM_ALLOW_PRO_ON_MANUAL: 'false'
-    }),
-    /Gemini Pro models require explicit manual escalation/
-  );
+test('Gemini Pro model names are rejected across public model config surfaces', () => {
+  const cases = [
+    { LLM_MODEL: 'gemini-2.5-pro' },
+    { GEMINI_MODEL: 'gemini-2.5-pro' },
+    { LLM_FALLBACK_MODELS: 'gemini-2.5-pro' },
+    { GEMINI_FALLBACK_MODELS: 'gemini-2.5-pro' },
+    { NEWSROOM_REPORTER_MODEL: 'gemini-2.5-pro' },
+    { NEWSROOM_EDITOR_MODEL: 'gemini-2.5-pro' },
+    { NEWSROOM_FACTCHECK_MODEL: 'gemini-2.5-pro' },
+    { NEWSROOM_REPAIR_MODEL: 'gemini-2.5-pro' },
+    { NEWSROOM_JUDGE_MODEL: 'gemini-2.5-pro' },
+    {
+      LLM_PROVIDER: 'internal',
+      LLM_MODEL: 'gemini-2.5-pro',
+      INTERNAL_LLM_API_KEY: 'internal-test-key',
+      INTERNAL_LLM_ENDPOINT: 'https://internal.example.test/llm'
+    }
+  ];
 
-  const config = readRuntimeConfig({
-    NEWSROOM_EDITOR_MODEL: 'gemini-2.5-pro',
-    GITHUB_EVENT_NAME: 'workflow_dispatch',
-    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
-  });
-
-  assert.equal(config.llmStageModels.editor, 'gemini-2.5-pro');
-  assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, true);
-  assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, true);
+  for (const env of cases) {
+    assert.throws(
+      () => readRuntimeConfig(env),
+      /Gemini Pro models are disabled; configured Pro model\(s\): gemini-2\.5-pro/
+    );
+  }
 });
 
-test('manual workflow dispatch allows Pro only when explicitly enabled', () => {
-  assert.throws(
-    () => readRuntimeConfig({
-      GEMINI_MODEL: 'gemini-2.5-flash',
-      GEMINI_FALLBACK_MODELS: 'gemini-2.5-pro',
-      GITHUB_EVENT_NAME: 'workflow_dispatch',
-      NEWSROOM_ALLOW_PRO_ON_MANUAL: 'false'
-    }),
-    /Gemini Pro models require explicit manual escalation/
-  );
-
+test('non-Pro model routing remains stage-specific without Pro fallback append', () => {
   const config = readRuntimeConfig({
-    GEMINI_MODEL: 'gemini-2.5-flash',
-    GEMINI_FALLBACK_MODELS: 'gemini-2.5-pro',
-    GITHUB_EVENT_NAME: 'workflow_dispatch',
-    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
+    LLM_PROVIDER: 'gemini',
+    NEWSROOM_EDITOR_MODEL: 'gemini-3.5-flash',
+    NEWSROOM_REPAIR_MODEL: 'gemini-3.5-flash',
+    NEWSROOM_JUDGE_MODEL: 'gemini-2.5-flash-lite'
   });
 
-  assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-pro']);
-  assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, true);
-  assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, true);
-});
-
-test('manual workflow allow_pro does not append Pro without explicit model selection', () => {
-  const config = readRuntimeConfig({
-    GEMINI_MODEL: 'gemini-2.5-flash',
-    GITHUB_EVENT_NAME: 'workflow_dispatch',
-    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
-  });
-
-  assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-3.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'editor completion attempt 1/2'), ['gemini-3.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'public article judge repair'), ['gemini-2.5-flash-lite']);
   assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, false);
-  assert.equal(sanitizeRuntimeConfig(config).proModelAllowed, false);
-});
-
-test('manual Pro model policy dedupes and does not apply to schedule or internal providers', () => {
-  const manualGemini = readRuntimeConfig({
-    GEMINI_MODEL: 'gemini-2.5-flash',
-    GEMINI_FALLBACK_MODELS: 'gemini-2.5-pro',
-    GITHUB_EVENT_NAME: 'workflow_dispatch',
-    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
-  });
-  assert.deepEqual(configuredModels(manualGemini), ['gemini-2.5-flash', 'gemini-2.5-pro']);
-
-  const scheduledGemini = readRuntimeConfig({
-    GITHUB_EVENT_NAME: 'schedule',
-    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true'
-  });
-  assert.deepEqual(configuredModels(scheduledGemini), ['gemini-2.5-flash', 'gemini-3.5-flash', 'gemini-2.5-flash-lite']);
-
-  const internal = readRuntimeConfig({
-    LLM_PROVIDER: 'internal',
-    LLM_MODEL: 'internal-model',
-    GITHUB_EVENT_NAME: 'workflow_dispatch',
-    NEWSROOM_ALLOW_PRO_ON_MANUAL: 'true',
-    INTERNAL_LLM_API_KEY: 'internal-test-key',
-    INTERNAL_LLM_ENDPOINT: 'https://internal.example.test/llm'
-  }, { requireLlmCredentials: true });
-  assert.deepEqual(configuredModels(internal), ['internal-model']);
 });

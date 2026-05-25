@@ -23,6 +23,11 @@ const LLM_STAGE_MODEL_ENV_KEYS = Object.freeze({
   repair: 'NEWSROOM_REPAIR_MODEL',
   judge: 'NEWSROOM_JUDGE_MODEL'
 });
+const PRO_DISABLED_ENV_KEYS = Object.freeze([
+  'NEWSROOM_ALLOW_PRO_ON_SCHEDULE',
+  'NEWSROOM_ALLOW_PRO_ON_MANUAL',
+  'NEWSROOM_PRO_ESCALATION'
+]);
 const LINKED_EVIDENCE_MODES = Object.freeze({
   EXTRACT_ONLY: 'extract_only',
   RESOLVE_ALLOWED_OFFICIAL_LINKS: 'resolve_allowed_official_links',
@@ -62,9 +67,6 @@ const DEFAULT_RUNTIME_CONFIG = {
   newsroomMaxSectionRepairs: 1,
   newsroomWarnCostUsd: 0.15,
   newsroomMaxCostUsd: 0.25,
-  newsroomAllowProOnSchedule: false,
-  newsroomAllowProOnManual: false,
-  newsroomProEscalation: 'manual',
   geminiThinkingBudgetReporter: 0,
   geminiThinkingBudgetEditor: 512,
   geminiThinkingBudgetRepair: 0,
@@ -180,6 +182,10 @@ function isProModel(value) {
   return isGeminiProModel(value);
 }
 
+function deprecatedProEnvKeys(env) {
+  return PRO_DISABLED_ENV_KEYS.filter(key => Object.prototype.hasOwnProperty.call(env, key));
+}
+
 function globalModelSource(env) {
   if (envText(env, 'LLM_MODEL')) return 'LLM_MODEL';
   if (envText(env, 'GEMINI_MODEL')) return 'GEMINI_MODEL';
@@ -287,17 +293,7 @@ function readRuntimeConfig(env = process.env, options = {}) {
       'NEWSROOM_MAX_COST_USD',
       { min: 0 }
     ),
-    newsroomAllowProOnSchedule: parseBoolean(
-      envValue(env, 'NEWSROOM_ALLOW_PRO_ON_SCHEDULE', DEFAULT_RUNTIME_CONFIG.newsroomAllowProOnSchedule),
-      'NEWSROOM_ALLOW_PRO_ON_SCHEDULE',
-      { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomAllowProOnSchedule }
-    ),
-    newsroomAllowProOnManual: parseBoolean(
-      envValue(env, 'NEWSROOM_ALLOW_PRO_ON_MANUAL', DEFAULT_RUNTIME_CONFIG.newsroomAllowProOnManual),
-      'NEWSROOM_ALLOW_PRO_ON_MANUAL',
-      { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomAllowProOnManual }
-    ),
-    newsroomProEscalation: String(envValue(env, 'NEWSROOM_PRO_ESCALATION', DEFAULT_RUNTIME_CONFIG.newsroomProEscalation) || '').trim(),
+    deprecatedProEnvKeys: deprecatedProEnvKeys(env),
     geminiThinkingBudgetReporter: parseInteger(
       envValue(env, 'GEMINI_THINKING_BUDGET_REPORTER', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetReporter),
       'GEMINI_THINKING_BUDGET_REPORTER',
@@ -478,14 +474,17 @@ function validateRuntimeConfig(config, options = {}) {
   if (!Number.isFinite(Number(config.newsroomMaxCostUsd)) || Number(config.newsroomMaxCostUsd) < 0) {
     errors.push('NEWSROOM_MAX_COST_USD must be a number >= 0.');
   }
-  if (typeof config.newsroomAllowProOnSchedule !== 'boolean') {
-    errors.push('NEWSROOM_ALLOW_PRO_ON_SCHEDULE must be true or false.');
-  }
-  if (typeof config.newsroomAllowProOnManual !== 'boolean') {
-    errors.push('NEWSROOM_ALLOW_PRO_ON_MANUAL must be true or false.');
-  }
-  if (!String(config.newsroomProEscalation || '').trim()) {
-    errors.push('NEWSROOM_PRO_ESCALATION must be non-empty.');
+  const deprecatedProKeys = [
+    ...PRO_DISABLED_ENV_KEYS.filter(key => Object.prototype.hasOwnProperty.call(config, key)),
+    ...(Array.isArray(config.deprecatedProEnvKeys) ? config.deprecatedProEnvKeys : []),
+    ...[
+      'newsroomAllowProOnSchedule',
+      'newsroomAllowProOnManual',
+      'newsroomProEscalation'
+    ].filter(key => Object.prototype.hasOwnProperty.call(config, key))
+  ];
+  if (deprecatedProKeys.length > 0) {
+    errors.push(`Gemini Pro policy settings are no longer supported; remove: ${[...new Set(deprecatedProKeys)].join(', ')}.`);
   }
   for (const [field, name] of [
     [config.geminiThinkingBudgetReporter, 'GEMINI_THINKING_BUDGET_REPORTER'],
@@ -544,14 +543,9 @@ function validateRuntimeConfig(config, options = {}) {
     errors.push('NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY must be true or false.');
   }
   const configuredModels = configuredModelList(config);
-  const proModels = config.llmProvider === 'gemini' ? configuredModels.filter(isProModel) : [];
+  const proModels = configuredModels.filter(isProModel);
   if (proModels.length > 0) {
-    const eventName = String(config.githubEventName || '').trim();
-    const allowScheduled = eventName === 'schedule' && config.newsroomAllowProOnSchedule === true;
-    const allowManual = eventName === 'workflow_dispatch' && config.newsroomAllowProOnManual === true;
-    if (!allowScheduled && !allowManual) {
-      errors.push(`Gemini Pro models require explicit manual escalation; configured Pro model(s): ${proModels.join(', ')}.`);
-    }
+    errors.push(`Gemini Pro models are disabled; configured Pro model(s): ${proModels.join(', ')}.`);
   }
   if (options.requireGeminiApiKey && config.llmProvider === 'gemini' && !config.geminiApiKeyConfigured) {
     errors.push('GEMINI_API_KEY must be configured for Gemini newsroom generation.');
@@ -602,9 +596,6 @@ function sanitizeRuntimeConfig(config) {
     newsroomMaxSectionRepairs: config.newsroomMaxSectionRepairs,
     newsroomWarnCostUsd: config.newsroomWarnCostUsd,
     newsroomMaxCostUsd: config.newsroomMaxCostUsd,
-    newsroomAllowProOnSchedule: config.newsroomAllowProOnSchedule,
-    newsroomAllowProOnManual: config.newsroomAllowProOnManual,
-    newsroomProEscalation: config.newsroomProEscalation,
     geminiThinkingBudgetReporter: config.geminiThinkingBudgetReporter,
     geminiThinkingBudgetEditor: config.geminiThinkingBudgetEditor,
     geminiThinkingBudgetRepair: config.geminiThinkingBudgetRepair,
@@ -623,11 +614,8 @@ function sanitizeRuntimeConfig(config) {
     internalLlmEndpointConfigured: Boolean(String(config.internalLlmEndpoint || '').trim()),
     internalLlmApiVersion: config.internalLlmApiVersion,
     githubEventName: config.githubEventName,
-    proModelConfigured: config.llmProvider === 'gemini' && configuredModelList(config).some(isProModel),
-    proModelAllowed: config.llmProvider === 'gemini' && configuredModelList(config).some(isProModel)
-      ? (config.githubEventName === 'schedule' && config.newsroomAllowProOnSchedule === true) ||
-        (config.githubEventName === 'workflow_dispatch' && config.newsroomAllowProOnManual === true)
-      : false,
+    proPolicy: 'disabled',
+    proModelConfigured: configuredModelList(config).some(isProModel),
     geminiApiKeyConfigured: Boolean(config.geminiApiKeyConfigured),
     internalLlmApiKeyConfigured: Boolean(config.internalLlmApiKeyConfigured)
   };
@@ -637,6 +625,7 @@ module.exports = {
   DEFAULT_RUNTIME_CONFIG,
   DEFAULT_LLM_STAGE_MODELS,
   LLM_STAGE_MODEL_ENV_KEYS,
+  PRO_DISABLED_ENV_KEYS,
   CANDIDATE_INPUT_MODE_VALUES,
   LINKED_EVIDENCE_MODES,
   LINKED_EVIDENCE_MODE_VALUES,

@@ -30,6 +30,8 @@ Stage별 primary model은 `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `N
 
 `LLM_PROVIDER=gemini`일 때는 `INTERNAL_LLM_API_KEY`와 `INTERNAL_LLM_ENDPOINT`를 요구하지 않습니다. `LLM_PROVIDER=internal`일 때만 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, explicit `LLM_MODEL`을 필수로 검증합니다. internal provider를 code default provider로 승격하는 작업은 별도 PR에서 `DEFAULT_RUNTIME_CONFIG`와 validation rule을 함께 수정해야 합니다.
 
+Gemini Pro 계열 모델명은 사용하지 않습니다. `LLM_MODEL`, `GEMINI_MODEL`, `LLM_FALLBACK_MODELS`, `GEMINI_FALLBACK_MODELS`, `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `NEWSROOM_FACTCHECK_MODEL`, `NEWSROOM_REPAIR_MODEL`, `NEWSROOM_JUDGE_MODEL`에 Gemini Pro 계열 모델명이 들어오면 provider와 관계없이 `doctor:config` / runtime validation이 실패합니다.
+
 ## Variable
 
 아래 값은 runtime config가 읽는 운영 설정입니다. provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 결정됩니다.
@@ -40,8 +42,8 @@ Stage 1 workflow는 후보 수집 전에 `npm run doctor:config -- --no-llm-cred
 | 이름 | 필수 | 현재 기본값 | 의미 | 변경해도 되는 상황 | 위험/주의 |
 | --- | --- | --- | --- | --- | --- |
 | `GEMINI_MODEL` | 선택 | `gemini-2.5-flash` | `LLM_MODEL`이 없을 때 유지되는 Gemini model compatibility alias입니다. | 로컬 실행이나 legacy env에서 Gemini 모델을 명시해야 할 때만 사용합니다. 기본값 변경은 code default에서 합니다. | current scheduled Stage 1은 LLM을 실행하지 않으므로 기본 provider/model 변경 경로가 아닙니다. alias나 preview/latest 계열로 무심코 바꾸면 Stage 3 manual final generation의 결과 재현성과 운영 안정성이 떨어질 수 있습니다. |
-| `GEMINI_FALLBACK_MODELS` | 선택 | `gemini-2.5-flash-lite` | `LLM_FALLBACK_MODELS`가 없을 때 유지되는 Gemini fallback compatibility alias입니다. | 로컬 실행이나 legacy env에서 Gemini fallback 순서를 명시해야 할 때만 사용합니다. 기본값 변경은 code default에서 합니다. | current scheduled Stage 1은 LLM을 실행하지 않으므로 기본 fallback 변경 경로가 아닙니다. Pro는 manual escalation(수동 승격)으로만 허용합니다. 너무 약한 모델은 JSON 품질이나 editorial 품질을 떨어뜨릴 수 있습니다. |
-| `NEWSROOM_REPORTER_MODEL` | 선택 | `gemini-2.5-flash` | reporter 및 background-context stage의 primary model override입니다. | reporter JSON tagging이나 배경 설명 품질을 특정 모델로 검증해야 할 때만 변경합니다. | `LLM_MODEL` 또는 `GEMINI_MODEL`이 있으면 이 값은 무시됩니다. Pro 계열 모델은 manual Pro 정책을 통과해야 합니다. |
+| `GEMINI_FALLBACK_MODELS` | 선택 | `gemini-2.5-flash-lite` | `LLM_FALLBACK_MODELS`가 없을 때 유지되는 Gemini fallback compatibility alias입니다. | 로컬 실행이나 legacy env에서 Gemini fallback 순서를 명시해야 할 때만 사용합니다. 기본값 변경은 code default에서 합니다. | current scheduled Stage 1은 LLM을 실행하지 않으므로 기본 fallback 변경 경로가 아닙니다. Gemini Pro 계열 모델명은 validation error입니다. 너무 약한 모델은 JSON 품질이나 editorial 품질을 떨어뜨릴 수 있습니다. |
+| `NEWSROOM_REPORTER_MODEL` | 선택 | `gemini-2.5-flash` | reporter 및 background-context stage의 primary model override입니다. | reporter JSON tagging이나 배경 설명 품질을 특정 모델로 검증해야 할 때만 변경합니다. | `LLM_MODEL` 또는 `GEMINI_MODEL`이 있으면 이 값은 무시됩니다. Gemini Pro 계열 모델명은 validation error입니다. |
 | `NEWSROOM_EDITOR_MODEL` | 선택 | `gemini-3.5-flash` | editor stage의 primary model override입니다. | 최종 기사 표현 품질을 검증하기 위해 editor model만 조정해야 할 때 변경합니다. | editor가 더 좋은 문장을 써도 source binding, source gap, dated evidence, forbidden bucket gate를 우회할 수 없습니다. |
 | `NEWSROOM_FACTCHECK_MODEL` | 선택 | `gemini-2.5-flash` | fact-check 및 fact-checker repair/completion stage의 primary model override입니다. | fact-check artifact가 명백한 source/evidence 문제를 놓친 경우에만 조정합니다. | fact-checker는 새 글 작성 stage가 아니라 structured violation detection stage입니다. deterministic validator가 최종 방어선입니다. |
 | `NEWSROOM_REPAIR_MODEL` | 선택 | `gemini-3.5-flash` | semantic repair, editor repair, editor completion stage의 primary model override입니다. | repair가 좋은 draft를 보존하면서 실패 section만 보완해야 하는 경우 model을 비교 검증할 때 변경합니다. | repair는 source gap을 사실로 만들거나 품질 gate를 우회하는 단계가 아닙니다. 실패 artifact를 보존해야 합니다. |
@@ -59,9 +61,6 @@ Stage 1 workflow는 후보 수집 전에 `npm run doctor:config -- --no-llm-cred
 | `NEWSROOM_MAX_SECTION_REPAIRS` | 선택 | `1` | quality retry 한 번에서 repair 또는 replace를 요청할 section 수를 제한합니다. 기본값은 실패 section 1개만 고칩니다. | 특정 주차에서 여러 독립 section이 같은 원인으로 실패했고 artifact 검토 후 추가 repair가 비용 대비 유효하다고 판단될 때 변경합니다. | 값을 높이면 LLM prompt와 비용이 늘어납니다. source gap article은 rewrite로 통과시키지 말고 demote 또는 replace해야 합니다. |
 | `NEWSROOM_WARN_COST_USD` | 선택 | `0.15` | Gemini usage metadata 기반 추정 비용이 이 값을 넘으면 workflow log와 cost report(비용 리포트)에 warning을 남깁니다. | 실제 생성 비용을 관찰하면서 알림 기준을 조정할 때 변경합니다. | 현재 운영 기준 warning-only입니다. 값을 낮게 잡아도 생성이나 발행 gate를 실패시키지 않습니다. |
 | `NEWSROOM_MAX_COST_USD` | 선택 | `0.25` | Gemini usage metadata 기반 추정 비용의 운영 상한 참고값입니다. | 실제 비용 분포를 보고 hard gate 전환 여부를 검토할 때 변경합니다. | 현재 운영 기준 초과해도 실패하지 않고 warning만 남깁니다. 품질 gate나 publish readiness와 독립입니다. |
-| `NEWSROOM_ALLOW_PRO_ON_SCHEDULE` | 선택 | `false` | future scheduled final-generation workflow가 다시 도입될 때 Pro 계열 모델 사용을 허용할지 결정하는 방어적 정책 값입니다. 현재 scheduled Stage 1 workflow는 LLM을 실행하지 않으므로 이 값을 사용하지 않습니다. | scheduled final generation을 별도 PR로 재도입하고 비용 증가를 명시적으로 감수할 때만 변경합니다. | 현 운영에서 Pro 사용은 manual Stage 3 workflow에서 explicit Pro model과 `allow_pro=true`를 함께 지정할 때만 허용합니다. |
-| `NEWSROOM_ALLOW_PRO_ON_MANUAL` | 선택 | `false` | manual `workflow_dispatch` 실행에서 Pro 계열 모델 사용을 허용할지 결정합니다. Stage 3 manual workflow의 기본 입력은 `allow_pro=false`, `llm_model=""`이며, code default stage model을 primary로 사용하고 Pro를 호출하지 않습니다. 모든 stage primary를 Pro로 승격하려면 `llm_model=gemini-2.5-pro`와 `allow_pro=true`를 함께 명시합니다. | 편집자가 manual high-quality run(수동 고품질 실행)에서 Pro 비용을 명시적으로 승인했을 때만 `true`가 됩니다. | workflow YAML은 fallback model list를 조합하지 않습니다. JS model policy는 Pro fallback을 자동으로 추가하지 않으며, `workflow_dispatch`, 이 값 `true`, `LLM_PROVIDER=gemini`, explicit Pro model 조건을 모두 만족할 때만 Pro 사용을 허용합니다. |
-| `NEWSROOM_PRO_ESCALATION` | 선택 | `manual` | Pro 사용 정책을 cost report와 log에 표시하기 위한 escalation label입니다. | 운영 정책 이름을 문서화해야 할 때 변경합니다. | 정책 표시용 값이며, Pro 허용 여부는 `NEWSROOM_ALLOW_PRO_ON_*` 값과 workflow event로 결정됩니다. |
 | `NEWSROOM_LINKED_EVIDENCE_MODE` | 선택 | `extract_only` | linked evidence resolver mode입니다. `extract_only`, `resolve_allowed_official_links`, `offline_fixture_test`만 허용합니다. | 공식 source link resolve를 제한적으로 실험할 때만 `resolve_allowed_official_links`로 변경합니다. fixture test는 injected fetch client가 있는 테스트에서만 사용합니다. | 기본값은 network-off입니다. 이 값을 바꿔도 Event Bundle, scoring boost, publish gate 우회가 활성화되면 안 됩니다. |
 | `NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE` | 선택 | `8` | candidate 하나에서 network resolve를 시도할 최대 linked evidence 수입니다. | 공식 링크가 많은 source에서 diagnostic 비용과 시간을 제한해야 할 때 조정합니다. | 초과 링크는 실패가 아니라 `skipped` diagnostics로 남습니다. 값을 높이면 workflow 시간이 길어질 수 있습니다. |
 | `NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN` | 선택 | `40` | newsroom run 전체에서 network resolve를 시도할 최대 linked evidence 수입니다. | 한 주차에 candidate가 많아 resolve 시도가 과도할 때 상한을 조정합니다. | 초과 링크는 fetch하지 않습니다. publication score나 HAL impact를 추정하는 근거로 쓰면 안 됩니다. |
@@ -73,7 +72,7 @@ Stage 1 workflow는 후보 수집 전에 `npm run doctor:config -- --no-llm-cred
 
 ## Tradeoff 검토 기준
 
-- 비용: retry 횟수, fallback 모델 수, Pro 계열 모델 사용이 늘수록 Stage 3 manual final generation 비용이 증가할 수 있습니다. 기본 fallback은 Flash-Lite까지만 허용하고, Pro 계열은 manual Stage 3에서 `llm_model` 또는 explicit fallback으로 선택하고 `allow_pro=true`로 승인할 때만 사용합니다.
+- 비용: retry 횟수, fallback 모델 수, thinking budget이 늘수록 Stage 3 manual final generation 비용이 증가할 수 있습니다. Gemini Pro 계열 모델명은 운영 경로에서 validation error로 차단합니다.
 - 품질: 더 강한 모델이나 quality retry는 품질을 올릴 수 있지만, source gap이 있는 후보를 사실로 만들 수는 없습니다.
 - 시간: retry delay와 retry 횟수가 늘수록 PR 생성 시간이 길어집니다.
 

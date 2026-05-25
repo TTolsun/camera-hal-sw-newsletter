@@ -2,7 +2,6 @@ const { GoogleGenAI } = require('@google/genai');
 const { TOKENS_PER_MILLION, number, roundUsd } = require('../llm-cost');
 const {
   configuredModelsForStage,
-  geminiProPolicySummary,
   isGeminiProModel
 } = require('../model-policy');
 
@@ -13,16 +12,6 @@ const PRICE_TABLE = [
     inputUsdPerMillion: 1.5,
     outputUsdPerMillion: 9,
     cachedInputUsdPerMillion: 0.15
-  },
-  {
-    match: /^gemini-2\.5-pro\b/i,
-    inputUsdPerMillion: 1.25,
-    inputUsdPerMillionLargePrompt: 2.5,
-    outputUsdPerMillion: 10,
-    outputUsdPerMillionLargePrompt: 15,
-    cachedInputUsdPerMillion: 0.125,
-    cachedInputUsdPerMillionLargePrompt: 0.25,
-    largePromptThresholdTokens: 200000
   },
   {
     match: /^gemini-2\.5-flash-lite\b/i,
@@ -149,15 +138,8 @@ function thinkingBudgetForStage(stage, config) {
   return 0;
 }
 
-function thinkingConfigForStage(stage, modelName, config) {
+function thinkingConfigForStage(stage, config) {
   const requested = thinkingBudgetForStage(stage, config);
-  if (isGeminiProModel(modelName) && requested === 0) {
-    return {
-      requested,
-      applied: null,
-      note: 'Gemini Pro may not support disabling thinking; thinkingConfig omitted for requested budget 0.'
-    };
-  }
   return {
     requested,
     applied: requested,
@@ -179,7 +161,7 @@ function apiVersionForModel() {
 }
 
 function buildGeminiRequest({ model, stage, systemInstruction, prompt, responseSchema, config }) {
-  const thinkingBudget = thinkingConfigForStage(stage, model, config);
+  const thinkingBudget = thinkingConfigForStage(stage, config);
   const requestConfig = {
     systemInstruction,
     ...schemaConfig(responseSchema)
@@ -242,7 +224,9 @@ module.exports = {
 
   missingCredentialMessage: 'Missing GEMINI_API_KEY. Add it in GitHub repository Settings > Secrets and variables > Actions.',
 
-  proPolicySummary: geminiProPolicySummary,
+  proPolicySummary() {
+    return { status: 'disabled' };
+  },
 
   async execute({ context, request }) {
     return context.ai.models.generateContent(request);
@@ -256,9 +240,9 @@ module.exports = {
 
   usageMetadataFromResponse,
 
-  warnModelSelection(stage, modelName, config) {
+  warnModelSelection(stage, modelName) {
     if (isGeminiProModel(modelName)) {
-      console.warn(`[${stage}] Gemini Pro model selected through ${config.newsroomProEscalation || 'manual'} escalation policy: ${modelName}.`);
+      console.warn(`[${stage}] Gemini Pro model selected despite disabled policy: ${modelName}.`);
     }
   }
 };

@@ -91,9 +91,6 @@ function buildCostReport({
     if (call.usage_metadata_present === false) {
       warnings.push(`No usage metadata for ${call.stage || 'unknown'} using ${call.model || 'unknown'}.`);
     }
-    if (call.provider === 'gemini' && call.pro_model === true && call.thinking_budget_requested === 0 && call.thinking_budget_applied === null) {
-      warnings.push(`Gemini Pro call ${call.stage || 'unknown'} did not apply thinkingBudget=0 because Pro may not support disabling thinking.`);
-    }
   }
   const finalTotals = finalizeCostTotals(totals);
   if (warnCostUsd > 0 && finalTotals.estimated_cost_usd >= warnCostUsd) {
@@ -104,7 +101,7 @@ function buildCostReport({
   }
   const proCalls = ensureArray(calls).filter(call => call.provider === 'gemini' && call.pro_model === true);
   if (proCalls.length > 0) {
-    warnings.push(`Gemini Pro was used in ${proCalls.length} call(s); escalation=${proPolicy?.escalation || 'unknown'}.`);
+    warnings.push(`Gemini Pro model call recorded in ${proCalls.length} call(s) while Pro policy is disabled.`);
   }
   return {
     schema_version: 1,
@@ -149,6 +146,7 @@ function buildCostReportMarkdown(report) {
   ].join('|')).join('\n') || '| none | none | none | none | none | none | none | none | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no | 0.000000 |';
   const warnings = ensureArray(report.warnings).map(item => `- ${item}`).join('\n') || '- none';
   const proPolicy = report.pro_policy || {};
+  const proPolicyStatus = proPolicy.status || 'n/a';
   return `# LLM cost report - ${report.date || 'unknown'}
 
 ## Summary
@@ -157,9 +155,7 @@ function buildCostReportMarkdown(report) {
 - Pricing source: ${report.pricing_source || 'n/a'}
 - Warning threshold USD: ${report.warning_threshold_usd}
 - Max threshold USD: ${report.max_threshold_usd}
-- Pro escalation: ${proPolicy.escalation || 'n/a'}
-- Pro model configured: ${proPolicy.pro_model_configured === true ? 'yes' : 'no'}
-- Pro model allowed: ${proPolicy.pro_model_allowed === true ? 'yes' : 'no'}
+- Pro policy: ${proPolicyStatus}
 - Request count: ${totals.request_count || 0}
 - Prompt tokens: ${totals.prompt_tokens || 0}
 - Output tokens: ${totals.output_tokens || 0}
