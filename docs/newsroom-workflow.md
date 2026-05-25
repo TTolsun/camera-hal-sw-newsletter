@@ -253,6 +253,8 @@ workflow는 `main`에 직접 push하지 않고 RAW candidate 검토용 PR을 만
 - `Newsroom 02 - Gemini Source Discovery PR` (`.github/workflows/02-newsroom-gemini-source-discovery-pr.yml`): `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`에서는 credential-free disabled pass-through로 `merged-candidates.json`을 만듭니다. `true`에서는 LLM credential preflight 뒤 Gemini proposal을 `gemini-source-proposals.json`에 저장하고, deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영합니다.
 - `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`): `NEWSROOM_CANDIDATE_INPUT_MODE=artifact`로 approved candidate artifact만 읽고 `collect`를 재실행하지 않습니다.
 
+Stage 2/3 manual run의 `newsletter_date`는 optional입니다. 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve되며, resolved date는 workflow log에 출력됩니다.
+
 Stage 1/3 smoke가 통과하기 전에는 새 Stage 1 schedule을 활성화하지 않습니다. cutover PR에서 기존 all-in-one schedule을 제거한 뒤 새 Stage 1 RAW workflow schedule을 활성화합니다.
 
 ### Secret
@@ -288,7 +290,7 @@ NEWSROOM_PRO_ESCALATION=manual
 
 ### 수동 Final Generation 실행
 
-GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다. 기본 수동 실행은 `allow_pro=false`, `llm_model=""`로 동작하며 code default stage model을 primary로 사용합니다. 모든 stage primary를 Pro로 승격해야 할 때만 `llm_model=gemini-2.5-pro`를 명시하고 `allow_pro=true`로 바꿉니다.
+GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`는 optional이며, 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve됩니다. 특정 날짜를 재생성하려면 `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다. 기본 수동 실행은 `allow_pro=false`, `llm_model=""`로 동작하며 code default stage model을 primary로 사용합니다. 모든 stage primary를 Pro로 승격해야 할 때만 `llm_model=gemini-2.5-pro`를 명시하고 `allow_pro=true`로 바꿉니다.
 
 ## Editor-in-Chief Review
 

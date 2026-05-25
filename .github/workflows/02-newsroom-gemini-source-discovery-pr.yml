@@ -4,8 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       newsletter_date:
-        description: "Newsletter date in YYYY-MM-DD."
-        required: true
+        description: "Newsletter date in YYYY-MM-DD. Empty means today in KST."
+        required: false
+        default: ""
         type: string
       enable_gemini_source_discovery:
         description: "Enable #149 Gemini source discovery engine."
@@ -22,7 +23,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: newsroom-source-discovery-${{ github.event.inputs.newsletter_date }}
+  group: newsroom-source-discovery-${{ github.event.inputs.newsletter_date || 'auto-kst-today' }}
   cancel-in-progress: false
 
 jobs:
@@ -38,6 +39,28 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Resolve newsletter date
+        id: resolve-newsletter-date
+        env:
+          INPUT_NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
+        run: |
+          set -euo pipefail
+
+          DATE="${INPUT_NEWSLETTER_DATE:-}"
+          if [ -z "$DATE" ]; then
+            DATE="$(TZ=Asia/Seoul date +%F)"
+          fi
+
+          if ! [[ "$DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "newsletter_date must be YYYY-MM-DD: $DATE"
+            exit 1
+          fi
+
+          echo "Newsletter date in YYYY-MM-DD. Empty means today in KST."
+          echo "Resolved newsletter date: $DATE"
+          echo "NEWSLETTER_DATE=$DATE" >> "$GITHUB_ENV"
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -84,27 +107,27 @@ jobs:
         with:
           name: newsroom-source-discovery-debug-${{ github.run_id }}
           path: |
-            content/collected-news/${{ env.NEWSLETTER_DATE }}/gemini-candidates.json
-            content/collected-news/${{ env.NEWSLETTER_DATE }}/seed-candidates.json
-            content/collected-news/${{ env.NEWSLETTER_DATE }}/seed-evidence-pack.json
-            content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidates.json
-            content/collected-news/${{ env.NEWSLETTER_DATE }}/merged-candidate-manifest.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-fetch-report.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-fetch-report.md
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-evidence-pack.md
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-merge-report.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/seed-merge-report.md
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposals.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-proposal-validation-report.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-usage-report.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/extracted-source-facts.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-quality-report.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-quality-report.md
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-clusters.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/evidence-validation-report.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-discovery-feedback-report.json
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/source-discovery-feedback-report.md
-            content/newsroom/${{ env.NEWSLETTER_DATE }}/gemini-source-discovery-report.md
+            content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-candidates.json
+            content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/seed-candidates.json
+            content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/seed-evidence-pack.json
+            content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/merged-candidates.json
+            content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/merged-candidate-manifest.json
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-fetch-report.json
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-fetch-report.md
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-evidence-pack.md
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-merge-report.json
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-merge-report.md
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-proposals.json
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-proposal-validation-report.json
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-usage-report.json
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/extracted-source-facts.json
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-quality-report.json
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-quality-report.md
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-clusters.json
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/evidence-validation-report.json
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-discovery-feedback-report.json
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-discovery-feedback-report.md
+            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-discovery-report.md
           if-no-files-found: warn
           retention-days: 14
 
@@ -137,9 +160,9 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: "Merge Camera HAL candidate artifacts ${{ env.NEWSLETTER_DATE }}"
-          branch: newsroom-source-discovery/${{ env.NEWSLETTER_DATE }}
+          commit-message: "Merge Camera HAL candidate artifacts ${{ steps.resolve-newsletter-date.outputs.date }}"
+          branch: newsroom-source-discovery/${{ steps.resolve-newsletter-date.outputs.date }}
           delete-branch: true
-          title: "[Newsroom Source Discovery] Candidate boundary - ${{ env.NEWSLETTER_DATE }}"
+          title: "[Newsroom Source Discovery] Candidate boundary - ${{ steps.resolve-newsletter-date.outputs.date }}"
           body: ${{ steps.pr-body.outputs.body }}
           labels: newsletter,aosp-camera,source-discovery
