@@ -142,11 +142,6 @@
       }${hiddenTagChip}</div>`;
     };
 
-    const renderHomepageBadge = issue => {
-      if (!issue || !issue.homepage_badge) return '';
-      return `<span class="status-chip">${escapeHtml(issue.homepage_badge)}</span>`;
-    };
-
     const renderIssueActions = (issue, primaryLabel = '기사 보기', mdLabel = 'Markdown') => {
       const htmlLink = issue.html
         ? `<a class="button button-primary" href="${escapeHtml(issue.html)}">${primaryLabel}</a>`
@@ -333,7 +328,6 @@
           <article class="archive-card">
             <div class="card-meta archive-card-meta">
               <span class="issue-date">${escapeHtml(item.date)}</span>
-              ${renderHomepageBadge(item)}
             </div>
             ${renderArchiveTags(item.tags)}
             <h3 class="card-title clamp-2">${escapeHtml(item.title)}</h3>
