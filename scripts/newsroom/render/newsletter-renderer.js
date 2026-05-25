@@ -423,7 +423,7 @@ function buildPublicHtml(issue) {
   <link rel="stylesheet" href="../../css/styles.css" />
   <script src="../../assets/js/site-header.js" defer></script>
 </head>
-<body>
+<body class="newsletter-issue-page">
   <header class="site-header" data-site-header data-site-root="../../"></header>
 
   <main class="article-page">

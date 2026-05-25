@@ -8,19 +8,31 @@
   <link rel="stylesheet" href="css/styles.css" />
   <script src="assets/js/site-header.js" defer></script>
 </head>
-<body>
-  <header class="site-header" data-site-header></header>
+<body class="homepage">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="index.html" aria-label="Camera HAL / SW Newsletter">
+        <span>Camera HAL</span>
+        <span class="brand-subtitle">SW Newsletter</span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="#latest">Latest</a>
+        <a href="#archive">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
 
   <main class="site-main">
     <section class="site-hero content-wrap" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow">CAMERA HAL SW NEWSLETTER</p>
+        <p class="eyebrow">Camera HAL - Android - Driver - AI</p>
         <h1 id="hero-title">
-          <span class="hero-title-line hero-title-main">AOSP Camera</span>
-          <span class="hero-title-line">Newsletters</span>
+          <span class="hero-title-line">모바일 카메라의</span>
+          <span class="hero-title-line hero-title-nowrap">어제와 오늘, <span class="hero-title-main">그리고 내일</span></span>
         </h1>
         <p class="hero-description">
-          Android Camera와 driver 변경, Camera HAL 실무 이슈, AI 기반 개발 생산성 흐름을 주간으로 정리합니다.
+          Camera HAL, Android, Linux Driver, AI 기술을 중심으로 모바일 카메라 기술의 변화를 추적합니다.
         </p>
         <div class="hero-actions">
           <a class="button button-primary" href="#latest">최신 뉴스레터 보기</a>
@@ -42,25 +54,24 @@
     <section class="focus-brief content-wrap" aria-label="Focus Keywords">
       <div class="focus-band">
         <div class="focus-copy">
-          <p class="eyebrow">FOCUS KEYWORDS</p>
+          <h2 class="focus-title">주제 키워드로 빠르게 탐색하세요</h2>
         </div>
-        <div class="keyword-row" aria-label="뉴스레터 주요 키워드">
-          <span class="keyword">Camera HAL</span>
-          <span class="keyword">AOSP Camera</span>
-          <span class="keyword">CameraX</span>
-          <span class="keyword">Image Processing</span>
-          <span class="keyword">V4L2</span>
-          <span class="keyword is-soft">AI</span>
-          <span class="keyword is-soft">C++</span>
+        <div id="topic-filter-list" class="keyword-row" role="group" aria-label="Archive topic filter">
+          <button type="button" class="keyword is-active" data-homepage-topic="all" aria-pressed="true">전체</button>
+          <button type="button" class="keyword" data-homepage-topic="camera-hal" aria-pressed="false">Camera HAL</button>
+          <button type="button" class="keyword" data-homepage-topic="android" aria-pressed="false">Android</button>
+          <button type="button" class="keyword" data-homepage-topic="driver" aria-pressed="false">Driver</button>
+          <button type="button" class="keyword" data-homepage-topic="image-processing" aria-pressed="false">Image Processing</button>
+          <button type="button" class="keyword" data-homepage-topic="ai" aria-pressed="false">AI</button>
+          <button type="button" class="keyword" data-homepage-topic="soc-platform" aria-pressed="false">SoC Platform</button>
         </div>
       </div>
     </section>
 
     <section id="headline" class="section headline-section content-wrap" aria-labelledby="headline-title" hidden>
       <div class="section-heading section-heading-row">
-        <span class="section-heading-mark" aria-hidden="true"></span>
+        <span class="section-icon section-icon-star" aria-hidden="true">☆</span>
         <div>
-          <p class="eyebrow">HEADLINE</p>
           <h2 id="headline-title">Featured Headline</h2>
         </div>
       </div>
@@ -69,34 +80,33 @@
 
     <section id="latest" class="section content-wrap" aria-labelledby="latest-title">
       <div class="section-heading section-heading-row">
-        <span class="section-heading-mark" aria-hidden="true"></span>
+        <span class="section-icon section-icon-latest" aria-hidden="true"></span>
         <div>
-          <p class="eyebrow">LATEST</p>
           <h2 id="latest-title">Latest Newsletter</h2>
         </div>
+        <a class="section-link" href="#archive">전체 보기</a>
       </div>
-      <div id="latest-card" class="newsletter-card latest-newsletter-card loading-card">
+      <a id="latest-card" class="newsletter-card latest-newsletter-card loading-card">
         <p class="muted">최신 뉴스레터를 불러오는 중입니다.</p>
-      </div>
+      </a>
     </section>
 
     <section id="archive" class="section content-wrap" aria-labelledby="archive-title">
-      <div class="section-heading">
-        <p class="eyebrow">ARCHIVE</p>
-        <h2 id="archive-title">Newsletter Archive</h2>
-      </div>
-      <div id="archive-toolbar" class="archive-toolbar" hidden>
-        <div class="archive-topic-panel">
-          <div id="archive-topic-list" class="archive-topic-list" role="group" aria-label="Archive topic filter"></div>
+      <div class="section-heading archive-heading">
+        <div class="section-heading-row">
+          <span class="section-icon section-icon-archive" aria-hidden="true"></span>
+          <h2 id="archive-title">Archive</h2>
         </div>
-        <label class="archive-sort-control" for="archive-sort">
-          <span>정렬</span>
-          <select id="archive-sort" aria-label="Archive sort order">
-            <option value="latest">최신순</option>
-            <option value="oldest">오래된순</option>
-          </select>
-        </label>
-        <p id="archive-result-summary" class="archive-result-summary" aria-live="polite"></p>
+        <div class="archive-controls">
+          <label class="archive-sort-control" for="archive-sort">
+            <span class="sr-only">Archive sort order</span>
+            <select id="archive-sort" aria-label="Archive sort order">
+              <option value="latest">최신순</option>
+              <option value="oldest">오래된순</option>
+            </select>
+          </label>
+          <button type="button" id="archive-filter-shortcut" class="filter-shortcut" aria-controls="topic-filter-list">필터</button>
+        </div>
       </div>
       <div id="archive-list" class="archive-grid">
         <p class="muted">아카이브를 불러오는 중입니다.</p>
@@ -155,16 +165,6 @@
       }${hiddenTagChip}</div>`;
     };
 
-    const renderIssueActions = (issue, primaryLabel = '기사 보기', mdLabel = 'Markdown') => {
-      const htmlLink = issue.html
-        ? `<a class="button button-primary" href="${escapeHtml(issue.html)}">${primaryLabel}</a>`
-        : '';
-      const mdLink = issue.md
-        ? `<a class="button button-secondary" href="${escapeHtml(issue.md)}">${mdLabel}</a>`
-        : '';
-      return `${htmlLink}${mdLink}`;
-    };
-
     const isExternalUrl = value => /^https?:\/\//i.test(String(value || ''));
     const isHttpsUrl = value => /^https:\/\//i.test(String(value || ''));
 
@@ -179,88 +179,33 @@
       return isHttpsUrl(raw) ? raw : safeInternalPath(raw);
     };
 
-    const ARCHIVE_TOPICS = [
-      { key: 'all', label: '전체', tag: '' },
-      { key: 'camera-hal', label: 'Camera HAL', tag: 'Camera HAL' },
-      { key: 'android', label: 'Android', tag: 'Android' },
-      { key: 'driver', label: 'Driver', tag: 'Driver' },
-      { key: 'image-processing', label: 'Image Processing', tag: 'Image Processing' },
-      { key: 'ai', label: 'AI', tag: 'AI' },
-      { key: 'soc-platform', label: 'SoC Platform', tag: 'SoC Platform' }
-    ];
-    const ARCHIVE_TOPIC_KEYS = new Set(ARCHIVE_TOPICS.map(topic => topic.key));
-    const ARCHIVE_SORT_KEYS = new Set(['latest', 'oldest']);
-    const DEFAULT_ARCHIVE_STATE = { topic: 'all', sort: 'latest' };
+    const ARCHIVE_PREVIEW_LIMIT = 6;
     const ARCHIVE_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
-
-    function archiveTopicByKey(key) {
-      return ARCHIVE_TOPICS.find(topic => topic.key === key) || ARCHIVE_TOPICS[0];
-    }
+    const HOMEPAGE_ARCHIVE_TOPICS = [
+      { key: 'all', tag: '' },
+      { key: 'camera-hal', tag: 'Camera HAL' },
+      { key: 'android', tag: 'Android' },
+      { key: 'driver', tag: 'Driver' },
+      { key: 'image-processing', tag: 'Image Processing' },
+      { key: 'ai', tag: 'AI' },
+      { key: 'soc-platform', tag: 'SoC Platform' }
+    ];
+    const HOMEPAGE_ARCHIVE_TOPIC_KEYS = new Set(HOMEPAGE_ARCHIVE_TOPICS.map(topic => topic.key));
+    const HOMEPAGE_ARCHIVE_SORT_KEYS = new Set(['latest', 'oldest']);
+    const DEFAULT_ARCHIVE_STATE = { topic: 'all', sort: 'latest' };
 
     function normalizeTopicKey(value) {
       const key = String(value || '').trim();
-      return ARCHIVE_TOPIC_KEYS.has(key) ? key : DEFAULT_ARCHIVE_STATE.topic;
+      return HOMEPAGE_ARCHIVE_TOPIC_KEYS.has(key) ? key : DEFAULT_ARCHIVE_STATE.topic;
     }
 
     function normalizeSortKey(value) {
       const key = String(value || '').trim();
-      return ARCHIVE_SORT_KEYS.has(key) ? key : DEFAULT_ARCHIVE_STATE.sort;
+      return HOMEPAGE_ARCHIVE_SORT_KEYS.has(key) ? key : DEFAULT_ARCHIVE_STATE.sort;
     }
 
-    function currentArchiveSearch() {
-      if (typeof window === 'undefined' || !window.location) return '';
-      return window.location.search || '';
-    }
-
-    function readArchiveStateFromUrl(locationSearch = currentArchiveSearch()) {
-      if (typeof URLSearchParams === 'undefined') {
-        return { ...DEFAULT_ARCHIVE_STATE, needsCanonicalUrl: false };
-      }
-
-      const params = new URLSearchParams(locationSearch || '');
-      const hasTopic = params.has('topic');
-      const hasSort = params.has('sort');
-      const rawTopic = params.get('topic');
-      const rawSort = params.get('sort');
-      const topic = normalizeTopicKey(rawTopic || DEFAULT_ARCHIVE_STATE.topic);
-      const sort = normalizeSortKey(rawSort || DEFAULT_ARCHIVE_STATE.sort);
-      const invalidQuery = Boolean(
-        (hasTopic && rawTopic !== topic) ||
-        (hasSort && rawSort !== sort)
-      );
-      const redundantDefaultQuery = Boolean(
-        (hasTopic && topic === DEFAULT_ARCHIVE_STATE.topic) ||
-        (hasSort && sort === DEFAULT_ARCHIVE_STATE.sort)
-      );
-      return { topic, sort, needsCanonicalUrl: invalidQuery || redundantDefaultQuery };
-    }
-
-    function buildArchiveUrl(state) {
-      if (typeof window === 'undefined' || !window.location || typeof URLSearchParams === 'undefined') return '';
-
-      const params = new URLSearchParams(window.location.search || '');
-      if (state.topic && state.topic !== DEFAULT_ARCHIVE_STATE.topic) {
-        params.set('topic', state.topic);
-      } else {
-        params.delete('topic');
-      }
-
-      if (state.sort && state.sort !== DEFAULT_ARCHIVE_STATE.sort) {
-        params.set('sort', state.sort);
-      } else {
-        params.delete('sort');
-      }
-
-      const query = params.toString();
-      const pathname = window.location.pathname || '';
-      const hash = window.location.hash || '';
-      return `${pathname}${query ? `?${query}` : ''}${hash}`;
-    }
-
-    function replaceArchiveUrl(state) {
-      if (typeof window === 'undefined' || !window.history || typeof window.history.replaceState !== 'function') return;
-      const nextUrl = buildArchiveUrl(state);
-      if (nextUrl) window.history.replaceState(null, '', nextUrl);
+    function archiveTopicByKey(key) {
+      return HOMEPAGE_ARCHIVE_TOPICS.find(topic => topic.key === key) || HOMEPAGE_ARCHIVE_TOPICS[0];
     }
 
     function sortableArchiveDate(item) {
@@ -289,124 +234,115 @@
       };
     }
 
-    function countArchiveTopics(items) {
-      const counts = Object.fromEntries(ARCHIVE_TOPICS.map(topic => [topic.key, 0]));
-      counts.all = items.length;
-      for (const item of items) {
-        const tags = visibleTags(item && item.tags);
-        for (const topic of ARCHIVE_TOPICS) {
-          if (topic.key !== 'all' && tags.includes(topic.tag)) {
-            counts[topic.key] += 1;
-          }
-        }
-      }
-      return counts;
+    function newsletterHtmlHref(item) {
+      return safeInternalPath(item && item.html);
     }
 
-    function filterArchiveItems(items, state) {
-      const topic = archiveTopicByKey(state.topic);
-      if (topic.key === 'all') return [...items];
-      return items.filter(item => visibleTags(item && item.tags).includes(topic.tag));
+    function archiveItemMatchesTopic(item, topicKey) {
+      const topic = archiveTopicByKey(topicKey);
+      if (topic.key === 'all') return true;
+      return visibleTags(item && item.tags).includes(topic.tag);
     }
 
-    function sortArchiveItems(items, state) {
-      return [...items].sort((a, b) => compareArchiveItems(a, b, state.sort));
+    function visibleArchivePreviewItems(items, state = DEFAULT_ARCHIVE_STATE) {
+      const topic = normalizeTopicKey(state.topic);
+      const sort = normalizeSortKey(state.sort);
+      return items
+        .filter(item => archiveItemMatchesTopic(item, topic))
+        .sort((a, b) => compareArchiveItems(a, b, sort))
+        .slice(0, ARCHIVE_PREVIEW_LIMIT);
     }
 
     function renderArchiveCards(items) {
-      return items.map(item => `
-          <article class="archive-card">
+      return items.map(item => {
+        const href = newsletterHtmlHref(item);
+        const accessibleName = `${item.date || ''} ${item.title || ''} 뉴스레터 열기`.trim();
+        return `
+          <a class="archive-card" href="${escapeHtml(href)}" aria-label="${escapeHtml(accessibleName)}">
             <div class="card-meta archive-card-meta">
               <span class="issue-date">${escapeHtml(item.date)}</span>
             </div>
             ${renderArchiveTags(item.tags)}
             <h3 class="card-title clamp-2">${escapeHtml(item.title)}</h3>
-            <p class="card-summary clamp-3">${escapeHtml(item.summary)}</p>
-            <div class="card-actions">
-              ${renderIssueActions(item, '기사 보기', 'Markdown')}
-            </div>
-          </article>
-        `).join('');
+            <p class="card-summary archive-card-summary clamp-3">${escapeHtml(item.summary)}</p>
+            <span class="card-bookmark" aria-hidden="true"></span>
+          </a>
+        `;
+      }).join('');
     }
 
     function renderArchiveEmptyState(state) {
       const topic = archiveTopicByKey(state.topic);
-      return `<div class="archive-empty-state"><p class="muted">${escapeHtml(topic.label)} 결과가 없습니다.</p></div>`;
+      const label = topic.key === 'all' ? '이전 뉴스레터가 없습니다.' : '선택한 주제의 아카이브가 없습니다.';
+      return `<div class="archive-empty-state"><p class="muted">${label}</p></div>`;
     }
 
-    function archiveSortLabel(sort) {
-      return sort === 'oldest' ? '오래된순' : '최신순';
+    function updateTopicButtons(topicList, activeTopic) {
+      if (!topicList || typeof topicList.querySelectorAll !== 'function') return;
+      for (const button of topicList.querySelectorAll('[data-homepage-topic]')) {
+        const isActive = button.getAttribute('data-homepage-topic') === activeTopic;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      }
     }
 
-    function renderArchiveResultSummary(summaryEl, state, count) {
-      const topic = archiveTopicByKey(state.topic);
-      summaryEl.textContent = count === 0
-        ? `${topic.label} 결과가 없습니다.`
-        : `${topic.label} ${count}개 아카이브를 ${archiveSortLabel(state.sort)}으로 표시 중입니다.`;
+    function renderArchivePreview(archiveEl, archiveItems, state) {
+      const visibleItems = visibleArchivePreviewItems(archiveItems, state);
+      archiveEl.innerHTML = visibleItems.length > 0
+        ? renderArchiveCards(visibleItems)
+        : renderArchiveEmptyState(state);
     }
 
-    function renderArchiveControls(state, counts) {
-      const topicList = document.getElementById('archive-topic-list');
-      const sortEl = document.getElementById('archive-sort');
-      if (!topicList || !sortEl) return false;
-
-      topicList.innerHTML = ARCHIVE_TOPICS.map(topic => {
-        const count = counts[topic.key] || 0;
-        const isActive = state.topic === topic.key;
-        const isDisabled = topic.key !== 'all' && count === 0;
-        const classes = ['archive-topic-chip', isActive ? 'is-active' : ''].filter(Boolean).join(' ');
-        const disabledAttrs = isDisabled ? ' disabled aria-disabled="true"' : '';
-        return `<button type="button" class="${classes}" data-archive-topic="${escapeHtml(topic.key)}" aria-pressed="${isActive ? 'true' : 'false'}"${disabledAttrs}>${escapeHtml(topic.label)} (${count})</button>`;
-      }).join('');
-      sortEl.value = state.sort;
-      return true;
-    }
-
-    function initializeArchiveInteraction(archiveItems, initialState) {
-      const toolbarEl = document.getElementById('archive-toolbar');
+    function initializeArchivePreview(archiveItems) {
       const archiveEl = document.getElementById('archive-list');
-      const topicList = document.getElementById('archive-topic-list');
+      const topicList = document.getElementById('topic-filter-list');
       const sortEl = document.getElementById('archive-sort');
-      const summaryEl = document.getElementById('archive-result-summary');
-      if (!toolbarEl || !archiveEl || !topicList || !sortEl || !summaryEl) return false;
+      const filterShortcut = document.getElementById('archive-filter-shortcut');
+      if (!archiveEl) return;
 
-      const counts = countArchiveTopics(archiveItems);
-      let currentState = {
-        topic: normalizeTopicKey(initialState.topic),
-        sort: normalizeSortKey(initialState.sort)
-      };
+      let currentState = { ...DEFAULT_ARCHIVE_STATE };
 
-      function applyArchiveState(nextState, options = {}) {
+      const applyState = nextState => {
         currentState = {
           topic: normalizeTopicKey(nextState.topic),
           sort: normalizeSortKey(nextState.sort)
         };
-        renderArchiveControls(currentState, counts);
-        const filteredItems = filterArchiveItems(archiveItems, currentState);
-        const visibleItems = sortArchiveItems(filteredItems, currentState);
-        archiveEl.innerHTML = visibleItems.length > 0
-          ? renderArchiveCards(visibleItems)
-          : renderArchiveEmptyState(currentState);
-        renderArchiveResultSummary(summaryEl, currentState, visibleItems.length);
-        if (options.updateUrl !== false) replaceArchiveUrl(currentState);
+        if (sortEl) sortEl.value = currentState.sort;
+        updateTopicButtons(topicList, currentState.topic);
+        renderArchivePreview(archiveEl, archiveItems, currentState);
+      };
+
+      if (topicList && typeof topicList.addEventListener === 'function') {
+        topicList.addEventListener('click', event => {
+          const button = event.target && typeof event.target.closest === 'function'
+            ? event.target.closest('[data-homepage-topic]')
+            : null;
+          if (!button) return;
+          applyState({
+            topic: button.getAttribute('data-homepage-topic'),
+            sort: currentState.sort
+          });
+        });
       }
 
-      if (!renderArchiveControls(currentState, counts)) return false;
-      topicList.addEventListener('click', event => {
-        const button = event.target && typeof event.target.closest === 'function'
-          ? event.target.closest('[data-archive-topic]')
-          : null;
-        if (!button || button.disabled || button.getAttribute('aria-disabled') === 'true') return;
-        applyArchiveState({ topic: button.getAttribute('data-archive-topic'), sort: currentState.sort });
-      });
-      sortEl.addEventListener('change', () => {
-        applyArchiveState({ topic: currentState.topic, sort: sortEl.value });
-      });
+      if (sortEl && typeof sortEl.addEventListener === 'function') {
+        sortEl.addEventListener('change', () => {
+          applyState({
+            topic: currentState.topic,
+            sort: sortEl.value
+          });
+        });
+      }
 
-      applyArchiveState(currentState, { updateUrl: false });
-      if (initialState.needsCanonicalUrl) replaceArchiveUrl(currentState);
-      toolbarEl.hidden = false;
-      return true;
+      if (filterShortcut && typeof filterShortcut.addEventListener === 'function') {
+        filterShortcut.addEventListener('click', () => {
+          if (topicList && typeof topicList.scrollIntoView === 'function') {
+            topicList.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+      }
+
+      applyState(currentState);
     }
 
     async function fetchHomepageNewsletters() {
@@ -533,8 +469,6 @@
     async function loadNewsletters() {
       const latestEl = document.getElementById('latest-card');
       const archiveEl = document.getElementById('archive-list');
-      const toolbarEl = document.getElementById('archive-toolbar');
-      if (toolbarEl) toolbarEl.hidden = true;
 
       try {
         const newsletters = await fetchHomepageNewsletters();
@@ -546,6 +480,11 @@
           return;
         }
 
+        const latestHref = newsletterHtmlHref(latest);
+        if (latestHref && typeof latestEl.setAttribute === 'function') {
+          latestEl.setAttribute('href', latestHref);
+          latestEl.setAttribute('aria-label', `${latest.date || ''} ${latest.title || ''} 최신 뉴스레터 열기`.trim());
+        }
         latestEl.classList.remove('loading-card');
         latestEl.innerHTML = `
           <div class="card-meta">
@@ -553,11 +492,8 @@
             <span class="status-chip">Latest</span>
           </div>
           <h3 class="card-title clamp-2">${escapeHtml(latest.title)}</h3>
-          <p class="card-summary clamp-3">${escapeHtml(latest.summary)}</p>
+          <p class="card-summary latest-card-summary clamp-3">${escapeHtml(latest.summary)}</p>
           ${renderTagRow(latest.tags, 'latest-tags')}
-          <div class="card-actions">
-            ${renderIssueActions(latest, '최신호 보기')}
-          </div>
         `;
 
         if (archiveItems.length === 0) {
@@ -565,12 +501,8 @@
           return;
         }
 
-        const initialArchiveState = readArchiveStateFromUrl();
-        if (!initializeArchiveInteraction(archiveItems, initialArchiveState)) {
-          archiveEl.innerHTML = renderArchiveCards(sortArchiveItems(archiveItems, DEFAULT_ARCHIVE_STATE));
-        }
+        initializeArchivePreview(archiveItems);
       } catch (error) {
-        if (toolbarEl) toolbarEl.hidden = true;
         latestEl.innerHTML = '<p class="muted">뉴스레터 정보를 불러오지 못했습니다.</p>';
         archiveEl.innerHTML = '<p class="muted">아카이브 정보를 불러오지 못했습니다.</p>';
         console.error(error);

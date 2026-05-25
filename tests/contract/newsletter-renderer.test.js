@@ -158,6 +158,7 @@ test('newsletter renderer keeps generated issue nav labels in English', () => {
   const html = buildHtml(issue());
   const labels = siteNavLabels(html);
 
+  assert.match(html, /<body class="newsletter-issue-page">/);
   assert.deepEqual(labels.slice(0, 3), ['Latest', 'Archive', 'GitHub']);
   assert.equal(labels.includes('Sources'), false);
   assert.equal(labels.includes('\ucd5c\uc2e0\ud638'), false);
