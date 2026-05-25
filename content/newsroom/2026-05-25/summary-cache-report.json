@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "date": "2026-05-25",
-  "generated_at": "2026-05-25T05:34:07.732Z",
+  "generated_at": "2026-05-25T09:18:27.261Z",
   "cache_root": "cache/news-summary",
   "totals": {
     "candidate_count": 2,
     "hit_count": 1,
     "miss_count": 1,
-    "by_url_hit_count": 1,
-    "by_content_hit_count": 0,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 1,
     "legacy_hit_count": 0
   },
   "reasons": [
@@ -17,7 +17,7 @@
       "count": 1
     },
     {
-      "reason": "url-hit",
+      "reason": "content-hash-hit",
       "count": 1
     }
   ],
@@ -34,9 +34,9 @@
         "content_hash": "07001fcff71ad48b61928d083d411a101099d62d0206dd9fd8c8b91c307b80b0"
       },
       "hit": true,
-      "reason": "url-hit",
-      "lookup_source": "by-url",
-      "cache_record_path": "cache/news-summary/by-url/bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3.json"
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/07001fcff71ad48b61928d083d411a101099d62d0206dd9fd8c8b91c307b80b0.json"
     },
     {
       "title": "Build native Android apps in Google AI Studio",

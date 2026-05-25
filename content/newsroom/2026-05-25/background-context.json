@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-25",
-  "generated_at": "2026-05-25T05:34:17.911Z",
+  "generated_at": "2026-05-25T09:18:38.060Z",
   "stage": "gemini-background-context",
   "background_contexts": [
     {
@@ -9,8 +9,8 @@
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
       "relevance_bucket": "android_platform_camera_adjacent",
-      "background_context": "Jetpack Compose는 Android의 선언적 UI 프레임워크로, 다양한 화면 크기와 폼 팩터에 걸쳐 유연하고 반응적인 사용자 인터페이스를 구축하는 데 사용됩니다. CameraX는 Android Jetpack 라이브러리의 일부로, 카메라 앱 개발을 간소화하고 다양한 기기에서 일관된 카메라 경험을 제공하는 데 중점을 둡니다. CameraX는 Camera2 API 위에 구축되어 복잡성을 추상화하고, 미리보기, 이미지 캡처, 비디오 캡처, 이미지 분석과 같은 일반적인 사용 사례를 지원합니다. '모든 창 크기에서 올바른 카메라 미리보기'는 Jetpack Compose 기반 앱이 폴더블폰, 태블릿 등 다양한 기기에서 카메라 미리보기 화면이 왜곡되거나 잘리지 않고 올바르게 표시되도록 CameraX가 지원한다는 의미입니다. 이는 사용자 경험에 직접적인 영향을 미치며, HAL 계층에서는 다양한 화면 비율과 해상도에 대한 카메라 스트림 구성 및 버퍼 처리가 올바르게 이루어져야 함을 시사합니다.",
-      "background_basis": "supplied article capsule metadata와 Android Camera, CameraX, Camera2, Camera HAL에 대한 모델 지식 기반",
+      "background_context": "Jetpack Compose는 Android에서 선언형 UI를 구축하기 위한 최신 툴킷입니다. 이는 UI 개발을 간소화하고 다양한 화면 크기 및 폼 팩터에 걸쳐 적응형 사용자 경험을 쉽게 만들 수 있도록 설계되었습니다. Jetpack Navigation 3는 앱의 탐색 흐름을 관리하며, Grid 및 FlexBox 레이아웃은 유연한 UI 구성을 가능하게 합니다. CameraX는 Android 카메라 개발을 단순화하는 Jetpack 라이브러리로, Camera2 API 위에 구축되어 카메라 미리보기, 사진 촬영, 동영상 녹화와 같은 일반적인 사용 사례를 위한 일관되고 사용하기 쉬운 API를 제공합니다. 이러한 기술들은 함께 작동하여 개발자가 다양한 Android 기기에서 원활하고 적응적인 카메라 미리보기 및 캡처 경험을 제공하는 앱을 만들 수 있도록 돕습니다. CameraX와 Camera2는 HAL 위 계층이므로, 이러한 UI/프레임워크 업데이트는 직접적인 HAL 계약 변경보다는 앱 호환성, API 사용 패턴, 그리고 앱 수준의 카메라 미리보기/캡처 UX 검증에 대한 신호로 해석하는 것이 적절합니다.",
+      "background_basis": "supplied article capsule metadata와 Android Camera, CameraX, Camera2, Jetpack Compose에 대한 모델 지식 기반",
       "background_confidence": "high",
       "background_warnings": []
     },
@@ -19,8 +19,8 @@
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
       "relevance_bucket": "cpp_ai_tooling_fallback",
-      "background_context": "Google AI Studio는 개발자가 AI 모델을 쉽게 구축하고 배포할 수 있도록 돕는 도구입니다. '프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드'하는 기능은 개발 워크플로우를 가속화하고, 특히 온디바이스 AI 통합을 위한 코드 생성이나 스캐폴딩에 활용될 수 있습니다. Camera HAL 및 드라이버 엔지니어에게는 이러한 AI 개발 도구가 카메라 입력 스트림을 활용하는 AI 기반 기능(예: 실시간 이미지 분석, 객체 감지)을 앱에 통합하는 방식에 간접적으로 영향을 미칠 수 있습니다. 이는 주로 앱 계층의 개발 생산성 향상에 초점을 맞추며, HAL 자체의 인터페이스나 동작 변경보다는 AI 모델이 카메라 프레임을 소비하고 처리하는 방식과 관련된 최적화 및 테스트 시나리오에 대한 고려를 유도할 수 있습니다. 예를 들어, NPU/GPU 스케줄링, 메모리 대역폭, 전력 소비 등 온디바이스 AI 추론 성능에 대한 요구 사항이 증가할 수 있습니다.",
-      "background_basis": "supplied article capsule metadata와 Android Camera, Camera HAL, SoC, native build/test/debug workflows에 대한 모델 지식 기반",
+      "background_context": "Google AI Studio는 개발자가 AI 모델을 빌드하고 배포할 수 있도록 돕는 플랫폼입니다. 이 기사에서 언급된 '프롬프트만으로 전체 Android 앱을 몇 분 안에 빌드'하는 기능은 개발 워크플로우를 자동화하고 가속화하는 데 중점을 둡니다. 이는 특히 AI 기능을 통합하는 Android 앱 개발에 유용할 수 있습니다. Camera HAL 및 드라이버 개발 팀의 관점에서는, 이러한 AI 툴링의 발전이 네이티브 빌드, 테스트, 디버그 워크플로우에 간접적인 영향을 미칠 수 있습니다. 예를 들어, AI 모델이 카메라 입력 스트림을 처리하는 앱을 개발할 때, Google AI Studio가 제공하는 도구는 개발 프로세스를 간소화할 수 있습니다. 그러나 이 기사는 카메라 입력 스트림과의 AI 모델 통합, 온디바이스 컴퓨터 비전 사용 사례, 실시간 카메라 AI 처리 성능 고려 사항에 대한 구체적인 API나 예시를 제공하지 않습니다. 따라서 camera-specific runtime evidence가 없는 한, 이러한 변화는 주로 개발 워크플로우 개선 신호로 해석해야 하며, HAL의 직접적인 변경 사항으로 간주해서는 안 됩니다.",
+      "background_basis": "supplied article capsule metadata와 Android Camera, Camera HAL, native build/test/debug workflows, Google AI Studio에 대한 모델 지식 기반",
       "background_confidence": "high",
       "background_warnings": []
     }

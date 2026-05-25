@@ -2,7 +2,7 @@
   {
     "date": "2026-05-25",
     "title": "Camera HAL / SW Newsletter - 2026-05-25",
-    "summary": "이번 2026-05-25호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화, Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 지원 및 Camera API 연동.",
+    "summary": "이번 2026-05-25호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화, Google AI Studio, 프롬프트 기반의 네이티브 카메라 API 연동 앱 생성 지원.",
     "html": "newsletters/2026-05-25/index.html",
     "md": "newsletters/2026-05-25/newsletter.md",
     "tags": [

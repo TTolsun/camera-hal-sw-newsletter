@@ -615,8 +615,8 @@
       "candidate_id": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
       "summary_cache": {
         "hit": true,
-        "reason": "url-hit",
-        "lookup_source": "by-url",
+        "reason": "content-hash-hit",
+        "lookup_source": "by-content",
         "cache_key": {
           "normalized_url": "https://goo.gle/adaptiveapps_io26",
           "url_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
@@ -645,17 +645,19 @@
         ],
         "relevance_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)"
       },
-      "relevance_reason": "Android 플랫폼, 호환성, 그래픽 버퍼, Surface, 미디어 프레임워크, 전력/발열, 스케줄러, 메모리 압력 또는 카메라 영향 경로가 있는 보안 증거.",
+      "relevance_reason": "Android 플랫폼 전반의 적응형 UI 및 멀티 디바이스 경험 개선은 CameraX 및 Camera2 API를 사용하는 앱의 카메라 미리보기 동작에 영향을 줄 수 있습니다. HAL 계층에서는 직접적인 변경 사항이 없지만, 상위 계층의 요구사항 변화를 이해하는 데 중요합니다.",
       "evidence_notes": [
-        "Android Developers Blog의 Google I/O 2026 요약 기사에서 CameraX가 Jetpack Compose를 통해 다양한 창 크기에서 올바른 카메라 미리보기를 제공하는 데 사용된다고 언급되었습니다.",
-        "이는 CameraX가 다양한 폼팩터 및 멀티태스킹 환경에서 카메라 미리보기 호환성을 개선하는 데 중점을 두고 있음을 시사합니다."
+        "Android Developers Blog의 Google I/O 2026 요약 기사에서 발췌되었습니다.",
+        "CameraX가 다양한 창 크기에서 올바른 카메라 미리보기를 제공하는 데 언급되었습니다.",
+        "이는 CameraX의 적응형 UI 지원 및 멀티 디바이스 경험 개선과 관련이 있습니다."
       ],
       "impact_areas": [
-        "camerax_app_compatibility"
+        "camerax_app_compatibility",
+        "android_platform_compatibility"
       ],
       "do_not_overstate": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
       "android_camera_relevance_score": 0,
       "practical_actionability_score": 0,
@@ -1002,10 +1004,10 @@
       "has_api_or_component": true,
       "has_behavior_change": true,
       "evidence_score": 6,
-      "version_or_release": "2026년 5월 19일 릴리스",
+      "version_or_release": "2026년 5월",
       "api_or_component": "Google AI Studio",
       "source_hint_api_or_component": "android",
-      "behavior_change": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다.",
+      "behavior_change": "Google AI Studio가 이제 프롬프트만으로 전체 Android 앱을 몇 분 안에 빌드할 수 있습니다.",
       "selection_exclusion_reason": "Official dated Android native tooling workflow article; eligible only as cpp_ai_tooling_fallback supporting main context.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
@@ -1119,17 +1121,18 @@
           "content_hash": "da4ad6a4cf681f0895f77dfefda4bfb4f93ffc3bb3c6dfd4d22eed96b312948f"
         }
       },
-      "relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, 네이티브 성능, 빌드/테스트 툴링, AI 코딩 도구, 온디바이스 AI 또는 LLM 에이전트 워크플로우 증거.",
+      "relevance_reason": "Google AI Studio를 통한 네이티브 Android 앱 빌드 기능은 Camera HAL 및 드라이버 개발 팀의 빌드, 테스트, 디버그 워크플로우에 간접적인 영향을 미 미칠 수 있습니다. 특히 AI 관련 카메라 기능 개발 시 새로운 툴링 옵션을 제공할 수 있습니다.",
       "evidence_notes": [
-        "Android Developers Blog에 따르면 Google AI Studio가 프롬프트 기반으로 Android 앱을 생성하는 기능을 제공합니다.",
-        "이 기능은 네이티브 Android 앱 개발 워크플로우에 영향을 미칠 수 있습니다."
+        "Android Developers Blog에 게시된 Google AI Studio의 새로운 기능에 대한 발표입니다.",
+        "AI Studio가 네이티브 Android 앱 빌드를 지원하며, 이는 개발 워크플로우에 영향을 미칠 수 있습니다."
       ],
       "impact_areas": [
-        "native_tooling_workflow"
+        "native_tooling_workflow",
+        "ai_development_workflow"
       ],
       "do_not_overstate": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
       "android_camera_relevance_score": 0,
       "practical_actionability_score": 0,

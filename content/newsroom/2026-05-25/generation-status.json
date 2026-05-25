@@ -2,7 +2,7 @@
   "date": "2026-05-25",
   "status": "NEEDS_FIX",
   "failure_stage": "editor attempt 1/2",
-  "failure_reason": "Editor output failed public article contract validation.",
+  "failure_reason": "Editor output failed article field hygiene validation.",
   "fact_check_status": "PASS",
   "must_fix_count": 0,
   "quality_status": "PASS",
@@ -116,97 +116,62 @@
     "candidate_count": 42
   },
   "run_context": {
-    "github_run_id": "26385076617",
-    "github_sha": "be632abcbf04a4c77bab287198fd72cad875b28f",
+    "github_run_id": "26393089994",
+    "github_sha": "220967dd7c79fa83b55703845a913f91dd6c5533",
     "github_ref": "refs/heads/main"
   },
   "raw_artifact_validation_error": null,
   "editor_semantic_validation": {
     "name": "EditorSemanticValidationError",
-    "message": "Editor output failed public article contract validation.",
+    "message": "Editor output failed article field hygiene validation.",
     "details": {
-      "field": "sections.public_article",
-      "expectedKeys": [
-        "headline",
-        "lead",
-        "body_paragraphs",
-        "camera_hal_takeaway",
-        "reader_checkpoints",
-        "source_links",
-        "story_contract_version",
-        "source_subtitle",
-        "editorial_story",
-        "decision_metadata"
-      ],
-      "actualCount": 2,
+      "field": "sections.field_hygiene",
+      "actualCount": 1,
       "sectionCount": 2,
       "issues": [
         {
-          "index": 1,
-          "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 다중 창 크기 대응 카메라 미리보기 최적화",
-          "type": "insufficient_concrete_internal_reader_checkpoints",
-          "actualCount": 0,
-          "expectedMinCount": 2
-        },
-        {
           "index": 2,
-          "headline": "Google AI Studio: 프롬프트 기반 온디바이스 AI 카메라 애플리케이션 신속 프로토타이핑 지원",
-          "type": "insufficient_concrete_internal_reader_checkpoints",
-          "actualCount": 0,
-          "expectedMinCount": 2
+          "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 및 개발 워크플로우 변화",
+          "guardrail_impact_class": "tooling_support",
+          "type": "overclaim_guardrail",
+          "field": "camera_hal_perspective",
+          "snippet": "직접적인 HAL 계약이나 이미지 파이프라인 변경은 없으나, 카메라 API 연동 테스트 앱을 신속하게 생성하여 HAL의 기본적인 Request/Result 동작을 검증하는 용도로 활용할 수 있습니다",
+          "severity": "hard",
+          "blocking": true,
+          "reason": "Article claims direct HAL API or contract impact without a direct HAL guardrail impact class."
         }
       ]
     },
-    "field": "sections.public_article",
+    "field": "sections.field_hygiene",
     "stage": "editor attempt 1/2",
     "attempt": 1,
     "initial": {
       "name": "EditorSemanticValidationError",
-      "message": "Editor output failed public article contract validation.",
+      "message": "Editor output failed article field hygiene validation.",
       "details": {
-        "field": "sections.public_article",
-        "expectedKeys": [
-          "headline",
-          "lead",
-          "body_paragraphs",
-          "camera_hal_takeaway",
-          "reader_checkpoints",
-          "source_links",
-          "story_contract_version",
-          "source_subtitle",
-          "editorial_story",
-          "decision_metadata"
-        ],
-        "actualCount": 2,
+        "field": "sections.field_hygiene",
+        "actualCount": 1,
         "sectionCount": 2,
         "issues": [
           {
-            "index": 1,
-            "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 다중 창 크기 대응 카메라 미리보기 최적화",
-            "type": "insufficient_concrete_internal_reader_checkpoints",
-            "actualCount": 0,
-            "expectedMinCount": 2
-          },
-          {
             "index": 2,
-            "headline": "Google AI Studio: 프롬프트 기반 온디바이스 AI 카메라 애플리케이션 신속 프로토타이핑 지원",
-            "type": "insufficient_concrete_internal_reader_checkpoints",
-            "actualCount": 0,
-            "expectedMinCount": 2
+            "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 및 개발 워크플로우 변화",
+            "guardrail_impact_class": "tooling_support",
+            "type": "overclaim_guardrail",
+            "field": "camera_hal_perspective",
+            "snippet": "직접적인 HAL 계약이나 이미지 파이프라인 변경은 없으나, 카메라 API 연동 테스트 앱을 신속하게 생성하여 HAL의 기본적인 Request/Result 동작을 검증하는 용도로 활용할 수 있습니다",
+            "severity": "hard",
+            "blocking": true,
+            "reason": "Article claims direct HAL API or contract impact without a direct HAL guardrail impact class."
           }
         ]
       },
-      "field": "sections.public_article",
-      "deterministic_repair_failure_reason_codes": [
-        "missing_why_now_context",
-        "missing_why_now",
-        "missing_concrete_two_week_check",
-        "missing_check_within_2_weeks"
-      ],
+      "field": "sections.field_hygiene",
       "stage": "editor attempt 1/2",
       "attempt": 1
     }
   },
+  "editor_public_article_judge": null,
   "repairAttempted": true,
   "repairSucceeded": false,
   "input_candidate_count": 42,

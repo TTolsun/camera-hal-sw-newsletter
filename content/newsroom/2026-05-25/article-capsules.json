@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "date": "2026-05-25",
-  "generated_at": "2026-05-25T05:34:13.026Z",
+  "generated_at": "2026-05-25T09:18:32.927Z",
   "capsule_token_target": "700-1100",
   "shortlisted_capsule_count": 2,
   "selected_capsule_count": 2,
@@ -140,7 +140,7 @@
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "Android 플랫폼, 호환성, 그래픽 버퍼, Surface, 미디어 프레임워크, 전력/발열, 스케줄러, 메모리 압력 또는 카메라 영향 경로가 있는 보안 증거.",
+      "why_hal_engineer_cares": "Android 플랫폼 전반의 적응형 UI 및 멀티 디바이스 경험 개선은 CameraX 및 Camera2 API를 사용하는 앱의 카메라 미리보기 동작에 영향을 줄 수 있습니다. HAL 계층에서는 직접적인 변경 사항이 없지만, 상위 계층의 요구사항 변화를 이해하는 데 중요합니다.",
       "evidence": [
         "version_or_release: Google I/O 2026",
         "api_or_component: CameraX / Android camera APIs",
@@ -240,19 +240,19 @@
         }
       ],
       "do_not_overstate": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
       "do_not_claim": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
-      "fallback_promotion_reason": "Android 플랫폼, 호환성, 그래픽 버퍼, Surface, 미디어 프레임워크, 전력/발열, 스케줄러, 메모리 압력 또는 카메라 영향 경로가 있는 보안 증거.",
+      "fallback_promotion_reason": "Android 플랫폼 전반의 적응형 UI 및 멀티 디바이스 경험 개선은 CameraX 및 Camera2 API를 사용하는 앱의 카메라 미리보기 동작에 영향을 줄 수 있습니다. HAL 계층에서는 직접적인 변경 사항이 없지만, 상위 계층의 요구사항 변화를 이해하는 데 중요합니다.",
       "fallback_guard_notes": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
-      "estimated_tokens": 2406
+      "estimated_tokens": 2445
     },
     {
       "candidate_id": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
@@ -260,7 +260,7 @@
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 12:45:00 +0000",
-      "topic_type": "cpp",
+      "topic_type": "camera-hal",
       "editorial_priority": 6,
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "article_group_key": "android_native_tooling_workflow",
@@ -399,7 +399,7 @@
           {
             "kind": "behavior_change",
             "role": "primary",
-            "text": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다."
+            "text": "Google AI Studio가 이제 프롬프트만으로 전체 Android 앱을 몇 분 안에 빌드할 수 있습니다."
           },
           {
             "kind": "evidence",
@@ -419,18 +419,18 @@
         ],
         "supporting_source_urls": []
       },
-      "what_changed": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다.",
+      "what_changed": "Google AI Studio가 이제 프롬프트만으로 전체 Android 앱을 몇 분 안에 빌드할 수 있습니다.",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
       "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "C++, LLVM, Clang, GCC, sanitizer, 네이티브 성능, 빌드/테스트 툴링, AI 코딩 도구, 온디바이스 AI 또는 LLM 에이전트 워크플로우 증거.",
+      "why_hal_engineer_cares": "Google AI Studio를 통한 네이티브 Android 앱 빌드 기능은 Camera HAL 및 드라이버 개발 팀의 빌드, 테스트, 디버그 워크플로우에 간접적인 영향을 미 미칠 수 있습니다. 특히 AI 관련 카메라 기능 개발 시 새로운 툴링 옵션을 제공할 수 있습니다.",
       "evidence": [
-        "version_or_release: 2026년 5월 19일 릴리스",
+        "version_or_release: 2026년 5월",
         "api_or_component: Google AI Studio",
-        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다."
+        "behavior_change: Google AI Studio가 이제 프롬프트만으로 전체 Android 앱을 몇 분 안에 빌드할 수 있습니다."
       ],
       "seed_evidence": null,
       "source_extraction": null,
@@ -506,20 +506,20 @@
         }
       ],
       "do_not_overstate": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
       "do_not_claim": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
-      "fallback_promotion_reason": "C++, LLVM, Clang, GCC, sanitizer, 네이티브 성능, 빌드/테스트 툴링, AI 코딩 도구, 온디바이스 AI 또는 LLM 에이전트 워크플로우 증거.",
+      "fallback_promotion_reason": "Google AI Studio를 통한 네이티브 Android 앱 빌드 기능은 Camera HAL 및 드라이버 개발 팀의 빌드, 테스트, 디버그 워크플로우에 간접적인 영향을 미 미칠 수 있습니다. 특히 AI 관련 카메라 기능 개발 시 새로운 툴링 옵션을 제공할 수 있습니다.",
       "fallback_guard_notes": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
       "soc_signal_type": "accelerator_camera_workload",
-      "estimated_tokens": 2652
+      "estimated_tokens": 2688
     }
   ],
   "selected_capsules": [
@@ -656,7 +656,7 @@
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "Android 플랫폼, 호환성, 그래픽 버퍼, Surface, 미디어 프레임워크, 전력/발열, 스케줄러, 메모리 압력 또는 카메라 영향 경로가 있는 보안 증거.",
+      "why_hal_engineer_cares": "Android 플랫폼 전반의 적응형 UI 및 멀티 디바이스 경험 개선은 CameraX 및 Camera2 API를 사용하는 앱의 카메라 미리보기 동작에 영향을 줄 수 있습니다. HAL 계층에서는 직접적인 변경 사항이 없지만, 상위 계층의 요구사항 변화를 이해하는 데 중요합니다.",
       "evidence": [
         "version_or_release: Google I/O 2026",
         "api_or_component: CameraX / Android camera APIs",
@@ -756,19 +756,19 @@
         }
       ],
       "do_not_overstate": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
       "do_not_claim": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
-      "fallback_promotion_reason": "Android 플랫폼, 호환성, 그래픽 버퍼, Surface, 미디어 프레임워크, 전력/발열, 스케줄러, 메모리 압력 또는 카메라 영향 경로가 있는 보안 증거.",
+      "fallback_promotion_reason": "Android 플랫폼 전반의 적응형 UI 및 멀티 디바이스 경험 개선은 CameraX 및 Camera2 API를 사용하는 앱의 카메라 미리보기 동작에 영향을 줄 수 있습니다. HAL 계층에서는 직접적인 변경 사항이 없지만, 상위 계층의 요구사항 변화를 이해하는 데 중요합니다.",
       "fallback_guard_notes": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
-      "estimated_tokens": 2406
+      "estimated_tokens": 2445
     },
     {
       "candidate_id": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
@@ -776,7 +776,7 @@
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 12:45:00 +0000",
-      "topic_type": "cpp",
+      "topic_type": "camera-hal",
       "editorial_priority": 6,
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "article_group_key": "android_native_tooling_workflow",
@@ -915,7 +915,7 @@
           {
             "kind": "behavior_change",
             "role": "primary",
-            "text": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다."
+            "text": "Google AI Studio가 이제 프롬프트만으로 전체 Android 앱을 몇 분 안에 빌드할 수 있습니다."
           },
           {
             "kind": "evidence",
@@ -935,18 +935,18 @@
         ],
         "supporting_source_urls": []
       },
-      "what_changed": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다.",
+      "what_changed": "Google AI Studio가 이제 프롬프트만으로 전체 Android 앱을 몇 분 안에 빌드할 수 있습니다.",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
       "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "C++, LLVM, Clang, GCC, sanitizer, 네이티브 성능, 빌드/테스트 툴링, AI 코딩 도구, 온디바이스 AI 또는 LLM 에이전트 워크플로우 증거.",
+      "why_hal_engineer_cares": "Google AI Studio를 통한 네이티브 Android 앱 빌드 기능은 Camera HAL 및 드라이버 개발 팀의 빌드, 테스트, 디버그 워크플로우에 간접적인 영향을 미 미칠 수 있습니다. 특히 AI 관련 카메라 기능 개발 시 새로운 툴링 옵션을 제공할 수 있습니다.",
       "evidence": [
-        "version_or_release: 2026년 5월 19일 릴리스",
+        "version_or_release: 2026년 5월",
         "api_or_component: Google AI Studio",
-        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다."
+        "behavior_change: Google AI Studio가 이제 프롬프트만으로 전체 Android 앱을 몇 분 안에 빌드할 수 있습니다."
       ],
       "seed_evidence": null,
       "source_extraction": null,
@@ -1022,20 +1022,20 @@
         }
       ],
       "do_not_overstate": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
       "do_not_claim": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
-      "fallback_promotion_reason": "C++, LLVM, Clang, GCC, sanitizer, 네이티브 성능, 빌드/테스트 툴링, AI 코딩 도구, 온디바이스 AI 또는 LLM 에이전트 워크플로우 증거.",
+      "fallback_promotion_reason": "Google AI Studio를 통한 네이티브 Android 앱 빌드 기능은 Camera HAL 및 드라이버 개발 팀의 빌드, 테스트, 디버그 워크플로우에 간접적인 영향을 미 미칠 수 있습니다. 특히 AI 관련 카메라 기능 개발 시 새로운 툴링 옵션을 제공할 수 있습니다.",
       "fallback_guard_notes": [
-        "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 관련 변경 사항을 주장하지 마세요.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 등에 대한 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
       ],
       "soc_signal_type": "accelerator_camera_workload",
-      "estimated_tokens": 2652
+      "estimated_tokens": 2688
     }
   ],
   "reserve_capsules": []

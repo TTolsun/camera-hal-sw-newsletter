@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-25",
-  "generated_at": "2026-05-25T05:52:37.325Z",
+  "generated_at": "2026-05-25T09:19:51.534Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -359,9 +359,9 @@
         "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b"
       ],
       "key_evidence": [
-        "version_or_release: 2026년 5월 19일 릴리스",
+        "version_or_release: 2026년 5월",
         "api_or_component: Google AI Studio",
-        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다."
+        "behavior_change: Google AI Studio가 이제 프롬프트만으로 전체 Android 앱을 몇 분 안에 빌드할 수 있습니다."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
       "claim_validation": {

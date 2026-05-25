@@ -5,7 +5,7 @@ newsroom automation이 publication readiness 전에 멈췄습니다. 아래 arti
 ## 실패
 
 - 단계: editor attempt 1/2
-- 사유: Editor output failed public article contract validation.
+- 사유: Editor output failed article field hygiene validation.
 
 ## 후보 선택 진단
 
@@ -101,7 +101,7 @@ npm.cmd run validate
 {
   "schema_version": 3,
   "date": "2026-05-25",
-  "generated_at": "2026-05-25T05:34:07.713Z",
+  "generated_at": "2026-05-25T09:18:27.236Z",
   "input_candidate_count": 42,
   "eligible_candidate_count": 2,
   "deterministic_selected_count": 2,
@@ -28195,7 +28195,7 @@ npm.cmd run validate
     "updated_at": "2026-05-25T00:00:00+09:00",
     "current_headline": {
       "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "title": "Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 및 카메라 API 연동 지원",
+      "title": "Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 지원 및 Camera API 연동",
       "summary": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
       "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "newsletter_date": "2026-05-24",
@@ -28232,7 +28232,7 @@ npm.cmd run validate
         "category": "cpp_ai_tooling_fallback",
         "source_name": "Android Developers Blog"
       },
-      "newsletter_article_url": "newsletters/2026-05-25/index.html#article-google-ai-studio-android-api",
+      "newsletter_article_url": "newsletters/2026-05-25/index.html#article-google-ai-studio-android-camera-api",
       "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
       "image_alt": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인"
     },
