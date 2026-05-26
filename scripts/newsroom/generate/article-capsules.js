@@ -1,4 +1,4 @@
-const CAPSULE_TOKEN_TARGET = '700-1100';
+const CAPSULE_TOKEN_TARGET = '700-1200';
 const MAX_TEXT = 420;
 const MAX_EVIDENCE_ITEMS = 3;
 const MAX_IMAGE_CANDIDATES = 3;
@@ -23,6 +23,9 @@ const {
 const {
   buildArticleSourceFactBundle
 } = require('./source-fact-bundle');
+const {
+  buildAllowedClaimEvidence
+} = require('../validate/claim-source-binding');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -362,7 +365,7 @@ function isFinalSelected(candidate) {
   return bool(candidate.selected);
 }
 
-function buildArticleCapsule(candidate, contextCandidates = []) {
+function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
   const cleanedBehavior = cleanBehaviorChange(candidate);
   const fieldCandidate = { ...candidate };
   const halSignal = normalizeHalSignalFields(fieldCandidate);
@@ -446,6 +449,9 @@ function buildArticleCapsule(candidate, contextCandidates = []) {
       MAX_TEXT
     ),
     evidence: evidenceItems(candidate),
+    allowed_claim_evidence: buildAllowedClaimEvidence(candidate, {}, {
+      seedEvidencePack: options.seedEvidencePack || null
+    }),
     seed_evidence: candidate.compact_evidence ? {
       evidence_pack_ids: ensureArray(candidate.evidence_pack_ids).slice(0, 6),
       primary_evidence_ids: ensureArray(candidate.primary_evidence_ids).slice(0, 8),
@@ -548,27 +554,29 @@ function capsuleMap(capsules) {
   return { exact, normalized };
 }
 
-function capsulesForCandidates(candidates, capsules = []) {
+function capsulesForCandidates(candidates, capsules = [], options = {}) {
   const byUrl = capsuleMap(capsules);
   return ensureArray(candidates).map(candidate => {
     const exactKey = normalizeUrlExact(candidateUrl(candidate));
     const key = normalizeUrl(candidateUrl(candidate));
-    return byUrl.exact.get(exactKey) || byUrl.normalized.get(key) || buildArticleCapsule(candidate);
+    return byUrl.exact.get(exactKey) || byUrl.normalized.get(key) || buildArticleCapsule(candidate, [], options);
   });
 }
 
-function buildArticleCapsuleReport(date, shortlistReport, reporterInput = null) {
+function buildArticleCapsuleReport(date, shortlistReport, reporterInput = null, options = {}) {
   const shortlistedCandidates = ensureArray(reporterInput?.candidates).length > 0
     ? ensureArray(reporterInput.candidates)
     : ensureArray(shortlistReport?.shortlisted_candidates);
-  const shortlistedCapsules = shortlistedCandidates.map(candidate => buildArticleCapsule(candidate, shortlistedCandidates));
+  const shortlistedCapsules = shortlistedCandidates.map(candidate => buildArticleCapsule(candidate, shortlistedCandidates, options));
   const selectedCapsules = capsulesForCandidates(
     ensureArray(shortlistReport?.selected_articles),
-    shortlistedCapsules
+    shortlistedCapsules,
+    options
   );
   const reserveCapsules = capsulesForCandidates(
     ensureArray(shortlistReport?.reserve_candidates),
-    shortlistedCapsules
+    shortlistedCapsules,
+    options
   );
   return {
     schema_version: 3,
