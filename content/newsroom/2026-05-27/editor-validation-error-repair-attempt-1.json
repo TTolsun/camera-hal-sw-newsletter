@@ -1,0 +1,69 @@
+{
+  "name": "EditorSemanticValidationError",
+  "message": "Editor output failed article section contract validation.",
+  "details": {
+    "field": "sections.article_sections",
+    "expectedKeys": [
+      "verified_facts",
+      "background_context",
+      "hal_driver_impact",
+      "action_items",
+      "team_share_points"
+    ],
+    "allowedKeys": [
+      "verified_facts",
+      "background_context",
+      "hal_driver_impact",
+      "action_items",
+      "team_share_points",
+      "known_limitations",
+      "watch_items",
+      "do_not_claim"
+    ],
+    "actualCount": 3,
+    "sectionCount": 3,
+    "issues": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.6.1 릴리스: Android 17 호환성 확보 및 기기별 YUV 스트림 왜곡 수정",
+        "type": "missing_article_sections",
+        "keys": [
+          "verified_facts",
+          "background_context",
+          "hal_driver_impact",
+          "action_items",
+          "team_share_points"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Google I/O 2026: Jetpack Compose 기반 적응형 UI 환경에서의 CameraX 미리보기 최적화",
+        "type": "missing_article_sections",
+        "keys": [
+          "verified_facts",
+          "background_context",
+          "hal_driver_impact",
+          "action_items",
+          "team_share_points"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 기능 도입",
+        "type": "missing_article_sections",
+        "keys": [
+          "verified_facts",
+          "background_context",
+          "hal_driver_impact",
+          "action_items",
+          "team_share_points"
+        ]
+      }
+    ]
+  },
+  "field": "sections.article_sections",
+  "stage": "editor attempt 1/2",
+  "attempt": 1,
+  "repairAttempted": true,
+  "repairSucceeded": false
+}

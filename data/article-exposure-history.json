@@ -7,18 +7,35 @@
   },
   "articles": [
     {
-      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "title": "Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 지원 및 Camera API 연동",
-      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "newsletter_date": "2026-05-25",
-      "newsletter_url": "newsletters/2026-05-25/index.html",
+      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "CameraX 1.6.1: ListenableFuture 컴파일 오류 수정",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "newsletter_date": "2026-05-27",
+      "newsletter_url": "newsletters/2026-05-27/index.html",
       "exposure_type": "homepage_headline",
-      "headline_score": 96,
+      "headline_score": 100,
       "reuse_reason": "retained_current_above_margin",
-      "exposed_at": "2026-05-25",
+      "exposed_at": "2026-05-27",
+      "first_exposed_at": "2026-05-27",
+      "last_exposed_at": "2026-05-27",
+      "exposure_count": 1,
+      "exposure_types": [
+        "homepage_headline"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "title": "구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "newsletter_date": "2026-05-27",
+      "newsletter_url": "newsletters/2026-05-27/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 98,
+      "reuse_reason": "retained_current_above_margin",
+      "exposed_at": "2026-05-27",
       "first_exposed_at": "2026-05-24",
-      "last_exposed_at": "2026-05-25",
-      "exposure_count": 4,
+      "last_exposed_at": "2026-05-27",
+      "exposure_count": 5,
       "exposure_types": [
         "homepage_headline"
       ]
