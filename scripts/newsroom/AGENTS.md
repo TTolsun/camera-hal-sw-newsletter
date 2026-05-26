@@ -20,6 +20,7 @@
 - quality gate, hard blocker, source integrity check, image fallback contract를 약화하지 마세요.
 - generated artifact path를 바꿀 때는 workflow, docs, tests를 함께 갱신해야 합니다.
 - root wrapper와 `scripts/lib/**` shim은 compatibility surface입니다. 별도 PR 없이 import path를 대량 교체하지 마세요.
+- 일시적인 실험, 재현, probe, local 분석용 script는 `scripts/`나 `scripts/newsroom/`에 남기지 않습니다. 영구 script가 필요하면 유지보수 가능한 CLI/tool로 범위와 검증을 명확히 합니다.
 
 ## Review Publication Guardrail
 

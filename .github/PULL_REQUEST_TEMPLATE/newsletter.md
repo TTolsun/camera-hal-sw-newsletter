@@ -25,6 +25,7 @@
 - [ ] 각 주요 기사에 `팀 공유 포인트`가 있다.
 - [ ] 추정은 추정이라고 표시했다.
 - [ ] `TODO`가 남아 있지 않다.
+- [ ] 임시 Markdown, notes/checkpoint 문서, one-off script가 PR에 남아 있지 않다.
 
 ### Source / fact-check
 
