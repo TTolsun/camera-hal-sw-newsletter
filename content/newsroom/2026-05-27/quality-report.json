@@ -1,22 +1,12 @@
 {
   "schema_version": 1,
   "date": "2026-05-27",
-  "score": 97,
+  "score": 98,
   "max_score": 100,
   "threshold": 85,
   "status": "PASS",
-  "summary": "Quality score 97, threshold 85, max score 100. Editor review is ready.",
+  "summary": "Quality score 98, threshold 85, max score 100. Editor review is ready.",
   "deductions": [
-    {
-      "category": "editorial-story",
-      "points": 1,
-      "reason": "Briefing bullet misses story structure elements: action_hint.",
-      "location": "briefing 1",
-      "blocking": false,
-      "severity": "soft",
-      "reason_code": "",
-      "dedupe_key": ""
-    },
     {
       "category": "editorial-story",
       "points": 1,
@@ -339,7 +329,7 @@
     "blocking_deduction_count": 0,
     "blocking_deduction_categories": [],
     "hard_fail_count": 0,
-    "soft_deduction_count": 3,
+    "soft_deduction_count": 2,
     "article_gate_counts": {
       "PASS": 1,
       "DEMOTE": 0,
@@ -471,7 +461,7 @@
     "top_deduction_categories": [
       {
         "category": "editorial-story",
-        "count": 3
+        "count": 2
       }
     ],
     "candidate_exclusion_summary": []
@@ -489,7 +479,7 @@
   "fallback_only": true,
   "camera_anchor_count": 0,
   "homepage_badge": "Tooling Watch Edition",
-  "content_quality_score": 97,
+  "content_quality_score": 98,
   "camera_relevance_score": 0,
   "publication_mode_decision": "fallback_public: no final public camera anchor remained; publish as clearly labeled Tooling Watch Edition.",
   "original_fact_check_status": "PASS",
@@ -526,9 +516,7 @@
   "original_quality_status": "PASS",
   "original_quality_score": 97,
   "fallback_public_headline_generation": {
-    "source": "llm",
-    "stage": "fallback-public-title-editor",
-    "override_count": 2,
-    "reason": "llm_headlines_generated"
+    "source": "deterministic",
+    "override_count": 0
   }
 }

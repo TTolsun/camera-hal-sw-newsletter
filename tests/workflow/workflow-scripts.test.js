@@ -5130,6 +5130,174 @@ test('fallback builder writes public files when one safe article is available', 
   assert.equal(result.status.public_newsletter_ready, true);
 });
 
+test('fallback builder reuses LLM public article prose from invalid editor attempts', () => {
+  const root = tempRoot();
+  const date = '2026-05-27';
+  writeRootIndexContract(root);
+  const aiStudio = {
+    ...regressionCandidate({
+      title: 'Build native Android apps in Google AI Studio',
+      url: 'https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html',
+      bucket: 'cpp_ai_tooling_fallback',
+      fallback: true
+    }),
+    source: 'Android Developers Blog',
+    component: 'Google AI Studio',
+    tooling_workflow_type: 'native_tooling_workflow',
+    article_group_key: 'android_native_tooling_workflow',
+    native_tooling_relevance: 4,
+    behavior_change: 'Hardware-enabled experiences can use the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs.',
+    summary: 'Google AI Studio added native Android app generation support for Android developers.'
+  };
+  const llmPublicArticle = {
+    story_contract_version: 1,
+    headline: 'Google AI Studio의 native Android prototype 생성과 Camera API 확인',
+    source_subtitle: 'Android Developers Blog - Build native Android apps in Google AI Studio',
+    lead: 'Google AI Studio가 프롬프트에서 native Android app prototype을 만들고 Camera 같은 Android API 사용 예를 제공한다고 설명했습니다.',
+    body_paragraphs: [
+      'Android Developers Blog의 발표는 브라우저 기반 AI Studio 안에서 Kotlin 기반 Android app prototype을 만들고, device feature를 활용하는 예시로 Camera, GPS/Location, Accelerometer, Bluetooth를 언급합니다.',
+      'Camera HAL 독자는 이 내용을 HAL 업데이트가 아니라 test client와 sample app 생성 흐름으로 읽어야 합니다. 생성된 앱 코드에서 permission 선언, CameraX 또는 Camera2 호출 위치, device feature 의존성이 어떻게 놓이는지 검토하는 정도가 적절합니다.'
+    ],
+    camera_hal_takeaway: '직접적인 HAL/driver 변경 근거는 없습니다. 다만 prototype 도구가 Camera API를 호출하는 sample을 만들 수 있으므로, 검증용 client app의 권한 선언과 CameraX/Camera2 사용 방식을 빠르게 확인하는 tooling signal로 볼 수 있습니다.',
+    reader_checkpoints: [
+      '생성된 sample app의 Camera permission 선언과 CameraX binding 위치를 확인합니다.',
+      'Camera2 호출이나 device feature 조건이 vendor test scenario와 충돌하지 않는지 확인합니다.'
+    ],
+    editorial_story: {
+      reader_scenario: '프로토타입 앱을 검토할 때 source가 말한 Android API 사용 범위와 실제 Camera API 호출 위치를 분리해 봅니다.',
+      what_happened: 'Google AI Studio가 프롬프트 기반 native Android app prototype 생성 흐름을 발표했고 Camera 같은 device feature 사용 예를 들었습니다.',
+      why_it_matters: '직접 HAL 변경은 아니지만 Camera API를 호출하는 sample app 생성 흐름은 HAL 검증용 client app을 빠르게 살펴볼 때 참고할 수 있습니다.',
+      field_scenario: '검증자는 sample app의 permission, CameraX 또는 Camera2 binding, device feature 조건을 확인하고 vendor pipeline 영향으로 확대 해석하지 않습니다.',
+      not_to_overclaim: '이 source는 Camera HAL API, driver branch, metadata contract, stream buffer behavior 변경을 직접 말하지 않습니다.',
+      editor_take: '이 항목은 Camera HAL issue가 아니라 native Android tooling watch 항목으로 다룹니다.'
+    },
+    decision_metadata: {
+      impact: 'Medium',
+      scope: ['Tooling', 'AI', 'Framework'],
+      action: ['Watch', 'Test'],
+      overclaim_risk: 'Medium'
+    },
+    source_links: [{
+      title: 'Build native Android apps in Google AI Studio',
+      url: aiStudio.url,
+      source_role: 'primary'
+    }]
+  };
+  const deterministicEditor = {
+    schemaVersion: 1,
+    newsletterDate: date,
+    model: {
+      provider: 'deterministic-fallback-public-issue',
+      providerModel: 'deterministic'
+    },
+    date,
+    title: `Camera HAL / SW Newsletter - ${date}`,
+    summary: 'Deterministic fallback draft should not own reader prose.',
+    briefing: ['AI Studio tooling item.', 'Review-only public issue.', 'No direct HAL update.'],
+    sections: [regressionSection(aiStudio, {
+      category: 'Android Native Tooling',
+      public_article: {
+        headline: 'Deterministic placeholder headline',
+        lead: 'Deterministic placeholder lead.',
+        body_paragraphs: [
+          'Deterministic placeholder body one.',
+          'Deterministic placeholder body two.'
+        ],
+        camera_hal_takeaway: 'Deterministic placeholder takeaway.',
+        reader_checkpoints: ['Check placeholder one.', 'Check placeholder two.'],
+        source_links: [{ title: aiStudio.title, url: aiStudio.url }]
+      }
+    })],
+    action_items: ['Review AI Studio tooling item.'],
+    references: []
+  };
+  const llmInvalidEditor = {
+    ...deterministicEditor,
+    model: undefined,
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1,
+    sections: [regressionSection(aiStudio, {
+      category: 'Android Native Tooling',
+      public_article: llmPublicArticle
+    })]
+  };
+  const status = {
+    date,
+    status: 'NEEDS_FIX',
+    generation_status: 'NEEDS_FIX',
+    failure_stage: 'editor attempt 1/2',
+    failure_reason: 'Editor output failed article section contract validation.',
+    final_publish_ready: false,
+    artifact_final_publish_ready: false,
+    publish_gate_passed: false,
+    review_gate_passed: true,
+    editor_review_required: true,
+    fact_check_status: 'PASS',
+    must_fix_count: 0,
+    source_gap_count: 0,
+    quality_status: 'PASS',
+    quality_score: 100,
+    quality_threshold: qualityGatePolicy.threshold,
+    rendered_main_article_count: 1,
+    selected_article_count: 1,
+    min_final_articles: articlePolicy.mainArticleCount.min
+  };
+
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), deterministicEditor);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-invalid-attempt-1.json'), llmInvalidEditor);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
+    date,
+    score: 100,
+    threshold: qualityGatePolicy.threshold,
+    status: 'PASS',
+    deductions: [],
+    article_results: [{
+      index: 1,
+      headline: aiStudio.title,
+      status: 'FAIL',
+      repair_action: 'repair-section',
+      hard_fail_reasons: [],
+      scope_count: scopeCountForCandidate(aiStudio)
+    }]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
+    status: 'PASS',
+    must_fix: [],
+    source_gaps: [],
+    source_gap_count: 0,
+    final_comment: 'PASS'
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates-attempt-1.json'), {
+    date,
+    candidates: [aiStudio]
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    selected_articles: [aiStudio],
+    shortlisted_candidates: [aiStudio],
+    reserve_candidates: []
+  });
+  writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), {
+    selected_capsules: [aiStudio],
+    shortlisted_capsules: [aiStudio],
+    reserve_capsules: []
+  });
+
+  const result = buildFallbackPublicIssue({ root, date });
+  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
+  const publicMarkdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
+
+  assert.equal(finalEditor.sections[0].public_article.headline, llmPublicArticle.headline);
+  assert.deepEqual(finalEditor.sections[0].public_article.body_paragraphs, llmPublicArticle.body_paragraphs);
+  assert.equal(finalEditor.sections[0].public_article.camera_hal_takeaway, llmPublicArticle.camera_hal_takeaway);
+  assert.match(publicMarkdown, /브라우저 기반 AI Studio 안에서 Kotlin 기반 Android app prototype/);
+  assert.doesNotMatch(publicMarkdown, /Deterministic placeholder/);
+  assert.doesNotMatch(publicMarkdown, /Tooling Watch로 보고, 생성된 sample/);
+  assert.equal(result.status.public_newsletter_ready, true);
+});
+
 test('fallback builder includes selected native tooling supporting article after one safe main article', () => {
   const root = tempRoot();
   const date = '2026-05-22';

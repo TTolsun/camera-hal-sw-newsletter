@@ -9,9 +9,9 @@
     "schemaVersion": 1,
     "newsletterDate": "2026-05-27",
     "title": "Camera HAL / SW Newsletter - 2026-05-27",
-    "summary": "Tooling Watch Edition - 이번 2026-05-27호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 1개 항목을 정리했습니다: Google AI Studio, 프롬프트 기반 CameraX·Camera2 활용 native Android 앱 prototype 생성 지원.",
+    "summary": "Tooling Watch Edition - 이번 2026-05-27호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 1개 항목을 정리했습니다: Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드로 카메라 프로토타이핑 가속화.",
     "briefing": [
-      "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
+      "Google AI Studio에 프롬프트만으로 전체 네이티브 Android 앱을 자동 생성하고 빌드할 수 있는 기능이 도입되어, 카메라 API 연동 및 이미지 처리 프로토타입 앱 개발 속도가 획기적으로 빨라질 전망입니다.",
       "직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.",
       "직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다."
     ],
@@ -307,26 +307,33 @@
               "team_share_points": "Android Native Tooling: Build native Android apps in Google AI Studio은 정상 발행 범위가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다."
             },
             "public_article": {
-              "story_contract_version": 1,
-              "headline": "Google AI Studio, 프롬프트 기반 CameraX·Camera2 활용 native Android 앱 prototype 생성 지원",
-              "source_subtitle": "Android Developers Blog · Tue, 19 May 2026 12:45:00 +0000",
-              "lead": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
+              "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드로 카메라 프로토타이핑 가속화",
+              "lead": "Google AI Studio에 프롬프트만으로 전체 네이티브 Android 앱을 자동 생성하고 빌드할 수 있는 기능이 도입되어, 카메라 API 연동 및 이미지 처리 프로토타입 앱 개발 속도가 획기적으로 빨라질 전망입니다.",
               "body_paragraphs": [
-                "Google AI Studio는 프롬프트로 native Android 앱 prototype을 만드는 흐름에서 Camera, GPS/Location, Accelerometer, Bluetooth 같은 Android API 사용 예를 듭니다.",
-                "Camera HAL / Driver 독자는 이 항목을 Tooling Watch로 보고, 생성된 sample이 Camera 권한 선언, CameraX/Camera2 호출 위치, device feature 의존성을 어떻게 배치하는지 확인하는 정도로 다루면 됩니다. 원문에서 함께 언급된 프롬프트 기반 생성은 기능 예시 범위로만 읽습니다."
+                "네이티브 Android 앱 개발은 전통적으로 Android Studio 설치, SDK 구성, Gradle 의존성 설정 등 초기 환경 구축에 상당한 시간과 노력이 소요되었습니다. 특히 카메라 API나 이미지 처리 라이브러리를 연동하는 작업은 보일러플레이트 코드가 많아 초기 프로토타이핑 장벽이 높았습니다.",
+                "Google AI Studio의 이번 업데이트는 웹 브라우저 상에서 프롬프트 입력만으로 동작 가능한 네이티브 Android 앱 코드를 자동 생성하고 빌드할 수 있게 해줍니다. 개발자는 복잡한 환경 설정 없이 즉시 카메라 출력을 활용하는 AI 기능(객체 인식, 이미지 필터링 등)을 테스트할 수 있는 앱을 확보할 수 있습니다.",
+                "이 도구는 CameraX나 Camera2 API를 활용하여 카메라 미리보기 스트림을 획득하고, 이를 온디바이스 AI 모델의 입력 데이터 패스로 연결하는 샘플 코드를 빠르게 생성해 주므로, HAL 및 드라이버 개발팀이 상위 애플리케이션 계층의 동작을 모사하여 테스트 환경을 구축할 때 유용하게 활용될 수 있습니다."
               ],
-              "camera_hal_takeaway": "이 항목은 Tooling Watch 범위의 native Android prototyping 소식입니다. HAL/driver 업데이트로 보지 않고, sample이 Camera 권한, CameraX/Camera2 호출, device feature 선언을 어떻게 구성하는지 확인할 때 참고합니다.",
+              "camera_hal_takeaway": "이 도구는 Camera HAL 내부 런타임이나 드라이버 코드를 직접 수정하지는 않지만, HAL 개발팀이 새로운 카메라 기능이나 메타데이터 동작을 검증하기 위해 필요한 '테스트용 클라이언트 앱'을 신속하게 빌드하는 워크플로우 도구로 가치가 있습니다. 복잡한 앱 개발 과정 없이 프롬프트만으로 특정 스트림 조합을 사용하는 테스트 앱을 생성할 수 있습니다.",
               "reader_checkpoints": [
-                "AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다.",
-                "이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다."
+                "Google AI Studio를 활용하여 CameraX 기반의 단순 미리보기 및 이미지 캡처 스트림을 구동하는 테스트 앱 코드를 생성하고, 이를 자사 타겟 기기에서 실행해 보십시오.",
+                "생성된 앱 코드의 카메라 API 호출 패턴이 Android 권장 베스트 프랙티스(예: Surface 생명주기 관리)를 준수하는지 네이티브 뷰어에서 검증하십시오."
               ],
+              "source_links": [
+                {
+                  "title": "Build native Android apps in Google AI Studio",
+                  "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+                }
+              ],
+              "story_contract_version": 1,
+              "source_subtitle": "Android Developers Blog - Build native Android apps in Google AI Studio",
               "editorial_story": {
-                "reader_scenario": "Camera HAL 본체가 아니라 host/native tooling이나 prototype 코드 검토 과정에서 build, logging, Camera API 사용 범위를 확인합니다.",
-                "what_happened": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
-                "why_it_matters": "이 항목은 Tooling Watch 범위의 native Android prototyping 소식입니다. HAL/driver 업데이트로 보지 않고, sample이 Camera 권한, CameraX/Camera2 호출, device feature 선언을 어떻게 구성하는지 확인할 때 참고합니다.",
-                "field_scenario": "AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다. 이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.",
-                "not_to_overclaim": "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다. Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다. 이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다. Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다.",
-                "editor_take": "Google AI Studio, 프롬프트 기반 CameraX·Camera2 활용 native Android 앱 prototype 생성 지원은 source 범위 안에서만 실무 확인 항목으로 다루는 것이 안전합니다."
+                "reader_scenario": "새로운 HAL 기능을 테스트하기 위해 간단한 카메라 캡처 앱이 급히 필요하지만, 전담 앱 개발 인력이 부족하여 HAL 엔지니어가 직접 테스트 앱을 빌드해야 하는 상황입니다.",
+                "what_happened": "Google AI Studio에 프롬프트 기반으로 네이티브 Android 앱을 자동 생성하고 빌드하는 기능이 추가되어, 개발 환경 구축 없이 빠른 앱 프로토타이핑이 가능해졌습니다.",
+                "why_it_matters": "카메라 프레임워크 및 HAL 개발팀이 상위 앱 계층의 API 호출 시나리오를 모사하는 테스트 클라이언트를 확보하는 데 드는 시간과 비용을 크게 절감할 수 있습니다.",
+                "field_scenario": "웹 브라우저에서 'CameraX를 사용해 실시간 미리보기를 띄우고 버튼을 누르면 JPEG로 저장하는 앱을 만들어줘'라고 입력하여 생성된 APK를 타겟 기기에 설치하고 HAL 로그를 분석합니다.",
+                "not_to_overclaim": "Google AI Studio가 생성하는 코드는 상위 애플리케이션 수준의 Java/Kotlin 코드이며, C++ 기반의 Camera HAL3 구현이나 드라이버 코드를 자동으로 생성하거나 최적화해 주는 것은 아닙니다.",
+                "editor_take": "AI 기반 코드 생성 도구는 HAL 개발자가 앱 수준의 호환성 이슈를 재현하거나 단순 기능 검증용 샌드박스 앱을 만들 때 훌륭한 생산성 도구로 자리 잡을 것입니다."
               },
               "decision_metadata": {
                 "impact": "High",
@@ -343,15 +350,7 @@
                   "Test"
                 ],
                 "overclaim_risk": "Medium"
-              },
-              "source_links": [
-                {
-                  "title": "Build native Android apps in Google AI Studio",
-                  "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-                  "publisher": "Android Developers Blog",
-                  "source_role": "primary"
-                }
-              ]
+              }
             },
             "imageSelection": {
               "reasonCode": "selected",
@@ -450,7 +449,9 @@
                 "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
                 "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
               ]
-            }
+            },
+            "finalSelectionEligibility": "short",
+            "source_gap_risk": false
           }
         }
       }
@@ -521,9 +522,9 @@
   "public_contract_version": "story-v1",
   "generation_contract_version": 1,
   "title": "Camera HAL / SW Newsletter - 2026-05-27",
-  "summary": "Tooling Watch Edition - 이번 2026-05-27호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 1개 항목을 정리했습니다: Google AI Studio, 프롬프트 기반 CameraX·Camera2 활용 native Android 앱 prototype 생성 지원.",
+  "summary": "Tooling Watch Edition - 이번 2026-05-27호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 1개 항목을 정리했습니다: Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드로 카메라 프로토타이핑 가속화.",
   "briefing": [
-    "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
+    "Google AI Studio에 프롬프트만으로 전체 네이티브 Android 앱을 자동 생성하고 빌드할 수 있는 기능이 도입되어, 카메라 API 연동 및 이미지 처리 프로토타입 앱 개발 속도가 획기적으로 빨라질 전망입니다.",
     "직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.",
     "직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다."
   ],
@@ -737,26 +738,33 @@
         "team_share_points": "Android Native Tooling: Build native Android apps in Google AI Studio은 정상 발행 범위가 부족했거나 원래 section repair가 필요해 watch/supporting context로 재구성했습니다."
       },
       "public_article": {
-        "story_contract_version": 1,
-        "headline": "Google AI Studio, 프롬프트 기반 CameraX·Camera2 활용 native Android 앱 prototype 생성 지원",
-        "source_subtitle": "Android Developers Blog · Tue, 19 May 2026 12:45:00 +0000",
-        "lead": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
+        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드로 카메라 프로토타이핑 가속화",
+        "lead": "Google AI Studio에 프롬프트만으로 전체 네이티브 Android 앱을 자동 생성하고 빌드할 수 있는 기능이 도입되어, 카메라 API 연동 및 이미지 처리 프로토타입 앱 개발 속도가 획기적으로 빨라질 전망입니다.",
         "body_paragraphs": [
-          "Google AI Studio는 프롬프트로 native Android 앱 prototype을 만드는 흐름에서 Camera, GPS/Location, Accelerometer, Bluetooth 같은 Android API 사용 예를 듭니다.",
-          "Camera HAL / Driver 독자는 이 항목을 Tooling Watch로 보고, 생성된 sample이 Camera 권한 선언, CameraX/Camera2 호출 위치, device feature 의존성을 어떻게 배치하는지 확인하는 정도로 다루면 됩니다. 원문에서 함께 언급된 프롬프트 기반 생성은 기능 예시 범위로만 읽습니다."
+          "네이티브 Android 앱 개발은 전통적으로 Android Studio 설치, SDK 구성, Gradle 의존성 설정 등 초기 환경 구축에 상당한 시간과 노력이 소요되었습니다. 특히 카메라 API나 이미지 처리 라이브러리를 연동하는 작업은 보일러플레이트 코드가 많아 초기 프로토타이핑 장벽이 높았습니다.",
+          "Google AI Studio의 이번 업데이트는 웹 브라우저 상에서 프롬프트 입력만으로 동작 가능한 네이티브 Android 앱 코드를 자동 생성하고 빌드할 수 있게 해줍니다. 개발자는 복잡한 환경 설정 없이 즉시 카메라 출력을 활용하는 AI 기능(객체 인식, 이미지 필터링 등)을 테스트할 수 있는 앱을 확보할 수 있습니다.",
+          "이 도구는 CameraX나 Camera2 API를 활용하여 카메라 미리보기 스트림을 획득하고, 이를 온디바이스 AI 모델의 입력 데이터 패스로 연결하는 샘플 코드를 빠르게 생성해 주므로, HAL 및 드라이버 개발팀이 상위 애플리케이션 계층의 동작을 모사하여 테스트 환경을 구축할 때 유용하게 활용될 수 있습니다."
         ],
-        "camera_hal_takeaway": "이 항목은 Tooling Watch 범위의 native Android prototyping 소식입니다. HAL/driver 업데이트로 보지 않고, sample이 Camera 권한, CameraX/Camera2 호출, device feature 선언을 어떻게 구성하는지 확인할 때 참고합니다.",
+        "camera_hal_takeaway": "이 도구는 Camera HAL 내부 런타임이나 드라이버 코드를 직접 수정하지는 않지만, HAL 개발팀이 새로운 카메라 기능이나 메타데이터 동작을 검증하기 위해 필요한 '테스트용 클라이언트 앱'을 신속하게 빌드하는 워크플로우 도구로 가치가 있습니다. 복잡한 앱 개발 과정 없이 프롬프트만으로 특정 스트림 조합을 사용하는 테스트 앱을 생성할 수 있습니다.",
         "reader_checkpoints": [
-          "AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다.",
-          "이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다."
+          "Google AI Studio를 활용하여 CameraX 기반의 단순 미리보기 및 이미지 캡처 스트림을 구동하는 테스트 앱 코드를 생성하고, 이를 자사 타겟 기기에서 실행해 보십시오.",
+          "생성된 앱 코드의 카메라 API 호출 패턴이 Android 권장 베스트 프랙티스(예: Surface 생명주기 관리)를 준수하는지 네이티브 뷰어에서 검증하십시오."
         ],
+        "source_links": [
+          {
+            "title": "Build native Android apps in Google AI Studio",
+            "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "Android Developers Blog - Build native Android apps in Google AI Studio",
         "editorial_story": {
-          "reader_scenario": "Camera HAL 본체가 아니라 host/native tooling이나 prototype 코드 검토 과정에서 build, logging, Camera API 사용 범위를 확인합니다.",
-          "what_happened": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
-          "why_it_matters": "이 항목은 Tooling Watch 범위의 native Android prototyping 소식입니다. HAL/driver 업데이트로 보지 않고, sample이 Camera 권한, CameraX/Camera2 호출, device feature 선언을 어떻게 구성하는지 확인할 때 참고합니다.",
-          "field_scenario": "AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다. 이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.",
-          "not_to_overclaim": "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다. Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다. 이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다. Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다.",
-          "editor_take": "Google AI Studio, 프롬프트 기반 CameraX·Camera2 활용 native Android 앱 prototype 생성 지원은 source 범위 안에서만 실무 확인 항목으로 다루는 것이 안전합니다."
+          "reader_scenario": "새로운 HAL 기능을 테스트하기 위해 간단한 카메라 캡처 앱이 급히 필요하지만, 전담 앱 개발 인력이 부족하여 HAL 엔지니어가 직접 테스트 앱을 빌드해야 하는 상황입니다.",
+          "what_happened": "Google AI Studio에 프롬프트 기반으로 네이티브 Android 앱을 자동 생성하고 빌드하는 기능이 추가되어, 개발 환경 구축 없이 빠른 앱 프로토타이핑이 가능해졌습니다.",
+          "why_it_matters": "카메라 프레임워크 및 HAL 개발팀이 상위 앱 계층의 API 호출 시나리오를 모사하는 테스트 클라이언트를 확보하는 데 드는 시간과 비용을 크게 절감할 수 있습니다.",
+          "field_scenario": "웹 브라우저에서 'CameraX를 사용해 실시간 미리보기를 띄우고 버튼을 누르면 JPEG로 저장하는 앱을 만들어줘'라고 입력하여 생성된 APK를 타겟 기기에 설치하고 HAL 로그를 분석합니다.",
+          "not_to_overclaim": "Google AI Studio가 생성하는 코드는 상위 애플리케이션 수준의 Java/Kotlin 코드이며, C++ 기반의 Camera HAL3 구현이나 드라이버 코드를 자동으로 생성하거나 최적화해 주는 것은 아닙니다.",
+          "editor_take": "AI 기반 코드 생성 도구는 HAL 개발자가 앱 수준의 호환성 이슈를 재현하거나 단순 기능 검증용 샌드박스 앱을 만들 때 훌륭한 생산성 도구로 자리 잡을 것입니다."
         },
         "decision_metadata": {
           "impact": "High",
@@ -773,15 +781,7 @@
             "Test"
           ],
           "overclaim_risk": "Medium"
-        },
-        "source_links": [
-          {
-            "title": "Build native Android apps in Google AI Studio",
-            "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-            "publisher": "Android Developers Blog",
-            "source_role": "primary"
-          }
-        ]
+        }
       },
       "imageSelection": {
         "reasonCode": "selected",
@@ -880,7 +880,9 @@
           "이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.",
           "Native tooling 항목은 explicit camera evidence 없이 Android Camera HAL toolchain migration 또는 runtime behavior change로 claim하지 않습니다."
         ]
-      }
+      },
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false
     }
   ],
   "action_items": [

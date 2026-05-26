@@ -2,7 +2,7 @@
   {
     "date": "2026-05-27",
     "title": "Camera HAL / SW Newsletter - 2026-05-27",
-    "summary": "Tooling Watch Edition - 이번 2026-05-27호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 1개 항목을 정리했습니다: Google AI Studio, 프롬프트 기반 CameraX·Camera2 활용 native Android 앱 prototype 생성 지원.",
+    "summary": "Tooling Watch Edition - 이번 2026-05-27호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 1개 항목을 정리했습니다: Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드로 카메라 프로토타이핑 가속화.",
     "html": "newsletters/2026-05-27/index.html",
     "md": "newsletters/2026-05-27/newsletter.md",
     "tags": [

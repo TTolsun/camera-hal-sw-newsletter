@@ -59,7 +59,9 @@ const {
   publicationDecisionForSections
 } = require('../common/publication-mode');
 const {
-  deriveDecisionMetadata
+  deriveDecisionMetadata,
+  mergePublicArticleFromLlm,
+  validatePublicArticle
 } = require('../common/public-article-contract');
 const {
   buildArticleSourceFactBundle
@@ -1744,6 +1746,145 @@ function baseDraftCandidates(root, date) {
   return candidates;
 }
 
+function editorAttemptFileRank(fileName) {
+  const invalidRepair = /^editor-invalid-repair-attempt-(\d+)\.json$/.exec(fileName);
+  if (invalidRepair) return 5000 + Number(invalidRepair[1]);
+  const invalid = /^editor-invalid-attempt-(\d+)\.json$/.exec(fileName);
+  if (invalid) return 4000 + Number(invalid[1]);
+  const repair = /^editor-repair-attempt-(\d+)\.json$/.exec(fileName);
+  if (repair) return 3000 + Number(repair[1]);
+  const draftAttempt = /^editor-draft-attempt-(\d+)\.json$/.exec(fileName);
+  if (draftAttempt) return 2000 + Number(draftAttempt[1]);
+  if (fileName === 'editor-draft.json') return 1000;
+  return 0;
+}
+
+function deterministicFallbackDraft(draft = {}) {
+  return text(draft?.model?.provider) === 'deterministic-fallback-public-issue';
+}
+
+function reusablePublicArticleSection(section = {}) {
+  const article = section.public_article;
+  return article &&
+    typeof article === 'object' &&
+    ensureArray(article.body_paragraphs).filter(Boolean).length >= 2 &&
+    text(article.camera_hal_takeaway) &&
+    ensureArray(article.source_links).length > 0;
+}
+
+function llmPublicArticleDraftRecords(root, date, baseCandidate = null) {
+  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const records = [];
+  if (baseCandidate?.draft && !deterministicFallbackDraft(baseCandidate.draft)) {
+    records.push({
+      source: baseCandidate.source || 'baseDraft',
+      rank: 6000,
+      draft: baseCandidate.draft
+    });
+  }
+  if (fs.existsSync(newsroomDir)) {
+    for (const fileName of fs.readdirSync(newsroomDir)) {
+      const rank = editorAttemptFileRank(fileName);
+      if (rank === 0) continue;
+      const draft = readJsonIfExists(path.join(newsroomDir, fileName));
+      if (!draft || deterministicFallbackDraft(draft)) continue;
+      records.push({ source: fileName, rank, draft });
+    }
+  }
+  return records
+    .sort((left, right) => right.rank - left.rank)
+    .map(record => ({
+      ...record,
+      sections: ensureArray(record.draft.sections).filter(reusablePublicArticleSection)
+    }))
+    .filter(record => record.sections.length > 0);
+}
+
+function sectionHashKeys(section = {}, candidate = {}) {
+  return new Set([
+    section.source_candidate_hash,
+    section.sourceCandidateHash,
+    candidate.source_candidate_hash,
+    candidate.sourceCandidateHash
+  ].map(text).filter(Boolean));
+}
+
+function sectionUrlValues(section = {}, candidate = {}) {
+  return [
+    section.source_candidate_url,
+    section.sourceCandidateUrl,
+    section.url,
+    candidate.source_candidate_url,
+    candidate.sourceCandidateUrl,
+    candidate.url,
+    candidate.parent_url,
+    candidate.parentUrl,
+    ...ensureArray(section.sources).map(source => source?.url || source),
+    ...ensureArray(section.public_article?.source_links).map(source => source?.url || source),
+    ...ensureArray(candidate.sources).map(source => source?.url || source),
+    ...ensureArray(candidate.public_article?.source_links).map(source => source?.url || source)
+  ].map(text).filter(Boolean);
+}
+
+function normalizedUrlKeys(section = {}, candidate = {}) {
+  return new Set(sectionUrlValues(section, candidate).map(normalizeUrl).filter(Boolean));
+}
+
+function baseUrlKeys(section = {}, candidate = {}) {
+  return new Set(sectionUrlValues(section, candidate).map(sourceBaseKey).filter(Boolean));
+}
+
+function hasIntersection(left, right) {
+  for (const item of left) {
+    if (right.has(item)) return true;
+  }
+  return false;
+}
+
+function findLlmPublicArticleSection(records, section = {}, candidate = {}) {
+  const targetHashes = sectionHashKeys(section, candidate);
+  const targetUrls = normalizedUrlKeys(section, candidate);
+  for (const record of records) {
+    const match = record.sections.find(sourceSection =>
+      hasIntersection(targetHashes, sectionHashKeys(sourceSection)) ||
+      hasIntersection(targetUrls, normalizedUrlKeys(sourceSection))
+    );
+    if (match) return match;
+  }
+
+  const targetBaseUrls = baseUrlKeys(section, candidate);
+  const baseMatches = [];
+  for (const record of records) {
+    for (const sourceSection of record.sections) {
+      if (hasIntersection(targetBaseUrls, baseUrlKeys(sourceSection))) {
+        baseMatches.push(sourceSection);
+      }
+    }
+  }
+  return baseMatches.length === 1 ? baseMatches[0] : null;
+}
+
+function applyLlmPublicArticle(section = {}, candidate = {}, records = [], options = {}) {
+  const sourceSection = findLlmPublicArticleSection(records, section, candidate);
+  if (!sourceSection) return section;
+  try {
+    const merged = mergePublicArticleFromLlm(section, sourceSection, candidate);
+    const headlineOverride = text(options.headlineOverride);
+    if (headlineOverride) merged.public_article.headline = headlineOverride;
+    const normalized = cloneJson(merged);
+    const issues = validatePublicArticle(normalized, 0, {
+      issue: {
+        public_contract_version: 'story-v1',
+        generation_contract_version: 1
+      },
+      requireStoryContract: true
+    });
+    return issues.length === 0 ? normalized : section;
+  } catch (_) {
+    return section;
+  }
+}
+
 function defaultIssue(date) {
   return {
     date,
@@ -1912,6 +2053,7 @@ function buildFallbackPublicIssue(options = {}) {
     ? { source: options.baseDraftSource || 'options.baseDraft', draft: options.baseDraft }
     : baseDraftCandidates(root, date)[0];
   const base = baseCandidate?.draft || defaultIssue(date);
+  const llmPublicArticleRecords = llmPublicArticleDraftRecords(root, date, baseCandidate);
   const issue = {
     ...defaultIssue(date),
     ...cloneJson(base),
@@ -2057,10 +2199,13 @@ function buildFallbackPublicIssue(options = {}) {
     .map(section => {
       const candidate = findCandidateForSection(candidates, section, {}) || {};
       const completed = completeHalSignalSection(section, candidate);
+      const headlineOverride = headlineOverrideForSection(completed, candidate, publicArticleHeadlineOverrides);
       completed.public_article = buildPublicArticle(completed, candidate, {
-        headlineOverride: headlineOverrideForSection(completed, candidate, publicArticleHeadlineOverrides)
+        headlineOverride
       });
-      return completed;
+      return applyLlmPublicArticle(completed, candidate, llmPublicArticleRecords, {
+        headlineOverride
+      });
     });
   const reportedDemotedRecords = demotedRecords.length > 0 ? demotedRecords : priorDemotedRecords;
   const reportedFallbackRecords = fallbackRecords.length > 0 ? fallbackRecords : priorFallbackRecords;

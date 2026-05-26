@@ -1,6 +1,6 @@
 {
   "date": "2026-05-27",
-  "generated_at": "2026-05-26T18:19:59.521Z",
+  "generated_at": "2026-05-26T18:50:06.601Z",
   "fallback_public_issue_status": "CREATED",
   "fallback_public_issue_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
   "review_publication_ready_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
@@ -23,10 +23,8 @@
   "preserve_article_count": 1,
   "final_article_count": 1,
   "headline_generation": {
-    "source": "llm",
-    "stage": "fallback-public-title-editor",
-    "override_count": 2,
-    "reason": "llm_headlines_generated"
+    "source": "deterministic",
+    "override_count": 0
   },
   "demoted_articles": [
     {
