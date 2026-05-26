@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-05-27",
+  "proposals": [
+    {
+      "proposal_id": "P001",
+      "topic_gap": "New features or improvements in CameraX for Android developers.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.6.1",
+        "Android CameraX release",
+        "CameraX new features"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "expected_evidence": [
+        "CameraX 1.6.1 release notes",
+        "Specific API changes or new functionalities related to camera output, preview, or recording."
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "P002",
+      "topic_gap": "Impact of Google I/O 2026 announcements on Android camera HAL software, especially regarding cross-device experiences and adaptive UI that might affect camera output or media pipelines.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [
+        "goo.gle",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android I/O 2026 camera",
+        "Jetpack Compose camera",
+        "cross-device camera",
+        "adaptive apps camera"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Information on how Jetpack Compose or adaptive experiences might influence camera preview, capture, or playback across different form factors.",
+        "Mentions of camera-related APIs or media pipeline considerations in a multi-device context."
+      ],
+      "risk_notes": [
+        "The URL is a shortened link, which might redirect to a generic I/O summary. Need to ensure the content specifically addresses camera/media aspects.",
+        "The title 'Building seamless Android experiences across devices with Jetpack Compose' is broad; specific camera relevance needs to be confirmed."
+      ]
+    },
+    {
+      "proposal_id": "P003",
+      "topic_gap": "New developments or integrations of AI in native Android app development, potentially impacting camera-generated content processing or on-device machine learning for camera features.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android AI Studio camera",
+        "native Android AI camera",
+        "on-device AI camera",
+        "camera AI development"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
+      ],
+      "expected_evidence": [
+        "Details on how Google AI Studio can be used for native Android app development, specifically mentioning camera-related AI features (e.g., image processing, object recognition, computational photography).",
+        "APIs or tools that facilitate on-device AI for camera output."
+      ],
+      "risk_notes": [
+        "The article might be too generic about AI development and lack specific camera/media relevance. Need to verify if it discusses AI applications directly tied to camera HAL or camera app functionality."
+      ]
+    }
+  ]
+}
