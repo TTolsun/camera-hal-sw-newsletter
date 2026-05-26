@@ -252,7 +252,9 @@ const PUBLIC_PROSE_PLACEHOLDER_PATTERNS = Object.freeze([
   { pattern: /stream\/metadata\s+확인\s+항목/i, reason: 'stream_metadata_check_item_placeholder' },
   { pattern: /확인\s+항목만\s+추적합니다/i, reason: 'check_item_tracking_placeholder' },
   { pattern: /source\s+범위에서[^.!?。！？\r\n]*확인\s+항목을\s+점검합니다/i, reason: 'source_scope_check_item_placeholder' },
-  { pattern: /release note 범위에서[^.!?。！？\r\n]*API\/component\/date/i, reason: 'release_note_placeholder_template' }
+  { pattern: /release note 범위에서[^.!?。！？\r\n]*API\/component\/date/i, reason: 'release_note_placeholder_template' },
+  { pattern: /원문\s+세부\s+내용으로는[^.!?。！？\r\n]*확인됩니다/i, reason: 'source_detail_review_placeholder' },
+  { pattern: /후속\s+검토에서\s+출처\s+범위를\s+확인할\s+때\s+기준점/i, reason: 'internal_followup_source_scope' }
 ]);
 
 function normalizedLeakText(value) {

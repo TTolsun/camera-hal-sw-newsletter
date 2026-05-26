@@ -1,6 +1,6 @@
 {
   "date": "2026-05-27",
-  "generated_at": "2026-05-26T17:21:45.450Z",
+  "generated_at": "2026-05-26T18:06:15.532Z",
   "fallback_public_issue_status": "CREATED",
   "fallback_public_issue_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
   "review_publication_ready_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
@@ -23,10 +23,9 @@
   "preserve_article_count": 1,
   "final_article_count": 1,
   "headline_generation": {
-    "source": "llm",
-    "stage": "fallback-public-title-editor",
-    "override_count": 4,
-    "reason": "llm_headlines_generated"
+    "source": "preserved_existing_public_headlines",
+    "override_count": 2,
+    "reason": "preserve_existing_headlines_after_public_body_cleanup"
   },
   "demoted_articles": [
     {
@@ -44,24 +43,14 @@
   ],
   "fallback_articles": [
     {
-      "headline": "CameraX Release Notes - CameraX 1.6.1",
-      "category": "AOSP Camera / Android Camera",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "source": "Android Developers Latest Updates",
-      "relevance_bucket": "direct_aosp_camera",
-      "action": "rebuild-from-bound-candidate",
-      "fallback": false,
-      "reason": "hard failure replacement"
-    },
-    {
       "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
       "category": "Android Native Tooling",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
       "relevance_bucket": "cpp_ai_tooling_fallback",
-      "action": "selected-native-tooling-supporting",
-      "fallback": false,
-      "reason": "selected source-ready native tooling supporting article"
+      "action": "demote-to-watch",
+      "fallback": true,
+      "reason": "demote-to-watch"
     }
   ],
   "rejected_candidates": []

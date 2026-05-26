@@ -965,6 +965,44 @@ function sourceFactTexts(candidate = {}, section = {}) {
 }
 
 const GENERIC_TERM_STOPWORDS = new Set([
+  'Mon',
+  'Monday',
+  'Tue',
+  'Tuesday',
+  'Wed',
+  'Wednesday',
+  'Thu',
+  'Thursday',
+  'Fri',
+  'Friday',
+  'Sat',
+  'Saturday',
+  'Sun',
+  'Sunday',
+  'Jan',
+  'January',
+  'Feb',
+  'February',
+  'Mar',
+  'March',
+  'Apr',
+  'April',
+  'May',
+  'Jun',
+  'June',
+  'Jul',
+  'July',
+  'Aug',
+  'August',
+  'Sep',
+  'September',
+  'Oct',
+  'October',
+  'Nov',
+  'November',
+  'Dec',
+  'December',
+  'Details',
   'Starting',
   'Today',
   'Build',
@@ -977,12 +1015,16 @@ const GENERIC_TERM_STOPWORDS = new Set([
   'Personal',
   'Hardware',
   'Hardware-enabled',
+  'camera-related',
+  'on-device',
   'AI-powered',
   'Official',
   'Source',
   'Posted',
   'Android Developers',
-  'Google'
+  'Google',
+  'Product Manager',
+  'Group Product Manager'
 ]);
 
 function normalizeSourceTerm(value) {
@@ -996,10 +1038,26 @@ function normalizeSourceTerm(value) {
     .replace(/[.;:]+$/g, '')
     .trim();
   if (!term || term.length < 3 || GENERIC_TERM_STOPWORDS.has(term)) return '';
+  if (/^[A-Z][a-z]{2},?$/.test(term)) return '';
+  if (/^\d{1,2}\s+[A-Z][a-z]{2,}$/.test(term)) return '';
+  if (/Product Manager/i.test(term)) return '';
   if (/^prompt$/i.test(term)) return '프롬프트 기반 생성';
   if (/^native Android(?: apps?)?$/i.test(term)) return 'native Android 앱';
   if (/^Camera$/i.test(term)) return 'Camera API';
   return term;
+}
+
+function publicSourceFactText(value) {
+  const fact = text(value)
+    .replace(/^확인된\s+변경점:\s*/i, '')
+    .replace(/^관련\s+컴포넌트:\s*/i, '')
+    .replace(/^Posted by\b[^.]{0,240}\bStarting today\b/i, 'Starting today')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!fact) return '';
+  if (/게시\s+또는\s+업데이트한\s+항목입니다\.?$/i.test(fact)) return '';
+  if (/published date|source URL|deterministic fallback|quality gate|fallback builder/i.test(fact)) return '';
+  return fact;
 }
 
 function technicalTermsFromText(value) {
@@ -1055,14 +1113,12 @@ function koreanFactPhrase(value) {
 }
 
 function sourceFactBodyParagraphs(candidate = {}, section = {}, component = '') {
-  const facts = sourceFactTexts(candidate, section);
+  const facts = sourceFactTexts(candidate, section).map(publicSourceFactText).filter(Boolean);
   const terms = sourceTermsFromFacts(facts);
   if (facts.length < 2 && terms.length < 3) return [];
 
   const source = firstText(candidate.source, candidate.publisher, ensureArray(section.sources)[0]?.title, '공개 출처');
   const title = text(candidate.title || section.headline || component);
-  const date = firstText(candidate.published_date, candidate.publishedAt, section.published_date);
-  const datePhrase = date ? `${date}에 ` : '';
   const primaryFact = koreanFactPhrase(facts[0]) || `${component || title} 관련 업데이트`;
   const componentPhrase = component || firstText(candidate.api_or_component, candidate.component, section.category, title);
   const termChunks = [];
@@ -1070,21 +1126,21 @@ function sourceFactBodyParagraphs(candidate = {}, section = {}, component = '') 
     termChunks.push(terms.slice(index, index + 6));
   }
   const paragraphs = [
-    `${source}는 ${datePhrase}${title} 내용을 공개했습니다. 원문에서 확인되는 핵심은 ${primaryFact}입니다.`
+    `${source}는 ${title}에서 ${primaryFact}을 공개했습니다.`
   ];
 
   if (termChunks[0]?.length > 0) {
-    paragraphs.push(`원문은 ${termChunks[0].join(', ')}를 주요 구성 요소로 다룹니다. 이는 ${componentPhrase}의 지원 범위, 적용 예시, 개발 흐름을 이해하기 위한 정보입니다.`);
+    paragraphs.push(`본문에서 직접 확인되는 범위는 ${termChunks[0].join(', ')}입니다. 이 항목은 ${componentPhrase}의 지원 범위, 적용 예시, 개발 흐름을 이해하기 위한 참고 정보로 다룹니다.`);
   }
   if (termChunks[1]?.length > 0) {
-    paragraphs.push(`추가로 확인되는 항목은 ${termChunks[1].join(', ')}입니다. 이런 세부 내용은 독자가 원문 발표의 실제 범위를 파악하는 데 도움이 됩니다.`);
+    paragraphs.push(`함께 언급된 항목은 ${termChunks[1].join(', ')}입니다. 이 내용은 출처가 말한 기능 예시 범위 안에서만 해석합니다.`);
   }
 
   const remainingFact = facts.slice(1).map(koreanFactPhrase).find(value =>
     value && !paragraphs.some(paragraph => paragraph.includes(value))
   );
   if (remainingFact && paragraphs.length < 4) {
-    paragraphs.push(`원문 세부 내용으로는 ${remainingFact}도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다.`);
+    paragraphs.push(`관련 사실로 ${remainingFact}도 함께 확인됩니다.`);
   }
 
   return paragraphs
@@ -1129,7 +1185,6 @@ function publicBodyParagraphs(candidate, section, component) {
   const title = text(candidate.title || section.headline);
   const change = publicChangeSummary(candidate, section, component);
   const factParagraphs = sourceFactBodyParagraphs(candidate, section, component);
-  if (factParagraphs.length >= 3) return factParagraphs;
   if (/Building seamless Android experiences across devices/i.test(title) || /Jetpack Compose is the definitive engine/i.test(change)) {
     return [
       'Google Android Developers Blog는 여러 기기와 화면 크기에서 Jetpack Compose를 중심으로 Android UX를 맞추는 흐름을 설명하면서, window size에 맞는 camera preview를 위해 CameraX를 함께 언급했습니다.',
@@ -1137,11 +1192,18 @@ function publicBodyParagraphs(candidate, section, component) {
     ];
   }
   if (/Start building today|Google AI Studio/i.test(title) || /Hardware-enabled experiences/i.test(change)) {
+    const extraTerms = sourceTermsFromFacts(sourceFactTexts(candidate, section).map(publicSourceFactText))
+      .filter(term => !/Google AI Studio|native Android 앱|Camera API|Android API/i.test(term))
+      .slice(0, 4);
+    const extraTermSentence = extraTerms.length > 0
+      ? ` 원문에서 함께 언급된 ${extraTerms.join(', ')}${extraTerms.length === 1 ? '은' : '는'} 기능 예시 범위로만 읽습니다.`
+      : '';
     return [
-      'Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android APIs를 사용할 수 있다는 점을 예로 듭니다.',
-      'Camera HAL runtime 변경 근거는 아니지만, AI Studio로 만든 sample이나 prototype이 실제 Camera API를 호출할 수 있으므로 preview/capture path, permission, device feature 의존성을 검토할 때 참고할 만합니다.'
+      'Google AI Studio는 프롬프트로 native Android 앱 prototype을 만드는 흐름에서 Camera, GPS/Location, Accelerometer, Bluetooth 같은 Android API 사용 예를 듭니다.',
+      `Camera HAL / Driver 독자는 이 항목을 Tooling Watch로 보고, 생성된 sample이 Camera 권한 선언, CameraX/Camera2 호출 위치, device feature 의존성을 어떻게 배치하는지 확인하는 정도로 다루면 됩니다.${extraTermSentence}`
     ];
   }
+  if (factParagraphs.length >= 3) return factParagraphs;
   if (/\bGlaze\b/i.test(title)) {
     return [
       'Glaze 7.2는 C++26 Reflection 기반 serialization 지원을 병합했고 YAML, CBOR, MessagePack, TOML 같은 format 지원도 함께 확장했습니다.',
@@ -1265,7 +1327,7 @@ function publicTakeawayForCandidate(candidate, section, component) {
     return '이 소식은 HAL API 변경 고지가 아니라 app/framework 계층의 호환성 점검 신호입니다. Camera HAL / Driver 팀은 CameraX preview의 aspect ratio, rotation, crop 동작이 폴더블, 태블릿, 멀티윈도우 환경에서 기존 앱과 다르게 보이지 않는지 확인하는 참고 항목으로 보면 됩니다.';
   }
   if (/Start building today|Google AI Studio/i.test(title)) {
-    return '이 소식은 Google AI Studio가 native Android 앱 prototype에서 Camera 같은 Android API를 사용할 수 있음을 보여주는 tooling 동향입니다. Camera HAL runtime 변경 근거는 아니며, 샘플 앱이 Camera 권한과 CameraX/Camera2 호출을 어떻게 구성하는지 참고하는 수준으로 제한해야 합니다.';
+    return '이 항목은 Tooling Watch 범위의 native Android prototyping 소식입니다. HAL/driver 업데이트로 보지 않고, sample이 Camera 권한, CameraX/Camera2 호출, device feature 선언을 어떻게 구성하는지 확인할 때 참고합니다.';
   }
   if (isCameraXCandidate(candidate, section) && isListenableFutureCompileFix(behavior)) {
     return 'AOSP Camera HAL에는 직접 영향이 확인되지 않았습니다. 이 항목은 CameraX 1.6.0 채택 앱이나 샘플, 검증 도구의 빌드 안정성 패치로 보는 것이 안전합니다. HAL/driver 영향은 별도 source evidence가 있을 때만 판단합니다.';
@@ -1280,7 +1342,7 @@ function publicTakeawayForCandidate(candidate, section, component) {
     return `${title}은 SoC/platform signal입니다. vendor BSP, ISP, driver branch, device matrix 영향은 별도 source evidence가 있을 때만 확인합니다.`;
   }
   if (/cpp_ai_tooling|tooling/i.test(bucket) || /tooling/i.test(impact)) {
-    return '이 소식은 native tooling workflow 참고 항목입니다. production HAL runtime behavior 변경 근거는 아니며, prototype이 Camera API를 호출할 때 권한 선언과 CameraX/Camera2 사용 방식을 확인하는 수준으로 제한합니다.';
+    return '이 항목은 native tooling workflow 참고 항목입니다. production HAL 런타임 변화가 아니라, prototype이나 보조 도구가 Camera API를 호출할 때 권한 선언과 CameraX/Camera2 사용 방식을 확인하는 용도로 봅니다.';
   }
   return `${title}은 공개 출처 범위 안의 watch signal입니다. HAL/driver 변경 근거가 확인되지 않으면 release note와 compatibility 확인 범위로 제한합니다.`;
 }
@@ -1716,15 +1778,15 @@ function issueSummary(date, sections, fallbackCount, demotedCount) {
 }
 
 function publicIssueSummary(date, sections) {
-  const topics = sections
+  const topicItems = sections
     .slice(0, 3)
     .map(section => section.public_article?.headline || section.headline || section.category)
-    .filter(Boolean)
-    .join(', ');
+    .filter(Boolean);
+  const topics = topicItems.join(', ');
   if (!topics) {
     return `이번 ${date}호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 공개 camera source 소식을 정리했습니다.`;
   }
-  return `이번 ${date}호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: ${topics}.`;
+  return `이번 ${date}호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 ${topicItems.length}개 항목을 정리했습니다: ${topics}.`;
 }
 
 function publicBriefingBullets(sections) {
@@ -1806,6 +1868,17 @@ function fallbackActionItems(issue, fallbackCount, demotedRecords) {
   ];
 }
 
+function toFallbackEditorDraftArtifact(issue, context) {
+  const artifact = toEditorDraftArtifact(issue, context);
+  artifact.public_contract_version = issue.public_contract_version;
+  artifact.generation_contract_version = issue.generation_contract_version;
+  if (artifact.issue && typeof artifact.issue === 'object') {
+    artifact.issue.public_contract_version = issue.public_contract_version;
+    artifact.issue.generation_contract_version = issue.generation_contract_version;
+  }
+  return artifact;
+}
+
 function buildFallbackPublicIssue(options = {}) {
   const root = options.root || process.cwd();
   const date = options.date;
@@ -1845,6 +1918,11 @@ function buildFallbackPublicIssue(options = {}) {
     date,
     sections: ensureArray(base.sections).map(cloneJson)
   };
+  delete issue.schemaVersion;
+  delete issue.newsletterDate;
+  delete issue.model;
+  delete issue.issue;
+  delete issue.adapterDiagnostics;
   issue.public_contract_version = 'story-v1';
   issue.generation_contract_version = 1;
 
@@ -2083,7 +2161,7 @@ function buildFallbackPublicIssue(options = {}) {
     }
   };
 
-  writeJson(path.join(newsroomDir, 'editor-draft.json'), toEditorDraftArtifact(issue, {
+  writeJson(path.join(newsroomDir, 'editor-draft.json'), toFallbackEditorDraftArtifact(issue, {
     date,
     provider: 'deterministic-fallback-public-issue',
     providerModel: 'deterministic'
