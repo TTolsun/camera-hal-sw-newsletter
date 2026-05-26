@@ -785,18 +785,24 @@ test('homepage shell stays wide while hero second line remains unwrapped', () =>
   const heroTitle = exactSelectorBlock(css, '.homepage .site-hero h1');
   const heroPrimaryCta = exactSelectorBlock(css, '.homepage .hero-actions .button-primary');
   const nowrapTitle = exactSelectorBlock(css, '.homepage .hero-title-nowrap');
+  const tabletHero = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.homepage .site-hero');
+  const mobile = mediaBlock(css, '(max-width: 640px)');
+  const mobileHero = exactSelectorBlock(mobile, '.homepage .site-hero');
   const mobileHeroTitle = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.homepage .site-hero h1');
 
   assertCssDeclaration(homepageNav, 'justify-content', 'space-between');
-  assertCssDeclaration(homepageWrap, 'width', 'min(100% - 48px, 1000px)');
-  assertCssDeclaration(homepageShell, 'width', 'min(100% - 28px, 1040px)');
-  assertCssDeclaration(hero, 'width', 'min(100% - 48px, 1000px)');
+  assertCssDeclaration(homepageWrap, 'width', 'min(100% - 48px, 1120px)');
+  assertCssDeclaration(homepageShell, 'width', 'min(100% - 28px, 1200px)');
+  assertCssDeclaration(hero, 'width', 'min(100% - 48px, 1120px)');
   assertCssDeclaration(hero, 'grid-template-columns', 'minmax(0, 1.12fr) minmax(260px, 0.52fr)');
   assertCssDeclaration(hero, 'gap', 'clamp(40px, 5.5vw, 80px)');
   assertCssDeclaration(nowrapTitle, 'white-space', 'nowrap');
   assertCssDeclaration(heroTitle, 'font-size', 'clamp(2rem, 4vw, 3.3rem)');
   assertCssDeclaration(heroPrimaryCta, 'border-color', '#0f8f49');
   assert.match(heroPrimaryCta, /background\s*:\s*linear-gradient\(135deg, #0c9650 0%, #08783a 100%\)\s*;/);
+  assertCssDeclaration(tabletHero, 'grid-template-columns', '1fr');
+  assertCssDeclaration(tabletHero, 'gap', '18px');
+  assertCssDeclaration(mobileHero, 'gap', '14px');
   assertCssDeclaration(mobileHeroTitle, 'font-size', 'clamp(1.53rem, 7.2vw, 2.1rem)');
   assert.doesNotMatch(css, /homepage-header-actions|icon-link|icon-menu|icon-search|section-icon-bolt/);
 });
@@ -846,7 +852,7 @@ test('newsletter issue page CSS uses homepage shell with issue landing layout', 
 
   assert.match(pageBackground, /radial-gradient\(circle at 50% -80px, rgba\(24, 128, 56, 0\.09\), transparent 34%\)/);
   assertCssDeclaration(issueArticlePage, 'padding', '52px 0 0');
-  assertCssDeclaration(issueWrap, 'width', 'min(100% - 48px, 1000px)');
+  assertCssDeclaration(issueWrap, 'width', 'min(100% - 48px, 1120px)');
   assertCssDeclaration(issueWrap, 'max-width', 'none');
   assertCssDeclaration(issueHero, 'grid-template-columns', 'minmax(0, 1.12fr) minmax(260px, 0.52fr)');
   assertCssDeclaration(issueHero, 'padding', '46px 0 42px');
