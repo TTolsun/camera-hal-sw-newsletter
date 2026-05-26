@@ -4289,9 +4289,11 @@ test('fallback builder publishes fallback-only issue as disclosed fallback_publi
   assert.equal(status.public_newsletter_ready, true);
   assert.equal(status.final_publish_ready, false);
   assert.equal(status.publish_gate_passed, false);
+  assert.equal(status.quality_status, 'PASS');
   assert.equal(status.review_publication_ready, true);
   assert.equal(status.homepage_visible_after_merge, true);
   assert.equal(quality.publication_mode, 'fallback_public');
+  assert.equal(quality.status, 'PASS');
   assert.equal(quality.content_quality_score, quality.score);
   assert.equal(quality.camera_relevance_score, 0);
   assert.match(quality.publication_mode_decision, /fallback_public/);
@@ -4301,6 +4303,8 @@ test('fallback builder publishes fallback-only issue as disclosed fallback_publi
   assert.equal(newsletterData.camera_anchor_count, 0);
   assert.deepEqual(newsletterData.tags, ['Tooling Watch Edition', 'Tooling Watch']);
   assert.match(markdown, /Tooling Watch Edition/);
+  assert.match(markdown, /1개 항목/);
+  assert.doesNotMatch(markdown, /세 가지 항목/);
   assert.match(html, /class="publication-notice"/);
   assert.match(html, /Tooling Watch Edition/);
   assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);
@@ -5174,13 +5178,45 @@ test('fallback builder includes selected native tooling supporting article after
     summary: 'Hardware-enabled experiences can use the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs.'
   };
   const editor = {
+    schemaVersion: 1,
+    newsletterDate: date,
+    model: {
+      provider: 'deterministic-fallback-public-issue',
+      providerModel: 'deterministic'
+    },
     date,
     title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'Workflow 3 fallback should keep source-ready supporting tooling.',
     briefing: ['Compose CameraX item.', 'AI Studio tooling item.', 'Review-only public issue.'],
     sections: [regressionSection(compose)],
     action_items: ['Review Compose CameraX behavior.'],
-    references: []
+    references: [],
+    issue: {
+      date,
+      title: `Stale nested issue - ${date}`,
+      summary: 'Stale nested issue should not be reused.',
+      sections: [{
+        headline: 'Stale nested fallback article',
+        public_article: {
+          headline: 'Stale nested fallback article',
+          lead: 'Stale nested lead.',
+          body_paragraphs: [
+            '원문 세부 내용으로는 Tue, May 관련 내용도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다.'
+          ],
+          camera_hal_takeaway: 'Camera HAL runtime 변경 근거는 아니며 stale nested issue text입니다.',
+          reader_checkpoints: ['stale nested checkpoint'],
+          source_links: [{
+            title: 'Stale Source',
+            url: 'https://example.com/stale',
+            source_role: 'primary'
+          }]
+        },
+        sources: [{
+          title: 'Stale Source',
+          url: 'https://example.com/stale'
+        }]
+      }]
+    }
   };
   const status = {
     date,
@@ -5255,20 +5291,31 @@ test('fallback builder includes selected native tooling supporting article after
   const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
 
   assert.equal(fs.existsSync(canonicalReporterPath), true);
+  assert.equal(finalEditor.public_contract_version, 'story-v1');
+  assert.equal(finalEditor.generation_contract_version, 1);
+  assert.equal(finalEditor.issue.public_contract_version, 'story-v1');
+  assert.equal(finalEditor.issue.generation_contract_version, 1);
   assert.equal(finalEditor.sections.length, 2);
   assert.equal(
     finalEditor.sections.some(section => section.headline.includes(aiStudio.title)),
     true,
     finalEditor.sections.map(section => section.headline).join(' | ')
   );
+  assert.equal(finalEditor.sections.some(section => section.headline === 'Stale nested fallback article'), false);
   assert.match(publicMarkdown, /Build native Android apps in Google AI Studio/);
+  assert.match(publicMarkdown, /2개 항목/);
+  assert.doesNotMatch(publicMarkdown, /세 가지 항목/);
   assert.match(publicMarkdown, /프롬프트 기반 생성/);
   assert.match(publicMarkdown, /native Android 앱/);
   assert.match(publicMarkdown, /Camera API/);
-  assert.match(publicMarkdown, /Gemini API/);
+  assert.match(publicMarkdown, /GPS\/Location/);
   assert.match(publicMarkdown, /Camera HAL\/Driver 관점에서의 의미/);
   assert.match(publicMarkdown, /CameraX preview의 aspect ratio, rotation, crop 동작/);
+  assert.match(publicMarkdown, /Camera 권한 선언, CameraX\/Camera2 호출 위치, device feature 의존성/);
   assert.doesNotMatch(publicMarkdown, /HAL\/driver 변경으로 해석하지 말고/);
+  assert.doesNotMatch(publicMarkdown, /후속 검토|출처 범위를 확인할 때 기준점|원문 세부 내용으로는/);
+  assert.doesNotMatch(publicMarkdown, /Camera HAL runtime 변경 근거는|Tue, May|Details|Group Product Manager/);
+  assert.doesNotMatch(publicMarkdown, /camera-related|on-device/);
   assert.doesNotMatch(publicMarkdown, /API\/component\/date|stream\/metadata|compatibility test scenario|현재\s+device matrix와\s+맞는지/);
   assert.equal(fallbackReport.fallback_articles.some(item => item.action === 'selected-native-tooling-supporting'), true);
   assert.equal(result.status.public_newsletter_ready, true);

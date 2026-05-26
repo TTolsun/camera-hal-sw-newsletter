@@ -440,6 +440,38 @@ function writeReviewOnlyQualityStatus(root, date, overrides = {}) {
   });
 }
 
+function writeFallbackPublicQualityStatus(root, date, overrides = {}) {
+  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+    date,
+    title: 'Camera HAL / SW Newsletter',
+    summary: 'Tooling Watch Edition',
+    html: `newsletters/${date}/index.html`,
+    md: `newsletters/${date}/newsletter.md`,
+    tags: ['Tooling Watch Edition', 'Tooling Watch'],
+    publication_mode: 'fallback_public',
+    homepage_visibility: 'visible_with_fallback_badge',
+    fallback_only: true,
+    camera_anchor_count: 0,
+    homepage_badge: 'Tooling Watch Edition'
+  }]);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+    date,
+    publication_mode: 'fallback_public',
+    homepage_visibility: 'visible_with_fallback_badge',
+    fallback_only: true,
+    camera_anchor_count: 0,
+    fallback_public_ready: true,
+    final_publish_ready: false,
+    editor_review_required: true,
+    public_newsletter_ready: true,
+    review_publication_ready: true,
+    diagnostics_only: false,
+    homepage_visible_after_merge: true,
+    fallback_public_issue_reason: 'Fallback public issue files were generated for editor-approved publication.',
+    ...overrides
+  });
+}
+
 function writeDiagnosticsOnlyStatus(root, date, overrides = {}) {
   writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
     date,
@@ -1053,6 +1085,20 @@ test('review-only publication target does not make claim-contract drift a hard q
   const date = '2026-04-01';
   writeMissingClaimsQualityFixture(root, { date });
   writeReviewOnlyQualityStatus(root, date);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+
+  const result = runScript(validateQualityPath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.doesNotMatch(result.stderr, /quality report is stale/);
+  assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
+});
+
+test('fallback-public publication target does not make claim-contract drift a hard quality failure', () => {
+  const root = tempRoot('validate-quality-fallback-public-missing-claims-');
+  const date = '2026-04-01';
+  writeMissingClaimsQualityFixture(root, { date });
+  writeFallbackPublicQualityStatus(root, date);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
 
   const result = runScript(validateQualityPath, root);

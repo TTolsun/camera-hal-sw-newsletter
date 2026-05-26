@@ -431,6 +431,18 @@ test('public newsletter validator rejects validator-token placeholder prose', ()
   assert.ok(errors.some(error => /validator-token prose|API\/component\/date|stream\/metadata/.test(error)));
 });
 
+test('public newsletter validator rejects internal source-review placeholder prose', () => {
+  const errors = validatePublicNewsletterArtifacts({
+    markdown: markdown().replace(
+      '본문 1A는 source-backed change를 Camera HAL 독자 관점에서 설명합니다.',
+      '원문 세부 내용으로는 Tue, May 관련 내용도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다.'
+    ),
+    html: html('<p>원문 세부 내용으로는 Tue, May 관련 내용도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다.</p>')
+  });
+
+  assert.ok(errors.some(error => /source_detail_review_placeholder|internal_followup_source_scope/.test(error)));
+});
+
 test('public newsletter validator allows natural technical prose with concrete targets', () => {
   const errors = validatePublicNewsletterArtifacts({
     markdown: markdown({

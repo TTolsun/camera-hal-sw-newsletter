@@ -88,16 +88,23 @@ function reviewPublicationExceptionReason(item = {}, report = {}, status = {}) {
     status.publication_mode ||
     ''
   ).trim();
-  if (publicationMode !== 'review_only') return '';
+  if (!['review_only', 'fallback_public'].includes(publicationMode)) return '';
   if (!isTrue(status.review_publication_ready)) return '';
   if (!isTrue(status.public_newsletter_ready)) return '';
   if (!isTrue(status.homepage_visible_after_merge)) return '';
   if (!isTrue(status.editor_review_required)) return '';
   if (!isFalse(status.final_publish_ready)) return '';
   if (isTrue(status.diagnostics_only)) return '';
+  if (publicationMode === 'fallback_public') {
+    if (!isTrue(status.fallback_public_ready)) return '';
+    if (!isTrue(status.fallback_only)) return '';
+    if (Number(status.camera_anchor_count) !== 0) return '';
+  }
   const reason = String(
     status.review_publication_ready_reason ||
     report.review_publication_ready_reason ||
+    status.fallback_public_issue_reason ||
+    report.fallback_public_issue_reason ||
     status.editor_review_reason ||
     report.editor_review_reason ||
     ''
