@@ -54,8 +54,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
-        "last_seen_at": "2026-05-25T00:00:00.000Z",
-        "seen_count": 4,
+        "last_seen_at": "2026-05-26T00:00:00.000Z",
+        "seen_count": 5,
         "status": 200
       },
       "current_values": {
@@ -1737,8 +1737,8 @@
           }
         ],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
-        "last_seen_at": "2026-05-25T00:00:00.000Z",
-        "seen_count": 4,
+        "last_seen_at": "2026-05-26T00:00:00.000Z",
+        "seen_count": 5,
         "status": 200
       },
       "current_values": {

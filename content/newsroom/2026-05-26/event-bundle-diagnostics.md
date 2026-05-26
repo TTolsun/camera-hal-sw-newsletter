@@ -44,12 +44,11 @@
 - event_bb92e4ef92b5: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html, evidence=0, confidence=low
 - event_b169f55cd9e5: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html, evidence=0, confidence=low
 - event_3744977cfc68: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html, evidence=0, confidence=low
-- event_d4f82e08cbcf: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo, evidence=0, confidence=low
 - event_4f422e47339f: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer, evidence=0, confidence=low
 - event_8d2c20f81637: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei, evidence=0, confidence=low
 - event_a023062a2e52: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru, evidence=0, confidence=low
 - event_47efcf32a7f3: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig, evidence=0, confidence=low
-- event_bd925ddd03cf: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/2026-survey-summary, evidence=0, confidence=low
+- event_762eb693ab2e: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos, evidence=0, confidence=low
 - event_e4b2671da11f: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-how-to-build-robust-cpp-inter-process-queues-jody-hagins, evidence=0, confidence=low
 - event_0cfa40b3a793: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire, evidence=0, confidence=low
 - event_090e15fe27db: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo, evidence=0, confidence=low
@@ -57,3 +56,4 @@
 - event_511155d5eb95: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp, evidence=0, confidence=low
 - event_b82118ee5311: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter, evidence=0, confidence=low
 - event_63e4833cafb8: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks, evidence=0, confidence=low
+- event_c2b11f90366d: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain, evidence=0, confidence=low

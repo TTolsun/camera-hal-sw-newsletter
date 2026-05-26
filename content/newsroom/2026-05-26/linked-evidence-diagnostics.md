@@ -5,7 +5,7 @@
 - enable_network: false
 - candidate_count: 40
 - total_linked_evidence: 0
-- source_aware_linked_evidence: 1345
+- source_aware_linked_evidence: 1347
 - warning_count: 34
 
 ## Fetch Status Counts
@@ -14,10 +14,10 @@
 
 ## Impact Type Counts
 
-- build_dependency_fix: 12
+- build_dependency_fix: 11
 - camera_api_change: 4
 - documentation_only: 2
-- generic_tooling_change: 7
+- generic_tooling_change: 8
 - security_component_camera_related: 1
 - unknown: 13
 - video_capture_fix: 1
@@ -51,12 +51,11 @@
 - Building for the Intelligence System on Android: 0 evidence, impact=unknown, recommendation=unknown
 - What's new in Android for Cars: Unifying platforms and unlocking premium experiences: 0 evidence, impact=unknown, recommendation=unknown
 - What's New in Wear OS 7: 0 evidence, impact=unknown, recommendation=unknown
-- C++26: A User-Friendly assert() macro -- Sandor Dargo: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - C++: The Documentary trailer: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - Let the Compiler Check Your Units -- Wu Yongwei: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - What reinterpret_cast doesn&apos;t do -- Andreas Fertig: 0 evidence, impact=build_dependency_fix, recommendation=watch
-- Results summary: 2026 Annual C++ Developer Survey "Lite": 0 evidence, impact=generic_tooling_change, recommendation=watch
+- CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - CppCon 2025 How To Build Robust C++ Inter-Process Queues -- Jody Hagins: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - JSON and C++26 compile-time reflection: a talk -- Daniel Lemire: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - What Happens When a Destructor Throws -- Sandor Dargo: 0 evidence, impact=generic_tooling_change, recommendation=watch
@@ -64,3 +63,4 @@
 - Evolving a Translation System with Reflection in C++: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - CppCon 2025 Back to Basics: Move Semantics -- Ben Saks: 0 evidence, impact=generic_tooling_change, recommendation=watch
+- CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz: 0 evidence, impact=generic_tooling_change, recommendation=watch

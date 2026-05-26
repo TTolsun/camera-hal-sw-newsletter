@@ -11,7 +11,7 @@ Date: 2026-05-26
 - Selected candidates: 2
 - Rendered main articles: 2
 - Source gap candidates: 37
-- Generic noise candidates: 28
+- Generic noise candidates: 29
 - Duplicate candidates: 1
 - Recommendations: NO_RECENT_SIGNAL: 47, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 1, KEEP_AND_FIX_PARSER: 5
 - Selected main source quality coverage: 3/3
@@ -32,7 +32,7 @@ Date: 2026-05-26
 | source_quality_status | blocked | 37 |
 | source_quality_status | allowed | 3 |
 | blocker | source_gap_risk | 37 |
-| blocker | reference_only | 33 |
+| blocker | reference_only | 34 |
 | blocker | undated_reference_page | 2 |
 
 
@@ -113,7 +113,7 @@ _없음_
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 13 | 0 | 0 | 0 | 1 | 0.6154 | 0 |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 13 | 0 | 0 | 0 | 1 | 0.6923 | 0 |
 
 ## Warnings
 
