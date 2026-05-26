@@ -185,6 +185,86 @@ test('audit flags selectedImage that is not present in imageCandidates', async (
   assert.equal(report.errors.some(item => item.reasonCode === 'selected_image_not_in_candidates'), true);
 });
 
+test('audit keeps publish-target render mismatch blocking for normal public issues', async () => {
+  const root = tempRoot('newsletter-image-public-render-mismatch-');
+  const date = '2026-05-27';
+  const selectedImage = 'https://publisher.example.com/images/public-card.png';
+  const fixture = issue(date, {
+    selectedImage,
+    imageSource: 'https://publisher.example.com/camera-update',
+    imageAttribution: 'Example Publisher',
+    imageAlt: 'Selected image missing from rendered output',
+    imageLicenseStatus: 'unknown',
+    imageCandidates: [validImage(selectedImage)]
+  });
+  fixture.publication_mode = 'public';
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), fixture);
+  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), '# Missing image\n');
+  writeText(path.join(root, 'newsletters', date, 'index.html'), '<html><body>Missing image</body></html>');
+
+  const report = await buildNewsletterImageAuditReport({ root, date });
+
+  assert.equal(report.render_consistency_scope, 'editor_draft');
+  assert.equal(report.summary.selected_image_render_mismatch_count, 1);
+  assert.equal(report.summary.publish_blocking_issue_count, 1);
+});
+
+test('fallback_public audit checks rendered public issue images instead of demoted editor images', async () => {
+  const root = tempRoot('newsletter-image-fallback-public-scope-');
+  const date = '2026-05-27';
+  const demotedImage = 'https://publisher.example.com/images/demoted-card.png';
+  const renderedImage = 'https://publisher.example.com/images/rendered-card.png';
+  const demotedSection = issue(date, {
+    headline: 'Demoted CameraX article',
+    selectedImage: demotedImage,
+    imageSource: 'https://publisher.example.com/camera-update',
+    imageAttribution: 'Example Publisher',
+    imageAlt: 'Demoted image',
+    imageLicenseStatus: 'unknown',
+    imageCandidates: [validImage(demotedImage)]
+  }).sections[0];
+  const renderedSection = retrySection('Rendered tooling article', 'https://publisher.example.com/camera-update');
+  Object.assign(renderedSection, {
+    selectedImage: renderedImage,
+    imageSource: 'https://publisher.example.com/camera-update',
+    imageAttribution: 'Example Publisher',
+    imageAlt: 'Rendered image',
+    imageLicenseStatus: 'unknown',
+    imageCandidates: [validImage(renderedImage)]
+  });
+  const editor = {
+    ...issue(date),
+    publication_mode: 'fallback_public',
+    fallback_only: true,
+    sections: [demotedSection, renderedSection]
+  };
+  const publicIssue = {
+    ...editor,
+    sections: [renderedSection]
+  };
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), publicIssue);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+    date,
+    publication_mode: 'fallback_public',
+    run_mode: 'review_only_public',
+    public_state: 'REVIEW_ONLY_PUBLIC_CREATED'
+  });
+  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), buildMarkdown(publicIssue));
+  writeText(path.join(root, 'newsletters', date, 'index.html'), buildHtml(publicIssue));
+
+  const report = await buildNewsletterImageAuditReport({ root, date });
+
+  assert.equal(report.render_consistency_scope, 'rendered_public_issue');
+  assert.equal(report.source_of_truth, `content/newsroom/${date}/fallback-public-issue.json`);
+  assert.equal(report.summary.article_count, 1);
+  assert.equal(report.summary.selected_image_count, 1);
+  assert.equal(report.summary.rendered_image_count, 1);
+  assert.equal(report.summary.selected_image_render_mismatch_count, 0);
+  assert.equal(report.summary.publish_blocking_issue_count, 0);
+  assert.equal(report.errors.length, 0);
+});
+
 test('known reason code validation rejects typos before reports can hide them', () => {
   assert.doesNotThrow(() => assertKnownImageReasonCode('missing_attribution'));
   assert.throws(

@@ -648,19 +648,39 @@ function countMarkdownImages(markdown) {
   return (String(markdown || '').match(/^!\[/gm) || []).length;
 }
 
-function renderConsistency(issue, markdown, html) {
+function imageAppearsInPublicArtifacts(selectedImage, markdown, html) {
+  const htmlImage = selectedImage.replace(/&/g, '&amp;');
+  return {
+    markdown: markdown.includes(selectedImage),
+    html: html.includes(selectedImage) || html.includes(htmlImage)
+  };
+}
+
+function isRenderedPublicIssueScope(issue = {}, status = {}) {
+  const publicationMode = String(issue.publication_mode || status.publication_mode || '').trim();
+  const runMode = String(status.run_mode || '').trim();
+  const publicState = String(status.public_state || '').trim();
+  return publicationMode === 'fallback_public' ||
+    publicationMode === 'review_only' ||
+    runMode === 'review_only_public' ||
+    publicState === 'REVIEW_ONLY_PUBLIC_CREATED';
+}
+
+function renderConsistency(issue, markdown, html, options = {}) {
   const mismatches = [];
+  const publicArtifactsOnly = options.publicArtifactsOnly === true;
   for (const [index, section] of ensureArray(issue.sections).entries()) {
     const selectedImage = String(section.selectedImage || '').trim();
     if (!selectedImage) continue;
-    const htmlImage = selectedImage.replace(/&/g, '&amp;');
-    if (!markdown.includes(selectedImage) || !(html.includes(selectedImage) || html.includes(htmlImage))) {
+    const rendered = imageAppearsInPublicArtifacts(selectedImage, markdown, html);
+    if (publicArtifactsOnly && !rendered.markdown && !rendered.html) continue;
+    if (!rendered.markdown || !rendered.html) {
       mismatches.push({
         index: index + 1,
         headline: articleTitle(section, index),
         selectedImage,
-        markdown: markdown.includes(selectedImage),
-        html: html.includes(selectedImage),
+        markdown: rendered.markdown,
+        html: rendered.html,
         reasonCode: 'render_mismatch',
         reasonLabel: imageReasonLabelKo('render_mismatch'),
         reasonText: imageReasonTextKo('render_mismatch')
@@ -686,6 +706,7 @@ function reportPaths(root, date) {
   return {
     dateDir,
     editorPath: path.join(dateDir, 'editor-draft.json'),
+    fallbackPublicIssuePath: path.join(dateDir, 'fallback-public-issue.json'),
     editorMarkdownPath: path.join(dateDir, 'editor-draft.md'),
     newsletterMarkdownPath: path.join(root, 'newsletters', date, 'newsletter.md'),
     newsletterHtmlPath: path.join(root, 'newsletters', date, 'index.html'),
@@ -699,10 +720,21 @@ async function buildNewsletterImageAuditReport(options = {}) {
   const root = options.root || process.cwd();
   const date = options.date;
   const paths = reportPaths(root, date);
-  const issue = readJsonIfExists(paths.editorPath);
+  const editorIssue = readJsonIfExists(paths.editorPath);
+  const fallbackPublicIssue = readJsonIfExists(paths.fallbackPublicIssuePath);
   const markdown = readTextIfExists(paths.newsletterMarkdownPath);
   const html = readTextIfExists(paths.newsletterHtmlPath);
   const status = readJsonIfExists(paths.generationStatusPath) || {};
+  const publicArtifactScope = isRenderedPublicIssueScope(editorIssue || fallbackPublicIssue || {}, status);
+  const useRenderedPublicIssue = Boolean(
+    publicArtifactScope &&
+    options.useEditorDraftForAudit !== true &&
+    fallbackPublicIssue
+  );
+  const issue = useRenderedPublicIssue ? fallbackPublicIssue : editorIssue;
+  const sourceOfTruth = useRenderedPublicIssue
+    ? `content/newsroom/${date}/fallback-public-issue.json`
+    : `content/newsroom/${date}/editor-draft.json`;
   const warnings = [];
   const errors = [];
 
@@ -710,7 +742,7 @@ async function buildNewsletterImageAuditReport(options = {}) {
     warnings.push({
       type: 'missing_source_of_truth',
       message: 'editor-draft.json is missing; image audit cannot inspect this date.',
-      source_artifact: `content/newsroom/${date}/editor-draft.json`
+      source_artifact: sourceOfTruth
     });
   }
 
@@ -721,7 +753,9 @@ async function buildNewsletterImageAuditReport(options = {}) {
     }
   }
 
-  const mismatches = issue ? renderConsistency(issue, markdown, html) : [];
+  const mismatches = issue ? renderConsistency(issue, markdown, html, {
+    publicArtifactsOnly: publicArtifactScope && !useRenderedPublicIssue
+  }) : [];
   for (const mismatch of mismatches) {
     errors.push({
       type: 'selected_image_render_mismatch',
@@ -780,12 +814,13 @@ async function buildNewsletterImageAuditReport(options = {}) {
   return {
     schemaVersion: 1,
     date,
-    source_of_truth: `content/newsroom/${date}/editor-draft.json`,
+    source_of_truth: sourceOfTruth,
     public_artifacts: {
       markdown: `newsletters/${date}/newsletter.md`,
       html: `newsletters/${date}/index.html`
     },
     mode: isPublishTarget ? 'publish-target' : 'review-or-draft',
+    render_consistency_scope: publicArtifactScope ? 'rendered_public_issue' : 'editor_draft',
     summary: {
       article_count: articleCount,
       rendered_image_count: countRenderedImages(html),
@@ -1103,7 +1138,12 @@ function applySelectedCandidate(section, article) {
 async function repairNewsletterImagesForDate(options = {}) {
   const root = options.root || process.cwd();
   const date = options.date;
-  const before = await buildNewsletterImageAuditReport({ ...options, root, date });
+  const before = await buildNewsletterImageAuditReport({
+    ...options,
+    root,
+    date,
+    useEditorDraftForAudit: true
+  });
   if (before.summary.repairable_article_count === 0) {
     await writeNewsletterImageAuditArtifacts({ ...options, root, date, failOnPublishBlocking: false });
     return { date, repairedArticleCount: 0, report: before };
@@ -1134,6 +1174,7 @@ async function repairNewsletterImagesForDate(options = {}) {
     ...options,
     root,
     date,
+    useEditorDraftForAudit: true,
     repairedInThisRunCount: repairedArticleCount,
     failOnPublishBlocking: false
   });
