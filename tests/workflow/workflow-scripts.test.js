@@ -78,6 +78,11 @@ const {
   publicationDecisionForSections
 } = require('../../scripts/newsroom/common/publication-mode');
 const {
+  blockingIssues: llmPublicationQualityBlockingIssues,
+  normalizeReport: normalizeLlmPublicationQualityReport,
+  promptFor: llmPublicationQualityPromptFor
+} = require('../../scripts/newsroom/cli/validate-llm-publication-quality');
+const {
   candidate: buildCandidate,
   retrySection
 } = require('../helpers/newsroom-builders');
@@ -7133,6 +7138,57 @@ test('newsroom PR body primary headings are Korean', () => {
   }
 });
 
+test('LLM publication quality prompt judges final public artifacts only', () => {
+  const prompt = llmPublicationQualityPromptFor('2026-05-27', {
+    entry: { date: '2026-05-27', title: 'Camera HAL / SW Newsletter - 2026-05-27' },
+    statusSummary: {
+      publication_mode: 'fallback_public',
+      run_mode: 'review_only_public'
+    },
+    markdown: '# Rendered public issue\n\nPublic article body.',
+    html: '<html><body><article>Rendered public HTML.</article></body></html>'
+  });
+
+  assert.match(prompt, /final rendered public newsletter artifacts/);
+  assert.match(prompt, /not intermediate editor drafts/);
+  assert.match(prompt, /fallback_public \/ review_only_public/);
+  assert.match(prompt, /Rendered public issue/);
+  assert.match(prompt, /Rendered public HTML/);
+});
+
+test('LLM publication quality report fail-closes unknown issue severity', () => {
+  const report = normalizeLlmPublicationQualityReport({
+    date: '2026-05-27',
+    overall_pass: true,
+    summary: 'Reviewable with blocking issue severities.',
+    issues: [
+      {
+        field: 'summary',
+        severity: 'p3',
+        reason: 'Minor wording polish.'
+      },
+      {
+        field: 'sources',
+        severity: 'p2',
+        reason: 'A public source link is missing.'
+      },
+      {
+        field: 'public_artifacts',
+        severity: 'BLOCKER',
+        reason: 'Unknown severity must not be treated as non-blocking.'
+      }
+    ]
+  }, '2026-05-27');
+
+  assert.equal(report.issues[0].severity, 'P3');
+  assert.equal(report.issues[1].severity, 'P2');
+  assert.equal(report.issues[2].severity, 'BLOCKER');
+  assert.deepEqual(
+    llmPublicationQualityBlockingIssues(report).map(issue => issue.field),
+    ['sources', 'public_artifacts']
+  );
+});
+
 test('final newsroom workflow separates review PR success from publish-ready gate', () => {
   const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '03-newsroom-final-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
@@ -7233,6 +7289,12 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(ensurePublicStep, /node scripts\/ensure-public-newsletter-artifacts\.js/);
   assert.match(resolveMetaStep, /node scripts\/resolve-reviewable-artifacts\.js >> "\$GITHUB_OUTPUT"/);
   assert.match(validateGeneratedSiteStep, /if: steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
+  assert.match(validateGeneratedSiteStep, /^\s*run: npm run validate:post-generation$/m);
+  assert.doesNotMatch(validateGeneratedSiteStep, /npm run validate:quality/);
+  assert.doesNotMatch(validateGeneratedSiteStep, /^\s*run: npm run validate$/m);
+  const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'package.json'), 'utf8'));
+  assert.match(packageJson.scripts['validate:post-generation'], /validate:llm-publication-quality/);
+  assert.doesNotMatch(packageJson.scripts['validate:post-generation'], /validate:quality/);
   assert.match(workflow, /newsletter/);
   assert.match(workflow, /aosp-camera/);
   assert.match(workflow, /editor-review/);

@@ -31,6 +31,7 @@
     "check:encoding": "node scripts/check-text-encoding.js",
     "check:repo-hygiene": "node scripts/check-repo-hygiene.js",
     "validate": "npm run check:encoding && npm run check:repo-hygiene && npm run check:fixtures && npm run check:domain-model-boundary && npm run validate:policy && npm run check:policy-docs && npm run validate:config && npm run validate:site && npm run validate:archive && npm run validate:public && npm run validate:images && npm run validate:quality && npm run validate:localization",
+    "validate:post-generation": "npm run check:encoding && npm run check:repo-hygiene && npm run check:fixtures && npm run check:domain-model-boundary && npm run validate:policy && npm run check:policy-docs && npm run validate:config && npm run validate:site && npm run validate:archive && npm run validate:public && npm run validate:images && npm run validate:llm-publication-quality && npm run validate:localization",
     "validate:policy": "node scripts/validate-newsletter-policy.js",
     "validate:archive": "node scripts/validate-archive.js",
     "validate:source-quality-rollout": "node scripts/newsroom/validate/validate-source-quality-rollout-exit.js",
@@ -40,6 +41,7 @@
     "validate:public": "node scripts/validate-public-newsletter.js",
     "validate:images": "node scripts/validate-external-images.js",
     "validate:quality": "node scripts/validate-quality.js",
+    "validate:llm-publication-quality": "node scripts/validate-llm-publication-quality.js",
     "validate:localization": "node scripts/validate-localization.js"
   },
   "dependencies": {
