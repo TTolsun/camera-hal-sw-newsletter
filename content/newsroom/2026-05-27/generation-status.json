@@ -117,8 +117,8 @@
     "candidate_count": 42
   },
   "run_context": {
-    "github_run_id": "26463804643",
-    "github_sha": "39558c700dc63cbae946001bd7c6231412972fb9",
+    "github_run_id": "26466727024",
+    "github_sha": "ce16d5e56eede79f53630e82b3f62d777c784022",
     "github_ref": "refs/heads/main"
   },
   "raw_artifact_validation_error": null,
@@ -149,7 +149,7 @@
       "issues": [
         {
           "index": 1,
-          "headline": "CameraX 1.6.1 릴리스: Android 17 호환성 확보 및 기기별 YUV 스트림 왜곡 수정",
+          "headline": "CameraX 1.6.1 릴리스: 기기별 YUV 왜곡 및 토치 캡처 호환성 패치 적용",
           "type": "missing_article_sections",
           "keys": [
             "verified_facts",
@@ -161,7 +161,7 @@
         },
         {
           "index": 2,
-          "headline": "Google I/O 2026: Jetpack Compose 기반 적응형 UI 환경에서의 CameraX 미리보기 최적화",
+          "headline": "Google I/O 2026: Jetpack Compose 기반 적응형 레이아웃에서의 CameraX 미리보기 최적화",
           "type": "missing_article_sections",
           "keys": [
             "verified_facts",
@@ -215,7 +215,7 @@
         "issues": [
           {
             "index": 1,
-            "headline": "CameraX 1.6.1 릴리스: Android 17 호환성 확보 및 기기별 YUV 스트림 왜곡 수정",
+            "headline": "CameraX 1.6.1 릴리스: 기기별 YUV 왜곡 및 토치 캡처 호환성 패치 적용",
             "type": "missing_article_sections",
             "keys": [
               "verified_facts",
@@ -227,7 +227,7 @@
           },
           {
             "index": 2,
-            "headline": "Google I/O 2026: Jetpack Compose 기반 적응형 UI 환경에서의 CameraX 미리보기 최적화",
+            "headline": "Google I/O 2026: Jetpack Compose 기반 적응형 레이아웃에서의 CameraX 미리보기 최적화",
             "type": "missing_article_sections",
             "keys": [
               "verified_facts",
@@ -253,9 +253,9 @@
       },
       "field": "sections.article_sections",
       "deterministic_repair_failure_reason_codes": [
-        "missing_concrete_two_week_check",
         "missing_why_now_context",
         "missing_why_now",
+        "missing_concrete_two_week_check",
         "missing_check_within_2_weeks"
       ],
       "stage": "editor attempt 1/2",
@@ -418,11 +418,11 @@
   "headline_decision": {
     "decision": "retained_current_above_margin",
     "reason": "retained_current_above_margin",
-    "current_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "current_headline_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
     "replacement_headline_key": null,
-    "previous_stored_current_score": 100,
+    "previous_stored_current_score": 98,
     "runtime_decayed_score": 98,
-    "last_scored_at": "2026-05-26",
+    "last_scored_at": "2026-05-27",
     "scored_at": "2026-05-27",
     "retained": true,
     "replaced": false,

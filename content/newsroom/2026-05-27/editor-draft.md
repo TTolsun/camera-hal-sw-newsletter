@@ -1,6 +1,6 @@
 # Camera HAL / SW Newsletter - 2026-05-27
 
-Tooling Watch Edition - 이번 2026-05-27호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 1개 항목을 정리했습니다: Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.
+Tooling Watch Edition - 이번 2026-05-27호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 1개 항목을 정리했습니다: Google AI Studio, 프롬프트 기반 CameraX·Camera2 활용 native Android 앱 prototype 생성 지원.
 
 
 > Tooling Watch Edition
@@ -14,7 +14,7 @@ Tooling Watch Edition - 이번 2026-05-27호는 Camera HAL / Driver / Native too
 - 직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.
 - 직접 HAL 변경 근거가 없는 항목은 참고 동향으로만 공유합니다.
 
-## 2. Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인
+## 2. Google AI Studio, 프롬프트 기반 CameraX·Camera2 활용 native Android 앱 prototype 생성 지원
 
 
 ![Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png)

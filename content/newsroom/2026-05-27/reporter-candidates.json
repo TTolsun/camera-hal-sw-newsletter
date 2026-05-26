@@ -433,7 +433,7 @@
       "version_or_release": "CameraX 1.6.1",
       "api_or_component": "CameraX / androidx.camera",
       "source_hint_api_or_component": "android",
-      "behavior_change": "CameraX 1.6.0 사용 시 'Cannot access class ListenableFuture' 컴파일 오류 수정. (Ic8cba, b/497571473) 또한, CameraX 1.6.1은 개발자가 라이프사이클에 바인딩하기 전에 특정 유스케이스 및 기능(HDR, 안정화, 특정 해상도, CameraX 확장 또는 슬로우 모션 등) 조합이 기기에서 지원되는지 쿼리할 수 있는 API를 도입했습니다. Android 17 기기에서 발생하는 알 수 없는 동적 범위 모드 추가로 인한 CameraX 앱 충돌을 수정했습니다. (Ibd7b5) PREVIEW_STABILIZATION이 VideoCapture와 함께 사용될 때 일관성 없는 결과를 초래하던 버그를 수정했습니다. (Ifed82, b/449913903) 지원되지 않는 기능이 잘못 제공되던 문제를 수정했습니다. (I38db8, b/449532342) Samsung Galaxy S6에서 비디오 결과가 불안정하던 문제를 수정했습니다. (I612d9, b/235127608) CameraInfo#isFeatureGroupSupported가 PREVIEW_STABILIZATION에 대해 잘못 true를 반환할 수 있던 문제를 수정했습니다. (I2c355c, b/437816469) Samsung Z Fold 4 기기에서 왜곡 문제가 발생하던 YUV 형식 출력 크기를 제외했습니다. (I776bf, b/460322307) Samsung A53 기기에서 VideoCapture 유스케이스가 바인딩된 상태에서 토치를 사용한 이미지 캡처가 실패하던 문제를 수정했습니다. (I0f183, b/458197367) 일부 기기에서 초광각 카메라와 플래시를 함께 사용할 때 노출 부족 이미지가 발생하던 문제를 수정했습니다. (Ib7530, b/444590340) 0xFF 패딩이 있는 JPEG 파싱을 위한 ExifInterface 종속성 업데이트를 통해 JPEG 인코더가 마커 앞에 채움 바이트를 추가하는 기기에서 이미지 캡처 실패를 해결했습니다. (I0eb49)",
+      "behavior_change": "CameraX 1.6.0 사용 시 'Cannot access class ListenableFuture' 컴파일 오류 수정. (Ic8cba, b/497571473)",
       "selection_exclusion_reason": "Eligible for short newsletter use.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
@@ -756,11 +756,20 @@
         ],
         "relevance_reason": "Android Developers Latest Updates (official, high, score 72): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)"
       },
-      "relevance_reason": "CameraX는 Android Camera Framework의 상위 계층이지만, 그 변경 사항은 HAL 구현 및 검증에 영향을 미칠 수 있는 앱 호환성, 사용 패턴, 성능 특성을 나타낼 수 있습니다. 특히 기기별 문제 수정은 HAL/드라이버 수준의 잠재적 문제를 시사할 수 있습니다.",
+      "relevance_reason": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, HAL/드라이버 구현의 호환성 및 동작에 간접적인 영향을 미칠 수 있습니다. 특히 기기별 버그 수정은 HAL/드라이버 계층의 특정 동작을 우회하거나 보완하는 경우가 많습니다.",
       "evidence_notes": [
-        "CameraX 1.6.1 릴리스 노트에 명시된 버그 수정 및 기능 개선 사항입니다.",
-        "컴파일 오류 수정, Android 17 기기에서의 충돌 수정, PREVIEW_STABILIZATION 및 VideoCapture 일관성 개선, 지원되지 않는 기능 필터링, Samsung Galaxy S6 비디오 문제 수정, CameraInfo#isFeatureGroupSupported 오동작 수정, Samsung Z Fold 4 YUV 출력 크기 문제 제외, Samsung A53 토치 이미지 캡처 실패 수정, 초광각 카메라 플래시 노출 문제 수정, ExifInterface 종속성 업데이트를 통한 JPEG 파싱 및 이미지 캡처 실패 해결 등 다양한 개선이 포함됩니다.",
-        "특정 기기(Samsung Galaxy S6, Samsung Z Fold 4, Samsung A53)에 대한 수정 사항이 포함되어 있습니다."
+        "CameraX 1.6.1 릴리스 노트에 명시된 버그 수정 사항입니다.",
+        "CameraX 1.6.0에서 발생하던 컴파일 오류를 해결합니다.",
+        "CameraX는 이제 개발자가 라이프사이클에 바인딩하기 전에 특정 사용 사례 및 기능(HDR, 안정화, 특정 해상도, CameraX 확장 또는 슬로우 모션 등) 조합이 장치에서 지원되는지 쿼리할 수 있도록 하는 API를 사용합니다.",
+        "예정된 Android 17 기기에서 알 수 없는 동적 범위 모드가 추가되어 CameraX가 제대로 처리하지 못해 발생하는 CameraX 앱의 충돌을 수정했습니다. 동일한 수정 사항은 1.5.2에도 백포트되었습니다. Android 17 출시 시 충돌을 피하려면 CameraX 버전을 1.5.2 또는 1.6.0으로 업데이트해야 합니다. (Ibd7b5)",
+        "PREVIEW_STABILIZATION이 VideoCapture와 함께 사용될 때 기능 그룹 API가 일관된 결과를 제공합니다. 이는 Preview 사용 사례가 활성화되지 않았을 때 일관성 없는 결과를 유발하던 버그를 수정합니다. (Ifed82, b/449913903)",
+        "지원되지 않는 선호 기능이 잘못 제공되던 문제를 수정했습니다. 이제 필요한 사용 사례가 충족되지 않으면 기능이 올바르게 필터링됩니다. (I38db8, b/449532342)",
+        "Samsung Galaxy S6에서 비디오 결과가 불안정하던 문제를 수정했습니다. (I612d9, b/235127608)",
+        "쿼리의 SessionConfig가 이미 다른 기능으로 구성된 경우 CameraInfo#isFeatureGroupSupported가 PREVIEW_STABILIZATION에 대해 잘못 true를 반환할 수 있던 문제를 수정했습니다. (I2c355c, b/437816469)",
+        "Samsung Z Fold 4 기기에서 문제가 있는 YUV 형식 출력 크기를 제외했습니다. 해당 출력 크기를 사용할 때 수신된 이미지에 왜곡 문제가 있습니다. (I776bf, b/460322307)",
+        "Samsung A53에서 VideoCapture 사용 사례가 바인딩된 경우 토치(torch)를 활성화한 이미지 캡처가 때때로 실패하던 기기별 문제를 수정했습니다. (I0f183, b/458197367)",
+        "일부 기기에서 초광각 카메라로 플래시를 사용하면 노출 부족 이미지가 발생할 수 있던 문제를 수정했습니다. (Ib7530, b/444590340)",
+        "ExifInterface 종속성을 업데이트하여 JPEG 인코더가 마커 앞에 채움 바이트를 추가하는 기기에서 JPEG를 0xFF 패딩으로 파싱할 때 발생하는 이미지 캡처 실패를 해결하는 수정 사항을 포함했습니다. (I0eb49)"
       ],
       "impact_areas": [
         "framework_hal_contract",
@@ -769,8 +778,8 @@
         "camerax_app_compatibility"
       ],
       "do_not_overstate": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오."
       ],
       "android_camera_relevance_score": 0,
       "practical_actionability_score": 0,
@@ -1099,10 +1108,10 @@
       "briefing_only": false,
       "reference_only": false,
       "evidence_score": 6,
-      "version_or_release": "Jetpack Navigation 3 release",
+      "version_or_release": "Jetpack Compose, Jetpack Navigation 3",
       "api_or_component": "CameraX / Android camera APIs",
       "source_hint_api_or_component": "android",
-      "behavior_change": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 여러 기기에서 원활한 Android 경험을 구축하는 데 결정적인 엔진입니다. Android 생태계는 이제 기본적으로 적응형(Adaptive by Default)이며, 휴대폰, 폴더블, 태블릿, 자동차, XR, 그리고 Googlebook 및 연결된 디스플레이와 같은 확장된 사용 사례 전반에 걸쳐 유동적으로 움직입니다.",
+      "behavior_change": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 이러한 전환의 결정적인 엔진입니다.",
       "selection_exclusion_reason": "Eligible for main article selection.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
@@ -1389,10 +1398,6 @@
           "article_group_key": "article:https://goo.gle/adaptiveapps_io26"
         }
       ],
-      "included_as_headline_latest": true,
-      "headline_latest_inclusion_mode": "selected_normally",
-      "injected_from_headline_snapshot": false,
-      "snapshot_revalidated": true,
       "primary_selected": true,
       "reserve_candidate": false,
       "selection_stage": "reporter",
@@ -1432,17 +1437,17 @@
         ],
         "relevance_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)"
       },
-      "relevance_reason": "CameraX는 Android Camera Framework의 상위 계층이지만, Jetpack Compose와 함께 다양한 폼팩터 및 창 크기에서 카메라 미리보기의 정확성을 강조하는 것은 HAL 구현자가 다양한 화면 비율, 해상도, 동시 스트림 시나리오에서 HAL의 안정성과 성능을 검증하는 데 중요한 신호가 될 수 있습니다.",
+      "relevance_reason": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, 다양한 폼팩터 및 창 크기에서 카메라 미리보기의 정확성을 보장하는 것은 HAL/드라이버 계층의 안정적인 동작과 호환성에 의존합니다. 이는 HAL 구현의 유연성과 적응성을 요구할 수 있습니다.",
       "evidence_notes": [
-        "Jetpack Compose가 다양한 폼팩터 및 기기에서 원활한 Android 경험을 구축하는 데 핵심적인 역할을 하며, CameraX가 모든 창 크기에서 올바른 카메라 미리보기를 제공하는 데 사용된다는 점을 명시합니다.",
-        "Android 생태계가 'Adaptive by Default'로 변화하고 있으며, 이는 다양한 기기 유형(휴대폰, 폴더블, 태블릿, 자동차, XR 등)에서 앱이 유동적으로 작동해야 함을 의미합니다."
+        "Android Developers Blog 게시물에서 Jetpack Compose가 다양한 기기에서 원활한 Android 경험을 구축하는 데 사용되며, CameraX가 모든 창 크기에서 올바른 카메라 미리보기를 제공하는 핵심 도구 중 하나로 언급되었습니다.",
+        "Android 생태계는 이제 기본적으로 적응형(Adaptive by Default)이며, 휴대폰, 폴더블, 태블릿, 자동차, XR 및 Googlebook과 연결된 디스플레이를 포함한 확장된 사용 사례 전반에 걸쳐 유동적으로 움직입니다."
       ],
       "impact_areas": [
         "camerax_app_compatibility"
       ],
       "do_not_overstate": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오."
       ],
       "android_camera_relevance_score": 0,
       "practical_actionability_score": 0,
@@ -1788,10 +1793,10 @@
       "has_api_or_component": true,
       "has_behavior_change": true,
       "evidence_score": 6,
-      "version_or_release": "2026-05-19",
+      "version_or_release": "2026년 5월 19일",
       "api_or_component": "Google AI Studio",
       "source_hint_api_or_component": "android",
-      "behavior_change": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다.",
+      "behavior_change": "Google AI Studio는 이제 프롬프트만으로 몇 분 만에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다.",
       "selection_exclusion_reason": "Official dated Android native tooling workflow article; eligible only as cpp_ai_tooling_fallback supporting main context.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
@@ -1890,6 +1895,10 @@
       "fallback_window_promoted": true,
       "selection_window_stage": "fallback",
       "selection_slot": "",
+      "included_as_headline_latest": true,
+      "headline_latest_inclusion_mode": "selected_normally",
+      "injected_from_headline_snapshot": false,
+      "snapshot_revalidated": true,
       "candidate_id": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
       "summary_cache": {
         "hit": false,
@@ -1901,18 +1910,19 @@
           "content_hash": "da4ad6a4cf681f0895f77dfefda4bfb4f93ffc3bb3c6dfd4d22eed96b312948f"
         }
       },
-      "relevance_reason": "이 기사는 직접적인 카메라 HAL 변경 사항은 아니지만, AI 기반 개발 도구가 Android 앱 개발 워크플로우에 통합되는 추세를 보여줍니다. 이는 장기적으로 카메라 HAL 및 드라이버 팀이 AI 모델 통합, 온디바이스 추론 최적화, 개발 도구 지원 측면에서 고려해야 할 사항을 시사할 수 있습니다.",
+      "relevance_reason": "Camera HAL 및 드라이버 개발은 주로 C++ 기반의 네이티브 환경에서 이루어집니다. Google AI Studio와 같은 AI 기반 개발 도구는 네이티브 코드 생성, 디버깅, 테스트 워크플로우에 영향을 미쳐 개발 효율성을 높일 수 있습니다.",
       "evidence_notes": [
-        "Google AI Studio가 프롬프트 기반으로 Android 앱을 빌드할 수 있게 되어 개발 워크플로우를 간소화합니다.",
-        "소프트웨어 설치 및 라이브러리 구성이 필요 없어 개발 진입 장벽이 낮아진다는 점이 강조됩니다.",
-        "이것은 개발자 도구 및 워크플로우 개선에 초점을 맞춘 변경 사항입니다."
+        "Google AI Studio를 통해 네이티브 Android 앱 개발 워크플로우가 간소화됩니다.",
+        "개발자는 소프트웨어 설치나 라이브러리 구성 없이 앱을 빌드할 수 있습니다.",
+        "이는 개발 장벽을 낮추고 생산성을 향상시킬 수 있습니다."
       ],
       "impact_areas": [
         "native_tooling_workflow"
       ],
       "do_not_overstate": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
+        "카메라 관련 런타임 동작에 대한 직접적인 증거 없이 AI 도구의 변경 사항이 HAL 런타임 성능이나 동작에 직접적인 영향을 미 미친다고 과장하지 마십시오. 이는 주로 개발 워크플로우 및 생산성 향상에 중점을 둡니다."
       ],
       "android_camera_relevance_score": 0,
       "practical_actionability_score": 0,

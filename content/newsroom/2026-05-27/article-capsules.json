@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "date": "2026-05-27",
-  "generated_at": "2026-05-26T17:20:08.338Z",
+  "generated_at": "2026-05-26T18:18:22.790Z",
   "capsule_token_target": "700-1200",
   "shortlisted_capsule_count": 3,
   "selected_capsule_count": 3,
@@ -128,7 +128,7 @@
           {
             "kind": "behavior_change",
             "role": "primary",
-            "text": "CameraX 1.6.0 사용 시 'Cannot access class ListenableFuture' 컴파일 오류 수정. (Ic8cba, b/497571473) 또한, CameraX 1.6.1은 개발자가 라이프사이클에 바인딩하기 전에 특정 유스케이스 및 기능(HDR, 안정화, 특정 해상도, CameraX 확장 또는 슬로우 모션 등) 조합이 기기에서 지원되는지 쿼리할 수 있는 API를 도입했습니다. Android 17 기기에서 발생하는 알 수 없는 동적 범위 모드 추가로 인한 CameraX 앱 충돌을 수정했습니다. (Ibd7b..."
+            "text": "CameraX 1.6.0 사용 시 'Cannot access class ListenableFuture' 컴파일 오류 수정. (Ic8cba, b/497571473)"
           },
           {
             "kind": "source_extraction",
@@ -195,11 +195,11 @@
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "CameraX는 Android Camera Framework의 상위 계층이지만, 그 변경 사항은 HAL 구현 및 검증에 영향을 미칠 수 있는 앱 호환성, 사용 패턴, 성능 특성을 나타낼 수 있습니다. 특히 기기별 문제 수정은 HAL/드라이버 수준의 잠재적 문제를 시사할 수 있습니다.",
+      "why_hal_engineer_cares": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, HAL/드라이버 구현의 호환성 및 동작에 간접적인 영향을 미칠 수 있습니다. 특히 기기별 버그 수정은 HAL/드라이버 계층의 특정 동작을 우회하거나 보완하는 경우가 많습니다.",
       "evidence": [
         "version_or_release: CameraX 1.6.1",
         "api_or_component: CameraX / androidx.camera",
-        "behavior_change: CameraX 1.6.0 사용 시 'Cannot access class ListenableFuture' 컴파일 오류 수정. (Ic8cba, b/497571473) 또한, CameraX 1.6.1은 개발자가 라이프사이클에 바인딩하기 전에 특정 유스케이스 및..."
+        "behavior_change: CameraX 1.6.0 사용 시 'Cannot access class ListenableFuture' 컴파일 오류 수정. (Ic8cba, b/497571473)"
       ],
       "allowed_claim_evidence": [
         {
@@ -296,7 +296,7 @@
           "source_urls": [
             "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
           ],
-          "text": "CameraX 1.6.1 릴리스 노트에 명시된 버그 수정 및 기능 개선 사항입니다."
+          "text": "CameraX 1.6.1 릴리스 노트에 명시된 버그 수정 사항입니다."
         }
       ],
       "seed_evidence": null,
@@ -558,26 +558,26 @@
         }
       ],
       "do_not_overstate": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오.",
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
         "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
         "Do not use artifact version tables as behavior-change evidence."
       ],
       "do_not_claim": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오.",
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
         "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
         "Do not use artifact version tables as behavior-change evidence."
       ],
-      "fallback_promotion_reason": "CameraX는 Android Camera Framework의 상위 계층이지만, 그 변경 사항은 HAL 구현 및 검증에 영향을 미칠 수 있는 앱 호환성, 사용 패턴, 성능 특성을 나타낼 수 있습니다. 특히 기기별 문제 수정은 HAL/드라이버 수준의 잠재적 문제를 시사할 수 있습니다.",
+      "fallback_promotion_reason": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, HAL/드라이버 구현의 호환성 및 동작에 간접적인 영향을 미칠 수 있습니다. 특히 기기별 버그 수정은 HAL/드라이버 계층의 특정 동작을 우회하거나 보완하는 경우가 많습니다.",
       "fallback_guard_notes": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오.",
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
         "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
         "Do not use artifact version tables as behavior-change evidence."
       ],
       "soc_signal_type": "platform_signal",
-      "estimated_tokens": 5831
+      "estimated_tokens": 5725
     },
     {
       "candidate_id": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
@@ -695,7 +695,7 @@
           {
             "kind": "behavior_change",
             "role": "primary",
-            "text": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 여러 기기에서 원활한 Android 경험을 구축하는 데 결정적인 엔진입니다. Android 생태계는 이제 기본적으로 적응형(Adaptive by Default)이며, 휴대폰, 폴더블, 태블릿, 자동차, XR, 그리고 Googlebook 및 연결된 디스플레이와 같은 확장된..."
+            "text": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 이러한 전환의 결정적인 엔진입니다."
           },
           {
             "kind": "source_extraction",
@@ -705,18 +705,18 @@
         ],
         "supporting_source_urls": []
       },
-      "what_changed": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 여러 기기에서 원활한 Android 경험을 구축하는 데 결정적인 엔진입니다. Android 생태계는 이제 기본적으로 적응형(Adaptive by Default)이며, 휴대폰, 폴더블, 태블릿, 자동차, XR, 그리고 Googlebook 및 연결된 디스플레이와 같은 확장된 사용 사례 전반에 걸쳐 유동적으로 움직입니다.",
+      "what_changed": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 이러한 전환의 결정적인 엔진입니다.",
       "background_context_static": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
       "camera_hal_perspective_static": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "CameraX는 Android Camera Framework의 상위 계층이지만, Jetpack Compose와 함께 다양한 폼팩터 및 창 크기에서 카메라 미리보기의 정확성을 강조하는 것은 HAL 구현자가 다양한 화면 비율, 해상도, 동시 스트림 시나리오에서 HAL의 안정성과 성능을 검증하는 데 중요한 신호가 될 수 있습니다.",
+      "why_hal_engineer_cares": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, 다양한 폼팩터 및 창 크기에서 카메라 미리보기의 정확성을 보장하는 것은 HAL/드라이버 계층의 안정적인 동작과 호환성에 의존합니다. 이는 HAL 구현의 유연성과 적응성을 요구할 수 있습니다.",
       "evidence": [
-        "version_or_release: Jetpack Navigation 3 release",
+        "version_or_release: Jetpack Compose, Jetpack Navigation 3",
         "api_or_component: CameraX / Android camera APIs",
-        "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제..."
+        "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공..."
       ],
       "allowed_claim_evidence": [
         {
@@ -736,7 +736,7 @@
           "source_urls": [
             "https://goo.gle/AdaptiveApps_IO26"
           ],
-          "text": "Jetpack Compose가 다양한 폼팩터 및 기기에서 원활한 Android 경험을 구축하는 데 핵심적인 역할을 하며, CameraX가 모든 창 크기에서 올바른 카메라 미리보기를 제공하는 데 사용된다는 점을 명시합니다."
+          "text": "Android Developers Blog 게시물에서 Jetpack Compose가 다양한 기기에서 원활한 Android 경험을 구축하는 데 사용되며, CameraX가 모든 창 크기에서 올바른 카메라 미리보기를 제공하는 핵심 도구 중 하나로 언급되었습니다."
         }
       ],
       "seed_evidence": null,
@@ -833,19 +833,19 @@
         }
       ],
       "do_not_overstate": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오."
       ],
       "do_not_claim": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오."
       ],
-      "fallback_promotion_reason": "CameraX는 Android Camera Framework의 상위 계층이지만, Jetpack Compose와 함께 다양한 폼팩터 및 창 크기에서 카메라 미리보기의 정확성을 강조하는 것은 HAL 구현자가 다양한 화면 비율, 해상도, 동시 스트림 시나리오에서 HAL의 안정성과 성능을 검증하는 데 중요한 신호가 될 수 있습...",
+      "fallback_promotion_reason": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, 다양한 폼팩터 및 창 크기에서 카메라 미리보기의 정확성을 보장하는 것은 HAL/드라이버 계층의 안정적인 동작과 호환성에 의존합니다. 이는 HAL 구현의 유연성과 적응성을 요구할 수 있습니다.",
       "fallback_guard_notes": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오."
       ],
-      "estimated_tokens": 2834
+      "estimated_tokens": 2722
     },
     {
       "candidate_id": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
@@ -853,7 +853,7 @@
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 12:45:00 +0000",
-      "topic_type": "cpp",
+      "topic_type": "camera-hal",
       "editorial_priority": 6,
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "article_group_key": "android_native_tooling_workflow",
@@ -992,7 +992,7 @@
           {
             "kind": "behavior_change",
             "role": "primary",
-            "text": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
+            "text": "Google AI Studio는 이제 프롬프트만으로 몇 분 만에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
           },
           {
             "kind": "evidence",
@@ -1007,18 +1007,18 @@
         ],
         "supporting_source_urls": []
       },
-      "what_changed": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다.",
+      "what_changed": "Google AI Studio는 이제 프롬프트만으로 몇 분 만에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다.",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
       "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "이 기사는 직접적인 카메라 HAL 변경 사항은 아니지만, AI 기반 개발 도구가 Android 앱 개발 워크플로우에 통합되는 추세를 보여줍니다. 이는 장기적으로 카메라 HAL 및 드라이버 팀이 AI 모델 통합, 온디바이스 추론 최적화, 개발 도구 지원 측면에서 고려해야 할 사항을 시사할 수 있습니다.",
+      "why_hal_engineer_cares": "Camera HAL 및 드라이버 개발은 주로 C++ 기반의 네이티브 환경에서 이루어집니다. Google AI Studio와 같은 AI 기반 개발 도구는 네이티브 코드 생성, 디버깅, 테스트 워크플로우에 영향을 미쳐 개발 효율성을 높일 수 있습니다.",
       "evidence": [
-        "version_or_release: 2026-05-19",
+        "version_or_release: 2026년 5월 19일",
         "api_or_component: Google AI Studio",
-        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
+        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 만에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
       ],
       "allowed_claim_evidence": [
         {
@@ -1104,20 +1104,23 @@
         }
       ],
       "do_not_overstate": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
+        "카메라 관련 런타임 동작에 대한 직접적인 증거 없이 AI 도구의 변경 사항이 HAL 런타임 성능이나 동작에 직접적인 영향을 미 미친다고 과장하지 마십시오. 이는 주로 개발 워크플로우 및 생산성 향상에 중점을 둡니다."
       ],
       "do_not_claim": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
+        "카메라 관련 런타임 동작에 대한 직접적인 증거 없이 AI 도구의 변경 사항이 HAL 런타임 성능이나 동작에 직접적인 영향을 미 미친다고 과장하지 마십시오. 이는 주로 개발 워크플로우 및 생산성 향상에 중점을 둡니다."
       ],
-      "fallback_promotion_reason": "이 기사는 직접적인 카메라 HAL 변경 사항은 아니지만, AI 기반 개발 도구가 Android 앱 개발 워크플로우에 통합되는 추세를 보여줍니다. 이는 장기적으로 카메라 HAL 및 드라이버 팀이 AI 모델 통합, 온디바이스 추론 최적화, 개발 도구 지원 측면에서 고려해야 할 사항을 시사할 수 있습니다.",
+      "fallback_promotion_reason": "Camera HAL 및 드라이버 개발은 주로 C++ 기반의 네이티브 환경에서 이루어집니다. Google AI Studio와 같은 AI 기반 개발 도구는 네이티브 코드 생성, 디버깅, 테스트 워크플로우에 영향을 미쳐 개발 효율성을 높일 수 있습니다.",
       "fallback_guard_notes": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
+        "카메라 관련 런타임 동작에 대한 직접적인 증거 없이 AI 도구의 변경 사항이 HAL 런타임 성능이나 동작에 직접적인 영향을 미 미친다고 과장하지 마십시오. 이는 주로 개발 워크플로우 및 생산성 향상에 중점을 둡니다."
       ],
       "soc_signal_type": "accelerator_camera_workload",
-      "estimated_tokens": 2891
+      "estimated_tokens": 2939
     }
   ],
   "selected_capsules": [
@@ -1242,7 +1245,7 @@
           {
             "kind": "behavior_change",
             "role": "primary",
-            "text": "CameraX 1.6.0 사용 시 'Cannot access class ListenableFuture' 컴파일 오류 수정. (Ic8cba, b/497571473) 또한, CameraX 1.6.1은 개발자가 라이프사이클에 바인딩하기 전에 특정 유스케이스 및 기능(HDR, 안정화, 특정 해상도, CameraX 확장 또는 슬로우 모션 등) 조합이 기기에서 지원되는지 쿼리할 수 있는 API를 도입했습니다. Android 17 기기에서 발생하는 알 수 없는 동적 범위 모드 추가로 인한 CameraX 앱 충돌을 수정했습니다. (Ibd7b..."
+            "text": "CameraX 1.6.0 사용 시 'Cannot access class ListenableFuture' 컴파일 오류 수정. (Ic8cba, b/497571473)"
           },
           {
             "kind": "source_extraction",
@@ -1309,11 +1312,11 @@
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "CameraX는 Android Camera Framework의 상위 계층이지만, 그 변경 사항은 HAL 구현 및 검증에 영향을 미칠 수 있는 앱 호환성, 사용 패턴, 성능 특성을 나타낼 수 있습니다. 특히 기기별 문제 수정은 HAL/드라이버 수준의 잠재적 문제를 시사할 수 있습니다.",
+      "why_hal_engineer_cares": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, HAL/드라이버 구현의 호환성 및 동작에 간접적인 영향을 미칠 수 있습니다. 특히 기기별 버그 수정은 HAL/드라이버 계층의 특정 동작을 우회하거나 보완하는 경우가 많습니다.",
       "evidence": [
         "version_or_release: CameraX 1.6.1",
         "api_or_component: CameraX / androidx.camera",
-        "behavior_change: CameraX 1.6.0 사용 시 'Cannot access class ListenableFuture' 컴파일 오류 수정. (Ic8cba, b/497571473) 또한, CameraX 1.6.1은 개발자가 라이프사이클에 바인딩하기 전에 특정 유스케이스 및..."
+        "behavior_change: CameraX 1.6.0 사용 시 'Cannot access class ListenableFuture' 컴파일 오류 수정. (Ic8cba, b/497571473)"
       ],
       "allowed_claim_evidence": [
         {
@@ -1410,7 +1413,7 @@
           "source_urls": [
             "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
           ],
-          "text": "CameraX 1.6.1 릴리스 노트에 명시된 버그 수정 및 기능 개선 사항입니다."
+          "text": "CameraX 1.6.1 릴리스 노트에 명시된 버그 수정 사항입니다."
         }
       ],
       "seed_evidence": null,
@@ -1672,26 +1675,26 @@
         }
       ],
       "do_not_overstate": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오.",
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
         "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
         "Do not use artifact version tables as behavior-change evidence."
       ],
       "do_not_claim": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오.",
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
         "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
         "Do not use artifact version tables as behavior-change evidence."
       ],
-      "fallback_promotion_reason": "CameraX는 Android Camera Framework의 상위 계층이지만, 그 변경 사항은 HAL 구현 및 검증에 영향을 미칠 수 있는 앱 호환성, 사용 패턴, 성능 특성을 나타낼 수 있습니다. 특히 기기별 문제 수정은 HAL/드라이버 수준의 잠재적 문제를 시사할 수 있습니다.",
+      "fallback_promotion_reason": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, HAL/드라이버 구현의 호환성 및 동작에 간접적인 영향을 미칠 수 있습니다. 특히 기기별 버그 수정은 HAL/드라이버 계층의 특정 동작을 우회하거나 보완하는 경우가 많습니다.",
       "fallback_guard_notes": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오.",
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
         "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
         "Do not use artifact version tables as behavior-change evidence."
       ],
       "soc_signal_type": "platform_signal",
-      "estimated_tokens": 5831
+      "estimated_tokens": 5725
     },
     {
       "candidate_id": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
@@ -1809,7 +1812,7 @@
           {
             "kind": "behavior_change",
             "role": "primary",
-            "text": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 여러 기기에서 원활한 Android 경험을 구축하는 데 결정적인 엔진입니다. Android 생태계는 이제 기본적으로 적응형(Adaptive by Default)이며, 휴대폰, 폴더블, 태블릿, 자동차, XR, 그리고 Googlebook 및 연결된 디스플레이와 같은 확장된..."
+            "text": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 이러한 전환의 결정적인 엔진입니다."
           },
           {
             "kind": "source_extraction",
@@ -1819,18 +1822,18 @@
         ],
         "supporting_source_urls": []
       },
-      "what_changed": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 여러 기기에서 원활한 Android 경험을 구축하는 데 결정적인 엔진입니다. Android 생태계는 이제 기본적으로 적응형(Adaptive by Default)이며, 휴대폰, 폴더블, 태블릿, 자동차, XR, 그리고 Googlebook 및 연결된 디스플레이와 같은 확장된 사용 사례 전반에 걸쳐 유동적으로 움직입니다.",
+      "what_changed": "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공하여 이러한 전환의 결정적인 엔진입니다.",
       "background_context_static": "CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.",
       "camera_hal_perspective_static": "CameraX 또는 Camera2 usage pattern, compatibility assumption, app-facing behavior를 검증해 HAL boundary 위 계층의 문제 신호로 활용합니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "CameraX는 Android Camera Framework의 상위 계층이지만, Jetpack Compose와 함께 다양한 폼팩터 및 창 크기에서 카메라 미리보기의 정확성을 강조하는 것은 HAL 구현자가 다양한 화면 비율, 해상도, 동시 스트림 시나리오에서 HAL의 안정성과 성능을 검증하는 데 중요한 신호가 될 수 있습니다.",
+      "why_hal_engineer_cares": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, 다양한 폼팩터 및 창 크기에서 카메라 미리보기의 정확성을 보장하는 것은 HAL/드라이버 계층의 안정적인 동작과 호환성에 의존합니다. 이는 HAL 구현의 유연성과 적응성을 요구할 수 있습니다.",
       "evidence": [
-        "version_or_release: Jetpack Navigation 3 release",
+        "version_or_release: Jetpack Compose, Jetpack Navigation 3",
         "api_or_component: CameraX / Android camera APIs",
-        "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제..."
+        "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공..."
       ],
       "allowed_claim_evidence": [
         {
@@ -1850,7 +1853,7 @@
           "source_urls": [
             "https://goo.gle/AdaptiveApps_IO26"
           ],
-          "text": "Jetpack Compose가 다양한 폼팩터 및 기기에서 원활한 Android 경험을 구축하는 데 핵심적인 역할을 하며, CameraX가 모든 창 크기에서 올바른 카메라 미리보기를 제공하는 데 사용된다는 점을 명시합니다."
+          "text": "Android Developers Blog 게시물에서 Jetpack Compose가 다양한 기기에서 원활한 Android 경험을 구축하는 데 사용되며, CameraX가 모든 창 크기에서 올바른 카메라 미리보기를 제공하는 핵심 도구 중 하나로 언급되었습니다."
         }
       ],
       "seed_evidence": null,
@@ -1947,19 +1950,19 @@
         }
       ],
       "do_not_overstate": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오."
       ],
       "do_not_claim": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오."
       ],
-      "fallback_promotion_reason": "CameraX는 Android Camera Framework의 상위 계층이지만, Jetpack Compose와 함께 다양한 폼팩터 및 창 크기에서 카메라 미리보기의 정확성을 강조하는 것은 HAL 구현자가 다양한 화면 비율, 해상도, 동시 스트림 시나리오에서 HAL의 안정성과 성능을 검증하는 데 중요한 신호가 될 수 있습...",
+      "fallback_promotion_reason": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, 다양한 폼팩터 및 창 크기에서 카메라 미리보기의 정확성을 보장하는 것은 HAL/드라이버 계층의 안정적인 동작과 호환성에 의존합니다. 이는 HAL 구현의 유연성과 적응성을 요구할 수 있습니다.",
       "fallback_guard_notes": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오."
       ],
-      "estimated_tokens": 2834
+      "estimated_tokens": 2722
     },
     {
       "candidate_id": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
@@ -1967,7 +1970,7 @@
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 12:45:00 +0000",
-      "topic_type": "cpp",
+      "topic_type": "camera-hal",
       "editorial_priority": 6,
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "article_group_key": "android_native_tooling_workflow",
@@ -2106,7 +2109,7 @@
           {
             "kind": "behavior_change",
             "role": "primary",
-            "text": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
+            "text": "Google AI Studio는 이제 프롬프트만으로 몇 분 만에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
           },
           {
             "kind": "evidence",
@@ -2121,18 +2124,18 @@
         ],
         "supporting_source_urls": []
       },
-      "what_changed": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다.",
+      "what_changed": "Google AI Studio는 이제 프롬프트만으로 몇 분 만에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다.",
       "background_context_static": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
       "camera_hal_perspective_static": "build, test, debug, native tooling workflow 항목으로 유지합니다. camera-specific source evidence 없이 HAL runtime impact로 승격하지 않습니다.",
       "overclaim_guardrails": [
         "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS,...",
         "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
       ],
-      "why_hal_engineer_cares": "이 기사는 직접적인 카메라 HAL 변경 사항은 아니지만, AI 기반 개발 도구가 Android 앱 개발 워크플로우에 통합되는 추세를 보여줍니다. 이는 장기적으로 카메라 HAL 및 드라이버 팀이 AI 모델 통합, 온디바이스 추론 최적화, 개발 도구 지원 측면에서 고려해야 할 사항을 시사할 수 있습니다.",
+      "why_hal_engineer_cares": "Camera HAL 및 드라이버 개발은 주로 C++ 기반의 네이티브 환경에서 이루어집니다. Google AI Studio와 같은 AI 기반 개발 도구는 네이티브 코드 생성, 디버깅, 테스트 워크플로우에 영향을 미쳐 개발 효율성을 높일 수 있습니다.",
       "evidence": [
-        "version_or_release: 2026-05-19",
+        "version_or_release: 2026년 5월 19일",
         "api_or_component: Google AI Studio",
-        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
+        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 만에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
       ],
       "allowed_claim_evidence": [
         {
@@ -2218,20 +2221,23 @@
         }
       ],
       "do_not_overstate": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
+        "카메라 관련 런타임 동작에 대한 직접적인 증거 없이 AI 도구의 변경 사항이 HAL 런타임 성능이나 동작에 직접적인 영향을 미 미친다고 과장하지 마십시오. 이는 주로 개발 워크플로우 및 생산성 향상에 중점을 둡니다."
       ],
       "do_not_claim": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
+        "카메라 관련 런타임 동작에 대한 직접적인 증거 없이 AI 도구의 변경 사항이 HAL 런타임 성능이나 동작에 직접적인 영향을 미 미친다고 과장하지 마십시오. 이는 주로 개발 워크플로우 및 생산성 향상에 중점을 둡니다."
       ],
-      "fallback_promotion_reason": "이 기사는 직접적인 카메라 HAL 변경 사항은 아니지만, AI 기반 개발 도구가 Android 앱 개발 워크플로우에 통합되는 추세를 보여줍니다. 이는 장기적으로 카메라 HAL 및 드라이버 팀이 AI 모델 통합, 온디바이스 추론 최적화, 개발 도구 지원 측면에서 고려해야 할 사항을 시사할 수 있습니다.",
+      "fallback_promotion_reason": "Camera HAL 및 드라이버 개발은 주로 C++ 기반의 네이티브 환경에서 이루어집니다. Google AI Studio와 같은 AI 기반 개발 도구는 네이티브 코드 생성, 디버깅, 테스트 워크플로우에 영향을 미쳐 개발 효율성을 높일 수 있습니다.",
       "fallback_guard_notes": [
-        "제공된 source evidence가 명시적으로 언급하지 않는 한, HAL API, metadata contract, stream, buffer, request/result, CTS/VTS/ITS와 같은 직접적인 HAL 변경 사항을 주장하지 마십시오.",
-        "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
+        "제공된 소스 증거가 명시적으로 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS 동작의 직접적인 변경을 주장하지 마십시오.",
+        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마십시오.",
+        "카메라 관련 런타임 동작에 대한 직접적인 증거 없이 AI 도구의 변경 사항이 HAL 런타임 성능이나 동작에 직접적인 영향을 미 미친다고 과장하지 마십시오. 이는 주로 개발 워크플로우 및 생산성 향상에 중점을 둡니다."
       ],
       "soc_signal_type": "accelerator_camera_workload",
-      "estimated_tokens": 2891
+      "estimated_tokens": 2939
     }
   ],
   "reserve_capsules": []
