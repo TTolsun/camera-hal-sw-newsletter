@@ -33,6 +33,9 @@ const dataPath = path.join(root, 'data', 'newsletters.json');
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 const requiredFields = ['date', 'title', 'summary', 'html', 'md', 'tags'];
+const subscriptionConfigPath = path.join(root, 'config', 'subscription.json');
+const subscriptionFetchPath = 'config/subscription.json';
+const subscriptionAllowedKeys = new Set(['schemaVersion', 'enabled', 'provider', 'mode', 'subscribeUrl']);
 const briefingHeadings = [
   '## 1. 이번 주 3줄 브리핑'
 ];
@@ -185,6 +188,100 @@ function textFromHtml(html) {
 function publicationNoticeText(html) {
   const match = String(html || '').match(/<[^>]+class=["'][^"']*\bpublication-notice\b[^>]*>[\s\S]*?<\/(?:div|section|aside)>/i);
   return match ? textFromHtml(match[0]) : '';
+}
+
+function isPlainObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function isLocalOrDevHost(hostname) {
+  const host = String(hostname || '').toLowerCase().replace(/^\[|\]$/g, '');
+  if (!host) return true;
+  if (host === 'localhost' || host === '::1' || host === '0.0.0.0') return true;
+  if (host.startsWith('127.') || host.startsWith('10.') || host.startsWith('192.168.')) return true;
+  if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(host)) return true;
+  return host.endsWith('.localhost') || host.endsWith('.local') || host.endsWith('.test');
+}
+
+function isPlaceholderSubscribeUrl(raw) {
+  const value = String(raw || '').trim();
+  if (!value || /[<>]/.test(value)) return true;
+  if (/placeholder|todo|actual beehiiv/i.test(value)) return true;
+  try {
+    const url = new URL(value);
+    return /^(example\.com|example\.org|example\.net)$/i.test(url.hostname);
+  } catch (_error) {
+    return false;
+  }
+}
+
+function validHostedSubscribeUrl(raw) {
+  const value = String(raw || '').trim();
+  if (isPlaceholderSubscribeUrl(value)) return false;
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && !isLocalOrDevHost(url.hostname);
+  } catch (_error) {
+    return false;
+  }
+}
+
+function readSubscriptionConfig() {
+  if (!fs.existsSync(subscriptionConfigPath)) {
+    return { exists: false, enabled: false };
+  }
+
+  try {
+    const config = readJson(subscriptionConfigPath);
+    return { exists: true, enabled: config?.enabled === true, config };
+  } catch (error) {
+    fail(`Invalid config/subscription.json: ${error.message}`);
+    return { exists: true, enabled: false };
+  }
+}
+
+function validateSubscriptionConfig() {
+  const state = readSubscriptionConfig();
+  if (!state.exists) return state;
+
+  const { config } = state;
+  if (!isPlainObject(config)) {
+    fail('config/subscription.json must contain an object.');
+    return { exists: true, enabled: false };
+  }
+
+  for (const key of Object.keys(config)) {
+    if (!subscriptionAllowedKeys.has(key)) {
+      fail(`config/subscription.json contains unsupported field: ${key}.`);
+    }
+    if (/(?:api[_-]?key|token|secret)/i.test(key)) {
+      fail(`config/subscription.json must not expose token-like field: ${key}.`);
+    }
+  }
+
+  if (config.schemaVersion !== 1) {
+    fail('config/subscription.json schemaVersion must be 1.');
+  }
+  if (typeof config.enabled !== 'boolean') {
+    fail('config/subscription.json enabled must be a boolean.');
+  }
+  if (config.provider !== 'beehiiv') {
+    fail('config/subscription.json provider must be beehiiv.');
+  }
+  if (config.mode !== 'hosted_link') {
+    fail('config/subscription.json mode must be hosted_link.');
+  }
+
+  const subscribeUrl = String(config.subscribeUrl || '').trim();
+  if (config.enabled === true) {
+    if (!validHostedSubscribeUrl(subscribeUrl)) {
+      fail('config/subscription.json enabled=true requires a valid absolute HTTPS subscribeUrl that is not a placeholder or local/dev URL.');
+    }
+  } else if (subscribeUrl && !validHostedSubscribeUrl(subscribeUrl)) {
+    fail('config/subscription.json subscribeUrl must be empty or a valid absolute HTTPS URL when disabled.');
+  }
+
+  return { exists: true, enabled: config.enabled === true, config };
 }
 
 function sameOrderedValues(left, right) {
@@ -413,16 +510,80 @@ function validateSourceGapArtifact(date, strictArtifactValidation) {
   }
 }
 
+function subscriptionSectionHtml(html) {
+  const match = String(html || '').match(/<section\b(?=[^>]*\bdata-subscription-section\b)[^>]*>[\s\S]*?<\/section>/i);
+  return match ? match[0] : '';
+}
+
+function subscriptionScopedScriptHtml(html) {
+  const chunks = [];
+  for (const match of String(html || '').matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
+    const script = match[1];
+    const blockMatch = script.match(/\basync function fetchSubscriptionConfig\b[\s\S]*?\n\s*function hideHomepageHeadline\b/);
+    if (blockMatch) {
+      chunks.push(blockMatch[0]);
+      continue;
+    }
+    chunks.push(...script
+      .split(/\r?\n/)
+      .filter(line => /subscription/i.test(line)));
+  }
+  return chunks.join('\n');
+}
+
+function hasSubscriptionActionHref(sectionHtml) {
+  return /<a\b(?=[^>]*\bdata-subscription-action\b)(?=[^>]*\bhref=["'][^"']+["'])[^>]*>/i.test(sectionHtml);
+}
+
+function validateRootHomepageSubscriptionContract(html, subscriptionState) {
+  if (!new RegExp(`fetch\\(\\s*['"]${escapeRegex(subscriptionFetchPath)}['"]`).test(html)) {
+    fail('root index.html must fetch config/subscription.json through a repo-relative path.');
+  }
+  if (/fetch\(\s*['"]\/config\/subscription\.json['"]/.test(html)) {
+    fail('root index.html must not fetch /config/subscription.json with an absolute path.');
+  }
+
+  const sectionHtml = subscriptionSectionHtml(html);
+  if (!sectionHtml) {
+    fail('root index.html must include a data-subscription-section hook.');
+    return;
+  }
+  if (!/<section\b[^>]*\bhidden\b/i.test(sectionHtml)) {
+    fail('root index.html subscription section must be hidden by default.');
+  }
+  if (!/<a\b(?=[^>]*\bdata-subscription-action\b)[^>]*>/i.test(sectionHtml)) {
+    fail('root index.html subscription section must include a data-subscription-action anchor.');
+  }
+  for (const tagName of ['form', 'input', 'button']) {
+    if (new RegExp(`<${tagName}\\b`, 'i').test(sectionHtml)) {
+      fail(`root index.html subscription section must not include <${tagName}>.`);
+    }
+  }
+  if (/<a\b(?=[^>]*\bdata-subscription-action\b)(?=[^>]*\brole=)[^>]*>/i.test(sectionHtml)) {
+    fail('root index.html subscription CTA must remain a normal anchor without a forced role.');
+  }
+  if (!subscriptionState.enabled && hasSubscriptionActionHref(sectionHtml)) {
+    fail('root index.html must not render an active subscription CTA when subscription is disabled or missing.');
+  }
+
+  const scopedHtml = `${sectionHtml}\n${subscriptionScopedScriptHtml(html)}`;
+  if (/\b(localStorage|sessionStorage)\b|document\.cookie|\b(?:api[_-]?key|token|secret)\b/i.test(scopedHtml)) {
+    fail('root index.html subscription path must not persist email/subscription data or expose token-like fields.');
+  }
+}
+
 function validateRootHomepageContract(newsletters) {
   const indexPath = path.join(root, 'index.html');
   if (!fs.existsSync(indexPath)) return;
   const html = read(indexPath);
+  const subscriptionState = validateSubscriptionConfig();
   if (!/fetch\(\s*['"]data\/newsletters\.json['"]/.test(html)) {
     fail('root index.html must fetch data/newsletters.json as the homepage/archive source of truth.');
   }
   if (!/fetch\(\s*['"]data\/homepage-headline\.json['"]/.test(html)) {
     fail('root index.html must fetch data/homepage-headline.json through a separate headline loader.');
   }
+  validateRootHomepageSubscriptionContract(html, subscriptionState);
   const exposedDates = [...html.matchAll(/newsletters\/(\d{4}-\d{2}-\d{2})\//g)]
     .map(match => match[1]);
   const publicDates = new Set(newsletters.map(item => item?.date).filter(Boolean));

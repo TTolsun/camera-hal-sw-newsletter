@@ -87,6 +87,19 @@
         <p class="muted">아카이브를 불러오는 중입니다.</p>
       </div>
     </section>
+
+    <section id="subscribe" class="section subscribe-section content-wrap" aria-labelledby="subscribe-title" data-subscription-section hidden>
+      <div class="subscribe-panel">
+        <div class="subscribe-copy">
+          <p class="eyebrow">Newsletter subscription</p>
+          <h2 id="subscribe-title">Subscribe</h2>
+          <p class="subscribe-description">
+            Camera HAL, Android Camera, Driver, AI newsletter updates open on a provider-hosted subscription page.
+          </p>
+        </div>
+        <a class="button button-secondary subscribe-link" data-subscription-action>Subscribe</a>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -185,6 +198,72 @@
       }
 
       return newsletters;
+    }
+
+    async function fetchSubscriptionConfig() {
+      const response = await fetch('config/subscription.json', { cache: 'no-store' });
+      if (!response.ok) return null;
+      return response.json();
+    }
+
+    function isLocalOrDevSubscribeHost(hostname) {
+      const host = String(hostname || '').toLowerCase().replace(/^\[|\]$/g, '');
+      if (!host) return true;
+      if (host === 'localhost' || host === '::1' || host === '0.0.0.0') return true;
+      if (host.startsWith('127.') || host.startsWith('10.') || host.startsWith('192.168.')) return true;
+      if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(host)) return true;
+      return host.endsWith('.localhost') || host.endsWith('.local') || host.endsWith('.test');
+    }
+
+    function hostedSubscribeUrl(value) {
+      const raw = String(value || '').trim();
+      if (!raw || /[<>]/.test(raw) || /placeholder|todo|actual beehiiv/i.test(raw)) return '';
+
+      try {
+        const url = new URL(raw);
+        if (url.protocol !== 'https:') return '';
+        if (isLocalOrDevSubscribeHost(url.hostname)) return '';
+        if (/^(example\.com|example\.org|example\.net)$/i.test(url.hostname)) return '';
+        return url.href;
+      } catch (_error) {
+        return '';
+      }
+    }
+
+    function getValidSubscriptionUrl(config) {
+      if (!config || typeof config !== 'object') return '';
+      if (config.enabled !== true) return '';
+      if (config.provider !== 'beehiiv' || config.mode !== 'hosted_link') return '';
+      return hostedSubscribeUrl(config.subscribeUrl);
+    }
+
+    function hideSubscription(section, action) {
+      if (section) section.hidden = true;
+      if (!action || typeof action.removeAttribute !== 'function') return;
+      action.removeAttribute('href');
+      action.removeAttribute('target');
+      action.removeAttribute('rel');
+      action.removeAttribute('aria-label');
+    }
+
+    async function loadSubscription() {
+      const section = document.querySelector('[data-subscription-section]');
+      const action = document.querySelector('[data-subscription-action]');
+      if (!section || !action) return;
+      hideSubscription(section, action);
+
+      try {
+        const config = await fetchSubscriptionConfig();
+        const href = getValidSubscriptionUrl(config);
+        if (!href) return;
+
+        action.setAttribute('href', href);
+        action.setAttribute('aria-label', 'Subscribe to Camera SW Newsletter');
+        section.hidden = false;
+      } catch (error) {
+        hideSubscription(section, action);
+        console.error(error);
+      }
     }
 
     function hideHomepageHeadline() {
@@ -339,6 +418,7 @@
 
     loadHomepageHeadline();
     loadNewsletters();
+    loadSubscription();
   </script>
 </body>
 </html>

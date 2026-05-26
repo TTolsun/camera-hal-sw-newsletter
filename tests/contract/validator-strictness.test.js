@@ -126,12 +126,17 @@ function rootIndexHtml(extra = '', { navLabels = null, siteHeaderComponent = tru
     '<a class="section-link" href="archive.html">전체 아카이브 보기</a>',
     '<div id="latest-card"></div>',
     '<div id="archive-list"></div>',
+    '<section class="section subscribe-section" data-subscription-section hidden>',
+    '<a class="button subscribe-link" data-subscription-action>Subscribe</a>',
+    '</section>',
     extra,
     '<script>',
     "async function loadHomepageHeadline() { await fetch('data/homepage-headline.json'); }",
     "async function loadNewsletters() { const latest = {}; const archive = []; await fetch('data/newsletters.json'); }",
+    "async function loadSubscription() { await fetch('config/subscription.json'); document.querySelector('[data-subscription-section]'); document.querySelector('[data-subscription-action]'); }",
     'loadHomepageHeadline();',
     'loadNewsletters();',
+    'loadSubscription();',
     '</script>',
     '</body></html>'
   ].join('\n');
@@ -161,6 +166,17 @@ function rootArchiveHtml(extra = '') {
     extra,
     '</body></html>'
   ].join('\n');
+}
+
+function subscriptionConfig(overrides = {}) {
+  return {
+    schemaVersion: 1,
+    enabled: false,
+    provider: 'beehiiv',
+    mode: 'hosted_link',
+    subscribeUrl: '',
+    ...overrides
+  };
 }
 
 function writeSiteFixture(root, {
@@ -622,6 +638,104 @@ test('validate-site rejects shared site header component without script', () => 
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /Shared site header in index\.html must load assets\/js\/site-header\.js/);
+});
+
+test('validate-site accepts disabled subscription config and scoped unrelated UI code', () => {
+  const root = tempRoot('validate-site-subscription-disabled-');
+  writeSiteFixture(root, {
+    strict: true,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeJson(path.join(root, 'config', 'subscription.json'), subscriptionConfig());
+  writeText(path.join(root, 'index.html'), rootIndexHtml([
+    '<p class="button">Unrelated action copy</p>',
+    '<script>localStorage.setItem("archive-view", "compact");</script>'
+  ].join('\n')));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test('validate-site accepts enabled subscription with custom HTTPS hosted URL', () => {
+  const root = tempRoot('validate-site-subscription-enabled-');
+  writeSiteFixture(root, {
+    strict: true,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeJson(path.join(root, 'config', 'subscription.json'), subscriptionConfig({
+    enabled: true,
+    subscribeUrl: 'https://subscribe.camera-sw-newsletter.com/join'
+  }));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test('validate-site rejects unsafe subscription URLs when enabled', () => {
+  for (const [name, subscribeUrl] of [
+    ['placeholder', '<actual beehiiv hosted subscribe URL>'],
+    ['empty', ''],
+    ['http', 'http://subscribe.camera-sw-newsletter.com/join'],
+    ['javascript', 'javascript:alert(1)'],
+    ['data', 'data:text/plain,subscribe'],
+    ['mailto', 'mailto:news@example.com'],
+    ['localhost', 'https://localhost/subscribe'],
+    ['example', 'https://example.com/subscribe']
+  ]) {
+    const root = tempRoot(`validate-site-subscription-${name}-`);
+    writeSiteFixture(root, {
+      strict: true,
+      articleCount: articlePolicy.mainArticleCount.min
+    });
+    writeJson(path.join(root, 'config', 'subscription.json'), subscriptionConfig({
+      enabled: true,
+      subscribeUrl
+    }));
+
+    const result = runScript(validateSitePath, root);
+
+    assert.notEqual(result.status, 0, `${name} should fail validation`);
+    assert.match(result.stderr, /enabled=true requires a valid absolute HTTPS subscribeUrl/);
+  }
+});
+
+test('validate-site requires repo-relative subscription fetch path', () => {
+  const root = tempRoot('validate-site-subscription-fetch-path-');
+  writeSiteFixture(root, {
+    strict: true,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(path.join(root, 'index.html'), rootIndexHtml().replace(
+    "fetch('config/subscription.json')",
+    "fetch('/config/subscription.json')"
+  ));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /must fetch config\/subscription\.json through a repo-relative path/);
+  assert.match(result.stderr, /must not fetch \/config\/subscription\.json/);
+});
+
+test('validate-site rejects fake subscription form controls in the subscription section', () => {
+  const root = tempRoot('validate-site-subscription-form-');
+  writeSiteFixture(root, {
+    strict: true,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(path.join(root, 'index.html'), rootIndexHtml().replace(
+    '<a class="button subscribe-link" data-subscription-action>Subscribe</a>',
+    '<form><input type="email"><button type="submit">Subscribe</button></form><a class="button subscribe-link" data-subscription-action>Subscribe</a>'
+  ));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /subscription section must not include <form>/);
+  assert.match(result.stderr, /subscription section must not include <input>/);
+  assert.match(result.stderr, /subscription section must not include <button>/);
 });
 
 test('validate-site fails fallback_public without badge or publication notice', () => {

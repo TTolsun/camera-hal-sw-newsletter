@@ -14,12 +14,13 @@ function extractHomepageScript() {
   const homepageScript = scripts.find(script =>
     /\basync function loadNewsletters\b/.test(script) &&
     /\basync function loadHomepageHeadline\b/.test(script) &&
-    /\bloadNewsletters\(\);\s*$/.test(script)
+    /\basync function loadSubscription\b/.test(script) &&
+    /\bloadSubscription\(\);\s*$/.test(script)
   );
   assert.ok(homepageScript, 'index.html should include the homepage newsletter script');
   return homepageScript.replace(
-    /\bloadHomepageHeadline\(\);\s*\n\s*loadNewsletters\(\);\s*$/,
-    'globalThis.__headlineReady = loadHomepageHeadline();\n    globalThis.__homepageReady = loadNewsletters();'
+    /\bloadHomepageHeadline\(\);\s*\n\s*loadNewsletters\(\);\s*\n\s*loadSubscription\(\);\s*$/,
+    'globalThis.__headlineReady = loadHomepageHeadline();\n    globalThis.__homepageReady = loadNewsletters();\n    globalThis.__subscriptionReady = loadSubscription();'
   );
 }
 
@@ -57,6 +58,9 @@ function createElement(overrides = {}) {
     setAttribute(name, value) {
       this[name] = value;
     },
+    removeAttribute(name) {
+      delete this[name];
+    },
     ...overrides
   };
 }
@@ -75,7 +79,9 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
     headline: createElement(),
     'headline-card': createElement(),
     'latest-card': createElement(),
-    'archive-list': createElement()
+    'archive-list': createElement(),
+    subscribe: createElement({ hidden: true }),
+    'subscription-action': createElement()
   };
   const historyUpdates = [];
   const location = {
@@ -96,10 +102,16 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
 
   const context = {
     window,
+    URL,
     URLSearchParams,
     document: {
       getElementById(id) {
         return elements[id];
+      },
+      querySelector(selector) {
+        if (selector === '[data-subscription-section]') return elements.subscribe;
+        if (selector === '[data-subscription-action]') return elements['subscription-action'];
+        return null;
       }
     },
     fetch: async (url, fetchOptions) => {
@@ -121,6 +133,9 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
           json: async () => headlineState
         };
       }
+      if (url === 'config/subscription.json') {
+        return { ok: false, status: 404 };
+      }
       assert.equal(url, 'data/newsletters.json');
       if (options.newsletterFetchError) {
         return { ok: false, status: 500 };
@@ -140,8 +155,10 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
   vm.runInNewContext(script, context, { filename: 'index.html' });
   assert.equal(typeof context.__homepageReady?.then, 'function');
   assert.equal(typeof context.__headlineReady?.then, 'function');
+  assert.equal(typeof context.__subscriptionReady?.then, 'function');
   await context.__headlineReady;
   await context.__homepageReady;
+  await context.__subscriptionReady;
 
   return { elements, errors, context, historyUpdates, location };
 }
