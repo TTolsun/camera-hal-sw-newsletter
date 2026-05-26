@@ -1087,6 +1087,54 @@ pre code {
   white-space: nowrap;
 }
 
+.subscribe-section[hidden] {
+  display: none;
+}
+
+.subscribe-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-6);
+  padding: 22px 24px;
+  border: 1px solid rgba(24, 128, 56, 0.2);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(244, 250, 246, 0.76)),
+    var(--surface);
+}
+
+.subscribe-copy {
+  min-width: 0;
+}
+
+.subscribe-copy .eyebrow {
+  margin-bottom: 8px;
+  color: #05963a;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.subscribe-copy h2 {
+  margin-bottom: 8px;
+  font-size: 1.48rem;
+  line-height: 1.22;
+}
+
+.subscribe-description {
+  max-width: 680px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.subscribe-link {
+  min-width: 144px;
+  border-radius: var(--radius-xs);
+  font-weight: 850;
+}
+
 .archive-card {
   position: relative;
   display: flex;
@@ -2356,6 +2404,16 @@ pre code {
   }
 
   .archive-controls {
+    width: 100%;
+  }
+
+  .subscribe-panel {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    padding: var(--card-padding-sm);
+  }
+
+  .subscribe-link {
     width: 100%;
   }
 
