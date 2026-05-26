@@ -29,14 +29,14 @@
 ## Homepage Headline
 
 - decision: retained_current_above_margin
-- current_headline_key: url:https://goo.gle/AdaptiveApps_IO26
+- current_headline_key: url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html
 - replacement_headline_key: unknown
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
-- previous_stored_current_score: 100
+- previous_stored_current_score: 98
 - runtime_decayed_score: 98
-- last_scored_at: 2026-05-26
+- last_scored_at: 2026-05-27
 - scored_at: 2026-05-27
 - latest_inclusion_mode: selected_normally
 - injected_from_snapshot: false

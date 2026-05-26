@@ -33,7 +33,7 @@
     "parser_extraction_failure": true,
     "source_gap_risk": false,
     "taxonomy_missing": false,
-    "fallback_only_composition": false,
+    "fallback_only_composition": true,
     "duplicate_or_noop_source_discovery": true
   },
   "diagnosis_reasons": {
@@ -77,7 +77,13 @@
     ],
     "source_gap_risk": [],
     "taxonomy_missing": [],
-    "fallback_only_composition": [],
+    "fallback_only_composition": [
+      {
+        "reason": "composition_mode indicates fallback composition: FALLBACK_COMPOSITION.",
+        "source_artifact": "content/newsroom/2026-05-27/generation-status.json",
+        "severity": "medium"
+      }
+    ],
     "duplicate_or_noop_source_discovery": [
       {
         "reason": "Gemini discovery produced 2 candidate(s) but gemini_new_unique_url_count=0.",

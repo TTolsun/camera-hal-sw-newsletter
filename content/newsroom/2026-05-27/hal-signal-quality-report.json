@@ -2,8 +2,8 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-05-27",
-  "generated_at": "2026-05-26T17:21:51.636Z",
-  "status": "NEEDS_FIX",
+  "generated_at": "2026-05-26T18:20:05.976Z",
+  "status": "PASS",
   "input_completeness": "complete",
   "input_statuses": {
     "shortlisted_candidates": "loaded",
@@ -57,19 +57,19 @@
     "missing_required": [],
     "unavailable_optional": []
   },
-  "quality_status": "NEEDS_FIX",
+  "quality_status": "PASS",
   "hal_signal_quality_summary": {
     "schema_version": 1,
-    "main_article_count": 2,
-    "strong_signal_count": 2,
+    "main_article_count": 1,
+    "strong_signal_count": 1,
     "usable_signal_count": 0,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
-    "article_count_with_hal_signal_capsule": 2,
+    "article_count_with_hal_signal_capsule": 1,
     "article_count_without_hal_signal_capsule": 0,
-    "main_articles_with_owner_metric_log": 2,
-    "main_articles_with_concrete_action": 2,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 1,
     "fallback_main_article_count": 1,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
@@ -77,68 +77,27 @@
     "hal_signal_hard_blocker_count": 0,
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
-      "framework_hal_contract": 2,
-      "driver_image_pipeline": 2,
-      "stream_buffer_metadata": 2,
-      "cts_vts_its_cdd": 2,
-      "camerax_app_compatibility": 2,
       "native_tooling_workflow": 1,
-      "soc_resource_contention": 1
+      "framework_hal_contract": 1,
+      "driver_image_pipeline": 1,
+      "stream_buffer_metadata": 1,
+      "cts_vts_its_cdd": 1,
+      "soc_resource_contention": 1,
+      "camerax_app_compatibility": 1
     },
     "actionability_level_counts": {
-      "owner_metric_log": 2
+      "measurable_test": 1
     },
     "effective_actionability_level_counts": {
-      "owner_metric_log": 2
+      "measurable_test": 1
     },
     "signal_quality_status_counts": {
-      "strong_signal": 2
+      "strong_signal": 1
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "CameraX Release Notes - CameraX 1.6.1",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "relevance_bucket": "direct_aosp_camera",
-      "hal_impact_axes": [
-        "framework_hal_contract",
-        "driver_image_pipeline",
-        "stream_buffer_metadata",
-        "cts_vts_its_cdd",
-        "camerax_app_compatibility"
-      ],
-      "reader_owners": [
-        "camera_hal_owner",
-        "camera_framework_owner",
-        "camerax_app_compat_owner",
-        "camera_driver_owner",
-        "camera_test_owner"
-      ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 6,
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 72): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
-        "Do not use artifact version tables as behavior-change evidence.",
-        "Supplied source evidence가 말하지 않으면 HAL API, metadata contract, stream, buffer, request/result, CTS, VTS, Camera ITS impact를 claim하지 않습니다.",
-        "Release-table text 또는 UI snippet을 background knowledge로 바꾸지 않습니다."
-      ],
-      "soc_signal_type": "platform_signal",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": true,
-      "hal_signal_capsule_complete": true,
-      "hal_signal_capsule_missing_keys": [],
-      "hard_blockers": [],
-      "hard_blocker_reason_codes": []
-    },
-    {
-      "index": 2,
       "title": "Android Native Tooling: Build native Android apps in Google AI Studio",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -160,11 +119,11 @@
         "soc_platform_owner",
         "native_tooling_owner"
       ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
       "actionability_upgrade_reason": "",
       "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 5,
+      "concrete_action_signal_count": 4,
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [

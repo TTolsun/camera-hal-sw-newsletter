@@ -526,8 +526,9 @@
   "original_quality_status": "PASS",
   "original_quality_score": 97,
   "fallback_public_headline_generation": {
-    "source": "preserved_existing_public_headlines",
+    "source": "llm",
+    "stage": "fallback-public-title-editor",
     "override_count": 2,
-    "reason": "preserve_existing_headlines_after_public_body_cleanup"
+    "reason": "llm_headlines_generated"
   }
 }
