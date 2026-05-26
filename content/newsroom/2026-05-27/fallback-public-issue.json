@@ -1,0 +1,68 @@
+{
+  "date": "2026-05-27",
+  "generated_at": "2026-05-26T17:21:45.450Z",
+  "fallback_public_issue_status": "CREATED",
+  "fallback_public_issue_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
+  "review_publication_ready_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
+  "editor_review_reason": "AI 자동 발행 기준을 통과하지 못했으므로 merge 발행 전에 편집자 검토가 필요합니다.",
+  "publication_mode": "fallback_public",
+  "homepage_visibility": "visible_with_fallback_badge",
+  "normal_public_ready": false,
+  "automatic_publish_ready": false,
+  "public_artifact_ready": true,
+  "fallback_public_ready": true,
+  "fallback_only": true,
+  "camera_anchor_count": 0,
+  "homepage_badge": "Tooling Watch Edition",
+  "original_fact_check_status": "PASS",
+  "original_must_fix_count": 0,
+  "original_source_gap_count": 0,
+  "fallback_public_issue_removed_blockers": true,
+  "fallback_public_issue_removed_article_count": 1,
+  "base_draft_source": "editor-draft.json",
+  "preserve_article_count": 1,
+  "final_article_count": 1,
+  "headline_generation": {
+    "source": "llm",
+    "stage": "fallback-public-title-editor",
+    "override_count": 4,
+    "reason": "llm_headlines_generated"
+  },
+  "demoted_articles": [
+    {
+      "headline": "CameraX Release Notes - CameraX 1.6.1",
+      "category": "AOSP Camera / Android Camera",
+      "action": "replace-or-demote",
+      "reason": "CameraX source extraction failure: CameraX HAL boundary is missing from the article.",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.6.1",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        }
+      ]
+    }
+  ],
+  "fallback_articles": [
+    {
+      "headline": "CameraX Release Notes - CameraX 1.6.1",
+      "category": "AOSP Camera / Android Camera",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "relevance_bucket": "direct_aosp_camera",
+      "action": "rebuild-from-bound-candidate",
+      "fallback": false,
+      "reason": "hard failure replacement"
+    },
+    {
+      "headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
+      "category": "Android Native Tooling",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "source": "Android Developers Blog",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "action": "selected-native-tooling-supporting",
+      "fallback": false,
+      "reason": "selected source-ready native tooling supporting article"
+    }
+  ],
+  "rejected_candidates": []
+}

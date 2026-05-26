@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-05-27",
+  "overall_pass": true,
+  "summary": "The newsletter is a fallback public edition focusing on tooling. It clearly discloses that the content is not a direct Camera HAL issue but rather a tooling trend, linking to the source and providing context. The public disclosure is adequate for a fallback release.",
+  "issues": [],
+  "llm_diagnostics": {
+    "quota_error_count": 0,
+    "invalid_json_count": 0,
+    "model_usage": {
+      "post-generation public quality judge": {
+        "gemini-2.5-flash-lite": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "model_routing": {
+      "post-generation public quality judge": {
+        "stage": "post-generation public quality judge",
+        "stage_group": "judge",
+        "stage_group_known": true,
+        "routing_warning": "",
+        "primary_model": "gemini-2.5-flash-lite",
+        "fallback_models": [],
+        "primary_resolved_by": "code_default",
+        "resolved_by": "code_default",
+        "global_override_applied": false
+      }
+    },
+    "cost_report": {
+      "calls": [
+        {
+          "provider": "gemini",
+          "stage": "post-generation public quality judge",
+          "stage_group": "judge",
+          "stage_group_known": true,
+          "routing_warning": "",
+          "model": "gemini-2.5-flash-lite",
+          "primary_model": "gemini-2.5-flash-lite",
+          "attempt_model": "gemini-2.5-flash-lite",
+          "fallback_models": [],
+          "primary_resolved_by": "code_default",
+          "attempt_resolved_by": "code_default",
+          "resolved_by": "code_default",
+          "fallback_index": null,
+          "global_override_applied": false,
+          "attempt": 1,
+          "pro_model": false,
+          "usage_metadata_present": true,
+          "prompt_tokens": 2217,
+          "output_tokens": 89,
+          "thinking_tokens": 0,
+          "thinking_budget_requested": 0,
+          "thinking_budget_applied": 0,
+          "thinking_budget_note": "",
+          "cached_tokens": 0,
+          "total_tokens": 2306,
+          "billable_input_tokens": 2217,
+          "billable_output_tokens": 89,
+          "estimated_cost_usd": 0.0002573,
+          "pricing_usd_per_million": {
+            "input_usd_per_million": 0.1,
+            "output_usd_per_million": 0.4,
+            "cached_input_usd_per_million": 0.01,
+            "large_prompt_threshold_tokens": null,
+            "large_prompt_applied": false
+          },
+          "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing",
+          "pricing_warning": ""
+        }
+      ]
+    }
+  }
+}

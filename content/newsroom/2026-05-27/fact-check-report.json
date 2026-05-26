@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "final_comment": "Fallback public issue builder removed or demoted hard failure articles before writing public files."
+}
