@@ -12,6 +12,7 @@
 - [ ] 뉴스레터 generated artifact를 불필요하게 수정하지 않았다.
 - [ ] public newsletter content 변경이 있으면 이유를 설명했다.
 - [ ] unrelated cleanup을 섞지 않았다.
+- [ ] 임시 Markdown, notes/checkpoint 문서, one-off script가 PR에 남아 있지 않다.
 
 ### Code safety
 
@@ -29,6 +30,7 @@
 - [ ] 파일명, 명령어, 코드 식별자, JSON key, enum 값, URL, 외부 제품명은 원문을 유지했다.
 - [ ] README / AGENTS / docs 간 설명이 충돌하지 않는다.
 - [ ] archive 문서를 current guidance처럼 보이게 만들지 않았다.
+- [ ] 새 문서나 스크립트는 정식 산출물 또는 유지보수 가능한 도구로 설명 가능하다.
 
 ### Validation
 

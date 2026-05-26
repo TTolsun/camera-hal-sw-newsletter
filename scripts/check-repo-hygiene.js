@@ -5,6 +5,26 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT_TEST_ALLOWLIST_RELATIVE_PATH = 'tests/root-test-allowlist.json';
+const ONE_OFF_SCRIPT_EXTENSIONS = new Set(['.cjs', '.js', '.mjs', '.ps1', '.sh']);
+const ONE_OFF_DIRECTORY_SEGMENTS = new Set([
+  'tmp',
+  'temp',
+  'scratch',
+  'local',
+  'one-off',
+  'probe',
+  'repro',
+  'experiment'
+]);
+const ONE_OFF_BASENAME_TOKENS = new Set([
+  'tmp',
+  'temp',
+  'scratch',
+  'local',
+  'probe',
+  'repro',
+  'experiment'
+]);
 
 function normalizePath(filePath) {
   return String(filePath || '')
@@ -47,6 +67,39 @@ function isTrackedWorklogDocumentPath(filePath) {
     filePath.startsWith('docs/refactoring/') ||
     filePath.startsWith('docs/archive/') ||
     filePath.startsWith('docs/testing/');
+}
+
+function isTrackedScratchMarkdownPath(filePath) {
+  return /\.md$/i.test(filePath) &&
+    (/^(?:notes|memory|checkpoint|checkpoints)\//.test(filePath));
+}
+
+function splitNameTokens(value) {
+  return String(value || '')
+    .toLowerCase()
+    .split(/[._\-\s]+/)
+    .filter(Boolean);
+}
+
+function hasOneOffPhrase(value) {
+  return /(?:^|[._\-\s])one[-_\s]off(?:$|[._\-\s])/.test(String(value || '').toLowerCase());
+}
+
+function isOneOffScriptPath(filePath) {
+  const normalizedPath = normalizePath(filePath);
+  const segments = normalizedPath.split('/').filter(Boolean);
+  if (segments[0] !== 'scripts') return false;
+
+  const extension = path.posix.extname(normalizedPath).toLowerCase();
+  if (!ONE_OFF_SCRIPT_EXTENSIONS.has(extension)) return false;
+
+  const directorySegments = segments.slice(1, -1).map(segment => segment.toLowerCase());
+  if (directorySegments.some(segment => ONE_OFF_DIRECTORY_SEGMENTS.has(segment))) return true;
+
+  const basename = path.posix.basename(normalizedPath, extension).toLowerCase();
+  if (hasOneOffPhrase(basename)) return true;
+
+  return splitNameTokens(basename).some(token => ONE_OFF_BASENAME_TOKENS.has(token));
 }
 
 function isRootTestFile(filePath) {
@@ -108,14 +161,18 @@ function findRepoHygieneIssues(files, options = {}) {
       issues.push(issue(filePath, 'tracked_agent_scratch', 'root plan files must stay local-only'));
     } else if (filePath.startsWith('.codex/')) {
       issues.push(issue(filePath, 'tracked_agent_scratch', '.codex files must stay local-only'));
-    } else if (filePath.startsWith('.tmp/codex/')) {
-      issues.push(issue(filePath, 'tracked_agent_scratch', '.tmp/codex files must stay local-only'));
+    } else if (filePath.startsWith('.tmp/')) {
+      issues.push(issue(filePath, 'tracked_agent_scratch', '.tmp files must stay local-only'));
+    } else if (isTrackedScratchMarkdownPath(filePath)) {
+      issues.push(issue(filePath, 'tracked_agent_scratch', 'notes, memory, and checkpoint markdown files must stay local-only'));
     } else if (/^codex-[^/]*\.md$/.test(filePath)) {
       issues.push(issue(filePath, 'tracked_agent_scratch', 'root codex markdown scratch files must stay local-only'));
     } else if (/^[^/]+-codex-plan\.md$/.test(filePath)) {
       issues.push(issue(filePath, 'tracked_agent_scratch', 'root codex plan markdown files must stay local-only'));
     } else if (/^[^/]+-scratch\.md$/.test(filePath)) {
       issues.push(issue(filePath, 'tracked_agent_scratch', 'root scratch markdown files must stay local-only'));
+    } else if (isOneOffScriptPath(filePath)) {
+      issues.push(issue(filePath, 'tracked_one_off_script', 'one-off scripts under scripts/ must stay outside the repo or become maintained project tools'));
     }
   }
 
@@ -152,6 +209,8 @@ module.exports = {
   findRootTestStructureIssues,
   findRepoHygieneIssues,
   formatIssue,
+  isOneOffScriptPath,
+  isTrackedScratchMarkdownPath,
   isTrackedWorklogDocumentPath,
   loadRootTestAllowlist,
   normalizePath,

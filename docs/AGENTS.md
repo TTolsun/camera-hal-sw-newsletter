@@ -8,9 +8,11 @@
 - Code identifiers, JSON keys, enum values, file names, commands, URLs, product names are kept in English.
 - Current guidance와 과거 작업 중간 산출물을 혼동하지 마세요.
 - 과거 handoff, dated baseline, one-off audit, refactoring worklog는 `docs/**`에 보존하지 않습니다.
+- memory, notes, checkpoint, TODO 정리, 임시 보고서처럼 작업 중간 산출물인 Markdown은 `docs/**`에 보존하지 않습니다.
 - README에는 긴 내용을 중복하지 말고 canonical docs로 연결합니다.
 - 문서를 이동하거나 이름을 바꾸면 `README.md`, `docs/START_HERE.ko.md`, 관련 docs 링크를 함께 갱신합니다.
 - 작업 중 계획, 설계 초안, 디버그 baseline, 리팩터링 worklog는 repository 문서로 남기지 않습니다.
+- 영구 문서가 필요한 경우에는 현재 운영 계약을 설명하는 canonical docs에 통합하고, 임시 분석 메모를 별도 문서로 추가하지 않습니다.
 - 코드 동작이나 운영 절차를 설명해야 할 내용은 `docs/newsroom-workflow.md`, `docs/operations/**`, `docs/config/**`, `docs/evidence/**` 같은 canonical 문서에 현재형으로 통합합니다.
 
 ## Validation

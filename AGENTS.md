@@ -62,6 +62,8 @@ npm.cmd run validate
 - Repository root `PLAN.md`와 `PLAN.local.md`는 repository artifact가 아니라 local-only scratch로 취급합니다.
 - 작업 계획이 필요하면 `.tmp/codex/<task>.md` 또는 `.codex/PLAN.local.md`처럼 `.gitignore`로 보호되는 local-only 경로를 사용합니다.
 - PR에는 product code, tests, official docs만 포함하고 Codex scratch, worklog, temp plan 문서는 commit하지 않습니다.
+- memory/notes/checkpoint 성격의 Markdown, 작업 메모, TODO 정리, 임시 보고서는 repository 문서로 남기지 않습니다.
+- 일시적으로 만든 실험용 코드, 디버깅용 one-off script, 재현/분석용 helper는 repository에 저장하지 않습니다. 필요하면 저장소 밖이나 OS 임시 디렉터리에서 사용하고 작업 완료 전에 삭제합니다.
 - 과거 issue 해결, 리팩터링 계획, 디버그 baseline 같은 작업 중간 산출물은 repository 문서로 남기지 않습니다. 보존해야 할 정책이나 계약은 현재 코드와 맞는 canonical docs에 직접 통합합니다.
 
 ## Fixture Trust Policy

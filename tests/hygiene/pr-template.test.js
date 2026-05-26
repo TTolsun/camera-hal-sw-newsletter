@@ -52,6 +52,7 @@ test('newsletter PR template keeps publication checklist guardrails', () => {
   assert.match(text, /newsletters\/YYYY-MM-DD\/newsletter\.md/);
   assert.match(text, /fact-check must_fix|must_fix/);
   assert.match(text, /source gap/i);
+  assert.match(text, /임시 Markdown, notes\/checkpoint 문서, one-off script가 PR에 남아 있지 않다/);
   assert.match(text, /`npm run test`/);
   assert.match(text, /`npm run validate`/);
 });
@@ -70,6 +71,8 @@ test('code docs PR template keeps code safety checklist guardrails', () => {
   assert.match(text, /publish-ready/);
   assert.match(text, /final_publish_ready/);
   assert.match(text, /artifact_final_publish_ready/);
+  assert.match(text, /임시 Markdown, notes\/checkpoint 문서, one-off script가 PR에 남아 있지 않다/);
+  assert.match(text, /새 문서나 스크립트는 정식 산출물 또는 유지보수 가능한 도구로 설명 가능하다/);
   assert.match(text, /`npm run test`/);
   assert.match(text, /`npm run validate`/);
 });
