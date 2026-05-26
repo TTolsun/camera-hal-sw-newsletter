@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-27",
-  "generated_at": "2026-05-26T18:20:05.741Z",
+  "generated_at": "2026-05-26T19:22:59.901Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -380,7 +380,7 @@
         "\\bCameraX\\b"
       ],
       "key_evidence": [
-        "version_or_release: Jetpack Compose, Jetpack Navigation 3",
+        "version_or_release: Google I/O 2026",
         "api_or_component: CameraX / Android camera APIs",
         "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공..."
       ],
@@ -468,7 +468,7 @@
       "key_evidence": [
         "version_or_release: 2026년 5월 19일",
         "api_or_component: Google AI Studio",
-        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 만에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
+        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어 설치나 라이브러리 구성이 필요 없어 개발 장벽이 크게 낮아집니다."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
       "claim_validation": {

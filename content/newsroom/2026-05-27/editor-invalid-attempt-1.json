@@ -3,58 +3,57 @@
   "public_contract_version": "story-v1",
   "generation_contract_version": 1,
   "title": "AOSP Camera / Driver / SoC Platform 뉴스레터",
-  "summary": "이번 주에는 CameraX 1.6.1 릴리스를 통해 다양한 기기별 호환성 이슈와 런타임 버그가 수정되었습니다. 또한 Google I/O 2026에서 발표된 Jetpack Compose 및 Navigation 3 기반의 적응형 레이아웃 환경에서 CameraX 미리보기를 올바르게 처리하기 위한 프레임워크 수준의 검증 포인트가 강조되었습니다.",
+  "summary": "이번 주에는 CameraX 1.6.1 마이너 업데이트를 통해 Android 17 호환성 크래시 대응 및 기기별 스트림 왜곡 버그 수정이 이루어졌습니다. 또한 Google I/O 2026을 통해 Jetpack Compose 및 Adaptive UI 환경에서의 CameraX 통합 미리보기 검증의 중요성이 강조되었습니다.",
   "briefing": [
-    "CameraX 1.6.1 릴리스를 통해 Samsung Z Fold 4의 YUV 왜곡 크기 제외, A53의 토치 캡처 실패 등 기기별 호환성 패치가 적용되었습니다.",
-    "Jetpack Compose 및 Navigation 3 기반의 다중 창/폴더블 환경에서 CameraX 미리보기 스트림의 동적 레이아웃 적응성과 안정성이 강조되었습니다.",
-    "Google AI Studio의 프롬프트 기반 네이티브 앱 빌드 기능이 추가되어, 카메라 연동 프로토타이핑 및 테스트 앱 개발 워크플로우 효율성이 향상될 것으로 기대됩니다."
+    "CameraX 1.6.1 릴리스를 통해 차기 Android 17 기기에서 발생하던 알 수 없는 동적 범위 모드 관련 크래시가 수정되었으므로 앱 호환성 레이어의 선제적 업데이트가 권장됩니다.",
+    "Samsung Z Fold 4의 특정 YUV 출력 크기 왜곡 현상 및 Samsung A53의 VideoCapture 바인딩 시 토치 오동작 등 기기 특화 스트림/캡처 버그가 프레임워크 수준에서 우회 처리되었습니다.",
+    "Google I/O 2026의 적응형 레이아웃 세션을 통해 다양한 폴더블 및 대화면 기기의 창 크기 변경 시 올바른 카메라 미리보기 스트림 구성을 보장하기 위한 CameraX 검증이 강조되었습니다."
   ],
   "sections": [
     {
       "category": "direct_aosp_camera",
-      "headline": "CameraX 1.6.1 릴리스: 기기별 YUV 왜곡 및 토치 캡처 호환성 패치 적용",
-      "what_changed": "CameraX 1.6.1 버전에서 1.6.0의 ListenableFuture 컴파일 오류가 수정되었으며, Samsung Z Fold 4의 특정 YUV 출력 크기 제외, A53의 VideoCapture 바인딩 시 토치 캡처 실패 수정 등 다수의 기기별 런타임 호환성 패치가 포함되었습니다.",
+      "headline": "CameraX 1.6.1 업데이트: Android 17 호환성 크래시 대응 및 기기별 YUV 스트림 왜곡 수정",
+      "what_changed": "CameraX 1.6.1 및 1.6.0 마이너 업데이트를 통해 차기 Android 17 기기에서 알 수 없는 동적 범위 모드로 인해 발생하던 크래시가 해결되었으며, Samsung Z Fold 4의 YUV 출력 왜곡 크기 제외 및 Samsung A53의 토치 캡처 실패 등 다수의 기기 특화 버그가 수정되었습니다.",
       "confirmed_facts": [
-        "CameraX 1.6.0 사용 시 발생하던 'Cannot access class ListenableFuture' 컴파일 오류를 수정했습니다. (Ic8cba, b/497571473)",
-        "Samsung Z Fold 4 기기에서 이미지 왜곡을 유발하는 특정 YUV 포맷 출력 크기를 지원 대상에서 제외했습니다. (I776bf, b/460322307)",
-        "Samsung A53 기기에서 VideoCapture 유스케이스가 바인딩되어 있을 때 토치를 켠 상태로 이미지 캡처를 수행하면 간헐적으로 실패하던 문제를 수정했습니다. (I0f183, b/458197367)",
-        "ExifInterface 의존성을 업데이트하여 JPEG 인코더가 마커 앞에 채움 바이트를 추가하는 기기에서의 이미지 캡처 실패 문제를 해결했습니다. (I0eb49)",
-        "일부 기기에서 초광각 카메라와 플래시를 함께 사용할 때 이미지가 어둡게 나오던 노출 부족 문제를 수정했습니다. (Ib7530, b/444590340)"
+        "CameraX 1.6.0 사용 시 발생하던 'Cannot access class ListenableFuture' 컴파일 오류가 수정되었습니다. (b/497571473)",
+        "차기 Android 17 기기에서 알 수 없는 동적 범위 모드가 추가됨에 따라 CameraX 앱 전체에서 발생하던 크래시 문제를 해결하였으며, 이 수정사항은 1.5.2 버전에도 체리픽되었습니다. (Ibd7b5)",
+        "PREVIEW_STABILIZATION이 VideoCapture와 함께 사용될 때 Preview 유스케이스가 활성화되지 않은 경우 일관되지 않은 결과를 제공하던 기능 그룹 API 버그를 수정하였습니다. (b/449913903)",
+        "Samsung Z Fold 4 기기에서 이미지 왜곡을 유발하던 특정 YUV 포맷 출력 크기를 지원 대상에서 제외(Exclude) 조치하였습니다. (b/460322307)",
+        "Samsung A53 기기에서 VideoCapture 유스케이스가 바인딩된 상태로 토치를 켜고 이미지 캡처를 수행할 때 간헐적으로 실패하던 문제를 해결하였습니다. (b/458197367)",
+        "ExifInterface 의존성을 업데이트하여 JPEG 인코더가 마커 앞에 채움 바이트(fill bytes)를 추가하는 기기에서 0xFF 패딩 파싱 오류로 인해 이미지 캡처가 실패하던 현상을 수정하였습니다. (I0eb49)"
       ],
-      "evidence_summary": "May 06, 2026에 배포된 CameraX 1.6.1 공식 릴리스 노트를 통해 컴파일러 오류 수정 및 다수의 기기별 카메라 파이프라인 우회 패치(YUV 왜곡 크기 제외, 토치 연동 캡처 실패 수정 등)가 확인되었습니다.",
+      "evidence_summary": "CameraX 1.6.1 공식 릴리스 노트를 통해 Android 17 호환성 확보를 위한 크래시 패치 및 특정 OEM 단말(Samsung Z Fold 4, A53, S6 등)에서 발생하던 스트림 구성, YUV 왜곡, 토치 연동 캡처 실패 등의 프레임워크/앱 레이어 우회 코드가 적용되었음이 확인되었습니다.",
       "specificity_checks": [
         "Version: CameraX 1.6.1",
         "Release Date: May 06, 2026",
-        "Component: CameraX / androidx.camera",
-        "Behavior Change: ListenableFuture 컴파일 오류 해결 및 Samsung Z Fold 4, A53 등 기기별 우회 로직 적용"
+        "API/Component: CameraX / androidx.camera",
+        "Behavior Change: Android 17 dynamic range crash fix, Samsung Z Fold 4 YUV size exclusion, Samsung A53 torch capture fix"
       ],
       "source_verification_notes": [
-        "공식 Android Developers Jetpack 릴리스 노트를 통해 확인된 사실입니다.",
-        "Gerrit 변경사항(Ic8cba, I776bf, I0f183 등) 및 IssueTracker ID(b/497571473, b/460322307, b/458197367)가 명시되어 신뢰성이 확보되었습니다."
+        "공식 Android 개발자 사이트의 Jetpack CameraX 릴리스 노트를 통해 변경 사항의 상세 커밋(Ic8cba, Ibd7b5, I776bf 등) 및 IssueTracker ID가 매핑되어 신뢰성이 확보되었습니다."
       ],
       "public_article": {
-        "headline": "CameraX 1.6.1 릴리스: 폴더블 YUV 왜곡 제외 및 기기별 캡처 호환성 패치 대거 반영",
-        "source_subtitle": "Android Developers Latest Updates - CameraX 1.6.1",
-        "lead": "Android Jetpack의 핵심 카메라 라이브러리인 CameraX가 1.6.1 마이너 업데이트를 통해 컴파일 오류를 해결하고, 실제 현업에서 보고된 주요 기기별 카메라 런타임 호환성 문제를 대거 수정했습니다.",
+        "headline": "CameraX 1.6.1 배포: 차기 Android 17 크래시 예방 및 특정 단말 YUV 왜곡 우회 패치 적용",
+        "source_subtitle": "Android Developers Jetpack CameraX Release Notes (May 06, 2026)",
+        "lead": "Google은 Jetpack CameraX 1.6.1 마이너 업데이트를 릴리스하고, 차세대 Android 17 환경에서의 앱 크래시 방지 패치 및 주요 OEM 단말에서 보고된 카메라 스트림/캡처 오동작에 대한 프레임워크 수준의 우회 수정을 대거 반영했습니다.",
         "body_paragraphs": [
-          "이번 CameraX 1.6.1 릴리스에서는 지난 1.6.0 버전 도입 시 개발자들의 발목을 잡았던 'Cannot access class ListenableFuture' 컴파일 오류가 공식적으로 해결되었습니다. 이와 함께 실제 상용 기기에서 발생하던 치명적인 이미지 왜곡 및 캡처 실패 현상에 대한 프레임워크 수준의 우회(Quirk) 로직이 대거 추가되었습니다.",
-          "가장 주목할 만한 변경 사항은 Samsung Z Fold 4 기기에서 발생하는 YUV 포맷 출력 이미지 왜곡 문제입니다. 특정 해상도의 YUV 출력 크기에서 캡처된 이미지에 왜곡이 발생하는 현상이 보고됨에 따라, CameraX 프레임워크는 해당 기기에서 문제가 되는 YUV 출력 크기를 스트림 구성 대상에서 제외하도록 필터링 로직을 적용했습니다.",
-          "또한, Samsung A53 기기에서 비디오 녹화(VideoCapture) 유스케이스가 활성화된 상태에서 토치(Torch)를 켜고 정지 영상 캡처를 시도할 때 간헐적으로 캡처가 실패하던 타이밍 이슈가 수정되었습니다. 초광각 카메라 사용 시 플래시 동기화 오동작으로 인해 최종 이미지가 어둡게 나오던 노출 부족 현상도 함께 해결되었습니다.",
-          "마지막으로, 일부 하드웨어 JPEG 인코더가 마커 앞에 0xFF 채움 바이트(Padding)를 삽입할 때 ExifInterface가 이를 정상적으로 파싱하지 못해 이미지 저장에 실패하던 문제를 해결하기 위해 ExifInterface 내부 의존성 라이브러리가 업데이트되었습니다."
+          "이번 CameraX 1.6.1 업데이트는 개발자들의 발목을 잡던 빌드 및 호환성 문제를 해결하는 데 초점을 맞추었습니다. 먼저 CameraX 1.6.0 버전에서 발생하던 'Cannot access class ListenableFuture' 컴파일 오류가 완전히 해결되어 빌드 안정성이 확보되었습니다. 또한, 차기 Android 17 환경에서 새롭게 도입되는 미확인 동적 범위(Dynamic Range) 모드로 인해 모든 CameraX 기반 앱이 실행 중 크래시를 일으키던 치명적인 호환성 결함이 수정되었습니다. 해당 패치는 이전 안정 버전인 1.5.2에도 소급 적용되었습니다.",
+          "기기 특화 버그 수정도 다수 포함되었습니다. 대표적으로 Samsung Z Fold 4 단말에서 특정 YUV 포맷 출력 크기를 사용할 때 결과 이미지가 왜곡되어 렌더링되던 문제를 해결하기 위해, 해당 해상도 크기들을 지원 목록에서 제외하는 쿼크(Quirk) 필터가 추가되었습니다. 아울러 Samsung A53 단말에서 비디오 녹화(VideoCapture) 유스케이스가 바인딩된 상태로 플래시 토치를 켜고 사진을 촬영할 때 간헐적으로 캡처가 실패하던 현상도 수정되었습니다.",
+          "스트림 안정화 기능의 오동작도 개선되었습니다. PREVIEW_STABILIZATION(미리보기 손떨림 방지)을 VideoCapture와 함께 사용할 때 Preview 유스케이스가 활성화되어 있지 않으면 기능 지원 여부 판단 API(isFeatureGroupSupported)가 비정상적인 값을 반환하던 오류가 바로잡혔습니다. 이외에도 JPEG 인코더가 마커 앞단에 fill byte를 삽입하는 특정 기기들에서 ExifInterface의 0xFF 패딩 파싱 실패로 인해 이미지 저장이 되지 않던 문제가 ExifInterface 라이브러리 의존성 업데이트를 통해 해결되었습니다."
         ],
-        "camera_hal_takeaway": "이번 업데이트는 직접적인 Camera HAL API 규격 변경을 수반하지는 않지만, HAL이 제공하는 YUV 스트림 해상도나 토치/캡처 동기화 타이밍이 상위 프레임워크(CameraX)에서 어떻게 오동작을 유발할 수 있는지 보여줍니다. 특히 Z Fold 4의 YUV 왜곡이나 A53의 비디오+토치 캡처 실패는 HAL 단에서의 스트림 무결성과 상태 전이 타이밍 검증이 중요함을 시사합니다.",
+        "camera_hal_takeaway": "이번 변경은 Camera HAL API 자체의 직접적인 규격 변경은 아니나, 프레임워크 및 앱 호환성 레이어(CameraX)가 특정 단말의 HAL 출력(YUV 해상도 왜곡, 토치 연동 타이밍 등)을 우회하기 위해 적용한 Quirk 로직을 담고 있습니다. HAL 개발 팀은 자사 단말의 YUV 출력 포맷 해상도 정합성 및 VideoCapture+ImageCapture+Torch 동시 구동 시의 하드웨어 상태 전이 안정성을 재검증해야 합니다.",
         "reader_checkpoints": [
-          "Samsung Z Fold 4 등 폴더블 기기 타겟의 YUV 스트림 구성 시, 특정 해상도에서 하드웨어 스케일러나 ISP 출력 왜곡이 발생하지 않는지 HAL 수준에서 재검증하십시오.",
-          "VideoCapture와 ImageCapture가 동시에 바인딩된 상태에서 AE 플래시/토치 트리거 시, HAL의 메타데이터 상태 전이(State Transition)가 정상적으로 완료되는지 타이밍 로그를 분석하십시오."
+          "Samsung Z Fold 4 및 유사 폴더블 단말에서 YUV 스트림 출력 시 특정 해상도에서 왜곡이 발생하는지 HAL 레벨의 이미지 버퍼를 덤프하여 확인합니다.",
+          "VideoCapture와 ImageCapture 유스케이스가 동시에 활성화된 상태에서 플래시 토치(Torch)를 온/오프하며 반복 캡처를 수행할 때, HAL3 요청-결과 메타데이터 및 센서 레지스터 제어 타이밍에 병목이나 타임아웃이 없는지 검증합니다."
         ],
         "story_contract_version": 1,
         "editorial_story": {
-          "reader_scenario": "폴더블 기기나 특정 보급형 라인업에서 카메라 앱을 구동할 때, 특정 해상도에서 미리보기나 캡처 이미지가 깨지거나 비디오 녹화 중 사진을 찍을 때 앱이 멈추는 현상이 발생하여 HAL과 프레임워크 간의 타이밍 이슈를 추적해야 하는 상황입니다.",
-          "what_happened": "CameraX 1.6.1에서 컴파일 에러 수정과 함께, Z Fold 4의 왜곡 유발 YUV 해상도 필터링, A53의 비디오 녹화 중 토치 캡처 실패 우회, 초광각 플래시 노출 부족 대응 등 기기 특화 호환성 패치가 적용되었습니다.",
-          "why_it_matters": "상위 라이브러리 수준에서 기기별 우회 로직(Quirks)이 추가된다는 것은 기본 HAL 구현의 특정 스트림 조합이나 동기화 타이밍에 잠재적 결함이 있음을 뜻하므로, OEM 개발팀은 이를 자체 HAL 검증 항목에 반영해야 합니다.",
-          "field_scenario": "개발 중인 기기에서 비디오 녹화와 정지 영상 캡처를 동시에 수행하면서 토치를 켜고 끌 때, HAL이 REQUEST_AVAILABLE_CAPABILITIES에 선언된 스트림 조합과 메타데이터 제어를 정상 처리하는지 확인합니다.",
-          "not_to_overclaim": "이 업데이트는 CameraX 라이브러리 내부의 호환성 우회 필터링 및 버그 수정이며, Android Camera HAL3 AIDL/HIDL 인터페이스 자체의 규격 변경을 의미하지는 않습니다.",
-          "editor_take": "CameraX의 기기별 패치 내역은 역설적으로 HAL 개발자가 어떤 시나리오(YUV 해상도 왜곡, 비디오+토치 동시 구동 타이밍)에서 방어적인 코드를 작성해야 하는지 알려주는 훌륭한 피드백 루프입니다."
+          "reader_scenario": "폴더블 단말이나 보급형 단말에서 카메라 앱을 실행해 비디오를 녹화하면서 플래시를 켜고 사진을 찍을 때, 화면이 깨지거나 앱이 갑자기 멈추는 현상으로 인해 사용자 불만이 접수되는 상황입니다.",
+          "what_happened": "CameraX 프레임워크 단에서 Android 17의 신규 dynamic range 대응 크래시 패치와 함께, Samsung Z Fold 4의 왜곡 유발 YUV 해상도 제외 및 Samsung A53의 비디오+토치 사진 촬영 실패 버그를 우회하는 패치가 적용되었습니다.",
+          "why_it_matters": "앱 개발사들이 호환성 확보를 위해 CameraX 1.6.1 이상으로 업데이트함에 따라, 단말 제조사 및 SoC HAL 개발 팀은 프레임워크가 우회 처리한 하드웨어 오동작(YUV 왜곡, 토치 연동 타이밍 버그)의 근본 원인이 HAL/드라이버 단에 남아있는지 확인하고 수정해야 합니다.",
+          "field_scenario": "개발자가 신규 OS 버전이나 특정 폴더블 기기에서 카메라 미리보기 스트림을 설정하고 캡처를 수행할 때, 프레임워크 수준의 해상도 필터링이 정상 작동하는지 로그를 통해 대조 분석합니다.",
+          "not_to_overclaim": "이 업데이트는 CameraX 프레임워크의 버그 수정 및 우회책 적용 건으로, Camera HAL3 인터페이스 규격 자체나 AIDL/HIDL 하드웨어 추상화 레이어의 표준 API가 변경된 것은 아닙니다.",
+          "editor_take": "프레임워크가 기기별 예외 처리(Quirks)를 추가했다는 것은 하위 HAL/드라이버 단의 잠재적 불안정성을 의미하므로, 실무 엔지니어는 이를 단순 앱 이슈로 치부하지 말고 하드웨어 파이프라인 검증의 기회로 삼아야 합니다."
         },
         "source_links": [
           {
@@ -63,22 +62,23 @@
           }
         ]
       },
-      "background": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, Camera2 API 위에 구축되어 앱 개발자가 카메라 기능을 더 쉽게 통합할 수 있도록 돕습니다. CameraX의 업데이트는 직접적인 HAL API 변경을 의미하지는 않지만, CameraX가 내부적으로 Camera2 API를 호출하고 프레임워크 수준에서 특정 동작을 기대하므로, HAL/드라이버 구현의 호환성 및 동작에 간접적인 영향을 미칠 수 있습니다. 특히 기기별 버그 수정은 HAL/드라이버 계층의 특정 동작을 우회하거나 보완하는 경우가 많습니다. 따라서 CameraX의 안정성 및 기능 개선은 HAL/드라이버 팀이 제공하는 기본 카메라 기능의 견고성에 의존하며, 앱 호환성 및 사용자 경험에 영향을 미칩니다.",
-      "why_it_matters": "기기별로 발생하는 YUV 왜곡이나 캡처 실패는 최종 사용자 경험을 크게 저해하는 요소입니다. 프레임워크 단의 우회책이 마련되었더라도, 근본적으로는 HAL 및 드라이버 단에서 스트림 무결성과 동기화 신뢰성을 확보하는 것이 중요합니다.",
-      "camera_hal_perspective": "CameraX가 특정 YUV 해상도를 제외하거나 토치 제어 타이밍을 우회하는 것은, HAL 수준에서 해당 스트림 구성(Stream Configuration) 및 메타데이터 처리가 불안정했음을 방증합니다. HAL 개발팀은 이러한 시나리오를 자체 CTS 및 런타임 스트레스 테스트에 포함해야 합니다.",
+      "background": "CameraX는 Android Jetpack 라이브러리의 일부로, 하위 Camera2 및 Camera HAL3의 복잡한 스트림 구성 및 기기별 예외 상황을 프레임워크 내부에서 추상화하여 관리합니다. 따라서 CameraX의 릴리스 노트에 등장하는 기기 특화 버그 수정 내역은 역으로 해당 단말의 HAL 구현부나 드라이버 파이프라인에 잠재적인 타이밍/포맷 호환성 결함이 존재함을 시사하는 중요한 디버깅 힌트가 됩니다.",
+      "why_it_matters": "차기 Android 17 환경에 대응하는 크래시 패치가 선제적으로 반영되었으므로, 신규 플랫폼을 준비하는 SoC 및 프레임워크 엔지니어는 동적 범위 모드 추가에 따른 호환성 영향을 파악해야 합니다. 또한 OEM 단말 특화 우회 로직들은 차기 모델 HAL 개발 시 회귀 방지 검증 항목으로 등록되어야 합니다.",
+      "camera_hal_perspective": "PREVIEW_STABILIZATION과 VideoCapture 조합 시의 기능 그룹 쿼리 일관성 수정은 HAL의 세션 파라미터 및 스트림 조합 지원 선언부와 맞물려 있습니다. 또한 YUV 포맷 출력 왜곡 해상도 제외 조치는 HAL3가 선언한 스트림 구성 가능 목록(Stream Configuration Map) 중 특정 해상도에서 메모리 얼라인먼트나 ISP 스케일링 버그가 발생하고 있음을 뜻하므로, 드라이버 단의 픽셀 포맷 및 스트림 버퍼 할당 로직을 점검해야 합니다.",
       "camera_hal_checks": [
-        "Samsung Z Fold 4 및 유사 폼팩터 기기에서 YUV_420_888 포맷의 모든 지원 해상도에 대해 ISP 스케일러 출력 왜곡 여부를 VTS 및 ITS 환경에서 전수 검사하십시오.",
-        "ImageCapture와 VideoCapture 스트림이 동시 활성화된 상태에서 AE_MODE_ON_ALWAYS_FLASH 또는 FLASH_MODE_TORCH 트리거 시, HAL의 버퍼 릴리즈 및 메타데이터 피드백 루프 타이밍을 측정하십시오."
+        "isFeatureGroupSupported 쿼리 시 PREVIEW_STABILIZATION 세션 설정 상태에 따른 HAL 메타데이터 반환 값을 검증합니다.",
+        "Samsung Z Fold 4 등 폴더블 타겟 기기에서 YUV_420_888 스트림의 모든 해상도 조합에 대해 ISP 스케일러 왜곡 여부를 CTS 테스트를 통해 전수 조사합니다.",
+        "VideoCapture + ImageCapture + Torch 동시 구동 시 HAL의 요청 큐(Request Queue) 처리 지연 및 버퍼 드롭 발생 여부를 측정합니다."
       ],
       "action_hints": [
-        "CameraX 1.6.1의 기기별 Quirk 리스트를 분석하여 자사 타겟 기기에 유사한 스트림 조합/타이밍 버그가 잠재되어 있는지 확인하십시오.",
-        "ExifInterface 패치와 관련하여, 자사 JPEG 인코더가 출력하는 비트스트림에 규격 외 패딩 바이트가 과도하게 삽입되지 않는지 인코더 드라이버 설정을 검증하십시오."
+        "CameraX 1.6.1의 Quirk 리스트에 등록된 단말(Samsung Z Fold 4, A53 등)의 로컬 HAL 소스코드에서 스트림 제한 로직을 대조하십시오.",
+        "JPEG 인코더의 0xFF 패딩 바이트 추가 동작이 표준 규격을 준수하는지, ExifInterface 파싱 실패를 유발하는 비정상 데이터가 없는지 인코더 출력을 덤프하여 확인하십시오."
       ],
       "action_items": [
-        "2주 이내에 비디오 녹화 중 토치 활성화 및 정지 영상 캡처 연속 수행 시나리오를 자사 참조 기기에서 500회 이상 반복 테스트하여 프레임 드롭 및 캡처 실패율을 기록하십시오.",
-        "YUV_420_888 스트림 출력 시 하드웨어 왜곡이 발생하는 특정 해상도가 있는지 픽셀 분석 툴을 통해 검증하고, 필요 시 HAL의 Stream Configuration Map에서 해당 해상도를 제외하거나 스케일러 로직을 수정하십시오."
+        "2주 이내에 VideoCapture와 ImageCapture가 동시에 활성화된 상태에서 플래시 토치(Torch)를 켜고 사진을 촬영하는 시나리오를 100회 반복하여 HAL3 요청-결과 메타데이터 및 센서 제어 타이밍에 병목이나 타임아웃이 없는지 검증하십시오. (담당: HAL 검증 파트)",
+        "Samsung Z Fold 4 및 유사 폴더블 단말의 YUV_420_888 스트림 출력 버퍼를 덤프하여, 특정 해상도에서 스케일러 왜곡이나 메모리 얼라인먼트 오류가 발생하는지 하드웨어 ISP 파이프라인 설정을 점검하십시오. (담당: ISP 드라이버 팀)"
       ],
-      "team_summary": "CameraX 1.6.1은 컴파일 오류 해결과 함께 Z Fold 4 YUV 왜곡 제외, A53 비디오+토치 캡처 실패 대응 등 기기별 호환성 패치를 대거 포함했으므로, HAL 팀은 관련 스트림 및 타이밍 검증을 강화해야 합니다.",
+      "team_summary": "CameraX 1.6.1은 Android 17 크래시 예방 및 특정 단말의 YUV 왜곡, 토치 연동 캡처 실패를 우회하는 패치를 적용했습니다. HAL 팀은 해당 단말들의 하드웨어 파이프라인 및 스트림 구성 안정성을 재점검해야 합니다.",
       "is_ai_related": false,
       "article_type": "direct_aosp_camera",
       "imageCandidates": [
@@ -86,18 +86,18 @@
           "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "sourceKind": "official_site",
+          "sourceKind": "release_note_item",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok"
         }
       ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "The available image is a generic Android Developers social share image, which does not provide specific visual context for CameraX 1.6.1 or HAL implementation details.",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
+      "imageSource": "https://developer.android.com/latest-updates",
+      "imageAttribution": "Android Developers Latest Updates",
+      "imageAlt": "Android Developers Logo",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "공식 Android 개발자 업데이트 소스의 대표 이미지를 사용하여 신뢰성을 높이고 기사의 맥락을 보완합니다.",
       "sources": [
         {
           "title": "CameraX Release Notes - CameraX 1.6.1",
@@ -106,67 +106,75 @@
       ],
       "actionability_level": "none",
       "effective_actionability_level": "none",
-      "hal_impact_axes": [
-        "framework_hal_contract",
-        "driver_image_pipeline",
-        "stream_buffer_metadata",
-        "camerax_app_compatibility"
-      ],
-      "reader_owners": [
-        "camera_hal_owner",
-        "camera_framework_owner",
-        "camerax_app_compat_owner",
-        "camera_driver_owner"
-      ],
-      "signal_quality_status": "weak_signal",
-      "soc_signal_source_allowed": true,
+      "hal_signal_capsule": {
+        "why_now": "CameraX 1.6.1이 배포되어 앱 개발사들이 Android 17 크래시 방지 및 단말 버그 우회 패치를 적용하기 시작했으므로, OEM 및 SoC 파트너는 하위 레이어의 근본 원인 해결을 위해 즉각적인 분석이 필요합니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "YUV 스트림 특정 해상도 왜곡 여부 및 VideoCapture+Torch 동시 구동 시의 HAL3 요청 처리 안정성을 로컬 테스트 스위트로 검증해야 합니다.",
+        "impact_axes": [
+          "framework_hal_contract",
+          "driver_image_pipeline",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "릴리스 노트에 명시되지 않은 Camera HAL API 또는 벤더 HAL 계약 변경 사항을 주장하지 마세요.",
+          "아티팩트 버전 테이블을 동작 변경 증거로 사용하지 마세요."
+        ]
+      },
+      "main_article_source_allowed": true,
+      "main_article_source_blockers": [],
+      "relevance_bucket": "direct_aosp_camera",
       "source_quality": {
         "source_role": "official_release_source",
         "source_url_quality": "official_site_update_row"
       },
-      "topic_area": "AOSP Camera Framework & Library Updates"
+      "topic_area": "AOSP Camera Framework"
     },
     {
       "category": "android_platform_camera_adjacent",
-      "headline": "Google I/O 2026: Jetpack Compose 기반 적응형 레이아웃에서의 CameraX 미리보기 최적화",
-      "what_changed": "Jetpack Compose가 최신 Jetpack Navigation 3 릴리스와 함께 'Adaptive by Default' 패러다임을 제시함에 따라, 폴더블, 태블릿 등 다양한 창 크기 전환 환경에서 CameraX를 활용한 올바른 카메라 미리보기(Preview) 스트림 처리가 핵심 요구사항으로 강조되었습니다.",
+      "headline": "Google I/O 2026: Jetpack Compose 및 Adaptive UI 환경에서의 CameraX 미리보기 스트림 정합성 확보",
+      "what_changed": "Google I/O 2026에서 발표된 'Jetpack Compose를 통한 멀티 디바이스 원활한 경험 구축' 세션을 통해, 다양한 화면 크기 및 폴더블 기기 환경에서 올바른 카메라 미리보기(Preview)를 제공하기 위한 핵심 도구로서 CameraX의 역할과 통합 검증의 중요성이 강조되었습니다.",
       "confirmed_facts": [
-        "Android 생태계가 폴더블, 태블릿, XR 등 다양한 폼팩터에 대응하는 'Adaptive by Default'로 전환되고 있습니다.",
-        "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적 Grid 및 FlexBox 레이아웃과 함께 모든 창 크기에서 올바른 카메라 미리보기를 제공하기 위한 도구로 CameraX를 명시했습니다."
+        "Android 생태계는 폴더블, 태블릿, 차량용 디스플레이, XR 등 다양한 폼팩터에 대응하기 위해 'Adaptive by Default'를 지향하고 있습니다.",
+        "Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 실험적 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원과 함께, 모든 창 크기에서 왜곡 없는 카메라 미리보기를 구현하기 위한 CameraX 통합 가이드를 제공합니다."
       ],
-      "evidence_summary": "May 19, 2026에 발표된 Google I/O 2026 블로그 포스트를 통해, 다양한 화면 크기 및 다중 창 환경에서 끊김 없고 왜곡 없는 카메라 미리보기를 구현하기 위한 Jetpack Compose와 CameraX의 통합 설계 방향이 확인되었습니다.",
+      "evidence_summary": "Google I/O 2026 블로그 포스트를 통해 멀티 디바이스 및 적응형 UI 환경에서 카메라 미리보기 스트림의 정합성을 보장하기 위해 CameraX가 핵심 구성 요소로 다루어지고 있음이 확인되었습니다.",
       "specificity_checks": [
-        "Version: Jetpack Compose, Jetpack Navigation 3",
+        "Version: Google I/O 2026",
         "Release Date: May 19, 2026",
-        "Component: CameraX / Android camera APIs",
-        "Behavior Change: 다중 창 및 동적 화면 크기 변경 시 CameraX 미리보기의 레이아웃 적응성 강화"
+        "API/Component: CameraX / Android camera APIs",
+        "Behavior Change: Integration of CameraX with Jetpack Compose and Navigation 3 for multi-device adaptive preview"
       ],
       "source_verification_notes": [
-        "Google I/O 2026 공식 개발자 블로그 포스트 내용을 기반으로 작성되었습니다.",
-        "UI 프레임워크의 변화가 상위 카메라 라이브러리(CameraX)의 스트림 처리 및 Surface 동적 변경 요구사항으로 이어지는 맥락을 짚어냈습니다."
+        "Android Developers Blog의 Google I/O 요약 포스트를 바탕으로 작성되었으며, 마케팅성 문구를 배제하고 카메라 미리보기 스트림 구성 관점의 기술적 사실만 추출하였습니다."
       ],
       "public_article": {
-        "headline": "Google I/O 2026: 폴더블 및 다중 창 환경을 위한 CameraX 미리보기 스트림 최적화",
-        "source_subtitle": "Android Developers Blog - Adaptive Apps at Google I/O 2026",
-        "lead": "Google I/O 2026에서 Android 생태계의 기본값으로 선언된 'Adaptive by Default' 흐름에 발맞춰, 다양한 화면 크기와 폴더블 폼팩터에서 왜곡 없는 카메라 미리보기를 구현하기 위한 프레임워크 및 HAL 단의 유연성이 요구되고 있습니다.",
+        "headline": "Google I/O 2026: 폴더블 및 멀티 디바이스 환경을 위한 CameraX 적응형 미리보기 기술 조명",
+        "source_subtitle": "Android Developers Blog (May 19, 2026)",
+        "lead": "Google은 I/O 2026을 통해 다양한 화면 크기를 가진 폴더블폰, 태블릿 등에서 왜곡 없는 일관된 카메라 미리보기(Preview)를 제공하기 위해 Jetpack Compose와 CameraX의 유기적 결합을 강조했습니다.",
         "body_paragraphs": [
-          "Android 생태계가 폴더블, 태블릿, 차량용 디스플레이, XR 기기 등 다양한 폼팩터로 확장됨에 따라, 앱이 실행 중에 화면 크기를 동적으로 변경하는 멀티 윈도우 및 프리폼 레이아웃 대응이 필수가 되었습니다. Google은 Jetpack Compose와 최신 Jetpack Navigation 3를 통해 이러한 적응형 UI 환경을 지원하는 동시에, 핵심 컴포넌트 중 하나로 CameraX를 지목했습니다.",
-          "다양한 창 크기에서 '올바른 카메라 미리보기'를 제공하는 것은 단순히 UI 레이아웃을 늘리는 것에 그치지 않습니다. 사용자가 폴더블 기기를 접거나 펼칠 때, 혹은 앱 창의 크기를 조절할 때 카메라 미리보기 Surface의 종횡비(Aspect Ratio)와 해상도가 실시간으로 변경됩니다.",
-          "이러한 동적 변화 상황에서 화면 왜곡이나 프레임 드롭 없이 부드러운 미리보기 전환을 보장하기 위해서는, 상위 CameraX 라이브러리가 시스템 레이아웃 변경에 맞춰 미리보기 Surface를 신속하게 재구성하고, 하위 HAL 및 드라이버가 새로운 스트림 구성 요청에 지연 없이 대응해야 합니다."
+          "현재 Android 생태계는 대화면 기기가 5억 8천만 대를 넘어서는 등 폴더블, 태블릿, 차량용 스크린, XR 기기를 아우르는 다중 기기 환경으로 빠르게 전환되고 있습니다. 이에 따라 앱 개발 시 다양한 화면 비율과 창 크기 변화에 유연하게 대응하는 '적응형 레이아웃(Adaptive UI)'이 기본 사양으로 자리잡고 있습니다.",
+          "특히 카메라 기능을 포함하는 앱의 경우, 사용자가 기기를 접거나 펼칠 때(Fold/Unfold), 혹은 멀티 윈도우 모드에서 창 크기를 조절할 때 카메라 미리보기 스트림이 늘어나거나 깨지지 않고 올바른 종횡비(Aspect Ratio)를 유지하는 것이 핵심 과제입니다. Google은 Jetpack Compose 환경에서 최신 Jetpack Navigation 3 및 레이아웃 엔진을 활용해 이러한 카메라 미리보기를 안정적으로 구현하는 최적의 도구로 CameraX를 제시했습니다.",
+          "이러한 프레임워크 수준의 변화는 하위 Camera HAL 및 드라이버 레이어에도 영향을 미칩니다. 화면 크기가 실시간으로 변할 때 앱은 카메라 세션을 재구성하거나 미리보기 스트림의 해상도를 동적으로 변경해야 하므로, 하부 시스템의 스트림 구성(Stream Configuration) 처리 속도와 안정성이 더욱 중요해지고 있습니다."
         ],
-        "camera_hal_takeaway": "Jetpack Compose 기반의 적응형 UI 환경은 HAL 개발자에게 더 가혹한 스트림 재구성(Stream Reconfiguration) 성능을 요구합니다. 사용자가 창 크기를 조절할 때 발생하는 빈번한 Surface 변경 요청에 대해, HAL이 지연(Latency)을 최소화하고 화면 깜빡임이나 프레임 드롭 없이 새로운 해상도로 스트림을 전환할 수 있어야 합니다.",
+        "camera_hal_takeaway": "Jetpack Compose 및 적응형 UI의 확산으로 인해 앱 레이어에서의 카메라 세션 재구성(Session Reconfiguration) 및 미리보기 스트림 해상도 변경 요청 빈도가 크게 증가할 것입니다. HAL 및 드라이버 개발 팀은 화면 전환 및 멀티 윈도우 크기 변경 시 발생하는 동적 스트림 구성 요청이 지연(Latency)이나 화면 깜빡임 없이 처리되도록 세션 관리 로직을 최적화해야 합니다.",
         "reader_checkpoints": [
-          "폴더블 기기의 접힘/펼침 상태 전환 시, 미리보기 스트림 재구성 과정에서 발생하는 화면 멈춤(Freeze) 시간을 측정하고 최적화하십시오.",
-          "다양한 종횡비(1:1, 4:3, 16:9 등)의 Surface가 동적으로 바인딩될 때 HAL의 스트림 유효성 검증 로직이 오동작하지 않는지 확인하십시오."
+          "폴더블 기기의 접힘/펼침 상태 전이 시 미리보기 스트림이 끊김 없이 부드럽게 전환(Seamless Transition)되는지 HAL 세션 구성 로그를 확인합니다.",
+          "멀티 윈도우 모드에서 카메라 앱의 창 크기를 실시간으로 드래그하여 변경할 때, HAL3가 새로운 스트림 해상도 요청을 지연 없이 처리하는지 프레임 레이트(FPS)를 측정합니다."
         ],
         "story_contract_version": 1,
         "editorial_story": {
-          "reader_scenario": "사용자가 폴더블 폰으로 카메라 앱을 사용하다가 화면을 펼쳤을 때, 미리보기 화면이 일시적으로 찢어지거나 검은 화면이 수 초간 지속되는 현상이 발생하여 스트림 재구성 성능을 개선해야 하는 상황입니다.",
-          "what_happened": "Google I/O 2026에서 Jetpack Compose 및 Navigation 3와 함께, 모든 창 크기에서 왜곡 없는 카메라 미리보기를 제공하기 위한 CameraX의 역할과 적응형 레이아웃 대응이 강조되었습니다.",
-          "why_it_matters": "적응형 UI 환경에서는 카메라 스트림의 해상도와 종횡비가 동적으로 자주 변경되므로, HAL 및 프레임워크가 스트림 재구성을 얼마나 빠르고 안정적으로 처리하는지가 사용자 경험의 핵심 척도가 됩니다.",
-          "field_scenario": "앱 창 크기를 마우스나 터치 드래그로 실시간 조절할 때, HAL이 새로운 해상도의 Surface를 전달받아 버퍼를 끊김 없이 갱신하는지 모니터링합니다.",
-          "not_to_overclaim": "이 발표는 Jetpack Compose와 CameraX를 활용한 앱 개발 가이드라인의 일환이며, Android OS 내부의 Camera2/HAL3 바인딩 아키텍처 자체가 완전히 새롭게 개편된 것은 아닙니다.",
-          "editor_take": "UI가 선언적으로 변할수록 하위 HAL은 더 동적이고 예측 불가능한 스트림 전환 요청을 받게 되므로, 스트림 재구성 시 발생하는 오버헤드를 줄이는 하드웨어/드라이버 최적화가 더욱 중요해집니다."
+          "reader_scenario": "사용자가 폴더블폰으로 카메라 앱을 사용하다가 화면을 펼쳤을 때, 미리보기 화면이 순간적으로 멈추거나 검은 화면이 수 초간 지속되어 사용자 경험이 저하되는 상황입니다.",
+          "what_happened": "Google I/O 2026에서 멀티 디바이스 대응을 위해 Jetpack Compose와 CameraX를 결합한 적응형 미리보기 구현 방안이 발표되면서, 앱 레이어의 동적 화면 대응 요구가 강화되었습니다.",
+          "why_it_matters": "앱이 화면 크기 변화에 맞춰 카메라 스트림을 실시간으로 재구성함에 따라, HAL 레이어는 빈번한 세션 재설정 요청을 부하 없이 신속하게 처리할 수 있는 고성능 파이프라인을 제공해야 합니다.",
+          "field_scenario": "폴더블 단말에서 디스플레이 상태 변화에 따른 카메라 미리보기 스트림의 동적 해상도 전환 성능을 측정하고 병목 구간을 분석합니다.",
+          "not_to_overclaim": "이 발표는 Jetpack Compose와 CameraX를 활용한 앱 개발 가이드라인 제시 건으로, Android OS 내부의 CameraService나 HAL3 표준 인터페이스 자체에 즉각적인 API 변경을 강제하는 것은 아닙니다.",
+          "editor_take": "적응형 UI의 확산은 결국 하부 카메라 시스템에 더 잦은 세션 재구성 스트레스를 주게 되므로, HAL 개발 팀은 세션 오픈/클로즈 및 스트림 할당 성능 최적화에 집중해야 합니다."
         },
         "source_links": [
           {
@@ -175,41 +183,30 @@
           }
         ]
       },
-      "background": "Jetpack Compose는 Android의 선언적 UI 프레임워크로, 다양한 화면 크기와 폼팩터에 적응하는 UI를 쉽게 구축할 수 있도록 돕습니다. Jetpack Navigation 3는 앱 내비게이션을 관리하는 라이브러리로, Compose와 함께 사용될 때 적응형 UI 흐름을 지원합니다. CameraX는 Android Camera Framework의 상위 계층 라이브러리로, 카메라 미리보기 및 캡처 기능을 제공합니다. 다양한 기기 및 창 크기에서 '올바른 카메라 미리보기'를 제공하는 것은 CameraX가 HAL/드라이버에서 제공하는 스트림을 정확하게 처리하고, 시스템 UI 및 레이아웃 변경에 따라 미리보기 Surface를 동적으로 조정하는 능력에 달려 있습니다. 이는 HAL/드라이버가 다양한 해상도, 종횡비, 회전 모드에서 안정적인 스트림을 제공해야 함을 의미하며, CameraX의 요구사항을 충족하기 위해 HAL 구현의 유연성과 적응성이 중요합니다.",
-      "why_it_matters": "대화면 및 폴더블 기기의 보급으로 멀티 윈도우 환경에서의 카메라 사용성이 중요해졌습니다. 프레임워크의 동적 레이아웃 변경에 기민하게 대응하지 못하는 HAL은 화면 왜곡이나 시스템 랙을 유발하여 기기 품질 평가에 악영향을 미칩니다.",
-      "camera_hal_perspective": "다중 창 전환 시 CameraX는 새로운 해상도와 종횡비로 Session을 재구성하거나 Surface를 동적으로 교체합니다. HAL은 이 과정에서 발생하는 `configure_streams` 호출 오버헤드를 최소화하고, 버퍼 할당 지연으로 인한 프레임 드롭을 방지해야 합니다.",
+      "background": "폴더블 및 대화면 기기에서는 앱의 생명주기(Lifecycle)와 디스플레이 창 크기가 동적으로 변합니다. CameraX는 이러한 환경에서 UI 레이아웃의 변화를 감지하고 카메라 미리보기 스트림의 종횡비를 자동으로 보정하는 역할을 수행하지만, 이는 결국 하위 Camera2 및 HAL 레이어의 빈번한 세션 재구성(Session Reconfiguration)을 유발하게 됩니다.",
+      "why_it_matters": "적응형 UI 환경에서 카메라 미리보기의 정합성을 보장하는 것은 사용자 경험에 직결됩니다. HAL 엔지니어는 앱 레이어의 이러한 동적 스트림 변경 요청이 하드웨어 및 드라이버 단에서 병목 없이 신속하게 처리될 수 있도록 최적화해야 합니다.",
+      "camera_hal_perspective": "앱이 화면 크기 변경에 대응하여 Preview 스트림의 해상도를 동적으로 전환할 때, HAL3 세션 재설정 과정에서 발생하는 프레임 드롭(Frame Drop)과 지연 시간(Latency)을 최소화해야 합니다. 특히 세션 파라미터(Session Parameter)를 활용하여 불필요한 하드웨어 리셋 없이 스트림을 재구성할 수 있도록 HAL 구현을 튜닝해야 합니다.",
       "camera_hal_checks": [
-        "다중 창 모드에서 앱 창 크기를 실시간으로 조절할 때, HAL에 전달되는 Surface의 해상도 변경 요청이 300ms 이내에 완료되는지 프로파일링하십시오.",
-        "화면 회전 및 분할 화면 전환 시, 기존 버퍼의 반환(Return)과 신규 버퍼의 큐잉(Queuing) 과정에서 메모리 누수나 데드락이 발생하지 않는지 검증하십시오."
+        "폴더블 기기의 접힘/펼침 상태 변화 시 HAL 세션 재구성 소요 시간을 측정합니다.",
+        "다양한 종횡비의 Preview 스트림 구성 요청 시 ISP의 크롭 및 스케일링 엔진이 실시간으로 올바른 좌표계를 계산하는지 검증합니다."
       ],
       "action_hints": [
-        "Jetpack Compose의 적응형 레이아웃 샘플 앱을 활용하여, 자사 기기에서 화면 분할 및 폴딩 상태 전환 시 카메라 미리보기의 프레임 레이트(FPS) 변화를 기록하십시오.",
-        "스트림 재구성 시 하드웨어 ISP 및 센서 모드 전환 속도를 단축할 수 있는 벤더 전용 빠른 세션 전환(Fast Session Switch) 기술 적용 여부를 검토하십시오."
+        "Jetpack Compose 환경에서 CameraX 미리보기 컴포넌트를 구동하고, 창 크기 변경 시 HAL로 유입되는 스트림 구성 요청 로그를 분석하십시오.",
+        "화면 전환 시 세션 재설정 없이 미리보기 해상도를 변경할 수 있는 HAL3 세션 파라미터 적용 가능 여부를 검토하십시오."
       ],
       "action_items": [
-        "2주 이내에 폴더블 기기의 접힘/펼침 시나리오를 모사하는 자동화 스크립트를 작성하고, 스트림 재구성(Stream Reconfiguration) 시 소요되는 HAL 내부 처리 시간을 측정하여 200ms 이하로 유지하는지 검증하십시오.",
-        "다양한 창 크기 전환 중 발생할 수 있는 버퍼 고갈(Buffer Starvation) 현상을 방지하기 위해, HAL의 최대 버퍼 개수(max_buffers) 설정과 프레임워크의 버퍼 순환 주기를 정합하십시오."
+        "2주 이내에 폴더블 기기의 디스플레이 상태 전이(Fold <-> Unfold) 시나리오에서 카메라 미리보기 세션 재구성 시 발생하는 프레임 드롭 수와 전환 소요 시간(ms)을 측정하는 자동화 테스트 스크립트를 작성하십시오. (담당: 프레임워크 및 HAL 성능 최적화 팀)"
       ],
-      "team_summary": "Google I/O 2026에서 강조된 'Adaptive by Default' 패러다임에 따라, 폴더블 및 다중 창 환경에서 CameraX 미리보기 스트림의 동적 재구성 성능과 안정성을 확보하기 위한 HAL 최적화가 요구됩니다.",
+      "team_summary": "Google I/O 2026에서는 멀티 디바이스 환경 대응을 위한 Jetpack Compose와 CameraX의 통합이 강조되었습니다. 이는 HAL 단에 빈번한 동적 스트림 재구성 스트레스를 주므로, 세션 전환 성능 최적화가 요구됩니다.",
       "is_ai_related": false,
       "article_type": "android_platform_camera_adjacent",
-      "imageCandidates": [
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://goo.gle/AdaptiveApps_IO26",
-          "sourceKind": "official_blog",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
-        }
-      ],
+      "imageCandidates": [],
       "selectedImage": "",
       "imageSource": "",
       "imageAttribution": "",
       "imageAlt": "",
       "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "The image is a generic Google I/O promotional banner and does not contain specific technical diagrams or UI screenshots related to CameraX preview rendering on adaptive layouts.",
+      "imageUsageDecisionReason": "제공된 이미지 후보 중 적응형 UI 및 카메라 미리보기 기술을 직접적으로 묘사하는 고품질 이미지가 없어 선택하지 않았습니다.",
       "sources": [
         {
           "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
@@ -218,126 +215,35 @@
       ],
       "actionability_level": "none",
       "effective_actionability_level": "none",
-      "hal_impact_axes": [
-        "camerax_app_compatibility"
-      ],
-      "reader_owners": [
-        "camera_framework_owner",
-        "camerax_app_compat_owner"
-      ],
-      "signal_quality_status": "weak_signal",
-      "soc_signal_source_allowed": true,
+      "hal_signal_capsule": {
+        "why_now": "Google I/O 2026을 기점으로 적응형 UI를 적용한 앱들이 늘어남에 따라, 폴더블 및 대화면 기기에서의 동적 카메라 미리보기 세션 전환 안정성 확보가 시급한 과제로 부상했습니다.",
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "디스플레이 상태 변화에 따른 카메라 미리보기 스트림의 동적 해상도 전환 성능 및 세션 재구성 지연 시간을 측정해야 합니다.",
+        "impact_axes": [
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "제공된 소스 증거가 직접 언급하지 않는 한 Camera HAL API 또는 벤더 HAL 계약 변경 사항을 주장하지 마세요.",
+          "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마세요."
+        ]
+      },
+      "main_article_source_allowed": true,
+      "main_article_source_blockers": [],
+      "relevance_bucket": "android_platform_camera_adjacent",
       "source_quality": {
         "source_role": "official_release_source",
         "source_url_quality": "official_dated_release"
       },
-      "topic_area": "Android Platform & UI Integration"
-    },
-    {
-      "category": "cpp_ai_tooling_fallback",
-      "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 기능 도입",
-      "what_changed": "Google AI Studio에서 프롬프트 입력만으로 몇 분 만에 전체 네이티브 Android 앱을 빌드할 수 있는 기능이 추가되어, 복잡한 소프트웨어 설치나 라이브러리 구성 없이 개발 장벽을 낮추고 빠른 프로토타이핑을 지원합니다.",
-      "confirmed_facts": [
-        "Google AI Studio는 이제 로컬 소프트웨어 설치나 복잡한 라이브러리 구성 없이 프롬프트만으로 몇 분 만에 전체 Android 앱을 빌드할 수 있는 환경을 제공합니다.",
-        "이를 통해 이미지 처리, 객체 인식 등 카메라 출력을 활용하는 온디바이스 AI 기능이나 프로토타입 앱의 개발 장벽이 낮아집니다."
-      ],
-      "evidence_summary": "May 19, 2026에 발표된 Android Developers Blog 포스트를 통해, Google AI Studio 내에서 네이티브 Android 앱을 신속하게 빌드하고 카메라 연동 AI 기능 등을 손쉽게 실험할 수 있는 웹 기반 개발 워크플로우가 공개되었습니다.",
-      "specificity_checks": [
-        "Version: Google AI Studio (May 19, 2026 업데이트)",
-        "Release Date: May 19, 2026",
-        "Component: Google AI Studio / Android Native Tooling",
-        "Behavior Change: 프롬프트 기반의 웹 환경 네이티브 Android 앱 자동 생성 및 빌드 지원"
-      ],
-      "source_verification_notes": [
-        "공식 Android Developers Blog 게시물을 바탕으로 작성되었습니다.",
-        "카메라 런타임 자체의 변경이 아닌, 카메라 출력을 활용하는 테스트 앱 및 프로토타이핑 개발 워크플로우 관점의 변화로 범위를 제한하여 해석했습니다."
-      ],
-      "public_article": {
-        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드로 카메라 프로토타이핑 가속화",
-        "source_subtitle": "Android Developers Blog - Build native Android apps in Google AI Studio",
-        "lead": "Google AI Studio에 프롬프트만으로 전체 네이티브 Android 앱을 자동 생성하고 빌드할 수 있는 기능이 도입되어, 카메라 API 연동 및 이미지 처리 프로토타입 앱 개발 속도가 획기적으로 빨라질 전망입니다.",
-        "body_paragraphs": [
-          "네이티브 Android 앱 개발은 전통적으로 Android Studio 설치, SDK 구성, Gradle 의존성 설정 등 초기 환경 구축에 상당한 시간과 노력이 소요되었습니다. 특히 카메라 API나 이미지 처리 라이브러리를 연동하는 작업은 보일러플레이트 코드가 많아 초기 프로토타이핑 장벽이 높았습니다.",
-          "Google AI Studio의 이번 업데이트는 웹 브라우저 상에서 프롬프트 입력만으로 동작 가능한 네이티브 Android 앱 코드를 자동 생성하고 빌드할 수 있게 해줍니다. 개발자는 복잡한 환경 설정 없이 즉시 카메라 출력을 활용하는 AI 기능(객체 인식, 이미지 필터링 등)을 테스트할 수 있는 앱을 확보할 수 있습니다.",
-          "이 도구는 CameraX나 Camera2 API를 활용하여 카메라 미리보기 스트림을 획득하고, 이를 온디바이스 AI 모델의 입력 데이터 패스로 연결하는 샘플 코드를 빠르게 생성해 주므로, HAL 및 드라이버 개발팀이 상위 애플리케이션 계층의 동작을 모사하여 테스트 환경을 구축할 때 유용하게 활용될 수 있습니다."
-        ],
-        "camera_hal_takeaway": "이 도구는 Camera HAL 내부 런타임이나 드라이버 코드를 직접 수정하지는 않지만, HAL 개발팀이 새로운 카메라 기능이나 메타데이터 동작을 검증하기 위해 필요한 '테스트용 클라이언트 앱'을 신속하게 빌드하는 워크플로우 도구로 가치가 있습니다. 복잡한 앱 개발 과정 없이 프롬프트만으로 특정 스트림 조합을 사용하는 테스트 앱을 생성할 수 있습니다.",
-        "reader_checkpoints": [
-          "Google AI Studio를 활용하여 CameraX 기반의 단순 미리보기 및 이미지 캡처 스트림을 구동하는 테스트 앱 코드를 생성하고, 이를 자사 타겟 기기에서 실행해 보십시오.",
-          "생성된 앱 코드의 카메라 API 호출 패턴이 Android 권장 베스트 프랙티스(예: Surface 생명주기 관리)를 준수하는지 네이티브 뷰어에서 검증하십시오."
-        ],
-        "story_contract_version": 1,
-        "editorial_story": {
-          "reader_scenario": "새로운 HAL 기능을 테스트하기 위해 간단한 카메라 캡처 앱이 급히 필요하지만, 전담 앱 개발 인력이 부족하여 HAL 엔지니어가 직접 테스트 앱을 빌드해야 하는 상황입니다.",
-          "what_happened": "Google AI Studio에 프롬프트 기반으로 네이티브 Android 앱을 자동 생성하고 빌드하는 기능이 추가되어, 개발 환경 구축 없이 빠른 앱 프로토타이핑이 가능해졌습니다.",
-          "why_it_matters": "카메라 프레임워크 및 HAL 개발팀이 상위 앱 계층의 API 호출 시나리오를 모사하는 테스트 클라이언트를 확보하는 데 드는 시간과 비용을 크게 절감할 수 있습니다.",
-          "field_scenario": "웹 브라우저에서 'CameraX를 사용해 실시간 미리보기를 띄우고 버튼을 누르면 JPEG로 저장하는 앱을 만들어줘'라고 입력하여 생성된 APK를 타겟 기기에 설치하고 HAL 로그를 분석합니다.",
-          "not_to_overclaim": "Google AI Studio가 생성하는 코드는 상위 애플리케이션 수준의 Java/Kotlin 코드이며, C++ 기반의 Camera HAL3 구현이나 드라이버 코드를 자동으로 생성하거나 최적화해 주는 것은 아닙니다.",
-          "editor_take": "AI 기반 코드 생성 도구는 HAL 개발자가 앱 수준의 호환성 이슈를 재현하거나 단순 기능 검증용 샌드박스 앱을 만들 때 훌륭한 생산성 도구로 자리 잡을 것입니다."
-        },
-        "source_links": [
-          {
-            "title": "Build native Android apps in Google AI Studio",
-            "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
-          }
-        ]
-      },
-      "background": "Google AI Studio는 AI 모델 개발 및 배포를 위한 플랫폼으로, 이제 프롬프트 기반으로 Android 앱을 생성하는 기능을 제공합니다. Camera HAL 및 드라이버 개발은 주로 C++ 기반의 네이티브 환경에서 이루어지며, 빌드, 테스트, 디버깅 워크플로우는 개발 생산성에 직접적인 영향을 미칩니다. AI 기반 개발 도구는 네이티브 코드 생성, 코드 스니펫 제안, 버그 진단, 테스트 케이스 생성 등을 통해 이러한 워크플로우를 자동화하거나 가속화할 수 있습니다. 이는 HAL/드라이버 팀의 개발 효율성을 높일 수 있지만, AI 도구 자체의 변경 사항이 카메라 런타임 성능이나 HAL API 계약에 직접적인 영향을 미친다고 보기는 어렵습니다. 대신, 개발 프로세스 및 도구 체인에 대한 신호로 해석하는 것이 적절합니다.",
-      "why_it_matters": "HAL 개발팀이 새로운 메타데이터 태그나 스트림 조합을 검증하기 위해 매번 무거운 Android Studio 프로젝트를 수동으로 구성하는 것은 비효율적입니다. 신속한 프로토타이핑 도구는 개발 및 검증 루프의 속도를 높여줍니다.",
-      "camera_hal_perspective": "직접적인 HAL 런타임 영향은 없으나, 카메라 출력을 입력으로 받는 온디바이스 AI 모델 연동 시나리오에서 버퍼 수명 주기(Buffer Lifecycle) 관리 및 이미지 포맷 변환 오버헤드를 최소화하는 상위 앱 코드를 빠르게 생성하여 테스트 베드로 활용할 수 있습니다.",
-      "camera_hal_checks": [
-        "Google AI Studio가 생성한 카메라 앱이 ImageAnalysis 유스케이스 사용 시 YUV_420_888 버퍼를 적절한 타이밍에 close()하여 HAL의 버퍼 고갈을 유발하지 않는지 확인하십시오."
-      ],
-      "action_hints": [
-        "AI Studio를 통해 생성된 카메라 앱의 소스 코드에서 Camera2/CameraX API 바인딩 루틴을 추출하여, 자사 HAL의 비정상 상태 전이 테스트 케이스로 활용하십시오."
-      ],
-      "action_items": [
-        "2주 이내에 Google AI Studio를 사용하여 'CameraX ImageAnalysis 스트림에서 프레임을 받아 픽셀 평균 밝기를 계산하는 초경량 테스트 앱'을 생성하고, 자사 기기에서 구동 시 HAL의 프레임 드롭 여부를 확인하십시오."
-      ],
-      "team_summary": "Google AI Studio에 프롬프트 기반 네이티브 Android 앱 빌드 기능이 추가되어, 카메라 API 연동 및 이미지 처리 프로토타입 앱을 신속하게 생성하여 HAL 검증용 툴로 활용할 수 있게 되었습니다.",
-      "is_ai_related": true,
-      "article_type": "cpp_ai_tooling_fallback",
-      "imageCandidates": [
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-          "sourceKind": "official_blog",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
-        }
-      ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "The image is a generic promotional graphic for Google AI Studio and does not provide technical workflow diagrams or camera-specific UI details.",
-      "sources": [
-        {
-          "title": "Build native Android apps in Google AI Studio",
-          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
-        }
-      ],
-      "actionability_level": "none",
-      "effective_actionability_level": "none",
-      "hal_impact_axes": [
-        "native_tooling_workflow"
-      ],
-      "reader_owners": [
-        "native_tooling_owner"
-      ],
-      "signal_quality_status": "weak_signal",
-      "soc_signal_source_allowed": true,
-      "topic_area": "Developer Tools & AI Workflows"
+      "topic_area": "Android Platform Camera Adjacent"
     }
   ],
   "action_items": [
-    "CameraX 1.6.1의 기기별 패치 내역을 바탕으로, 자사 타겟 기기에서 VideoCapture와 ImageCapture 동시 구동 시 토치/플래시 제어 타이밍 및 AE 상태 전이 무결성을 500회 이상 반복 검증하십시오.",
-    "Samsung Z Fold 4의 YUV 왜곡 사례를 벤치마킹하여, 자사 폴더블 기기 개발 시 지원하는 모든 YUV_420_888 해상도에서 ISP 스케일러 출력 왜곡이 발생하는지 전수 조사하십시오.",
-    "Jetpack Compose의 적응형 레이아웃 환경에 대응하기 위해, 화면 분할 및 크기 조절 시 발생하는 동적 스트림 재구성(Stream Reconfiguration) 소요 시간을 측정하고 200ms 이하로 최적화하십시오.",
-    "Google AI Studio를 활용하여 CameraX ImageAnalysis 스트림 버퍼를 획득하는 경량 테스트 앱을 신속하게 빌드하고, 프레임 획득 후 버퍼 해제 타이밍 지연으로 인한 HAL 버퍼 고갈 현상이 발생하지 않는지 검증하십시오."
+    "CameraX 1.6.1의 Quirk 필터링 내역을 기반으로, 자사 폴더블 단말의 YUV_420_888 스트림 특정 해상도에서 ISP 스케일러 왜곡이나 메모리 얼라인먼트 오류가 발생하는지 하드웨어 파이프라인을 점검하십시오.",
+    "VideoCapture와 ImageCapture 유스케이스가 동시에 활성화된 상태에서 플래시 토치(Torch)를 온/오프하며 반복 캡처를 수행할 때, HAL3 요청-결과 메타데이터 및 센서 제어 타이밍에 병목이나 타임아웃이 없는지 검증하십시오.",
+    "폴더블 기기의 디스플레이 상태 전이(Fold <-> Unfold) 시나리오에서 카메라 미리보기 세션 재구성 시 발생하는 프레임 드롭 수와 전환 소요 시간(ms)을 측정하여 세션 전환 성능을 최적화하십시오."
   ],
   "references": [
     {
@@ -347,12 +253,14 @@
     {
       "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
       "url": "https://goo.gle/AdaptiveApps_IO26"
-    },
-    {
-      "title": "Build native Android apps in Google AI Studio",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
     }
   ],
-  "explicitly_demoted_groups": [],
+  "explicitly_demoted_groups": [
+    {
+      "article_group_key": "android_native_tooling_workflow",
+      "demotion_reason": "Google AI Studio의 네이티브 앱 빌드 기능은 일반적인 개발 워크플로우 개선 사항으로, Camera HAL, 드라이버, 이미지 파이프라인과의 직접적인 기술적 연관성이나 런타임 영향도가 낮아 메인 기사에서 제외하고 3줄 브리핑 및 참고용으로만 분류했습니다.",
+      "reason_code": "forbidden_bucket"
+    }
+  ],
   "hard_blocked_groups": []
 }

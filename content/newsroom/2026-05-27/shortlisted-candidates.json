@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "date": "2026-05-27",
-  "generated_at": "2026-05-26T18:18:11.379Z",
+  "generated_at": "2026-05-26T19:20:35.550Z",
   "input_candidate_count": 42,
   "eligible_candidate_count": 3,
   "deterministic_selected_count": 3,
@@ -29670,7 +29670,7 @@
     "updated_at": "2026-05-27T00:00:00+09:00",
     "current_headline": {
       "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "title": "Google AI Studio, 프롬프트 기반 CameraX·Camera2 활용 native Android 앱 prototype 생성 지원",
+      "title": "구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원",
       "summary": "Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Accelerometer, Bluetooth 같은 native Android API 접근을 예로 들며 hardware-enabled app 구성을 설명했습니다.",
       "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "newsletter_date": "2026-05-27",
@@ -29707,7 +29707,7 @@
         "category": "cpp_ai_tooling_fallback",
         "source_name": "Android Developers Blog"
       },
-      "newsletter_article_url": "newsletters/2026-05-27/index.html#article-google-ai-studio-camerax-camera2-native-android-prototype",
+      "newsletter_article_url": "newsletters/2026-05-27/index.html#article-ai",
       "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
       "image_alt": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인"
     },

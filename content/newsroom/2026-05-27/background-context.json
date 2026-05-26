@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-27",
-  "generated_at": "2026-05-26T18:18:29.155Z",
+  "generated_at": "2026-05-26T19:21:32.923Z",
   "stage": "gemini-background-context",
   "background_contexts": [
     {
@@ -9,9 +9,9 @@
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "source_candidate_hash": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
       "relevance_bucket": "direct_aosp_camera",
-      "background_context": "CameraX는 Android Camera Framework의 상위 계층 라이브러리로, Camera2 API 위에 구축되어 앱 개발자가 카메라 기능을 더 쉽게 통합할 수 있도록 돕습니다. CameraX의 업데이트는 직접적인 HAL API 변경을 의미하지는 않지만, CameraX가 내부적으로 Camera2 API를 호출하고 프레임워크 수준에서 특정 동작을 기대하므로, HAL/드라이버 구현의 호환성 및 동작에 간접적인 영향을 미칠 수 있습니다. 특히 기기별 버그 수정은 HAL/드라이버 계층의 특정 동작을 우회하거나 보완하는 경우가 많습니다. 따라서 CameraX의 안정성 및 기능 개선은 HAL/드라이버 팀이 제공하는 기본 카메라 기능의 견고성에 의존하며, 앱 호환성 및 사용자 경험에 영향을 미칩니다.",
-      "background_basis": "supplied article capsule metadata와 model knowledge 기반",
-      "background_confidence": "high",
+      "background_context": "Camera HAL 엔지니어는 변경 사항을 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과 동작 변경으로 다루기 전에 소스 증거를 확인해야 합니다. CameraX 1.6.1 릴리스 노트에는 여러 버그 수정 사항이 포함되어 있으며, 이는 앱 호환성 및 안정성에 영향을 미칠 수 있습니다. 특히, 'Cannot access class ListenableFuture' 컴파일 오류 수정, Android 17 기기에서의 동적 범위 모드 관련 크래시 수정, PREVIEW_STABILIZATION과 VideoCapture 사용 시 기능 그룹 API의 일관성 문제 해결 등이 있습니다. 또한, 일부 기기에서 YUV 형식 출력 크기 문제 및 토치 사용 시 이미지 캡처 실패 문제도 해결되었습니다. 이러한 수정 사항은 Camera HAL의 간접적인 영향을 검증할 때 고려해야 합니다.",
+      "background_basis": "supplied article capsule metadata 기반",
+      "background_confidence": "medium",
       "background_warnings": []
     },
     {
@@ -19,9 +19,9 @@
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
       "relevance_bucket": "android_platform_camera_adjacent",
-      "background_context": "Jetpack Compose는 Android의 선언적 UI 프레임워크로, 다양한 화면 크기와 폼팩터에 적응하는 UI를 쉽게 구축할 수 있도록 돕습니다. Jetpack Navigation 3는 앱 내비게이션을 관리하는 라이브러리로, Compose와 함께 사용될 때 적응형 UI 흐름을 지원합니다. CameraX는 Android Camera Framework의 상위 계층 라이브러리로, 카메라 미리보기 및 캡처 기능을 제공합니다. 다양한 기기 및 창 크기에서 '올바른 카메라 미리보기'를 제공하는 것은 CameraX가 HAL/드라이버에서 제공하는 스트림을 정확하게 처리하고, 시스템 UI 및 레이아웃 변경에 따라 미리보기 Surface를 동적으로 조정하는 능력에 달려 있습니다. 이는 HAL/드라이버가 다양한 해상도, 종횡비, 회전 모드에서 안정적인 스트림을 제공해야 함을 의미하며, CameraX의 요구사항을 충족하기 위해 HAL 구현의 유연성과 적응성이 중요합니다.",
-      "background_basis": "supplied article capsule metadata와 model knowledge 기반",
-      "background_confidence": "high",
+      "background_context": "CameraX와 Camera2는 HAL 위에 있는 라이브러리이므로, 해당 릴리스 노트는 직접적인 HAL 계약 증거라기보다는 호환성, API 사용법, 앱 측면의 검증 신호로 해석하는 것이 적절합니다. 이 기사는 Jetpack Compose를 활용하여 여러 기기에서 원활한 Android 경험을 구축하는 방법을 다루며, CameraX를 핵심 도구 중 하나로 언급합니다. 이는 Camera HAL 구현 및 호환성 검증 시 고려해야 할 앱 개발 환경의 변화를 시사합니다. 특히, 다양한 창 크기에서 올바른 카메라 미리보기를 보장하는 CameraX의 역할은 UI 및 레이아웃 변경이 카메라 미리보기 스트림 구성에 미치는 영향을 간접적으로 나타냅니다.",
+      "background_basis": "supplied article capsule metadata 기반",
+      "background_confidence": "medium",
       "background_warnings": []
     },
     {
@@ -29,9 +29,9 @@
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
       "relevance_bucket": "cpp_ai_tooling_fallback",
-      "background_context": "Google AI Studio는 AI 모델 개발 및 배포를 위한 플랫폼으로, 이제 프롬프트 기반으로 Android 앱을 생성하는 기능을 제공합니다. Camera HAL 및 드라이버 개발은 주로 C++ 기반의 네이티브 환경에서 이루어지며, 빌드, 테스트, 디버깅 워크플로우는 개발 생산성에 직접적인 영향을 미칩니다. AI 기반 개발 도구는 네이티브 코드 생성, 코드 스니펫 제안, 버그 진단, 테스트 케이스 생성 등을 통해 이러한 워크플로우를 자동화하거나 가속화할 수 있습니다. 이는 HAL/드라이버 팀의 개발 효율성을 높일 수 있지만, AI 도구 자체의 변경 사항이 카메라 런타임 성능이나 HAL API 계약에 직접적인 영향을 미친다고 보기는 어렵습니다. 대신, 개발 프로세스 및 도구 체인에 대한 신호로 해석하는 것이 적절합니다.",
-      "background_basis": "supplied article capsule metadata와 model knowledge 기반",
-      "background_confidence": "high",
+      "background_context": "네이티브 빌드, 테스트, sanitizer, 컴파일러, 디버그 워크플로우의 변경 사항은 Camera HAL 및 드라이버 팀을 지원할 수 있지만, 카메라 관련 런타임 증거가 없다면 워크플로우 신호로만 표현해야 합니다. Google AI Studio는 프롬프트만으로 Android 앱을 빌드할 수 있게 하여 개발 장벽을 낮춥니다. 이는 카메라 관련 AI 기능(예: 이미지 처리, 객체 인식, 계산 사진 촬영)을 통합하는 데 영향을 줄 수 있으며, 장기적으로 Camera HAL 및 드라이버 개발 환경에 간접적인 영향을 미칠 수 있습니다. AI 기반 개발 도구의 발전은 네이티브 Android 앱 개발 워크플로우에 영향을 미치므로, Camera HAL 팀은 이러한 도구의 잠재적 영향을 인지하고 있어야 합니다.",
+      "background_basis": "supplied article capsule metadata 기반",
+      "background_confidence": "medium",
       "background_warnings": []
     }
   ]

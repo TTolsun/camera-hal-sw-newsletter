@@ -2,7 +2,7 @@
 
 - overall_pass: true
 - blocking_issue_count: 0
-- summary: The newsletter is a 'Tooling Watch Edition' and clearly states that it does not contain direct Camera HAL issues but rather tooling and workflow insights. The content is readable, sourced, and does not overclaim impact on Camera HAL. It is safe to send to editor review.
+- summary: The newsletter entry is a 'Tooling Watch Edition' and clearly discloses that it is not a direct Camera HAL/Driver issue but rather a reference for tooling and prototyping. The content is readable, sourced, and does not overclaim HAL impact. It is safe for editor review.
 
 ## Issues
 

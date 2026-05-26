@@ -2,17 +2,17 @@
 
 ## Gate Result
 
-- Quality score: 98
+- Quality score: 97
 - Quality threshold: 85
 - Max score: 100
 - Result: PASS
-- Summary: Quality score 98, threshold 85, max score 100. Editor review is ready.
+- Summary: Quality score 97, threshold 85, max score 100. Editor review is ready.
 
 ## Publication Mode
 
 - publication_mode: fallback_public
 - homepage_visibility: visible_with_fallback_badge
-- content_quality_score: 98
+- content_quality_score: 97
 - camera_relevance_score: 0
 - publication_mode_decision: fallback_public: no final public camera anchor remained; publish as clearly labeled Tooling Watch Edition.
 - fallback_only: true
@@ -77,7 +77,7 @@
 - Blocking deduction count: 0
 - Blocking deduction categories: none
 - Hard fail count: 0
-- Soft deduction count: 2
+- Soft deduction count: 3
 
 ## Claim Binding
 
@@ -122,12 +122,13 @@
 
 ## Soft Deductions
 
+- 1 pt [editorial-story] briefing 1: Briefing bullet misses story structure elements: action_hint.
 - 1 pt [editorial-story] briefing 2: Briefing bullet misses story structure elements: action_hint.
 - 1 pt [editorial-story] briefing 3: Briefing bullet misses story structure elements: action_hint.
 
 ## Top Deduction Categories
 
-- editorial-story (2)
+- editorial-story (3)
 
 ## Candidate Exclusion Summary
 
@@ -135,5 +136,6 @@
 
 ## Deductions
 
+- 1 pt [editorial-story] briefing 1: Briefing bullet misses story structure elements: action_hint.
 - 1 pt [editorial-story] briefing 2: Briefing bullet misses story structure elements: action_hint.
 - 1 pt [editorial-story] briefing 3: Briefing bullet misses story structure elements: action_hint.
