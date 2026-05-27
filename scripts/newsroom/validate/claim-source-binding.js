@@ -94,7 +94,7 @@ function uniqueTexts(values = []) {
 function normalizeText(value) {
   return text(value)
     .toLowerCase()
-    .normalize('NFKD')
+    .normalize('NFC')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9\uac00-\ud7a3+.#/-]+/g, ' ')
     .replace(/\s+/g, ' ')

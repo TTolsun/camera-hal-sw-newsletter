@@ -114,6 +114,23 @@ test('source extraction item id remains stable when item order changes', () => {
   assert.match(first, /^sx:hash-a:release-bug-fixes:[a-f0-9]{16}$/);
 });
 
+test('source extraction item id distinguishes different Korean-only evidence text', () => {
+  // Pure Korean evidence (no distinguishing Latin). Under old NFKD + 가-힣 filter both texts
+  // normalized to the same empty residue and hashed to an identical id, colliding distinct
+  // evidence items. NFC preserves the Korean so the ids stay apart. (Fails on old NFKD.)
+  const first = stableSourceExtractionItemId(
+    { source_candidate_hash: 'hash-a' },
+    'evidence_blocks',
+    '카메라 버퍼 관리 동작이 변경되었습니다.'
+  );
+  const second = stableSourceExtractionItemId(
+    { source_candidate_hash: 'hash-a' },
+    'evidence_blocks',
+    '카메라 스트림 구성 동작이 변경되었습니다.'
+  );
+  assert.notEqual(first, second);
+});
+
 test('allowed claim evidence exposes only validator-allowed item ids', () => {
   const sourceText = 'CameraX 1.6.1 fixes preview behavior for foldable window resizing.';
   const claimCandidate = candidate({
