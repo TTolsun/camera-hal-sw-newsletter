@@ -2,7 +2,7 @@
   {
     "attempt": 1,
     "model": "deterministic-fallback-public-issue",
-    "score": 98,
+    "score": 97,
     "threshold": 85,
     "status": "PUBLIC_ISSUE_CREATED",
     "rendered_main_article_count": 1,
@@ -20,6 +20,16 @@
       }
     ],
     "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
       {
         "category": "editorial-story",
         "points": 1,

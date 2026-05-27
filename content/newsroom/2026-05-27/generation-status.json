@@ -8,9 +8,9 @@
   "must_fix_count": 0,
   "quality_status": "PASS",
   "quality_attempt_count": 1,
-  "quality_score": 98,
+  "quality_score": 97,
   "quality_threshold": 85,
-  "quality_deduction_count": 2,
+  "quality_deduction_count": 3,
   "quota_error_count": 0,
   "invalid_json_count": 0,
   "model_usage": {
@@ -25,6 +25,13 @@
     },
     "background-context attempt 1/2": {
       "gemini-2.5-flash": {
+        "requests": 3,
+        "successes": 0,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 3
+      },
+      "gemini-2.5-flash-lite": {
         "requests": 1,
         "successes": 1,
         "invalid_json": 0,
@@ -117,8 +124,8 @@
     "candidate_count": 42
   },
   "run_context": {
-    "github_run_id": "26466727024",
-    "github_sha": "ce16d5e56eede79f53630e82b3f62d777c784022",
+    "github_run_id": "26469878863",
+    "github_sha": "73bf3f0c6e34b5e11076a66ba33b50b1cd0697ad",
     "github_ref": "refs/heads/main"
   },
   "raw_artifact_validation_error": null,
@@ -144,12 +151,12 @@
         "watch_items",
         "do_not_claim"
       ],
-      "actualCount": 3,
-      "sectionCount": 3,
+      "actualCount": 2,
+      "sectionCount": 2,
       "issues": [
         {
           "index": 1,
-          "headline": "CameraX 1.6.1 릴리스: 기기별 YUV 왜곡 및 토치 캡처 호환성 패치 적용",
+          "headline": "CameraX 1.6.1 업데이트: Android 17 호환성 크래시 대응 및 기기별 YUV 스트림 왜곡 수정",
           "type": "missing_article_sections",
           "keys": [
             "verified_facts",
@@ -161,19 +168,7 @@
         },
         {
           "index": 2,
-          "headline": "Google I/O 2026: Jetpack Compose 기반 적응형 레이아웃에서의 CameraX 미리보기 최적화",
-          "type": "missing_article_sections",
-          "keys": [
-            "verified_facts",
-            "background_context",
-            "hal_driver_impact",
-            "action_items",
-            "team_share_points"
-          ]
-        },
-        {
-          "index": 3,
-          "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 기능 도입",
+          "headline": "Google I/O 2026: Jetpack Compose 및 Adaptive UI 환경에서의 CameraX 미리보기 스트림 정합성 확보",
           "type": "missing_article_sections",
           "keys": [
             "verified_facts",
@@ -210,12 +205,12 @@
           "watch_items",
           "do_not_claim"
         ],
-        "actualCount": 3,
-        "sectionCount": 3,
+        "actualCount": 2,
+        "sectionCount": 2,
         "issues": [
           {
             "index": 1,
-            "headline": "CameraX 1.6.1 릴리스: 기기별 YUV 왜곡 및 토치 캡처 호환성 패치 적용",
+            "headline": "CameraX 1.6.1 업데이트: Android 17 호환성 크래시 대응 및 기기별 YUV 스트림 왜곡 수정",
             "type": "missing_article_sections",
             "keys": [
               "verified_facts",
@@ -227,19 +222,7 @@
           },
           {
             "index": 2,
-            "headline": "Google I/O 2026: Jetpack Compose 기반 적응형 레이아웃에서의 CameraX 미리보기 최적화",
-            "type": "missing_article_sections",
-            "keys": [
-              "verified_facts",
-              "background_context",
-              "hal_driver_impact",
-              "action_items",
-              "team_share_points"
-            ]
-          },
-          {
-            "index": 3,
-            "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 기능 도입",
+            "headline": "Google I/O 2026: Jetpack Compose 및 Adaptive UI 환경에서의 CameraX 미리보기 스트림 정합성 확보",
             "type": "missing_article_sections",
             "keys": [
               "verified_facts",
@@ -252,12 +235,6 @@
         ]
       },
       "field": "sections.article_sections",
-      "deterministic_repair_failure_reason_codes": [
-        "missing_why_now_context",
-        "missing_why_now",
-        "missing_concrete_two_week_check",
-        "missing_check_within_2_weeks"
-      ],
       "stage": "editor attempt 1/2",
       "attempt": 1
     }
@@ -550,7 +527,7 @@
   "fallback_only": true,
   "camera_anchor_count": 0,
   "homepage_badge": "Tooling Watch Edition",
-  "content_quality_score": 98,
+  "content_quality_score": 97,
   "camera_relevance_score": 0,
   "publication_mode_decision": "fallback_public: no final public camera anchor remained; publish as clearly labeled Tooling Watch Edition.",
   "original_fact_check_status": "PASS",
