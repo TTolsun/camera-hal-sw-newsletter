@@ -216,12 +216,6 @@ function writeFullArtifactSet(root) {
   writeJson(newsroomPath(root, 'repair-failure.json'), {
     message: 'section_count_drift'
   });
-  writeJson(newsroomPath(root, 'fallback-public-issue.json'), {
-    failure_reason: 'fallback issue could not be rendered'
-  });
-  writeJson(newsroomPath(root, 'fallback-public-issue-diagnostics.json'), {
-    errors: ['fallback builder missing public article body']
-  });
   writeJson(newsroomPath(root, 'stale-claim-report.json'), {
     must_fix: ['Remove stale Android version claim.']
   });
@@ -495,10 +489,9 @@ test('full artifact set creates selected, reserve, excluded, and failure summari
   assert.ok(report.failure_diagnostics.quality_hard_failures.some(item => item.includes('source gap')));
   assert.ok(report.failure_diagnostics.fact_check_must_fix.some(item => item.includes('dated source evidence')));
   assert.ok(report.failure_diagnostics.repair_failures.some(item => item.includes('section_count_drift')));
-  assert.ok(report.failure_diagnostics.fallback_builder_failures.some(item => item.includes('fallback')));
   assert.ok(report.failure_diagnostics.source_gap_warnings.some(item => item.includes('source gap')));
   assert.equal(report.failure_diagnostics.invalid_artifacts.length, 0);
-  assert.equal(report.inputs.used.length, 14);
+  assert.equal(report.inputs.used.length, 12);
   assert.equal(report.inputs.missing.length, 0);
 
   const article = report.selected_main_articles[0];

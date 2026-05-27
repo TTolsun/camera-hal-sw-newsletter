@@ -1,7 +1,7 @@
 [
   {
     "attempt": 1,
-    "model": "deterministic-fallback-public-issue",
+    "model": "llm-public-article-reuse",
     "score": 97,
     "threshold": 85,
     "status": "PUBLIC_ISSUE_CREATED",
@@ -58,7 +58,7 @@
       "CameraX Release Notes - CameraX 1.6.1"
     ],
     "repair_actions": [
-      "fallback-public-issue-builder"
+      "llm-public-article-reuse"
     ]
   }
 ]

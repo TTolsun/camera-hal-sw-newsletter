@@ -79,7 +79,7 @@ test('completes HAL Signal Capsule from existing fields in fallback mode', () =>
   const result = completeHalSignalCapsuleFromExistingFields(article({
     hal_signal_capsule: undefined
   }), {
-    mode: 'fallback_public_issue'
+    mode: 'fallback_completion'
   });
 
   assert.equal(result.complete, true);

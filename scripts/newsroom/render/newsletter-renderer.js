@@ -275,7 +275,7 @@ function normalizedSections(issue) {
   const usedAnchors = new Set();
   return ensureArray(issue.sections).map((section, index) => {
     const publicArticle = publicArticleForSection(section, { issue });
-    const category = publicArticle.headline || section.headline || section.category || `Main Article ${index + 1}`;
+    const category = publicArticle.headline || `Main Article ${index + 1}`;
     return {
       heading: `## ${index + 2}. ${category}`,
       htmlHeading: `${index + 2}. ${category}`,

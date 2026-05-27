@@ -103,8 +103,6 @@ function reviewPublicationExceptionReason(item = {}, report = {}, status = {}) {
   const reason = String(
     status.review_publication_ready_reason ||
     report.review_publication_ready_reason ||
-    status.fallback_public_issue_reason ||
-    report.fallback_public_issue_reason ||
     status.editor_review_reason ||
     report.editor_review_reason ||
     ''

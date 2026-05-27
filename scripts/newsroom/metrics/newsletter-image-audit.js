@@ -706,7 +706,6 @@ function reportPaths(root, date) {
   return {
     dateDir,
     editorPath: path.join(dateDir, 'editor-draft.json'),
-    fallbackPublicIssuePath: path.join(dateDir, 'fallback-public-issue.json'),
     editorMarkdownPath: path.join(dateDir, 'editor-draft.md'),
     newsletterMarkdownPath: path.join(root, 'newsletters', date, 'newsletter.md'),
     newsletterHtmlPath: path.join(root, 'newsletters', date, 'index.html'),
@@ -721,20 +720,12 @@ async function buildNewsletterImageAuditReport(options = {}) {
   const date = options.date;
   const paths = reportPaths(root, date);
   const editorIssue = readJsonIfExists(paths.editorPath);
-  const fallbackPublicIssue = readJsonIfExists(paths.fallbackPublicIssuePath);
   const markdown = readTextIfExists(paths.newsletterMarkdownPath);
   const html = readTextIfExists(paths.newsletterHtmlPath);
   const status = readJsonIfExists(paths.generationStatusPath) || {};
-  const publicArtifactScope = isRenderedPublicIssueScope(editorIssue || fallbackPublicIssue || {}, status);
-  const useRenderedPublicIssue = Boolean(
-    publicArtifactScope &&
-    options.useEditorDraftForAudit !== true &&
-    fallbackPublicIssue
-  );
-  const issue = useRenderedPublicIssue ? fallbackPublicIssue : editorIssue;
-  const sourceOfTruth = useRenderedPublicIssue
-    ? `content/newsroom/${date}/fallback-public-issue.json`
-    : `content/newsroom/${date}/editor-draft.json`;
+  const publicArtifactScope = isRenderedPublicIssueScope(editorIssue || {}, status);
+  const issue = editorIssue;
+  const sourceOfTruth = `content/newsroom/${date}/editor-draft.json`;
   const warnings = [];
   const errors = [];
 
@@ -754,7 +745,7 @@ async function buildNewsletterImageAuditReport(options = {}) {
   }
 
   const mismatches = issue ? renderConsistency(issue, markdown, html, {
-    publicArtifactsOnly: publicArtifactScope && !useRenderedPublicIssue
+    publicArtifactsOnly: publicArtifactScope
   }) : [];
   for (const mismatch of mismatches) {
     errors.push({

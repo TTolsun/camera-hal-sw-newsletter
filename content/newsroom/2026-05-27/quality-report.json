@@ -159,7 +159,7 @@
       "article_index": 1,
       "article_headline": "Android Native Tooling: Build native Android apps in Google AI Studio",
       "field": "evidence_summary",
-      "text": "Android Developers Blog source metadata와 날짜가 확인된 candidate evidence를 deterministic fallback builder가 사용했습니다.",
+      "text": "Android Developers Blog source metadata와 날짜가 확인된 candidate evidence를 사용했습니다.",
       "reason_code": "missing_matching_fact_claim"
     }
   ],
@@ -476,9 +476,7 @@
     ],
     "candidate_exclusion_summary": []
   },
-  "fallback_public_issue": true,
-  "fallback_public_issue_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
-  "review_publication_ready_reason": "자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.",
+  "review_publication_ready_reason": "자동 발행 기준은 통과하지 못했지만 편집자 검토용 public newsletter 파일을 생성했습니다.",
   "editor_review_reason": "AI 자동 발행 기준을 통과하지 못했으므로 merge 발행 전에 편집자 검토가 필요합니다.",
   "publication_mode": "fallback_public",
   "homepage_visibility": "visible_with_fallback_badge",
@@ -495,8 +493,6 @@
   "original_fact_check_status": "PASS",
   "original_must_fix_count": 0,
   "original_source_gap_count": 0,
-  "fallback_public_issue_removed_blockers": true,
-  "fallback_public_issue_removed_article_count": 1,
   "demoted_articles": [
     {
       "headline": "CameraX Release Notes - CameraX 1.6.1",
@@ -524,11 +520,5 @@
     }
   ],
   "original_quality_status": "PASS",
-  "original_quality_score": 97,
-  "fallback_public_headline_generation": {
-    "source": "llm",
-    "stage": "fallback-public-title-editor",
-    "override_count": 2,
-    "reason": "llm_headlines_generated"
-  }
+  "original_quality_score": 97
 }

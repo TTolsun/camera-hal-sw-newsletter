@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-27",
-  "generated_at": "2026-05-26T19:22:59.901Z",
+  "generated_at": "2026-05-27T02:14:58.053Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -18,13 +18,10 @@
       "content/newsroom/2026-05-27/source-effectiveness-report.json",
       "content/source-events/2026-05-27/source-change-events.json",
       "content/newsroom/2026-05-27/repair-failure.json",
-      "content/newsroom/2026-05-27/fallback-public-issue.json",
-      "content/newsroom/2026-05-27/fallback-public-issue-diagnostics.json",
       "content/newsroom/2026-05-27/stale-claim-report.json"
     ],
     "missing": [
       "content/newsroom/2026-05-27/repair-failure.json",
-      "content/newsroom/2026-05-27/fallback-public-issue-diagnostics.json",
       "content/newsroom/2026-05-27/stale-claim-report.json"
     ],
     "used": [
@@ -37,8 +34,7 @@
       "content/newsroom/2026-05-27/quality-report.json",
       "content/newsroom/2026-05-27/fact-check-report.json",
       "content/newsroom/2026-05-27/source-effectiveness-report.json",
-      "content/source-events/2026-05-27/source-change-events.json",
-      "content/newsroom/2026-05-27/fallback-public-issue.json"
+      "content/source-events/2026-05-27/source-change-events.json"
     ]
   },
   "publish_status": {
@@ -597,7 +593,6 @@
     "quality_hard_failures": [],
     "fact_check_must_fix": [],
     "repair_failures": [],
-    "fallback_builder_failures": [],
     "candidate_shortage_hints": [
       "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.",
       "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
@@ -605,14 +600,12 @@
     "source_gap_warnings": [],
     "missing_artifacts": [
       "content/newsroom/2026-05-27/repair-failure.json",
-      "content/newsroom/2026-05-27/fallback-public-issue-diagnostics.json",
       "content/newsroom/2026-05-27/stale-claim-report.json"
     ],
     "invalid_artifacts": []
   },
   "warnings": [
     "Missing optional artifact: content/newsroom/2026-05-27/repair-failure.json",
-    "Missing optional artifact: content/newsroom/2026-05-27/fallback-public-issue-diagnostics.json",
     "Missing optional artifact: content/newsroom/2026-05-27/stale-claim-report.json",
     "Fallback claim_validation.status=not_available for selected article: CameraX Release Notes - CameraX 1.6.1",
     "Fallback claim_validation.status=not_available for selected article: 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",

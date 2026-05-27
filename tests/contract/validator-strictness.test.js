@@ -483,7 +483,7 @@ function writeFallbackPublicQualityStatus(root, date, overrides = {}) {
     review_publication_ready: true,
     diagnostics_only: false,
     homepage_visible_after_merge: true,
-    fallback_public_issue_reason: 'Fallback public issue files were generated for editor-approved publication.',
+    review_publication_ready_reason: 'Editor-approved public newsletter files were generated for review publication.',
     ...overrides
   });
 }

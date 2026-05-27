@@ -138,9 +138,7 @@ function reviewPublicationExceptionFor(date, articleCount) {
     status?.review_publication_ready_reason ||
     status?.editor_review_reason ||
     quality?.review_publication_ready_reason ||
-    quality?.editor_review_reason ||
-    status?.fallback_public_issue_reason ||
-    quality?.fallback_public_issue_reason;
+    quality?.editor_review_reason;
   const qualityArticleCount = finiteNumber(quality?.metrics?.article_count);
   const approved =
     status?.review_publication_ready === true &&

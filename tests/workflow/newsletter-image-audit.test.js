@@ -209,20 +209,10 @@ test('audit keeps publish-target render mismatch blocking for normal public issu
   assert.equal(report.summary.publish_blocking_issue_count, 1);
 });
 
-test('fallback_public audit checks rendered public issue images instead of demoted editor images', async () => {
+test('fallback_public audit uses editor draft as public issue source of truth', async () => {
   const root = tempRoot('newsletter-image-fallback-public-scope-');
   const date = '2026-05-27';
-  const demotedImage = 'https://publisher.example.com/images/demoted-card.png';
   const renderedImage = 'https://publisher.example.com/images/rendered-card.png';
-  const demotedSection = issue(date, {
-    headline: 'Demoted CameraX article',
-    selectedImage: demotedImage,
-    imageSource: 'https://publisher.example.com/camera-update',
-    imageAttribution: 'Example Publisher',
-    imageAlt: 'Demoted image',
-    imageLicenseStatus: 'unknown',
-    imageCandidates: [validImage(demotedImage)]
-  }).sections[0];
   const renderedSection = retrySection('Rendered tooling article', 'https://publisher.example.com/camera-update');
   Object.assign(renderedSection, {
     selectedImage: renderedImage,
@@ -232,18 +222,13 @@ test('fallback_public audit checks rendered public issue images instead of demot
     imageLicenseStatus: 'unknown',
     imageCandidates: [validImage(renderedImage)]
   });
-  const editor = {
+  const publicIssue = {
     ...issue(date),
     publication_mode: 'fallback_public',
     fallback_only: true,
-    sections: [demotedSection, renderedSection]
-  };
-  const publicIssue = {
-    ...editor,
     sections: [renderedSection]
   };
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), publicIssue);
+  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), publicIssue);
   writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
     date,
     publication_mode: 'fallback_public',
@@ -256,7 +241,7 @@ test('fallback_public audit checks rendered public issue images instead of demot
   const report = await buildNewsletterImageAuditReport({ root, date });
 
   assert.equal(report.render_consistency_scope, 'rendered_public_issue');
-  assert.equal(report.source_of_truth, `content/newsroom/${date}/fallback-public-issue.json`);
+  assert.equal(report.source_of_truth, `content/newsroom/${date}/editor-draft.json`);
   assert.equal(report.summary.article_count, 1);
   assert.equal(report.summary.selected_image_count, 1);
   assert.equal(report.summary.rendered_image_count, 1);

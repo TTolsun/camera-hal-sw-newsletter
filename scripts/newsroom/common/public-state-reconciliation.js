@@ -212,12 +212,6 @@ function validateRetentionMetadata({ root = process.cwd(), date } = {}) {
   };
 }
 
-function fallbackPublicSourceExists({ root, date, status = {} }) {
-  if (status.fallback_public_issue_status === 'CREATED') return true;
-  const result = readJsonResult(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'));
-  return result.exists && !result.error && result.value?.fallback_public_issue_status === 'CREATED';
-}
-
 function latestDiagnosticsOnly(status = {}) {
   if (isTrue(status.diagnostics_only)) return true;
   return !isTrue(status.public_newsletter_ready) &&
@@ -236,7 +230,6 @@ function classifyLatestPublicState({ root = process.cwd(), date, status = {}, pu
     !isTrue(status.final_publish_ready) &&
     isTrue(status.review_publication_ready) &&
     isTrue(status.public_newsletter_ready) &&
-    fallbackPublicSourceExists({ root, date: date || status.date, status }) &&
     structure.ok
   ) {
     return PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED;

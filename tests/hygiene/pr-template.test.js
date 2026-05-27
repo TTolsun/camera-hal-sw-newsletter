@@ -150,7 +150,6 @@ test('prompt host files do not keep long English prose instructions', () => {
   const promptHostFiles = [
     ['scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'],
     ['scripts', 'newsroom', 'cli', 'build-newsroom-pr-body.js'],
-    ['scripts', 'newsroom', 'generate', 'fallback-public-issue.js'],
     ['scripts', 'newsroom', 'render', 'newsletter-renderer.js']
   ];
 
