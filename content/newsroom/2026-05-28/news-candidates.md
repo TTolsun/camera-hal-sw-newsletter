@@ -1878,6 +1878,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 
 - LLVM Project Blog: 404 Not Found
 - OpenAI News: 403 Forbidden
+- 요즘IT: 403 Forbidden
 
 ## 편집장 체크리스트
 
