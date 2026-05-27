@@ -11,7 +11,7 @@ function text(value) {
 function normalize(value) {
   return text(value)
     .toLowerCase()
-    .normalize('NFKD')
+    .normalize('NFC')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/\s+/g, ' ')
     .trim();

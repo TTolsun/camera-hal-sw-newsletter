@@ -13,6 +13,7 @@ const {
   LINKED_EVIDENCE_WATCH_PENALTY,
   MAIN_ARTICLE_SCORE_THRESHOLD,
   SHORTLIST_CAP,
+  normalizeTitle,
   normalizeUrl,
   publishGatePasses,
   publishReadyGateReasonCodes,
@@ -36,6 +37,15 @@ const { candidate } = require('../helpers/newsroom-builders');
 const { readJsonFixture, readTextFixture } = require('../helpers/fixture-loader');
 
 const FALLBACK_WINDOW_TEST_MIN_ARTICLES = 3;
+
+test('normalizeTitle preserves Korean so titles differing only in Hangul stay distinct', () => {
+  // NFKD decomposed Hangul out of the 가-힣 allow-list, collapsing distinct Korean titles
+  // to identical Latin remnants. NFC must keep the Korean so dedup does not merge them.
+  const left = normalizeTitle('Camera HAL 버퍼 관리 동작 변경');
+  const right = normalizeTitle('Camera HAL 스트림 구성 동작 변경');
+  assert.notEqual(left, right);
+  assert.equal(normalizeTitle('카메라 드라이버 업데이트').length > 0, true);
+});
 
 test('Issue #238 scope expansion leaves publication count policy unchanged', () => {
   assert.deepEqual(articlePolicy.mainArticleCount, { min: 1, max: 5 });

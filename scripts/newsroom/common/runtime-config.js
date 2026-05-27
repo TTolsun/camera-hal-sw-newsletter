@@ -14,7 +14,7 @@ const DEFAULT_LLM_STAGE_MODELS = Object.freeze({
   reporter: 'gemini-2.5-flash',
   editor: 'gemini-3.5-flash',
   factcheck: 'gemini-2.5-flash',
-  repair: 'gemini-2.5-flash',
+  repair: 'gemini-3.5-flash',
   judge: 'gemini-2.5-flash-lite'
 });
 const LLM_STAGE_MODEL_ENV_KEYS = Object.freeze({

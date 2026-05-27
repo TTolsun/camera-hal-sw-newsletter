@@ -114,7 +114,7 @@ function halSignalInput(section = {}, candidate = {}, scope = {}) {
 function normalizeForMatch(value) {
   return text(value)
     .toLowerCase()
-    .normalize('NFKD')
+    .normalize('NFC')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9가-힣]+/g, ' ')
     .replace(/\s+/g, ' ')

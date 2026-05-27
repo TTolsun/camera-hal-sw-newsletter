@@ -131,7 +131,7 @@ function normalizedUrlHash(value) {
 function normalizeTitle(value) {
   return text(value)
     .toLowerCase()
-    .normalize('NFKD')
+    .normalize('NFC')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/&[#a-z0-9]+;/g, ' ')
     .replace(/[^a-z0-9가-힣]+/g, ' ')

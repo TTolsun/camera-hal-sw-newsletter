@@ -211,6 +211,30 @@ test('field hygiene separates exact duplicate semantic overlap and short overlap
   assert.equal(distinct, undefined);
 });
 
+test('field hygiene does not flag Korean text whose only shared tokens are identical Latin names', () => {
+  // Both fields carry the same Latin residue ("Google AI Studio ... Android"); only the Korean
+  // prose differs. Under the old NFKD + 가-힣 filter the Korean was stripped, collapsing both to
+  // the identical Latin remnant and falsely flagging an exact_duplicate. NFC keeps the Korean
+  // distinct, so this must NOT be a blocking field_overlap. (Fails on the old NFKD normalization.)
+  const overlap = findFieldHygieneIssues({
+    what_changed: 'Google AI Studio는 프롬프트만으로 Android 앱을 빠르게 빌드하도록 지원합니다.',
+    background: 'Google AI Studio는 브라우저에서 동작하며 Android 네이티브 개발 워크플로우를 단순화합니다.'
+  }).find(item => item.type === 'field_overlap' && item.blocking === true);
+  assert.equal(overlap, undefined);
+});
+
+test('field hygiene still blocks genuinely identical Korean-only background and what_changed', () => {
+  // Pure Korean (no Latin). Under old NFKD both normalized to an empty string, so the
+  // exact_duplicate branch (which guards on a truthy normalized value) never fired — Korean
+  // duplicates went undetected. NFC keeps the Korean, restoring detection.
+  const exact = findFieldHygieneIssues({
+    what_changed: '카메라 버퍼 관리 동작이 변경되었습니다.',
+    background: '카메라 버퍼 관리 동작이 변경되었습니다.'
+  }).find(item => item.type === 'field_overlap');
+  assert.equal(exact.overlap_kind, 'exact_duplicate');
+  assert.equal(exact.blocking, true);
+});
+
 test('field hygiene does not make semantic direct-HAL validity decisions', () => {
   for (const camera_hal_perspective of [
     '이 항목은 직접 HAL API 변경입니다.',
