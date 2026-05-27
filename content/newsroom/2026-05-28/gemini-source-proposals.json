@@ -4,61 +4,55 @@
   "newsletter_date": "2026-05-28",
   "proposals": [
     {
-      "proposal_id": "P1",
-      "topic_gap": "Google I/O 2026에서 발표된 Android 개발자를 위한 적응형 앱 경험 구축에 대한 업데이트. 특히 카메라 출력 및 미디어 파이프라인과 관련된 내용이 있는지 확인해야 합니다.",
-      "source_family": "android",
+      "proposal_id": "adaptive_apps_jetpack_compose_io26",
+      "topic_gap": "Seamless Android experiences across devices with Jetpack Compose, potentially impacting camera-related UI/UX for multi-device scenarios.",
+      "source_family": "android-developers-blog",
       "allowed_domains": [
         "goo.gle",
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
-        "Android Adaptive Apps",
-        "Jetpack Compose Camera",
-        "Multi-device Camera",
-        "Android Media Pipeline",
-        "Google I/O 2026 Camera"
+        "Jetpack Compose camera",
+        "Android adaptive camera UI",
+        "multi-device camera experience",
+        "foldable camera Jetpack Compose"
       ],
       "candidate_urls": [
         "https://goo.gle/AdaptiveApps_IO26"
       ],
       "expected_evidence": [
-        "카메라 API (CameraX, Camera2) 관련 변경 사항",
-        "미디어 처리 (MediaCodec, MediaRecorder) 개선 사항",
-        "다중 장치/폼팩터에서의 카메라 및 미디어 경험 통합",
-        "미디어 출력 공유 또는 접근 방식의 변화"
+        "Mentions of camera-related UI/UX across different form factors (foldables, tablets, ChromeOS)",
+        "Guidelines or examples for adapting camera preview, controls, or gallery access using Jetpack Compose for multi-device experiences."
       ],
       "risk_notes": [
-        "제목만으로는 카메라/미디어 관련성이 불분명하며, 일반적인 UI/UX 또는 앱 개발에 초점을 맞출 수 있습니다.",
-        "링크된 Google I/O 세션 요약 페이지이므로 실제 내용 확인이 필요합니다."
+        "The URL is a goo.gle shortlink, which should redirect to an android-developers.googleblog.com URL. Need to verify the final URL and content relevance.",
+        "The title is broad; specific camera relevance needs to be confirmed by content analysis."
       ]
     },
     {
-      "proposal_id": "P2",
-      "topic_gap": "Google AI Studio에서 네이티브 Android 앱을 빌드하는 기능에 대한 업데이트. 카메라 HAL SW와 직접적인 관련은 없지만, AI 기반 이미지/비디오 처리 기능이 Android 앱에 통합될 가능성을 탐색해야 합니다.",
-      "source_family": "android",
+      "proposal_id": "ai_studio_native_android_apps",
+      "topic_gap": "New tools and workflows for building native Android apps with Google AI Studio, potentially impacting camera-driven AI features or on-device ML for image/video processing.",
+      "source_family": "android-developers-blog",
       "allowed_domains": [
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
-        "Android AI Studio Camera",
-        "AI Image Processing Android",
-        "AI Video Analysis Android",
-        "Android ML Camera",
-        "Google AI Android"
+        "Google AI Studio Android camera",
+        "on-device AI camera Android",
+        "Android ML camera integration",
+        "computational photography AI Android"
       ],
       "candidate_urls": [
         "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
         "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
       ],
       "expected_evidence": [
-        "AI를 활용한 카메라 스트림 처리 (예: 실시간 필터, 객체 인식)",
-        "카메라로 캡처된 이미지/비디오에 대한 AI 분석 기능",
-        "AI 모델을 Android 앱에 통합하는 새로운 방식",
-        "AI 기반 미디어 처리 라이브러리 또는 API"
+        "Details on how Google AI Studio can be used to integrate AI models for camera-related tasks (e.g., object detection, image segmentation, computational photography)",
+        "APIs or SDKs for on-device AI inference with camera input",
+        "Examples or tutorials demonstrating camera-AI integration."
       ],
       "risk_notes": [
-        "이 기사는 AI 개발 도구에 중점을 둘 가능성이 높으며, 카메라 출력과의 직접적인 연관성이 낮을 수 있습니다.",
-        "일반적인 AI 앱 개발에 대한 내용일 수 있으므로, 카메라/미디어 관련 내용을 주의 깊게 찾아야 합니다."
+        "The article might be too general about AI development and lack specific camera or media pipeline relevance. Content analysis is crucial."
       ]
     }
   ]
