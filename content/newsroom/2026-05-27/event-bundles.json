@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "date": "2026-05-27",
-  "generated_at": "2026-05-26T15:33:28.136Z",
+  "generated_at": "2026-05-27T02:35:32.162Z",
   "summary": {
     "schema_version": 1,
     "total_count": 40,
     "by_event_type": {
-      "primary_url": 30,
-      "release_note": 10
+      "primary_url": 32,
+      "release_note": 8
     },
     "by_dedupe_reason": {
-      "normalized_primary_url": 30,
+      "normalized_primary_url": 32,
       "source_id + release.date + component": 6,
-      "source_id + release.version": 4
+      "source_id + release.version": 2
     },
     "warning_count": 0
   },
@@ -84,8 +84,30 @@
       "warnings": []
     },
     {
+      "event_id": "event_c0ad42a1dcc5",
+      "primary_candidate_id": "candidate_d543d6af914d",
+      "event_key": "url:https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "event_type": "primary_url",
+      "primary_url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 26 May 2026 17:30:00 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "build_dependency_fix",
+        "generic_tech_watchlist",
+        "Android / AOSP / Camera",
+        "android"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
       "event_id": "event_43262b041662",
-      "primary_candidate_id": "candidate_ca0c4751735c",
+      "primary_candidate_id": "candidate_0048d001315d",
       "event_key": "source:android-developers-blog:release:stable 1.0",
       "event_type": "release_note",
       "primary_url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
@@ -107,7 +129,7 @@
     },
     {
       "event_id": "event_4fb344106a98",
-      "primary_candidate_id": "candidate_13b950ec1796",
+      "primary_candidate_id": "candidate_2ee7d3b7a4a7",
       "event_key": "source:android-developers-blog:date:Tue, 19 May 2026 09:30:00 +0000:component:android studio",
       "event_type": "release_note",
       "primary_url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
@@ -129,7 +151,7 @@
     },
     {
       "event_id": "event_23223c0084d6",
-      "primary_candidate_id": "candidate_3f0daddce537",
+      "primary_candidate_id": "candidate_074cc6c6f6ff",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
@@ -147,28 +169,6 @@
         "android"
       ],
       "confidence": "low",
-      "warnings": []
-    },
-    {
-      "event_id": "event_50db0807428f",
-      "primary_candidate_id": "candidate_c06a658a9cd7",
-      "event_key": "source:android-developers-latest-updates:release:camerax 1.6.1",
-      "event_type": "release_note",
-      "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "evidence_urls": [],
-      "dedupe_reason": "source_id + release.version",
-      "release": {
-        "version": "CameraX 1.6.1",
-        "date": "May 06, 2026"
-      },
-      "component": "CameraX / androidx.camera",
-      "impact_axes": [
-        "camera_api_change",
-        "direct_aosp_camera",
-        "Android / AOSP / Camera",
-        "android"
-      ],
-      "confidence": "high",
       "warnings": []
     },
     {
@@ -436,30 +436,8 @@
       "warnings": []
     },
     {
-      "event_id": "event_764d2d438c57",
-      "primary_candidate_id": "candidate_c429b2ba2ec9",
-      "event_key": "source:android-developers-latest-updates:release:1.4.0-alpha07",
-      "event_type": "release_note",
-      "primary_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "evidence_urls": [],
-      "dedupe_reason": "source_id + release.version",
-      "release": {
-        "version": "1.4.0-alpha07",
-        "date": "May 06, 2026"
-      },
-      "component": "CameraX / androidx.camera",
-      "impact_axes": [
-        "camera_api_change",
-        "direct_aosp_camera",
-        "Android / AOSP / Camera",
-        "android"
-      ],
-      "confidence": "high",
-      "warnings": []
-    },
-    {
       "event_id": "event_aebc033c93c0",
-      "primary_candidate_id": "candidate_fd38512f76fb",
+      "primary_candidate_id": "candidate_751c03a0c027",
       "event_key": "url:https://source.android.com/docs/whatsnew",
       "event_type": "primary_url",
       "primary_url": "https://source.android.com/docs/whatsnew",
@@ -481,7 +459,7 @@
     },
     {
       "event_id": "event_22f0b66cf484",
-      "primary_candidate_id": "candidate_8b33edc4f87c",
+      "primary_candidate_id": "candidate_7a9445072706",
       "event_key": "url:https://source.android.com/docs/compatibility/cdd",
       "event_type": "primary_url",
       "primary_url": "https://source.android.com/docs/compatibility/cdd",
@@ -503,7 +481,7 @@
     },
     {
       "event_id": "event_dc3e74662602",
-      "primary_candidate_id": "candidate_8c3f0143ed11",
+      "primary_candidate_id": "candidate_74f42ec1285b",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
@@ -525,7 +503,7 @@
     },
     {
       "event_id": "event_bb92e4ef92b5",
-      "primary_candidate_id": "candidate_cbf51d853671",
+      "primary_candidate_id": "candidate_9c487a77ae94",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
@@ -547,7 +525,7 @@
     },
     {
       "event_id": "event_b169f55cd9e5",
-      "primary_candidate_id": "candidate_0bbaf5906d7a",
+      "primary_candidate_id": "candidate_11846e94f8a6",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
@@ -569,7 +547,7 @@
     },
     {
       "event_id": "event_3744977cfc68",
-      "primary_candidate_id": "candidate_8e88a2190835",
+      "primary_candidate_id": "candidate_a7485bd1ca88",
       "event_key": "url:https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
       "event_type": "primary_url",
       "primary_url": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
@@ -591,7 +569,7 @@
     },
     {
       "event_id": "event_4f422e47339f",
-      "primary_candidate_id": "candidate_fbc2e261a0a1",
+      "primary_candidate_id": "candidate_dc028f7f190e",
       "event_key": "url:https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
@@ -613,7 +591,7 @@
     },
     {
       "event_id": "event_8d2c20f81637",
-      "primary_candidate_id": "candidate_c21f7ad4bcd3",
+      "primary_candidate_id": "candidate_7b609a1a1972",
       "event_key": "url:https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei",
@@ -635,7 +613,7 @@
     },
     {
       "event_id": "event_a023062a2e52",
-      "primary_candidate_id": "candidate_a343b15a85ad",
+      "primary_candidate_id": "candidate_9e1f452740fb",
       "event_key": "url:https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru",
@@ -657,7 +635,7 @@
     },
     {
       "event_id": "event_47efcf32a7f3",
-      "primary_candidate_id": "candidate_1e377a37518e",
+      "primary_candidate_id": "candidate_2aefe9cc314d",
       "event_key": "url:https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
@@ -666,6 +644,28 @@
       "release": {
         "version": "",
         "date": "Mon, 18 May 2026 22:46:29 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "build_dependency_fix",
+        "cpp_ai_tooling_fallback",
+        "C++ / Native / Toolchain",
+        "cpp"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_b433fac84afe",
+      "primary_candidate_id": "candidate_edd3b145554d",
+      "event_key": "url:https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
+      "event_type": "primary_url",
+      "primary_url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 26 May 2026 22:57:06 +0000"
       },
       "component": "",
       "impact_axes": [
@@ -854,30 +854,8 @@
       "warnings": []
     },
     {
-      "event_id": "event_c2b11f90366d",
-      "primary_candidate_id": "candidate_d8d5079ff32c",
-      "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
-      "event_type": "primary_url",
-      "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
-      "evidence_urls": [],
-      "dedupe_reason": "normalized_primary_url",
-      "release": {
-        "version": "",
-        "date": "Tue, 05 May 2026 21:28:00 +0000"
-      },
-      "component": "",
-      "impact_axes": [
-        "generic_tooling_change",
-        "generic_tech_watchlist",
-        "C++ / Native / Toolchain",
-        "cpp"
-      ],
-      "confidence": "low",
-      "warnings": []
-    },
-    {
       "event_id": "event_6bed6b10f629",
-      "primary_candidate_id": "candidate_3932e14e0da5",
+      "primary_candidate_id": "candidate_e610de96b7f9",
       "event_key": "url:https://isocpp.org//blog/2026/05/exploring-ref-qualifiers-in-cpp",
       "event_type": "primary_url",
       "primary_url": "https://isocpp.org//blog/2026/05/exploring-ref-qualifiers-in-cpp",
@@ -891,6 +869,28 @@
       "impact_axes": [
         "build_dependency_fix",
         "cpp_ai_tooling_fallback",
+        "C++ / Native / Toolchain",
+        "cpp"
+      ],
+      "confidence": "low",
+      "warnings": []
+    },
+    {
+      "event_id": "event_c5ae263776e5",
+      "primary_candidate_id": "candidate_23523ff7cc7b",
+      "event_key": "url:https://isocpp.org//blog/2026/05/cppcon-2025-concept-based-generic-programming-bjarne-stroustrup1",
+      "event_type": "primary_url",
+      "primary_url": "https://isocpp.org//blog/2026/05/cppcon-2025-concept-based-generic-programming-bjarne-stroustrup1",
+      "evidence_urls": [],
+      "dedupe_reason": "normalized_primary_url",
+      "release": {
+        "version": "",
+        "date": "Tue, 19 May 2026 21:39:13 +0000"
+      },
+      "component": "",
+      "impact_axes": [
+        "generic_tooling_change",
+        "generic_tech_watchlist",
         "C++ / Native / Toolchain",
         "cpp"
       ],

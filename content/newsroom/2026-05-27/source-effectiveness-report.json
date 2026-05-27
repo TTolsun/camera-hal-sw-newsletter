@@ -18,48 +18,48 @@
     "synthetic_source_count": 0,
     "unregistered_candidate_count": 0,
     "collected_count": 39,
-    "eligible_count": 3,
+    "eligible_count": 2,
     "selected_count": 3,
     "rendered_main_count": 1,
-    "source_gap_count": 36,
-    "generic_noise_count": 29,
+    "source_gap_count": 37,
+    "generic_noise_count": 30,
     "duplicate_count": 1,
     "source_url_quality_distribution": {
       "undated_reference_page": 2,
-      "official_dated_release": 21,
-      "official_site_update_row": 3,
-      "engineering_blog_with_camera_evidence": 14
+      "official_dated_release": 22,
+      "official_site_update_row": 1,
+      "engineering_blog_with_camera_evidence": 15
     },
     "source_quality_status_summary": {
-      "blocked": 36,
-      "allowed": 4
+      "blocked": 37,
+      "allowed": 3
     },
     "source_quality_blocker_summary": {
       "undated_reference_page": 2,
-      "source_gap_risk": 36,
+      "source_gap_risk": 37,
       "reference_only": 33
     },
     "selected_main_source_quality_coverage": {
-      "selected_main_count": 4,
-      "with_source_quality_count": 4
+      "selected_main_count": 3,
+      "with_source_quality_count": 3
     },
     "main_eligible_source_quality_coverage": {
       "main_eligible_candidate_count": 1,
       "with_source_quality_count": 1
     },
     "conditional_source_promoted_count": 0,
-    "conditional_source_blocked_count": 14,
+    "conditional_source_blocked_count": 15,
     "unknown_source_quality_count": 0,
     "source_quality_field_drift_count": 0,
     "legacy_source_quality_warning_count": 0,
     "recommendation_counts": [
       {
         "recommendation": "NO_RECENT_SIGNAL",
-        "count": 47
+        "count": 48
       },
       {
         "recommendation": "KEEP_AND_FIX_PARSER",
-        "count": 6
+        "count": 5
       }
     ]
   },
@@ -223,31 +223,31 @@
       "candidate_only": false,
       "collection_mode_hint": "rss-source",
       "synthetic": false,
-      "collected_count": 20,
+      "collected_count": 21,
       "eligible_count": 2,
       "selected_count": 2,
       "rendered_main_count": 1,
-      "source_gap_count": 18,
+      "source_gap_count": 19,
       "camera_relevant_raw_count": 2,
       "parser_repair_reason_count": 0,
-      "reference_only_count": 17,
-      "watchlist_count": 17,
-      "main_eligible_false_count": 18,
-      "briefing_only_count": 17,
+      "reference_only_count": 18,
+      "watchlist_count": 18,
+      "main_eligible_false_count": 19,
+      "briefing_only_count": 18,
       "duplicate_count": 1,
       "duplicate_within_source_count": 1,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 17,
+      "generic_noise_count": 18,
       "source_url_quality_distribution": {
-        "official_dated_release": 21
+        "official_dated_release": 22
       },
       "source_quality_status_summary": {
         "allowed": 3,
-        "blocked": 18
+        "blocked": 19
       },
       "source_quality_blocker_summary": {
-        "source_gap_risk": 18,
-        "reference_only": 17
+        "source_gap_risk": 19,
+        "reference_only": 18
       },
       "selected_main_source_quality_coverage": {
         "selected_main_count": 3,
@@ -262,12 +262,12 @@
       "unknown_source_quality_count": 0,
       "source_quality_field_drift_count": 0,
       "legacy_source_quality_warning_count": 0,
-      "eligible_rate": 0.1,
+      "eligible_rate": 0.0952,
       "selection_rate": 1,
       "rendered_rate": 0.5,
-      "source_gap_rate": 0.9,
-      "noise_rate": 0.85,
-      "effectiveness_score": 13.5,
+      "source_gap_rate": 0.9048,
+      "noise_rate": 0.8571,
+      "effectiveness_score": 13.09,
       "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
         "Duplicate candidates detected: within_source=1, across_sources=0.",
@@ -278,23 +278,23 @@
       "top_exclusion_reasons": [
         {
           "reason": "main_eligible=false",
-          "count": 18
+          "count": 19
         },
         {
           "reason": "source_gap_risk=true",
-          "count": 18
+          "count": 19
         },
         {
           "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-          "count": 17
+          "count": 18
         },
         {
           "reason": "briefing_only=true",
-          "count": 17
+          "count": 18
         },
         {
           "reason": "finalSelectionEligibility=watchlist",
-          "count": 17
+          "count": 18
         }
       ],
       "sample_selected_urls": [
@@ -304,9 +304,9 @@
       "sample_excluded_urls": [
         "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
         "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
+        "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
         "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
-        "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
-        "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html"
+        "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html"
       ]
     },
     {
@@ -378,35 +378,27 @@
       "candidate_only": false,
       "collection_mode_hint": "release-note-watch",
       "synthetic": false,
-      "collected_count": 2,
-      "eligible_count": 1,
+      "collected_count": 0,
+      "eligible_count": 0,
       "selected_count": 1,
       "rendered_main_count": 0,
-      "source_gap_count": 1,
-      "camera_relevant_raw_count": 2,
-      "parser_repair_reason_count": 1,
-      "reference_only_count": 1,
-      "watchlist_count": 1,
-      "main_eligible_false_count": 1,
-      "briefing_only_count": 1,
+      "source_gap_count": 0,
+      "camera_relevant_raw_count": 0,
+      "parser_repair_reason_count": 0,
+      "reference_only_count": 0,
+      "watchlist_count": 0,
+      "main_eligible_false_count": 0,
+      "briefing_only_count": 0,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
-      "source_url_quality_distribution": {
-        "official_site_update_row": 2
-      },
-      "source_quality_status_summary": {
-        "allowed": 1,
-        "blocked": 1
-      },
-      "source_quality_blocker_summary": {
-        "source_gap_risk": 1,
-        "reference_only": 1
-      },
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
+      "source_quality_blocker_summary": {},
       "selected_main_source_quality_coverage": {
-        "selected_main_count": 1,
-        "with_source_quality_count": 1
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
       },
       "main_eligible_source_quality_coverage": {
         "main_eligible_candidate_count": 0,
@@ -417,45 +409,21 @@
       "unknown_source_quality_count": 0,
       "source_quality_field_drift_count": 0,
       "legacy_source_quality_warning_count": 0,
-      "eligible_rate": 0.5,
-      "selection_rate": 1,
+      "eligible_rate": 0,
+      "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 0.5,
+      "source_gap_rate": 0,
       "noise_rate": 0,
-      "effectiveness_score": 30,
-      "recommendation": "KEEP_AND_FIX_PARSER",
+      "effectiveness_score": 0,
+      "recommendation": "NO_RECENT_SIGNAL",
       "reasons": [
-        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
-        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
+        "No recent candidates were collected for this source."
       ],
-      "top_exclusion_reasons": [
-        {
-          "reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-          "count": 1
-        },
-        {
-          "reason": "briefing_only=true",
-          "count": 1
-        },
-        {
-          "reason": "finalSelectionEligibility=watchlist",
-          "count": 1
-        },
-        {
-          "reason": "hasDatedEvidence=false",
-          "count": 1
-        },
-        {
-          "reason": "main_eligible=false",
-          "count": 1
-        }
-      ],
+      "top_exclusion_reasons": [],
       "sample_selected_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
       ],
-      "sample_excluded_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-      ]
+      "sample_excluded_urls": []
     },
     {
       "source_id": "android-mediacodec-reference",
@@ -2073,29 +2041,29 @@
       "candidate_only": false,
       "collection_mode_hint": "",
       "synthetic": false,
-      "collected_count": 14,
+      "collected_count": 15,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 14,
+      "source_gap_count": 15,
       "camera_relevant_raw_count": 0,
       "parser_repair_reason_count": 0,
       "reference_only_count": 12,
       "watchlist_count": 9,
-      "main_eligible_false_count": 14,
+      "main_eligible_false_count": 15,
       "briefing_only_count": 9,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 9,
       "source_url_quality_distribution": {
-        "engineering_blog_with_camera_evidence": 14
+        "engineering_blog_with_camera_evidence": 15
       },
       "source_quality_status_summary": {
-        "blocked": 14
+        "blocked": 15
       },
       "source_quality_blocker_summary": {
-        "source_gap_risk": 14,
+        "source_gap_risk": 15,
         "reference_only": 12
       },
       "selected_main_source_quality_coverage": {
@@ -2107,7 +2075,7 @@
         "with_source_quality_count": 0
       },
       "conditional_source_promoted_count": 0,
-      "conditional_source_blocked_count": 14,
+      "conditional_source_blocked_count": 15,
       "unknown_source_quality_count": 0,
       "source_quality_field_drift_count": 0,
       "legacy_source_quality_warning_count": 0,
@@ -2115,7 +2083,7 @@
       "selection_rate": 0,
       "rendered_rate": 0,
       "source_gap_rate": 1,
-      "noise_rate": 0.6429,
+      "noise_rate": 0.6,
       "effectiveness_score": 0,
       "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
@@ -2126,11 +2094,11 @@
       "top_exclusion_reasons": [
         {
           "reason": "main_eligible=false",
-          "count": 14
+          "count": 15
         },
         {
           "reason": "source_gap_risk=true",
-          "count": 14
+          "count": 15
         },
         {
           "reason": "reference_only=true",
@@ -2148,10 +2116,10 @@
       "sample_selected_urls": [],
       "sample_excluded_urls": [
         "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+        "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
         "https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-move-semantics-ben-saks",
-        "https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
-        "https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos",
-        "https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo"
+        "https://isocpp.org//blog/2026/05/cppcon-2025-concept-based-generic-programming-bjarne-stroustrup1",
+        "https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos"
       ]
     },
     {

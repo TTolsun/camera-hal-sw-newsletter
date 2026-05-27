@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-27",
-  "generated_at": "2026-05-26T15:33:28.136Z",
+  "generated_at": "2026-05-27T02:35:32.162Z",
   "linked_evidence_mode": "extract_only",
   "linked_evidence_limits": {
     "max_links_per_candidate": 8,
@@ -15,16 +15,12 @@
   "warnings": [],
   "totals": {
     "schema_version": 1,
-    "total_count": 1,
-    "by_type": {
-      "google_issue_tracker": 1
-    },
-    "by_fetch_status": {
-      "unsupported": 1
-    },
+    "total_count": 0,
+    "by_type": {},
+    "by_fetch_status": {},
     "impact_type_counts": {
-      "build_dependency_fix": 12,
-      "camera_api_change": 3,
+      "build_dependency_fix": 14,
+      "camera_api_change": 1,
       "documentation_only": 2,
       "generic_tooling_change": 8,
       "security_component_camera_related": 1,
@@ -33,24 +29,20 @@
     },
     "warning_count": 37,
     "has_resolved_evidence": false,
-    "has_unresolved_evidence": true,
-    "top_identifiers": [
-      "497571473"
-    ]
+    "has_unresolved_evidence": false,
+    "top_identifiers": []
   },
   "source_aware_totals": {
     "schema_version": 1,
-    "total_count": 1345,
+    "total_count": 1344,
     "by_type": {
-      "android_gerrit": 1,
-      "generic_url": 1343,
-      "google_issue_tracker": 1
+      "generic_url": 1344
     },
     "by_fetch_status": {
-      "skipped": 1345
+      "skipped": 1344
     },
     "impact_type_counts": {},
-    "warning_count": 1345,
+    "warning_count": 1344,
     "has_resolved_evidence": false,
     "has_unresolved_evidence": true,
     "top_identifiers": [
@@ -68,13 +60,13 @@
     "schema_version": 1,
     "total_count": 40,
     "by_event_type": {
-      "primary_url": 30,
-      "release_note": 10
+      "primary_url": 32,
+      "release_note": 8
     },
     "by_dedupe_reason": {
-      "normalized_primary_url": 30,
+      "normalized_primary_url": 32,
       "source_id + release.date + component": 6,
-      "source_id + release.version": 4
+      "source_id + release.version": 2
     },
     "warning_count": 0
   },
@@ -506,6 +498,53 @@
       "source_aware_linked_evidence": []
     },
     {
+      "title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
+      "url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "normalized_url": "",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 26 May 2026 17:30:00 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": [],
+      "classified_outgoing_links": [],
+      "source_aware_linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {},
+        "warning_count": 0,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "source_aware_linked_evidence": []
+    },
+    {
       "title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
       "url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
       "normalized_url": "",
@@ -645,196 +684,6 @@
         "top_identifiers": []
       },
       "source_aware_linked_evidence": []
-    },
-    {
-      "title": "CameraX Release Notes - CameraX 1.6.1",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "normalized_url": "",
-      "source": "Android Developers Latest Updates",
-      "published_date": "May 06, 2026",
-      "source_kind": "release_note_item",
-      "final_selection_eligibility": "short",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 1,
-        "by_type": {
-          "google_issue_tracker": 1
-        },
-        "by_fetch_status": {
-          "unsupported": 1
-        },
-        "impact_type_counts": {
-          "camera_api_change": 1
-        },
-        "warning_count": 2,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": true,
-        "top_identifiers": [
-          "497571473"
-        ]
-      },
-      "impact_classification": {
-        "impact_type": "camera_api_change",
-        "hal_runtime_impact": true,
-        "camera_pipeline_impact": true,
-        "recommended_article_type": "main",
-        "confidence": 0.75,
-        "reason": "camera_api_change classified from candidate text.",
-        "warnings": [
-          "linked_evidence_unsupported"
-        ]
-      },
-      "linked_evidence": [
-        {
-          "type": "google_issue_tracker",
-          "url": "",
-          "identifier": "497571473",
-          "source_text": "b/497571473",
-          "raw_excerpt": "CameraX Release Notes - CameraX 1.6.1 Fixed a compilation error \"Cannot access class ListenableFuture \" when using CameraX 1.6.0. ( Ic8cba , b/497571473 )",
-          "fetch_status": "unsupported",
-          "warnings": [
-            "google_issue_tracker resolver requires a URL."
-          ],
-          "resolver": "google_issue_tracker",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        }
-      ],
-      "classified_outgoing_links": [
-        {
-          "url": "https://android.googlesource.com/platform/frameworks/support/+log/18899702605001b396c92fe1f50666948ce85048..987b9ac8585b31424a397206c492196dd163997b/camera",
-          "text": "these commits",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain"
-        },
-        {
-          "url": "https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e",
-          "text": "Ic8cba",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence"
-        },
-        {
-          "url": "https://issuetracker.google.com/issues/497571473",
-          "text": "b/497571473",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only"
-        }
-      ],
-      "source_aware_linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 3,
-        "by_type": {
-          "android_gerrit": 1,
-          "generic_url": 1,
-          "google_issue_tracker": 1
-        },
-        "by_fetch_status": {
-          "skipped": 3
-        },
-        "impact_type_counts": {},
-        "warning_count": 3,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": true,
-        "top_identifiers": [
-          "https://android.googlesource.com/platform/frameworks/support/+log/18899702605001b396c92fe1f50666948ce85048..987b9ac8585b31424a397206c492196dd163997b/camera",
-          "https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e",
-          "497571473"
-        ]
-      },
-      "source_aware_linked_evidence": [
-        {
-          "type": "generic_url",
-          "url": "https://android.googlesource.com/platform/frameworks/support/+log/18899702605001b396c92fe1f50666948ce85048..987b9ac8585b31424a397206c492196dd163997b/camera",
-          "identifier": "https://android.googlesource.com/platform/frameworks/support/+log/18899702605001b396c92fe1f50666948ce85048..987b9ac8585b31424a397206c492196dd163997b/camera",
-          "source_text": "these commits",
-          "raw_excerpt": "these commits https://android.googlesource.com/platform/frameworks/support/+log/18899702605001b396c92fe1f50666948ce85048..987b9ac8585b31424a397206c492196dd163997b/camera",
-          "fetch_status": "skipped",
-          "evidence_role": "unsupported",
-          "classification_reason": "domain_not_allowed_by_policy",
-          "skipped_reason": "unsupported_domain",
-          "warnings": [
-            "Linked evidence resolve skipped: unsupported_domain."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "android_gerrit",
-          "url": "https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e",
-          "identifier": "https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e",
-          "source_text": "Ic8cba",
-          "raw_excerpt": "Ic8cba https://android-review.googlesource.com/#/q/Ic8cba6ae5318d3e6098cc54042c6aebba837996e",
-          "fetch_status": "skipped",
-          "evidence_role": "secondary_context",
-          "classification_reason": "allowed_domain_context_link",
-          "skipped_reason": "not_primary_evidence",
-          "warnings": [
-            "Linked evidence resolve skipped: not_primary_evidence."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "google_issue_tracker",
-          "url": "https://issuetracker.google.com/issues/497571473",
-          "identifier": "497571473",
-          "source_text": "b/497571473",
-          "raw_excerpt": "b/497571473 https://issuetracker.google.com/issues/497571473",
-          "fetch_status": "skipped",
-          "evidence_role": "primary_evidence",
-          "classification_reason": "allowed_official_evidence_url",
-          "skipped_reason": "mode_extract_only",
-          "warnings": [
-            "Linked evidence resolve skipped: mode_extract_only."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        }
-      ]
     },
     {
       "title": "Build native Android apps in Google AI Studio",
@@ -32454,51 +32303,6 @@
       "source_aware_linked_evidence": []
     },
     {
-      "title": "1.4.0-alpha07",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "normalized_url": "",
-      "source": "Android Developers Latest Updates",
-      "published_date": "May 06, 2026",
-      "source_kind": "release_note_item",
-      "final_selection_eligibility": "watchlist",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "camera_api_change": 1
-        },
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "camera_api_change",
-        "hal_runtime_impact": true,
-        "camera_pipeline_impact": true,
-        "recommended_article_type": "main",
-        "confidence": 0.75,
-        "reason": "camera_api_change classified from candidate text.",
-        "warnings": []
-      },
-      "linked_evidence": [],
-      "classified_outgoing_links": [],
-      "source_aware_linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {},
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "source_aware_linked_evidence": []
-    },
-    {
       "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
       "url": "https://source.android.com/docs/whatsnew",
       "normalized_url": "",
@@ -46569,6 +46373,130 @@
       ]
     },
     {
+      "title": "C++26: Structured Bindings in Conditions -- Sandor Dargo",
+      "url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 26 May 2026 22:57:06 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "exclude",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": [],
+      "classified_outgoing_links": [
+        {
+          "url": "https://www.sandordargo.com/blog/2026/04/15/cpp26-structured-bindings-condition",
+          "text": "C++26: Structured Bindings in Conditions",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://godbolt.org/z/97GaMajMP",
+          "text": "https://godbolt.org/z/97GaMajMP",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        }
+      ],
+      "source_aware_linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 2,
+        "by_type": {
+          "generic_url": 2
+        },
+        "by_fetch_status": {
+          "skipped": 2
+        },
+        "impact_type_counts": {},
+        "warning_count": 2,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "https://www.sandordargo.com/blog/2026/04/15/cpp26-structured-bindings-condition",
+          "https://godbolt.org/z/97GaMajMP"
+        ]
+      },
+      "source_aware_linked_evidence": [
+        {
+          "type": "generic_url",
+          "url": "https://www.sandordargo.com/blog/2026/04/15/cpp26-structured-bindings-condition",
+          "identifier": "https://www.sandordargo.com/blog/2026/04/15/cpp26-structured-bindings-condition",
+          "source_text": "C++26: Structured Bindings in Conditions",
+          "raw_excerpt": "C++26: Structured Bindings in Conditions https://www.sandordargo.com/blog/2026/04/15/cpp26-structured-bindings-condition",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://godbolt.org/z/97GaMajMP",
+          "identifier": "https://godbolt.org/z/97GaMajMP",
+          "source_text": "https://godbolt.org/z/97GaMajMP",
+          "raw_excerpt": "https://godbolt.org/z/97GaMajMP",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        }
+      ]
+    },
+    {
       "title": "CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos",
       "url": "https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos",
       "normalized_url": "",
@@ -47666,165 +47594,6 @@
       ]
     },
     {
-      "title": "CppCon 2025 Beyond Sequential Consistency: Unlocking Hidden Performance Gains -- Christopher Fretz",
-      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-beyond-sequential-consistency-unlocking-hidden-performance-gain",
-      "normalized_url": "",
-      "source": "ISO C++ Blog",
-      "published_date": "Tue, 05 May 2026 21:28:00 +0000",
-      "source_kind": "rss_item",
-      "final_selection_eligibility": "watchlist",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "generic_tooling_change": 1
-        },
-        "warning_count": 1,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "generic_tooling_change",
-        "hal_runtime_impact": false,
-        "camera_pipeline_impact": false,
-        "recommended_article_type": "watch",
-        "confidence": 0.35,
-        "reason": "generic_tooling_change classified from candidate text.",
-        "warnings": [
-          "main_hint_requires_candidate_runtime_evidence"
-        ]
-      },
-      "linked_evidence": [],
-      "classified_outgoing_links": [
-        {
-          "url": "https://cppcon.org/",
-          "text": "in person in Aurora, CO",
-          "source_field": "rss.description",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://cppcon.org/registration/",
-          "text": "register today",
-          "source_field": "rss.description",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        },
-        {
-          "url": "https://www.youtube.com/watch?v=6AnHbZbLr2o",
-          "text": "Beyond Sequential Consistency: Unlocking Hidden Performance Gains",
-          "source_field": "rss.description",
-          "extraction_method": "html_anchor",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled"
-        }
-      ],
-      "source_aware_linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 3,
-        "by_type": {
-          "generic_url": 3
-        },
-        "by_fetch_status": {
-          "skipped": 3
-        },
-        "impact_type_counts": {},
-        "warning_count": 3,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": true,
-        "top_identifiers": [
-          "https://cppcon.org/",
-          "https://cppcon.org/registration/",
-          "https://www.youtube.com/watch?v=6AnHbZbLr2o"
-        ]
-      },
-      "source_aware_linked_evidence": [
-        {
-          "type": "generic_url",
-          "url": "https://cppcon.org/",
-          "identifier": "https://cppcon.org/",
-          "source_text": "in person in Aurora, CO",
-          "raw_excerpt": "in person in Aurora, CO https://cppcon.org/",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://cppcon.org/registration/",
-          "identifier": "https://cppcon.org/registration/",
-          "source_text": "register today",
-          "raw_excerpt": "register today https://cppcon.org/registration/",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        },
-        {
-          "type": "generic_url",
-          "url": "https://www.youtube.com/watch?v=6AnHbZbLr2o",
-          "identifier": "https://www.youtube.com/watch?v=6AnHbZbLr2o",
-          "source_text": "Beyond Sequential Consistency: Unlocking Hidden Performance Gains",
-          "raw_excerpt": "Beyond Sequential Consistency: Unlocking Hidden Performance Gains https://www.youtube.com/watch?v=6AnHbZbLr2o",
-          "fetch_status": "skipped",
-          "evidence_role": "blocked_or_deferred",
-          "classification_reason": "linked_evidence_policy_disabled",
-          "skipped_reason": "policy_disabled",
-          "warnings": [
-            "Linked evidence resolve skipped: policy_disabled."
-          ],
-          "resolver": "source_aware_policy",
-          "resolved": {
-            "title": "",
-            "summary": "",
-            "changed_files": [],
-            "bug_ids": [],
-            "cve_ids": [],
-            "test_info": "",
-            "labels": [],
-            "component": ""
-          }
-        }
-      ]
-    },
-    {
       "title": "Exploring ref qualifiers in C++",
       "url": "https://isocpp.org//blog/2026/05/exploring-ref-qualifiers-in-cpp",
       "normalized_url": "",
@@ -47892,6 +47661,165 @@
           "identifier": "https://meetingcpp.com/blog/items/Exploring-ref-qualifiers-in-Cpp.html",
           "source_text": "Exploring ref qualifiers in C++",
           "raw_excerpt": "Exploring ref qualifiers in C++ https://meetingcpp.com/blog/items/Exploring-ref-qualifiers-in-Cpp.html",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        }
+      ]
+    },
+    {
+      "title": "CppCon 2025 Concept-based Generic Programming -- Bjarne Stroustrup",
+      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-concept-based-generic-programming-bjarne-stroustrup1",
+      "normalized_url": "",
+      "source": "ISO C++ Blog",
+      "published_date": "Tue, 19 May 2026 21:39:13 +0000",
+      "source_kind": "rss_item",
+      "final_selection_eligibility": "watchlist",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "generic_tooling_change": 1
+        },
+        "warning_count": 1,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "generic_tooling_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.35,
+        "reason": "generic_tooling_change classified from candidate text.",
+        "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      },
+      "linked_evidence": [],
+      "classified_outgoing_links": [
+        {
+          "url": "https://cppcon.org/",
+          "text": "in person in Aurora, CO",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://cppcon.org/registration/",
+          "text": "register today",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=VMGB75hsDQo",
+          "text": "Concept-based Generic Programming",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled"
+        }
+      ],
+      "source_aware_linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 3,
+        "by_type": {
+          "generic_url": 3
+        },
+        "by_fetch_status": {
+          "skipped": 3
+        },
+        "impact_type_counts": {},
+        "warning_count": 3,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "https://cppcon.org/",
+          "https://cppcon.org/registration/",
+          "https://www.youtube.com/watch?v=VMGB75hsDQo"
+        ]
+      },
+      "source_aware_linked_evidence": [
+        {
+          "type": "generic_url",
+          "url": "https://cppcon.org/",
+          "identifier": "https://cppcon.org/",
+          "source_text": "in person in Aurora, CO",
+          "raw_excerpt": "in person in Aurora, CO https://cppcon.org/",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://cppcon.org/registration/",
+          "identifier": "https://cppcon.org/registration/",
+          "source_text": "register today",
+          "raw_excerpt": "register today https://cppcon.org/registration/",
+          "fetch_status": "skipped",
+          "evidence_role": "blocked_or_deferred",
+          "classification_reason": "linked_evidence_policy_disabled",
+          "skipped_reason": "policy_disabled",
+          "warnings": [
+            "Linked evidence resolve skipped: policy_disabled."
+          ],
+          "resolver": "source_aware_policy",
+          "resolved": {
+            "title": "",
+            "summary": "",
+            "changed_files": [],
+            "bug_ids": [],
+            "cve_ids": [],
+            "test_info": "",
+            "labels": [],
+            "component": ""
+          }
+        },
+        {
+          "type": "generic_url",
+          "url": "https://www.youtube.com/watch?v=VMGB75hsDQo",
+          "identifier": "https://www.youtube.com/watch?v=VMGB75hsDQo",
+          "source_text": "Concept-based Generic Programming",
+          "raw_excerpt": "Concept-based Generic Programming https://www.youtube.com/watch?v=VMGB75hsDQo",
           "fetch_status": "skipped",
           "evidence_role": "blocked_or_deferred",
           "classification_reason": "linked_evidence_policy_disabled",
