@@ -9,7 +9,7 @@ on:
         default: ""
         type: string
       llm_provider:
-        description: "LLM provider override for source discovery manual runs. Current code default: Gemini. Choices: default(code default), gemini, openapi(reserved fail-fast), internal."
+        description: "LLM provider override for source discovery manual runs. Current code default: Gemini. Choices: default(code default), gemini, openapi(reserved fail-fast), internal(requires llm_model)."
         required: false
         default: "default"
         type: choice
@@ -18,6 +18,11 @@ on:
           - "gemini"
           - "openapi"
           - "internal"
+      llm_model:
+        description: "Optional LLM model override for this manual run. Required when llm_provider=internal."
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: write
@@ -77,6 +82,23 @@ jobs:
             npm ci
           else
             npm install
+          fi
+
+      - name: Apply manual LLM overrides
+        env:
+          INPUT_LLM_MODEL: ${{ github.event.inputs.llm_model }}
+        run: |
+          set -euo pipefail
+
+          case "${INPUT_LLM_MODEL:-}" in
+            *$'\n'*|*$'\r'*)
+              echo "Workflow inputs must be single-line values."
+              exit 1
+              ;;
+          esac
+
+          if [ -n "${INPUT_LLM_MODEL:-}" ]; then
+            echo "LLM_MODEL=${INPUT_LLM_MODEL}" >> "$GITHUB_ENV"
           fi
 
       - name: Validate newsroom source discovery boundary

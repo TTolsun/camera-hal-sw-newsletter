@@ -175,6 +175,26 @@ test('manual candidate writer rejects combining manual_source_urls with collecti
   );
 });
 
+test('manual candidate writer fails fast on invalid manual_source_urls without writing artifacts', () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+
+  assert.throws(
+    () => writeManualCandidateArtifacts({
+      root,
+      date,
+      payload: candidatePayload(),
+      sourceCount: 1,
+      manualSourceUrls: 'ftp://a.example/x'
+    }),
+    /must use http or https/
+  );
+
+  assert.equal(fs.existsSync(manualCandidatesPath(root, date)), false);
+  assert.equal(fs.existsSync(collectedCandidatesPath(root, date)), false);
+  assert.equal(fs.existsSync(rawCandidateManifestPath(root, date)), false);
+});
+
 test('candidate artifact validation distinguishes valid, missing, mismatch, and llm_used failures', () => {
   const root = tempRoot();
   const date = '2026-05-16';

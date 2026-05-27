@@ -34,7 +34,7 @@ source registry
 
 기본 provider는 `gemini`이며 scheduled run은 `runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`에 정의된 provider/model/fallback model을 사용합니다. scheduled run은 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` repo variable을 읽지 않습니다.
 
-`workflow_dispatch` 수동 실행에서만 `llm_provider`, `llm_model`, `llm_fallback_models` input이 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` runtime env로 전달됩니다. Stage 1 source collection은 LLM을 호출하지 않으므로 `llm_provider` selector가 없습니다. Stage 2 optional source discovery와 Stage 3 final generation은 LLM 호출 경로가 있으므로 `llm_provider`를 제공합니다. 이슈 초안에 나온 `llm_api_provider`는 예시 이름이며, 현재 공개 workflow 계약은 `llm_provider`입니다.
+`workflow_dispatch` 수동 실행에서만 `llm_provider`, `llm_model`, `llm_fallback_models` input이 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` runtime env로 전달됩니다. Stage 1 source collection은 LLM을 호출하지 않으므로 `llm_provider` selector가 없습니다. Stage 2 source discovery는 `llm_provider`와 `llm_model`을 제공하며(`llm_provider=internal`은 explicit `llm_model`이 필요), Stage 3 final generation은 `llm_provider`, `llm_model`, `llm_fallback_models`를 모두 제공합니다. 이슈 초안에 나온 `llm_api_provider`는 예시 이름이며, 현재 공개 workflow 계약은 `llm_provider`입니다.
 
 `LLM_PROVIDER=gemini`은 `GEMINI_API_KEY`만 요구하고, `LLM_PROVIDER=internal`은 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, explicit `LLM_MODEL`을 요구합니다. `LLM_PROVIDER=openapi`는 reserved provider enum입니다. 전용 구현 PR 전에는 `provider_not_implemented`로 fail-fast하며 `OPENAPI_LLM_API_KEY`, `OPENAPI_LLM_ENDPOINT`, HTTP request code, retry/backoff, response parser를 제공하지 않습니다. `GEMINI_MODEL`은 internal model 지정으로 인정하지 않습니다. token은 GitHub Secrets에서만 읽고 log, artifact, PR body에 출력하지 않습니다.
 

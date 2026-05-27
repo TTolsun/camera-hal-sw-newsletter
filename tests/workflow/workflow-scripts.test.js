@@ -6433,7 +6433,12 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.doesNotMatch(stage2, /enable_gemini_source_discovery:/);
   assert.match(stage2, /llm_provider:/);
   assert.match(stage2, /-\s+"openapi"/);
+  assert.match(stage2, /llm_model:/);
   assert.match(stage2, /LLM_PROVIDER: \$\{\{ github\.event\.inputs\.llm_provider \|\| 'default' \}\}/);
+  assert.match(stage2, /- name: Apply manual LLM overrides/);
+  assert.match(stage2, /INPUT_LLM_MODEL: \$\{\{ github\.event\.inputs\.llm_model \}\}/);
+  assert.ok(stage2.indexOf('- name: Apply manual LLM overrides') <
+    stage2.indexOf('- name: Run Gemini source discovery'));
   assert.doesNotMatch(stage2, /vars\.LLM_PROVIDER/);
   assert.doesNotMatch(stage2, /vars\.LLM_MODEL/);
   assert.doesNotMatch(stage2, /vars\.LLM_FALLBACK_MODELS/);
