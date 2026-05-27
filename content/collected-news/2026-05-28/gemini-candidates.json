@@ -1,7 +1,7 @@
 {
   "failures": [
     {
-      "proposal_id": "P1",
+      "proposal_id": "adaptive_apps_jetpack_compose_io26",
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "rejected_reason": "domain_not_allowed"
     }
@@ -9,7 +9,7 @@
   "schema_version": 5,
   "date": "2026-05-28",
   "newsletter_date": "2026-05-28",
-  "generated_at": "2026-05-27T18:08:32.649Z",
+  "generated_at": "2026-05-27T19:41:21.353Z",
   "candidates": [
     {
       "schema_version": 5,
@@ -44,20 +44,18 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Google AI Studio에서 네이티브 Android 앱을 빌드하는 기능에 대한 업데이트. 카메라 HAL SW와 직접적인 관련은 없지만, AI 기반 이미지/비디오 처리 기능이 Android 앱에 통합될 가능성을 탐색해야 합니다."
+        "New tools and workflows for building native Android apps with Google AI Studio, potentially impacting camera-driven AI features or on-device ML for image/video processing."
       ],
       "keywords": [
-        "Android AI Studio Camera",
-        "AI Image Processing Android",
-        "AI Video Analysis Android",
-        "Android ML Camera",
-        "Google AI Android"
+        "Google AI Studio Android camera",
+        "on-device AI camera Android",
+        "Android ML camera integration",
+        "computational photography AI Android"
       ],
       "evidence": [
-        "AI를 활용한 카메라 스트림 처리 (예: 실시간 필터, 객체 인식)",
-        "카메라로 캡처된 이미지/비디오에 대한 AI 분석 기능",
-        "AI 모델을 Android 앱에 통합하는 새로운 방식",
-        "AI 기반 미디어 처리 라이브러리 또는 API"
+        "Details on how Google AI Studio can be used to integrate AI models for camera-related tasks (e.g., object detection, image segmentation, computational photography)",
+        "APIs or SDKs for on-device AI inference with camera input",
+        "Examples or tutorials demonstrating camera-AI integration."
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -77,10 +75,10 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "P2",
-      "proposal_trace_id": "P2",
-      "discovery_topic_gap": "Google AI Studio에서 네이티브 Android 앱을 빌드하는 기능에 대한 업데이트. 카메라 HAL SW와 직접적인 관련은 없지만, AI 기반 이미지/비디오 처리 기능이 Android 앱에 통합될 가능성을 탐색해야 합니다.",
-      "discovery_source_family": "android",
+      "proposal_id": "ai_studio_native_android_apps",
+      "proposal_trace_id": "ai_studio_native_android_apps",
+      "discovery_topic_gap": "New tools and workflows for building native Android apps with Google AI Studio, potentially impacting camera-driven AI features or on-device ML for image/video processing.",
+      "discovery_source_family": "android-developers-blog",
       "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-fac75a8d436dc70f",
@@ -124,20 +122,18 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Google AI Studio에서 네이티브 Android 앱을 빌드하는 기능에 대한 업데이트. 카메라 HAL SW와 직접적인 관련은 없지만, AI 기반 이미지/비디오 처리 기능이 Android 앱에 통합될 가능성을 탐색해야 합니다."
+        "New tools and workflows for building native Android apps with Google AI Studio, potentially impacting camera-driven AI features or on-device ML for image/video processing."
       ],
       "keywords": [
-        "Android AI Studio Camera",
-        "AI Image Processing Android",
-        "AI Video Analysis Android",
-        "Android ML Camera",
-        "Google AI Android"
+        "Google AI Studio Android camera",
+        "on-device AI camera Android",
+        "Android ML camera integration",
+        "computational photography AI Android"
       ],
       "evidence": [
-        "AI를 활용한 카메라 스트림 처리 (예: 실시간 필터, 객체 인식)",
-        "카메라로 캡처된 이미지/비디오에 대한 AI 분석 기능",
-        "AI 모델을 Android 앱에 통합하는 새로운 방식",
-        "AI 기반 미디어 처리 라이브러리 또는 API"
+        "Details on how Google AI Studio can be used to integrate AI models for camera-related tasks (e.g., object detection, image segmentation, computational photography)",
+        "APIs or SDKs for on-device AI inference with camera input",
+        "Examples or tutorials demonstrating camera-AI integration."
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -157,10 +153,10 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "P2",
-      "proposal_trace_id": "P2",
-      "discovery_topic_gap": "Google AI Studio에서 네이티브 Android 앱을 빌드하는 기능에 대한 업데이트. 카메라 HAL SW와 직접적인 관련은 없지만, AI 기반 이미지/비디오 처리 기능이 Android 앱에 통합될 가능성을 탐색해야 합니다.",
-      "discovery_source_family": "android",
+      "proposal_id": "ai_studio_native_android_apps",
+      "proposal_trace_id": "ai_studio_native_android_apps",
+      "discovery_topic_gap": "New tools and workflows for building native Android apps with Google AI Studio, potentially impacting camera-driven AI features or on-device ML for image/video processing.",
+      "discovery_source_family": "android-developers-blog",
       "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-fe7a2b2ca51287c9",
