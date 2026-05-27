@@ -437,6 +437,17 @@
       ]
     },
     {
+      "path": "source-html/reddit-search-camera.rss",
+      "source": "synthetic",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Reddit search.rss community-signal entries stay watchlist/exclude and never main",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
+    },
+    {
       "path": "source-html/android-latest-updates-camera.html",
       "source": "curated",
       "allowedUse": "parser-source-html",

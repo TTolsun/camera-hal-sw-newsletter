@@ -92,6 +92,23 @@
         "keywords": [
           "platform"
         ]
+      },
+      {
+        "id": "reddit-android-dev",
+        "name": "Reddit r/androiddev",
+        "sourceUrl": "https://www.reddit.com/r/androiddev/",
+        "rssUrl": "https://www.reddit.com/r/androiddev/search.rss?q=camera&restrict_sr=1&sort=new",
+        "collectionModeHint": "rss-source",
+        "category": "android",
+        "priority": "low",
+        "reliability": "community",
+        "enabled": true,
+        "candidateOnly": true,
+        "requiresCrossCheck": true,
+        "usageHint": "reddit community signal 집계를 검증하는 source",
+        "keywords": [
+          "camera"
+        ]
       }
     ]
   },
@@ -240,6 +257,77 @@
         "reference_only": false,
         "briefing_only": false,
         "selection_exclusion_reason": "source_gap_risk=true"
+      },
+      {
+        "source_id": "reddit-android-dev",
+        "source_name": "Reddit r/androiddev",
+        "sourceUrl": "https://www.reddit.com/r/androiddev/",
+        "url": "https://www.reddit.com/r/androiddev/comments/aaa/camera_hal_blocked/",
+        "title": "Reddit camera HAL discussion (blocked)",
+        "published_date": "2026-05-05",
+        "finalSelectionEligibility": "watchlist",
+        "hasDatedEvidence": true,
+        "main_eligible": false,
+        "source_gap_risk": false,
+        "reference_only": false,
+        "briefing_only": true,
+        "community_signal": true,
+        "community_signal_source": "reddit",
+        "community_signal_role": "candidate_discovery",
+        "reddit_subreddit": "androiddev",
+        "source_quality": {
+          "source_role": "community_lead_source",
+          "source_url_quality": "community_lead_requires_cross_check",
+          "source_quality_status": "blocked",
+          "main_article_source_allowed": false,
+          "main_article_source_allowed_reason": "Community-signal source is a discovery sensor and cannot be a primary main-article source.",
+          "main_article_source_blockers": [
+            "candidate_only_without_primary_confirmation",
+            "cross_check_required_but_missing",
+            "community_signal_primary_source_disallowed"
+          ],
+          "cross_check_status": "required_missing",
+          "requires_cross_check": true,
+          "requires_conditional_evidence": true,
+          "conditional_evidence_type": "primary_confirmation",
+          "evidence_granularity": "article_with_primary_confirmation",
+          "source_quality_notes": []
+        }
+      },
+      {
+        "source_id": "reddit-android-dev",
+        "source_name": "Reddit r/androiddev",
+        "sourceUrl": "https://www.reddit.com/r/androiddev/",
+        "url": "https://www.reddit.com/r/androiddev/comments/bbb/camera_hal_crosschecked/",
+        "title": "Reddit camera HAL discussion (cross-checked)",
+        "published_date": "2026-05-05",
+        "finalSelectionEligibility": "watchlist",
+        "hasDatedEvidence": true,
+        "main_eligible": false,
+        "source_gap_risk": false,
+        "reference_only": false,
+        "briefing_only": true,
+        "primary_confirmation": true,
+        "community_signal": true,
+        "community_signal_source": "reddit",
+        "community_signal_role": "candidate_discovery",
+        "reddit_subreddit": "androiddev",
+        "source_quality": {
+          "source_role": "community_lead_source",
+          "source_url_quality": "community_lead_requires_cross_check",
+          "source_quality_status": "blocked",
+          "main_article_source_allowed": false,
+          "main_article_source_allowed_reason": "Community-signal source is a discovery sensor and cannot be a primary main-article source.",
+          "main_article_source_blockers": [
+            "community_signal_primary_source_disallowed"
+          ],
+          "cross_check_status": "required_satisfied",
+          "requires_cross_check": true,
+          "requires_conditional_evidence": true,
+          "conditional_evidence_type": "primary_confirmation",
+          "evidence_granularity": "article_with_primary_confirmation",
+          "source_quality_notes": []
+        }
       }
     ]
   },

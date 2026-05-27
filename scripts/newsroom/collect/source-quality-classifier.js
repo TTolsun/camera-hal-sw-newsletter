@@ -29,6 +29,7 @@ const SOURCE_QUALITY_BLOCKERS = Object.freeze([
   'generic_trend_without_hal_workflow_link',
   'cross_check_required_but_missing',
   'candidate_only_without_primary_confirmation',
+  'community_signal_primary_source_disallowed',
   'fallback_without_concrete_source_fact',
   'unknown_source_quality',
   'linked_evidence_blocked',
@@ -159,6 +160,30 @@ function candidateUrl(candidate = {}) {
     candidate.source_candidate_url,
     candidate.normalized_url
   );
+}
+
+function urlHost(value) {
+  const raw = text(value);
+  if (!raw) return '';
+  try {
+    return new URL(raw).host.toLowerCase();
+  } catch (_error) {
+    return '';
+  }
+}
+
+// Reddit / community-signal candidates are discovery sensors only: their own URL is
+// never a primary main-article source, even when an unrelated cross-check is satisfied.
+function isCommunitySignalCandidate(candidate = {}, source = {}) {
+  if (candidate.community_signal === true) return true;
+  if (lower(candidate.community_signal_source) === 'reddit') return true;
+  if (lower(candidate.source_id || candidate.sourceId).startsWith('reddit-')) return true;
+  if (lower(source.id).startsWith('reddit-')) return true;
+  const hosts = [
+    source.sourceUrl, source.url, source.rssUrl,
+    candidate.url, candidate.article_url, candidate.source_url
+  ].map(urlHost);
+  return hosts.includes('reddit.com') || hosts.includes('www.reddit.com');
 }
 
 function hasDate(candidate = {}, metadata = {}) {
@@ -299,6 +324,7 @@ function reasonFor(blockers, allowed) {
     generic_trend_without_hal_workflow_link: 'Generic AI/IT trend lacks explicit Camera HAL, Android Camera, driver, SoC, or native workflow evidence.',
     cross_check_required_but_missing: 'Source requires primary confirmation before main promotion.',
     candidate_only_without_primary_confirmation: 'Candidate-only source lacks primary confirmation.',
+    community_signal_primary_source_disallowed: 'Community-signal source is a discovery sensor and cannot be a primary main-article source.',
     fallback_without_concrete_source_fact: 'Fallback candidate lacks concrete dated source facts.',
     unknown_source_quality: 'Source URL quality is unresolved.',
     linked_evidence_blocked: 'Linked evidence is blocked and cannot support the claim.',
@@ -362,6 +388,15 @@ function classifySourceQuality(input = {}) {
   if (sourceUrlQuality === 'unknown') {
     status = 'unknown';
     allowed = false;
+  }
+  if (isCommunitySignalCandidate(candidate, source)) {
+    allowed = false;
+    if (status === 'allowed' || status === 'conditional') {
+      status = 'blocked';
+    }
+    if (!remainingBlockers.includes('community_signal_primary_source_disallowed')) {
+      remainingBlockers.push('community_signal_primary_source_disallowed');
+    }
   }
 
   return {
@@ -583,6 +618,7 @@ module.exports = {
   SOURCE_ROLES,
   SOURCE_URL_QUALITIES,
   classifySourceQuality,
+  isCommunitySignalCandidate,
   hasConcreteDatedEvidence,
   normalizeMainArticlePolicy,
   normalizeSourceQuality,

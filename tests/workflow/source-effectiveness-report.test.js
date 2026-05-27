@@ -235,6 +235,37 @@ test('source quality coverage separates selected main from main-eligible pool', 
   });
 });
 
+test('reddit community signal candidates are counted per source', () => {
+  const report = buildReport();
+  const reddit = source(report, 'reddit-android-dev');
+
+  assert.equal(reddit.collected_count, 2);
+  assert.equal(reddit.community_signal_count, 2);
+  assert.equal(reddit.reddit_candidate_count, 2);
+  assert.equal(reddit.reddit_cross_checked_count, 1);
+  assert.equal(reddit.reddit_only_blocked_count, 1);
+});
+
+test('community signal counts roll up into the summary', () => {
+  const report = buildReport();
+
+  assert.equal(report.summary.community_signal_count, 2);
+  assert.equal(report.summary.reddit_candidate_count, 2);
+  assert.equal(report.summary.reddit_cross_checked_count, 1);
+  assert.equal(report.summary.reddit_only_blocked_count, 1);
+});
+
+test('markdown renders a Community signals section', () => {
+  const markdown = renderSourceEffectivenessMarkdown(buildReport());
+
+  assert.match(markdown, /## Community signals/);
+  assert.match(markdown, /- Community-signal candidates: 2/);
+  assert.match(markdown, /- Reddit candidates: 2/);
+  assert.match(markdown, /- Reddit cross-checked: 1/);
+  assert.match(markdown, /- Reddit-only blocked \(no primary confirmation\): 1/);
+  assert.match(markdown, /\| reddit-android-dev \| 2 \| 2 \| 1 \| 1 \|/);
+});
+
 test('source effectiveness report builds for candidate shortage review-only without public newsletter files', () => {
   const root = tempRoot('source-effectiveness-');
   const date = fixture.date;

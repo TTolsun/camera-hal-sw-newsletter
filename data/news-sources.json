@@ -1883,6 +1883,290 @@
       "sourceQualityNotes": [
         "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
       ]
+    },
+    {
+      "id": "reddit-androiddev-camera",
+      "name": "Reddit r/androiddev",
+      "sourceUrl": "https://www.reddit.com/r/androiddev/",
+      "rssUrl": "https://www.reddit.com/r/androiddev/search.rss?q=camera+OR+CameraX+OR+Camera2+OR+%22Camera+HAL%22+OR+%22Android+Camera%22&restrict_sr=1&sort=new",
+      "collectionModeHint": "rss-source",
+      "category": "android",
+      "priority": "low",
+      "reliability": "community",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "r/androiddev 커뮤니티 신호(candidate discovery)용 lead source; Reddit URL 자체는 main article/primary evidence가 될 수 없고 독립적인 official/project 출처 확인이 필요",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "developer.android.com",
+          "source.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com",
+          "libcamera.org",
+          "git.libcamera.org",
+          "lists.libcamera.org",
+          "isocpp.org",
+          "kernel.org",
+          "lore.kernel.org"
+        ]
+      },
+      "keywords": [
+        "Android",
+        "camera",
+        "CameraX",
+        "Camera2",
+        "HAL",
+        "androiddev"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "community signal / candidate discovery source only",
+        "Reddit URL is never a main-article or primary-evidence source",
+        "requires independent official/project confirmation before main promotion"
+      ]
+    },
+    {
+      "id": "reddit-android-camera",
+      "name": "Reddit r/Android",
+      "sourceUrl": "https://www.reddit.com/r/Android/",
+      "rssUrl": "https://www.reddit.com/r/Android/search.rss?q=camera+OR+CameraX+OR+Camera2+OR+%22Camera+HAL%22+OR+%22Android+Camera%22&restrict_sr=1&sort=new",
+      "collectionModeHint": "rss-source",
+      "category": "android",
+      "priority": "low",
+      "reliability": "community",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "r/Android 커뮤니티 신호(candidate discovery)용 lead source; Reddit URL 자체는 main article/primary evidence가 될 수 없고 독립적인 official/project 출처 확인이 필요",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "developer.android.com",
+          "source.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com",
+          "libcamera.org",
+          "git.libcamera.org",
+          "lists.libcamera.org",
+          "isocpp.org",
+          "kernel.org",
+          "lore.kernel.org"
+        ]
+      },
+      "keywords": [
+        "Android",
+        "camera",
+        "Camera2",
+        "Pixel",
+        "OEM"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "community signal / candidate discovery source only",
+        "Reddit URL is never a main-article or primary-evidence source",
+        "requires independent official/project confirmation before main promotion"
+      ]
+    },
+    {
+      "id": "reddit-artificial-camera",
+      "name": "Reddit r/artificial",
+      "sourceUrl": "https://www.reddit.com/r/artificial/",
+      "rssUrl": "https://www.reddit.com/r/artificial/search.rss?q=camera+OR+CameraX+OR+Camera2+OR+%22Camera+HAL%22+OR+%22Android+Camera%22&restrict_sr=1&sort=new",
+      "collectionModeHint": "rss-source",
+      "category": "ai",
+      "priority": "low",
+      "reliability": "community",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "r/artificial 커뮤니티 신호(candidate discovery)용 lead source; Reddit URL 자체는 main article/primary evidence가 될 수 없고 독립적인 official/project 출처 확인이 필요",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "developer.android.com",
+          "source.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com",
+          "libcamera.org",
+          "git.libcamera.org",
+          "lists.libcamera.org",
+          "isocpp.org",
+          "kernel.org",
+          "lore.kernel.org"
+        ]
+      },
+      "keywords": [
+        "AI",
+        "camera",
+        "computer vision",
+        "on-device",
+        "image"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "community signal / candidate discovery source only",
+        "Reddit URL is never a main-article or primary-evidence source",
+        "requires independent official/project confirmation before main promotion"
+      ]
+    },
+    {
+      "id": "reddit-cpp-camera",
+      "name": "Reddit r/cpp",
+      "sourceUrl": "https://www.reddit.com/r/cpp/",
+      "rssUrl": "https://www.reddit.com/r/cpp/search.rss?q=camera+OR+CameraX+OR+Camera2+OR+%22Camera+HAL%22+OR+%22Android+Camera%22&restrict_sr=1&sort=new",
+      "collectionModeHint": "rss-source",
+      "category": "cpp",
+      "priority": "low",
+      "reliability": "community",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "r/cpp 커뮤니티 신호(candidate discovery)용 lead source; Reddit URL 자체는 main article/primary evidence가 될 수 없고 독립적인 official/project 출처 확인이 필요",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "developer.android.com",
+          "source.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com",
+          "libcamera.org",
+          "git.libcamera.org",
+          "lists.libcamera.org",
+          "isocpp.org",
+          "kernel.org",
+          "lore.kernel.org"
+        ]
+      },
+      "keywords": [
+        "C++",
+        "camera",
+        "libcamera",
+        "native",
+        "performance"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "community signal / candidate discovery source only",
+        "Reddit URL is never a main-article or primary-evidence source",
+        "requires independent official/project confirmation before main promotion"
+      ]
+    },
+    {
+      "id": "reddit-linux-camera",
+      "name": "Reddit r/linux",
+      "sourceUrl": "https://www.reddit.com/r/linux/",
+      "rssUrl": "https://www.reddit.com/r/linux/search.rss?q=camera+OR+CameraX+OR+Camera2+OR+%22Camera+HAL%22+OR+%22Android+Camera%22&restrict_sr=1&sort=new",
+      "collectionModeHint": "rss-source",
+      "category": "linux-camera",
+      "priority": "low",
+      "reliability": "community",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "r/linux 커뮤니티 신호(candidate discovery)용 lead source; Reddit URL 자체는 main article/primary evidence가 될 수 없고 독립적인 official/project 출처 확인이 필요",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "developer.android.com",
+          "source.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com",
+          "libcamera.org",
+          "git.libcamera.org",
+          "lists.libcamera.org",
+          "isocpp.org",
+          "kernel.org",
+          "lore.kernel.org"
+        ]
+      },
+      "keywords": [
+        "Linux",
+        "camera",
+        "V4L2",
+        "libcamera",
+        "kernel",
+        "driver"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "community signal / candidate discovery source only",
+        "Reddit URL is never a main-article or primary-evidence source",
+        "requires independent official/project confirmation before main promotion"
+      ]
+    },
+    {
+      "id": "reddit-camera-community",
+      "name": "Reddit r/Camera",
+      "sourceUrl": "https://www.reddit.com/r/Camera/",
+      "rssUrl": "https://www.reddit.com/r/Camera/search.rss?q=camera+OR+CameraX+OR+Camera2+OR+%22Camera+HAL%22+OR+%22Android+Camera%22&restrict_sr=1&sort=new",
+      "collectionModeHint": "rss-source",
+      "category": "camera-api",
+      "priority": "low",
+      "reliability": "community",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "r/Camera 커뮤니티 신호(candidate discovery)용 lead source; Reddit URL 자체는 main article/primary evidence가 될 수 없고 독립적인 official/project 출처 확인이 필요",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "developer.android.com",
+          "source.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com",
+          "libcamera.org",
+          "git.libcamera.org",
+          "lists.libcamera.org",
+          "isocpp.org",
+          "kernel.org",
+          "lore.kernel.org"
+        ]
+      },
+      "keywords": [
+        "camera",
+        "image sensor",
+        "ISP",
+        "Android Camera",
+        "Camera HAL"
+      ],
+      "sourceRole": "community_lead_source",
+      "sourceUrlQualityHint": "community_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "community signal / candidate discovery source only",
+        "Reddit URL is never a main-article or primary-evidence source",
+        "requires independent official/project confirmation before main promotion"
+      ]
     }
   ]
 }

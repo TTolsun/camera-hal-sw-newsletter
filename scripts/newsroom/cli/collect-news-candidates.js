@@ -640,6 +640,36 @@ function sourceExtractionBackfill(raw) {
   };
 }
 
+const REDDIT_HOSTS = new Set(['reddit.com', 'www.reddit.com']);
+
+function isRedditSource(source = {}) {
+  if (typeof source.id === 'string' && source.id.startsWith('reddit-')) return true;
+  for (const value of [source.sourceUrl, source.url, source.rssUrl]) {
+    if (typeof value !== 'string' || !value.trim()) continue;
+    try {
+      if (REDDIT_HOSTS.has(new URL(value).host.toLowerCase())) return true;
+    } catch (_error) { /* ignore unparsable url */ }
+  }
+  return false;
+}
+
+function redditSubreddit(source = {}) {
+  const match = String(source.sourceUrl || source.url || source.rssUrl || '').match(/\/r\/([^/?#]+)/i);
+  return match ? match[1] : '';
+}
+
+function communitySignalMarkers(source = {}) {
+  if (!isRedditSource(source)) {
+    return { community_signal: false };
+  }
+  return {
+    community_signal: true,
+    community_signal_source: 'reddit',
+    community_signal_role: 'candidate_discovery',
+    reddit_subreddit: redditSubreddit(source)
+  };
+}
+
 function normalizeCandidate(raw) {
   raw = sourceExtractionBackfill(raw);
   const source = raw.source;
@@ -773,6 +803,7 @@ function normalizeCandidate(raw) {
     ...sourceQualityFlat,
     candidateOnly,
     candidate_only: candidateOnly,
+    ...communitySignalMarkers(source),
     collectionMode: classification.collectionMode,
     collection_mode: classification.collectionMode,
     sourceCollectionMode: classification.sourceCollectionMode,

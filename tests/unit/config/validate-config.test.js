@@ -257,3 +257,110 @@ test('source quality enum docs stay in sync with config validator', () => {
     assert.ok(docs.includes(`\`${value}\``), `docs/config/news-sources-fields.ko.md must document ${value}`);
   }
 });
+
+function validRedditSource(overrides = {}) {
+  return validSource({
+    id: 'reddit-androiddev-camera',
+    name: 'Reddit r/androiddev',
+    sourceUrl: 'https://www.reddit.com/r/androiddev/',
+    rssUrl: 'https://www.reddit.com/r/androiddev/search.rss?q=camera%20OR%20CameraX&restrict_sr=1&sort=new',
+    collectionModeHint: 'rss-source',
+    category: 'android',
+    priority: 'low',
+    reliability: 'community',
+    enabled: true,
+    candidateOnly: true,
+    requiresCrossCheck: true,
+    sourceRole: 'community_lead_source',
+    sourceUrlQualityHint: 'community_lead_requires_cross_check',
+    mainArticlePolicy: 'conditional',
+    requiresCrossCheckDefault: true,
+    evidenceGranularityHint: 'article_with_primary_confirmation',
+    sourceQualityNotes: ['community signal / candidate discovery source only'],
+    usageHint: 'community lead source; requires official/project confirmation',
+    keywords: ['camera', 'HAL', 'Android'],
+    ...overrides
+  });
+}
+
+function validateReddit(overrides = {}) {
+  return validate(validRegistry({ sources: [validRedditSource(overrides)] }));
+}
+
+function hasError(result, pattern) {
+  return result.errors.some(error => pattern.test(error));
+}
+
+test('valid reddit community source passes', () => {
+  const result = validateReddit();
+
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.errors, []);
+});
+
+test('reddit source with candidateOnly=false fails', () => {
+  const result = validateReddit({ candidateOnly: false });
+
+  assert.equal(result.ok, false);
+  assert.ok(hasError(result, /candidateOnly must be true for reddit community sources/));
+});
+
+test('reddit source with requiresCrossCheck=false fails', () => {
+  const result = validateReddit({ requiresCrossCheck: false });
+
+  assert.equal(result.ok, false);
+  assert.ok(hasError(result, /requiresCrossCheck must be true for reddit community sources/));
+});
+
+test('reddit source with priority=medium fails', () => {
+  const result = validateReddit({ priority: 'medium' });
+
+  assert.equal(result.ok, false);
+  assert.ok(hasError(result, /priority must be "low" for reddit community sources/));
+});
+
+test('reddit source with a non-search.rss reddit feed fails', () => {
+  const result = validateReddit({ rssUrl: 'https://www.reddit.com/r/androiddev/.rss' });
+
+  assert.equal(result.ok, false);
+  assert.ok(hasError(result, /rssUrl must be a reddit\.com search\.rss URL/));
+});
+
+test('reddit source with a non-reddit feed host fails', () => {
+  const result = validateReddit({ rssUrl: 'https://example.com/search.rss?q=camera' });
+
+  assert.equal(result.ok, false);
+  assert.ok(hasError(result, /rssUrl must be a reddit\.com search\.rss URL/));
+});
+
+test('reddit source that opts into over-18 content fails', () => {
+  const result = validateReddit({
+    rssUrl: 'https://www.reddit.com/r/androiddev/search.rss?q=camera&restrict_sr=1&include_over_18=on'
+  });
+
+  assert.equal(result.ok, false);
+  assert.ok(hasError(result, /must not opt into over-18 content/));
+});
+
+test('valid reddit feed without an over-18 opt-in passes', () => {
+  const result = validateReddit({
+    rssUrl: 'https://www.reddit.com/r/androiddev/search.rss?q=camera&restrict_sr=1&sort=new'
+  });
+
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.errors, []);
+});
+
+test('reddit source with mainArticlePolicy other than conditional fails', () => {
+  const result = validateReddit({ mainArticlePolicy: 'watchlist_only' });
+
+  assert.equal(result.ok, false);
+  assert.ok(hasError(result, /mainArticlePolicy must be "conditional" for reddit community sources/));
+});
+
+test('reddit source with wrong evidenceGranularityHint fails', () => {
+  const result = validateReddit({ evidenceGranularityHint: 'article_level_concrete_source_fact' });
+
+  assert.equal(result.ok, false);
+  assert.ok(hasError(result, /evidenceGranularityHint must be "article_with_primary_confirmation" for reddit community sources/));
+});

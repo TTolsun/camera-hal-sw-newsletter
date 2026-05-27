@@ -119,10 +119,28 @@ Media3 release note는 날짜가 있는 item-level 변경, 구체 component/API/
 - 요즘IT: https://yozm.wishket.com/
 - NAVER DEVIEW: https://developers.naver.com/d2/deview/ (registry에서 비활성)
 
+## Reddit 커뮤니티 신호 (community signal)
+
+Reddit 출처는 candidate discovery용 **커뮤니티 신호(sensor)**입니다. Reddit URL 자체는 primary evidence가 아니며, 단독으로 main article이 되거나 source gap을 해소하거나 주요 factual claim의 근거가 될 수 없습니다. Reddit lead는 항상 독립적인 official/project source로 교차 확인한 뒤에만 기사화합니다.
+
+- 모든 Reddit 출처는 `candidateOnly: true`, `requiresCrossCheck: true`, `priority: low`, `reliability: community`, `mainArticlePolicy: conditional`로 고정합니다. 교차 확인이 있어도 Reddit URL은 main article의 primary source로 승격하지 않습니다.
+- 수집은 subreddit `search.rss`(camera/Android Camera 관련 query)만 사용하며 본문·댓글 전문은 저장하지 않습니다.
+- `linkedEvidencePolicy`는 official/project domain link만 교차 확인 후보로 분류합니다.
+
+### 후보 / 교차 확인 출처 (community signal)
+
+- Reddit r/androiddev (`rss-source`, community signal): https://www.reddit.com/r/androiddev/
+- Reddit r/Android (`rss-source`, community signal): https://www.reddit.com/r/Android/
+- Reddit r/artificial (`rss-source`, community signal): https://www.reddit.com/r/artificial/
+- Reddit r/cpp (`rss-source`, community signal): https://www.reddit.com/r/cpp/
+- Reddit r/linux (`rss-source`, community signal): https://www.reddit.com/r/linux/
+- Reddit r/Camera (`rss-source`, community signal): https://www.reddit.com/r/Camera/
+
 ## 선택 규칙
 
 - official documentation, official blog, release note, project-official source를 우선합니다.
 - media/community/newsletter source는 registry가 다르게 지정하지 않는 한 discovery lead로 사용합니다.
+- Reddit 등 community signal source는 sensor로만 사용하며 Reddit URL을 main article의 primary source로 승격하지 않습니다.
 - `requiresCrossCheck: true` 출처의 중요한 주장은 final publication 전에 official documentation, vendor/project source, release note로 확인합니다.
 - 모든 최종 newsletter section은 `Sources` 또는 `출처`에 source link를 보존해야 하며, 이슈 끝에는 `References` 또는 `참고자료`가 있어야 합니다.
 - 최종 newsletter 요약은 한국어로 작성하고 article body를 복사하지 않습니다.

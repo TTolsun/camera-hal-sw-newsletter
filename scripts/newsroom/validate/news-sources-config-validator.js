@@ -50,6 +50,7 @@ const CONDITIONAL_EVIDENCE_RULE_HINTS = new Set([
   'project_release',
   'project_mailing_list_release'
 ]);
+const REDDIT_HOSTS = new Set(['reddit.com', 'www.reddit.com']);
 
 function sourceLabel(source, index) {
   if (source && typeof source === 'object' && typeof source.id === 'string' && source.id.trim()) {
@@ -69,6 +70,87 @@ function isHttpUrl(value) {
     return url.protocol === 'http:' || url.protocol === 'https:';
   } catch (_error) {
     return false;
+  }
+}
+
+function urlHost(value) {
+  if (typeof value !== 'string' || !value.trim()) return '';
+  try {
+    return new URL(value).host.toLowerCase();
+  } catch (_error) {
+    return '';
+  }
+}
+
+function isRedditCommunitySource(source) {
+  if (typeof source.id === 'string' && source.id.startsWith('reddit-')) return true;
+  if (REDDIT_HOSTS.has(urlHost(source.sourceUrl))) return true;
+  if (REDDIT_HOSTS.has(urlHost(source.rssUrl))) return true;
+  return false;
+}
+
+function isRedditSearchRssUrl(value) {
+  if (typeof value !== 'string' || !value.trim()) return false;
+  let url;
+  try {
+    url = new URL(value);
+  } catch (_error) {
+    return false;
+  }
+  if (!REDDIT_HOSTS.has(url.host.toLowerCase())) return false;
+  if (!url.pathname.toLowerCase().includes('search.rss')) return false;
+  const query = url.searchParams.get('q');
+  return typeof query === 'string' && query.trim().length > 0;
+}
+
+function redditFeedOptsIntoOver18(value) {
+  if (typeof value !== 'string' || !value.trim()) return false;
+  let url;
+  try {
+    url = new URL(value);
+  } catch (_error) {
+    return false;
+  }
+  const flag = (url.searchParams.get('include_over_18') || '').trim().toLowerCase();
+  return ['on', '1', 'true', 'yes'].includes(flag);
+}
+
+function validateRedditCommunitySource(errors, label, source) {
+  if (source.candidateOnly !== true) {
+    errors.push(`${label}.candidateOnly must be true for reddit community sources.`);
+  }
+  if (source.requiresCrossCheck !== true) {
+    errors.push(`${label}.requiresCrossCheck must be true for reddit community sources.`);
+  }
+  if (source.requiresCrossCheckDefault !== true) {
+    errors.push(`${label}.requiresCrossCheckDefault must be true for reddit community sources.`);
+  }
+  if (source.priority !== 'low') {
+    errors.push(`${label}.priority must be "low" for reddit community sources.`);
+  }
+  if (source.reliability !== 'community') {
+    errors.push(`${label}.reliability must be "community" for reddit community sources.`);
+  }
+  if (source.collectionModeHint !== 'rss-source') {
+    errors.push(`${label}.collectionModeHint must be "rss-source" for reddit community sources.`);
+  }
+  if (source.sourceRole !== 'community_lead_source') {
+    errors.push(`${label}.sourceRole must be "community_lead_source" for reddit community sources.`);
+  }
+  if (source.sourceUrlQualityHint !== 'community_lead_requires_cross_check') {
+    errors.push(`${label}.sourceUrlQualityHint must be "community_lead_requires_cross_check" for reddit community sources.`);
+  }
+  if (source.mainArticlePolicy !== 'conditional') {
+    errors.push(`${label}.mainArticlePolicy must be "conditional" for reddit community sources.`);
+  }
+  if (source.evidenceGranularityHint !== 'article_with_primary_confirmation') {
+    errors.push(`${label}.evidenceGranularityHint must be "article_with_primary_confirmation" for reddit community sources.`);
+  }
+  if (!isRedditSearchRssUrl(source.rssUrl)) {
+    errors.push(`${label}.rssUrl must be a reddit.com search.rss URL with a non-empty q= query for reddit community sources.`);
+  }
+  if (redditFeedOptsIntoOver18(source.rssUrl)) {
+    errors.push(`${label}.rssUrl must not opt into over-18 content (include_over_18) for reddit community sources.`);
   }
 }
 
@@ -221,6 +303,10 @@ function validateSource(errors, source, index, sectionMap, seenIds) {
     !VALID_COLLECTION_MODE_HINTS.has(source.collectionModeHint)
   ) {
     errors.push(`${label}.collectionModeHint must be one of: ${[...VALID_COLLECTION_MODE_HINTS].join(', ')}.`);
+  }
+
+  if (isRedditCommunitySource(source)) {
+    validateRedditCommunitySource(errors, label, source);
   }
 }
 
