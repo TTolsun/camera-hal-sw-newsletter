@@ -12,6 +12,7 @@ const {
 const {
   writeManualCandidateArtifacts
 } = require('../common/candidate-artifacts');
+const { parseManualSourceUrls } = require('../collect/collection-intent');
 const { readRuntimeConfig } = require('../common/runtime-config');
 const {
   extractImageCandidatesFromHtml,
@@ -1113,6 +1114,9 @@ function markdown(date, candidates, failures, lookbackDays, options = {}) {
 }
 
 async function main() {
+  // Fail fast on a malformed manual_source_urls input before doing any
+  // collection work, so we never leave a manifest-less candidate artifact.
+  parseManualSourceUrls(process.env.NEWSROOM_MANUAL_SOURCE_URLS || '');
   const date = runtimeConfig.newsletterDate || kstDate();
   const lookbackDays = runtimeConfig.lookbackDays;
   const now = runtimeConfig.newsletterDate
@@ -1202,6 +1206,7 @@ async function main() {
     date,
     payload: candidatePayload,
     sourceCount: sources.length,
+    manualSourceUrls: process.env.NEWSROOM_MANUAL_SOURCE_URLS || '',
     collectionIntentPath: process.env.NEWSROOM_COLLECTION_INTENT_PATH || '',
     generatedAt,
     workflow: 'manual-source-collection-pr'

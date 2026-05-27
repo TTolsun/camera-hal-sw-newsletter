@@ -6396,7 +6396,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   const stage1 = fs.readFileSync(path.join(workflowDir, '01-newsroom-manual-source-collect-pr.yml'), 'utf8');
   const stage2 = fs.readFileSync(path.join(workflowDir, '02-newsroom-gemini-source-discovery-pr.yml'), 'utf8');
   const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsroom-final-pr.yml'), 'utf8');
-  const stage2RunStep = workflowStep(stage2, 'Run disabled pass-through or Gemini source discovery');
+  const stage2RunStep = workflowStep(stage2, 'Run Gemini source discovery');
   const stage2PrepareBodyStep = workflowStep(stage2, 'Prepare source discovery pull request body');
   const stage2CreatePrStep = workflowStep(stage2, 'Create source discovery pull request');
   const stage2UploadStep = workflowStep(stage2, 'Upload source discovery debug artifacts');
@@ -6410,9 +6410,10 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage3, /^name: Newsroom 03 - Gemini Final Newsletter PR/m);
 
   assert.match(stage1, /workflow_dispatch:/);
-  assert.match(stage1, /collection_intent_path:/);
+  assert.match(stage1, /manual_source_urls:/);
+  assert.doesNotMatch(stage1, /collection_intent_path:/);
   assert.doesNotMatch(stage1, /llm_provider:/);
-  assert.match(stage1, /NEWSROOM_COLLECTION_INTENT_PATH: \$\{\{ github\.event\.inputs\.collection_intent_path \}\}/);
+  assert.match(stage1, /NEWSROOM_MANUAL_SOURCE_URLS: \$\{\{ github\.event\.inputs\.manual_source_urls \}\}/);
   assert.match(stage1, /^\s*schedule:/m);
   assert.match(stage1, /cron: "0 0 \* \* \*"/);
   assert.match(stage1, /run: npm run doctor:config -- --no-llm-credentials/);
@@ -6428,17 +6429,23 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage1, /content\/source-events\/\$\{\{ steps\.raw-meta\.outputs\.date \}\}\/source-change-events\.md/);
   assert.match(stage1, /data\/source-snapshots\/\*\*/);
 
-  assert.match(stage2, /NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY/);
+  assert.match(stage2, /NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY:\s*"true"/);
+  assert.doesNotMatch(stage2, /enable_gemini_source_discovery:/);
   assert.match(stage2, /llm_provider:/);
   assert.match(stage2, /-\s+"openapi"/);
+  assert.match(stage2, /llm_model:/);
   assert.match(stage2, /LLM_PROVIDER: \$\{\{ github\.event\.inputs\.llm_provider \|\| 'default' \}\}/);
+  assert.match(stage2, /- name: Apply manual LLM overrides/);
+  assert.match(stage2, /INPUT_LLM_MODEL: \$\{\{ github\.event\.inputs\.llm_model \}\}/);
+  assert.ok(stage2.indexOf('- name: Apply manual LLM overrides') <
+    stage2.indexOf('- name: Run Gemini source discovery'));
   assert.doesNotMatch(stage2, /vars\.LLM_PROVIDER/);
   assert.doesNotMatch(stage2, /vars\.LLM_MODEL/);
   assert.doesNotMatch(stage2, /vars\.LLM_FALLBACK_MODELS/);
   assert.doesNotMatch(stage2, /Preflight LLM credentials for enabled source discovery/);
   assert.doesNotMatch(stage2, /--preflight-only/);
   assert.doesNotMatch(stage2, /npm run doctor:config/);
-  assert.ok(stage2.indexOf('- name: Run disabled pass-through or Gemini source discovery') <
+  assert.ok(stage2.indexOf('- name: Run Gemini source discovery') <
     stage2.indexOf('- name: Prepare source discovery pull request body'));
   assert.ok(stage2.indexOf('- name: Prepare source discovery pull request body') <
     stage2.indexOf('- name: Upload source discovery debug artifacts'));
@@ -6473,8 +6480,8 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_MODE: artifact/);
   assert.match(stage3, /llm_provider:/);
   assert.match(stage3, /-\s+"openapi"/);
-  assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_PATH: \$\{\{ github\.event\.inputs\.candidate_input_path \}\}/);
-  assert.match(stage3, /manual-candidates\.json or merged-candidates\.json/);
+  assert.match(stage3, /NEWSROOM_CANDIDATE_INPUT_PATH:\s*""/);
+  assert.doesNotMatch(stage3, /candidate_input_path:/);
   assert.match(stage3, /run: npm run generate/);
   assert.doesNotMatch(stage3, /--no-llm-credentials/);
   assert.doesNotMatch(stage3, /npm run collect/);
@@ -6524,7 +6531,7 @@ test('stage 2 and 3 manual workflows resolve empty newsletter dates to KST today
     '- name: Resolve newsletter date',
     '- name: Setup Node.js',
     '- name: Validate newsroom source discovery boundary',
-    '- name: Run disabled pass-through or Gemini source discovery'
+    '- name: Run Gemini source discovery'
   ]);
   assertTextInOrder(stage3, [
     '- name: Checkout repository',

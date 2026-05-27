@@ -8,16 +8,8 @@ on:
         required: false
         default: ""
         type: string
-      enable_gemini_source_discovery:
-        description: "Enable #149 Gemini source discovery engine."
-        required: false
-        default: "false"
-        type: choice
-        options:
-          - "false"
-          - "true"
       llm_provider:
-        description: "LLM provider override for source discovery manual runs. Current code default: Gemini. Choices: default(code default), gemini, openapi(reserved fail-fast), internal."
+        description: "LLM provider override for source discovery manual runs. Current code default: Gemini. Choices: default(code default), gemini, openapi(reserved fail-fast), internal(requires llm_model)."
         required: false
         default: "default"
         type: choice
@@ -26,6 +18,11 @@ on:
           - "gemini"
           - "openapi"
           - "internal"
+      llm_model:
+        description: "Optional LLM model override for this manual run. Required when llm_provider=internal."
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: write
@@ -42,7 +39,7 @@ jobs:
 
     env:
       NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
-      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: ${{ github.event.inputs.enable_gemini_source_discovery || 'false' }}
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: "true"
       LLM_PROVIDER: ${{ github.event.inputs.llm_provider || 'default' }}
 
     steps:
@@ -87,10 +84,27 @@ jobs:
             npm install
           fi
 
+      - name: Apply manual LLM overrides
+        env:
+          INPUT_LLM_MODEL: ${{ github.event.inputs.llm_model }}
+        run: |
+          set -euo pipefail
+
+          case "${INPUT_LLM_MODEL:-}" in
+            *$'\n'*|*$'\r'*)
+              echo "Workflow inputs must be single-line values."
+              exit 1
+              ;;
+          esac
+
+          if [ -n "${INPUT_LLM_MODEL:-}" ]; then
+            echo "LLM_MODEL=${INPUT_LLM_MODEL}" >> "$GITHUB_ENV"
+          fi
+
       - name: Validate newsroom source discovery boundary
         run: npm run validate:config
 
-      - name: Run disabled pass-through or Gemini source discovery
+      - name: Run Gemini source discovery
         id: source-discovery
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}

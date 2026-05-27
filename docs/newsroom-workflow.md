@@ -34,7 +34,7 @@ source registry
 
 기본 provider는 `gemini`이며 scheduled run은 `runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`에 정의된 provider/model/fallback model을 사용합니다. scheduled run은 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` repo variable을 읽지 않습니다.
 
-`workflow_dispatch` 수동 실행에서만 `llm_provider`, `llm_model`, `llm_fallback_models` input이 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` runtime env로 전달됩니다. Stage 1 source collection은 LLM을 호출하지 않으므로 `llm_provider` selector가 없습니다. Stage 2 optional source discovery와 Stage 3 final generation은 LLM 호출 경로가 있으므로 `llm_provider`를 제공합니다. 이슈 초안에 나온 `llm_api_provider`는 예시 이름이며, 현재 공개 workflow 계약은 `llm_provider`입니다.
+`workflow_dispatch` 수동 실행에서만 `llm_provider`, `llm_model`, `llm_fallback_models` input이 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` runtime env로 전달됩니다. Stage 1 source collection은 LLM을 호출하지 않으므로 `llm_provider` selector가 없습니다. Stage 2 source discovery는 `llm_provider`와 `llm_model`을 제공하며(`llm_provider=internal`은 explicit `llm_model`이 필요), Stage 3 final generation은 `llm_provider`, `llm_model`, `llm_fallback_models`를 모두 제공합니다. 이슈 초안에 나온 `llm_api_provider`는 예시 이름이며, 현재 공개 workflow 계약은 `llm_provider`입니다.
 
 `LLM_PROVIDER=gemini`은 `GEMINI_API_KEY`만 요구하고, `LLM_PROVIDER=internal`은 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, explicit `LLM_MODEL`을 요구합니다. `LLM_PROVIDER=openapi`는 reserved provider enum입니다. 전용 구현 PR 전에는 `provider_not_implemented`로 fail-fast하며 `OPENAPI_LLM_API_KEY`, `OPENAPI_LLM_ENDPOINT`, HTTP request code, retry/backoff, response parser를 제공하지 않습니다. `GEMINI_MODEL`은 internal model 지정으로 인정하지 않습니다. token은 GitHub Secrets에서만 읽고 log, artifact, PR body에 출력하지 않습니다.
 
@@ -249,7 +249,7 @@ workflow는 `main`에 직접 push하지 않고 RAW candidate 검토용 PR을 만
 현재 schedule entrypoint는 Stage 1 RAW workflow입니다. Final newsletter generation은 승인된 candidate artifact를 입력으로 받는 수동 workflow로만 실행합니다.
 
 - `Newsroom 01 - Manual Source Collection PR` (`.github/workflows/01-newsroom-manual-source-collect-pr.yml`): `collect`만 실행하고 `manual-candidates.json`, compatibility `candidates.json`, `raw-candidate-manifest.json`을 생성합니다. Gemini/API secret을 사용하지 않습니다.
-- `Newsroom 02 - Gemini Source Discovery PR` (`.github/workflows/02-newsroom-gemini-source-discovery-pr.yml`): `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`에서는 credential-free disabled pass-through로 `merged-candidates.json`을 만듭니다. `true`에서는 LLM credential preflight 뒤 Gemini proposal을 `gemini-source-proposals.json`에 저장하고, deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영합니다.
+- `Newsroom 02 - Gemini Source Discovery PR` (`.github/workflows/02-newsroom-gemini-source-discovery-pr.yml`): source discovery 전용 workflow이므로 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하며 별도 toggle input은 없습니다. LLM credential preflight 뒤 Gemini proposal을 `gemini-source-proposals.json`에 저장하고, deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영합니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`인 credential-free disabled pass-through는 여전히 code-level로 지원되지만 이 workflow에서는 노출하지 않습니다.)
 - `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`): `NEWSROOM_CANDIDATE_INPUT_MODE=artifact`로 approved candidate artifact만 읽고 `collect`를 재실행하지 않습니다.
 
 Stage 2/3 manual run의 `newsletter_date`는 optional입니다. 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve되며, resolved date는 workflow log에 출력됩니다.
@@ -286,7 +286,7 @@ NEWSROOM_MAX_COST_USD=0.25
 
 ### 수동 Final Generation 실행
 
-GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`는 optional이며, 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve됩니다. 특정 날짜를 재생성하려면 `newsletter_date`를 입력하고, 필요하면 승인된 `manual-candidates.json` 또는 `merged-candidates.json` artifact path를 `candidate_input_path`에 입력합니다. 기본 수동 실행은 `llm_model=""`로 동작하며 code default stage model을 primary로 사용합니다. `llm_model` 또는 `llm_fallback_models`에 Gemini Pro 계열 모델명을 넣으면 `doctor:config` 단계에서 실패합니다.
+GitHub Actions에서 `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`는 optional이며, 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve됩니다. 특정 날짜를 재생성하려면 `newsletter_date`만 입력하면 되고, candidate artifact path는 더 이상 input으로 받지 않습니다. Stage 3는 `merged-candidates.json` → `manual-candidates.json` → legacy `candidates.json` 순서로 승인된 artifact를 자동 선택합니다. `llm_provider`, `llm_model`, `llm_fallback_models`는 #368 기준상 advanced manual override input으로 유지합니다. 기본 수동 실행은 `llm_model=""`로 동작하며 code default stage model을 primary로 사용합니다. `llm_model` 또는 `llm_fallback_models`에 Gemini Pro 계열 모델명을 넣으면 `doctor:config` 단계에서 실패합니다.
 
 ## Editor-in-Chief Review
 

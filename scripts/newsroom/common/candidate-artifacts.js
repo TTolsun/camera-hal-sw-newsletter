@@ -33,7 +33,9 @@ const {
   writeJson
 } = require('./common');
 const {
-  approveCollectionIntent
+  approveCollectionIntent,
+  approveCollectionIntentFromUrls,
+  parseManualSourceUrls
 } = require('../collect/collection-intent');
 
 const CANDIDATE_INPUT_MODES = Object.freeze({
@@ -468,18 +470,24 @@ function writeManualCandidateArtifacts({
   payload,
   sourceCount = null,
   collectionIntentPath = '',
+  manualSourceUrls = '',
   generatedAt = payload?.generated_at || new Date().toISOString(),
   workflow = 'raw-candidate-pr'
 } = {}) {
   const manualPath = manualCandidatesPath(root, date);
   const legacyPath = collectedCandidatesPath(root, date);
+  // Parse and validate inputs before writing any artifact so an invalid
+  // manual_source_urls value fails fast without leaving a manifest-less
+  // candidate file behind.
+  const manualUrls = parseManualSourceUrls(manualSourceUrls);
+  if (manualUrls.length > 0 && String(collectionIntentPath || '').trim()) {
+    throw new Error('manual_source_urls and collection_intent_path are mutually exclusive');
+  }
   writeJson(manualPath, payload);
   writeJson(legacyPath, payload);
-  const collectionIntent = approveCollectionIntent({
-    root,
-    date,
-    inputPath: collectionIntentPath
-  });
+  const collectionIntent = manualUrls.length > 0
+    ? approveCollectionIntentFromUrls({ root, date, urls: manualUrls, generatedAt })
+    : approveCollectionIntent({ root, date, inputPath: collectionIntentPath });
 
   const manifestPath = rawCandidateManifestPath(root, date);
   const manifest = buildRawCandidateManifest({

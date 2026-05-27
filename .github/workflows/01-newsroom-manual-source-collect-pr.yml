@@ -14,8 +14,8 @@ on:
         required: false
         default: "21"
         type: string
-      collection_intent_path:
-        description: "Optional collection intent artifact path. Empty uses content/collected-news/<date>/collection-intent.json if present."
+      manual_source_urls:
+        description: "Optional ';'-separated http/https seed URLs. Empty uses content/collected-news/<date>/collection-intent.json if present."
         required: false
         default: ""
         type: string
@@ -36,7 +36,7 @@ jobs:
     env:
       NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
       LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '21' }}
-      NEWSROOM_COLLECTION_INTENT_PATH: ${{ github.event.inputs.collection_intent_path }}
+      NEWSROOM_MANUAL_SOURCE_URLS: ${{ github.event.inputs.manual_source_urls }}
 
     steps:
       - name: Checkout repository

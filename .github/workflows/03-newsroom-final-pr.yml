@@ -8,11 +8,6 @@ on:
         required: false
         default: ""
         type: string
-      candidate_input_path:
-        description: "Optional approved artifact path: manual-candidates.json or merged-candidates.json. Empty uses merged, manual, then legacy fallback priority."
-        required: false
-        default: ""
-        type: string
       llm_provider:
         description: "LLM provider override for manual runs. Current code default: Gemini. Choices: default(code default), gemini, openapi(reserved fail-fast), internal."
         required: false
@@ -50,7 +45,7 @@ jobs:
     env:
       NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
       NEWSROOM_CANDIDATE_INPUT_MODE: artifact
-      NEWSROOM_CANDIDATE_INPUT_PATH: ${{ github.event.inputs.candidate_input_path }}
+      NEWSROOM_CANDIDATE_INPUT_PATH: ""
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       INTERNAL_LLM_API_KEY: ${{ secrets.INTERNAL_LLM_API_KEY }}
       INTERNAL_LLM_ENDPOINT: ${{ vars.INTERNAL_LLM_ENDPOINT }}
@@ -130,7 +125,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          for value in "${INPUT_LLM_PROVIDER:-}" "${INPUT_LLM_MODEL:-}" "${INPUT_LLM_FALLBACK_MODELS:-}" "${NEWSROOM_CANDIDATE_INPUT_PATH:-}"; do
+          for value in "${INPUT_LLM_PROVIDER:-}" "${INPUT_LLM_MODEL:-}" "${INPUT_LLM_FALLBACK_MODELS:-}"; do
             case "$value" in
               *$'\n'*|*$'\r'*)
                 echo "Workflow inputs must be single-line values."

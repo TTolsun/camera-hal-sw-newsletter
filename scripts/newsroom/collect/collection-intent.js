@@ -142,6 +142,82 @@ function approveCollectionIntent({
   };
 }
 
+function parseManualSourceUrls(raw) {
+  const value = String(raw || '');
+  if (value.includes('\n') || value.includes('\r')) {
+    throw new CollectionIntentError('manual_source_urls must be a single-line value', {
+      manual_source_urls: value
+    });
+  }
+  const urls = [];
+  const seen = new Set();
+  for (const segment of value.split(';')) {
+    const candidate = segment.trim();
+    if (!candidate) continue;
+    let parsed;
+    try {
+      parsed = new URL(candidate);
+    } catch (error) {
+      throw new CollectionIntentError(`Invalid manual source URL: ${candidate}`, {
+        url: candidate,
+        parse_error: error.message
+      });
+    }
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      throw new CollectionIntentError(`manual_source_urls must use http or https: ${candidate}`, {
+        url: candidate,
+        protocol: parsed.protocol
+      });
+    }
+    if (seen.has(candidate)) continue;
+    seen.add(candidate);
+    urls.push(candidate);
+  }
+  return urls;
+}
+
+function buildCollectionIntentFromUrls({
+  urls = [],
+  date = '',
+  generatedAt = new Date().toISOString()
+} = {}) {
+  const seedUrls = urls.map((url, index) => ({
+    seed_id: stableSeedId(url, index),
+    url,
+    source_id: '',
+    expected_topic: '',
+    priority: 'medium',
+    editor_note: ''
+  }));
+  const payload = normalizeCollectionIntentPayload({
+    newsletter_date: date,
+    generated_at: generatedAt,
+    seed_urls: seedUrls,
+    keyword_hints: []
+  }, date);
+  return validateCollectionIntentPayload(payload, date);
+}
+
+function approveCollectionIntentFromUrls({
+  root = process.cwd(),
+  date,
+  urls = [],
+  generatedAt = new Date().toISOString()
+} = {}) {
+  const payload = buildCollectionIntentFromUrls({ urls, date, generatedAt });
+  const canonicalPath = collectionIntentPath(root, date);
+  writeJson(canonicalPath, payload);
+  return {
+    path: canonicalPath,
+    relPath: collectionIntentRelPath(date),
+    hash: hashFile(canonicalPath),
+    payload,
+    seedUrlCount: payload.seed_urls.length,
+    keywordHintCount: payload.keyword_hints.length,
+    status: 'approved'
+  };
+}
+
 function approvedCollectionIntentFromManifest({
   root = process.cwd(),
   date,
@@ -195,8 +271,11 @@ function approvedCollectionIntentFromManifest({
 module.exports = {
   CollectionIntentError,
   approveCollectionIntent,
+  approveCollectionIntentFromUrls,
   approvedCollectionIntentFromManifest,
+  buildCollectionIntentFromUrls,
   hashFile,
   normalizeCollectionIntentPayload,
+  parseManualSourceUrls,
   validateCollectionIntentPayload
 };
