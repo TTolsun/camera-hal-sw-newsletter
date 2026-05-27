@@ -327,6 +327,7 @@ const section = {
     'specificity_checks',
     'source_verification_notes',
     'public_article',
+    'article_sections',
     'background',
     'why_it_matters',
     'camera_hal_perspective',

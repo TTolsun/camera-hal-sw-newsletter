@@ -2850,7 +2850,7 @@ test('editor schema constrains briefing to exactly 3 numeric items', () => {
   assert.equal(editorSchema.properties.briefing.maxItems, 3);
 });
 
-test('editor schema keeps article_sections optional with five required normalized keys when present', () => {
+test('editor schema requires article_sections with five required normalized keys', () => {
   const articleSections = editorSchema.properties.sections.items.properties.article_sections;
 
   assert.ok(articleSections);
@@ -2863,7 +2863,7 @@ test('editor schema keeps article_sections optional with five required normalize
   ]);
   assert.equal(
     editorSchema.properties.sections.items.required.includes('article_sections'),
-    false
+    true
   );
   assert.equal(articleSections.additionalProperties, false);
   assert.deepEqual(Object.keys(articleSections.properties).sort(), [
