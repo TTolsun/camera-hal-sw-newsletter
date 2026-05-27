@@ -438,6 +438,62 @@ for (const regression of hardFailRegressionCases.values()) {
   });
 }
 
+test('reddit-only main article is blocked by source quality gate', () => {
+  const sections = [
+    section({ headline: 'Reddit-only camera HAL article', url: 'https://www.reddit.com/r/androiddev/comments/abc/camera_hal/' }),
+    ...validSections().slice(1)
+  ];
+  const redditSourceQuality = {
+    source_role: 'community_lead_source',
+    source_url_quality: 'community_lead_requires_cross_check',
+    source_quality_status: 'blocked',
+    main_article_source_allowed: false,
+    main_article_source_allowed_reason: 'Community-signal source is a discovery sensor and cannot be a primary main-article source.',
+    main_article_source_blockers: ['candidate_only_without_primary_confirmation', 'cross_check_required_but_missing', 'community_signal_primary_source_disallowed'],
+    cross_check_status: 'required_missing',
+    requires_cross_check: true,
+    evidence_granularity: 'article_with_primary_confirmation',
+    source_quality_notes: []
+  };
+  const report = reportFor(sections, [
+    scopedCandidate('https://www.reddit.com/r/androiddev/comments/abc/camera_hal/', 'direct_aosp_camera', {
+      source_quality_required: true,
+      source_id: 'reddit-androiddev-camera',
+      community_signal: true,
+      community_signal_source: 'reddit',
+      source_quality: redditSourceQuality,
+      sourceRole: 'community_lead_source',
+      source_role: 'community_lead_source',
+      sourceUrlQuality: 'community_lead_requires_cross_check',
+      source_url_quality: 'community_lead_requires_cross_check',
+      sourceQualityStatus: 'blocked',
+      source_quality_status: 'blocked',
+      mainArticleSourceAllowed: false,
+      main_article_source_allowed: false,
+      mainArticleSourceAllowedReason: 'Community-signal source is a discovery sensor and cannot be a primary main-article source.',
+      main_article_source_allowed_reason: 'Community-signal source is a discovery sensor and cannot be a primary main-article source.',
+      mainArticleSourceBlockers: ['candidate_only_without_primary_confirmation', 'cross_check_required_but_missing', 'community_signal_primary_source_disallowed'],
+      main_article_source_blockers: ['candidate_only_without_primary_confirmation', 'cross_check_required_but_missing', 'community_signal_primary_source_disallowed'],
+      crossCheckStatus: 'required_missing',
+      cross_check_status: 'required_missing',
+      requiresCrossCheck: true,
+      requires_cross_check: true,
+      evidenceGranularity: 'article_with_primary_confirmation',
+      evidence_granularity: 'article_with_primary_confirmation',
+      sourceQualityNotes: [],
+      source_quality_notes: []
+    }),
+    ...reporterCandidatesFor(validSections()).slice(1)
+  ]);
+
+  assert.equal(report.score >= qualityGatePolicy.threshold, true);
+  assert.equal(report.status, 'NEEDS_FIX');
+  assert.ok(report.deductions.some(item =>
+    item.blocking === true &&
+    item.reason.includes('main_article_source_allowed=false')
+  ));
+});
+
 test('quality gate leaves direct HAL prose validity to LLM and editor judgment', () => {
   const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
   const cameraXSection = section({

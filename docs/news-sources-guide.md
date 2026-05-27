@@ -31,6 +31,7 @@ registry를 수정할 때는 canonical JSON formatting을 유지하고 `npm.cmd 
 - `priority`는 수집과 ranking 순서를 조정하며 `high`, `medium`, `low`를 사용합니다.
 - `rssUrl`은 확인된 feed URL이 있을 때만 넣습니다. 없으면 collector가 `sourceUrl`을 감시합니다.
 - `reliability`가 `community`, `newsletter`, `tech-media`, `expert-media`, `community-doc`에 가까울수록 후보 lead로 취급하고 교차 확인합니다.
+- Reddit 출처(`reddit-*` id 또는 `reddit.com` host)는 candidate discovery용 community signal로만 사용합니다. collector가 후보에 `community_signal: true`, `community_signal_source: "reddit"`, `community_signal_role: "candidate_discovery"`, `reddit_subreddit` marker를 붙이며, Reddit URL은 교차 확인이 있어도 main article/primary evidence로 승격하지 않습니다.
 - `keywords`는 후보 발굴과 하위 호환 `camera_hal_relevance_score` 계산에 도움을 줍니다. 새 로직은 기사 단위 evidence에서 나온 `relevance_bucket`, `editorial_priority`, `aosp_camera_directness`를 우선합니다.
 
 자주 쓰는 `reliability` 값:

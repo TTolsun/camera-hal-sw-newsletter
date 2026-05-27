@@ -304,3 +304,87 @@ test('source quality summary separates selected main from main-eligible candidat
     with_source_quality_count: 2
   });
 });
+
+function redditSource(overrides = {}) {
+  return {
+    id: 'reddit-androiddev-camera',
+    sourceUrl: 'https://www.reddit.com/r/androiddev/',
+    reliability: 'community',
+    candidateOnly: true,
+    requiresCrossCheck: true,
+    requiresCrossCheckDefault: true,
+    sourceRole: 'community_lead_source',
+    sourceUrlQualityHint: 'community_lead_requires_cross_check',
+    mainArticlePolicy: 'conditional',
+    evidenceGranularityHint: 'article_with_primary_confirmation',
+    ...overrides
+  };
+}
+
+test('reddit community signal is never promotable even when cross-check is satisfied', () => {
+  const sourceQuality = classifySourceQuality({
+    candidate: candidate({
+      url: 'https://www.reddit.com/r/androiddev/comments/abc/camera_hal/',
+      community_signal: true,
+      community_signal_source: 'reddit',
+      candidateOnly: true,
+      candidate_only: true,
+      primary_confirmation: true
+    }),
+    source: redditSource(),
+    metadata: metadata({ source_kind: 'rss_item' })
+  });
+
+  assert.equal(sourceQuality.main_article_source_allowed, false);
+  assert.equal(sourceQuality.source_quality_status, 'blocked');
+  assert.equal(sourceQuality.cross_check_status, 'required_satisfied');
+  assert.ok(sourceQuality.main_article_source_blockers.includes('community_signal_primary_source_disallowed'));
+  assert.equal(sourceQuality.main_article_source_blockers.includes('candidate_only_without_primary_confirmation'), false);
+});
+
+test('reddit-only candidate without confirmation carries both candidate-only and cross-check blockers', () => {
+  const sourceQuality = classifySourceQuality({
+    candidate: candidate({
+      url: 'https://www.reddit.com/r/androiddev/comments/def/camera_hal/',
+      community_signal: true,
+      community_signal_source: 'reddit',
+      candidateOnly: true,
+      candidate_only: true
+    }),
+    source: redditSource(),
+    metadata: metadata({ source_kind: 'rss_item' })
+  });
+
+  assert.equal(sourceQuality.main_article_source_allowed, false);
+  assert.equal(sourceQuality.cross_check_status, 'required_missing');
+  assert.ok(sourceQuality.main_article_source_blockers.includes('candidate_only_without_primary_confirmation'));
+  assert.ok(sourceQuality.main_article_source_blockers.includes('cross_check_required_but_missing'));
+  assert.ok(sourceQuality.main_article_source_blockers.includes('community_signal_primary_source_disallowed'));
+});
+
+test('non-reddit community lead source is still promotable with satisfied cross-check', () => {
+  const sourceQuality = classifySourceQuality({
+    candidate: candidate({
+      url: 'https://news.ycombinator.com/item?id=1',
+      primary_confirmation: true,
+      candidateOnly: true,
+      candidate_only: true
+    }),
+    source: {
+      id: 'hacker-news',
+      sourceUrl: 'https://news.ycombinator.com/',
+      reliability: 'community',
+      candidateOnly: true,
+      requiresCrossCheck: true,
+      requiresCrossCheckDefault: true,
+      sourceRole: 'community_lead_source',
+      sourceUrlQualityHint: 'community_lead_requires_cross_check',
+      mainArticlePolicy: 'conditional',
+      evidenceGranularityHint: 'article_with_primary_confirmation'
+    },
+    metadata: metadata({ source_kind: 'rss_item' })
+  });
+
+  assert.equal(sourceQuality.cross_check_status, 'required_satisfied');
+  assert.equal(sourceQuality.main_article_source_allowed, true);
+});

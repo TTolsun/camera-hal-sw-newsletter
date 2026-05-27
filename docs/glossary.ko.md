@@ -24,6 +24,7 @@
 | `watchlist` | 모니터링은 하되 dated evidence나 article candidate 조건이 부족해 main article로 올리지 않는 후보 tier입니다. |
 | `reference_only` | 참고자료로만 쓰는 후보 또는 source metadata입니다. main article 후보로 직접 승격하지 않습니다. |
 | `candidateOnly` | source registry에서 후보 발굴용 source임을 나타내는 값입니다. 최종 신뢰 source로 쓰기 전에 cross-check가 필요합니다. |
+| `community signal` | Reddit 같은 커뮤니티 source를 candidate discovery용 sensor로만 사용한다는 개념입니다. 후보에 `community_signal`, `community_signal_source`, `reddit_subreddit` marker가 붙으며, 해당 URL은 단독 main article이나 primary evidence로 승격하지 않고 official/project source로 교차 확인합니다. |
 | `requiresCrossCheck` | media/community/paywall 등 단독 최종 근거로 쓰기 위험한 source에 교차 확인이 필요함을 나타냅니다. |
 | `finalSelectionEligibility` | 후보의 최종 article 선택 가능성을 나타내는 field입니다. main article에는 `main` 또는 `short` 후보만 사용할 수 있습니다. |
 | `section_text_fallback` | renderer나 validator가 structured field 대신 section text에서 필요한 정보를 보완해 읽는 fallback 경로입니다. primary 계약을 대체하지 않습니다. |

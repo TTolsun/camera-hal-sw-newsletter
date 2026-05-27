@@ -718,3 +718,40 @@ test('collector allows public SoC platform signals only with camera impact evide
   assert.equal(candidate.relevance_bucket, BUCKETS.SOC_PLATFORM_SIGNAL);
   assert.equal(candidate.counts_as_soc_topic, true);
 });
+
+test('reddit search.rss yields a community-signal candidate that never reaches main/short', () => {
+  const rss = readTextFixture('source-html/reddit-search-camera.rss');
+  const redditSource = source({
+    id: 'reddit-androiddev-camera',
+    name: 'Reddit r/androiddev',
+    url: 'https://www.reddit.com/r/androiddev/',
+    sourceUrl: 'https://www.reddit.com/r/androiddev/',
+    category: 'android',
+    section: 'Android / AOSP / Camera',
+    priority: 'low',
+    reliability: 'community',
+    candidateOnly: true,
+    requiresCrossCheck: true,
+    keywords: ['camera', 'HAL', 'Android']
+  });
+
+  const items = parseRss(rss, redditSource);
+
+  assert.ok(items.length >= 1);
+  const candidate = items[0];
+  assert.equal(candidate.community_signal, true);
+  assert.equal(candidate.community_signal_source, 'reddit');
+  assert.equal(candidate.community_signal_role, 'candidate_discovery');
+  assert.equal(candidate.reddit_subreddit, 'androiddev');
+  assert.equal(candidate.candidate_only, true);
+  assert.ok(['watchlist', 'exclude'].includes(candidate.finalSelectionEligibility));
+  assert.equal(['main', 'short'].includes(candidate.finalSelectionEligibility), false);
+  assert.equal(candidate.source_quality.main_article_source_allowed, false);
+});
+
+test('non-reddit candidates are not marked as community signals', () => {
+  const candidate = normalizeCandidate(raw());
+
+  assert.equal(candidate.community_signal, false);
+  assert.equal(candidate.community_signal_source, undefined);
+});

@@ -155,6 +155,30 @@ function sourceObject(candidate = {}) {
   return objectValue(candidate.source);
 }
 
+function isRedditCandidate(candidate = {}) {
+  return lower(candidate.community_signal_source) === 'reddit' ||
+    lower(candidate.source_id || candidate.sourceId).startsWith('reddit-');
+}
+
+function isCommunitySignalCandidate(candidate = {}) {
+  return candidate.community_signal === true || isRedditCandidate(candidate);
+}
+
+function redditCrossChecked(candidate = {}, sourceQuality = {}) {
+  return sourceQuality.cross_check_status === 'required_satisfied' ||
+    candidate.primary_confirmation === true ||
+    candidate.cross_check_status === 'required_satisfied';
+}
+
+function redditOnlyBlocked(candidate = {}, sourceQuality = {}) {
+  if (sourceQuality.main_article_source_allowed === true) return false;
+  if (redditCrossChecked(candidate, sourceQuality)) return false;
+  const blockers = ensureArray(sourceQuality.main_article_source_blockers);
+  return blockers.includes('candidate_only_without_primary_confirmation') ||
+    blockers.includes('cross_check_required_but_missing') ||
+    blockers.includes('community_signal_primary_source_disallowed');
+}
+
 function genericNoiseCandidate(candidate = {}, source = {}) {
   const haystack = [
     candidate.relevance_bucket,
@@ -629,7 +653,11 @@ function finalizeState(state) {
     conditional_source_blocked_count: 0,
     unknown_source_quality_count: 0,
     source_quality_field_drift_count: 0,
-    legacy_source_quality_warning_count: 0
+    legacy_source_quality_warning_count: 0,
+    community_signal_count: 0,
+    reddit_candidate_count: 0,
+    reddit_cross_checked_count: 0,
+    reddit_only_blocked_count: 0
   };
   const selectedUrls = new Set(state.selectedUrls);
   const excludedUrls = new Set();
@@ -685,6 +713,12 @@ function finalizeState(state) {
       metrics.source_quality_field_drift_count += drift.length;
       if (!candidate.source_quality || typeof candidate.source_quality !== 'object') {
         metrics.legacy_source_quality_warning_count += 1;
+      }
+      if (isCommunitySignalCandidate(candidate)) metrics.community_signal_count += 1;
+      if (isRedditCandidate(candidate)) {
+        metrics.reddit_candidate_count += 1;
+        if (redditCrossChecked(candidate, sourceQuality)) metrics.reddit_cross_checked_count += 1;
+        if (redditOnlyBlocked(candidate, sourceQuality)) metrics.reddit_only_blocked_count += 1;
       }
     }
 
@@ -889,6 +923,10 @@ function buildSourceEffectivenessReport(options = {}) {
     unknown_source_quality_count: sources.reduce((sum, source) => sum + source.unknown_source_quality_count, 0),
     source_quality_field_drift_count: sources.reduce((sum, source) => sum + source.source_quality_field_drift_count, 0),
     legacy_source_quality_warning_count: sources.reduce((sum, source) => sum + source.legacy_source_quality_warning_count, 0),
+    community_signal_count: sources.reduce((sum, source) => sum + source.community_signal_count, 0),
+    reddit_candidate_count: sources.reduce((sum, source) => sum + source.reddit_candidate_count, 0),
+    reddit_cross_checked_count: sources.reduce((sum, source) => sum + source.reddit_cross_checked_count, 0),
+    reddit_only_blocked_count: sources.reduce((sum, source) => sum + source.reddit_only_blocked_count, 0),
     recommendation_counts: RECOMMENDATION_ORDER.map(recommendation => ({
       recommendation,
       count: sources.filter(source => source.recommendation === recommendation).length
@@ -984,6 +1022,27 @@ function renderSourceEffectivenessMarkdown(report) {
         ...countObjectRows(report.summary.source_quality_status_summary).map(item => ['source_quality_status', item.key, item.count]),
         ...countObjectRows(report.summary.source_quality_blocker_summary).map(item => ['blocker', item.key, item.count])
       ]
+    ),
+    '',
+    '## Community signals',
+    '',
+    `- Community-signal candidates: ${report.summary.community_signal_count || 0}`,
+    `- Reddit candidates: ${report.summary.reddit_candidate_count || 0}`,
+    `- Reddit cross-checked: ${report.summary.reddit_cross_checked_count || 0}`,
+    `- Reddit-only blocked (no primary confirmation): ${report.summary.reddit_only_blocked_count || 0}`,
+    '',
+    markdownTable(
+      ['Source', 'Community', 'Reddit', 'Cross-checked', 'Reddit-only blocked'],
+      sources
+        .filter(source => source.community_signal_count > 0 || source.reddit_candidate_count > 0)
+        .sort(sourceSort)
+        .map(source => [
+          source.source_id,
+          source.community_signal_count,
+          source.reddit_candidate_count,
+          source.reddit_cross_checked_count,
+          source.reddit_only_blocked_count
+        ])
     ),
     '',
     '## Top Effective Sources',

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>r/androiddev search: camera hal</title>
+  <link href="https://www.reddit.com/r/androiddev/search.rss?q=camera" rel="self" />
+  <updated>2026-05-05T10:00:00Z</updated>
+  <entry>
+    <title>Anyone debugging Camera HAL stream config on Pixel?</title>
+    <link href="https://www.reddit.com/r/androiddev/comments/abc123/camera_hal_stream_config/" />
+    <updated>2026-05-05T10:00:00Z</updated>
+    <published>2026-05-05T10:00:00Z</published>
+    <summary>Community discussion thread about Camera HAL buffer and metadata behavior on Android devices. No official confirmation linked.</summary>
+  </entry>
+</feed>
