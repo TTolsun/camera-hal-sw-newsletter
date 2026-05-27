@@ -130,6 +130,51 @@ test('manual candidate writer creates canonical and compatibility payloads with 
   assert.equal(readJson(rawCandidateManifestPath(root, date)).artifact_hash, result.manifest.artifact_hash);
 });
 
+test('manual candidate writer builds an approved collection intent from manual_source_urls', () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const payload = candidatePayload();
+
+  const result = writeManualCandidateArtifacts({
+    root,
+    date,
+    payload,
+    sourceCount: 2,
+    manualSourceUrls: 'https://a.example/x ; https://b.example/y ; https://a.example/x',
+    generatedAt: payload.generated_at
+  });
+
+  const intent = readJson(collectionIntentPath(root, date));
+  assert.equal(intent.newsletter_date, date);
+  assert.deepEqual(intent.seed_urls.map(seed => seed.url), [
+    'https://a.example/x',
+    'https://b.example/y'
+  ]);
+
+  assert.equal(result.manifest.collection_intent, 'content/collected-news/2026-05-16/collection-intent.json');
+  assert.equal(result.manifest.collection_intent_status, 'approved');
+  assert.match(result.manifest.collection_intent_hash, /^[0-9a-f]{64}$/);
+  assert.equal(result.manifest.seed_url_count, 2);
+  assert.equal(result.manifest.keyword_hint_count, 0);
+});
+
+test('manual candidate writer rejects combining manual_source_urls with collection_intent_path', () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+
+  assert.throws(
+    () => writeManualCandidateArtifacts({
+      root,
+      date,
+      payload: candidatePayload(),
+      sourceCount: 1,
+      manualSourceUrls: 'https://a.example/x',
+      collectionIntentPath: 'content/collected-news/2026-05-16/collection-intent.json'
+    }),
+    /mutually exclusive/
+  );
+});
+
 test('candidate artifact validation distinguishes valid, missing, mismatch, and llm_used failures', () => {
   const root = tempRoot();
   const date = '2026-05-16';

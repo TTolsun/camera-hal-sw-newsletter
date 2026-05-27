@@ -1202,6 +1202,7 @@ async function main() {
     date,
     payload: candidatePayload,
     sourceCount: sources.length,
+    manualSourceUrls: process.env.NEWSROOM_MANUAL_SOURCE_URLS || '',
     collectionIntentPath: process.env.NEWSROOM_COLLECTION_INTENT_PATH || '',
     generatedAt,
     workflow: 'manual-source-collection-pr'

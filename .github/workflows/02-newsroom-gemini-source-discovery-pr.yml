@@ -8,14 +8,6 @@ on:
         required: false
         default: ""
         type: string
-      enable_gemini_source_discovery:
-        description: "Enable #149 Gemini source discovery engine."
-        required: false
-        default: "false"
-        type: choice
-        options:
-          - "false"
-          - "true"
       llm_provider:
         description: "LLM provider override for source discovery manual runs. Current code default: Gemini. Choices: default(code default), gemini, openapi(reserved fail-fast), internal."
         required: false
@@ -42,7 +34,7 @@ jobs:
 
     env:
       NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
-      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: ${{ github.event.inputs.enable_gemini_source_discovery || 'false' }}
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: "true"
       LLM_PROVIDER: ${{ github.event.inputs.llm_provider || 'default' }}
 
     steps:
@@ -90,7 +82,7 @@ jobs:
       - name: Validate newsroom source discovery boundary
         run: npm run validate:config
 
-      - name: Run disabled pass-through or Gemini source discovery
+      - name: Run Gemini source discovery
         id: source-discovery
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}

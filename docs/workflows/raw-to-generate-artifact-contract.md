@@ -8,7 +8,7 @@
 
 ### Collection Intent Approval Boundary
 
-Stage 1은 seed URL과 `keyword_hints`를 직접 workflow input list로 받지 않습니다. `workflow_dispatch` input은 `collection_intent_path`만 허용하고, 승인된 intent는 canonical `content/collected-news/<date>/collection-intent.json`로 normalize됩니다. Seed input이 없으면 empty intent file을 만들지 않습니다.
+Stage 1의 `workflow_dispatch` seed input은 `manual_source_urls`입니다. `;`로 구분한 http/https URL list만 받아 first-seen dedupe 후 stable `seed_id`를 부여하고, 승인된 intent는 canonical `content/collected-news/<date>/collection-intent.json`로 normalize됩니다. newline이나 비-http(s) URL은 fail-fast로 거절합니다. `manual_source_urls`가 비어 있으면 기존 canonical `collection-intent.json`이 있을 때만 사용하고, seed input이 없으면 empty intent file을 만들지 않습니다.
 
 `raw-candidate-manifest.json`은 승인된 intent가 있을 때만 다음 필드를 기록합니다.
 
