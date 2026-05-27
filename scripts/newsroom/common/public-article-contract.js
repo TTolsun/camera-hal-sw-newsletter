@@ -101,20 +101,6 @@ function compactText(value) {
   return text(value).replace(/\s+/g, ' ').trim();
 }
 
-function publicSafeText(value) {
-  return compactText(value)
-    .replace(/\bTooling Watch \/ Fallback:\s*/gi, '')
-    .replace(/\bFallback\b/gi, 'Watch')
-    .replace(/\bReview-only\b/gi, '참고 동향')
-    .replace(/\bquality gate\b/gi, 'quality review')
-    .replace(/자동 정상 발행 기준/g, '검토 기준')
-    .replace(/자동 발행 기준/g, '검토 기준')
-    .replace(/편집자 확인 후 merge/g, '검토')
-    .replace(/merge 발행/g, '발행')
-    .replace(/\bcandidate\b/gi, 'source item')
-    .trim();
-}
-
 function normalizePublicSourceRole(value) {
   const role = compactText(value);
   if (!role) return '';
@@ -363,16 +349,6 @@ function publicProseLeakageIssues(value, label = 'public text') {
   return issues;
 }
 
-function hasInternalPublicTerm(value) {
-  return publicProseLeakageIssues(value).length > 0;
-}
-
-function fallbackLeadText(sourceText, headline) {
-  const fallback = `${headline || 'Camera HAL 관련 소식'}은 공개 출처가 확인한 범위 안에서 Camera HAL 독자가 참고할 만한 동향으로 정리했습니다.`;
-  if (!sourceText || hasInternalPublicTerm(sourceText)) return fallback;
-  return publicSafeText(sourceText);
-}
-
 function normalizeStringArray(value) {
   const values = Array.isArray(value) ? value : [value];
   const seen = new Set();
@@ -386,10 +362,6 @@ function normalizeStringArray(value) {
     output.push(normalized);
   }
   return output;
-}
-
-function normalizePublicSafeStringArray(value) {
-  return normalizeStringArray(value).map(publicSafeText).filter(Boolean);
 }
 
 function isPlainObject(value) {
@@ -624,28 +596,6 @@ function sourceLinkIssues(source = {}, index = 0, options = {}) {
   return issues;
 }
 
-function sourceLinksFromSection(section = {}) {
-  return ensureArray(section.sources)
-    .map(source => normalizeSourceLink({
-      title: publicSafeText(source?.title || source?.url),
-      url: source?.url,
-      source_role: 'primary'
-    }))
-    .filter(source => source && source.title && source.url && !publicUrlError(source.url));
-}
-
-function fallbackParagraphs(section = {}) {
-  const paragraphs = normalizePublicSafeStringArray([
-    section.background,
-    section.camera_hal_perspective || section.why_it_matters
-  ]);
-  if (paragraphs.length >= 2) return paragraphs.slice(0, 4);
-  return [
-    ...paragraphs,
-    ...buildBucketAwareFallbackParagraphs(section)
-  ].slice(0, 4);
-}
-
 function sectionBucket(section = {}) {
   return compactText(section.relevance_bucket || section.bucket || section.category);
 }
@@ -874,103 +824,7 @@ function normalizeEditorialStory(value = {}) {
   }, {});
 }
 
-function publicComponentText(section = {}) {
-  return publicSafeText(
-    section.api_or_component ||
-    section.apiOrComponent ||
-    section.component ||
-    section.category ||
-    section.headline ||
-    'Camera 관련 항목'
-  );
-}
-
-function buildToolingFallbackCheckpoints(section = {}) {
-  const headline = `${section.headline || section.category || ''}`;
-  if (/AI Studio/i.test(headline)) {
-    return [
-      'AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다.',
-      '이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.'
-    ];
-  }
-  return [
-    'native tooling이나 prototype 코드가 Camera API를 호출한다면, Camera 권한과 preview/capture 호출 흐름만 확인합니다.',
-    '이 소스는 production HAL runtime 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.'
-  ];
-}
-
-function buildCameraApiFallbackCheckpoints() {
-  return [
-    'CameraX preview가 다양한 화면 크기에서 aspect ratio와 rotation을 유지하는지 app/framework 레벨에서 확인합니다.',
-    '이 소스는 HAL API 변경을 직접 언급하지 않으므로, HAL/driver 변경 신호가 아니라 preview layout 회귀 가능성으로만 해석합니다.'
-  ];
-}
-
-function buildDirectHalFallbackCheckpoints(section = {}) {
-  const component = publicComponentText(section);
-  return [
-    `${component}가 request/result, stream configuration, buffer lifecycle 중 어떤 HAL 계약과 연결되는지 source 근거 안에서 확인합니다.`,
-    'source가 직접 뒷받침하지 않는 driver branch, vendor tag, pipeline 변경 주장은 분리합니다.'
-  ];
-}
-
-function buildLowImpactFallbackCheckpoints(section = {}) {
-  const component = publicComponentText(section);
-  return [
-    `${component}와 직접 연결된 공개 출처의 Camera API나 component 변화만 확인합니다.`,
-    'HAL/driver 변경 근거가 없으면 request/result나 vendor tag 변화로 해석하지 않습니다.'
-  ];
-}
-
-function buildBucketAwareFallbackParagraphs(section = {}) {
-  const bucket = sectionBucket(section);
-  const component = publicComponentText(section);
-  if (/cpp_ai_tooling|tooling|native/i.test(bucket)) {
-    return [
-      '이 항목은 Camera HAL runtime 변경이 아니라, Camera API를 사용하는 prototype/tooling 흐름을 이해하기 위한 참고 신호입니다.',
-      '독자에게 필요한 확인 범위는 Camera 권한, CameraX/Camera2 usage, build/test/debug workflow 수준에 머무릅니다.'
-    ];
-  }
-  if (/android_platform_camera_adjacent|android_camera_api|android_camera|multimedia|CameraX|Camera2/i.test(bucket)) {
-    return [
-      '이 항목은 HAL API 변경이 아니라, CameraX preview가 다양한 화면 조건에서 어떻게 동작하는지 확인할 때 참고할 app/framework 계층의 신호입니다.',
-      '확인 범위는 preview/capture behavior, rotation, crop, app compatibility처럼 앱에서 관찰 가능한 동작으로 제한합니다.'
-    ];
-  }
-  if (/direct|camera_driver|image_pipeline|direct_aosp_camera|camera_stack/i.test(bucket)) {
-    return [
-      `${component}는 공개 출처가 직접 뒷받침하는 범위 안에서만 HAL runtime 검증 후보로 다룹니다.`,
-      'request/result, stream, buffer, metadata 표현은 source가 해당 계약을 실제로 말할 때만 사용합니다.'
-    ];
-  }
-  return [
-    `${component}는 공개 출처가 확인한 Camera API나 component 변화 범위 안에서만 해석합니다.`,
-    '직접 HAL/driver 근거가 없으면 vendor pipeline 영향으로 확대하지 않습니다.'
-  ];
-}
-
-function fallbackCheckpoints(section = {}) {
-  const actions = normalizePublicSafeStringArray(section.action_items)
-    .filter(item => !/source URL|published date|Publication|Direct HAL behavior claim|watch\/supporting context|다음 issue|후속 release note/i.test(item));
-  if (actions.length >= 2) return actions;
-  const bucket = sectionBucket(section);
-  let generated;
-  if (/cpp_ai_tooling|tooling|native/i.test(bucket)) {
-    generated = buildToolingFallbackCheckpoints(section);
-  } else if (/android_platform_camera_adjacent|android_camera_api|android_camera|multimedia|CameraX|Camera2/i.test(bucket)) {
-    generated = buildCameraApiFallbackCheckpoints(section);
-  } else if (/direct|camera_driver|image_pipeline|direct_aosp_camera|camera_stack/i.test(bucket)) {
-    generated = buildDirectHalFallbackCheckpoints(section);
-  } else {
-    generated = buildLowImpactFallbackCheckpoints(section);
-  }
-  return [
-    ...actions,
-    ...generated
-  ].slice(0, 3);
-}
-
-function publicArticleForSection(section = {}, { allowLegacyFallback = true, issue = {}, requireStoryContract = false } = {}) {
+function publicArticleForSection(section = {}, { issue = {}, requireStoryContract = false } = {}) {
   const raw = isPlainObject(section.public_article) ? section.public_article : {};
   const storyState = storyContractMarkers(issue, section, { requireStoryContract });
   const sourceLinks = ensureArray(raw.source_links)
@@ -992,20 +846,6 @@ function publicArticleForSection(section = {}, { allowLegacyFallback = true, iss
     normalized.decision_metadata = normalizeDecisionMetadata(raw.decision_metadata, section, issue);
   }
 
-  if (!allowLegacyFallback) return normalized;
-
-  if (!normalized.headline) normalized.headline = publicSafeText(section.headline || section.category || 'Camera HAL 관련 소식');
-  if (!normalized.lead) normalized.lead = fallbackLeadText(section.what_changed || section.summary || section.evidence_summary, normalized.headline);
-  if (normalized.body_paragraphs.length < 2) normalized.body_paragraphs = fallbackParagraphs(section);
-  if (!normalized.camera_hal_takeaway) {
-    normalized.camera_hal_takeaway = publicSafeText(section.camera_hal_perspective || section.why_it_matters || 'Camera HAL / Driver 관점의 직접 영향은 공개 출처가 확인한 범위에서만 해석합니다.');
-  }
-  if (normalized.reader_checkpoints.length === 0) normalized.reader_checkpoints = fallbackCheckpoints(section);
-  if (normalized.source_links.length === 0) normalized.source_links = sourceLinksFromSection(section);
-  if (storyEnabled && !normalized.source_subtitle) {
-    const firstSource = normalized.source_links[0] || ensureArray(section.sources)[0] || {};
-    normalized.source_subtitle = publicSafeText(firstSource.title || firstSource.publisher || section.category || normalized.headline);
-  }
   return normalized;
 }
 
@@ -1254,13 +1094,10 @@ function mergePublicArticlesFromLlmSections(baseSections = [], llmSections = [],
   for (let index = 0; index < base.length; index += 1) {
     if (usedBaseIndexes.has(index)) continue;
     if (publicArticleIsValid(base[index])) continue;
-    base[index].public_article = publicArticleForSection(base[index]);
-    if (!publicArticleIsValid(base[index])) {
-      throw publicArticleMergeError('missing_llm_section_public_article_invalid', 'Missing LLM section could not be repaired with fallback public_article.', {
-        base_index: index,
-        base_section: sectionMergeLabel(base[index])
-      });
-    }
+    throw publicArticleMergeError('missing_llm_section_public_article_invalid', 'Missing LLM section public_article is invalid; refusing to synthesize public prose.', {
+      base_index: index,
+      base_section: sectionMergeLabel(base[index])
+    });
   }
 
   return base;
@@ -1285,7 +1122,7 @@ function mergePublicArticleFromLlm(baseSection = {}, llmSection = {}, capsule = 
       delete merged[field];
     }
   }
-  merged.public_article = publicArticleForSection(merged, { allowLegacyFallback: false });
+  merged.public_article = publicArticleForSection(merged);
   const sourceIssues = publicSourceLinkMergeIssues(merged);
   if (sourceIssues.length > 0) {
     throw publicArticleMergeError('invalid_public_source_links', 'LLM public_article source_links failed provenance validation.', {
@@ -1409,7 +1246,6 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
     issues.push({ index: index + 1, headline, type: 'unexpected_public_article_keys', keys: unexpected });
   }
   const normalized = publicArticleForSection(section, {
-    allowLegacyFallback: false,
     issue,
     requireStoryContract: storyState.required
   });

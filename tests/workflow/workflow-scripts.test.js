@@ -57,13 +57,7 @@ const {
   resolveReviewableArtifacts
 } = require('../../scripts/resolve-reviewable-artifacts');
 const {
-  buildFallbackPublicIssue,
-  sectionDuplicateReason
-} = require('../../scripts/newsroom/generate/fallback-public-issue');
-const {
-  ensurePublicNewsletterArtifacts,
-  generateFallbackPublicHeadlineOverrides,
-  writeFallbackFailureDiagnostics
+  ensurePublicNewsletterArtifacts
 } = require('../../scripts/ensure-public-newsletter-artifacts');
 const {
   main: annotatePublicationQualityMain,
@@ -521,6 +515,21 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
           action_items: ['Run Camera ITS smoke tests.', 'Check stream/buffer compatibility.'],
           team_share_points: 'Camera team should review compatibility impact.'
         },
+        public_article: {
+          headline: 'CameraX release note',
+          lead: 'CameraX release note는 Camera HAL 독자에게 날짜가 있는 app-framework 호환성 확인 신호를 제공합니다.',
+          body_paragraphs: [
+            '이 fixture release note는 renderer와 readiness 테스트에서 공식 Android camera 근거로 취급됩니다.',
+            '공개 해석 범위는 CameraX 호환성, Camera ITS smoke test, stream configuration, metadata 확인으로 제한합니다.'
+          ],
+          camera_hal_takeaway: '이 항목은 app-framework 검증 트리거로만 다루고, 직접 Camera HAL API 변경 근거로 보지 않습니다.',
+          reader_checkpoints: ['Camera ITS smoke test를 실행합니다.', 'stream/buffer 호환성을 확인합니다.'],
+          source_links: [{
+            title: 'Android Developers Camera',
+            url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.0.0',
+            source_role: 'primary'
+          }]
+        },
         sources: [
           {
             title: 'Android Developers Camera',
@@ -715,10 +724,10 @@ function regressionSection(item, overrides = {}) {
   if (!Object.prototype.hasOwnProperty.call(overrides, 'public_article')) {
     value.public_article = {
       headline: value.headline,
-      lead: `${value.headline} gives Camera HAL readers a source-backed validation signal.`,
+      lead: `${value.headline}는 Camera HAL 독자에게 출처 기반 검증 신호를 제공합니다.`,
       body_paragraphs: [
-        `${value.headline} was selected from dated source evidence for Camera HAL readers.`,
-        'The practical interpretation stays limited to stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.'
+        `${value.headline}는 날짜가 있는 출처 근거를 바탕으로 선택된 항목입니다.`,
+        '실무 해석은 stream, buffer, metadata, Camera ITS, latency, frame-drop 검증 범위로 제한합니다.'
       ],
       camera_hal_takeaway: value.camera_hal_perspective,
       reader_checkpoints: value.action_items,
@@ -2704,7 +2713,6 @@ function writeMinimalEvidencePackSummary(root, date, overrides = {}) {
     quality_hard_failures: ['source-integrity'],
     fact_check_must_fix: [],
     repair_failures: [],
-    fallback_builder_failures: [],
     candidate_shortage_hints: [],
     source_gap_warnings: [],
     missing_artifacts: [],
@@ -2824,7 +2832,6 @@ function withMinimalEvidencePackSections(body) {
     '- Quality hard failures: source-integrity',
     '- Fact-check must-fix: needs source binding',
     '- Repair failures: none',
-    '- Fallback builder failures: none',
     '- Candidate shortage hints: none',
     '- Source gap warnings: none',
     '- Missing artifacts: none',
@@ -3357,7 +3364,6 @@ test('newsroom PR body omits detailed Evidence Pack summary sections', () => {
       quality_hard_failures: ['source-integrity'],
       fact_check_must_fix: [{ location: 'CameraX', problem: 'needs source binding' }],
       repair_failures: ['section_count_drift'],
-      fallback_builder_failures: [],
       candidate_shortage_hints: ['primary camera stack shortage'],
       source_gap_warnings: ['source gap on selected-1'],
       missing_artifacts: ['content/newsroom/2026-05-10/fact-check-report.json'],
@@ -3600,7 +3606,6 @@ test('validate-pr-body checks Evidence Pack diagnostics for needs-fix bodies', (
       quality_hard_failures: ['source-integrity'],
       fact_check_must_fix: ['needs source binding'],
       repair_failures: [],
-      fallback_builder_failures: [],
       candidate_shortage_hints: [],
       source_gap_warnings: [],
       missing_artifacts: [],
@@ -3684,31 +3689,6 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
   writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
     candidates: [finalCandidate, reserveCandidate, excludedCandidate, reportOnlyCandidate]
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), {
-    demoted_articles: [
-      {
-        headline: 'GCC 16.1',
-        reason: 'HAL 연결 근거가 약해 demote합니다.',
-        sources: [{ title: 'ISO C++ Blog', url: 'https://isocpp.org/blog/2026/05/gcc-16.1' }]
-      }
-    ],
-    rejected_candidates: [
-      {
-        title: 'Generic AI camera post',
-        url: 'https://example.com/generic-ai-camera',
-        source: 'Tech Blog',
-        relevance_bucket: 'generic_tech_watchlist',
-        reason: 'generic AI noise'
-      }
-    ],
-    merged_articles: [
-      {
-        headline: 'CameraX alpha release',
-        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#alpha'],
-        reason: 'same source cluster'
-      }
-    ]
-  });
   writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
     status: 'NEEDS_FIX',
     deductions: [
@@ -3788,12 +3768,6 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
   assert.doesNotMatch(finalSection, /quality_fail/);
   assert.match(body, /Glaze 7\.2 C\+\+ reflection/);
   assert.match(body, /\| 1 \| `cand_\d{3}` \| reserve \|/);
-  assert.match(body, /GCC 16\.1/);
-  assert.match(body, /demoted/);
-  assert.match(body, /Generic AI camera post/);
-  assert.match(body, /rejected/);
-  assert.match(body, /CameraX alpha release/);
-  assert.match(body, /merged/);
   assert.match(body, /Report only HAL evidence/);
   assert.match(body, /quality_fail/);
   assert.match(body, /quality-report\.json/);
@@ -3808,138 +3782,6 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
   assert.match(body, /unmatched 품질\/팩트체크 연결 항목: 1/);
   assert.match(body, /\|\s*\d+\s*\| unmatched \| Unmatched article \| fact-check-report\.json \| source_gap \|/);
   assert.equal(validatePrBodyText(body, { date }).ok, true);
-});
-
-test('newsroom PR body candidate traceability applies fallback status overrides safely', () => {
-  const root = tempRoot();
-  const date = '2026-05-10';
-  const longUrl = 'https://example.com/releases/camera-hal-driver-update-(very-long-segment)-with-query?param=alpha|beta gamma<delta>&tail=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  const sanitizedLongUrl = 'https://example.com/releases/camera-hal-driver-update-(very-long-segment)-with-query?param=alpha%7Cbeta%20gamma%3Cdelta%3E&tail=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  const finalCandidate = traceCandidate({
-    title: 'Final camera HAL release',
-    url: longUrl,
-    article_url: longUrl,
-    final_selected: true,
-    primary_selected: true,
-    selected_for_editor: true
-  });
-  const primaryDemoted = traceCandidate({
-    title: 'Primary HAL weak evidence',
-    url: 'https://example.com/primary-hal-weak-evidence',
-    article_url: 'https://example.com/primary-hal-weak-evidence',
-    source_name: 'HAL Review',
-    primary_selected: true,
-    selected_for_editor: true,
-    selection_exclusion_reason: 'reporter initially selected this candidate'
-  });
-  const reserveRejected = traceCandidate({
-    title: 'Reserve HAL follow-up',
-    url: 'https://example.com/reserve-hal-follow-up',
-    article_url: 'https://example.com/reserve-hal-follow-up',
-    source_name: 'Reserve Review',
-    reserve_candidate: true,
-    selection_exclusion_reason: 'reserve candidate before fallback review'
-  });
-  const excludedMerged = traceCandidate({
-    title: 'Excluded duplicate CameraX note',
-    url: 'https://example.com/excluded-duplicate-camerax',
-    article_url: 'https://example.com/excluded-duplicate-camerax',
-    source_name: 'CameraX Notes',
-    main_eligible: false,
-    finalSelectionEligibility: 'exclude',
-    final_exclusion_reasons: ['duplicate source before fallback']
-  });
-
-  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), {
-    date,
-    candidates: [finalCandidate, primaryDemoted, reserveRejected, excludedMerged]
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
-    selected_articles: [finalCandidate],
-    primary_selected_articles: [primaryDemoted],
-    reserve_candidates: [reserveRejected],
-    excluded_candidates: [excludedMerged]
-  });
-  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
-    candidates: [finalCandidate, primaryDemoted, reserveRejected, excludedMerged]
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), {
-    demoted_articles: [
-      {
-        headline: primaryDemoted.title,
-        reason: 'fallback demoted after source gap review',
-        sources: [{ title: primaryDemoted.source_name, url: primaryDemoted.url }]
-      }
-    ],
-    rejected_candidates: [
-      {
-        title: finalCandidate.title,
-        url: finalCandidate.url,
-        source: finalCandidate.source_name,
-        reason: 'fallback attempted final override'
-      },
-      {
-        title: reserveRejected.title,
-        url: reserveRejected.url,
-        source: reserveRejected.source_name,
-        reason: 'fallback rejected duplicate_url after repair'
-      }
-    ],
-    merged_articles: [
-      {
-        headline: excludedMerged.title,
-        source_urls: [excludedMerged.url],
-        reason: 'same source cluster merged into final article'
-      }
-    ]
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
-    status: 'NEEDS_FIX',
-    deductions: [],
-    article_results: [
-      {
-        index: 1,
-        headline: primaryDemoted.title,
-        status: 'FAIL',
-        sources: [{ url: primaryDemoted.url }],
-        hard_fail_reasons: ['source-integrity']
-      }
-    ]
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
-    status: 'PASS',
-    must_fix: [],
-    source_gaps: [],
-    source_gap_count: 0
-  });
-
-  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
-  const finalSection = body.slice(body.indexOf('### 최종 선택 기사'), body.indexOf('### Reserve 후보'));
-  const reserveSection = body.slice(body.indexOf('### Reserve 후보'), body.indexOf('### 제외/강등/거절된 주요 후보'));
-  const notableSection = body.slice(body.indexOf('### 제외/강등/거절된 주요 후보'), body.indexOf('### 품질/팩트체크 연결'));
-
-  assert.ok(body.includes(`[Final camera HAL release](<${sanitizedLongUrl}>)`));
-  assert.match(finalSection, /Final camera HAL release/);
-  assert.match(finalSection, /final_selected/);
-  assert.doesNotMatch(finalSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*rejected\s*\|/);
-  assert.doesNotMatch(reserveSection, /Reserve HAL follow-up/);
-  assert.match(notableSection, /\| # \| Candidate ID \| 상태 \| 원문 기사 \| 출처\/날짜 \| Bucket \| 점수 \| 사유 코드 \| 설명 \|/);
-  assert.match(notableSection, /Primary HAL weak evidence/);
-  assert.match(notableSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*demoted\s*\|[^\n]*Primary HAL weak evidence/);
-  assert.match(notableSection, /fallback demoted after source gap review/);
-  assert.match(notableSection, /source_gap/);
-  assert.match(notableSection, /Reserve HAL follow-up/);
-  assert.match(notableSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*rejected\s*\|[^\n]*Reserve HAL follow-up/);
-  assert.match(notableSection, /fallback rejected duplicate_url after repair/);
-  assert.match(notableSection, /duplicate_source/);
-  assert.match(notableSection, /Excluded duplicate CameraX note/);
-  assert.match(notableSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*merged\s*\|[^\n]*Excluded duplicate CameraX note/);
-  assert.match(notableSection, /merged_into_selected_article/);
-  assert.doesNotMatch(notableSection, /\|\s*\d+\s*\|\s*`cand_\d{3}`\s*\|\s*quality_fail\s*\|[^\n]*Primary HAL weak evidence/);
-  assert.equal(validatePrBodyText(body, { date }).ok, true);
-
-  const bodyWithBrokenLinkOutsideTrace = `${body}\n## 추가 메모\n\n| 설명 |\n| --- |\n| [깨진 링크](https://example.com |\n`;
-  assert.equal(validatePrBodyText(bodyWithBrokenLinkOutsideTrace, { date }).ok, true);
 });
 
 test('newsroom PR body candidate traceability tolerates missing and malformed artifacts', () => {
@@ -4248,98 +4090,15 @@ test('ensure CLI keeps zero-candidate shortage diagnostics-only without editor d
 
   assert.throws(
     () => ensurePublicNewsletterArtifacts({ root, date }),
-    /Fallback builder could not fill minimum main article count 1; only 0 article\(s\) available\./
+    /missing required public file: newsletters\/2026-05-11\/newsletter\.md/
   );
   const status = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
-  const diagnostics = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json'), 'utf8'));
 
   assert.equal(status.failure_kind, 'candidate_shortage_reviewable');
-  assert.equal(diagnostics.status, 'FAILED');
-  assert.match(diagnostics.failure_reason, /only 0 article\(s\) available/);
   assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), false);
   assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), false);
   assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), false);
   assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), false);
-});
-
-test('fallback builder publishes fallback-only issue as disclosed fallback_public edition', () => {
-  const root = tempRoot();
-  const date = '2026-05-12';
-  const { rejectedCamera } = writeFallbackOnlyReviewableArtifacts(root, date);
-
-  const result = buildFallbackPublicIssue({ root, date });
-  const status = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
-  const quality = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), 'utf8'));
-  const newsletterData = JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters.json'), 'utf8'))[0];
-  const markdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
-  const html = fs.readFileSync(path.join(root, 'newsletters', date, 'index.html'), 'utf8');
-  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
-
-  assert.equal(rejectedCamera.relevance_bucket, 'direct_aosp_camera');
-  assert.equal(finalEditor.sections.every(section => section.relevance_bucket === 'cpp_ai_tooling_fallback'), true);
-  assert.equal(status.publication_mode, 'fallback_public');
-  assert.equal(status.homepage_visibility, 'visible_with_fallback_badge');
-  assert.equal(status.normal_public_ready, false);
-  assert.equal(status.automatic_publish_ready, false);
-  assert.equal(status.public_artifact_ready, true);
-  assert.equal(status.fallback_public_ready, true);
-  assert.equal(status.fallback_only, true);
-  assert.equal(status.camera_anchor_count, 0);
-  assert.equal(status.homepage_badge, 'Tooling Watch Edition');
-  assert.equal(status.public_newsletter_ready, true);
-  assert.equal(status.final_publish_ready, false);
-  assert.equal(status.publish_gate_passed, false);
-  assert.equal(status.quality_status, 'PASS');
-  assert.equal(status.review_publication_ready, true);
-  assert.equal(status.homepage_visible_after_merge, true);
-  assert.equal(quality.publication_mode, 'fallback_public');
-  assert.equal(quality.status, 'PASS');
-  assert.equal(quality.content_quality_score, quality.score);
-  assert.equal(quality.camera_relevance_score, 0);
-  assert.match(quality.publication_mode_decision, /fallback_public/);
-  assert.equal(newsletterData.publication_mode, 'fallback_public');
-  assert.equal(newsletterData.homepage_visibility, 'visible_with_fallback_badge');
-  assert.equal(newsletterData.homepage_badge, 'Tooling Watch Edition');
-  assert.equal(newsletterData.camera_anchor_count, 0);
-  assert.deepEqual(newsletterData.tags, ['Tooling Watch Edition', 'Tooling Watch']);
-  assert.match(markdown, /Tooling Watch Edition/);
-  assert.match(markdown, /1개 항목/);
-  assert.doesNotMatch(markdown, /세 가지 항목/);
-  assert.match(html, /class="publication-notice"/);
-  assert.match(html, /Tooling Watch Edition/);
-  assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);
-
-  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
-    root,
-    date,
-    changedArtifacts: requiredPublicFiles(date)
-  }));
-  assert.equal(outputs.publication_mode, 'fallback_public');
-  assert.equal(outputs.homepage_visibility, 'visible_with_fallback_badge');
-  assert.equal(outputs.fallback_only, 'true');
-  assert.equal(outputs.camera_anchor_count, '0');
-  assert.equal(outputs.homepage_badge, 'Tooling Watch Edition');
-
-  const body = buildNewsroomPrBody({
-    root,
-    date,
-    validateOutcome: 'skipped',
-    changedArtifacts: requiredPublicFiles(date)
-  });
-  assert.match(body, /publication_mode: fallback_public/);
-  assert.match(body, /homepage_visibility: visible_with_fallback_badge/);
-  assert.match(body, /fallback_only: true/);
-  assert.match(body, /camera_anchor_count: 0/);
-  assert.match(body, /fallback_public_ready: true/);
-  assert.match(body, /homepage_badge: Tooling Watch Edition/);
-  assert.match(body, /hard block policy에서 downgrade policy로/);
-  const bodyValidation = validatePrBodyText(body);
-  assert.equal(bodyValidation.ok, true, JSON.stringify(bodyValidation, null, 2));
-
-  const hiddenFallbackStatus = body.replace(/fallback_only: true/g, 'fallback_only: false');
-  const validation = validatePrBodyText(hiddenFallbackStatus);
-  assert.equal(validation.ok, false);
-  assert.match(validation.errors.join('\n'), /fallback public PR body must include fallback_only=true/);
 });
 
 test('publication mode uses final bound candidate bucket over stale section bucket', () => {
@@ -4455,7 +4214,7 @@ test('review-only public issue keeps review publication notice', () => {
   assert.doesNotMatch(`${markdownNotice}\n${htmlNotice}`, /Review-only|quality gate|guardrail|fallback|자동 정상 발행|편집자 확인 후 merge|merge해야/);
 });
 
-test('fallback public issue uses tooling perspective label', () => {
+test('fallback_public renderer uses tooling perspective label', () => {
   const date = '2026-05-14';
   const candidate = regressionCandidate({
     title: 'LLVM native sanitizer workflow',
@@ -4651,892 +4410,7 @@ test('reviewable artifact resolver does not treat FAILED status as a publish can
   assert.equal(outputs.review_only, 'false');
 });
 
-test('fallback builder recovers PR #39 shape with public files and preserve-first articles', () => {
-  const root = tempRoot();
-  const { date, editor } = writePr39LikeRegressionFixture(root);
-  const preserveSnapshots = editor.sections.slice(0, 2).map(section => ({
-    headline: section.headline,
-    category: section.category,
-    confirmed_facts: section.confirmed_facts,
-    camera_hal_perspective: section.camera_hal_perspective,
-    action_items: section.action_items,
-    source_candidate_hash: section.source_candidate_hash,
-    sourceUrl: section.sources[0].url
-  }));
-
-  const result = buildFallbackPublicIssue({ root, date });
-  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
-  const quality = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), 'utf8'));
-  const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
-  const publicMarkdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
-  const publicHtml = fs.readFileSync(path.join(root, 'newsletters', date, 'index.html'), 'utf8');
-
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
-  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), true);
-  assert.equal(finalEditor.sections.length, preserveSnapshots.length);
-  assert.equal(finalEditor.sections.some(section => section.headline === 'GCC 16.1'), false);
-  assert.equal(finalEditor.sections.some(section => /Glaze 7\.2/.test(section.headline)), false);
-  assert.doesNotMatch(publicMarkdown, /Glaze 7\.2 C\+\+26 Reflection/);
-  assert.doesNotMatch(
-    `${publicMarkdown}\n${publicHtml}`,
-    /HAL Signal Capsule|why_now|impact_axes|do_not_overstate|Review-only|quality gate|deterministic reconstruction|source-bound|Publication 전에|Direct HAL behavior claim/
-  );
-  assert.equal(quality.status, 'PASS');
-  assert.equal(result.status.publication_mode, 'review_only');
-  assert.equal(result.status.fallback_only, false);
-  assert.equal(result.status.camera_anchor_count, 2);
-  assert.equal(result.status.fallback_public_ready, false);
-  assert.equal(fallbackReport.demoted_articles[0].headline, 'GCC 16.1');
-  assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);
-
-  for (const snapshot of preserveSnapshots) {
-    const section = finalEditor.sections.find(item => item.source_candidate_hash === snapshot.source_candidate_hash);
-    assert.ok(section, `${snapshot.headline} must be preserved`);
-    assert.deepEqual(section.headline, snapshot.headline);
-    assert.deepEqual(section.category, snapshot.category);
-    assert.deepEqual(section.confirmed_facts, snapshot.confirmed_facts);
-    assert.deepEqual(section.camera_hal_perspective, snapshot.camera_hal_perspective);
-    assert.deepEqual(section.action_items, snapshot.action_items);
-    assert.deepEqual(section.sources[0].url, snapshot.sourceUrl);
-  }
-
-  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
-    root,
-    date,
-    changedArtifacts: requiredPublicFiles(date)
-  }));
-  assert.equal(outputs.public_newsletter_ready, 'true');
-  assert.equal(outputs.publication_mode, 'review_only');
-  assert.equal(outputs.fallback_only, 'false');
-  assert.equal(outputs.camera_anchor_count, '2');
-  assert.equal(outputs.has_publish_candidate, 'true');
-  assert.equal(outputs.public_newsletter_reason, 'ready');
-});
-
-test('fallback builder preserves original fact-check blocker diagnostics after rebuilding public issue', () => {
-  const root = tempRoot();
-  const { date } = writePr39LikeRegressionFixture(root);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
-    status: 'NEEDS_FIX',
-    must_fix: [{
-      location: 'GCC 16.1',
-      problem: 'Original article overstated Camera HAL impact.',
-      suggestion: 'Remove or demote the article.',
-      source_url: 'https://isocpp.org/blog/2026/04/gcc-16.1'
-    }],
-    source_gaps: ['GCC 16.1 lacks Camera HAL source support.'],
-    source_gap_count: 1,
-    final_comment: 'Original public issue was not safe.'
-  });
-
-  buildFallbackPublicIssue({ root, date });
-  buildFallbackPublicIssue({
-    root,
-    date,
-    publicArticleHeadlineGeneration: {
-      source: 'llm',
-      stage: 'fallback-public-title-editor',
-      override_count: 0,
-      reason: 'diagnostic-preservation-regression'
-    }
-  });
-
-  const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
-  const status = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
-  const quality = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), 'utf8'));
-  const factCheck = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), 'utf8'));
-
-  assert.equal(factCheck.status, 'PASS');
-  for (const artifact of [fallbackReport, status, quality]) {
-    assert.equal(artifact.original_fact_check_status, 'NEEDS_FIX');
-    assert.equal(artifact.original_must_fix_count, 1);
-    assert.equal(artifact.original_source_gap_count, 1);
-    assert.equal(artifact.fallback_public_issue_removed_blockers, true);
-    assert.equal(artifact.fallback_public_issue_removed_article_count > 0, true);
-    assert.equal(
-      artifact.review_publication_ready_reason,
-      '자동 발행 기준은 통과하지 못했지만 fallback public issue builder가 편집자 검토용 public newsletter 파일을 생성했습니다.'
-    );
-    assert.equal(
-      artifact.editor_review_reason,
-      'AI 자동 발행 기준을 통과하지 못했으므로 merge 발행 전에 편집자 검토가 필요합니다.'
-    );
-  }
-});
-
-test('fallback builder keeps editorial reviewable failure kind for unchanged public handoff', () => {
-  const root = tempRoot();
-  const { date } = writePr39LikeRegressionFixture(root);
-  const statusPath = path.join(root, 'content', 'newsroom', date, 'generation-status.json');
-  const tmpStatusPath = path.join(root, '.tmp', 'newsletter-generation-status.json');
-  const status = {
-    ...JSON.parse(fs.readFileSync(statusPath, 'utf8')),
-    status: 'NEEDS_FIX',
-    editor_semantic_validation: {
-      name: 'EditorSemanticValidationError',
-      field: 'sections.claims',
-      message: 'Editor output failed claim binding validation.'
-    }
-  };
-  writeJson(statusPath, status);
-  writeJson(tmpStatusPath, status);
-
-  buildFallbackPublicIssue({ root, date });
-
-  const nextStatus = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
-  assert.equal(nextStatus.failure_kind, 'editorial_reviewable');
-
-  const changedArtifacts = REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
-    .map(file => `content/newsroom/${date}/${file}`)
-    .concat(`content/newsroom/${date}/fallback-public-issue.json`);
-  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
-    root,
-    date,
-    changedArtifacts
-  }));
-
-  assert.equal(outputs.public_newsletter_ready, 'false');
-  assert.equal(outputs.review_pr_ready, 'true');
-  assert.equal(outputs.diagnostics_only, 'true');
-  assert.match(outputs.reviewable_artifact_reason, /failure_kind=editorial_reviewable/);
-  assert.match(outputs.reviewable_artifact_reason, /editorial_reject=none/);
-});
-
-test('fallback duplicate detection treats AndroidX Camera release anchors as release identity', () => {
-  const camerax14 = regressionCandidate({
-    title: 'CameraX 1.4.0-alpha07',
-    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07',
-    bucket: 'android_platform_camera_adjacent'
-  });
-  const camerax16 = regressionCandidate({
-    title: 'CameraX 1.6.1',
-    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
-    bucket: 'android_platform_camera_adjacent'
-  });
-  const anchorless = regressionCandidate({
-    title: 'CameraX release notes',
-    url: 'https://developer.android.com/jetpack/androidx/releases/camera',
-    bucket: 'android_platform_camera_adjacent'
-  });
-  const camerax14Localized = regressionCandidate({
-    title: 'CameraX 1.4.0-alpha07 localized',
-    url: 'https://developer.android.com/jetpack/androidx/releases/camera?hl=vi#1.4.0-alpha07',
-    bucket: 'android_platform_camera_adjacent'
-  });
-
-  assert.equal(sectionDuplicateReason(camerax16, [regressionSection(camerax14)]), '');
-  assert.equal(sectionDuplicateReason(camerax14, [regressionSection(camerax14)]), 'duplicate_url');
-  assert.equal(sectionDuplicateReason(camerax14Localized, [regressionSection(camerax14)]), 'duplicate_base_url');
-  assert.equal(sectionDuplicateReason(anchorless, [regressionSection(camerax14)]), 'duplicate_base_url');
-  assert.equal(sectionDuplicateReason(anchorless, [regressionSection(anchorless)]), 'duplicate_url');
-});
-
-test('fallback builder keeps CameraX source behavior in public article instead of generic preview framing', () => {
-  const root = tempRoot();
-  const { date, camerax14 } = writeRun25590436113LikeFallbackFixture(root, { date: '2026-05-24' });
-  const behavior = 'Fixed a compilation error "Cannot access class ListenableFuture" when using CameraX 1.6.0.';
-  const genericBehavior = 'CameraX / androidx.camera update.';
-  const candidate = {
-    ...camerax14,
-    title: 'CameraX Release Notes - CameraX 1.6.1',
-    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
-    version_or_release: 'CameraX 1.6.1',
-    component: 'CameraX / androidx.camera',
-    api_or_component: 'CameraX / androidx.camera',
-    summary: genericBehavior,
-    behavior_change: genericBehavior,
-    source_extraction: {
-      ...camerax14.source_extraction,
-      release: {
-        ...camerax14.source_extraction.release,
-        version: 'CameraX 1.6.1',
-        date: '2026-05-06',
-        component: 'CameraX / androidx.camera',
-        sections: [{
-          category: 'bug_fixes',
-          heading: 'Bug Fixes',
-          items: [{
-            text: behavior,
-            source_text: behavior,
-            links: [],
-            issue_ids: ['497571473'],
-            artifact_names: ['androidx.camera:camera-core']
-          }]
-        }]
-      }
-    }
-  };
-
-  for (const relPath of [
-    ['content', 'newsroom', date, 'reporter-candidates.json'],
-    ['content', 'newsroom', date, 'article-capsules.json'],
-    ['content', 'newsroom', date, 'shortlisted-candidates.json'],
-    ['content', 'collected-news', date, 'candidates.json']
-  ]) {
-    const filePath = path.join(root, ...relPath);
-    const payload = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    const replace = value => Array.isArray(value)
-      ? value.map(item => item.source_candidate_hash === camerax14.source_candidate_hash ? candidate : item)
-      : value;
-    payload.candidates = replace(payload.candidates);
-    payload.selected_articles = replace(payload.selected_articles);
-    payload.reserve_candidates = replace(payload.reserve_candidates);
-    payload.selected_capsules = replace(payload.selected_capsules);
-    payload.reserve_capsules = replace(payload.reserve_capsules);
-    writeJson(filePath, payload);
-  }
-
-  const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
-  const editor = JSON.parse(fs.readFileSync(editorPath, 'utf8'));
-  editor.sections[0].headline = candidate.title;
-  editor.sections[0].what_changed = genericBehavior;
-  editor.sections[0].sources = [{ title: candidate.title, url: candidate.url }];
-  writeJson(editorPath, editor);
-
-  buildFallbackPublicIssue({ root, date });
-
-  const markdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
-  assert.match(markdown, /CameraX 1\.6\.1: ListenableFuture 컴파일 오류 수정/);
-  assert.match(markdown, /Cannot access class ListenableFuture/);
-  assert.match(markdown, /CameraX 1\.6\.0 사용 시 발생/);
-  assert.match(markdown, /AOSP Camera HAL에는 직접 영향이 확인되지 않았습니다/);
-  assert.doesNotMatch(markdown, /CameraX 1\.6\.1 업데이트: preview\/capture 호환성 확인/);
-  assert.doesNotMatch(markdown, /CameraX release note는 app\/framework 계층의 preview\/capture 호환성 검증 신호/);
-});
-
-test('fallback title helper asks LLM for source-bound headlines using article content', async () => {
-  const issue = {
-    sections: [{
-      source_candidate_hash: 'camerax-161',
-      source_candidate_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
-      headline: 'CameraX Release Notes - CameraX 1.6.1',
-      what_changed: 'Fixed a compilation error "Cannot access class ListenableFuture" when using CameraX 1.6.0.',
-      confirmed_facts: ['버전/릴리스: CameraX 1.6.1.', '관련 컴포넌트: CameraX / androidx.camera.'],
-      sources: [{
-        title: 'CameraX Release Notes - CameraX 1.6.1',
-        url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
-      }],
-      public_article: {
-        headline: 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정',
-        source_subtitle: 'Android Developers Latest Updates · CameraX 1.6.1',
-        lead: 'CameraX 1.6.1은 ListenableFuture 컴파일 오류를 수정한 패치입니다.',
-        body_paragraphs: ['AOSP Camera HAL에는 직접 영향이 확인되지 않았습니다.'],
-        camera_hal_takeaway: '빌드 안정성 패치로 확인합니다.',
-        reader_checkpoints: ['Gradle compile smoke test를 확인합니다.'],
-        source_links: [{
-          title: 'CameraX Release Notes - CameraX 1.6.1',
-          url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
-        }]
-      }
-    }]
-  };
-  const calls = [];
-  const result = await generateFallbackPublicHeadlineOverrides({
-    issue,
-    force: true,
-    llmCall: async (stage, systemInstruction, prompt, schema) => {
-      calls.push({ stage, systemInstruction, prompt, schema });
-      return {
-        headlines: [{
-          source_candidate_hash: 'camerax-161',
-          headline: 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정'
-        }]
-      };
-    }
-  });
-
-  assert.equal(result.used, true);
-  assert.equal(result.overrides['camerax-161'], 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정');
-  assert.equal(calls[0].stage, 'fallback-public-title-editor');
-  assert.match(calls[0].systemInstruction, /Do not copy the source title verbatim/);
-  assert.match(calls[0].prompt, /Cannot access class ListenableFuture/);
-  assert.match(calls[0].prompt, /AOSP Camera HAL/);
-  assert.match(calls[0].prompt, /Items without a stable key are ignored/);
-});
-
-test('fallback title helper ignores LLM headlines without stable source keys', async () => {
-  const issue = {
-    sections: [{
-      source_candidate_hash: 'camerax-161',
-      source_candidate_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
-      headline: 'CameraX Release Notes - CameraX 1.6.1',
-      sources: [{
-        title: 'CameraX Release Notes - CameraX 1.6.1',
-        url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
-      }],
-      public_article: {
-        headline: 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정',
-        body_paragraphs: ['CameraX 1.6.1은 ListenableFuture 컴파일 오류를 수정한 패치입니다.']
-      }
-    }, {
-      source_candidate_hash: 'libcamera-071',
-      source_candidate_url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html',
-      headline: 'libcamera v0.7.1',
-      sources: [{
-        title: 'libcamera v0.7.1',
-        url: 'https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html'
-      }],
-      public_article: {
-        headline: 'libcamera v0.7.1 릴리스',
-        body_paragraphs: ['libcamera v0.7.1 release note입니다.']
-      }
-    }]
-  };
-  const result = await generateFallbackPublicHeadlineOverrides({
-    issue,
-    force: true,
-    llmCall: async () => ({
-      headlines: [{
-        headline: '엉뚱하게 첫 번째 기사에 들어가면 안 되는 제목'
-      }]
-    })
-  });
-
-  assert.equal(result.used, false);
-  assert.equal(result.reason, 'no_valid_llm_headlines');
-  assert.deepEqual(result.overrides, {});
-});
-
-test('fallback title helper does not treat reserved openapi as missing credentials', async () => {
-  const issue = {
-    sections: [{
-      source_candidate_hash: 'camerax-161',
-      headline: 'CameraX Release Notes - CameraX 1.6.1',
-      evidence_summary: 'CameraX 1.6.1 release note.',
-      camera_hal_perspective: 'Use as source-bound validation context.',
-      action_items: ['Run a compile smoke test.'],
-      sources: [{
-        title: 'CameraX Release Notes - CameraX 1.6.1',
-        url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
-      }],
-      public_article: {
-        headline: 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정',
-        body_paragraphs: ['CameraX 1.6.1은 ListenableFuture 컴파일 오류를 수정한 패치입니다.']
-      }
-    }]
-  };
-  let called = false;
-  const result = await generateFallbackPublicHeadlineOverrides({
-    issue,
-    env: { LLM_PROVIDER: 'openapi' },
-    llmCall: async () => {
-      called = true;
-      return {
-        headlines: [{
-          source_candidate_hash: 'camerax-161',
-          headline: 'CameraX 1.6.1: ListenableFuture 컴파일 오류 수정'
-        }]
-      };
-    }
-  });
-
-  assert.equal(called, true);
-  assert.equal(result.used, true);
-});
-
-test('fallback builder recovers run 25590436113 shape with source-bound anchor candidates', () => {
-  const root = tempRoot();
-  const { date, camerax14, camerax16, camerax13, libcamera, gcc } = writeRun25590436113LikeFallbackFixture(root);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'background-context.json'), {
-    schema_version: 1,
-    date,
-    background_contexts: [{
-      source_candidate_hash: camerax13.source_candidate_hash,
-      background_context: 'API supplied context wins over static fallback for CameraX validation background.',
-      background_basis: 'supplied capsule and model knowledge',
-      background_confidence: 'medium',
-      background_warnings: []
-    }]
-  });
-
-  const result = buildFallbackPublicIssue({ root, date });
-  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
-  const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
-  const status = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
-
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
-  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), true);
-  assert.equal(finalEditor.sections.length, articlePolicy.mainArticleCount.min);
-  assert.deepEqual(
-    finalEditor.sections.map(section => section.source_candidate_hash),
-    [camerax14.source_candidate_hash]
-  );
-  for (const section of finalEditor.sections) {
-    assert.notEqual(section.background, section.what_changed);
-    assert.equal(Object.hasOwn(section, 'impact_claim_level'), false);
-    assert.match(section.public_article.camera_hal_takeaway, /HAL|CameraX|app|framework/i);
-  }
-  assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === camerax13.source_candidate_hash), false);
-  assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === libcamera.source_candidate_hash), false);
-  assert.equal(finalEditor.sections.some(section => section.source_candidate_hash === gcc.source_candidate_hash), false);
-  assert.equal(fallbackReport.fallback_articles[0].action, 'rebuild-from-bound-candidate');
-  assert.equal(fallbackReport.demoted_articles.some(item => item.headline === libcamera.title && item.action === 'replace-or-demote'), true);
-  assert.equal(fallbackReport.demoted_articles.some(item => item.headline === 'GCC 16.1' && item.action === 'replace-or-demote'), true);
-  assert.equal(status.final_publish_ready, false);
-  assert.equal(status.artifact_final_publish_ready, false);
-  assert.equal(status.publish_gate_passed, false);
-  assert.equal(result.publicFiles.includes(`newsletters/${date}/newsletter.md`), true);
-
-  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
-    root,
-    date,
-    changedArtifacts: requiredPublicFiles(date)
-  }));
-  assert.equal(outputs.public_newsletter_ready, 'true');
-});
-
-test('fallback builder excludes demoted article sources from public references', () => {
-  const root = tempRoot();
-  const { date, libcamera, gcc } = writeRun25590436113LikeFallbackFixture(root);
-
-  buildFallbackPublicIssue({ root, date });
-
-  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
-  const publicMarkdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
-  const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
-  const referencesSection = extractMarkdownSection(publicMarkdown, '참고자료');
-
-  assert.equal(
-    fallbackReport.demoted_articles.some(item => item.sources?.some(source => source.url === libcamera.url)),
-    true
-  );
-  assert.equal(
-    fallbackReport.demoted_articles.some(item => item.sources?.some(source => source.url === gcc.url)),
-    true
-  );
-  assert.equal(finalEditor.references.some(source => source.url === libcamera.url), false);
-  assert.equal(finalEditor.references.some(source => source.url === gcc.url), false);
-  assert.equal(referencesSection.includes(libcamera.url), false);
-  assert.equal(referencesSection.includes(gcc.url), false);
-});
-
-test('fallback builder writes public files when one safe article is available', () => {
-  const root = tempRoot();
-  const { date } = writeRun25590436113LikeFallbackFixture(root, { includeSafeAnchors: false });
-
-  const result = buildFallbackPublicIssue({ root, date });
-  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
-  const publicMarkdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
-  const publicHtml = fs.readFileSync(path.join(root, 'newsletters', date, 'index.html'), 'utf8');
-
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
-  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), true);
-  assert.equal(finalEditor.sections.length, articlePolicy.mainArticleCount.min);
-  assert.match(publicMarkdown, /CameraX 1\.4\.0-alpha07/);
-  assert.match(publicHtml, /CameraX 1\.4\.0-alpha07/);
-  assert.equal(result.status.public_newsletter_ready, true);
-});
-
-test('fallback builder reuses LLM public article prose from invalid editor attempts', () => {
-  const root = tempRoot();
-  const date = '2026-05-27';
-  writeRootIndexContract(root);
-  const aiStudio = {
-    ...regressionCandidate({
-      title: 'Build native Android apps in Google AI Studio',
-      url: 'https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html',
-      bucket: 'cpp_ai_tooling_fallback',
-      fallback: true
-    }),
-    source: 'Android Developers Blog',
-    component: 'Google AI Studio',
-    tooling_workflow_type: 'native_tooling_workflow',
-    article_group_key: 'android_native_tooling_workflow',
-    native_tooling_relevance: 4,
-    behavior_change: 'Hardware-enabled experiences can use the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs.',
-    summary: 'Google AI Studio added native Android app generation support for Android developers.'
-  };
-  const llmPublicArticle = {
-    story_contract_version: 1,
-    headline: 'Google AI Studio의 native Android prototype 생성과 Camera API 확인',
-    source_subtitle: 'Android Developers Blog - Build native Android apps in Google AI Studio',
-    lead: 'Google AI Studio가 프롬프트에서 native Android app prototype을 만들고 Camera 같은 Android API 사용 예를 제공한다고 설명했습니다.',
-    body_paragraphs: [
-      'Android Developers Blog의 발표는 브라우저 기반 AI Studio 안에서 Kotlin 기반 Android app prototype을 만들고, device feature를 활용하는 예시로 Camera, GPS/Location, Accelerometer, Bluetooth를 언급합니다.',
-      'Camera HAL 독자는 이 내용을 HAL 업데이트가 아니라 test client와 sample app 생성 흐름으로 읽어야 합니다. 생성된 앱 코드에서 permission 선언, CameraX 또는 Camera2 호출 위치, device feature 의존성이 어떻게 놓이는지 검토하는 정도가 적절합니다.'
-    ],
-    camera_hal_takeaway: '직접적인 HAL/driver 변경 근거는 없습니다. 다만 prototype 도구가 Camera API를 호출하는 sample을 만들 수 있으므로, 검증용 client app의 권한 선언과 CameraX/Camera2 사용 방식을 빠르게 확인하는 tooling signal로 볼 수 있습니다.',
-    reader_checkpoints: [
-      '생성된 sample app의 Camera permission 선언과 CameraX binding 위치를 확인합니다.',
-      'Camera2 호출이나 device feature 조건이 vendor test scenario와 충돌하지 않는지 확인합니다.'
-    ],
-    editorial_story: {
-      reader_scenario: '프로토타입 앱을 검토할 때 source가 말한 Android API 사용 범위와 실제 Camera API 호출 위치를 분리해 봅니다.',
-      what_happened: 'Google AI Studio가 프롬프트 기반 native Android app prototype 생성 흐름을 발표했고 Camera 같은 device feature 사용 예를 들었습니다.',
-      why_it_matters: '직접 HAL 변경은 아니지만 Camera API를 호출하는 sample app 생성 흐름은 HAL 검증용 client app을 빠르게 살펴볼 때 참고할 수 있습니다.',
-      field_scenario: '검증자는 sample app의 permission, CameraX 또는 Camera2 binding, device feature 조건을 확인하고 vendor pipeline 영향으로 확대 해석하지 않습니다.',
-      not_to_overclaim: '이 source는 Camera HAL API, driver branch, metadata contract, stream buffer behavior 변경을 직접 말하지 않습니다.',
-      editor_take: '이 항목은 Camera HAL issue가 아니라 native Android tooling watch 항목으로 다룹니다.'
-    },
-    decision_metadata: {
-      impact: 'Medium',
-      scope: ['Tooling', 'AI', 'Framework'],
-      action: ['Watch', 'Test'],
-      overclaim_risk: 'Medium'
-    },
-    source_links: [{
-      title: 'Build native Android apps in Google AI Studio',
-      url: aiStudio.url,
-      source_role: 'primary'
-    }]
-  };
-  const deterministicEditor = {
-    schemaVersion: 1,
-    newsletterDate: date,
-    model: {
-      provider: 'deterministic-fallback-public-issue',
-      providerModel: 'deterministic'
-    },
-    date,
-    title: `Camera HAL / SW Newsletter - ${date}`,
-    summary: 'Deterministic fallback draft should not own reader prose.',
-    briefing: ['AI Studio tooling item.', 'Review-only public issue.', 'No direct HAL update.'],
-    sections: [regressionSection(aiStudio, {
-      category: 'Android Native Tooling',
-      public_article: {
-        headline: 'Deterministic placeholder headline',
-        lead: 'Deterministic placeholder lead.',
-        body_paragraphs: [
-          'Deterministic placeholder body one.',
-          'Deterministic placeholder body two.'
-        ],
-        camera_hal_takeaway: 'Deterministic placeholder takeaway.',
-        reader_checkpoints: ['Check placeholder one.', 'Check placeholder two.'],
-        source_links: [{ title: aiStudio.title, url: aiStudio.url }]
-      }
-    })],
-    action_items: ['Review AI Studio tooling item.'],
-    references: []
-  };
-  const llmInvalidEditor = {
-    ...deterministicEditor,
-    model: undefined,
-    public_contract_version: 'story-v1',
-    generation_contract_version: 1,
-    sections: [regressionSection(aiStudio, {
-      category: 'Android Native Tooling',
-      public_article: llmPublicArticle
-    })]
-  };
-  const status = {
-    date,
-    status: 'NEEDS_FIX',
-    generation_status: 'NEEDS_FIX',
-    failure_stage: 'editor attempt 1/2',
-    failure_reason: 'Editor output failed article section contract validation.',
-    final_publish_ready: false,
-    artifact_final_publish_ready: false,
-    publish_gate_passed: false,
-    review_gate_passed: true,
-    editor_review_required: true,
-    fact_check_status: 'PASS',
-    must_fix_count: 0,
-    source_gap_count: 0,
-    quality_status: 'PASS',
-    quality_score: 100,
-    quality_threshold: qualityGatePolicy.threshold,
-    rendered_main_article_count: 1,
-    selected_article_count: 1,
-    min_final_articles: articlePolicy.mainArticleCount.min
-  };
-
-  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
-  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), deterministicEditor);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-invalid-attempt-1.json'), llmInvalidEditor);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
-    date,
-    score: 100,
-    threshold: qualityGatePolicy.threshold,
-    status: 'PASS',
-    deductions: [],
-    article_results: [{
-      index: 1,
-      headline: aiStudio.title,
-      status: 'FAIL',
-      repair_action: 'repair-section',
-      hard_fail_reasons: [],
-      scope_count: scopeCountForCandidate(aiStudio)
-    }]
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
-    status: 'PASS',
-    must_fix: [],
-    source_gaps: [],
-    source_gap_count: 0,
-    final_comment: 'PASS'
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates-attempt-1.json'), {
-    date,
-    candidates: [aiStudio]
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
-    selected_articles: [aiStudio],
-    shortlisted_candidates: [aiStudio],
-    reserve_candidates: []
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), {
-    selected_capsules: [aiStudio],
-    shortlisted_capsules: [aiStudio],
-    reserve_capsules: []
-  });
-
-  const result = buildFallbackPublicIssue({ root, date });
-  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
-  const publicMarkdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
-
-  assert.equal(finalEditor.sections[0].public_article.headline, llmPublicArticle.headline);
-  assert.deepEqual(finalEditor.sections[0].public_article.body_paragraphs, llmPublicArticle.body_paragraphs);
-  assert.equal(finalEditor.sections[0].public_article.camera_hal_takeaway, llmPublicArticle.camera_hal_takeaway);
-  assert.match(publicMarkdown, /브라우저 기반 AI Studio 안에서 Kotlin 기반 Android app prototype/);
-  assert.doesNotMatch(publicMarkdown, /Deterministic placeholder/);
-  assert.doesNotMatch(publicMarkdown, /Tooling Watch로 보고, 생성된 sample/);
-  assert.equal(result.status.public_newsletter_ready, true);
-});
-
-test('fallback builder includes selected native tooling supporting article after one safe main article', () => {
-  const root = tempRoot();
-  const date = '2026-05-22';
-  writeRootIndexContract(root);
-  const compose = regressionCandidate({
-    title: 'Building seamless Android experiences across devices with Jetpack Compose',
-    url: 'https://goo.gle/AdaptiveApps_IO26',
-    bucket: 'android_platform_camera_adjacent'
-  });
-  const aiStudio = {
-    ...regressionCandidate({
-      title: 'Build native Android apps in Google AI Studio',
-      url: 'https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html',
-      bucket: 'cpp_ai_tooling_fallback',
-      fallback: true
-    }),
-    source: 'Android Developers Blog',
-    component: 'Google AI Studio',
-    tooling_workflow_type: 'native_tooling_workflow',
-    article_group_key: 'android_native_tooling_workflow',
-    native_tooling_relevance: 4,
-    behavior_change: 'Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.',
-    summary: 'Google AI Studio added native Android app generation workflow support for Android developers.'
-  };
-  const aiStudioChild = {
-    ...regressionCandidate({
-      title: 'Start building today - Build native Android apps in Google AI Studio',
-      url: 'https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today',
-      bucket: 'cpp_ai_tooling_fallback',
-      fallback: true
-    }),
-    source: 'Android Developers Blog',
-    component: 'Google AI Studio',
-    article_group_key: 'android_native_tooling_workflow',
-    parent_url: aiStudio.url,
-    parent_title: aiStudio.title,
-    finalSelectionEligibility: 'watchlist',
-    source_extraction: {
-      mode: 'roundup_child_topic',
-      evidence_blocks: [{
-        heading: 'Start building today',
-        source_text: 'Start building today. Personal utilities and simple social apps include habit trackers, study quizzes, or event itineraries. Hardware-enabled experiences can use the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs. AI-powered experiences can feature Gemini API integrations.'
-      }]
-    },
-    behavior_change: 'Hardware-enabled experiences can use the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs.',
-    summary: 'Hardware-enabled experiences can use the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs.'
-  };
-  const editor = {
-    schemaVersion: 1,
-    newsletterDate: date,
-    model: {
-      provider: 'deterministic-fallback-public-issue',
-      providerModel: 'deterministic'
-    },
-    date,
-    title: `Camera HAL / SW Newsletter - ${date}`,
-    summary: 'Workflow 3 fallback should keep source-ready supporting tooling.',
-    briefing: ['Compose CameraX item.', 'AI Studio tooling item.', 'Review-only public issue.'],
-    sections: [regressionSection(compose)],
-    action_items: ['Review Compose CameraX behavior.'],
-    references: [],
-    issue: {
-      date,
-      title: `Stale nested issue - ${date}`,
-      summary: 'Stale nested issue should not be reused.',
-      sections: [{
-        headline: 'Stale nested fallback article',
-        public_article: {
-          headline: 'Stale nested fallback article',
-          lead: 'Stale nested lead.',
-          body_paragraphs: [
-            '원문 세부 내용으로는 Tue, May 관련 내용도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다.'
-          ],
-          camera_hal_takeaway: 'Camera HAL runtime 변경 근거는 아니며 stale nested issue text입니다.',
-          reader_checkpoints: ['stale nested checkpoint'],
-          source_links: [{
-            title: 'Stale Source',
-            url: 'https://example.com/stale',
-            source_role: 'primary'
-          }]
-        },
-        sources: [{
-          title: 'Stale Source',
-          url: 'https://example.com/stale'
-        }]
-      }]
-    }
-  };
-  const status = {
-    date,
-    status: 'NEEDS_FIX',
-    generation_status: 'FAILED',
-    failure_stage: 'editor attempt 1/2',
-    failure_reason: 'Editor output failed article section contract validation.',
-    final_publish_ready: false,
-    artifact_final_publish_ready: false,
-    publish_gate_passed: false,
-    review_gate_passed: true,
-    editor_review_required: true,
-    fact_check_status: 'PASS',
-    must_fix_count: 0,
-    source_gap_count: 0,
-    quality_status: 'PASS',
-    quality_score: 100,
-    quality_threshold: qualityGatePolicy.threshold,
-    rendered_main_article_count: 1,
-    selected_article_count: 2,
-    min_final_articles: articlePolicy.mainArticleCount.min
-  };
-
-  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
-  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
-    date,
-    score: 100,
-    threshold: qualityGatePolicy.threshold,
-    status: 'PASS',
-    deductions: [],
-    article_results: [{
-      index: 1,
-      headline: compose.title,
-      status: 'PASS',
-      repair_action: 'preserve',
-      hard_fail_reasons: [],
-      scope_count: scopeCountForCandidate(compose)
-    }]
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
-    status: 'PASS',
-    must_fix: [],
-    source_gaps: [],
-    source_gap_count: 0,
-    final_comment: 'PASS'
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
-  const canonicalReporterPath = path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json');
-  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates-attempt-1.json'), {
-    date,
-    candidates: [compose, aiStudio, aiStudioChild]
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
-    selected_articles: [compose, aiStudio],
-    shortlisted_candidates: [compose, aiStudio, aiStudioChild],
-    reserve_candidates: [],
-    composition_summary: {
-      supporting_main_article_count: 1
-    }
-  });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), {
-    selected_capsules: [compose, aiStudio],
-    shortlisted_capsules: [compose, aiStudio, aiStudioChild],
-    reserve_capsules: []
-  });
-
-  const result = buildFallbackPublicIssue({ root, date });
-  const finalEditor = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
-  const publicMarkdown = fs.readFileSync(path.join(root, 'newsletters', date, 'newsletter.md'), 'utf8');
-  const fallbackReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), 'utf8'));
-
-  assert.equal(fs.existsSync(canonicalReporterPath), true);
-  assert.equal(finalEditor.public_contract_version, 'story-v1');
-  assert.equal(finalEditor.generation_contract_version, 1);
-  assert.equal(finalEditor.issue.public_contract_version, 'story-v1');
-  assert.equal(finalEditor.issue.generation_contract_version, 1);
-  assert.equal(finalEditor.sections.length, 2);
-  assert.equal(
-    finalEditor.sections.some(section => section.headline.includes(aiStudio.title)),
-    true,
-    finalEditor.sections.map(section => section.headline).join(' | ')
-  );
-  assert.equal(finalEditor.sections.some(section => section.headline === 'Stale nested fallback article'), false);
-  assert.match(publicMarkdown, /Build native Android apps in Google AI Studio/);
-  assert.match(publicMarkdown, /2개 항목/);
-  assert.doesNotMatch(publicMarkdown, /세 가지 항목/);
-  assert.match(publicMarkdown, /프롬프트 기반 생성/);
-  assert.match(publicMarkdown, /native Android 앱/);
-  assert.match(publicMarkdown, /Camera API/);
-  assert.match(publicMarkdown, /GPS\/Location/);
-  assert.match(publicMarkdown, /Camera HAL\/Driver 관점에서의 의미/);
-  assert.match(publicMarkdown, /CameraX preview의 aspect ratio, rotation, crop 동작/);
-  assert.match(publicMarkdown, /Camera 권한 선언, CameraX\/Camera2 호출 위치, device feature 의존성/);
-  assert.doesNotMatch(publicMarkdown, /HAL\/driver 변경으로 해석하지 말고/);
-  assert.doesNotMatch(publicMarkdown, /후속 검토|출처 범위를 확인할 때 기준점|원문 세부 내용으로는/);
-  assert.doesNotMatch(publicMarkdown, /Camera HAL runtime 변경 근거는|Tue, May|Details|Group Product Manager/);
-  assert.doesNotMatch(publicMarkdown, /camera-related|on-device/);
-  assert.doesNotMatch(publicMarkdown, /API\/component\/date|stream\/metadata|compatibility test scenario|현재\s+device matrix와\s+맞는지/);
-  assert.equal(fallbackReport.fallback_articles.some(item => item.action === 'selected-native-tooling-supporting'), true);
-  assert.equal(result.status.public_newsletter_ready, true);
-
-  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
-    root,
-    date,
-    changedArtifacts: requiredPublicFiles(date)
-  }));
-  assert.equal(outputs.public_newsletter_ready, 'true');
-  assert.equal(outputs.diagnostics_only, 'false');
-});
-
-test('fallback failure diagnostics overwrites stale failure reason on rerun', () => {
-  const root = tempRoot();
-  const date = '2026-05-08';
-  const diagnosticsPath = path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json');
-  const oldGeneratedAt = '2026-05-08T00:00:00.000Z';
-  writeJson(diagnosticsPath, {
-    date,
-    generated_at: oldGeneratedAt,
-    status: 'FAILED',
-    failure_stage: 'stale_stage',
-    failure_reason: 'old failure',
-    fallback_public_issue_failed: true,
-    demoted_articles: [{ headline: 'Old demoted article' }],
-    top_rejected_reasons: [{ reason: 'old_reason', count: 2 }],
-    written_by: 'ensure-public-newsletter-artifacts'
-  });
-
-  const relPath = writeFallbackFailureDiagnostics({
-    root,
-    date,
-    error: new Error('new failure'),
-    status: {
-      generation_status: 'FAILED_REPAIR_REVIEWABLE',
-      status: 'NEEDS_FIX'
-    }
-  });
-  const diagnostics = JSON.parse(fs.readFileSync(diagnosticsPath, 'utf8'));
-
-  assert.equal(relPath, `content/newsroom/${date}/fallback-public-issue-diagnostics.json`);
-  assert.equal(diagnostics.status, 'FAILED');
-  assert.equal(diagnostics.failure_stage, 'fallback_public_issue_builder');
-  assert.equal(diagnostics.failure_reason, 'new failure');
-  assert.equal(diagnostics.previous_failure_reason, 'old failure');
-  assert.notEqual(diagnostics.generated_at, oldGeneratedAt);
-  assert.equal(diagnostics.source_status, 'FAILED_REPAIR_REVIEWABLE');
-  assert.deepEqual(diagnostics.demoted_articles, [{ headline: 'Old demoted article' }]);
-  assert.deepEqual(diagnostics.top_rejected_reasons, [{ reason: 'old_reason', count: 2 }]);
-});
-
-test('ensure CLI preserves failed repair Gemini draft instead of building fallback public issue', () => {
+test('ensure CLI preserves failed repair Gemini draft without synthesizing public prose', () => {
   const root = tempRoot();
   const date = '2026-05-21';
   const draftSection = retrySection(
@@ -5590,73 +4464,16 @@ test('ensure CLI preserves failed repair Gemini draft instead of building fallba
   const editorBefore = fs.readFileSync(editorPath, 'utf8');
 
   const result = ensurePublicNewsletterArtifacts({ root, date, changedArtifacts });
-
-  assert.equal(result.fallbackExecuted, false);
-  assert.equal(result.fallbackSkipped, true);
-  assert.equal(result.outputs.fallback_public_issue_executed, 'false');
-  assert.equal(result.outputs.fallback_public_issue_skipped, 'true');
-  assert.equal(result.outputs.fallback_public_issue_skip_reason, 'preserve_reviewable_gemini_draft_after_failed_repair');
   assert.equal(result.outputs.public_newsletter_ready, 'false');
   assert.equal(result.outputs.review_pr_ready, 'true');
   assert.equal(result.outputs.diagnostics_only, 'true');
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json')), false);
   assert.equal(fs.readFileSync(editorPath, 'utf8'), editorBefore);
-});
-
-test('ensure CLI treats one safe fallback article as review-publication ready for non-repair quality triggers', () => {
-  const root = tempRoot();
-  const { date } = writeRun25590436113LikeFallbackFixture(root, { includeSafeAnchors: false });
-  writeArchiveSyncSurface(root);
-  const qualityTriggerStatus = {
-    date,
-    status: 'QUALITY_NEEDS_FIX',
-    final_publish_ready: false,
-    publish_gate_passed: false,
-    review_gate_passed: true,
-    editor_review_required: true,
-    quality_status: 'NEEDS_FIX',
-    quality_score: 56,
-    quality_threshold: qualityGatePolicy.threshold,
-    rendered_main_article_count: 3,
-    min_final_articles: articlePolicy.mainArticleCount.min
-  };
-  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), qualityTriggerStatus);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), qualityTriggerStatus);
-  const changedArtifacts = REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
-    .map(file => `content/newsroom/${date}/${file}`)
-    .concat(requiredPublicFiles(date));
-
-  const result = ensurePublicNewsletterArtifacts({ root, date, changedArtifacts });
-  const resolvedOutputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
-    root,
-    date,
-    changedArtifacts
-  }));
-
-  assert.equal(result.fallbackExecuted, true);
-  assert.equal(result.outputs.fallback_public_issue_executed, 'true');
-  assert.equal(result.outputs.fallback_public_issue_failed, 'false');
-  assert.equal(result.outputs.fallback_public_issue_error, 'none');
-  assert.equal(result.outputs.public_newsletter_ready, 'true');
-  assert.equal(result.outputs.review_pr_ready, 'true');
-  assert.equal(result.outputs.review_only, 'false');
-  assert.equal(result.outputs.diagnostics_only, 'false');
-  assert.equal(result.outputs.review_publication_ready, 'true');
-  assert.equal(result.outputs.homepage_visible_after_merge, 'true');
-  assert.equal(result.outputs.publication_mode, 'review_only');
-  assert.equal(result.outputs.homepage_visibility, 'normal');
-  assert.equal(result.outputs.publish_candidate_ready, 'true');
-  assert.equal(result.outputs.review_pr_ready, resolvedOutputs.review_pr_ready);
-  assert.equal(result.outputs.review_only, resolvedOutputs.review_only);
-  assert.equal(result.outputs.diagnostics_only, resolvedOutputs.diagnostics_only);
-  assert.equal(result.outputs.review_publication_ready, resolvedOutputs.review_publication_ready);
-  assert.equal(result.outputs.homepage_visible_after_merge, resolvedOutputs.homepage_visible_after_merge);
-  assert.equal(result.outputs.public_newsletter_ready, resolvedOutputs.public_newsletter_ready);
 });
 
 test('ensure CLI persists homepage headline artifacts for review-publication public files', () => {
   const root = tempRoot();
   const date = '2026-05-23';
+  writeArchiveSyncSurface(root);
   writePublicNewsletterArtifacts(root, date);
   const status = {
     date,
@@ -5765,6 +4582,7 @@ test('ensure CLI persists homepage headline artifacts for review-publication pub
 test('ensure CLI persists a rendered public article when selected headline is not rendered', () => {
   const root = tempRoot();
   const date = '2026-05-23';
+  writeArchiveSyncSurface(root);
   const renderedUrl = 'https://goo.gle/AdaptiveApps_IO26';
   const renderedTitle = 'Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트';
   const renderedSummary = 'Google은 여러 화면 크기와 CameraX preview 대응을 함께 언급했습니다.';
@@ -5798,6 +4616,21 @@ test('ensure CLI persists a rendered public article when selected headline is no
             hal_driver_impact: 'Camera HAL 팀은 preview stream, rotation, buffer path를 회귀 확인합니다.',
             action_items: ['Check CameraX preview compatibility.'],
             team_share_points: 'Camera preview compatibility를 확인합니다.'
+          },
+          public_article: {
+            headline: renderedTitle,
+            lead: renderedSummary,
+            body_paragraphs: [
+              '이 항목은 adaptive app 문맥에서 CameraX preview 동작을 확인하는 app-framework 계층의 신호입니다.',
+              'HAL 독자는 preview stream, rotation, buffer path 확인처럼 앱에서 관찰 가능한 검증 범위로 해석합니다.'
+            ],
+            camera_hal_takeaway: 'Camera HAL runtime 변경 근거가 아니라 CameraX preview compatibility 확인 신호로 다룹니다.',
+            reader_checkpoints: ['CameraX preview compatibility를 확인합니다.', 'preview stream과 rotation 동작을 비교합니다.'],
+            source_links: [{
+              title: 'Android Developers Blog',
+              url: renderedUrl,
+              source_role: 'primary'
+            }]
           },
           sources: [
             {
@@ -6008,28 +4841,10 @@ test('ensure CLI records invalid review publication structure as non-visible', (
   assert.equal(status.public_artifact_policy, 'review_publication_invalid_public_structure');
 });
 
-test('ensure CLI runs fallback builder for quality and repair triggers, then recomputes readiness', () => {
-  const root = tempRoot();
-  const { date } = writePr39LikeRegressionFixture(root);
-  writeArchiveSyncSurface(root);
-
-  const result = ensurePublicNewsletterArtifacts({ root, date });
-
-  assert.equal(result.fallbackExecuted, true);
-  assert.equal(result.outputs.public_newsletter_ready, 'true');
-  assert.equal(result.outputs.review_publication_ready, 'true');
-  assert.equal(result.outputs.diagnostics_only, 'false');
-  assert.equal(result.outputs.homepage_visible_after_merge, 'true');
-  assert.equal(result.outputs.fallback_public_issue_executed, 'true');
-  assert.match(result.outputs.fallback_public_issue_trigger_reason, /quality_status=NEEDS_FIX/);
-  assert.match(result.outputs.fallback_public_issue_trigger_reason, /section_count_drift/);
-  assert.doesNotMatch(result.outputs.public_newsletter_reason, /quality|final_publish_ready|repair|shortage|section_count_drift/);
-});
-
 test('public newsletter readiness requires every public file in changed artifacts', () => {
   const root = tempRoot();
-  const { date } = writePr39LikeRegressionFixture(root);
-  buildFallbackPublicIssue({ root, date });
+  const date = '2026-05-10';
+  writePublicNewsletterArtifacts(root, date);
 
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
@@ -6095,11 +4910,7 @@ test('ensure CLI skips fallback when public artifacts are already valid', () => 
     date,
     changedArtifacts: requiredPublicFiles(date)
   });
-
-  assert.equal(result.fallbackExecuted, false);
   assert.equal(result.outputs.public_newsletter_ready, 'true');
-  assert.equal(result.outputs.fallback_public_issue_executed, 'false');
-  assert.equal(result.outputs.fallback_public_issue_trigger_reason, 'none');
   assert.equal(result.outputs.public_newsletter_reason, 'ready');
 });
 
@@ -6156,7 +4967,7 @@ test('root wrapper CLIs expose review handoff outputs', () => {
   assert.match(ensureOutput, /changed_artifact_count=\d+/);
 });
 
-test('ensure CLI throws when fallback is required but candidate artifacts are missing', () => {
+test('ensure CLI reports missing public artifacts instead of building fallback', () => {
   const root = tempRoot();
   const date = '2026-05-10';
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
@@ -6169,32 +4980,8 @@ test('ensure CLI throws when fallback is required but candidate artifacts are mi
 
   assert.throws(
     () => ensurePublicNewsletterArtifacts({ root, date }),
-    /Cannot build fallback public issue for 2026-05-10: no newsroom or collected candidate artifacts are available\./
+    /missing required public file: newsletters\/2026-05-10\/newsletter\.md/
   );
-});
-
-test('fallback builder records structural diagnostics when public issue validation fails', () => {
-  const root = tempRoot();
-  const { date } = writePr39LikeRegressionFixture(root);
-  const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
-  const editor = JSON.parse(fs.readFileSync(editorPath, 'utf8'));
-  editor.sections[0].selectedImage = 'assets/images/fallback/missing.png';
-  editor.sections[0].resolvedImage = {
-    usedFallback: true,
-    url: 'assets/images/fallback/missing.png'
-  };
-  writeJson(editorPath, editor);
-
-  assert.throws(
-    () => buildFallbackPublicIssue({ root, date }),
-    /Fallback public issue structural validation failed/
-  );
-
-  const diagnosticsPath = path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-structural-errors.json');
-  assert.equal(fs.existsSync(diagnosticsPath), true);
-  const diagnostics = JSON.parse(fs.readFileSync(diagnosticsPath, 'utf8'));
-  assert.ok(Array.isArray(diagnostics.errors));
-  assert.match(diagnostics.errors.join('\n'), /selectedImage fallback file is missing|article image fallback file is missing/);
 });
 
 test('newsroom PR body separates quality score threshold and result in Korean status text', () => {
@@ -6948,21 +5735,8 @@ test('validate-pr-body accepts diagnostics-only wording and rejects misleading p
       score: 79
     }
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json'), {
-    status: 'FAILED',
-    failure_stage: 'fallback_public_issue_builder',
-    failure_reason: 'Fallback builder could not fill minimum main article count 3; only 1 article(s) available.',
-    fallback_public_issue_failed: true,
-    preserve_article_count: 1,
-    final_article_count: 1,
-    minimum_required_count: 3,
-    demoted_articles: [],
-    top_rejected_reasons: [{ reason: 'duplicate_url', count: 2 }],
-    written_by: 'ensure-public-newsletter-artifacts'
-  });
   const changedArtifacts = REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
-    .map(file => `content/newsroom/${date}/${file}`)
-    .concat(`content/newsroom/${date}/fallback-public-issue-diagnostics.json`);
+    .map(file => `content/newsroom/${date}/${file}`);
   const body = buildNewsroomPrBody({
     root,
     date,
@@ -6975,7 +5749,6 @@ test('validate-pr-body accepts diagnostics-only wording and rejects misleading p
   assert.match(body, /homepage_visible_after_merge: false/);
   assert.match(body, /final_publish_ready: false/);
   assert.match(body, /section_count_drift/);
-  assert.match(body, /Fallback builder could not fill minimum main article count 3/);
   const validation = validatePrBodyText(body, { date });
   assert.equal(validation.ok, true, validation.errors.join('\n'));
 

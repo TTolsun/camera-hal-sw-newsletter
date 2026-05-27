@@ -40,8 +40,6 @@ const OPTIONAL_ARTIFACT_NAMES = [
   'source_effectiveness_report',
   'source_change_events',
   'repair_failure',
-  'fallback_public_issue',
-  'fallback_public_issue_diagnostics',
   'stale_claim_report'
 ];
 
@@ -101,16 +99,6 @@ function artifactSpecs(date) {
       key: 'repairFailure',
       tier: 'optional',
       relPath: newsroomRelPath(date, 'repair-failure.json')
-    },
-    fallback_public_issue: {
-      key: 'fallbackPublicIssue',
-      tier: 'optional',
-      relPath: newsroomRelPath(date, 'fallback-public-issue.json')
-    },
-    fallback_public_issue_diagnostics: {
-      key: 'fallbackPublicIssueDiagnostics',
-      tier: 'optional',
-      relPath: newsroomRelPath(date, 'fallback-public-issue-diagnostics.json')
     },
     stale_claim_report: {
       key: 'staleClaimReport',
@@ -239,7 +227,6 @@ function defaultFailureDiagnostics() {
     quality_hard_failures: [],
     fact_check_must_fix: [],
     repair_failures: [],
-    fallback_builder_failures: [],
     candidate_shortage_hints: [],
     source_gap_warnings: [],
     missing_artifacts: [],
@@ -726,17 +713,6 @@ function repairFailures(repairFailure = {}) {
   ]);
 }
 
-function fallbackFailures(fallbackPublicIssue = {}, fallbackPublicIssueDiagnostics = {}) {
-  return compactDiagnostics([
-    fallbackPublicIssue.failure_reason,
-    fallbackPublicIssue.error,
-    ...ensureArray(fallbackPublicIssue.errors),
-    ...ensureArray(fallbackPublicIssueDiagnostics.errors),
-    ...ensureArray(fallbackPublicIssueDiagnostics.structural_errors),
-    ...ensureArray(fallbackPublicIssueDiagnostics.fallback_builder_failures)
-  ]);
-}
-
 function candidateShortageHints(...sources) {
   return compactDiagnostics(sources.flatMap(source => ensureArray(source?.selection_shortage_hints)));
 }
@@ -1013,8 +989,6 @@ function buildEvidencePackSummary(options = {}) {
   const factCheckReport = options.factCheckReport || {};
   const sourceEffectivenessReport = options.sourceEffectivenessReport || {};
   const repairFailure = options.repairFailure || null;
-  const fallbackPublicIssue = options.fallbackPublicIssue || {};
-  const fallbackPublicIssueDiagnostics = options.fallbackPublicIssueDiagnostics || {};
   const staleClaimReport = options.staleClaimReport || {};
   const selected = selectedCandidates(shortlistReport, articleCapsules);
   const reserve = reserveCandidates(shortlistReport, articleCapsules);
@@ -1038,7 +1012,6 @@ function buildEvidencePackSummary(options = {}) {
     quality_hard_failures: hardFailures(qualityReport),
     fact_check_must_fix: factCheckMustFix(factCheckReport, staleClaimReport),
     repair_failures: repairFailures(repairFailure),
-    fallback_builder_failures: fallbackFailures(fallbackPublicIssue, fallbackPublicIssueDiagnostics),
     candidate_shortage_hints: shortageHints,
     source_gap_warnings: sourceGapWarnings(factCheckReport, sourceEffectivenessReport),
     missing_artifacts: unique(inputState.failure_diagnostics.missing_artifacts),

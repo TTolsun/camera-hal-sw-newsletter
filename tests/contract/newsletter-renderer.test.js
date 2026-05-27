@@ -241,7 +241,7 @@ test('newsletter renderer article structure table uses shared row semantics', ()
   assert.doesNotMatch(markdown, /Do not claim vendor HAL binary updates/);
 });
 
-test('newsletter renderer sanitizes legacy sections through compatibility projection', () => {
+test('newsletter renderer does not synthesize public prose for legacy sections', () => {
   const draft = issue();
   draft.sections[0].what_changed = 'Review-only Fallback candidate passed a quality gate for review.';
   draft.sections[0].sources[0].title = 'Fallback candidate source';
@@ -250,11 +250,10 @@ test('newsletter renderer sanitizes legacy sections through compatibility projec
   const markdown = buildMarkdown(draft);
   const html = buildHtml(draft);
 
-  assert.match(markdown, /Internal Watch headline must not render/);
-  assert.match(markdown, /공개 출처가 확인한 범위 안에서 Camera HAL 독자가 참고할 만한 동향으로 정리했습니다/);
+  assert.match(markdown, /## 2\. Main Article 1/);
   assert.match(markdown, /Camera HAL\/Driver 관점에서의 의미/);
-  assert.doesNotMatch(markdown, /Camera API를 호출한다면, Camera 권한과 preview\/capture 호출 흐름만 확인합니다/);
-  assert.match(html, /공개 출처가 확인한 범위 안에서 Camera HAL 독자가 참고할 만한 동향으로 정리했습니다/);
+  assert.doesNotMatch(markdown, /Internal fallback headline must not render/);
+  assert.doesNotMatch(html, /Internal fallback headline must not render/);
   assert.match(html, /camera-hal-takeaway/);
   assert.doesNotMatch(html, /reader-checkpoints/);
   assert.doesNotMatch(markdown, /HAL Signal Capsule/);

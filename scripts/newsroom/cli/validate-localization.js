@@ -24,7 +24,6 @@ const markdownRoots = [
 const promptHostFiles = [
   path.join('scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
   path.join('scripts', 'newsroom', 'cli', 'build-newsroom-pr-body.js'),
-  path.join('scripts', 'newsroom', 'generate', 'fallback-public-issue.js'),
   path.join('scripts', 'newsroom', 'render', 'newsletter-renderer.js')
 ];
 

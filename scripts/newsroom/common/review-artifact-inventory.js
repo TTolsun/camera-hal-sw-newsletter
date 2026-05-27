@@ -443,8 +443,6 @@ function debugExactCatalog(date) {
     newsroomRelPath(date, 'gemini-usage-report.json'),
     newsroomRelPath(date, 'extracted-source-facts.json'),
     newsroomRelPath(date, 'evidence-validation-report.json'),
-    newsroomRelPath(date, 'fallback-public-issue.json'),
-    newsroomRelPath(date, 'fallback-public-issue-diagnostics.json'),
     newsroomRelPath(date, 'cost-report.md'),
     newsroomRelPath(date, 'summary-cache-report.md'),
     newsroomRelPath(date, 'summary-cache-report.json'),

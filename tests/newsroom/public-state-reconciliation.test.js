@@ -131,12 +131,6 @@ function statusPaths(date) {
   };
 }
 
-function writeFallbackPublicIssue(root, date) {
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), {
-    fallback_public_issue_status: 'CREATED'
-  });
-}
-
 function archiveSidecarEntry(date, context = 'review_only_publication', overrides = {}) {
   const reviewOnly = context === 'review_only_publication';
   return {
@@ -222,10 +216,6 @@ test('classifyLatestPublicState returns fixed public states', () => {
     }),
     PUBLIC_STATES.PUBLISH_READY
   );
-
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), {
-    fallback_public_issue_status: 'CREATED'
-  });
   assert.equal(
     classifyLatestPublicState({
       root,
@@ -271,9 +261,6 @@ test('reconcilePublicState emits only fixed policy, action, and run_mode values'
     },
     {
       prepare() {
-        writeJson(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'), {
-          fallback_public_issue_status: 'CREATED'
-        });
       },
       status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true }
     },
@@ -309,7 +296,6 @@ test('review-only public reconciliation syncs archive sidecar and provenance led
   const root = tempRoot('public-state-review-archive-sync-');
   const date = '2026-05-23';
   writePublicArtifacts(root, date);
-  writeFallbackPublicIssue(root, date);
   writeArchiveSidecar(root, []);
   writeArchiveLedger(root);
   const status = {
@@ -358,7 +344,6 @@ test('archive sync changedArtifacts distinguish sidecar-only, ledger-only, and n
   {
     const root = tempRoot('public-state-sidecar-only-');
     writePublicArtifacts(root, date);
-    writeFallbackPublicIssue(root, date);
     writeArchiveSidecar(root, []);
     writeArchiveLedger(root, [archiveLedgerRow(date)]);
     const result = reconcilePublicState({
@@ -374,7 +359,6 @@ test('archive sync changedArtifacts distinguish sidecar-only, ledger-only, and n
   {
     const root = tempRoot('public-state-ledger-only-');
     writePublicArtifacts(root, date);
-    writeFallbackPublicIssue(root, date);
     writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
     writeArchiveLedger(root);
     const result = reconcilePublicState({
@@ -390,7 +374,6 @@ test('archive sync changedArtifacts distinguish sidecar-only, ledger-only, and n
   {
     const root = tempRoot('public-state-archive-noop-');
     writePublicArtifacts(root, date);
-    writeFallbackPublicIssue(root, date);
     writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
     writeArchiveLedger(root, [archiveLedgerRow(date)]);
     const result = reconcilePublicState({
@@ -422,7 +405,6 @@ test('archive reconciliation rejects duplicate ledger rows and missing table mar
   {
     const root = tempRoot('public-state-duplicate-ledger-');
     writePublicArtifacts(root, date);
-    writeFallbackPublicIssue(root, date);
     writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
     writeArchiveLedger(root, [archiveLedgerRow(date), archiveLedgerRow(date)]);
 
@@ -440,7 +422,6 @@ test('archive reconciliation rejects duplicate ledger rows and missing table mar
   {
     const root = tempRoot('public-state-missing-ledger-table-');
     writePublicArtifacts(root, date);
-    writeFallbackPublicIssue(root, date);
     writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
     writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), '# Ledger missing table\n');
 
@@ -460,7 +441,6 @@ test('archive reconciliation anchors ledger parsing after the Ledger heading', (
   const root = tempRoot('public-state-ledger-anchor-');
   const date = '2026-05-23';
   writePublicArtifacts(root, date);
-  writeFallbackPublicIssue(root, date);
   writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
   writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), [
     '# Historical Newsletter Provenance Ledger',
@@ -512,7 +492,6 @@ test('archive reconciliation rejects removed, unlisted, and non-current sidecar 
   for (const entry of cases) {
     const root = tempRoot('public-state-sidecar-conflict-');
     writePublicArtifacts(root, date);
-    writeFallbackPublicIssue(root, date);
     writeArchiveSidecar(root, [entry]);
     writeArchiveLedger(root, [archiveLedgerRow(date)]);
 
@@ -532,7 +511,6 @@ test('2026-05-23 review-only public state backfills archive status through recon
   const root = tempRoot('public-state-2026-05-23-backfill-');
   const date = '2026-05-23';
   writePublicArtifacts(root, date);
-  writeFallbackPublicIssue(root, date);
   writeArchiveSidecar(root, []);
   writeArchiveLedger(root);
 

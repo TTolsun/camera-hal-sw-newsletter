@@ -2,15 +2,6 @@ const fs = require('fs');
 const path = require('path');
 
 const {
-  buildFallbackPublicIssue
-} = require('../generate/fallback-public-issue');
-const {
-  callLlmJson
-} = require('../llm/llm-client');
-const {
-  readRuntimeConfig
-} = require('../common/runtime-config');
-const {
   buildReviewableArtifactOutputs,
   resolveDate,
   resolveReviewableArtifacts
@@ -19,9 +10,6 @@ const {
   readStatus,
   renderGithubOutputs
 } = require('./write-generation-status-output');
-const {
-  articlePolicy
-} = require('../common/newsletter-policy');
 const {
   decodeHtml
 } = require('../common/common');
@@ -46,46 +34,12 @@ const {
 const {
   reconcilePublicState
 } = require('../common/public-state-reconciliation');
-const {
-  toLegacyEditorIssue
-} = require('../domain/newsletter-domain-normalize');
 
 // Contract:
 // - This command ensures the workflow has either publishable public newsletter artifacts
 //   or reviewable failure artifacts.
 // - It must not mark review-only artifacts as publish-ready.
 // - It may exit successfully with public_newsletter_ready=false when review_pr_ready=true.
-const FALLBACK_TRIGGER_STATUSES = new Set([
-  'NEEDS_FIX',
-  'QUALITY_NEEDS_FIX',
-  'UNDERFILLED_NEEDS_FIX',
-  'FAILED_REPAIR_REVIEWABLE'
-]);
-
-const FALLBACK_PUBLIC_TITLE_STAGE = 'fallback-public-title-editor';
-
-const fallbackPublicTitleSchema = {
-  type: 'OBJECT',
-  properties: {
-    headlines: {
-      type: 'ARRAY',
-      items: {
-        type: 'OBJECT',
-        properties: {
-          source_candidate_hash: { type: 'STRING' },
-          source_hash: { type: 'STRING' },
-          source_candidate_url: { type: 'STRING' },
-          source_url: { type: 'STRING' },
-          headline: { type: 'STRING' },
-          rationale: { type: 'STRING' }
-        },
-        required: ['headline']
-      }
-    }
-  },
-  required: ['headlines']
-};
-
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -93,23 +47,6 @@ function ensureArray(value) {
 function readJsonIfExists(filePath) {
   if (!fs.existsSync(filePath)) return null;
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-}
-
-function numeric(value) {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
-function text(value) {
-  return String(value ?? '').trim();
-}
-
-function normalizedTitle(value) {
-  return text(value)
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
 }
 
 function parseArgs(argv) {
@@ -131,256 +68,6 @@ function parseArgs(argv) {
     }
   }
   return options;
-}
-
-function llmTitleCredentialConfigured(env = process.env) {
-  const config = readRuntimeConfig(env);
-  if (config.llmProvider === 'openapi') return true;
-  if (config.llmProvider === 'internal') return Boolean(text(env.INTERNAL_LLM_API_KEY));
-  return Boolean(text(env.GEMINI_API_KEY));
-}
-
-function fallbackHeadlineKey(section = {}) {
-  return text(section.source_candidate_hash) ||
-    text(section.source_candidate_url) ||
-    text(ensureArray(section.sources)[0]?.url) ||
-    text(section.public_article?.source_links?.[0]?.url) ||
-    text(section.headline);
-}
-
-function fallbackHeadlineArticlePayload(section = {}, index = 0) {
-  const publicArticle = section.public_article || {};
-  return {
-    index: index + 1,
-    source_candidate_hash: text(section.source_candidate_hash),
-    source_url: text(section.source_candidate_url || ensureArray(section.sources)[0]?.url || ensureArray(publicArticle.source_links)[0]?.url),
-    source_title: text(ensureArray(section.sources)[0]?.title || section.headline),
-    current_public_headline: text(publicArticle.headline || section.headline),
-    source_subtitle: text(publicArticle.source_subtitle),
-    what_changed: text(section.what_changed),
-    confirmed_facts: ensureArray(section.confirmed_facts).map(text).filter(Boolean),
-    evidence_summary: text(section.evidence_summary),
-    public_lead: text(publicArticle.lead),
-    public_body_paragraphs: ensureArray(publicArticle.body_paragraphs).map(text).filter(Boolean),
-    camera_hal_takeaway: text(publicArticle.camera_hal_takeaway),
-    reader_checkpoints: ensureArray(publicArticle.reader_checkpoints).map(text).filter(Boolean),
-    source_extraction: section.source_extraction || null,
-    derived_editorial_hints: section.derived_editorial_hints || null,
-    do_not_overstate: ensureArray(section.do_not_overstate || section.hal_signal_capsule?.do_not_overstate).map(text).filter(Boolean)
-  };
-}
-
-function fallbackTitleSystemInstruction() {
-  return [
-    'You write concise Korean public article headlines for Camera HAL / SW Newsletter review-only fallback artifacts.',
-    'Return JSON only. Do not copy the source title verbatim.',
-    'Use the supplied source title, what_changed, confirmed facts, public article draft, and source_extraction.',
-    'The headline must reflect the concrete source-confirmed article content, not a generic CameraX or Android template.',
-    'You may make source-bound engineering inferences from the supplied article facts, but do not invent direct Camera HAL, driver, vendor, CTS/VTS/ITS, stream, buffer, metadata, or preview/capture impact unless the supplied facts support that framing.',
-    'Preserve important technical tokens such as CameraX, ListenableFuture, ImageCapture, VideoCapture, Camera2, API names, versions, and error strings when they are central to the article.'
-  ].join('\n');
-}
-
-function fallbackTitlePrompt(issue = {}) {
-  issue = toLegacyEditorIssue(issue);
-  const articles = ensureArray(issue.sections).map(fallbackHeadlineArticlePayload);
-  return JSON.stringify({
-    task: 'Generate source-bound Korean headlines for these fallback public newsletter articles.',
-    output_contract: {
-      headlines: 'One item per input article. Include source_candidate_hash or source_url from the matching input article. Items without a stable key are ignored.',
-      headline: 'Concise Korean headline, usually 18-60 chars. Must not be the original source title copied verbatim.'
-    },
-    articles
-  }, null, 2);
-}
-
-function sanitizeGeneratedHeadline(section = {}, headline = '') {
-  const value = text(headline)
-    .replace(/^[`"'“”‘’]+|[`"'“”‘’]+$/g, '')
-    .replace(/\s+/g, ' ');
-  if (!value) return '';
-  const sourceTitle = text(ensureArray(section.sources)[0]?.title || section.headline);
-  if (normalizedTitle(value) && normalizedTitle(value) === normalizedTitle(sourceTitle)) return '';
-  if (/direct\s+(?:Camera\s+)?HAL|vendor\s+HAL|HAL\s+API/i.test(value)) return '';
-  return value.length > 90 ? `${value.slice(0, 90).trim()}...` : value;
-}
-
-function normalizeLlmHeadlineOverrides(issue = {}, response = {}) {
-  issue = toLegacyEditorIssue(issue);
-  const sections = ensureArray(issue.sections);
-  const byHash = new Map(sections.map(section => [text(section.source_candidate_hash), section]).filter(([key]) => key));
-  const urlEntries = sections.flatMap(section => [
-    text(section.source_candidate_url),
-    text(ensureArray(section.sources)[0]?.url),
-    text(section.public_article?.source_links?.[0]?.url)
-  ]
-    .flatMap(url => [url, normalizeArticleUrl(url)])
-    .filter(Boolean)
-    .map(url => [url, section]));
-  const urlSections = new Map();
-  for (const [url, section] of urlEntries) {
-    if (!urlSections.has(url)) urlSections.set(url, new Set());
-    urlSections.get(url).add(section);
-  }
-  const byUrl = new Map(urlEntries.filter(([url]) => urlSections.get(url)?.size === 1));
-  const overrides = {};
-  for (const item of ensureArray(response.headlines)) {
-    const sourceHash = text(item.source_candidate_hash || item.source_hash || item.hash);
-    const sourceUrl = text(item.source_url || item.source_candidate_url || item.url);
-    const section = byHash.get(sourceHash) ||
-      byUrl.get(sourceUrl) ||
-      byUrl.get(normalizeArticleUrl(sourceUrl));
-    if (!section) continue;
-    const headline = sanitizeGeneratedHeadline(section, item.headline);
-    if (!headline) continue;
-    overrides[fallbackHeadlineKey(section)] = headline;
-    if (section.source_candidate_hash) overrides[section.source_candidate_hash] = headline;
-    if (section.source_candidate_url) overrides[section.source_candidate_url] = headline;
-    for (const source of ensureArray(section.sources)) {
-      if (source?.url) overrides[source.url] = headline;
-    }
-  }
-  return overrides;
-}
-
-async function generateFallbackPublicHeadlineOverrides(options = {}) {
-  const issue = toLegacyEditorIssue(options.issue || {});
-  if (ensureArray(issue.sections).length === 0) {
-    return { used: false, skipped: true, reason: 'no_sections', overrides: {} };
-  }
-  if (options.force !== true && !llmTitleCredentialConfigured(options.env || process.env)) {
-    return { used: false, skipped: true, reason: 'missing_llm_credentials', overrides: {} };
-  }
-  const llmCall = options.llmCall || callLlmJson;
-  const response = await llmCall(
-    FALLBACK_PUBLIC_TITLE_STAGE,
-    fallbackTitleSystemInstruction(),
-    fallbackTitlePrompt(issue),
-    fallbackPublicTitleSchema,
-    options.llmOptions || {}
-  );
-  const overrides = normalizeLlmHeadlineOverrides(issue, response);
-  return {
-    used: Object.keys(overrides).length > 0,
-    skipped: false,
-    reason: Object.keys(overrides).length > 0 ? 'llm_headlines_generated' : 'no_valid_llm_headlines',
-    stage: FALLBACK_PUBLIC_TITLE_STAGE,
-    override_count: Object.keys(overrides).length,
-    overrides
-  };
-}
-
-function hasArtifactInputs(root, date) {
-  return [
-    path.join(root, 'content', 'newsroom', date, 'editor-draft.json'),
-    path.join(root, 'content', 'newsroom', date, 'editor-draft-attempt-1.json'),
-    path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'),
-    path.join(root, 'content', 'newsroom', date, 'article-capsules.json'),
-    path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'),
-    path.join(root, 'content', 'collected-news', date, 'candidates.json')
-  ].some(filePath => fs.existsSync(filePath));
-}
-
-function editorDraftSectionCount(root, date) {
-  const editor = toLegacyEditorIssue(readJsonSafely(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), { date });
-  return ensureArray(editor.sections).length;
-}
-
-function shouldPreserveReviewableDraftWithoutFallback({ root, date, resolved, initialReasons }) {
-  const status = resolved.status || {};
-  const statusValues = new Set([status.status, status.generation_status].filter(Boolean));
-  if (!statusValues.has('FAILED_REPAIR_REVIEWABLE')) return false;
-  if (resolved.reviewPrReady !== true) return false;
-  if (editorDraftSectionCount(root, date) < articlePolicy.mainArticleCount.min) return false;
-  const reasonText = ensureArray(initialReasons).join('\n');
-  return /repair_failure|section_count_drift|quality_status|must_fix_count|source_gap_count/.test(reasonText);
-}
-
-function hardFailureArticleCount(qualityReport = {}) {
-  return ensureArray(qualityReport.article_results).filter(result => {
-    const hardReasons = ensureArray(result.hard_fail_reasons).join(' ');
-    const blockingDeductions = ensureArray(result.deductions).some(item => item?.blocking === true);
-    const status = String(result.status || '');
-    const repairAction = String(result.repair_action || '');
-    return status === 'FAIL' ||
-      repairAction === 'replace-or-demote' ||
-      blockingDeductions ||
-      /source-integrity|scope-relevance|source gap|must_fix/i.test(hardReasons) ||
-      result.scope_count?.publishable_scope === false;
-  }).length;
-}
-
-function fallbackTriggerReasons({ root, date, resolved }) {
-  const status = resolved.status || {};
-  const newsroomDir = path.join(root, 'content', 'newsroom', date);
-  const qualityReport = readJsonIfExists(path.join(newsroomDir, 'quality-report.json')) || {};
-  const factCheck = readJsonIfExists(path.join(newsroomDir, 'fact-check-report.json')) || {};
-  const repairFailure = readJsonIfExists(path.join(newsroomDir, 'repair-failure.json'));
-  const repairFailureExists = Boolean(repairFailure);
-  const reasons = [];
-
-  if (resolved.publicNewsletterReady !== true) {
-    reasons.push('public_newsletter_not_ready');
-  }
-  if (FALLBACK_TRIGGER_STATUSES.has(status.status) || FALLBACK_TRIGGER_STATUSES.has(status.generation_status)) {
-    reasons.push(`status=${status.status || status.generation_status}`);
-  }
-  if (status.final_publish_ready === false || status.final_publish_ready === 'false') {
-    reasons.push('final_publish_ready=false');
-  }
-  if (repairFailureExists) {
-    reasons.push('repair_failure');
-  }
-  const qualityScore = numeric(qualityReport.score ?? status.quality_score);
-  const qualityThreshold = numeric(qualityReport.threshold ?? status.quality_threshold);
-  if (qualityReport.status && qualityReport.status !== 'PASS') {
-    reasons.push(`quality_status=${qualityReport.status}`);
-  }
-  if (qualityScore !== null && qualityThreshold !== null && qualityScore < qualityThreshold) {
-    reasons.push('quality_score_below_threshold');
-  }
-  const hardFailures = hardFailureArticleCount(qualityReport);
-  if (hardFailures > 0) {
-    reasons.push(`hard_failure_article_count=${hardFailures}`);
-  }
-  const sectionDrift = [
-    status.repair_failure_kind,
-    status.failure_reason,
-    repairFailure?.code,
-    repairFailure?.message,
-    repairFailure?.reason,
-    repairFailure?.details
-  ].map(value => typeof value === 'string' ? value : JSON.stringify(value || '')).join('\n').includes('section_count_drift');
-  if (sectionDrift) {
-    reasons.push('section_count_drift');
-  }
-  const mainCount = numeric(status.rendered_main_article_count ?? status.final_selected_article_count ?? status.selected_article_count);
-  const minCount = numeric(status.min_final_articles) ?? articlePolicy.mainArticleCount.min;
-  if (mainCount !== null && minCount !== null && mainCount < minCount) {
-    reasons.push('article_shortage');
-  } else if (status.underfilled === true || status.underfilled === 'true') {
-    reasons.push('article_shortage');
-  }
-  if (numeric(factCheck.source_gap_count ?? status.source_gap_count) > 0) {
-    reasons.push('source_gap_count');
-  }
-  if (ensureArray(factCheck.must_fix).length > 0 || numeric(status.must_fix_count) > 0) {
-    reasons.push('must_fix_count');
-  }
-
-  return [...new Set(reasons)];
-}
-
-function summarizeRejectedReasons(items) {
-  const counts = new Map();
-  for (const item of ensureArray(items)) {
-    const reason = String(item?.reason || item?.selection_exclusion_reason || 'unknown').trim() || 'unknown';
-    counts.set(reason, (counts.get(reason) || 0) + 1);
-  }
-  return [...counts.entries()]
-    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
-    .slice(0, 5)
-    .map(([reason, count]) => ({ reason, count }));
 }
 
 function readJsonSafely(filePath) {
@@ -633,55 +320,6 @@ function persistHomepageHeadlineArtifacts({ root, date, resolved }) {
   return files;
 }
 
-function writeFallbackFailureDiagnostics({ root, date, error, status = {} }) {
-  const relPath = `content/newsroom/${date}/fallback-public-issue-diagnostics.json`;
-  const filePath = path.join(root, ...relPath.split('/'));
-  const existing = readJsonSafely(filePath);
-  const rejectedCandidates = ensureArray(existing.rejected_candidates);
-  const currentFailureReason = String(error?.message || error || 'Unknown fallback public issue failure.');
-  const previousFailureReason = existing.failure_reason && existing.failure_reason !== currentFailureReason
-    ? existing.failure_reason
-    : undefined;
-  const payload = {
-    ...existing,
-    date,
-    generated_at: new Date().toISOString(),
-    status: 'FAILED',
-    fallback_public_issue_status: 'FAILED',
-    source_status: status.generation_status || status.status || 'unknown',
-    failure_stage: 'fallback_public_issue_builder',
-    failure_reason: currentFailureReason,
-    previous_failure_reason: previousFailureReason,
-    fallback_public_issue_failed: true,
-    original_fact_check_status: existing.original_fact_check_status || status.fact_check_status || 'UNKNOWN',
-    original_must_fix_count: existing.original_must_fix_count ?? status.must_fix_count ?? 'unknown',
-    original_source_gap_count: existing.original_source_gap_count ?? status.source_gap_count ?? 'unknown',
-    fallback_public_issue_removed_blockers: existing.fallback_public_issue_removed_blockers ?? false,
-    fallback_public_issue_removed_article_count: existing.fallback_public_issue_removed_article_count ?? ensureArray(existing.demoted_articles).length,
-    preserve_article_count: existing.preserve_article_count ?? 'unknown',
-    final_article_count: existing.final_article_count ?? 'unknown',
-    minimum_required_count: existing.minimum_required_count ?? articlePolicy.mainArticleCount.min,
-    demoted_articles: ensureArray(existing.demoted_articles),
-    top_rejected_reasons: ensureArray(existing.top_rejected_reasons).length > 0
-      ? existing.top_rejected_reasons
-      : summarizeRejectedReasons(rejectedCandidates),
-    written_by: 'ensure-public-newsletter-artifacts'
-  };
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
-  return relPath;
-}
-
-function changedArtifactsForRecheck(options, fallbackResult, extraArtifacts = []) {
-  if (Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')) {
-    return [...new Set(ensureArray(options.changedArtifacts).concat(extraArtifacts).filter(Boolean))];
-  }
-  if (fallbackResult?.publicFiles) {
-    return [...new Set(ensureArray(fallbackResult.publicFiles).concat(extraArtifacts).filter(Boolean))];
-  }
-  return undefined;
-}
-
 function resolveReviewableArtifactsForEnsure(baseOptions, changedArtifacts) {
   const options = { ...baseOptions };
   if (changedArtifacts !== undefined) {
@@ -694,22 +332,14 @@ function isTrue(value) {
   return value === true || value === 'true';
 }
 
-function buildEnsureOutputs(resolved, reconciliation, fallbackState) {
+function buildEnsureOutputs(resolved, reconciliation) {
   return {
     ...buildReviewableArtifactOutputs(resolved),
-    ...reconciliation.outputs,
-    fallback_public_issue_executed: fallbackState.fallbackExecuted ? 'true' : 'false',
-    fallback_public_issue_already_created: fallbackState.fallbackAlreadyCreated ? 'true' : 'false',
-    fallback_public_issue_failed: fallbackState.fallbackError ? 'true' : 'false',
-    fallback_public_issue_error: fallbackState.fallbackError ? String(fallbackState.fallbackError.message || fallbackState.fallbackError) : 'none',
-    fallback_public_issue_diagnostics: fallbackState.fallbackDiagnosticsRelPath || 'none',
-    fallback_public_issue_skipped: fallbackState.fallbackSkipped ? 'true' : 'false',
-    fallback_public_issue_skip_reason: fallbackState.fallbackSkipReason || 'none',
-    fallback_public_issue_trigger_reason: fallbackState.initialReasons.join('; ') || 'none'
+    ...reconciliation.outputs
   };
 }
 
-function reconcileResolvedArtifacts({ root, date, resolved, fallbackState }) {
+function reconcileResolvedArtifacts({ root, date, resolved }) {
   const headlineArtifacts = persistHomepageHeadlineArtifacts({ root, date, resolved });
   const resolvedWithHeadlineArtifacts = {
     ...resolved,
@@ -738,7 +368,7 @@ function reconcileResolvedArtifacts({ root, date, resolved, fallbackState }) {
   return {
     reconciliation,
     reconciledResolved,
-    outputs: buildEnsureOutputs(reconciledResolved, reconciliation, fallbackState)
+    outputs: buildEnsureOutputs(reconciledResolved, reconciliation)
   };
 }
 
@@ -756,154 +386,23 @@ function ensurePublicNewsletterArtifacts(options = {}) {
     date,
     status
   }, Object.prototype.hasOwnProperty.call(options, 'changedArtifacts') ? options.changedArtifacts : undefined);
-  const initialReasons = fallbackTriggerReasons({ root, date, resolved });
-  const fallbackAlreadyCreated = resolved.status?.fallback_public_issue_status === 'CREATED';
-  let fallbackExecuted = false;
-  let fallbackSkipped = false;
-  let fallbackSkipReason = '';
-  let fallbackError = null;
-  let fallbackResult = null;
-  let fallbackDiagnosticsRelPath = '';
-
-  if (initialReasons.length > 0 && !fallbackAlreadyCreated && !options.noBuild) {
-    if (shouldPreserveReviewableDraftWithoutFallback({ root, date, resolved, initialReasons })) {
-      fallbackSkipped = true;
-      fallbackSkipReason = 'preserve_reviewable_gemini_draft_after_failed_repair';
-    } else if (!hasArtifactInputs(root, date)) {
-      throw new Error(`Cannot build fallback public issue for ${date}: no newsroom or collected candidate artifacts are available.`);
-    } else {
-      fallbackExecuted = true;
-      try {
-        fallbackResult = buildFallbackPublicIssue({ root, date });
-      } catch (error) {
-        fallbackError = error;
-        fallbackDiagnosticsRelPath = writeFallbackFailureDiagnostics({ root, date, error, status });
-      }
-      const recheckStatus = fallbackResult?.status || status;
-      resolved = resolveReviewableArtifactsForEnsure({
-        root,
-        date,
-        status: recheckStatus
-      }, changedArtifactsForRecheck(options, fallbackResult, fallbackDiagnosticsRelPath ? [fallbackDiagnosticsRelPath] : []));
-    }
-  }
-
-  const fallbackState = {
-    fallbackExecuted,
-    fallbackAlreadyCreated,
-    fallbackSkipped,
-    fallbackSkipReason,
-    fallbackError,
-    fallbackDiagnosticsRelPath,
-    initialReasons
-  };
-
   if (!resolved.publicNewsletterReady) {
     const reason = resolved.publicNewsletterReason || 'public newsletter artifacts are not structurally ready';
     if (resolved.reviewPrReady) {
-      const reconciled = reconcileResolvedArtifacts({ root, date, resolved, fallbackState });
+      const reconciled = reconcileResolvedArtifacts({ root, date, resolved });
       return {
         date,
-        fallbackExecuted,
-        fallbackAlreadyCreated,
-        fallbackSkipped,
-        fallbackTriggerReasons: initialReasons,
-        fallbackResult,
         resolved: reconciled.reconciledResolved,
         reconciliation: reconciled.reconciliation,
         outputs: reconciled.outputs
       };
     }
-    if (fallbackError) {
-      throw new Error(`${reason}\nFallback public issue builder failed: ${fallbackError.message}`);
-    }
     throw new Error(reason);
   }
 
-  const reconciled = reconcileResolvedArtifacts({ root, date, resolved, fallbackState });
+  const reconciled = reconcileResolvedArtifacts({ root, date, resolved });
   return {
     date,
-    fallbackExecuted,
-    fallbackAlreadyCreated,
-    fallbackSkipped,
-    fallbackTriggerReasons: initialReasons,
-    fallbackResult,
-    resolved: reconciled.reconciledResolved,
-    reconciliation: reconciled.reconciliation,
-    outputs: reconciled.outputs
-  };
-}
-
-async function ensurePublicNewsletterArtifactsWithLlmTitles(options = {}) {
-  const result = ensurePublicNewsletterArtifacts(options);
-  if (
-    options.noBuild === true ||
-    options.noLlmFallbackTitles === true ||
-    result.fallbackExecuted !== true ||
-    !result.fallbackResult?.issue
-  ) {
-    return result;
-  }
-
-  let titleResult;
-  try {
-    titleResult = await generateFallbackPublicHeadlineOverrides({
-      issue: result.fallbackResult.issue,
-      env: options.env || process.env,
-      llmCall: options.llmCall,
-      llmOptions: options.llmOptions,
-      force: options.forceLlmFallbackTitles === true
-    });
-  } catch (error) {
-    return {
-      ...result,
-      fallbackHeadlineGeneration: {
-        used: false,
-        skipped: true,
-        reason: 'llm_headline_generation_failed',
-        error: error.message
-      }
-    };
-  }
-  if (!titleResult.used) {
-    return {
-      ...result,
-      fallbackHeadlineGeneration: titleResult
-    };
-  }
-
-  const root = options.root || process.cwd();
-  const date = result.date;
-  const rebuilt = buildFallbackPublicIssue({
-    root,
-    date,
-    publicArticleHeadlineOverrides: titleResult.overrides,
-    publicArticleHeadlineGeneration: {
-      source: 'llm',
-      stage: titleResult.stage,
-      override_count: titleResult.override_count,
-      reason: titleResult.reason
-    }
-  });
-  const resolved = resolveReviewableArtifactsForEnsure({
-    root,
-    date,
-    status: rebuilt.status
-  }, changedArtifactsForRecheck(options, rebuilt, []));
-  const fallbackState = {
-    fallbackExecuted: true,
-    fallbackAlreadyCreated: result.fallbackAlreadyCreated,
-    fallbackSkipped: result.fallbackSkipped,
-    fallbackSkipReason: '',
-    fallbackError: null,
-    fallbackDiagnosticsRelPath: '',
-    initialReasons: result.fallbackTriggerReasons || []
-  };
-  const reconciled = reconcileResolvedArtifacts({ root, date, resolved, fallbackState });
-  return {
-    ...result,
-    fallbackResult: rebuilt,
-    fallbackHeadlineGeneration: titleResult,
     resolved: reconciled.reconciledResolved,
     reconciliation: reconciled.reconciliation,
     outputs: reconciled.outputs
@@ -913,7 +412,7 @@ async function ensurePublicNewsletterArtifactsWithLlmTitles(options = {}) {
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   try {
-    const result = await ensurePublicNewsletterArtifactsWithLlmTitles(options);
+    const result = await ensurePublicNewsletterArtifacts(options);
     process.stdout.write(`${renderGithubOutputs(result.outputs)}\n`);
   } catch (error) {
     console.error(error.message);
@@ -926,12 +425,6 @@ if (require.main === module) {
 }
 
 module.exports = {
-  fallbackTriggerReasons,
-  generateFallbackPublicHeadlineOverrides,
-  hardFailureArticleCount,
-  shouldPreserveReviewableDraftWithoutFallback,
   ensurePublicNewsletterArtifacts,
-  ensurePublicNewsletterArtifactsWithLlmTitles,
-  writeFallbackFailureDiagnostics,
   parseArgs
 };

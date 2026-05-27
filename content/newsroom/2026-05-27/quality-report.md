@@ -99,7 +99,7 @@
 - article=1; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=confirmed_facts[0]; reason=missing_matching_fact_claim; text=Android Developers Blog가 Tue, 19 May 2026 12:45:00 +0000에 게시 또는 업데이트한 항목입니다.
 - article=1; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=confirmed_facts[1]; reason=missing_matching_fact_claim; text=관련 컴포넌트: Google AI Studio.
 - article=1; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=confirmed_facts[2]; reason=missing_matching_fact_claim; text=확인된 변경점: Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt.
-- article=1; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=evidence_summary; reason=missing_matching_fact_claim; text=Android Developers Blog source metadata와 날짜가 확인된 candidate evidence를 deterministic fallback builder가 사용했습니다.
+- article=1; headline=Android Native Tooling: Build native Android apps in Google AI Studio; field=evidence_summary; reason=missing_matching_fact_claim; text=Android Developers Blog source metadata와 날짜가 확인된 candidate evidence를 사용했습니다.
 
 ## Article Structure Contract
 

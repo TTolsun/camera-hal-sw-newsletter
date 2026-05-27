@@ -25,7 +25,6 @@ const {
   deriveDecisionMetadata,
   mergePublicArticleFromLlm,
   mergePublicArticlesFromLlmSections,
-  publicArticleForSection,
   validatePublicArticle
 } = require('../../scripts/newsroom/common/public-article-contract');
 
@@ -1805,37 +1804,6 @@ test('LLM public_article merge fails closed on invalid source link provenance', 
   );
 });
 
-test('public_article fallback body paragraphs stay bucket aware', () => {
-  const tooling = publicArticleForSection(section(1, {
-    relevance_bucket: 'cpp_ai_tooling_fallback',
-    background: '',
-    camera_hal_perspective: '',
-    why_it_matters: '',
-    public_article: {
-      ...section(1).public_article,
-      body_paragraphs: []
-    }
-  }));
-  const adjacent = publicArticleForSection(section(2, {
-    relevance_bucket: 'android_platform_camera_adjacent',
-    background: '',
-    camera_hal_perspective: '',
-    why_it_matters: '',
-    public_article: {
-      ...section(2).public_article,
-      body_paragraphs: []
-    }
-  }));
-
-  assert.ok(tooling.body_paragraphs.some(paragraph => /prototype\/tooling/.test(paragraph)));
-  assert.ok(adjacent.body_paragraphs.some(paragraph => /app\/framework 계층/.test(paragraph)));
-  assert.equal(
-    [...tooling.body_paragraphs, ...adjacent.body_paragraphs]
-      .some(paragraph => paragraph.includes('공개 출처가 제공한 범위 안에서만 참고 동향')),
-    false
-  );
-});
-
 test('LLM section merge uses source_candidate_hash before title or URL', () => {
   const baseSections = [section(1), section(2)];
   const llmSections = [{
@@ -1966,7 +1934,7 @@ test('LLM section merge rejects an unmatched LLM section', () => {
   );
 });
 
-test('LLM section merge preserves or repairs base public_article when LLM omits a section', () => {
+test('LLM section merge fails closed when LLM omits an invalid base public_article', () => {
   const missingPublicArticle = section(2, {
     public_article: {
       headline: '',
@@ -1985,12 +1953,14 @@ test('LLM section merge preserves or repairs base public_article when LLM omits 
     }
   }];
 
-  const merged = mergePublicArticlesFromLlmSections([section(1), missingPublicArticle], llmSections);
-
-  assert.equal(merged[0].public_article.headline, 'Merged first article');
-  assert.equal(merged[1].public_article.headline, 'Headline 2');
-  assert.ok(merged[1].public_article.reader_checkpoints.length >= 2);
-  assert.ok(merged[1].public_article.source_links.length >= 1);
+  assert.throws(
+    () => mergePublicArticlesFromLlmSections([section(1), missingPublicArticle], llmSections),
+    error => {
+      assert.equal(error.code, 'missing_llm_section_public_article_invalid');
+      assert.equal(error.details.base_index, 1);
+      return true;
+    }
+  );
 });
 
 test('editor output contract rejects source link label leakage and related context role', () => {
@@ -2139,8 +2109,8 @@ test('public_article prose quality accepts reader-facing camera checkpoints', ()
       ...section(1).public_article,
       camera_hal_takeaway: '이 소식은 HAL API 변경이 아니라 app/framework 계층의 참고 신호입니다.',
       reader_checkpoints: [
-        'AI Studio가 만든 샘플 앱이 Camera API를 호출할 수 있으므로, prototype 단계에서 Camera 권한과 CameraX/Camera2 사용 방식을 확인합니다.',
-        '이 소스는 HAL/driver 변경을 직접 언급하지 않으므로 vendor camera pipeline 영향으로 확대 해석하지 않습니다.'
+        '테스트용 클라이언트 앱에서 manifest permission 선언과 Camera API 호출 위치를 확인합니다.',
+        '출처가 직접 말하지 않는 HAL/driver runtime 변경이나 vendor pipeline 영향은 별도 근거가 있을 때만 다룹니다.'
       ]
     }
   });

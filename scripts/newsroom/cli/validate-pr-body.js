@@ -686,7 +686,6 @@ function validateEvidencePackSections(text, sections, parsed, errors) {
       'Quality hard failures',
       'Fact-check must-fix',
       'Repair failure',
-      'Fallback builder failure',
       'Candidate shortage hints'
     ];
     for (const label of requiredDiagnosticLabels) {

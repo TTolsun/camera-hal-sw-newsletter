@@ -811,7 +811,6 @@ function renderEvidencePackSummary(root, date) {
     renderEvidencePackDiagnosticSummary('Quality hard failures', diagnostics.quality_hard_failures),
     renderEvidencePackDiagnosticSummary('Fact-check must-fix', diagnostics.fact_check_must_fix),
     renderEvidencePackDiagnosticSummary('Repair failure', diagnostics.repair_failures),
-    renderEvidencePackDiagnosticSummary('Fallback builder failure', diagnostics.fallback_builder_failures),
     renderEvidencePackDiagnosticSummary('Candidate shortage hints', diagnostics.candidate_shortage_hints),
     renderEvidencePackDiagnosticSummary('Source gap warnings', diagnostics.source_gap_warnings),
     renderEvidencePackDiagnosticSummary('Missing artifacts', diagnostics.missing_artifacts),
@@ -1024,13 +1023,6 @@ function finalNewsletterHardBlockers(status = {}) {
   if (status.repair_failure_kind) {
     blockers.push(`repair_failure_kind=${status.repair_failure_kind}`);
   }
-  if (status.fallback_public_issue_failed === true || status.fallback_public_issue_failed === 'true') {
-    blockers.push('fallback_public_issue_failed=true');
-  }
-  if (status.fallback_public_issue_error && status.fallback_public_issue_error !== 'none') {
-    blockers.push(`fallback_public_issue_error=${status.fallback_public_issue_error}`);
-  }
-
   return blockers;
 }
 
@@ -1191,24 +1183,6 @@ function renderPublicNewsletterReadiness(root, date, handoff) {
   ].join('\n');
 }
 
-function summarizeFallbackReasonRows(items) {
-  return ensureArray(items)
-    .slice(0, 5)
-    .map(item => `${valueOrUnknown(item.reason)} (${valueOrUnknown(item.count ?? 'n/a')})`)
-    .join('; ') || 'none';
-}
-
-function fallbackDiagnosticsFor(root, date) {
-  if (!date) return null;
-  const diagnostics = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue-diagnostics.json'));
-  if (diagnostics) return { source: 'fallback-public-issue-diagnostics.json', value: diagnostics };
-  const fallback = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'));
-  if (fallback) return { source: 'fallback-public-issue.json', value: fallback };
-  const generationStatus = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'generation-status.json'));
-  if (generationStatus) return { source: 'generation-status.json', value: generationStatus };
-  return null;
-}
-
 function renderFailureDiagnostics(root, date, status, handoff) {
   if (!handoff?.diagnosticsOnly) return '';
   const generationStatus = date
@@ -1217,8 +1191,6 @@ function renderFailureDiagnostics(root, date, status, handoff) {
   const repairFailure = date
     ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'))
     : null;
-  const fallback = fallbackDiagnosticsFor(root, date);
-  const fallbackValue = fallback?.value || {};
   const selectionHints = ensureArray(status.selection_shortage_hints);
   return [
     '## Failure Diagnostics',
@@ -1230,33 +1202,6 @@ function renderFailureDiagnostics(root, date, status, handoff) {
       : '- repair_failure: unavailable',
     `- failure_stage: ${valueOrUnknown(generationStatus.failure_stage ?? status.failure_stage)}`,
     `- failure_reason: ${valueOrUnknown(generationStatus.failure_reason ?? status.failure_reason ?? repairFailure?.message ?? repairFailure?.reason)}`,
-    '',
-    '### Fallback Builder Failure',
-    '',
-    fallback
-      ? `- diagnostics_source: ${fallback.source}`
-      : '- fallback diagnostics unavailable',
-    fallback
-      ? `- fallback_public_issue_failed: ${booleanText(fallbackValue.fallback_public_issue_failed === true || fallbackValue.status === 'FAILED')}`
-      : '',
-    fallback
-      ? `- failure_reason: ${valueOrUnknown(fallbackValue.failure_reason || fallbackValue.fallback_public_issue_reason)}`
-      : '',
-    fallback
-      ? `- preserve_article_count: ${valueOrUnknown(fallbackValue.preserve_article_count)}`
-      : '',
-    fallback
-      ? `- final_article_count: ${valueOrUnknown(fallbackValue.final_article_count)}`
-      : '',
-    fallback
-      ? `- minimum_required_count: ${valueOrUnknown(fallbackValue.minimum_required_count ?? articlePolicy.mainArticleCount.min)}`
-      : '',
-    fallback
-      ? `- demoted_articles: ${ensureArray(fallbackValue.demoted_articles).map(item => valueOrUnknown(item.headline || item.title)).join('; ') || 'none'}`
-      : '',
-    fallback
-      ? `- top_rejected_reasons: ${summarizeFallbackReasonRows(fallbackValue.top_rejected_reasons)}`
-      : '',
     '',
     '### Candidate Shortage',
     '',
@@ -1353,8 +1298,7 @@ const TRACE_ARTIFACT_DEFS = [
   { key: 'shortlist', path: date => `content/newsroom/${date}/shortlisted-candidates.json` },
   { key: 'collected', path: date => `content/collected-news/${date}/candidates.json` },
   { key: 'quality', path: date => `content/newsroom/${date}/quality-report.json` },
-  { key: 'factCheck', path: date => `content/newsroom/${date}/fact-check-report.json` },
-  { key: 'fallback', path: date => `content/newsroom/${date}/fallback-public-issue.json` }
+  { key: 'factCheck', path: date => `content/newsroom/${date}/fact-check-report.json` }
 ];
 
 const TRACE_STATUS_RANK = {
@@ -1373,7 +1317,6 @@ const TRACE_STATUS_RANK = {
   unknown: 99
 };
 
-const FALLBACK_OVERRIDE_STATUSES = new Set(['demoted', 'rejected', 'merged']);
 const REPORT_ONLY_STATUSES = new Set(['quality_fail', 'factcheck_fail']);
 
 function normalizeMatchText(value) {
@@ -1641,13 +1584,6 @@ function normalizeTraceCandidate(raw, { statusHint = '', sourceHint = '' } = {})
   };
 }
 
-function hasSourceHint(candidate, hint) {
-  if (!candidate || !candidate.sourceHints) return false;
-  if (candidate.sourceHints instanceof Set) return candidate.sourceHints.has(hint);
-  if (Array.isArray(candidate.sourceHints)) return candidate.sourceHints.includes(hint);
-  return false;
-}
-
 function traceStatusRank(status) {
   return TRACE_STATUS_RANK[status] || 99;
 }
@@ -1655,14 +1591,9 @@ function traceStatusRank(status) {
 function shouldReplaceTraceStatus(target, incoming) {
   const incomingStatus = incoming.status || 'unknown';
   const targetStatus = target.status || 'unknown';
-  const incomingIsFallback = hasSourceHint(incoming, 'fallback-public-issue');
 
   if (incomingStatus === 'final_selected') return true;
   if (targetStatus === 'final_selected') return false;
-
-  if (incomingIsFallback && FALLBACK_OVERRIDE_STATUSES.has(incomingStatus)) {
-    return true;
-  }
 
   if (REPORT_ONLY_STATUSES.has(incomingStatus) && targetStatus !== 'unknown') {
     return false;
@@ -1736,24 +1667,11 @@ function pushArtifactCandidates(index, value, field, statusHint, sourceHint, iss
   for (const item of list) addTraceCandidate(index, item, { statusHint, sourceHint });
 }
 
-function buildFallbackCandidate(item) {
-  if (!item || typeof item !== 'object') return null;
-  return {
-    ...item,
-    title: item.title || item.headline,
-    url: item.url || valuesAsArray(item.source_urls)[0] || ensureArray(item.sources)[0]?.url,
-    source_name: item.source_name || item.source || ensureArray(item.sources)[0]?.title,
-    relevance_bucket: item.relevance_bucket || item.category,
-    selection_exclusion_reason: item.reason
-  };
-}
-
 function buildTraceIndex(artifacts, issues) {
   const index = { candidates: [], keyToCandidate: new Map() };
   const shortlist = artifacts.shortlist.value;
   const reporter = artifacts.reporter.value;
   const collected = artifacts.collected.value;
-  const fallback = artifacts.fallback.value;
 
   pushArtifactCandidates(index, shortlist, 'primary_selected_articles', 'primary_selected', 'shortlist', issues, artifacts.shortlist.relPath);
   pushArtifactCandidates(index, shortlist, 'selected_articles', 'final_selected', 'shortlist', issues, artifacts.shortlist.relPath);
@@ -1763,18 +1681,6 @@ function buildTraceIndex(artifacts, issues) {
   pushArtifactCandidates(index, shortlist, 'excluded_candidates', 'excluded', 'shortlist', issues, artifacts.shortlist.relPath);
   pushArtifactCandidates(index, reporter, 'candidates', '', 'reporter', issues, artifacts.reporter.relPath);
   pushArtifactCandidates(index, collected, 'candidates', '', 'collected', issues, artifacts.collected.relPath);
-
-  if (fallback && typeof fallback === 'object') {
-    for (const item of ensureArray(fallback.merged_articles)) {
-      addTraceCandidate(index, buildFallbackCandidate(item), { statusHint: 'merged', sourceHint: 'fallback-public-issue' });
-    }
-    for (const item of ensureArray(fallback.demoted_articles)) {
-      addTraceCandidate(index, buildFallbackCandidate(item), { statusHint: 'demoted', sourceHint: 'fallback-public-issue' });
-    }
-    for (const item of ensureArray(fallback.rejected_candidates)) {
-      addTraceCandidate(index, buildFallbackCandidate(item), { statusHint: 'rejected', sourceHint: 'fallback-public-issue' });
-    }
-  }
 
   for (const artifact of [artifacts.shortlist, artifacts.reporter, artifacts.collected]) {
     if (!artifact.value) continue;
@@ -2551,32 +2457,6 @@ function readJsonIfExists(filePath) {
   } catch (_) {
     return null;
   }
-}
-
-function renderFallbackPublicIssueNotes(root, date) {
-  const report = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'fallback-public-issue.json'));
-  if (!report) return '';
-  const demoted = ensureArray(report.demoted_articles);
-  const fallback = ensureArray(report.fallback_articles);
-  if (demoted.length === 0 && fallback.length === 0) return '';
-  const lines = [
-    '## 교체/강등된 기사',
-    ''
-  ];
-  if (demoted.length === 0) {
-    lines.push('- none');
-  } else {
-    for (const item of demoted) {
-      lines.push(`- ${valueOrUnknown(item.headline)}: ${valueOrUnknown(item.reason)}`);
-    }
-  }
-  if (fallback.length > 0) {
-    lines.push('', '## Fallback 기사', '');
-    for (const item of fallback) {
-      lines.push(`- ${valueOrUnknown(item.headline)}: ${valueOrUnknown(item.reason)} (${valueOrUnknown(item.relevance_bucket)})`);
-    }
-  }
-  return lines.join('\n');
 }
 
 function renderArticleStructureContract(root, date) {
