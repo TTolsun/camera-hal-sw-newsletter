@@ -741,7 +741,7 @@ test('homepage headline falls back to external source CTA when no newsletter URL
 test('homepage exposes clear Featured and Latest heading rows without changing heading levels', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
-  assert.match(html, /좋은 사진 뒤에는 고생했다는 말 없이 지나간[\s\S]*hero-title-nowrap[\s\S]*수많은 코드[\s\S]*가 있다\./);
+  assert.match(html, /사용자는 셔터를 눌렀고,[\s\S]*hero-title-nowrap[\s\S]*개발자는[\s\S]*로그[\s\S]*를 열었다\./);
   assert.match(html, /Camera HAL, Android, Linux Driver, AI 기술을 중심으로 모바일 카메라 기술의 변화를 추적합니다\./);
   assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">Home<\/a>[\s\S]*href="archive\.html">Archive<\/a>[\s\S]*href="https:\/\/github\.com\/TTolsun\/camera-hal-sw-newsletter">GitHub<\/a>/);
   assert.match(html, /<a class="button button-secondary" href="#archive">/);
