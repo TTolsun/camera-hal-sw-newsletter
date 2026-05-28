@@ -1,7 +1,14 @@
+const {
+  CLAIM_TYPES,
+  CLAIM_IMPACT_LEVELS,
+  OVERCLAIM_RISKS
+} = require('../validate/claim-source-binding');
+
 const string = { type: 'STRING' };
 const number = { type: 'NUMBER' };
 const stringArray = { type: 'ARRAY', items: string };
 const briefingArray = { type: 'ARRAY', items: string, minItems: 3, maxItems: 3 };
+const enumString = values => ({ type: 'STRING', enum: [...values] });
 const source = {
   type: 'OBJECT',
   properties: {
@@ -158,11 +165,11 @@ const claimBinding = {
   properties: {
     claim_id: string,
     text: string,
-    claim_type: string,
+    claim_type: enumString(CLAIM_TYPES),
     evidence_ids: stringArray,
     source_urls: stringArray,
-    impact_level: string,
-    overclaim_risk: string
+    impact_level: enumString(CLAIM_IMPACT_LEVELS),
+    overclaim_risk: enumString(OVERCLAIM_RISKS)
   },
   required: [
     'claim_id',
