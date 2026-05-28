@@ -2786,6 +2786,211 @@ test('repairable claim binding failures are repaired without replacing articles'
   assert.equal(errorArtifact.details.field, 'sections.claims');
 });
 
+test('missing claims[] is deterministically backfilled from verified_facts without calling the LLM', async () => {
+  const newsroomDir = tempNewsroomDir();
+  const url = 'https://example.com/source-1';
+  const draft = editor({
+    sections: [
+      section(1, {
+        evidence_summary: 'Fact 1',
+        article_sections: {
+          verified_facts: ['Fact 1'],
+          background_context: 'Background 1',
+          hal_driver_impact: 'HAL perspective 1',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1'
+        },
+        claims: []
+      })
+    ]
+  });
+  let repairCalled = false;
+
+  const result = await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    reporter: reporterForClaimTests(url),
+    attempt: 7,
+    stage: 'editor attempt 1/1',
+    newsroomDir,
+    normalizeSection,
+    strictClaims: true,
+    repairFn: async () => {
+      repairCalled = true;
+      throw new Error('LLM repair should not be invoked when deterministic backfill succeeds.');
+    }
+  });
+
+  assert.equal(repairCalled, false);
+  assert.equal(result.repairAttempted, true);
+  assert.equal(result.repairSucceeded, true);
+  assert.equal(result.editor.sections.length, 1);
+  const claims = result.editor.sections[0].claims;
+  assert.equal(claims.length, 1);
+  assert.equal(claims[0].claim_type, 'fact');
+  assert.equal(claims[0].text, 'Fact 1');
+  assert.deepEqual(claims[0].evidence_ids, ['evidence-1']);
+  assert.deepEqual(claims[0].source_urls, [url]);
+  assert.equal(claims[0].impact_level, 'no_hal_runtime_impact');
+  assert.equal(result.editor.sections[0].headline, draft.sections[0].headline);
+  assert.deepEqual(result.editor.sections[0].sources, draft.sections[0].sources);
+});
+
+test('missing claims[] fails closed when no candidate evidence can bind the verified_facts', async () => {
+  const newsroomDir = tempNewsroomDir();
+  const url = 'https://example.com/source-1';
+  const reporter = {
+    candidates: [{
+      title: 'Source 1',
+      url,
+      source_candidate_hash: 'hash-1',
+      relevance_bucket: 'direct_aosp_camera',
+      counts_as_primary_camera_topic: true,
+      hasDatedEvidence: true,
+      source_gap_risk: false,
+      main_eligible: true,
+      finalSelectionEligibility: 'main'
+    }]
+  };
+  const draft = editor({
+    sections: [
+      section(1, {
+        evidence_summary: 'Fact 1',
+        article_sections: {
+          verified_facts: ['Fact 1'],
+          background_context: 'Background 1',
+          hal_driver_impact: 'HAL perspective 1',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1'
+        },
+        claims: []
+      })
+    ]
+  });
+
+  await assert.rejects(
+    repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      reporter,
+      attempt: 8,
+      stage: 'editor attempt 1/1',
+      newsroomDir,
+      normalizeSection,
+      strictClaims: true
+    }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.claims');
+      return true;
+    }
+  );
+});
+
+test('blocked context surfaces as the next blocker after claims are satisfied', async () => {
+  const newsroomDir = tempNewsroomDir();
+  const url = 'https://example.com/source-1';
+  const blockedUrl = 'https://android-developers.googleblog.com/2026/05/roundup.html';
+  const reporter = {
+    candidates: [{
+      title: 'Source 1',
+      url,
+      source_candidate_hash: 'hash-1',
+      relevance_bucket: 'direct_aosp_camera',
+      counts_as_primary_camera_topic: true,
+      primary_evidence_ids: ['evidence-1'],
+      compact_evidence: {
+        primary_facts: ['Fact 1'],
+        evidence_urls: [url],
+        do_not_claim: ['Do not claim direct Camera HAL API changes.']
+      },
+      final_selected: true,
+      selected_for_editor: true,
+      primary_selected: true,
+      hasDatedEvidence: true,
+      source_gap_risk: false,
+      main_eligible: true,
+      finalSelectionEligibility: 'main',
+      article_group_key: 'group-a',
+      related_context_candidates: [{
+        title: 'Blocked roundup',
+        url: blockedUrl,
+        context_role: 'parent_roundup_context_only',
+        context_usage_allowed: false,
+        can_create_independent_article: false,
+        blocked_from_independent_main_reason: 'parent_roundup_context_only',
+        article_group_key: 'group-a'
+      }]
+    }]
+  };
+  const baseSection = section(1);
+  const draft = editor({
+    sections: [
+      section(1, {
+        article_group_key: 'group-a',
+        evidence_summary: 'Fact 1',
+        article_sections: {
+          verified_facts: ['Fact 1'],
+          background_context: 'Background 1',
+          hal_driver_impact: 'HAL perspective 1',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1'
+        },
+        claims: [],
+        sources: [
+          { title: 'Source 1', url },
+          { title: 'Blocked roundup', url: blockedUrl }
+        ],
+        public_article: {
+          ...baseSection.public_article,
+          source_links: [
+            { title: 'Source 1', url, source_role: 'primary' },
+            { title: 'Blocked roundup', url: blockedUrl, source_role: 'primary' }
+          ]
+        }
+      })
+    ]
+  });
+  let repairCalled = false;
+
+  await assert.rejects(
+    repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      reporter,
+      attempt: 9,
+      stage: 'editor attempt 1/1',
+      newsroomDir,
+      normalizeSection,
+      strictClaims: true,
+      repairFn: async ({ invalidEditor }) => {
+        repairCalled = true;
+        return {
+          ...invalidEditor,
+          sections: [{
+            ...invalidEditor.sections[0],
+            claims: [{
+              claim_id: 'claim-1',
+              text: 'Fact 1',
+              claim_type: 'fact',
+              evidence_ids: ['evidence-1'],
+              source_urls: [url],
+              impact_level: 'app_api_or_framework_adjacent',
+              overclaim_risk: 'low'
+            }]
+          }]
+        };
+      }
+    }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.blocked_context');
+      return true;
+    }
+  );
+  assert.equal(repairCalled, false);
+});
+
 test('failure status can include editor semantic validation and repair fields', () => {
   const error = new EditorSemanticValidationError('Editor output must contain exactly 3 briefing items; got 4.', {
     field: 'briefing',
