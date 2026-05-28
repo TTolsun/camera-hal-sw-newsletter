@@ -4,10 +4,13 @@ const path = require('path');
 const test = require('node:test');
 
 const {
+  articleClaimContractPrompt,
   articleSectionContractPrompt,
+  claimRepairEvidencePrompt,
   publicArticleJudgeBlockingIssues,
   publicArticleJudgePrompt,
   publicArticleContractPrompt,
+  publicationBoundaryPrompt,
   sourceExtractionPromptGuardrails
 } = require('../../scripts/gemini-newsroom-newsletter');
 const {
@@ -115,7 +118,6 @@ test('public article contract prompt keeps public output separate from diagnosti
     'field_scenario',
     'not_to_overclaim',
     'editor_take',
-    'decision_metadata',
     'source_links',
     'source-bound engineering inference',
     'selected article capsule',
@@ -124,13 +126,7 @@ test('public article contract prompt keeps public output separate from diagnosti
     'claim-level classification',
     'article_sections.hal_driver_impact',
     'public_article.camera_hal_takeaway',
-    'claims[].impact_level',
-    'deterministic publication judgment',
-    'source eligibility',
-    'source_gap_risk',
-    'main/supporting 승격',
-    'source link',
-    'do_not_claim'
+    'claims[].impact_level'
   ]) {
     assert.match(prompt, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
@@ -141,12 +137,10 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /fallback_public 또는 relevance_bucket 때문에 본문을 짧은 generic 문장/);
   assert.match(prompt, /3-5개 자연스러운 문단/);
   assert.match(prompt, /발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획/);
-  assert.match(prompt, /기사 선택, source eligibility, main\/supporting 승격 같은 발행 판단/);
   assert.match(prompt, /Public-facing impact wording과 claim-level classification은 public_article\.camera_hal_takeaway, article_sections\.hal_driver_impact, claims\[\]\.impact_level/);
   assert.match(prompt, /source가 직접 말하지 않는 HAL\/driver\/runtime 영향은 없다고 제한/);
   assert.match(prompt, /Camera HAL\/Driver 관점에서의 의미/);
   assert.match(prompt, /android_multimedia_camera_output article의 camera_hal_takeaway는 Camera HAL 직접 변경이 아니라 camera-generated output/);
-  assert.match(prompt, /Gemini는 decision_metadata를 생성하지 마세요/);
   assert.match(prompt, /validation report, checklist, enum, schema\/debug field name/);
   assert.match(prompt, /claim\/schema contract와 public prose contract를 섞지 마세요/);
   assert.match(prompt, /primary 또는 seed evidence URL/);
@@ -161,6 +155,41 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /compatibility test scenario/);
   assert.match(prompt, /vendor pipeline, stream, metadata, buffer/);
   assert.doesNotMatch(prompt, /즉시 조치할 항목은 없습니다\. 참고 동향으로만 공유합니다\./);
+});
+
+test('publication boundary prompt isolates deterministic publication judgment', () => {
+  const prompt = publicationBoundaryPrompt();
+
+  assert.match(prompt, /deterministic publication judgment/);
+  assert.match(prompt, /source eligibility/);
+  assert.match(prompt, /source_gap_risk/);
+  assert.match(prompt, /main\/supporting 승격/);
+  assert.match(prompt, /source link/);
+  assert.match(prompt, /do_not_claim/);
+  assert.match(prompt, /Gemini는 decision_metadata를 생성하지 마세요/);
+});
+
+test('claim repair evidence prompt carries repair-only guidance', () => {
+  const prompt = claimRepairEvidencePrompt();
+
+  assert.match(prompt, /allowed_claim_evidence/);
+  assert.match(prompt, /이전 invalid output/);
+  assert.match(prompt, /새 fact claim/);
+});
+
+test('initial editor prompt excludes repair-only claim guidance', () => {
+  assert.doesNotMatch(articleClaimContractPrompt(), /Repair|이전 invalid output|재사용/);
+
+  const source = promptHostSource();
+  const editorAnchor = '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI editor입니다.';
+  const start = source.indexOf(editorAnchor);
+  assert.notEqual(start, -1, `Missing editor stage anchor`);
+  const end = source.indexOf('schema와 일치하는 JSON만 반환하세요.', start);
+  assert.notEqual(end, -1, `Missing schema anchor after editor stage`);
+  const editorStageSource = source.slice(start, end);
+
+  assert.doesNotMatch(editorStageSource, /claimRepairEvidencePrompt\(\),/);
+  assert.match(source, /claimRepairEvidencePrompt\(\),/);
 });
 
 test('public article judge prompt is semantic and does not require keyword vocabulary', () => {

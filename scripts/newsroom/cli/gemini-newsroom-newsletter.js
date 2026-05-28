@@ -262,10 +262,8 @@ function publicArticleContractPrompt() {
     'reader_scenario는 source-confirmed incident가 아니라 독자가 마주칠 수 있는 가정형 현업 장면을 자연스러운 문장으로 쓰세요. "상황을 가정합니다"처럼 편집 메모처럼 쓰지 말고, 실제 발생 사실처럼 단정하지도 마세요.',
     'what_happened에는 source-confirmed fact만 쓰고, HAL 해석이나 권고는 why_it_matters, field_scenario, editor_take로 분리하세요. 다만 body_paragraphs에는 이 내용을 독자-facing 기사 문장으로 자연스럽게 합쳐 쓰세요.',
     'not_to_overclaim과 editor_take는 내부 구조화 필드입니다. public article prose에는 "편집자 판단", "과장 금지", "overclaim", "validation report" 같은 편집/검증 용어를 노출하지 말고 필요한 제한은 자연스러운 설명으로만 표현하세요.',
-    'Gemini는 decision_metadata를 생성하지 마세요. publication scope/action/overclaim_risk는 deterministic builder가 public output 직전에 생성하거나 overwrite합니다.',
     'Gemini는 public article writer입니다. selected article capsule과 source facts를 바탕으로 public-facing impact wording과 source-bound engineering inference를 자연스러운 한국어 기사 문장으로 작성하세요.',
     'Public-facing impact wording과 claim-level classification은 public_article.camera_hal_takeaway, article_sections.hal_driver_impact, claims[].impact_level에 원문 근거 기반으로 작성하세요. source가 직접 말하지 않는 HAL/driver/runtime 영향은 없다고 제한하세요.',
-    'Gemini는 deterministic publication judgment를 바꿀 수 없습니다: source eligibility, source_gap_risk, main/supporting 승격, source link, do_not_claim.',
     'public_article은 한국어 독자-facing technical newsletter prose로 작성하세요. validation report, checklist, enum, schema/debug field name을 노출하지 마세요.',
     'claim/schema contract와 public prose contract를 섞지 마세요. enum, diagnostic term, internal field name은 public_article 문장에 쓰지 마세요.',
     'source_links는 selected capsule의 primary 또는 seed evidence URL만 사용하고 새 URL을 만들지 마세요.',
@@ -274,6 +272,14 @@ function publicArticleContractPrompt() {
     'reader_checkpoints는 최소 2개이며 내부 QA/checklist용 필드입니다. Markdown/HTML에 직접 렌더링되지 않으므로, public body나 "Camera HAL/Driver 관점에서의 의미" 섹션을 대체하지 마세요. 독자가 실제로 확인할 행동과 source 범위 제한을 자연어로 작성하되 body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요.',
     'API/component/date, stream/metadata, compatibility test scenario처럼 validator token을 조합한 문장을 쓰지 마세요.',
     'source가 HAL/driver 변경을 직접 말하지 않으면 vendor pipeline, stream, metadata, buffer 변경으로 확대하지 마세요.'
+  ].join('\n');
+}
+
+function publicationBoundaryPrompt() {
+  return [
+    '기사 선택, source eligibility, main/supporting 승격 같은 발행 판단은 deterministic metadata와 validation layer가 담당합니다.',
+    'Gemini는 decision_metadata를 생성하지 마세요. publication scope/action/overclaim_risk는 deterministic builder가 public output 직전에 생성하거나 overwrite합니다.',
+    'Gemini는 deterministic publication judgment를 바꿀 수 없습니다: source eligibility, source_gap_risk, main/supporting 승격, source link, do_not_claim.'
   ].join('\n');
 }
 
@@ -305,9 +311,16 @@ function articleClaimContractPrompt() {
     'claims[].evidence_ids는 같은 article capsule의 allowed_claim_evidence[].evidence_id 값만 정확히 복사하세요. evidence id를 만들거나 변형하지 마세요.',
     'claims[].source_urls는 선택한 allowed_claim_evidence[].source_urls에서만 가져오세요.',
     'behavior_change: ... 같은 설명문, confirmed_facts[0], article_sections.verified_facts[0] 같은 JSON field path, URL 문자열 자체를 evidence_id로 쓰지 마세요.',
-    'Repair 중에는 이전 invalid output의 evidence_ids를 신뢰하거나 재사용하지 말고 현재 prompt의 allowed_claim_evidence[]에서 전부 다시 선택하세요.',
     'evidence URL에 fragment가 있으면 source_urls에서 release/version/section URL fragment를 보존하세요. 특히 CameraX release-note anchor를 보존해야 합니다.',
     'do_not_claim 또는 do_not_overstate guardrails와 모순되지 않게 쓰세요. Direct HAL/API/runtime 표현은 direct source evidence가 필요합니다.'
+  ].join('\n');
+}
+
+function claimRepairEvidencePrompt() {
+  return [
+    'Repair 중에는 이전 invalid output의 evidence_ids/source_urls를 신뢰하거나 재사용하지 말고 현재 prompt의 allowed_claim_evidence[]에서 전부 다시 선택하세요. source_urls가 누락된 경우 현재 article capsule의 allowed_claim_evidence[].source_urls에서 선택하세요. 이전 invalid output의 evidence_ids/source_urls를 허용 목록처럼 취급하지 마세요.',
+    'uncovered factual fields를 덮기 위해 새 fact claim, evidence id, source URL을 만들지 마세요. 제공된 candidate evidence로 coverage 또는 source/evidence binding을 충족할 수 없으면 section을 demote 또는 replace하세요.',
+    'do_not_claim violation은 evidence_ids 또는 source_urls를 바꾸지 말고 unsupported assertion을 제거하거나 risk_note/limitation으로 다시 쓰세요.'
   ].join('\n');
 }
 
@@ -1915,13 +1928,11 @@ async function repairEditorSemanticWithLlm({
       'Validation repair에 필요한 local edit가 아니면 한국어 reader-facing prose를 보존하세요. 새로 쓰는 reader-facing text는 반드시 한국어여야 합니다.',
       'Article을 추가, 제거, 재정렬, 교체하지 마세요.',
       'Validation error가 명시적으로 해당 field를 가리키지 않으면 article headline, category, source URL, image field, action_items, references를 변경하지 마세요.',
-      publicArticleContractPrompt(),
-      articleClaimContractPrompt(),
+      claimRepairEvidencePrompt(),
       'sections.group_coverage failure는 missing selected representative group을 selected capsule만 사용해 article로 복구하세요. 해당 group을 render할 수 없으면 article_group_key, reason_code, reason text를 포함해 explicitly_demoted_groups[] 또는 hard_blocked_groups[]에 기록하세요.',
       'sections.blocked_context failure는 article sources와 headline에서 blocked context URL/title을 제거하세요. Blocked context는 diagnostic context로만 남길 수 있습니다.',
       'sections.claims failure는 source-backed article_sections.verified_facts[]의 각 항목마다 matching claim_type=fact claim이 있도록 claims를 추가하거나 조정하세요. (confirmed_facts / evidence_summary는 claim 바인딩 대상이 아닙니다.)',
       'Claim repair에는 허용된 claim_type과 impact_level 값만 사용하세요. 직접 HAL contract를 뒷받침하는 근거가 없으면 CameraX/adaptive UI impact는 app_api_or_framework_adjacent로 매핑하세요.',
-      'source_urls가 누락된 경우 현재 article capsule의 allowed_claim_evidence[].source_urls에서 선택하세요. 이전 invalid output의 evidence_ids/source_urls를 허용 목록처럼 취급하지 마세요.',
       'briefing failure는 briefing을 정확히 3개 item으로 고치고 draft의 나머지는 보존하세요.',
       'Source fact 또는 source material을 만들지 마세요.',
       'Schema-compliant JSON만 반환하세요.'
@@ -3777,6 +3788,7 @@ async function main() {
         sourceExtractionPromptGuardrails(),
         articleSectionContractPrompt(),
         publicArticleContractPrompt(),
+        publicationBoundaryPrompt(),
         articleClaimContractPrompt(),
         '초기 editor draft는 primary selected article capsule만 사용해야 합니다. reserve candidate는 repair 또는 completion 중 primary article이 demote/remove된 뒤에만 사용할 수 있습니다.',
         `우선순위: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. 금지 bucket은 briefing/watchlist로만 남깁니다: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
@@ -3878,6 +3890,7 @@ async function main() {
         'source 없는 claim은 must_fix로 분류해야 합니다.',
         articleSectionContractPrompt(),
         publicArticleContractPrompt(),
+        publicationBoundaryPrompt(),
         articleClaimContractPrompt(),
         factCheckSeverityPrompt(),
         cameraDeveloperToolingFactCheckPrompt(),
@@ -3978,9 +3991,9 @@ async function main() {
           sourceExtractionPromptGuardrails(),
           articleSectionContractPrompt(),
           publicArticleContractPrompt(),
+          publicationBoundaryPrompt(),
           articleClaimContractPrompt(),
-          'Claim repair safety: uncovered factual fields를 덮기 위해 새 fact claim, evidence id, source URL을 만들지 마세요. 제공된 candidate evidence로 coverage 또는 source/evidence binding을 충족할 수 없으면 section을 demote 또는 replace하세요.',
-          'do_not_claim violation은 evidence_ids 또는 source_urls를 바꾸지 말고 unsupported assertion을 제거하거나 risk_note/limitation으로 다시 쓰세요.',
+          claimRepairEvidencePrompt(),
           'locked/passing section은 변경하지 말고 locked 또는 excluded article을 중복하지 마세요.',
           'locked/passing section은 이미 gate를 통과했습니다. repair plan에 명시적으로 포함된 경우가 아니면 source URLs, title/headline, source-date-title 조합을 정확히 보존하세요.',
           '각 regenerated section에는 release date, version/release, API/component 또는 library/artifact, concrete behavior change, relevance_bucket, AOSP Camera / driver / SoC / native tooling relevance를 명시하세요.',
@@ -4049,6 +4062,7 @@ async function main() {
           sourceExtractionPromptGuardrails(),
           articleSectionContractPrompt(),
           publicArticleContractPrompt(),
+          publicationBoundaryPrompt(),
           articleClaimContractPrompt(),
           factCheckSeverityPrompt(),
           cameraDeveloperToolingFactCheckPrompt(),
@@ -4140,6 +4154,7 @@ async function main() {
             sourceExtractionPromptGuardrails(),
             articleSectionContractPrompt(),
             publicArticleContractPrompt(),
+            publicationBoundaryPrompt(),
             articleClaimContractPrompt(),
             'exclusion context에 있는 locked, duplicate/rejected, source-gap, ineligible sections를 중복하지 마세요.',
             '각 새 section은 같은 editorial contract인 confirmed_facts, background, camera_hal_perspective, action_items, team_summary, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, sources를 만족해야 합니다.',
@@ -4194,6 +4209,7 @@ async function main() {
             sourceExtractionPromptGuardrails(),
             articleSectionContractPrompt(),
             publicArticleContractPrompt(),
+            publicationBoundaryPrompt(),
             articleClaimContractPrompt(),
             factCheckSeverityPrompt(),
             cameraDeveloperToolingFactCheckPrompt(),
@@ -4709,8 +4725,10 @@ module.exports = {
   hasTooFewMainArticlesDeduction,
   articleClaimContractPrompt,
   articleSectionContractPrompt,
+  claimRepairEvidencePrompt,
   linkedEvidencePromptGuardrails,
   publicArticleContractPrompt,
+  publicationBoundaryPrompt,
   publicArticleJudgeBlockingIssues,
   publicArticleJudgeInput,
   publicArticleJudgePrompt,
