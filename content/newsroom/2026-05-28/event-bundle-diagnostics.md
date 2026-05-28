@@ -49,7 +49,7 @@
 - event_b433fac84afe: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo, evidence=0, confidence=low
 - event_762eb693ab2e: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos, evidence=0, confidence=low
 - event_e4b2671da11f: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-how-to-build-robust-cpp-inter-process-queues-jody-hagins, evidence=0, confidence=low
-- event_0cfa40b3a793: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire, evidence=0, confidence=low
+- event_08ab4fc869b6: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-master-cpp-friendship-mateusz-pusz, evidence=0, confidence=low
 - event_090e15fe27db: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo, evidence=0, confidence=low
 - event_8f582e1ff61b: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo, evidence=0, confidence=low
 - event_511155d5eb95: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp, evidence=0, confidence=low

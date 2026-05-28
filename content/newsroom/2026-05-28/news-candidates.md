@@ -51,6 +51,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | watchlist | generic_tech_watchlist | 7 | 45 | 4 | rss-item | yes | rss_item | ISO C++ Blog | Let the Compiler Check Your Units -- Wu Yongwei | Fri, 22 May 2026 22:54:40 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei) |
 | watchlist | generic_tech_watchlist | 7 | 39 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos | Mon, 25 May 2026 21:47:37 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos) |
 | watchlist | generic_tech_watchlist | 7 | 39 | 4 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 How To Build Robust C++ Inter-Process Queues -- Jody Hagins | Thu, 21 May 2026 21:43:57 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-how-to-build-robust-cpp-inter-process-queues-jody-hagins) |
+| watchlist | generic_tech_watchlist | 7 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Back to Basics: Master C++ Friendship -- Mateusz Pusz | Wed, 27 May 2026 21:49:28 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-master-cpp-friendship-mateusz-pusz) |
 | watchlist | generic_tech_watchlist | 7 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | What Happens When a Destructor Throws -- Sandor Dargo | Fri, 15 May 2026 22:42:26 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/what-happens-when-a-destructor-throws-sandor-dargo) |
 | watchlist | generic_tech_watchlist | 7 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman | Wed, 13 May 2026 21:36:47 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-crafting-the-code-you-dont-write-sculpting-software-in-an-ai-wo) |
 | watchlist | generic_tech_watchlist | 7 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | CppCon 2025 Reflection: C++’s Decade-Defining Rocket Engine -- Herb Sutter | Mon, 11 May 2026 21:33:30 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-reflection-cpps-decade-defining-rocket-engine-herb-sutter) |
@@ -68,7 +69,6 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | exclude | cpp_ai_tooling_fallback | 6 | 45 | 4 | rss-item | yes | rss_item | ISO C++ Blog | The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo | Wed, 20 May 2026 22:51:47 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru) |
 | exclude | cpp_ai_tooling_fallback | 6 | 45 | 2 | rss-item | yes | rss_item | ISO C++ Blog | What reinterpret_cast doesn&apos;t do -- Andreas Fertig | Mon, 18 May 2026 22:46:29 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig) |
 | exclude | cpp_ai_tooling_fallback | 6 | 39 | 4 | rss-item | yes | rss_item | ISO C++ Blog | C++26: Structured Bindings in Conditions -- Sandor Dargo | Tue, 26 May 2026 22:57:06 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo) |
-| exclude | cpp_ai_tooling_fallback | 6 | 39 | 4 | rss-item | yes | rss_item | ISO C++ Blog | JSON and C++26 compile-time reflection: a talk -- Daniel Lemire | Wed, 06 May 2026 22:35:16 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire) |
 | exclude | cpp_ai_tooling_fallback | 6 | 33 | 2 | rss-item | yes | rss_item | ISO C++ Blog | Evolving a Translation System with Reflection in C++ | Tue, 12 May 2026 22:40:34 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/evolving-a-translation-system-with-reflection-in-cpp) |
 | exclude | cpp_ai_tooling_fallback | 6 | 27 | 2 | rss-item | yes | rss_item | ISO C++ Blog | Exploring ref qualifiers in C++ | Thu, 21 May 2026 15:12:55 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/exploring-ref-qualifiers-in-cpp) |
 
@@ -1514,27 +1514,27 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! How To Build Robust C++ Inter-Process Queues by Jody Hagins Summary of the talk: This talk will o
 - Selection reason: ISO C++ Blog (official-community, high, score 39): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 33. JSON and C++26 compile-time reflection: a talk -- Daniel Lemire
+### 33. CppCon 2025 Back to Basics: Master C++ Friendship -- Mateusz Pusz
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
-- 발행일: Wed, 06 May 2026 22:35:16 +0000
-- Link: https://isocpp.org//blog/2026/05/json-and-cpp26-compile-time-reflection-a-talk-daniel-lemire
+- 발행일: Wed, 27 May 2026 21:49:28 +0000
+- Link: https://isocpp.org//blog/2026/05/cppcon-2025-back-to-basics-master-cpp-friendship-mateusz-pusz
 - Section: C++ / Native / Toolchain
 - Source category: cpp
 - Source priority: high
 - Source reliability: official-community
-- Editorial priority: 6
-- Relevance bucket: cpp_ai_tooling_fallback
+- Editorial priority: 7
+- Relevance bucket: generic_tech_watchlist
 - AOSP camera directness: 0
 - Driver stack relevance: 0
 - SoC platform relevance: 0
-- Native tooling relevance: 3
+- Native tooling relevance: 0
 - Counts as primary camera topic: no
 - Counts as driver topic: no
 - Counts as SoC topic: no
-- Counts as fallback topic: yes
-- Evidence origin: article_text
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
 - Source hint: C++ standard, C++26/C++29, committee, compiler support 감시
 - Candidate only: no
 - Collection mode: rss-item
@@ -1542,22 +1542,22 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Watch page: no
 - 날짜 근거 있음: yes
 - Evidence level: dated-rss-article
-- Final selection eligibility: exclude
+- Final selection eligibility: watchlist
 - Source kind: rss_item
 - Main eligible: no
-- Briefing only: no
-- Reference only: no
+- Briefing only: yes
+- Reference only: yes
 - Source gap risk: yes
-- Evidence score: 4
+- Evidence score: 2
 - Version/release: 추출 안 됨
 - API/component: 추출 안 됨
-- Behavior change: To test it out, we extended our fast JSON library (simdjson) and we gave a talk at CppCon 2025.
+- Behavior change: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO .
 - Cross-check 필요: no
-- Selection exclusion reason: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Verification hint: Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.
-- Relevance Score: 39
-- 요약: The next C++ standard (C++26) is getting exciting new features. One of these features is compile-time reflection. It is ideally suited to serialize and deserialize data at high speed. To test it out, we extended our fast JSON library (simdjson) and we gave a talk at CppCon 2025. The video is out on YouTube. JSON and C++26 compile-time reflection: a talk by Daniel Lemire Watch now:
-- Selection reason: ISO C++ Blog (official-community, high, score 39): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 33
+- 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Back to Basics: Master C++ Friendship by Mateusz Pusz Summary of the talk: C++ offers a rich set
+- Selection reason: ISO C++ Blog (official-community, high, score 33): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
 ### 34. What Happens When a Destructor Throws -- Sandor Dargo
 
@@ -1878,7 +1878,6 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 
 - LLVM Project Blog: 404 Not Found
 - OpenAI News: 403 Forbidden
-- 요즘IT: 403 Forbidden
 
 ## 편집장 체크리스트
 

@@ -5,7 +5,7 @@
 - enable_network: false
 - candidate_count: 40
 - total_linked_evidence: 0
-- source_aware_linked_evidence: 1344
+- source_aware_linked_evidence: 1346
 - warning_count: 37
 
 ## Fetch Status Counts
@@ -14,10 +14,10 @@
 
 ## Impact Type Counts
 
-- build_dependency_fix: 14
+- build_dependency_fix: 13
 - camera_api_change: 1
 - documentation_only: 2
-- generic_tooling_change: 8
+- generic_tooling_change: 9
 - security_component_camera_related: 1
 - unknown: 13
 - video_capture_fix: 1
@@ -56,7 +56,7 @@
 - C++26: Structured Bindings in Conditions -- Sandor Dargo: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - CppCon 2025 How To Build Robust C++ Inter-Process Queues -- Jody Hagins: 0 evidence, impact=build_dependency_fix, recommendation=watch
-- JSON and C++26 compile-time reflection: a talk -- Daniel Lemire: 0 evidence, impact=build_dependency_fix, recommendation=watch
+- CppCon 2025 Back to Basics: Master C++ Friendship -- Mateusz Pusz: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - What Happens When a Destructor Throws -- Sandor Dargo: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - CppCon 2025 Crafting the Code You Don’t Write: Sculpting Software in an AI World -- Daisy Hollman: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - Evolving a Translation System with Reflection in C++: 0 evidence, impact=build_dependency_fix, recommendation=watch
