@@ -211,10 +211,16 @@ function attachRelatedContextToSelected(selected = [], pools = []) {
     const selfUrl = normalizeSourceUrlPreserveAnchor(candidateUrl(candidate));
     const related = allCandidates
       .filter(item => candidateGroupKey(item) === groupKey)
-      .filter(item => normalizeSourceUrlPreserveAnchor(candidateUrl(item)) !== selfUrl || candidateTitle(item) !== candidateTitle(candidate))
+      // selected candidate 자신의 exact normalized URL(anchor 포함)은 title이 달라도 제외한다.
+      // 같은 article URL이 다른 title로 재카탈로그되어 related/blocked context로 새어 들어가면,
+      // validateBlockedContextUsage가 자기 source를 blocked_context_url_used_as_article_source로
+      // 오탐한다. anchor가 다른 sibling(#roundup-child-... 등)은 selfUrl과 달라 그대로 유지된다.
+      .filter(item => normalizeSourceUrlPreserveAnchor(candidateUrl(item)) !== selfUrl)
       .map(item => compactContextCandidate(item));
     const parentContext = parentRoundupContext(candidate);
-    const relatedContexts = uniqueByUrlAndTitle(parentContext ? [parentContext, ...related] : related);
+    const relatedContexts = uniqueByUrlAndTitle(parentContext ? [parentContext, ...related] : related)
+      // parentRoundupContext가 self와 동일 URL인 degenerate 케이스까지 막는 post-merge guard.
+      .filter(item => normalizeSourceUrlPreserveAnchor(item.url) !== selfUrl);
     return {
       ...candidate,
       article_group_key: groupKey,

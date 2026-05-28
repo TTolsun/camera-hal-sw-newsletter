@@ -365,6 +365,36 @@ test('blocked related context cannot be used as article source or headline', () 
   );
 });
 
+test('a selected article own source URL leaked into its blocked context is not flagged', () => {
+  // selected candidate 자신의 source URL이 다른 title로 자기 related/blocked context에 새어
+  // 들어가도, 자기 source는 "improperly used blocked context"가 아니므로 오탐하면 안 된다.
+  const selfUrl = 'https://example.com/source-1';
+  const reporter = reporterForGroupTests({
+    related_context_candidates: [{
+      title: 'Selected group source (re-catalogued under a different title)',
+      url: selfUrl,
+      context_role: 'parent_roundup_context_only',
+      context_usage_allowed: false,
+      can_create_independent_article: false,
+      blocked_from_independent_main_reason: 'parent_roundup_context_only',
+      article_group_key: 'group-a'
+    }]
+  });
+  const baseSection = section(1);
+  const draft = editor({
+    sections: [section(1, {
+      article_group_key: 'group-a',
+      sources: [{ title: 'Selected group source', url: selfUrl }],
+      public_article: {
+        ...baseSection.public_article,
+        source_links: [{ title: 'Selected group source', url: selfUrl, source_role: 'primary' }]
+      }
+    })]
+  });
+
+  assert.doesNotThrow(() => validateEditorOutputContract(draft, DATE, { normalizeSection, reporter }));
+});
+
 test('source-gap selected group is hard blocked even if editor also demotes it', () => {
   const reporter = reporterForGroupTests({
     source_gap_risk: true,

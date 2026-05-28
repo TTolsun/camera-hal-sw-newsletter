@@ -3,6 +3,7 @@ const test = require('node:test');
 
 const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
+  attachRelatedContextToSelected,
   candidateGroupKey,
   compactContextCandidate,
   groupCoverageSummary,
@@ -115,4 +116,30 @@ test('group coverage summary reports missing, overlap, and demotion reason issue
   });
   assert.equal(hardBlockedAndDemoted.ok, false);
   assert.deepEqual(hardBlockedAndDemoted.hard_blocked_demoted_overlap_group_keys, ['group-a']);
+});
+
+test('attachRelatedContextToSelected drops the selected article own exact URL but keeps anchor siblings and other URLs', () => {
+  const selfUrl = 'https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html';
+  const selected = [{
+    title: 'Build native Android apps in Google AI Studio',
+    url: selfUrl,
+    article_group_key: 'group-ai-studio'
+  }];
+  const pool = [
+    // 같은 article URL이 다른 title로 재카탈로그된 self 항목 -> 제외되어야 함.
+    { title: 'Android Developers Blog: Build native Android apps', url: selfUrl, article_group_key: 'group-ai-studio' },
+    // anchor만 다른 sibling -> 유지되어야 함.
+    { title: 'Roundup child section', url: `${selfUrl}#roundup-child-3-start-building-today`, article_group_key: 'group-ai-studio' },
+    // 완전히 다른 URL -> 유지(차단 context)되어야 함.
+    { title: 'Different roundup', url: 'https://android-developers.googleblog.com/2026/05/roundup.html', article_group_key: 'group-ai-studio' }
+  ];
+
+  const [result] = attachRelatedContextToSelected(selected, [pool]);
+  const normalizedUrls = result.related_context_candidates.map(item => normalizeSourceUrlPreserveAnchor(item.url));
+
+  // self의 exact normalized URL은 related/blocked context에 없어야 한다.
+  assert.equal(normalizedUrls.includes(normalizeSourceUrlPreserveAnchor(selfUrl)), false);
+  // anchor가 다른 sibling과 다른 roundup URL은 유지된다.
+  assert.ok(normalizedUrls.includes(normalizeSourceUrlPreserveAnchor(`${selfUrl}#roundup-child-3-start-building-today`)));
+  assert.ok(normalizedUrls.includes(normalizeSourceUrlPreserveAnchor('https://android-developers.googleblog.com/2026/05/roundup.html')));
 });
