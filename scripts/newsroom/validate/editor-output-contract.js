@@ -811,7 +811,18 @@ function candidateBlockedContexts(candidate = {}) {
 function blockedContextCandidates(reporter = {}) {
   const seen = new Set();
   return selectedReporterCandidates(reporter)
-    .flatMap(candidateBlockedContexts)
+    // Defense-in-depth: a selected candidate's OWN source URL is never an "improperly used
+    // blocked context" — it is the article's legitimate source. Drop blocked-context entries
+    // whose normalized URL matches their originating candidate's own source URL, so a self-URL
+    // that leaked into related/blocked context cannot raise blocked_context_url_used_as_article_source.
+    // Per-candidate scope keeps a DIFFERENT article's blocked aggregator URL fully blocked.
+    .flatMap(candidate => {
+      const selfUrl = normalizeGroupUrl(text(
+        candidate.url || candidate.article_url || candidate.articleUrl || candidate.normalized_url
+      ));
+      return candidateBlockedContexts(candidate)
+        .filter(item => !selfUrl || normalizeGroupUrl(item.url) !== selfUrl);
+    })
     .filter(item => item.context_usage_allowed !== true)
     .map(item => ({
       title: text(item.title),

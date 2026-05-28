@@ -1098,3 +1098,133 @@ test('seed pack do_not_claim guardrails are additive', () => {
 test('seed pack status normalization maps failed_or_blocked to blocked', () => {
   assert.equal(normalizeSeedPackStatus('failed_or_blocked'), 'blocked');
 });
+
+function koreanFactSection(verifiedFact, claimText, overrides = {}) {
+  return section({
+    headline: '한국어 사실 커버리지 테스트',
+    confirmed_facts: [],
+    evidence_summary: '',
+    article_sections: {
+      verified_facts: [verifiedFact],
+      background_context: 'Google AI Studio는 Android 앱 개발 도구입니다.',
+      hal_driver_impact: '프레임워크 인접 호환성 증거로 다룹니다.',
+      action_items: ['참조 기기에서 검증 항목을 실행한다.'],
+      team_share_points: '팀 공유용 호환성 관찰 항목.'
+    },
+    claims: [{
+      claim_id: 'claim-ko',
+      text: claimText,
+      claim_type: 'fact',
+      evidence_ids: ['seed-camerax-primary-01'],
+      source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+      impact_level: 'app_api_or_framework_adjacent',
+      overclaim_risk: 'low'
+    }],
+    ...overrides
+  });
+}
+
+test('Korean paraphrase of a verified fact is covered by a similar fact claim', () => {
+  // 같은 사실의 조사/어미만 다른 paraphrase("네이티브…지원" vs "전체…제공")는
+  // 어절 Jaccard로는 0.72 미만이지만 hybrid(문자 bigram) similarity로 커버되어야 한다.
+  const result = validateArticleClaims({
+    section: koreanFactSection(
+      '네이티브 Android 앱을 빌드하는 도구를 지원합니다.',
+      '전체 Android 앱을 빌드할 수 있는 네이티브 도구를 제공합니다.'
+    ),
+    candidate: candidate(),
+    strict: true
+  });
+  assert.equal(
+    result.uncovered_facts.some(item => item.field === 'article_sections.verified_facts[0]'),
+    false
+  );
+});
+
+test('a verified fact is not falsely covered by a claim about a different fact in the same article', () => {
+  const result = validateArticleClaims({
+    section: koreanFactSection(
+      '네이티브 Android 앱을 빌드하는 도구를 지원합니다.',
+      '카메라 입력 기반 객체 감지와 이미지 세분화를 수행합니다.'
+    ),
+    candidate: candidate(),
+    strict: true
+  });
+  assert.ok(result.uncovered_facts.some(item =>
+    item.field === 'article_sections.verified_facts[0]' &&
+    item.reason_code === 'missing_matching_fact_claim'
+  ));
+});
+
+test('claims sharing only generic Korean modifiers do not falsely cover a fact', () => {
+  const result = validateArticleClaims({
+    section: koreanFactSection(
+      '전체 Android 앱 빌드를 위한 도구를 지원합니다.',
+      '전체 Android 보안 패치 배포 일정을 안내합니다.'
+    ),
+    candidate: candidate(),
+    strict: true
+  });
+  assert.ok(result.uncovered_facts.some(item =>
+    item.field === 'article_sections.verified_facts[0]' &&
+    item.reason_code === 'missing_matching_fact_claim'
+  ));
+});
+
+test('protected version token blocks coverage despite high character overlap', () => {
+  // 문자 overlap이 매우 높아도(버전만 다름) protected-token guard가 먼저 차단해야 한다.
+  const result = validateArticleClaims({
+    section: koreanFactSection(
+      'CameraX 1.6.1 릴리스 날짜는 2026-05-06입니다.',
+      'CameraX 1.6.0 릴리스 날짜는 2026-05-06입니다.'
+    ),
+    candidate: candidate({
+      compact_evidence: {
+        primary_facts: ['CameraX 1.6.0 릴리스 날짜는 2026-05-06입니다.'],
+        evidence_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1']
+      }
+    }),
+    strict: true
+  });
+  assert.ok(result.uncovered_facts.some(item =>
+    item.field === 'article_sections.verified_facts[0]' &&
+    item.reason_code === 'missing_matching_fact_claim'
+  ));
+});
+
+test('only article_sections.verified_facts requires claim coverage; confirmed_facts and evidence_summary do not', () => {
+  const result = validateArticleClaims({
+    section: section({
+      headline: 'canonical verified_facts coverage 계약',
+      confirmed_facts: ['레거시 확정 사실: 어떤 claim으로도 커버되지 않는 내용.'],
+      evidence_summary: '어떤 claim으로도 커버되지 않는 별도의 요약 텍스트입니다.',
+      article_sections: {
+        verified_facts: ['Google AI Studio는 프롬프트 기반 앱 빌드를 지원합니다.'],
+        background_context: 'Google AI Studio 배경 맥락.',
+        hal_driver_impact: '프레임워크 인접 영향.',
+        action_items: ['검증 항목을 실행한다.'],
+        team_share_points: '공유 포인트.'
+      },
+      claims: [{
+        claim_id: 'claim-vf',
+        text: 'Google AI Studio는 프롬프트 기반 앱 빌드를 지원합니다.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-camerax-primary-01'],
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+        impact_level: 'app_api_or_framework_adjacent',
+        overclaim_risk: 'low'
+      }]
+    }),
+    candidate: candidate(),
+    strict: true
+  });
+  // verified_facts[0]은 동일 claim으로 커버되고, 레거시 confirmed_facts/evidence_summary는
+  // 더 이상 coverage 대상이 아니므로 uncovered가 없어야 한다.
+  assert.deepEqual(result.uncovered_facts, []);
+  assert.equal(
+    result.uncovered_facts.some(item =>
+      /^confirmed_facts\[/.test(item.field) || item.field === 'evidence_summary'
+    ),
+    false
+  );
+});

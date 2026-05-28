@@ -914,13 +914,46 @@ function protectedTokens(value) {
   return [...tokens].filter(Boolean);
 }
 
-function tokenSimilarity(left, right) {
-  const leftTokens = new Set(normalizeText(left).split(/\s+/).filter(token => token.length > 2));
-  const rightTokens = new Set(normalizeText(right).split(/\s+/).filter(token => token.length > 2));
-  if (leftTokens.size === 0 || rightTokens.size === 0) return 0;
-  const intersection = [...leftTokens].filter(token => rightTokens.has(token)).length;
-  const union = new Set([...leftTokens, ...rightTokens]).size;
+function similarityTokens(value) {
+  // Korean is agglutinative: 조사/어미가 붙은 짧은 어절도 의미를 가지므로 length>2 필터로 버리지 않는다.
+  // 또한 normalizeText가 남긴 어절 앞뒤 구두점(예: "제공합니다.")을 제거해 같은 어간이 다른 토큰으로 갈리는 것을 막는다.
+  return new Set(
+    normalizeText(value)
+      .split(/\s+/)
+      .map(token => token.replace(/^[.#/+-]+|[.#/+-]+$/g, ''))
+      .filter(token => token.length >= 2)
+  );
+}
+
+function jaccard(leftSet, rightSet) {
+  if (leftSet.size === 0 || rightSet.size === 0) return 0;
+  const intersection = [...leftSet].filter(item => rightSet.has(item)).length;
+  const union = new Set([...leftSet, ...rightSet]).size;
   return union > 0 ? intersection / union : 0;
+}
+
+function tokenSimilarity(left, right) {
+  return jaccard(similarityTokens(left), similarityTokens(right));
+}
+
+function charBigrams(value) {
+  const compact = normalizeText(value).replace(/\s+/g, '');
+  const grams = new Set();
+  for (let i = 0; i < compact.length - 1; i += 1) {
+    grams.add(compact.slice(i, i + 2));
+  }
+  return grams;
+}
+
+function charBigramSimilarity(left, right) {
+  return jaccard(charBigrams(left), charBigrams(right));
+}
+
+// Korean paraphrases of the same fact share few whole 어절 (조사/어미 변형) but heavy
+// character overlap; English/version facts share whole tokens. max() of both keeps recall
+// for Korean without loosening cross-fact safety — the protected-token guard runs first.
+function factClaimSimilarity(left, right) {
+  return Math.max(tokenSimilarity(left, right), charBigramSimilarity(left, right));
 }
 
 function evidenceTextForClaim(claim, evidenceIndex) {
@@ -1010,24 +1043,25 @@ function factCoveredByClaim(factText, claim, evidenceIndex) {
   if (claimText.includes(fact) || fact.includes(claimText)) {
     return { covered: true, confidence: 1, reason_code: 'substring_match' };
   }
-  const similarity = tokenSimilarity(fact, claimText);
-  if (similarity >= 0.72) {
+  const similarity = factClaimSimilarity(fact, claimText);
+  if (similarity >= 0.5) {
     return { covered: true, confidence: similarity, reason_code: 'token_similarity' };
   }
   return { covered: false, confidence: similarity, reason_code: 'missing_matching_fact_claim' };
 }
 
 function factsToCover(section = {}) {
+  // article_sections.verified_facts만 canonical source-backed facts이며 claim 바인딩(증거 결속)의
+  // 유일한 대상이다. confirmed_facts / evidence_summary는 legacy/intermediate 필드로 발행물
+  // (public_article.*)에 노출되지 않고, article_sections 부재 시 buildArticleSectionsFromLegacyFields가
+  // confirmed_facts -> verified_facts로 backfill한다. 동일 사실을 verified_facts와 함께 paraphrase로
+  // 중복 나열하던 두 필드까지 coverage를 요구하면 같은 사실을 2~3회 바인딩해야 해 false uncovered를
+  // 유발하므로 coverage 대상에서 제외한다(가드: 에디터 프롬프트가 verified_facts를 source-backed facts의
+  // canonical 배열로 명시).
   const articleSections = normalizeArticleSections(section);
   const facts = [];
   for (const [index, value] of ensureArray(articleSections.verified_facts).entries()) {
     facts.push({ field: `article_sections.verified_facts[${index}]`, text: value });
-  }
-  for (const [index, value] of ensureArray(section.confirmed_facts).entries()) {
-    facts.push({ field: `confirmed_facts[${index}]`, text: value });
-  }
-  if (hasConcreteFactualText(section.evidence_summary)) {
-    facts.push({ field: 'evidence_summary', text: section.evidence_summary });
   }
   return facts.filter(item => text(item.text));
 }
