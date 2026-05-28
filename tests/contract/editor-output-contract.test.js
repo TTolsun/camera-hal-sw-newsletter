@@ -850,7 +850,7 @@ test('claim prompt restricts editor and repair evidence ids to allowed evidence'
   assert.match(prompt, /allowed_claim_evidence\[\]\.source_urls/);
   assert.match(prompt, /confirmed_facts\[0\]/);
   assert.match(prompt, /article_sections\.verified_facts\[0\]/);
-  assert.match(prompt, /Repair/);
+  assert.doesNotMatch(prompt, /Repair/);
 });
 
 test('strict editor claim binding rejects duplicate claim ids and invalid enums', () => {
