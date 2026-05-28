@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-05-28",
+  "source_of_truth": "content/newsroom/2026-05-28/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-05-28/newsletter.md",
+    "html": "newsletters/2026-05-28/index.html"
+  },
+  "mode": "review-or-draft",
+  "render_consistency_scope": "editor_draft",
+  "summary": {
+    "article_count": 1,
+    "rendered_image_count": 0,
+    "markdown_image_count": 0,
+    "fallback_visual_count": 0,
+    "image_candidates_count": 1,
+    "valid_image_candidate_count": 0,
+    "selected_image_count": 1,
+    "empty_selected_with_candidates_count": 0,
+    "selected_image_without_valid_candidate_count": 1,
+    "selected_image_not_in_candidates_count": 0,
+    "repairable_article_count": 0,
+    "selected_by_image_selection_count": 0,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
+    "unrepairable_no_candidate_count": 0,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 1,
+    "publish_blocking_issue_count": 1
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "Jetpack Compose와 CameraX의 결합: 폴더블 및 대화면을 위한 적응형 카메라 미리보기 표준화",
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": true,
+      "selected_image_evidence": {
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다.",
+        "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+        "selectedImageInCandidates": true,
+        "selectedImageHasValidCandidate": false,
+        "selectedImageIsFallback": false
+      },
+      "repairable": false,
+      "reasonCode": "missing_extraction_source",
+      "reasonLabel": "추출 출처 정보 부족",
+      "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+          "reasonCode": "missing_extraction_source",
+          "reasonLabel": "추출 출처 정보 부족",
+          "reasonText": "후보 이미지의 provenance 또는 validation metadata가 부족합니다.",
+          "sourceKind": "blog_post_item",
+          "contentType": "",
+          "validationStatus": "ok",
+          "sourceUrl": "https://goo.gle/AdaptiveApps_IO26",
+          "canonicalSourceUrl": "https://goo.gle/AdaptiveApps_IO26",
+          "sameOrigin": false,
+          "directExtraction": false,
+          "ok": false,
+          "valid": false
+        }
+      ]
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": [
+      {
+        "index": 1,
+        "headline": "Jetpack Compose와 CameraX의 결합: 폴더블 및 대화면을 위한 적응형 카메라 미리보기 표준화",
+        "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+        "markdown": false,
+        "html": false,
+        "reasonCode": "render_mismatch",
+        "reasonLabel": "렌더 결과 불일치",
+        "reasonText": "선택된 이미지가 Markdown 또는 HTML 산출물에 일관되게 반영되지 않았습니다."
+      }
+    ],
+    "selected_image_without_valid_candidate_articles": [
+      {
+        "index": 1,
+        "headline": "Jetpack Compose와 CameraX의 결합: 폴더블 및 대화면을 위한 적응형 카메라 미리보기 표준화",
+        "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+        "reasonCode": "selected_image_without_valid_candidate",
+        "reasonLabel": "대표 이미지 provenance 부족",
+        "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+      }
+    ]
+  },
+  "warnings": [
+    {
+      "type": "selected_image_without_valid_candidate",
+      "index": 1,
+      "headline": "Jetpack Compose와 CameraX의 결합: 폴더블 및 대화면을 위한 적응형 카메라 미리보기 표준화",
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+      "reasonCode": "selected_image_without_valid_candidate",
+      "reasonLabel": "대표 이미지 provenance 부족",
+      "reasonText": "대표 이미지가 설정되어 있지만 현재 audit 기준을 통과한 후보 이미지가 없습니다."
+    }
+  ],
+  "errors": [
+    {
+      "type": "selected_image_render_mismatch",
+      "index": 1,
+      "headline": "Jetpack Compose와 CameraX의 결합: 폴더블 및 대화면을 위한 적응형 카메라 미리보기 표준화",
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+      "markdown": false,
+      "html": false,
+      "reasonCode": "render_mismatch",
+      "reasonLabel": "렌더 결과 불일치",
+      "reasonText": "선택된 이미지가 Markdown 또는 HTML 산출물에 일관되게 반영되지 않았습니다."
+    }
+  ]
+}
