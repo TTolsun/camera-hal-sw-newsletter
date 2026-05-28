@@ -328,6 +328,7 @@ const section = {
     'source_verification_notes',
     'public_article',
     'article_sections',
+    'claims',
     'background',
     'why_it_matters',
     'camera_hal_perspective',

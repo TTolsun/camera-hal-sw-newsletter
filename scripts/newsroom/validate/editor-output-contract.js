@@ -36,6 +36,7 @@ const {
   validatePublicArticle
 } = require('../common/public-article-contract');
 const {
+  buildAllowedClaimEvidence,
   validateArticleClaims
 } = require('./claim-source-binding');
 const {
@@ -507,6 +508,128 @@ function deterministicallyRepairEditorSchema(value, options = {}) {
     editor: changed ? repaired : null,
     reason_codes: []
   };
+}
+
+const BACKFILL_FACT_CLAIM_IMPACT_LEVELS = Object.freeze([
+  'no_hal_runtime_impact',
+  'app_api_or_framework_adjacent',
+  'native_tooling_workflow'
+]);
+
+function hasBlockingClaimIssues(result) {
+  return [
+    ...ensureArray(result.issues),
+    ...ensureArray(result.claim_results).flatMap(claim => ensureArray(claim.issues))
+  ].some(item => item.blocking !== false);
+}
+
+function backfillFactClaim({ section, candidate, articleIndex, seedEvidencePack, factText, allowedEvidence, claimId }) {
+  for (const impactLevel of BACKFILL_FACT_CLAIM_IMPACT_LEVELS) {
+    for (const evidence of allowedEvidence) {
+      const evidenceId = text(evidence.evidence_id);
+      const sourceUrls = ensureArray(evidence.source_urls).map(text).filter(Boolean);
+      if (!evidenceId || sourceUrls.length === 0) continue;
+      const claim = {
+        claim_id: claimId,
+        text: factText,
+        claim_type: 'fact',
+        evidence_ids: [evidenceId],
+        source_urls: sourceUrls,
+        impact_level: impactLevel,
+        overclaim_risk: 'low'
+      };
+      const trialSection = cloneJson(section);
+      trialSection.claims = [claim];
+      const baseSections = trialSection.article_sections &&
+        typeof trialSection.article_sections === 'object' &&
+        !Array.isArray(trialSection.article_sections)
+        ? trialSection.article_sections
+        : {};
+      trialSection.article_sections = { ...baseSections, verified_facts: [factText] };
+      const result = validateArticleClaims({
+        section: trialSection,
+        candidate,
+        articleIndex,
+        strict: true,
+        seedEvidencePack
+      });
+      if (!hasBlockingClaimIssues(result)) return claim;
+    }
+  }
+  return null;
+}
+
+// Deterministic repair for `sections.claims`: when a strict main article has source-backed
+// verified_facts[] but an empty claims[], copy each verified fact verbatim into a fact claim and
+// bind it only to the candidate's own allowed_claim_evidence. No new facts and no evidence are
+// invented; the real claim binding validator is the oracle, so anything that cannot bind safely is
+// left to the LLM repair path (and ultimately fails closed).
+function deterministicallyBackfillFactClaims(value, options = {}) {
+  const reporter = options.reporter || { candidates: [] };
+  const seedEvidencePack = options.seedEvidencePack || null;
+  const repaired = cloneJson(value);
+  const candidateIndex = buildCandidateIndex(reporter);
+  const reasonCodes = [];
+  let changed = false;
+
+  ensureArray(repaired?.sections).forEach((section, index) => {
+    if (ensureArray(section.claims).length > 0) return;
+    const candidate = candidateForSection(section, candidateIndex) || {};
+    const verifiedFacts = uniqueText(
+      ensureArray(normalizeArticleSections(section).verified_facts).map(text).filter(Boolean)
+    );
+    if (verifiedFacts.length === 0) {
+      reasonCodes.push('no_verified_facts_to_bind');
+      return;
+    }
+    const allowedEvidence = buildAllowedClaimEvidence(candidate, section, { seedEvidencePack });
+    if (allowedEvidence.length === 0) {
+      reasonCodes.push('no_allowed_claim_evidence');
+      return;
+    }
+    const newClaims = [];
+    let sectionFailed = false;
+    verifiedFacts.forEach((factText, factIndex) => {
+      if (sectionFailed) return;
+      const claim = backfillFactClaim({
+        section,
+        candidate,
+        articleIndex: index,
+        seedEvidencePack,
+        factText,
+        allowedEvidence,
+        claimId: `article-${index + 1}-fact-${factIndex + 1}`
+      });
+      if (!claim) {
+        sectionFailed = true;
+        reasonCodes.push('unbindable_verified_fact');
+        return;
+      }
+      newClaims.push(claim);
+    });
+    if (sectionFailed) return;
+    const candidateSection = cloneJson(section);
+    candidateSection.claims = newClaims;
+    const finalResult = validateArticleClaims({
+      section: candidateSection,
+      candidate,
+      articleIndex: index,
+      strict: true,
+      seedEvidencePack
+    });
+    if (hasBlockingClaimIssues(finalResult)) {
+      reasonCodes.push('backfilled_claims_failed_validation');
+      return;
+    }
+    section.claims = newClaims;
+    changed = true;
+  });
+
+  const uniqueReasonCodes = uniqueText(reasonCodes);
+  if (uniqueReasonCodes.length > 0) {
+    return { editor: null, reason_codes: uniqueReasonCodes };
+  }
+  return { editor: changed ? repaired : null, reason_codes: [] };
 }
 
 function validateArticleSectionContract(value) {
@@ -1120,6 +1243,12 @@ async function repairEditorOutputContract({
       if (deterministicRepairFailureReasonCodes.length > 0) {
         error.deterministic_repair_failure_reason_codes = deterministicRepairFailureReasonCodes;
       }
+    } else if (repairField === 'sections.claims') {
+      deterministicRepair = deterministicallyBackfillFactClaims(invalidEditor, { reporter, seedEvidencePack });
+      deterministicRepairFailureReasonCodes = ensureArray(deterministicRepair?.reason_codes);
+      if (deterministicRepairFailureReasonCodes.length > 0) {
+        error.deterministic_repair_failure_reason_codes = deterministicRepairFailureReasonCodes;
+      }
     }
     const initialDetails = {
       ...serializeEditorValidationError(error, deterministicRepairFailureReasonCodes.length > 0
@@ -1179,8 +1308,40 @@ async function repairEditorOutputContract({
           repairSucceeded: true,
           deterministicRepair: true
         };
-      } catch (_) {
-        // Fall through to the LLM repair path; the raw validation error stays recorded.
+      } catch (revalidationError) {
+        // sections.claims 백필이 성공했으나 후속 게이트(다른 field)가 실패한 경우:
+        // 낡은 claims 에러로 LLM을 재호출하는 대신 새 blocker를 바로 노출한다.
+        if (
+          repairField === 'sections.claims' &&
+          revalidationError instanceof EditorSemanticValidationError
+        ) {
+          const newField = revalidationError.details?.field || revalidationError.field || '';
+          if (newField !== repairField) {
+            if (newsroomDir) {
+              writeEditorValidationDiagnostics({
+                newsroomDir,
+                attempt,
+                phase: 'repair',
+                output: deterministicRepair.editor,
+                error: revalidationError,
+                extra: { stage, attempt, repairAttempted: true, repairSucceeded: false }
+              });
+            }
+            revalidationError.stage = stage;
+            attachSemanticStatus(revalidationError, {
+              editor_semantic_validation: {
+                ...serializeEditorValidationError(revalidationError),
+                stage,
+                attempt,
+                initial: initialDetails
+              },
+              repairAttempted: true,
+              repairSucceeded: false
+            });
+            throw revalidationError;
+          }
+        }
+        // 그 외(스키마 수선 경로 또는 같은 필드 재실패): LLM 수선 경로로 fall through.
       }
     }
 
