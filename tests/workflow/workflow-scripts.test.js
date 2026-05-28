@@ -6210,6 +6210,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   ]);
   assertTextInOrder(workflow, [
     '- name: Generate newsletter with approved candidate artifact',
+    '- name: Generate HAL signal quality report',
     '- name: Ensure public newsletter artifacts',
     '- name: Resolve newsletter metadata',
     '- name: Resolve final publish status',
@@ -6220,7 +6221,6 @@ test('final newsroom workflow separates review PR success from publish-ready gat
     '- name: Generate source effectiveness report',
     '- name: Generate source quality diagnosis',
     '- name: Generate evidence pack summary',
-    '- name: Generate HAL signal quality report',
     '- name: Audit newsletter image lineage',
     '- name: Snapshot newsroom debug artifacts'
   ]);
@@ -6313,9 +6313,9 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(evidencePackStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   assert.match(evidencePackStep, /continue-on-error:\s*true/);
   assert.match(evidencePackStep, /npm run report:evidence-pack -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
-  assert.match(halSignalQualityStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
+  assert.match(halSignalQualityStep, /if: always\(\) && steps\.resolve-newsletter-date\.outputs\.date != ''/);
   assert.match(halSignalQualityStep, /continue-on-error:\s*true/);
-  assert.match(halSignalQualityStep, /npm run report:hal-signal-quality -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
+  assert.match(halSignalQualityStep, /npm run report:hal-signal-quality -- --date "\$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}"/);
   assert.match(imageAuditStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   assert.doesNotMatch(imageAuditStep, /continue-on-error:\s*true/);
   assert.match(imageAuditStep, /steps\.meta\.outputs\.public_newsletter_ready/);

@@ -169,6 +169,11 @@ jobs:
         continue-on-error: true
         run: npm run generate
 
+      - name: Generate HAL signal quality report
+        if: always() && steps.resolve-newsletter-date.outputs.date != ''
+        continue-on-error: true
+        run: npm run report:hal-signal-quality -- --date "${{ steps.resolve-newsletter-date.outputs.date }}"
+
       - name: Ensure public newsletter artifacts
         id: ensure-public-newsletter
         if: always()
@@ -223,11 +228,6 @@ jobs:
         if: always() && steps.meta.outputs.date != ''
         continue-on-error: true
         run: npm run report:evidence-pack -- --date "${{ steps.meta.outputs.date }}"
-
-      - name: Generate HAL signal quality report
-        if: always() && steps.meta.outputs.date != ''
-        continue-on-error: true
-        run: npm run report:hal-signal-quality -- --date "${{ steps.meta.outputs.date }}"
 
       - name: Audit newsletter image lineage
         if: always() && steps.meta.outputs.date != ''
