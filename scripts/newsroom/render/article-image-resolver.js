@@ -4,6 +4,35 @@ const {
   MIN_CONTENT_LENGTH,
   validateImageUrl
 } = require('./image-candidates');
+const {
+  analyzeImageCandidateFromMetadata
+} = require('../metrics/newsletter-image-audit');
+
+function comparableUrl(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    parsed.hash = '';
+    return parsed.toString();
+  } catch {
+    return raw;
+  }
+}
+
+function selectedImageHasValidCandidate(selectedImage, section) {
+  const candidates = Array.isArray(section.imageCandidates) ? section.imageCandidates : [];
+  if (candidates.length === 0) return false;
+  const selectedKey = comparableUrl(selectedImage) || selectedImage;
+  for (const candidate of candidates) {
+    const candidateKey = comparableUrl(candidate.url) || String(candidate.url || '');
+    if (candidateKey && candidateKey === selectedKey) {
+      const result = analyzeImageCandidateFromMetadata(candidate, section);
+      if (result.valid) return true;
+    }
+  }
+  return false;
+}
 
 const FALLBACKS = {
   ai: 'assets/images/fallback/ai.svg',
@@ -142,6 +171,23 @@ async function resolveArticleImage(section = {}, options = {}) {
   });
 
   if (result.ok) {
+    // Uses the same metadata-based valid-candidate decision as the audit; intentionally falls back rather than emitting an unvalidated external URL.
+    if (!selectedImageHasValidCandidate(selectedImage, section)) {
+      if (!fallbackExists(root, fallbackAsset)) {
+        return resolvedImage({
+          url: selectedImage,
+          originalUrl: preservedOriginal || selectedImage,
+          usedFallback: false,
+          reason: `fallback missing: ${fallbackAsset}; no valid provenance candidate for selected image`
+        });
+      }
+      return resolvedImage({
+        url: fallbackSrc,
+        originalUrl: preservedOriginal || selectedImage,
+        usedFallback: true,
+        reason: 'selected image has no valid provenance candidate; local fallback visual used'
+      });
+    }
     return resolvedImage({
       url: selectedImage,
       originalUrl: preservedOriginal,
