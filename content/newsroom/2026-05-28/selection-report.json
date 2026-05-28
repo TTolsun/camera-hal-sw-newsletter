@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-28",
+  "generated_at": "2026-05-28T16:41:35.250Z",
+  "status": "OK",
+  "failure_stage": "",
+  "failure_reason": "",
+  "selection_errors": [],
+  "selection_warnings": [],
+  "selection_shortage_hints": [
+    "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
+    "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.",
+    "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+  ],
+  "review_gate_passed": true,
+  "publish_gate_passed": true,
+  "gate_summary": {
+    "review_gate_passed": true,
+    "publish_gate_passed": true,
+    "non_fallback_reviewable_article_count": 1,
+    "primary_camera_stack_topic_count": 1,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "eligible_non_fallback_reviewable_article_count": 1,
+    "min_final_articles": 1,
+    "max_final_articles": 5,
+    "absolute_min_reviewable_articles": 0,
+    "min_non_fallback_publish_ready_articles": 0,
+    "selected_article_count": 2
+  },
+  "composition_mode": "FALLBACK_COMPOSITION",
+  "composition_reason": "Article Composition Policy passed with 1 Primary Camera Stack article(s) and 1 supporting main article(s).",
+  "composition_summary": {
+    "selected_article_count": 2,
+    "bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 1,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 1,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 1,
+    "fallback_topic_count": 1
+  },
+  "eligible_composition_summary": {
+    "selected_article_count": 2,
+    "bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 1,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 1,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 1,
+    "fallback_topic_count": 1
+  },
+  "headline_decision": {
+    "decision": "retained_current_above_margin",
+    "reason": "retained_current_above_margin",
+    "current_headline_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+    "replacement_headline_key": null,
+    "previous_stored_current_score": 98,
+    "runtime_decayed_score": 96,
+    "last_scored_at": "2026-05-27",
+    "scored_at": "2026-05-28",
+    "retained": true,
+    "replaced": false,
+    "cleared": false,
+    "seeded": false,
+    "injected": false,
+    "snapshot_revalidated": true,
+    "revalidation_failure_reason": "",
+    "selected_normally": true,
+    "latest_inclusion_required": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "headline_latest_inclusion": {
+    "included": true,
+    "mode": "selected_normally",
+    "injected_from_snapshot": false,
+    "snapshot_revalidated": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "removed_due_to_headline_inclusion": [],
+  "article_exposure_coverage": null,
+  "candidate_pool_preflight_passed": true,
+  "candidate_shortage_reviewable": false,
+  "candidate_shortage_summary": {
+    "publishable_candidate_count": 2,
+    "required_publishable_candidate_count": 1,
+    "reserve_candidate_count": 0,
+    "required_reserve_candidate_count": 0,
+    "primary_camera_stack_candidate_count": 1,
+    "required_primary_camera_stack_candidate_count": 0,
+    "camera_stack_candidate_count": 1,
+    "required_camera_stack_candidate_count": 0,
+    "direct_camera_or_driver_candidate_count": 0,
+    "camera_adjacent_candidate_count": 1,
+    "supporting_candidate_count": 1,
+    "selected_article_count": 2,
+    "selected_primary_camera_stack_count": 1
+  },
+  "shortage_reason_codes": [],
+  "source_parser_hints": [
+    {
+      "code": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
+      "source_id": "unknown",
+      "reason": "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence."
+    },
+    {
+      "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence."
+    },
+    {
+      "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "counts": {
+    "input_candidate_count": 42,
+    "eligible_candidate_count": 2,
+    "selected_article_count": 2,
+    "deterministic_selected_count": 2,
+    "reserve_candidate_count": 0,
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 1,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 1
+  },
+  "exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 39
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 39
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 39
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 35
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 29
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 29
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 10
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 5
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 5
+    },
+    {
+      "reason": "watch page without dated evidence",
+      "count": 3
+    }
+  ],
+  "final_exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 39
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 39
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 39
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 35
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 29
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 29
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 10
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 5
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 5
+    },
+    {
+      "reason": "watch page without dated evidence",
+      "count": 3
+    }
+  ],
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."
+}
