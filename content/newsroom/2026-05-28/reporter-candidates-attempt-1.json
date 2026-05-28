@@ -646,19 +646,21 @@
         ],
         "relevance_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)"
       },
-      "relevance_reason": "Android 플랫폼, 호환성, 그래픽 버퍼, Surface, 미디어 프레임워크, 전력, 발열, 스케줄러, 메모리 압력 또는 카메라 영향 경로가 있는 보안 증거입니다.",
+      "relevance_reason": "Android 플랫폼 전반의 호환성 및 미디어 프레임워크 변화는 CameraX를 사용하는 앱의 동작에 영향을 미칠 수 있으며, 이는 HAL 계층의 검증 시나리오에 간접적인 영향을 줍니다.",
       "evidence_notes": [
-        "Android Developers Blog의 Google I/O 2026 요약 기사에서 발췌되었습니다.",
-        "CameraX가 다양한 창 크기에서 올바른 카메라 미리보기를 지원하는 도구로 언급되었습니다.",
-        "이것은 CameraX의 적응형 레이아웃 및 다중 장치 지원 개선을 시사합니다."
+        "Android Developers Blog의 Google I/O 2026 발표 내용입니다.",
+        "Jetpack Compose가 다양한 기기 및 창 크기에서 CameraX를 통한 올바른 카메라 미리보기를 지원한다고 명시합니다.",
+        "이는 CameraX의 호환성 및 적응형 UI 지원에 대한 업데이트입니다."
       ],
       "impact_areas": [
         "camerax_app_compatibility",
-        "android_platform_compatibility"
+        "app_facing_behavior",
+        "validation_scenarios"
       ],
       "do_not_overstate": [
-        "제공된 출처 증거가 명시적으로 언급하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 또는 드라이버 동작에 대한 주장을 하지 마십시오.",
-        "이것은 CameraX의 상위 계층 변경이며, HAL 인터페이스나 드라이버 동작에 대한 직접적인 증거는 아닙니다. 주로 앱 호환성 및 프레임워크 동작에 초점을 맞춥니다."
+        "이 정보는 Camera HAL API 또는 드라이버 동작에 대한 직접적인 변경 사항을 명시하지 않습니다.",
+        "CameraX의 내부 구현 변경이나 HAL 인터페이스의 새로운 요구사항을 의미하지 않습니다.",
+        "프레임워크 또는 앱 레벨의 변경 사항으로 제한하여 해석해야 합니다."
       ],
       "android_camera_relevance_score": 0,
       "practical_actionability_score": 0,
@@ -989,10 +991,10 @@
       "has_api_or_component": true,
       "has_behavior_change": true,
       "evidence_score": 6,
-      "version_or_release": "2026-05-19",
+      "version_or_release": "2026년 5월",
       "api_or_component": "Google AI Studio",
       "source_hint_api_or_component": "android",
-      "behavior_change": "Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다.",
+      "behavior_change": "Google AI Studio가 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있게 되었습니다. 소프트웨어 설치나 라이브러리 구성이 필요 없어 개발 장벽이 크게 낮아집니다.",
       "selection_exclusion_reason": "Official dated Android native tooling workflow article; eligible only as cpp_ai_tooling_fallback supporting main context.",
       "watchlist_reason": "",
       "verification_hint": "Can be used directly if the collected item supports the claim.",
@@ -1106,20 +1108,21 @@
           "content_hash": "da4ad6a4cf681f0895f77dfefda4bfb4f93ffc3bb3c6dfd4d22eed96b312948f"
         }
       },
-      "relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, 네이티브 성능, 빌드/테스트 툴링, AI 코딩 도구, 온디바이스 AI 또는 LLM 에이전트 워크플로우 증거입니다.",
+      "relevance_reason": "Camera HAL 및 드라이버 팀의 네이티브 개발 워크플로우, 빌드, 테스트, 디버깅 프로세스에 AI 기반 도구가 통합될 가능성을 시사합니다. 이는 개발 효율성에 영향을 줄 수 있습니다.",
       "evidence_notes": [
-        "Android Developers Blog에 게시된 Google AI Studio의 새로운 기능에 대한 내용입니다.",
-        "Google AI Studio가 프롬프트 기반으로 Android 앱을 생성할 수 있게 되어 개발 워크플로우를 간소화합니다.",
-        "이것은 네이티브 앱 개발 및 툴링에 영향을 미칩니다."
+        "Android Developers Blog에 게시된 Google AI Studio의 새로운 기능입니다.",
+        "개발자가 Android 앱을 더 쉽게 빌드할 수 있도록 지원하는 AI 기반 도구입니다.",
+        "네이티브 앱 개발 워크플로우에 영향을 미칠 수 있습니다."
       ],
       "impact_areas": [
         "native_tooling_workflow",
-        "ai_development_workflow"
+        "development_efficiency",
+        "build_test_debug_workflow"
       ],
       "do_not_overstate": [
-        "제공된 출처 증거가 명시적으로 언급하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 또는 드라이버 동작에 대한 주장을 하지 마십시오.",
-        "이것은 일반적인 네이티브 앱 개발 툴링에 대한 업데이트이며, 카메라 HAL 또는 드라이버의 특정 런타임 동작에 대한 직접적인 영향은 출처에서 명시되지 않았습니다.",
-        "카메라 관련 AI 기능이나 온디바이스 추론 경로에 대한 구체적인 언급이 없으므로, AI Studio의 일반적인 앱 빌드 기능으로 제한해야 합니다."
+        "이것은 Camera HAL 또는 드라이버의 런타임 동작, API 계약, 성능, 전력 소비에 대한 직접적인 변경 사항이 아닙니다.",
+        "AI Studio가 Camera HAL 코드를 직접 생성하거나 최적화한다는 증거는 없습니다.",
+        "Camera 관련 특정 기능이나 요구사항에 대한 언급이 없으므로, 일반적인 네이티브 개발 도구의 개선으로 제한하여 해석해야 합니다."
       ],
       "android_camera_relevance_score": 0,
       "practical_actionability_score": 0,

@@ -2,7 +2,7 @@
 
 | 시도 | 모델 | 점수 | 상태 | Rendered | Locked | Demoted | Reserve used | 중복 거절 | Source gap | Must-fix |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | repair-fallback | 83/85 | FAILED_REPAIR_REVIEWABLE | 1 | 0 | 0 | 0 | 0 | 0 | 5 |
+| 1 | repair-fallback | 81/85 | FAILED_REPAIR_REVIEWABLE | 2 | 0 | 0 | 0 | 0 | 0 | 16 |
 
 ## 후보 선택 진단
 
@@ -13,8 +13,8 @@
 - Final selected articles: 2
 - Deterministic primary articles: 2
 - Selected representative groups: 2
-- Rendered groups: 1
-- Explicitly demoted groups: 1
+- Rendered groups: 2
+- Explicitly demoted groups: 0
 - Reserve candidates: 0
 - Demoted candidates: unknown
 - Composition mode: NEEDS_FIX
@@ -63,7 +63,7 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 
 ## 시도 1
 
-- 선택 기사: Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현
+- 선택 기사: Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화; Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원
 - Lock된 기사: 없음
 - Source gap section: 없음
 - Demoted section: 없음
@@ -75,9 +75,9 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 - 재생성 section: 없음
 - 거절된 retry output: 없음
 - Repair action: editor repair attempt 1/2: fallback-to-last-known-valid-editor
-- Final slot distribution: {"android_camera_platform_api":0,"camerax_aosp_camera_compatibility":1,"linux_camera_libcamera_v4l2":0,"ai_camera_path_hal_workflow":0,"cpp_toolchain_fallback":0,"other":0}
+- Final slot distribution: {"android_camera_platform_api":0,"camerax_aosp_camera_compatibility":1,"linux_camera_libcamera_v4l2":0,"ai_camera_path_hal_workflow":1,"cpp_toolchain_fallback":0,"other":0}
 - Reporter eligibility blocked section: 없음
 - Rejected main-ineligible candidate: 없음
 - Lock blocker: 없음
 - 거절된 중복 기사: 없음
-- 감점: 1pt editorial-story (briefing 1): Briefing bullet misses story structure elements: action_hint.; 1pt editorial-story (briefing 2): Briefing bullet misses story structure elements: reader_perspective, action_hint.; 15pt source-integrity: Fact checker returned 5 must_fix item(s).
+- 감점: 1pt editorial-story (briefing 1): Briefing bullet misses story structure elements: action_hint.; 1pt editorial-story (briefing 2): Briefing bullet misses story structure elements: action_hint.; 1pt image-fallback (Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화): Article image uses a local fallback visual.; 1pt image-fallback (Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원): Article image uses a local fallback visual.; 15pt source-integrity: Fact checker returned 16 must_fix item(s).

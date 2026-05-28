@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "date": "2026-05-28",
-  "score": 83,
+  "score": 81,
   "max_score": 100,
   "threshold": 85,
   "status": "NEEDS_FIX",
-  "summary": "Quality score 83, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
+  "summary": "Quality score 81, threshold 85, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.",
   "deductions": [
     {
       "category": "editorial-story",
@@ -20,8 +20,28 @@
     {
       "category": "editorial-story",
       "points": 1,
-      "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
       "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원",
       "blocking": false,
       "severity": "soft",
       "reason_code": "",
@@ -30,7 +50,7 @@
     {
       "category": "source-integrity",
       "points": 15,
-      "reason": "Fact checker returned 5 must_fix item(s).",
+      "reason": "Fact checker returned 16 must_fix item(s).",
       "location": "",
       "blocking": true,
       "severity": "hard",
@@ -41,7 +61,7 @@
   "article_results": [
     {
       "index": 1,
-      "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+      "headline": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화",
       "category": "android_platform_camera_adjacent",
       "status": "FAIL",
       "repair_action": "repair-section",
@@ -55,16 +75,20 @@
         "complete": true,
         "missing_keys": [],
         "missing_required_keys": [],
-        "present_optional_keys": [],
+        "present_optional_keys": [
+          "known_limitations",
+          "watch_items",
+          "do_not_claim"
+        ],
         "unexpected_keys": [],
-        "has_limitations": false,
-        "has_watch_items": false,
-        "has_do_not_claim": false,
-        "limitation_visibility": "none"
+        "has_limitations": true,
+        "has_watch_items": true,
+        "has_do_not_claim": true,
+        "limitation_visibility": "public-limitation"
       },
       "scope_count": {
         "index": 1,
-        "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+        "headline": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화",
         "source_candidate_url": "https://goo.gle/AdaptiveApps_IO26",
         "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
         "relevance_bucket": "android_platform_camera_adjacent",
@@ -95,28 +119,102 @@
       "hard_fail_reasons": [
         "Fact-check must_fix item mentions this section."
       ],
-      "soft_deductions": []
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원",
+      "category": "cpp_ai_tooling_fallback",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "Build native Android apps in Google AI Studio",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "known_limitations",
+          "watch_items",
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": true,
+        "has_watch_items": true,
+        "has_do_not_claim": true,
+        "limitation_visibility": "public-limitation"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원",
+        "source_candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 6,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "tooling_support",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      },
+      "guardrail_impact_class": "tooling_support",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [
+        "Fact-check must_fix item mentions this section."
+      ],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
     }
   ],
   "claim_validation_summary": {
     "status": "available",
-    "bound_claims": 2,
-    "total_claims": 3,
+    "bound_claims": 4,
+    "total_claims": 6,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
-    "available_article_count": 1,
+    "available_article_count": 2,
     "not_available_article_count": 0
   },
   "claim_results": [
     {
       "article_index": 1,
-      "article_headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
-      "claim_id": "claim:compose_camerax_integration",
+      "article_headline": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화",
+      "claim_id": "claim:adaptive_apps_compose_tools",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "app_api_or_framework_adjacent",
       "overclaim_risk": "low",
-      "text": "Jetpack Compose는 최신 Jetpack Navigation 3, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX와 같은 핵심 도구를 제공합니다.",
+      "text": "Jetpack Compose는 최신 Jetpack Navigation 3, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원을 제공합니다.",
       "evidence_ids": [
         "sx:bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3:evidence_blocks:2b41feb08ba22d15"
       ],
@@ -144,13 +242,13 @@
     },
     {
       "article_index": 1,
-      "article_headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
-      "claim_id": "claim:camerax_core_tool_integration",
+      "article_headline": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화",
+      "claim_id": "claim:adaptive_apps_camerax_preview",
       "claim_type": "fact",
       "status": "bound",
-      "impact_level": "app_api_or_framework_adjacent",
+      "impact_level": "camera_framework_behavior",
       "overclaim_risk": "low",
-      "text": "모든 창 크기에서 올바른 카메라 미리보기를 제공하기 위해 CameraX가 핵심 도구로 통합되어 활용됩니다.",
+      "text": "모든 창 크기에서 올바른 카메라 미리보기를 보장하기 위해 CameraX가 핵심 도구로 활용됩니다.",
       "evidence_ids": [
         "sx:bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3:evidence_blocks:2b41feb08ba22d15"
       ],
@@ -178,13 +276,13 @@
     },
     {
       "article_index": 1,
-      "article_headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
-      "claim_id": "claim:dynamic_stream_reconfig_risk",
+      "article_headline": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화",
+      "claim_id": "claim:adaptive_apps_hal_stream_reconfig",
       "claim_type": "inference",
       "status": "bound",
       "impact_level": "stream_buffer_metadata",
       "overclaim_risk": "medium",
-      "text": "앱 계층에서 화면 크기 전환 시 미리보기 Surface 비율이 동적으로 변경됨에 따라 HAL의 configure_streams 호출 및 버퍼 재할당 빈도가 증가할 수 있습니다.",
+      "text": "대화면 및 폴더블 기기에서 앱이 동적으로 창 크기를 변경할 때 CameraX가 프레임워크를 통해 HAL에 요청하는 스트림 재구성 빈도가 증가할 수 있습니다.",
       "evidence_ids": [
         "sx:bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3:evidence_blocks:2b41feb08ba22d15"
       ],
@@ -209,44 +307,147 @@
       "bound": false,
       "derived_evidence_mapping": false,
       "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원",
+      "claim_id": "claim:ai_studio_prompt_build",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "Google AI Studio가 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있게 되었습니다.",
+      "evidence_ids": [
+        "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary",
+          "resolved_evidence_id": "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원",
+      "claim_id": "claim:ai_studio_no_setup",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "소프트웨어 설치나 라이브러리 구성이 필요 없어 개발 장벽이 크게 낮아집니다.",
+      "evidence_ids": [
+        "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary",
+          "resolved_evidence_id": "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원",
+      "claim_id": "claim:ai_studio_hal_indirect_impact",
+      "claim_type": "inference",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "medium",
+      "text": "카메라 프레임을 입력으로 사용하는 온디바이스 AI 모델의 프로토타이핑이 단순화되어 상위 레이어의 카메라-AI 결합 워크로드 검증에 활용될 수 있습니다.",
+      "evidence_ids": [
+        "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary",
+          "resolved_evidence_id": "candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
     }
   ],
   "uncovered_facts": [],
   "hal_signal_quality_summary": {
     "schema_version": 1,
-    "main_article_count": 1,
-    "strong_signal_count": 1,
+    "main_article_count": 2,
+    "strong_signal_count": 2,
     "usable_signal_count": 0,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
-    "article_count_with_hal_signal_capsule": 1,
+    "article_count_with_hal_signal_capsule": 2,
     "article_count_without_hal_signal_capsule": 0,
     "main_articles_with_owner_metric_log": 0,
-    "main_articles_with_concrete_action": 1,
-    "fallback_main_article_count": 0,
+    "main_articles_with_concrete_action": 2,
+    "fallback_main_article_count": 1,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
     "generic_signal_hard_blocker_count": 0,
     "hal_signal_hard_blocker_count": 0,
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
-      "camerax_app_compatibility": 1
+      "camerax_app_compatibility": 1,
+      "native_tooling_workflow": 1
     },
     "actionability_level_counts": {
-      "measurable_test": 1
+      "measurable_test": 2
     },
     "effective_actionability_level_counts": {
-      "measurable_test": 1
+      "measurable_test": 2
     },
     "signal_quality_status_counts": {
-      "strong_signal": 1
+      "strong_signal": 2
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+      "title": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화",
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "relevance_bucket": "android_platform_camera_adjacent",
       "hal_impact_axes": [
@@ -264,9 +465,43 @@
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "이것은 CameraX의 상위 계층 변경이며, HAL 인터페이스나 드라이버 동작에 대한 직접적인 증거는 아닙니다. 주로 앱 호환성 및 프레임워크 동작에 초점을 맞춥니다."
+        "이 정보는 Camera HAL API 또는 드라이버 동작에 대한 직접적인 변경 사항을 명시하지 않습니다.",
+        "CameraX의 내부 구현 변경이나 HAL 인터페이스의 새로운 요구사항을 의미하지 않습니다.",
+        "프레임워크 또는 앱 레벨의 변경 사항으로 제한하여 해석해야 합니다."
       ],
       "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "reader_owners": [
+        "native_tooling_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이것은 Camera HAL 또는 드라이버의 런타임 동작, API 계약, 성능, 전력 소비에 대한 직접적인 변경 사항이 아닙니다.",
+        "AI Studio가 Camera HAL 코드를 직접 생성하거나 최적화한다는 증거는 없습니다.",
+        "Camera 관련 특정 기능이나 요구사항에 대한 언급이 없으므로, 일반적인 네이티브 개발 도구의 개선으로 제한하여 해석해야 합니다."
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,
@@ -277,28 +512,28 @@
     }
   ],
   "metrics": {
-    "article_count": 1,
+    "article_count": 2,
     "briefing_count": 3,
     "camera_article_count": 1,
-    "legacy_regex_camera_article_count": 1,
-    "expanded_scope_article_count": 1,
+    "legacy_regex_camera_article_count": 2,
+    "expanded_scope_article_count": 2,
     "direct_aosp_camera_count": 0,
     "camera_driver_image_pipeline_count": 0,
     "android_platform_camera_adjacent_count": 1,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
     "generic_tech_watchlist_count": 0,
     "primary_camera_stack_count": 1,
-    "supporting_main_article_count": 0,
+    "supporting_main_article_count": 1,
     "forbidden_main_article_count": 0,
-    "fallback_relevance_count": 0,
-    "publishable_scope_count": 1,
-    "composition_mode": "NORMAL",
+    "fallback_relevance_count": 1,
+    "publishable_scope_count": 2,
+    "composition_mode": "FALLBACK_COMPOSITION",
     "section_count_details": [
       {
         "index": 1,
-        "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+        "headline": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화",
         "source_candidate_url": "https://goo.gle/AdaptiveApps_IO26",
         "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
         "relevance_bucket": "android_platform_camera_adjacent",
@@ -319,6 +554,30 @@
         "missing_score_fields": [],
         "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원",
+        "source_candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "source_candidate_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 6,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "tooling_support",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
       }
     ],
     "relevance_bucket_counts": {
@@ -327,14 +586,14 @@
       "android_platform_camera_adjacent": 1,
       "android_multimedia_camera_output": 0,
       "soc_platform_signal": 0,
-      "cpp_ai_tooling_fallback": 0,
+      "cpp_ai_tooling_fallback": 1,
       "generic_tech_watchlist": 0
     },
     "topic_tier_distribution": {
       "direct_camera": 1,
       "multimedia": 0,
       "platform": 0,
-      "fallback": 0,
+      "fallback": 1,
       "watchlist": 0
     },
     "topic_tier_distribution_source": "relevance_bucket",
@@ -357,9 +616,9 @@
         "generic_tech_watchlist"
       ]
     },
-    "ai_article_count": 0,
+    "ai_article_count": 1,
     "fact_check_status": "NEEDS_FIX",
-    "must_fix_count": 5,
+    "must_fix_count": 16,
     "source_gap_count": 0,
     "stale_claim_status": "UNKNOWN",
     "stale_claim_removed_count": 0,
@@ -370,14 +629,14 @@
       "source-integrity"
     ],
     "hard_fail_count": 1,
-    "soft_deduction_count": 2,
+    "soft_deduction_count": 4,
     "article_gate_counts": {
       "PASS": 0,
       "DEMOTE": 0,
-      "FAIL": 1
+      "FAIL": 2
     },
     "article_section_contract": {
-      "complete_count": 1,
+      "complete_count": 2,
       "incomplete_count": 0,
       "missing_key_counts": {
         "verified_facts": 0,
@@ -386,70 +645,94 @@
         "action_items": 0,
         "team_share_points": 0
       },
-      "optional_key_counts": {},
+      "optional_key_counts": {
+        "known_limitations": 2,
+        "watch_items": 2,
+        "do_not_claim": 2
+      },
       "limitation_visibility_counts": {
-        "none": 1
+        "public-limitation": 2
       },
       "summaries": [
         {
           "complete": true,
           "missing_keys": [],
           "missing_required_keys": [],
-          "present_optional_keys": [],
+          "present_optional_keys": [
+            "known_limitations",
+            "watch_items",
+            "do_not_claim"
+          ],
           "unexpected_keys": [],
-          "has_limitations": false,
-          "has_watch_items": false,
-          "has_do_not_claim": false,
-          "limitation_visibility": "none"
+          "has_limitations": true,
+          "has_watch_items": true,
+          "has_do_not_claim": true,
+          "limitation_visibility": "public-limitation"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "known_limitations",
+            "watch_items",
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": true,
+          "has_watch_items": true,
+          "has_do_not_claim": true,
+          "limitation_visibility": "public-limitation"
         }
       ]
     },
     "claim_validation_summary": {
       "status": "available",
-      "bound_claims": 2,
-      "total_claims": 3,
+      "bound_claims": 4,
+      "total_claims": 6,
       "derived_evidence_mapping_count": 0,
       "overclaim_risk": "low",
-      "available_article_count": 1,
+      "available_article_count": 2,
       "not_available_article_count": 0
     },
     "derived_evidence_mapping_count": 0,
     "uncovered_fact_count": 0,
     "hal_signal_quality_summary": {
       "schema_version": 1,
-      "main_article_count": 1,
-      "strong_signal_count": 1,
+      "main_article_count": 2,
+      "strong_signal_count": 2,
       "usable_signal_count": 0,
       "weak_signal_count": 0,
       "watchlist_only_count": 0,
       "blocked_source_gap_count": 0,
-      "article_count_with_hal_signal_capsule": 1,
+      "article_count_with_hal_signal_capsule": 2,
       "article_count_without_hal_signal_capsule": 0,
       "main_articles_with_owner_metric_log": 0,
-      "main_articles_with_concrete_action": 1,
-      "fallback_main_article_count": 0,
+      "main_articles_with_concrete_action": 2,
+      "fallback_main_article_count": 1,
       "android_multimedia_camera_output_count": 0,
       "soc_platform_signal_count": 0,
       "generic_signal_hard_blocker_count": 0,
       "hal_signal_hard_blocker_count": 0,
       "hard_blocker_reason_code_counts": {},
       "hal_impact_axis_counts": {
-        "camerax_app_compatibility": 1
+        "camerax_app_compatibility": 1,
+        "native_tooling_workflow": 1
       },
       "actionability_level_counts": {
-        "measurable_test": 1
+        "measurable_test": 2
       },
       "effective_actionability_level_counts": {
-        "measurable_test": 1
+        "measurable_test": 2
       },
       "signal_quality_status_counts": {
-        "strong_signal": 1
+        "strong_signal": 2
       }
     },
     "main_article_signal_checks": [
       {
         "index": 1,
-        "title": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+        "title": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화",
         "url": "https://goo.gle/AdaptiveApps_IO26",
         "relevance_bucket": "android_platform_camera_adjacent",
         "hal_impact_axes": [
@@ -467,9 +750,43 @@
         "fallback_promotion_allowed": true,
         "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)",
         "fallback_guard_notes": [
-          "이것은 CameraX의 상위 계층 변경이며, HAL 인터페이스나 드라이버 동작에 대한 직접적인 증거는 아닙니다. 주로 앱 호환성 및 프레임워크 동작에 초점을 맞춥니다."
+          "이 정보는 Camera HAL API 또는 드라이버 동작에 대한 직접적인 변경 사항을 명시하지 않습니다.",
+          "CameraX의 내부 구현 변경이나 HAL 인터페이스의 새로운 요구사항을 의미하지 않습니다.",
+          "프레임워크 또는 앱 레벨의 변경 사항으로 제한하여 해석해야 합니다."
         ],
         "soc_signal_type": "",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원",
+        "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "hal_impact_axes": [
+          "native_tooling_workflow"
+        ],
+        "reader_owners": [
+          "native_tooling_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이것은 Camera HAL 또는 드라이버의 런타임 동작, API 계약, 성능, 전력 소비에 대한 직접적인 변경 사항이 아닙니다.",
+          "AI Studio가 Camera HAL 코드를 직접 생성하거나 최적화한다는 증거는 없습니다.",
+          "Camera 관련 특정 기능이나 요구사항에 대한 언급이 없으므로, 일반적인 네이티브 개발 도구의 개선으로 제한하여 해석해야 합니다."
+        ],
+        "soc_signal_type": "accelerator_camera_workload",
         "soc_signal_source_allowed": true,
         "camera_pipeline_link": "",
         "has_hal_signal_capsule": true,
@@ -482,6 +799,10 @@
     "top_deduction_categories": [
       {
         "category": "editorial-story",
+        "count": 2
+      },
+      {
+        "category": "image-fallback",
         "count": 2
       },
       {

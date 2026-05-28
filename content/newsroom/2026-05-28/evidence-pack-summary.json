@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-28",
-  "generated_at": "2026-05-28T16:42:58.618Z",
+  "generated_at": "2026-05-28T18:00:45.756Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -40,7 +40,7 @@
   "publish_status": {
     "status": "needs-fix",
     "run_mode": "diagnostics_only",
-    "quality_score": 83,
+    "quality_score": 81,
     "quality_threshold": 85,
     "fact_check_status": "NEEDS_FIX",
     "final_publish_ready": false,
@@ -69,11 +69,11 @@
   },
   "claim_validation_summary": {
     "status": "available",
-    "bound_claims": 2,
-    "total_claims": 3,
+    "bound_claims": 4,
+    "total_claims": 6,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
-    "available_article_count": 1,
+    "available_article_count": 2,
     "not_available_article_count": 0
   },
   "hal_impact_summary": {
@@ -338,16 +338,16 @@
         "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b"
       ],
       "key_evidence": [
-        "version_or_release: 2026-05-19",
+        "version_or_release: 2026년 5월",
         "api_or_component: Google AI Studio",
-        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
+        "behavior_change: Google AI Studio가 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있게 되었습니다. 소프트웨어 설치나 라이브러리 구성이 필요 없어 개발 장벽이 크게 낮아집니다."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
       "claim_validation": {
-        "status": "not_available",
-        "bound_claims": null,
-        "total_claims": null,
-        "overclaim_risk": "unknown"
+        "status": "available",
+        "bound_claims": 2,
+        "total_claims": 3,
+        "overclaim_risk": "medium"
       }
     }
   ],
@@ -468,11 +468,15 @@
   "failure_diagnostics": {
     "quality_hard_failures": [
       "Fact-check must_fix item mentions this section.",
-      "Fact checker returned 5 must_fix item(s)."
+      "Fact checker returned 16 must_fix item(s)."
     ],
     "fact_check_must_fix": [
-      "The action item is too generic and lacks specific details for a Camera HAL/driver engineer.",
-      "The impact_level 'stream_buffer_metadata' is too broad for an inference about 'configure_streams' calls and buffer reallocation frequency. It should be more specific."
+      "HAL/driver/runtime impact가 없는 CameraX/AndroidX release notes에서 source_extraction.release.sections[].items[].text가 source-confirmed release-note behavior evidence입니다. artifact ta...",
+      "Camera HAL perspective가 약하거나 engineering relevance가 빠진 main article은 source-backed 보강이 가능하면 recommended_fixes[]에 넣고, source가 Camera developer relevance를 뒷받침하지 못하면 must_fix[] 또는...",
+      "API/component/date, stream/metadata, compatibility test scenario처럼 validator token을 조합한 문장을 쓰지 마세요.",
+      "제공된 evidence가 stream, buffer, metadata, request, result, ImageCapture, VideoCapture, Surface, CameraPipe behavior를 명시하지 않으면 높은 HAL/runtime impact를 주장하지 마세요.",
+      "구체적인 Action Item content가 없는 main article은 같은 source 안에서 실행 가능한 action을 만들 수 있으면 recommended_fixes[]에 넣고, source가 실무 action을 뒷받침하지 못하면 must_fix[]에 넣으세요.",
+      "claims[].impact_level은 candidate metadata enum을 복사하지 말고 source facts, behavior_change, source_extraction, article_sections.hal_driver_impact를 보고 직접 판단하세요."
     ],
     "repair_failures": [
       "Targeted repair changed main article count outside completion/replacement mode."

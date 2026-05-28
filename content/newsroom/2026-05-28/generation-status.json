@@ -1,11 +1,11 @@
 {
   "status": "FAILED_REPAIR_REVIEWABLE",
   "fact_check_status": "NEEDS_FIX",
-  "must_fix_count": 5,
+  "must_fix_count": 16,
   "failure_kind": "",
   "failure_class": "",
   "quality_status": "NEEDS_FIX",
-  "quality_score": 83,
+  "quality_score": 81,
   "quality_threshold": 85,
   "publish_ready": false,
   "selection_publish_ready": false,
@@ -15,7 +15,7 @@
   "failure_stage": "editor repair attempt 1/2",
   "failure_reason": "Targeted repair changed main article count outside completion/replacement mode.",
   "quality_attempt_count": 1,
-  "quality_deduction_count": 3,
+  "quality_deduction_count": 5,
   "quota_error_count": 0,
   "invalid_json_count": 0,
   "model_usage": {
@@ -38,15 +38,6 @@
       }
     },
     "editor attempt 1/2": {
-      "gemini-3.5-flash": {
-        "requests": 1,
-        "successes": 1,
-        "invalid_json": 0,
-        "quota_errors": 0,
-        "api_errors": 0
-      }
-    },
-    "editor attempt 1/2 semantic repair": {
       "gemini-3.5-flash": {
         "requests": 1,
         "successes": 1,
@@ -123,19 +114,6 @@
       "resolved_by": "code_default",
       "global_override_applied": false
     },
-    "editor attempt 1/2 semantic repair": {
-      "stage": "editor attempt 1/2 semantic repair",
-      "stage_group": "repair",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-3.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false
-    },
     "editor attempt 1/2 public article judge": {
       "stage": "editor attempt 1/2 public article judge",
       "stage_group": "judge",
@@ -186,9 +164,9 @@
     "candidate_count": 42
   },
   "run_context": {
-    "github_run_id": "26588463846",
-    "github_sha": "2961e967ee3d7990220e616479a11cfb23d6a0af",
-    "github_ref": "refs/heads/fix/claim-enum-schema-constraints"
+    "github_run_id": "26592591197",
+    "github_sha": "99761c20a4ec94858c076b4d0c03cfa8de90fed7",
+    "github_ref": "refs/heads/main"
   },
   "validate_ok": false,
   "public_output_expected": false,
@@ -202,29 +180,38 @@
       "field": "sections",
       "reason": "section_count_drift",
       "mode": "targeted-repair",
-      "expectedCount": 1,
-      "actualCount": 0,
+      "expectedCount": 2,
+      "actualCount": 1,
       "expectedMinCount": 1,
       "expectedMaxCount": 5,
       "actualType": "array",
-      "sectionCount": 0
+      "sectionCount": 1
     },
     "field": "sections",
     "stage": "editor repair attempt 1/2",
     "attempt": 1,
     "status": "FAILED_REPAIR_REVIEWABLE",
     "lastKnownValidAttempt": 1,
-    "fallbackEditorSectionCount": 1
+    "fallbackEditorSectionCount": 2
   },
   "editor_public_article_judge": {
     "date": "2026-05-28",
     "overall_pass": true,
-    "section_count_expected": 1,
-    "section_count_actual": 1,
+    "section_count_expected": 2,
+    "section_count_actual": 2,
     "sections": [
       {
         "section_index": 1,
-        "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+        "headline": "Google I/O 2026: Jetpack Compose 기반 Adaptive UI 생태계 확장과 CameraX 미리보기 호환성 강화",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 2,
+        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 AI 카메라 워크로드 프로토타이핑 지원",
         "public_article_pass": true,
         "reader_checkpoints_pass": true,
         "source_boundary_pass": true,
@@ -234,26 +221,25 @@
     ]
   },
   "repairAttempted": true,
-  "repairSucceeded": true,
+  "repairSucceeded": false,
   "input_candidate_count": 42,
   "eligible_candidate_count": 2,
   "selected_article_count": 2,
   "deterministic_selected_count": 2,
-  "rendered_main_article_count": 1,
+  "rendered_main_article_count": 2,
   "selected_group_count": 2,
-  "rendered_group_count": 1,
-  "explicitly_demoted_group_count": 1,
+  "rendered_group_count": 2,
+  "explicitly_demoted_group_count": 0,
   "hard_blocked_group_count": 0,
   "selected_representative_group_keys": [
     "article:https://goo.gle/adaptiveapps_io26",
     "android_native_tooling_workflow"
   ],
   "rendered_group_keys": [
-    "article:https://goo.gle/adaptiveapps_io26"
-  ],
-  "explicitly_demoted_group_keys": [
+    "article:https://goo.gle/adaptiveapps_io26",
     "android_native_tooling_workflow"
   ],
+  "explicitly_demoted_group_keys": [],
   "hard_blocked_group_keys": [],
   "group_coverage_ok": true,
   "reserve_candidate_count": 0,

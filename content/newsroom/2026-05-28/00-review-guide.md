@@ -5,9 +5,9 @@
 - seed_used: false
 - public_output_expected: false
 - status: FAILED_REPAIR_REVIEWABLE
-- present: 62/83
-- missing_required: 2
-- attention_required: 6
+- present: 70/83
+- missing_required: 1
+- attention_required: 5
 
 ## 읽는 순서
 
@@ -35,13 +35,15 @@
 
 - `content/newsroom/2026-05-28/fact-check-report.md` - changed
 - `content/newsroom/2026-05-28/quality-report.md` - changed
-- `content/newsroom/2026-05-28/hal-signal-quality-report.md` - missing required (required_artifact_missing)
+- `content/newsroom/2026-05-28/hal-signal-quality-report.md` - present
+- `content/newsroom/2026-05-28/image-audit-report.md` - present
 - `content/newsroom/2026-05-28/source-quality-report.md` - present
 
 ## 후보 선정 진단
 
 - `content/newsroom/2026-05-28/selection-diagnostics.md` - present
 - `content/newsroom/2026-05-28/selection-report.md` - present
+- `content/newsroom/2026-05-28/source-quality-diagnosis.md` - present
 
 ## 필요 시 확인
 
@@ -50,6 +52,7 @@
 - `content/newsroom/2026-05-28/retry-history.md` - changed
 - `content/newsroom/2026-05-28/linked-evidence-diagnostics.md` - present
 - `content/newsroom/2026-05-28/event-bundle-diagnostics.md` - present
+- `content/newsroom/2026-05-28/source-effectiveness-report.md` - present
 - `content/newsroom/2026-05-28/source-discovery-feedback-report.md` - present
 - `content/newsroom/2026-05-28/gemini-source-discovery-report.md` - present
 
@@ -67,6 +70,7 @@
 - `content/newsroom/2026-05-28/editor-draft.md` - changed
 - `content/newsroom/2026-05-28/fact-check-report.json` - changed
 - `content/newsroom/2026-05-28/quality-report.json` - changed
+- `content/newsroom/2026-05-28/hal-signal-quality-report.json` - present
 - `content/newsroom/2026-05-28/retry-history.json` - changed
 - `content/newsroom/2026-05-28/shortlisted-candidates.json` - present
 - `content/newsroom/2026-05-28/selection-report.json` - present
@@ -75,7 +79,10 @@
 - `content/newsroom/2026-05-28/article-capsules.json` - present
 - `content/newsroom/2026-05-28/background-context.json` - present
 - `content/newsroom/2026-05-28/evidence-pack-summary.json` - present
+- `content/newsroom/2026-05-28/image-audit-report.json` - present
 - `content/newsroom/2026-05-28/source-quality-report.json` - present
+- `content/newsroom/2026-05-28/source-quality-diagnosis.json` - present
+- `content/newsroom/2026-05-28/source-effectiveness-report.json` - present
 - `content/newsroom/2026-05-28/source-discovery-feedback-report.json` - present
 - `content/newsroom/2026-05-28/source-clusters.json` - present
 - `content/newsroom/2026-05-28/gemini-source-proposals.json` - present
@@ -108,9 +115,7 @@
 ## 누락된 필수 확인 산출물
 
 - `content/newsroom/2026-05-28/editor-in-chief-brief.md` - missing required (required_artifact_missing)
-- `content/newsroom/2026-05-28/hal-signal-quality-report.md` - missing required (required_artifact_missing)
 
 ## 주의 필요
 
 - `content/newsroom/2026-05-28/editor-in-chief-brief.md`: required_artifact_missing - Required review artifact is missing for this run context.
-- `content/newsroom/2026-05-28/hal-signal-quality-report.md`: required_artifact_missing - Required review artifact is missing for this run context.

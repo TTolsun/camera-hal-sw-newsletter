@@ -9,7 +9,7 @@ Date: 2026-05-28
 - Unregistered candidates: 0
 - Eligible candidates: 2
 - Selected candidates: 2
-- Rendered main articles: 1
+- Rendered main articles: 2
 - Source gap candidates: 37
 - Generic noise candidates: 30
 - Duplicate candidates: 1
@@ -50,7 +50,7 @@ _없음_
 
 | Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
 | --- | --- | --- | --- | --- | --- | --- |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 13.09 | 21 | 2 | 2 | 1 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 28.09 | 21 | 2 | 2 | 2 |
 
 ## Sources Needing Parser Repair
 
@@ -124,7 +124,7 @@ _없음_
 | venturebeat-ai | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yozm-it | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 13.09 | 21 | 0.0952 | 1 | 0.5 | 0.9048 | 0.8571 | 1 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 28.09 | 21 | 0.0952 | 1 | 1 | 0.9048 | 0.8571 | 1 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
