@@ -8,10 +8,10 @@ const {
   buildReviewArtifactInventory,
   renderReviewGuideMarkdown,
   REVIEW_ARTIFACT_SCHEMA_VERSION,
-  PUB,
-  RRC,
-  DBG,
-  TRA
+  PUBLIC_SOURCE_OF_TRUTH,
+  REVIEW_REQUIRED_COMPACT,
+  DEBUG_HEAVY,
+  TRANSIENT_ATTEMPT
 } = require('../common/review-artifact-inventory');
 const {
   collectedCandidatesRelPath,
@@ -161,7 +161,7 @@ function testManifestCreationAndHashes() {
     a.path === newsroomRelPath(date, 'shortlisted-candidates.json')
   );
   assert.ok(heavyShortlisted, 'shortlisted-candidates.json should be in retained_heavy_artifacts');
-  assert.strictEqual(heavyShortlisted.retention_grade, DBG);
+  assert.strictEqual(heavyShortlisted.retention_grade, DEBUG_HEAVY);
   assert.ok(typeof heavyShortlisted.retention_location === 'string');
   assert.ok(typeof heavyShortlisted.size === 'number');
   assert.ok(typeof heavyShortlisted.sha256 === 'string');
@@ -170,13 +170,13 @@ function testManifestCreationAndHashes() {
     a.path === newsroomRelPath(date, 'selection-report.json')
   );
   assert.ok(committedSelectionReport, 'selection-report.json should be in committed_artifacts');
-  assert.strictEqual(committedSelectionReport.retention_grade, RRC);
+  assert.strictEqual(committedSelectionReport.retention_grade, REVIEW_REQUIRED_COMPACT);
 
   const committedQualityReport = manifest.committed_artifacts.find(a =>
     a.path === newsroomRelPath(date, 'quality-report.json')
   );
   assert.ok(committedQualityReport, 'quality-report.json should be in committed_artifacts');
-  assert.strictEqual(committedQualityReport.retention_grade, RRC);
+  assert.strictEqual(committedQualityReport.retention_grade, REVIEW_REQUIRED_COMPACT);
 }
 
 function testWarningsWhenReportsDisagree() {
@@ -383,14 +383,14 @@ function testRetentionGradeAssignment() {
   const snapshotDir = makeSnapshot();
   seedAgreeingSnapshot(snapshotDir);
 
-  // PUB: newsletter.md
+  // PUBLIC_SOURCE_OF_TRUTH: newsletter.md
   writeText(path.join(snapshotDir, 'newsletters', date, 'newsletter.md'), '# Newsletter\n');
-  // RRC: selection-report.md
+  // REVIEW_REQUIRED_COMPACT: selection-report.md
   writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-report.md').split('/')), '# Selection Report\n');
   writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-report.json').split('/')), { date });
-  // DBG: shortlisted-candidates.json
+  // DEBUG_HEAVY: shortlisted-candidates.json
   writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'shortlisted-candidates.json').split('/')), { date, selected_article_count: 0 });
-  // TRA: attempt file
+  // TRANSIENT_ATTEMPT: attempt file
   writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'editor-draft-attempt-1.json').split('/')), { attempt: 1 });
 
   const inventory = buildReviewArtifactInventory({
@@ -401,19 +401,19 @@ function testRetentionGradeAssignment() {
 
   const newsletterMd = inventory.review_artifacts.find(a => a.path === `newsletters/${date}/newsletter.md`);
   assert.ok(newsletterMd, 'newsletter.md should be in inventory');
-  assert.strictEqual(newsletterMd.retention_grade, PUB);
+  assert.strictEqual(newsletterMd.retention_grade, PUBLIC_SOURCE_OF_TRUTH);
 
   const selectionReportMd = inventory.review_artifacts.find(a => a.path === newsroomRelPath(date, 'selection-report.md'));
   assert.ok(selectionReportMd, 'selection-report.md should be in inventory');
-  assert.strictEqual(selectionReportMd.retention_grade, RRC);
+  assert.strictEqual(selectionReportMd.retention_grade, REVIEW_REQUIRED_COMPACT);
 
   const shortlisted = inventory.review_artifacts.find(a => a.path === newsroomRelPath(date, 'shortlisted-candidates.json'));
   assert.ok(shortlisted, 'shortlisted-candidates.json should be in inventory');
-  assert.strictEqual(shortlisted.retention_grade, DBG);
+  assert.strictEqual(shortlisted.retention_grade, DEBUG_HEAVY);
 
   const attempt = inventory.review_artifacts.find(a => a.path === newsroomRelPath(date, 'editor-draft-attempt-1.json'));
   assert.ok(attempt, 'editor-draft-attempt-1.json should be in inventory');
-  assert.strictEqual(attempt.retention_grade, TRA);
+  assert.strictEqual(attempt.retention_grade, TRANSIENT_ATTEMPT);
 }
 
 function testBuildDateReviewManifestRetentionFields() {
@@ -442,7 +442,7 @@ function testBuildDateReviewManifestRetentionFields() {
     a.path === newsroomRelPath(date, 'shortlisted-candidates.json')
   );
   assert.ok(heavyShortlisted, 'shortlisted-candidates.json should appear in retained_heavy_artifacts');
-  assert.strictEqual(heavyShortlisted.retention_grade, DBG);
+  assert.strictEqual(heavyShortlisted.retention_grade, DEBUG_HEAVY);
   assert.ok(typeof heavyShortlisted.retention_location === 'string');
   assert.ok(typeof heavyShortlisted.size === 'number');
   assert.ok(typeof heavyShortlisted.sha256 === 'string');
@@ -451,7 +451,7 @@ function testBuildDateReviewManifestRetentionFields() {
     a.path === newsroomRelPath(date, 'quality-report.json')
   );
   assert.ok(committedQuality, 'quality-report.json should appear in committed_artifacts');
-  assert.strictEqual(committedQuality.retention_grade, RRC);
+  assert.strictEqual(committedQuality.retention_grade, REVIEW_REQUIRED_COMPACT);
 }
 
 testManifestCreationAndHashes();

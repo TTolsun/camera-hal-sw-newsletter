@@ -231,6 +231,8 @@ PR마다 failure classification은 `A. New workflow blocker`, `B. Source / evide
 
 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, LLM JSON parsing, fact-check, quality, validation이 retry 후에도 실패할 때 작성됩니다. shortlist, selected input, failed section, quality deduction, fact-check finding, exact rerun command를 포함합니다.
 
+이 파일은 **DBG (`debug_heavy`)** 등급으로 Git에 커밋하지 않습니다. 실패 run의 recovery-prompt는 GitHub Actions artifact `newsroom-final-debug-<run_id>`에서 다운로드하거나, 해당 날짜의 `artifact-manifest.json` → `retained_heavy_artifacts`에서 path/sha256으로 조회하세요.
+
 ## GitHub Actions 운영
 
 ### 일일 RAW 후보 PR
