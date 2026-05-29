@@ -254,10 +254,11 @@
                 "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
                 "sourceUrl": "https://android-developers.googleblog.com/",
                 "articleUrl": "https://goo.gle/AdaptiveApps_IO26",
-                "sourceKind": "blog_post_item",
+                "sourceKind": "og",
                 "licenseStatus": "unknown",
                 "attribution": "Android Developers Blog",
-                "validationStatus": "ok"
+                "validationStatus": "ok",
+                "contentType": "image/png"
               }
             ],
             "selectedImage": "",
@@ -555,10 +556,11 @@
                 "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
                 "sourceUrl": "https://android-developers.googleblog.com/",
                 "articleUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-                "sourceKind": "rss_item",
+                "sourceKind": "og",
                 "licenseStatus": "unknown",
                 "attribution": "Android Developers Blog",
-                "validationStatus": "ok"
+                "validationStatus": "ok",
+                "contentType": "image/png"
               }
             ],
             "selectedImage": "",
@@ -875,18 +877,19 @@
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://goo.gle/AdaptiveApps_IO26",
-          "sourceKind": "blog_post_item",
+          "sourceKind": "og",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentType": "image/png"
         }
       ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "Google I/O 2026 공식 블로그 포스트의 대표 이미지로, Jetpack Compose 적응형 앱 발표 맥락과 일치하여 선택했습니다.",
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+      "imageSource": "https://goo.gle/AdaptiveApps_IO26",
+      "imageAttribution": "Android Developers Blog",
+      "imageAlt": "Google I/O 2026: Jetpack Compose와 CameraX로 구현하는 완벽한 적응형 카메라 미리보기",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
       "sources": [
         {
           "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
@@ -929,18 +932,29 @@
       "evidence_origin": "article_text",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "resolvedImage": {
-        "url": "../../assets/images/fallback/android.svg",
-        "src": "../../assets/images/fallback/android.svg",
-        "originalUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-        "originalSrc": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-        "usedFallback": true,
-        "reason": "selected image has no valid provenance candidate; local fallback visual used"
+        "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+        "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
       },
       "originalImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
       "do_not_overstate": [
         "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 또는 기타 HAL 관련 세부 사항을 주장하지 마십시오.",
         "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
-      ]
+      ],
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://goo.gle/AdaptiveApps_IO26",
+        "attribution": "Android Developers Blog",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+        "exclusionEvidence": []
+      }
     },
     {
       "category": "cpp_ai_tooling_fallback",
@@ -1102,18 +1116,19 @@
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-          "sourceKind": "rss_item",
+          "sourceKind": "og",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
-          "validationStatus": "ok"
+          "validationStatus": "ok",
+          "contentType": "image/png"
         }
       ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "Google AI Studio 발표 블로그 포스트의 공식 메타카드 이미지로, 본문 주제를 시각적으로 잘 대변하여 선택했습니다.",
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+      "imageSource": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "imageAttribution": "Android Developers Blog",
+      "imageAlt": "Google AI Studio: 프롬프트만으로 네이티브 Android 앱 빌드 및 AI 카메라 프로토타이핑 가속화",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
       "sources": [
         {
           "title": "Build native Android apps in Google AI Studio",
@@ -1155,18 +1170,29 @@
       "evidence_origin": "article_text",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "resolvedImage": {
-        "url": "../../assets/images/fallback/ai.svg",
-        "src": "../../assets/images/fallback/ai.svg",
-        "originalUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
-        "originalSrc": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
-        "usedFallback": true,
-        "reason": "selected image has no valid provenance candidate; local fallback visual used"
+        "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+        "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
       },
       "originalImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
       "do_not_overstate": [
         "제공된 출처 증거가 명시하지 않는 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 또는 기타 HAL 관련 세부 사항을 주장하지 마십시오.",
         "릴리스 테이블 텍스트 또는 UI 스니펫을 배경 지식으로 바꾸지 마십시오."
-      ]
+      ],
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "attribution": "Android Developers Blog",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+        "exclusionEvidence": []
+      }
     }
   ],
   "action_items": [

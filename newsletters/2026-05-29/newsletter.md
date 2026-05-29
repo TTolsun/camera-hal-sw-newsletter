@@ -13,9 +13,9 @@
 ## 2. Google I/O 2026: Jetpack Compose와 CameraX로 구현하는 완벽한 적응형 카메라 미리보기
 
 
-![Google I/O 2026: Jetpack Compose와 CameraX로 구현하는 완벽한 적응형 카메라 미리보기 image](../../assets/images/fallback/android.svg)
+![Google I/O 2026: Jetpack Compose와 CameraX로 구현하는 완벽한 적응형 카메라 미리보기](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png)
 
-_이미지: [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)_
+_이미지: [Android Developers Blog](https://goo.gle/AdaptiveApps_IO26)_
 
 
 _Jetpack Compose를 통한 멀티 디바이스 환경에서의 원활한 Android 경험 구축_
@@ -41,9 +41,9 @@ Google I/O 2026에서 Android 생태계가 '기본 적응형(Adaptive by Default
 ## 3. Google AI Studio: 프롬프트만으로 네이티브 Android 앱 빌드 및 AI 카메라 프로토타이핑 가속화
 
 
-![Google AI Studio: 프롬프트만으로 네이티브 Android 앱 빌드 및 AI 카메라 프로토타이핑 가속화 image](../../assets/images/fallback/ai.svg)
+![Google AI Studio: 프롬프트만으로 네이티브 Android 앱 빌드 및 AI 카메라 프로토타이핑 가속화](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png)
 
-_이미지: [Build native Android apps in Google AI Studio](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html)_
+_이미지: [Android Developers Blog](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html)_
 
 
 _Google AI Studio를 활용한 무설치 기반의 신속한 Android 개발 워크플로 도입_
