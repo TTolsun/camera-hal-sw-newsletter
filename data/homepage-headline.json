@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-05-27T00:00:00+09:00",
+  "updated_at": "2026-05-29T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-    "title": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드로 카메라 프로토타이핑 가속화",
-    "summary": "Google AI Studio에 프롬프트만으로 전체 네이티브 Android 앱을 자동 생성하고 빌드할 수 있는 기능이 도입되어, 카메라 API 연동 및 이미지 처리 프로토타입 앱 개발 속도가 획기적으로 빨라질 전망입니다.",
-    "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-    "newsletter_date": "2026-05-27",
-    "newsletter_url": "newsletters/2026-05-27/index.html",
-    "selected_at": "2026-05-27",
-    "base_score": 98,
-    "current_score": 98,
-    "last_scored_at": "2026-05-27",
+    "article_identity_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "title": "Google I/O 2026: Jetpack Compose와 CameraX로 구현하는 완벽한 적응형 카메라 미리보기",
+    "summary": "Google I/O 2026에서 Android 생태계가 '기본 적응형(Adaptive by Default)'으로 전환됨에 따라, 다양한 폼 팩터에서 일관된 카메라 경험을 제공하는 것이 핵심 과제로 떠올랐습니다. 특히 Jetpack Compose와 CameraX의 긴밀한 통합은 폴더블, 태블릿, XR 기기 등 모든 화면 크기에서 왜곡 없는 카메라 미리보기를 구현하는 핵심 엔진 역할을 수행합니다.",
+    "source_url": "https://goo.gle/AdaptiveApps_IO26",
+    "newsletter_date": "2026-05-29",
+    "newsletter_url": "newsletters/2026-05-29/index.html",
+    "selected_at": "2026-05-29",
+    "base_score": 100,
+    "current_score": 100,
+    "last_scored_at": "2026-05-29",
     "date_evidence": {
-      "date": "Tue, 19 May 2026 12:45:00 +0000",
+      "date": "Tue, 19 May 2026 13:00:00 +0000",
       "date_field": "published_date",
-      "evidence_level": "dated-rss-article",
+      "evidence_level": "dated-concrete-evidence",
       "publish_ready_date_evidence": true
     },
     "quality_flags": {
@@ -27,24 +27,69 @@
     "score_breakdown": {
       "base_score": 100,
       "official_source_bonus": 8,
-      "camera_bucket_bonus": 0,
+      "camera_bucket_bonus": 6,
       "driver_or_soc_bonus": 0,
-      "fallback_penalty": 10,
+      "fallback_penalty": 0,
       "generic_topic_penalty": 0,
       "source_gap_penalty": 0,
       "watch_page_penalty": 0,
       "minimum_headline_score": 40,
-      "total": 98
+      "total": 100
     },
     "snapshot": {
-      "category": "cpp_ai_tooling_fallback",
-      "source_name": "Android Developers Blog"
+      "category": "android_platform_camera_adjacent",
+      "source_name": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O"
     },
-    "newsletter_article_url": "newsletters/2026-05-27/index.html#article-google-ai-studio-android",
-    "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
-    "image_alt": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인"
+    "newsletter_article_url": "newsletters/2026-05-29/index.html#article-google-i-o-2026-jetpack-compose-camerax",
+    "image_url": "../../assets/images/fallback/android.svg",
+    "image_alt": "Google I/O 2026: Jetpack Compose와 CameraX로 구현하는 완벽한 적응형 카메라 미리보기 image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "title": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드로 카메라 프로토타이핑 가속화",
+      "summary": "Google AI Studio에 프롬프트만으로 전체 네이티브 Android 앱을 자동 생성하고 빌드할 수 있는 기능이 도입되어, 카메라 API 연동 및 이미지 처리 프로토타입 앱 개발 속도가 획기적으로 빨라질 전망입니다.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "newsletter_date": "2026-05-27",
+      "newsletter_url": "newsletters/2026-05-27/index.html",
+      "selected_at": "2026-05-27",
+      "base_score": 98,
+      "current_score": 98,
+      "last_scored_at": "2026-05-27",
+      "date_evidence": {
+        "date": "Tue, 19 May 2026 12:45:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "dated-rss-article",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 10,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 98
+      },
+      "snapshot": {
+        "category": "cpp_ai_tooling_fallback",
+        "source_name": "Android Developers Blog"
+      },
+      "newsletter_article_url": "newsletters/2026-05-27/index.html#article-google-ai-studio-android",
+      "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+      "image_alt": "Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인",
+      "replaced_at": "2026-05-29",
+      "replacement_reason": "replaced_by_new_candidate"
+    },
     {
       "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "title": "Google AI Studio, 프롬프트 기반 네이티브 Android 앱 생성 지원 및 Camera API 연동",

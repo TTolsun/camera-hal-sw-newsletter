@@ -1,0 +1,183 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 97,
+    "threshold": 85,
+    "status": "PASS",
+    "rendered_main_article_count": 2,
+    "locked_article_count": 2,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 카메라 스트림 연동 워크플로",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+      "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 카메라 스트림 연동 워크플로"
+    ],
+    "locked_article_headlines": [
+      "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+      "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 카메라 스트림 연동 워크플로"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+        "category": "android_platform_camera_adjacent",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "urls": [
+          "https://goo.gle/AdaptiveApps_IO26"
+        ],
+        "source_titles": [
+          "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 카메라 스트림 연동 워크플로",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+        ],
+        "source_titles": [
+          "Build native Android apps in Google AI Studio"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+        "sources": [
+          "https://goo.gle/AdaptiveApps_IO26"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 카메라 스트림 연동 워크플로",
+        "sources": [
+          "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 카메라 스트림 연동 워크플로"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
+        "category": "android_platform_camera_adjacent",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "urls": [
+          "https://goo.gle/AdaptiveApps_IO26"
+        ],
+        "source_titles": [
+          "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 카메라 스트림 연동 워크플로",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+        ],
+        "source_titles": [
+          "Build native Android apps in Google AI Studio"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 1,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]
