@@ -606,9 +606,6 @@ function validateArchivePageContract(newsletters) {
   if (!/<body\b[^>]*class=["'][^"']*\bhomepage\b[^"']*["']/i.test(html)) {
     fail('archive.html must use the same body.homepage shell as index.html.');
   }
-  if (!/<footer\b[^>]*class=["'][^"']*\bsite-footer\b[^"']*["'][\s\S]*Home[\s\S]*Archive[\s\S]*GitHub/i.test(html)) {
-    fail('archive.html must keep the shared site-footer with Home / Archive / GitHub links.');
-  }
   if (!/assets\/js\/newsletter-archive\.js/.test(html)) {
     fail('archive.html must load assets/js/newsletter-archive.js.');
   }

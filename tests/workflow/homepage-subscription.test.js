@@ -147,7 +147,7 @@ test('homepage renders subscription CTA only for valid enabled hosted config', a
   assert.equal(errors.length, 0);
 });
 
-test('homepage keeps subscription hidden for missing, disabled, or invalid config', async () => {
+test('homepage shows subscription in coming-soon state for missing, disabled, or invalid config', async () => {
   for (const subscriptionState of [
     'missing',
     {
@@ -167,21 +167,23 @@ test('homepage keeps subscription hidden for missing, disabled, or invalid confi
   ]) {
     const { section, action, errors } = await renderHomepage(subscriptionState);
 
-    assert.equal(section.hidden, true);
+    assert.equal(section.hidden, false);
     assert.equal(action.href, undefined);
     assert.equal(action.target, undefined);
     assert.equal(action.rel, undefined);
+    assert.equal(action.getAttribute('aria-disabled'), 'true');
     assert.equal(errors.length, 0);
   }
 });
 
-test('homepage subscription fetch failure hides section without an unhandled rejection', async () => {
+test('homepage subscription fetch failure shows coming-soon state without an unhandled rejection', async () => {
   const { section, action, errors } = await renderHomepage(null, {
     subscriptionFetchThrows: true
   });
 
-  assert.equal(section.hidden, true);
+  assert.equal(section.hidden, false);
   assert.equal(action.href, undefined);
+  assert.equal(action.getAttribute('aria-disabled'), 'true');
   assert.equal(errors.length, 1);
   assert.match(String(errors[0].message), /subscription config unavailable/);
 });

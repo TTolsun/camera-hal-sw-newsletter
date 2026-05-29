@@ -94,26 +94,16 @@
           <p class="eyebrow">Newsletter subscription</p>
           <h2 id="subscribe-title">Subscribe</h2>
           <p class="subscribe-description">
-            Camera HAL, Android Camera, Driver, AI newsletter updates open on a provider-hosted subscription page.
+            Camera HAL 디버깅하다 머리 쥐어뜯기 전에, 새 소식부터 메일로 챙기세요. (버튼은 안 뭅니다.)
           </p>
         </div>
-        <a class="button button-secondary subscribe-link" data-subscription-action>Subscribe</a>
+        <a class="button button-secondary subscribe-link" data-subscription-action>Subscribe (지원예정)</a>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <nav class="content-wrap footer-inner" aria-label="Footer navigation">
-      <a class="site-brand homepage-brand" href="index.html" aria-label="Camera SW Newsletter">
-        <span>Camera SW</span>
-        <span class="brand-subtitle">Newsletter</span>
-      </a>
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="archive.html">Archive</a>
-        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
-      </div>
-    </nav>
+    <div class="content-wrap footer-legal"><small>© 2026 Camera SW Newsletter</small></div>
   </footer>
 
   <script src="assets/js/newsletter-archive.js"></script>
@@ -237,31 +227,39 @@
       return hostedSubscribeUrl(config.subscribeUrl);
     }
 
-    function hideSubscription(section, action) {
-      if (section) section.hidden = true;
+    function applyComingSoon(section, action) {
       if (!action || typeof action.removeAttribute !== 'function') return;
       action.removeAttribute('href');
       action.removeAttribute('target');
       action.removeAttribute('rel');
       action.removeAttribute('aria-label');
+      action.setAttribute('aria-disabled', 'true');
+      action.classList.add('is-coming-soon');
+      action.textContent = 'Subscribe (지원예정)';
+      if (section) section.hidden = false;
     }
 
     async function loadSubscription() {
       const section = document.querySelector('[data-subscription-section]');
       const action = document.querySelector('[data-subscription-action]');
       if (!section || !action) return;
-      hideSubscription(section, action);
 
       try {
         const config = await fetchSubscriptionConfig();
         const href = getValidSubscriptionUrl(config);
-        if (!href) return;
+        if (!href) {
+          applyComingSoon(section, action);
+          return;
+        }
 
+        action.removeAttribute('aria-disabled');
+        action.classList.remove('is-coming-soon');
         action.setAttribute('href', href);
         action.setAttribute('aria-label', 'Subscribe to Camera SW Newsletter');
+        action.textContent = 'Subscribe';
         section.hidden = false;
       } catch (error) {
-        hideSubscription(section, action);
+        applyComingSoon(section, action);
         console.error(error);
       }
     }

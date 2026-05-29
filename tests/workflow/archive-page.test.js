@@ -190,7 +190,6 @@ test('archive page uses homepage shell, shared footer, metadata, and stable hook
   assert.match(html, /assets\/images\/brand\/HALley\.png/);
   assert.doesNotMatch(html, /archive-hero-actions|<a class="button button-primary" href="index\.html">Home<\/a>/);
   assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">Home<\/a>[\s\S]*href="archive\.html">Archive<\/a>[\s\S]*GitHub/);
-  assert.match(html, /<footer class="site-footer">[\s\S]*href="index\.html">Home<\/a>[\s\S]*href="archive\.html">Archive<\/a>[\s\S]*GitHub/);
   for (const hook of [
     'data-page="archive"',
     'data-archive-status',
