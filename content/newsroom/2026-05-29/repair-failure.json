@@ -1,0 +1,21 @@
+{
+  "name": "EditorSemanticValidationError",
+  "message": "Targeted repair changed main article count outside completion/replacement mode.",
+  "details": {
+    "field": "sections",
+    "reason": "section_count_drift",
+    "mode": "targeted-repair",
+    "expectedCount": 2,
+    "actualCount": 1,
+    "expectedMinCount": 1,
+    "expectedMaxCount": 5,
+    "actualType": "array",
+    "sectionCount": 1
+  },
+  "field": "sections",
+  "stage": "editor repair attempt 1/2",
+  "attempt": 1,
+  "status": "FAILED_REPAIR_REVIEWABLE",
+  "lastKnownValidAttempt": 1,
+  "fallbackEditorSectionCount": 2
+}

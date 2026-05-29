@@ -1,0 +1,57 @@
+{
+  "status": "NEEDS_FIX",
+  "must_fix": [
+    {
+      "location": "sections[0].public_article.decision_metadata.impact",
+      "problem": "decision_metadata 필드는 내부 구조화 필드이며 public article prose에 노출되어서는 안 됩니다.",
+      "suggestion": "decision_metadata 필드를 public_article에서 제거하십시오.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.decision_metadata.scope",
+      "problem": "decision_metadata 필드는 내부 구조화 필드이며 public article prose에 노출되어서는 안 됩니다.",
+      "suggestion": "decision_metadata 필드를 public_article에서 제거하십시오.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.decision_metadata.action",
+      "problem": "decision_metadata 필드는 내부 구조화 필드이며 public article prose에 노출되어서는 안 됩니다.",
+      "suggestion": "decision_metadata 필드를 public_article에서 제거하십시오.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.decision_metadata.overclaim_risk",
+      "problem": "decision_metadata 필드는 내부 구조화 필드이며 public article prose에 노출되어서는 안 됩니다.",
+      "suggestion": "decision_metadata 필드를 public_article에서 제거하십시오.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[1].public_article.decision_metadata.impact",
+      "problem": "decision_metadata 필드는 내부 구조화 필드이며 public article prose에 노출되어서는 안 됩니다.",
+      "suggestion": "decision_metadata 필드를 public_article에서 제거하십시오.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.decision_metadata.scope",
+      "problem": "decision_metadata 필드는 내부 구조화 필드이며 public article prose에 노출되어서는 안 됩니다.",
+      "suggestion": "decision_metadata 필드를 public_article에서 제거하십시오.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.decision_metadata.action",
+      "problem": "decision_metadata 필드는 내부 구조화 필드이며 public article prose에 노출되어서는 안 됩니다.",
+      "suggestion": "decision_metadata 필드를 public_article에서 제거하십시오.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.decision_metadata.overclaim_risk",
+      "problem": "decision_metadata 필드는 내부 구조화 필드이며 public article prose에 노출되어서는 안 됩니다.",
+      "suggestion": "decision_metadata 필드를 public_article에서 제거하십시오.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    }
+  ],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "final_comment": "decision_metadata 필드는 public article에 노출되어서는 안 됩니다. 해당 필드를 제거해야 합니다."
+}
