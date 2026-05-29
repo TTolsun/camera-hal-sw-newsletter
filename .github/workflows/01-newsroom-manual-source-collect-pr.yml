@@ -83,11 +83,6 @@ jobs:
           CANDIDATE_COUNT="$(node -e "const fs=require('fs'); const p='content/collected-news/${DATE}/manual-candidates.json'; const v=JSON.parse(fs.readFileSync(p,'utf8')); console.log(Array.isArray(v.candidates)?v.candidates.length:0)")"
           echo "candidate_count=${CANDIDATE_COUNT}" >> "$GITHUB_OUTPUT"
 
-      - name: Generate source effectiveness report
-        if: always() && steps.raw-meta.outputs.date != ''
-        continue-on-error: true
-        run: npm run report:source-effectiveness -- --date "${{ steps.raw-meta.outputs.date }}"
-
       - name: Generate evidence pack summary
         if: always() && steps.raw-meta.outputs.date != ''
         continue-on-error: true
