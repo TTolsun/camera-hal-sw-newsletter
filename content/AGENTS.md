@@ -34,7 +34,7 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `stale-claim-report.{json,md}`, `image-audit-report.{json,md}`, `source-quality-report.{json,md}`
 - `selection-report.{json,md}`, `selection-diagnostics.md`
 - `source-quality-diagnosis.{json,md}`, `evidence-pack-summary.json`
-- `recovery-prompt.md`, `retry-history.{json,md}`, `release-qa-report.md`
+- `retry-history.{json,md}`, `release-qa-report.md`
 - `linked-evidence-diagnostics.md`, `event-bundle-diagnostics.md`
 - `source-effectiveness-report.{json,md}`, `source-discovery-feedback-report.{json,md}`
 - `gemini-source-discovery-report.md`, `cost-report.md`
@@ -49,6 +49,7 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `source-clusters.json`, `extracted-source-facts.json`, `evidence-validation-report.json`
 - `gemini-*.json`, `seed-fetch-report.json`, `seed-merge-report.json`
 - `source-change-events.json`
+- `recovery-prompt.md` — heavy LLM prompt dump (~10 MB 규모). Git에 커밋하지 않음; GitHub Actions artifact `newsroom-final-debug-<run_id>` + `artifact-manifest.json` → `retained_heavy_artifacts`에서 조회.
 - `content/collected-news/YYYY-MM-DD/` 전체 (candidates, manual-candidates, collection-intent, raw-candidate-manifest, merged-candidates, merged-candidate-manifest, gemini-candidates, seed-candidates, seed-evidence-pack.json)
 
 ### TRA — `transient_attempt` (Actions + manifest만, 커밋 제외)
@@ -76,11 +77,12 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 실패 run이더라도 아래 RRC artifact는 Git에 커밋되어야 합니다.
 
 - `generation-status.json`
-- `recovery-prompt.md`
 - `selection-diagnostics.md`
 - `selection-report.{json,md}`
 - `quality-report.{json,md}`, `fact-check-report.{json,md}`, `hal-signal-quality-report.{json,md}`
 - `artifact-manifest.json` (heavy artifact 목록과 retention_location 포함)
+
+`recovery-prompt.md`는 DBG 등급으로 Git에 커밋하지 않습니다. 실패 run의 recovery-prompt는 GitHub Actions artifact `newsroom-final-debug-<run_id>`에서 다운로드하거나, `artifact-manifest.json` → `retained_heavy_artifacts`에서 path/sha256으로 조회하세요.
 
 heavy artifact 전체는 GitHub Actions artifact `newsroom-final-debug-<run_id>`에 보존됩니다.
 

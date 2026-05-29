@@ -23,20 +23,24 @@ const {
 
 const REVIEW_ARTIFACT_SCHEMA_VERSION = 3;
 
-const PUB = 'public_source_of_truth';
-const RRC = 'review_required_compact';
-const DBG = 'debug_heavy';
-const TRA = 'transient_attempt';
+// Git에 영구 보존되는 공개 진실 공급원 등급
+const PUBLIC_SOURCE_OF_TRUTH = 'public_source_of_truth';
+// Git에 보존되는 소형 리뷰 산출물 등급
+const REVIEW_REQUIRED_COMPACT = 'review_required_compact';
+// Git에 보존하지 않는 대용량 디버그 산출물 등급
+const DEBUG_HEAVY = 'debug_heavy';
+// Git에 보존하지 않는 일회성 시도 산출물 등급
+const TRANSIENT_ATTEMPT = 'transient_attempt';
 
 const GROUP_RETENTION_DEFAULT = {
-  editorial_brief: RRC,
-  seed_evidence: RRC,
-  gate_reports: RRC,
-  selection_diagnostics: RRC,
-  check_when_needed: RRC,
-  public_output: PUB,
-  debug_evidence: DBG,
-  unknown_artifacts: DBG
+  editorial_brief: REVIEW_REQUIRED_COMPACT,
+  seed_evidence: REVIEW_REQUIRED_COMPACT,
+  gate_reports: REVIEW_REQUIRED_COMPACT,
+  selection_diagnostics: REVIEW_REQUIRED_COMPACT,
+  check_when_needed: REVIEW_REQUIRED_COMPACT,
+  public_output: PUBLIC_SOURCE_OF_TRUTH,
+  debug_evidence: DEBUG_HEAVY,
+  unknown_artifacts: DEBUG_HEAVY
 };
 
 const REQUIRED_ALWAYS = 'always';
@@ -189,7 +193,7 @@ function entry({
     review_blocking_when_present: Boolean(reviewBlockingWhenPresent),
     review_attention_required: Boolean(reviewAttentionRequired),
     derived: Boolean(derived),
-    retention_grade: retentionGrade || GROUP_RETENTION_DEFAULT[group] || DBG
+    retention_grade: retentionGrade || GROUP_RETENTION_DEFAULT[group] || DEBUG_HEAVY
   };
 }
 
@@ -361,10 +365,12 @@ function exactCatalog(date) {
     }),
     entry({
       relPath: newsroomRelPath(date, 'recovery-prompt.md'),
-      group: 'check_when_needed',
+      // recovery-prompt.md is a heavy debug dump (~10 MB across runs); Actions artifact only
+      group: 'debug_evidence',
       role: 'recovery_prompt',
       reviewOrder: 61,
-      humanReadable: true
+      humanReadable: true,
+      retentionGrade: DEBUG_HEAVY
     }),
     entry({
       relPath: newsroomRelPath(date, 'release-qa-report.md'),
@@ -427,7 +433,7 @@ function exactCatalog(date) {
   ];
 }
 
-// RRC override: compact files that belong in debug_evidence group but are committed
+// REVIEW_REQUIRED_COMPACT override: compact files that belong in debug_evidence group but are committed
 const DEBUG_RRC_PATHS = new Set([
   'artifact-manifest.json',
   'generation-status.json',
@@ -451,7 +457,7 @@ const DEBUG_RRC_PATHS = new Set([
 
 function debugEntryRetentionGrade(relPath) {
   const basename = relPath.split('/').pop();
-  return DEBUG_RRC_PATHS.has(basename) ? RRC : DBG;
+  return DEBUG_RRC_PATHS.has(basename) ? REVIEW_REQUIRED_COMPACT : DEBUG_HEAVY;
 }
 
 function debugExactCatalog(date) {
@@ -522,6 +528,7 @@ function dynamicClassification(date, relPath) {
     /^editor-(?:invalid|validation-error)(?:-repair)?-attempt-\d+\.json$/,
     /^editor-(?:repair|completion)-attempt-\d+\.(?:json|md)$/,
     /^editor-repair-sections-attempt-\d+\.json$/,
+    /^editor-public-article-judge-attempt-\d+\.(?:json|md)$/,
     /^fact-check-report-attempt-\d+\.(?:json|md)$/,
     /^fact-check-(?:repair|completion)-attempt-\d+\.(?:json|md)$/,
     /^quality-report-attempt-\d+\.(?:json|md)$/,
@@ -536,7 +543,7 @@ function dynamicClassification(date, relPath) {
     role: 'debug_attempt',
     reviewOrder: 91,
     humanReadable: isMarkdownLike(relPath),
-    retentionGrade: TRA
+    retentionGrade: TRANSIENT_ATTEMPT
   });
 }
 
@@ -634,7 +641,7 @@ function materializeEntry(root, date, catalogEntry, context, changedSet) {
     review_order: catalogEntry.review_order,
     changed: changedSet.has(catalogEntry.path),
     derived: catalogEntry.derived,
-    retention_grade: catalogEntry.retention_grade || GROUP_RETENTION_DEFAULT[catalogEntry.group] || DBG,
+    retention_grade: catalogEntry.retention_grade || GROUP_RETENTION_DEFAULT[catalogEntry.group] || DEBUG_HEAVY,
     size: present ? stat.size : null,
     sha256: present ? stat.sha256 : null,
     ...(warning ? { warning } : {})
@@ -847,7 +854,7 @@ function renderArtifactList(artifacts, fallback = '- none') {
 function renderGeneratedArtifactsSummary(inventory) {
   const heavyArtifacts = inventory.review_artifacts.filter(artifact =>
     artifact.present &&
-    (artifact.retention_grade === DBG || artifact.retention_grade === TRA)
+    (artifact.retention_grade === DEBUG_HEAVY || artifact.retention_grade === TRANSIENT_ATTEMPT)
   );
   const runId = process.env.GITHUB_RUN_ID || '';
   const heavyLocation = runId
@@ -920,7 +927,7 @@ function buildDateReviewManifest({
 
   const retainedHeavyArtifacts = inventory.review_artifacts
     .filter(artifact => artifact.present &&
-      (artifact.retention_grade === DBG || artifact.retention_grade === TRA))
+      (artifact.retention_grade === DEBUG_HEAVY || artifact.retention_grade === TRANSIENT_ATTEMPT))
     .map(artifact => {
       const { size, sha256 } = statArtifact(root, artifact.path);
       return {
@@ -934,7 +941,7 @@ function buildDateReviewManifest({
 
   const committedArtifacts = inventory.review_artifacts
     .filter(artifact => artifact.present &&
-      (artifact.retention_grade === PUB || artifact.retention_grade === RRC) &&
+      (artifact.retention_grade === PUBLIC_SOURCE_OF_TRUTH || artifact.retention_grade === REVIEW_REQUIRED_COMPACT) &&
       !isArtifactManifest(artifact.path))
     .map(artifact => {
       const { size, sha256 } = statArtifact(root, artifact.path);
@@ -970,7 +977,36 @@ function buildDateReviewManifest({
 }
 
 function committedRetentionGrades() {
-  return [PUB, RRC];
+  return [PUBLIC_SOURCE_OF_TRUTH, REVIEW_REQUIRED_COMPACT];
+}
+
+// Derive YYYY-MM-DD from a repo-relative path such as
+// "content/newsroom/2026-05-05/foo.json" or "content/collected-news/2026-05-05/bar.json".
+function extractDateFromPath(relPath) {
+  const match = String(relPath || '').match(/\/(\d{4}-\d{2}-\d{2})\//);
+  return match ? match[1] : null;
+}
+
+// Classify a single repo-relative path without needing a full inventory build.
+// Returns { group, retention_grade, role } or null when the path has no date segment.
+function classifyArtifactPath(relPath) {
+  const normalized = toPosix(relPath);
+  const date = extractDateFromPath(normalized);
+  if (!date) return null;
+
+  const catalog = exactCatalog(date);
+  const exact = catalog.find(item => item.path === normalized);
+  if (exact) {
+    return { group: exact.group, retention_grade: exact.retention_grade, role: exact.role };
+  }
+
+  const dynamic = dynamicClassification(date, normalized);
+  if (dynamic) {
+    return { group: dynamic.group, retention_grade: dynamic.retention_grade, role: dynamic.role };
+  }
+
+  const unknown = classifyUnknown(normalized);
+  return { group: unknown.group, retention_grade: unknown.retention_grade, role: unknown.role };
 }
 
 function retentionCommitAllowlist({ root = process.cwd(), date, runContext = {} } = {}) {
@@ -986,13 +1022,14 @@ function retentionCommitAllowlist({ root = process.cwd(), date, runContext = {} 
 module.exports = {
   GROUPS,
   REVIEW_ARTIFACT_SCHEMA_VERSION,
-  PUB,
-  RRC,
-  DBG,
-  TRA,
+  PUBLIC_SOURCE_OF_TRUTH,
+  REVIEW_REQUIRED_COMPACT,
+  DEBUG_HEAVY,
+  TRANSIENT_ATTEMPT,
   GROUP_RETENTION_DEFAULT,
   buildDateReviewManifest,
   buildReviewArtifactInventory,
+  classifyArtifactPath,
   committedRetentionGrades,
   renderGeneratedArtifactsSummary,
   renderReleaseQaInventorySection,

@@ -8,8 +8,8 @@ const {
 } = require('../common/artifact-paths');
 const {
   REVIEW_ARTIFACT_SCHEMA_VERSION,
-  DBG,
-  TRA,
+  DEBUG_HEAVY,
+  TRANSIENT_ATTEMPT,
   buildReviewArtifactInventory,
   resolveRetentionLocation
 } = require('../common/review-artifact-inventory');
@@ -287,7 +287,7 @@ function buildManifest(snapshotDir, date) {
 
   const retainedHeavyArtifacts = files.filter(file => {
     const artifact = reviewInventory.review_artifacts.find(a => a.path === file.path);
-    return artifact && (artifact.retention_grade === DBG || artifact.retention_grade === TRA);
+    return artifact && (artifact.retention_grade === DEBUG_HEAVY || artifact.retention_grade === TRANSIENT_ATTEMPT);
   }).map(file => {
     const artifact = reviewInventory.review_artifacts.find(a => a.path === file.path);
     return {
@@ -301,8 +301,8 @@ function buildManifest(snapshotDir, date) {
 
   const committedArtifacts = reviewInventory.review_artifacts
     .filter(artifact => artifact.present &&
-      artifact.retention_grade !== DBG &&
-      artifact.retention_grade !== TRA &&
+      artifact.retention_grade !== DEBUG_HEAVY &&
+      artifact.retention_grade !== TRANSIENT_ATTEMPT &&
       !isArtifactManifestPath(artifact.path))
     .map(artifact => ({
       path: artifact.path,

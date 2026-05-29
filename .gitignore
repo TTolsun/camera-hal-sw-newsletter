@@ -15,9 +15,29 @@ npm-debug.log*
 /.claude/
 /CLAUDE.md
 
-content/newsroom/**/editor-draft-attempt-*.md
-content/newsroom/**/editor-repair-attempt-*.md
-content/newsroom/**/fact-check-report-attempt-*.md
-content/newsroom/**/fact-check-repair-attempt-*.md
-content/newsroom/**/quality-report-attempt-*.md
-content/newsroom/**/quality-report-repair-attempt-*.md
+# DBG (debug_heavy) exact basenames — scoped to newsroom and collected-news
+content/newsroom/**/article-capsules.json
+content/newsroom/**/background-context.json
+content/newsroom/**/editor-draft.json
+content/newsroom/**/editor-draft.md
+content/newsroom/**/event-bundles.json
+content/newsroom/**/evidence-validation-report.json
+content/newsroom/**/extracted-source-facts.json
+content/newsroom/**/gemini-source-proposal-validation-report.json
+content/newsroom/**/gemini-source-proposals.json
+content/newsroom/**/gemini-usage-report.json
+content/newsroom/**/linked-evidence-report.json
+content/newsroom/**/recovery-prompt.md
+content/newsroom/**/reporter-candidates.json
+content/newsroom/**/shortlisted-candidates.json
+content/newsroom/**/source-clusters.json
+content/collected-news/**/candidates.json
+content/collected-news/**/gemini-candidates.json
+content/collected-news/**/manual-candidates.json
+content/collected-news/**/merged-candidate-manifest.json
+content/collected-news/**/merged-candidates.json
+content/collected-news/**/raw-candidate-manifest.json
+
+# TRA (transient_attempt) patterns — scoped to newsroom
+content/newsroom/**/*-attempt-*.json
+content/newsroom/**/*-attempt-*.md
