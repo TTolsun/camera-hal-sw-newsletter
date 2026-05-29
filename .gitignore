@@ -2,6 +2,7 @@ node_modules/
 .tmp/
 cache/news-summary/
 npm-debug.log*
+.vscode/
 
 # Local agent scratch files
 /PLAN.md
@@ -11,6 +12,8 @@ npm-debug.log*
 /codex-*.md
 /*-codex-plan.md
 /*-scratch.md
+/.claude/
+/CLAUDE.md
 
 content/newsroom/**/editor-draft-attempt-*.md
 content/newsroom/**/editor-repair-attempt-*.md
