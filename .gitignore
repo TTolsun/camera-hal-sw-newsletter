@@ -31,12 +31,10 @@ content/newsroom/**/recovery-prompt.md
 content/newsroom/**/reporter-candidates.json
 content/newsroom/**/shortlisted-candidates.json
 content/newsroom/**/source-clusters.json
-content/collected-news/**/candidates.json
+# collected-news pure-debug files (not pipeline-input handoff state)
 content/collected-news/**/gemini-candidates.json
-content/collected-news/**/manual-candidates.json
-content/collected-news/**/merged-candidate-manifest.json
-content/collected-news/**/merged-candidates.json
-content/collected-news/**/raw-candidate-manifest.json
+content/collected-news/**/seed-candidates.json
+content/collected-news/**/seed-evidence-pack.json
 
 # TRA (transient_attempt) patterns — scoped to newsroom
 content/newsroom/**/*-attempt-*.json

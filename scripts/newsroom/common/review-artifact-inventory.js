@@ -433,7 +433,10 @@ function exactCatalog(date) {
   ];
 }
 
-// REVIEW_REQUIRED_COMPACT override: compact files that belong in debug_evidence group but are committed
+// REVIEW_REQUIRED_COMPACT override: compact files that belong in debug_evidence group but are committed.
+// Pipeline-input basenames (candidates.json, manual-candidates.json, raw-candidate-manifest.json,
+// merged-candidates.json, merged-candidate-manifest.json) are workflow 01→02→03 handoff state
+// that must be committed so the next workflow can read them from main.
 const DEBUG_RRC_PATHS = new Set([
   'artifact-manifest.json',
   'generation-status.json',
@@ -452,7 +455,15 @@ const DEBUG_RRC_PATHS = new Set([
   'cost-report.md',
   'summary-cache-report.md',
   'summary-cache-report.json',
-  'source-change-events.md'
+  'source-change-events.md',
+  // collected-news pipeline-input files (workflow handoff state, not pure debug)
+  'candidates.json',
+  'manual-candidates.json',
+  'raw-candidate-manifest.json',
+  'merged-candidates.json',
+  'merged-candidate-manifest.json',
+  // workflow-01 manual collection intent (collection_intent field in raw-candidate-manifest.json)
+  'collection-intent.json'
 ]);
 
 function debugEntryRetentionGrade(relPath) {

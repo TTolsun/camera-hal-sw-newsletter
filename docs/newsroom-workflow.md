@@ -379,3 +379,5 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 이 정책은 발행 안전성·source binding·image lineage·review-publication state 판정을 약화하지 않습니다. validate:post-generation, resolve-reviewable-artifacts, pr-body 생성은 commit 스텝보다 먼저 in-run working tree에서 실행되므로 add-paths 허용목록의 영향을 받지 않습니다.
 
 `01-newsroom-raw-candidates.yml`과 `02-newsroom-source-discovery.yml`은 candidate JSON이 리뷰 대상이므로 이 허용목록 제한을 적용하지 않습니다.
+
+`content/collected-news/YYYY-MM-DD/`의 파이프라인 입력 파일(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`)은 workflow 01 → 02 → 03의 핸드오프 상태로서 `review_required_compact` 등급 RRC 파일입니다. 순수 디버그 파일(`gemini-candidates.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 `debug_heavy` 등급으로 `.gitignore` 처리됩니다.
