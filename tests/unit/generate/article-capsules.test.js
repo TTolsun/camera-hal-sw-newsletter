@@ -97,6 +97,27 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   assert.equal(Object.hasOwn(capsule, 'impact_claim_level'), false);
 });
 
+test('article capsule preserves image provenance (sourceKind, contentType) for the gate', () => {
+  const capsule = buildArticleCapsule(candidate({
+    imageCandidates: [
+      {
+        url: 'https://cdn.example.com/og-image.png',
+        sourceUrl: 'https://example.com/article',
+        articleUrl: 'https://example.com/article',
+        sourceKind: 'og',
+        contentType: 'image/png',
+        licenseStatus: 'unknown',
+        attribution: 'Android Developers',
+        validationStatus: 'ok'
+      }
+    ]
+  }));
+
+  const [image] = capsule.imageCandidates;
+  assert.equal(image.sourceKind, 'og');
+  assert.equal(image.contentType, 'image/png');
+});
+
 test('article capsule strips legacy impact fields before LLM writer input', () => {
   const capsule = buildArticleCapsule(candidate({
     impact_claim_level: 'direct_hal_change',
