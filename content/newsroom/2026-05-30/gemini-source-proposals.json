@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-05-30",
+  "proposals": [
+    {
+      "proposal_id": "android-dev-blog-io-adaptive-apps",
+      "topic_gap": "Android Developers Blog에서 Google I/O 2026의 주요 발표 사항 중 카메라 HAL SW 개발에 영향을 미칠 수 있는 적응형 앱 경험 및 기기 간 연동에 대한 정보를 탐색합니다. 특히 카메라 출력, 미디어 파이프라인, 또는 멀티 디바이스 카메라 사용 시나리오와 관련된 내용을 찾습니다.",
+      "source_family": "android",
+      "allowed_domains": [
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android I/O 2026 adaptive apps camera",
+        "Android I/O 2026 cross-device camera",
+        "Jetpack Compose camera multi-device"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "적응형 UI/UX가 카메라 미리보기 또는 캡처 흐름에 미치는 영향",
+        "멀티 디바이스 환경에서 카메라 스트림 공유 또는 동기화에 대한 언급",
+        "폴더블 또는 대형 화면 기기에서 카메라 앱 개발 관련 가이드라인",
+        "Jetpack Compose를 사용한 카메라 관련 UI 개발 개선 사항"
+      ],
+      "risk_notes": [
+        "해당 URL은 Google I/O 2026의 일반적인 요약일 수 있으며, 카메라 HAL SW와 직접적인 관련이 없는 내용이 많을 수 있습니다.",
+        "'seamless Android experiences across devices'가 카메라 출력과 직접적으로 연결되지 않을 수 있습니다."
+      ]
+    },
+    {
+      "proposal_id": "android-dev-blog-ai-studio-native-apps",
+      "topic_gap": "Google AI Studio를 사용하여 네이티브 Android 앱을 빌드하는 새로운 기능이 카메라 HAL SW 개발 프로세스 또는 결과물에 어떤 영향을 미치는지 탐색합니다. 특히 AI 기반 이미지 처리, 카메라 제어, 또는 미디어 파이프라인 통합과 관련된 내용을 찾습니다.",
+      "source_family": "android",
+      "allowed_domains": [
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Google AI Studio Android camera",
+        "native Android AI camera app",
+        "AI image processing Android camera"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
+      ],
+      "expected_evidence": [
+        "AI Studio를 통한 카메라 앱 개발 워크플로우 개선 사항",
+        "AI 모델을 활용한 카메라 이미지/비디오 처리 (예: 필터, 효과, 분석)",
+        "카메라 HAL 또는 Camera2 API와의 AI 통합 예시",
+        "온디바이스 AI 추론을 위한 미디어 파이프라인 최적화"
+      ],
+      "risk_notes": [
+        "AI Studio가 주로 앱 개발 생산성 향상에 초점을 맞출 수 있으며, 카메라 HAL SW의 심층적인 측면보다는 상위 레벨 API 통합에 대한 내용이 주를 이룰 수 있습니다.",
+        "카메라 관련 내용이 일반적인 AI 기능 설명에 묻힐 수 있습니다."
+      ]
+    }
+  ]
+}

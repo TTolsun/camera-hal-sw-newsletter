@@ -1,0 +1,691 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-05-30",
+  "clusters": [
+    {
+      "cluster_id": "bdcf8a4c506e5257",
+      "cluster_key": "https://goo.gle/adaptiveapps_io26",
+      "canonical_url": "https://goo.gle/AdaptiveApps_IO26",
+      "canonical_title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://goo.gle/AdaptiveApps_IO26",
+          "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ef27814b2c8c8636",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "canonical_title": "17 Things to know for Android developers at Google I/O",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+          "title": "17 Things to know for Android developers at Google I/O",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1bd949b88ac6a778",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "canonical_title": "Android UI Development is Compose First",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+          "title": "Android UI Development is Compose First",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "652f5c50bcb656fe",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "canonical_title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+          "title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a315e38980974827",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+      "canonical_title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+          "title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "efec1690039b80c5",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+      "canonical_title": "Android Studio I/O Edition: What’s new in Android Developer tools",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+          "title": "Android Studio I/O Edition: What’s new in Android Developer tools",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "931e1972767ee114",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "canonical_title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+          "title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "fac75a8d436dc70f",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "canonical_title": "Build native Android apps in Google AI Studio",
+      "candidate_count": 4,
+      "duplicate_count": 3,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "title": "Build native Android apps in Google AI Studio",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "title": "Start building today - Build native Android apps in Google AI Studio",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "dd3b2dadebc278d1",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
+      "canonical_title": "Increasing app discovery and engagement on Google TV",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
+          "title": "Increasing app discovery and engagement on Google TV",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "82f8513ebf26c678",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
+      "canonical_title": "I/O 2026: What's new in Google Play",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
+          "title": "I/O 2026: What's new in Google Play",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2e09be47b7d035b1",
+      "cluster_key": "https://source.android.com/docs/core/camera",
+      "canonical_url": "https://source.android.com/docs/core/camera",
+      "canonical_title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a428b00356ec8b02",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
+      "canonical_title": "Build for the future with the Android XR Developer Catalyst Program — Apply now!",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
+          "title": "Build for the future with the Android XR Developer Catalyst Program — Apply now!",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "82c77d8b0de180fe",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
+      "canonical_title": "Adaptive development for the expanding Android ecosystem",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
+          "title": "Adaptive development for the expanding Android ecosystem",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "932c0c12ca1e56df",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
+      "canonical_title": "Updates to the Android XR SDK: Introducing Developer Preview 4",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
+          "title": "Updates to the Android XR SDK: Introducing Developer Preview 4",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d4b81ad16bd8d236",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
+      "canonical_title": "Introducing Android Performance Analyzer : The Next Evolution in Profiling for Android",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
+          "title": "Introducing Android Performance Analyzer : The Next Evolution in Profiling for Android",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "aedaad77a2bc7e4d",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "canonical_title": "Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+          "title": "Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9e95b9aeb5650263",
+      "cluster_key": "https://source.android.com/docs/whatsnew",
+      "canonical_url": "https://source.android.com/docs/whatsnew",
+      "canonical_title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew",
+          "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b564c567eef7ae59",
+      "cluster_key": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_url": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cdd",
+          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b7e36d17d4d0d17e",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
+      "canonical_title": "Android XR Updates for Unity, Unreal, and Godot",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
+          "title": "Android XR Updates for Unity, Unreal, and Godot",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "11b022bd66224265",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+      "canonical_title": "Building for the Intelligence System on Android",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+          "title": "Building for the Intelligence System on Android",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "abcdde2af442be63",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
+      "canonical_title": "What's new in Android for Cars: Unifying platforms and unlocking premium experiences",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
+          "title": "What's new in Android for Cars: Unifying platforms and unlocking premium experiences",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "879f4dccd9d4e0d7",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
+      "canonical_title": "What's New in Wear OS 7",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
+          "title": "What's New in Wear OS 7",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5c9ee1f8dcfa44fb",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/",
+      "canonical_title": "[PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/",
+          "title": "[PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "12cf977dd6fb218d",
+      "cluster_key": "https://lore.kernel.org/linux-media/202605292151.mkz7fcgx-lkp@intel.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/202605292151.mKZ7FCgx-lkp@intel.com/",
+      "canonical_title": "[sailus-media-tree:cleanup] BUILD SUCCESS ec3876496f035949a995c8618c3e981c2e4cf985",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/202605292151.mKZ7FCgx-lkp@intel.com/",
+          "title": "[sailus-media-tree:cleanup] BUILD SUCCESS ec3876496f035949a995c8618c3e981c2e4cf985",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9720219f1bac19b5",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260529160314.1224731-1-briandaniels@google.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260529160314.1224731-1-briandaniels@google.com/",
+      "canonical_title": "Re: [PATCH v3] media: add virtio-media driver",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260529160314.1224731-1-briandaniels@google.com/",
+          "title": "Re: [PATCH v3] media: add virtio-media driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f779cc23d7c0772c",
+      "cluster_key": "https://lore.kernel.org/linux-media/23d2a824-e894-4c26-8bd1-02bbb8a7c6d1@linaro.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/23d2a824-e894-4c26-8bd1-02bbb8a7c6d1@linaro.org/",
+      "canonical_title": "Re: [PATCH 4/8] arm64: dts: qcom: shikra: Add CAMSS node",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/23d2a824-e894-4c26-8bd1-02bbb8a7c6d1@linaro.org/",
+          "title": "Re: [PATCH 4/8] arm64: dts: qcom: shikra: Add CAMSS node",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b33af7ba6aec103b",
+      "cluster_key": "https://lore.kernel.org/linux-media/202605292214.mngz6u2f-lkp@intel.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/202605292214.mngz6U2F-lkp@intel.com/",
+      "canonical_title": "[linuxtv-media-pending:next] BUILD SUCCESS 2175323fdf820ebf2d861283d1de7ef394b048c5",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/202605292214.mngz6U2F-lkp@intel.com/",
+          "title": "[linuxtv-media-pending:next] BUILD SUCCESS 2175323fdf820ebf2d861283d1de7ef394b048c5",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "dea6feb0afaee313",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
+      "canonical_title": "[PATCH 0/6] Add CAMSS support for Qualcomm Glymur",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
+          "title": "[PATCH 0/6] Add CAMSS support for Qualcomm Glymur",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1a2c24e82d6f8d37",
+      "cluster_key": "https://lore.kernel.org/linux-media/0fb85345-ea8c-4294-bf4b-220617c9f089@linaro.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/0fb85345-ea8c-4294-bf4b-220617c9f089@linaro.org/",
+      "canonical_title": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/0fb85345-ea8c-4294-bf4b-220617c9f089@linaro.org/",
+          "title": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "823f7e7641e8931c",
+      "cluster_key": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+      "canonical_url": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+      "canonical_title": "How ref qualifiers led to deducing this",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+          "title": "How ref qualifiers led to deducing this",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5126eff726f21536",
+      "cluster_key": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "canonical_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "canonical_title": "C++: The Documentary trailer",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+          "title": "C++: The Documentary trailer",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "402c15ef415c19f6",
+      "cluster_key": "https://lore.kernel.org/linux-media/21c17cac-2a1e-4b19-ab6d-ddca9132d725@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/21c17cac-2a1e-4b19-ab6d-ddca9132d725@oss.qualcomm.com/",
+      "canonical_title": "Re: [PATCH 3/8] media: qcom: camss: add support for QCM2390 camss",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/21c17cac-2a1e-4b19-ab6d-ddca9132d725@oss.qualcomm.com/",
+          "title": "Re: [PATCH 3/8] media: qcom: camss: add support for QCM2390 camss",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "50f0f3505fec25bc",
+      "cluster_key": "https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei",
+      "canonical_url": "https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei",
+      "canonical_title": "Let the Compiler Check Your Units -- Wu Yongwei",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei",
+          "title": "Let the Compiler Check Your Units -- Wu Yongwei",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0d954a77489e88b2",
+      "cluster_key": "https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru",
+      "canonical_url": "https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru",
+      "canonical_title": "The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru",
+          "title": "The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "fca43c61db562aa7",
+      "cluster_key": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
+      "canonical_url": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
+      "canonical_title": "What reinterpret_cast doesn&apos;t do -- Andreas Fertig",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
+          "title": "What reinterpret_cast doesn&apos;t do -- Andreas Fertig",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e2c04a2eddc6bf79",
+      "cluster_key": "https://lore.kernel.org/linux-media/8618255e-ecbf-4f55-877d-09cb2faa6f50@linaro.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/8618255e-ecbf-4f55-877d-09cb2faa6f50@linaro.org/",
+      "canonical_title": "Re: [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/8618255e-ecbf-4f55-877d-09cb2faa6f50@linaro.org/",
+          "title": "Re: [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "739ee3e94bae2610",
+      "cluster_key": "https://lore.kernel.org/linux-media/5b63761b-07dd-4786-bc98-d8a1c48a2ef4@kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/5b63761b-07dd-4786-bc98-d8a1c48a2ef4@kernel.org/",
+      "canonical_title": "Re: [PATCH v2] media: bcm2835-unicam: Fix log status runtime access",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/5b63761b-07dd-4786-bc98-d8a1c48a2ef4@kernel.org/",
+          "title": "Re: [PATCH v2] media: bcm2835-unicam: Fix log status runtime access",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d2ccace770c7c8e4",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-2-bee535396d22@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-2-bee535396d22@oss.qualcomm.com/",
+      "canonical_title": "[PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-2-bee535396d22@oss.qualcomm.com/",
+          "title": "[PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e5d3610b93608370",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v7] media: iris: drop struct iris_fmt",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com/",
+          "title": "[PATCH v7] media: iris: drop struct iris_fmt",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}
