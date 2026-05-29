@@ -45,17 +45,19 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | watchlist | generic_tech_watchlist | 7 | 48 | 2 | rss-item | yes | rss_item | Android Developers Blog | Building for the Intelligence System on Android | Tue, 12 May 2026 14:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html) |
 | watchlist | generic_tech_watchlist | 7 | 42 | 4 | rss-item | yes | rss_item | Android Developers Blog | What's new in Android for Cars: Unifying platforms and unlocking premium experiences | Tue, 19 May 2026 08:30:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html) |
 | watchlist | generic_tech_watchlist | 7 | 42 | 4 | rss-item | yes | rss_item | Android Developers Blog | What's New in Wear OS 7 | Tue, 19 May 2026 08:00:00 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html) |
-| watchlist | generic_tech_watchlist | 7 | 75 | 4 | rss-item | yes | rss_item | lore.kernel.org linux-media list | [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss | 2026-05-29T14:37:57Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/) |
+| watchlist | generic_tech_watchlist | 7 | 75 | 6 | rss-item | yes | rss_item | lore.kernel.org linux-media list | Re: [PATCH 8/8] arm64: dts: qcom: shikra-iqs-evk-imx577-camera: Add DT overlay | 2026-05-29T17:14:46Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/051b9597-873c-44ca-b7a5-29efa795406f@oss.qualcomm.com/) |
 | watchlist | generic_tech_watchlist | 7 | 69 | 4 | rss-item | yes | rss_item | lore.kernel.org linux-media list | Re: [PATCH v3] media: add virtio-media driver | 2026-05-29T16:03:17Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/20260529160314.1224731-1-briandaniels@google.com/) |
-| watchlist | generic_tech_watchlist | 7 | 63 | 6 | rss-item | yes | rss_item | lore.kernel.org linux-media list | [PATCH 0/6] Add CAMSS support for Qualcomm Glymur | 2026-05-29T14:37:51Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/) |
-| watchlist | generic_tech_watchlist | 7 | 63 | 2 | rss-item | yes | rss_item | lore.kernel.org linux-media list | Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats | 2026-05-29T13:25:19Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/0fb85345-ea8c-4294-bf4b-220617c9f089@linaro.org/) |
 | watchlist | generic_tech_watchlist | 7 | 57 | 4 | rss-item | yes | rss_item | ISO C++ Blog | C++: The Documentary trailer | Thu, 14 May 2026 15:01:46 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer) |
+| watchlist | generic_tech_watchlist | 7 | 51 | 4 | rss-item | yes | rss_item | lore.kernel.org linux-media list | Re: [BUG] KASAN: slab-use-after-free in au0828_dvb_register | 2026-05-29T19:22:15Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/2EBF1AF0-ED21-4B11-87DB-9E40AD082F7F@gmail.com/) |
+| watchlist | generic_tech_watchlist | 7 | 51 | 4 | rss-item | yes | rss_item | lore.kernel.org linux-media list | Re: [PATCH v2 (repost * 2)] media: usb: siano: don't set URB_FREE_BUFFER flag | 2026-05-29T19:02:26Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/20260529190225.F2D8D1F00893@smtp.kernel.org/) |
+| watchlist | generic_tech_watchlist | 7 | 51 | 4 | rss-item | yes | rss_item | lore.kernel.org linux-media list | [PATCH v15 0/6] Rust bindings for gem shmem | 2026-05-29T18:37:20Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/20260529183702.677677-1-lyude@redhat.com/) |
+| watchlist | generic_tech_watchlist | 7 | 51 | 2 | rss-item | yes | rss_item | lore.kernel.org linux-media list | Re: [PATCH 7/8] arm64: dts: qcom: shikra-cqm-evk-imx577-camera: Add DT overlay | 2026-05-29T17:31:07Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/bc2aecf3-fedd-4b15-8e69-33ca928831d6@oss.qualcomm.com/) |
 | watchlist | generic_tech_watchlist | 7 | 51 | 6 | rss-item | yes | rss_item | lore.kernel.org linux-media list | Re: [PATCH 3/8] media: qcom: camss: add support for QCM2390 camss | 2026-05-29T15:01:13Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/21c17cac-2a1e-4b19-ab6d-ddca9132d725@oss.qualcomm.com/) |
 | watchlist | generic_tech_watchlist | 7 | 45 | 4 | rss-item | yes | rss_item | ISO C++ Blog | Let the Compiler Check Your Units -- Wu Yongwei | Fri, 22 May 2026 22:54:40 +0000 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei) |
+| watchlist | generic_tech_watchlist | 7 | 45 | 2 | rss-item | yes | rss_item | lore.kernel.org linux-media list | [PATCH v15 5/6] drm/gem/shmem: Introduce __drm_gem_shmem_free_sgt_locked() | 2026-05-29T18:37:37Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/20260529183702.677677-6-lyude@redhat.com/) |
+| watchlist | generic_tech_watchlist | 7 | 45 | 4 | rss-item | yes | rss_item | lore.kernel.org linux-media list | [PATCH v15 4/6] rust: faux: Allow retrieving a bound Device | 2026-05-29T18:37:34Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/20260529183702.677677-5-lyude@redhat.com/) |
 | watchlist | generic_tech_watchlist | 7 | 45 | 2 | rss-item | yes | rss_item | lore.kernel.org linux-media list | Re: [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss | 2026-05-29T15:07:41Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/8618255e-ecbf-4f55-877d-09cb2faa6f50@linaro.org/) |
 | watchlist | generic_tech_watchlist | 7 | 45 | 4 | rss-item | yes | rss_item | lore.kernel.org linux-media list | Re: [PATCH v2] media: bcm2835-unicam: Fix log status runtime access | 2026-05-29T15:06:48Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/5b63761b-07dd-4786-bc98-d8a1c48a2ef4@kernel.org/) |
-| watchlist | generic_tech_watchlist | 7 | 45 | 4 | rss-item | yes | rss_item | lore.kernel.org linux-media list | [PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible | 2026-05-29T14:38:02Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-2-bee535396d22@oss.qualcomm.com/) |
-| watchlist | generic_tech_watchlist | 7 | 45 | 4 | rss-item | yes | rss_item | lore.kernel.org linux-media list | [PATCH v7] media: iris: drop struct iris_fmt | 2026-05-29T14:26:16Z | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://lore.kernel.org/linux-media/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com/) |
 
 ## 제외 또는 낮은 신뢰도 항목
 
@@ -65,10 +67,8 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | exclude | generic_tech_watchlist | 7 | 65 | 2 | html-watch-page | no | documentation_page | AOSP Camera Documentation | Camera &nbsp;\|&nbsp; Android Open Source Project | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://source.android.com/docs/core/camera) |
 | exclude | generic_tech_watchlist | 7 | 53 | 2 | release-note-page | no | rolling_page | AOSP What's New / Release Notes | What&apos;s new &nbsp;\|&nbsp; Android Open Source Project | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://source.android.com/docs/whatsnew) |
 | exclude | generic_tech_watchlist | 7 | 53 | 2 | html-watch-page | no | documentation_page | Android Compatibility Definition Document | Android Compatibility Definition Document &nbsp;\|&nbsp; Android Open Source Project | 검토 필요 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | [link](https://source.android.com/docs/compatibility/cdd) |
-| exclude | cpp_ai_tooling_fallback | 6 | 75 | 8 | rss-item | yes | rss_item | lore.kernel.org linux-media list | [sailus-media-tree:cleanup] BUILD SUCCESS ec3876496f035949a995c8618c3e981c2e4cf985 | 2026-05-29T13:53:22Z | Excluded or low-confidence item below the main/short candidate tier. | [link](https://lore.kernel.org/linux-media/202605292151.mKZ7FCgx-lkp@intel.com/) |
-| exclude | soc_platform_signal | 5 | 69 | 6 | rss-item | yes | rss_item | lore.kernel.org linux-media list | Re: [PATCH 4/8] arm64: dts: qcom: shikra: Add CAMSS node | 2026-05-29T14:58:19Z | Excluded or low-confidence item below the main/short candidate tier. | [link](https://lore.kernel.org/linux-media/23d2a824-e894-4c26-8bd1-02bbb8a7c6d1@linaro.org/) |
-| exclude | cpp_ai_tooling_fallback | 6 | 69 | 8 | rss-item | yes | rss_item | lore.kernel.org linux-media list | [linuxtv-media-pending:next] BUILD SUCCESS 2175323fdf820ebf2d861283d1de7ef394b048c5 | 2026-05-29T14:13:24Z | Excluded or low-confidence item below the main/short candidate tier. | [link](https://lore.kernel.org/linux-media/202605292214.mngz6U2F-lkp@intel.com/) |
 | exclude | cpp_ai_tooling_fallback | 6 | 57 | 4 | rss-item | yes | rss_item | ISO C++ Blog | How ref qualifiers led to deducing this | Fri, 29 May 2026 14:23:44 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this) |
+| exclude | camera_driver_image_pipeline | 2 | 57 | 8 | rss-item | yes | rss_item | lore.kernel.org linux-media list | [PATCH v2 0/3] Add support for the Iris codec on Milos | 2026-05-29T20:58:39Z | Excluded or low-confidence item below the main/short candidate tier. | [link](https://lore.kernel.org/linux-media/20260529-milos-iris-v2-0-7a763d7195ae@pm.me/) |
 | exclude | cpp_ai_tooling_fallback | 6 | 45 | 4 | rss-item | yes | rss_item | ISO C++ Blog | The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo | Wed, 20 May 2026 22:51:47 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru) |
 | exclude | cpp_ai_tooling_fallback | 6 | 45 | 2 | rss-item | yes | rss_item | ISO C++ Blog | What reinterpret_cast doesn&apos;t do -- Andreas Fertig | Mon, 18 May 2026 22:46:29 +0000 | Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | [link](https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig) |
 
@@ -1109,12 +1109,12 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Posted by John Zoeller, Developer Relations Engineer Today, we are excited to introduce Wear OS 7, a major update that brings a new era of power efficiency and intelligence to users and developers alike. We recognize that watches are essential, all-day companions to your users. That’s why we're continuing to invest in power optimizations so your users can do more with their favorite apps. For watches upgrading from Wear OS 6 to Wear OS 7, average users can expect up to 10% improvement in battery
 - Selection reason: Android Developers Blog (official, high, score 42): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 24. [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss
+### 24. Re: [PATCH 8/8] arm64: dts: qcom: shikra-iqs-evk-imx577-camera: Add DT overlay
 
 - 출처: lore.kernel.org linux-media list
 - 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-29T14:37:57Z
-- Link: https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/
+- 발행일: 2026-05-29T17:14:46Z
+- Link: https://lore.kernel.org/linux-media/051b9597-873c-44ca-b7a5-29efa795406f@oss.qualcomm.com/
 - Section: Linux Camera / Driver
 - Source category: linux-camera
 - Source priority: high
@@ -1143,63 +1143,18 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Briefing only: yes
 - Reference only: yes
 - Source gap risk: yes
-- Evidence score: 4
+- Evidence score: 6
 - Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: From: Nihal Kumar Gupta Add device tree bindings for the Camera Subsystem (CAMSS) on the Qualcomm Glymur platform.
+- API/component: SoC
+- Behavior change: */ Sure, I'll add this comment
 - Cross-check 필요: yes
 - Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
 - Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
 - Relevance Score: 75
-- 요약: From: Nihal Kumar Gupta Add device tree bindings for the Camera Subsystem (CAMSS) on the Qualcomm Glymur platform. The Glymur platform provides: - 3 x CSIPHY (CSI Physical Layer) - 3 x CSID (CSI Decoder), 2 x CSID Lite - 3 x TPG (Test Pattern Generator) - 2 x VFE (Video Front End), 2 x VFE Lite Signed-off-by: Nihal Kumar Gupta Co-developed-by: Vikram Sharma Signed-off-by: Vikram Sharma --- .../bindings/media/qcom,glymur-camss.yaml \| 343 +++++++++++++++++++++ 1 file changed , 343 insertions(+) di
+- 요약: On 29-05-2026 04:00, bod@kernel.org wrote: >> + dovdd-supply = ; > I don't have your schematic BUT where are the rest of the regulators. > > If they are absent or powered by the daughter board, a comment in the patch > would be warranted. > > Same comment for previous patch. /* * avdd and dvdd are supplied by on-board regulators on the IMX577 * module from the connector's 3.3 V rail; they are not SoC-controlled. * dovdd is the only supply sourced from the SoC PMIC. */ Sure, I'll add this comment
 - Selection reason: lore.kernel.org linux-media list (project-official, high, score 75): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 25. [sailus-media-tree:cleanup] BUILD SUCCESS ec3876496f035949a995c8618c3e981c2e4cf985
-
-- 출처: lore.kernel.org linux-media list
-- 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-29T13:53:22Z
-- Link: https://lore.kernel.org/linux-media/202605292151.mKZ7FCgx-lkp@intel.com/
-- Section: Linux Camera / Driver
-- Source category: linux-camera
-- Source priority: high
-- Source reliability: project-official
-- Editorial priority: 6
-- Relevance bucket: cpp_ai_tooling_fallback
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 3
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: yes
-- Evidence origin: article_text
-- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
-- Candidate only: yes
-- Collection mode: rss-item
-- Article candidate: no
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: exclude
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: no
-- Reference only: no
-- Source gap risk: yes
-- Evidence score: 8
-- Version/release: 15.2.0
-- API/component: gcc
-- Behavior change: tree/branch: git://linuxtv.org/sailus/media_tree.git cleanup branch HEAD: ec3876496f035949a995c8618c3e981c2e4cf985 media: rockchip: rkcif: add support for rk3588 vicap mipi capture elapsed time: 1153m configs tested: 187 configs skipped: 2 The following configs have been built successfully.
-- Cross-check 필요: yes
-- Selection exclusion reason: Excluded or low-confidence item below the main/short candidate tier.
-- Verification hint: Excluded or low-confidence item below the main/short candidate tier.
-- Relevance Score: 75
-- 요약: tree/branch: git://linuxtv.org/sailus/media_tree.git cleanup branch HEAD: ec3876496f035949a995c8618c3e981c2e4cf985 media: rockchip: rkcif: add support for rk3588 vicap mipi capture elapsed time: 1153m configs tested: 187 configs skipped: 2 The following configs have been built successfully. More configs may be tested in the coming days. tested configs: alpha allnoconfig gcc-15.2.0 alpha allyesconfig gcc-15.2.0 alpha defconfig gcc-15.2.0 arc allmodconfig clang-16 arc allnoconfig gcc-15.2.0 arc al
-- Selection reason: lore.kernel.org linux-media list (project-official, high, score 75): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.)
-
-### 26. Re: [PATCH v3] media: add virtio-media driver
+### 25. Re: [PATCH v3] media: add virtio-media driver
 
 - 출처: lore.kernel.org linux-media list
 - 출처 URL: https://lore.kernel.org/linux-media/
@@ -1244,187 +1199,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: Hi there! My name is Brian Daniels and I'll be taking over upstreaming this driver from Alexandre Courbot. I've consulted with Alexandre and my plan is to upload a v4 set of patches shortly based on the feedback from this revision. Before doing so, I'd like to address some of your comments: > Hi Alex, > > I didn't see on a first glance anything that would cause locking > issues here, but, as I pointed on my last e-mail, testing with > qv4l2 at the max res of my C920 camera, it ended keeping 24 C
 - Selection reason: lore.kernel.org linux-media list (project-official, high, score 69): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 27. Re: [PATCH 4/8] arm64: dts: qcom: shikra: Add CAMSS node
-
-- 출처: lore.kernel.org linux-media list
-- 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-29T14:58:19Z
-- Link: https://lore.kernel.org/linux-media/23d2a824-e894-4c26-8bd1-02bbb8a7c6d1@linaro.org/
-- Section: Linux Camera / Driver
-- Source category: linux-camera
-- Source priority: high
-- Source reliability: project-official
-- Editorial priority: 5
-- Relevance bucket: soc_platform_signal
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 3
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: yes
-- Counts as fallback topic: no
-- Evidence origin: article_text
-- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
-- Candidate only: yes
-- Collection mode: rss-item
-- Article candidate: no
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: exclude
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: no
-- Reference only: no
-- Source gap risk: yes
-- Evidence score: 6
-- Version/release: 추출 안 됨
-- API/component: isp
-- Behavior change: OPE is not yet enabled for > Shikra and in my opinion it should be added as a separate yaml similar to Agatti.
-- Cross-check 필요: yes
-- Selection exclusion reason: Excluded or low-confidence item below the main/short candidate tier.
-- Verification hint: Excluded or low-confidence item below the main/short candidate tier.
-- Relevance Score: 69
-- 요약: On 29/05/2026 15:52, Vikram Sharma wrote: > Shikra and Agatti are not iommu compatible in terms of Stream ID. Only VFE SID is same > for both. Agatti is documenting iommu for VFE, CDM and OPE. OPE is not yet enabled for > Shikra and in my opinion it should be added as a separate yaml similar to Agatti. > " https://lore.kernel.org/all/20260508-camss-isp-ope-v3-9- > bb1055274603@oss.qualcomm.com/" > > Regarding cdm iommu we have excluded it as we do not use it to program registers as of now. Which
-- Selection reason: lore.kernel.org linux-media list (project-official, high, score 69): soc_platform_signal (Public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 3 article-level signal(s) from article_text.)
-
-### 28. [linuxtv-media-pending:next] BUILD SUCCESS 2175323fdf820ebf2d861283d1de7ef394b048c5
-
-- 출처: lore.kernel.org linux-media list
-- 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-29T14:13:24Z
-- Link: https://lore.kernel.org/linux-media/202605292214.mngz6U2F-lkp@intel.com/
-- Section: Linux Camera / Driver
-- Source category: linux-camera
-- Source priority: high
-- Source reliability: project-official
-- Editorial priority: 6
-- Relevance bucket: cpp_ai_tooling_fallback
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 3
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: yes
-- Evidence origin: article_text
-- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
-- Candidate only: yes
-- Collection mode: rss-item
-- Article candidate: no
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: exclude
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: no
-- Reference only: no
-- Source gap risk: yes
-- Evidence score: 8
-- Version/release: 15.2.0
-- API/component: gcc
-- Behavior change: tree/branch: https://git.linuxtv.org/media-ci/media-pending.git next branch HEAD: 2175323fdf820ebf2d861283d1de7ef394b048c5 media: rockchip: rkcif: add support for rk3588 vicap mipi capture elapsed time: 1027m configs tested: 187 configs skipped: 2 The following configs have been built successfully.
-- Cross-check 필요: yes
-- Selection exclusion reason: Excluded or low-confidence item below the main/short candidate tier.
-- Verification hint: Excluded or low-confidence item below the main/short candidate tier.
-- Relevance Score: 69
-- 요약: tree/branch: https://git.linuxtv.org/media-ci/media-pending.git next branch HEAD: 2175323fdf820ebf2d861283d1de7ef394b048c5 media: rockchip: rkcif: add support for rk3588 vicap mipi capture elapsed time: 1027m configs tested: 187 configs skipped: 2 The following configs have been built successfully. More configs may be tested in the coming days. tested configs: alpha allnoconfig gcc-15.2.0 alpha allyesconfig gcc-15.2.0 alpha defconfig gcc-15.2.0 arc allmodconfig clang-16 arc allnoconfig gcc-15.2.
-- Selection reason: lore.kernel.org linux-media list (project-official, high, score 69): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.)
-
-### 29. [PATCH 0/6] Add CAMSS support for Qualcomm Glymur
-
-- 출처: lore.kernel.org linux-media list
-- 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-29T14:37:51Z
-- Link: https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/
-- Section: Linux Camera / Driver
-- Source category: linux-camera
-- Source priority: high
-- Source reliability: project-official
-- Editorial priority: 7
-- Relevance bucket: generic_tech_watchlist
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: no
-- Evidence origin: source_hint_only
-- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
-- Candidate only: yes
-- Collection mode: rss-item
-- Article candidate: no
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: watchlist
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: yes
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 6
-- Version/release: 추출 안 됨
-- API/component: SoC
-- Behavior change: This series adds Camera Subsystem (CAMSS) support for the Qualcomm Glymur SoC.
-- Cross-check 필요: yes
-- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 63
-- 요약: This series adds Camera Subsystem (CAMSS) support for the Qualcomm Glymur SoC. Glymur's camera hardware topology: - 3x CSIPHY (CSI Physical Layer) - 3x CSID + 2x CSID Lite (CSI Decoder) - 3x TPG (Test Pattern Generator) - 2x VFE + 2x VFE Lite (Video Front End) The CSIPHY block is the same hardware version as x1e80100 (3ph-1-0), differing only in instance count (3 vs 4). TPG, CSID, VFE, CSID wrapper, and ICC resources are fully shared with x1e80100 — only a dedicated csiphy_res_glymur array is in
-- Selection reason: lore.kernel.org linux-media list (project-official, high, score 63): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
-
-### 30. Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats
-
-- 출처: lore.kernel.org linux-media list
-- 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-29T13:25:19Z
-- Link: https://lore.kernel.org/linux-media/0fb85345-ea8c-4294-bf4b-220617c9f089@linaro.org/
-- Section: Linux Camera / Driver
-- Source category: linux-camera
-- Source priority: high
-- Source reliability: project-official
-- Editorial priority: 7
-- Relevance bucket: generic_tech_watchlist
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: no
-- Evidence origin: source_hint_only
-- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
-- Candidate only: yes
-- Collection mode: rss-item
-- Article candidate: no
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: watchlist
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: yes
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 2
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: On 5/29/26 12:33, Wangao Wang wrote: > > > On 2026/5/29 17:55, Neil Armstrong wrote: >> Hi, >> >> On 5/29/26 10:21, Wangao Wang wrote: >>> >>> >>> On 2026/5/28 21:26, Neil Armstrong wrote: >>>> Hi Wangao, >>>> >>>> On 5/27/26 06:15, Wangao Wang wrote: >>>>> I tested the v4 patch using the gst command you provided earlier.
-- Cross-check 필요: yes
-- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 63
-- 요약: On 5/29/26 12:33, Wangao Wang wrote: > > > On 2026/5/29 17:55, Neil Armstrong wrote: >> Hi, >> >> On 5/29/26 10:21, Wangao Wang wrote: >>> >>> >>> On 2026/5/28 21:26, Neil Armstrong wrote: >>>> Hi Wangao, >>>> >>>> On 5/27/26 06:15, Wangao Wang wrote: >>>>> I tested the v4 patch using the gst command you provided earlier. The decoded output still has the previous plane misalignment issue, but all frames are decoded successfully. When viewing the raw data with an image player at 1920x1080 resolut
-- Selection reason: lore.kernel.org linux-media list (project-official, high, score 63): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
-
-### 31. How ref qualifiers led to deducing this
+### 26. How ref qualifiers led to deducing this
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1469,7 +1244,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: A follow up on last weeks post on ref qualifiers: How ref qualifiers led to deducing this by Jens Weller From the article: Last week I shared an overview on ref qualifiers with you, this is a follow up on this post. Featuring deducing this, a C++23 feature that should be available in your compiler if its been released in 2025 or later. Lets start with two more things you may want to know about ref qualifiers. First, const is also supported for the rvalue version: m::f()const && exists, though th
 - Selection reason: ISO C++ Blog (official-community, high, score 57): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)
 
-### 32. C++: The Documentary trailer
+### 27. C++: The Documentary trailer
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -1513,6 +1288,231 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Relevance Score: 57
 - 요약: Sponsored by HRT and produced by CultRepo , we're pleased to share the official trailer for C++: The Documentary . The trailer premieres today at 19:00 UTC. Click Notify me on the YouTube Premiere page to get a reminder when it goes live. The film will have its world premiere on May 28 at a special live event in New York City&rsquo;s Financial District, followed by a panel discussion that will be recorded for later release. C++: The Documentary will be released worldwide on YouTube on June 4, wi
 - Selection reason: ISO C++ Blog (official-community, high, score 57): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 28. [PATCH v2 0/3] Add support for the Iris codec on Milos
+
+- 출처: lore.kernel.org linux-media list
+- 출처 URL: https://lore.kernel.org/linux-media/
+- 발행일: 2026-05-29T20:58:39Z
+- Link: https://lore.kernel.org/linux-media/20260529-milos-iris-v2-0-7a763d7195ae@pm.me/
+- Section: Linux Camera / Driver
+- Source category: linux-camera
+- Source priority: high
+- Source reliability: project-official
+- Editorial priority: 2
+- Relevance bucket: camera_driver_image_pipeline
+- AOSP camera directness: 0
+- Driver stack relevance: 3
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: yes
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: article_text
+- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
+- Candidate only: yes
+- Collection mode: rss-item
+- Article candidate: no
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: exclude
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: no
+- Reference only: no
+- Source gap risk: yes
+- Evidence score: 8
+- Version/release: 1.32.0
+- API/component: v4l2
+- Behavior change: This series adds the bindings, nodes and platform data for the Milos platform for the Iris video codec, allowing Milos to use hardware‑accelerated video encoding and decoding.
+- Cross-check 필요: yes
+- Selection exclusion reason: Excluded or low-confidence item below the main/short candidate tier.
+- Verification hint: Excluded or low-confidence item below the main/short candidate tier.
+- Relevance Score: 57
+- 요약: This series adds the bindings, nodes and platform data for the Milos platform for the Iris video codec, allowing Milos to use hardware‑accelerated video encoding and decoding. Ran v4l2-compliance and some fluster tests, though a concerning amount of them failed. Attaching v4l2-compliance output and the full fluster results below. $ v4l2-compliance -d /dev/video0 -s ~/fluster/resources/JVT-AVC_V1/SVA_BA1_B/SVA_BA1_B.264 v4l2-compliance 1.32.0, 64 bits, 64-bit time_t Compliance test for iris_drive
+- Selection reason: lore.kernel.org linux-media list (project-official, high, score 57): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)
+
+### 29. Re: [BUG] KASAN: slab-use-after-free in au0828_dvb_register
+
+- 출처: lore.kernel.org linux-media list
+- 출처 URL: https://lore.kernel.org/linux-media/
+- 발행일: 2026-05-29T19:22:15Z
+- Link: https://lore.kernel.org/linux-media/2EBF1AF0-ED21-4B11-87DB-9E40AD082F7F@gmail.com/
+- Section: Linux Camera / Driver
+- Source category: linux-camera
+- Source priority: high
+- Source reliability: project-official
+- Editorial priority: 7
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
+- Candidate only: yes
+- Collection mode: rss-item
+- Article candidate: no
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 4
+- Version/release: 추출 안 됨
+- API/component: 추출 안 됨
+- Behavior change: > On May 29, 2026, at 04:30, xiaopeitux@foxmail.com wrote: > > From: Pei Xiao > >> Hi Kernel Maintainers, >> >> We hit the following KASAN report while testing current upstream kernel: >> >> KASAN: slab-use-after-free in au0828_dvb_register >> >> on commit: e8c2f9fdadee7cbc75134dc463c1e0d856d6e5c7 (May 25 2026) >> >> The reproducer and .config files are here.
+- Cross-check 필요: yes
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 51
+- 요약: > On May 29, 2026, at 04:30, xiaopeitux@foxmail.com wrote: > > From: Pei Xiao > >> Hi Kernel Maintainers, >> >> We hit the following KASAN report while testing current upstream kernel: >> >> KASAN: slab-use-after-free in au0828_dvb_register >> >> on commit: e8c2f9fdadee7cbc75134dc463c1e0d856d6e5c7 (May 25 2026) >> >> The reproducer and .config files are here. >> https://gist.github.com/shuangpengbai/c31163f8ef234ba4fe85038c2f97f9cc >> >> I’m happy to test debug patches or provide additional info
+- Selection reason: lore.kernel.org linux-media list (project-official, high, score 51): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 30. Re: [PATCH v2 (repost * 2)] media: usb: siano: don't set URB_FREE_BUFFER flag
+
+- 출처: lore.kernel.org linux-media list
+- 출처 URL: https://lore.kernel.org/linux-media/
+- 발행일: 2026-05-29T19:02:26Z
+- Link: https://lore.kernel.org/linux-media/20260529190225.F2D8D1F00893@smtp.kernel.org/
+- Section: Linux Camera / Driver
+- Source category: linux-camera
+- Source priority: high
+- Source reliability: project-official
+- Editorial priority: 7
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
+- Candidate only: yes
+- Collection mode: rss-item
+- Article candidate: no
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 4
+- Version/release: 추출 안 됨
+- API/component: 추출 안 됨
+- Behavior change: -- commit 7f00858c7ab2fb0e69617ed008b46f7ad16b84b7 Author: Tetsuo Handa Subject: media: usb: siano: don't set URB_FREE_BUFFER flag This commit removes the URB_FREE_BUFFE
+- Cross-check 필요: yes
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 51
+- 요약: Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider: Pre-existing issues: - [High] A race condition during device teardown (`smsusb_stop_streaming`) allows an URB to be resubmitted after it was killed, resulting in a Use-After-Free and out-of-bounds DMA write when the orphaned URB completes. -- commit 7f00858c7ab2fb0e69617ed008b46f7ad16b84b7 Author: Tetsuo Handa Subject: media: usb: siano: don't set URB_FREE_BUFFER flag This commit removes the URB_FREE_BUFFE
+- Selection reason: lore.kernel.org linux-media list (project-official, high, score 51): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 31. [PATCH v15 0/6] Rust bindings for gem shmem
+
+- 출처: lore.kernel.org linux-media list
+- 출처 URL: https://lore.kernel.org/linux-media/
+- 발행일: 2026-05-29T18:37:20Z
+- Link: https://lore.kernel.org/linux-media/20260529183702.677677-1-lyude@redhat.com/
+- Section: Linux Camera / Driver
+- Source category: linux-camera
+- Source priority: high
+- Source reliability: project-official
+- Editorial priority: 7
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
+- Candidate only: yes
+- Collection mode: rss-item
+- Article candidate: no
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 4
+- Version/release: 추출 안 됨
+- API/component: 추출 안 됨
+- Behavior change: Most of this patch series has already been pushed upstream, this is just the second half of the patch series that has not been pushed yet + some additional changes which were required to implement changes requested by the mailing list.
+- Cross-check 필요: yes
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 51
+- 요약: Most of this patch series has already been pushed upstream, this is just the second half of the patch series that has not been pushed yet + some additional changes which were required to implement changes requested by the mailing list. This patch series is originally from Asahi, previously posted by Daniel Almeida. The previous version of the patch series can be found here: https://patchwork.freedesktop.org/series/164580/ Branch with patches applied available here: https://gitlab.freedesktop.org
+- Selection reason: lore.kernel.org linux-media list (project-official, high, score 51): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 32. Re: [PATCH 7/8] arm64: dts: qcom: shikra-cqm-evk-imx577-camera: Add DT overlay
+
+- 출처: lore.kernel.org linux-media list
+- 출처 URL: https://lore.kernel.org/linux-media/
+- 발행일: 2026-05-29T17:31:07Z
+- Link: https://lore.kernel.org/linux-media/bc2aecf3-fedd-4b15-8e69-33ca928831d6@oss.qualcomm.com/
+- Section: Linux Camera / Driver
+- Source category: linux-camera
+- Source priority: high
+- Source reliability: project-official
+- Editorial priority: 7
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
+- Candidate only: yes
+- Collection mode: rss-item
+- Article candidate: no
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 2
+- Version/release: 추출 안 됨
+- API/component: 추출 안 됨
+- Behavior change: On 29-05-2026 03:58, bod@kernel.org wrote: > If the overlay is not specific to board then the overlay should have some > kind of base name shikra-evk-imx577-camera.dtb > > This seems like a minor nit-pick and, it is 🙂 Thanks for the review!
+- Cross-check 필요: yes
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 51
+- 요약: On 29-05-2026 03:58, bod@kernel.org wrote: > If the overlay is not specific to board then the overlay should have some > kind of base name shikra-evk-imx577-camera.dtb > > This seems like a minor nit-pick and, it is 🙂 Thanks for the review! The overlay is named after CQM because it's shared between CQM and CQS both use PM4125 PMIC with identical camera supply rails. The only difference between them is the integrated modem on CQM, which does not affect camera hardware at all. IQS uses PM8150 wit
+- Selection reason: lore.kernel.org linux-media list (project-official, high, score 51): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
 ### 33. Re: [PATCH 3/8] media: qcom: camss: add support for QCM2390 camss
 
@@ -1694,7 +1694,97 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: In today's post, I will explain one of C++'s biggest pitfalls:&nbsp; reinterpret_cast . Another title for this post could be:&nbsp; This is&nbsp;not&nbsp;the cast you're looking for! What reinterpret_cast doesn't do Andreas Fertig From the article: My motivation for this blog post comes from multiple training classes I thought over the past several months and a couple of talks I gave. Since C++23, you have a new facility in the Standard Library:&nbsp; std::start_lifetime_as . When teaching class
 - Selection reason: ISO C++ Blog (official-community, high, score 45): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)
 
-### 37. Re: [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss
+### 37. [PATCH v15 5/6] drm/gem/shmem: Introduce __drm_gem_shmem_free_sgt_locked()
+
+- 출처: lore.kernel.org linux-media list
+- 출처 URL: https://lore.kernel.org/linux-media/
+- 발행일: 2026-05-29T18:37:37Z
+- Link: https://lore.kernel.org/linux-media/20260529183702.677677-6-lyude@redhat.com/
+- Section: Linux Camera / Driver
+- Source category: linux-camera
+- Source priority: high
+- Source reliability: project-official
+- Editorial priority: 7
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
+- Candidate only: yes
+- Collection mode: rss-item
+- Article candidate: no
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 2
+- Version/release: 추출 안 됨
+- API/component: 추출 안 됨
+- Behavior change: One of the complications of trying to use the shmem helpers to create a scatterlist for shmem objects is that we need to be able to provide a guarantee that the driver cannot be unbound for the lifetime of the scatterlist.
+- Cross-check 필요: yes
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 45
+- 요약: One of the complications of trying to use the shmem helpers to create a scatterlist for shmem objects is that we need to be able to provide a guarantee that the driver cannot be unbound for the lifetime of the scatterlist. The easiest way of handling this seems to be just hooking up an unmap operation to devres the first time we create a scatterlist, which allows us to still take advantage of gem shmem facilities without breaking that guarantee. To allow for this, we extract __drm_gem_shmem_free
+- Selection reason: lore.kernel.org linux-media list (project-official, high, score 45): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 38. [PATCH v15 4/6] rust: faux: Allow retrieving a bound Device
+
+- 출처: lore.kernel.org linux-media list
+- 출처 URL: https://lore.kernel.org/linux-media/
+- 발행일: 2026-05-29T18:37:34Z
+- Link: https://lore.kernel.org/linux-media/20260529183702.677677-5-lyude@redhat.com/
+- Section: Linux Camera / Driver
+- Source category: linux-camera
+- Source priority: high
+- Source reliability: project-official
+- Editorial priority: 7
+- Relevance bucket: generic_tech_watchlist
+- AOSP camera directness: 0
+- Driver stack relevance: 0
+- SoC platform relevance: 0
+- Native tooling relevance: 0
+- Counts as primary camera topic: no
+- Counts as driver topic: no
+- Counts as SoC topic: no
+- Counts as fallback topic: no
+- Evidence origin: source_hint_only
+- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
+- Candidate only: yes
+- Collection mode: rss-item
+- Article candidate: no
+- Watch page: no
+- 날짜 근거 있음: yes
+- Evidence level: dated-rss-article
+- Final selection eligibility: watchlist
+- Source kind: rss_item
+- Main eligible: no
+- Briefing only: yes
+- Reference only: yes
+- Source gap risk: yes
+- Evidence score: 4
+- Version/release: 추출 안 됨
+- API/component: 추출 안 됨
+- Behavior change: When writing up some rust code that used faux devices for unit testing, I noticed that we never actually added the Bound device context to faux::Registration's AsRef implementation.
+- Cross-check 필요: yes
+- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
+- Relevance Score: 45
+- 요약: When writing up some rust code that used faux devices for unit testing, I noticed that we never actually added the Bound device context to faux::Registration's AsRef implementation. This being said: the Registration object itself is proof that a driver is bound to the device - so this should be safe. Signed-off-by: Lyude Paul --- rust/kernel/faux.rs \| 7 ++++--- 1 file changed , 4 insertions(+), 3 deletions(-) diff --git a/rust/kernel/faux.rs b/rust/kernel/faux.rs index 43b4974f48cd2..e0856b2964a
+- Selection reason: lore.kernel.org linux-media list (project-official, high, score 45): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
+
+### 39. Re: [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss
 
 - 출처: lore.kernel.org linux-media list
 - 출처 URL: https://lore.kernel.org/linux-media/
@@ -1739,7 +1829,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 요약: On 29/05/2026 15:37, Vikram Sharma wrote: > + > + vdd-csiphy-0p8-supply: > + description: > + Phandle to 0.8V regulator supply to CSI PHYs. > + > + vdd-csiphy-1p2-supply: > + description: > + Phandle to a 1.2V regulator supply to CSI PHYs pll block. > + To be brutally honest, I'd rather see effort and buy-in from qcom engineers in converting to CSIPHY as a distinct sub-node. Pushing patches to hit your own internal deadlines to the detriment of upstream quality is not OK. This binding should be
 - Selection reason: lore.kernel.org linux-media list (project-official, high, score 45): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
-### 38. Re: [PATCH v2] media: bcm2835-unicam: Fix log status runtime access
+### 40. Re: [PATCH v2] media: bcm2835-unicam: Fix log status runtime access
 
 - 출처: lore.kernel.org linux-media list
 - 출처 URL: https://lore.kernel.org/linux-media/
@@ -1782,96 +1872,6 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
 - Relevance Score: 45
 - 요약: On 5/29/26 08:12, Jean-Michel Hautbois wrote: > Hi Eugen, > > Le 22/05/2026 à 17:28, Eugen Hristev a écrit : >> When requesting log status, the block might be powered off, but registers >> are being read. >> Avoid reading the registers if the device is not resumed, thus also avoid >> powering up the device just for log status. >> >> Fixes: 392cd78d495f ("media: bcm2835-unicam: Add support for CCP2/CSI2 camera interface") >> Signed-off-by: Eugen Hristev >> --- >> Changes in v2: >> - changed to us
-- Selection reason: lore.kernel.org linux-media list (project-official, high, score 45): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
-
-### 39. [PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible
-
-- 출처: lore.kernel.org linux-media list
-- 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-29T14:38:02Z
-- Link: https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-2-bee535396d22@oss.qualcomm.com/
-- Section: Linux Camera / Driver
-- Source category: linux-camera
-- Source priority: high
-- Source reliability: project-official
-- Editorial priority: 7
-- Relevance bucket: generic_tech_watchlist
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: no
-- Evidence origin: source_hint_only
-- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
-- Candidate only: yes
-- Collection mode: rss-item
-- Article candidate: no
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: watchlist
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: yes
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 4
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: From: Nihal Kumar Gupta Add Glymur compatible consistent with CAMSS CCI interfaces.
-- Cross-check 필요: yes
-- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 45
-- 요약: From: Nihal Kumar Gupta Add Glymur compatible consistent with CAMSS CCI interfaces. Signed-off-by: Nihal Kumar Gupta Signed-off-by: Vikram Sharma --- Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml \| 2 ++ 1 file changed , 2 insertions(+) diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml index 7c497a358e1d..53aefebc02bb 100644 --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml +++ b/Documentation/devic
-- Selection reason: lore.kernel.org linux-media list (project-official, high, score 45): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
-
-### 40. [PATCH v7] media: iris: drop struct iris_fmt
-
-- 출처: lore.kernel.org linux-media list
-- 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-29T14:26:16Z
-- Link: https://lore.kernel.org/linux-media/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com/
-- Section: Linux Camera / Driver
-- Source category: linux-camera
-- Source priority: high
-- Source reliability: project-official
-- Editorial priority: 7
-- Relevance bucket: generic_tech_watchlist
-- AOSP camera directness: 0
-- Driver stack relevance: 0
-- SoC platform relevance: 0
-- Native tooling relevance: 0
-- Counts as primary camera topic: no
-- Counts as driver topic: no
-- Counts as SoC topic: no
-- Counts as fallback topic: no
-- Evidence origin: source_hint_only
-- Source hint: V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요
-- Candidate only: yes
-- Collection mode: rss-item
-- Article candidate: no
-- Watch page: no
-- 날짜 근거 있음: yes
-- Evidence level: dated-rss-article
-- Final selection eligibility: watchlist
-- Source kind: rss_item
-- Main eligible: no
-- Briefing only: yes
-- Reference only: yes
-- Source gap risk: yes
-- Evidence score: 4
-- Version/release: 추출 안 됨
-- API/component: 추출 안 됨
-- Behavior change: Reviewed-by: Dikshita Agarwal Signed-off-by: Dmitry Baryshkov --- Changes in v7: - ...
-- Cross-check 필요: yes
-- Selection exclusion reason: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Verification hint: Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.
-- Relevance Score: 45
-- 요약: The struct iris_fmt unites pixfmt with the plane type, however the type from the struct is not actually used. Drop the struct completely and use u32 pixfmt in all the callsites. Reviewed-by: Dikshita Agarwal Signed-off-by: Dmitry Baryshkov --- Changes in v7: - ... and fix the build failure - Link to v6: https://patch.msgid.link/20260529-iris-remote-fmts-v6-1-4aa3f004ab3d@oss.qualcomm.com Changes in v6: - Another rebase, now on Bryan's -next tree, again - Link to v5: https://patch.msgid.link/2026
 - Selection reason: lore.kernel.org linux-media list (project-official, high, score 45): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.
 
 ## Collector 실패
