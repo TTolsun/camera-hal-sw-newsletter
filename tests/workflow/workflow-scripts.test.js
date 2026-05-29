@@ -7,7 +7,8 @@ const path = require('node:path');
 const test = require('node:test');
 
 const {
-  buildNewsroomPrBody
+  buildNewsroomPrBody,
+  renderCandidateTraceability
 } = require('../../scripts/build-newsroom-pr-body');
 const {
   buildRawCandidatePrBody
@@ -6685,4 +6686,40 @@ test('site validation workflow keeps structural checks blocking and quality anno
   for (const command of annotationCommands) {
     assert.match(command, /\bnode\s+scripts\/annotate-publication-quality\.js\b[^\n]*\s--latest\b/);
   }
+});
+
+test('candidate trace table does not produce broken Markdown links when title contains square brackets', () => {
+  const root = tempRoot();
+  const date = '2026-05-30';
+  const bracketedCandidate = {
+    title: '[PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss',
+    url: 'https://lore.kernel.org/linux-media/20260530-qcom-glymur-camss-v1-1-abc123@kernel.org/',
+    source: 'lore.kernel.org',
+    published_date: '2026-05-30',
+    finalSelectionEligibility: 'main',
+    hasDatedEvidence: true,
+    main_eligible: true,
+    source_gap_risk: false,
+    reference_only: false,
+    relevance_bucket: 'camera_driver_image_pipeline'
+  };
+  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+    selected_articles: [],
+    primary_selected_articles: [],
+    shortlisted_candidates: [],
+    reserve_candidates: [],
+    excluded_candidates: [bracketedCandidate]
+  });
+  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
+    candidates: [bracketedCandidate]
+  });
+
+  const traceSection = renderCandidateTraceability(root, date);
+
+  // validator regex: `[^\]\n]+` forbids `]` in link text — ensure no broken row slips through
+  const brokenLinkRows = traceSection
+    .split(/\r?\n/)
+    .filter(line => line.trim().startsWith('|') && line.includes('](') && !/\[[^\]\n]+\]\(<[^>\n]+>\)/.test(line) && !/\[[^\]\n]+\]\([^)>\n]+\)/.test(line));
+  assert.deepEqual(brokenLinkRows, [], `broken link rows found:\n${brokenLinkRows.join('\n')}`);
+  assert.doesNotMatch(traceSection, /\[\[PATCH/);
 });

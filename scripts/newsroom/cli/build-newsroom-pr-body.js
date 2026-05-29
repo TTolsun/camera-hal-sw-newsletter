@@ -1542,7 +1542,9 @@ function reasonCodeFor(candidate, status, reportStatus = '') {
 function formatCandidateLink(candidate) {
   const title = sanitizeMarkdownTableCell(candidate.title || 'unknown title', { maxLength: 120 });
   const url = sanitizeMarkdownLinkUrl(candidate.url);
-  return url ? trustedMarkdownTableCell(`[${title}](<${url}>)`) : title;
+  // validator regex forbids literal `]` inside link text; replace [ ] with ( ) so "[PATCH 1/6]" becomes "(PATCH 1/6)"
+  const linkText = title.replace(/\[/g, '(').replace(/\]/g, ')');
+  return url ? trustedMarkdownTableCell(`[${linkText}](<${url}>)`) : title;
 }
 
 function candidateKeys(candidate) {
