@@ -340,6 +340,8 @@ function compactImageCandidates(candidate) {
       url: text(image.url),
       sourceUrl: text(image.sourceUrl),
       articleUrl: text(image.articleUrl),
+      sourceKind: text(image.sourceKind),
+      contentType: text(image.contentType),
       licenseStatus: text(image.licenseStatus),
       attribution: compactText(image.attribution, 120),
       validationStatus: text(image.validationStatus)

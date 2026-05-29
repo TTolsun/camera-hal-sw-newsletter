@@ -1180,6 +1180,34 @@ function reporterImageCandidatesForSection(section, reporter) {
   return images.slice(0, 6);
 }
 
+// capsule 압축과 editor LLM round-trip이 떨어뜨리거나 위조하는 image provenance(sourceKind, contentType)를
+// reporter candidate의 검증된 값으로 URL 기준 복원한다.
+function authoritativeImageProvenanceByUrl(reporter) {
+  const byUrl = new Map();
+  for (const candidate of ensureArray(reporter && reporter.candidates)) {
+    for (const image of ensureArray(candidate.imageCandidates)) {
+      if (image && image.url && !byUrl.has(image.url)) byUrl.set(image.url, image);
+    }
+  }
+  return byUrl;
+}
+
+function restoreImageProvenance(image, provenanceByUrl) {
+  const authoritative = provenanceByUrl.get(image.url);
+  if (!authoritative) return image;
+  return {
+    ...image,
+    sourceKind: authoritative.sourceKind || image.sourceKind,
+    contentType: authoritative.contentType || image.contentType,
+    licenseStatus: authoritative.licenseStatus || image.licenseStatus,
+    validationStatus: authoritative.validationStatus || image.validationStatus,
+    attribution: image.attribution || authoritative.attribution,
+    width: image.width != null ? image.width : authoritative.width,
+    height: image.height != null ? image.height : authoritative.height,
+    alt: image.alt || authoritative.alt
+  };
+}
+
 function isHttpsUrl(value) {
   try {
     return new URL(String(value || '').trim()).protocol === 'https:';
@@ -1199,7 +1227,10 @@ function firstHttpsUrl(...values) {
 const fallbackCategories = ['AOSP Camera Watch', 'Camera Driver / SoC Platform Watch', 'C++ / AI Practical Tip'];
 
 function normalizeSectionImageFields(section, reporter) {
-  const sectionImages = ensureArray(section.imageCandidates).filter(image => image && image.url && isSafeExternalImageUrl(image.url));
+  const provenanceByUrl = authoritativeImageProvenanceByUrl(reporter);
+  const sectionImages = ensureArray(section.imageCandidates)
+    .filter(image => image && image.url && isSafeExternalImageUrl(image.url))
+    .map(image => restoreImageProvenance(image, provenanceByUrl));
   const imageCandidates = sectionImages.length > 0 ? sectionImages : reporterImageCandidatesForSection(section, reporter);
   const allowed = new Set(imageCandidates.map(image => image.url));
   const requestedImage = allowed.has(section.selectedImage) ? section.selectedImage : '';
@@ -4738,6 +4769,7 @@ module.exports = {
   availableCompletionCandidates,
   backgroundContextStageEnabled,
   mergeLockedSections,
+  normalizeSectionImageFields,
   recordLastKnownValidEditor,
   sectionsMatchingRepairPlan,
   sectionsOutsideRepairPlan,
