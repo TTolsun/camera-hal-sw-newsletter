@@ -56,9 +56,18 @@
 3. `content/newsroom/YYYY-MM-DD/fact-check-report.md`
 4. `content/newsroom/YYYY-MM-DD/quality-report.md`
 5. `content/newsroom/YYYY-MM-DD/retry-history.md`
-6. `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`
-7. `content/newsroom/YYYY-MM-DD/article-capsules.json`
+6. `content/newsroom/YYYY-MM-DD/selection-diagnostics.md`
+7. `content/newsroom/YYYY-MM-DD/selection-report.md`
 8. `newsletters/YYYY-MM-DD/newsletter.md`
+
+`shortlisted-candidates.json`과 `article-capsules.json`은 debug_heavy 등급이므로 PR diff에 포함되지 않습니다. 이 파일들은 GitHub Actions artifact `newsroom-final-debug-<run_id>`에 보존됩니다.
+
+## Heavy Artifact 접근
+
+PR diff에서 DBG/TRA artifact가 보이지 않는 것은 의도된 동작입니다.
+
+- Actions artifact `newsroom-final-debug-<run_id>`를 다운로드합니다.
+- 또는 `content/newsroom/YYYY-MM-DD/artifact-manifest.json`의 `retained_heavy_artifacts[]`를 확인합니다. 각 항목에 `path`, `size`, `sha256`, `retention_grade`, `retention_location`이 기록되어 있습니다.
 
 ## 소스 품질 진단
 

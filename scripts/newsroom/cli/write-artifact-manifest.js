@@ -8,7 +8,10 @@ const {
 } = require('../common/artifact-paths');
 const {
   REVIEW_ARTIFACT_SCHEMA_VERSION,
-  buildReviewArtifactInventory
+  DBG,
+  TRA,
+  buildReviewArtifactInventory,
+  resolveRetentionLocation
 } = require('../common/review-artifact-inventory');
 
 const SCHEMA_VERSION = REVIEW_ARTIFACT_SCHEMA_VERSION;
@@ -160,6 +163,10 @@ function halSignalQualitySummary(report) {
   };
 }
 
+function isArtifactManifestPath(relPath) {
+  return path.basename(String(relPath || '')) === 'artifact-manifest.json';
+}
+
 function walkFiles(root, dir = root, files = []) {
   if (!fs.existsSync(dir)) return files;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -276,6 +283,42 @@ function buildManifest(snapshotDir, date) {
     runContext: runContextFromStatus(status)
   });
 
+  const retentionLocation = resolveRetentionLocation();
+
+  const retainedHeavyArtifacts = files.filter(file => {
+    const artifact = reviewInventory.review_artifacts.find(a => a.path === file.path);
+    return artifact && (artifact.retention_grade === DBG || artifact.retention_grade === TRA);
+  }).map(file => {
+    const artifact = reviewInventory.review_artifacts.find(a => a.path === file.path);
+    return {
+      path: file.path,
+      size: file.size,
+      sha256: file.sha256,
+      retention_grade: artifact.retention_grade,
+      retention_location: retentionLocation
+    };
+  });
+
+  const committedArtifacts = reviewInventory.review_artifacts
+    .filter(artifact => artifact.present &&
+      artifact.retention_grade !== DBG &&
+      artifact.retention_grade !== TRA &&
+      !isArtifactManifestPath(artifact.path))
+    .map(artifact => ({
+      path: artifact.path,
+      size: artifact.size,
+      sha256: artifact.sha256,
+      retention_grade: artifact.retention_grade
+    }))
+    .sort((a, b) => a.path.localeCompare(b.path));
+
+  const retentionSummary = {};
+  for (const artifact of reviewInventory.review_artifacts) {
+    if (!artifact.present) continue;
+    const grade = artifact.retention_grade || 'unknown';
+    retentionSummary[grade] = (retentionSummary[grade] || 0) + 1;
+  }
+
   const manifest = {
     schema_version: SCHEMA_VERSION,
     date,
@@ -288,7 +331,12 @@ function buildManifest(snapshotDir, date) {
     review_artifacts: reviewInventory.review_artifacts,
     missing_required_review_artifacts: reviewInventory.missingRequired.map(artifact => artifact.path),
     missing_critical_files: missingCriticalFiles,
-    consistency_warnings: warnings
+    consistency_warnings: warnings,
+    retention_schema_version: SCHEMA_VERSION,
+    retention_location: retentionLocation,
+    retention_summary: retentionSummary,
+    retained_heavy_artifacts: retainedHeavyArtifacts,
+    committed_artifacts: committedArtifacts
   };
 
   const sha = gitSha();

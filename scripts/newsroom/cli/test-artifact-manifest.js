@@ -4,9 +4,14 @@ const os = require('os');
 const path = require('path');
 const { buildManifest } = require('./write-artifact-manifest');
 const {
+  buildDateReviewManifest,
   buildReviewArtifactInventory,
   renderReviewGuideMarkdown,
-  REVIEW_ARTIFACT_SCHEMA_VERSION
+  REVIEW_ARTIFACT_SCHEMA_VERSION,
+  PUB,
+  RRC,
+  DBG,
+  TRA
 } = require('../common/review-artifact-inventory');
 const {
   collectedCandidatesRelPath,
@@ -144,6 +149,34 @@ function testManifestCreationAndHashes() {
   ));
   assert.ok(manifest.files.every(file => !file.path.endsWith('artifact-manifest.json')));
   assert.ok(manifest.missing_critical_files.includes(`newsletters/${date}/newsletter.md`));
+
+  // retention fields
+  assert.ok(Array.isArray(manifest.retained_heavy_artifacts), 'retained_heavy_artifacts should be an array');
+  assert.ok(Array.isArray(manifest.committed_artifacts), 'committed_artifacts should be an array');
+  assert.ok(typeof manifest.retention_summary === 'object', 'retention_summary should be an object');
+  assert.ok(typeof manifest.retention_location === 'string', 'retention_location should be a string');
+  assert.strictEqual(manifest.retention_schema_version, REVIEW_ARTIFACT_SCHEMA_VERSION);
+
+  const heavyShortlisted = manifest.retained_heavy_artifacts.find(a =>
+    a.path === newsroomRelPath(date, 'shortlisted-candidates.json')
+  );
+  assert.ok(heavyShortlisted, 'shortlisted-candidates.json should be in retained_heavy_artifacts');
+  assert.strictEqual(heavyShortlisted.retention_grade, DBG);
+  assert.ok(typeof heavyShortlisted.retention_location === 'string');
+  assert.ok(typeof heavyShortlisted.size === 'number');
+  assert.ok(typeof heavyShortlisted.sha256 === 'string');
+
+  const committedSelectionReport = manifest.committed_artifacts.find(a =>
+    a.path === newsroomRelPath(date, 'selection-report.json')
+  );
+  assert.ok(committedSelectionReport, 'selection-report.json should be in committed_artifacts');
+  assert.strictEqual(committedSelectionReport.retention_grade, RRC);
+
+  const committedQualityReport = manifest.committed_artifacts.find(a =>
+    a.path === newsroomRelPath(date, 'quality-report.json')
+  );
+  assert.ok(committedQualityReport, 'quality-report.json should be in committed_artifacts');
+  assert.strictEqual(committedQualityReport.retention_grade, RRC);
 }
 
 function testWarningsWhenReportsDisagree() {
@@ -346,6 +379,81 @@ function testDerivedMissingWarningsAndOptionalGateBlocking() {
   assert.equal(staleClaim.review_blocking, true);
 }
 
+function testRetentionGradeAssignment() {
+  const snapshotDir = makeSnapshot();
+  seedAgreeingSnapshot(snapshotDir);
+
+  // PUB: newsletter.md
+  writeText(path.join(snapshotDir, 'newsletters', date, 'newsletter.md'), '# Newsletter\n');
+  // RRC: selection-report.md
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-report.md').split('/')), '# Selection Report\n');
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-report.json').split('/')), { date });
+  // DBG: shortlisted-candidates.json
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'shortlisted-candidates.json').split('/')), { date, selected_article_count: 0 });
+  // TRA: attempt file
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'editor-draft-attempt-1.json').split('/')), { attempt: 1 });
+
+  const inventory = buildReviewArtifactInventory({
+    root: snapshotDir,
+    date,
+    runContext: { seedUsed: false, publicOutputExpected: true, status: 'PASS' }
+  });
+
+  const newsletterMd = inventory.review_artifacts.find(a => a.path === `newsletters/${date}/newsletter.md`);
+  assert.ok(newsletterMd, 'newsletter.md should be in inventory');
+  assert.strictEqual(newsletterMd.retention_grade, PUB);
+
+  const selectionReportMd = inventory.review_artifacts.find(a => a.path === newsroomRelPath(date, 'selection-report.md'));
+  assert.ok(selectionReportMd, 'selection-report.md should be in inventory');
+  assert.strictEqual(selectionReportMd.retention_grade, RRC);
+
+  const shortlisted = inventory.review_artifacts.find(a => a.path === newsroomRelPath(date, 'shortlisted-candidates.json'));
+  assert.ok(shortlisted, 'shortlisted-candidates.json should be in inventory');
+  assert.strictEqual(shortlisted.retention_grade, DBG);
+
+  const attempt = inventory.review_artifacts.find(a => a.path === newsroomRelPath(date, 'editor-draft-attempt-1.json'));
+  assert.ok(attempt, 'editor-draft-attempt-1.json should be in inventory');
+  assert.strictEqual(attempt.retention_grade, TRA);
+}
+
+function testBuildDateReviewManifestRetentionFields() {
+  const snapshotDir = makeSnapshot();
+  seedAgreeingSnapshot(snapshotDir);
+
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'shortlisted-candidates.json').split('/')), {
+    date,
+    selected_article_count: 0
+  });
+  writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-report.md').split('/')), '# Selection Report\n');
+  writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-report.json').split('/')), { date });
+
+  const manifest = buildDateReviewManifest({
+    root: snapshotDir,
+    date,
+    runContext: { seedUsed: false, publicOutputExpected: false, status: 'UNDERFILLED_NEEDS_FIX' }
+  });
+
+  assert.ok(Array.isArray(manifest.retained_heavy_artifacts), 'retained_heavy_artifacts should be an array');
+  assert.ok(Array.isArray(manifest.committed_artifacts), 'committed_artifacts should be an array');
+  assert.ok(typeof manifest.retention_summary === 'object', 'retention_summary should be an object');
+  assert.ok(typeof manifest.retention_location === 'string', 'retention_location should be a string');
+
+  const heavyShortlisted = manifest.retained_heavy_artifacts.find(a =>
+    a.path === newsroomRelPath(date, 'shortlisted-candidates.json')
+  );
+  assert.ok(heavyShortlisted, 'shortlisted-candidates.json should appear in retained_heavy_artifacts');
+  assert.strictEqual(heavyShortlisted.retention_grade, DBG);
+  assert.ok(typeof heavyShortlisted.retention_location === 'string');
+  assert.ok(typeof heavyShortlisted.size === 'number');
+  assert.ok(typeof heavyShortlisted.sha256 === 'string');
+
+  const committedQuality = manifest.committed_artifacts.find(a =>
+    a.path === newsroomRelPath(date, 'quality-report.json')
+  );
+  assert.ok(committedQuality, 'quality-report.json should appear in committed_artifacts');
+  assert.strictEqual(committedQuality.retention_grade, RRC);
+}
+
 testManifestCreationAndHashes();
 testWarningsWhenReportsDisagree();
 testNoWarningsWhenReportsAgree();
@@ -353,5 +461,7 @@ testReviewInventoryRequiredStateAndFallbacks();
 testDerivedArtifactsDoNotCreateMissingRequired();
 testRecoveryPromptAttentionPolicy();
 testDerivedMissingWarningsAndOptionalGateBlocking();
+testRetentionGradeAssignment();
+testBuildDateReviewManifestRetentionFields();
 
 console.log('Artifact manifest tests passed.');

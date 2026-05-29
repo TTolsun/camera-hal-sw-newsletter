@@ -2331,6 +2331,19 @@ function publicOutputExpectedFromStatus(status = {}) {
     status.public_state === 'PUBLIC_READY';
 }
 
+function renderHeavyRetentionNote(date) {
+  const runId = process.env.GITHUB_RUN_ID || '';
+  const artifactName = runId ? `newsroom-final-debug-${runId}` : 'newsroom-final-debug-<run_id>';
+  return [
+    '## Heavy Evidence Retention',
+    '',
+    `debug_heavy/transient_attempt artifact는 PR diff에 의도적으로 포함되지 않습니다.`,
+    `- Actions artifact: \`${artifactName}\` 다운로드`,
+    `- 또는 \`content/newsroom/${date}/artifact-manifest.json\` → \`retained_heavy_artifacts\` 참조`,
+    ''
+  ].join('\n');
+}
+
 function renderGeneratedArtifacts(date, status = {}, root = process.cwd(), changedArtifacts = null) {
   const changed = Array.isArray(changedArtifacts)
     ? changedArtifacts
@@ -2345,7 +2358,7 @@ function renderGeneratedArtifacts(date, status = {}, root = process.cwd(), chang
       publicOutputExpected: publicOutputExpectedFromStatus(status)
     }
   });
-  return renderGeneratedArtifactsSummary(inventory);
+  return renderGeneratedArtifactsSummary(inventory) + '\n\n' + renderHeavyRetentionNote(date);
 }
 
 function readSelectionReport(root, date) {
