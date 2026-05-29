@@ -2167,6 +2167,192 @@
         "Reddit URL is never a main-article or primary-evidence source",
         "requires independent official/project confirmation before main promotion"
       ]
+    },
+    {
+      "id": "lore-linux-media-list",
+      "name": "lore.kernel.org linux-media list",
+      "sourceUrl": "https://lore.kernel.org/linux-media/",
+      "rssUrl": "https://lore.kernel.org/linux-media/new.atom",
+      "collectionModeHint": "rss-source",
+      "category": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "lore.kernel.org",
+          "lists.libcamera.org",
+          "libcamera.org",
+          "git.libcamera.org",
+          "kernel.org",
+          "git.kernel.org",
+          "patchwork.kernel.org",
+          "patchwork.linuxtv.org",
+          "linuxtv.org",
+          "github.com"
+        ],
+        "importantAnchorKeywords": [
+          "patchwork",
+          "patch",
+          "PATCH",
+          "release",
+          "tag",
+          "commit",
+          "changelog",
+          "thread",
+          "review"
+        ],
+        "ignoreAnchorKeywords": [
+          "subscribe",
+          "unsubscribe",
+          "rss",
+          "atom",
+          "raw",
+          "thread overview",
+          "permalink"
+        ]
+      },
+      "keywords": [
+        "V4L2",
+        "libcamera",
+        "media",
+        "ISP",
+        "image sensor",
+        "media controller",
+        "subdev",
+        "kernel"
+      ],
+      "sourceRole": "project_mailing_list_source",
+      "sourceUrlQualityHint": "project_mailing_list_release",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "mailing list lead source for V4L2/libcamera/media subsystem",
+        "individual patch thread requires primary project release confirmation before main promotion"
+      ]
+    },
+    {
+      "id": "kernel-org-releases",
+      "name": "kernel.org Linux Releases",
+      "sourceUrl": "https://www.kernel.org/",
+      "rssUrl": "https://www.kernel.org/feeds/kdist.xml",
+      "collectionModeHint": "rss-source",
+      "category": "linux-kernel",
+      "priority": "medium",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "Linux kernel mainline / stable / longterm 릴리스 트래킹; media subsystem(V4L2, libcamera 등) 영향 평가용. main 승격은 ChangeLog/release notes 기반 카메라/미디어 영향 확인 필요",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "kernel.org",
+          "git.kernel.org",
+          "cdn.kernel.org",
+          "lore.kernel.org",
+          "lwn.net",
+          "linuxtv.org"
+        ],
+        "importantAnchorKeywords": [
+          "ChangeLog",
+          "release",
+          "patch",
+          "tag",
+          "commit",
+          "source"
+        ],
+        "ignoreAnchorKeywords": [
+          "subscribe",
+          "rss",
+          "atom",
+          "donate"
+        ]
+      },
+      "keywords": [
+        "Linux",
+        "kernel",
+        "mainline",
+        "stable",
+        "longterm",
+        "media",
+        "V4L2",
+        "drivers/media",
+        "linux-next"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_dated_release",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "official kernel release notification source",
+        "kernel version itself is not main-article-worthy unless coupled with documented camera/media subsystem change evidence"
+      ]
+    },
+    {
+      "id": "raspberry-pi-blog",
+      "name": "Raspberry Pi Blog",
+      "sourceUrl": "https://www.raspberrypi.com/news/",
+      "rssUrl": "https://www.raspberrypi.com/feed/",
+      "collectionModeHint": "rss-source",
+      "category": "embedded",
+      "priority": "medium",
+      "reliability": "engineering-blog",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "Raspberry Pi 공식 블로그; Pi camera 모듈, libcamera 통합, HW 릴리스 등 embedded camera 관련 글 추적. main 승격은 libcamera / Linux 커널 등 primary source와 cross-check 필요",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "raspberrypi.com",
+          "www.raspberrypi.com",
+          "datasheets.raspberrypi.com",
+          "github.com",
+          "libcamera.org",
+          "git.libcamera.org"
+        ],
+        "importantAnchorKeywords": [
+          "documentation",
+          "release",
+          "datasheet",
+          "github",
+          "source",
+          "changelog"
+        ],
+        "ignoreAnchorKeywords": [
+          "subscribe",
+          "share",
+          "comments",
+          "rss",
+          "newsletter"
+        ]
+      },
+      "keywords": [
+        "Raspberry Pi",
+        "camera",
+        "libcamera",
+        "Pi Camera",
+        "Camera Module",
+        "image sensor",
+        "ISP",
+        "rpicam"
+      ],
+      "sourceRole": "engineering_blog_source",
+      "sourceUrlQualityHint": "engineering_blog_with_camera_evidence",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "engineering blog with frequent non-camera posts; filter by camera-related keywords",
+        "main promotion requires libcamera or kernel primary-source confirmation"
+      ]
     }
   ]
 }
