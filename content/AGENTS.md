@@ -40,6 +40,13 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `gemini-source-discovery-report.md`, `cost-report.md`
 - `summary-cache-report.{json,md}`, `artifact-manifest.json`
 - `news-candidates.md`, seed `*.md`, `source-change-events.md`
+- **collected-news 파이프라인 입력 파일** (워크플로 핸드오프 상태 — workflow 01 → main → workflow 02 → main → workflow 03 순서로 전달되므로 반드시 Git에 커밋해야 합니다):
+  - `content/collected-news/YYYY-MM-DD/candidates.json` (legacy 호환 경로)
+  - `content/collected-news/YYYY-MM-DD/manual-candidates.json`
+  - `content/collected-news/YYYY-MM-DD/raw-candidate-manifest.json`
+  - `content/collected-news/YYYY-MM-DD/merged-candidates.json`
+  - `content/collected-news/YYYY-MM-DD/merged-candidate-manifest.json`
+  - `content/collected-news/YYYY-MM-DD/collection-intent.json` (workflow-01 manual collection intent; 존재할 때만 커밋)
 
 ### DBG — `debug_heavy` (Actions + manifest만, 커밋 제외)
 
@@ -50,7 +57,8 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `gemini-*.json`, `seed-fetch-report.json`, `seed-merge-report.json`
 - `source-change-events.json`
 - `recovery-prompt.md` — heavy LLM prompt dump (~10 MB 규모). Git에 커밋하지 않음; GitHub Actions artifact `newsroom-final-debug-<run_id>` + `artifact-manifest.json` → `retained_heavy_artifacts`에서 조회.
-- `content/collected-news/YYYY-MM-DD/` 전체 (candidates, manual-candidates, collection-intent, raw-candidate-manifest, merged-candidates, merged-candidate-manifest, gemini-candidates, seed-candidates, seed-evidence-pack.json)
+- `content/collected-news/YYYY-MM-DD/` 순수 디버그 파일 (파이프라인 입력 파일 제외):
+  - `gemini-candidates.json`, `seed-candidates.json`, `seed-evidence-pack.json`
 
 ### TRA — `transient_attempt` (Actions + manifest만, 커밋 제외)
 
@@ -95,6 +103,8 @@ heavy artifact 전체는 GitHub Actions artifact `newsroom-final-debug-<run_id>`
 ## RAW/Source-Discovery PR 예외
 
 `01-newsroom-raw-candidates.yml`과 `02-newsroom-source-discovery.yml`은 candidate JSON 자체가 리뷰 대상이므로 candidate JSON을 의도적으로 커밋합니다. 이 워크플로에는 `add-paths` 허용목록 제한을 적용하지 않습니다.
+
+파이프라인 입력 파일(candidates.json, manual-candidates.json, raw-candidate-manifest.json, merged-candidates.json, merged-candidate-manifest.json, collection-intent.json)은 `review_required_compact` 등급 RRC 파일로서, workflow 01 → 02 → 03의 핸드오프 상태입니다. 이 파일들은 `.gitignore`에서 제외되며 Git에 항상 커밋됩니다. 순수 디버그 collected-news 파일(gemini-candidates.json, seed-candidates.json, seed-evidence-pack.json)은 여전히 `.gitignore` 처리됩니다.
 
 ## Preservation Rules
 
