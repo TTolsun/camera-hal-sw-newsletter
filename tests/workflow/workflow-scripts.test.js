@@ -2108,7 +2108,8 @@ test('newsroom PR body renders generated artifacts in review inventory order', (
     `content/newsroom/${date}/quality-report.md`,
     `content/newsroom/${date}/hal-signal-quality-report.md`,
     '### 디버그 근거',
-    `See \`content/newsroom/${date}/artifact-manifest.json\`.`
+    `heavy files (debug_heavy/transient_attempt)`,
+    `retained_heavy_artifacts`
   ]);
   const validation = validatePrBodyText(body, { date });
   assert.equal(validation.ok, true, validation.errors.join('\n'));

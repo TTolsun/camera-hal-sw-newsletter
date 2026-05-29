@@ -356,6 +356,18 @@ jobs:
               }
             }
 
+      - name: Resolve PR commit allowlist
+        id: allowlist
+        if: steps.meta.outputs.review_pr_ready == 'true'
+        run: |
+          set -euo pipefail
+          PATHS="$(node scripts/print-retention-commit-allowlist.js --date "${{ steps.meta.outputs.date }}" --root .)"
+          {
+            echo "paths<<EOF"
+            echo "$PATHS"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Create final newsletter pull request
         id: cpr
         if: steps.meta.outputs.review_pr_ready == 'true'
@@ -367,6 +379,7 @@ jobs:
           delete-branch: true
           title: "[Newsletter] Camera HAL / SW Newsletter - ${{ steps.meta.outputs.date }}"
           body: ${{ steps.pr-body.outputs.body }}
+          add-paths: ${{ steps.allowlist.outputs.paths }}
 
       - name: Add pull request labels
         if: steps.cpr.outputs.pull-request-number != ''

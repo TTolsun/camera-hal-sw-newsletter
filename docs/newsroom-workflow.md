@@ -90,12 +90,12 @@ editor는 deterministic final article input과 locked/retry context만 받습니
   6. 필요 시 확인
   7. 디버그 근거
   8. 미분류 산출물
-- `artifact-manifest.json`은 `schema_version=2`이며 legacy consumer 호환을 위해 `files[].path`, `files[].size`, `files[].sha256`에는 실제 존재하는 파일만 둡니다. review 순서, missing expected artifact, `review_blocking`, `review_attention_required` 같은 advisory metadata는 `review_artifacts[]`에 둡니다.
+- `artifact-manifest.json`은 `schema_version=3`이며 legacy consumer 호환을 위해 `files[].path`, `files[].size`, `files[].sha256`에는 실제 존재하는 파일만 둡니다. review 순서, missing expected artifact, `review_blocking`, `review_attention_required` 같은 advisory metadata는 `review_artifacts[]`에 둡니다.
 - `review_blocking`과 `review_attention_required`는 리뷰어 안내용 metadata입니다. 이 값은 deterministic publish gate, quality gate, source gate, public artifact readiness 판단을 변경하지 않습니다.
 - `artifact-manifest.json` 파일은 hash churn 방지를 위해 manifest `files[]` hashing 대상에서 제외합니다. `00-review-guide.md`와 `release-qa-report.md`는 존재하면 `files[]`에 포함될 수 있지만 derived artifact라서 `missingRequired` 판단에는 사용하지 않습니다.
 - Manifest surface는 두 가지입니다.
   - `content/newsroom/YYYY-MM-DD/artifact-manifest.json`: date-scoped review package manifest입니다. `files[]`와 `review_artifacts[]`는 review inventory 기준으로 생성합니다.
-  - snapshot root `artifact-manifest.json`: workflow snapshot manifest입니다. `.tmp/**`, cache, debug file 같은 snapshot file을 추가로 포함할 수 있으며 같은 `schema_version=2`와 review metadata field를 사용합니다.
+  - snapshot root `artifact-manifest.json`: workflow snapshot manifest입니다. `.tmp/**`, cache, debug file 같은 snapshot file을 추가로 포함할 수 있으며 같은 `schema_version=3`와 review metadata field를 사용합니다.
 
 ## Role 6. Validator
 
@@ -358,3 +358,22 @@ Source quality adds an executable policy layer between collection and Stage 3 ge
 `date_source`와 `date_confidence`는 `scripts/newsroom/common/date-signals.js`의 allowlist와 baseline을 따릅니다. `date_confidence >= 85`인 source date signal만 source relevance와 source binding이 함께 통과할 때 publish-ready date evidence 후보가 될 수 있습니다. `snapshot_detected_at` 및 `content_hash_changed_without_date`는 editor review 또는 watchlist signal로만 다루며 publish-ready date evidence가 아닙니다.
 
 Source monitor report는 `Source Snapshot Changes`, `Source Change Events`, `Evidence Identity / Duplicate Guard`, `Date Quality` 섹션을 포함합니다. Public newsletter artifact에는 raw snapshot state, previous/current diff payload, `processed_source_event_ids`, `processed_evidence_ids`를 노출하지 않습니다.
+
+## Artifact Retention Policy
+
+newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류합니다.
+
+| 등급 | 식별자 | Git 커밋 | 보존 위치 |
+|------|--------|----------|-----------|
+| Public Source of Truth | `public_source_of_truth` | 커밋 | Git |
+| Review Required Compact | `review_required_compact` | 커밋 | Git |
+| Debug Heavy | `debug_heavy` | 미커밋 | GitHub Actions artifact + manifest |
+| Transient Attempt | `transient_attempt` | 미커밋 | GitHub Actions artifact + manifest |
+
+`03-newsroom-final-pr.yml`의 `peter-evans/create-pull-request` 스텝은 `add-paths` 허용목록으로 PUB+RRC artifact만 커밋합니다. DBG+TRA artifact는 `newsroom-final-debug-<run_id>` Actions artifact에 full set이 보존되고, `artifact-manifest.json`의 `retained_heavy_artifacts[]`에 path/size/sha256/retention_grade/retention_location이 기록됩니다.
+
+허용목록은 `scripts/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 생성합니다. PR diff에 DBG/TRA 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 참조하세요.
+
+이 정책은 발행 안전성·source binding·image lineage·review-publication state 판정을 약화하지 않습니다. validate:post-generation, resolve-reviewable-artifacts, pr-body 생성은 commit 스텝보다 먼저 in-run working tree에서 실행되므로 add-paths 허용목록의 영향을 받지 않습니다.
+
+`01-newsroom-raw-candidates.yml`과 `02-newsroom-source-discovery.yml`은 candidate JSON이 리뷰 대상이므로 이 허용목록 제한을 적용하지 않습니다.

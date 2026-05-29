@@ -21,7 +21,23 @@ const {
   toPosix
 } = require('./artifact-paths');
 
-const REVIEW_ARTIFACT_SCHEMA_VERSION = 2;
+const REVIEW_ARTIFACT_SCHEMA_VERSION = 3;
+
+const PUB = 'public_source_of_truth';
+const RRC = 'review_required_compact';
+const DBG = 'debug_heavy';
+const TRA = 'transient_attempt';
+
+const GROUP_RETENTION_DEFAULT = {
+  editorial_brief: RRC,
+  seed_evidence: RRC,
+  gate_reports: RRC,
+  selection_diagnostics: RRC,
+  check_when_needed: RRC,
+  public_output: PUB,
+  debug_evidence: DBG,
+  unknown_artifacts: DBG
+};
 
 const REQUIRED_ALWAYS = 'always';
 const REQUIRED_WHEN_SEED_USED = 'when_seed_used';
@@ -158,7 +174,8 @@ function entry({
   reviewBlocking = false,
   reviewBlockingWhenPresent = false,
   reviewAttentionRequired = false,
-  derived = false
+  derived = false,
+  retentionGrade = null
 }) {
   return {
     path: relPath,
@@ -171,7 +188,8 @@ function entry({
     review_blocking: Boolean(reviewBlocking),
     review_blocking_when_present: Boolean(reviewBlockingWhenPresent),
     review_attention_required: Boolean(reviewAttentionRequired),
-    derived: Boolean(derived)
+    derived: Boolean(derived),
+    retention_grade: retentionGrade || GROUP_RETENTION_DEFAULT[group] || DBG
   };
 }
 
@@ -398,8 +416,42 @@ function exactCatalog(date) {
       reviewOrder: 68,
       humanReadable: true
     }),
+    entry({
+      relPath: newsroomRelPath(date, 'news-candidates.md'),
+      group: 'check_when_needed',
+      role: 'news_candidates_summary',
+      reviewOrder: 69,
+      humanReadable: true
+    }),
     ...debugExactCatalog(date)
   ];
+}
+
+// RRC override: compact files that belong in debug_evidence group but are committed
+const DEBUG_RRC_PATHS = new Set([
+  'artifact-manifest.json',
+  'generation-status.json',
+  'fact-check-report.json',
+  'quality-report.json',
+  'hal-signal-quality-report.json',
+  'stale-claim-report.json',
+  'image-audit-report.json',
+  'source-quality-report.json',
+  'selection-report.json',
+  'evidence-pack-summary.json',
+  'retry-history.json',
+  'source-quality-diagnosis.json',
+  'source-effectiveness-report.json',
+  'source-discovery-feedback-report.json',
+  'cost-report.md',
+  'summary-cache-report.md',
+  'summary-cache-report.json',
+  'source-change-events.md'
+]);
+
+function debugEntryRetentionGrade(relPath) {
+  const basename = relPath.split('/').pop();
+  return DEBUG_RRC_PATHS.has(basename) ? RRC : DBG;
 }
 
 function debugExactCatalog(date) {
@@ -451,11 +503,12 @@ function debugExactCatalog(date) {
   ];
   return debugFiles.map((relPath, index) => entry({
     relPath,
-    group: isArtifactManifest(relPath) ? 'debug_evidence' : 'debug_evidence',
+    group: 'debug_evidence',
     role: isArtifactManifest(relPath) ? 'artifact_manifest' : 'debug_json',
     reviewOrder: isArtifactManifest(relPath) ? 92 : 90 + (index / 1000),
     humanReadable: isMarkdownLike(relPath),
-    derived: isArtifactManifest(relPath)
+    derived: isArtifactManifest(relPath),
+    retentionGrade: debugEntryRetentionGrade(relPath)
   }));
 }
 
@@ -482,7 +535,8 @@ function dynamicClassification(date, relPath) {
     group: 'debug_evidence',
     role: 'debug_attempt',
     reviewOrder: 91,
-    humanReadable: isMarkdownLike(relPath)
+    humanReadable: isMarkdownLike(relPath),
+    retentionGrade: TRA
   });
 }
 
@@ -580,6 +634,7 @@ function materializeEntry(root, date, catalogEntry, context, changedSet) {
     review_order: catalogEntry.review_order,
     changed: changedSet.has(catalogEntry.path),
     derived: catalogEntry.derived,
+    retention_grade: catalogEntry.retention_grade || GROUP_RETENTION_DEFAULT[catalogEntry.group] || DBG,
     size: present ? stat.size : null,
     sha256: present ? stat.sha256 : null,
     ...(warning ? { warning } : {})
@@ -790,11 +845,14 @@ function renderArtifactList(artifacts, fallback = '- none') {
 }
 
 function renderGeneratedArtifactsSummary(inventory) {
-  const debugArtifacts = inventory.review_artifacts.filter(artifact =>
+  const heavyArtifacts = inventory.review_artifacts.filter(artifact =>
     artifact.present &&
-    !artifact.human_readable &&
-    ['debug_evidence', 'unknown_artifacts'].includes(artifact.group)
+    (artifact.retention_grade === DBG || artifact.retention_grade === TRA)
   );
+  const runId = process.env.GITHUB_RUN_ID || '';
+  const heavyLocation = runId
+    ? `Actions artifact \`newsroom-final-debug-${runId}\``
+    : '`artifact-manifest.json` → `retained_heavy_artifacts`';
   return [
     '## 생성 산출물',
     '',
@@ -808,7 +866,7 @@ function renderGeneratedArtifactsSummary(inventory) {
     renderArtifactList(presentHumanReadable(inventory, 'gate_reports')),
     '',
     '### 디버그 근거',
-    `- ${debugArtifacts.length} files. See \`content/newsroom/${inventory.date}/artifact-manifest.json\`.`
+    `- ${heavyArtifacts.length} heavy files (debug_heavy/transient_attempt). See ${heavyLocation} and \`content/newsroom/${inventory.date}/artifact-manifest.json\` → \`retained_heavy_artifacts\`.`
   ].join('\n');
 }
 
@@ -844,6 +902,13 @@ function presentReviewFiles(inventory) {
     .sort((left, right) => left.path.localeCompare(right.path));
 }
 
+function resolveRetentionLocation() {
+  const runId = process.env.GITHUB_RUN_ID || '';
+  return runId
+    ? `github-actions-artifact:newsroom-final-debug-${runId}`
+    : 'local-snapshot';
+}
+
 function buildDateReviewManifest({
   root = process.cwd(),
   date,
@@ -851,6 +916,44 @@ function buildDateReviewManifest({
   changedArtifacts = []
 } = {}) {
   const inventory = buildReviewArtifactInventory({ root, date, changedArtifacts, runContext });
+  const retentionLocation = resolveRetentionLocation();
+
+  const retainedHeavyArtifacts = inventory.review_artifacts
+    .filter(artifact => artifact.present &&
+      (artifact.retention_grade === DBG || artifact.retention_grade === TRA))
+    .map(artifact => {
+      const { size, sha256 } = statArtifact(root, artifact.path);
+      return {
+        path: artifact.path,
+        size,
+        sha256,
+        retention_grade: artifact.retention_grade,
+        retention_location: retentionLocation
+      };
+    });
+
+  const committedArtifacts = inventory.review_artifacts
+    .filter(artifact => artifact.present &&
+      (artifact.retention_grade === PUB || artifact.retention_grade === RRC) &&
+      !isArtifactManifest(artifact.path))
+    .map(artifact => {
+      const { size, sha256 } = statArtifact(root, artifact.path);
+      return {
+        path: artifact.path,
+        size,
+        sha256,
+        retention_grade: artifact.retention_grade
+      };
+    })
+    .sort((a, b) => a.path.localeCompare(b.path));
+
+  const retentionSummary = {};
+  for (const artifact of inventory.review_artifacts) {
+    if (!artifact.present) continue;
+    const grade = artifact.retention_grade || 'unknown';
+    retentionSummary[grade] = (retentionSummary[grade] || 0) + 1;
+  }
+
   return {
     schema_version: REVIEW_ARTIFACT_SCHEMA_VERSION,
     date,
@@ -858,16 +961,42 @@ function buildDateReviewManifest({
     review_summary: inventory.summary,
     files: presentReviewFiles(inventory),
     review_artifacts: inventory.review_artifacts,
-    missing_required_review_artifacts: inventory.missingRequired.map(artifact => artifact.path)
+    missing_required_review_artifacts: inventory.missingRequired.map(artifact => artifact.path),
+    retention_location: retentionLocation,
+    retention_summary: retentionSummary,
+    retained_heavy_artifacts: retainedHeavyArtifacts,
+    committed_artifacts: committedArtifacts
   };
+}
+
+function committedRetentionGrades() {
+  return [PUB, RRC];
+}
+
+function retentionCommitAllowlist({ root = process.cwd(), date, runContext = {} } = {}) {
+  if (!date) throw new Error('retentionCommitAllowlist requires date');
+  const inventory = buildReviewArtifactInventory({ root, date, runContext });
+  const committed = committedRetentionGrades();
+  return inventory.review_artifacts
+    .filter(artifact => artifact.present && committed.includes(artifact.retention_grade))
+    .map(artifact => artifact.path)
+    .sort();
 }
 
 module.exports = {
   GROUPS,
   REVIEW_ARTIFACT_SCHEMA_VERSION,
+  PUB,
+  RRC,
+  DBG,
+  TRA,
+  GROUP_RETENTION_DEFAULT,
   buildDateReviewManifest,
   buildReviewArtifactInventory,
+  committedRetentionGrades,
   renderGeneratedArtifactsSummary,
   renderReleaseQaInventorySection,
-  renderReviewGuideMarkdown
+  renderReviewGuideMarkdown,
+  resolveRetentionLocation,
+  retentionCommitAllowlist
 };
