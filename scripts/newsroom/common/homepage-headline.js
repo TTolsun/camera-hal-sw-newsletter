@@ -262,6 +262,23 @@ function decayHeadlineScore(baseScore, selectedAt, scoredAt, policy = getHeadlin
   return Math.max(0, number(baseScore) - ageDays * number(policy.decayRatePerDay));
 }
 
+function normalizeHeadlineImageUrl(imageUrl, newsletterUrl) {
+  const raw = String(imageUrl || '').trim();
+  if (!raw) return '';
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(raw)) return raw;
+  const nlUrl = String(newsletterUrl || '').replace(/\\/g, '/');
+  if (!nlUrl) {
+    return raw.replace(/^(?:\.\.\/)+/, '');
+  }
+  if (!/^\.\.?\//.test(raw)) return raw;
+  const dir = path.posix.dirname(nlUrl);
+  const resolved = path.posix.normalize(path.posix.join(dir, raw));
+  if (resolved.startsWith('../')) {
+    return raw.replace(/^(?:\.\.\/)+/, '');
+  }
+  return resolved;
+}
+
 function headlineSnapshotFromCandidate(candidate = {}, {
   date = todayKstDate(),
   newsletterUrl = '',
@@ -271,7 +288,11 @@ function headlineSnapshotFromCandidate(candidate = {}, {
   const score = computeHeadlineScore(candidate, policy);
   const articleKey = articleIdentityKey(candidate);
   const newsletterArticleUrl = text(candidate.newsletter_article_url || candidate.newsletterArticleUrl);
-  const imageUrl = text(candidate.image_url || candidate.imageUrl || candidate.selectedImage || candidate.selected_image);
+  const newsletterUrlForImage = text(candidate.newsletter_url || newsletterUrl);
+  const imageUrl = normalizeHeadlineImageUrl(
+    text(candidate.image_url || candidate.imageUrl || candidate.selectedImage || candidate.selected_image),
+    newsletterUrlForImage
+  );
   const imageAlt = text(candidate.image_alt || candidate.imageAlt || candidate.imageAltText);
   const snapshot = {
     article_identity_key: articleKey,
@@ -751,6 +772,7 @@ module.exports = {
   headlineEligibilityRejection,
   headlineSnapshotFromCandidate,
   isHeadlineEligible,
+  normalizeHeadlineImageUrl,
   policySnapshot,
   readHomepageHeadlineState,
   statePath,
