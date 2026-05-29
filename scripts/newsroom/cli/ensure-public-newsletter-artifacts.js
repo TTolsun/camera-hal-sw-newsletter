@@ -29,6 +29,7 @@ const {
   computeHeadlineScore,
   headlineSnapshotFromCandidate,
   isHeadlineEligible,
+  normalizeHeadlineImageUrl,
   writeHomepageHeadlineState
 } = require('../common/homepage-headline');
 const {
@@ -175,7 +176,7 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
           source_url: renderedCurrent.source_url,
           newsletter_url: newsletterUrl,
           newsletter_article_url: renderedCurrent.newsletter_article_url || newsletterUrl,
-          image_url: renderedCurrent.image_url || current.image_url || '',
+          image_url: normalizeHeadlineImageUrl(renderedCurrent.image_url || current.image_url || '', newsletterUrl),
           image_alt: renderedCurrent.image_alt || current.image_alt || renderedCurrent.title,
           snapshot: {
             ...(current.snapshot || {}),
