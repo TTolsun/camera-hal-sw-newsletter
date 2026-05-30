@@ -463,7 +463,10 @@ const DEBUG_RRC_PATHS = new Set([
   'merged-candidates.json',
   'merged-candidate-manifest.json',
   // workflow-01 manual collection intent (collection_intent field in raw-candidate-manifest.json)
-  'collection-intent.json'
+  'collection-intent.json',
+  // seed pipeline-input files (workflow 02 seed evidence expansion handoff; strict-checked by validateMergedManifestSchema when seed_used=true)
+  'seed-candidates.json',
+  'seed-evidence-pack.json'
 ]);
 
 function debugEntryRetentionGrade(relPath) {
