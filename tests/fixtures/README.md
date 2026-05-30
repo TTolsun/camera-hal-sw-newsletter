@@ -36,43 +36,35 @@ JSON fixture는 가능하면 아래 필드를 둡니다.
 
 ## Fixture ledger
 
-`fixture-ledger.json` schemaVersion 2 is the source of truth for committed fixture provenance.
-Every committed fixture file must have exactly one ledger entry with:
+`fixture-ledger.json` schemaVersion 2는 커밋된 fixture provenance의 source of truth입니다.
+커밋된 모든 fixture 파일에는 아래 필드를 갖는 ledger entry가 정확히 하나씩 있어야 합니다.
 
-- `path`: fixture-relative path using `/` separators.
-- `source`: `curated`, `synthetic`, or `minimized-generated-regression`.
-- `allowedUse`: `good`, `bad`, `linked-evidence`, `parser-source-html`, or `workflow-shape`.
-- `expectedStatus`: expected pass/fail class for JSON gate fixtures, or `n/a` for source text/html fixtures.
-- `protectedPolicy`: the regression contract protected by the fixture.
-- `generatedArtifact`: `true` only for minimized generated regression samples outside `good/`.
-- `relatedRules`: non-empty rule tags from `quality_gate`, `selection`, `source_binding`,
-  `seed_evidence`, `linked_evidence`, `parser_contract`, `workflow_shape`, or
-  `artifact_provenance`.
+- `path`: fixture-relative path, `/` 구분자 사용.
+- `source`: `curated`, `synthetic`, `minimized-generated-regression` 중 하나.
+- `allowedUse`: `good`, `bad`, `linked-evidence`, `parser-source-html`, `workflow-shape` 중 하나.
+- `expectedStatus`: JSON gate fixture의 기대 pass/fail 분류, source text/html fixture는 `n/a`.
+- `protectedPolicy`: fixture가 보호하는 regression 계약.
+- `generatedArtifact`: `good/` 바깥에 있는 minimized generated regression sample에만 `true`.
+- `relatedRules`: `quality_gate`, `selection`, `source_binding`, `seed_evidence`, `linked_evidence`,
+  `parser_contract`, `workflow_shape`, `artifact_provenance` 중 non-empty rule tag 배열.
 
-Ledger v2 keeps provenance compact:
+Ledger v2 provenance 정책:
 
-- `curated` maps to curated/reference fixtures.
-- `synthetic` maps to hand-authored reduced examples.
-- `minimized-generated-regression` is allowed only when reduced from generated output and must stay non-public, minimized, and regression-scoped.
+- `curated` → curated/reference fixture.
+- `synthetic` → 사람이 직접 작성한 축약 예시.
+- `minimized-generated-regression` → generated output에서 축약한 경우에만 허용. non-public, minimized, regression 범위여야 합니다.
 
-`good/` fixtures must be curated, non-generated, and PASS-only. `bad/` fixtures must not expect `PASS`.
+`good/` fixture는 curated, non-generated, PASS-only여야 합니다. `bad/` fixture는 `PASS`를 기대하면 안 됩니다.
 
-When adding, deleting, or moving committed fixture files, update `fixture-ledger.json`
-in the same change and run `npm.cmd run check:fixtures`. The ledger must contain
-exactly one entry for every committed fixture file, excluding `.gitkeep`,
-`README.md`, and `fixture-ledger.json` itself.
+커밋된 fixture 파일을 추가, 삭제, 이동할 때는 같은 변경에서 `fixture-ledger.json`을 갱신하고 `npm.cmd run check:fixtures`를 실행합니다. ledger에는 `.gitkeep`, `README.md`, `fixture-ledger.json` 자체를 제외한 모든 커밋된 fixture 파일에 대해 정확히 하나의 entry가 있어야 합니다.
 
-Generated regression fixtures must keep their fixture-local provenance in
-`fixture-ledger.json`, set `metadata.generated: true`, and use
-`metadata.source: "minimized-generated-regression"`.
-Do not embed `content/newsroom/YYYY-MM-DD`, `content/collected-news/YYYY-MM-DD`, or
-`newsletters/YYYY-MM-DD` paths inside committed fixture files.
-Only `bad/` or dedicated regression-purpose fixtures may set
-`generatedArtifact: true`; `good/` fixtures must stay curated and non-generated.
+Generated regression fixture는 `fixture-ledger.json`에 fixture-local provenance를 남기고, `metadata.generated: true`, `metadata.source: "minimized-generated-regression"`을 설정합니다.
+커밋된 fixture 파일 안에 `content/newsroom/YYYY-MM-DD`, `content/collected-news/YYYY-MM-DD`, `newsletters/YYYY-MM-DD` 경로를 포함하지 않습니다.
+`generatedArtifact: true`는 `bad/` 또는 regression 전용 fixture에만 사용합니다. `good/` fixture는 curated non-generated 상태를 유지합니다.
 
 ## Layout
 
-Current fixture layout is the repository contract:
+현재 fixture layout은 저장소 계약입니다.
 
 - `quality/good/`
 - `quality/bad/`
@@ -82,8 +74,8 @@ Current fixture layout is the repository contract:
 - `seed-evidence/bad/`
 - `seed-evidence/workflow-shapes/`
 
-Do not migrate fixtures to `good/quality/` or `bad/quality/` as part of generated artifact cleanup.
-Fixture layout migration must be handled as a separate scoped change.
+Generated artifact cleanup의 일환으로 fixture를 `good/quality/` 또는 `bad/quality/`로 이동하지 마세요.
+Fixture layout 이동은 별도의 scoped 변경으로 처리합니다.
 
 `seed-evidence/workflow-shapes/`는 generated artifact 사본이 아니라 seed-only,
 seed-plus-Gemini 같은 merge output contract를 최소 synthetic input으로 표현하는
@@ -92,12 +84,9 @@ domain-first fixture 위치입니다. 이 경로의 ledger entry는 `allowedUse:
 
 ## Seed evidence artifact boundary
 
-`collection-intent.json`, `seed-evidence-pack.json`, `seed-candidates.json`, and
-`compact_evidence` names may appear in synthetic or workflow-shape fixtures when
-the test protects the seed evidence contract. These names are not banned
-globally.
+`collection-intent.json`, `seed-evidence-pack.json`, `seed-candidates.json`, `compact_evidence` 이름은 seed evidence 계약을 보호하는 테스트에서 synthetic 또는 workflow-shape fixture에 등장할 수 있습니다. 이 이름들은 전역적으로 금지되지 않습니다.
 
-They are banned only when a `good/` fixture has generated provenance:
+아래 경우에만 금지됩니다.
 
 - `metadata.generated=true`
 - `metadata.source=generated_artifact`
@@ -105,16 +94,13 @@ They are banned only when a `good/` fixture has generated provenance:
 - ledger `generatedArtifact=true`
 - ledger `source=minimized-generated-regression`
 
-Generated seed artifacts may be used only as workflow-shape, smoke, or minimized
-regression evidence. They must not become quality PASS golden, source/evidence
-correctness golden, HAL impact golden, or claim binding golden fixtures.
+Generated seed artifact는 workflow-shape, smoke, minimized regression evidence로만 사용합니다. quality PASS golden, source/evidence correctness golden, HAL impact golden, claim binding golden fixture가 되어서는 안 됩니다.
 
-## Fixture change checklist
+## Fixture 변경 체크리스트
 
-- Do not copy a generated newsletter artifact into a `good/` or golden fixture.
-- Keep `good/` fixtures curated and non-generated.
-- Keep `bad/` fixture `expected.status` values away from `PASS`.
-- Do not turn source gap, reference-only, watchlist, exclude, undated evidence,
-  or generic AI/IT samples into PASS golden fixtures.
-- Update `fixture-ledger.json` in the same change.
-- Run `npm.cmd run check:fixtures`.
+- Generated newsletter artifact를 `good/` 또는 golden fixture로 복사하지 않습니다.
+- `good/` fixture는 curated non-generated 상태를 유지합니다.
+- `bad/` fixture의 `expected.status`를 `PASS`로 설정하지 않습니다.
+- source gap, reference-only, watchlist, exclude, undated evidence, generic AI/IT sample을 PASS golden fixture로 만들지 않습니다.
+- 같은 변경에서 `fixture-ledger.json`을 갱신합니다.
+- `npm.cmd run check:fixtures`를 실행합니다.

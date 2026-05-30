@@ -26,18 +26,18 @@ Root `tests/*.test.js` migration은 완료되었습니다. `tests/root-test-allo
 
 새 test는 보호하려는 동작 기준으로 위치를 정합니다.
 
-| Folder | Use for |
+| 폴더 | 용도 |
 | --- | --- |
-| `tests/unit/collect/` | Collector relevance, source parser, source-specific row extraction. |
-| `tests/unit/common/` | Shared client/cache/runtime behavior such as Gemini, LLM, runtime config, summary cache. |
-| `tests/unit/config/` | Source registry/config validation behavior. |
-| `tests/unit/evidence/` | Linked evidence extraction, resolution, diagnostics, schema, impact classifier. |
-| `tests/unit/generate/` | Generation-local helpers such as article capsule or fact-check repair logic. |
-| `tests/contract/` | Quality gate, source binding, rendered issue structure, fixture trust, strict validation targets, validator behavior. |
-| `tests/workflow/` | PR body, generation status, source effectiveness, fallback/public artifact flow, targeted retry, homepage/archive behavior. |
-| `tests/hygiene/` | Repo hygiene, encoding, policy docs, PR template, localization-facing checks. |
-| `tests/helpers/` | Shared fixture loading, temp root, artifact, newsroom, and quality builders. |
-| `tests/fixtures/` | Curated/minimized fixture inputs covered by the fixture trust policy. |
+| `tests/unit/collect/` | Collector 관련성, source 파서, source별 행 추출. |
+| `tests/unit/common/` | Gemini, LLM, runtime config, summary cache 등 공유 client/cache/runtime 동작. |
+| `tests/unit/config/` | Source registry/config 검증 동작. |
+| `tests/unit/evidence/` | Linked evidence 추출, 해석, 진단, 스키마, impact 분류기. |
+| `tests/unit/generate/` | article capsule, fact-check repair logic 등 generation 로컬 helper. |
+| `tests/contract/` | Quality gate, source binding, 렌더링된 이슈 구조, fixture 신뢰, strict 검증 대상, validator 동작. |
+| `tests/workflow/` | PR body, generation status, source effectiveness, fallback/public artifact flow, targeted retry, homepage/archive 동작. |
+| `tests/hygiene/` | 저장소 hygiene, 인코딩, policy docs, PR template, localization 관련 검사. |
+| `tests/helpers/` | 공유 fixture 로딩, temp root, artifact, newsroom, quality builder. |
+| `tests/fixtures/` | fixture 신뢰 정책에 따른 curated/minimized fixture 입력. |
 
 Path를 이동하면 import path뿐 아니라 `package.json`의 direct test path와 관련 README 문구도 함께 확인합니다.
 
@@ -60,22 +60,22 @@ Fixture policy는 `tests/contract/fixture-policy.test.js`와 `npm.cmd run check:
 
 중복 helper를 test file 안에 새로 만들기 전에 `tests/helpers/`를 먼저 확인합니다.
 
-| Helper | Purpose |
+| Helper | 목적 |
 | --- | --- |
-| `fixture-loader.js` | Safe fixture path resolution과 JSON/text fixture loading. |
-| `fs.js` | Temp root, JSON/text write, JSON read helper. |
-| `artifact-builders.js` | Minimal artifact manifest entry builder. |
+| `fixture-loader.js` | 안전한 fixture path 해석과 JSON/text fixture 로딩. |
+| `fs.js` | Temp root, JSON/text 쓰기, JSON 읽기 helper. |
+| `artifact-builders.js` | 최소 artifact manifest entry builder. |
 | `newsroom-builders.js` | Newsroom candidate와 targeted retry builder. |
-| `quality-builders.js` | Quality report section과 reporter candidate builder. |
+| `quality-builders.js` | Quality report 섹션과 reporter candidate builder. |
 
 새 helper는 여러 test가 같은 setup/write/assertion을 반복하고, helper name이 보호하는 domain contract를 분명히 설명할 때만 추가합니다.
 
-## Generated Artifact Boundary
+## Generated Artifact 경계
 
 허용되는 사용:
 
-- Path parsing 또는 path contract 검증을 위한 `newsletters/YYYY-MM-DD/newsletter.md` 같은 문자열.
-- Test 내부에서 생성하는 minimal temp-root artifact.
+- Path 파싱 또는 path contract 검증을 위한 `newsletters/YYYY-MM-DD/newsletter.md` 같은 문자열.
+- 테스트 내부에서 생성하는 minimal temp-root artifact.
 - `tests/fixtures/**/bad` 또는 regression 목적의 minimized fixture.
 - Public artifact 구조 smoke check. 단, content quality golden으로 삼지 않습니다.
 
