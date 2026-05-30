@@ -2,16 +2,16 @@
 
 이 inventory는 historical archive cleanup 우선순위를 정합니다. 이 문서는 historical article을 source-backed article로 바꾸지 않으며, 현재 review 상태와 권장 cleanup 방향만 기록합니다.
 
-## Inventory Scope
+## Inventory 범위
 
-- Includes article-level rows for public artifact dates retained after source dedup cleanup.
-- Includes one removed archive summary row for `2026-04-30` because delete-only cleanup is complete.
-- Excludes newsroom-only dates `2026-05-06` and `2026-05-14` because they are not public archive entries.
-- Article heading count is maintained by cleanup scripts; removed duplicate-source dates are represented by summary rows.
-- Article rows include main/brief article title headings only; references, action items, briefing, source list, and editorial/meta headings are excluded.
-- `Article slug` is unique within the same date. Historical rewrite diff paths use `<date>-<article_slug>.md`, so cross-date slug duplication is allowed.
+- source dedup cleanup 후 보존된 public artifact 날짜의 기사 단위 행을 포함합니다.
+- `2026-04-30`의 delete-only cleanup이 완료되었으므로 삭제된 archive 요약 행을 하나 포함합니다.
+- `2026-05-06`과 `2026-05-14`는 public archive 항목이 아니므로 제외합니다.
+- 기사 heading count는 cleanup script가 관리합니다. 삭제된 중복 source 날짜는 요약 행으로 표시합니다.
+- 기사 행에는 main/brief article title heading만 포함합니다. 참고자료, action item, briefing, source list, editorial/meta heading은 제외합니다.
+- `Article slug`는 같은 날짜 안에서 고유합니다. historical rewrite diff 경로는 `<date>-<article_slug>.md`를 사용하므로 날짜 간 slug 중복은 허용됩니다.
 
-## Allowed Values
+## 허용 값
 
 - `Source URL present`: `yes` / `no` / `unknown`
 - `Source-backed fact present`: `yes` / `partial` / `no` / `unknown`
@@ -23,35 +23,35 @@
 - `Recommended decision`: `keep_candidate` / `audit_first` / `keep` / `downgrade_review` / `rewrite_review` / `archive_note_review` / `delete_completed`
 - `Severity`: `S0` / `S1` / `S2` / `S3` / `pending` / `none`
 
-## Source Review Rules
+## Source 검토 규칙
 
-- `source_url_present=yes` means the article section itself, or its immediately adjacent `Sources` / `출처` block, contains a URL.
-- A URL that appears only in the global `참고자료` section does not by itself prove article-level source coverage.
-- `source_backed_fact_present` is separate from `source_url_present`; use `partial` or `unknown` when claim-level source coverage has not been fully verified.
-- `partial` means source links exist or appear related, but claim-level source coverage has not been fully verified. Rows marked `partial` are final-reviewed only when the final report records them as accepted historical limitations.
+- `source_url_present=yes`는 기사 섹션 자체 또는 바로 인접한 `Sources` / `출처` 블록에 URL이 있음을 의미합니다.
+- 전역 `참고자료` 섹션에만 있는 URL은 기사 단위 source coverage를 증명하지 않습니다.
+- `source_backed_fact_present`는 `source_url_present`와 별개입니다. claim 단위 source coverage가 완전히 검증되지 않았으면 `partial` 또는 `unknown`을 사용합니다.
+- `partial`은 source 링크가 존재하거나 관련성이 있어 보이지만 claim 단위 source coverage가 완전히 검증되지 않은 상태입니다. `partial`로 표시된 행은 최종 report에 accepted historical limitations로 기록될 때만 final-reviewed가 됩니다.
 
-## Final Review Transition Rule
+## 최종 리뷰 전환 규칙
 
-- A retained article row can move to final-reviewed only when no `rewrite_review`, `downgrade_review`, or `archive_note_review` decision remains.
-- `overclaim_risk=low` can be final-reviewed directly; `medium` is allowed only when recorded as an accepted historical limitation.
-- `source_backed_fact_present=partial` and `action_item_specificity=generic` are allowed only as accepted historical retention limitations.
-- A date can become `reviewed_archive` only when every retained article row for that date is final-reviewed or covered by accepted limitations.
+- 보존된 기사 행은 `rewrite_review`, `downgrade_review`, `archive_note_review` 결정이 없을 때만 final-reviewed로 이동할 수 있습니다.
+- `overclaim_risk=low`는 바로 final-reviewed가 될 수 있습니다. `medium`은 accepted historical limitation으로 기록된 경우에만 허용됩니다.
+- `source_backed_fact_present=partial`과 `action_item_specificity=generic`은 accepted historical retention limitations로만 허용됩니다.
+- 날짜는 해당 날짜의 모든 보존 기사 행이 final-reviewed이거나 accepted limitations로 커버될 때만 `reviewed_archive`가 됩니다.
 
-## Final Metric Policy
+## 최종 지표 정책
 
-- `remaining_source_gap_count` counts rows with `source_url_present=no` or `source_backed_fact_present=no`.
-- `partial` source-backed rows are not counted as source gaps when final report records them as accepted historical limitations.
-- `remaining_overclaim_risk_count` counts unresolved `high` or unresolved `medium` overclaim risk.
-- `remaining_weak_actionability_count` counts unresolved `none` or unresolved `generic` actionability.
+- `remaining_source_gap_count`는 `source_url_present=no` 또는 `source_backed_fact_present=no` 행을 셉니다.
+- `partial` source-backed 행은 최종 report에 accepted historical limitations로 기록된 경우 source gap으로 집계하지 않습니다.
+- `remaining_overclaim_risk_count`는 미해결 `high` 또는 미해결 `medium` overclaim risk를 셉니다.
+- `remaining_weak_actionability_count`는 미해결 `none` 또는 미해결 `generic` actionability를 셉니다.
 
 ## Severity
 
-| Severity | Meaning | Required action |
+| Severity | 의미 | 필요 조치 |
 | --- | --- | --- |
-| S0 | source missing, fabricated claim risk, broken route, duplicate public corruption | delete, archive note, or rewrite mandatory |
-| S1 | HAL overclaim, generic AI article promoted as HAL main, no actionable validation item | rewrite or downgrade mandatory |
-| S2 | weak readability, weak section structure, weak team-share summary | optional rewrite or minor edit |
-| S3 | cosmetic or format inconsistency | low-priority cleanup |
+| S0 | source 누락, 허위 claim 위험, 경로 파손, 중복 public 오염 | 삭제, archive note, 또는 재작성 필수 |
+| S1 | HAL overclaim, generic AI 기사를 HAL main으로 승격, actionable validation item 없음 | 재작성 또는 downgrade 필수 |
+| S2 | 약한 가독성, 약한 섹션 구조, 약한 팀 공유 요약 | 선택적 재작성 또는 소규모 편집 |
+| S3 | 외형 또는 포맷 불일치 | 낮은 우선순위 cleanup |
 
 ## Inventory
 

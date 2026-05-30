@@ -64,7 +64,7 @@
 
 ## Heavy Artifact 접근
 
-PR diff에서 DBG/TRA artifact가 보이지 않는 것은 의도된 동작입니다.
+PR diff에서 `debug_heavy`/`transient_attempt` 등급 산출물(artifact)이 보이지 않는 것은 의도된 동작입니다.
 
 - Actions artifact `newsroom-final-debug-<run_id>`를 다운로드합니다.
 - 또는 `content/newsroom/YYYY-MM-DD/artifact-manifest.json`의 `retained_heavy_artifacts[]`를 확인합니다. 각 항목에 `path`, `size`, `sha256`, `retention_grade`, `retention_location`이 기록되어 있습니다.

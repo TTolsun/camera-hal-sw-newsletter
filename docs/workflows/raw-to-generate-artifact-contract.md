@@ -38,7 +38,7 @@ Stage 2는 manifest에 기록된 approved path/hash와 실제 `collection-intent
 
 ### Seed Evidence Expansion
 
-Approved `collection-intent.json`이 있으면 Stage 2는 Gemini credential 여부와 무관하게 deterministic seed evidence expansion을 먼저 실행합니다. Gemini disabled mode에서도 seed expansion은 `merged-candidates.json`을 생성할 수 있습니다.
+승인된 `collection-intent.json`이 있으면 Stage 2는 Gemini credential 여부와 무관하게 deterministic seed evidence expansion을 먼저 실행합니다. Gemini 비활성 모드에서도 seed expansion은 `merged-candidates.json`을 생성할 수 있습니다.
 
 Seed evidence artifacts:
 
@@ -87,11 +87,11 @@ Duplicate merge precedence는 field-level로 고정합니다. Manual candidate�
 - provenance manifest: `content/collected-news/<date>/merged-candidate-manifest.json`
 - report: `content/newsroom/<date>/gemini-source-discovery-report.md`
 
-Stage 2는 v1에서 두 운영 방식을 허용합니다.
+Stage 2는 v1에서 두 가지 운영 방식을 허용합니다.
 
 ### Stage 2 미실행
 
-Stage 3은 `manual-candidates.json`을 직접 사용합니다. `merged-candidates.json`이 없어도 정상입니다. transition fallback으로 `candidates.json`도 허용합니다.
+Stage 3은 `manual-candidates.json`을 직접 사용합니다. `merged-candidates.json`이 없어도 정상입니다. 전환 fallback으로 `candidates.json`도 허용합니다.
 
 ### Disabled Pass-through 실행
 
@@ -103,52 +103,52 @@ Stage 3은 `manual-candidates.json`을 직접 사용합니다. `merged-candidate
 - `gemini_candidate_artifact=content/collected-news/<date>/gemini-candidates.json`
 - `merge_mode=disabled_pass_through`
 
-Disabled pass-through는 `gemini-candidates.json`을 정확히 empty array `[]`로 씁니다. 이 파일은 Stage 2 boundary artifact이며 Stage 3 generation input이 아닙니다.
+비활성 pass-through는 `gemini-candidates.json`을 정확히 빈 배열 `[]`로 씁니다. 이 파일은 Stage 2 boundary artifact이며 Stage 3 generation input이 아닙니다.
 
 ### Enabled Gemini Source Discovery
 
-`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`이면 Stage 2는 artifact mutation 전에 selected LLM provider credential preflight를 수행합니다. Credential preflight가 실패하면 가능하면 `gemini-source-discovery-report.md`에 failure status를 남기고 candidate artifact는 수정하지 않습니다.
+`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`이면 Stage 2는 artifact mutation 전에 선택된 LLM provider credential preflight를 수행합니다. Credential preflight가 실패하면 가능한 경우 `gemini-source-discovery-report.md`에 실패 상태를 남기고 candidate artifact는 수정하지 않습니다.
 
 - Gemini response는 `content/newsroom/<date>/gemini-source-proposals.json` proposal artifact로 저장합니다.
-- Proposal은 candidate가 아니며, deterministic fetch / normalize / schema validation을 통과한 URL만 `gemini-candidates.json`으로 promotion합니다.
-- `gemini-candidates.json`에는 promoted candidate만 저장합니다.
+- Proposal은 candidate가 아니며, deterministic fetch / normalize / schema validation을 통과한 URL만 `gemini-candidates.json`으로 승격합니다.
+- `gemini-candidates.json`에는 승격된 candidate만 저장합니다.
 - `merged-candidates.json`은 manual candidates를 보존하고 schema-valid Gemini candidates만 추가합니다.
 - v2 `merged-candidate-manifest.json`은 usage, proposal validation, quality, cluster, evidence report path를 포함합니다.
-- manual candidates는 어떤 경우에도 silently drop하지 않습니다.
+- manual candidates는 어떤 경우에도 자동으로 제외하지 않습니다.
 
 ## Stage 3 Final Generation
 
-Stage 3은 seed URL crawling/fetch를 다시 수행하지 않습니다. Seed-derived claim은 candidate의 `evidence_pack_ids`, `primary_evidence_ids`, `linked_evidence_ids`, `source_extraction_ref`로 Evidence Pack을 추적하고, Gemini prompt에는 full pack이 아니라 candidate별 `compact_evidence` capsule만 전달합니다. Missing evidence id가 있으면 traceability를 invent하지 않고 claim을 demote해야 합니다.
+Stage 3은 seed URL crawling/fetch를 다시 수행하지 않습니다. seed 기반 claim은 candidate의 `evidence_pack_ids`, `primary_evidence_ids`, `linked_evidence_ids`, `source_extraction_ref`로 Evidence Pack을 추적하고, Gemini prompt에는 full pack이 아니라 candidate별 `compact_evidence` capsule만 전달합니다. evidence id가 없으면 traceability를 만들어내지 않고 해당 claim을 demote해야 합니다.
 
-Stage 3은 artifact input mode로 approved candidate artifact만 읽습니다.
+Stage 3은 artifact input mode로 승인된 candidate artifact만 읽습니다.
 
 - `NEWSROOM_CANDIDATE_INPUT_MODE=artifact`
 - `NEWSROOM_CANDIDATE_INPUT_PATH=<repo-relative-candidate-json>`은 선택 입력입니다. Explicit path는 해당 날짜의 approved `manual-candidates.json` 또는 `merged-candidates.json`만 허용합니다. Legacy `candidates.json`는 explicit path로 지정하지 않고 explicit path가 비어 있을 때 automatic transition fallback으로만 허용합니다.
 
 입력 우선순위는 다음입니다.
 
-1. valid `merged-candidates.json` with valid `merged-candidate-manifest.json`
-2. otherwise `manual-candidates.json` with valid `raw-candidate-manifest.json`
-3. otherwise transition fallback `candidates.json`
+1. 유효한 `merged-candidates.json`과 유효한 `merged-candidate-manifest.json`
+2. 없으면 `manual-candidates.json`과 유효한 `raw-candidate-manifest.json`
+3. 없으면 전환 fallback `candidates.json`
 
-failed Stage 2 diagnostics report alone is never a valid generation input.
+실패한 Stage 2 진단 report 단독은 유효한 generation input이 아닙니다.
 
 Stage 3은 RAW artifact를 수정하지 않고 `collect`를 재실행하지 않습니다. manifest hash mismatch, missing artifact, `llm_used` 위반은 `FAILED_RAW_ARTIFACT_VALIDATION`으로 중단합니다.
 
 ## Manual Candidate Edit Policy
 
-v1에서는 수동 candidate edit를 허용하지 않습니다. RAW PR은 candidate review와 provenance 확인을 위한 PR이며, candidate payload를 사람이 수정해 Final Generation input으로 쓰는 절차는 별도 schema, review, approval 계약을 먼저 정의한 뒤 도입합니다.
+v1에서는 수동 candidate 편집을 허용하지 않습니다. RAW PR은 candidate review와 provenance 확인을 위한 PR이며, candidate payload를 사람이 수정해 Final Generation input으로 쓰는 절차는 별도 schema, review, approval 계약을 먼저 정의한 뒤 도입합니다.
 
 ## Schedule Cutover
 
-현재 `Newsroom 01 - Manual Source Collection PR` (`.github/workflows/01-newsroom-manual-source-collect-pr.yml`) workflow가 scheduled RAW collection entrypoint입니다.
+현재 `Newsroom 01 - Manual Source Collection PR` (`.github/workflows/01-newsroom-manual-source-collect-pr.yml`) workflow가 예약된 RAW collection 진입점입니다.
 
 - Stage 1은 daily schedule과 `workflow_dispatch`를 모두 지원합니다.
-- legacy all-in-one weekly workflow는 제거되어야 합니다.
-- Stage 2와 Stage 3은 계속 `workflow_dispatch` only입니다.
+- 레거시 all-in-one 주간 workflow는 제거해야 합니다.
+- Stage 2와 Stage 3은 계속 `workflow_dispatch` 전용입니다.
 - 전환 이후에도 all-in-one schedule과 Stage 1 schedule을 동시에 활성화하지 않습니다.
 
-Workflow branch는 date-based naming을 사용해 같은 날짜 PR 중복 생성을 막습니다.
+workflow branch는 날짜 기반 이름을 사용해 같은 날짜 PR 중복 생성을 막습니다.
 
 - Stage 1: `newsroom-raw/<YYYY-MM-DD>`
 - Stage 3: `newsroom-final/<YYYY-MM-DD>`

@@ -1,41 +1,41 @@
 # Source Quality Issue Map
 
-Source quality closes the remaining source URL / prompt quality gap by turning source policy into executable pipeline contracts. It does not reimplement source-specific parsers, linked evidence extraction, final article selection, or HAL signal classification.
+Source quality는 source URL/프롬프트 품질 격차를 source 정책을 실행 가능한 파이프라인 계약으로 전환하여 해소합니다. source별 파서 재구현, linked evidence 추출, final article selection, HAL signal 분류는 이 문서의 범위가 아닙니다.
 
-## Scope
+## 범위
 
-- `data/news-sources.json` is the executable source registry.
-- `docs/news-sources.md` and `docs/config/news-sources-fields.ko.md` are human review surfaces.
-- `source_quality` is canonical for new artifacts.
-- Flat fields such as `source_url_quality` and `main_article_source_allowed` are compatibility mirrors only.
-- `main_article_source_allowed` is source/evidence-policy-only. It must not depend on `finalSelectionEligibility`, score, final selection result, or HAL signal output.
-- `main_article_readiness` combines source readiness, HAL signal readiness, and `selection_input_ready` for final main article promotion.
-- `selection_ready` is kept only as a deprecated compatibility alias for `selection_input_ready`.
+- `data/news-sources.json`은 실행 가능한 source registry입니다.
+- `docs/news-sources.md`와 `docs/config/news-sources-fields.ko.md`는 사람이 검토하는 surface입니다.
+- `source_quality`는 신규 artifact의 정식 표현입니다.
+- `source_url_quality`와 `main_article_source_allowed` 같은 flat field는 호환성 mirror에 불과합니다.
+- `main_article_source_allowed`는 source/evidence 정책 전용입니다. `finalSelectionEligibility`, score, final selection 결과, HAL signal 출력에 의존하면 안 됩니다.
+- `main_article_readiness`는 source readiness, HAL signal readiness, `selection_input_ready`를 결합하여 final main article 승격 여부를 판정합니다.
+- `selection_ready`는 `selection_input_ready`의 deprecated 호환 alias로만 유지됩니다.
 
-## Policy Fields
+## 정책 필드
 
-| Field | Owner | Purpose |
+| 필드 | 소유자 | 목적 |
 | --- | --- | --- |
-| `sourceRole` | `data/news-sources.json` | Source role used by the classifier. |
-| `sourceUrlQualityHint` | `data/news-sources.json` | Default URL quality hint for source candidates. |
-| `mainArticlePolicy` | `data/news-sources.json` | Default main article source policy. |
-| `requiresCrossCheckDefault` | `data/news-sources.json` | Default cross-check requirement. |
-| `evidenceGranularityHint` | `data/news-sources.json` | Expected evidence granularity. |
-| `sourceQualityNotes` | `data/news-sources.json` | Human review notes. |
+| `sourceRole` | `data/news-sources.json` | 분류기가 사용하는 source role. |
+| `sourceUrlQualityHint` | `data/news-sources.json` | source 후보의 기본 URL 품질 힌트. |
+| `mainArticlePolicy` | `data/news-sources.json` | 기본 main article source 정책. |
+| `requiresCrossCheckDefault` | `data/news-sources.json` | 기본 cross-check 요구 여부. |
+| `evidenceGranularityHint` | `data/news-sources.json` | 기대하는 evidence 세분화 수준. |
+| `sourceQualityNotes` | `data/news-sources.json` | 사람이 검토하는 노트. |
 
-## Policy Mapping
+## 정책 매핑
 
-| `mainArticlePolicy` | Default `source_quality_status` | Default `main_article_source_allowed` | Notes |
+| `mainArticlePolicy` | 기본 `source_quality_status` | 기본 `main_article_source_allowed` | 비고 |
 | --- | --- | ---: | --- |
-| `allowed` | `allowed` | `true` | URL/evidence validation still required. |
-| `conditional` | `conditional` | `false` | Becomes source-ready only after source evidence and required primary confirmation/cross-check are satisfied. HAL/native workflow readiness is combined separately. |
-| `watchlist_only` | `blocked` | `false` | Watchlist/context only. |
-| `reference_only` | `blocked` | `false` | Background support only, not dated event evidence. |
-| `blocked` | `blocked` | `false` | Never main source. |
+| `allowed` | `allowed` | `true` | URL/evidence 검증은 여전히 필요. |
+| `conditional` | `conditional` | `false` | source evidence와 required primary confirmation/cross-check가 충족될 때만 source-ready가 됨. HAL/native workflow readiness는 별도로 결합. |
+| `watchlist_only` | `blocked` | `false` | Watchlist/컨텍스트 전용. |
+| `reference_only` | `blocked` | `false` | 배경 지원 전용, dated event evidence 아님. |
+| `blocked` | `blocked` | `false` | main source가 될 수 없음. |
 
-## Blockers
+## 차단 조건
 
-Machine-readable blocker codes:
+Machine-readable blocker 코드:
 
 - `missing_url`
 - `undated_reference_page`
@@ -49,11 +49,11 @@ Machine-readable blocker codes:
 - `linked_evidence_blocked`
 - `linked_evidence_failed`
 
-Raw `source_url_quality=unknown` is always main-ineligible. If registry policy and concrete dated evidence can classify the source, the classifier must convert it to a non-unknown quality before Stage 3. Stage 3 must fail any remaining unresolved `source_url_quality=unknown` in a new main article.
+원시 `source_url_quality=unknown`은 항상 main 부적격입니다. registry 정책과 concrete dated evidence로 source를 분류할 수 있으면 분류기는 Stage 3 이전에 non-unknown 품질로 변환해야 합니다. Stage 3는 신규 main article에 남은 미해결 `source_url_quality=unknown`을 반드시 실패 처리해야 합니다.
 
-## Ownership
+## 소유권
 
-- Source quality owns source URL/evidence policy.
-- HAL signal quality owns `hal_impact_axes`, `signal_quality_status`, and HAL hard blockers.
-- Capsule build assembles `do_not_claim[]` from source quality blockers, linked evidence blocked/failed status, HAL signal blockers, and fact-check restrictions.
-- Stage 3 generation consumes `source_quality`; it must not infer or repair missing source quality.
+- Source quality는 source URL/evidence 정책을 소유합니다.
+- HAL signal quality는 `hal_impact_axes`, `signal_quality_status`, HAL hard blocker를 소유합니다.
+- Capsule build는 source quality blocker, linked evidence blocked/failed 상태, HAL signal blocker, fact-check 제한에서 `do_not_claim[]`을 조립합니다.
+- Stage 3 generation은 `source_quality`를 소비합니다. 누락된 source quality를 추론하거나 수정해서는 안 됩니다.

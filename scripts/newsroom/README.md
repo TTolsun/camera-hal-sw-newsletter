@@ -4,7 +4,7 @@
 
 ## Module map
 
-| Path | Role |
+| 경로 | 역할 |
 | --- | --- |
 | `cli/` | command entrypoint, workflow-facing output, validation command wrapper입니다. |
 | `adapters/` | provider raw output을 internal domain model로 변환하는 adapter boundary입니다. |
@@ -19,7 +19,7 @@
 | `sources/` | source registry와 source quality 판단에 가까운 helper입니다. |
 | `validate/` | quality gate, config validation, site/output validation입니다. |
 
-## Suggested read order
+## 권장 읽기 순서
 
 1. `common/`
 2. `collect/`
@@ -32,7 +32,7 @@
 9. `metrics/`
 10. `cli/`
 
-## Do not weaken
+## 약화 금지
 
 - source binding
 - quality gate와 hard blocker
@@ -41,7 +41,7 @@
 
 Generated artifact path나 public output contract를 바꾸는 작업은 workflow, docs, tests를 함께 갱신해야 합니다.
 
-## Validation
+## 검증
 
 실제 newsroom 구현을 수정한 뒤에는 변경 범위에 맞는 targeted test를 먼저 실행하고 전체 검증으로 닫습니다.
 
