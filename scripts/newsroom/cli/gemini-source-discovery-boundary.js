@@ -114,6 +114,10 @@ function parseArgs(argv = process.argv.slice(2)) {
       index += 1;
     } else if (item === '--preflight-only') {
       args.preflightOnly = true;
+    } else if (item === '--dry-run') {
+      // --dry-run: 모든 가드(Missing manual candidate artifact 포함)는 실행하되
+      // 실제 파일 write를 건너뜁니다. 로컬 검증용으로 git-tracked RRC 파일 오염 방지.
+      args.dryRun = true;
     }
   }
   return args;
@@ -1300,6 +1304,7 @@ async function run({
   env = process.env,
   date: inputDate = '',
   preflightOnly = false,
+  dryRun = false,
   proposalPayload = null,
   callLlmJsonBudgetedImpl = null,
   fetchImpl = globalThis.fetch,
@@ -1326,6 +1331,21 @@ async function run({
   const manualCandidates = candidateItems(payload);
   const sourceManifestPath = rawCandidateManifestPath(root, date);
   const sourceManifest = fs.existsSync(sourceManifestPath) ? readJson(sourceManifestPath) : {};
+
+  if (dryRun) {
+    // --dry-run: 가드는 실행했으므로 여기서 종료. git-tracked RRC 파일을 덮어쓰지 않음.
+    process.stderr.write('[dry-run] disabled-passthrough 모드 가드 통과. 파일 write를 건너뜁니다.\n');
+    return {
+      date,
+      status: 'PASS',
+      dry_run: true,
+      candidate_count: manualCandidates.length,
+      source_candidate_artifact: sourceCandidatePath.endsWith('manual-candidates.json')
+        ? manualCandidatesRelPath(date)
+        : collectedCandidatesRelPath(date)
+    };
+  }
+
   removeStaleNormalOutputs(root, date);
   const collectionIntent = approvedCollectionIntentFromManifest({
     root,
@@ -1429,11 +1449,15 @@ if (require.main === module) {
   Promise.resolve()
     .then(() => {
       const args = parseArgs();
-      return run({ date: args.date, preflightOnly: args.preflightOnly });
+      return run({ date: args.date, preflightOnly: args.preflightOnly, dryRun: args.dryRun });
     })
     .then((result) => {
       if (result.preflight_only) {
         console.log('Gemini source discovery credential preflight passed.');
+        return;
+      }
+      if (result.dry_run) {
+        console.log(`[dry-run] 가드 통과. candidate_count=${result.candidate_count}. 파일은 변경되지 않았습니다.`);
         return;
       }
       console.log(`Gemini source discovery wrote ${result.merged_candidate_artifact}`);
