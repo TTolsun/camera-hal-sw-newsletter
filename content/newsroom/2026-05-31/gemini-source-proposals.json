@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-05-31",
+  "proposals": [
+    {
+      "proposal_id": "android_io_26_adaptive_apps_compose",
+      "topic_gap": "New developments in building seamless Android experiences across devices, potentially impacting camera-related app development for multi-device scenarios (e.g., camera preview on external displays, shared camera experiences).",
+      "source_family": "android",
+      "allowed_domains": [
+        "goo.gle",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android",
+        "Jetpack Compose",
+        "multi-device",
+        "adaptive UI",
+        "camera",
+        "CameraX",
+        "Camera2",
+        "Google I/O"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Mentions of camera APIs (CameraX, Camera2) in multi-device contexts.",
+        "Examples of adaptive UI for camera applications.",
+        "Discussions on media routing or display for camera output across devices."
+      ],
+      "risk_notes": [
+        "The URL is a shortlink, which might redirect to a more generic blog post. Need to verify the actual content for camera relevance.",
+        "The title 'Building seamless Android experiences across devices with Jetpack Compose' is broad; camera relevance needs to be explicitly present in the content."
+      ]
+    },
+    {
+      "proposal_id": "android_ai_studio_native_apps",
+      "topic_gap": "New tools or frameworks for integrating AI capabilities directly into native Android applications, which could impact on-device camera processing or intelligent camera features.",
+      "source_family": "android",
+      "allowed_domains": [
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android",
+        "AI Studio",
+        "native apps",
+        "on-device AI",
+        "camera AI",
+        "computer vision",
+        "image processing",
+        "CameraX",
+        "Google I/O"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
+      ],
+      "expected_evidence": [
+        "Specific examples or APIs for integrating AI with camera input/output.",
+        "Discussions on on-device AI models for image/video processing from camera streams.",
+        "Mention of CameraX or Camera2 integration with AI Studio."
+      ],
+      "risk_notes": [
+        "The article might be too high-level on AI integration without specific camera-related details.",
+        "Need to ensure the AI capabilities are relevant to Camera HAL SW (e.g., on-device processing, not just cloud AI)."
+      ]
+    }
+  ]
+}
