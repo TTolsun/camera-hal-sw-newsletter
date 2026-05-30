@@ -21,16 +21,10 @@ content/newsroom/**/background-context.json
 content/newsroom/**/editor-draft.json
 content/newsroom/**/editor-draft.md
 content/newsroom/**/event-bundles.json
-content/newsroom/**/evidence-validation-report.json
-content/newsroom/**/extracted-source-facts.json
-content/newsroom/**/gemini-source-proposal-validation-report.json
-content/newsroom/**/gemini-source-proposals.json
-content/newsroom/**/gemini-usage-report.json
 content/newsroom/**/linked-evidence-report.json
 content/newsroom/**/recovery-prompt.md
 content/newsroom/**/reporter-candidates.json
 content/newsroom/**/shortlisted-candidates.json
-content/newsroom/**/source-clusters.json
 # collected-news pure-debug files (not pipeline-input handoff state)
 content/collected-news/**/gemini-candidates.json
 

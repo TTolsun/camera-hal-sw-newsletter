@@ -49,14 +49,20 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
   - `content/collected-news/YYYY-MM-DD/collection-intent.json` (workflow-01 manual collection intent; 존재할 때만 커밋)
   - `content/collected-news/YYYY-MM-DD/seed-candidates.json` (seed_used=true 런에서 workflow 02 seed evidence expansion 산출물; `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋)
   - `content/collected-news/YYYY-MM-DD/seed-evidence-pack.json` (seed_used=true 런에서 workflow 02 seed evidence expansion 산출물; 동일한 hash strict-check 대상)
+- **workflow 02 Gemini source discovery 산출물** (워크플로 핸드오프 상태 — `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'`인 경우 strict-check하므로 반드시 Git에 커밋해야 합니다. workflow 03이 이 파일들을 main에서 읽을 수 있어야 합니다):
+  - `content/newsroom/YYYY-MM-DD/gemini-usage-report.json` (`usage_report` 필드 strict-check 대상)
+  - `content/newsroom/YYYY-MM-DD/gemini-source-proposals.json` (workflow 02 Gemini 제안 원문; manifest 참조 파일)
+  - `content/newsroom/YYYY-MM-DD/source-clusters.json` (`source_clusters` 필드 strict-check 대상)
+  - `content/newsroom/YYYY-MM-DD/evidence-validation-report.json` (`evidence_validation_report` 필드 strict-check 대상)
+  - `content/newsroom/YYYY-MM-DD/gemini-source-proposal-validation-report.json` (`proposal_validation_report` 필드 strict-check 대상)
+  - `content/newsroom/YYYY-MM-DD/extracted-source-facts.json` (workflow 02 소스 사실 추출 결과; manifest 참조 파일)
 
 ### DBG — `debug_heavy` (Actions + manifest만, 커밋 제외)
 
 - `shortlisted-candidates.json`, `article-capsules.json`
 - `editor-draft.{json,md}`, `reporter-candidates.json`
 - `linked-evidence-report.json`, `event-bundles.json`, `background-context.json`
-- `source-clusters.json`, `extracted-source-facts.json`, `evidence-validation-report.json`
-- `gemini-*.json`, `seed-fetch-report.json`, `seed-merge-report.json`
+- `seed-fetch-report.json`, `seed-merge-report.json`
 - `source-change-events.json`
 - `recovery-prompt.md` — heavy LLM prompt dump (~10 MB 규모). Git에 커밋하지 않음; GitHub Actions artifact `newsroom-final-debug-<run_id>` + `artifact-manifest.json` → `retained_heavy_artifacts`에서 조회.
 - `content/collected-news/YYYY-MM-DD/` 순수 디버그 파일 (파이프라인 입력 파일 제외):
