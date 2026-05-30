@@ -201,5 +201,9 @@ module.exports = {
     return parseInternalResponse(response);
   },
 
+  shouldStopRetriesAfter() {
+    return false;
+  },
+
   usageMetadataFromResponse
 };

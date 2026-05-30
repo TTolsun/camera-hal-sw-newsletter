@@ -10,18 +10,17 @@ const {
   LlmJsonParseError,
   errorStatus,
   extractJson,
-  isFreeTierQuotaExhausted,
   isQuotaError,
   isRetryableError,
   lastStatus,
   parseRetryDelayMs
 } = require('./llm-errors');
-const geminiProvider = require('./providers/gemini-provider');
-const internalProvider = require('./providers/internal-provider');
-const openApiProvider = require('./providers/openapi-provider');
+const { resolveProvider } = require('./providers/provider-registry');
 const {
   modelGroupInfoForStage
 } = require('./model-policy');
+
+const geminiProvider = resolveProvider('gemini');
 
 const runtimeConfig = readRuntimeConfig(process.env);
 const retryableStatuses = new Set([429, 500, 502, 503, 504]);
@@ -35,13 +34,6 @@ const diagnostics = createDiagnosticsState();
 
 function fail(message) {
   throw new Error(message);
-}
-
-function resolveProvider(providerId = runtimeConfig.llmProvider) {
-  if (providerId === 'gemini') return geminiProvider;
-  if (providerId === 'openapi') return openApiProvider;
-  if (providerId === 'internal') return internalProvider;
-  fail(`Unsupported LLM provider: ${providerId}`);
 }
 
 function sleep(ms) {
@@ -156,8 +148,8 @@ async function generateContentJsonWithRetry(stage, provider, context, requestSta
       const retryable = isRetryableError(error, retryableStatuses);
       if (!retryable || attempt > maxRetries) break;
 
-      if (provider.id === 'gemini' && isFreeTierQuotaExhausted(error, retryableStatuses)) {
-        console.warn(`[${stage}] Gemini quota appears exhausted for model ${modelName}; skipping remaining retries for this model.`);
+      if (typeof provider.shouldStopRetriesAfter === 'function' && provider.shouldStopRetriesAfter(error, retryableStatuses)) {
+        console.warn(`[${stage}] ${provider.displayName} quota appears exhausted for model ${modelName}; skipping remaining retries for this model.`);
         break;
       }
 

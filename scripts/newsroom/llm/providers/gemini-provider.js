@@ -4,6 +4,7 @@ const {
   configuredModelsForStage,
   isGeminiProModel
 } = require('../model-policy');
+const { isFreeTierQuotaExhausted } = require('../llm-errors');
 
 const PRICING_SOURCE_URL = 'https://ai.google.dev/gemini-api/docs/pricing';
 const PRICE_TABLE = [
@@ -244,5 +245,9 @@ module.exports = {
     if (isGeminiProModel(modelName)) {
       console.warn(`[${stage}] Gemini Pro model selected despite disabled policy: ${modelName}.`);
     }
+  },
+
+  shouldStopRetriesAfter(error, retryableStatuses) {
+    return isFreeTierQuotaExhausted(error, retryableStatuses);
   }
 };
