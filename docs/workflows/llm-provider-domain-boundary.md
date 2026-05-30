@@ -36,7 +36,7 @@ tests/**/llm-response/**
 docs/workflows/llm-provider-domain-boundary.md
 ```
 
-그 밖의 renderer, validator, PR body, publication status 코드는 provider raw response shape가 아니라 normalized `NewsletterIssue`를 읽어야 합니다.
+그 밖의 renderer, validator, PR body, publication status 코드는 provider raw response shape가 아니라 정규화된 `NewsletterIssue`를 읽어야 합니다.
 
 현재 domain model의 주요 객체는 다음입니다.
 
@@ -49,7 +49,7 @@ docs/workflows/llm-provider-domain-boundary.md
 
 ## Editor draft artifact
 
-새 `editor-draft.json`은 domain-centered artifact입니다.
+새 `editor-draft.json`은 도메인 중심 artifact입니다.
 
 ```json
 {
@@ -73,7 +73,7 @@ docs/workflows/llm-provider-domain-boundary.md
 }
 ```
 
-전환 기간에는 legacy reader 호환을 위해 top-level `sections` alias를 함께 보존할 수 있습니다. Downstream 코드는 `toLegacyEditorIssue()` 또는 `normalizeNewsletterIssue()`를 통해 읽고, provider raw field를 직접 읽지 않습니다.
+전환 기간에는 레거시 reader 호환을 위해 최상위 `sections` alias를 함께 보존할 수 있습니다. 하위 코드는 `toLegacyEditorIssue()` 또는 `normalizeNewsletterIssue()`를 통해 읽고, provider raw field를 직접 읽지 않습니다.
 
 ## Generation status failure class
 
@@ -81,18 +81,18 @@ docs/workflows/llm-provider-domain-boundary.md
 
 | 값 | 의미 |
 | --- | --- |
-| `provider_failure` | provider 호출, provider 설정, reserved provider fail-fast 실패입니다. |
+| `provider_failure` | provider 호출, provider 설정, 예약 provider fail-fast 실패입니다. |
 | `adapter_failure` | provider 응답을 JSON/domain 입력으로 변환하는 단계의 실패입니다. |
-| `domain_validation_failure` | normalized `NewsletterIssue`가 domain validator를 통과하지 못한 실패입니다. |
+| `domain_validation_failure` | 정규화된 `NewsletterIssue`가 domain validator를 통과하지 못한 실패입니다. |
 
 ## Validation severity
 
-| 조건 | severity |
+| 조건 | 심각도 |
 | --- | --- |
-| source URL 누락 또는 invalid URL | `error` |
+| source URL 누락 또는 잘못된 URL | `error` |
 | required article field 누락 | `error` |
 | optional image 누락 | `warning` |
-| legacy field repair | `warning` |
+| 레거시 field repair | `warning` |
 | provider raw field drop | `warning` |
 
 Raw response leak guard는 provider 이름이 아니라 raw shape marker를 검사합니다. 금지 marker는 `candidates[0].content.parts`, `choices[0].message.content`, `output_json`, `rawResponse`, `providerResponse`, `geminiResponse`, `openapiResponse`입니다.

@@ -1,12 +1,12 @@
 # Article Structure Contract
 
-이 문서는 final public article structure의 source of truth다. Source crawling, linked evidence resolving, Event Bundle construction은 소유하지 않고, 최종 article section 구조와 renderer-visible output만 정의한다.
+이 문서는 최종 public article structure의 source of truth다. Source crawling, linked evidence resolving, Event Bundle construction은 소유하지 않고, 최종 article section 구조와 renderer-visible output만 정의한다.
 
 ## New Generation Contract
 
 새 `editor`, `repair`, `completion` output의 main article은 `article_sections` object를 포함해야 한다.
 
-Required keys:
+필수 key:
 
 - `verified_facts`
 - `background_context`
@@ -14,15 +14,15 @@ Required keys:
 - `action_items`
 - `team_share_points`
 
-Optional keys:
+선택 key:
 
 - `known_limitations`
 - `watch_items`
 - `do_not_claim`
 
-`complete=true`는 required 5개 key만 기준으로 계산한다. Optional key가 없어도 pass다. Unknown key는 semantic validation fail이다.
+`complete=true`는 필수 5개 key만 기준으로 계산한다. 선택 key가 없어도 통과다. 알 수 없는 key는 semantic validation 실패다.
 
-Optional key type은 새 생성물 schema에서 array다. Normalizer는 legacy/manual input compatibility를 위해 string 또는 array를 받을 수 있지만, normalized output은 string array로 고정한다.
+선택 key 타입은 새 생성물 schema에서 array다. Normalizer는 레거시/수동 입력 호환을 위해 string 또는 array를 받을 수 있지만, 정규화 출력은 string array로 고정한다.
 
 ## Public Rendering
 
@@ -36,7 +36,7 @@ Public heading order는 고정이다.
 ### 팀 공유 포인트 / 결론
 ```
 
-Optional public blocks:
+선택 public block:
 
 - `known_limitations` -> `제한 / 주의`
 - `watch_items` -> `추적 항목`
@@ -45,14 +45,14 @@ Optional public blocks:
 
 ### Limitation visibility
 
-- `none`: optional limitation/watch/guardrail signal 없음
+- `none`: 선택 limitation/watch/guardrail signal 없음
 - `present`: `watch_items`만 존재하며 public limitation block은 없음
 - `guardrail-only`: `do_not_claim`이 존재하지만 raw text를 public output에 직접 렌더링하지 않음
 - `public-limitation`: `known_limitations`가 존재하며 public limitation으로 노출 가능
 
 ## Evidence Mapping
 
-`compact_evidence`는 final article structure의 input으로만 사용한다. Stage 3은 seed URL crawling을 다시 수행하지 않는다.
+`compact_evidence`는 final article structure의 입력으로만 사용한다. Stage 3은 seed URL crawling을 다시 수행하지 않는다.
 
 ```text
 compact_evidence.primary_facts -> article_sections.verified_facts
@@ -64,29 +64,29 @@ compact_evidence.do_not_claim -> article_sections.do_not_claim or known_limitati
 
 `verified_facts`는 source-confirmed facts만 포함한다. HAL interpretation, recommendation, guardrail text는 `verified_facts`에 넣지 않는다.
 
-`hal_driver_impact`는 editorial interpretation을 허용하지만, direct HAL/API/runtime/driver behavior는 source evidence가 있을 때만 단정할 수 있다.
+`hal_driver_impact`는 editorial interpretation을 허용하지만, 직접적인 HAL/API/runtime/driver 동작은 source evidence가 있을 때만 단정할 수 있다.
 
 ## Claim Binding Compatibility
 
-Claim binding은 `article_sections.verified_facts`를 fact coverage 대상으로 본다. New main article의 fact claim은 item-level evidence id와 source URL을 가져야 한다. `evidence_pack_ids` 단독 support는 신규 생성물의 fact claim support로 충분하지 않다.
+Claim binding은 `article_sections.verified_facts`를 fact coverage 대상으로 본다. 새 main article의 fact claim은 item-level evidence id와 source URL을 가져야 한다. `evidence_pack_ids` 단독 지원은 신규 생성물의 fact claim 지원으로 충분하지 않다.
 
-`article_sections.do_not_claim`은 strong guardrail이다. `article_sections.known_limitations`는 direct HAL/API/runtime/driver limitation wording이 있을 때 overclaim guardrail로 사용한다. `watch_items`는 guardrail이 아니라 report/rendering 중심의 follow-up signal이다.
+`article_sections.do_not_claim`은 강력한 guardrail이다. `article_sections.known_limitations`는 직접 HAL/API/runtime/driver 제한 표현이 있을 때 overclaim guardrail로 사용한다. `watch_items`는 guardrail이 아니라 report/rendering 중심의 후속 신호다.
 
 ## Responsibility Boundary
 
 - Seed evidence: seed URL fetch, linked evidence expansion, Evidence Pack, `compact_evidence` 생성을 소유한다.
-- Source adapters: source-specific extraction schema를 소유한다. Source adapter는 public article heading을 직접 생성하지 않는다.
+- Source adapters: source별 extraction schema를 소유한다. Source adapter는 public article heading을 직접 생성하지 않는다.
 - Event Bundle: evidence enrichment를 소유한다. Event Bundle은 article structure를 정의하지 않는다.
 - Claim binding: `claims[]`, claim -> evidence id/source URL binding, HAL overclaim validation을 소유한다.
-- Article structure: normalized article section keys, public section order, renderer-visible structure, section completeness report shape를 소유한다.
+- Article structure: 정규화된 article section key, public section 순서, renderer-visible structure, section completeness report shape를 소유한다.
 
 ## Historical Compatibility
 
-Historical rewrite는 archive cleanup contract에서 처리한다. Article structure contract 구현은 기존 `content/newsroom/**`, `content/collected-news/**`, `newsletters/**` artifact를 재생성하지 않는다.
+과거 rewrite는 archive cleanup contract에서 처리한다. Article structure contract 구현은 기존 `content/newsroom/**`, `content/collected-news/**`, `newsletters/**` artifact를 재생성하지 않는다.
 
-Historical cleanup rule:
+과거 cleanup 규칙:
 
-- seed evidence workflow 이전 article에 fake seed evidence provenance를 추가하지 않는다.
+- seed evidence workflow 이전 article에 가짜 seed evidence provenance를 추가하지 않는다.
 - source에 없는 technical claim을 추가하지 않는다.
-- structure normalization은 source support가 있을 때만 한다.
-- optional provenance/rewrite fields는 historical archive cleanup contract에서 정의하고 처리한다.
+- structure normalization은 source 지원이 있을 때만 한다.
+- 선택 provenance/rewrite field는 historical archive cleanup contract에서 정의하고 처리한다.

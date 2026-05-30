@@ -5,9 +5,9 @@
 ## Documentation Rules
 
 - 사용자-facing 문서는 한국어를 기본으로 작성합니다.
-- Code identifiers, JSON keys, enum values, file names, commands, URLs, product names are kept in English.
-- Current guidance와 과거 작업 중간 산출물을 혼동하지 마세요.
-- 과거 handoff, dated baseline, one-off audit, refactoring worklog는 `docs/**`에 보존하지 않습니다.
+- 코드 식별자, JSON 키, enum 값, 파일 이름, 명령어, URL, 제품 이름은 원문을 유지합니다.
+- 현재 운영 지침과 과거 작업 중간 산출물을 혼동하지 마세요.
+- 과거 handoff, dated baseline, 일회성 audit, 리팩터링 worklog는 `docs/**`에 보존하지 않습니다.
 - memory, notes, checkpoint, TODO 정리, 임시 보고서처럼 작업 중간 산출물인 Markdown은 `docs/**`에 보존하지 않습니다.
 - README에는 긴 내용을 중복하지 말고 canonical docs로 연결합니다.
 - 문서를 이동하거나 이름을 바꾸면 `README.md`, `docs/START_HERE.ko.md`, 관련 docs 링크를 함께 갱신합니다.

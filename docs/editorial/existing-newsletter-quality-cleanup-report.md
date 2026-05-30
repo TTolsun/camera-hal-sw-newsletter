@@ -2,9 +2,9 @@
 
 이 문서는 unsupported seed evidence provenance를 사후 보강하지 않고 historical public archive cleanup 상태만 추적합니다.
 
-## Final Archive Trust Summary
+## 최종 아카이브 신뢰 요약
 
-### Date-level status
+### 날짜 단위 현황
 
 - reviewed archive dates: 9
 - removed archive dates: 9
@@ -13,7 +13,7 @@
 - data/newsletters.json에 없는 public artifact 날짜: 0
 - content/newsroom 전용 날짜: 0
 
-### Article-level status
+### 기사 단위 현황
 
 - reviewed article rows: 17
 - removed article rows: 9
@@ -24,38 +24,38 @@
 - remaining overclaim risk rows: 0
 - remaining weak actionability rows: 0
 
-## Final Review Transition Rule
+## 최종 리뷰 전환 규칙
 
-- A retained article row is final-reviewed only when no rewrite/downgrade/archive-note decision remains.
-- `medium` overclaim, `partial` source-backed coverage, `generic` actionability, and weak historical format are allowed only as accepted historical limitations recorded in this report.
-- A retained date becomes `reviewed_archive` only when every retained article row for that date is final-reviewed or explicitly covered by accepted limitations.
+- 보존된 기사 행은 rewrite/downgrade/archive-note 결정이 없을 때만 final-reviewed 상태가 됩니다.
+- `medium` overclaim, `partial` source-backed coverage, `generic` actionability, 약한 historical format은 이 report에 기록된 accepted historical limitations로만 허용됩니다.
+- 보존된 날짜는 해당 날짜의 모든 보존 기사 행이 final-reviewed이거나 accepted limitations로 명시적으로 커버될 때만 `reviewed_archive`가 됩니다.
 
-## Final Metric Policy
+## 최종 지표 정책
 
-- `remaining_source_gap_count` counts rows with `source_url_present=no` or `source_backed_fact_present=no`.
-- `source_backed_fact_present=partial` is not counted as a remaining source gap when recorded as an accepted historical limitation.
-- `remaining_overclaim_risk_count` counts unresolved `high` or unresolved `medium` overclaim risk.
-- `remaining_weak_actionability_count` counts unresolved `none` or unresolved `generic` actionability.
+- `remaining_source_gap_count`는 `source_url_present=no` 또는 `source_backed_fact_present=no` 행을 셉니다.
+- `source_backed_fact_present=partial`은 accepted historical limitation으로 기록된 경우 remaining source gap으로 집계하지 않습니다.
+- `remaining_overclaim_risk_count`는 미해결 `high` 또는 미해결 `medium` overclaim risk를 셉니다.
+- `remaining_weak_actionability_count`는 미해결 `none` 또는 미해결 `generic` actionability를 셉니다.
 
-## Remaining Accepted Limitations
+## 남은 Accepted Limitations
 
-- Pre-seed-evidence generation: source provenance was not backfilled.
-- Partial source-backed coverage rows retained as accepted limitations: 17
-- Generic actionability rows retained as accepted limitations: 10
-- Medium overclaim rows retained as accepted limitations: 3
-- Weak historical format rows retained as accepted limitations: 17
+- Seed evidence workflow 이전 생성: source provenance를 사후 보강하지 않음.
+- Accepted limitations로 보존한 partial source-backed coverage 행: 17
+- Accepted limitations로 보존한 generic actionability 행: 10
+- Accepted limitations로 보존한 medium overclaim 행: 3
+- Accepted limitations로 보존한 약한 historical format 행: 17
 
-### Unlisted reviewed archives
+### 목록에 없는 reviewed archives
 
-These remain unlisted because they are absent from `data/newsletters.json`. This final trust report reviews their artifact quality but does not change public index visibility.
+`data/newsletters.json`에 없어 목록에 등재되지 않은 날짜입니다. 이 최종 신뢰 report는 artifact 품질을 검토하지만 public index 표시를 변경하지 않습니다.
 
 - none
 
-## Historical Content Normalizations
+## Historical Content 정규화
 
-- 2026-05-11 received date-level global action item normalization. No article-level material rewrite diff was added because article body meaning did not change; the change is recorded in the final archive trust report.
+- 2026-05-11은 날짜 단위 전역 action item 정규화를 받았습니다. article body 의미가 바뀌지 않아 article 단위 material rewrite diff는 추가하지 않았습니다. 변경은 최종 archive 신뢰 report에 기록됩니다.
 
-## Material Rewrite Traceability
+## Material Rewrite 추적
 
 | Date | Rewrite count | Diff artifacts |
 | --- | ---: | --- |
@@ -63,16 +63,16 @@ These remain unlisted because they are absent from `data/newsletters.json`. This
 | 2026-05-07 | 2 | `content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md`<br>`content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-softisp.md` |
 | 2026-05-11 | 1 | `content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md` |
 
-## Validation Status
+## 검증 현황
 
 - validation errors: 0
 - validation warnings: 0
 
-## Final Decision
+## 최종 결정
 
-Archive trust cleanup is complete because no unresolved S0/S1 rows remain, all material rewrites have diff artifacts, pre-seed-evidence provenance was not backfilled, and final validation passed.
+미해결 S0/S1 행이 없고, 모든 material rewrite에 diff artifact가 있으며, seed evidence 이전 provenance를 사후 보강하지 않았고, 최종 검증이 통과되었으므로 archive 신뢰 cleanup은 완료되었습니다.
 
-## Archive Entries
+## 아카이브 항목
 
 | Date | Artifact scope | Archive status | Public visibility | Data index | Public artifact | Known limitations | Cleanup context |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -99,10 +99,10 @@ Archive trust cleanup is complete because no unresolved S0/S1 rows remain, all m
 
 - none
 
-## Non-public newsroom artifacts
+## 비공개 newsroom artifacts
 
-`not_public` is an audit report classification, not a `content/audit/historical-archive-status.json` sidecar enum value.
+`not_public`은 audit report 분류값이며 `content/audit/historical-archive-status.json` sidecar enum 값이 아닙니다.
 
-These dates have `content/newsroom/YYYY-MM-DD/` artifacts but no public newsletter artifact. They are not public archive entries and are not subject to public archive cleanup.
+아래 날짜는 `content/newsroom/YYYY-MM-DD/` artifact는 있으나 public newsletter artifact가 없습니다. public archive 항목이 아니며 public archive cleanup 대상이 아닙니다.
 
 - none

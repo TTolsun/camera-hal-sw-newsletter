@@ -231,7 +231,7 @@ PR마다 failure classification은 `A. New workflow blocker`, `B. Source / evide
 
 `content/newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, LLM JSON parsing, fact-check, quality, validation이 retry 후에도 실패할 때 작성됩니다. shortlist, selected input, failed section, quality deduction, fact-check finding, exact rerun command를 포함합니다.
 
-이 파일은 **DBG (`debug_heavy`)** 등급으로 Git에 커밋하지 않습니다. 실패 run의 recovery-prompt는 GitHub Actions artifact `newsroom-final-debug-<run_id>`에서 다운로드하거나, 해당 날짜의 `artifact-manifest.json` → `retained_heavy_artifacts`에서 path/sha256으로 조회하세요.
+이 파일은 **`debug_heavy`** 등급으로 Git에 커밋하지 않습니다. 실패 run의 recovery-prompt는 GitHub Actions artifact `newsroom-final-debug-<run_id>`에서 다운로드하거나, 해당 날짜의 `artifact-manifest.json` → `retained_heavy_artifacts`에서 path/sha256으로 조회하세요.
 
 ## GitHub Actions 운영
 
@@ -251,7 +251,7 @@ workflow는 `main`에 직접 push하지 않고 RAW candidate 검토용 PR을 만
 현재 schedule entrypoint는 Stage 1 RAW workflow입니다. Final newsletter generation은 승인된 candidate artifact를 입력으로 받는 수동 workflow로만 실행합니다.
 
 - `Newsroom 01 - Manual Source Collection PR` (`.github/workflows/01-newsroom-manual-source-collect-pr.yml`): `collect`만 실행하고 `manual-candidates.json`, compatibility `candidates.json`, `raw-candidate-manifest.json`을 생성합니다. Gemini/API secret을 사용하지 않습니다.
-- `Newsroom 02 - Gemini Source Discovery PR` (`.github/workflows/02-newsroom-gemini-source-discovery-pr.yml`): source discovery 전용 workflow이므로 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하며 별도 toggle input은 없습니다. LLM credential preflight 뒤 Gemini proposal을 `gemini-source-proposals.json`에 저장하고, deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영합니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`인 credential-free disabled pass-through는 여전히 code-level로 지원되지만 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록하며, `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 파일 존재를 필수 검증하므로 모두 Git에 커밋(RRC 등급)해야 합니다:
+- `Newsroom 02 - Gemini Source Discovery PR` (`.github/workflows/02-newsroom-gemini-source-discovery-pr.yml`): source discovery 전용 workflow이므로 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하며 별도 toggle input은 없습니다. LLM credential preflight 뒤 Gemini proposal을 `gemini-source-proposals.json`에 저장하고, deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영합니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`인 credential-free disabled pass-through는 여전히 code-level로 지원되지만 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록하며, `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 파일 존재를 필수 검증하므로 모두 Git에 커밋(`review_required_compact` 등급)해야 합니다:
   - `gemini-usage-report.json` (`usage_report` 필드)
   - `gemini-source-proposals.json` (Gemini 제안 원문)
   - `gemini-source-proposal-validation-report.json` (`proposal_validation_report` 필드)
@@ -343,18 +343,18 @@ PR에서 다음 항목을 확인합니다.
 
 ## Source quality and prompt contract
 
-Source quality adds an executable policy layer between collection and Stage 3 generation.
+Source quality(출처 품질)는 수집과 Stage 3 생성 사이에 실행 가능한 정책 계층을 추가합니다.
 
-- Candidate collection runs `scripts/newsroom/collect/source-quality-classifier.js` before article capsule generation.
-- New candidates carry canonical `source_quality`; flat source quality fields are compatibility mirrors.
-- `article-capsules.json` includes `source_quality`, `main_article_readiness`, and `do_not_claim[]`.
-- `main_article_readiness` combines source readiness, HAL signal readiness, and deterministic `selection_input_ready`; `selection_ready` is a deprecated compatibility alias for `selection_input_ready`.
-- HAL signal quality remains owned by the HAL signal layer; source quality does not recalculate `hal_impact_axes`.
-- HAL/native workflow readiness is decided by the HAL signal layer and the combined readiness object, not by `source-quality-classifier.js`.
-- Prompt guardrails treat `main_article_source_allowed=false` as a hard blocker and forbid overriding `main_article_source_blockers[]` from prose reasoning.
-- New Stage 3 main articles fail on missing URL, missing canonical `source_quality`, unresolved `source_url_quality=unknown`, `source_quality_status=blocked`, `main_article_source_allowed=false`, or `SOURCE_QUALITY_FIELD_DRIFT`.
-- Legacy artifacts without source quality fields warn during rollout.
-- Source effectiveness and PR body summaries expose source URL quality distribution, status summary, blocker summary, selected-main coverage, main-eligible coverage, conditional promoted/blocked counts, unknown count, drift count, and legacy warning count.
+- Candidate 수집은 article capsule 생성 전에 `scripts/newsroom/collect/source-quality-classifier.js`를 실행합니다.
+- 새 candidate는 canonical `source_quality`를 포함하며, 평면 source quality 필드는 호환성 mirror입니다.
+- `article-capsules.json`에는 `source_quality`, `main_article_readiness`, `do_not_claim[]`이 포함됩니다.
+- `main_article_readiness`는 source readiness, HAL signal readiness, deterministic `selection_input_ready`를 결합합니다. `selection_ready`는 `selection_input_ready`의 deprecated 호환 alias입니다.
+- HAL signal quality는 HAL signal layer가 소유하며, source quality는 `hal_impact_axes`를 재계산하지 않습니다.
+- HAL/native workflow readiness는 `source-quality-classifier.js`가 아니라 HAL signal layer와 결합된 readiness object가 결정합니다.
+- Prompt guardrail은 `main_article_source_allowed=false`를 hard blocker로 취급하며, 산문 추론으로 `main_article_source_blockers[]`를 재정의하는 것을 금지합니다.
+- 새 Stage 3 main article은 URL 누락, canonical `source_quality` 누락, 미해소 `source_url_quality=unknown`, `source_quality_status=blocked`, `main_article_source_allowed=false`, `SOURCE_QUALITY_FIELD_DRIFT`가 있으면 실패합니다.
+- source quality 필드가 없는 레거시 artifact는 rollout 중 경고를 출력합니다.
+- Source effectiveness 및 PR body 요약은 source URL quality 분포, 상태 요약, blocker 요약, 선정 main 커버리지, main 자격 커버리지, 조건부 승격/차단 수, 미확인 수, drift 수, 레거시 경고 수를 노출합니다.
 ## Source snapshot / `effective_date`
 
 `data/source-monitor-registry.json`에 등록된 monitored source는 bounded fetch로 관찰하고, 이전 `data/source-snapshots/<source_id>.json`과 비교해 `content/source-events/YYYY-MM-DD/source-change-events.json` 및 `.md`를 만듭니다. 이 경로는 review artifact이며 public newsletter renderer가 직접 읽는 입력이 아닙니다.
@@ -378,12 +378,12 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 | Debug Heavy | `debug_heavy` | 미커밋 | GitHub Actions artifact + manifest |
 | Transient Attempt | `transient_attempt` | 미커밋 | GitHub Actions artifact + manifest |
 
-`03-newsroom-final-pr.yml`의 `peter-evans/create-pull-request` 스텝은 `add-paths` 허용목록으로 PUB+RRC artifact만 커밋합니다. DBG+TRA artifact는 `newsroom-final-debug-<run_id>` Actions artifact에 full set이 보존되고, `artifact-manifest.json`의 `retained_heavy_artifacts[]`에 path/size/sha256/retention_grade/retention_location이 기록됩니다.
+`03-newsroom-final-pr.yml`의 `peter-evans/create-pull-request` 스텝은 `add-paths` 허용목록으로 `public_source_of_truth`+`review_required_compact` artifact만 커밋합니다. `debug_heavy`+`transient_attempt` artifact는 `newsroom-final-debug-<run_id>` Actions artifact에 full set이 보존되고, `artifact-manifest.json`의 `retained_heavy_artifacts[]`에 path/size/sha256/retention_grade/retention_location이 기록됩니다.
 
-허용목록은 `scripts/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 생성합니다. PR diff에 DBG/TRA 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 참조하세요.
+허용목록은 `scripts/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 생성합니다. PR diff에 `debug_heavy`/`transient_attempt` 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 참조하세요.
 
 이 정책은 발행 안전성·source binding·image lineage·review-publication state 판정을 약화하지 않습니다. validate:post-generation, resolve-reviewable-artifacts, pr-body 생성은 commit 스텝보다 먼저 in-run working tree에서 실행되므로 add-paths 허용목록의 영향을 받지 않습니다.
 
 `01-newsroom-raw-candidates.yml`과 `02-newsroom-source-discovery.yml`은 candidate JSON이 리뷰 대상이므로 이 허용목록 제한을 적용하지 않습니다.
 
-`content/collected-news/YYYY-MM-DD/`의 파이프라인 입력 파일(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03의 핸드오프 상태로서 `review_required_compact` 등급 RRC 파일입니다. `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 생성하며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋되어야 합니다. 순수 디버그 파일(`gemini-candidates.json`)은 `debug_heavy` 등급으로 `.gitignore` 처리됩니다.
+`content/collected-news/YYYY-MM-DD/`의 파이프라인 입력 파일(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03의 핸드오프 상태로서 `review_required_compact` 등급 파일입니다. `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 생성하며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋되어야 합니다. 순수 디버그 파일(`gemini-candidates.json`)은 `debug_heavy` 등급으로 `.gitignore` 처리됩니다.

@@ -157,12 +157,12 @@ Reddit 출처는 candidate discovery용 **커뮤니티 신호(sensor)**입니다
 
 ## Source quality policy contract
 
-`data/news-sources.json` is the executable source registry for source quality policy. The human-facing source list in this document should explain policy, but it must not become a second source of truth.
+`data/news-sources.json`은 source quality policy의 실행 가능한 registry입니다. 이 문서의 사람이 읽는 출처 목록은 정책을 설명하는 역할이며, 두 번째 source of truth가 되어서는 안 됩니다.
 
-- Every enabled source defines `sourceRole`, `sourceUrlQualityHint`, `mainArticlePolicy`, `requiresCrossCheckDefault`, `evidenceGranularityHint`, and `sourceQualityNotes`.
-- `main_article_source_allowed` is source/evidence-policy-only. It does not include `finalSelectionEligibility`, score, final selection result, or HAL signal output.
-- Conditional sources can become source-ready only from source evidence and required primary confirmation/cross-check state.
-- HAL/native workflow evidence is not evaluated by the source classifier; it is consumed by the HAL signal layer and combined in `main_article_readiness`.
-- Raw `source_url_quality=unknown` is main-ineligible. The classifier must resolve it before Stage 3 or the new main article fails.
-- `generic_ai_or_it_trend`, `tech_media_lead_requires_cross_check`, and `community_lead_requires_cross_check` are conditional policies, not unconditional approvals.
-- Stage 3 consumes canonical `source_quality` and must not infer, repair, or override `main_article_source_blockers[]`.
+- 활성화된 모든 source는 `sourceRole`, `sourceUrlQualityHint`, `mainArticlePolicy`, `requiresCrossCheckDefault`, `evidenceGranularityHint`, `sourceQualityNotes`를 정의합니다.
+- `main_article_source_allowed`는 source/evidence 정책 전용 값입니다. `finalSelectionEligibility`, score, 최종 선정 결과, HAL signal 출력을 포함하지 않습니다.
+- 조건부 source는 source evidence와 필요한 primary 확인/교차 확인 상태를 갖출 때만 source-ready가 될 수 있습니다.
+- HAL/native workflow evidence는 source classifier가 평가하지 않으며, HAL signal layer가 소비하고 `main_article_readiness`에 합산합니다.
+- `source_url_quality=unknown` 상태의 source는 main 기사 자격이 없습니다. classifier가 Stage 3 전에 해소하지 못하면 해당 main 기사는 실패합니다.
+- `generic_ai_or_it_trend`, `tech_media_lead_requires_cross_check`, `community_lead_requires_cross_check`는 조건부 정책이며 무조건적인 승인이 아닙니다.
+- Stage 3은 canonical `source_quality`를 소비하며 `main_article_source_blockers[]`를 추론, 수정, 재정의해서는 안 됩니다.

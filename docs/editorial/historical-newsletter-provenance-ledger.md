@@ -4,14 +4,14 @@
 
 `content/audit/historical-archive-status.json`가 machine-readable source of truth입니다. `data/newsletters.json`는 public index와 archive routing metadata로만 유지합니다.
 
-## Policy
+## 정책
 
 - Seed evidence workflow 이전 archive entry에는 fake seed evidence provenance를 추가하지 않습니다.
 - `keep` / `minor_edit` 대상은 현재 article structure로 강제 재작성하지 않습니다.
 - Material rewrite는 `content/audit/historical-rewrite-diff/<date>-<slug>.md`를 필요로 합니다.
 - `removed` entry는 `data/newsletters.json`에 남기지 않습니다.
 
-## Ledger
+## 원장
 
 | Date | Original generation mode | Known quality issues | Rewrite allowed | Rewrite status | Archive status | Public visibility | Cleanup context |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -40,6 +40,6 @@
 | 2026-05-05 | pre_185 | source provenance not backfilled, bounded Firebase / Claude / C++ / Android Security overclaim rewrites, accepted limitations documented | yes_bounded | material_rewrite_firebase_claude_cxx_android_security | reviewed_archive | listed | historical_archive_cleanup |
 | 2026-04-30 | pre_185 | format inconsistency, delete-only cleanup completed | no | removed_archive | removed | removed | removed_archive_cleanup |
 
-## Historical Content Normalization
+## Historical Content 정규화
 
-- 2026-05-11 received date-level global action item normalization. No article-level material rewrite diff was added because article body meaning did not change; the change is recorded in the final archive trust report.
+- 2026-05-11은 날짜 단위 전역 action item 정규화를 받았습니다. article body 의미가 바뀌지 않아 article 단위 material rewrite diff는 추가하지 않았습니다. 변경은 최종 archive 신뢰 report에 기록됩니다.
