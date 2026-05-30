@@ -4,6 +4,9 @@ const path = require('path');
 const {
   renderCandidateSelectionDiagnostics
 } = require('../generate/selection-diagnostics');
+const {
+  formatReasonSummary
+} = require('../common/status-format');
 
 const DEFAULT_STATUS = {
   status: 'UNKNOWN',
@@ -113,13 +116,6 @@ function scalar(value, fallback = 'n/a') {
   if (typeof value === 'boolean') return value ? 'true' : 'false';
   if (value === null || value === undefined || value === '') return fallback;
   return String(value);
-}
-
-function formatReasonSummary(items) {
-  return ensureArray(items)
-    .slice(0, 5)
-    .map(item => `${item.reason || 'unknown'} (${item.count ?? 'n/a'})`)
-    .join('; ') || 'none';
 }
 
 function multilineValue(value) {
