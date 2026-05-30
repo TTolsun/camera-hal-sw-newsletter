@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-05-30",
+  "proposals": [
+    {
+      "proposal_id": "P001",
+      "topic_gap": "How to build seamless Android experiences across devices with Jetpack Compose, specifically focusing on camera-related interactions or media output.",
+      "source_family": "android",
+      "allowed_domains": [
+        "goo.gle",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Jetpack Compose camera cross-device",
+        "Android adaptive camera experience",
+        "Compose media output multi-device"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Mentions of CameraX, Camera2, or media APIs in the context of cross-device experiences.",
+        "Examples of adaptive UIs for camera preview, photo/video capture, or media playback across different form factors.",
+        "Guidance on handling camera output or media content sharing/syncing across devices using Jetpack Compose."
+      ],
+      "risk_notes": [
+        "The title is broad; the content might not specifically address camera or media output.",
+        "Could be more focused on general UI/UX adaptation rather than specific camera/media implications."
+      ]
+    },
+    {
+      "proposal_id": "P002",
+      "topic_gap": "Updates on building native Android apps using Google AI Studio, particularly if it involves camera input or AI processing of camera output.",
+      "source_family": "android",
+      "allowed_domains": [
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android AI Studio camera",
+        "Google AI camera input",
+        "native Android AI vision"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
+      ],
+      "expected_evidence": [
+        "Information on using camera input with AI models in Android apps.",
+        "APIs or tools for processing images/videos from the camera using Google AI Studio.",
+        "Examples or use cases demonstrating AI features integrated with the camera pipeline."
+      ],
+      "risk_notes": [
+        "The article might focus on general AI development without specific camera integration details.",
+        "Could be high-level announcements without deep technical insights relevant to Camera HAL."
+      ]
+    },
+    {
+      "proposal_id": "P003",
+      "topic_gap": "Updates on Qualcomm's Glymur CAMSS (Camera Subsystem) support in the Linux kernel, indicating potential future Android HAL implications.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "Qualcomm Glymur CAMSS",
+        "Linux media camera subsystem",
+        "V4L2 Glymur",
+        "Android Camera HAL Qualcomm"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/8618255e-ecbf-4f55-877d-09cb2faa6f50@linaro.org/",
+        "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-2-bee535396d22@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Details on new camera sensor support or ISP features for Qualcomm Glymur.",
+        "Changes to camera driver architecture or V4L2 interfaces relevant to Android HAL.",
+        "Discussions on performance, power, or new capabilities enabled by Glymur CAMSS."
+      ],
+      "risk_notes": [
+        "Highly technical kernel-level discussions; may require deep analysis to extract HAL-relevant information.",
+        "Changes might be specific to Linux and not directly translate to Android HAL without further context."
+      ]
+    },
+    {
+      "proposal_id": "P004",
+      "topic_gap": "Updates on virtio-media driver development for the Linux kernel, which could impact virtualized Android camera environments.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "virtio-media driver",
+        "Linux virtual camera",
+        "Android virtualized camera",
+        "camera emulation"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260529160314.1224731-1-briandaniels@google.com/"
+      ],
+      "expected_evidence": [
+        "Information on virtual camera devices or media pipelines.",
+        "Impact on Android Emulator or virtualized Android environments for camera testing/development.",
+        "Performance or feature improvements for camera access in virtual machines."
+      ],
+      "risk_notes": [
+        "Highly technical and specific to virtualization; relevance to general Android Camera HAL might be indirect.",
+        "May not have immediate, direct impact on physical device Camera HAL."
+      ]
+    },
+    {
+      "proposal_id": "P005",
+      "topic_gap": "Updates on Qualcomm Iris media driver, specifically regarding support for decoding 10-bit formats, which is relevant for HDR camera output.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "Qualcomm Iris 10-bit decode",
+        "HDR camera output Android",
+        "Linux media 10-bit format"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/0fb85345-ea8c-4294-bf4b-220617c9f089@linaro.org/",
+        "https://lore.kernel.org/linux-media/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Details on 10-bit video decoding support for Qualcomm Iris.",
+        "Implications for HDR video recording and playback from Android cameras.",
+        "Performance or compatibility improvements for high-bit-depth media streams."
+      ],
+      "risk_notes": [
+        "Kernel-level discussion; may require interpretation for Android-specific implications.",
+        "Focus is on decoding, but could indicate broader support for 10-bit formats in the pipeline."
+      ]
+    },
+    {
+      "proposal_id": "P006",
+      "topic_gap": "Updates on Qualcomm QCM2390 CAMSS support in the Linux kernel, indicating potential future Android HAL implications for this specific SoC.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "Qualcomm QCM2390 CAMSS",
+        "Linux media QCM2390 camera",
+        "Android Camera HAL QCM2390"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/21c17cac-2a1e-4b19-ab6d-ddca9132d725@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Details on camera sensor or ISP features specific to QCM2390.",
+        "Changes to camera driver for this SoC relevant to Android HAL.",
+        "New capabilities or performance characteristics for camera on QCM2390."
+      ],
+      "risk_notes": [
+        "Highly specific to a particular Qualcomm SoC; may not have broad relevance.",
+        "Kernel-level discussion, requiring deep technical understanding."
+      ]
+    },
+    {
+      "proposal_id": "P007",
+      "topic_gap": "Fixes or updates to the bcm2835-unicam media driver, relevant for embedded systems like Raspberry Pi that often use Android.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "bcm2835-unicam camera driver",
+        "Raspberry Pi Android camera",
+        "Linux media bcm2835"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/5b63761b-07dd-4786-bc98-d8a1c48a2ef4@kernel.org/"
+      ],
+      "expected_evidence": [
+        "Improvements in camera stability or performance for bcm2835-unicam.",
+        "Fixes related to camera sensor interaction or media stream handling.",
+        "Potential impact on camera functionality for Android on Raspberry Pi or similar platforms."
+      ],
+      "risk_notes": [
+        "Specific to a particular hardware platform; may not be broadly applicable to all Android devices.",
+        "Kernel-level patch, requiring interpretation for user-facing impact."
+      ]
+    }
+  ]
+}

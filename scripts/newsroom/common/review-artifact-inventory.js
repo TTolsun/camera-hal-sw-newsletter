@@ -466,7 +466,16 @@ const DEBUG_RRC_PATHS = new Set([
   'collection-intent.json',
   // seed pipeline-input files (workflow 02 seed evidence expansion handoff; strict-checked by validateMergedManifestSchema when seed_used=true)
   'seed-candidates.json',
-  'seed-evidence-pack.json'
+  'seed-evidence-pack.json',
+  // workflow 02 Gemini source discovery output files: strict-checked by validateMergedManifestSchema
+  // (usage_report, proposal_validation_report, source_clusters, evidence_validation_report fields)
+  // when llm_used=true or merge_mode='gemini_source_discovery'. Must be on main for workflow 03.
+  'gemini-usage-report.json',
+  'gemini-source-proposals.json',
+  'source-clusters.json',
+  'evidence-validation-report.json',
+  'gemini-source-proposal-validation-report.json',
+  'extracted-source-facts.json'
 ]);
 
 function debugEntryRetentionGrade(relPath) {

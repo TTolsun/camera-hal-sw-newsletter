@@ -251,7 +251,13 @@ workflow는 `main`에 직접 push하지 않고 RAW candidate 검토용 PR을 만
 현재 schedule entrypoint는 Stage 1 RAW workflow입니다. Final newsletter generation은 승인된 candidate artifact를 입력으로 받는 수동 workflow로만 실행합니다.
 
 - `Newsroom 01 - Manual Source Collection PR` (`.github/workflows/01-newsroom-manual-source-collect-pr.yml`): `collect`만 실행하고 `manual-candidates.json`, compatibility `candidates.json`, `raw-candidate-manifest.json`을 생성합니다. Gemini/API secret을 사용하지 않습니다.
-- `Newsroom 02 - Gemini Source Discovery PR` (`.github/workflows/02-newsroom-gemini-source-discovery-pr.yml`): source discovery 전용 workflow이므로 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하며 별도 toggle input은 없습니다. LLM credential preflight 뒤 Gemini proposal을 `gemini-source-proposals.json`에 저장하고, deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영합니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`인 credential-free disabled pass-through는 여전히 code-level로 지원되지만 이 workflow에서는 노출하지 않습니다.)
+- `Newsroom 02 - Gemini Source Discovery PR` (`.github/workflows/02-newsroom-gemini-source-discovery-pr.yml`): source discovery 전용 workflow이므로 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하며 별도 toggle input은 없습니다. LLM credential preflight 뒤 Gemini proposal을 `gemini-source-proposals.json`에 저장하고, deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영합니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`인 credential-free disabled pass-through는 여전히 code-level로 지원되지만 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록하며, `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 파일 존재를 필수 검증하므로 모두 Git에 커밋(RRC 등급)해야 합니다:
+  - `gemini-usage-report.json` (`usage_report` 필드)
+  - `gemini-source-proposals.json` (Gemini 제안 원문)
+  - `gemini-source-proposal-validation-report.json` (`proposal_validation_report` 필드)
+  - `source-clusters.json` (`source_clusters` 필드)
+  - `evidence-validation-report.json` (`evidence_validation_report` 필드)
+  - `extracted-source-facts.json` (소스 사실 추출 결과)
 - `Newsroom 03 - Gemini Final Newsletter PR` (`.github/workflows/03-newsroom-final-pr.yml`): `NEWSROOM_CANDIDATE_INPUT_MODE=artifact`로 approved candidate artifact만 읽고 `collect`를 재실행하지 않습니다.
 
 Stage 2/3 manual run의 `newsletter_date`는 optional입니다. 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve되며, resolved date는 workflow log에 출력됩니다.

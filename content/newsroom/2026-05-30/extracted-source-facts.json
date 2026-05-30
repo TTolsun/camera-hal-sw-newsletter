@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "gemini-52cc0ef29661fc95",
+      "url": "https://lore.kernel.org/linux-media/20260529160314.1224731-1-briandaniels@google.com/",
+      "title": "Re: [PATCH v3] media: add virtio-media driver - Brian Daniels",
+      "published_at": "2026-05-29",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v3] media: add virtio-media driver - Brian Daniels",
+          "evidence_text": "<html><head><title>Re: [PATCH v3] media: add virtio-media driver - Brian Daniels</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216dark.c",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "ea82c4d6fb3baf19",
+      "url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/",
+      "title": "[PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss",
+      "published_at": "2026-05-29T14:37:57Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "From: Nihal Kumar Gupta Add device tree bindings for the Camera Subsystem (CAMSS) on the Qualcomm Glymur platform. The Glymur platform provides: - 3 x CSIPHY (CSI Physical Layer) - 3 x CSID (CSI Decoder), 2 x CSID Lite - 3 x TPG (Test Pattern Generator) - 2 x VFE (Video Front End), 2 x VFE Lite Signed-off-by: Nihal Kumar Gupta Co-developed-by: Vikram Sharma Signed-off-by: Vikram Sharma --- .../bindings/media/qcom,glymur-camss.yaml | 343 +++++++++++++++++++++ 1 file changed , 343 insertions(+) di",
+          "evidence_text": "<html><head><title>[PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss - Vikram Sharma</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dar",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0,
+      "technical_depth": 0.74,
+      "warnings": []
+    },
+    {
+      "id": "gemini-0498b442816ef0e6",
+      "url": "https://lore.kernel.org/linux-media/5b63761b-07dd-4786-bc98-d8a1c48a2ef4@kernel.org/",
+      "title": "Re: [PATCH v2] media: bcm2835-unicam: Fix log status runtime access - Eugen Hristev",
+      "published_at": "2026-05-29",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v2] media: bcm2835-unicam: Fix log status runtime access - Eugen Hristev",
+          "evidence_text": "<html><head><title>Re: [PATCH v2] media: bcm2835-unicam: Fix log status runtime access - Eugen Hristev</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-5c07e96c1e44165b",
+      "url": "https://lore.kernel.org/linux-media/8618255e-ecbf-4f55-877d-09cb2faa6f50@linaro.org/",
+      "title": "Re: [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss - Bryan O&#39;Donoghue",
+      "published_at": "2026-05-29",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss - Bryan O&#39;Donoghue",
+          "evidence_text": "<html><head><title>Re: [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss - Bryan O&#39;Donoghue</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-78cbcb920857dcb5",
+      "url": "https://lore.kernel.org/linux-media/21c17cac-2a1e-4b19-ab6d-ddca9132d725@oss.qualcomm.com/",
+      "title": "Re: [PATCH 3/8] media: qcom: camss: add support for QCM2390 camss - Vikram Sharma",
+      "published_at": "2026-05-29",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH 3/8] media: qcom: camss: add support for QCM2390 camss - Vikram Sharma",
+          "evidence_text": "<html><head><title>Re: [PATCH 3/8] media: qcom: camss: add support for QCM2390 camss - Vikram Sharma</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-b312f8455ee18b6f",
+      "url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
+      "title": "[PATCH 0/6] Add CAMSS support for Qualcomm Glymur - Vikram Sharma",
+      "published_at": "2026-05-29",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH 0/6] Add CAMSS support for Qualcomm Glymur - Vikram Sharma",
+          "evidence_text": "<html><head><title>[PATCH 0/6] Add CAMSS support for Qualcomm Glymur - Vikram Sharma</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-e5aebe1858abbcb0",
+      "url": "https://lore.kernel.org/linux-media/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com/",
+      "title": "[PATCH v7] media: iris: drop struct iris_fmt - Dmitry Baryshkov",
+      "published_at": "2026-05-29",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v7] media: iris: drop struct iris_fmt - Dmitry Baryshkov",
+          "evidence_text": "<html><head><title>[PATCH v7] media: iris: drop struct iris_fmt - Dmitry Baryshkov</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216dark",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-f3c2a267d979f4cb",
+      "url": "https://lore.kernel.org/linux-media/0fb85345-ea8c-4294-bf4b-220617c9f089@linaro.org/",
+      "title": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong",
+      "published_at": "2026-05-29",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong",
+          "evidence_text": "<html><head><title>Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-f6cabb6b4d49035f",
+      "url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/",
+      "title": "[PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss - Vikram Sharma",
+      "published_at": "2026-05-29",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss - Vikram Sharma",
+          "evidence_text": "<html><head><title>[PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss - Vikram Sharma</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dar",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-fcdc57da52676968",
+      "url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-2-bee535396d22@oss.qualcomm.com/",
+      "title": "[PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible - Vikram Sharma",
+      "published_at": "2026-05-29",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible - Vikram Sharma",
+          "evidence_text": "<html><head><title>[PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible - Vikram Sharma</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dar",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "e9a1d558afd08434",
+      "url": "https://lore.kernel.org/linux-media/20260529160314.1224731-1-briandaniels@google.com/",
+      "title": "Re: [PATCH v3] media: add virtio-media driver",
+      "published_at": "2026-05-29T16:03:17Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hi there! My name is Brian Daniels and I'll be taking over upstreaming this driver from Alexandre Courbot. I've consulted with Alexandre and my plan is to upload a v4 set of patches shortly based on the feedback from this revision. Before doing so, I'd like to address some of your comments: > Hi Alex, > > I didn't see on a first glance anything that would cause locking > issues here, but, as I pointed on my last e-mail, testing with > qv4l2 at the max res of my C920 camera, it ended keeping 24 C",
+          "evidence_text": "<html><head><title>Re: [PATCH v3] media: add virtio-media driver - Brian Daniels</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216dark.c",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.716,
+      "warnings": []
+    },
+    {
+      "id": "4cd1324b82d886c6",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "title": "Build native Android apps in Google AI Studio",
+      "published_at": "Tue, 19 May 2026 12:45:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt. You don't need to install any software or configure any libraries, which significantly lowers the barrier to development. Whether you’re a seasoned developer looking to prototype at lightning speed or a creator building your first-ever mobile experience, you can now go from a single prompt to a high-quality,",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.66,
+      "android_hal_relevance": 0.66,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.666,
+      "warnings": []
+    }
+  ]
+}
