@@ -651,6 +651,63 @@ function decisionFromCandidate({ classification, metadata, sourceQuality, snapsh
   return result;
 }
 
+function buildLegacyDecisionInputs(item) {
+  const finalSelectionEligibility = item.finalSelectionEligibility || item.final_selection_eligibility || 'exclude';
+
+  const classification = {
+    collectionMode: item.collectionMode || item.collection_mode || '',
+    sourceCollectionMode: item.sourceCollectionMode || item.source_collection_mode || '',
+    isArticleCandidate: Boolean(item.isArticleCandidate || item.is_article_candidate),
+    isWatchPage: Boolean(item.isWatchPage || item.is_watch_page),
+    hasDatedEvidence: Boolean(item.hasDatedEvidence || item.has_dated_evidence),
+    finalSelectionEligibility,
+    evidenceSignalKind: item.evidenceSignalKind || item.evidence_signal_kind || '',
+    selectionExclusionReason: item.selection_exclusion_reason || ''
+  };
+
+  const metadata = {
+    source_kind: item.source_kind || '',
+    source_role: item.source_role || '',
+    has_published_date: Boolean(item.has_published_date || item.hasDatedEvidence || item.has_dated_evidence),
+    has_version_or_release: Boolean(item.has_version_or_release),
+    has_api_or_component: Boolean(item.has_api_or_component),
+    has_behavior_change: Boolean(item.has_behavior_change),
+    evidence_score: item.evidence_score || 0,
+    source_gap_risk: Boolean(item.source_gap_risk),
+    reference_only: Boolean(item.reference_only)
+  };
+
+  const sourceQuality = item.source_quality || {
+    source_role: item.source_role || '',
+    source_url_quality: item.source_url_quality || '',
+    source_quality_status: item.source_quality_status || '',
+    main_article_source_allowed: Boolean(item.main_article_source_allowed),
+    main_article_source_allowed_reason: item.main_article_source_allowed_reason || '',
+    main_article_source_blockers: Array.isArray(item.main_article_source_blockers) ? item.main_article_source_blockers : [],
+    cross_check_status: item.cross_check_status || '',
+    requires_cross_check: Boolean(item.requires_cross_check),
+    requires_conditional_evidence: Boolean(item.requires_conditional_evidence),
+    conditional_evidence_type: item.conditional_evidence_type || '',
+    evidence_granularity: item.evidence_granularity || ''
+  };
+
+  const snapshot = (item.snapshot_last_seen_at || item.snapshot_seen_count !== undefined)
+    ? {
+        lastSeenAt: item.snapshot_last_seen_at || '',
+        seenCount: item.snapshot_seen_count || 0,
+        contentChanged: typeof item.content_changed === 'boolean' ? item.content_changed : undefined
+      }
+    : (item.snapshot || undefined);
+
+  const scopeMetadata = {
+    relevance_bucket: item.relevance_bucket || item.relevanceBucket || ''
+  };
+
+  const candidateOnly = Boolean(item.candidateOnly || item.candidate_only);
+
+  return { classification, metadata, sourceQuality, snapshot, scopeMetadata, candidateOnly };
+}
+
 function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
   const sourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
   const sourceRole = String(raw.sourceRole || raw.source_role || source.sourceRole || source.source_role || '').trim();
@@ -1154,44 +1211,7 @@ function markdown(date, candidates, failures, lookbackDays, options = {}) {
 
   function resolveDecision(item) {
     if (item.decision) return item.decision;
-    const rawSelection = item.finalSelectionEligibility || '';
-    const rawEvidenceLevel = item.evidenceLevel || item.evidence_signal_kind || '';
-    const isReferenceRole = item.reference_only === true ||
-      item.source_role === 'reference_index' ||
-      item.source_role === 'official_documentation_reference' ||
-      (item.main_article_source_blockers || []).includes('reference_only') ||
-      (item.main_article_source_blockers || []).includes('undated_reference_page') ||
-      item.source_url_quality === 'undated_reference_page';
-    let selection;
-    if (rawSelection === 'main' || rawSelection === 'short' || rawSelection === 'watch' || rawSelection === 'reference') {
-      selection = rawSelection;
-    } else if (rawSelection === 'watchlist') {
-      selection = 'watch';
-    } else if (rawSelection === 'exclude') {
-      selection = isReferenceRole ? 'reference' : 'watch';
-    } else {
-      selection = 'watch';
-    }
-    let evidenceLevel;
-    if (rawEvidenceLevel === 'primary' || rawEvidenceLevel === 'verified' || rawEvidenceLevel === 'watch' || rawEvidenceLevel === 'reference') {
-      evidenceLevel = rawEvidenceLevel;
-    } else if (rawEvidenceLevel === 'reference-index') {
-      evidenceLevel = 'reference';
-    } else if (rawEvidenceLevel === 'undated-watch-page' || rawEvidenceLevel === 'partial-evidence' || rawEvidenceLevel === 'low-confidence') {
-      evidenceLevel = 'watch';
-    } else if (rawEvidenceLevel === 'dated-release-evidence' || rawEvidenceLevel === 'dated-rss-article' || rawEvidenceLevel === 'dated-concrete-evidence' || rawEvidenceLevel === 'dated_release') {
-      evidenceLevel = isReferenceRole ? 'reference' : (item.source_reliability === 'official' || item.source_reliability === 'project-official' ? 'primary' : 'verified');
-    } else {
-      evidenceLevel = selection === 'reference' ? 'reference' : 'watch';
-    }
-    return {
-      selection,
-      evidenceLevel,
-      reason: item.selection_exclusion_reason || '',
-      topic: item.relevance_bucket || '',
-      hasDate: item.hasDatedEvidence,
-      hasConcreteChange: Boolean(item.has_version_or_release || item.has_api_or_component || item.has_behavior_change)
-    };
+    return decisionFromCandidate(buildLegacyDecisionInputs(item));
   }
 
   const mainCandidates = candidates.filter(item => resolveDecision(item).selection === 'main');

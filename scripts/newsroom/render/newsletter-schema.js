@@ -194,26 +194,6 @@ const actionabilityUpgradeEvidence = {
   }
 };
 
-const candidateDecision = {
-  type: 'OBJECT',
-  properties: {
-    topic: string,
-    evidenceLevel: string,
-    selection: string,
-    reason: string,
-    contentChanged: { type: 'BOOLEAN' },
-    hasDate: { type: 'BOOLEAN' },
-    hasConcreteChange: { type: 'BOOLEAN' },
-    snapshot: {
-      type: 'OBJECT',
-      properties: {
-        lastSeenAt: string,
-        seenCount: { type: 'NUMBER' }
-      }
-    }
-  }
-};
-
 const sourceQuality = {
   type: 'OBJECT',
   properties: {
