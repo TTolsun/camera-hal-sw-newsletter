@@ -18,9 +18,9 @@ const REWRITE_DIFF_PREFIX = 'content/audit/historical-rewrite-diff/';
 
 const DEFAULT_SIDECAR_PATH = 'content/audit/historical-archive-status.json';
 const DEFAULT_AUDIT_REPORT_PATH = 'content/audit/historical-newsletter-audit-report.json';
-const DEFAULT_CLEANUP_REPORT_PATH = 'docs/editorial/existing-newsletter-quality-cleanup-report.md';
-const DEFAULT_LEDGER_PATH = 'docs/editorial/historical-newsletter-provenance-ledger.md';
-const DEFAULT_INVENTORY_PATH = 'docs/editorial/existing-newsletter-quality-inventory.md';
+const DEFAULT_CLEANUP_REPORT_PATH = 'content/audit/newsletter-quality-cleanup-report.md';
+const DEFAULT_LEDGER_PATH = 'content/audit/newsletter-provenance-ledger.md';
+const DEFAULT_INVENTORY_PATH = 'content/audit/newsletter-quality-inventory.md';
 
 function toPosix(value = '') {
   return String(value).replace(/\\/g, '/');

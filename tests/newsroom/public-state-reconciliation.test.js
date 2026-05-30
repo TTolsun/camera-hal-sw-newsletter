@@ -176,7 +176,7 @@ function archiveLedgerRow(date, context = 'review_only_publication', overrides =
 }
 
 function writeArchiveLedger(root, rows = []) {
-  writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), [
+  writeText(path.join(root, 'content', 'audit', 'newsletter-provenance-ledger.md'), [
     '# Historical Newsletter Provenance Ledger',
     '',
     '## Ledger',
@@ -309,9 +309,9 @@ test('review-only public reconciliation syncs archive sidecar and provenance led
 
   const sidecar = readJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'));
   assert.deepEqual(sidecar, [archiveSidecarEntry(date)]);
-  assert.match(readFile(root, 'docs/editorial/historical-newsletter-provenance-ledger.md'), /review_only_publication/);
+  assert.match(readFile(root, 'content/audit/newsletter-provenance-ledger.md'), /review_only_publication/);
   assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), true);
-  assert.equal(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'), true);
+  assert.equal(result.changedArtifacts.includes('content/audit/newsletter-provenance-ledger.md'), true);
 });
 
 test('publish-ready public reconciliation syncs current-generation archive state', () => {
@@ -332,11 +332,11 @@ test('publish-ready public reconciliation syncs current-generation archive state
   const sidecar = readJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'));
   assert.deepEqual(sidecar, [archiveSidecarEntry(date, 'current_generation_archive_review')]);
   assert.match(
-    readFile(root, 'docs/editorial/historical-newsletter-provenance-ledger.md'),
+    readFile(root, 'content/audit/newsletter-provenance-ledger.md'),
     /current generated public artifact; no historical provenance backfill required/
   );
   assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), true);
-  assert.equal(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'), true);
+  assert.equal(result.changedArtifacts.includes('content/audit/newsletter-provenance-ledger.md'), true);
 });
 
 test('archive sync changedArtifacts distinguish sidecar-only, ledger-only, and no-op states', () => {
@@ -353,7 +353,7 @@ test('archive sync changedArtifacts distinguish sidecar-only, ledger-only, and n
       write: true
     });
     assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), true);
-    assert.equal(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'), false);
+    assert.equal(result.changedArtifacts.includes('content/audit/newsletter-provenance-ledger.md'), false);
   }
 
   {
@@ -368,7 +368,7 @@ test('archive sync changedArtifacts distinguish sidecar-only, ledger-only, and n
       write: true
     });
     assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), false);
-    assert.equal(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'), true);
+    assert.equal(result.changedArtifacts.includes('content/audit/newsletter-provenance-ledger.md'), true);
   }
 
   {
@@ -383,7 +383,7 @@ test('archive sync changedArtifacts distinguish sidecar-only, ledger-only, and n
       write: true
     });
     assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), false);
-    assert.equal(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'), false);
+    assert.equal(result.changedArtifacts.includes('content/audit/newsletter-provenance-ledger.md'), false);
   }
 });
 
@@ -423,7 +423,7 @@ test('archive reconciliation rejects duplicate ledger rows and missing table mar
     const root = tempRoot('public-state-missing-ledger-table-');
     writePublicArtifacts(root, date);
     writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
-    writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), '# Ledger missing table\n');
+    writeText(path.join(root, 'content', 'audit', 'newsletter-provenance-ledger.md'), '# Ledger missing table\n');
 
     assert.throws(
       () => reconcilePublicState({
@@ -442,7 +442,7 @@ test('archive reconciliation anchors ledger parsing after the Ledger heading', (
   const date = '2026-05-23';
   writePublicArtifacts(root, date);
   writeArchiveSidecar(root, [archiveSidecarEntry(date)]);
-  writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), [
+  writeText(path.join(root, 'content', 'audit', 'newsletter-provenance-ledger.md'), [
     '# Historical Newsletter Provenance Ledger',
     '',
     '## Summary',
@@ -464,12 +464,12 @@ test('archive reconciliation anchors ledger parsing after the Ledger heading', (
     status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
     write: true
   });
-  const ledger = fs.readFileSync(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), 'utf8');
+  const ledger = fs.readFileSync(path.join(root, 'content', 'audit', 'newsletter-provenance-ledger.md'), 'utf8');
   const summaryTableIndex = ledger.indexOf('| 2026-01-01 | This is not the provenance ledger table. |');
   const ledgerHeadingIndex = ledger.indexOf('## Ledger');
   const insertedRowIndex = ledger.indexOf(archiveLedgerRow(date));
 
-  assert.ok(result.changedArtifacts.includes('docs/editorial/historical-newsletter-provenance-ledger.md'));
+  assert.ok(result.changedArtifacts.includes('content/audit/newsletter-provenance-ledger.md'));
   assert.ok(summaryTableIndex > 0);
   assert.ok(insertedRowIndex > ledgerHeadingIndex);
 });

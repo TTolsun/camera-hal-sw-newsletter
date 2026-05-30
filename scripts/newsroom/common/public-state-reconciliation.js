@@ -56,7 +56,7 @@ const DIAGNOSTICS_STATUSES = new Set([
 
 const RETENTION_SCOPE = 'same_date_diagnostics_only';
 const ARCHIVE_SIDECAR_PATH = 'content/audit/historical-archive-status.json';
-const ARCHIVE_LEDGER_PATH = 'docs/editorial/historical-newsletter-provenance-ledger.md';
+const ARCHIVE_LEDGER_PATH = 'content/audit/newsletter-provenance-ledger.md';
 const ARCHIVE_CURRENT_CONTEXTS = new Set([
   'current_generation_archive_review',
   'review_only_publication'
@@ -445,7 +445,7 @@ function canonicalLedgerRow(row = {}) {
 
 function parseLedgerTable(text, dateForError) {
   const lines = String(text || '').split(/\r?\n/);
-  const ledgerHeadingIndex = lines.findIndex(line => /^## Ledger\b/.test(line));
+  const ledgerHeadingIndex = lines.findIndex(line => /^##\s+(Ledger|원장)\b/.test(line));
   const headerIndex = ledgerHeadingIndex < 0
     ? -1
     : lines.findIndex((line, index) => index > ledgerHeadingIndex && /^\|\s*Date\s*\|/.test(line));
