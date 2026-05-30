@@ -13,17 +13,6 @@
 - `validate/`: quality gate와 config validation입니다.
 - `common/`: shared runtime config, artifact paths, scope helpers입니다.
 
-## Common Helper Modules (PR 5~6 신규)
-
-PR 5/6에서 중복 제거 목적으로 추가된 순수 helper 모듈 4종입니다.
-
-| 모듈 | 부작용 | 제공 함수 |
-| --- | --- | --- |
-| `common/json.js` | filesystem read (side-effect 있음) | `readJsonIfExists` |
-| `common/text.js` | pure | `stripHtml`, `truncateText` |
-| `common/markdown.js` | pure | `sanitizeMarkdownTableCell`, `sanitizeMarkdownLinkUrl`, `markdownTableCell`, `trustedMarkdownTableCell`, `renderMarkdownTable` |
-| `common/status-format.js` | pure | `formatReasonSummary` |
-
 ## Implementation Rules
 
 - CommonJS `require`, 2칸 들여쓰기, 세미콜론, Node 20 compatibility를 유지합니다.
