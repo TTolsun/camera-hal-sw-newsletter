@@ -1,7 +1,31 @@
-const crypto = require('crypto');
 const {
   normalizeShortlistReport
 } = require('./selection-diagnostics');
+const {
+  SHORTLIST_CAP,
+  RESERVE_MIN_CANDIDATES,
+  RESERVE_MAX_CANDIDATES,
+  MIN_FINAL_ARTICLES,
+  MAX_FINAL_ARTICLES,
+  ABSOLUTE_MIN_REVIEWABLE_ARTICLES,
+  MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES,
+  DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS,
+  MAIN_ARTICLE_SCORE_THRESHOLD,
+  MIN_CAMERA_HAL_DIRECTNESS,
+  MIN_SCOPE_RELEVANCE,
+  LINKED_EVIDENCE_RUNTIME_BONUS,
+  LINKED_EVIDENCE_WATCH_PENALTY,
+  COMPOSITION_MODES
+} = require('./selection-policy-constants');
+const {
+  normalizeUrl,
+  normalizedUrlHash,
+  normalizeTitle,
+  titleSimilarity
+} = require('./selection-normalizers');
+const {
+  reliabilityScore
+} = require('./selection-scoring');
 const {
   BUCKETS,
   classifyAospCameraStackCandidate,
@@ -44,30 +68,7 @@ const {
   publishGateCriteriaText
 } = require('../common/newsletter-policy');
 
-const SHORTLIST_CAP = 12;
-const RESERVE_MIN_CANDIDATES = 4;
-const RESERVE_MAX_CANDIDATES = 7;
-// Legacy compatibility exports only. New selection code should prefer articlePolicy.
-const MIN_FINAL_ARTICLES = articlePolicy.mainArticleCount.min;
-const MAX_FINAL_ARTICLES = articlePolicy.mainArticleCount.max;
-const ABSOLUTE_MIN_REVIEWABLE_ARTICLES = articlePolicy.primaryCameraStack.minRequired;
 const publishReadyCompositionPolicy = getPublishReadyCompositionPolicy();
-const MIN_NON_FALLBACK_PUBLISH_READY_ARTICLES = publishReadyCompositionPolicy.primaryCameraStackMinRequired;
-const DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS = Object.freeze([
-  BUCKETS.DIRECT_AOSP_CAMERA,
-  BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE
-]);
-const MAIN_ARTICLE_SCORE_THRESHOLD = 42;
-const MIN_CAMERA_HAL_DIRECTNESS = 2;
-const MIN_SCOPE_RELEVANCE = 2;
-const LINKED_EVIDENCE_RUNTIME_BONUS = 2;
-const LINKED_EVIDENCE_WATCH_PENALTY = 8;
-const COMPOSITION_MODES = Object.freeze({
-  NORMAL: 'NORMAL',
-  FALLBACK_COMPOSITION: 'FALLBACK_COMPOSITION',
-  THIN_WEEK_REVIEW: 'THIN_WEEK_REVIEW',
-  NEEDS_FIX: 'NEEDS_FIX'
-});
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
@@ -104,47 +105,6 @@ function clamp(value, min, max) {
 function rounded(value, digits = 2) {
   const scale = 10 ** digits;
   return Math.round(value * scale) / scale;
-}
-
-function normalizeUrl(value) {
-  const raw = text(value);
-  if (!raw) return '';
-  try {
-    const parsed = new URL(raw);
-    const hash = parsed.hash;
-    const preserveHash = parsed.hostname.toLowerCase() === 'developer.android.com' &&
-      ['/jetpack/androidx/releases/camera', '/jetpack/androidx/releases/media3'].includes(parsed.pathname) &&
-      /^#(?:(?:camera-[a-z0-9-]+|media3)-)?\d+\.\d+\.\d+(?:[-\w.]*)?$/i.test(hash);
-    if (!preserveHash) parsed.hash = '';
-    parsed.search = '';
-    parsed.hostname = parsed.hostname.toLowerCase();
-    return parsed.toString().replace(/\/$/, '').toLowerCase();
-  } catch {
-    return raw.replace(/[?#].*$/, '').replace(/\/$/, '').toLowerCase();
-  }
-}
-
-function normalizedUrlHash(value) {
-  return crypto.createHash('sha256').update(normalizeUrl(value)).digest('hex');
-}
-
-function normalizeTitle(value) {
-  return text(value)
-    .toLowerCase()
-    .normalize('NFC')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/&[#a-z0-9]+;/g, ' ')
-    .replace(/[^a-z0-9가-힣]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function titleSimilarity(a, b) {
-  const left = new Set(normalizeTitle(a).split(' ').filter(Boolean));
-  const right = new Set(normalizeTitle(b).split(' ').filter(Boolean));
-  if (left.size === 0 || right.size === 0) return 0;
-  const overlap = [...left].filter(token => right.has(token)).length;
-  return overlap / Math.max(left.size, right.size);
 }
 
 function publishedDate(candidate) {
@@ -256,15 +216,6 @@ function exclusionReasons(candidate) {
   const extractionViolation = cameraReleaseExtractionViolation(candidate);
   if (extractionViolation) reasons.push(extractionViolation);
   return [...new Set(reasons)];
-}
-
-function reliabilityScore(candidate) {
-  const reliability = text(candidate.reliability || candidate.source_reliability).toLowerCase();
-  if (reliability === 'official') return 5;
-  if (['project-official', 'official-community'].includes(reliability)) return 4;
-  if (['expert-media', 'community-doc'].includes(reliability)) return 2;
-  if (['community', 'newsletter'].includes(reliability)) return 1;
-  return 0;
 }
 
 function freshnessScore(candidate, newsletterDate) {
