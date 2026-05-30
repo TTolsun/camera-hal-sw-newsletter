@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-30",
+  "generated_at": "2026-05-30T02:31:47.835Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 10,
+    "hit_count": 1,
+    "miss_count": 9,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 1,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 8
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 1
+    },
+    {
+      "reason": "content-hash-hit",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "Re: [PATCH v2] media: bcm2835-unicam: Fix log status runtime access - Eugen Hristev",
+      "url": "https://lore.kernel.org/linux-media/5b63761b-07dd-4786-bc98-d8a1c48a2ef4@kernel.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-05-29",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/5b63761b-07dd-4786-bc98-d8a1c48a2ef4@kernel.org",
+        "url_hash": "739ee3e94bae2610b7810a981c6f8581f02d180d6015bf8fd16a1d40bd3ad24a",
+        "published_date": "2026-05-29",
+        "content_hash": "fd8b9bcec96e7a6252f9ca11988f7d983e92146bd3f9d51050856a031bfad18e"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/6] Add CAMSS support for Qualcomm Glymur - Vikram Sharma",
+      "url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-05-29",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com",
+        "url_hash": "dea6feb0afaee3134efcb59b5641e7fffb7d4df71b039ad9fdb10b550661918f",
+        "published_date": "2026-05-29",
+        "content_hash": "51e27758c623fef46224833d21d818ee06e8e025a28d7dc8771314ea055a6024"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss - Vikram Sharma",
+      "url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-05-29",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com",
+        "url_hash": "5c9ee1f8dcfa44fb7c69c5078e76c6f5d9752a7561432b9e6d67b60587df2c68",
+        "published_date": "2026-05-29",
+        "content_hash": "03fddf7ba88db1829a87b119a3090f3884eef0a9cd14e7457474135c72aed1e9"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible - Vikram Sharma",
+      "url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-2-bee535396d22@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-05-29",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-2-bee535396d22@oss.qualcomm.com",
+        "url_hash": "d2ccace770c7c8e44233ec719aa39a404b96b4ede09f9569c1380d8be84f703a",
+        "published_date": "2026-05-29",
+        "content_hash": "09303ace3d479f263cafda2e2b03e46dd5d95efb1adddd1c701de91275627d96"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v7] media: iris: drop struct iris_fmt - Dmitry Baryshkov",
+      "url": "https://lore.kernel.org/linux-media/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-05-29",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com",
+        "url_hash": "e5d3610b93608370139fc37e823ce6a802a86596ee8ffaadbdc71b7c06decc4a",
+        "published_date": "2026-05-29",
+        "content_hash": "6f0c5cfd94589f3ab7ac55d0b4cfd6a52df2802a11b8ea2a6e716db36500ffd7"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH 3/8] media: qcom: camss: add support for QCM2390 camss - Vikram Sharma",
+      "url": "https://lore.kernel.org/linux-media/21c17cac-2a1e-4b19-ab6d-ddca9132d725@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-05-29",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/21c17cac-2a1e-4b19-ab6d-ddca9132d725@oss.qualcomm.com",
+        "url_hash": "402c15ef415c19f6e65cf274ccd512730a2e8e838c6f84311b10c78dd1064b79",
+        "published_date": "2026-05-29",
+        "content_hash": "63fbbd45c77d9b568a196ed12bf94c1f6cc72297a340f5dd289eac72270c0904"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH v3] media: add virtio-media driver - Brian Daniels",
+      "url": "https://lore.kernel.org/linux-media/20260529160314.1224731-1-briandaniels@google.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-05-29",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260529160314.1224731-1-briandaniels@google.com",
+        "url_hash": "9720219f1bac19b52b64fa6dce5cd6d1fe8b96eb250c17d9b20322b6482231a8",
+        "published_date": "2026-05-29",
+        "content_hash": "cf921eb645d6444b66d1fbe25004977b8771b0aa84a28ee8eaaac933464287fa"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong",
+      "url": "https://lore.kernel.org/linux-media/0fb85345-ea8c-4294-bf4b-220617c9f089@linaro.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-05-29",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/0fb85345-ea8c-4294-bf4b-220617c9f089@linaro.org",
+        "url_hash": "1a2c24e82d6f8d37416f8fb86a08ea8e35cf9eb299ce2c2aa021203aaa11a713",
+        "published_date": "2026-05-29",
+        "content_hash": "aac6205508551714a1b01446cdc8366d1be2a4016ffb1dc0b914d454cb92827a"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "url": "https://goo.gle/AdaptiveApps_IO26",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 19 May 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://goo.gle/adaptiveapps_io26",
+        "url_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
+        "published_date": "Tue, 19 May 2026 13:00:00 +0000",
+        "content_hash": "07001fcff71ad48b61928d083d411a101099d62d0206dd9fd8c8b91c307b80b0"
+      },
+      "hit": true,
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/07001fcff71ad48b61928d083d411a101099d62d0206dd9fd8c8b91c307b80b0.json"
+    },
+    {
+      "title": "Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 19 May 2026 12:45:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "url_hash": "fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc",
+        "published_date": "Tue, 19 May 2026 12:45:00 +0000",
+        "content_hash": "da4ad6a4cf681f0895f77dfefda4bfb4f93ffc3bb3c6dfd4d22eed96b312948f"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}
