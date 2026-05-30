@@ -96,7 +96,7 @@ NEWSROOM_LINKED_EVIDENCE_MAX_BYTES=200000
 - 응답당 최대 bytes.
 - 기사당 최대 링크 수.
 - 실행당 최대 링크 수 합계.
-- `extract_only`는 링크를 보존하고 분류하되 네트워크 컨텐츠를 가져오지 않습니다.
+- `extract_only`는 링크를 보존하고 분류하되 네트워크 콘텐츠를 가져오지 않습니다.
 - `resolve_allowed_official_links`는 source policy가 허용하는 `primary_evidence` 링크만 가져올 수 있습니다.
 - `offline_fixture_test`는 주입된 fixture fetch client를 통해서만 resolve할 수 있습니다.
 - `noise`, `unsupported`, `blocked_or_deferred`, `secondary_context`, `http`, 비-URL 링크는 절대 가져오지 않습니다.

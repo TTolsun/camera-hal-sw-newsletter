@@ -7,6 +7,9 @@ const path = require('node:path');
 const test = require('node:test');
 
 const {
+  LEDGER_PATH: AUDIT_LEDGER_PATH
+} = require('../../scripts/newsroom/common/audit-paths');
+const {
   buildNewsroomPrBody,
   renderCandidateTraceability
 } = require('../../scripts/build-newsroom-pr-body');
@@ -95,7 +98,7 @@ function writeText(filePath, value) {
 
 function writeArchiveSyncSurface(root) {
   writeJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'), []);
-  writeText(path.join(root, 'content', 'audit', 'newsletter-provenance-ledger.md'), [
+  writeText(path.join(root, AUDIT_LEDGER_PATH), [
     '# Historical Newsletter Provenance Ledger',
     '',
     '## Ledger',

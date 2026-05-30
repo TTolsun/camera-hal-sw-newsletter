@@ -40,6 +40,39 @@ function loadAllowlist() {
   }
 }
 
+// --- export/require 파싱 정규식 ---
+// 각 패턴이 인식하는 형태와 인식하지 못하는 형태를 명시한다.
+
+// 인식: module.exports = { NAME, key: value, ... }
+// 미인식: 여러 줄에 걸쳐 중첩 객체가 있는 경우, 동적 키
+const PATTERN_EXPORTS_OBJECT = /module\.exports\s*=\s*\{([^}]+)\}/gs;
+const PATTERN_EXPORTS_OBJECT_SHORTHAND = /^\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s*[,\n}]/gm;
+const PATTERN_EXPORTS_OBJECT_KEYVAL = /([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g;
+
+// 인식: module.exports.NAME = ...
+// 미인식: Object.assign(module.exports, ...), module.exports[동적키] = ...
+const PATTERN_EXPORTS_DOTPROP = /module\.exports\.([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=/g;
+
+// 인식: exports.NAME = ...
+// 미인식: exports[동적키] = ...
+const PATTERN_EXPORTS_NAMED = /\bexports\.([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=/g;
+
+// 비표준 export 형태 — 위 패턴이 포착하지 못하는 형태를 검출해 unparseable로 보고
+// 인식: Object.assign(module.exports, ...), module.exports[...] = ...
+const PATTERN_UNPARSEABLE_EXPORTS = [
+  /Object\.assign\s*\(\s*module\.exports\s*,/,
+  /module\.exports\s*\[/,
+];
+
+// 인식: require('path') 또는 require("path") — 정적 문자열
+// 미인식: require(변수), require(`template`), dynamic import()
+const PATTERN_REQUIRE = /require\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
+
+// 동적 require 형태 — 위 패턴이 포착하지 못하는 형태를 검출해 unparseable로 보고
+const PATTERN_UNPARSEABLE_REQUIRE = [
+  /require\s*\(\s*[^'"]/,
+];
+
 // 디렉터리를 재귀 순회하여 .js 파일 경로 목록 반환
 function collectJsFiles(dir) {
   const results = [];
@@ -64,36 +97,40 @@ function toRepoRelative(absPath) {
 function extractExports(source) {
   const names = new Set();
 
-  // module.exports = { NAME, ... }
-  const objectPattern = /module\.exports\s*=\s*\{([^}]+)\}/gs;
-  for (const match of source.matchAll(objectPattern)) {
+  for (const match of source.matchAll(PATTERN_EXPORTS_OBJECT)) {
     const block = match[1];
-    for (const nameMatch of block.matchAll(/^\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s*[,\n}]/gm)) {
+    for (const nameMatch of block.matchAll(PATTERN_EXPORTS_OBJECT_SHORTHAND)) {
       names.add(nameMatch[1]);
     }
-    // key: value 형식
-    for (const nameMatch of block.matchAll(/([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g)) {
+    for (const nameMatch of block.matchAll(PATTERN_EXPORTS_OBJECT_KEYVAL)) {
       names.add(nameMatch[1]);
     }
   }
 
-  // module.exports.NAME = ...
-  for (const match of source.matchAll(/module\.exports\.([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=/g)) {
+  for (const match of source.matchAll(PATTERN_EXPORTS_DOTPROP)) {
     names.add(match[1]);
   }
 
-  // exports.NAME = ...
-  for (const match of source.matchAll(/\bexports\.([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=/g)) {
+  for (const match of source.matchAll(PATTERN_EXPORTS_NAMED)) {
     names.add(match[1]);
   }
 
   return [...names];
 }
 
+// 비표준 export/require 형태가 있으면 true 반환 (unparseable 표시용)
+function hasUnparseableExports(source) {
+  return PATTERN_UNPARSEABLE_EXPORTS.some(pattern => pattern.test(source));
+}
+
+function hasUnparseableRequire(source) {
+  return PATTERN_UNPARSEABLE_REQUIRE.some(pattern => pattern.test(source));
+}
+
 // require() 경로 추출 — 상대경로 및 절대경로 모두
 function extractRequirePaths(source) {
   const paths = [];
-  for (const match of source.matchAll(/require\s*\(\s*['"]([^'"]+)['"]\s*\)/g)) {
+  for (const match of source.matchAll(PATTERN_REQUIRE)) {
     paths.push(match[1]);
   }
   return paths;
@@ -282,7 +319,21 @@ function main() {
     }
   }
 
-  // ---- 7. 출력 ----
+  // ---- 7. unparseable 파일 탐지 ----
+  // 비표준 export/require 패턴을 가진 파일은 분석이 불완전할 수 있어 별도 표시한다.
+  const unparseableFiles = [];
+  for (const filePath of newsroomFiles) {
+    const relPath = toRepoRelative(filePath);
+    const source = sourceCache[filePath] || '';
+    const reasons = [];
+    if (hasUnparseableExports(source)) reasons.push('non-standard export (Object.assign / dynamic key)');
+    if (hasUnparseableRequire(source)) reasons.push('dynamic require');
+    if (reasons.length > 0) {
+      unparseableFiles.push({ file: relPath, reasons });
+    }
+  }
+
+  // ---- 8. 출력 ----
   if (showJson) {
     const result = {
       deadExports,
@@ -293,6 +344,7 @@ function main() {
       })),
       shimCallerless,
       shimSuppressed,
+      unparseableFiles,
     };
     process.stdout.write(JSON.stringify(result, null, 2) + '\n');
     process.exit(0);
@@ -370,6 +422,23 @@ function main() {
     lines.push('');
   }
 
+  // --- 섹션 4: Unparseable files ---
+  lines.push('## 4. Unparseable Files (비표준 export/require)');
+  lines.push('');
+  lines.push('정규식 기반 파싱으로 인식하지 못하는 export/require 형태가 있는 파일입니다. dead export 분석이 불완전할 수 있습니다.');
+  lines.push('');
+
+  if (unparseableFiles.length === 0) {
+    lines.push('_(없음)_');
+  } else {
+    lines.push('| File | 이유 |');
+    lines.push('| --- | --- |');
+    for (const item of unparseableFiles) {
+      lines.push(`| \`${item.file}\` | ${item.reasons.join('; ')} |`);
+    }
+  }
+  lines.push('');
+
   // --- 요약 ---
   lines.push('---');
   lines.push('');
@@ -378,6 +447,7 @@ function main() {
   lines.push(`- dead exports: ${deadExports.length}`);
   lines.push(`- signature duplicates: ${signatureClusters.length} clusters`);
   lines.push(`- shim caller-less: ${shimCallerless.length} (suppressed: ${shimSuppressed.length})`);
+  lines.push(`- unparseable files: ${unparseableFiles.length}`);
   lines.push('');
 
   process.stdout.write(lines.join('\n') + '\n');

@@ -11,6 +11,11 @@ const {
   validateHistoricalArchive
 } = require('../../scripts/newsroom/validate/historical-archive');
 const {
+  CLEANUP_REPORT_PATH: AUDIT_CLEANUP_REPORT_PATH,
+  INVENTORY_PATH: AUDIT_INVENTORY_PATH,
+  LEDGER_PATH: AUDIT_LEDGER_PATH
+} = require('../../scripts/newsroom/common/audit-paths');
+const {
   readJson,
   tempRoot,
   writeJson,
@@ -58,19 +63,19 @@ function writeArchiveDocs(root, datesOrOptions) {
     inventoryDates = [],
     cleanupDates = []
   } = options || {};
-  writeText(path.join(root, 'content', 'audit', 'newsletter-provenance-ledger.md'), [
+  writeText(path.join(root, AUDIT_LEDGER_PATH), [
     '# Historical Newsletter Provenance Ledger',
     '',
     tableRows(ledgerDates),
     ''
   ].join('\n'));
-  writeText(path.join(root, 'content', 'audit', 'newsletter-quality-inventory.md'), [
+  writeText(path.join(root, AUDIT_INVENTORY_PATH), [
     '# Existing Newsletter Quality Inventory',
     '',
     tableRows(inventoryDates),
     ''
   ].join('\n'));
-  writeText(path.join(root, 'content', 'audit', 'newsletter-quality-cleanup-report.md'), [
+  writeText(path.join(root, AUDIT_CLEANUP_REPORT_PATH), [
     '# Existing Newsletter Quality Cleanup Report',
     '',
     tableRows(cleanupDates),
