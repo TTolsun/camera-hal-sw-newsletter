@@ -95,7 +95,7 @@ function writeText(filePath, value) {
 
 function writeArchiveSyncSurface(root) {
   writeJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'), []);
-  writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), [
+  writeText(path.join(root, 'content', 'audit', 'newsletter-provenance-ledger.md'), [
     '# Historical Newsletter Provenance Ledger',
     '',
     '## Ledger',

@@ -937,7 +937,7 @@ function pruneRewriteDiffsForKeptDates(root, finalDates, deletedPaths) {
 }
 
 function updateLedger(root, removedDates) {
-  const ledgerPath = path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md');
+  const ledgerPath = path.join(root, 'content', 'audit', 'newsletter-provenance-ledger.md');
   if (!fs.existsSync(ledgerPath)) return;
   const removed = new Set(removedDates);
   const lines = fs.readFileSync(ledgerPath, 'utf8').split(/\r?\n/);
@@ -951,7 +951,7 @@ function updateLedger(root, removedDates) {
 }
 
 function updateInventory(root, removedDates) {
-  const inventoryPath = path.join(root, 'docs', 'editorial', 'existing-newsletter-quality-inventory.md');
+  const inventoryPath = path.join(root, 'content', 'audit', 'newsletter-quality-inventory.md');
   if (!fs.existsSync(inventoryPath)) return;
   const removed = new Set(removedDates);
   const lines = fs.readFileSync(inventoryPath, 'utf8').split(/\r?\n/);

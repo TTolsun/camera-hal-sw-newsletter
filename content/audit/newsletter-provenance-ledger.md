@@ -11,7 +11,7 @@
 - Material rewrite는 `content/audit/historical-rewrite-diff/<date>-<slug>.md`를 필요로 합니다.
 - `removed` entry는 `data/newsletters.json`에 남기지 않습니다.
 
-## 원장
+## Ledger
 
 | Date | Original generation mode | Known quality issues | Rewrite allowed | Rewrite status | Archive status | Public visibility | Cleanup context |
 | --- | --- | --- | --- | --- | --- | --- | --- |

@@ -58,19 +58,19 @@ function writeArchiveDocs(root, datesOrOptions) {
     inventoryDates = [],
     cleanupDates = []
   } = options || {};
-  writeText(path.join(root, 'docs', 'editorial', 'historical-newsletter-provenance-ledger.md'), [
+  writeText(path.join(root, 'content', 'audit', 'newsletter-provenance-ledger.md'), [
     '# Historical Newsletter Provenance Ledger',
     '',
     tableRows(ledgerDates),
     ''
   ].join('\n'));
-  writeText(path.join(root, 'docs', 'editorial', 'existing-newsletter-quality-inventory.md'), [
+  writeText(path.join(root, 'content', 'audit', 'newsletter-quality-inventory.md'), [
     '# Existing Newsletter Quality Inventory',
     '',
     tableRows(inventoryDates),
     ''
   ].join('\n'));
-  writeText(path.join(root, 'docs', 'editorial', 'existing-newsletter-quality-cleanup-report.md'), [
+  writeText(path.join(root, 'content', 'audit', 'newsletter-quality-cleanup-report.md'), [
     '# Existing Newsletter Quality Cleanup Report',
     '',
     tableRows(cleanupDates),
@@ -188,7 +188,7 @@ test('historical archive validator requires sidecar entries to be referenced by 
 
   const result = validateHistoricalArchive({ root });
   assert.equal(result.ok, false);
-  assert.match(result.errors.join('\n'), /historical-newsletter-provenance-ledger\.md/);
+  assert.match(result.errors.join('\n'), /newsletter-provenance-ledger\.md/);
 
   const audit = auditHistoricalArchive({ root, writeReports: false });
   assert.equal(audit.ok, false);
@@ -271,7 +271,7 @@ test('historical archive validator requires non-stable sidecar entries in the cl
 
   const result = validateHistoricalArchive({ root });
   assert.equal(result.ok, false);
-  assert.match(result.errors.join('\n'), /existing-newsletter-quality-cleanup-report\.md/);
+  assert.match(result.errors.join('\n'), /newsletter-quality-cleanup-report\.md/);
 });
 
 test('historical archive validator rejects removed archives exposed through public index', () => {
