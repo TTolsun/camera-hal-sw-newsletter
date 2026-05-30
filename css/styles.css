@@ -167,7 +167,7 @@ pre code {
 }
 
 .homepage .site-main {
-  padding: 0 0 56px;
+  padding: 0 0 28px;
 }
 
 .homepage .site-footer {
@@ -275,7 +275,7 @@ pre code {
 }
 
 .homepage-nav-links a {
-  font-size: 0.92rem;
+  font-size: 1.15rem;
   font-weight: 760;
 }
 
@@ -2553,5 +2553,21 @@ pre code {
 
   .headline-body {
     padding: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .button:hover,
+  .card:hover,
+  .archive-card:hover {
+    transform: none;
   }
 }
