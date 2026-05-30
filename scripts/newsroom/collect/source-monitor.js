@@ -28,7 +28,10 @@ const SNAPSHOT_SCHEMA_VERSION = 1;
 const PROCESSED_ID_LIMIT = 500;
 // collect-news-candidates.js 와 공유하는 값 — 순환 참조 방지를 위해 로컬 복사.
 const CANDIDATE_SCHEMA_VERSION = 6;
+// page_removed 는 콘텐츠 자체가 사라진 변경이라 content_changed=true 로 두지만,
+// candidateAllowed 산정에서는 별도로 차단된다(URL 안정성 결여).
 const NON_CONTENT_CHANGE_EVENT_TYPES = new Set(['no_meaningful_change', 'metadata_only_changed']);
+const CANDIDATE_BLOCKED_EVENT_TYPES = new Set(['page_removed']);
 const SOURCE_MONITOR_REGISTRY_REL_PATH = 'data/source-monitor-registry.json';
 const SOURCE_SNAPSHOT_ROOT = path.join('data', 'source-snapshots');
 const SOURCE_EVENTS_ROOT = path.join('content', 'source-events');
@@ -528,7 +531,8 @@ function buildEvent({ source, previous, current, eventType, dateSource, effectiv
   });
   const date_confidence = dateSourceConfidence(dateSource);
   const candidateAllowed = !duplicate &&
-    !NON_CONTENT_CHANGE_EVENT_TYPES.has(eventType) && eventType !== 'page_removed';
+    !NON_CONTENT_CHANGE_EVENT_TYPES.has(eventType) &&
+    !CANDIDATE_BLOCKED_EVENT_TYPES.has(eventType);
   const mainArticleAllowed = candidateAllowed &&
     source.main_article_allowed === true &&
     eventType !== 'page_added' &&
@@ -1064,6 +1068,7 @@ async function runSourceMonitor(options = {}) {
 
 module.exports = {
   CANDIDATE_SCHEMA_VERSION,
+  CANDIDATE_BLOCKED_EVENT_TYPES,
   NON_CONTENT_CHANGE_EVENT_TYPES,
   PROCESSED_ID_LIMIT,
   SNAPSHOT_SCHEMA_VERSION,
