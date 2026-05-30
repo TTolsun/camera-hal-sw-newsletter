@@ -19,10 +19,15 @@ const {
 } = require('../../scripts/newsroom/render/newsletter-schema');
 
 function promptHostSource() {
-  return fs.readFileSync(
+  const host = fs.readFileSync(
     path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
     'utf8'
   );
+  const prompts = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'newsletter-prompts.js'),
+    'utf8'
+  );
+  return `${host}\n${prompts}`;
 }
 
 function assertStagePromptUsesFactCheckHelpers(source, stageAnchor) {
