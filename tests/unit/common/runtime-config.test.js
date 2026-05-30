@@ -15,7 +15,7 @@ const {
   parseIntegerList,
   parseNumber,
   normalizeLlmProvider
-} = require('../../../scripts/lib/runtime-config');
+} = require('../../../scripts/newsroom/common/runtime-config');
 const {
   configuredModels,
   configuredModelsForStage,

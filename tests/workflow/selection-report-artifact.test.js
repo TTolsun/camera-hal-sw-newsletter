@@ -10,7 +10,7 @@ const {
   writeNewsletterDate,
   writeSelectionDiagnosticsArtifact
 } = require('../../scripts/newsroom/cli/gemini-newsroom-newsletter');
-const { articlePolicy } = require('../../scripts/lib/newsletter-policy');
+const { articlePolicy } = require('../../scripts/newsroom/common/newsletter-policy');
 const {
   readJson,
   tempRoot

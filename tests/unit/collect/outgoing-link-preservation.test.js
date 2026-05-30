@@ -6,7 +6,7 @@ const {
   parseHtmlPage,
   parseRss
 } = require('../../../scripts/newsroom/cli/collect-news-candidates');
-const { parseSourceSpecificItems } = require('../../../scripts/lib/source-item-parsers');
+const { parseSourceSpecificItems } = require('../../../scripts/newsroom/collect/source-item-parsers');
 const {
   DEFAULT_EVIDENCE_ROLE,
   extractOutgoingLinksFromHtml

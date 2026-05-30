@@ -6,7 +6,7 @@ const {
   buildQualityReportMarkdown,
   determineQualityStatus,
   sectionPassesArticleGate
-} = require('../../scripts/lib/newsletter-quality');
+} = require('../../scripts/newsroom/validate/newsletter-quality');
 const {
   reporterCandidate,
   reporterCandidatesFor,
@@ -20,7 +20,7 @@ const {
   articlePolicy,
   articleCountRangeText,
   qualityGatePolicy
-} = require('../../scripts/lib/newsletter-policy');
+} = require('../../scripts/newsroom/common/newsletter-policy');
 
 function seedEvidencePack(packs = []) {
   return {

@@ -4,6 +4,9 @@ const path = require('path');
 const {
   qualityGatePolicy
 } = require('./newsletter-policy');
+const {
+  readJsonIfExists
+} = require('./json');
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const COMPOSITION_MODE_NEEDS_FIX = 'NEEDS_FIX';
@@ -33,21 +36,6 @@ function ensureArray(value) {
 
 function hasOwn(value, key) {
   return Object.prototype.hasOwnProperty.call(value || {}, key);
-}
-
-function readJsonIfExists(filePath) {
-  if (!fs.existsSync(filePath)) {
-    return { exists: false, value: null, error: null };
-  }
-  try {
-    return {
-      exists: true,
-      value: JSON.parse(fs.readFileSync(filePath, 'utf8')),
-      error: null
-    };
-  } catch (error) {
-    return { exists: true, value: null, error };
-  }
 }
 
 function numberOrNull(...values) {
@@ -388,7 +376,11 @@ module.exports = {
   DEFAULT_STATUS,
   booleanOrNull,
   ensureArray,
+  factCheckSummary,
+  qualitySummary,
   readPublishStatusInputs,
   resolveDate,
-  resolvePublishStatus
+  resolvePublishStatus,
+  selectionSummary,
+  staleClaimSummary
 };

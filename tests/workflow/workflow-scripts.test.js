@@ -34,7 +34,7 @@ const {
   selectionWindowPolicy,
   publishGateCriteriaText,
   validateNewsletterPolicyConfig
-} = require('../../scripts/lib/newsletter-policy');
+} = require('../../scripts/newsroom/common/newsletter-policy');
 const {
   resolvePublishStatus
 } = require('../../scripts/newsroom/common/publish-status');

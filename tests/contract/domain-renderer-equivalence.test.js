@@ -10,7 +10,7 @@ const {
 } = require('../../scripts/newsroom/domain/newsletter-domain-normalize');
 const {
   buildNewsletterQualityReport
-} = require('../../scripts/lib/newsletter-quality');
+} = require('../../scripts/newsroom/validate/newsletter-quality');
 
 function legacyIssue() {
   return {

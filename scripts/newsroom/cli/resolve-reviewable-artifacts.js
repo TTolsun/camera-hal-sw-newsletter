@@ -6,6 +6,9 @@ const {
   kstDate
 } = require('../common/common');
 const {
+  readJsonIfExists
+} = require('../common/json');
+const {
   readStatus,
   renderGithubOutputs
 } = require('./write-generation-status-output');
@@ -92,21 +95,6 @@ function readTextResult(filePath) {
     return { exists: true, text: fs.readFileSync(filePath, 'utf8'), error: null };
   } catch (error) {
     return { exists: true, text: '', error };
-  }
-}
-
-function readJsonIfExists(filePath) {
-  if (!fs.existsSync(filePath)) {
-    return { exists: false, value: null, error: null };
-  }
-  try {
-    return {
-      exists: true,
-      value: JSON.parse(fs.readFileSync(filePath, 'utf8')),
-      error: null
-    };
-  } catch (error) {
-    return { exists: true, value: null, error };
   }
 }
 

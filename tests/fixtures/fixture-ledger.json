@@ -72,7 +72,7 @@
       "source": "minimized-generated-regression",
       "allowedUse": "bad",
       "expectedStatus": "DEMOTE",
-      "protectedPolicy": "generic IT item cannot pass as Camera HAL main article",
+      "protectedPolicy": "FreeBSD camera workflow regression coverage — source-label generation rule: generic IT item without Camera HAL connection cannot pass as main article",
       "generatedArtifact": true,
       "relatedRules": [
         "quality_gate",
