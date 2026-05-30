@@ -44,4 +44,13 @@
 | blocked_candidate | 0.53 | [PATCH v7] media: iris: drop struct iris_fmt | https://lore.kernel.org/linux-media/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com/ |
 | blocked_candidate | 0.492 | Android Developers Blog: Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html |
 | blocked_candidate | 0.492 | Android Developers Blog: Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today |
+| review_candidate | 0.72 | [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss - Vikram Sharma | https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/ |
+| review_candidate | 0.72 | [PATCH 0/6] Add CAMSS support for Qualcomm Glymur - Vikram Sharma | https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/ |
+| review_candidate | 0.72 | Re: [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss - Bryan O&#39;Donoghue | https://lore.kernel.org/linux-media/8618255e-ecbf-4f55-877d-09cb2faa6f50@linaro.org/ |
+| review_candidate | 0.72 | [PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible - Vikram Sharma | https://lore.kernel.org/linux-media/20260529-glymur_camss-v1-2-bee535396d22@oss.qualcomm.com/ |
+| strong_candidate | 0.81 | Re: [PATCH v3] media: add virtio-media driver - Brian Daniels | https://lore.kernel.org/linux-media/20260529160314.1224731-1-briandaniels@google.com/ |
+| review_candidate | 0.72 | Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong | https://lore.kernel.org/linux-media/0fb85345-ea8c-4294-bf4b-220617c9f089@linaro.org/ |
+| review_candidate | 0.72 | [PATCH v7] media: iris: drop struct iris_fmt - Dmitry Baryshkov | https://lore.kernel.org/linux-media/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com/ |
+| review_candidate | 0.72 | Re: [PATCH 3/8] media: qcom: camss: add support for QCM2390 camss - Vikram Sharma | https://lore.kernel.org/linux-media/21c17cac-2a1e-4b19-ab6d-ddca9132d725@oss.qualcomm.com/ |
+| review_candidate | 0.72 | Re: [PATCH v2] media: bcm2835-unicam: Fix log status runtime access - Eugen Hristev | https://lore.kernel.org/linux-media/5b63761b-07dd-4786-bc98-d8a1c48a2ef4@kernel.org/ |
 
