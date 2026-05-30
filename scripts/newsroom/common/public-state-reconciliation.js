@@ -62,12 +62,18 @@ const DIAGNOSTICS_STATUSES = new Set([
 const LEDGER_HEADING_TRANSLATIONS = Object.freeze(['Ledger', '원장']);
 
 function ledgerHeadingPattern(translations = LEDGER_HEADING_TRANSLATIONS) {
-  const alternatives = translations
+  const usedDefault = translations === LEDGER_HEADING_TRANSLATIONS;
+  const inputLength = Array.isArray(translations) ? translations.length : 0;
+  const alternatives = (Array.isArray(translations) ? translations : [])
     .filter(text => typeof text === 'string' && text.trim().length > 0)
     .map(text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
   // translations가 비어있으면 broad fallback 대신 즉시 실패 — 조용한 오매칭 방지
   if (alternatives.length === 0) {
-    throw new Error('LEDGER_HEADING_TRANSLATIONS must contain at least one non-empty string');
+    throw new Error(
+      `LEDGER_HEADING_TRANSLATIONS must contain at least one non-empty string ` +
+      `(received ${inputLength} entr${inputLength === 1 ? 'y' : 'ies'}, ` +
+      `using ${usedDefault ? 'default constant' : 'caller-supplied list'})`
+    );
   }
   return new RegExp(`^##\\s+(${alternatives.join('|')})\\b`);
 }

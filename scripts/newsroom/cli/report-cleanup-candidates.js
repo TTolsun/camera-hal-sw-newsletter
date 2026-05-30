@@ -121,6 +121,8 @@ function extractExports(source) {
 function findUnparseableReasons(text, patternTuples) {
   const reasons = [];
   for (const [pattern, reason] of patternTuples) {
+    // g/y 플래그 추가 시 stateful test 회귀 방지
+    pattern.lastIndex = 0;
     if (pattern.test(text)) reasons.push(reason);
   }
   return reasons;
