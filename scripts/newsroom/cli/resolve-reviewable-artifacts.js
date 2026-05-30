@@ -17,6 +17,7 @@ const {
 } = require('../common/public-structure');
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
+const STATUS_FAILED_RAW_ARTIFACT_VALIDATION = 'FAILED_RAW_ARTIFACT_VALIDATION';
 const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
 const FAILURE_KIND_CANDIDATE_SHORTAGE_REVIEWABLE = 'candidate_shortage_reviewable';
 
@@ -25,7 +26,8 @@ const REVIEWABLE_STATUSES = new Set([
   'NEEDS_FIX',
   'QUALITY_NEEDS_FIX',
   'UNDERFILLED_NEEDS_FIX',
-  STATUS_FAILED_REPAIR_REVIEWABLE
+  STATUS_FAILED_REPAIR_REVIEWABLE,
+  STATUS_FAILED_RAW_ARTIFACT_VALIDATION
 ]);
 
 const CANONICAL_REVIEW_ARTIFACTS = [
@@ -52,6 +54,11 @@ const REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS = [
   'hal-signal-quality-report.json',
   'hal-signal-quality-report.md',
   'repair-failure.json',
+  'generation-status.json'
+];
+
+// Raw artifact validation fails before any LLM step, so only generation-status is guaranteed.
+const REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS = [
   'generation-status.json'
 ];
 
@@ -234,6 +241,7 @@ function resolveReviewableArtifacts(options = {}) {
   const hasCanonicalDiagnostic = canonicalArtifacts.length > 0;
   const statusReviewable = REVIEWABLE_STATUSES.has(status.status);
   const failedRepairReviewable = status.status === STATUS_FAILED_REPAIR_REVIEWABLE;
+  const failedRawArtifactValidationReviewable = status.status === STATUS_FAILED_RAW_ARTIFACT_VALIDATION;
   const changedRequiredPublicArtifacts = requiredPublicArtifacts.filter(filePath => changedArtifacts.includes(filePath));
   const editorialArtifacts = artifactReadResults(root, date, REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS);
   const editorialGenerationStatus = editorialArtifacts['generation-status.json'];
@@ -297,14 +305,18 @@ function resolveReviewableArtifacts(options = {}) {
   }
   const missingRequired = failedRepairReviewable
     ? REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS.filter(file => !canonicalArtifacts.includes(file))
-    : [];
+    : failedRawArtifactValidationReviewable
+      ? REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS.filter(file => !canonicalArtifacts.includes(file))
+      : [];
   const hasRequiredCanonicalArtifacts = failedRepairReviewable
     ? missingRequired.length === 0
-    : candidateShortageRequested
-      ? candidateShortageRejectReasons.length === 0
-    : editorialReviewableRequested
-      ? editorialRejectReasons.length === 0
-      : hasCanonicalDiagnostic;
+    : failedRawArtifactValidationReviewable
+      ? missingRequired.length === 0
+      : candidateShortageRequested
+        ? candidateShortageRejectReasons.length === 0
+        : editorialReviewableRequested
+          ? editorialRejectReasons.length === 0
+          : hasCanonicalDiagnostic;
   let hasReviewableArtifacts =
     hasRequiredCanonicalArtifacts &&
     statusReviewable &&
@@ -404,8 +416,14 @@ function resolveReviewableArtifacts(options = {}) {
       ? `canonical=${canonicalArtifacts.join(',')}`
       : 'canonical=none',
     `changed=${changedArtifacts.length > 0 ? changedArtifacts.join(',') : 'none'}`,
-    failedRepairReviewable
+    (failedRepairReviewable || failedRawArtifactValidationReviewable)
       ? `missing_required=${missingRequired.length > 0 ? missingRequired.join(',') : 'none'}`
+      : '',
+    failedRawArtifactValidationReviewable
+      ? `raw_artifact_validation_error_field=${status.raw_artifact_validation_error?.field || 'unknown'}`
+      : '',
+    failedRawArtifactValidationReviewable
+      ? `raw_artifact_validation_error_value=${status.raw_artifact_validation_error?.value || ''}`
       : '',
     editorialReviewableRequested
       ? `editorial_reject=${editorialRejectReasons.length > 0 ? editorialRejectReasons.join(';') : 'none'}`
@@ -545,6 +563,7 @@ module.exports = {
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
+  REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS,
   REQUIRED_PUBLIC_NEWSLETTER_FILES,
   REVIEWABLE_STATUSES,
   buildReviewableArtifactOutputs,

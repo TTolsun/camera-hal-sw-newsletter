@@ -54,6 +54,7 @@ const {
   REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS,
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
+  REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS,
   requiredPublicFiles,
   resolveReviewableArtifacts
 } = require('../../scripts/resolve-reviewable-artifacts');
@@ -1167,6 +1168,32 @@ function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
   }
 
   return { status, editor, quality, factCheck, repairFailure, generationStatus };
+}
+
+function writeFailedRawArtifactValidationArtifacts(root, date, overrides = {}) {
+  const status = {
+    date,
+    status: 'FAILED_RAW_ARTIFACT_VALIDATION',
+    final_publish_ready: false,
+    publish_gate_passed: false,
+    raw_artifact_validation_error: {
+      field: 'merged_candidate_manifest',
+      value: 'content/newsroom/' + date + '/gemini-usage-report.json'
+    },
+    ...(overrides.status || {})
+  };
+  const generationStatus = {
+    ...status,
+    ...(overrides.generationStatus || {})
+  };
+
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  if (overrides.writeGenerationStatus !== false) {
+    writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), generationStatus);
+  }
+
+  return { status, generationStatus };
 }
 
 function candidateShortageSummary(overrides = {}) {
@@ -5503,6 +5530,64 @@ test('publish status resolver does not promote FAILED_REPAIR_REVIEWABLE with inv
   assert.equal(resolved.status.review_gate_passed, false);
   assert.equal(resolved.status.final_publish_ready, false);
   assert.match(resolved.status.consistency_errors.join('\n'), /Could not read content\/newsroom\/2026-05-08\/editor-draft\.json/);
+});
+
+test('reviewable artifact resolver accepts FAILED_RAW_ARTIFACT_VALIDATION with generation-status in changed artifacts', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeFailedRawArtifactValidationArtifacts(root, date);
+
+  const resolved = resolveReviewableArtifacts({
+    root,
+    changedArtifacts: REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS
+      .map(file => `content/newsroom/${date}/${file}`)
+  });
+  const outputs = buildReviewableArtifactOutputs(resolved);
+
+  assert.equal(outputs.review_pr_ready, 'true');
+  assert.equal(outputs.diagnostics_only, 'true');
+  assert.equal(outputs.public_newsletter_ready, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /status=FAILED_RAW_ARTIFACT_VALIDATION/);
+  assert.match(outputs.reviewable_artifact_reason, /missing_required=none/);
+  assert.match(outputs.reviewable_artifact_reason, /raw_artifact_validation_error_field=merged_candidate_manifest/);
+  assert.match(outputs.reviewable_artifact_reason, /raw_artifact_validation_error_value=/);
+});
+
+test('reviewable artifact resolver rejects FAILED_RAW_ARTIFACT_VALIDATION when generation-status absent from changed artifacts', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), {
+    date,
+    status: 'FAILED_RAW_ARTIFACT_VALIDATION',
+    final_publish_ready: false
+  });
+  writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+
+  const resolved = resolveReviewableArtifacts({
+    root,
+    changedArtifacts: []
+  });
+  const outputs = buildReviewableArtifactOutputs(resolved);
+
+  assert.equal(outputs.review_pr_ready, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /status=FAILED_RAW_ARTIFACT_VALIDATION/);
+  assert.match(outputs.reviewable_artifact_reason, /generation-status\.json/);
+  assert.match(outputs.reviewable_artifact_reason, /missing_required=/);
+});
+
+test('publish status resolver does not promote FAILED_RAW_ARTIFACT_VALIDATION to final_publish_ready', () => {
+  const root = tempRoot();
+  const date = '2026-05-08';
+  writeFailedRawArtifactValidationArtifacts(root, date);
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+  const outputs = buildPublishStatusOutputs(resolved);
+
+  assert.equal(resolved.status.generation_status, 'FAILED_RAW_ARTIFACT_VALIDATION');
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.equal(resolved.status.artifact_final_publish_ready, false);
+  assert.equal(outputs.final_publish_ready, 'false');
+  assert.equal(outputs.publish_gate_passed, 'false');
 });
 
 test('validate-pr-body fails when consistency errors are present', () => {
