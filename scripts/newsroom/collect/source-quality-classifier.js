@@ -546,6 +546,71 @@ function sourceQualityFieldDrift(value = {}) {
   return issues;
 }
 
+const OFFICIAL_RELEASE_SOURCE_ROLES = new Set([
+  'official_release_source',
+  'project_release_source',
+  'engineering_blog_source'
+]);
+
+function mapSourceQualityToBaseDecision(sourceQuality = {}, metadata = {}, classification = {}) {
+  const role = text(sourceQuality.source_role);
+  const status = text(sourceQuality.source_quality_status);
+  const allowed = sourceQuality.main_article_source_allowed === true;
+  const crossCheck = text(sourceQuality.cross_check_status);
+  const blockers = ensureArray(sourceQuality.main_article_source_blockers);
+
+  if (
+    role === 'official_documentation_reference' ||
+    role === 'reference_index' ||
+    blockers.includes('reference_only') ||
+    blockers.includes('undated_reference_page')
+  ) {
+    return { baseEvidenceLevel: 'reference', baseReasonKey: 'reference' };
+  }
+
+  if (crossCheck === 'required_satisfied') {
+    return { baseEvidenceLevel: 'verified', baseReasonKey: 'cross_check_satisfied' };
+  }
+
+  if (
+    allowed &&
+    status === 'allowed' &&
+    classification.hasDatedEvidence === true &&
+    OFFICIAL_RELEASE_SOURCE_ROLES.has(role)
+  ) {
+    return { baseEvidenceLevel: 'primary', baseReasonKey: 'primary' };
+  }
+
+  if (
+    blockers.includes('community_signal_primary_source_disallowed') ||
+    ['tech_media_lead_source', 'community_lead_source', 'project_mailing_list_source'].includes(role)
+  ) {
+    return { baseEvidenceLevel: 'watch', baseReasonKey: 'watch_mailing_lead' };
+  }
+
+  if (blockers.includes('generic_trend_without_hal_workflow_link')) {
+    return { baseEvidenceLevel: 'watch', baseReasonKey: 'watch_generic_trend' };
+  }
+
+  if (blockers.includes('source_gap_risk')) {
+    return { baseEvidenceLevel: 'watch', baseReasonKey: 'watch_source_gap' };
+  }
+
+  if (
+    crossCheck === 'required_missing' ||
+    blockers.includes('cross_check_required_but_missing') ||
+    blockers.includes('candidate_only_without_primary_confirmation')
+  ) {
+    return { baseEvidenceLevel: 'watch', baseReasonKey: 'watch_cross_check' };
+  }
+
+  if (allowed && status === 'allowed' && classification.hasDatedEvidence === true) {
+    return { baseEvidenceLevel: 'primary', baseReasonKey: 'primary' };
+  }
+
+  return { baseEvidenceLevel: 'watch', baseReasonKey: 'watch_default' };
+}
+
 function countBy(items, pick) {
   const out = {};
   for (const item of items) {
@@ -620,6 +685,7 @@ module.exports = {
   classifySourceQuality,
   isCommunitySignalCandidate,
   hasConcreteDatedEvidence,
+  mapSourceQualityToBaseDecision,
   normalizeMainArticlePolicy,
   normalizeSourceQuality,
   sourceQualityFieldDrift,

@@ -1201,11 +1201,16 @@ function normalizeEditorSection(section, index, reporter) {
     sources: ensureArray(section.sources).filter(source => source && source.url)
   };
   const deterministicMetadata = sourceCandidateMetadataForSection(normalized, reporter);
-  return mergePublicArticleFromLlm({
+  const merged = mergePublicArticleFromLlm({
     ...normalized,
     ...deterministicMetadata,
     ...normalizeSectionImageFields(normalized, reporter)
   }, normalized, deterministicMetadata);
+  // LLM 이 임의로 채운 decision/evidenceLevel/selection 은 deterministic 코드가 결정해야 하므로 제거.
+  delete merged.decision;
+  delete merged.evidenceLevel;
+  delete merged.selection;
+  return merged;
 }
 
 function editorRenderedGroupKeys(editor = {}) {

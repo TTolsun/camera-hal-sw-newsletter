@@ -26,6 +26,9 @@ const {
 
 const SNAPSHOT_SCHEMA_VERSION = 1;
 const PROCESSED_ID_LIMIT = 500;
+// collect-news-candidates.js 와 공유하는 값 — 순환 참조 방지를 위해 로컬 복사.
+const CANDIDATE_SCHEMA_VERSION = 6;
+const NON_CONTENT_CHANGE_EVENT_TYPES = new Set(['no_meaningful_change', 'metadata_only_changed']);
 const SOURCE_MONITOR_REGISTRY_REL_PATH = 'data/source-monitor-registry.json';
 const SOURCE_SNAPSHOT_ROOT = path.join('data', 'source-snapshots');
 const SOURCE_EVENTS_ROOT = path.join('content', 'source-events');
@@ -525,7 +528,7 @@ function buildEvent({ source, previous, current, eventType, dateSource, effectiv
   });
   const date_confidence = dateSourceConfidence(dateSource);
   const candidateAllowed = !duplicate &&
-    !['page_removed', 'metadata_only_changed', 'no_meaningful_change'].includes(eventType);
+    !NON_CONTENT_CHANGE_EVENT_TYPES.has(eventType) && eventType !== 'page_removed';
   const mainArticleAllowed = candidateAllowed &&
     source.main_article_allowed === true &&
     eventType !== 'page_added' &&
@@ -735,7 +738,7 @@ function candidateFromEvent(event, source) {
     main_article_allowed: mainDateEligible
   });
   return {
-    schema_version: 5,
+    schema_version: CANDIDATE_SCHEMA_VERSION,
     source: source.source_id,
     source_name: source.source_id,
     source_id: source.source_id,
@@ -814,7 +817,10 @@ function candidateFromEvent(event, source) {
       ? 'Source snapshot event has strong date evidence and source binding.'
       : 'Source snapshot event is review/watchlist only because date evidence is weak or diagnostic.',
     verification_hint: 'Review source-change-events artifacts before using this candidate.',
-    date_quality: dateQuality
+    date_quality: dateQuality,
+    content_changed: !NON_CONTENT_CHANGE_EVENT_TYPES.has(event.event_type),
+    snapshot_last_seen_at: event.current_values?.last_seen_at || '',
+    snapshot_seen_count: event.current_values?.seen_count || 0
   };
 }
 
@@ -1057,6 +1063,8 @@ async function runSourceMonitor(options = {}) {
 }
 
 module.exports = {
+  CANDIDATE_SCHEMA_VERSION,
+  NON_CONTENT_CHANGE_EVENT_TYPES,
   PROCESSED_ID_LIMIT,
   SNAPSHOT_SCHEMA_VERSION,
   SOURCE_EVENTS_ROOT,

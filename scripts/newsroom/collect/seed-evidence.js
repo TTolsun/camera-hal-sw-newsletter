@@ -41,6 +41,9 @@ const {
   text,
   urlHostname
 } = require('./source-intelligence-utils');
+const {
+  CANDIDATE_SCHEMA_VERSION
+} = require('../cli/collect-news-candidates');
 
 const SCHEMA_VERSION = 1;
 const DEFAULT_LIMITS = Object.freeze({
@@ -327,7 +330,7 @@ function seedCandidateFromEvidence({
   const id = `seed-${stableId([seed.seed_id, url, primaryEvidence.evidence_id])}`;
   const facts = primaryEvidence.source_backed_items || [];
   return {
-    schema_version: 5,
+    schema_version: CANDIDATE_SCHEMA_VERSION,
     id,
     source_candidate_id: id,
     title: candidate.title || seed.expected_topic || primaryEvidence.title,
@@ -737,7 +740,7 @@ async function runSeedEvidenceExpansion({
     }
   };
   const seedPayloadOut = {
-    schema_version: 5,
+    schema_version: CANDIDATE_SCHEMA_VERSION,
     date,
     newsletter_date: date,
     generated_at: fetchReport.generated_at,

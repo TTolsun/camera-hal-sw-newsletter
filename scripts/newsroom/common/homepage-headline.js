@@ -201,7 +201,8 @@ function candidateDateEvidence(candidate = {}) {
   return {
     date,
     date_field: text(existing.date_field || (candidate.effective_date ? 'effective_date' : 'published_date')),
-    evidence_level: text(existing.evidence_level || candidate.evidence_level || candidate.evidenceLevel || 'dated_release'),
+    // publish_ready_date_evidence 가 실제 게이트이므로 evidence_level 디폴트는 빈 문자열로 유지.
+    evidence_level: text(existing.evidence_level || candidate.decision?.evidenceLevel || candidate.evidenceLevel || candidate.evidence_level || ''),
     publish_ready_date_evidence: Boolean(date && publishReady)
   };
 }
