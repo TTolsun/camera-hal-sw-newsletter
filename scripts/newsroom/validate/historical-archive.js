@@ -13,14 +13,19 @@ const {
   FAKE_SEED_PROVENANCE_PATTERN,
   FORBIDDEN_GOOD_FIXTURE_PROVENANCE
 } = require('../common/archive-policy');
+const {
+  CLEANUP_REPORT_PATH: AUDIT_CLEANUP_REPORT_PATH,
+  LEDGER_PATH: AUDIT_LEDGER_PATH,
+  INVENTORY_PATH: AUDIT_INVENTORY_PATH
+} = require('../common/audit-paths');
 
 const REWRITE_DIFF_PREFIX = 'content/audit/historical-rewrite-diff/';
 
 const DEFAULT_SIDECAR_PATH = 'content/audit/historical-archive-status.json';
 const DEFAULT_AUDIT_REPORT_PATH = 'content/audit/historical-newsletter-audit-report.json';
-const DEFAULT_CLEANUP_REPORT_PATH = 'content/audit/newsletter-quality-cleanup-report.md';
-const DEFAULT_LEDGER_PATH = 'content/audit/newsletter-provenance-ledger.md';
-const DEFAULT_INVENTORY_PATH = 'content/audit/newsletter-quality-inventory.md';
+const DEFAULT_CLEANUP_REPORT_PATH = AUDIT_CLEANUP_REPORT_PATH;
+const DEFAULT_LEDGER_PATH = AUDIT_LEDGER_PATH;
+const DEFAULT_INVENTORY_PATH = AUDIT_INVENTORY_PATH;
 
 function toPosix(value = '') {
   return String(value).replace(/\\/g, '/');

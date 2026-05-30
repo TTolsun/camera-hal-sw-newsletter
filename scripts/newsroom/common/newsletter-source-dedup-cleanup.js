@@ -25,6 +25,10 @@ const {
   auditHistoricalArchive
 } = require('../validate/historical-archive');
 const {
+  LEDGER_PATH: AUDIT_LEDGER_PATH,
+  INVENTORY_PATH: AUDIT_INVENTORY_PATH
+} = require('./audit-paths');
+const {
   isReleaseVersionAnchor,
   normalizeNewsSourceKey
 } = require('./source-url-key');
@@ -937,7 +941,7 @@ function pruneRewriteDiffsForKeptDates(root, finalDates, deletedPaths) {
 }
 
 function updateLedger(root, removedDates) {
-  const ledgerPath = path.join(root, 'content', 'audit', 'newsletter-provenance-ledger.md');
+  const ledgerPath = path.join(root, AUDIT_LEDGER_PATH);
   if (!fs.existsSync(ledgerPath)) return;
   const removed = new Set(removedDates);
   const lines = fs.readFileSync(ledgerPath, 'utf8').split(/\r?\n/);
@@ -951,7 +955,7 @@ function updateLedger(root, removedDates) {
 }
 
 function updateInventory(root, removedDates) {
-  const inventoryPath = path.join(root, 'content', 'audit', 'newsletter-quality-inventory.md');
+  const inventoryPath = path.join(root, AUDIT_INVENTORY_PATH);
   if (!fs.existsSync(inventoryPath)) return;
   const removed = new Set(removedDates);
   const lines = fs.readFileSync(inventoryPath, 'utf8').split(/\r?\n/);

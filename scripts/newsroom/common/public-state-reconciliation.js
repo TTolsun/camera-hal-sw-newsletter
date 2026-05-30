@@ -7,6 +7,10 @@ const {
   publicNewsletterStructureStatus
 } = require('./public-structure');
 
+const {
+  LEDGER_PATH: AUDIT_LEDGER_PATH
+} = require('./audit-paths');
+
 const PUBLIC_STATES = Object.freeze({
   PUBLISH_READY: 'PUBLISH_READY',
   REVIEW_ONLY_PUBLIC_CREATED: 'REVIEW_ONLY_PUBLIC_CREATED',
@@ -54,9 +58,24 @@ const DIAGNOSTICS_STATUSES = new Set([
   'FAILED_RAW_ARTIFACT_VALIDATION'
 ]);
 
+// 추가 locale은 LEDGER_HEADING_TRANSLATIONS에 추가
+const LEDGER_HEADING_TRANSLATIONS = Object.freeze(['Ledger', '원장']);
+
+function ledgerHeadingPattern(translations = LEDGER_HEADING_TRANSLATIONS) {
+  const alternatives = translations
+    .filter(text => typeof text === 'string' && text.trim().length > 0)
+    .map(text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  if (alternatives.length === 0) {
+    return /^##\s+\S/;
+  }
+  return new RegExp(`^##\\s+(${alternatives.join('|')})\\b`);
+}
+
+const LEDGER_HEADING_PATTERN = ledgerHeadingPattern();
+
 const RETENTION_SCOPE = 'same_date_diagnostics_only';
 const ARCHIVE_SIDECAR_PATH = 'content/audit/historical-archive-status.json';
-const ARCHIVE_LEDGER_PATH = 'content/audit/newsletter-provenance-ledger.md';
+const ARCHIVE_LEDGER_PATH = AUDIT_LEDGER_PATH;
 const ARCHIVE_CURRENT_CONTEXTS = new Set([
   'current_generation_archive_review',
   'review_only_publication'
@@ -445,7 +464,7 @@ function canonicalLedgerRow(row = {}) {
 
 function parseLedgerTable(text, dateForError) {
   const lines = String(text || '').split(/\r?\n/);
-  const ledgerHeadingIndex = lines.findIndex(line => /^##\s+(Ledger|원장)\b/.test(line));
+  const ledgerHeadingIndex = lines.findIndex(line => LEDGER_HEADING_PATTERN.test(line));
   const headerIndex = ledgerHeadingIndex < 0
     ? -1
     : lines.findIndex((line, index) => index > ledgerHeadingIndex && /^\|\s*Date\s*\|/.test(line));
@@ -748,6 +767,7 @@ function reconcilePublicState(options = {}) {
 }
 
 module.exports = {
+  LEDGER_HEADING_TRANSLATIONS,
   PUBLIC_ARTIFACT_POLICIES,
   PUBLIC_ARTIFACT_SOURCES,
   PUBLIC_STATES,
@@ -757,6 +777,7 @@ module.exports = {
   buildRemediationMessage,
   classifyLatestPublicState,
   latestDiagnosticsOnly,
+  ledgerHeadingPattern,
   publicNewsletterPaths,
   publicStructureStatus,
   reconcilePublicState,
