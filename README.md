@@ -1,26 +1,38 @@
 # AOSP Camera / Driver / SoC Platform Newsletter
 
-> 기본 newsroom provider는 Gemini입니다. 기본 실행과 scheduled run은 code default를 따르며, `workflow_dispatch` 수동 실행에서만 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` override가 runtime env로 전달됩니다. 사내 API 설정은 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, `INTERNAL_LLM_API_VERSION`를 사용하며 token은 GitHub Secrets에서만 읽습니다.
+> 기본 뉴스룸(newsroom) 공급자는 Gemini입니다. 기본 실행과 예약 실행(scheduled run)은 코드 기본값(code default)을 따르며, `workflow_dispatch` 수동 실행에서만 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` 재정의(override)가 런타임 환경 변수(runtime env)로 전달됩니다. 사내 API 설정은 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, `INTERNAL_LLM_API_VERSION`를 사용하며 토큰은 GitHub Secrets에서만 읽습니다.
 
-이 저장소는 AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC platform 소식을 수집해 정적 뉴스레터로 발행합니다. 후보 수집과 Gemini 기반 newsroom 자동화는 검토 가능한 PR artifact를 만들고, 발행은 사람이 승인한 PR merge를 통해서만 진행합니다. 비용 절감은 deterministic shortlist, compact article capsule, retry scope 제한으로 처리하며 quality gate를 낮추지 않습니다.
+이 저장소는 AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC platform 소식을 수집해 정적 뉴스레터로 발행합니다. 후보 수집과 Gemini 기반 뉴스룸 자동화는 검토 가능한 리뷰 산출물(review artifact)을 만들고, 발행은 사람이 승인한 PR merge를 통해서만 진행합니다. 비용 절감은 deterministic shortlist(결정론적 숏리스트), compact article capsule(요약된 기사 캡슐), retry scope(재시도 범위) 제한으로 처리하며 quality gate(품질 게이트)를 낮추지 않습니다.
 
-처음 보는 사람은 모든 파일을 뒤지지 말고 아래 문서부터 읽으면 됩니다. README는 긴 운영 매뉴얼이 아니라, 각 세부 문서로 연결하는 짧은 entry 역할만 합니다.
+처음 보는 사람은 모든 파일을 뒤지지 말고 아래 문서부터 읽으면 됩니다. README는 긴 운영 매뉴얼이 아니라, 각 세부 문서로 연결하는 짧은 진입점 역할만 합니다.
 
-## Start Here
+## 시작 가이드
 
 | 문서 | 역할 |
 | --- | --- |
-| [docs/START_HERE.ko.md](docs/START_HERE.ko.md) | 처음 보는 운영자와 agent를 위한 진입점입니다. |
-| [docs/glossary.ko.md](docs/glossary.ko.md) | newsroom, artifact, gate 용어를 설명합니다. |
-| [docs/newsroom-workflow.md](docs/newsroom-workflow.md) | 후보 수집부터 PR 생성까지의 workflow를 설명합니다. |
-| [docs/operations/README.ko.md](docs/operations/README.ko.md) | 수동 실행, PR review, release, artifact review 순서입니다. |
+| [docs/START_HERE.ko.md](docs/START_HERE.ko.md) | 처음 보는 운영자와 에이전트(agent)를 위한 진입점입니다. |
+| [docs/glossary.ko.md](docs/glossary.ko.md) | 뉴스룸, 산출물(artifact), 게이트 용어를 설명합니다. |
+| [docs/newsroom-workflow.md](docs/newsroom-workflow.md) | 후보 수집부터 PR 생성까지의 워크플로(workflow)를 설명합니다. |
+| [docs/operations/README.ko.md](docs/operations/README.ko.md) | 수동 실행, PR 리뷰, 릴리스, 산출물 리뷰 순서입니다. |
 | [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md) | GitHub Actions Secret과 Variable 기본값을 설명합니다. |
 | [docs/config/news-sources-fields.ko.md](docs/config/news-sources-fields.ko.md) | `data/news-sources.json` field 계약을 설명합니다. |
-| [scripts/README.md](scripts/README.md) | scripts wrapper와 실제 newsroom 구현 진입점을 설명합니다. |
+| [scripts/README.md](scripts/README.md) | scripts 래퍼(wrapper)와 실제 뉴스룸 구현 진입점을 설명합니다. |
 
 뉴스레터 생성은 아래 흐름으로 진행됩니다. 중요한 점은 생성 성공과 발행 가능 상태가 다르다는 것입니다.
 
-## Current Operating Model
+## 5분 안에 처음 실행하기
+
+```powershell
+git clone <repo-url>
+cd camera-hal-sw-newsletter
+npm install
+npm.cmd run test
+npm.cmd run validate
+```
+
+`test`와 `validate`가 모두 통과하면 로컬 환경이 준비된 것입니다. 실제 뉴스룸 파이프라인 실행은 `GEMINI_API_KEY`가 필요하며, 자세한 절차는 [docs/operations/README.ko.md](docs/operations/README.ko.md)를 확인합니다.
+
+## 현재 운영 모델
 
 ```text
 candidate collection
@@ -31,56 +43,67 @@ candidate collection
   -> GitHub Pages
 ```
 
-`content/collected-news/YYYY-MM-DD/`에는 raw candidate가, `content/newsroom/YYYY-MM-DD/`에는 review artifact가, `newsletters/YYYY-MM-DD/`에는 public issue output이 저장됩니다. `publish-ready` 상태가 아니면 PR이 만들어져도 발행 가능한 뉴스레터로 보지 않습니다.
+`content/collected-news/YYYY-MM-DD/`에는 원시 후보(raw candidate)가, `content/newsroom/YYYY-MM-DD/`에는 리뷰 산출물이, `newsletters/YYYY-MM-DD/`에는 공개 산출물(public artifact)이 저장됩니다. `publish-ready` 상태가 아니면 PR이 만들어져도 발행 가능한 뉴스레터로 보지 않습니다.
 
 로컬에서 확인할 때는 아래 명령만 기억하면 됩니다. 변경 범위가 넓거나 확신이 없으면 `ci`를 우선 사용합니다.
 
-`publish-ready`는 AI 자동 발행 가능 상태입니다. `needs-fix`라도 public artifact가 포함되면 편집장 main merge를 사이트 공개 승인으로 해석합니다. `Validate Site and Images` (`.github/workflows/validate-site.yml`)는 structural validation은 blocking으로, quality/fact-check 문제는 non-blocking annotation으로 보고합니다.
+`publish-ready`는 AI 자동 발행 가능 상태입니다. `needs-fix`라도 공개 산출물이 포함되면 편집장 main merge를 사이트 공개 승인으로 해석합니다. `Validate Site and Images` (`.github/workflows/validate-site.yml`)는 구조 검증(structural validation)은 blocking(차단)으로, quality/fact-check 문제는 non-blocking annotation(비차단 알림)으로 보고합니다.
 
-## Main Commands
+## 주요 명령
 
 Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 
-```powershell
-npm.cmd run test
-npm.cmd run validate
-npm.cmd run ci
-npm.cmd run collect
-npm.cmd run generate
-```
+| 명령 | 언제 쓰나 | 결과물 |
+| --- | --- | --- |
+| `npm.cmd run test` | 단위/통합 테스트 회귀 확인 | `tests/` 전수 결과 |
+| `npm.cmd run validate` | docs·정책·인코딩·site 무결성 검사 | `validate:*` 체인 보고 |
+| `npm.cmd run ci` | test + validate 한꺼번에 | 변경 범위 넓을 때 1차 신뢰도 확인 |
+| `npm.cmd run collect` | `data/news-sources.json` 기반 후보 수집 | `content/collected-news/YYYY-MM-DD/` |
+| `npm.cmd run generate` | LLM 뉴스룸 파이프라인 (Gemini 공급자 사용 시 `GEMINI_API_KEY` 필요) | `content/newsroom/YYYY-MM-DD/` |
 
-기본 `generate` 실행은 Gemini provider를 사용하므로 `GEMINI_API_KEY`가 필요합니다. `workflow_dispatch` 수동 실행에서 provider/model을 바꾸는 방법과 사내 API secret/variable 설정은 [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md)를 확인합니다.
-
-`collect`는 `data/news-sources.json`에서 후보를 수집합니다. `generate`는 LLM newsroom pipeline(default: Gemini)을 실행합니다. 기본 provider인 Gemini를 사용할 때는 `GEMINI_API_KEY`가 필요합니다. 전체 로컬 확인은 `npm.cmd run ci`를 사용합니다.
+공급자/모델 재정의와 사내 API Secret 설정은 [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md)를 확인합니다.
 
 폴더 구조는 목적별로 나뉘어 있습니다. 실제 구현은 `scripts/newsroom/`에 있고, 검토 산출물과 공개 발행물은 `content/`와 `newsletters/`에 분리됩니다.
 
-## Repository Map
+## 저장소 구조
 
 | 경로 | 역할 |
 | --- | --- |
-| [`.github/`](.github/README.md) | issue/PR template, newsroom PR workflow, validation workflow입니다. |
-| [`config/`](config/README.md) | newsletter policy와 budget config입니다. |
-| [`data/`](data/README.md) | `newsletters.json`과 machine-readable source registry입니다. |
-| [`docs/`](docs/README.md) | 운영 문서, glossary, source guide입니다. |
-| [`scripts/newsroom/`](scripts/newsroom/README.md) | 실제 collector, generator, renderer, validator 구현입니다. |
-| [`tests/`](tests/README.md) | Node built-in test runner 기반 regression test입니다. |
-| [`content/`](content/README.md) | 수집 후보와 newsroom review artifact입니다. |
-| [`newsletters/`](newsletters/README.md) | public newsletter Markdown/HTML output입니다. |
-| [`assets/`](assets/README.md) | site image와 article fallback image입니다. |
+| [`.github/`](.github/README.md) | issue/PR 템플릿, 뉴스룸 PR 워크플로, 검증 워크플로입니다. |
+| [`config/`](config/README.md) | 뉴스레터 정책과 예산 설정입니다. |
+| [`data/`](data/README.md) | `newsletters.json`과 머신 가독형 source 레지스트리입니다. |
+| [`docs/`](docs/README.md) | 운영 문서, 용어집, source 안내입니다. |
+| [`scripts/newsroom/`](scripts/newsroom/README.md) | 실제 수집기(collector), 생성기(generator), 렌더러(renderer), 검증기(validator) 구현입니다. |
+| [`tests/`](tests/README.md) | Node 내장 테스트 러너 기반 회귀 테스트(regression test)입니다. |
+| [`content/`](content/README.md) | 수집 후보와 뉴스룸 리뷰 산출물입니다. |
+| [`newsletters/`](newsletters/README.md) | 공개 뉴스레터 Markdown/HTML 출력물입니다. |
+| [`assets/`](assets/README.md) | 사이트 이미지와 기사 fallback 이미지입니다. |
 | [`css/`](css/README.md) | 정적 사이트 스타일입니다. |
-| [`templates/`](templates/README.md) | newsletter Markdown/HTML template입니다. |
+| [`templates/`](templates/README.md) | 뉴스레터 Markdown/HTML 템플릿(template)입니다. |
+
+## 범위별 AGENTS
+
+각 영역에는 안전 규칙이 별도 `AGENTS.md`로 정의되어 있습니다. 해당 영역을 수정할 때 먼저 읽으세요.
+
+| 영역 | 파일 | 보호 대상 |
+| --- | --- | --- |
+| 저장소 전반 | [AGENTS.md](AGENTS.md) | 인코딩, PR 범위, fixture 신뢰 |
+| 구현 | [scripts/newsroom/AGENTS.md](scripts/newsroom/AGENTS.md) | 리뷰·발행 가드레일, 테스트 요구 |
+| 워크플로 | [.github/workflows/AGENTS.md](.github/workflows/AGENTS.md) | Secret 처리, PR 기반 발행 |
+| 데이터 | [data/AGENTS.md](data/AGENTS.md) | `news-sources.json` 계약 |
+| 테스트 | [tests/AGENTS.md](tests/AGENTS.md) | fixture 신뢰 정책 |
+| 문서 | [docs/AGENTS.md](docs/AGENTS.md) | 한국어 우선, audit/worklog 금지 |
 
 마지막으로, 아래 규칙은 문서 정리나 리팩토링 중에도 약화하면 안 됩니다.
 
-## Rules That Must Not Be Weakened
+## 약화하면 안 되는 규칙
 
-- Newsletter publishing must remain PR-based.
-- Do not directly auto-publish generated issues to `main`.
-- Do not publish source-less main articles.
-- Do not promote watch/reference pages to main articles without dated evidence.
-- Do not weaken quality gate, source binding, image validation, or hard blockers.
-- Generated artifacts are not automatically trusted as good/golden fixtures.
+- 뉴스레터 발행은 PR 머지를 통해서만 진행합니다.
+- 생성된 issue를 `main`에 직접 자동 발행하지 않습니다.
+- source가 없는 main article(주요 기사)은 발행하지 않습니다.
+- dated evidence(날짜가 명시된 근거) 없는 watch/reference 페이지를 main article로 승격하지 않습니다.
+- quality gate, source binding(출처 결속), image validation(이미지 검증), hard blocker(하드 블로커)를 약화하지 않습니다.
+- generated artifact를 good/golden fixture(검증된 fixture)로 자동 신뢰하지 않습니다.
 
 <!-- NEWSLETTER_POLICY:BEGIN -->
 <!-- This block is generated. Update config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
