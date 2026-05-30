@@ -65,8 +65,9 @@ function ledgerHeadingPattern(translations = LEDGER_HEADING_TRANSLATIONS) {
   const alternatives = translations
     .filter(text => typeof text === 'string' && text.trim().length > 0)
     .map(text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  // translations가 비어있으면 broad fallback 대신 즉시 실패 — 조용한 오매칭 방지
   if (alternatives.length === 0) {
-    return /^##\s+\S/;
+    throw new Error('LEDGER_HEADING_TRANSLATIONS must contain at least one non-empty string');
   }
   return new RegExp(`^##\\s+(${alternatives.join('|')})\\b`);
 }

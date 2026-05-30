@@ -57,21 +57,20 @@ const PATTERN_EXPORTS_DOTPROP = /module\.exports\.([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=
 // 미인식: exports[동적키] = ...
 const PATTERN_EXPORTS_NAMED = /\bexports\.([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=/g;
 
-// 비표준 export 형태 — 위 패턴이 포착하지 못하는 형태를 검출해 unparseable로 보고
-// 인식: Object.assign(module.exports, ...), module.exports[...] = ...
-const PATTERN_UNPARSEABLE_EXPORTS = [
-  /Object\.assign\s*\(\s*module\.exports\s*,/,
-  /module\.exports\s*\[/,
-];
-
 // 인식: require('path') 또는 require("path") — 정적 문자열
 // 미인식: require(변수), require(`template`), dynamic import()
 const PATTERN_REQUIRE = /require\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
 
-// 동적 require 형태 — 위 패턴이 포착하지 못하는 형태를 검출해 unparseable로 보고
-const PATTERN_UNPARSEABLE_REQUIRE = [
-  /require\s*\(\s*[^'"]/,
-];
+// 비표준 export 형태 — [패턴, 이유] 튜플. 패턴과 이유를 같은 위치에 두어 변경 시 동기화 누락 방지.
+const UNPARSEABLE_EXPORT_PATTERNS = Object.freeze([
+  [/Object\.assign\s*\(\s*module\.exports\s*,/, 'Object.assign(module.exports, ...) — not parseable by simple regex'],
+  [/module\.exports\s*\[/, 'module.exports[동적키] = ... — dynamic key, fields not collected'],
+]);
+
+// 동적 require 형태 — [패턴, 이유] 튜플
+const UNPARSEABLE_REQUIRE_PATTERNS = Object.freeze([
+  [/require\s*\(\s*[^'"]/, 'dynamic require(...) — caller relation not statically known'],
+]);
 
 // 디렉터리를 재귀 순회하여 .js 파일 경로 목록 반환
 function collectJsFiles(dir) {
@@ -118,13 +117,13 @@ function extractExports(source) {
   return [...names];
 }
 
-// 비표준 export/require 형태가 있으면 true 반환 (unparseable 표시용)
-function hasUnparseableExports(source) {
-  return PATTERN_UNPARSEABLE_EXPORTS.some(pattern => pattern.test(source));
-}
-
-function hasUnparseableRequire(source) {
-  return PATTERN_UNPARSEABLE_REQUIRE.some(pattern => pattern.test(source));
+// 튜플 배열에서 매칭된 이유 문자열 목록 반환
+function findUnparseableReasons(text, patternTuples) {
+  const reasons = [];
+  for (const [pattern, reason] of patternTuples) {
+    if (pattern.test(text)) reasons.push(reason);
+  }
+  return reasons;
 }
 
 // require() 경로 추출 — 상대경로 및 절대경로 모두
@@ -325,9 +324,10 @@ function main() {
   for (const filePath of newsroomFiles) {
     const relPath = toRepoRelative(filePath);
     const source = sourceCache[filePath] || '';
-    const reasons = [];
-    if (hasUnparseableExports(source)) reasons.push('non-standard export (Object.assign / dynamic key)');
-    if (hasUnparseableRequire(source)) reasons.push('dynamic require');
+    const reasons = [
+      ...findUnparseableReasons(source, UNPARSEABLE_EXPORT_PATTERNS),
+      ...findUnparseableReasons(source, UNPARSEABLE_REQUIRE_PATTERNS),
+    ];
     if (reasons.length > 0) {
       unparseableFiles.push({ file: relPath, reasons });
     }
@@ -454,4 +454,12 @@ function main() {
   process.exit(0);
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = {
+  UNPARSEABLE_EXPORT_PATTERNS,
+  UNPARSEABLE_REQUIRE_PATTERNS,
+  findUnparseableReasons,
+};
