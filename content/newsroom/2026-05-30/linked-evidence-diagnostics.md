@@ -4,23 +4,24 @@
 - linked_evidence_mode: extract_only
 - enable_network: false
 - candidate_count: 40
-- total_linked_evidence: 3
-- source_aware_linked_evidence: 1332
-- warning_count: 41
+- total_linked_evidence: 1
+- source_aware_linked_evidence: 1340
+- warning_count: 37
 
 ## Fetch Status Counts
 
-- skipped: 3
+- skipped: 1
 
 ## Impact Type Counts
 
-- build_dependency_fix: 10
-- camera_api_change: 1
+- build_dependency_fix: 14
+- camera_api_change: 2
 - documentation_only: 2
-- generic_tooling_change: 2
-- security_component_camera_related: 1
-- test_only_change: 4
-- unknown: 19
+- generic_tooling_change: 3
+- runtime_behavior_change: 1
+- security_component_camera_related: 2
+- test_only_change: 1
+- unknown: 14
 - video_capture_fix: 1
 
 ## Candidates
@@ -48,20 +49,20 @@
 - Building for the Intelligence System on Android: 0 evidence, impact=unknown, recommendation=unknown
 - What's new in Android for Cars: Unifying platforms and unlocking premium experiences: 0 evidence, impact=unknown, recommendation=unknown
 - What's New in Wear OS 7: 0 evidence, impact=unknown, recommendation=unknown
-- Re: [PATCH 8/8] arm64: dts: qcom: shikra-iqs-evk-imx577-camera: Add DT overlay: 0 evidence, impact=unknown, recommendation=unknown
-- Re: [PATCH v3] media: add virtio-media driver: 0 evidence, impact=test_only_change, recommendation=watch
 - How ref qualifiers led to deducing this: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - C++: The Documentary trailer: 0 evidence, impact=generic_tooling_change, recommendation=watch
-- [PATCH v2 0/3] Add support for the Iris codec on Milos: 0 evidence, impact=test_only_change, recommendation=watch
-- Re: [BUG] KASAN: slab-use-after-free in au0828_dvb_register: 1 evidence, impact=test_only_change, recommendation=watch
-- Re: [PATCH v2 (repost * 2)] media: usb: siano: don't set URB_FREE_BUFFER flag: 0 evidence, impact=unknown, recommendation=unknown
-- [PATCH v15 0/6] Rust bindings for gem shmem: 2 evidence, impact=unknown, recommendation=unknown
 - Re: [PATCH 7/8] arm64: dts: qcom: shikra-cqm-evk-imx577-camera: Add DT overlay: 0 evidence, impact=unknown, recommendation=unknown
-- Re: [PATCH 3/8] media: qcom: camss: add support for QCM2390 camss: 0 evidence, impact=unknown, recommendation=unknown
+- [PATCH v2 0/3] Add support for the Iris codec on Milos: 0 evidence, impact=test_only_change, recommendation=watch
+- Re: [PATCH v7 04/15] firmware: qcom: Add a PAS TEE service: 0 evidence, impact=runtime_behavior_change, recommendation=main
+- Re: [PATCH v7 03/15] firmware: qcom_scm: Migrate to generic PAS service: 0 evidence, impact=security_component_camera_related, recommendation=watch
 - Let the Compiler Check Your Units -- Wu Yongwei: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - What reinterpret_cast doesn&apos;t do -- Andreas Fertig: 0 evidence, impact=build_dependency_fix, recommendation=watch
-- [PATCH v15 5/6] drm/gem/shmem: Introduce __drm_gem_shmem_free_sgt_locked(): 0 evidence, impact=unknown, recommendation=unknown
-- [PATCH v15 4/6] rust: faux: Allow retrieving a bound Device: 0 evidence, impact=test_only_change, recommendation=watch
-- Re: [PATCH 1/6] dt-bindings: media: Add bindings for qcom,glymur-camss: 0 evidence, impact=unknown, recommendation=unknown
-- Re: [PATCH v2] media: bcm2835-unicam: Fix log status runtime access: 0 evidence, impact=unknown, recommendation=unknown
+- [linuxtv-media-pending:fixes] BUILD SUCCESS f78073e84c800ae146ce62447e7a685a5ceeb92d: 1 evidence, impact=build_dependency_fix, recommendation=watch
+- Re: [PATCH v4] media: iris: optimize COMV buffer allocation for VPU3x and VPU4x: 0 evidence, impact=unknown, recommendation=unknown
+- Re: [PATCH v3 1/3] media: ipu-bridge: Add DMI information of Lenovo X9 to the image upside-down list: 0 evidence, impact=unknown, recommendation=unknown
+- Annotations for C++26 Hashing -- Krystian Piękoś: 0 evidence, impact=build_dependency_fix, recommendation=watch
+- C++26: Structured Bindings in Conditions -- Sandor Dargo: 0 evidence, impact=build_dependency_fix, recommendation=watch
+- CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos: 0 evidence, impact=generic_tooling_change, recommendation=watch
+- CppCon 2025 How To Build Robust C++ Inter-Process Queues -- Jody Hagins: 0 evidence, impact=build_dependency_fix, recommendation=watch
+- Re: [PATCH v7 13/15] wifi: ath12k: Switch to generic PAS TZ APIs: 0 evidence, impact=camera_api_change, recommendation=watch
