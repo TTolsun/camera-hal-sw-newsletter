@@ -16,6 +16,7 @@
     "report:evidence-pack": "node scripts/build-evidence-pack-summary.js",
     "report:hal-signal-quality": "node scripts/build-hal-signal-quality-report.js",
     "report:hal-signal-scorecard": "node scripts/build-hal-signal-quality-scorecard.js",
+    "report:cleanup-candidates": "node scripts/newsroom/cli/report-cleanup-candidates.js",
     "newsroom:audit-images": "node scripts/audit-newsletter-images.js",
     "newsroom:repair-images": "node scripts/repair-newsletter-images.js",
     "audit:historical-newsletters": "node scripts/audit-historical-newsletters.js",
