@@ -1,0 +1,81 @@
+{
+  "status": "NEEDS_FIX",
+  "must_fix": [
+    {
+      "location": "sections[0].public_article.editorial_story.decision_metadata.impact",
+      "problem": "Impact level is an enum, but the value 'Low' is not a valid enum member. Valid values are 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent', 'driver_image_pipeline', 'stream_buffer_metadata', 'cts_vts_its_cdd', 'performance_latency_thermal', 'soc_resource_contention', 'native_tooling_workflow', 'no_hal_runtime_impact', 'unknown'.",
+      "suggestion": "Replace 'Low' with a valid enum member for impact_level, such as 'app_api_or_framework_adjacent' or 'no_hal_runtime_impact' based on the article's content.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.editorial_story.decision_metadata.scope",
+      "problem": "Scope is an enum, but the value 'Framework' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'soc_platform_signal', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'Framework' with a valid enum member for scope, such as 'android_platform_camera_adjacent'.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.editorial_story.decision_metadata.scope",
+      "problem": "Scope is an enum, but the value 'SoC' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'soc_platform_signal', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'SoC' with a valid enum member for scope, such as 'soc_platform_signal' if it's relevant, or remove if not directly applicable.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.editorial_story.decision_metadata.action",
+      "problem": "Action is an enum, but the value 'Watch' is not a valid enum member. Valid values are 'direct_camera_hal', 'direct_aosp_camera', 'camera_driver_image_pipeline', 'android_camera_api', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'Watch' with a valid enum member for action, such as 'watchlist' or 'android_platform_camera_adjacent' if it implies a broader action.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.editorial_story.decision_metadata.action",
+      "problem": "Action is an enum, but the value 'Test' is not a valid enum member. Valid values are 'direct_camera_hal', 'direct_aosp_camera', 'camera_driver_image_pipeline', 'android_camera_api', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'Test' with a valid enum member for action, such as 'android_platform_camera_adjacent' if it implies testing within that scope.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.editorial_story.decision_metadata.overclaim_risk",
+      "problem": "Overclaim risk is an enum, but the value 'High' is not a valid enum member. Valid values are 'low', 'medium', 'high'.",
+      "suggestion": "Replace 'High' with a valid enum member for overclaim_risk, such as 'medium' or 'low' based on the actual risk.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[1].public_article.editorial_story.decision_metadata.impact",
+      "problem": "Impact level is an enum, but the value 'Medium' is not a valid enum member. Valid values are 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent', 'driver_image_pipeline', 'stream_buffer_metadata', 'cts_vts_its_cdd', 'performance_latency_thermal', 'soc_resource_contention', 'native_tooling_workflow', 'no_hal_runtime_impact', 'unknown'.",
+      "suggestion": "Replace 'Medium' with a valid enum member for impact_level, such as 'native_tooling_workflow' or 'no_hal_runtime_impact' based on the article's content.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.editorial_story.decision_metadata.scope",
+      "problem": "Scope is an enum, but the value 'Tooling' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'soc_platform_signal', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'Tooling' with a valid enum member for scope, such as 'cpp_ai_tooling_fallback'.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.editorial_story.decision_metadata.scope",
+      "problem": "Scope is an enum, but the value 'AI' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'soc_platform_signal', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'AI' with a valid enum member for scope, such as 'cpp_ai_tooling_fallback' if it's related to AI tooling, or remove if not directly applicable.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.editorial_story.decision_metadata.action",
+      "problem": "Action is an enum, but the value 'Watch' is not a valid enum member. Valid values are 'direct_camera_hal', 'direct_aosp_camera', 'camera_driver_image_pipeline', 'android_camera_api', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'Watch' with a valid enum member for action, such as 'watchlist' or 'cpp_ai_tooling_fallback' if it implies a broader action.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.editorial_story.decision_metadata.action",
+      "problem": "Action is an enum, but the value 'Test' is not a valid enum member. Valid values are 'direct_camera_hal', 'direct_aosp_camera', 'camera_driver_image_pipeline', 'android_camera_api', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'Test' with a valid enum member for action, such as 'cpp_ai_tooling_fallback' if it implies testing within that scope.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.editorial_story.decision_metadata.overclaim_risk",
+      "problem": "Overclaim risk is an enum, but the value 'High' is not a valid enum member. Valid values are 'low', 'medium', 'high'.",
+      "suggestion": "Replace 'High' with a valid enum member for overclaim_risk, such as 'medium' or 'low' based on the actual risk.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    }
+  ],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "final_comment": "The JSON structure is mostly correct, but there are several issues with enum values in the 'decision_metadata' fields within 'public_article.editorial_story'. The 'impact', 'scope', 'action', and 'overclaim_risk' fields are using values that are not part of the allowed enum lists. These need to be corrected to valid enum members as specified in the schema. No other issues were found."
+}
