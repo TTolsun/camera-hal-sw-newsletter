@@ -4,7 +4,7 @@ const test = require('node:test');
 const {
   hasConcreteVersionedReleaseExtraction,
   parseSourceSpecificItems
-} = require('../../../scripts/lib/source-item-parsers');
+} = require('../../../scripts/newsroom/collect/source-item-parsers');
 const { readTextFixture } = require('../../helpers/fixture-loader');
 
 function source(overrides = {}) {

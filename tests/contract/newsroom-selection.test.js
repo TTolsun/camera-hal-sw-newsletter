@@ -22,16 +22,16 @@ const {
   selectFinalArticles,
   selectionErrors,
   summarizeExclusionReasons
-} = require('../../scripts/lib/newsroom-selection');
+} = require('../../scripts/newsroom/generate/newsroom-selection');
 const {
   articlePolicy,
   publishReadyCompositionPolicy
-} = require('../../scripts/lib/newsletter-policy');
+} = require('../../scripts/newsroom/common/newsletter-policy');
 const {
   emptyHeadlineState,
   headlineSnapshotFromCandidate
 } = require('../../scripts/newsroom/common/homepage-headline');
-const { parseSourceSpecificItems } = require('../../scripts/lib/source-item-parsers');
+const { parseSourceSpecificItems } = require('../../scripts/newsroom/collect/source-item-parsers');
 const { normalizeCandidate } = require('../../scripts/newsroom/cli/collect-news-candidates');
 const { candidate } = require('../helpers/newsroom-builders');
 const { readJsonFixture, readTextFixture } = require('../helpers/fixture-loader');

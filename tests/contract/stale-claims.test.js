@@ -4,7 +4,7 @@ const test = require('node:test');
 const {
   pruneResolvedStaleFactCheckItems,
   scrubStaleClaims
-} = require('../../scripts/lib/stale-claims');
+} = require('../../scripts/newsroom/common/stale-claims');
 
 function source(url, title) {
   return { url, title };

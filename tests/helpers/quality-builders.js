@@ -1,5 +1,5 @@
-const { buildNewsletterQualityReport } = require('../../scripts/lib/newsletter-quality');
-const { articlePolicy } = require('../../scripts/lib/newsletter-policy');
+const { buildNewsletterQualityReport } = require('../../scripts/newsroom/validate/newsletter-quality');
+const { articlePolicy } = require('../../scripts/newsroom/common/newsletter-policy');
 
 function source(url, title = 'Source') {
   return { title, url };

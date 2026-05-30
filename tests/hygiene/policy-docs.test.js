@@ -10,7 +10,7 @@ const {
   getDefaultNewsletterPolicy,
   renderNewsletterPolicyBlock,
   replaceNewsletterPolicyBlock
-} = require('../../scripts/lib/newsletter-policy');
+} = require('../../scripts/newsroom/common/newsletter-policy');
 const {
   policyDocPaths,
   syncPolicyDocs

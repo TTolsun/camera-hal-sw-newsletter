@@ -7,11 +7,11 @@ const {
   VALID_SOURCE_ROLES,
   VALID_SOURCE_URL_QUALITY_HINTS,
   validateNewsSourcesConfigText
-} = require('../../../scripts/lib/news-sources-config-validator');
+} = require('../../../scripts/newsroom/validate/news-sources-config-validator');
 const {
   normalizeEnabledSources,
   resolveSection
-} = require('../../../scripts/lib/news-source-section-resolver');
+} = require('../../../scripts/newsroom/collect/news-source-section-resolver');
 
 function validSource(overrides = {}) {
   return {

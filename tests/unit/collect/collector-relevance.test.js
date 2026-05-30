@@ -3,11 +3,11 @@ const test = require('node:test');
 
 const {
   BUCKETS
-} = require('../../../scripts/lib/aosp-camera-scope');
+} = require('../../../scripts/newsroom/common/aosp-camera-scope');
 const {
   extractRoundupChildTopics
 } = require('../../../scripts/newsroom/collect/roundup-child-topic-extractor');
-const { parseSourceSpecificItems } = require('../../../scripts/lib/source-item-parsers');
+const { parseSourceSpecificItems } = require('../../../scripts/newsroom/collect/source-item-parsers');
 const {
   canonicalContentUrl,
   dedupe,

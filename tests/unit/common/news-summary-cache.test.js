@@ -13,7 +13,7 @@ const {
   annotateCandidatesWithCache,
   readCacheRecord,
   writeCacheRecord
-} = require('../../../scripts/lib/news-summary-cache');
+} = require('../../../scripts/newsroom/generate/news-summary-cache');
 
 function tempDir() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'news-summary-cache-'));

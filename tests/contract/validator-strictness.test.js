@@ -6,12 +6,12 @@ const test = require('node:test');
 
 const {
   buildNewsletterQualityReport
-} = require('../../scripts/lib/newsletter-quality');
+} = require('../../scripts/newsroom/validate/newsletter-quality');
 const {
   articlePolicy,
   getHeadlinePolicy,
   qualityGatePolicy
-} = require('../../scripts/lib/newsletter-policy');
+} = require('../../scripts/newsroom/common/newsletter-policy');
 const {
   policySnapshot
 } = require('../../scripts/newsroom/common/homepage-headline');

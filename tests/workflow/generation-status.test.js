@@ -12,7 +12,7 @@ const {
 const {
   NewsletterDomainValidationError
 } = require('../../scripts/newsroom/domain/newsletter-domain-errors');
-const { qualityGatePolicy } = require('../../scripts/lib/newsletter-policy');
+const { qualityGatePolicy } = require('../../scripts/newsroom/common/newsletter-policy');
 const { backgroundContextSchema } = require('../../scripts/newsroom/render/newsletter-schema');
 
 test('failure status includes required Gemini diagnostic fields', () => {
