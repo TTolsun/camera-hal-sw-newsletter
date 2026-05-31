@@ -4,24 +4,23 @@
 - linked_evidence_mode: extract_only
 - enable_network: false
 - candidate_count: 40
-- total_linked_evidence: 4
-- source_aware_linked_evidence: 1339
-- warning_count: 44
+- total_linked_evidence: 3
+- source_aware_linked_evidence: 1342
+- warning_count: 39
 
 ## Fetch Status Counts
 
-- skipped: 2
-- unsupported: 2
+- skipped: 3
 
 ## Impact Type Counts
 
-- build_dependency_fix: 14
+- build_dependency_fix: 13
 - camera_api_change: 1
-- documentation_only: 3
+- documentation_only: 4
 - generic_tooling_change: 3
+- runtime_behavior_change: 3
 - security_component_camera_related: 1
-- test_only_change: 2
-- unknown: 15
+- unknown: 14
 - video_capture_fix: 1
 
 ## Candidates
@@ -51,18 +50,18 @@
 - What's New in Wear OS 7: 0 evidence, impact=unknown, recommendation=unknown
 - How ref qualifiers led to deducing this: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - C++: The Documentary trailer: 0 evidence, impact=generic_tooling_change, recommendation=watch
-- [linuxtv-media:next] BUILD SUCCESS a947fc3ba8a0c097862613bbaaa0bbd06d10b0d2: 1 evidence, impact=build_dependency_fix, recommendation=watch
+- Re: [PATCH v2 1/7] media: qcom: iris: Centralize internal buffer table selection: 0 evidence, impact=runtime_behavior_change, recommendation=main
+- Re: [PATCH] [TEST] add a broken patch: 2 evidence, impact=documentation_only, recommendation=watch
+- Re: [PATCH v4] media: iris: optimize COMV buffer allocation for VPU3x and VPU4x: 0 evidence, impact=runtime_behavior_change, recommendation=main
 - Re: [PATCH 4/4] MAINTAINERS: Add entry for Rust dma-buf: 1 evidence, impact=documentation_only, recommendation=watch
 - [PATCH 4/4] MAINTAINERS: Add entry for Rust dma-buf: 0 evidence, impact=unknown, recommendation=unknown
-- Re: [PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible: 2 evidence, impact=unknown, recommendation=unknown
-- Re: [PATCH 5/6] media: qcom: camss: enable vfe for Glymur: 0 evidence, impact=unknown, recommendation=unknown
-- [PATCH] [TEST] add a broken patch: 0 evidence, impact=test_only_change, recommendation=watch
 - Let the Compiler Check Your Units -- Wu Yongwei: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - What reinterpret_cast doesn&apos;t do -- Andreas Fertig: 0 evidence, impact=build_dependency_fix, recommendation=watch
-- Re: [PATCH] [TEST] add a broken patch: 0 evidence, impact=test_only_change, recommendation=watch
 - Annotations for C++26 Hashing -- Krystian Piękoś: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - C++26: Structured Bindings in Conditions -- Sandor Dargo: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - CppCon 2025 How To Build Robust C++ Inter-Process Queues -- Jody Hagins: 0 evidence, impact=build_dependency_fix, recommendation=watch
-- Re: [PATCH 6/6] media: qcom: camss: Enumerate resources for Glymur: 0 evidence, impact=unknown, recommendation=unknown
+- Re: [PATCH v2] media: ec168: fix slab-out-of-bounds in ec168_i2c_xfer: 0 evidence, impact=runtime_behavior_change, recommendation=main
+- Re: [PATCH v4 3/3] media: iris: Add Gen2 firmware autodetect and fallback: 0 evidence, impact=unknown, recommendation=unknown
+- Re: [PATCH 4/7] drivers: staging: media: sunxi: cedrus: add H616 variant: 0 evidence, impact=unknown, recommendation=unknown

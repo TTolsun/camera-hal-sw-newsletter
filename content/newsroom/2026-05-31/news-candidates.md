@@ -36,7 +36,6 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 |---|---|---|---|---|---|---|---|
 | watch | watch | cpp_ai_tooling_fallback | Android CLI Now Stable 1.0: Accelerate developing for Android using any agent | Android Developers Blog | Tue, 19 May 2026 11:45:00 +0000 | Source has gap risk; keep as watch material. | [link](https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html) |
 | watch | watch | cpp_ai_tooling_fallback | How ref qualifiers led to deducing this | ISO C++ Blog | Fri, 29 May 2026 14:23:44 +0000 | Source has gap risk; keep as watch material. | [link](https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this) |
-| watch | watch | cpp_ai_tooling_fallback | [linuxtv-media:next] BUILD SUCCESS a947fc3ba8a0c097862613bbaaa0bbd06d10b0d2 | lore.kernel.org linux-media list | 2026-05-30T13:04:44Z | Mailing-list/community lead requires primary confirmation. | [link](https://lore.kernel.org/linux-media/202605302149.FUyMS34H-lkp@intel.com/) |
 | watch | watch | cpp_ai_tooling_fallback | The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo | ISO C++ Blog | Wed, 20 May 2026 22:51:47 +0000 | Source has gap risk; keep as watch material. | [link](https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru) |
 | watch | watch | cpp_ai_tooling_fallback | C++26: Structured Bindings in Conditions -- Sandor Dargo | ISO C++ Blog | Tue, 26 May 2026 22:57:06 +0000 | Source has gap risk; keep as watch material. | [link](https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo) |
 
@@ -64,18 +63,19 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 | reference | reference | generic_tech_watchlist | What's new in Android for Cars: Unifying platforms and unlocking premium experiences | Android Developers Blog | Tue, 19 May 2026 08:30:00 +0000 | Background reference page; not an article candidate. | [link](https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html) |
 | reference | reference | generic_tech_watchlist | What's New in Wear OS 7 | Android Developers Blog | Tue, 19 May 2026 08:00:00 +0000 | Background reference page; not an article candidate. | [link](https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html) |
 | reference | reference | generic_tech_watchlist | C++: The Documentary trailer | ISO C++ Blog | Thu, 14 May 2026 15:01:46 +0000 | Background reference page; not an article candidate. | [link](https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer) |
+| reference | reference | generic_tech_watchlist | Re: [PATCH v2 1/7] media: qcom: iris: Centralize internal buffer table selection | lore.kernel.org linux-media list | 2026-05-30T23:56:31Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/178018538483.10222.11193748558944377408.b4-reply@b4/) |
+| reference | reference | generic_tech_watchlist | Re: [PATCH] [TEST] add a broken patch | lore.kernel.org linux-media list | 2026-05-30T23:43:07Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/202605310729.zrGRsEVN-lkp@intel.com/) |
+| reference | reference | generic_tech_watchlist | Re: [PATCH v4] media: iris: optimize COMV buffer allocation for VPU3x and VPU4x | lore.kernel.org linux-media list | 2026-05-30T16:21:53Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/9665bf18-57fd-404c-b0fa-df13f2847606@kernel.org/) |
 | reference | reference | generic_tech_watchlist | Re: [PATCH 4/4] MAINTAINERS: Add entry for Rust dma-buf | lore.kernel.org linux-media list | 2026-05-30T15:20:34Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/DIW42TO5HY6H.2RLL8V8H48A5A@kernel.org/) |
 | reference | reference | generic_tech_watchlist | [PATCH 4/4] MAINTAINERS: Add entry for Rust dma-buf | lore.kernel.org linux-media list | 2026-05-30T14:37:38Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/20260530143541.229628-7-phasta@kernel.org/) |
-| reference | reference | generic_tech_watchlist | Re: [PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible | lore.kernel.org linux-media list | 2026-05-30T14:09:28Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/ahrvlYI-WfHwUPMC@shikoro/) |
-| reference | reference | generic_tech_watchlist | Re: [PATCH 5/6] media: qcom: camss: enable vfe for Glymur | lore.kernel.org linux-media list | 2026-05-30T12:25:13Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/20260530-undetectable-caribou-of-development-2b1241@quoll/) |
-| reference | reference | generic_tech_watchlist | [PATCH] [TEST] add a broken patch | lore.kernel.org linux-media list | 2026-05-30T11:40:13Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/9050789262f583cef777eb3a9c3e07948faf18c3.1780141190.git.mchehab+huawei@kernel.org/) |
 | reference | reference | generic_tech_watchlist | Let the Compiler Check Your Units -- Wu Yongwei | ISO C++ Blog | Fri, 22 May 2026 22:54:40 +0000 | Background reference page; not an article candidate. | [link](https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei) |
 | reference | reference | cpp_ai_tooling_fallback | What reinterpret_cast doesn&apos;t do -- Andreas Fertig | ISO C++ Blog | Mon, 18 May 2026 22:46:29 +0000 | Background reference page; not an article candidate. | [link](https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig) |
-| reference | reference | generic_tech_watchlist | Re: [PATCH] [TEST] add a broken patch | lore.kernel.org linux-media list | 2026-05-30T11:42:25Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/20260530114225.869391F00893@smtp.kernel.org/) |
 | reference | reference | cpp_ai_tooling_fallback | Annotations for C++26 Hashing -- Krystian Piękoś | ISO C++ Blog | Fri, 29 May 2026 23:33:18 +0000 | Background reference page; not an article candidate. | [link](https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko) |
 | reference | reference | generic_tech_watchlist | CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos | ISO C++ Blog | Mon, 25 May 2026 21:47:37 +0000 | Background reference page; not an article candidate. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos) |
 | reference | reference | generic_tech_watchlist | CppCon 2025 How To Build Robust C++ Inter-Process Queues -- Jody Hagins | ISO C++ Blog | Thu, 21 May 2026 21:43:57 +0000 | Background reference page; not an article candidate. | [link](https://isocpp.org//blog/2026/05/cppcon-2025-how-to-build-robust-cpp-inter-process-queues-jody-hagins) |
-| reference | reference | generic_tech_watchlist | Re: [PATCH 6/6] media: qcom: camss: Enumerate resources for Glymur | lore.kernel.org linux-media list | 2026-05-30T12:27:11Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/20260530-efficient-inscrutable-grasshopper-40cd21@quoll/) |
+| reference | reference | generic_tech_watchlist | Re: [PATCH v2] media: ec168: fix slab-out-of-bounds in ec168_i2c_xfer | lore.kernel.org linux-media list | 2026-05-31T01:47:15Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/CADhLXY4SKRFnkDhR31U9pU_4CQ9WC+2AOfYL1KXnLoedTDoWbA@mail.gmail.com/) |
+| reference | reference | generic_tech_watchlist | Re: [PATCH v4 3/3] media: iris: Add Gen2 firmware autodetect and fallback | lore.kernel.org linux-media list | 2026-05-30T23:43:24Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/178018459824.10222.12026103622148092471.b4-reply@b4/) |
+| reference | reference | generic_tech_watchlist | Re: [PATCH 4/7] drivers: staging: media: sunxi: cedrus: add H616 variant | lore.kernel.org linux-media list | 2026-05-30T16:43:18Z | Background reference page; not an article candidate. | [link](https://lore.kernel.org/linux-media/CAGb2v64wDvLMFn9DYs-kH1S2PpHJat-imxR5eJSQAUYjOp=Xdg@mail.gmail.com/) |
 
 ## 원본 후보
 
@@ -429,21 +429,49 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 날짜 근거 있음: yes
 - 요약: Sponsored by HRT and produced by CultRepo , we're pleased to share the official trailer for C++: The Documentary . The trailer premieres today at 19:00 UTC. Click Notify me on the YouTube Premiere page to get a reminder when it goes live. The film will have its world premiere on May 28 at a special live event in New York City&rsquo;s Financial District, followed by a panel discussion that will be recorded for later release. C++: The Documentary will be released worldwide on YouTube on June 4, wi
 
-### 26. [linuxtv-media:next] BUILD SUCCESS a947fc3ba8a0c097862613bbaaa0bbd06d10b0d2
+### 26. Re: [PATCH v2 1/7] media: qcom: iris: Centralize internal buffer table selection
 
 - 출처: lore.kernel.org linux-media list
 - 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-30T13:04:44Z
-- Link: https://lore.kernel.org/linux-media/202605302149.FUyMS34H-lkp@intel.com/
+- 발행일: 2026-05-30T23:56:31Z
+- Link: https://lore.kernel.org/linux-media/178018538483.10222.11193748558944377408.b4-reply@b4/
 - Section: Linux Camera / Driver
-- Selection: watch
-- Evidence level: watch
-- Topic: cpp_ai_tooling_fallback
-- Reason: Mailing-list/community lead requires primary confirmation.
+- Selection: reference
+- Evidence level: reference
+- Topic: generic_tech_watchlist
+- Reason: Background reference page; not an article candidate.
 - 날짜 근거 있음: yes
-- 요약: tree/branch: https://git.linuxtv.org/media.git next branch HEAD: a947fc3ba8a0c097862613bbaaa0bbd06d10b0d2 media: rcar-vin: Drop min_queued_buffers elapsed time: 926m configs tested: 219 configs skipped: 2 The following configs have been built successfully. More configs may be tested in the coming days. tested configs: alpha allnoconfig gcc-15.2.0 alpha allyesconfig gcc-15.2.0 alpha defconfig gcc-15.2.0 arc allmodconfig clang-16 arc allmodconfig gcc-15.2.0 arc allnoconfig gcc-15.2.0 arc allyescon
+- 요약: On 2026-04-23 17:30 +0530, Dikshita Agarwal wrote: > Internal buffer table dispatch is duplicated across multiple Iris code > paths, which is error‑prone and makes future changes harder to reason > about. > > Consolidate the buffer dispatch logic into a single helper so that table > selection is defined in exactly one place and keep call sites minimal. > No functional change intended. > > Signed-off-by: Dikshita Agarwal Reviewed-by: Bryan O'Donoghue --- bod
 
-### 27. Re: [PATCH 4/4] MAINTAINERS: Add entry for Rust dma-buf
+### 27. Re: [PATCH] [TEST] add a broken patch
+
+- 출처: lore.kernel.org linux-media list
+- 출처 URL: https://lore.kernel.org/linux-media/
+- 발행일: 2026-05-30T23:43:07Z
+- Link: https://lore.kernel.org/linux-media/202605310729.zrGRsEVN-lkp@intel.com/
+- Section: Linux Camera / Driver
+- Selection: reference
+- Evidence level: reference
+- Topic: generic_tech_watchlist
+- Reason: Background reference page; not an article candidate.
+- 날짜 근거 있음: yes
+- 요약: Hi Mauro, kernel test robot noticed the following build errors: [auto build test ERROR on staging/staging-testing] [also build test ERROR on staging/staging-next staging/staging-linus sailus-media-tree/master sailus-media-tree/streams linus/master v7.1-rc5 next-20260529] [If your patch is applied to the wrong git tree, kindly drop us a note. And when submitting patch, we suggest to use '--base' as documented in https://git-scm.com/docs/git-format-patch#_base_tree_information ] url: https://githu
+
+### 28. Re: [PATCH v4] media: iris: optimize COMV buffer allocation for VPU3x and VPU4x
+
+- 출처: lore.kernel.org linux-media list
+- 출처 URL: https://lore.kernel.org/linux-media/
+- 발행일: 2026-05-30T16:21:53Z
+- Link: https://lore.kernel.org/linux-media/9665bf18-57fd-404c-b0fa-df13f2847606@kernel.org/
+- Section: Linux Camera / Driver
+- Selection: reference
+- Evidence level: reference
+- Topic: generic_tech_watchlist
+- Reason: Background reference page; not an article candidate.
+- 날짜 근거 있음: yes
+- 요약: On 30/05/2026 10:24, Vishnu Reddy wrote: > Hi Bryan, > > I checked that the patch is already present in linux-media/users/bodonoghue → > venus-iris-next. > It also applies cleanly on the following branches: > linux-next → master > media tree → next > linux-media/users/bodonoghue → next > linux-media/users/bodonoghue → next+fixes > linux-media/users/bodonoghue → next-smoketest > > Could you please let me know on which branch the patch is not applying > cleanly and where exactly you'd like me to r
+
+### 29. Re: [PATCH 4/4] MAINTAINERS: Add entry for Rust dma-buf
 
 - 출처: lore.kernel.org linux-media list
 - 출처 URL: https://lore.kernel.org/linux-media/
@@ -457,7 +485,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 날짜 근거 있음: yes
 - 요약: On Sat May 30, 2026 at 4:35 PM CEST, Philipp Stanner wrote: > @@ -7529,6 +7530,7 @@ T: git https://gitlab.freedesktop.org/drm/misc/kernel.git > F: Documentation/driver-api/dma-buf.rst > F: Documentation/userspace-api/dma-buf-alloc-exchange.rst > F: drivers/dma-buf/ > +F: rust/kernel/dma_buf/ Please also add rust/helpers/dma_fence.c. Given that dma-buf goes through drm-misc, we should probably also add those file to the drm-rust entry.
 
-### 28. [PATCH 4/4] MAINTAINERS: Add entry for Rust dma-buf
+### 30. [PATCH 4/4] MAINTAINERS: Add entry for Rust dma-buf
 
 - 출처: lore.kernel.org linux-media list
 - 출처 URL: https://lore.kernel.org/linux-media/
@@ -471,49 +499,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 날짜 근거 있음: yes
 - 요약: Rust does now have abstractions for dma_fence. These abstractions are quite complicated and require expertise with both the C and the Rust side. Therefore, using the existing entry also for maintenance of the Rust code appears reasonable. Philipp volunteers to help maintain the dma_fence abstractions. Add a corresponding MAINTAINERS entry. Signed-off-by: Philipp Stanner --- Just as a suggestion, I don't want to force myself in here. Would also be perfectly happy with other approaches; there are
 
-### 29. Re: [PATCH 2/6] dt-bindings: i2c: qcom-cci: Document Glymur compatible
-
-- 출처: lore.kernel.org linux-media list
-- 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-30T14:09:28Z
-- Link: https://lore.kernel.org/linux-media/ahrvlYI-WfHwUPMC@shikoro/
-- Section: Linux Camera / Driver
-- Selection: reference
-- Evidence level: reference
-- Topic: generic_tech_watchlist
-- Reason: Background reference page; not an article candidate.
-- 날짜 근거 있음: yes
-- 요약: [-- Attachment #1: Type: text/plain, Size: 391 bytes --] On Fri, May 29, 2026 at 08:07:22PM +0530, Vikram Sharma wrote: > From: Nihal Kumar Gupta > > Add Glymur compatible consistent with CAMSS CCI interfaces. > > Signed-off-by: Nihal Kumar Gupta > Signed-off-by: Vikram Sharma Reviewed-by: Wolfram Sang [-- Attachment #2: signature.asc --] [-- Type: application/pgp-signature, Size: 833 bytes --]
-
-### 30. Re: [PATCH 5/6] media: qcom: camss: enable vfe for Glymur
-
-- 출처: lore.kernel.org linux-media list
-- 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-30T12:25:13Z
-- Link: https://lore.kernel.org/linux-media/20260530-undetectable-caribou-of-development-2b1241@quoll/
-- Section: Linux Camera / Driver
-- Selection: reference
-- Evidence level: reference
-- Topic: generic_tech_watchlist
-- Reason: Background reference page; not an article candidate.
-- 날짜 근거 있음: yes
-- 요약: On Fri, May 29, 2026 at 08:07:25PM +0530, Vikram Sharma wrote: > From: Prashant Shrotriya > > Extend vfe_src_pad_code() and vfe_bpl_align() for Glymur. Why is this a separate patch? You already added Glymur support at previous commits, so WHY you are doing more work? Where is it explained? Your commit msg must explain WHY you are doing this, not what you did. Best regards, Krzysztof
-
-### 31. [PATCH] [TEST] add a broken patch
-
-- 출처: lore.kernel.org linux-media list
-- 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-30T11:40:13Z
-- Link: https://lore.kernel.org/linux-media/9050789262f583cef777eb3a9c3e07948faf18c3.1780141190.git.mchehab+huawei@kernel.org/
-- Section: Linux Camera / Driver
-- Selection: reference
-- Evidence level: reference
-- Topic: generic_tech_watchlist
-- Reason: Background reference page; not an article candidate.
-- 날짜 근거 있음: yes
-- 요약: IGNORE THIS PATCH. This causes a compilation breakage. Its only goal is to do some patchwork tests. Signed-off-by: Mauro Carvalho Chehab --- drivers/staging/media/atomisp/pci/sh_css.c \| 3 +++ 1 file changed , 3 insertions(+) diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c index 00082276f1db..3b997a9453e9 100644 --- a/drivers/staging/media/atomisp/pci/sh_css.c +++ b/drivers/staging/media/atomisp/pci/sh_css.c @@ -89,6 +89,9 @@ struct sh_css my_c
-
-### 32. Let the Compiler Check Your Units -- Wu Yongwei
+### 31. Let the Compiler Check Your Units -- Wu Yongwei
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -527,7 +513,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 날짜 근거 있음: yes
 - 요약: Mixing your units can be disastrous. Wu Yongwei takes a quick look at C++ unit libraries that can help keep everything in order. Let the Compiler Check Your Units by Wu Yongwei From the article: I recently came across a C++ standard proposal P3045 [ P3045R7 ], which aims to add physical units to C++. Curious, I looked into the existing unit libraries and went down quite a rabbit hole. Type safety and user-defined literals Before exploring these libraries, I was already somewhat familiar with the
 
-### 33. The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo
+### 32. The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -541,7 +527,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 날짜 근거 있음: yes
 - 요약: C++20 modules have been in the standard for more than 5 years already. They promise to deliver a big change to how we write C++, but their adoption hasn't been as widespread as one would have expected. This talk is a deep dive into the practical aspects of C++20 modules, exploring the reality of the ecosystem as it is today. The road to 'import boost': a library developer's journey into C++20 modules Rub&eacute;n P&eacute;rez Hidalgo Watch now:
 
-### 34. What reinterpret_cast doesn&apos;t do -- Andreas Fertig
+### 33. What reinterpret_cast doesn&apos;t do -- Andreas Fertig
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -555,21 +541,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 날짜 근거 있음: yes
 - 요약: In today's post, I will explain one of C++'s biggest pitfalls:&nbsp; reinterpret_cast . Another title for this post could be:&nbsp; This is&nbsp;not&nbsp;the cast you're looking for! What reinterpret_cast doesn't do Andreas Fertig From the article: My motivation for this blog post comes from multiple training classes I thought over the past several months and a couple of talks I gave. Since C++23, you have a new facility in the Standard Library:&nbsp; std::start_lifetime_as . When teaching class
 
-### 35. Re: [PATCH] [TEST] add a broken patch
-
-- 출처: lore.kernel.org linux-media list
-- 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-30T11:42:25Z
-- Link: https://lore.kernel.org/linux-media/20260530114225.869391F00893@smtp.kernel.org/
-- Section: Linux Camera / Driver
-- Selection: reference
-- Evidence level: reference
-- Topic: generic_tech_watchlist
-- Reason: Background reference page; not an article candidate.
-- 날짜 근거 있음: yes
-- 요약: Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider: - [Low] Intentional compilation breakage via an invalid syntax token at global scope. -- commit d87fbaaa0dc34bb42824653229b401ea3e07a379 Author: Mauro Carvalho Chehab add a broken patch This commit introduces a compilation regression for the stated purpose of testing patchwork. It adds a bare identifier to the global scope of sh_css.c. > diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/sta
-
-### 36. Annotations for C++26 Hashing -- Krystian Piękoś
+### 34. Annotations for C++26 Hashing -- Krystian Piękoś
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -583,7 +555,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 날짜 근거 있음: yes
 - 요약: Static reflection already makes generic hashing in C++26 far more expressive, but annotations push it into genuinely ergonomic territory. By letting types explicitly opt-in to hashing and allowing individual members or base classes to be cleanly excluded, we get a solution that is both powerful and readable. Annotations for C++26 Hashing by Krystian Piękoś From the article: In my&nbsp; recent post , I demonstrated how to use static reflection from C++26 to implement generic hash computation for
 
-### 37. C++26: Structured Bindings in Conditions -- Sandor Dargo
+### 35. C++26: Structured Bindings in Conditions -- Sandor Dargo
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -597,7 +569,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 날짜 근거 있음: yes
 - 요약: Structured bindings in conditions may look like a small syntax sugar, but they let us write much more expressive conditional logic. By allowing decomposition and condition checking to live side by side, C++26 reduces boilerplate, improves locality, and better supports modern result types that bundle status and data together. This is a pragmatic, well-integrated evolution of a feature that has already proven its value since C++17. C++26: Structured Bindings in Conditions by Sandor Dargo From the
 
-### 38. CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos
+### 36. CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -611,7 +583,7 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 날짜 근거 있음: yes
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! Could C++ Developers Handle an ABI Break Today? by Luis Caro Campos Summary of the talk: The C++
 
-### 39. CppCon 2025 How To Build Robust C++ Inter-Process Queues -- Jody Hagins
+### 37. CppCon 2025 How To Build Robust C++ Inter-Process Queues -- Jody Hagins
 
 - 출처: ISO C++ Blog
 - 출처 URL: https://isocpp.org/blog
@@ -625,24 +597,53 @@ Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, ne
 - 날짜 근거 있음: yes
 - 요약: Registration is now open for CppCon 2026!&nbsp;The conference starts on September 12 and will be held&nbsp; in person in Aurora, CO . To whet your appetite for this year&rsquo;s conference, we&rsquo;re posting videos of some of the top-rated talks from last year's conference. Here&rsquo;s another CppCon talk video we hope you will enjoy &ndash; and why not&nbsp; register today &nbsp;for CppCon 2026! How To Build Robust C++ Inter-Process Queues by Jody Hagins Summary of the talk: This talk will o
 
-### 40. Re: [PATCH 6/6] media: qcom: camss: Enumerate resources for Glymur
+### 38. Re: [PATCH v2] media: ec168: fix slab-out-of-bounds in ec168_i2c_xfer
 
 - 출처: lore.kernel.org linux-media list
 - 출처 URL: https://lore.kernel.org/linux-media/
-- 발행일: 2026-05-30T12:27:11Z
-- Link: https://lore.kernel.org/linux-media/20260530-efficient-inscrutable-grasshopper-40cd21@quoll/
+- 발행일: 2026-05-31T01:47:15Z
+- Link: https://lore.kernel.org/linux-media/CADhLXY4SKRFnkDhR31U9pU_4CQ9WC+2AOfYL1KXnLoedTDoWbA@mail.gmail.com/
 - Section: Linux Camera / Driver
 - Selection: reference
 - Evidence level: reference
 - Topic: generic_tech_watchlist
 - Reason: Background reference page; not an article candidate.
 - 날짜 근거 있음: yes
-- 요약: On Fri, May 29, 2026 at 08:07:26PM +0530, Vikram Sharma wrote: > From: Prashant Shrotriya > > Enumerate csiphy, csid vfe and tpg resources for Glymur. NAK, this is getting ridicilous. You add incomplete "compatible" claiming that such change as adding a compatible is a complete work, complete change (as explained in submitting patches). Then later you add missing description of what that compatible means. I could not stress more how WRONG this approach is. Stop inflating your patchcount.
+- 요약: On Tue, Mar 24, 2026 at 7:25 AM Deepanshu Kartikey wrote: > > The WRITE_DEMOD path in ec168_i2c_xfer() checks msg[i].len before accessing the buffer, but then reads both buf[0] (register) > and buf[1] (value). If userspace supplies a 1-byte I2C message, > the read of buf[1] goes out of bounds, triggering a KASAN > slab-out-of-bounds error. > > Fix by checking msg[i].len buffer is too short to contain both register and value bytes. > > Fixes: a6dcefcc08ec ("media: dvb-usb-v2: ec168: fix null-ptr-
+
+### 39. Re: [PATCH v4 3/3] media: iris: Add Gen2 firmware autodetect and fallback
+
+- 출처: lore.kernel.org linux-media list
+- 출처 URL: https://lore.kernel.org/linux-media/
+- 발행일: 2026-05-30T23:43:24Z
+- Link: https://lore.kernel.org/linux-media/178018459824.10222.12026103622148092471.b4-reply@b4/
+- Section: Linux Camera / Driver
+- Selection: reference
+- Evidence level: reference
+- Topic: generic_tech_watchlist
+- Reason: Background reference page; not an article candidate.
+- 날짜 근거 있음: yes
+- 요약: On 2026-04-29 17:39 +0530, Dikshita Agarwal wrote: > Some Iris platforms support both Gen1 and Gen2 HFI firmware images. > Update the firmware loading logic to handle this generically by > preferring Gen2 when available, while safely falling back to Gen1 > when required. > > The firmware loading logic is updated with the following priority: > 1. Device Tree (`firmware-name`): If specified, load unconditionally. > 2. Gen2 default : If no DT override exists, select the Gen2 firmware > descriptor w
+
+### 40. Re: [PATCH 4/7] drivers: staging: media: sunxi: cedrus: add H616 variant
+
+- 출처: lore.kernel.org linux-media list
+- 출처 URL: https://lore.kernel.org/linux-media/
+- 발행일: 2026-05-30T16:43:18Z
+- Link: https://lore.kernel.org/linux-media/CAGb2v64wDvLMFn9DYs-kH1S2PpHJat-imxR5eJSQAUYjOp=Xdg@mail.gmail.com/
+- Section: Linux Camera / Driver
+- Selection: reference
+- Evidence level: reference
+- Topic: generic_tech_watchlist
+- Reason: Background reference page; not an article candidate.
+- 날짜 근거 있음: yes
+- 요약: On Tue, May 5, 2026 at 7:18 PM Jernej Škrabec wrote: > > Dne torek, 5. maj 2026 ob 15:48:08 Srednjeevropski poletni čas je Chen-Yu Tsai napisal(a): > > The Allwinner H616 SoC has a video engine hardware block like the one > > found on previous generations such as the H6. In addition to the > > currently supported features of the H6, it is also supposed to include > > Remove "supposed". I can't actually verify that, so "supposed" is accurate from my point of view. ChenYu > > a VP9 decoder. Howeve
 
 ## Collector 실패
 
 - LLVM Project Blog: 404 Not Found
 - OpenAI News: 403 Forbidden
+- 요즘IT: 403 Forbidden
 
 ## 편집장 체크리스트
 

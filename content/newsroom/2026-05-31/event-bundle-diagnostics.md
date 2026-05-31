@@ -12,8 +12,8 @@
 ## Dedupe Reason Counts
 
 - normalized_primary_url: 29
-- source_id + release.date + component: 7
-- source_id + release.version: 3
+- source_id + release.date + component: 8
+- source_id + release.version: 2
 
 ## Event Bundles
 
@@ -42,17 +42,17 @@
 - event_3744977cfc68: primary_url, normalized_primary_url, primary=https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html, evidence=0, confidence=low
 - event_fe9e2982103e: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this, evidence=0, confidence=low
 - event_4f422e47339f: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer, evidence=0, confidence=low
-- event_88fa36cdc8ab: release_note, source_id + release.version, primary=https://lore.kernel.org/linux-media/202605302149.fuyms34h-lkp@intel.com, evidence=0, confidence=high
+- event_8be0d4f455e3: primary_url, normalized_primary_url, primary=https://lore.kernel.org/linux-media/178018538483.10222.11193748558944377408.b4-reply@b4, evidence=0, confidence=low
+- event_d6c7ae3618da: primary_url, normalized_primary_url, primary=https://lore.kernel.org/linux-media/202605310729.zrgrsevn-lkp@intel.com, evidence=0, confidence=low
+- event_366da3672e7b: primary_url, normalized_primary_url, primary=https://lore.kernel.org/linux-media/9665bf18-57fd-404c-b0fa-df13f2847606@kernel.org, evidence=0, confidence=low
 - event_89a786a3b885: release_note, source_id + release.date + component, primary=https://lore.kernel.org/linux-media/diw42to5hy6h.2rll8v8h48a5a@kernel.org, evidence=1, confidence=medium
-- event_bcec803f16d6: primary_url, normalized_primary_url, primary=https://lore.kernel.org/linux-media/ahrvlyi-wfhwupmc@shikoro, evidence=0, confidence=low
-- event_6c2ec42513e6: primary_url, normalized_primary_url, primary=https://lore.kernel.org/linux-media/20260530-undetectable-caribou-of-development-2b1241@quoll, evidence=0, confidence=low
-- event_b2f0403d9c6b: primary_url, normalized_primary_url, primary=https://lore.kernel.org/linux-media/9050789262f583cef777eb3a9c3e07948faf18c3.1780141190.git.mchehab+huawei@kernel.org, evidence=0, confidence=low
 - event_8d2c20f81637: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei, evidence=0, confidence=low
 - event_a023062a2e52: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru, evidence=0, confidence=low
 - event_47efcf32a7f3: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig, evidence=0, confidence=low
-- event_237b05217a0b: primary_url, normalized_primary_url, primary=https://lore.kernel.org/linux-media/20260530114225.869391f00893@smtp.kernel.org, evidence=0, confidence=low
 - event_3b2133341d90: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko, evidence=0, confidence=low
 - event_b433fac84afe: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo, evidence=0, confidence=low
 - event_762eb693ab2e: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos, evidence=0, confidence=low
 - event_e4b2671da11f: primary_url, normalized_primary_url, primary=https://isocpp.org//blog/2026/05/cppcon-2025-how-to-build-robust-cpp-inter-process-queues-jody-hagins, evidence=0, confidence=low
-- event_fbdafb118c63: primary_url, normalized_primary_url, primary=https://lore.kernel.org/linux-media/20260530-efficient-inscrutable-grasshopper-40cd21@quoll, evidence=0, confidence=low
+- event_d58c046490ee: primary_url, normalized_primary_url, primary=https://lore.kernel.org/linux-media/cadhlxy4skrfnkdhr31u9pu_4cq9wc+2aofyl1kxnloedtdowba@mail.gmail.com, evidence=0, confidence=low
+- event_7a6bee03981b: primary_url, normalized_primary_url, primary=https://lore.kernel.org/linux-media/178018459824.10222.12026103622148092471.b4-reply@b4, evidence=0, confidence=low
+- event_b13c6c576d43: release_note, source_id + release.date + component, primary=https://lore.kernel.org/linux-media/cagb2v64wdvlmfn9dys-kh1s2pphjat-imxr5ejsqauyjop=xdg@mail.gmail.com, evidence=0, confidence=medium
