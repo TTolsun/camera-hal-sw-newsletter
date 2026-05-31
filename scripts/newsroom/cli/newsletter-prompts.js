@@ -51,6 +51,7 @@ function articleSectionContractPrompt() {
     'HAL Signal contract: 모든 main article은 why_now, reader_owners, check_within_2_weeks, impact_axes, do_not_overstate key만 가진 hal_signal_capsule을 포함해야 합니다.',
     'hal_signal_capsule.reader_owners와 hal_signal_capsule.impact_axes는 arrays여야 합니다. 제공된 capsule metadata와 article evidence만 사용하고 누락된 source claim을 만들지 마세요.',
     'hal_signal_capsule.check_within_2_weeks는 generic review가 아니라 bucket scope에 맞는 구체 follow-up을 명명해야 합니다. direct HAL/driver evidence가 있는 경우에만 stream, buffer, metadata, request/result, vendor tag를 사용하세요. app/API/tooling article에서는 permission, CameraX/Camera2 usage, preview/capture behavior, build/test/debug workflow 수준으로 제한하세요.',
+    'hal_signal_capsule.do_not_overstate는 generic guardrail 문구나 prompt boilerplate를 그대로 복사하지 말고, 해당 article의 source가 직접 뒷받침하지 않는 구체적 HAL/driver claim, API name, metadata key, stream/buffer behavior, vendor tag, CTS/VTS test 항목을 명명해 article-specific warning 배열로 작성하세요. 과장 위험이 없으면 빈 배열을 두세요.',
     '제공되어 있으면 additive HAL signal fields인 hal_impact_axes, reader_owners, actionability_level, effective_actionability_level, actionability_upgrade_reason, signal_quality_status, do_not_overstate, fallback_promotion_allowed, fallback_promotion_reason, fallback_guard_notes, soc_signal_type, soc_signal_source_allowed, camera_pipeline_link를 포함하세요.'
   ].join('\n');
 }
