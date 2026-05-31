@@ -291,8 +291,8 @@ test('stage-specific thinking budgets are applied to Gemini request config', asy
       { thinkingBudget: 0 },
       { thinkingBudget: 1024 },
       { thinkingBudget: 0 },
-      { thinkingBudget: 0 },
-      { thinkingBudget: 0 },
+      { thinkingBudget: 1024 },
+      { thinkingBudget: 1024 },
       { thinkingBudget: 0 }
     ]
   );

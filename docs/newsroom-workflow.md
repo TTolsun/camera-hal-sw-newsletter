@@ -134,7 +134,11 @@ generator는 `content/newsroom/YYYY-MM-DD/summary-cache-report.json`, `summary-c
 
 Gemini 호출이 성공적으로 응답을 반환하면 generator는 response usage metadata를 stage/model/attempt 단위로 기록합니다. 비용 리포트는 `.tmp/newsroom-cost-report.json`과 `content/newsroom/YYYY-MM-DD/cost-report.md`에 남으며, prompt tokens, output tokens, thinking tokens, cached tokens, total tokens, estimated cost를 포함합니다.
 
-Gemini request에는 stage별 thinking budget을 적용합니다. 기본값은 reporter `0`, editor/completion `512`, repair `0`, fact-check `0`, scoring `0`입니다. `GEMINI_THINKING_BUDGET_*` 환경변수로 조정할 수 있고, cost report의 call row에는 실제 response의 `thinking_tokens`와 함께 `thinking_budget_requested`, `thinking_budget_applied`가 남습니다.
+Gemini request에는 stage별 thinking budget과 temperature를 적용합니다. thinking budget 기본값은 reporter `0`, editor/completion `1024`, repair `0`, fact-check `1024`, judge `1024`, scoring `0`입니다. editor/fact-check/judge의 thinking budget 활성화로 일일 약 12K thinking 토큰이 추가되며, Gemini 2.5 가격 기준 수 센트 수준입니다. fact-check 정확도와 publication-ready 판정 신뢰도 향상으로 정당화됩니다. 비용이 예상을 초과하면 `GEMINI_THINKING_BUDGET_JUDGE=0` 같은 env override로 코드 변경 없이 즉시 조정할 수 있습니다.
+
+temperature 기본값은 stage별로 다릅니다. reporter `0.30`, editor `0.55`, fact-check `0.20`, repair `0.25`, judge `0.20`, source discovery `0.45`, 기타(default) `0.35`입니다. `GEMINI_TEMPERATURE_*` 환경변수로 각 stage를 독립적으로 조정할 수 있습니다(범위 0 이상 2 이하).
+
+`GEMINI_THINKING_BUDGET_*` 및 `GEMINI_TEMPERATURE_*` 환경변수로 조정할 수 있고, cost report의 call row에는 실제 response의 `thinking_tokens`와 함께 `thinking_budget_requested`, `thinking_budget_applied`가 남습니다.
 
 `NEWSROOM_WARN_COST_USD`와 `NEWSROOM_MAX_COST_USD`는 비용 관찰용 기준값입니다. 현재 운영 기준으로 두 값을 넘어도 workflow를 실패시키지 않고 warning만 출력합니다. 이 리포트는 비용 발생 위치를 파악하기 위한 artifact이며, 품질 점수나 publish readiness 판단을 변경하지 않습니다.
 
@@ -190,11 +194,18 @@ GEMINI_MAX_RETRIES=2
 GEMINI_RETRY_DELAYS_MS=20000,10000
 GEMINI_RETRY_MAX_DELAY_MS=300000
 GEMINI_THINKING_BUDGET_REPORTER=0
-GEMINI_THINKING_BUDGET_EDITOR=512
+GEMINI_THINKING_BUDGET_EDITOR=1024
 GEMINI_THINKING_BUDGET_REPAIR=0
-GEMINI_THINKING_BUDGET_FACTCHECK=0
-GEMINI_THINKING_BUDGET_JUDGE=0
+GEMINI_THINKING_BUDGET_FACTCHECK=1024
+GEMINI_THINKING_BUDGET_JUDGE=1024
 GEMINI_THINKING_BUDGET_SCORING=0
+GEMINI_TEMPERATURE_DEFAULT=0.35
+GEMINI_TEMPERATURE_SOURCE_DISCOVERY=0.45
+GEMINI_TEMPERATURE_REPORTER=0.30
+GEMINI_TEMPERATURE_EDITOR=0.55
+GEMINI_TEMPERATURE_FACTCHECK=0.20
+GEMINI_TEMPERATURE_REPAIR=0.25
+GEMINI_TEMPERATURE_JUDGE=0.20
 NEWSROOM_MAX_QUALITY_RETRIES=1
 NEWSROOM_MAX_SECTION_REPAIRS=1
 NEWSROOM_WARN_COST_USD=0.15
