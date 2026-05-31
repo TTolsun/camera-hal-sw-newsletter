@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-31",
-  "generated_at": "2026-05-30T15:41:52.230Z",
+  "generated_at": "2026-05-31T05:33:05.544Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -21,7 +21,7 @@
       "content/newsroom/2026-05-31/stale-claim-report.json"
     ],
     "missing": [
-      "content/newsroom/2026-05-31/stale-claim-report.json"
+      "content/newsroom/2026-05-31/repair-failure.json"
     ],
     "used": [
       "content/newsroom/2026-05-31/generation-status.json",
@@ -34,17 +34,17 @@
       "content/newsroom/2026-05-31/fact-check-report.json",
       "content/newsroom/2026-05-31/source-effectiveness-report.json",
       "content/source-events/2026-05-31/source-change-events.json",
-      "content/newsroom/2026-05-31/repair-failure.json"
+      "content/newsroom/2026-05-31/stale-claim-report.json"
     ]
   },
   "publish_status": {
-    "status": "needs-fix",
-    "run_mode": "diagnostics_only",
-    "quality_score": 79,
+    "status": "publish-ready",
+    "run_mode": "publish_ready",
+    "quality_score": 98,
     "quality_threshold": 85,
-    "fact_check_status": "NEEDS_FIX",
-    "final_publish_ready": false,
-    "public_newsletter_ready": false,
+    "fact_check_status": "PASS",
+    "final_publish_ready": true,
+    "public_newsletter_ready": true,
     "review_pr_ready": true
   },
   "selection_summary": {
@@ -70,7 +70,7 @@
   "claim_validation_summary": {
     "status": "available",
     "bound_claims": 4,
-    "total_claims": 6,
+    "total_claims": 5,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
     "available_article_count": 2,
@@ -271,7 +271,7 @@
       "key_evidence": [
         "version_or_release: Google I/O 2026",
         "api_or_component: CameraX / Android camera APIs",
-        "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX를 포함한 핵심 도구를 제공하여..."
+        "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX를 포함한 핵심 도구를..."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)",
       "claim_validation": {
@@ -338,15 +338,15 @@
         "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b"
       ],
       "key_evidence": [
-        "version_or_release: 2026년 5월 19일",
+        "version_or_release: 2026년 5월 19일 릴리스",
         "api_or_component: Google AI Studio",
-        "behavior_change: Google AI Studio가 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있게 되어 개발 장벽이 크게 낮아졌습니다. 소프트웨어 설치나 라이브러리 구성이 필요 없습니다."
+        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
       "claim_validation": {
         "status": "available",
         "bound_claims": 2,
-        "total_claims": 3,
+        "total_claims": 2,
         "overclaim_risk": "low"
       }
     }
@@ -466,24 +466,9 @@
   ],
   "excluded_candidates_truncated": true,
   "failure_diagnostics": {
-    "quality_hard_failures": [
-      "Fact-check must_fix item mentions this section.",
-      "Fact checker returned 12 must_fix item(s)."
-    ],
-    "fact_check_must_fix": [
-      "Impact level is an enum, but the value 'Low' is not a valid enum member. Valid values are 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent', 'd...",
-      "Scope is an enum, but the value 'Framework' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent',...",
-      "Scope is an enum, but the value 'SoC' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent', 'andr...",
-      "Action is an enum, but the value 'Watch' is not a valid enum member. Valid values are 'direct_camera_hal', 'direct_aosp_camera', 'camera_driver_image_pipeline', 'android_camera_...",
-      "Action is an enum, but the value 'Test' is not a valid enum member. Valid values are 'direct_camera_hal', 'direct_aosp_camera', 'camera_driver_image_pipeline', 'android_camera_a...",
-      "Overclaim risk is an enum, but the value 'High' is not a valid enum member. Valid values are 'low', 'medium', 'high'.",
-      "Impact level is an enum, but the value 'Medium' is not a valid enum member. Valid values are 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent',...",
-      "Scope is an enum, but the value 'Tooling' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent', '...",
-      "Scope is an enum, but the value 'AI' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent', 'andro..."
-    ],
-    "repair_failures": [
-      "Targeted repair changed main article count outside completion/replacement mode."
-    ],
+    "quality_hard_failures": [],
+    "fact_check_must_fix": [],
+    "repair_failures": [],
     "candidate_shortage_hints": [
       "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
       "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.",
@@ -491,12 +476,12 @@
     ],
     "source_gap_warnings": [],
     "missing_artifacts": [
-      "content/newsroom/2026-05-31/stale-claim-report.json"
+      "content/newsroom/2026-05-31/repair-failure.json"
     ],
     "invalid_artifacts": []
   },
   "warnings": [
-    "Missing optional artifact: content/newsroom/2026-05-31/stale-claim-report.json",
+    "Missing optional artifact: content/newsroom/2026-05-31/repair-failure.json",
     "Fallback claim_validation.status=not_available for selected article: 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
     "Fallback claim_validation.status=not_available for selected article: Build native Android apps in Google AI Studio"
   ]

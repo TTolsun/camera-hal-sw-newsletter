@@ -2,7 +2,7 @@
 
 | 시도 | 모델 | 점수 | 상태 | Rendered | Locked | Demoted | Reserve used | 중복 거절 | Source gap | Must-fix |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | repair-fallback | 79/85 | FAILED_REPAIR_REVIEWABLE | 2 | 0 | 0 | 0 | 0 | 0 | 12 |
+| 1 | reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash | 98/85 | PASS | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
 
 ## 후보 선택 진단
 
@@ -13,12 +13,12 @@
 - Final selected articles: 2
 - Deterministic primary articles: 2
 - Selected representative groups: 2
-- Rendered groups: 2
+- Rendered groups: unknown
 - Explicitly demoted groups: 0
 - Reserve candidates: 0
 - Demoted candidates: unknown
-- Composition mode: NEEDS_FIX
-- Editor review required: true
+- Composition mode: FALLBACK_COMPOSITION
+- Editor review required: false
 - Reporter-selected but final-excluded: 0
 - direct_aosp_camera: 0
 - android_platform_camera_adjacent: 1
@@ -63,8 +63,8 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 
 ## 시도 1
 
-- 선택 기사: Google I/O 2026: Jetpack Compose와 CameraX를 활용한 다중 기기 적응형 카메라 미리보기 구현; Google AI Studio: 프롬프트 기반 네이티브 Android 앱 신속 빌드 지원
-- Lock된 기사: 없음
+- 선택 기사: Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 대화면 적응형 카메라 미리보기 최적화; Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 및 개발 워크플로우 변화
+- Lock된 기사: Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 대화면 적응형 카메라 미리보기 최적화; Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 및 개발 워크플로우 변화
 - Source gap section: 없음
 - Demoted section: 없음
 - Replaced section: 없음
@@ -74,10 +74,10 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 - 실패 section: 없음
 - 재생성 section: 없음
 - 거절된 retry output: 없음
-- Repair action: editor repair attempt 1/2: fallback-to-last-known-valid-editor
+- Repair action: 없음
 - Final slot distribution: {"android_camera_platform_api":0,"camerax_aosp_camera_compatibility":1,"linux_camera_libcamera_v4l2":0,"ai_camera_path_hal_workflow":1,"cpp_toolchain_fallback":0,"other":0}
 - Reporter eligibility blocked section: 없음
 - Rejected main-ineligible candidate: 없음
 - Lock blocker: 없음
 - 거절된 중복 기사: 없음
-- 감점: 1pt editorial-story (briefing 1): Briefing bullet misses story structure elements: action_hint.; 1pt editorial-story (briefing 2): Briefing bullet misses story structure elements: reader_perspective, action_hint.; 4pt actionability (Google AI Studio: 프롬프트 기반 네이티브 Android 앱 신속 빌드 지원): Expected at least 2 action_items, found 1.; 15pt source-integrity: Fact checker returned 12 must_fix item(s).
+- 감점: 1pt editorial-story (briefing 1): Briefing bullet misses story structure elements: action_hint.; 1pt editorial-story (briefing 3): Briefing bullet misses story structure elements: what_happened.

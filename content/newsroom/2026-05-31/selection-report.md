@@ -42,7 +42,7 @@
 - latest_inclusion_mode: selected_normally
 - injected_from_snapshot: false
 - removed_due_to_headline_inclusion_count: 0
-- exposure_history_coverage: unknown since unknown
+- exposure_history_coverage: forward_only since 2026-05-23
 
 ## Source Parser Hints
 
