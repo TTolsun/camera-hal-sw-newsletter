@@ -1,0 +1,477 @@
+'use strict';
+
+const assert = require('node:assert/strict');
+const test = require('node:test');
+
+const {
+  exclusionReasons,
+  freshnessWindowMetadata,
+  normalizeTitle,
+  normalizeUrl,
+  summarizeExclusionReasons
+} = require('../../scripts/newsroom/generate/newsroom-selection');
+const {
+  articlePolicy
+} = require('../../scripts/newsroom/common/newsletter-policy');
+const {
+  emptyHeadlineState,
+  headlineSnapshotFromCandidate
+} = require('../../scripts/newsroom/common/homepage-headline');
+const { candidate } = require('../helpers/newsroom-builders');
+const {
+  buildShortlistReport,
+  policyPrimaryCandidate
+} = require('../helpers/selection-builders');
+
+test('normalizeTitle preserves Korean so titles differing only in Hangul stay distinct', () => {
+  // NFKD decomposed Hangul out of the 가-힣 allow-list, collapsing distinct Korean titles
+  // to identical Latin remnants. NFC must keep the Korean so dedup does not merge them.
+  const left = normalizeTitle('Camera HAL 버퍼 관리 동작 변경');
+  const right = normalizeTitle('Camera HAL 스트림 구성 동작 변경');
+  assert.notEqual(left, right);
+  assert.equal(normalizeTitle('카메라 드라이버 업데이트').length > 0, true);
+});
+
+test('Issue #238 scope expansion leaves publication count policy unchanged', () => {
+  const { publishReadyCompositionPolicy } = require('../../scripts/newsroom/common/newsletter-policy');
+  assert.deepEqual(articlePolicy.mainArticleCount, { min: 1, max: 5 });
+  assert.equal(articlePolicy.primaryCameraStack.minRequired, 0);
+  assert.equal(publishReadyCompositionPolicy.supportingMainMaxAllowed, 1);
+  assert.ok(articlePolicy.supportingMainBuckets.includes('android_multimedia_camera_output'));
+  assert.equal(
+    Object.prototype.hasOwnProperty.call(articlePolicy.primaryCameraStack, 'directCameraMinimum'),
+    false
+  );
+});
+
+test('prefilter excludes source gaps, undated watch pages, missing evidence, and duplicate URLs', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    candidate({ title: 'Android Camera HAL release note', url: 'https://example.com/a' }),
+    candidate({ title: 'Duplicate URL', url: 'https://example.com/a?utm=1' }),
+    candidate({ title: 'Source gap', url: 'https://example.com/b', source_gap_risk: true }),
+    candidate({ title: 'Watch page', url: 'https://example.com/c', isWatchPage: true, hasDatedEvidence: false, finalSelectionEligibility: 'watchlist' }),
+    candidate({ title: 'Missing date', url: 'https://example.com/d', published_date: '', hasDatedEvidence: false })
+  ], { minArticles: 1 });
+
+  assert.equal(report.shortlisted_candidates.length, 1);
+  assert.equal(report.shortlisted_candidates[0].title, 'Android Camera HAL release note');
+  assert.deepEqual(
+    report.excluded_candidates.map(item => item.exclusion_reasons[0]),
+    ['duplicate URL or near-duplicate title', 'source_gap_risk=true', 'missing dated evidence', 'missing dated evidence']
+  );
+});
+
+test('effective_date can satisfy selection only with publish-ready date quality', () => {
+  const strongEffectiveDate = policyPrimaryCandidate(0, {
+    title: 'AOSP Camera provider effective date update',
+    url: 'https://example.com/effective-strong',
+    published_date: '',
+    effective_date: '2026-05-02',
+    date_source: 'visible_last_updated',
+    date_confidence: 85,
+    hasDatedEvidence: true
+  });
+  const weakEffectiveDate = policyPrimaryCandidate(1, {
+    title: 'AOSP Camera provider content hash only update',
+    url: 'https://example.com/effective-weak',
+    published_date: '',
+    effective_date: '2026-05-02',
+    date_source: 'content_hash_changed_without_date',
+    date_confidence: 40,
+    hasDatedEvidence: true
+  });
+
+  assert.deepEqual(exclusionReasons(strongEffectiveDate), []);
+  assert.ok(exclusionReasons(weakEffectiveDate).includes('missing dated evidence'));
+
+  const strongWindow = freshnessWindowMetadata(strongEffectiveDate, '2026-05-03');
+  assert.equal(strongWindow.freshness_window, 'primary');
+  assert.match(strongWindow.selection_window_reason, /since effective_date/);
+});
+
+test('near-duplicate titles are prevented', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    candidate({ title: 'CameraX 1.5 release improves compatibility', url: 'https://example.com/a' }),
+    candidate({ title: 'CameraX 1.5 release improves Android compatibility', url: 'https://example.com/b' })
+  ], { minArticles: 1 });
+
+  assert.equal(report.shortlisted_candidates.length, 1);
+  assert.equal(report.excluded_candidates[0].exclusion_reasons[0], 'duplicate URL or near-duplicate title');
+});
+
+test('URL normalization removes tracking query and hash', () => {
+  assert.equal(
+    normalizeUrl('https://Example.com/path/?utm_source=x#section'),
+    'https://example.com/path'
+  );
+});
+
+test('exclusion reason reports reference-only candidates', () => {
+  assert.ok(exclusionReasons(candidate({ reference_only: true })).includes('reference_only=true'));
+});
+
+test('derived editorial do_not_claim text does not increase Camera HAL directness score', () => {
+  const { scoreCandidate } = require('../../scripts/newsroom/generate/newsroom-selection');
+  const baseCandidate = candidate({
+    title: 'CameraX Release Notes - CameraX 1.6.1',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    summary: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.',
+    published_date: '2026-05-06',
+    version_or_release: 'CameraX 1.6.1',
+    api_or_component: 'CameraX / androidx.camera',
+    behavior_change: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.',
+    relevance_bucket: 'android_platform_camera_adjacent',
+    editorial_priority: 3,
+    aosp_camera_directness: 2,
+    driver_stack_relevance: 0,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: 0,
+    camera_hal_relevance_score: 0,
+    counts_as_primary_camera_topic: true,
+    hasDatedEvidence: true,
+    finalSelectionEligibility: 'main'
+  });
+
+  const base = scoreCandidate(baseCandidate, '2026-05-12');
+  const withHints = scoreCandidate({
+    ...baseCandidate,
+    derived_editorial_hints: {
+      relevance_bucket_hint: 'direct_aosp_camera',
+      hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+      do_not_claim: ['Do not claim direct Camera HAL API changes.']
+    }
+  }, '2026-05-12');
+
+  assert.equal(withHints.camera_hal_directness, base.camera_hal_directness);
+  assert.equal(withHints.scope_relevance, base.scope_relevance);
+  assert.equal(withHints.relevance_bucket, base.relevance_bucket);
+});
+
+test('derived editorial relevance bucket hint does not classify a generic candidate', () => {
+  const { scoreCandidate } = require('../../scripts/newsroom/generate/newsroom-selection');
+  const baseCandidate = candidate({
+    title: 'Generic platform release notes',
+    url: 'https://example.com/platform-release-notes',
+    summary: 'The release updates documentation, dashboards, and sorting behavior.',
+    published_date: '2026-05-06',
+    api_or_component: '',
+    behavior_change: 'Documentation and dashboard sorting were updated.',
+    camera_hal_relevance_score: 0,
+    hasDatedEvidence: true,
+    finalSelectionEligibility: 'main'
+  });
+
+  const base = scoreCandidate(baseCandidate, '2026-05-12');
+  const withHints = scoreCandidate({
+    ...baseCandidate,
+    derived_editorial_hints: {
+      relevance_bucket_hint: 'direct_aosp_camera',
+      do_not_claim: ['Do not claim direct Camera HAL API changes.']
+    }
+  }, '2026-05-12');
+
+  assert.equal(base.relevance_bucket, 'generic_tech_watchlist');
+  assert.equal(withHints.relevance_bucket, base.relevance_bucket);
+  assert.equal(withHints.scope_relevance, base.scope_relevance);
+});
+
+function cameraXSourceExtraction(version, bullet, overrides = {}) {
+  return {
+    adapter_id: 'android-developers-jetpack-release',
+    source_type: 'release_note',
+    source: {
+      name: 'CameraX Release Notes',
+      url: 'https://developer.android.com/jetpack/androidx/releases/camera'
+    },
+    release: {
+      version: `CameraX ${version}`,
+      date: '2026-05-06',
+      component: 'CameraX / androidx.camera',
+      sections: [{
+        category: 'bug_fixes',
+        heading: 'Bug Fixes',
+        items: [{
+          text: bullet,
+          source_text: bullet,
+          links: [],
+          issue_ids: [],
+          artifact_names: ['androidx.camera:camera-core']
+        }]
+      }]
+    },
+    minor_line_context: null,
+    extraction_quality: {
+      has_concrete_behavior_change: true,
+      used_fallback: false,
+      raw_table_used_as_body: false,
+      main_article_allowed: true,
+      warnings: [],
+      ...overrides.extraction_quality
+    }
+  };
+}
+
+function cameraXReleaseCandidate(version, overrides = {}) {
+  const bullet = overrides.behavior_change || `Fixed CameraX ${version} compatibility behavior.`;
+  const extraction = overrides.source_extraction || cameraXSourceExtraction(version, bullet);
+  return candidate({
+    title: `CameraX Release Notes - CameraX ${version}`,
+    url: `https://developer.android.com/jetpack/androidx/releases/camera#${version}`,
+    published_date: '2026-05-06',
+    version_or_release: `CameraX ${version}`,
+    api_or_component: 'CameraX / androidx.camera',
+    behavior_change: bullet,
+    summary: bullet,
+    relevance_bucket: 'android_platform_camera_adjacent',
+    editorial_priority: 3,
+    aosp_camera_directness: 2,
+    driver_stack_relevance: 0,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: 0,
+    counts_as_primary_camera_topic: true,
+    source_extraction: extraction,
+    extraction_quality: extraction.extraction_quality,
+    derived_editorial_hints: {
+      relevance_bucket_hint: 'direct_aosp_camera',
+      hal_boundary: 'framework_adjacent_not_direct_hal_contract',
+      validation_targets: ['Camera2 interop regression validation'],
+      device_specific_notes: [],
+      do_not_claim: ['Do not claim direct Camera HAL API changes.'],
+      main_article_allowed_hint: true,
+      warnings: []
+    },
+    ...overrides
+  });
+}
+
+test('CameraX release-note body candidate supersedes latest-updates discovery row for same version URL', () => {
+  const versionUrl = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const discoveryRow = candidate({
+    title: 'CameraX 1.6.1 - Camera Maven Group versions',
+    url: versionUrl,
+    source: 'Android Developers Latest Updates',
+    published_date: '2026-05-06',
+    version_or_release: 'CameraX 1.6.1',
+    api_or_component: 'CameraX / androidx.camera',
+    behavior_change: 'Fixed Camera2 interop behavior for CameraX apps.',
+    summary: 'Fixed Camera2 interop behavior for CameraX apps.',
+    relevance_bucket: 'android_platform_camera_adjacent',
+    editorial_priority: 3,
+    aosp_camera_directness: 2,
+    counts_as_primary_camera_topic: true
+  });
+  const releaseBody = cameraXReleaseCandidate('1.6.1', {
+    title: 'CameraX Release Notes - CameraX 1.6.1',
+    behavior_change: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.'
+  });
+
+  const report = buildShortlistReport('2026-05-12', [discoveryRow, releaseBody], {
+    minArticles: 1,
+    maxArticles: 1
+  });
+
+  assert.equal(report.selected_articles.length, 1);
+  assert.equal(report.selected_articles[0].title, 'CameraX Release Notes - CameraX 1.6.1');
+  assert.ok(report.excluded_candidates.some(item =>
+    item.title === discoveryRow.title &&
+    item.exclusion_reasons.includes('duplicate CameraX release-note body candidate supersedes discovery row')
+  ));
+});
+
+test('retained homepage headline is revalidated before injection into final selection', () => {
+  const retained = headlineSnapshotFromCandidate(policyPrimaryCandidate(90, {
+    title: 'Retained Camera HAL metadata headline',
+    url: 'https://source.android.com/docs/camera/retained-headline',
+    source: 'source.android.com',
+    deterministic_score: 88,
+    published_date: '2026-05-20',
+    hasDatedEvidence: true
+  }), {
+    date: '2026-05-20',
+    scoredAt: '2026-05-20'
+  });
+  const report = buildShortlistReport('2026-05-21', [
+    policyPrimaryCandidate(1, {
+      url: 'https://source.android.com/docs/camera/current-candidate',
+      source: 'source.android.com',
+      deterministic_score: 70
+    })
+  ], {
+    homepageHeadlineState: {
+      ...emptyHeadlineState({ date: '2026-05-20' }),
+      current_headline: retained
+    }
+  });
+
+  assert.equal(report.headline_decision.reason, 'retained_current_above_margin');
+  assert.equal(report.headline_latest_inclusion.injected_from_snapshot, true);
+  assert.ok(report.selected_articles.some(article => article.injected_from_headline_snapshot === true));
+  assert.ok(report.selected_articles.every(article =>
+    !(article.headline_latest_inclusion_mode === 'selected_normally' && article.injected_from_headline_snapshot === true)
+  ));
+});
+
+test('headline injection collapses duplicates by article identity and keeps max article count', () => {
+  const retained = headlineSnapshotFromCandidate(policyPrimaryCandidate(91, {
+    title: 'Retained Camera HAL metadata headline',
+    url: 'https://source.android.com/docs/camera/retained-headline-max',
+    source: 'source.android.com',
+    deterministic_score: 88,
+    published_date: '2026-05-20',
+    hasDatedEvidence: true
+  }), {
+    date: '2026-05-20',
+    scoredAt: '2026-05-20'
+  });
+  const candidates = Array.from({ length: 7 }, (_, index) => policyPrimaryCandidate(index, {
+    url: `https://source.android.com/docs/camera/current-${index}`,
+    source: 'source.android.com',
+    deterministic_score: 65 - index,
+    editorial_priority: index + 1
+  }));
+  const report = buildShortlistReport('2026-05-21', candidates, {
+    homepageHeadlineState: {
+      ...emptyHeadlineState({ date: '2026-05-20' }),
+      current_headline: retained
+    }
+  });
+
+  assert.equal(report.selected_articles.length <= articlePolicy.mainArticleCount.max, true);
+  assert.ok(report.selected_articles.some(article => article.article_identity_key === retained.article_identity_key));
+  assert.equal(new Set(report.selected_articles.map(article => article.article_identity_key)).size, report.selected_articles.length);
+  assert.equal(Array.isArray(report.removed_due_to_headline_inclusion), true);
+  assert.equal(
+    report.headline_decision.removed_due_to_headline_inclusion_count,
+    report.removed_due_to_headline_inclusion.length
+  );
+});
+
+test('generic CameraX metadata fallback cannot become a main candidate without source_extraction bullet', () => {
+  const generic = candidate({
+    title: 'CameraX 1.6.1 - Camera Maven Group versions',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    source: 'Android Developers Latest Updates',
+    published_date: '2026-05-06',
+    version_or_release: 'CameraX 1.6.1',
+    api_or_component: 'CameraX / androidx.camera',
+    behavior_change: 'CameraX / androidx.camera update.',
+    summary: 'CameraX / androidx.camera update.',
+    relevance_bucket: 'android_platform_camera_adjacent',
+    editorial_priority: 3,
+    aosp_camera_directness: 2,
+    counts_as_primary_camera_topic: true
+  });
+
+  assert.ok(exclusionReasons(generic).includes('CameraX release-note candidate has no concrete source_extraction bullet'));
+  const report = buildShortlistReport('2026-05-12', [generic], {
+    minArticles: 1,
+    maxArticles: 1
+  });
+  assert.equal(report.selected_articles.length, 0);
+});
+
+test('CameraX source extraction violation depends on concrete release-note bullets', () => {
+  const concrete = cameraXReleaseCandidate('1.6.1', {
+    behavior_change: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.'
+  });
+  const missingExtraction = cameraXReleaseCandidate('1.6.1', {
+    title: 'CameraX 1.6.1 - Camera Maven Group versions',
+    behavior_change: 'CameraX / androidx.camera update.',
+    summary: 'CameraX / androidx.camera update.',
+    source_extraction: null,
+    extraction_quality: null,
+    derived_editorial_hints: null
+  });
+  const emptyExtraction = cameraXReleaseCandidate('1.6.1', {
+    title: 'CameraX Release Notes - CameraX 1.6.1 empty extraction',
+    behavior_change: 'CameraX / androidx.camera update.',
+    summary: 'CameraX / androidx.camera update.',
+    source_extraction: cameraXSourceExtraction('1.6.1', 'CameraX / androidx.camera update.')
+  });
+  emptyExtraction.source_extraction.release.sections = [];
+  emptyExtraction.source_extraction.extraction_quality.has_concrete_behavior_change = false;
+
+  assert.equal(
+    exclusionReasons(concrete).includes('CameraX release-note candidate has no concrete source_extraction bullet'),
+    false
+  );
+  assert.ok(exclusionReasons(missingExtraction).includes('CameraX release-note candidate has no concrete source_extraction bullet'));
+  assert.ok(exclusionReasons(emptyExtraction).includes('CameraX release-note candidate has no concrete source_extraction bullet'));
+
+  const report = buildShortlistReport('2026-05-12', [missingExtraction, emptyExtraction, concrete], {
+    minArticles: 1,
+    maxArticles: 1
+  });
+  assert.equal(report.selected_articles.length, 1);
+  assert.equal(report.selected_articles[0].title, concrete.title);
+  assert.ok(report.excluded_candidates.some(item =>
+    item.title === missingExtraction.title &&
+    item.exclusion_reasons.includes('CameraX release-note candidate has no concrete source_extraction bullet')
+  ));
+});
+
+test('AndroidX Camera release page keeps one main article and prefers latest stable patch', () => {
+  const patch = cameraXReleaseCandidate('1.6.1', {
+    behavior_change: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.'
+  });
+  const minor = cameraXReleaseCandidate('1.6.0', {
+    published_date: '2026-03-25',
+    behavior_change: 'Added CameraPipe SessionConfig support for dynamic range handling.'
+  });
+  const beta = cameraXReleaseCandidate('1.7.0-alpha01', {
+    behavior_change: 'Updated CameraX alpha API behavior for testing.'
+  });
+
+  const report = buildShortlistReport('2026-05-12', [minor, beta, patch], {
+    minArticles: 1,
+    maxArticles: 3
+  });
+  const selectedCameraReleases = report.selected_articles.filter(item =>
+    item.url.startsWith('https://developer.android.com/jetpack/androidx/releases/camera')
+  );
+
+  assert.equal(selectedCameraReleases.length, 1);
+  assert.equal(selectedCameraReleases[0].version_or_release, 'CameraX 1.6.1');
+});
+
+test('exclusion reason summary sorts by count descending then reason name', () => {
+  const summary = summarizeExclusionReasons([
+    { exclusion_reasons: ['z reason', 'a reason'] },
+    { exclusion_reasons: ['a reason'] },
+    { exclusion_reasons: ['m reason'] }
+  ]);
+
+  assert.deepEqual(summary, [
+    { reason: 'a reason', count: 2 },
+    { reason: 'm reason', count: 1 },
+    { reason: 'z reason', count: 1 }
+  ]);
+});
+
+test('undated watch and reference candidates remain excluded from final selection', () => {
+  const report = buildShortlistReport('2026-05-03', [
+    candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
+    candidate({ title: 'AOSP Camera change B updates stream compatibility', url: 'https://example.com/b' }),
+    candidate({ title: 'On-device AI camera path update C', url: 'https://example.com/c', summary: 'AI inference update affects Android camera frame processing.' }),
+    candidate({ title: 'Android Camera API change D fixes metadata behavior', url: 'https://example.com/d' }),
+    candidate({
+      title: 'Undated rolling Camera documentation',
+      url: 'https://example.com/watch',
+      published_date: '',
+      isWatchPage: true,
+      hasDatedEvidence: false,
+      finalSelectionEligibility: 'watchlist'
+    }),
+    candidate({
+      title: 'Reference-only Camera background',
+      url: 'https://example.com/reference',
+      reference_only: true
+    })
+  ]);
+
+  const selectedUrls = new Set(report.selected_articles.map(item => item.url));
+  assert.equal(selectedUrls.has('https://example.com/watch'), false);
+  assert.equal(selectedUrls.has('https://example.com/reference'), false);
+  assert.ok(report.excluded_candidates.some(item => item.title === 'Undated rolling Camera documentation'));
+  assert.ok(report.excluded_candidates.some(item => item.title === 'Reference-only Camera background'));
+});
