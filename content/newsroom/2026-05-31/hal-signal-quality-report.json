@@ -2,7 +2,7 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-05-31",
-  "generated_at": "2026-05-31T05:32:59.634Z",
+  "generated_at": "2026-05-31T07:02:54.860Z",
   "status": "PASS",
   "input_completeness": "complete",
   "input_statuses": {
@@ -61,8 +61,8 @@
   "hal_signal_quality_summary": {
     "schema_version": 1,
     "main_article_count": 2,
-    "strong_signal_count": 2,
-    "usable_signal_count": 0,
+    "strong_signal_count": 1,
+    "usable_signal_count": 1,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
@@ -81,19 +81,22 @@
       "native_tooling_workflow": 1
     },
     "actionability_level_counts": {
-      "measurable_test": 2
+      "measurable_test": 1,
+      "concrete_check": 1
     },
     "effective_actionability_level_counts": {
-      "measurable_test": 2
+      "measurable_test": 1,
+      "concrete_check": 1
     },
     "signal_quality_status_counts": {
-      "strong_signal": 2
+      "strong_signal": 1,
+      "usable_signal": 1
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 대화면 적응형 카메라 미리보기 최적화",
+      "title": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 반응형 카메라 미리보기 구현",
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "relevance_bucket": "android_platform_camera_adjacent",
       "hal_impact_axes": [
@@ -107,11 +110,11 @@
       "effective_actionability_level": "measurable_test",
       "actionability_upgrade_reason": "",
       "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 4,
+      "concrete_action_signal_count": 3,
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "이 업데이트가 Camera HAL3 규격 자체나 AIDL/HIDL 카메라 프로바이더 인터페이스를 직접 변경하는 것은 아닙니다."
+        "이 변화는 상위 프레임워크의 사용성 개선 사항이며, Camera HAL3 규격 자체에 새로운 API 요구사항을 강제하는 것은 아닙니다."
       ],
       "soc_signal_type": "",
       "soc_signal_source_allowed": true,
@@ -124,7 +127,7 @@
     },
     {
       "index": 2,
-      "title": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 및 개발 워크플로우 변화",
+      "title": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "hal_impact_axes": [
@@ -133,17 +136,17 @@
       "reader_owners": [
         "native_tooling_owner"
       ],
-      "actionability_level": "measurable_test",
-      "effective_actionability_level": "measurable_test",
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
       "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 3,
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "이 도구가 생성하는 코드가 상용 수준의 고성능 카메라 파이프라인이나 복잡한 NPU 가속 추론 코드를 완벽히 대체할 수 있는 것은 아닙니다."
+        "AI Studio가 생성하는 코드는 상위 API 수준이며, Camera HAL 내부 런타임이나 드라이버 최적화 코드를 직접 생성하는 것은 아닙니다."
       ],
-      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_type": "accelerator_camera_workload",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,

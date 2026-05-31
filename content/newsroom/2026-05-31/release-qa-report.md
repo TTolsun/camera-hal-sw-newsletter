@@ -154,7 +154,7 @@ Validated 4 article images.
 - source gap 개수: 0
 
 ## 품질 게이트
-- 품질 점수: 98/100
+- 품질 점수: 94/100
 - 품질 기준: 85
 - 품질 상태: PASS
-- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 3)
+- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 3); 4pt actionability (Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원)

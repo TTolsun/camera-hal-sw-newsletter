@@ -30,7 +30,7 @@
             <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
           </div>
           <h1 class="issue-title"><span>Camera SW</span><span>Newsletter - 2026-05-31</span></h1>
-          <p class="subtitle">이번 주 뉴스레터에서는 Google I/O 2026에서 발표된 Jetpack Compose와 CameraX의 통합을 통한 다양한 폼 팩터에서의 카메라 미리보기 최적화 소식과 Google AI Studio를 활용한 네이티브 Android 앱 개발 워크플로우 변화를 다룹니다. 대화면 및 적응형 UI 환경에서 카메라 스트림의 종횡비와 해상도를 올바르게 처리하기 위한 프레임워크 및 앱 계층의 연동 방안과 네이티브 개발 생산성 향상을 위한 AI 도구 활용법을 분석합니다.</p>
+          <p class="subtitle">이번 주 뉴스레터에서는 Google I/O 2026에서 발표된 Jetpack Compose와 CameraX의 통합을 통한 반응형 카메라 미리보기 지원 소식을 다룹니다. 또한 Google AI Studio의 네이티브 Android 앱 빌드 지원이 가져올 개발 워크플로우 변화를 Camera HAL 및 드라이버 엔지니어 관점에서 분석합니다.</p>
         </div>
         <figure class="issue-hero-mascot" aria-label="HALley mascot">
           <img
@@ -50,50 +50,50 @@
             <span class="section-icon section-icon-list" aria-hidden="true"></span>
             <h2 id="issue-briefing-title">이번 주 3줄 브리핑</h2>
           </div>
-          <ul><li>Google I/O 2026에서 Jetpack Compose와 CameraX의 통합이 강조되어, 폴더블 및 태블릿 등 다양한 창 크기에서 올바른 카메라 미리보기를 제공하는 적응형 UI 환경 구축이 지원됩니다.</li><li>Google AI Studio가 프롬프트 기반으로 소프트웨어 설치 없이 네이티브 Android 앱을 빌드할 수 있도록 업데이트되어, 카메라 관련 프로토타입 및 테스트 앱 개발 워크플로우가 간소화됩니다.</li><li>카메라 프레임워크 및 HAL 엔지니어는 대화면 기기에서의 스트림 해상도 및 종횡비 정합성을 검증하고, AI 도구를 활용한 네이티브 디버깅 생산성 향상 방안을 검토해야 합니다.</li></ul>
+          <ul><li>Google I/O 2026에서 Jetpack Compose와 CameraX의 통합이 강조되어, 폴더블 및 대화면 기기에서 일관된 카메라 미리보기 스트림 구성의 중요성이 커졌습니다.</li><li>Google AI Studio가 프롬프트 기반 네이티브 Android 앱 빌드를 지원하여, 카메라 연동 프로토타입 및 테스트 앱의 신속한 구현이 가능해졌습니다.</li><li>다양한 폼팩터 대응을 위해 Camera HAL 계층에서의 안정적인 스트림 조합 지원 및 버퍼 라이프사이클 검증이 요구됩니다.</li></ul>
         </div>
       </section>
 
       <section class="section issue-story" id="article-google-i-o-2026-jetpack-compose-camerax" aria-labelledby="article-google-i-o-2026-jetpack-compose-camerax-title">
         <span class="issue-story-number" aria-label="Article 1">1</span>
-        <article class="card issue-section article-card story-article has-image android_platform_camera_adjacent">
+        <article class="card issue-section article-card story-article has-image main_article">
           <div class="article-feature-row">
             <figure class="article-media">
-            <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png" alt="Google I/O 2026 Jetpack Compose and CameraX integration announcement" loading="lazy" decoding="async">
+            <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png" alt="Google I/O 2026 Android Developers Blog Banner" loading="lazy" decoding="async">
             <figcaption class="article-image-caption">이미지: <a href="https://android-developers.googleblog.com/">Android Developers Blog</a></figcaption>
             </figure>
             <div class="article-copy">
-              <h2 id="article-google-i-o-2026-jetpack-compose-camerax-title" class="article-title">Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원</h2>
-              <p class="article-source-subtitle">Jetpack Compose를 활용한 멀티 디바이스 환경에서의 원활한 Android 카메라 경험 구축</p>
-              <p class="article-lead">Google I/O 2026에서 Android 생태계가 &#39;기본 적응형(Adaptive by Default)&#39;으로 진화함에 따라, 폴더블폰, 태블릿, XR 등 다양한 화면 크기에서 올바른 카메라 미리보기를 제공하기 위한 Jetpack Compose와 CameraX의 통합이 핵심 도구로 강조되었습니다.</p>
-              <p>Android 생태계가 스마트폰을 넘어 폴더블, 태블릿, 차량용 디스플레이, XR 기기 등으로 빠르게 확장되면서 다양한 화면 크기에 유연하게 대응하는 적응형 UI 구축이 필수적인 과제로 떠올랐습니다. Google은 이러한 변화에 대응하기 위해 Jetpack Compose를 중심으로 한 멀티 디바이스 개발 엔진을 강화하고 있습니다.</p>
-              <p>이번 발표에서 Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 그리고 향상된 비터치 입력 지원과 함께 CameraX를 핵심 도구로 제시했습니다. 이를 통해 개발자는 복잡한 화면 전환이나 창 크기 변경 시에도 왜곡 없는 올바른 카메라 미리보기를 구현할 수 있게 됩니다.</p>
-              <p>카메라 미리보기는 화면의 종횡비, 회전 상태, 그리고 사용 가능한 해상도 스트림 조합에 매우 민감합니다. 특히 폴더블 기기에서 화면을 접거나 펼칠 때 발생하는 동적 레이아웃 변경 환경에서, CameraX와 Compose의 긴밀한 연동은 앱이 카메라 프레임워크로부터 전달받은 Surface 버퍼를 올바른 비율로 렌더링할 수 있도록 돕습니다.</p>
+              <h2 id="article-google-i-o-2026-jetpack-compose-camerax-title" class="article-title">Google I/O 2026: Jetpack Compose와 CameraX 통합으로 반응형 카메라 미리보기 지원 강화</h2>
+              <p class="article-source-subtitle">Android Developers Blog - 17 Things to know for Android developers at Google I/O</p>
+              <p class="article-lead">Google I/O 2026에서 대화면 및 폴더블 기기 대응을 위한 &#39;Adaptive by Default&#39; 기조가 강화되었습니다. 특히 Jetpack Compose와 CameraX의 긴밀한 통합을 통해 다양한 화면 크기에서도 왜곡 없는 올바른 카메라 미리보기를 구현할 수 있는 환경이 마련되었습니다.</p>
+              <p>Android 생태계가 폴더블폰, 태블릿, 차량용 디스플레이, XR 기기 등 다양한 폼팩터로 확장됨에 따라 반응형 UI 구축이 필수적인 요소로 자리 잡았습니다. Google은 개발자가 이러한 변화에 쉽게 대응할 수 있도록 Jetpack Compose를 중심으로 한 핵심 도구들을 대거 소개했습니다.</p>
+              <p>이번 발표의 핵심 중 하나는 Jetpack Compose 환경에서 CameraX를 활용한 카메라 미리보기의 일관성 확보입니다. 새로운 Jetpack Navigation 3 및 실험적인 Grid/FlexBox 레이아웃과 결합하여, 앱이 실행되는 화면의 크기나 비율이 동적으로 변하더라도 카메라 미리보기 스트림이 올바르게 렌더링되도록 돕습니다.</p>
+              <p>이는 상위 프레임워크 수준에서의 변화이지만, 결과적으로 하부의 Camera HAL이 다양한 해상도 및 화면 비율 전환 환경에서도 안정적으로 스트림을 구성하고 버퍼를 관리해야 함을 의미합니다. 다양한 기기 환경에서의 호환성 검증이 더욱 중요해질 전망입니다.</p>
             </div>
           </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이 변화는 Camera HAL의 직접적인 API나 메타데이터 계약을 변경하지는 않지만, 상위 앱 계층에서 다양한 해상도 및 종횡비 스트림을 동적으로 요청할 가능성을 높입니다. HAL 개발자는 Preview 스트림 구성 시 대화면 및 분할 화면 시나리오에서 발생할 수 있는 스트림 재구성(Stream Reconfiguration) 레이턴시와 프레임 드롭 여부를 검증해야 합니다.</p></div>
+          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이번 변화는 Camera HAL API나 메타데이터 규격의 직접적인 변경을 의미하지는 않습니다. 다만, 상위 프레임워크(CameraX)가 다양한 화면 크기 및 멀티 윈도우 환경에서 카메라 스트림을 동적으로 재구성할 때, HAL 계층에서 스트림 구성(Stream Configuration) 요청을 지연 없이 안정적으로 처리하고 YUV/PRIVATE 버퍼 라이프사이클을 정상적으로 유지해야 함을 시사합니다.</p></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://goo.gle/AdaptiveApps_IO26">8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O</a></li></ul></div>
         </article>
       </section>
 
       <section class="section issue-story" id="article-google-ai-studio-android" aria-labelledby="article-google-ai-studio-android-title">
         <span class="issue-story-number" aria-label="Article 2">2</span>
-        <article class="card issue-section article-card story-article has-image cpp_ai_tooling_fallback">
+        <article class="card issue-section article-card story-article has-image main_article">
           <div class="article-feature-row">
             <figure class="article-media">
-            <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png" alt="Google AI Studio Android app building announcement" loading="lazy" decoding="async">
+            <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png" alt="Google AI Studio Android App Build Banner" loading="lazy" decoding="async">
             <figcaption class="article-image-caption">이미지: <a href="https://android-developers.googleblog.com/">Android Developers Blog</a></figcaption>
             </figure>
             <div class="article-copy">
-              <h2 id="article-google-ai-studio-android-title" class="article-title">Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신</h2>
-              <p class="article-source-subtitle">설치와 구성 없는 클라우드 기반 네이티브 Android 개발 환경 제공</p>
-              <p class="article-lead">Google AI Studio가 프롬프트 입력만으로 몇 분 만에 전체 네이티브 Android 앱을 빌드할 수 있는 새로운 기능을 발표했습니다. 복잡한 개발 환경 설정 없이 아이디어를 바로 코드로 구현할 수 있어 네이티브 개발 생산성이 크게 향상될 것으로 기대됩니다.</p>
-              <p>네이티브 Android 앱 개발은 전통적으로 Android Studio 설치, SDK 구성, Gradle 빌드 환경 설정 등 초기 진입 장벽이 존재했습니다. 특히 간단한 기능 검증이나 프로토타입 앱을 제작할 때도 이러한 환경 구성에 많은 시간이 소요되곤 했습니다.</p>
-              <p>새롭게 업데이트된 Google AI Studio는 이러한 과정을 클라우드 환경으로 통합했습니다. 개발자는 프롬프트 창에 원하는 앱의 기능과 구조를 설명하는 것만으로 소프트웨어 설치나 복잡한 라이브러리 구성 없이 완전한 네이티브 Android 앱을 빌드할 수 있습니다.</p>
-              <p>이 도구는 카메라 HAL이나 드라이버를 개발하는 엔지니어들에게도 유용하게 활용될 수 있습니다. 예를 들어, 특정 카메라 API의 동작을 테스트하거나 간단한 이미지 처리 파이프라인을 검증하기 위한 테스트용 앱을 빠르게 생성하여 로컬 환경에서 즉시 실행해 볼 수 있습니다.</p>
+              <h2 id="article-google-ai-studio-android-title" class="article-title">Google AI Studio, 프롬프트만으로 네이티브 Android 앱 빌드 지원</h2>
+              <p class="article-source-subtitle">Android Developers Blog - Build native Android apps in Google AI Studio</p>
+              <p class="article-lead">Google AI Studio가 웹 환경에서 프롬프트 입력만으로 몇 분 만에 전체 네이티브 Android 앱을 빌드할 수 있는 새로운 워크플로우를 도입했습니다. 이를 통해 개발 환경 구축 단계를 생략하고 아이디어를 빠르게 프로토타입으로 구현할 수 있게 되었습니다.</p>
+              <p>네이티브 Android 개발은 일반적으로 Android Studio 설치, SDK 및 Gradle 구성, 종속성 라이브러리 설정 등 초기 환경 구축에 상당한 시간이 소요됩니다. Google AI Studio의 이번 업데이트는 이러한 진입 장벽을 완전히 제거하는 것을 목표로 합니다.</p>
+              <p>개발자는 웹 브라우저에서 원하는 앱의 기능과 요구사항을 자연어 프롬프트로 입력하기만 하면 됩니다. AI Studio는 이를 해석하여 작동 가능한 전체 Android 앱 코드를 생성하고 빌드까지 완료합니다.</p>
+              <p>이 도구는 카메라 드라이버나 HAL 수준의 시스템 코드를 직접 작성하는 데는 한계가 있으나, 카메라 API를 활용하는 간단한 테스트 앱이나 프로토타입 앱을 신속하게 제작하여 HAL의 동작을 검증하는 용도로 유용하게 활용될 수 있습니다.</p>
             </div>
           </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이 도구 자체는 Camera HAL의 런타임 동작에 직접적인 영향을 주지 않습니다. 다만, 카메라 프레임워크나 HAL API의 특정 동작을 재현하기 위한 테스트용 클라이언트 앱(Sample/Prototype App)을 빠르게 빌드하고 배포하는 네이티브 개발 워크플로우 관점에서 유용한 보조 도구로 활용될 수 있습니다.</p></div>
+          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이 도구는 Camera HAL 런타임이나 드라이버 구현에 직접적인 영향을 주지 않습니다. 다만, HAL/드라이버 엔지니어가 새로운 카메라 기능이나 메타데이터 동작을 검증하기 위해 간단한 Camera2/CameraX 테스트 앱을 신속하게 생성하고 프로토타이핑하는 워크플로우 도구로 활용할 수 있습니다.</p></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html">Build native Android apps in Google AI Studio</a></li></ul></div>
         </article>
       </section>

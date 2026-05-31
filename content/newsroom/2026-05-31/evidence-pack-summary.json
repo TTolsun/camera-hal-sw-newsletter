@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-31",
-  "generated_at": "2026-05-31T05:33:05.544Z",
+  "generated_at": "2026-05-31T07:03:02.575Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -40,7 +40,7 @@
   "publish_status": {
     "status": "publish-ready",
     "run_mode": "publish_ready",
-    "quality_score": 98,
+    "quality_score": 94,
     "quality_threshold": 85,
     "fact_check_status": "PASS",
     "final_publish_ready": true,
@@ -69,8 +69,8 @@
   },
   "claim_validation_summary": {
     "status": "available",
-    "bound_claims": 4,
-    "total_claims": 5,
+    "bound_claims": 5,
+    "total_claims": 6,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
     "available_article_count": 2,
@@ -271,13 +271,13 @@
       "key_evidence": [
         "version_or_release: Google I/O 2026",
         "api_or_component: CameraX / Android camera APIs",
-        "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3 릴리스, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX를 포함한 핵심 도구를..."
+        "behavior_change: Jetpack Compose는 최신 Jetpack Navigation 3, 새로운 실험적인 Grid 및 FlexBox 레이아웃, 향상된 비터치 입력 지원, 그리고 모든 창 크기에서 올바른 카메라 미리보기를 위한 CameraX를 포함한 핵심 도구를 제공하여..."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)",
       "claim_validation": {
         "status": "available",
-        "bound_claims": 2,
-        "total_claims": 3,
+        "bound_claims": 3,
+        "total_claims": 4,
         "overclaim_risk": "medium"
       }
     },
@@ -338,9 +338,9 @@
         "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b"
       ],
       "key_evidence": [
-        "version_or_release: 2026년 5월 19일 릴리스",
+        "version_or_release: 2026-05-19",
         "api_or_component: Google AI Studio",
-        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
+        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어 설치나 라이브러리 구성이 필요 없어 개발 장벽이 크게 낮아집니다."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
       "claim_validation": {

@@ -3,8 +3,8 @@
   "updated_at": "2026-05-31T00:00:00+09:00",
   "current_headline": {
     "article_identity_key": "url:https://goo.gle/AdaptiveApps_IO26",
-    "title": "Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원",
-    "summary": "Google I/O 2026에서 Android 생태계가 '기본 적응형(Adaptive by Default)'으로 진화함에 따라, 폴더블폰, 태블릿, XR 등 다양한 화면 크기에서 올바른 카메라 미리보기를 제공하기 위한 Jetpack Compose와 CameraX의 통합이 핵심 도구로 강조되었습니다.",
+    "title": "Google I/O 2026: Jetpack Compose와 CameraX 통합으로 반응형 카메라 미리보기 지원 강화",
+    "summary": "Google I/O 2026에서 대화면 및 폴더블 기기 대응을 위한 'Adaptive by Default' 기조가 강화되었습니다. 특히 Jetpack Compose와 CameraX의 긴밀한 통합을 통해 다양한 화면 크기에서도 왜곡 없는 올바른 카메라 미리보기를 구현할 수 있는 환경이 마련되었습니다.",
     "source_url": "https://goo.gle/AdaptiveApps_IO26",
     "newsletter_date": "2026-05-29",
     "newsletter_url": "newsletters/2026-05-31/index.html",
@@ -42,7 +42,7 @@
     },
     "newsletter_article_url": "newsletters/2026-05-31/index.html#article-google-i-o-2026-jetpack-compose-camerax",
     "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
-    "image_alt": "Google I/O 2026 Jetpack Compose and CameraX integration announcement"
+    "image_alt": "Google I/O 2026 Android Developers Blog Banner"
   },
   "headline_history": [
     {

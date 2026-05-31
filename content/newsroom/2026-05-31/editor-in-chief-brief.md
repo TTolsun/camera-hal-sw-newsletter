@@ -2,37 +2,36 @@
 
 ## 이번 주 핵심 메시지
 
-이번 주 뉴스레터에서는 Google I/O 2026에서 발표된 Jetpack Compose와 CameraX의 통합을 통한 다양한 폼 팩터에서의 카메라 미리보기 최적화 소식과 Google AI Studio를 활용한 네이티브 Android 앱 개발 워크플로우 변화를 다룹니다. 대화면 및 적응형 UI 환경에서 카메라 스트림의 종횡비와 해상도를 올바르게 처리하기 위한 프레임워크 및 앱 계층의 연동 방안과 네이티브 개발 생산성 향상을 위한 AI 도구 활용법을 분석합니다.
+이번 주 뉴스레터에서는 Google I/O 2026에서 발표된 Jetpack Compose와 CameraX의 통합을 통한 반응형 카메라 미리보기 지원 소식을 다룹니다. 또한 Google AI Studio의 네이티브 Android 앱 빌드 지원이 가져올 개발 워크플로우 변화를 Camera HAL 및 드라이버 엔지니어 관점에서 분석합니다.
 
 ## 메인으로 봐야 할 기사
 
-Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 대화면 적응형 카메라 미리보기 최적화
+Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 반응형 카메라 미리보기 구현
 
 ## Camera HAL 업무 연결 포인트
-- 폴더블 reference 디바이스에서 분할 화면 및 화면 전환 시나리오를 실행하여, CameraX 미리보기 스트림 재구성 시 HAL의 stream configuration latency를 측정하십시오.
-- 다양한 종횡비(16:9, 4:3, 1:1 등) 요청 시 HAL이 반환하는 YUV/PRIVATE 버퍼의 왜곡 여부를 CTS 및 수동 테스트를 통해 검증하십시오.
-- Google AI Studio를 사용해 간단한 Camera2 API 호출 및 Surface 렌더링 코드가 포함된 테스트 앱을 생성해 보고, 생성된 코드의 품질을 리뷰하십시오.
-- 네이티브 빌드 환경에서 AI 생성 코드가 Clang 컴파일러 경고를 유발하는지 static analysis 도구로 검증하십시오.
+- 폴더블 기기 대응을 위해 화면 크기 전환 시 Camera HAL의 configure_streams API 처리 지연 시간을 측정하고 150ms 이내로 유지되는지 확인하십시오.
+- 동적 스트림 재구성 과정에서 Camera HAL의 버퍼 해제 및 재할당 주기 중 메모리 누수나 버퍼 고갈이 발생하는지 로그를 검증하십시오.
+- Google AI Studio를 활용해 생성한 CameraX 기반 테스트 앱이 기기의 지원 해상도 목록을 올바르게 쿼리하는지 VTS 환경에서 검증하십시오.
 
 ## 검증 결과 요약
 
 - 상태: PASS
 - must_fix 개수: 0
 - source gap 개수: 0
-- 의견: 제공된 모든 섹션이 정책을 준수하고 있습니다. 추정적 표현을 검증 필요성으로 강조하는 방향으로 수정하면 더 좋습니다.
+- 의견: All checks passed. The article is ready for publication.
 
 ## 품질 게이트
-- 품질 점수: 98/100
+- 품질 점수: 94/100
 - 품질 기준: 85
 - 품질 상태: PASS
-- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 3)
+- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 3); 4pt actionability (Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원)
 
 ## Article Structure Contract
 
 | # | Article | 5-section | Fact boundary | HAL impact axis | Actionability | Limitations |
 | ---: | --- | --- | --- | --- | --- | --- |
-| 1 | Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 대화면 적응형 카메라 미리보기 최적화 | pass | present | camerax_app_compatibility | present | none |
-| 2 | Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 및 개발 워크플로우 변화 | pass | present | native_tooling_workflow | present | none |
+| 1 | Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 반응형 카메라 미리보기 구현 | pass | present | camerax_app_compatibility | present | none |
+| 2 | Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 | pass | present | native_tooling_workflow | present | none |
 
 ## Stale Claim Gate
 
@@ -89,8 +88,8 @@ Homepage Headline:
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
 - runtime_decayed_score: 96
-- previous_stored_current_score: 98
-- last_scored_at: 2026-05-30
+- previous_stored_current_score: 96
+- last_scored_at: 2026-05-31
 - scored_at: 2026-05-31
 - included_as_latest: true
 - latest_inclusion_mode: selected_normally

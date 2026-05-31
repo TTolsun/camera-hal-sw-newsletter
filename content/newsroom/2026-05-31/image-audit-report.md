@@ -21,8 +21,8 @@
 
 | # | 기사 | 선택된 대표 이미지 | 후보 | 검증 통과 후보 | 상태 |
 | ---: | --- | --- | ---: | ---: | --- |
-| 1 | Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
-| 2 | Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
+| 1 | Google I/O 2026: Jetpack Compose와 CameraX 통합으로 반응형 카메라 미리보기 지원 강화 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
+| 2 | Google AI Studio, 프롬프트만으로 네이티브 Android 앱 빌드 지원 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
 
 ## 복원 가능 기사
 
