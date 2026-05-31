@@ -2,14 +2,14 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-05-31",
-  "generated_at": "2026-05-30T15:41:51.160Z",
-  "status": "NEEDS_FIX",
-  "input_completeness": "partial",
+  "generated_at": "2026-05-31T05:32:59.634Z",
+  "status": "PASS",
+  "input_completeness": "complete",
   "input_statuses": {
     "shortlisted_candidates": "loaded",
     "editor_draft": "loaded",
     "quality_report": "loaded",
-    "source_effectiveness_report": "input_unavailable",
+    "source_effectiveness_report": "loaded",
     "source_quality_report": "loaded",
     "evidence_pack_summary": "loaded",
     "merged_candidate_manifest": "loaded"
@@ -35,7 +35,7 @@
     "optional": {
       "source_effectiveness_report": {
         "path": "content/newsroom/2026-05-31/source-effectiveness-report.json",
-        "status": "input_unavailable",
+        "status": "loaded",
         "error": ""
       },
       "source_quality_report": {
@@ -55,16 +55,14 @@
       }
     },
     "missing_required": [],
-    "unavailable_optional": [
-      "source_effectiveness_report"
-    ]
+    "unavailable_optional": []
   },
-  "quality_status": "NEEDS_FIX",
+  "quality_status": "PASS",
   "hal_signal_quality_summary": {
     "schema_version": 1,
     "main_article_count": 2,
-    "strong_signal_count": 1,
-    "usable_signal_count": 1,
+    "strong_signal_count": 2,
+    "usable_signal_count": 0,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
@@ -83,22 +81,19 @@
       "native_tooling_workflow": 1
     },
     "actionability_level_counts": {
-      "concrete_check": 1,
-      "measurable_test": 1
+      "measurable_test": 2
     },
     "effective_actionability_level_counts": {
-      "concrete_check": 1,
-      "measurable_test": 1
+      "measurable_test": 2
     },
     "signal_quality_status_counts": {
-      "usable_signal": 1,
-      "strong_signal": 1
+      "strong_signal": 2
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "Google I/O 2026: Jetpack Compose와 CameraX를 활용한 다중 기기 적응형 카메라 미리보기 구현",
+      "title": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 대화면 적응형 카메라 미리보기 최적화",
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "relevance_bucket": "android_platform_camera_adjacent",
       "hal_impact_axes": [
@@ -108,15 +103,15 @@
         "camera_framework_owner",
         "camerax_app_compat_owner"
       ],
-      "actionability_level": "concrete_check",
-      "effective_actionability_level": "concrete_check",
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
       "actionability_upgrade_reason": "",
-      "signal_quality_status": "usable_signal",
-      "concrete_action_signal_count": 2,
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 5 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "제공된 소스 증거가 직접 언급하지 않는 한, HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS에 대한 직접적인 변경 사항을 주장하지 마십시오."
+        "이 업데이트가 Camera HAL3 규격 자체나 AIDL/HIDL 카메라 프로바이더 인터페이스를 직접 변경하는 것은 아닙니다."
       ],
       "soc_signal_type": "",
       "soc_signal_source_allowed": true,
@@ -129,7 +124,7 @@
     },
     {
       "index": 2,
-      "title": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 신속 빌드 지원",
+      "title": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 및 개발 워크플로우 변화",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "hal_impact_axes": [
@@ -146,9 +141,9 @@
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "제공된 소스 증거가 직접 언급하지 않는 한, 이 변경 사항이 Camera HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS/VTS/ITS에 직접적인 영향을 미친다고 주장하지 마십시오."
+        "이 도구가 생성하는 코드가 상용 수준의 고성능 카메라 파이프라인이나 복잡한 NPU 가속 추론 코드를 완벽히 대체할 수 있는 것은 아닙니다."
       ],
-      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_type": "isp_image_pipeline",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,
@@ -198,7 +193,5 @@
     ],
     "historical_rewrite_followup": "#108"
   },
-  "warnings": [
-    "Optional input_unavailable: source_effectiveness_report"
-  ]
+  "warnings": []
 }

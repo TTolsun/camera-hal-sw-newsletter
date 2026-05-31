@@ -2,62 +2,17 @@
 
 ## 상태
 
-NEEDS_FIX
+PASS
 
 ## 반드시 수정할 항목
 
-- 위치: sections[0].public_article.editorial_story.decision_metadata.impact
-  - 문제: Impact level is an enum, but the value 'Low' is not a valid enum member. Valid values are 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent', 'driver_image_pipeline', 'stream_buffer_metadata', 'cts_vts_its_cdd', 'performance_latency_thermal', 'soc_resource_contention', 'native_tooling_workflow', 'no_hal_runtime_impact', 'unknown'.
-  - 제안: Replace 'Low' with a valid enum member for impact_level, such as 'app_api_or_framework_adjacent' or 'no_hal_runtime_impact' based on the article's content.
-  - 출처: https://goo.gle/AdaptiveApps_IO26
-- 위치: sections[0].public_article.editorial_story.decision_metadata.scope
-  - 문제: Scope is an enum, but the value 'Framework' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'soc_platform_signal', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.
-  - 제안: Replace 'Framework' with a valid enum member for scope, such as 'android_platform_camera_adjacent'.
-  - 출처: https://goo.gle/AdaptiveApps_IO26
-- 위치: sections[0].public_article.editorial_story.decision_metadata.scope
-  - 문제: Scope is an enum, but the value 'SoC' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'soc_platform_signal', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.
-  - 제안: Replace 'SoC' with a valid enum member for scope, such as 'soc_platform_signal' if it's relevant, or remove if not directly applicable.
-  - 출처: https://goo.gle/AdaptiveApps_IO26
-- 위치: sections[0].public_article.editorial_story.decision_metadata.action
-  - 문제: Action is an enum, but the value 'Watch' is not a valid enum member. Valid values are 'direct_camera_hal', 'direct_aosp_camera', 'camera_driver_image_pipeline', 'android_camera_api', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.
-  - 제안: Replace 'Watch' with a valid enum member for action, such as 'watchlist' or 'android_platform_camera_adjacent' if it implies a broader action.
-  - 출처: https://goo.gle/AdaptiveApps_IO26
-- 위치: sections[0].public_article.editorial_story.decision_metadata.action
-  - 문제: Action is an enum, but the value 'Test' is not a valid enum member. Valid values are 'direct_camera_hal', 'direct_aosp_camera', 'camera_driver_image_pipeline', 'android_camera_api', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.
-  - 제안: Replace 'Test' with a valid enum member for action, such as 'android_platform_camera_adjacent' if it implies testing within that scope.
-  - 출처: https://goo.gle/AdaptiveApps_IO26
-- 위치: sections[0].public_article.editorial_story.decision_metadata.overclaim_risk
-  - 문제: Overclaim risk is an enum, but the value 'High' is not a valid enum member. Valid values are 'low', 'medium', 'high'.
-  - 제안: Replace 'High' with a valid enum member for overclaim_risk, such as 'medium' or 'low' based on the actual risk.
-  - 출처: https://goo.gle/AdaptiveApps_IO26
-- 위치: sections[1].public_article.editorial_story.decision_metadata.impact
-  - 문제: Impact level is an enum, but the value 'Medium' is not a valid enum member. Valid values are 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent', 'driver_image_pipeline', 'stream_buffer_metadata', 'cts_vts_its_cdd', 'performance_latency_thermal', 'soc_resource_contention', 'native_tooling_workflow', 'no_hal_runtime_impact', 'unknown'.
-  - 제안: Replace 'Medium' with a valid enum member for impact_level, such as 'native_tooling_workflow' or 'no_hal_runtime_impact' based on the article's content.
-  - 출처: https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html
-- 위치: sections[1].public_article.editorial_story.decision_metadata.scope
-  - 문제: Scope is an enum, but the value 'Tooling' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'soc_platform_signal', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.
-  - 제안: Replace 'Tooling' with a valid enum member for scope, such as 'cpp_ai_tooling_fallback'.
-  - 출처: https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html
-- 위치: sections[1].public_article.editorial_story.decision_metadata.scope
-  - 문제: Scope is an enum, but the value 'AI' is not a valid enum member. Valid values are 'direct_camera_hal', 'camera_driver_image_pipeline', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'soc_platform_signal', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.
-  - 제안: Replace 'AI' with a valid enum member for scope, such as 'cpp_ai_tooling_fallback' if it's related to AI tooling, or remove if not directly applicable.
-  - 출처: https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html
-- 위치: sections[1].public_article.editorial_story.decision_metadata.action
-  - 문제: Action is an enum, but the value 'Watch' is not a valid enum member. Valid values are 'direct_camera_hal', 'direct_aosp_camera', 'camera_driver_image_pipeline', 'android_camera_api', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.
-  - 제안: Replace 'Watch' with a valid enum member for action, such as 'watchlist' or 'cpp_ai_tooling_fallback' if it implies a broader action.
-  - 출처: https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html
-- 위치: sections[1].public_article.editorial_story.decision_metadata.action
-  - 문제: Action is an enum, but the value 'Test' is not a valid enum member. Valid values are 'direct_camera_hal', 'direct_aosp_camera', 'camera_driver_image_pipeline', 'android_camera_api', 'android_platform_camera_adjacent', 'android_multimedia_camera_output', 'cpp_ai_tooling_fallback', 'reference_only', 'watchlist'.
-  - 제안: Replace 'Test' with a valid enum member for action, such as 'cpp_ai_tooling_fallback' if it implies testing within that scope.
-  - 출처: https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html
-- 위치: sections[1].public_article.editorial_story.decision_metadata.overclaim_risk
-  - 문제: Overclaim risk is an enum, but the value 'High' is not a valid enum member. Valid values are 'low', 'medium', 'high'.
-  - 제안: Replace 'High' with a valid enum member for overclaim_risk, such as 'medium' or 'low' based on the actual risk.
-  - 출처: https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html
+- 없음
 
 ## 권장 수정
 
-- 없음
+- article_sections.hal_driver_impact에서 'HAL이 이를 지연 없이 처리할 수 있어야 합니다'와 같은 추정적 표현 대신, 'HAL이 이를 지연 없이 처리하는지 검증이 필요합니다'와 같이 검증의 필요성을 강조하는 표현으로 수정하는 것이 좋습니다.
+- article_sections.hal_driver_impact에서 '메모리 압박이나 프레임 드롭이 발생하지 않는지 검증이 필요합니다'와 같이 검증의 필요성을 강조하는 표현으로 수정하는 것이 좋습니다.
+- article_sections.hal_driver_impact에서 'Clang/LLVM 툴체인 호환성을 유지하는지 확인하는 것이 좋습니다'와 같이 검증의 필요성을 강조하는 표현으로 수정하는 것이 좋습니다.
 
 ## 출처 공백
 
@@ -65,4 +20,4 @@ NEEDS_FIX
 
 ## 최종 의견
 
-The JSON structure is mostly correct, but there are several issues with enum values in the 'decision_metadata' fields within 'public_article.editorial_story'. The 'impact', 'scope', 'action', and 'overclaim_risk' fields are using values that are not part of the allowed enum lists. These need to be corrected to valid enum members as specified in the schema. No other issues were found.
+제공된 모든 섹션이 정책을 준수하고 있습니다. 추정적 표현을 검증 필요성으로 강조하는 방향으로 수정하면 더 좋습니다.
