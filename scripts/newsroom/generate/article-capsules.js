@@ -494,7 +494,7 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
     };
   }
   if (ensureArray(halSignal.do_not_overstate).length > 0) {
-    capsule.do_not_overstate = ensureArray(halSignal.do_not_overstate).slice(0, 5);
+    capsule._overclaim_guardrail_hints = ensureArray(halSignal.do_not_overstate).slice(0, 5);
   }
   if (doNotClaim.length > 0) {
     capsule.do_not_claim = [...new Set(doNotClaim)].slice(0, 8);
