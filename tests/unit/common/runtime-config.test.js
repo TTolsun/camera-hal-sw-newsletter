@@ -82,11 +82,18 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.newsroomWarnCostUsd, 0.15);
   assert.equal(config.newsroomMaxCostUsd, 0.25);
   assert.equal(config.geminiThinkingBudgetReporter, 0);
-  assert.equal(config.geminiThinkingBudgetEditor, 512);
+  assert.equal(config.geminiThinkingBudgetEditor, 1024);
   assert.equal(config.geminiThinkingBudgetRepair, 0);
-  assert.equal(config.geminiThinkingBudgetFactcheck, 0);
-  assert.equal(config.geminiThinkingBudgetJudge, 0);
+  assert.equal(config.geminiThinkingBudgetFactcheck, 1024);
+  assert.equal(config.geminiThinkingBudgetJudge, 1024);
   assert.equal(config.geminiThinkingBudgetScoring, 0);
+  assert.equal(config.geminiTemperatureDefault, 0.35);
+  assert.equal(config.geminiTemperatureSourceDiscovery, 0.45);
+  assert.equal(config.geminiTemperatureReporter, 0.30);
+  assert.equal(config.geminiTemperatureEditor, 0.55);
+  assert.equal(config.geminiTemperatureFactcheck, 0.20);
+  assert.equal(config.geminiTemperatureRepair, 0.25);
+  assert.equal(config.geminiTemperatureJudge, 0.20);
   assert.equal(config.linkedEvidenceMode, 'extract_only');
   assert.equal(config.linkedEvidenceMaxLinksPerCandidate, 8);
   assert.equal(config.linkedEvidenceMaxLinksPerRun, 40);
@@ -219,7 +226,7 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.geminiThinkingBudgetEditor, 1024);
   assert.equal(config.geminiThinkingBudgetRepair, 0);
   assert.equal(config.geminiThinkingBudgetFactcheck, 0);
-  assert.equal(config.geminiThinkingBudgetJudge, 0);
+  assert.equal(config.geminiThinkingBudgetJudge, 1024);
   assert.equal(config.geminiThinkingBudgetScoring, 0);
   assert.equal(config.linkedEvidenceMode, 'resolve_allowed_official_links');
   assert.equal(config.linkedEvidenceMaxLinksPerCandidate, 4);
@@ -694,8 +701,8 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.newsroomWarnCostUsd, 0.15);
   assert.equal(sanitized.newsroomMaxCostUsd, 0.25);
   assert.equal(sanitized.newsroomMaxSectionRepairs, 1);
-  assert.equal(sanitized.geminiThinkingBudgetEditor, 512);
-  assert.equal(sanitized.geminiThinkingBudgetJudge, 0);
+  assert.equal(sanitized.geminiThinkingBudgetEditor, 1024);
+  assert.equal(sanitized.geminiThinkingBudgetJudge, 1024);
   assert.equal(sanitized.linkedEvidenceMode, 'extract_only');
   assert.equal(sanitized.linkedEvidenceMaxLinksPerCandidate, 8);
   assert.equal(sanitized.linkedEvidenceMaxLinksPerRun, 40);
@@ -769,4 +776,30 @@ test('non-Pro model routing remains stage-specific without Pro fallback append',
   assert.deepEqual(configuredModelsForStage(config, 'editor completion attempt 1/2'), ['gemini-3.5-flash', 'gemini-2.5-flash-lite']);
   assert.deepEqual(configuredModelsForStage(config, 'public article judge repair'), ['gemini-2.5-flash-lite']);
   assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, false);
+});
+
+test('GEMINI_TEMPERATURE_* env override가 stage별 temperature를 대체한다', () => {
+  const config = readRuntimeConfig({
+    GEMINI_TEMPERATURE_EDITOR: '0.7',
+    GEMINI_TEMPERATURE_FACTCHECK: '0.1',
+    GEMINI_TEMPERATURE_JUDGE: '0.15'
+  });
+
+  assert.equal(config.geminiTemperatureEditor, 0.7);
+  assert.equal(config.geminiTemperatureFactcheck, 0.1);
+  assert.equal(config.geminiTemperatureJudge, 0.15);
+  // override하지 않은 필드는 default 유지
+  assert.equal(config.geminiTemperatureReporter, 0.30);
+  assert.equal(config.geminiTemperatureDefault, 0.35);
+});
+
+test('GEMINI_TEMPERATURE_* — 범위 밖 값은 파싱 단계에서 에러', () => {
+  assert.throws(
+    () => readRuntimeConfig({ GEMINI_TEMPERATURE_EDITOR: '2.1' }),
+    /GEMINI_TEMPERATURE_EDITOR must be <= 2/
+  );
+  assert.throws(
+    () => readRuntimeConfig({ GEMINI_TEMPERATURE_REPORTER: '-0.1' }),
+    /GEMINI_TEMPERATURE_REPORTER must be >= 0/
+  );
 });

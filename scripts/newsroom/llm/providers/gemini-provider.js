@@ -128,6 +128,18 @@ function estimateCallCost(model, usage) {
   };
 }
 
+function temperatureForStage(stage, config) {
+  const normalized = String(stage || '').toLowerCase();
+  if (/public[-\s]?article[-\s]?judge|\bjudge\b/.test(normalized)) return config.geminiTemperatureJudge;
+  if (/fact[-\s]?check|factchecker/.test(normalized)) return config.geminiTemperatureFactcheck;
+  if (/\brepair\b/.test(normalized)) return config.geminiTemperatureRepair;
+  if (/\breporter\b/.test(normalized)) return config.geminiTemperatureReporter;
+  if (/source[-\s]?discovery/.test(normalized)) return config.geminiTemperatureSourceDiscovery;
+  if (/editor|completion/.test(normalized)) return config.geminiTemperatureEditor;
+  // scoring stage는 현재 LLM 호출이 없어 default temperature로 흡수
+  return config.geminiTemperatureDefault;
+}
+
 function thinkingBudgetForStage(stage, config) {
   const normalized = String(stage || '').toLowerCase();
   if (/public[-\s]?article[-\s]?judge|\bjudge\b/.test(normalized)) return config.geminiThinkingBudgetJudge;
@@ -148,11 +160,11 @@ function thinkingConfigForStage(stage, config) {
   };
 }
 
-function schemaConfig(responseSchema) {
+function schemaConfig(responseSchema, temperature) {
   return {
     responseMimeType: 'application/json',
     responseSchema,
-    temperature: 0.35
+    temperature
   };
 }
 
@@ -165,7 +177,7 @@ function buildGeminiRequest({ model, stage, systemInstruction, prompt, responseS
   const thinkingBudget = thinkingConfigForStage(stage, config);
   const requestConfig = {
     systemInstruction,
-    ...schemaConfig(responseSchema)
+    ...schemaConfig(responseSchema, temperatureForStage(stage, config))
   };
   if (Number.isInteger(thinkingBudget.applied)) {
     requestConfig.thinkingConfig = {
@@ -236,6 +248,8 @@ module.exports = {
   textFromResponse(response) {
     return typeof response?.text === 'function' ? response.text() : response?.text;
   },
+
+  temperatureForStage,
 
   thinkingBudgetForStage,
 

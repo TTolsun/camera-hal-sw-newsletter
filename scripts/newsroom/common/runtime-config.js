@@ -69,11 +69,18 @@ const DEFAULT_RUNTIME_CONFIG = {
   newsroomWarnCostUsd: 0.15,
   newsroomMaxCostUsd: 0.25,
   geminiThinkingBudgetReporter: 0,
-  geminiThinkingBudgetEditor: 512,
+  geminiThinkingBudgetEditor: 1024,
   geminiThinkingBudgetRepair: 0,
-  geminiThinkingBudgetFactcheck: 0,
-  geminiThinkingBudgetJudge: 0,
+  geminiThinkingBudgetFactcheck: 1024,
+  geminiThinkingBudgetJudge: 1024,
   geminiThinkingBudgetScoring: 0,
+  geminiTemperatureDefault: 0.35,
+  geminiTemperatureSourceDiscovery: 0.45,
+  geminiTemperatureReporter: 0.30,
+  geminiTemperatureEditor: 0.55,
+  geminiTemperatureFactcheck: 0.20,
+  geminiTemperatureRepair: 0.25,
+  geminiTemperatureJudge: 0.20,
   linkedEvidenceMode: LINKED_EVIDENCE_MODES.EXTRACT_ONLY,
   linkedEvidenceMaxLinksPerCandidate: 8,
   linkedEvidenceMaxLinksPerRun: 40,
@@ -148,6 +155,10 @@ function parseNumber(value, fieldName, options = {}) {
   }
   if (options.min !== undefined && number < options.min) {
     throw new Error(`${fieldName} must be >= ${options.min}.`);
+  }
+  // 범위 초과 시 default fallback 아닌 throw로 fail-fast
+  if (options.max !== undefined && number > options.max) {
+    throw new Error(`${fieldName} must be <= ${options.max}.`);
   }
   return number;
 }
@@ -325,6 +336,41 @@ function readRuntimeConfig(env = process.env, options = {}) {
       'GEMINI_THINKING_BUDGET_SCORING',
       { min: 0 }
     ),
+    geminiTemperatureDefault: parseNumber(
+      envValue(env, 'GEMINI_TEMPERATURE_DEFAULT', DEFAULT_RUNTIME_CONFIG.geminiTemperatureDefault),
+      'GEMINI_TEMPERATURE_DEFAULT',
+      { min: 0, max: 2, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiTemperatureDefault }
+    ),
+    geminiTemperatureSourceDiscovery: parseNumber(
+      envValue(env, 'GEMINI_TEMPERATURE_SOURCE_DISCOVERY', DEFAULT_RUNTIME_CONFIG.geminiTemperatureSourceDiscovery),
+      'GEMINI_TEMPERATURE_SOURCE_DISCOVERY',
+      { min: 0, max: 2, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiTemperatureSourceDiscovery }
+    ),
+    geminiTemperatureReporter: parseNumber(
+      envValue(env, 'GEMINI_TEMPERATURE_REPORTER', DEFAULT_RUNTIME_CONFIG.geminiTemperatureReporter),
+      'GEMINI_TEMPERATURE_REPORTER',
+      { min: 0, max: 2, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiTemperatureReporter }
+    ),
+    geminiTemperatureEditor: parseNumber(
+      envValue(env, 'GEMINI_TEMPERATURE_EDITOR', DEFAULT_RUNTIME_CONFIG.geminiTemperatureEditor),
+      'GEMINI_TEMPERATURE_EDITOR',
+      { min: 0, max: 2, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiTemperatureEditor }
+    ),
+    geminiTemperatureFactcheck: parseNumber(
+      envValue(env, 'GEMINI_TEMPERATURE_FACTCHECK', DEFAULT_RUNTIME_CONFIG.geminiTemperatureFactcheck),
+      'GEMINI_TEMPERATURE_FACTCHECK',
+      { min: 0, max: 2, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiTemperatureFactcheck }
+    ),
+    geminiTemperatureRepair: parseNumber(
+      envValue(env, 'GEMINI_TEMPERATURE_REPAIR', DEFAULT_RUNTIME_CONFIG.geminiTemperatureRepair),
+      'GEMINI_TEMPERATURE_REPAIR',
+      { min: 0, max: 2, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiTemperatureRepair }
+    ),
+    geminiTemperatureJudge: parseNumber(
+      envValue(env, 'GEMINI_TEMPERATURE_JUDGE', DEFAULT_RUNTIME_CONFIG.geminiTemperatureJudge),
+      'GEMINI_TEMPERATURE_JUDGE',
+      { min: 0, max: 2, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiTemperatureJudge }
+    ),
     linkedEvidenceMode: String(
       envValue(env, 'NEWSROOM_LINKED_EVIDENCE_MODE', DEFAULT_RUNTIME_CONFIG.linkedEvidenceMode) || ''
     ).trim() || DEFAULT_RUNTIME_CONFIG.linkedEvidenceMode,
@@ -499,6 +545,21 @@ function validateRuntimeConfig(config, options = {}) {
       errors.push(`${name} must be an integer >= 0.`);
     }
   }
+  for (const [field, name, defaultField] of [
+    [config.geminiTemperatureDefault, 'GEMINI_TEMPERATURE_DEFAULT', 'geminiTemperatureDefault'],
+    [config.geminiTemperatureSourceDiscovery, 'GEMINI_TEMPERATURE_SOURCE_DISCOVERY', 'geminiTemperatureSourceDiscovery'],
+    [config.geminiTemperatureReporter, 'GEMINI_TEMPERATURE_REPORTER', 'geminiTemperatureReporter'],
+    [config.geminiTemperatureEditor, 'GEMINI_TEMPERATURE_EDITOR', 'geminiTemperatureEditor'],
+    [config.geminiTemperatureFactcheck, 'GEMINI_TEMPERATURE_FACTCHECK', 'geminiTemperatureFactcheck'],
+    [config.geminiTemperatureRepair, 'GEMINI_TEMPERATURE_REPAIR', 'geminiTemperatureRepair'],
+    [config.geminiTemperatureJudge, 'GEMINI_TEMPERATURE_JUDGE', 'geminiTemperatureJudge']
+  ]) {
+    // 필드가 없으면 default값을 사용하므로 검증 대상에서 제외 (GEMINI_THINKING_BUDGET_* 패턴과 동일)
+    const value = field !== undefined ? field : DEFAULT_RUNTIME_CONFIG[defaultField];
+    if (!Number.isFinite(value) || value < 0 || value > 2) {
+      errors.push(`${name} must be a number between 0 and 2.`);
+    }
+  }
   const linkedEvidenceMode = String(config.linkedEvidenceMode || DEFAULT_RUNTIME_CONFIG.linkedEvidenceMode).trim();
   if (!LINKED_EVIDENCE_MODE_VALUES.includes(linkedEvidenceMode)) {
     errors.push(`NEWSROOM_LINKED_EVIDENCE_MODE must be one of: ${LINKED_EVIDENCE_MODE_VALUES.join(', ')}.`);
@@ -603,6 +664,13 @@ function sanitizeRuntimeConfig(config) {
     geminiThinkingBudgetFactcheck: config.geminiThinkingBudgetFactcheck,
     geminiThinkingBudgetJudge: config.geminiThinkingBudgetJudge,
     geminiThinkingBudgetScoring: config.geminiThinkingBudgetScoring,
+    geminiTemperatureDefault: config.geminiTemperatureDefault,
+    geminiTemperatureSourceDiscovery: config.geminiTemperatureSourceDiscovery,
+    geminiTemperatureReporter: config.geminiTemperatureReporter,
+    geminiTemperatureEditor: config.geminiTemperatureEditor,
+    geminiTemperatureFactcheck: config.geminiTemperatureFactcheck,
+    geminiTemperatureRepair: config.geminiTemperatureRepair,
+    geminiTemperatureJudge: config.geminiTemperatureJudge,
     linkedEvidenceMode: config.linkedEvidenceMode,
     linkedEvidenceMaxLinksPerCandidate: config.linkedEvidenceMaxLinksPerCandidate,
     linkedEvidenceMaxLinksPerRun: config.linkedEvidenceMaxLinksPerRun,
