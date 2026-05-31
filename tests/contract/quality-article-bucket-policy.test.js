@@ -13,6 +13,9 @@ const {
   qualityGatePolicy
 } = require('../../scripts/newsroom/common/newsletter-policy');
 const {
+  isFallbackOnly
+} = require('../../scripts/newsroom/common/public-article-contract');
+const {
   reportFor,
   scopedCandidate,
   section,
@@ -689,4 +692,25 @@ test('quality gate fails missing Camera HAL perspective and fewer than 2 action 
   assert.ok(report.deductions.some(item => item.reason.includes('at least 2 action_items')));
   assert.equal(report.deductions.find(item => item.reason.includes('at least 2 action_items')).severity, 'soft');
   assert.equal(report.article_results[0].status, 'DEMOTE');
+});
+
+test('cpp_fallback isFallbackOnly: toggle=false(기본값)이면 relevance 값과 무관하게 모두 fallback-only', () => {
+  // toggle=false이면 requiresCameraDevWorkflowRelevance 조건 미충족 → 조기 return 없이 항상 fallback-only
+  const sectionWithRelevance = {
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    camera_dev_workflow_relevance: true
+  };
+  const sectionWithoutRelevance = {
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    camera_dev_workflow_relevance: false
+  };
+  const sectionDefaultFalse = {
+    relevance_bucket: 'cpp_ai_tooling_fallback'
+  };
+
+  // toggle=false이면 relevance=true여도 fallback-only (selection/quality와 일관성)
+  assert.equal(isFallbackOnly(sectionWithRelevance), true);
+  // relevance=false 또는 미설정이면 기존대로 fallback-only
+  assert.equal(isFallbackOnly(sectionWithoutRelevance), true);
+  assert.equal(isFallbackOnly(sectionDefaultFalse), true);
 });

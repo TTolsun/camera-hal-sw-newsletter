@@ -72,6 +72,28 @@ Camera HAL / Android Camera 후보가 부족할 때 C++ 기사를 fallback으로
 
 Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합니다. GCC 또는 일반 C++ 표준 기사를 Android HAL toolchain 전환으로 단정하지 않습니다.
 
+### cpp_ai_tooling_fallback 메인 기사 자격 — camera_dev_workflow_relevance
+
+`cpp_ai_tooling_fallback` bucket 후보는 기본적으로 supporting 전용이지만, LLM이 아래 기준 중 하나를 충족한다고 판단하면 (`camera_dev_workflow_relevance=true`) 메인 기사 자격을 부여합니다.
+
+판단 기준:
+- Camera 앱 / Camera 기능을 가진 Android 앱을 빠르게 빌드·프로토타이핑하는 데 쓰일 수 있는 도구
+- Camera HAL / Camera2 / CameraX API의 특정 동작을 재현·검증할 수 있는 테스트 클라이언트나 sample 앱을 만드는 데 도움이 되는 도구
+- Camera 관련 이슈를 디버깅하거나 재현하는 워크플로우를 단축하는 도구
+
+해당 없는 경우: C++ 컴파일러 일반 릴리스, 일반 native performance 글, AI 코딩 도구 일반 소개(Camera 워크플로우 언급 없음)는 false.
+
+구현 상 보장:
+- LLM 미가용 또는 응답 없음 시 기본값 `false` (보수적)
+- 결정론적 keyword 안전망 (title/summary에 Camera + 빌드/디버깅/재현 키워드 동시 존재 시 `true`) — LLM 결과로 덮어씀
+- `camera_dev_workflow_relevance_source` 필드로 판단 출처(`llm_reporter` / `llm_source_discovery` / `deterministic_fallback` / `default_false`) 추적
+- supporting 카운트에서 제외되어 기존 `supportingMainMaxAllowed` 한계에 영향 없음
+- fact-check 단계에서 `decision_metadata` 필드 must_fix 자동 제거 안전망 동반 (`dropDecisionMetadataMustFix`)
+
+운영 절차:
+- 메인 자격 승격을 활성하려면 `config/newsletter-policy.json`의 `cppFallbackMainPromotion.requiresCameraDevWorkflowRelevance`를 `true`로 변경한 별도 PR을 머지해야 합니다.
+- 정책 토글 변경은 코드 변경과 분리된 별도 PR로 진행합니다 (CLAUDE.md PR scope 원칙).
+
 ## 실행 항목 기준
 
 모든 주요 기사는 2주 안에 확인 가능한 실행 항목을 포함해야 합니다. 실행 항목은 test, log, metric, device class, code owner, API, stream 조합 중 하나 이상을 포함해야 합니다.
