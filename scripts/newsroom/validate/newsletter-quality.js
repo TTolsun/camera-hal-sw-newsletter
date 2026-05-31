@@ -26,6 +26,7 @@ const {
   publishReadyCompositionPolicy,
   qualityGatePolicy,
   articleCountRangeText,
+  getCppFallbackMainPromotionPolicy,
   isForbiddenMainBucket,
   isPrimaryCameraStackBucket,
   isSupportingMainBucket,
@@ -1207,7 +1208,9 @@ function candidateMetadataForBinding(binding) {
     binding_status: 'bound',
     binding_source: binding.binding_source || 'bound_candidate',
     binding_tie_score: binding.tie_score ?? null,
-    publishable_scope: true
+    publishable_scope: true,
+    // selection 단계와 동일한 기준으로 quality 단계도 relevance 판단 가능하도록 보존
+    camera_dev_workflow_relevance: binding.candidate.camera_dev_workflow_relevance === true
   };
 }
 
@@ -1286,7 +1289,9 @@ function sectionCountDetail(section, scope, index) {
   const bucket = knownBucket(scope?.relevance_bucket) || BUCKETS.GENERIC_TECH_WATCHLIST;
   const publishableScope = scope?.publishable_scope === true;
   const countsAsPrimaryStack = isPrimaryCameraStackBucket(bucket);
-  const countsAsSupportingMain = isSupportingMainBucket(bucket);
+  const countsAsSupportingMain = isSupportingMainBucket(bucket, undefined, {
+    cameraDevWorkflowRelevance: scope?.camera_dev_workflow_relevance === true
+  });
   const countsAsForbiddenMain = isForbiddenMainBucket(bucket);
   let countReason = `${scope?.count_source || scope?.evidence_origin || 'unknown'} classified this section as ${bucket}.`;
   let exclusionReason = '';
@@ -1600,12 +1605,26 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const topicTierCounts = topicTierDistribution(scopeBucketCounts);
   const primaryCameraStackCount = articlePolicy.primaryCameraStack.buckets
     .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
+  // toggle이 true일 때만 relevance=true cpp_fallback을 supporting에서 제외 (compositionSummary와 동일한 기준)
+  // options.cppFallbackMainPromotionPolicy로 정책 주입 가능 (테스트 전용); 미지정 시 글로벌 캐시 사용
+  const qualityPromotionPolicy = options.cppFallbackMainPromotionPolicy !== undefined
+    ? options.cppFallbackMainPromotionPolicy
+    : getCppFallbackMainPromotionPolicy();
+  const qualityRequiresRelevance = qualityPromotionPolicy?.requiresCameraDevWorkflowRelevance === true;
+  const cppFallbackCameraDevRelevantQualityCount = qualityRequiresRelevance
+    ? sectionScopes.filter(scope => {
+        if (scope?.publishable_scope !== true) return false;
+        return text(scope?.relevance_bucket) === BUCKETS.CPP_AI_TOOLING_FALLBACK &&
+          scope?.camera_dev_workflow_relevance === true;
+      }).length
+    : 0;
   const supportingMainArticleCount = articlePolicy.supportingMainBuckets
-    .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
+    .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0) -
+    cppFallbackCameraDevRelevantQualityCount;
   const forbiddenMainArticleCount = articlePolicy.forbiddenMainBuckets
     .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
   const fallbackRelevanceCount = socPlatformSignalCount + cppAiToolingFallbackCount;
-  const expandedScopeCoverage = primaryCameraStackCount + supportingMainArticleCount;
+  const expandedScopeCoverage = primaryCameraStackCount + supportingMainArticleCount + cppFallbackCameraDevRelevantQualityCount;
   const publishableScopeCount = sectionScopes.filter(scope => scope?.publishable_scope === true).length;
   const compositionMode = publishableScopeCount === 0 && sections.length > 0
     ? 'NEEDS_FIX'

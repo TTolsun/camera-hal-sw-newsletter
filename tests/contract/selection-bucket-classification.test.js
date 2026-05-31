@@ -315,6 +315,89 @@ test('versioned C++ toolchain evidence is concrete but not counted as direct cam
   assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 1);
 });
 
+test('cpp_fallback with camera_dev_workflow_relevance=true counts as non-fallback for composition', () => {
+  const { compositionSummary } = require('../../scripts/newsroom/generate/newsroom-selection');
+  const cameraDevTool = candidate({
+    title: 'Google AI Studio enables rapid Camera app prototyping',
+    url: 'https://example.com/ai-studio-camera-proto',
+    summary: 'Google AI Studio allows developers to build and prototype Android Camera apps quickly using native C++ tools.',
+    api_or_component: 'Google AI Studio / Android Camera prototyping',
+    behavior_change: 'Enables rapid Camera app build workflow.',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    editorial_priority: 6,
+    aosp_camera_directness: 0,
+    driver_stack_relevance: 0,
+    multimedia_camera_output_relevance: 0,
+    soc_platform_relevance: 0,
+    native_tooling_relevance: 3,
+    counts_as_primary_camera_topic: false,
+    counts_as_driver_topic: false,
+    counts_as_soc_topic: false,
+    counts_as_fallback_topic: true,
+    camera_hal_relevance_score: 0,
+    camera_dev_workflow_relevance: true,
+    camera_dev_workflow_relevance_reason: 'Google AI Studio로 Camera 앱을 빠르게 프로토타이핑할 수 있음',
+    camera_dev_workflow_relevance_source: 'llm_reporter'
+  });
+  const genericFallback = candidate({
+    title: 'GCC 17.0 general C++ compiler update',
+    url: 'https://example.com/gcc-17-general',
+    summary: 'GCC 17.0 updates general C++ compiler optimization.',
+    api_or_component: 'GCC compiler',
+    behavior_change: 'C++ optimization changed.',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    editorial_priority: 6,
+    native_tooling_relevance: 3,
+    counts_as_fallback_topic: true,
+    camera_dev_workflow_relevance: false,
+    camera_dev_workflow_relevance_source: 'default_false'
+  });
+
+  const summaryRelevant = compositionSummary([cameraDevTool]);
+  const summaryGeneric = compositionSummary([genericFallback]);
+  const summaryBoth = compositionSummary([cameraDevTool, genericFallback]);
+
+  // toggle=false(기본값)이면 cpp_fallback_camera_dev_relevant_count는 항상 0
+  assert.equal(summaryRelevant.cpp_fallback_camera_dev_relevant_count, 0);
+  // toggle=false이면 relevance=true여도 supporting에 포함
+  assert.equal(summaryRelevant.supporting_main_article_count, 1);
+  assert.equal(summaryRelevant.fallback_topic_count, 1);
+
+  // relevance=false는 기존대로 supporting에 포함
+  assert.equal(summaryGeneric.cpp_fallback_camera_dev_relevant_count, 0);
+  assert.equal(summaryGeneric.non_fallback_reviewable_article_count, 0);
+  assert.equal(summaryGeneric.supporting_main_article_count, 1);
+  assert.equal(summaryGeneric.fallback_topic_count, 1);
+
+  // 혼합: toggle=false이면 둘 다 supporting
+  assert.equal(summaryBoth.cpp_fallback_camera_dev_relevant_count, 0);
+  assert.equal(summaryBoth.supporting_main_article_count, 2);
+  assert.equal(summaryBoth.fallback_topic_count, 2);
+});
+
+test('cpp_fallback with camera_dev_workflow_relevance=false stays supporting-only', () => {
+  const { compositionSummary } = require('../../scripts/newsroom/generate/newsroom-selection');
+  const genericFallback = candidate({
+    title: 'LLVM 20 general compiler release',
+    url: 'https://example.com/llvm-20-general',
+    summary: 'LLVM 20 releases with general compiler improvements.',
+    api_or_component: 'LLVM compiler',
+    behavior_change: 'General compiler optimization improved.',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    editorial_priority: 6,
+    native_tooling_relevance: 3,
+    counts_as_fallback_topic: true,
+    camera_dev_workflow_relevance: false,
+    camera_dev_workflow_relevance_source: 'default_false'
+  });
+
+  const summary = compositionSummary([genericFallback]);
+
+  assert.equal(summary.cpp_fallback_camera_dev_relevant_count, 0);
+  assert.equal(summary.supporting_main_article_count, 1);
+  assert.equal(summary.non_fallback_reviewable_article_count, 0);
+});
+
 test('score breakdown exposes HAL-first deterministic fields and penalties', () => {
   const halScore = scoreCandidate(candidate({
     title: 'Camera HAL stream update',

@@ -97,7 +97,8 @@ const {
   writeHomepageHeadlineState
 } = require('../common/homepage-headline');
 const {
-  pruneResolvedFallbackImageFactCheckItems
+  pruneResolvedFallbackImageFactCheckItems,
+  dropDecisionMetadataMustFix
 } = require('../common/fact-check-repair');
 const {
   GENERATION_CONTRACT_VERSION,
@@ -501,6 +502,7 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     Number(primaryCameraStackTopicCount) >= articlePolicy.primaryCameraStack.minRequired &&
     Number(forbiddenMainArticleCount) === 0
   );
+  const cppFallbackCameraDevRelevantCount = compositionSummary.cpp_fallback_camera_dev_relevant_count ?? 0;
   const selectionPublishGatePassed = report.publish_gate_passed ?? (
     Number(selectedArticleCount) >= minFinalArticles &&
     Number(selectedArticleCount) <= maxFinalArticles &&
@@ -508,7 +510,7 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     Number(directAospCameraOrDriverCount) >= publishReadyCompositionPolicy.directAospCameraOrDriverMinRequired &&
     Number(supportingMainArticleCount) <= publishReadyCompositionPolicy.supportingMainMaxAllowed &&
     Number(forbiddenMainArticleCount) === 0 &&
-    Number(primaryCameraStackTopicCount) + Number(supportingMainArticleCount) === Number(selectedArticleCount)
+    Number(primaryCameraStackTopicCount) + Number(supportingMainArticleCount) + Number(cppFallbackCameraDevRelevantCount) === Number(selectedArticleCount)
   );
   const publishGatePassed = options.publishGatePassed ?? selectionPublishGatePassed;
   const selectedGroupKeys = ensureArray(options.selectedGroupKeys).length > 0
@@ -974,6 +976,25 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.tooling_workflow_type = stringOrEmpty(collected.tooling_workflow_type || candidate.tooling_workflow_type);
     candidate.native_workflow_evidence_score = numberOrDefault(collected.native_workflow_evidence_score ?? candidate.native_workflow_evidence_score);
     candidate.related_context_candidates = ensureArray(collected.related_context_candidates || candidate.related_context_candidates);
+    // reporter LLM이 camera_dev_workflow_relevance를 판단하면 우선 적용, 아니면 collected(source-discovery) 값 보존, 기본 false
+    if (typeof candidate.camera_dev_workflow_relevance === 'boolean') {
+      candidate.camera_dev_workflow_relevance_source = 'llm_reporter';
+      const llmReason = String(candidate.camera_dev_workflow_relevance_reason || '').trim();
+      // LLM이 true 판단했으나 reason이 비어 있으면 traceability 보존을 위해 collected reason을 fallback으로 사용
+      if (!llmReason && typeof collected.camera_dev_workflow_relevance_reason === 'string' && collected.camera_dev_workflow_relevance_reason.trim()) {
+        candidate.camera_dev_workflow_relevance_reason = collected.camera_dev_workflow_relevance_reason.slice(0, 200);
+      } else {
+        candidate.camera_dev_workflow_relevance_reason = llmReason.slice(0, 200);
+      }
+    } else if (typeof collected.camera_dev_workflow_relevance === 'boolean') {
+      candidate.camera_dev_workflow_relevance = collected.camera_dev_workflow_relevance;
+      candidate.camera_dev_workflow_relevance_reason = String(collected.camera_dev_workflow_relevance_reason || '').slice(0, 200);
+      candidate.camera_dev_workflow_relevance_source = collected.camera_dev_workflow_relevance_source || 'llm_source_discovery';
+    } else {
+      candidate.camera_dev_workflow_relevance = false;
+      candidate.camera_dev_workflow_relevance_reason = '';
+      candidate.camera_dev_workflow_relevance_source = 'default_false';
+    }
     candidate.imageCandidates = imageCandidatesForReporterCandidate(candidate, collectedByUrl);
     const rejectionReason = reporterCandidateRejectionReason(candidate);
     candidate.evidence_eligible = !rejectionReason;
@@ -3651,6 +3672,13 @@ async function main() {
         'Candidate-only 또는 requiresCrossCheck lead는 cross_check_status에 검증 필요 상태를 명시하고 unsupported fact를 만들지 마세요.',
         'HAL/driver 직접 영향이 아니면 evidence_notes와 do_not_overstate에서 app/API/tooling/debug/repro 맥락으로 제한하세요.',
         lockedSections.length > 0 ? 'retry context에 있는 locked article URLs, titles, sources, source-date-title 조합과 중복되는 candidate는 evidence_notes에 중복 가능성을 명시하세요.' : '',
+        'capsule에 camera_dev_workflow_relevance=true가 이미 있으면 그 결정을 유지하세요. capsule에 명시적으로 false로 뒤집을 근거가 없으면 true를 유지하세요. 이 값은 deterministic source-discovery 단계에서 이미 판단된 신호이므로 LLM이 임의로 false로 바꾸면 selection 정합성이 깨집니다.',
+        'capsule에 camera_dev_workflow_relevance 필드가 없는 경우는 평가되지 않은 것이므로, 위 판단 기준에 따라 새로 결정해도 됩니다.',
+        '각 candidate에 대해 camera_dev_workflow_relevance(boolean)와 camera_dev_workflow_relevance_reason(한 문장)을 반환하세요. 판단 기준:',
+        '- Camera 앱 / Camera 기능을 가진 Android 앱을 빠르게 빌드·프로토타이핑하는 데 쓰일 수 있는 도구면 true',
+        '- Camera HAL / Camera2 / CameraX API의 특정 동작을 재현·검증할 수 있는 테스트 클라이언트나 sample 앱을 만드는 데 도움이 되는 도구면 true',
+        '- Camera 관련 이슈를 디버깅하거나 재현하는 워크플로우를 단축하는 도구면 true',
+        '- C++ 컴파일러 일반 릴리스, 일반 native performance 글, AI 코딩 도구 일반 소개(Camera 워크플로우 언급 없음)는 false',
         'schema와 일치하는 JSON만 반환하세요.'
       ].filter(Boolean).join('\n'),
       `${reporterContext}\n\n${lockedContext}\n\nArticle capsule shortlist JSON:\n${JSON.stringify(capsuleInputFromReport(articleCapsuleReport, 'shortlisted'), null, 2)}\n\nCompact selection context JSON:\n${JSON.stringify(compactSelectionContext(shortlistReport), null, 2)}`,
@@ -3828,6 +3856,7 @@ async function main() {
     let eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
     factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
     factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
+    ({ factCheck } = dropDecisionMetadataMustFix(factCheck));
     generationRunState.factCheck = factCheck;
     writeJson(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.json`), factCheck);
     fs.writeFileSync(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
@@ -3997,6 +4026,7 @@ async function main() {
         });
         factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
         factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
+        ({ factCheck } = dropDecisionMetadataMustFix(factCheck));
         generationRunState.factCheck = factCheck;
         writeJson(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.json`), factCheck);
         fs.writeFileSync(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');

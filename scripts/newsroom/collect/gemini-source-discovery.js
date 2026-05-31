@@ -58,7 +58,9 @@ function proposalResponseSchema() {
             search_keywords: { type: 'ARRAY', items: { type: 'STRING' } },
             candidate_urls: { type: 'ARRAY', items: { type: 'STRING' } },
             expected_evidence: { type: 'ARRAY', items: { type: 'STRING' } },
-            risk_notes: { type: 'ARRAY', items: { type: 'STRING' } }
+            risk_notes: { type: 'ARRAY', items: { type: 'STRING' } },
+            camera_dev_workflow_relevance: { type: 'BOOLEAN' },
+            camera_dev_workflow_relevance_reason: { type: 'STRING' }
           },
           required: ['proposal_id', 'topic_gap', 'source_family', 'candidate_urls']
         }
@@ -90,7 +92,10 @@ function normalizeProposalPayload(payload = {}, date = '') {
         search_keywords: Array.isArray(proposal.search_keywords) ? proposal.search_keywords.map(text).filter(Boolean) : [],
         candidate_urls: Array.isArray(proposal.candidate_urls) ? proposal.candidate_urls.map(text).filter(Boolean) : [],
         expected_evidence: Array.isArray(proposal.expected_evidence) ? proposal.expected_evidence.map(text).filter(Boolean) : [],
-        risk_notes: Array.isArray(proposal.risk_notes) ? proposal.risk_notes.map(text).filter(Boolean) : []
+        risk_notes: Array.isArray(proposal.risk_notes) ? proposal.risk_notes.map(text).filter(Boolean) : [],
+        // Camera 개발 워크플로우 관련성 — LLM이 판단, 기본값 false (보수적)
+        camera_dev_workflow_relevance: proposal.camera_dev_workflow_relevance === true,
+        camera_dev_workflow_relevance_reason: text(proposal.camera_dev_workflow_relevance_reason).slice(0, 200)
       }))
       : []
   };
@@ -121,6 +126,14 @@ function buildProposalPrompt({ date, manualCandidates = [], sourceRegistry = {} 
     'Official Android media source라도 날짜가 있는 item-level release/change evidence와 camera-output/media-pipeline relevance가 모두 있어야 합니다. official source quality만으로 topic relevance를 우회하지 마세요.',
     'Reference docs(MediaCodec, MediaRecorder, MediaStore, Photo Picker training docs, supported formats)는 standalone article 후보가 아니라 context/reference source입니다. dated release-note item 또는 다른 dated source가 concrete change를 제공할 때만 보강 근거로 제안하세요.',
     'Reject generic consumer multimedia discovery intent: generic playback/player-only, streaming-only, music, DRM/player-only, OTT-only, audio-only, or gallery UI updates without camera-generated output/access impact.',
+    '',
+    '각 proposal에 대해 camera_dev_workflow_relevance 판단:',
+    '이 후보가 다음 중 하나에라도 해당하면 camera_dev_workflow_relevance=true:',
+    '- Camera 앱 / Camera 기능을 가진 Android 앱을 빠르게 빌드·프로토타이핑하는 데 쓰일 수 있는 도구',
+    '- Camera HAL / Camera2 / CameraX API의 특정 동작을 재현·검증할 수 있는 테스트 클라이언트나 sample 앱을 만드는 데 도움이 되는 도구',
+    '- Camera 관련 이슈를 디버깅하거나 재현하는 워크플로우를 단축하는 도구',
+    '- 위 경우의 근거를 camera_dev_workflow_relevance_reason 필드에 한 문장으로 적어주세요.',
+    '해당 없으면 false. C++ 컴파일러 일반 릴리스, 일반 native performance 글, AI 코딩 도구 일반 소개(Camera 워크플로우 언급 없음)는 false.',
     '',
     'Manual candidates 요약:',
     JSON.stringify(candidateSummary, null, 2),
@@ -370,7 +383,13 @@ function parserBackedCandidate({ proposal, source, item, fallbackUrl }) {
     proposal_trace_id: proposal.proposal_id,
     discovery_topic_gap: proposal.topic_gap,
     discovery_source_family: proposal.source_family,
-    parser_backed_source_extraction: true
+    parser_backed_source_extraction: true,
+    // source-discovery LLM이 판단한 카메라 개발 워크플로우 관련성 — reporter stage에서 덮어씀
+    camera_dev_workflow_relevance: proposal.camera_dev_workflow_relevance === true,
+    camera_dev_workflow_relevance_reason: text(proposal.camera_dev_workflow_relevance_reason || '').slice(0, 200),
+    camera_dev_workflow_relevance_source: proposal.camera_dev_workflow_relevance === true
+      ? 'llm_source_discovery'
+      : 'default_false'
   };
 }
 
