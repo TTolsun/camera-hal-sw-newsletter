@@ -3,13 +3,13 @@
 ## 요약
 
 - 상태: 정상 또는 조치 없음
-- 기사 수 (`article_count`): 2
+- 기사 수 (`article_count`): 1
 - 렌더된 이미지 수 (`rendered_image_count`): 2
 - Markdown 이미지 수 (`markdown_image_count`): 2
 - 임시 시각 요소 수 (`fallback_visual_count`): 0
-- 이미지 후보 수 (`image_candidates_count`): 2
-- 검증 통과 이미지 후보 수 (`valid_image_candidate_count`): 2
-- 선택된 대표 이미지 수 (`selected_image_count`): 2
+- 이미지 후보 수 (`image_candidates_count`): 1
+- 검증 통과 이미지 후보 수 (`valid_image_candidate_count`): 1
+- 선택된 대표 이미지 수 (`selected_image_count`): 1
 - 출처 근거 부족 대표 이미지 수 (`selected_image_without_valid_candidate_count`): 0
 - 후보 목록 불일치 대표 이미지 수 (`selected_image_not_in_candidates_count`): 0
 - 복원 가능 기사 수 (`repairable_article_count`): 0
@@ -21,8 +21,7 @@
 
 | # | 기사 | 선택된 대표 이미지 | 후보 | 검증 통과 후보 | 상태 |
 | ---: | --- | --- | ---: | ---: | --- |
-| 1 | Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
-| 2 | Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
+| 1 | Google I/O 2026: Jetpack Compose와 CameraX 통합으로 다중 폼 팩터 카메라 미리보기 호환성 강화 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
 
 ## 복원 가능 기사
 

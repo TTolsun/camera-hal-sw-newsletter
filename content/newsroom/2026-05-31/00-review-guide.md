@@ -3,11 +3,11 @@
 ## 요약
 
 - seed_used: false
-- public_output_expected: true
-- status: PASS
-- present: 70/82
+- public_output_expected: false
+- status: FAILED_REPAIR_REVIEWABLE
+- present: 77/88
 - missing_required: 0
-- attention_required: 0
+- attention_required: 2
 
 ## 읽는 순서
 
@@ -23,22 +23,22 @@
 ## 편집장 브리프
 
 - `content/newsroom/2026-05-31/00-review-guide.md` - changed
-- `content/newsroom/2026-05-31/editor-in-chief-brief.md` - changed
+- `content/newsroom/2026-05-31/editor-in-chief-brief.md` - present
 
 ## 최종 기사 / 공개 출력
 
-- `newsletters/2026-05-31/newsletter.md` - changed
-- `newsletters/2026-05-31/index.html` - changed
-- `data/newsletters.json` - changed
-- `data/homepage-headline.json` - changed
-- `data/article-exposure-history.json` - changed
+- `newsletters/2026-05-31/newsletter.md` - present
+- `newsletters/2026-05-31/index.html` - present
+- `data/newsletters.json` - present
+- `data/homepage-headline.json` - present
+- `data/article-exposure-history.json` - present
 
 ## 사실성 / 품질 / HAL 게이트
 
 - `content/newsroom/2026-05-31/fact-check-report.md` - changed
 - `content/newsroom/2026-05-31/quality-report.md` - changed
 - `content/newsroom/2026-05-31/hal-signal-quality-report.md` - present
-- `content/newsroom/2026-05-31/stale-claim-report.md` - changed
+- `content/newsroom/2026-05-31/stale-claim-report.md` - present
 - `content/newsroom/2026-05-31/image-audit-report.md` - present
 - `content/newsroom/2026-05-31/source-quality-report.md` - present
 
@@ -61,24 +61,25 @@
 
 ## 디버그 근거
 
+- `content/newsroom/2026-05-31/recovery-prompt.md` - changed
 - `content/collected-news/2026-05-31/manual-candidates.json` - present
 - `content/collected-news/2026-05-31/candidates.json` - present
 - `content/collected-news/2026-05-31/raw-candidate-manifest.json` - present
-- `content/collected-news/2026-05-31/merged-candidates.json` - changed
-- `content/collected-news/2026-05-31/merged-candidate-manifest.json` - changed
-- `content/newsroom/2026-05-31/generation-status.json` - present
+- `content/collected-news/2026-05-31/merged-candidates.json` - present
+- `content/collected-news/2026-05-31/merged-candidate-manifest.json` - present
+- `content/newsroom/2026-05-31/generation-status.json` - changed
 - `content/newsroom/2026-05-31/reporter-candidates.json` - changed
 - `content/newsroom/2026-05-31/editor-draft.json` - changed
 - `content/newsroom/2026-05-31/editor-draft.md` - changed
 - `content/newsroom/2026-05-31/fact-check-report.json` - changed
 - `content/newsroom/2026-05-31/quality-report.json` - changed
 - `content/newsroom/2026-05-31/hal-signal-quality-report.json` - present
-- `content/newsroom/2026-05-31/stale-claim-report.json` - changed
+- `content/newsroom/2026-05-31/stale-claim-report.json` - present
 - `content/newsroom/2026-05-31/retry-history.json` - changed
-- `content/newsroom/2026-05-31/shortlisted-candidates.json` - changed
+- `content/newsroom/2026-05-31/shortlisted-candidates.json` - present
 - `content/newsroom/2026-05-31/selection-report.json` - present
-- `content/newsroom/2026-05-31/article-capsules.json` - changed
-- `content/newsroom/2026-05-31/background-context.json` - changed
+- `content/newsroom/2026-05-31/article-capsules.json` - present
+- `content/newsroom/2026-05-31/background-context.json` - present
 - `content/newsroom/2026-05-31/evidence-pack-summary.json` - present
 - `content/newsroom/2026-05-31/image-audit-report.json` - present
 - `content/newsroom/2026-05-31/source-quality-report.json` - present
@@ -91,7 +92,7 @@
 - `content/newsroom/2026-05-31/gemini-usage-report.json` - present
 - `content/newsroom/2026-05-31/extracted-source-facts.json` - present
 - `content/newsroom/2026-05-31/evidence-validation-report.json` - present
-- `content/newsroom/2026-05-31/cost-report.md` - changed
+- `content/newsroom/2026-05-31/cost-report.md` - present
 - `content/newsroom/2026-05-31/summary-cache-report.md` - present
 - `content/newsroom/2026-05-31/summary-cache-report.json` - present
 - `content/source-events/2026-05-31/source-change-events.md` - present
@@ -99,11 +100,20 @@
 - `content/newsroom/2026-05-31/editor-draft-attempt-1.json` - present
 - `content/newsroom/2026-05-31/editor-draft-attempt-1.md` - present
 - `content/newsroom/2026-05-31/editor-invalid-attempt-1.json` - present
-- `content/newsroom/2026-05-31/editor-public-article-judge-attempt-1.json` - changed
+- `content/newsroom/2026-05-31/editor-invalid-attempt-2.json` - present
+- `content/newsroom/2026-05-31/editor-invalid-repair-attempt-2.json` - present
+- `content/newsroom/2026-05-31/editor-public-article-judge-attempt-1.json` - present
 - `content/newsroom/2026-05-31/editor-validation-error-attempt-1.json` - present
+- `content/newsroom/2026-05-31/editor-validation-error-attempt-2.json` - present
+- `content/newsroom/2026-05-31/editor-validation-error-repair-attempt-2.json` - present
 - `content/newsroom/2026-05-31/fact-check-report-attempt-1.json` - present
 - `content/newsroom/2026-05-31/fact-check-report-attempt-1.md` - present
 - `content/newsroom/2026-05-31/quality-report-attempt-1.json` - present
 - `content/newsroom/2026-05-31/quality-report-attempt-1.md` - present
 - `content/newsroom/2026-05-31/reporter-candidates-attempt-1.json` - present
+- `content/newsroom/2026-05-31/reporter-candidates-attempt-2.json` - present
 - `content/newsroom/2026-05-31/artifact-manifest.json` - changed
+
+## 미분류 산출물
+
+- `content/newsroom/2026-05-31/repair-failure.json` - changed

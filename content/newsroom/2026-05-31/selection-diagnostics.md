@@ -47,8 +47,8 @@ Homepage Headline:
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
 - runtime_decayed_score: 96
-- previous_stored_current_score: 98
-- last_scored_at: 2026-05-30
+- previous_stored_current_score: 96
+- last_scored_at: 2026-05-31
 - scored_at: 2026-05-31
 - included_as_latest: true
 - latest_inclusion_mode: selected_normally

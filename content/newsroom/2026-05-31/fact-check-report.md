@@ -2,17 +2,30 @@
 
 ## 상태
 
-PASS
+NEEDS_FIX
 
 ## 반드시 수정할 항목
 
-- 없음
+- 위치: sections[0].public_article.decision_metadata.impact
+  - 문제: decision_metadata 필드는 deterministic builder가 생성/덮어쓰는 내부 메타데이터이므로 fact-checker가 수정해서는 안 됩니다. enum 위반은 deterministic validator가 담당합니다.
+  - 제안: decision_metadata 필드를 제거하거나 수정하지 마세요.
+  - 출처: N/A
+- 위치: sections[0].public_article.decision_metadata.scope
+  - 문제: decision_metadata 필드는 deterministic builder가 생성/덮어쓰는 내부 메타데이터이므로 fact-checker가 수정해서는 안 됩니다. enum 위반은 deterministic validator가 담당합니다.
+  - 제안: decision_metadata 필드를 제거하거나 수정하지 마세요.
+  - 출처: N/A
+- 위치: sections[0].public_article.decision_metadata.action
+  - 문제: decision_metadata 필드는 deterministic builder가 생성/덮어쓰는 내부 메타데이터이므로 fact-checker가 수정해서는 안 됩니다. enum 위반은 deterministic validator가 담당합니다.
+  - 제안: decision_metadata 필드를 제거하거나 수정하지 마세요.
+  - 출처: N/A
+- 위치: sections[0].public_article.decision_metadata.overclaim_risk
+  - 문제: decision_metadata 필드는 deterministic builder가 생성/덮어쓰는 내부 메타데이터이므로 fact-checker가 수정해서는 안 됩니다. enum 위반은 deterministic validator가 담당합니다.
+  - 제안: decision_metadata 필드를 제거하거나 수정하지 마세요.
+  - 출처: N/A
 
 ## 권장 수정
 
-- article_sections.hal_driver_impact에서 'HAL이 이를 지연 없이 처리할 수 있어야 합니다'와 같은 추정적 표현 대신, 'HAL이 이를 지연 없이 처리하는지 검증이 필요합니다'와 같이 검증의 필요성을 강조하는 표현으로 수정하는 것이 좋습니다.
-- article_sections.hal_driver_impact에서 '메모리 압박이나 프레임 드롭이 발생하지 않는지 검증이 필요합니다'와 같이 검증의 필요성을 강조하는 표현으로 수정하는 것이 좋습니다.
-- article_sections.hal_driver_impact에서 'Clang/LLVM 툴체인 호환성을 유지하는지 확인하는 것이 좋습니다'와 같이 검증의 필요성을 강조하는 표현으로 수정하는 것이 좋습니다.
+- 없음
 
 ## 출처 공백
 
@@ -20,4 +33,4 @@ PASS
 
 ## 최종 의견
 
-제공된 모든 섹션이 정책을 준수하고 있습니다. 추정적 표현을 검증 필요성으로 강조하는 방향으로 수정하면 더 좋습니다.
+decision_metadata 필드는 내부 필드이므로 수정하지 않아야 합니다. 이 외에는 전반적으로 잘 작성되었습니다.

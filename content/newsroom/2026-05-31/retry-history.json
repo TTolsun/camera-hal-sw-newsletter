@@ -2,11 +2,11 @@
   {
     "attempt": 1,
     "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
-    "score": 98,
+    "score": 82,
     "threshold": 85,
-    "status": "PASS",
-    "rendered_main_article_count": 2,
-    "locked_article_count": 2,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 1,
+    "locked_article_count": 1,
     "demoted_article_count": 0,
     "reserve_pool_opened": false,
     "reserve_open_reason": "",
@@ -27,21 +27,39 @@
       {
         "category": "editorial-story",
         "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
         "reason": "Briefing bullet misses story structure elements: what_happened.",
         "location": "briefing 3",
         "blocking": false,
         "severity": "soft",
         "reason_code": "",
         "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 15,
+        "reason": "Fact checker returned 4 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
       }
     ],
     "selected_article_headlines": [
-      "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 대화면 적응형 카메라 미리보기 최적화",
-      "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 및 개발 워크플로우 변화"
+      "Google I/O 2026: Jetpack Compose와 CameraX 통합으로 다중 폼 팩터 카메라 미리보기 호환성 강화"
     ],
     "locked_article_headlines": [
-      "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 대화면 적응형 카메라 미리보기 최적화",
-      "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 및 개발 워크플로우 변화"
+      "Google I/O 2026: Jetpack Compose와 CameraX 통합으로 다중 폼 팩터 카메라 미리보기 호환성 강화"
     ],
     "source_gap_sections": [],
     "demoted_sections": [],
@@ -49,7 +67,7 @@
     "locked_sections": [
       {
         "index": 1,
-        "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 대화면 적응형 카메라 미리보기 최적화",
+        "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합으로 다중 폼 팩터 카메라 미리보기 호환성 강화",
         "category": "android_platform_camera_adjacent",
         "relevance_bucket": "android_platform_camera_adjacent",
         "urls": [
@@ -57,18 +75,6 @@
         ],
         "source_titles": [
           "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O"
-        ]
-      },
-      {
-        "index": 2,
-        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 및 개발 워크플로우 변화",
-        "category": "cpp_ai_tooling_fallback",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "urls": [
-          "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
-        ],
-        "source_titles": [
-          "Build native Android apps in Google AI Studio"
         ]
       }
     ],
@@ -82,7 +88,7 @@
     "article_locks": [
       {
         "index": 1,
-        "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 대화면 적응형 카메라 미리보기 최적화",
+        "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합으로 다중 폼 팩터 카메라 미리보기 호환성 강화",
         "category": "android_platform_camera_adjacent",
         "relevance_bucket": "android_platform_camera_adjacent",
         "urls": [
@@ -94,28 +100,13 @@
         "status": "PASS",
         "reason": "",
         "locked": true
-      },
-      {
-        "index": 2,
-        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원 및 개발 워크플로우 변화",
-        "category": "cpp_ai_tooling_fallback",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "urls": [
-          "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
-        ],
-        "source_titles": [
-          "Build native Android apps in Google AI Studio"
-        ],
-        "status": "PASS",
-        "reason": "",
-        "locked": true
       }
     ],
     "final_article_slot_distribution": {
       "android_camera_platform_api": 0,
       "camerax_aosp_camera_compatibility": 1,
       "linux_camera_libcamera_v4l2": 0,
-      "ai_camera_path_hal_workflow": 1,
+      "ai_camera_path_hal_workflow": 0,
       "cpp_toolchain_fallback": 0,
       "other": 0
     },
@@ -124,6 +115,128 @@
     "lock_blockers": [],
     "rejected_duplicate_headlines": [],
     "source_gap_count": 0,
-    "must_fix_count": 0
+    "must_fix_count": 4
+  },
+  {
+    "attempt": 2,
+    "model": "repair-fallback",
+    "score": 82,
+    "threshold": 85,
+    "status": "FAILED_REPAIR_REVIEWABLE",
+    "rendered_main_article_count": 1,
+    "locked_article_count": 0,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 15,
+        "reason": "Fact checker returned 4 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Google I/O 2026: Jetpack Compose와 CameraX 통합으로 다중 폼 팩터 카메라 미리보기 호환성 강화"
+    ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "editor attempt 2/2: fallback-to-last-known-valid-editor"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 0,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 4,
+    "repair_failure": {
+      "name": "EditorSemanticValidationError",
+      "message": "Editor output failed claim binding validation.",
+      "details": {
+        "field": "sections.claims",
+        "actualCount": 1,
+        "sectionCount": 2,
+        "issues": [
+          {
+            "index": 1,
+            "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합으로 다중 폼 팩터 카메라 미리보기 호환성 강화",
+            "status": "needs_fix",
+            "issues": [
+              {
+                "reason_code": "unknown_evidence_id",
+                "message": "Claim references unresolved evidence_id: candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary."
+              },
+              {
+                "reason_code": "unknown_evidence_id",
+                "message": "Claim references unresolved evidence_id: candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary."
+              }
+            ],
+            "uncovered_facts": []
+          }
+        ]
+      },
+      "field": "sections.claims",
+      "stage": "editor attempt 2/2",
+      "attempt": 2,
+      "status": "FAILED_REPAIR_REVIEWABLE",
+      "lastKnownValidAttempt": 1,
+      "fallbackEditorSectionCount": 1
+    }
   }
 ]

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-31",
-  "generated_at": "2026-05-31T05:33:05.544Z",
+  "generated_at": "2026-05-31T07:47:52.835Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -20,9 +20,7 @@
       "content/newsroom/2026-05-31/repair-failure.json",
       "content/newsroom/2026-05-31/stale-claim-report.json"
     ],
-    "missing": [
-      "content/newsroom/2026-05-31/repair-failure.json"
-    ],
+    "missing": [],
     "used": [
       "content/newsroom/2026-05-31/generation-status.json",
       "content/newsroom/2026-05-31/selection-report.json",
@@ -34,17 +32,18 @@
       "content/newsroom/2026-05-31/fact-check-report.json",
       "content/newsroom/2026-05-31/source-effectiveness-report.json",
       "content/source-events/2026-05-31/source-change-events.json",
+      "content/newsroom/2026-05-31/repair-failure.json",
       "content/newsroom/2026-05-31/stale-claim-report.json"
     ]
   },
   "publish_status": {
-    "status": "publish-ready",
-    "run_mode": "publish_ready",
-    "quality_score": 98,
+    "status": "needs-fix",
+    "run_mode": "diagnostics_only",
+    "quality_score": 82,
     "quality_threshold": 85,
-    "fact_check_status": "PASS",
-    "final_publish_ready": true,
-    "public_newsletter_ready": true,
+    "fact_check_status": "NEEDS_FIX",
+    "final_publish_ready": false,
+    "public_newsletter_ready": false,
     "review_pr_ready": true
   },
   "selection_summary": {
@@ -69,11 +68,11 @@
   },
   "claim_validation_summary": {
     "status": "available",
-    "bound_claims": 4,
-    "total_claims": 5,
+    "bound_claims": 2,
+    "total_claims": 3,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
-    "available_article_count": 2,
+    "available_article_count": 1,
     "not_available_article_count": 0
   },
   "hal_impact_summary": {
@@ -340,14 +339,14 @@
       "key_evidence": [
         "version_or_release: 2026년 5월 19일 릴리스",
         "api_or_component: Google AI Studio",
-        "behavior_change: Google AI Studio는 이제 프롬프트만으로 몇 분 안에 전체 Android 앱을 빌드할 수 있습니다. 소프트웨어를 설치하거나 라이브러리를 구성할 필요가 없어 개발 장벽이 크게 낮아집니다."
+        "behavior_change: Google AI Studio가 이제 프롬프트만으로 전체 Android 앱을 몇 분 안에 빌드할 수 있게 되었습니다. 소프트웨어 설치나 라이브러리 구성이 필요 없어 개발 장벽이 크게 낮아집니다."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 5 article-level signal(s) from article_text.)",
       "claim_validation": {
-        "status": "available",
-        "bound_claims": 2,
-        "total_claims": 2,
-        "overclaim_risk": "low"
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
       }
     }
   ],
@@ -466,22 +465,25 @@
   ],
   "excluded_candidates_truncated": true,
   "failure_diagnostics": {
-    "quality_hard_failures": [],
-    "fact_check_must_fix": [],
-    "repair_failures": [],
+    "quality_hard_failures": [
+      "Fact checker returned 4 must_fix item(s)."
+    ],
+    "fact_check_must_fix": [
+      "decision_metadata 필드는 deterministic builder가 생성/덮어쓰는 내부 메타데이터이므로 fact-checker가 수정해서는 안 됩니다. enum 위반은 deterministic validator가 담당합니다."
+    ],
+    "repair_failures": [
+      "Editor output failed claim binding validation."
+    ],
     "candidate_shortage_hints": [
       "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
       "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.",
       "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
     ],
     "source_gap_warnings": [],
-    "missing_artifacts": [
-      "content/newsroom/2026-05-31/repair-failure.json"
-    ],
+    "missing_artifacts": [],
     "invalid_artifacts": []
   },
   "warnings": [
-    "Missing optional artifact: content/newsroom/2026-05-31/repair-failure.json",
     "Fallback claim_validation.status=not_available for selected article: 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
     "Fallback claim_validation.status=not_available for selected article: Build native Android apps in Google AI Studio"
   ]

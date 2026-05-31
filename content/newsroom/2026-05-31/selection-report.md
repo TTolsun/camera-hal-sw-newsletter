@@ -35,14 +35,14 @@
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
-- previous_stored_current_score: 98
+- previous_stored_current_score: 96
 - runtime_decayed_score: 96
-- last_scored_at: 2026-05-30
+- last_scored_at: 2026-05-31
 - scored_at: 2026-05-31
 - latest_inclusion_mode: selected_normally
 - injected_from_snapshot: false
 - removed_due_to_headline_inclusion_count: 0
-- exposure_history_coverage: forward_only since 2026-05-23
+- exposure_history_coverage: unknown since unknown
 
 ## Source Parser Hints
 

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-05-31",
-  "generated_at": "2026-05-31T05:32:58.191Z",
+  "generated_at": "2026-05-31T07:46:43.153Z",
   "status": "OK",
   "failure_stage": "",
   "failure_reason": "",
@@ -83,9 +83,9 @@
     "reason": "retained_current_above_margin",
     "current_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
     "replacement_headline_key": null,
-    "previous_stored_current_score": 98,
+    "previous_stored_current_score": 96,
     "runtime_decayed_score": 96,
-    "last_scored_at": "2026-05-30",
+    "last_scored_at": "2026-05-31",
     "scored_at": "2026-05-31",
     "retained": true,
     "replaced": false,
@@ -106,11 +106,7 @@
     "removed_due_to_headline_inclusion_count": 0
   },
   "removed_due_to_headline_inclusion": [],
-  "article_exposure_coverage": {
-    "mode": "forward_only",
-    "coverage_starts_at": "2026-05-23",
-    "backfill_included": false
-  },
+  "article_exposure_coverage": null,
   "candidate_pool_preflight_passed": true,
   "candidate_shortage_reviewable": false,
   "candidate_shortage_summary": {
