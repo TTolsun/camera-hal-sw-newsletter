@@ -1832,6 +1832,7 @@ async function repairEditorSemanticWithLlm({
   invalidEditor,
   validationError
 }) {
+  const beforeSectionCount = ensureArray(invalidEditor?.sections).length;
   return callLlmJson(
     `${editorStage} semantic repair`,
     [
@@ -1839,7 +1840,8 @@ async function repairEditorSemanticWithLlm({
       '같은 schema와 일치하는 complete editor JSON object 하나를 반환하세요.',
       'Editor semantic validation error JSON에 표시된 validation error만 수정하세요.',
       'Validation repair에 필요한 local edit가 아니면 한국어 reader-facing prose를 보존하세요. 새로 쓰는 reader-facing text는 반드시 한국어여야 합니다.',
-      'Article을 추가, 제거, 재정렬, 교체하지 마세요.',
+      `현재 editor draft는 정확히 ${beforeSectionCount}개의 main sections를 가집니다. Repaired output도 동일한 sections 수를 같은 순서로 유지하세요.`,
+      'Section을 추가, 제거, 합치기, 분할, 재정렬, 교체하지 마세요. Validation error가 명시한 field만 in-place로 수정하세요.',
       'Validation error가 명시적으로 해당 field를 가리키지 않으면 article headline, category, source URL, image field, action_items, references를 변경하지 마세요.',
       claimRepairEvidencePrompt(),
       'sections.group_coverage failure는 missing selected representative group을 selected capsule만 사용해 article로 복구하세요. 해당 group을 render할 수 없으면 article_group_key, reason_code, reason text를 포함해 explicitly_demoted_groups[] 또는 hard_blocked_groups[]에 기록하세요.',
@@ -3813,6 +3815,7 @@ async function main() {
         '구체적인 Action Item content가 없는 main article은 같은 source 안에서 실행 가능한 action을 만들 수 있으면 recommended_fixes[]에 넣고, source가 실무 action을 뒷받침하지 못하면 must_fix[]에 넣으세요.',
         'action_items가 막연하지만 같은 source가 더 구체적인 action을 뒷받침하면 must_fix가 아니라 recommended_fixes[]로 분류하세요. must_fix[]는 발행을 막아야 하는 factual/source 오류 전용입니다.',
         'claims[].impact_level, claim_type, overclaim_risk는 고정 enum입니다. 허용된 enum 목록에 없는 값(예: stream_configuration_behavior, buffer_lifecycle_management)을 suggestion으로 제시하지 말고, 유효한 enum 값을 단지 "too broad" 또는 "too specific"라는 이유로 must_fix하지 마세요. 분류가 실제로 틀렸을 때만 허용된 enum 값 중 하나를 suggestion으로 제시하세요.',
+        'sections[*].public_article.decision_metadata.{impact, scope, action, overclaim_risk}는 deterministic builder가 public output 직전에 derive/overwrite하는 internal metadata입니다. enum 위반은 deterministic validator(validateDecisionMetadataShape)가 담당하므로 fact-checker는 이 field 값을 must_fix[] 또는 recommended_fixes[]에 넣지 마세요.',
         'Camera HAL perspective가 약하거나 engineering relevance가 빠진 main article은 source-backed 보강이 가능하면 recommended_fixes[]에 넣고, source가 Camera developer relevance를 뒷받침하지 못하면 must_fix[] 또는 source_gaps[]에 넣으세요.',
         'Editor가 official-source 또는 cross-checked verification을 설명하지 않는 candidate-only 또는 requiresCrossCheck source 사용은 must_fix[]와 source_gaps[]에 모두 기록하세요.',
         'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
