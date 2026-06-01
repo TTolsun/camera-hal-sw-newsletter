@@ -97,8 +97,7 @@ const {
   writeHomepageHeadlineState
 } = require('../common/homepage-headline');
 const {
-  pruneResolvedFallbackImageFactCheckItems,
-  dropDecisionMetadataMustFix
+  pruneResolvedFallbackImageFactCheckItems
 } = require('../common/fact-check-repair');
 const {
   GENERATION_CONTRACT_VERSION,
@@ -3850,7 +3849,6 @@ async function main() {
     let eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
     factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
     factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
-    ({ factCheck } = dropDecisionMetadataMustFix(factCheck));
     generationRunState.factCheck = factCheck;
     writeJson(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.json`), factCheck);
     fs.writeFileSync(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
@@ -4020,7 +4018,6 @@ async function main() {
         });
         factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
         factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
-        ({ factCheck } = dropDecisionMetadataMustFix(factCheck));
         generationRunState.factCheck = factCheck;
         writeJson(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.json`), factCheck);
         fs.writeFileSync(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');

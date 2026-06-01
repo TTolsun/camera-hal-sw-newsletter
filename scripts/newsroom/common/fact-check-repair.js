@@ -95,57 +95,8 @@ function pruneResolvedFallbackImageFactCheckItems(factCheck = {}, issue = {}, op
   return { factCheck: next, removed };
 }
 
-// decision_metadata 필드(impact/scope/action/overclaim_risk)에 대한 must_fix 항목을 제거
-// PR #466 회귀 차단: LLM fact-checker가 decision_metadata를 must_fix로 잡는 경우 자동 drop
-const DECISION_METADATA_FIELD_PATTERN = /sections\[\d+\]\.public_article\.decision_metadata\./;
-
-function itemIsDecisionMetadataMustFix(item = {}) {
-  const location = String(item.location || '').replace(/\\/g, '/');
-  const field = String(item.field || '').replace(/\\/g, '/');
-  return DECISION_METADATA_FIELD_PATTERN.test(location) || DECISION_METADATA_FIELD_PATTERN.test(field);
-}
-
-function dropDecisionMetadataMustFix(factCheck = {}) {
-  const dropped = [];
-  const mustFix = [];
-
-  for (const item of ensureArray(factCheck.must_fix)) {
-    if (itemIsDecisionMetadataMustFix(item)) {
-      dropped.push(item);
-      continue;
-    }
-    mustFix.push(item);
-  }
-
-  const recommendedFixes = ensureArray(factCheck.recommended_fixes).filter(item => {
-    const text = String(item || '');
-    return !DECISION_METADATA_FIELD_PATTERN.test(text);
-  });
-
-  const droppedCount = dropped.length;
-  if (droppedCount > 0) {
-    console.log(`[fact-check-repair] fact-check-decision-metadata-dropped-count: ${droppedCount} must_fix 항목 제거됨 (decision_metadata 필드 패턴)`);
-  }
-
-  const next = {
-    ...factCheck,
-    must_fix: mustFix,
-    recommended_fixes: recommendedFixes
-  };
-
-  if (next.status === 'NEEDS_FIX' && mustFix.length === 0 &&
-      ensureArray(next.source_gaps).length === 0 && droppedCount > 0) {
-    next.status = 'PASS';
-    // PASS 승격 시 LLM이 남긴 must_fix 안내 문구가 그대로 노출되지 않도록 결정론적 문구로 교체
-    next.final_comment = `decision_metadata must_fix ${droppedCount}건이 자동 필터로 정리되어 PASS 처리됨.`;
-  }
-
-  return { factCheck: next, droppedCount };
-}
-
 module.exports = {
   itemLooksLikeFallbackImageFalsePositive,
   pruneResolvedFallbackImageFactCheckItems,
-  sectionHasSafeResolvedFallback,
-  dropDecisionMetadataMustFix
+  sectionHasSafeResolvedFallback
 };
