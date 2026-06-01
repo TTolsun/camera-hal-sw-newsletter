@@ -1,0 +1,142 @@
+[
+  {
+    "attempt": 1,
+    "model": "repair-fallback",
+    "score": 65,
+    "threshold": 85,
+    "status": "FAILED_REPAIR_REVIEWABLE",
+    "rendered_main_article_count": 1,
+    "locked_article_count": 0,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 8,
+        "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "location": "Google I/O 2026: Jetpack Compose 적응형 UI 전환과 CameraX 미리보기 호환성 강화",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "claim-evidence",
+        "points": 8,
+        "reason": "Claim references unresolved evidence_id: sx:bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3:evidence_blocks:2b41feb08ba22d15.",
+        "location": "Google I/O 2026: Jetpack Compose 적응형 UI 전환과 CameraX 미리보기 호환성 강화",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "unknown_evidence_id",
+        "dedupe_key": "1:cl:adaptive_compose_nav3:unknown_evidence_id"
+      },
+      {
+        "category": "claim-evidence",
+        "points": 8,
+        "reason": "Claim references unresolved evidence_id: sx:bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3:evidence_blocks:2b41feb08ba22d15.",
+        "location": "Google I/O 2026: Jetpack Compose 적응형 UI 전환과 CameraX 미리보기 호환성 강화",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "unknown_evidence_id",
+        "dedupe_key": "1:cl:adaptive_camerax_preview:unknown_evidence_id"
+      },
+      {
+        "category": "scope-relevance",
+        "points": 8,
+        "reason": "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
+        "location": "Google I/O 2026: Jetpack Compose 적응형 UI 전환과 CameraX 미리보기 호환성 강화",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Google I/O 2026: Jetpack Compose 적응형 UI 전환과 CameraX 미리보기 호환성 강화",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Google I/O 2026: Jetpack Compose 적응형 UI 전환과 CameraX 미리보기 호환성 강화"
+    ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "editor repair attempt 1/2: fallback-to-last-known-valid-editor"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 0,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0,
+    "repair_failure": {
+      "name": "EditorSemanticValidationError",
+      "message": "Targeted repair changed main article count outside completion/replacement mode.",
+      "details": {
+        "field": "sections",
+        "reason": "section_count_drift",
+        "mode": "targeted-repair",
+        "expectedCount": 1,
+        "actualCount": 0,
+        "expectedMinCount": 1,
+        "expectedMaxCount": 5,
+        "actualType": "array",
+        "sectionCount": 0
+      },
+      "field": "sections",
+      "stage": "editor repair attempt 1/2",
+      "attempt": 1,
+      "status": "FAILED_REPAIR_REVIEWABLE",
+      "lastKnownValidAttempt": 1,
+      "fallbackEditorSectionCount": 1
+    }
+  }
+]

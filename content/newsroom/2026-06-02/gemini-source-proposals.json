@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-02",
+  "proposals": [
+    {
+      "proposal_id": "android_io_2026_adaptive_apps",
+      "topic_gap": "Android ecosystem is expanding, and developers need to build seamless experiences across devices. This includes camera-related applications and media handling across form factors.",
+      "source_family": "android",
+      "allowed_domains": [
+        "goo.gle",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android",
+        "Jetpack Compose",
+        "cross-device",
+        "adaptive apps",
+        "camera",
+        "media",
+        "multi-device",
+        "form factors",
+        "Google I/O 2026"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Mentions of camera or media APIs (CameraX, Camera2, Media3, MediaCodec, MediaRecorder, MediaStore, Photo Picker) in the context of cross-device development.",
+        "Examples or guidelines for adapting camera-enabled applications to different screen sizes, input methods, or device types (foldables, tablets, Wear OS, etc.).",
+        "Discussions on media output consistency and performance across various Android devices."
+      ],
+      "risk_notes": [
+        "The URL is a shortlink, which might redirect to a generic I/O roundup without specific camera/media details.",
+        "The title is broad ('Building seamless Android experiences across devices with Jetpack Compose') and may not contain enough specific information about camera HAL or media pipeline changes.",
+        "Jetpack Compose focus might mean UI/UX rather than underlying HAL/media changes."
+      ]
+    },
+    {
+      "proposal_id": "android_ai_studio_native_apps",
+      "topic_gap": "Integration of AI capabilities directly into native Android applications, potentially impacting camera-based AI features, on-device processing, or new AI-driven media experiences.",
+      "source_family": "android",
+      "allowed_domains": [
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android",
+        "AI Studio",
+        "native apps",
+        "on-device AI",
+        "camera AI",
+        "computer vision",
+        "machine learning",
+        "image processing",
+        "Google I/O 2026"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
+      ],
+      "expected_evidence": [
+        "Details on how Google AI Studio facilitates the development of camera-related AI features (e.g., real-time object detection, image enhancement, computational photography).",
+        "Information about new APIs or tools for integrating AI models with camera streams or captured media.",
+        "Performance considerations or best practices for on-device AI processing of camera output.",
+        "Mentions of specific AI models or frameworks relevant to image/video processing."
+      ],
+      "risk_notes": [
+        "The article might be too high-level or focus on general AI application development, without specific relevance to camera HAL or media pipeline.",
+        "It might focus on cloud-based AI rather than on-device capabilities relevant to HAL."
+      ]
+    }
+  ]
+}
