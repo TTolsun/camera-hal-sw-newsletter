@@ -407,6 +407,52 @@ ${sourceListMarkdown(publicArticle.source_links)}
 `;
 }
 
+const QUIET_CORE_CONTEXT_NOTE = '이번 기간 카메라 코어 직접 변경은 없었습니다. 아래는 실무 레이더 관점의 맥락입니다.';
+const WATCH_POINTS_HEADING = '다음 관전 포인트';
+
+function hasWatchPoints(issue) {
+  return Array.isArray(issue?.watch_points) && issue.watch_points.length > 0;
+}
+
+function isContextPublishMode(issue) {
+  return issue?.publish_mode === 'CONTEXT';
+}
+
+function quietCoreNoteMarkdown(issue) {
+  if (!isContextPublishMode(issue)) return '';
+  return `\n${QUIET_CORE_CONTEXT_NOTE}\n`;
+}
+
+function watchPointsMarkdown(issue) {
+  if (!hasWatchPoints(issue)) return '';
+  return `## ${WATCH_POINTS_HEADING}
+
+${bulletsMarkdown(issue.watch_points)}
+
+`;
+}
+
+function quietCoreNoteHtml(issue) {
+  if (!isContextPublishMode(issue)) return '';
+  return `\n      <section class="section issue-quiet-core-note" role="note">
+        <div class="card issue-quiet-core-note-card">
+          <p>${escapeHtml(QUIET_CORE_CONTEXT_NOTE)}</p>
+        </div>
+      </section>\n`;
+}
+
+function watchPointsHtml(issue) {
+  if (!hasWatchPoints(issue)) return '';
+  return `\n      <section class="section issue-watch-points" aria-labelledby="issue-watch-points-title">
+        <div class="card issue-watch-points-card">
+          <div class="issue-section-heading">
+            <h2 id="issue-watch-points-title">${escapeHtml(WATCH_POINTS_HEADING)}</h2>
+          </div>
+          <ul>${bulletsHtml(issue.watch_points)}</ul>
+        </div>
+      </section>\n`;
+}
+
 function buildPublicMarkdown(issue) {
   return `# ${issue.title}
 
@@ -417,10 +463,10 @@ ${publicationNoticeMarkdown(issue)}
 ## 1. 이번 주 3줄 브리핑
 
 ${bulletsMarkdown(issue.briefing)}
-
+${quietCoreNoteMarkdown(issue)}
 ${normalizedSections(issue).map(({ heading, section }) => publicArticleMarkdown(issue, heading, section)).join('\n---\n\n')}
 
-## 참고자료
+${watchPointsMarkdown(issue)}## 참고자료
 
 ${sourceListMarkdown(issue.references)}
 `;
@@ -519,11 +565,11 @@ function buildPublicHtml(issue) {
       ${issueHeroHtml(issue)}
 
 ${publicationNoticeBlock}      ${issueBriefingHtml(issue)}
-
+${quietCoreNoteHtml(issue)}
 ${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, anchorId, articleNumber, section }) =>
     publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, articleNumber, section)
   ).join('\n\n')}
-
+${watchPointsHtml(issue)}
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">참고자료</h2>
         <div class="card reference-list"><ul>${sourceListHtml(issue.references)}</ul></div>

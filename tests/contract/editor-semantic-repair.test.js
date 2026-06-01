@@ -14,7 +14,8 @@ const {
   editor,
   normalizeSection,
   tempNewsroomDir,
-  readJson
+  readJson,
+  buildGroupCoverageFixture
 } = require('../helpers/editor-builders');
 
 const DATE = '2026-05-08';
@@ -396,6 +397,45 @@ test('repair output with invalid briefing writes repair diagnostics', async () =
   assert.equal(readJson(path.join(newsroomDir, 'editor-invalid-repair-attempt-4.json')).briefing.length, 2);
   const errorArtifact = readJson(path.join(newsroomDir, 'editor-validation-error-repair-attempt-4.json'));
   assert.equal(errorArtifact.details.actualCount, 2);
+});
+
+test('DEEP repair that drops a selected group fails re-validation and reports failure', async () => {
+  // 회귀 방지: DEEP 모드에서 repair 콜백이 선택된 그룹 하나(group-b)를 떨어뜨린
+  // 1개 섹션 에디터를 반환하면, repair 재검증의 selected group coverage 게이트가
+  // 이를 잡아내어 repair 성공으로 보고하지 않아야 한다.
+  const newsroomDir = tempNewsroomDir();
+  const { editor: groupDroppedEditor, reporter } = buildGroupCoverageFixture();
+  // 초기 value는 repairable한 briefing 실패를 일으켜 repair 경로로 진입시킨다.
+  const invalidValue = JSON.parse(JSON.stringify(groupDroppedEditor));
+  invalidValue.briefing = ['one', 'two', 'three', 'four'];
+  let repairCalled = false;
+
+  await assert.rejects(
+    repairEditorOutputContract({
+      value: invalidValue,
+      date: '2026-05-31',
+      reporter,
+      attempt: 1,
+      stage: 'editor attempt 1/2',
+      newsroomDir,
+      normalizeSection,
+      publishMode: 'DEEP',
+      // repair 콜백은 briefing은 고쳤지만 여전히 group-b를 떨어뜨린 1섹션 에디터를 반환한다.
+      repairFn: async () => {
+        repairCalled = true;
+        return JSON.parse(JSON.stringify(groupDroppedEditor));
+      }
+    }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.match(error.message, /selected group coverage/);
+      assert.equal(error.repairAttempted, true);
+      assert.equal(error.repairSucceeded, false);
+      return true;
+    }
+  );
+
+  assert.equal(repairCalled, true);
 });
 
 test('unrepairable section-count semantic failures are not repaired', async () => {

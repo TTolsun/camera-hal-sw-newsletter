@@ -178,6 +178,55 @@ function reporterForGroupTests(overrides = {}) {
   };
 }
 
+function groupCoverageReporterCandidate(overrides = {}) {
+  return {
+    title: 'Selected group source',
+    url: 'https://example.com/source-1',
+    source_candidate_hash: 'hash-1',
+    article_group_key: 'group-a',
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    final_selected: true,
+    selected_for_editor: true,
+    primary_selected: true,
+    finalSelectionEligibility: 'short',
+    hasDatedEvidence: true,
+    source_gap_risk: false,
+    main_eligible: true,
+    related_context_candidates: [],
+    ...overrides
+  };
+}
+
+// 선택된 그룹은 둘(group-a, group-b)이지만 에디터는 group-a 섹션 하나만 렌더링한다.
+// 렌더링된 섹션 자체는 모든 다른 게이트를 통과하므로 DEEP 모드에서 유일한 실패는
+// "selected group coverage"가 된다. 모드별 게이트 테스트를 위해 매번 새 deep clone을 반환한다.
+function buildGroupCoverageFixture() {
+  const baseSection = section(1, { article_group_key: 'group-a' });
+  const editorValue = editor({
+    sections: [baseSection]
+  });
+  const reporter = {
+    candidates: [
+      groupCoverageReporterCandidate({
+        article_group_key: 'group-a',
+        source_candidate_hash: 'hash-1',
+        url: 'https://example.com/source-1',
+        title: 'Selected group A source'
+      }),
+      groupCoverageReporterCandidate({
+        article_group_key: 'group-b',
+        source_candidate_hash: 'hash-2',
+        url: 'https://example.com/source-2',
+        title: 'Selected group B source'
+      })
+    ]
+  };
+  return {
+    editor: JSON.parse(JSON.stringify(editorValue)),
+    reporter: JSON.parse(JSON.stringify(reporter))
+  };
+}
+
 function normalizeSection(value) {
   return {
     ...value,
@@ -205,6 +254,7 @@ module.exports = {
   storyEditor,
   reporterForClaimTests,
   reporterForGroupTests,
+  buildGroupCoverageFixture,
   normalizeSection,
   tempNewsroomDir,
   readJson,

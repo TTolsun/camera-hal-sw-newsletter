@@ -85,10 +85,6 @@ const {
   normalizeNewsSourceKey
 } = require('./source-url-key');
 
-const {
-  getCppFallbackMainPromotionPolicy
-} = require('./newsletter-policy');
-
 const NO_IMMEDIATE_ACTION_TEXT = '즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.';
 
 function ensureArray(value) {
@@ -678,13 +674,7 @@ function hasDoNotOverstateBoundary(section = {}) {
 
 function isFallbackOnly(section = {}, issue = {}) {
   const bucket = compactText(section.relevance_bucket || section.bucket);
-  // requiresCameraDevWorkflowRelevance=true(정책 활성)이고 relevance=true인 cpp_fallback은 메인 자격 — overclaim_risk 자동 상향 사슬 제외
-  if (bucket === 'cpp_ai_tooling_fallback' && section.camera_dev_workflow_relevance === true) {
-    const promotionPolicy = getCppFallbackMainPromotionPolicy();
-    if (promotionPolicy?.requiresCameraDevWorkflowRelevance === true) {
-      return false;
-    }
-  }
+  // cpp_fallback 메인 승격 기능은 비활성화됨 (publishModePolicy로 대체 예정) — 항상 fallback 취급
   return issue.fallback_only === true ||
     section.fallback_only === true ||
     issue.publication_mode === 'fallback_public' ||

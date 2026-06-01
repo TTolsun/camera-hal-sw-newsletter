@@ -77,7 +77,7 @@ const DEFAULT_RUNTIME_CONFIG = {
   geminiTemperatureDefault: 0.35,
   geminiTemperatureSourceDiscovery: 0.45,
   geminiTemperatureReporter: 0.30,
-  geminiTemperatureEditor: 0.55,
+  geminiTemperatureEditor: 0.4,
   geminiTemperatureFactcheck: 0.20,
   geminiTemperatureRepair: 0.25,
   geminiTemperatureJudge: 0.20,

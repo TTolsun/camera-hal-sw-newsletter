@@ -200,8 +200,8 @@ function validateNewsletterPolicyConfig(config) {
   validateInteger(preflight.cameraStackCandidateMin, 'candidatePoolPreflight.cameraStackCandidateMin', errors, { min: 0 });
   validateSelectionWindowPolicy(config.selectionWindowPolicy, errors);
   validateHeadlinePolicy(config.headlinePolicy, errors);
-  if (config.cppFallbackMainPromotion !== undefined) {
-    validateCppFallbackMainPromotion(config.cppFallbackMainPromotion, errors);
+  if (config.publishModePolicy !== undefined) {
+    validatePublishModePolicy(config.publishModePolicy, errors);
   }
   if (
     Number.isInteger(preflight.publishableCandidateMin) &&
@@ -251,23 +251,24 @@ function deepFreeze(value) {
   return value;
 }
 
-function normalizeCppFallbackMainPromotion(raw) {
+function normalizePublishModePolicy(raw) {
   if (!raw || typeof raw !== 'object') {
-    return { requiresCameraDevWorkflowRelevance: false };
+    return { contextMinSignals: 1 };
   }
   return {
-    // 운영자가 명시적으로 true를 설정해야만 cpp_fallback 메인 자격 활성 (보수적 기본값 false)
-    requiresCameraDevWorkflowRelevance: raw.requiresCameraDevWorkflowRelevance === true
+    contextMinSignals: Number.isInteger(raw.contextMinSignals) && raw.contextMinSignals >= 1
+      ? raw.contextMinSignals
+      : 1
   };
 }
 
-function validateCppFallbackMainPromotion(value, errors) {
+function validatePublishModePolicy(value, errors) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
-    errors.push('cppFallbackMainPromotion must be an object.');
+    errors.push('publishModePolicy must be an object.');
     return;
   }
-  if (typeof value.requiresCameraDevWorkflowRelevance !== 'boolean') {
-    errors.push('cppFallbackMainPromotion.requiresCameraDevWorkflowRelevance must be a boolean.');
+  if (!Number.isInteger(value.contextMinSignals) || value.contextMinSignals < 1) {
+    errors.push('publishModePolicy.contextMinSignals must be an integer >= 1.');
   }
 }
 
@@ -280,7 +281,7 @@ function normalizeNewsletterPolicyConfig(config) {
   return deepFreeze({
     schemaVersion: config.schemaVersion,
     name: config.name || 'Newsletter Policy',
-    cppFallbackMainPromotion: normalizeCppFallbackMainPromotion(config.cppFallbackMainPromotion),
+    publishModePolicy: normalizePublishModePolicy(config.publishModePolicy),
     articlePolicy: {
       mainArticleCount: {
         min: article.mainArticleCount.min,
@@ -367,8 +368,8 @@ function getHeadlinePolicy(policy = getDefaultNewsletterPolicy()) {
   return policy.headlinePolicy;
 }
 
-function getCppFallbackMainPromotionPolicy(policy = getDefaultNewsletterPolicy()) {
-  return policy.cppFallbackMainPromotion;
+function getPublishModePolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.publishModePolicy;
 }
 
 function bucketValue(bucket) {
@@ -379,26 +380,16 @@ function isPrimaryCameraStackBucket(bucket, policy = getDefaultNewsletterPolicy(
   return getArticlePolicy(policy).primaryCameraStack.buckets.includes(bucketValue(bucket));
 }
 
-function isSupportingMainBucket(bucket, policy = getDefaultNewsletterPolicy(), options = {}) {
-  const bucketName = bucketValue(bucket);
-  // cppFallbackMainPromotion.requiresCameraDevWorkflowRelevance=true(기본값 false — 보수적)이고
-  // camera_dev_workflow_relevance=true인 cpp_fallback은 supporting이 아닌 메인 자격
-  const promotionConfig = policy?.cppFallbackMainPromotion;
-  // 명시적으로 true일 때만 메인 자격 활성 (보수적 기본값 false)
-  const requiresRelevance = promotionConfig?.requiresCameraDevWorkflowRelevance === true;
-  if (bucketName === 'cpp_ai_tooling_fallback' && requiresRelevance && options.cameraDevWorkflowRelevance === true) {
-    return false;
-  }
-  // requiresCameraDevWorkflowRelevance=false이면 cpp_fallback은 relevance 무관하게 항상 supporting
-  return getArticlePolicy(policy).supportingMainBuckets.includes(bucketName);
+function isSupportingMainBucket(bucket, policy = getDefaultNewsletterPolicy()) {
+  return getArticlePolicy(policy).supportingMainBuckets.includes(bucketValue(bucket));
 }
 
 function isForbiddenMainBucket(bucket, policy = getDefaultNewsletterPolicy()) {
   return getArticlePolicy(policy).forbiddenMainBuckets.includes(bucketValue(bucket));
 }
 
-function isMainArticleAllowedBucket(bucket, policy = getDefaultNewsletterPolicy(), options = {}) {
-  return isPrimaryCameraStackBucket(bucket, policy) || isSupportingMainBucket(bucket, policy, options);
+function isMainArticleAllowedBucket(bucket, policy = getDefaultNewsletterPolicy()) {
+  return isPrimaryCameraStackBucket(bucket, policy) || isSupportingMainBucket(bucket, policy);
 }
 
 function articleCountRangeText(policy = getDefaultNewsletterPolicy()) {
@@ -574,7 +565,7 @@ module.exports = {
   analyzeNewsletterPolicyBlock,
   articleCountRangeText,
   getCandidatePoolPreflightPolicy,
-  getCppFallbackMainPromotionPolicy,
+  getPublishModePolicy,
   getDefaultNewsletterPolicy,
   getHeadlinePolicy,
   getPublishReadyCompositionPolicy,

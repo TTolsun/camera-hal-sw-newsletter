@@ -58,8 +58,8 @@ const {
   articlePolicy,
   articleCountRangeText,
   candidatePoolPreflightPolicy,
-  getCppFallbackMainPromotionPolicy,
   getHeadlinePolicy,
+  getPublishModePolicy,
   getPublishReadyCompositionPolicy,
   getSelectionWindowPolicy,
   isForbiddenMainBucket,
@@ -67,6 +67,7 @@ const {
   isPrimaryCameraStackBucket,
   publishGateCriteriaText
 } = require('../common/newsletter-policy');
+const { resolvePublishMode } = require('./publish-mode');
 
 const publishReadyCompositionPolicy = getPublishReadyCompositionPolicy();
 
@@ -366,7 +367,7 @@ function candidateBucket(candidate) {
 }
 
 function hasSelectableScope(candidate) {
-  return isMainArticleAllowedBucket(candidateBucket(candidate), undefined, { cameraDevWorkflowRelevance: candidate.camera_dev_workflow_relevance === true }) &&
+  return isMainArticleAllowedBucket(candidateBucket(candidate)) &&
     scopeRelevanceScore(candidate) >= MIN_SCOPE_RELEVANCE;
 }
 
@@ -1156,13 +1157,11 @@ function reviewCompositionGatePasses(summary) {
   const primaryCount = number(summary.primary_camera_stack_topic_count);
   const supportingCount = number(summary.supporting_main_article_count);
   const forbiddenCount = number(summary.forbidden_main_article_count);
-  // relevance=true cpp_fallback은 supporting도 primary도 아닌 메인 자격이므로 별도 계상
-  const cppFallbackCameraDevRelevantCount = number(summary.cpp_fallback_camera_dev_relevant_count);
   return selectedCount >= articlePolicy.mainArticleCount.min &&
     selectedCount <= articlePolicy.mainArticleCount.max &&
     primaryCount >= articlePolicy.primaryCameraStack.minRequired &&
     forbiddenCount === 0 &&
-    primaryCount + supportingCount + cppFallbackCameraDevRelevantCount === selectedCount;
+    primaryCount + supportingCount === selectedCount;
 }
 
 function publishReadyGateReasonSummary(summary, policy = getPublishReadyCompositionPolicy()) {
@@ -1197,9 +1196,7 @@ function publishReadyGateReasonSummary(summary, policy = getPublishReadyComposit
   if (forbiddenCount > 0) {
     addReason('publish_ready_forbidden_main_bucket', forbiddenCount, 0);
   }
-  // camera_dev_workflow_relevance=true인 cpp_fallback은 primary도 supporting도 아닌 메인 자격이므로 별도 계상
-  const cppFallbackCameraDevRelevantCount = number(summary.cpp_fallback_camera_dev_relevant_count);
-  const accountedCount = primaryCount + supportingCount + cppFallbackCameraDevRelevantCount;
+  const accountedCount = primaryCount + supportingCount;
   if (accountedCount !== selectedCount && forbiddenCount === 0) {
     addReason('publish_ready_forbidden_main_bucket', selectedCount - accountedCount, 0);
   }
@@ -1269,35 +1266,21 @@ function bucketCountMap(candidates) {
   return counts;
 }
 
-function compositionSummary(candidates, policy) {
+function compositionSummary(candidates) {
   const bucket_counts = bucketCountMap(candidates);
   const primary_camera_stack_topic_count = articlePolicy.primaryCameraStack.buckets
     .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
   const forbidden_main_article_count = articlePolicy.forbiddenMainBuckets
     .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
-  // toggle이 true일 때만 relevance=true cpp_fallback을 메인 자격으로 계상
-  const promotionPolicy = policy !== undefined
-    ? getCppFallbackMainPromotionPolicy(policy)
-    : getCppFallbackMainPromotionPolicy();
-  const requiresRelevance = promotionPolicy?.requiresCameraDevWorkflowRelevance === true;
-  const cpp_fallback_camera_dev_relevant_count = requiresRelevance
-    ? ensureArray(candidates).filter(candidate => {
-        const bucket = text(candidate.relevance_bucket || candidateScope(candidate).relevance_bucket);
-        return bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK && candidate.camera_dev_workflow_relevance === true;
-      }).length
-    : 0;
   const supporting_main_article_count = articlePolicy.supportingMainBuckets
-    .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0) -
-    cpp_fallback_camera_dev_relevant_count;
+    .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
   const non_fallback_reviewable_article_count =
     primary_camera_stack_topic_count +
     bucket_counts[BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT] +
-    bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL] +
-    cpp_fallback_camera_dev_relevant_count;
+    bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL];
   const fallback_topic_count =
     bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL] +
-    bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK] -
-    cpp_fallback_camera_dev_relevant_count;
+    bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK];
   const selected_article_count = ensureArray(candidates).length;
   return {
     selected_article_count,
@@ -1313,8 +1296,7 @@ function compositionSummary(candidates, policy) {
     supporting_main_article_count,
     forbidden_main_article_count,
     non_fallback_reviewable_article_count,
-    fallback_topic_count,
-    cpp_fallback_camera_dev_relevant_count
+    fallback_topic_count
   };
 }
 
@@ -1413,8 +1395,8 @@ function selectionShortageHints(summary = {}) {
   return hints;
 }
 
-function compositionMode(selected, errors = [], policy) {
-  const summary = compositionSummary(selected, policy);
+function compositionMode(selected, errors = []) {
+  const summary = compositionSummary(selected);
   if (
     ensureArray(errors).length > 0 ||
     !reviewCompositionGatePasses(summary)
@@ -1495,6 +1477,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const publishGateReasonSummary = publishReadyGateReasonSummary(composition);
   const publishGateReasonCodes = publishGateReasonSummary.map(reason => reason.code);
   const publishGatePassed = reviewGatePassed && publishGateReasonCodes.length === 0;
+  const publishModeResult = resolvePublishMode(composition, getPublishModePolicy());
   const publishReady = publishGatePassed && warnings.length === 0 && mode !== COMPOSITION_MODES.NEEDS_FIX;
   const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
   const reportShortlist = shortlistWithFinalCandidates(shortlist, selected, reserve, cap);
@@ -1538,6 +1521,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     composition_mode: mode,
     selection_composition_mode: mode,
     composition_reason: compositionReason(mode, composition),
+    publish_mode: publishModeResult.mode,
+    publish_mode_detail: publishModeResult,
     composition_summary: composition,
     eligible_composition_summary: eligibleComposition,
     selection_shortage_hints: selectionShortageHints(eligibleComposition),
