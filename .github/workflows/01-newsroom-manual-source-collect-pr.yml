@@ -1,8 +1,6 @@
 name: Newsroom 01 - Manual Source Collection PR
 
 on:
-  schedule:
-    - cron: "0 0 * * *" # KST daily 09:00
   workflow_dispatch:
     inputs:
       newsletter_date:
