@@ -58,7 +58,6 @@ const {
   articlePolicy,
   articleCountRangeText,
   candidatePoolPreflightPolicy,
-  getCppFallbackMainPromotionPolicy,
   getHeadlinePolicy,
   getPublishReadyCompositionPolicy,
   getSelectionWindowPolicy,
@@ -366,7 +365,7 @@ function candidateBucket(candidate) {
 }
 
 function hasSelectableScope(candidate) {
-  return isMainArticleAllowedBucket(candidateBucket(candidate), undefined, { cameraDevWorkflowRelevance: candidate.camera_dev_workflow_relevance === true }) &&
+  return isMainArticleAllowedBucket(candidateBucket(candidate)) &&
     scopeRelevanceScore(candidate) >= MIN_SCOPE_RELEVANCE;
 }
 
@@ -1275,17 +1274,8 @@ function compositionSummary(candidates, policy) {
     .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
   const forbidden_main_article_count = articlePolicy.forbiddenMainBuckets
     .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
-  // toggle이 true일 때만 relevance=true cpp_fallback을 메인 자격으로 계상
-  const promotionPolicy = policy !== undefined
-    ? getCppFallbackMainPromotionPolicy(policy)
-    : getCppFallbackMainPromotionPolicy();
-  const requiresRelevance = promotionPolicy?.requiresCameraDevWorkflowRelevance === true;
-  const cpp_fallback_camera_dev_relevant_count = requiresRelevance
-    ? ensureArray(candidates).filter(candidate => {
-        const bucket = text(candidate.relevance_bucket || candidateScope(candidate).relevance_bucket);
-        return bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK && candidate.camera_dev_workflow_relevance === true;
-      }).length
-    : 0;
+  // cpp_fallback 메인 승격 기능은 비활성화됨 (publishModePolicy로 대체 예정) — 항상 0
+  const cpp_fallback_camera_dev_relevant_count = 0;
   const supporting_main_article_count = articlePolicy.supportingMainBuckets
     .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0) -
     cpp_fallback_camera_dev_relevant_count;

@@ -47,9 +47,9 @@
     "latestInclusionRequired": true,
     "historyMaxEntries": 50
   },
-  "cppFallbackMainPromotion": {
-    "requiresCameraDevWorkflowRelevance": false,
-    "description": "cpp_ai_tooling_fallback 후보가 LLM의 camera_dev_workflow_relevance=true 판단을 받은 경우에만 메인 기사 자격 부여. 기본값 false(보수적). supporting 카운트에서 제외되어 기존 supportingMainMaxAllowed 한계에 영향 없음."
+  "publishModePolicy": {
+    "contextMinSignals": 1,
+    "description": "발행 모드 판정 임계값. coreCount>=1이면 DEEP, core 0건이고 (adjacent+context) 신호가 contextMinSignals 이상이면 CONTEXT, 그 외 QUIET."
   },
   "qualityGatePolicy": {
     "threshold": 85,
