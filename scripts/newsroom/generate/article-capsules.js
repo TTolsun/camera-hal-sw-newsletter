@@ -431,14 +431,6 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
     signal_quality_status: halSignal.signal_quality_status,
     fallback_promotion_allowed: halSignal.fallback_promotion_allowed,
     soc_signal_source_allowed: halSignal.soc_signal_source_allowed,
-    // source-discovery/deterministic 단계에서 마크한 카메라 개발 워크플로우 관련성 신호를 LLM에 전달
-    // reporter LLM이 이 값을 보고 이미 true로 결정된 신호를 false로 뒤집지 않도록 하기 위함
-    // true로 결정된 경우에만 캡슐에 포함 — false/미확정은 LLM이 직접 판단하도록 생략
-    ...(candidate.camera_dev_workflow_relevance === true ? {
-      camera_dev_workflow_relevance: true,
-      camera_dev_workflow_relevance_reason: text(candidate.camera_dev_workflow_relevance_reason).slice(0, 200) || null,
-      camera_dev_workflow_relevance_source: text(candidate.camera_dev_workflow_relevance_source) || null
-    } : {}),
     ...(candidate.decision ? { decision: candidate.decision } : {}),
     source_quality: compactSourceQuality(sourceQuality),
     source_quality_reason: compactText(sourceQuality.main_article_source_allowed_reason, 180),

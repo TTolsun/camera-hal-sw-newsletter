@@ -878,16 +878,11 @@ function normalizeCandidate(raw) {
     classification.hasDatedEvidence === true &&
     metadata.source_gap_risk === false
   ) {
-    // camera_dev_workflow_relevance=true인 후보는 메인 자격 유지 (supporting 강제 불적용)
-    const hasCameraDevWorkflowRelevance = scopeMetadata.camera_dev_workflow_relevance === true ||
-      raw.camera_dev_workflow_relevance === true;
-    if (!hasCameraDevWorkflowRelevance) {
-      classification = {
-        ...classification,
-        finalSelectionEligibility: 'short',
-        selectionExclusionReason: 'Official dated Android native tooling workflow article; eligible only as cpp_ai_tooling_fallback supporting main context.'
-      };
-    }
+    classification = {
+      ...classification,
+      finalSelectionEligibility: 'short',
+      selectionExclusionReason: 'Official dated Android native tooling workflow article; eligible only as cpp_ai_tooling_fallback supporting main context.'
+    };
   }
   if (scopeMetadata.relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST) {
     classification = {

@@ -1207,9 +1207,7 @@ function candidateMetadataForBinding(binding) {
     binding_status: 'bound',
     binding_source: binding.binding_source || 'bound_candidate',
     binding_tie_score: binding.tie_score ?? null,
-    publishable_scope: true,
-    // selection 단계와 동일한 기준으로 quality 단계도 relevance 판단 가능하도록 보존
-    camera_dev_workflow_relevance: binding.candidate.camera_dev_workflow_relevance === true
+    publishable_scope: true
   };
 }
 
@@ -1602,15 +1600,12 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const topicTierCounts = topicTierDistribution(scopeBucketCounts);
   const primaryCameraStackCount = articlePolicy.primaryCameraStack.buckets
     .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
-  // cpp_fallback 메인 승격 기능은 비활성화됨 (publishModePolicy로 대체 예정) — 항상 0
-  const cppFallbackCameraDevRelevantQualityCount = 0;
   const supportingMainArticleCount = articlePolicy.supportingMainBuckets
-    .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0) -
-    cppFallbackCameraDevRelevantQualityCount;
+    .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
   const forbiddenMainArticleCount = articlePolicy.forbiddenMainBuckets
     .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
   const fallbackRelevanceCount = socPlatformSignalCount + cppAiToolingFallbackCount;
-  const expandedScopeCoverage = primaryCameraStackCount + supportingMainArticleCount + cppFallbackCameraDevRelevantQualityCount;
+  const expandedScopeCoverage = primaryCameraStackCount + supportingMainArticleCount;
   const publishableScopeCount = sectionScopes.filter(scope => scope?.publishable_scope === true).length;
   const compositionMode = publishableScopeCount === 0 && sections.length > 0
     ? 'NEEDS_FIX'

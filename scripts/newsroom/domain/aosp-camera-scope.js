@@ -591,12 +591,6 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     ? Math.max(3, relevanceScoreFromHits(nativeTerms))
     : 0;
 
-  // cpp_ai_tooling_fallback 후보에 대해 결정론적 카메라 개발 워크플로우 관련성 판단 부착
-  // LLM(reporter/source-discovery)이 응답하면 나중에 덮어씀
-  const deterministicWorkflowRelevance = bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK
-    ? detectCameraDevWorkflowRelevanceDeterministic(candidate)
-    : { camera_dev_workflow_relevance: false, camera_dev_workflow_relevance_reason: '', camera_dev_workflow_relevance_source: 'default_false' };
-
   return normalizeAospCameraScope(candidate, {
     editorial_priority: BUCKET_PRIORITY[bucket],
     relevance_bucket: bucket,
@@ -613,9 +607,6 @@ function classifyAospCameraStackCandidate(candidate = {}) {
       ? nativeAndroidTooling.tooling_workflow_type
       : text(candidate.tooling_workflow_type),
     native_workflow_evidence_score: nativeAndroidTooling.native_workflow_evidence_score,
-    camera_dev_workflow_relevance: deterministicWorkflowRelevance.camera_dev_workflow_relevance,
-    camera_dev_workflow_relevance_reason: deterministicWorkflowRelevance.camera_dev_workflow_relevance_reason,
-    camera_dev_workflow_relevance_source: deterministicWorkflowRelevance.camera_dev_workflow_relevance_source,
     evidence_origin: evidenceOrigin,
     source_hint: text(candidate.usageHint || candidate.source_usage_hint || sourceHint).slice(0, 240),
     scope_evidence_terms: evidenceTerms.slice(0, 8),
@@ -658,44 +649,12 @@ function normalizeAospCameraScope(candidate = {}, scope = {}) {
   };
 }
 
-// Camera 개발 워크플로우 관련성 결정론적 fallback 키워드 패턴
-// LLM 미가용 시 보수적 안전망으로 동작 — true 기준은 엄격하게 유지
-const CAMERA_DEV_WORKFLOW_CONTEXT_PATTERNS = [
-  /\bCamera\b/i,
-  /\bCameraX\b/i,
-  /\bCamera2\b/i
-];
-
-const CAMERA_DEV_WORKFLOW_ACTION_PATTERNS = [
-  /\bprototyp(?:e|ing)\b/i,
-  /\bbuild\s+app\b/i,
-  /\bsample\s+app\b/i,
-  /\btest\s+client\b/i,
-  /\breproduc(?:e|ing|tion)\b/i,
-  /\bdebug(?:ging)?\b/i
-];
-
-function detectCameraDevWorkflowRelevanceDeterministic(candidate = {}) {
-  const body = candidateArticleText(candidate);
-  const hasCameraContext = CAMERA_DEV_WORKFLOW_CONTEXT_PATTERNS.some(pattern => pattern.test(body));
-  const hasActionContext = CAMERA_DEV_WORKFLOW_ACTION_PATTERNS.some(pattern => pattern.test(body));
-  const relevant = hasCameraContext && hasActionContext;
-  return {
-    camera_dev_workflow_relevance: relevant,
-    camera_dev_workflow_relevance_reason: relevant
-      ? 'Camera 컨텍스트와 앱 빌드/디버깅/재현 관련 키워드가 함께 발견됨 (결정론적 fallback 판단)'
-      : '',
-    camera_dev_workflow_relevance_source: 'deterministic_fallback'
-  };
-}
-
 module.exports = {
   BUCKETS,
   BUCKET_DEFINITIONS,
   BUCKET_PRIORITY,
   classifyAospCameraStackCandidate,
   detectNativeAndroidToolingWorkflow,
-  detectCameraDevWorkflowRelevanceDeterministic,
   normalizeAospCameraScope,
   candidateArticleText
 };

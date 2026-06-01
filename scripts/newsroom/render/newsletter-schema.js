@@ -226,9 +226,7 @@ const reporterCandidate = {
     cross_check_status: string,
     relevance_reason: string,
     impact_areas: stringArray,
-    do_not_overstate: stringArray,
-    camera_dev_workflow_relevance: { type: 'BOOLEAN' },
-    camera_dev_workflow_relevance_reason: string
+    do_not_overstate: stringArray
   },
   required: [
     'candidate_id',
