@@ -3936,7 +3936,7 @@ async function main() {
           'locked/passing section은 이미 gate를 통과했습니다. repair plan에 명시적으로 포함된 경우가 아니면 source URLs, title/headline, source-date-title 조합을 정확히 보존하세요.',
           '각 regenerated section에는 release date, version/release, API/component 또는 library/artifact, concrete behavior change, relevance_bucket, AOSP Camera / driver / SoC / native tooling relevance를 명시하세요.',
           '그 fact를 제공된 candidate/source data에서 확인할 수 없으면 briefing/watchlist로 demote하거나 exclude하세요. 누락된 release evidence를 만들거나 추론하지 마세요.',
-          `Main article count는 Newsletter Policy range (${articleCountRangeText()}) 안에서 유지하세요.`,
+          `repair plan에 있는 ${repairPlan.length}개 section에 대해 각각 1개씩 총 ${repairPlan.length}개의 regenerated section만 반환하세요. repair plan에 없는 추가 section을 생성하지 마세요.`,
           `Newsletter Policy bucket order를 유지하세요: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets는 briefing/watchlist로만 유지하세요: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
           'golden example은 article structure와 evidence/actionability style 참고로만 사용하세요. 현재 reporter candidates에 없는 facts는 복사하지 마세요.',
           'schema와 일치하는 JSON만 반환하세요.'
