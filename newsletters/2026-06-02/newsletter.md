@@ -1,0 +1,44 @@
+# Camera HAL / SW Newsletter - 2026-06-02
+
+이번 기간 카메라 코어의 직접적인 변경은 조용했으나, Google I/O 2026을 통해 발표된 Jetpack Compose의 적응형 레이아웃 및 CameraX 미리보기 지원 강화가 상위 프레임워크 호환성 신호로 확인되었습니다. 또한 Google AI Studio의 네이티브 Android 앱 빌드 지원 등 개발 워크플로우를 보조할 수 있는 도구 소식이 제공되었습니다.
+
+
+
+## 1. 이번 주 3줄 브리핑
+
+- Google I/O 2026에서 Jetpack Compose와 CameraX를 결합하여 다양한 폼 팩터에서 올바른 카메라 미리보기를 구현하는 적응형 레이아웃 기술이 강조되었습니다.
+- Google AI Studio를 활용한 프롬프트 기반 네이티브 Android 앱 빌드 기능이 발표되어 카메라 연동 앱 프로토타이핑 및 디버깅 워크플로우에 활용 가능성이 열렸습니다.
+- 이번 주에는 Camera HAL 코어 및 드라이버 레이어의 직접적인 변경 사항이 없으므로, 상위 프레임워크의 호환성 검증 및 개발 생산성 도구 관점의 간접 영향 위주로 점검을 권장합니다.
+
+이번 기간 카메라 코어 직접 변경은 없었습니다. 아래는 실무 레이더 관점의 맥락입니다.
+
+## 2. Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신
+
+
+![Google I/O 2026 Jetpack Compose and Adaptive Apps Announcement](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png)
+
+_이미지: [Android Developers Blog](https://android-developers.googleblog.com/)_
+
+
+_Android Developers Blog - Google I/O 2026 발표_
+
+Google I/O 2026에서 Android 생태계가 '기본 적응형(Adaptive by Default)'으로 선언됨에 따라, 폴더블폰, 태블릿, XR 등 다양한 폼 팩터에서 일관된 카메라 미리보기를 구현하기 위해 Jetpack Compose와 CameraX의 결합이 핵심 기술로 부각되었습니다.
+
+현재 Android 생태계는 스마트폰을 넘어 폴더블, 태블릿, 자동차, XR 기기 등으로 빠르게 확장되고 있으며, 대화면 기기의 수만 해도 5억 8천만 대를 넘어섰습니다. 이러한 다중 기기 환경에서 사용자에게 끊김 없는 경험을 제공하기 위해, 구글은 Jetpack Compose를 중심으로 한 적응형 화면 구성을 전면에 내세우고 있습니다.
+
+특히 이번 발표에서 강조된 Jetpack Navigation 3 릴리스와 실험적인 Grid 및 FlexBox 레이아웃, 비터치 입력 지원 등은 앱 개발자가 다양한 화면 크기에 유연하게 대응할 수 있도록 돕습니다. 이 과정에서 가장 까다로운 영역 중 하나인 카메라 미리보기 렌더링을 완벽하게 처리하기 위해 CameraX가 핵심 도구로 함께 연동됩니다.
+
+다양한 화면 비율과 윈도우 크기 변화(Multi-window, Freeform, Fold/Unfold) 속에서도 왜곡 없는 카메라 미리보기를 유지하는 것은 앱 개발자뿐만 아니라 하위 프레임워크와 HAL 레이어의 호환성 보장 측면에서도 매우 중요한 과제입니다. 이번 통합은 상위 레이어에서 이러한 복잡성을 추상화하여 일관된 UX를 보장하는 데 기여합니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+이번 변화는 Camera HAL API나 메타데이터 계약, 스트림 버퍼 자체의 직접적인 변경을 의미하지는 않습니다. 다만, 상위 앱 계층에서 폴더블 및 멀티 윈도우 전환 시 CameraX를 통해 다양한 해상도와 화면 비율로 미리보기 스트림을 빈번하게 재구성(Stream Reconfiguration)할 수 있으므로, HAL 레이어에서의 동적 스트림 구성 안정성과 프레임 드롭 여부를 검증하는 것이 중요해집니다.
+
+**출처**
+
+- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
+
+
+## 참고자료
+
+- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
