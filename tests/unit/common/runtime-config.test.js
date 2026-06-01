@@ -90,7 +90,7 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.geminiTemperatureDefault, 0.35);
   assert.equal(config.geminiTemperatureSourceDiscovery, 0.45);
   assert.equal(config.geminiTemperatureReporter, 0.30);
-  assert.equal(config.geminiTemperatureEditor, 0.55);
+  assert.equal(config.geminiTemperatureEditor, 0.4);
   assert.equal(config.geminiTemperatureFactcheck, 0.20);
   assert.equal(config.geminiTemperatureRepair, 0.25);
   assert.equal(config.geminiTemperatureJudge, 0.20);
