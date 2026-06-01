@@ -885,9 +885,14 @@ function sectionGroupKey(section = {}, candidate = null) {
     (candidate ? candidateGroupKey(candidate) : '');
 }
 
-function validateSelectedGroupCoverage(value, reporter = {}) {
+function validateSelectedGroupCoverage(value, reporter = {}, publishMode = 'DEEP') {
   const selectedGroupKeys = [...new Set(selectedReporterCandidates(reporter).map(candidateGroupKey).filter(Boolean))];
   if (selectedGroupKeys.length === 0) return null;
+  // CONTEXT/QUIET 모드는 "선택된 모든 그룹이 메인 섹션으로 렌더링되어야 한다"를 요구하지 않는다.
+  // 코어 기사가 없는 날의 정직한 발행을 허용하기 위함. 근거/출처 게이트는 별도로 유지된다.
+  if (publishMode === 'CONTEXT' || publishMode === 'QUIET') {
+    return null;
+  }
   const selectedCandidates = selectedReporterCandidates(reporter);
   const candidateIndex = buildCandidateIndex(reporter);
   const renderedGroupKeys = ensureArray(value.sections)
@@ -1050,7 +1055,7 @@ function validateEditorOutputContract(value, date, options = {}) {
   validateClaimBindingContract(value, reporter, options.strictClaims === true, options.seedEvidencePack || null);
   validateEditorArticlePolicy(value, reporter);
   validateBlockedContextUsage(value, reporter);
-  validateSelectedGroupCoverage(value, reporter);
+  validateSelectedGroupCoverage(value, reporter, options.publishMode);
 
   const emptySourceSections = value.sections
     .filter(section => ensureArray(section.sources).length === 0)
@@ -1172,6 +1177,7 @@ async function repairEditorOutputContract({
   strictClaims = false,
   requireStoryContract = false,
   seedEvidencePack = null,
+  publishMode = 'DEEP',
   repairFn
 }) {
   const invalidEditor = cloneJson(value);
@@ -1180,7 +1186,8 @@ async function repairEditorOutputContract({
     normalizeSection,
     strictClaims,
     requireStoryContract,
-    seedEvidencePack
+    seedEvidencePack,
+    publishMode
   });
   const unsupportedStoryMarkerPreflightIssues = unsupportedStoryMarkerIssues(invalidEditor);
   if (unsupportedStoryMarkerPreflightIssues.length > 0) {
