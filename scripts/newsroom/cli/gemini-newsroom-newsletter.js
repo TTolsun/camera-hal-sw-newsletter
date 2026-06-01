@@ -3757,6 +3757,7 @@ async function main() {
           '이번 발행은 QUIET 모드입니다. 발행할 만한 신호가 빈약합니다.',
           '3줄 브리핑과 "다음 관전 포인트"만 간결하게 작성하고 메인 기사를 만들지 마세요.'
         ].join('\n') : '',
+        '각 기사의 article_sections.verified_facts 모든 항목은 대응하는 claim_type=fact claim으로 binding되어야 합니다. verified_facts 개수보다 적은 수의 fact claim을 만들지 마세요.',
         '사실과 해석을 분리하세요. source links를 보존하세요. schema와 일치하는 JSON만 반환하세요.',
         'briefing은 정확히 3개 item이어야 합니다.'
       ].filter(Boolean).join('\n'),
