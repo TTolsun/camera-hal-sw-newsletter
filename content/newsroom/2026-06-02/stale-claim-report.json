@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-02",
+  "status": "PASS",
+  "removed_sections": [],
+  "final_section_sources": [
+    {
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "url": "https://goo.gle/AdaptiveApps_IO26"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}

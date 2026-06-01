@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-02",
+  "proposals": [
+    {
+      "proposal_id": "P-ADBLOG-202605-ADAPTIVE-COMPOSE",
+      "topic_gap": "How Jetpack Compose facilitates building seamless Android experiences across devices, potentially impacting camera UI/UX across form factors.",
+      "source_family": "android",
+      "allowed_domains": [
+        "goo.gle",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Jetpack Compose camera",
+        "Android adaptive camera UI",
+        "cross-device camera experience",
+        "Compose camera preview",
+        "foldable camera UI"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Mentions of camera-related UI/UX for different device types (foldables, tablets, etc.)",
+        "Guidance on adapting camera preview, controls, or output display using Compose",
+        "Examples of adaptive layouts for camera applications"
+      ],
+      "risk_notes": [
+        "The URL is a shortlink and might redirect to a more generic blog post. Need to verify direct relevance to camera HAL/SW.",
+        "The title is broad; specific camera relevance needs to be confirmed within the content."
+      ]
+    },
+    {
+      "proposal_id": "P-ADBLOG-202605-AI-STUDIO-NATIVE",
+      "topic_gap": "Updates on building native Android apps with Google AI Studio, specifically how it might integrate with or leverage camera capabilities for on-device AI/ML features.",
+      "source_family": "android",
+      "allowed_domains": [
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android AI Studio camera",
+        "on-device AI camera",
+        "camera ML Android",
+        "Google AI Studio camera integration",
+        "real-time camera AI"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
+      ],
+      "expected_evidence": [
+        "Examples or APIs for integrating camera streams/images with on-device AI models built with Google AI Studio",
+        "Mentions of camera-based AI features (e.g., object detection, scene understanding, real-time filters)",
+        "Performance considerations for running AI models on camera input on Android devices"
+      ],
+      "risk_notes": [
+        "The article might be too high-level or focus on generic AI features without specific camera integration details. Need to look for concrete examples or APIs."
+      ]
+    }
+  ]
+}
