@@ -252,8 +252,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.doesNotMatch(stage1, /collection_intent_path:/);
   assert.doesNotMatch(stage1, /llm_provider:/);
   assert.match(stage1, /NEWSROOM_MANUAL_SOURCE_URLS: \$\{\{ github\.event\.inputs\.manual_source_urls \}\}/);
-  assert.match(stage1, /^\s*schedule:/m);
-  assert.match(stage1, /cron: "0 0 \* \* \*"/);
+  assert.doesNotMatch(stage1, /^\s*schedule:/m);
   assert.match(stage1, /run: npm run doctor:config -- --no-llm-credentials/);
   assert.match(stage1, /run: npm run collect/);
   assert.doesNotMatch(stage1, /npm run generate/);
