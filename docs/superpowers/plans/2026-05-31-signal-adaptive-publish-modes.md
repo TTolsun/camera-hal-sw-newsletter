@@ -451,20 +451,20 @@ const { getPublishModePolicy } = require('../common/newsletter-policy');
 
 - [ ] **Step 2: report 객체에 모드 필드 추가**
 
-라인 1660의 `const compositionResult = compositionMode(selected, errors);` 다음 줄에 추가:
+`buildShortlistReport` 내부에서 `composition`/`mode`가 이미 계산되어 있다 (`const composition = compositionSummary(selected);` 라인 1484, `const mode = compositionMode(selected, errors);` 라인 1493). 라인 1497 `const publishGatePassed = ...` 다음 줄에 추가:
 
 ```javascript
   const publishModeResult = resolvePublishMode(composition, getPublishModePolicy());
 ```
 
-그리고 report 객체(라인 1661~)의 `composition_reason:` 다음에 추가:
+그리고 report return 객체의 `composition_reason: compositionReason(mode, composition),` (라인 1540) 다음 줄에 추가:
 
 ```javascript
     publish_mode: publishModeResult.mode,
     publish_mode_detail: publishModeResult,
 ```
 
-`diagnostics` 객체에도 동일 두 필드를 추가한다.
+> 참고: 이 report 객체가 CLI에서 `report`(=`shortlistReport`)로 그대로 쓰이므로 별도 diagnostics 동기화는 불필요하다. CLI의 `selectionStatusExtra`(라인 478 부근)가 `report.publish_mode`를 읽을 수 있으면 충분하다. 단, `selectionStatusExtra`가 반환하는 진단 객체에도 `publish_mode: report.publish_mode ?? diagnostics.publish_mode ?? null` 한 줄을 추가해 generation-status까지 전파되게 한다.
 
 - [ ] **Step 3: 테스트 통과**
 
