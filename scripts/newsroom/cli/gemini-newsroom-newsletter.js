@@ -4354,6 +4354,7 @@ async function main() {
   );
   writeCostReport(date);
 
+  editor.publish_mode = currentPublishMode(shortlistReport);
   const newsletterMarkdown = buildMarkdown(editor);
   const newsletterHtmlContent = buildHtml(editor);
   assertTerminalPublicationContracts({
