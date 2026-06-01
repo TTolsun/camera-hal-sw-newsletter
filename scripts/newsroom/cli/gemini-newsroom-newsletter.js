@@ -574,6 +574,8 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     absolute_min_reviewable_articles: absoluteMinReviewable,
     min_non_fallback_publish_ready_articles: minNonFallbackPublishReady,
     composition_mode: compositionMode,
+    publish_mode: report.publish_mode ?? diagnostics.publish_mode ?? null,
+    publish_mode_detail: report.publish_mode_detail ?? diagnostics.publish_mode_detail ?? null,
     selection_composition_mode: selectionCompositionMode,
     composition_reason: options.compositionReason || report.composition_reason || diagnostics.composition_reason || '',
     composition_summary: compositionSummary,
@@ -1244,13 +1246,18 @@ function editorExplicitlyDemotedGroups(editor = {}) {
   return explicitDemotedGroups(editor);
 }
 
+function currentPublishMode(shortlistReport = generationRunState.shortlistReport) {
+  return (shortlistReport && shortlistReport.publish_mode) || 'DEEP';
+}
+
 function validateEditor(value, date, reporter = { candidates: [] }, options = {}) {
   return validateEditorOutputContract(value, date, {
     reporter,
     normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
     strictClaims: options.strictClaims === true,
     requireStoryContract: options.requireStoryContract === true,
-    seedEvidencePack: options.seedEvidencePack || null
+    seedEvidencePack: options.seedEvidencePack || null,
+    publishMode: options.publishMode || currentPublishMode()
   });
 }
 
@@ -2206,7 +2213,8 @@ async function validateOrRepairEditor(value, {
   lockedContext,
   newsroomDir,
   articleCapsuleReport = null,
-  seedEvidencePack = null
+  seedEvidencePack = null,
+  publishMode = currentPublishMode()
 }) {
   const result = await repairEditorOutputContract({
     value,
@@ -2217,6 +2225,7 @@ async function validateOrRepairEditor(value, {
     newsroomDir,
     strictClaims: true,
     requireStoryContract: true,
+    publishMode,
     seedEvidencePack,
     normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
     repairFn: async ({ invalidEditor, validationError }) => repairEditorSemanticWithLlm({
@@ -3714,6 +3723,7 @@ async function main() {
         lockedSections
       })
       : null;
+    const publishMode = currentPublishMode();
     const editorDraft = await callLlmJson(
       editorStage,
       [
@@ -3765,6 +3775,16 @@ async function main() {
         'imageSource, imageAttribution, imageAlt, imageLicenseStatus를 제공할 수 없으면 image를 선택하지 말고 selectedImage를 비워 두세요.',
         '불완전한 selected image metadata는 validation 중 제거되며 publication validation failure를 일으킬 수 있습니다.',
         '이미지를 선택하지 않으면 selectedImage, imageSource, imageAttribution, imageAlt는 비우고 imageLicenseStatus는 none으로 두며, imageUsageDecisionReason에 제외 이유를 짧게 설명하세요.',
+        publishMode === 'CONTEXT' ? [
+          '이번 발행은 CONTEXT 모드입니다. 카메라 코어 직접 변경 기사가 없으므로 메인 기사를 억지로 만들지 마세요.',
+          '"이번 기간 카메라 코어는 조용했습니다"를 명시하고, SoC/도구/표준 변화가 Camera HAL/driver/검증 워크플로우에 왜·어떻게 닿는지 실무 레이더 관점으로 정리하세요.',
+          '근거 없는 단정을 금지합니다. "~한 검증 포인트를 점검할 만하다"처럼 검증 가능한 행동으로 연결하세요.',
+          'editorial-policy.md의 해석 기준(stream/buffer/metadata/request/result, CTS/VTS/Camera ITS, thermal/latency/frame drop/memory/contention)으로 relevance를 설명하세요.'
+        ].join('\n') : '',
+        publishMode === 'QUIET' ? [
+          '이번 발행은 QUIET 모드입니다. 발행할 만한 신호가 빈약합니다.',
+          '3줄 브리핑과 "다음 관전 포인트"만 간결하게 작성하고 메인 기사를 만들지 마세요.'
+        ].join('\n') : '',
         '사실과 해석을 분리하세요. source links를 보존하세요. schema와 일치하는 JSON만 반환하세요.',
         'briefing은 정확히 3개 item이어야 합니다.'
       ].filter(Boolean).join('\n'),
@@ -3787,7 +3807,8 @@ async function main() {
         lockedContext,
         newsroomDir,
         articleCapsuleReport,
-        seedEvidencePack
+        seedEvidencePack,
+        publishMode: currentPublishMode()
       });
       assertEditorRetryOutputContract(editor, editorRetryContract, reporter);
     } catch (error) {
