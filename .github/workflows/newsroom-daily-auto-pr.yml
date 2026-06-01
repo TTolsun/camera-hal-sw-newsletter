@@ -1,0 +1,435 @@
+name: Newsroom Daily Auto PR
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # KST daily 09:00
+  workflow_dispatch:
+    inputs:
+      newsletter_date:
+        description: "Newsletter date in YYYY-MM-DD. Empty means today in KST."
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: newsroom-daily-${{ github.event.inputs.newsletter_date || 'auto-kst-today' }}
+  cancel-in-progress: false
+
+jobs:
+  create-daily-newsletter-pr:
+    runs-on: ubuntu-latest
+
+    env:
+      NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
+      LOOKBACK_DAYS: "21"
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: "true"
+      NEWSROOM_CANDIDATE_INPUT_MODE: artifact
+      NEWSROOM_CANDIDATE_INPUT_PATH: ""
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MAX_RETRIES: ${{ vars.GEMINI_MAX_RETRIES || '2' }}
+      GEMINI_RETRY_DELAYS_MS: ${{ vars.GEMINI_RETRY_DELAYS_MS || '20000,10000' }}
+      GEMINI_RETRY_MAX_DELAY_MS: ${{ vars.GEMINI_RETRY_MAX_DELAY_MS || '300000' }}
+      GEMINI_THINKING_BUDGET_REPORTER: ${{ vars.GEMINI_THINKING_BUDGET_REPORTER || '0' }}
+      GEMINI_THINKING_BUDGET_EDITOR: ${{ vars.GEMINI_THINKING_BUDGET_EDITOR || '512' }}
+      GEMINI_THINKING_BUDGET_REPAIR: ${{ vars.GEMINI_THINKING_BUDGET_REPAIR || '0' }}
+      GEMINI_THINKING_BUDGET_FACTCHECK: ${{ vars.GEMINI_THINKING_BUDGET_FACTCHECK || '0' }}
+      GEMINI_THINKING_BUDGET_JUDGE: ${{ vars.GEMINI_THINKING_BUDGET_JUDGE || '0' }}
+      GEMINI_THINKING_BUDGET_SCORING: ${{ vars.GEMINI_THINKING_BUDGET_SCORING || '0' }}
+      NEWSROOM_REPORTER_MODEL: ${{ vars.NEWSROOM_REPORTER_MODEL || '' }}
+      NEWSROOM_EDITOR_MODEL: ${{ vars.NEWSROOM_EDITOR_MODEL || '' }}
+      NEWSROOM_FACTCHECK_MODEL: ${{ vars.NEWSROOM_FACTCHECK_MODEL || '' }}
+      NEWSROOM_REPAIR_MODEL: ${{ vars.NEWSROOM_REPAIR_MODEL || '' }}
+      NEWSROOM_JUDGE_MODEL: ${{ vars.NEWSROOM_JUDGE_MODEL || '' }}
+      NEWSROOM_MAX_QUALITY_RETRIES: ${{ vars.NEWSROOM_MAX_QUALITY_RETRIES || '1' }}
+      NEWSROOM_MAX_SECTION_REPAIRS: ${{ vars.NEWSROOM_MAX_SECTION_REPAIRS || '1' }}
+      NEWSROOM_WARN_COST_USD: ${{ vars.NEWSROOM_WARN_COST_USD || '0.15' }}
+      NEWSROOM_MAX_COST_USD: ${{ vars.NEWSROOM_MAX_COST_USD || '0.25' }}
+      NEWSROOM_BACKGROUND_CONTEXT_STAGE: ${{ vars.NEWSROOM_BACKGROUND_CONTEXT_STAGE || 'gemini' }}
+      NEWSROOM_LINKED_EVIDENCE_MODE: ${{ vars.NEWSROOM_LINKED_EVIDENCE_MODE || 'extract_only' }}
+      NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE: ${{ vars.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE || '8' }}
+      NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN: ${{ vars.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN || '40' }}
+      NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS: ${{ vars.NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS || '5000' }}
+      NEWSROOM_LINKED_EVIDENCE_MAX_BYTES: ${{ vars.NEWSROOM_LINKED_EVIDENCE_MAX_BYTES || '200000' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve newsletter date
+        id: resolve-newsletter-date
+        env:
+          INPUT_NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
+        run: |
+          set -euo pipefail
+
+          DATE="${INPUT_NEWSLETTER_DATE:-}"
+          if [ -z "$DATE" ]; then
+            DATE="$(TZ=Asia/Seoul date +%F)"
+          fi
+
+          if ! [[ "$DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "newsletter_date must be YYYY-MM-DD: $DATE"
+            exit 1
+          fi
+
+          echo "Resolved newsletter date: $DATE"
+          echo "NEWSLETTER_DATE=$DATE" >> "$GITHUB_ENV"
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Doctor runtime config
+        run: npm run doctor:config
+
+      - name: Validate newsletter policy
+        run: npm run validate:policy
+
+      - name: Check policy docs
+        run: npm run check:policy-docs
+
+      - name: Run unit and regression tests
+        run: npm run test
+
+      # ── Phase 1: RAW candidate collection ──────────────────────────────────
+      - name: Collect RAW news candidates
+        run: npm run collect
+
+      # ── Phase 2: Gemini source discovery ───────────────────────────────────
+      - name: Validate newsroom source discovery boundary
+        run: npm run validate:config
+
+      - name: Run Gemini source discovery
+        id: source-discovery
+        run: node scripts/gemini-source-discovery-boundary.js --date "${NEWSLETTER_DATE}"
+
+      - name: Verify merged candidates exist
+        id: verify-candidates
+        run: |
+          set -euo pipefail
+          CANDIDATES_PATH="content/collected-news/${NEWSLETTER_DATE}/merged-candidates.json"
+          if [ ! -f "$CANDIDATES_PATH" ]; then
+            echo "ERROR: $CANDIDATES_PATH not found after source discovery" >&2
+            exit 1
+          fi
+          COUNT="$(node -e "const f=require('./${CANDIDATES_PATH}'); process.stdout.write(String(f.candidates?.length ?? 0))")"
+          if [ "$COUNT" = "0" ]; then
+            echo "ERROR: No candidates in $CANDIDATES_PATH" >&2
+            exit 1
+          fi
+          echo "Found $COUNT merged candidates."
+          echo "NEWSROOM_CANDIDATE_INPUT_PATH=${CANDIDATES_PATH}" >> "$GITHUB_ENV"
+
+      # ── Phase 3: Final newsletter generation ───────────────────────────────
+      - name: Restore URL summary cache
+        uses: actions/cache/restore@v4
+        with:
+          path: cache/news-summary
+          key: news-summary-${{ runner.os }}-
+          restore-keys: |
+            news-summary-${{ runner.os }}-
+
+      - name: Generate newsletter with merged candidate artifact
+        id: generate
+        continue-on-error: true
+        run: npm run generate
+
+      - name: Generate HAL signal quality report
+        if: always() && steps.resolve-newsletter-date.outputs.date != ''
+        continue-on-error: true
+        run: npm run report:hal-signal-quality -- --date "${{ steps.resolve-newsletter-date.outputs.date }}"
+
+      - name: Ensure public newsletter artifacts
+        id: ensure-public-newsletter
+        if: always()
+        run: node scripts/ensure-public-newsletter-artifacts.js
+
+      - name: Resolve newsletter metadata
+        id: meta
+        if: always()
+        run: node scripts/resolve-reviewable-artifacts.js >> "$GITHUB_OUTPUT"
+
+      - name: Resolve generation status
+        id: generation-status
+        if: always()
+        run: node scripts/write-generation-status-output.js >> "$GITHUB_OUTPUT"
+
+      - name: Check URL summary cache directory
+        id: summary-cache
+        if: always()
+        run: |
+          if [ -d cache/news-summary ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate generated site
+        id: validate
+        if: steps.meta.outputs.public_newsletter_ready == 'true'
+        continue-on-error: true
+        env:
+          REQUIRE_NEWSLETTER_DATE_FILE: "1"
+        run: npm run validate:post-generation
+
+      - name: Resolve final publish status
+        id: final-publish-status
+        if: steps.meta.outputs.public_newsletter_ready == 'true'
+        env:
+          VALIDATE_OUTCOME: ${{ steps.validate.outcome || 'skipped' }}
+        run: node scripts/write-publish-status-output.js >> "$GITHUB_OUTPUT"
+
+      - name: Generate source effectiveness report
+        if: always() && steps.meta.outputs.review_pr_ready == 'true'
+        continue-on-error: true
+        run: npm run report:source-effectiveness -- --date "${{ steps.meta.outputs.date }}"
+
+      - name: Generate source quality diagnosis
+        if: always() && steps.meta.outputs.date != ''
+        continue-on-error: true
+        run: npm run report:source-quality-diagnosis -- --date "${{ steps.meta.outputs.date }}"
+
+      - name: Generate evidence pack summary
+        if: always() && steps.meta.outputs.date != ''
+        continue-on-error: true
+        run: npm run report:evidence-pack -- --date "${{ steps.meta.outputs.date }}"
+
+      - name: Audit newsletter image lineage
+        if: always() && steps.meta.outputs.date != ''
+        run: |
+          if [ "${{ steps.meta.outputs.public_newsletter_ready }}" = "true" ]; then
+            npm run newsroom:audit-images -- --date "${{ steps.meta.outputs.date }}" --fail-on-publish-blocking
+          else
+            npm run newsroom:audit-images -- --date "${{ steps.meta.outputs.date }}"
+          fi
+
+      - name: Snapshot newsroom debug artifacts
+        if: always()
+        run: |
+          set -euo pipefail
+
+          SNAPSHOT=".tmp/artifact-snapshot"
+          rm -rf "$SNAPSHOT"
+          mkdir -p "$SNAPSHOT"
+
+          DATE="${{ steps.meta.outputs.date }}"
+
+          copy_if_present() {
+            local src="$1"
+            local dest="$SNAPSHOT/$src"
+            if [ -e "$src" ]; then
+              mkdir -p "$(dirname "$dest")"
+              cp "$src" "$dest"
+            fi
+          }
+
+          copy_tree_if_present() {
+            local src="$1"
+            local dest="$SNAPSHOT/$src"
+            if [ -d "$src" ]; then
+              mkdir -p "$(dirname "$dest")"
+              cp -R "$src" "$dest"
+            fi
+          }
+
+          copy_if_present ".tmp/newsletter-date.txt"
+          copy_if_present ".tmp/newsletter-generation-status.json"
+          copy_if_present ".tmp/newsroom-cost-report.json"
+          copy_if_present ".tmp/summary-cache-report.json"
+          copy_tree_if_present ".tmp/gemini-raw"
+          copy_tree_if_present "cache/news-summary"
+          if [ -n "$DATE" ]; then
+            copy_if_present "content/collected-news/${DATE}/manual-candidates.json"
+            copy_if_present "content/collected-news/${DATE}/candidates.json"
+            copy_if_present "content/collected-news/${DATE}/collection-intent.json"
+            copy_if_present "content/collected-news/${DATE}/seed-candidates.json"
+            copy_if_present "content/collected-news/${DATE}/seed-evidence-pack.json"
+            copy_if_present "content/collected-news/${DATE}/raw-candidate-manifest.json"
+            copy_if_present "content/collected-news/${DATE}/gemini-candidates.json"
+            copy_if_present "content/collected-news/${DATE}/merged-candidates.json"
+            copy_if_present "content/collected-news/${DATE}/merged-candidate-manifest.json"
+            copy_tree_if_present "content/source-events/${DATE}"
+            copy_tree_if_present "content/newsroom/${DATE}"
+            copy_if_present "newsletters/${DATE}/newsletter.md"
+            copy_if_present "newsletters/${DATE}/index.html"
+            copy_if_present "data/newsletters.json"
+            copy_if_present "data/homepage-headline.json"
+            copy_if_present "data/article-exposure-history.json"
+            copy_tree_if_present "data/source-snapshots"
+          else
+            echo "No generated date marker found; skipping date-scoped artifact copy."
+          fi
+
+          node scripts/write-artifact-manifest.js "$SNAPSHOT" "$DATE"
+
+      - name: Save URL summary cache
+        if: always() && steps.summary-cache.outputs.exists == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: cache/news-summary
+          key: news-summary-${{ runner.os }}-${{ steps.meta.outputs.date }}-${{ github.run_id }}
+
+      - name: Prepare pull request body
+        id: pr-body
+        if: steps.meta.outputs.review_pr_ready == 'true'
+        env:
+          VALIDATE_OUTCOME: ${{ steps.validate.outcome || 'skipped' }}
+          HOMEPAGE_HEADLINE_FIGMA_URL: https://www.figma.com/design/EWJMa8vjfZLjdn9a7s3Kzs
+          HOMEPAGE_HEADLINE_DESKTOP_COVERAGE: covered
+          HOMEPAGE_HEADLINE_MOBILE_COVERAGE: covered
+          HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION: none
+        run: |
+          mkdir -p .tmp
+          node scripts/build-newsroom-pr-body.js > .tmp/newsroom-pr-body.md
+          node scripts/validate-pr-body.js .tmp/newsroom-pr-body.md --type newsletter --date "${{ steps.meta.outputs.date }}" --require-publish-status-consistency
+          {
+            echo "body<<EOF"
+            cat .tmp/newsroom-pr-body.md
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Ensure labels
+        if: steps.meta.outputs.review_pr_ready == 'true'
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const labels = [
+              { name: 'newsletter', color: '1b58b5', description: 'Camera HAL / SW Newsletter' },
+              { name: 'aosp-camera', color: '0e8a16', description: 'AOSP Camera and camera stack scope' },
+              { name: 'editor-review', color: 'fbca04', description: 'Editor-in-chief review required' },
+              { name: 'needs-fix', color: 'd73a4a', description: 'Generated newsletter is not ready to publish' },
+              { name: 'fallback-composition', color: '5319e7', description: 'Non-publish-ready fallback composition diagnostics' },
+              { name: 'thin-week', color: 'c5def5', description: 'Review-only thin-week newsletter candidate' },
+              { name: 'review-only', color: 'bfd4f2', description: 'AI automatic publish gate did not pass; editor review is required' },
+              { name: 'review-only-publication', color: 'bfd4f2', description: 'Public newsletter files exist but editor review is required before merge' },
+              { name: 'diagnostics-only', color: 'cfd3d7', description: 'Review diagnostics only; merge will not publish a newsletter' },
+              { name: 'failed-repair-reviewable', color: 'd4c5f9', description: 'Failed repair produced reviewable diagnostics' },
+              { name: 'publish-ready', color: '0e8a16', description: 'Final publish gate passed' }
+            ];
+            for (const label of labels) {
+              try {
+                await github.rest.issues.getLabel({ owner: context.repo.owner, repo: context.repo.repo, name: label.name });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  color: label.color,
+                  description: label.description
+                });
+              }
+            }
+
+      - name: Resolve PR commit allowlist
+        id: allowlist
+        if: steps.meta.outputs.review_pr_ready == 'true'
+        run: |
+          set -euo pipefail
+          PATHS="$(node scripts/print-retention-commit-allowlist.js --date "${{ steps.meta.outputs.date }}" --root .)"
+          {
+            echo "paths<<EOF"
+            echo "$PATHS"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create daily newsletter pull request
+        id: cpr
+        if: steps.meta.outputs.review_pr_ready == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Generate Camera HAL newsletter ${{ steps.meta.outputs.date }}"
+          branch: newsroom-daily/${{ steps.meta.outputs.date }}
+          base: main
+          delete-branch: true
+          title: "[Newsletter] Camera HAL / SW Newsletter - ${{ steps.meta.outputs.date }}"
+          body: ${{ steps.pr-body.outputs.body }}
+          add-paths: ${{ steps.allowlist.outputs.paths }}
+
+      - name: Add pull request labels
+        if: steps.cpr.outputs.pull-request-number != ''
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const issue_number = Number('${{ steps.cpr.outputs.pull-request-number }}');
+            const stateLabels = ['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week', 'review-only', 'review-only-publication', 'diagnostics-only', 'failed-repair-reviewable'];
+            const labels = ['newsletter', 'aosp-camera'];
+            const hasAiPublishReady = '${{ steps.final-publish-status.outputs.has_ai_publish_ready }}' === 'true';
+            const compositionMode = '${{ steps.final-publish-status.outputs.composition_mode }}';
+            const diagnosticsOnly = '${{ steps.meta.outputs.diagnostics_only }}' === 'true';
+            const reviewPublicationReady = '${{ steps.meta.outputs.review_publication_ready }}' === 'true';
+            const generationStatus = '${{ steps.generation-status.outputs.status }}';
+            if (hasAiPublishReady) {
+              labels.push('publish-ready');
+            } else if (reviewPublicationReady) {
+              labels.push('needs-fix', 'editor-review', 'review-only', 'review-only-publication');
+            } else if (diagnosticsOnly) {
+              labels.push('needs-fix', 'editor-review', 'review-only', 'diagnostics-only');
+              if (generationStatus === 'FAILED_REPAIR_REVIEWABLE') {
+                labels.push('failed-repair-reviewable');
+              }
+            } else {
+              labels.push('needs-fix', 'editor-review');
+            }
+            if (compositionMode === 'FALLBACK_COMPOSITION' && !hasAiPublishReady) {
+              labels.push('fallback-composition');
+            }
+            if (compositionMode === 'THIN_WEEK_REVIEW') {
+              labels.push('thin-week');
+            }
+            for (const name of stateLabels) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number,
+                  name
+                });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+              }
+            }
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number,
+              labels
+            });
+
+      - name: Upload newsroom debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newsroom-daily-debug-${{ github.run_id }}
+          path: .tmp/artifact-snapshot
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Fail if no reviewable PR can be created
+        if: steps.meta.outputs.review_pr_ready != 'true'
+        run: |
+          echo "Newsletter artifacts are not reviewable: ${{ steps.meta.outputs.reviewable_artifact_reason }}"
+          echo "Public newsletter readiness: ${{ steps.meta.outputs.public_newsletter_ready }}"
+          echo "Public newsletter reason: ${{ steps.meta.outputs.public_newsletter_reason }}"
+          exit 1
