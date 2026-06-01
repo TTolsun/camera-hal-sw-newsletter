@@ -59,6 +59,7 @@ const {
   articleCountRangeText,
   candidatePoolPreflightPolicy,
   getHeadlinePolicy,
+  getPublishModePolicy,
   getPublishReadyCompositionPolicy,
   getSelectionWindowPolicy,
   isForbiddenMainBucket,
@@ -66,6 +67,7 @@ const {
   isPrimaryCameraStackBucket,
   publishGateCriteriaText
 } = require('../common/newsletter-policy');
+const { PUBLISH_MODES, resolvePublishMode } = require('./publish-mode');
 
 const publishReadyCompositionPolicy = getPublishReadyCompositionPolicy();
 
@@ -1485,6 +1487,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const publishGateReasonSummary = publishReadyGateReasonSummary(composition);
   const publishGateReasonCodes = publishGateReasonSummary.map(reason => reason.code);
   const publishGatePassed = reviewGatePassed && publishGateReasonCodes.length === 0;
+  const publishModeResult = resolvePublishMode(composition, getPublishModePolicy());
   const publishReady = publishGatePassed && warnings.length === 0 && mode !== COMPOSITION_MODES.NEEDS_FIX;
   const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
   const reportShortlist = shortlistWithFinalCandidates(shortlist, selected, reserve, cap);
@@ -1528,6 +1531,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     composition_mode: mode,
     selection_composition_mode: mode,
     composition_reason: compositionReason(mode, composition),
+    publish_mode: publishModeResult.mode,
+    publish_mode_detail: publishModeResult,
     composition_summary: composition,
     eligible_composition_summary: eligibleComposition,
     selection_shortage_hints: selectionShortageHints(eligibleComposition),
