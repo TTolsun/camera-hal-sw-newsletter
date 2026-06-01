@@ -67,7 +67,7 @@ const {
   isPrimaryCameraStackBucket,
   publishGateCriteriaText
 } = require('../common/newsletter-policy');
-const { PUBLISH_MODES, resolvePublishMode } = require('./publish-mode');
+const { resolvePublishMode } = require('./publish-mode');
 
 const publishReadyCompositionPolicy = getPublishReadyCompositionPolicy();
 
