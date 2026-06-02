@@ -7,7 +7,7 @@ const {
 } = require('./newsletter-policy');
 
 const DEFAULT_LLM_PROVIDER = 'gemini';
-const LLM_PROVIDER_VALUES = Object.freeze(['gemini', 'openapi', 'internal']);
+const LLM_PROVIDER_VALUES = Object.freeze(['gemini', 'openapi']);
 const DEFAULT_LLM_MODEL = 'gemini-2.5-flash';
 const DEFAULT_LLM_FALLBACK_MODELS = ['gemini-2.5-flash-lite'];
 const DEFAULT_LLM_STAGE_MODELS = Object.freeze({
@@ -62,8 +62,6 @@ const DEFAULT_RUNTIME_CONFIG = {
   geminiMaxRetries: 2,
   geminiRetryDelaysMs: [20000, 10000],
   geminiRetryMaxDelayMs: 300000,
-  internalLlmEndpoint: '',
-  internalLlmApiVersion: '',
   newsroomMaxQualityRetries: 1,
   newsroomMaxSectionRepairs: 1,
   newsroomWarnCostUsd: 0.15,
@@ -232,9 +230,7 @@ function readRuntimeConfig(env = process.env, options = {}) {
   const llmModel = String(
     envValue(env, 'LLM_MODEL', envValue(env, 'GEMINI_MODEL', DEFAULT_RUNTIME_CONFIG.llmModel)) || ''
   ).trim();
-  const llmFallbackDefault = llmProvider === 'internal'
-    ? ''
-    : envValue(env, 'GEMINI_FALLBACK_MODELS', DEFAULT_RUNTIME_CONFIG.llmFallbackModels.join(','));
+  const llmFallbackDefault = envValue(env, 'GEMINI_FALLBACK_MODELS', DEFAULT_RUNTIME_CONFIG.llmFallbackModels.join(','));
   const llmFallbackValue = envValue(
     env,
     'LLM_FALLBACK_MODELS',
@@ -283,8 +279,6 @@ function readRuntimeConfig(env = process.env, options = {}) {
       'GEMINI_RETRY_MAX_DELAY_MS',
       { min: 0 }
     ),
-    internalLlmEndpoint: String(envValue(env, 'INTERNAL_LLM_ENDPOINT', DEFAULT_RUNTIME_CONFIG.internalLlmEndpoint) || '').trim(),
-    internalLlmApiVersion: String(envValue(env, 'INTERNAL_LLM_API_VERSION', DEFAULT_RUNTIME_CONFIG.internalLlmApiVersion) || '').trim(),
     newsroomMaxQualityRetries: parseInteger(
       envValue(env, 'NEWSROOM_MAX_QUALITY_RETRIES', DEFAULT_RUNTIME_CONFIG.newsroomMaxQualityRetries),
       'NEWSROOM_MAX_QUALITY_RETRIES',
@@ -418,8 +412,7 @@ function readRuntimeConfig(env = process.env, options = {}) {
       { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomEnableGeminiSourceDiscovery }
     ),
     githubEventName: String(envValue(env, 'GITHUB_EVENT_NAME', DEFAULT_RUNTIME_CONFIG.githubEventName) || '').trim(),
-    geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim()),
-    internalLlmApiKeyConfigured: Boolean(String(env.INTERNAL_LLM_API_KEY || '').trim())
+    geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim())
   };
 
   const result = validateRuntimeConfig(config, options);
@@ -479,9 +472,6 @@ function validateRuntimeConfig(config, options = {}) {
   }
   if (!String(config.llmModel || '').trim()) {
     errors.push('LLM_MODEL/GEMINI_MODEL must be non-empty.');
-  }
-  if (config.llmProvider === 'internal' && config.llmModelExplicitlyConfigured !== true) {
-    errors.push('LLM_MODEL is required when LLM_PROVIDER=internal.');
   }
   if (!Array.isArray(config.llmFallbackModels)) {
     errors.push('LLM_FALLBACK_MODELS/GEMINI_FALLBACK_MODELS must be a comma-separated list.');
@@ -615,15 +605,6 @@ function validateRuntimeConfig(config, options = {}) {
   if (options.requireLlmCredentials && config.llmProvider === 'gemini' && !config.geminiApiKeyConfigured) {
     errors.push('GEMINI_API_KEY must be configured for Gemini newsroom generation.');
   }
-  if (options.requireLlmCredentials && config.llmProvider === 'internal') {
-    if (!config.internalLlmApiKeyConfigured) {
-      errors.push('INTERNAL_LLM_API_KEY must be configured for internal LLM generation.');
-    }
-    if (!String(config.internalLlmEndpoint || '').trim()) {
-      errors.push('INTERNAL_LLM_ENDPOINT must be configured for internal LLM generation.');
-    }
-  }
-
   return {
     ok: errors.length === 0,
     errors
@@ -680,13 +661,10 @@ function sanitizeRuntimeConfig(config) {
     newsroomCandidateInputPath: config.newsroomCandidateInputPath ?? DEFAULT_RUNTIME_CONFIG.newsroomCandidateInputPath,
     newsroomEnableGeminiSourceDiscovery:
       config.newsroomEnableGeminiSourceDiscovery ?? DEFAULT_RUNTIME_CONFIG.newsroomEnableGeminiSourceDiscovery,
-    internalLlmEndpointConfigured: Boolean(String(config.internalLlmEndpoint || '').trim()),
-    internalLlmApiVersion: config.internalLlmApiVersion,
     githubEventName: config.githubEventName,
     proPolicy: 'disabled',
     proModelConfigured: configuredModelList(config).some(isProModel),
-    geminiApiKeyConfigured: Boolean(config.geminiApiKeyConfigured),
-    internalLlmApiKeyConfigured: Boolean(config.internalLlmApiKeyConfigured)
+    geminiApiKeyConfigured: Boolean(config.geminiApiKeyConfigured)
   };
 }
 

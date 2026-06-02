@@ -20,7 +20,7 @@ LLM provider/model 설정은 LLM 호출 경로가 있는 수동 workflow에서�
 
 Stage별 primary model은 `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `NEWSROOM_FACTCHECK_MODEL`, `NEWSROOM_REPAIR_MODEL`, `NEWSROOM_JUDGE_MODEL`로 각각 override할 수 있습니다. `LLM_MODEL` 또는 `GEMINI_MODEL`이 명시되면 stage별 값보다 우선해서 모든 stage primary model을 override합니다. fallback chain은 `LLM_FALLBACK_MODELS` 또는 compatibility alias인 `GEMINI_FALLBACK_MODELS`가 모든 stage primary 뒤에 붙습니다.
 
-`INTERNAL_LLM_API_KEY`는 `LLM_PROVIDER=internal` 수동 실행에서만 필요한 GitHub Secret입니다. `INTERNAL_LLM_ENDPOINT`와 `INTERNAL_LLM_API_VERSION`는 GitHub Variable로 관리합니다. internal provider는 이번 범위에서 `workflow_dispatch` manual override 전용이므로 explicit `LLM_MODEL`이 필수입니다. `GEMINI_MODEL`은 internal model 지정으로 인정하지 않습니다. token은 workflow input, log, artifact, PR body에 출력하지 않습니다.
+token은 workflow input, log, artifact, PR body에 출력하지 않습니다.
 
 | input | 기본값 | runtime env | 설명 |
 | --- | --- | --- | --- |
@@ -28,7 +28,7 @@ Stage별 primary model은 `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `N
 | `llm_model` | 빈 값 | `LLM_MODEL` | 수동 실행에서만 primary model을 override합니다. |
 | `llm_fallback_models` | 빈 값 | `LLM_FALLBACK_MODELS` | 수동 실행에서만 fallback model 목록을 comma-separated string으로 override합니다. |
 
-`LLM_PROVIDER=gemini`일 때는 `INTERNAL_LLM_API_KEY`와 `INTERNAL_LLM_ENDPOINT`를 요구하지 않습니다. `LLM_PROVIDER=internal`일 때만 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, explicit `LLM_MODEL`을 필수로 검증합니다. `LLM_PROVIDER=openapi`는 이번 범위에서 HTTP client, `OPENAPI_LLM_API_KEY`, `OPENAPI_LLM_ENDPOINT`, retry/backoff, response parser를 제공하지 않습니다. internal provider 또는 openapi provider를 code default provider로 승격하는 작업은 별도 PR에서 `DEFAULT_RUNTIME_CONFIG`와 validation rule을 함께 수정해야 합니다.
+`LLM_PROVIDER=gemini`가 기본값입니다. `LLM_PROVIDER=openapi`는 전용 구현 PR 전에는 `provider_not_implemented`로 fail-fast합니다.
 
 Gemini Pro 계열 모델명은 사용하지 않습니다. `LLM_MODEL`, `GEMINI_MODEL`, `LLM_FALLBACK_MODELS`, `GEMINI_FALLBACK_MODELS`, `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `NEWSROOM_FACTCHECK_MODEL`, `NEWSROOM_REPAIR_MODEL`, `NEWSROOM_JUDGE_MODEL`에 Gemini Pro 계열 모델명이 들어오면 provider와 관계없이 `doctor:config` / runtime validation이 실패합니다.
 

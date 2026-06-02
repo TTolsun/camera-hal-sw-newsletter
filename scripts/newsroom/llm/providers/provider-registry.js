@@ -1,8 +1,7 @@
 const geminiProvider = require('./gemini-provider');
-const internalProvider = require('./internal-provider');
 const openApiProvider = require('./openapi-provider');
 
-const providers = Object.freeze([geminiProvider, openApiProvider, internalProvider]);
+const providers = Object.freeze([geminiProvider, openApiProvider]);
 const providersById = Object.freeze(Object.fromEntries(providers.map(p => [p.id, p])));
 
 function resolveProvider(providerId) {

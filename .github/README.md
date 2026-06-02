@@ -16,7 +16,7 @@
 
 ## 작업 규칙
 
-- `GEMINI_API_KEY`, `INTERNAL_LLM_API_KEY` 같은 token은 workflow input으로 받지 않고 GitHub Secrets에서만 읽습니다.
+- `GEMINI_API_KEY` 같은 token은 workflow input으로 받지 않고 GitHub Secrets에서만 읽습니다.
 - scheduled run은 기본 code default를 따릅니다. `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` override는 `workflow_dispatch` 수동 실행에서만 runtime env로 전달합니다.
 - workflow gate에서 `npm run test`와 `npm run validate`를 제거하지 않습니다.
 - failed 또는 reviewable run의 artifact upload를 보존합니다.

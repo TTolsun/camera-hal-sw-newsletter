@@ -103,7 +103,6 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.newsroomCandidateInputPath, '');
   assert.equal(config.newsroomEnableGeminiSourceDiscovery, false);
   assert.equal(config.geminiApiKeyConfigured, false);
-  assert.equal(config.internalLlmApiKeyConfigured, false);
 });
 
 test('CSV parsing trims values and drops empty items', () => {
@@ -140,7 +139,6 @@ test('LLM provider default values normalize to Gemini', () => {
   assert.equal(normalizeLlmProvider(''), 'gemini');
   assert.equal(normalizeLlmProvider('default'), 'gemini');
   assert.equal(normalizeLlmProvider('openapi'), 'openapi');
-  assert.equal(normalizeLlmProvider('internal'), 'internal');
   assert.equal(readRuntimeConfig({ LLM_PROVIDER: '' }).llmProvider, 'gemini');
   assert.equal(readRuntimeConfig({ LLM_PROVIDER: 'default' }).llmProvider, 'gemini');
   assert.equal(readRuntimeConfig({ LLM_PROVIDER: 'openapi' }).llmProvider, 'openapi');
@@ -149,7 +147,11 @@ test('LLM provider default values normalize to Gemini', () => {
 test('runtime config rejects unknown LLM providers', () => {
   assert.throws(
     () => readRuntimeConfig({ LLM_PROVIDER: 'unknown' }),
-    /LLM_PROVIDER must be one of: gemini, openapi, internal/
+    /LLM_PROVIDER must be one of: gemini, openapi/
+  );
+  assert.throws(
+    () => readRuntimeConfig({ LLM_PROVIDER: 'internal' }),
+    /LLM_PROVIDER must be one of: gemini, openapi/
   );
 });
 
@@ -317,8 +319,6 @@ test('linked evidence runtime config rejects invalid mode and unsafe limits', ()
     geminiMaxRetries: 2,
     geminiRetryDelaysMs: [20000],
     geminiRetryMaxDelayMs: 300000,
-    internalLlmEndpoint: '',
-    internalLlmApiVersion: '',
     newsroomMaxQualityRetries: 1,
     newsroomMaxSectionRepairs: 1,
     newsroomWarnCostUsd: 0.15,
@@ -336,7 +336,6 @@ test('linked evidence runtime config rejects invalid mode and unsafe limits', ()
     linkedEvidenceMaxBytes: 0,
     githubEventName: '',
     geminiApiKeyConfigured: false,
-    internalLlmApiKeyConfigured: false
   });
 
   assert.equal(result.ok, false);
@@ -501,86 +500,13 @@ test('stage model normalizer maps known generation stages', () => {
   });
 });
 
-test('internal provider credentials do not require a Gemini API key', () => {
+test('gemini provider works with GEMINI_API_KEY when credentials required', () => {
   const config = readRuntimeConfig({
-    LLM_PROVIDER: 'internal',
-    LLM_MODEL: 'internal-model',
-    INTERNAL_LLM_API_KEY: 'internal-test-key',
-    INTERNAL_LLM_ENDPOINT: 'https://internal.example.test/llm',
-    GEMINI_API_KEY: ''
-  }, { requireLlmCredentials: true });
-
-  assert.equal(config.llmProvider, 'internal');
-  assert.equal(config.geminiApiKeyConfigured, false);
-  assert.equal(config.internalLlmApiKeyConfigured, true);
-  assert.equal(config.llmModelExplicitlyConfigured, true);
-  assert.deepEqual(config.llmFallbackModels, []);
-});
-
-test('internal provider requires explicit LLM_MODEL and does not accept Gemini model aliases', () => {
-  assert.throws(
-    () => readRuntimeConfig({
-      LLM_PROVIDER: 'internal',
-      INTERNAL_LLM_API_KEY: 'internal-test-key',
-      INTERNAL_LLM_ENDPOINT: 'https://internal.example.test/llm',
-      GEMINI_API_KEY: ''
-    }, { requireLlmCredentials: true }),
-    /LLM_MODEL is required when LLM_PROVIDER=internal/
-  );
-
-  assert.throws(
-    () => readRuntimeConfig({
-      LLM_PROVIDER: 'internal',
-      GEMINI_MODEL: 'internal-via-gemini-alias',
-      INTERNAL_LLM_API_KEY: 'internal-test-key',
-      INTERNAL_LLM_ENDPOINT: 'https://internal.example.test/llm',
-      GEMINI_API_KEY: ''
-    }, { requireLlmCredentials: true }),
-    /LLM_MODEL is required when LLM_PROVIDER=internal/
-  );
-});
-
-test('internal provider requires its own key and endpoint only when selected', () => {
-  const missingBoth = validateRuntimeConfig({
-    newsletterDate: '',
-    lookbackDays: 21,
-    llmProvider: 'internal',
-    llmModel: 'internal-model',
-    llmFallbackModels: [],
-    geminiModel: 'internal-model',
-    geminiFallbackModels: [],
-    geminiMaxRetries: 2,
-    geminiRetryDelaysMs: [20000],
-    geminiRetryMaxDelayMs: 300000,
-    internalLlmEndpoint: '',
-    internalLlmApiVersion: '',
-    newsroomMaxQualityRetries: 1,
-    newsroomMaxSectionRepairs: 1,
-    newsroomWarnCostUsd: 0.15,
-    newsroomMaxCostUsd: 0.25,
-    geminiThinkingBudgetReporter: 0,
-    geminiThinkingBudgetEditor: 512,
-    geminiThinkingBudgetRepair: 0,
-    geminiThinkingBudgetFactcheck: 0,
-    geminiThinkingBudgetJudge: 0,
-    geminiThinkingBudgetScoring: 0,
-    githubEventName: '',
-    geminiApiKeyConfigured: false,
-    internalLlmApiKeyConfigured: false,
-    llmModelExplicitlyConfigured: true
-  }, { requireLlmCredentials: true });
-
-  assert.equal(missingBoth.ok, false);
-  assert.match(missingBoth.errors.join('\n'), /INTERNAL_LLM_API_KEY/);
-  assert.match(missingBoth.errors.join('\n'), /INTERNAL_LLM_ENDPOINT/);
-
-  const gemini = readRuntimeConfig({
     LLM_PROVIDER: 'gemini',
-    GEMINI_API_KEY: 'gemini-test-key',
-    INTERNAL_LLM_API_KEY: '',
-    INTERNAL_LLM_ENDPOINT: ''
+    GEMINI_API_KEY: 'gemini-test-key'
   }, { requireLlmCredentials: true });
-  assert.equal(gemini.llmProvider, 'gemini');
+  assert.equal(config.llmProvider, 'gemini');
+  assert.equal(config.geminiApiKeyConfigured, true);
 });
 
 test('invalid date and ranges return field-specific validation errors', () => {
@@ -595,8 +521,6 @@ test('invalid date and ranges return field-specific validation errors', () => {
     geminiMaxRetries: -1,
     geminiRetryDelaysMs: [],
     geminiRetryMaxDelayMs: -1,
-    internalLlmEndpoint: '',
-    internalLlmApiVersion: '',
     newsroomMaxQualityRetries: -1,
     newsroomMaxSectionRepairs: -1,
     newsroomWarnCostUsd: -0.1,
@@ -609,7 +533,6 @@ test('invalid date and ranges return field-specific validation errors', () => {
     geminiThinkingBudgetScoring: -1,
     githubEventName: '',
     geminiApiKeyConfigured: false,
-    internalLlmApiKeyConfigured: false
   }, { requireGeminiApiKey: true });
 
   assert.equal(result.ok, false);
@@ -644,8 +567,6 @@ test('validator returns structured errors for malformed fallback model input', (
     geminiMaxRetries: 2,
     geminiRetryDelaysMs: [20000],
     geminiRetryMaxDelayMs: 300000,
-    internalLlmEndpoint: '',
-    internalLlmApiVersion: '',
     newsroomMaxQualityRetries: 1,
     newsroomMaxSectionRepairs: 1,
     newsroomWarnCostUsd: 0.15,
@@ -658,7 +579,6 @@ test('validator returns structured errors for malformed fallback model input', (
     geminiThinkingBudgetScoring: 0,
     githubEventName: 'schedule',
     geminiApiKeyConfigured: true,
-    internalLlmApiKeyConfigured: false
   });
 
   assert.equal(result.ok, false);
@@ -696,8 +616,6 @@ test('sanitized diagnostics never include the raw API key', () => {
     fallbackSelectionDays: 21,
     referenceContextDays: 90
   });
-  assert.equal(sanitized.internalLlmApiKeyConfigured, false);
-  assert.equal(sanitized.internalLlmEndpointConfigured, false);
   assert.equal(sanitized.newsroomWarnCostUsd, 0.15);
   assert.equal(sanitized.newsroomMaxCostUsd, 0.25);
   assert.equal(sanitized.newsroomMaxSectionRepairs, 1);

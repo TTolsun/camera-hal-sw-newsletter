@@ -87,8 +87,8 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_BYTES: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_BYTES \|\| '200000' \}\}/);
   assert.doesNotMatch(workflow, /LLM_FALLBACK_MODELS=gemini-2\.5-flash-lite,gemini-2\.5-pro/);
   assert.doesNotMatch(workflow, /\[ "\$\{INPUT_LLM_PROVIDER\}" = "gemini" \]/);
-  assert.match(workflow, /INTERNAL_LLM_API_KEY: \$\{\{ secrets\.INTERNAL_LLM_API_KEY \}\}/);
-  assert.match(workflow, /INTERNAL_LLM_ENDPOINT: \$\{\{ vars\.INTERNAL_LLM_ENDPOINT \}\}/);
+  assert.doesNotMatch(workflow, /INTERNAL_LLM_API_KEY/);
+  assert.doesNotMatch(workflow, /INTERNAL_LLM_ENDPOINT/);
   assert.doesNotMatch(doctorStep, /--no-llm-credentials/);
   assert.doesNotMatch(workflow, /vars\.LLM_PROVIDER/);
   assert.doesNotMatch(workflow, /vars\.LLM_MODEL/);

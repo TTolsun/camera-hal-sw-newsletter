@@ -1,6 +1,6 @@
 # AOSP Camera / Driver / SoC Platform Newsletter
 
-> 기본 뉴스룸(newsroom) 공급자는 Gemini입니다. 기본 실행과 예약 실행(scheduled run)은 코드 기본값(code default)을 따르며, `workflow_dispatch` 수동 실행에서만 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` 재정의(override)가 런타임 환경 변수(runtime env)로 전달됩니다. 사내 API 설정은 `INTERNAL_LLM_API_KEY`, `INTERNAL_LLM_ENDPOINT`, `INTERNAL_LLM_API_VERSION`를 사용하며 토큰은 GitHub Secrets에서만 읽습니다.
+> 기본 뉴스룸(newsroom) 공급자는 Gemini입니다. 기본 실행과 예약 실행(scheduled run)은 코드 기본값(code default)을 따르며, `workflow_dispatch` 수동 실행에서만 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` 재정의(override)가 런타임 환경 변수(runtime env)로 전달됩니다. 토큰은 GitHub Secrets에서만 읽습니다.
 
 이 저장소는 AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC platform 소식을 수집해 정적 뉴스레터로 발행합니다. 후보 수집과 Gemini 기반 뉴스룸 자동화는 검토 가능한 리뷰 산출물(review artifact)을 만들고, 발행은 사람이 승인한 PR merge를 통해서만 진행합니다. 비용 절감은 deterministic shortlist(결정론적 숏리스트), compact article capsule(요약된 기사 캡슐), retry scope(재시도 범위) 제한으로 처리하며 quality gate(품질 게이트)를 낮추지 않습니다.
 

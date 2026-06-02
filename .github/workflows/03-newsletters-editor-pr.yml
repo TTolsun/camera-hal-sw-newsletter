@@ -9,7 +9,7 @@ on:
         default: ""
         type: string
       llm_provider:
-        description: "LLM provider override for manual runs. Current code default: Gemini. Choices: default(code default), gemini, openapi(reserved fail-fast), internal."
+        description: "LLM provider override for manual runs. Current code default: Gemini. Choices: default(code default), gemini, openapi(reserved fail-fast)."
         required: false
         default: "default"
         type: choice
@@ -17,7 +17,6 @@ on:
           - "default"
           - "gemini"
           - "openapi"
-          - "internal"
       llm_model:
         description: "Optional LLM model override for this manual run."
         required: false
@@ -54,9 +53,6 @@ jobs:
       NEWSROOM_CANDIDATE_INPUT_MODE: artifact
       NEWSROOM_CANDIDATE_INPUT_PATH: ""
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      INTERNAL_LLM_API_KEY: ${{ secrets.INTERNAL_LLM_API_KEY }}
-      INTERNAL_LLM_ENDPOINT: ${{ vars.INTERNAL_LLM_ENDPOINT }}
-      INTERNAL_LLM_API_VERSION: ${{ vars.INTERNAL_LLM_API_VERSION }}
       GEMINI_MAX_RETRIES: ${{ vars.GEMINI_MAX_RETRIES || '2' }}
       GEMINI_RETRY_DELAYS_MS: ${{ vars.GEMINI_RETRY_DELAYS_MS || '20000,10000' }}
       GEMINI_RETRY_MAX_DELAY_MS: ${{ vars.GEMINI_RETRY_MAX_DELAY_MS || '300000' }}
