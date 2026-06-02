@@ -4,145 +4,169 @@
   "newsletter_date": "2026-06-03",
   "proposals": [
     {
-      "proposal_id": "P1",
-      "topic_gap": "Updates on Android media pipeline and premium experiences, potentially including camera output processing, recording, or playback improvements.",
+      "proposal_id": "HAL-DISC-2026-06-03-001",
+      "topic_gap": "Updates to Android's media pipeline toolkit, potentially impacting camera output processing and integration.",
       "source_family": "android-media",
       "allowed_domains": [
-        "youtube.com"
+        "youtube.com",
+        "android-developers.googleblog.com"
       ],
       "search_keywords": [
         "Android media pipeline",
+        "CameraX",
         "Media3",
         "MediaCodec",
         "MediaRecorder",
         "camera output",
-        "Android premium experiences",
-        "video recording",
-        "A/V sync"
+        "video processing"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "Mentions of Media3, MediaCodec, MediaRecorder, camera output, recording, preview, A/V sync, or video calls.",
-        "Discussions on performance optimizations for media processing.",
-        "New APIs or features related to camera-generated content."
+        "New APIs or features in Media3, MediaCodec, MediaRecorder, or related media components.",
+        "Improvements in camera output handling, such as preview, recording, or A/V sync.",
+        "Performance enhancements or best practices for media processing pipelines."
       ],
       "risk_notes": [
-        "The playlist title is broad; need to verify if individual talks are relevant to camera HAL or media pipeline.",
-        "YouTube content might be more high-level than technical deep dives."
+        "The YouTube playlist might contain general Android development topics; focus on videos specifically related to media pipeline, camera, or video processing.",
+        "Verify the content's relevance to Camera HAL SW, not just generic app development."
       ]
     },
     {
-      "proposal_id": "P2",
-      "topic_gap": "New developments or best practices for testing camera images using automation, specifically related to AOSP and CTS.",
+      "proposal_id": "HAL-DISC-2026-06-03-002",
+      "topic_gap": "Information on testing camera images using automation, specifically related to AOSP's Camera ITS box.",
       "source_family": "aosp",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
-        "Camera ITS",
-        "Android camera testing",
-        "AOSP camera automation",
-        "CTS camera",
-        "camera image quality testing"
+        "Camera ITS box",
+        "AOSP camera testing",
+        "automated camera testing",
+        "Camera HAL testing",
+        "compatibility"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "Details on Camera ITS (Image Test Suite) and its usage.",
-        "Guidelines or tools for automated camera image testing.",
-        "Updates to AOSP documentation regarding camera compatibility and testing."
+        "Details on the Camera ITS box setup and usage.",
+        "New or updated procedures for automated camera image testing.",
+        "Impact on Camera HAL implementation or testing requirements."
       ],
       "risk_notes": [
-        "This is a documentation page, so it might be a refresh of existing content rather than a new feature or significant change. Need to check for 'last updated' date or specific change logs."
+        "This is a documentation update, ensure it contains new or significantly changed information relevant to HAL developers, not just existing reference material."
       ]
     },
     {
-      "proposal_id": "P3",
-      "topic_gap": "Updates on building native Android applications with Google AI Studio, particularly if it impacts camera-related AI features or on-device machine learning for image/video processing.",
+      "proposal_id": "HAL-DISC-2026-06-03-003",
+      "topic_gap": "Updates on building seamless Android experiences across devices with Jetpack Compose, potentially impacting camera UI or cross-device camera features.",
+      "source_family": "android",
+      "allowed_domains": [
+        "goo.gle",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Jetpack Compose camera",
+        "adaptive camera UI",
+        "cross-device camera",
+        "Android camera experience",
+        "camera preview compose"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Guidance on implementing camera-related UI with Jetpack Compose for different form factors.",
+        "New Jetpack Compose components or patterns for camera preview or controls.",
+        "Strategies for adaptive camera experiences across devices (e.g., foldables, tablets)."
+      ],
+      "risk_notes": [
+        "The content might be too general for UI development. Focus on specific mentions or implications for camera-generated output, preview, or related media interactions.",
+        "Verify that it's not just generic UI updates without direct camera impact."
+      ]
+    },
+    {
+      "proposal_id": "HAL-DISC-2026-06-03-004",
+      "topic_gap": "Updates on AI on Android for building intelligent experiences, which could include on-device AI for camera processing or computer vision.",
       "source_family": "ai-engineering",
       "allowed_domains": [
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
-        "Android AI Studio",
-        "on-device AI",
-        "camera AI",
-        "machine learning camera",
-        "Android image processing AI"
+        "Android AI camera",
+        "on-device AI vision",
+        "camera ML",
+        "computational photography",
+        "Google AI Studio camera"
       ],
       "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
+        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
       ],
       "expected_evidence": [
-        "Examples or APIs for integrating AI models with camera input or output.",
-        "Discussions on on-device AI for image/video analysis or generation.",
-        "Tools or frameworks facilitating AI-powered camera features."
+        "New tools or APIs for integrating AI models with camera streams or captured images.",
+        "Examples of on-device AI applications for camera features (e.g., object detection, segmentation, computational photography).",
+        "Performance considerations or best practices for running AI on camera data."
       ],
       "risk_notes": [
-        "The article might be too generic about AI on Android and not specifically target camera-related applications.",
-        "Need to filter for content directly impacting camera HAL SW or media pipeline."
+        "The article might focus on general AI app development. Ensure there are concrete connections to camera input, image processing, or computer vision tasks directly relevant to camera HAL or framework.",
+        "Avoid topics solely focused on cloud AI or non-camera related AI features."
       ]
     },
     {
-      "proposal_id": "P4",
-      "topic_gap": "Linux kernel media subsystem updates, specifically regarding Rust bindings for `gem shmem` and potential implications for camera drivers or media processing on Linux-based systems (including Android's kernel).",
+      "proposal_id": "HAL-DISC-2026-06-03-005",
+      "topic_gap": "Linux kernel media subsystem updates, specifically regarding Rust bindings for GEM shmem, which could impact camera driver development.",
       "source_family": "linux-camera",
       "allowed_domains": [
         "lore.kernel.org"
       ],
       "search_keywords": [
-        "Linux media kernel",
-        "Rust kernel",
-        "gem shmem",
-        "V4L2",
-        "camera driver Linux",
-        "kernel media pipeline"
+        "Linux media Rust",
+        "GEM shmem",
+        "camera driver kernel",
+        "V4L2 Rust",
+        "kernel media memory"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
         "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
+        "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
         "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/"
       ],
       "expected_evidence": [
-        "Details on how Rust bindings for `gem shmem` impact kernel-level memory management for graphics and media.",
-        "Discussions on the benefits or challenges of using Rust in media drivers.",
-        "Potential implications for camera sensor drivers or ISP integration."
+        "Introduction of Rust-based GEM shmem functionality for media drivers.",
+        "Implications for camera sensor drivers or ISP integration in the Linux kernel.",
+        "Potential for improved memory management or safety in camera-related kernel modules."
       ],
       "risk_notes": [
-        "Highly technical and low-level kernel development, might not have direct, immediate impact on Android Camera HAL SW.",
-        "Requires deep understanding of Linux kernel media subsystem and Rust in kernel."
+        "These are mailing list patches; they might be highly technical and require deep kernel knowledge. Focus on the high-level impact on camera driver development.",
+        "Ensure the changes are not purely generic kernel features but have specific relevance to media/camera subsystems."
       ]
     },
     {
-      "proposal_id": "P5",
-      "topic_gap": "Linux kernel updates related to specific hardware (e.g., Qualcomm Hamoa) and its interaction with Iris (likely a GPU or display component), which could affect camera buffer management or display paths.",
+      "proposal_id": "HAL-DISC-2026-06-03-006",
+      "topic_gap": "Linux kernel media subsystem updates, specifically regarding IOVA range reservation for Iris, which could impact camera hardware integration.",
       "source_family": "linux-camera",
       "allowed_domains": [
         "lore.kernel.org"
       ],
       "search_keywords": [
-        "Linux kernel media",
-        "Qualcomm Hamoa",
-        "Iris GPU",
-        "IOVA",
-        "camera buffer management",
-        "display path Linux"
+        "Linux media Iris IOVA",
+        "qcom hamoa camera",
+        "camera hardware integration",
+        "kernel media memory management"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/"
       ],
       "expected_evidence": [
-        "Discussions on IOVA (I/O Virtual Address) range reservation for graphics/display components.",
-        "Impact on memory allocation or performance for camera-generated frames.",
-        "Specific hardware (Qualcomm Hamoa, Iris) related optimizations or fixes."
+        "Details on the Iris hardware component and its role in the media pipeline.",
+        "Impact of IOVA range reservation on camera data flow or performance.",
+        "Relevance to specific Qualcomm platforms (hamoa) and potential broader implications for camera HALs."
       ],
       "risk_notes": [
-        "Very specific to a particular hardware platform; general applicability to Android Camera HAL might be limited.",
-        "Requires detailed knowledge of hardware architecture and kernel memory management."
+        "This is a highly specific kernel patch. Ensure the discussion provides sufficient context to understand its relevance to camera HAL or Android media.",
+        "The technical depth might be very high, requiring careful summarization."
       ]
     }
   ]

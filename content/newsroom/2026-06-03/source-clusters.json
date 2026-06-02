@@ -168,8 +168,8 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "canonical_title": "Build native Android apps in Google AI Studio",
-      "candidate_count": 4,
-      "duplicate_count": 3,
+      "candidate_count": 3,
+      "duplicate_count": 2,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
@@ -187,13 +187,6 @@
         },
         {
           "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
           "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
           "canonical": false,
           "reliability": "official",

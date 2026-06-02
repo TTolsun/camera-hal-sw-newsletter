@@ -790,28 +790,9 @@
       ]
     },
     {
-      "candidate_id": "gemini-fe7a2b2ca51287c9",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-      "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
-      "candidate_id": "gemini-a6bba1ddfb2143b7",
-      "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
-      "title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings - Lyude Paul",
+      "candidate_id": "gemini-7fad71b79fca5cf4",
+      "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
+      "title": "[PATCH v16 0/6] Rust bindings for gem shmem - Lyude Paul",
       "deep_checked": true,
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -826,9 +807,9 @@
       "reasons": []
     },
     {
-      "candidate_id": "gemini-7fad71b79fca5cf4",
-      "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
-      "title": "[PATCH v16 0/6] Rust bindings for gem shmem - Lyude Paul",
+      "candidate_id": "gemini-a6bba1ddfb2143b7",
+      "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
+      "title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings - Lyude Paul",
       "deep_checked": true,
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -880,6 +861,6 @@
   "counts": {
     "not_checked": 3,
     "pass": 7,
-    "blocked": 37
+    "blocked": 36
   }
 }
