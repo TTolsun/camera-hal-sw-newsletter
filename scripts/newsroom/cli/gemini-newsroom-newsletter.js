@@ -2233,15 +2233,30 @@ async function validateOrRepairEditor(value, {
   });
 }
 
+const FACT_CHECK_LOCATION_ALLOWLIST = [
+  /public_article\.decision_metadata\./,
+  /public_article\.story_contract_version/
+];
+
+function isAllowlistedFactCheckLocation(item) {
+  const location = String(item?.location || '');
+  return FACT_CHECK_LOCATION_ALLOWLIST.some(pattern => pattern.test(location));
+}
+
 function validateFactCheck(value) {
   if (!['PASS', 'NEEDS_FIX'].includes(value.status)) {
     value.status = ensureArray(value.must_fix).length > 0 ? 'NEEDS_FIX' : 'PASS';
   }
-  value.must_fix = ensureArray(value.must_fix);
-  value.recommended_fixes = ensureArray(value.recommended_fixes);
+  value.must_fix = ensureArray(value.must_fix).filter(item => !isAllowlistedFactCheckLocation(item));
+  value.recommended_fixes = ensureArray(value.recommended_fixes).filter(item => !isAllowlistedFactCheckLocation(item));
   value.source_gaps = ensureArray(value.source_gaps);
   value.source_gap_count = numberOrDefault(value.source_gap_count, value.source_gaps.length);
   value.final_comment = value.final_comment || '';
+  if (!['PASS', 'NEEDS_FIX'].includes(value.status)) {
+    value.status = value.must_fix.length > 0 ? 'NEEDS_FIX' : 'PASS';
+  } else if (value.status === 'NEEDS_FIX' && value.must_fix.length === 0) {
+    value.status = 'PASS';
+  }
   return value;
 }
 
