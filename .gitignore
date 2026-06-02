@@ -4,6 +4,9 @@ cache/news-summary/
 npm-debug.log*
 .vscode/
 
+# understand-anything knowledge graph artifacts
+/.understand-anything/
+
 # Local agent scratch files
 /PLAN.md
 /PLAN.local.md

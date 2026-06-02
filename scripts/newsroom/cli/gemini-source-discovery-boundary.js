@@ -172,15 +172,17 @@ function sourceDiscoveryHandoff({
   status,
   stats = null,
   mergedCandidateRelPath = '',
-  sourceDiscoveryFeedbackReport = null
+  sourceDiscoveryFeedbackReport = null,
+  llmUsed = false
 } = {}) {
   const mergedCount = numberStat(stats, 'merged_candidate_count');
   const geminiPublishableCount = numberStat(stats, 'gemini_publishable_candidate_count');
   const seedPublishableCount = numberStat(stats, 'seed_publishable_candidate_count');
   const publishableCount = geminiPublishableCount + seedPublishableCount;
-  const newUniqueCount = numberStat(stats, 'gemini_new_unique_url_count') +
-    numberStat(stats, 'seed_new_unique_url_count');
+  const geminiNewUniqueCount = numberStat(stats, 'gemini_new_unique_url_count');
+  const newUniqueCount = geminiNewUniqueCount + numberStat(stats, 'seed_new_unique_url_count');
   const hasMergedArtifact = Boolean(mergedCandidateRelPath);
+  const geminiDiscoveryNoNewUniqueUrl = Boolean(llmUsed) && geminiNewUniqueCount === 0;
   if (status === FAILED_LLM_CREDENTIALS || !hasMergedArtifact || mergedCount === 0) {
     return {
       nextStep: 'blocked',
@@ -193,23 +195,28 @@ function sourceDiscoveryHandoff({
   if (publishableCount > 0) {
     return {
       nextStep: 'run_03',
-      label: '03 진행 가능',
+      label: geminiDiscoveryNoNewUniqueUrl ? '03 진행 가능 — Gemini 신규 URL 없음' : '03 진행 가능',
       reason: seedPublishableCount > 0 && geminiPublishableCount === 0
         ? 'Seed evidence expansion에서 publishable 후보가 확인되었습니다.'
-        : 'Gemini 또는 seed discovery에서 publishable 후보가 확인되었습니다.'
+        : 'Gemini 또는 seed discovery에서 publishable 후보가 확인되었습니다.',
+      gemini_discovery_no_new_unique_url: geminiDiscoveryNoNewUniqueUrl
     };
   }
   if (newUniqueCount === 0 || sourceDiscoveryFeedbackReport?.status === 'WARNING') {
     return {
       nextStep: 'strengthen_candidates',
-      label: '03 진행 가능하나 후보 보강 권장',
-      reason: 'merged artifact는 생성되었지만 Gemini 신규 publishable 후보가 없거나 parser/source gap이 남아 있습니다.'
+      label: geminiDiscoveryNoNewUniqueUrl
+        ? '03 진행 가능하나 후보 보강 권장 — Gemini 신규 URL 없음'
+        : '03 진행 가능하나 후보 보강 권장',
+      reason: 'merged artifact는 생성되었지만 Gemini 신규 publishable 후보가 없거나 parser/source gap이 남아 있습니다.',
+      gemini_discovery_no_new_unique_url: geminiDiscoveryNoNewUniqueUrl
     };
   }
   return {
     nextStep: 'run_03',
     label: '03 진행 가능',
-    reason: 'merged candidate artifact가 생성되었습니다.'
+    reason: 'merged candidate artifact가 생성되었습니다.',
+    gemini_discovery_no_new_unique_url: false
   };
 }
 
@@ -284,7 +291,8 @@ function renderReport({
     status,
     stats,
     mergedCandidateRelPath,
-    sourceDiscoveryFeedbackReport
+    sourceDiscoveryFeedbackReport,
+    llmUsed
   });
   const verdict = sourceDiscoveryVerdict({
     status,
@@ -347,6 +355,18 @@ function renderReport({
     '- PR body에는 편집장 1차 판단에 필요한 요약만 남깁니다.',
     ''
   ];
+
+  if (handoff.gemini_discovery_no_new_unique_url) {
+    lines.push(
+      '### ⚠️ Gemini 신규 URL 없음 (Ineffective Discovery)',
+      '',
+      `Gemini discovery가 실행됐지만 manual 후보와 전부 중복입니다 (gemini_new_unique_url_count=${stats?.gemini_new_unique_url_count ?? 0}).`,
+      'source coverage가 늘지 않았습니다.',
+      '',
+      '**권장 조치:** source family 확장, discovery prompt 재검토, 또는 seed URL 추가를 고려하세요.',
+      ''
+    );
+  }
 
   if (status === FAILED_LLM_CREDENTIALS) {
     lines.push(
@@ -1479,5 +1499,6 @@ module.exports = {
   renderReport,
   renderSourceDiscoveryFeedbackMarkdown,
   run,
-  selectEvidenceFetchTargets
+  selectEvidenceFetchTargets,
+  sourceDiscoveryHandoff
 };
