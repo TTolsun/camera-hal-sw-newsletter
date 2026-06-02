@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-06-03",
+  "validations": [
+    {
+      "proposal_id": "io26-media-pipeline",
+      "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "accepted": false,
+      "rejected_reason": "domain_not_allowed",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "io26-adaptive-apps",
+      "candidate_url": "https://goo.gle/AdaptiveApps_IO26",
+      "normalized_url": "https://goo.gle/AdaptiveApps_IO26",
+      "accepted": false,
+      "rejected_reason": "domain_not_allowed",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "io26-ai-android-camera",
+      "candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "io26-ai-android-camera",
+      "candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "linux-media-rust-bindings",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "linux-media-rust-bindings",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "linux-media-rust-bindings",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    }
+  ],
+  "counts": {
+    "domain_not_allowed": 2,
+    "accepted": 5
+  }
+}
