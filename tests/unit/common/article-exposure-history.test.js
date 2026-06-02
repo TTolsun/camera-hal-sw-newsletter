@@ -9,6 +9,7 @@ const {
   dedupeByArticleIdentity,
   readExposureHistory,
   recordArticleExposure,
+  recordNewsletterArticles,
   writeExposureHistory
 } = require('../../../scripts/newsroom/common/article-exposure-history');
 
@@ -125,4 +126,78 @@ test('exposure history writes stable JSON', () => {
   assert.equal(written.articles[0].first_exposed_at, '2026-05-23');
   assert.equal(written.articles[0].last_exposed_at, '2026-05-23');
   assert.deepEqual(written.articles[0].exposure_types, ['homepage_headline']);
+});
+
+test('recordArticleExposure sets cooldown_until for newsletter_article type', () => {
+  let history = { schemaVersion: 1, coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false }, articles: [] };
+  history = recordArticleExposure(history, {
+    title: 'CameraX 1.6.1 fix',
+    source_url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'
+  }, {
+    date: '2026-06-03',
+    type: 'newsletter_article',
+    cooldownDays: 21
+  });
+  assert.equal(history.articles[0].exposure_type, 'newsletter_article');
+  assert.equal(history.articles[0].newsletter_date, '2026-06-03');
+  assert.equal(history.articles[0].cooldown_until, '2026-06-24');
+});
+
+test('recordArticleExposure does not set cooldown_until for homepage_headline type', () => {
+  let history = { schemaVersion: 1, coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false }, articles: [] };
+  history = recordArticleExposure(history, {
+    title: 'CameraX headline',
+    source_url: 'https://example.com'
+  }, {
+    date: '2026-06-03',
+    type: 'homepage_headline'
+  });
+  assert.ok(!history.articles[0].cooldown_until);
+});
+
+test('annotateArticleExposure marks published_within_cooldown when cooldown_until is in the future', () => {
+  const history = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false },
+    articles: [{
+      article_identity_key: 'url:https://example.com/camerax-fix',
+      exposure_type: 'newsletter_article',
+      newsletter_date: '2026-06-03',
+      cooldown_until: '2099-01-01'
+    }]
+  };
+  const candidate = { source_url: 'https://example.com/camerax-fix' };
+  const annotated = annotateArticleExposure(candidate, history);
+  assert.strictEqual(annotated.published_within_cooldown, true);
+  assert.strictEqual(annotated.last_newsletter_date, '2026-06-03');
+  assert.strictEqual(annotated.already_exposed, true);
+});
+
+test('annotateArticleExposure does not set published_within_cooldown when cooldown_until has passed', () => {
+  const history = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false },
+    articles: [{
+      article_identity_key: 'url:https://example.com/old-article',
+      exposure_type: 'newsletter_article',
+      newsletter_date: '2026-01-01',
+      cooldown_until: '2026-01-22'
+    }]
+  };
+  const candidate = { source_url: 'https://example.com/old-article' };
+  const annotated = annotateArticleExposure(candidate, history);
+  assert.strictEqual(annotated.published_within_cooldown, false);
+  assert.strictEqual(annotated.last_newsletter_date, null);
+});
+
+test('recordNewsletterArticles records all sections with newsletter_article type', () => {
+  let history = { schemaVersion: 1, coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false }, articles: [] };
+  const sections = [
+    { title: 'Article A', source_url: 'https://example.com/a' },
+    { title: 'Article B', source_url: 'https://example.com/b' }
+  ];
+  history = recordNewsletterArticles(history, sections, { date: '2026-06-03', cooldownDays: 21 });
+  assert.equal(history.articles.length, 2);
+  assert.ok(history.articles.every(a => a.exposure_type === 'newsletter_article'));
+  assert.ok(history.articles.every(a => a.cooldown_until === '2026-06-24'));
 });

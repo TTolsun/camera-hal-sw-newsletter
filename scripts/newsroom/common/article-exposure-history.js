@@ -111,21 +111,32 @@ function seedExposureHistoryFromNewsletters(root = process.cwd(), date = todayDa
   return history;
 }
 
+function addDays(dateStr, days) {
+  const d = new Date(dateStr);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
 function recordArticleExposure(history, article = {}, options = {}) {
   const normalized = normalizeExposureHistory(history, options.date || todayDate());
   const key = articleIdentityKey(article);
   const existingIndex = normalized.articles.findIndex(item => item.article_identity_key === key);
+  const exposureType = text(options.type || 'homepage_headline');
+  const newsletterDate = text(options.date || article.newsletter_date);
   const record = {
     article_identity_key: key,
     title: text(article.title),
     source_url: sourceUrl(article),
-    newsletter_date: text(options.date || article.newsletter_date),
+    newsletter_date: newsletterDate,
     newsletter_url: text(options.newsletterUrl || article.newsletter_url),
-    exposure_type: text(options.type || 'homepage_headline'),
+    exposure_type: exposureType,
     headline_score: Number.isFinite(Number(options.score)) ? Number(options.score) : null,
     reuse_reason: text(options.reuseReason),
     exposed_at: text(options.exposedAt || options.date || article.selected_at || todayDate())
   };
+  if (exposureType === 'newsletter_article' && newsletterDate) {
+    record.cooldown_until = addDays(newsletterDate, Number(options.cooldownDays) || 21);
+  }
   record.first_exposed_at = record.exposed_at;
   record.last_exposed_at = record.exposed_at;
   record.exposure_count = 1;
@@ -156,6 +167,20 @@ function recordArticleExposure(history, article = {}, options = {}) {
   return normalized;
 }
 
+function recordNewsletterArticles(history, sections = [], options = {}) {
+  let current = normalizeExposureHistory(history, options.date || todayDate());
+  for (const section of ensureArray(sections)) {
+    if (!section || typeof section !== 'object') continue;
+    current = recordArticleExposure(current, section, {
+      date: options.date,
+      type: 'newsletter_article',
+      newsletterUrl: options.newsletterUrl,
+      cooldownDays: options.cooldownDays || 21
+    });
+  }
+  return current;
+}
+
 function exposureMap(history = {}) {
   return new Map(ensureArray(history.articles)
     .map(item => [text(item.article_identity_key), item])
@@ -165,10 +190,16 @@ function exposureMap(history = {}) {
 function annotateArticleExposure(article = {}, history = {}) {
   const key = articleIdentityKey(article);
   const record = exposureMap(history).get(key) || null;
+  const today = todayDate();
+  const publishedWithinCooldown = record?.exposure_type === 'newsletter_article' &&
+    Boolean(record.cooldown_until) &&
+    today <= record.cooldown_until;
   return {
     ...article,
     article_identity_key: key,
     already_exposed: Boolean(record),
+    published_within_cooldown: publishedWithinCooldown,
+    last_newsletter_date: publishedWithinCooldown ? text(record.newsletter_date) : null,
     exposure_history_record: record
   };
 }
@@ -194,6 +225,7 @@ module.exports = {
   normalizeExposureHistory,
   readExposureHistory,
   recordArticleExposure,
+  recordNewsletterArticles,
   seedExposureHistoryFromNewsletters,
   writeExposureHistory
 };

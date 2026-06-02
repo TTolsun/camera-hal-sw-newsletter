@@ -86,6 +86,7 @@ const {
 const {
   readExposureHistory,
   recordArticleExposure,
+  recordNewsletterArticles,
   writeExposureHistory
 } = require('../common/article-exposure-history');
 const {
@@ -2266,7 +2267,7 @@ function updateNewsletterData(date, issue) {
   writeJson(dataPath, updated);
 }
 
-function persistHeadlineStateArtifacts({ date, shortlistReport, shouldWritePublicArtifacts }) {
+function persistHeadlineStateArtifacts({ date, shortlistReport, shouldWritePublicArtifacts, editor }) {
   if (!shouldWritePublicArtifacts || !shortlistReport?.homepage_headline_state) {
     return { files: [], exposureCoverage: shortlistReport?.article_exposure_coverage || null };
   }
@@ -2283,6 +2284,14 @@ function persistHeadlineStateArtifacts({ date, shortlistReport, shouldWritePubli
       score: state.current_headline.current_score,
       reuseReason: shortlistReport.headline_decision?.reason || shortlistReport.headline_decision?.decision || '',
       newsletterUrl: state.current_headline.newsletter_url
+    });
+  }
+  const sections = ensureArray(editor?.sections);
+  if (sections.length > 0) {
+    history = recordNewsletterArticles(history, sections, {
+      date,
+      newsletterUrl: `newsletters/${date}/index.html`,
+      cooldownDays: 21
     });
   }
   const historyPath = writeExposureHistory(root, history);
@@ -4401,7 +4410,8 @@ async function main() {
   const headlineArtifactResult = persistHeadlineStateArtifacts({
     date,
     shortlistReport,
-    shouldWritePublicArtifacts
+    shouldWritePublicArtifacts,
+    editor
   });
   if (headlineArtifactResult.exposureCoverage) {
     shortlistReport.article_exposure_coverage = headlineArtifactResult.exposureCoverage;

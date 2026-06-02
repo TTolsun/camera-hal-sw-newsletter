@@ -47,6 +47,10 @@ const {
   articleIdentityKey
 } = require('../common/article-identity');
 const {
+  annotateArticleExposure,
+  readExposureHistory
+} = require('../common/article-exposure-history');
+const {
   applyHomepageHeadlineSelection,
   candidateDateEvidence,
   candidateQualityFlags,
@@ -1125,8 +1129,19 @@ function shortlistWithFinalCandidates(shortlist, selected, reserve, cap = SHORTL
   return kept.reverse().slice(0, limit);
 }
 
-function selectionWarnings(selected) {
-  return [];
+function selectionWarnings(selected, options = {}) {
+  const warnings = [];
+  const items = ensureArray(selected);
+  if (!options.exposureHistory) return warnings;
+  for (const article of items) {
+    const annotated = annotateArticleExposure(article, options.exposureHistory);
+    if (annotated.published_within_cooldown) {
+      warnings.push(
+        `repeated_event_within_cooldown: "${article.title || article.headline || article.article_identity_key}" — last published ${annotated.last_newsletter_date}`
+      );
+    }
+  }
+  return warnings;
 }
 
 function selectionErrors(selected) {
@@ -1461,7 +1476,9 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   selected = headlineSelection.selected_articles;
   const windowDiagnostics = selectionResult.diagnostics;
   const reserve = reserveCandidates(selectionCandidatePool, selected, options);
-  const warnings = selectionWarnings(selected);
+  const exposureHistory = options.exposureHistory ||
+    (options.root ? readExposureHistory(options.root, date) : null);
+  const warnings = selectionWarnings(selected, { exposureHistory });
   const errors = selectionErrors(selected);
   const composition = compositionSummary(selected);
   const eligibleComposition = compositionSummary(shortlist);
