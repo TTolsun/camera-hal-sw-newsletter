@@ -65,6 +65,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: main
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -172,6 +173,7 @@ jobs:
             echo "Nothing to commit."
           else
             git commit -m "chore(newsroom): collect raw candidates for ${{ steps.raw-meta.outputs.date }}"
+            git pull --rebase origin main
             git push origin HEAD:main
           fi
 

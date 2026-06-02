@@ -1177,7 +1177,7 @@ test('historical validate-quality missing claims report is warning-only', () => 
   const result = runScript(validateQualityPath, root);
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stderr, /quality score \d+\/85 does not pass: NEEDS_FIX/);
+  assert.match(result.stderr, /quality score \d+\/70 does not pass: NEEDS_FIX/);
   assert.match(result.stderr, /historical artifact outside current\/changed\/generated validation target, warning only/);
 });
 

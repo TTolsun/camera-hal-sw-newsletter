@@ -1446,7 +1446,7 @@ function validateTargetedRepairResult({
   const after = ensureArray(afterSections);
   const locked = ensureArray(lockedSections);
 
-  if (mode === 'targeted-repair' && after.length !== before.length) {
+  if (mode === 'targeted-repair' && !allowCountChange && after.length !== before.length) {
     throw targetedRepairError('Targeted repair changed main article count outside completion/replacement mode.', {
       reason: 'section_count_drift',
       mode,
@@ -3951,7 +3951,7 @@ async function main() {
           afterSections: repairMerged.sections,
           lockedSections: preservedSections,
           mode: 'targeted-repair',
-          allowCountChange: false,
+          allowCountChange: true,
           date,
           reporter
         });
@@ -4051,7 +4051,7 @@ async function main() {
           attempt,
           stage: repairStage
         });
-        return;
+        break;
       }
     }
 

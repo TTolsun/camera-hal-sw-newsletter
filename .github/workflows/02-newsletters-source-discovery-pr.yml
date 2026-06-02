@@ -150,6 +150,7 @@ jobs:
             echo "Nothing to commit."
           else
             git commit -m "chore(newsroom): source discovery artifacts for ${{ steps.resolve-newsletter-date.outputs.date }}"
+            git pull --rebase origin main
             git push origin HEAD:main
           fi
 
