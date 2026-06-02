@@ -73,8 +73,10 @@ const {
   toLegacyEditorIssue
 } = require('../domain/newsletter-domain-normalize');
 const {
+  EDITORIAL_STORY_KEYS,
   STORY_CONTRACT_VERSION,
-  STORY_PUBLIC_CONTRACT_VERSION
+  STORY_PUBLIC_CONTRACT_VERSION,
+  validatePublicArticle
 } = require('../common/public-article-contract');
 const {
   PRODUCT_VERSION_TOKEN_PATTERN,
@@ -1728,6 +1730,22 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
           location,
           titleFinding.severity === 'fail' ? {} : { blocking: false, severity: 'soft' }
         );
+      }
+      if (storyTitleGate) {
+        const storyIssues = validatePublicArticle(section, index, {
+          issue: editor,
+          requireStoryContract: true
+        }).filter(i => i.type === 'empty_editorial_story_field');
+        if (storyIssues.length > 0) {
+          boundedDeduct(
+            state,
+            'editorial-story',
+            storyIssues.length,
+            `editorial_story fields incomplete: ${storyIssues.map(i => i.key).join(', ')}`,
+            location,
+            { blocking: false, severity: 'soft' }
+          );
+        }
       }
     }
     const claimValidation = validateArticleClaims({
