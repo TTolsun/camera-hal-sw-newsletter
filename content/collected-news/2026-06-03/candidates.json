@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-03",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 21,
-  "generated_at": "2026-06-02T19:36:15.205Z",
+  "generated_at": "2026-06-02T19:48:32.337Z",
   "sources_path": "data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -1012,7 +1012,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=pl",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=id",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -1026,7 +1026,7 @@
           "contentLength": 1760
         },
         {
-          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=pl",
+          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=id",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -1056,7 +1056,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=pl",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=id",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -1070,7 +1070,7 @@
           "contentLength": 1760
         },
         {
-          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=pl",
+          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=id",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -12518,6 +12518,20 @@
           "contentLength": 144898
         },
         {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgE-vRiyQ4kvd23LM6SpFv87Dnedt0b429a_dL-l8kxF5I_jOw5bUC5bCtiRppRFyEDK2zzTTs4eZBuL884kSl1XU-I1t-FRAaVPrYcKbxuIn9O9TlUps07MY95iTWRPYKLiBkGP0kbeJZB3T_0gBdYgsCdXhLBuvn07b9WDfdw9aHkGaN0Iamd9xtN38U/w1200-h630-p-k-no-nu/Bring%20Native%20Visibility%20to%20Your%20VoIP%20App%20Experience%20with%20Telecom's%20Latest%20Alpha%20%5BDESIGN%5D%5BABL_66%5D_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 111925
+        },
+        {
           "url": "https://developer.android.com/static/images/logos/android.svg",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
@@ -12546,6 +12560,20 @@
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
           "contentLength": 144898
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgE-vRiyQ4kvd23LM6SpFv87Dnedt0b429a_dL-l8kxF5I_jOw5bUC5bCtiRppRFyEDK2zzTTs4eZBuL884kSl1XU-I1t-FRAaVPrYcKbxuIn9O9TlUps07MY95iTWRPYKLiBkGP0kbeJZB3T_0gBdYgsCdXhLBuvn07b9WDfdw9aHkGaN0Iamd9xtN38U/w1200-h630-p-k-no-nu/Bring%20Native%20Visibility%20to%20Your%20VoIP%20App%20Experience%20with%20Telecom's%20Latest%20Alpha%20%5BDESIGN%5D%5BABL_66%5D_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 111925
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -17454,20 +17482,6 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
-          "sourceUrl": "https://source.android.com/docs/security/bulletin",
-          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Security Bulletin",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -17484,20 +17498,6 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
-          "sourceUrl": "https://source.android.com/docs/security/bulletin",
-          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Security Bulletin",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
