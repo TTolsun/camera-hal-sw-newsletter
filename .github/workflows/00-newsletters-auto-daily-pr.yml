@@ -25,6 +25,7 @@ jobs:
     uses: ./.github/workflows/01-newsletters-source-collect-pr.yml
     with:
       newsletter_date: ${{ github.event.inputs.newsletter_date || '' }}
+      auto_mode: true
     secrets: inherit
 
   discover:
@@ -32,6 +33,7 @@ jobs:
     uses: ./.github/workflows/02-newsletters-source-discovery-pr.yml
     with:
       newsletter_date: ${{ needs.collect.outputs.date }}
+      auto_mode: true
     secrets: inherit
 
   generate:
