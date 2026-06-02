@@ -341,6 +341,23 @@
       ]
     },
     {
+      "cluster_id": "0643321d4a8e79e3",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/prioritizing-memory-efficiency-steps-for-android-17.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/prioritizing-memory-efficiency-steps-for-android-17.html",
+      "canonical_title": "Prioritizing Memory Efficiency: Essential Steps for Android 17",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/prioritizing-memory-efficiency-steps-for-android-17.html",
+          "title": "Prioritizing Memory Efficiency: Essential Steps for Android 17",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "9e95b9aeb5650263",
       "cluster_key": "https://source.android.com/docs/whatsnew",
       "canonical_url": "https://source.android.com/docs/whatsnew",
@@ -498,20 +515,13 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
       "canonical_title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
           "title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
-          "title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings - Lyude Paul",
-          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -522,20 +532,13 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
       "canonical_title": "[PATCH v16 0/6] Rust bindings for gem shmem",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
           "title": "[PATCH v16 0/6] Rust bindings for gem shmem",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
-          "title": "[PATCH v16 0/6] Rust bindings for gem shmem - Lyude Paul",
-          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -614,20 +617,13 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
       "canonical_title": "[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
           "title": "[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
-          "title": "[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device - Lyude Paul",
-          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -678,23 +674,6 @@
         {
           "url": "https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko",
           "title": "Annotations for C++26 Hashing -- Krystian Piękoś",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "214d719a12834106",
-      "cluster_key": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
-      "canonical_url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
-      "canonical_title": "C++26: Structured Bindings in Conditions -- Sandor Dargo",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
-          "title": "C++26: Structured Bindings in Conditions -- Sandor Dargo",
           "canonical": true,
           "reliability": "official-community",
           "manual_seed": false
