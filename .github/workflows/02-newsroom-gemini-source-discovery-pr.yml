@@ -41,7 +41,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: newsroom-source-discovery-${{ github.event.inputs.newsletter_date || 'auto-kst-today' }}
+  group: newsroom-source-discovery-${{ inputs.newsletter_date || github.event.inputs.newsletter_date || 'auto-kst-today' }}
   cancel-in-progress: false
 
 jobs:

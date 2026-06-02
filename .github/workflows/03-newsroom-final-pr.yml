@@ -28,6 +28,13 @@ on:
         required: false
         default: ""
         type: string
+  workflow_call:
+    inputs:
+      newsletter_date:
+        description: "Newsletter date in YYYY-MM-DD. Empty means today in KST."
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -35,7 +42,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: newsroom-final-${{ github.event.inputs.newsletter_date || 'auto-kst-today' }}
+  group: newsroom-final-${{ inputs.newsletter_date || github.event.inputs.newsletter_date || 'auto-kst-today' }}
   cancel-in-progress: false
 
 jobs:
@@ -43,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
+      NEWSLETTER_DATE: ${{ inputs.newsletter_date || github.event.inputs.newsletter_date || '' }}
       NEWSROOM_CANDIDATE_INPUT_MODE: artifact
       NEWSROOM_CANDIDATE_INPUT_PATH: ""
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -84,7 +91,7 @@ jobs:
       - name: Resolve newsletter date
         id: resolve-newsletter-date
         env:
-          INPUT_NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
+          INPUT_NEWSLETTER_DATE: ${{ inputs.newsletter_date || github.event.inputs.newsletter_date || '' }}
         run: |
           set -euo pipefail
 

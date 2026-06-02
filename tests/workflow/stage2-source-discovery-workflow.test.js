@@ -23,8 +23,8 @@ test('stage 2 and 3 manual workflows resolve empty newsletter dates to KST today
 
   assert.match(stage2, expectedInput);
   assert.match(stage3, expectedInput);
-  assert.match(stage2, /group: newsroom-source-discovery-\$\{\{ github\.event\.inputs\.newsletter_date \|\| 'auto-kst-today' \}\}/);
-  assert.match(stage3, /group: newsroom-final-\$\{\{ github\.event\.inputs\.newsletter_date \|\| 'auto-kst-today' \}\}/);
+  assert.match(stage2, /group: newsroom-source-discovery-\$\{\{ inputs\.newsletter_date \|\| github\.event\.inputs\.newsletter_date \|\| 'auto-kst-today' \}\}/);
+  assert.match(stage3, /group: newsroom-final-\$\{\{ inputs\.newsletter_date \|\| github\.event\.inputs\.newsletter_date \|\| 'auto-kst-today' \}\}/);
   assert.doesNotMatch(stage2, /group: newsroom-source-discovery-\$\{\{ github\.event\.inputs\.newsletter_date \|\| github\.run_id \}\}/);
   assert.doesNotMatch(stage3, /group: newsroom-final-\$\{\{ github\.event\.inputs\.newsletter_date \|\| github\.run_id \}\}/);
 
