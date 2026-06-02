@@ -4,24 +4,25 @@
 - linked_evidence_mode: extract_only
 - enable_network: false
 - candidate_count: 40
-- total_linked_evidence: 0
-- source_aware_linked_evidence: 1342
-- warning_count: 34
+- total_linked_evidence: 4
+- source_aware_linked_evidence: 1348
+- warning_count: 37
 
 ## Fetch Status Counts
 
-- none
+- skipped: 4
 
 ## Impact Type Counts
 
-- build_dependency_fix: 12
-- camera_api_change: 2
+- build_dependency_fix: 10
+- camera_api_change: 1
 - documentation_only: 2
-- generic_tooling_change: 4
+- generic_tooling_change: 3
+- runtime_behavior_change: 1
 - security_component_camera_related: 3
 - test_only_change: 1
-- unknown: 13
-- video_capture_fix: 3
+- unknown: 15
+- video_capture_fix: 4
 
 ## Candidates
 
@@ -45,23 +46,23 @@
 - What&apos;s new &nbsp;|&nbsp; Android Open Source Project: 0 evidence, impact=unknown, recommendation=unknown
 - Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project: 0 evidence, impact=documentation_only, recommendation=watch
 - Android XR Updates for Unity, Unreal, and Godot: 0 evidence, impact=unknown, recommendation=unknown
+- Building for the Intelligence System on Android: 0 evidence, impact=unknown, recommendation=unknown
 - What's new in Android for Cars: Unifying platforms and unlocking premium experiences: 0 evidence, impact=unknown, recommendation=unknown
 - What's New in Wear OS 7: 0 evidence, impact=unknown, recommendation=unknown
 - Overview: 0 evidence, impact=security_component_camera_related, recommendation=watch
 - June: 0 evidence, impact=security_component_camera_related, recommendation=watch
-- Re: [PATCH WIP v5 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms: 0 evidence, impact=unknown, recommendation=unknown
+- [PATCH] ACPI: scan: Honor _DEP for Intel CVS devices: 0 evidence, impact=build_dependency_fix, recommendation=watch
+- Re: [PATCH 01/11] params: bound array element output to the caller's page buffer: 0 evidence, impact=unknown, recommendation=unknown
+- Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats: 0 evidence, impact=runtime_behavior_change, recommendation=main
 - How ref qualifiers led to deducing this: 0 evidence, impact=build_dependency_fix, recommendation=watch
 - C++: The Documentary trailer: 0 evidence, impact=generic_tooling_change, recommendation=watch
+- [PATCH v7 1/2] dt-bindings: Pinefeat cef168 lens control board: 0 evidence, impact=video_capture_fix, recommendation=main
 - Re: [PATCH v2 1/2] PM: hibernate: add pm_hibernation_snapshot_done() helper: 0 evidence, impact=unknown, recommendation=unknown
-- Re: [PATCH WIP v5 6/9] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init: 0 evidence, impact=video_capture_fix, recommendation=main
-- Re: [PATCH v14 5/5] media: qcom: camss: vfe: Add support for VFE gen4: 0 evidence, impact=camera_api_change, recommendation=main
-- Re: [PATCH v14 2/5] media: qcom: camss: Add Kaanapali compatible camss driver: 0 evidence, impact=video_capture_fix, recommendation=main
-- [PATCH v4 5/5] media: qcom: camss: vfe: Add support for VFE 980: 0 evidence, impact=unknown, recommendation=unknown
-- [PATCH v4 1/5] media: dt-bindings: Add CAMSS device for SM8750: 0 evidence, impact=test_only_change, recommendation=watch
+- [PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980: 0 evidence, impact=unknown, recommendation=unknown
+- [PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750: 0 evidence, impact=test_only_change, recommendation=watch
+- Re: [PATCH v7 2/2] media: i2c: Pinefeat cef168 lens control board driver: 0 evidence, impact=video_capture_fix, recommendation=main
+- Re: [PATCH v7 1/2] dt-bindings: Pinefeat cef168 lens control board: 0 evidence, impact=unknown, recommendation=unknown
+- [PATCH v7 2/2] media: i2c: Pinefeat cef168 lens control board driver: 0 evidence, impact=video_capture_fix, recommendation=main
+- [syzbot] [media?] KASAN: slab-use-after-free Read in em28xx_v4l2_open: 4 evidence, impact=build_dependency_fix, recommendation=watch
 - Upcoming C++ User Group meetings in June 2026: 0 evidence, impact=generic_tooling_change, recommendation=watch
 - Let the Compiler Check Your Units -- Wu Yongwei: 0 evidence, impact=generic_tooling_change, recommendation=watch
-- The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo: 0 evidence, impact=build_dependency_fix, recommendation=watch
-- What reinterpret_cast doesn&apos;t do -- Andreas Fertig: 0 evidence, impact=build_dependency_fix, recommendation=watch
-- Annotations for C++26 Hashing -- Krystian Piękoś: 0 evidence, impact=build_dependency_fix, recommendation=watch
-- C++26: Structured Bindings in Conditions -- Sandor Dargo: 0 evidence, impact=build_dependency_fix, recommendation=watch
-- CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos: 0 evidence, impact=generic_tooling_change, recommendation=watch
