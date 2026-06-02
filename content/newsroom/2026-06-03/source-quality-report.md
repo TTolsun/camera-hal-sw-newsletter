@@ -44,8 +44,5 @@
 | blocked_candidate | 0.431 | C++26: Structured Bindings in Conditions -- Sandor Dargo | https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo |
 | strong_candidate | 0.802 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
 | blocked_candidate | 0.492 | Android Developers Blog: Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html |
-| review_candidate | 0.72 | [PATCH v16 0/6] Rust bindings for gem shmem - Lyude Paul | https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/ |
-| review_candidate | 0.72 | [PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings - Lyude Paul | https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/ |
-| review_candidate | 0.72 | [PATCH v16 5/6] rust: faux: Allow retrieving a bound Device - Lyude Paul | https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/ |
-| review_candidate | 0.72 | Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris - Daniel J Blueman | https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/ |
+| blocked_candidate | 0.492 | Android Developers Blog: Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today |
 

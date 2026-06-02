@@ -34,13 +34,13 @@
 | 항목 | 값 | 판단 |
 | --- | --- | --- |
 | manual 후보 | 40 | 입력 |
-| Gemini 후보 | 6 | 실행됨 |
+| Gemini 후보 | 3 | 실행됨 |
 | Gemini 신규 unique 후보 | 0 | 없음 |
-| Gemini publishable 후보 | 5 | 있음 |
+| Gemini publishable 후보 | 1 | 있음 |
 | seed 후보 | 0 | 없음 |
 | seed 신규 unique 후보 | 0 | 없음 |
 | seed publishable 후보 | 0 | 없음 |
-| 중복 후보 | 6 | 확인 필요 |
+| 중복 후보 | 3 | 확인 필요 |
 | parser gap | 1 | 보강 필요 |
 | Gemini parser failure | 0 | 없음 |
 | rejected: taxonomy_gap | 2 | bucket/classifier 또는 허용 domain 보강 필요 |
