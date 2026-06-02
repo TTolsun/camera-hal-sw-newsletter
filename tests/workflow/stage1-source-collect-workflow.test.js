@@ -27,3 +27,15 @@ test('schedule cutover leaves only the daily auto PR workflow on the newsroom sc
   assert.doesNotMatch(stage3, /^\s*schedule:/m);
   assert.doesNotMatch(stage3, /npm run collect/);
 });
+
+test('01 workflow accepts workflow_call trigger for auto mode', () => {
+  const workflowDir = path.join(__dirname, '..', '..', '.github', 'workflows');
+  const stage1 = fs.readFileSync(path.join(workflowDir, '01-newsroom-manual-source-collect-pr.yml'), 'utf8');
+
+  assert.match(stage1, /^\s*workflow_call:/m);
+  assert.match(stage1, /value: \$\{\{ jobs\.create-raw-candidate-pr\.outputs\.date \}\}/);
+  assert.match(stage1, /Commit candidates to main \(auto mode\)/);
+  assert.match(stage1, /github\.event_name == 'workflow_call'/);
+  assert.match(stage1, /github\.event_name == 'workflow_dispatch'/);
+  assert.match(stage1, /git push origin HEAD:main/);
+});
