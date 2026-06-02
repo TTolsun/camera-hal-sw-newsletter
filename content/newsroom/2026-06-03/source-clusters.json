@@ -168,8 +168,8 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "canonical_title": "Build native Android apps in Google AI Studio",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 4,
+      "duplicate_count": 3,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
@@ -181,6 +181,20 @@
         {
           "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
           "title": "Start building today - Build native Android apps in Google AI Studio",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -515,13 +529,20 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
       "canonical_title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
           "title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
+          "title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings - Lyude Paul",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -532,13 +553,20 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
       "canonical_title": "[PATCH v16 0/6] Rust bindings for gem shmem",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
           "title": "[PATCH v16 0/6] Rust bindings for gem shmem",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
+          "title": "[PATCH v16 0/6] Rust bindings for gem shmem - Lyude Paul",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -617,8 +645,8 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
       "canonical_title": "[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
@@ -626,21 +654,11 @@
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "684d39c545b6c152",
-      "cluster_key": "https://lore.kernel.org/linux-media/8854824e-06c2-43b3-86c2-8c2c28f9ad63@meta.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/8854824e-06c2-43b3-86c2-8c2c28f9ad63@meta.com/",
-      "canonical_title": "Re: [PATCH v2 9/9] vfio/pci: Add mmap() attributes to DMABUF feature",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
+        },
         {
-          "url": "https://lore.kernel.org/linux-media/8854824e-06c2-43b3-86c2-8c2c28f9ad63@meta.com/",
-          "title": "Re: [PATCH v2 9/9] vfio/pci: Add mmap() attributes to DMABUF feature",
-          "canonical": true,
+          "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
+          "title": "[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device - Lyude Paul",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -651,13 +669,20 @@
       "cluster_key": "https://lore.kernel.org/linux-media/camvg2ssnyh=kukrdfnuotpyu7p17inyzcywckht4eazxdzdjfg@mail.gmail.com",
       "canonical_url": "https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/",
       "canonical_title": "Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/",
           "title": "Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/",
+          "title": "Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris - Daniel J Blueman",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -674,6 +699,23 @@
         {
           "url": "https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko",
           "title": "Annotations for C++26 Hashing -- Krystian Piękoś",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "214d719a12834106",
+      "cluster_key": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
+      "canonical_url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
+      "canonical_title": "C++26: Structured Bindings in Conditions -- Sandor Dargo",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
+          "title": "C++26: Structured Bindings in Conditions -- Sandor Dargo",
           "canonical": true,
           "reliability": "official-community",
           "manual_seed": false

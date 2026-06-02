@@ -39,8 +39,14 @@
 | blocked_candidate | 0.455 | The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo | https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru |
 | blocked_candidate | 0.455 | What reinterpret_cast doesn&apos;t do -- Andreas Fertig | https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig |
 | blocked_candidate | 0.62 | [PATCH v16 5/6] rust: faux: Allow retrieving a bound Device | https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/ |
-| blocked_candidate | 0.62 | Re: [PATCH v2 9/9] vfio/pci: Add mmap() attributes to DMABUF feature | https://lore.kernel.org/linux-media/8854824e-06c2-43b3-86c2-8c2c28f9ad63@meta.com/ |
 | blocked_candidate | 0.62 | Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris | https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/ |
 | blocked_candidate | 0.431 | Annotations for C++26 Hashing -- Krystian Piękoś | https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko |
+| blocked_candidate | 0.431 | C++26: Structured Bindings in Conditions -- Sandor Dargo | https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo |
 | strong_candidate | 0.802 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
+| blocked_candidate | 0.492 | Android Developers Blog: Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html |
+| blocked_candidate | 0.492 | Android Developers Blog: Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today |
+| review_candidate | 0.72 | [PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings - Lyude Paul | https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/ |
+| review_candidate | 0.72 | [PATCH v16 0/6] Rust bindings for gem shmem - Lyude Paul | https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/ |
+| review_candidate | 0.72 | [PATCH v16 5/6] rust: faux: Allow retrieving a bound Device - Lyude Paul | https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/ |
+| review_candidate | 0.72 | Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris - Daniel J Blueman | https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/ |
 

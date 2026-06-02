@@ -36,7 +36,7 @@
       "claims": [
         {
           "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"id-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
           "confidence": "medium"
         }
       ],
@@ -44,6 +44,98 @@
       "android_hal_relevance": 0.7,
       "ai_relevance": 0,
       "technical_depth": 0.802,
+      "warnings": []
+    },
+    {
+      "id": "gemini-2cda43838cde3f2d",
+      "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
+      "title": "[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device - Lyude Paul",
+      "published_at": "2026-06-02",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device - Lyude Paul",
+          "evidence_text": "<html><head><title>[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device - Lyude Paul</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-7fad71b79fca5cf4",
+      "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
+      "title": "[PATCH v16 0/6] Rust bindings for gem shmem - Lyude Paul",
+      "published_at": "2026-06-02",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v16 0/6] Rust bindings for gem shmem - Lyude Paul",
+          "evidence_text": "<html><head><title>[PATCH v16 0/6] Rust bindings for gem shmem - Lyude Paul</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216dark.css?69",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-a6bba1ddfb2143b7",
+      "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
+      "title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings - Lyude Paul",
+      "published_at": "2026-06-02",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings - Lyude Paul",
+          "evidence_text": "<html><head><title>[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings - Lyude Paul</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-b2b9f7e1f4de8524",
+      "url": "https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/",
+      "title": "Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris - Daniel J Blueman",
+      "published_at": "2026-06-02",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris - Daniel J Blueman",
+          "evidence_text": "<html><head><title>Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris - Daniel J Blueman</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
       "warnings": []
     },
     {
@@ -70,49 +162,118 @@
       "warnings": []
     },
     {
-      "id": "8edd18929c9fbdd9",
-      "url": "https://goo.gle/AdaptiveApps_IO26",
-      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-      "published_at": "Tue, 19 May 2026 13:00:00 +0000",
-      "source_type": "roundup_child",
+      "id": "d982879fe3845606",
+      "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
+      "title": "[PATCH v16 0/6] Rust bindings for gem shmem",
+      "published_at": "2026-06-02T17:28:25Z",
+      "source_type": "rss_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
+          "claim": "Most of this patch series has already been pushed upstream, this is just the second half of the patch series that has not been pushed yet + some additional changes which were required to implement changes requested by the mailing list. This patch series is originally from Asahi, previously posted by Daniel Almeida. The previous version of the patch series can be found here: https://patchwork.freedesktop.org/series/164580/ Branch with patches applied available here: https://gitlab.freedesktop.org",
+          "evidence_text": "<html><head><title>[PATCH v16 0/6] Rust bindings for gem shmem - Lyude Paul</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216dark.css?69",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.51,
+      "android_hal_relevance": 0.51,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.644,
+      "warnings": []
+    },
+    {
+      "id": "6713fce8be86c45c",
+      "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
+      "title": "[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device",
+      "published_at": "2026-06-02T17:28:45Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "When writing up some rust code that used faux devices for unit testing, I noticed that we never actually added the Bound device context to faux::Registration's AsRef implementation. This being said: the Registration object itself is proof that a driver is bound to the device - so this should be safe. Signed-off-by: Lyude Paul --- rust/kernel/faux.rs | 7 ++++--- 1 file changed , 4 insertions(+), 3 deletions(-) diff --git a/rust/kernel/faux.rs b/rust/kernel/faux.rs index 43b4974f48cd2..e0856b2964a",
+          "evidence_text": "<html><head><title>[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device - Lyude Paul</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.62,
+      "warnings": []
+    },
+    {
+      "id": "eaa6a73bca53d24e",
+      "url": "https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/",
+      "title": "Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris",
+      "published_at": "2026-06-02T15:35:45Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "On Tue, 2 Jun 2026 at 18:27, Bryan O'Donoghue wrote: > > On 01/06/2026 05:13, Daniel J Blueman wrote: > > On X1-family hamoa platforms, Iris DMA below IOVA 0x25800000 (600MB) > > triggers unhandled SMMU page faults > > How do we know that is a correct address - does it come from qcom > documentation or trial and error ? @Vikash, beyond your comment I linked in the patch [1] kindly cite a source for the different stream-ID <600MB behaviour, and share specifics, eg if silicon, firmware, or driver",
+          "evidence_text": "<html><head><title>Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris - Daniel J Blueman</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.62,
+      "warnings": []
+    },
+    {
+      "id": "bc5082e71b64fa32",
+      "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
+      "title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings",
+      "published_at": "2026-06-02T17:28:34Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "One of the more obvious use cases for gem shmem objects is the ability to create mappings into their contents. So, let's hook this up in our rust bindings. Signed-off-by: Lyude Paul --- V7: * Switch over to the new iosys map bindings that use the Io trait V8: * Get rid of iosys_map bindings for now, only support non-iomem types * s/as_shmem()/as_raw_shmem() V9: * Get rid of some outdated comments I missed * Add missing SIZE check to raw_vmap() * Add a proper unit test that ensures that we actual",
+          "evidence_text": "<html><head><title>[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings - Lyude Paul</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.578,
+      "warnings": []
+    },
+    {
+      "id": "gemini-fac75a8d436dc70f",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Developers Blog: Build native Android apps in Google AI Studio",
           "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 1,
-      "android_hal_relevance": 1,
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
       "ai_relevance": 0.5,
-      "technical_depth": 0.893,
-      "warnings": []
-    },
-    {
-      "id": "9b460337b26c1fbb",
-      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
-      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
-      "published_at": "Tue, 02 Jun 2026 17:00:00 +0000",
-      "source_type": "roundup_child",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "By leveraging Jetpack CameraX and Media3, you can build professional-grade experiences that feel native across the entire ecosystem.&nbsp; It starts with high-fidelity capture using the CameraXViewfinder Composable, which ensures your preview remains perfectly scaled and responsive on any form factor, including foldables and tablets.",
-          "evidence_text": "<!DOCTYPE html><html style=\"font-size: 62.5%;font-family: Roboto, Arial, sans-serif;\" lang=\"en\" darker-dark-theme darker-dark-theme-deprecate system-icons color-version=\"v2_0\" typography typography-spacing><head><script data-id=\"_gd\" nonce=\"b596bQbIlghFDZXGk52Ccg\">window.WIZ_global_data = {\"AfY8Hf\":false,\"FL1an\":false,\"HiPsbb\":0,\"MUE6Ne\":\"youtube_web\",\"MuJWjd\":false,\"UUFaWc\":\"%.@.null,1000,2]\",\"cfb2h\":\"youtube.web-front-end-critical_20260601.08_p0\",\"fPDxwd\":[],\"hsFLT\":\"%.@.null,10,3]\",\"iCzhFc\":f",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 1,
-      "android_hal_relevance": 1,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.893,
+      "technical_depth": 0.492,
       "warnings": []
     }
   ]
