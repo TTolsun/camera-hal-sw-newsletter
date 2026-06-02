@@ -35,7 +35,7 @@ test('01 workflow accepts workflow_call trigger for auto mode', () => {
   assert.match(stage1, /^\s*workflow_call:/m);
   assert.match(stage1, /value: \$\{\{ jobs\.create-raw-candidate-pr\.outputs\.date \}\}/);
   assert.match(stage1, /Commit candidates to main \(auto mode\)/);
-  assert.match(stage1, /github\.event_name == 'workflow_call'/);
-  assert.match(stage1, /github\.event_name == 'workflow_dispatch'/);
+  assert.match(stage1, /inputs\.auto_mode == true/);
+  assert.match(stage1, /inputs\.auto_mode != true/);
   assert.match(stage1, /git push origin HEAD:main/);
 });
