@@ -3767,6 +3767,7 @@ async function main() {
           '3줄 브리핑과 "다음 관전 포인트"만 간결하게 작성하고 메인 기사를 만들지 마세요.'
         ].join('\n') : '',
         '각 기사의 article_sections.verified_facts 모든 항목은 대응하는 claim_type=fact claim으로 binding되어야 합니다. verified_facts 개수보다 적은 수의 fact claim을 만들지 마세요.',
+        '각 claim의 evidence_ids는 해당 기사 candidate의 source_extraction.evidence_ids에 실제로 존재하는 ID만 사용하세요. candidate에 evidence_ids가 없거나 source_extraction이 없으면 evidence_ids를 빈 배열([])로 두세요. 존재하지 않는 ID를 만들어 쓰지 마세요.',
         '각 기사의 public_article.editorial_story를 반드시 채우세요: reader_scenario(현업 HAL 엔지니어가 실제로 겪을 법한 디버깅/CI/리뷰 상황 — 가정법, 1~2문장), what_happened(source에서 확인되는 사실 요약, 1~2문장), why_it_matters(Camera HAL / Driver / native tooling 관점의 의미, 1~2문장), field_scenario(실제 capture session/HAL 설정/CI 시나리오 연결, 1~2문장), not_to_overclaim(source가 명시하지 않은 수치/API/계층 주장 한 줄 경고), editor_take(편집자 한 줄 판단). 모든 필드는 빈 문자열이 아니어야 합니다.',
         '사실과 해석을 분리하세요. source links를 보존하세요. schema와 일치하는 JSON만 반환하세요.',
         'briefing은 정확히 3개 item이어야 합니다.'
