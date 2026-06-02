@@ -1,6 +1,75 @@
 {
   "sources": [
     {
+      "id": "gemini-1087b2aa81ee577b",
+      "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/",
+      "title": "[PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750 - Hangxiang Ma",
+      "published_at": "2026-06-02",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750 - Hangxiang Ma",
+          "evidence_text": "<html><head><title>[PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750 - Hangxiang Ma</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nh",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-723b6ee7c1854388",
+      "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/",
+      "title": "[PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980 - Hangxiang Ma",
+      "published_at": "2026-06-02",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980 - Hangxiang Ma",
+          "evidence_text": "<html><head><title>[PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980 - Hangxiang Ma</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\n",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "9d6a71d7cc9d58e5",
+      "url": "https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/",
+      "title": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats",
+      "published_at": "2026-06-01T18:59:28Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "On 6/1/26 17:03, Bryan O'Donoghue wrote: > On 01/06/2026 10:01, Wangao Wang wrote: >> >> >> On 2026/5/21 17:24, Neil Armstrong wrote: >>> This adds the plumbing to support decoding HEVC, VP9 and AV1 >>> streams into 10bit pixel formats, linear and compressed. >>> >>> This has only been tested on SM8550 & SM8650 with HEVC, and was >>> inspired by Venus, DRM MSM and the downstream vidc driver for the >>> buffer calculations and HFI messages. >>> >>> Gstreamer support for QC08 and QC10 need the MR",
+          "evidence_text": "<html><head><title>Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0,
+      "technical_depth": 0.692,
+      "warnings": []
+    },
+    {
       "id": "4cd1324b82d886c6",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "title": "Build native Android apps in Google AI Studio",
@@ -21,6 +90,75 @@
       "android_hal_relevance": 0.66,
       "ai_relevance": 0.5,
       "technical_depth": 0.666,
+      "warnings": []
+    },
+    {
+      "id": "844f9dc618f3913b",
+      "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/",
+      "title": "[PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980",
+      "published_at": "2026-06-02T00:32:36Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add support for Video Front End (VFE) that is on the SM8750 SoCs. VFE gen4 has support for VFE 980. This change limits SM8750 VFE output lines to 3 for now as constrained by the CAMSS driver framework. Reviewed-by: Bryan O'Donoghue Co-developed-by: Atiya Kailany Signed-off-by: Atiya Kailany Signed-off-by: Hangxiang Ma --- drivers/media/platform/qcom/camss/camss-vfe-gen4.c | 10 +- drivers/media/platform/qcom/camss/camss-vfe.c | 2 + drivers/media/platform/qcom/camss/camss.c | 135 +++++++++++++++++",
+          "evidence_text": "<html><head><title>[PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980 - Hangxiang Ma</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\n",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.51,
+      "android_hal_relevance": 0.51,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.644,
+      "warnings": []
+    },
+    {
+      "id": "gemini-a528f73adc1e2d7b",
+      "url": "https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/",
+      "title": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong",
+      "published_at": "2026-04-11",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong",
+          "evidence_text": "<html><head><title>Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.635,
+      "warnings": []
+    },
+    {
+      "id": "416c9958f718e6d3",
+      "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/",
+      "title": "[PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750",
+      "published_at": "2026-06-02T00:32:29Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add bindings for Camera Subsystem (CAMSS) on the Qualcomm SM8750 platform. The SM8750 platform provides: - 6 x CSIPHY (CSI Physical Layer) - 3 x TPG (Test Pattern Generator) - 3 x CSID (CSI Decoder) - 2 x CSID Lite - 3 x VFE (Video Front End), 5 RDI per VFE - 2 x VFE Lite, 4 RDI per VFE Lite Reviewed-by: Bryan O'Donoghue Reviewed-by: Krzysztof Kozlowski Signed-off-by: Hangxiang Ma --- .../bindings/media/qcom,sm8750-camss.yaml | 433 +++++++++++++++++++++ 1 file changed , 433 insertions(+) diff --",
+          "evidence_text": "<html><head><title>[PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750 - Hangxiang Ma</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nh",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.51,
+      "android_hal_relevance": 0.51,
+      "ai_relevance": 0,
+      "technical_depth": 0.599,
       "warnings": []
     },
     {

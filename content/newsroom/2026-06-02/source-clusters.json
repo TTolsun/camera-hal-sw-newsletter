@@ -416,17 +416,58 @@
       ]
     },
     {
-      "cluster_id": "4e003121bea8d294",
-      "cluster_key": "https://lore.kernel.org/linux-media/4138a85a-e6b9-4a81-9025-b2f809988788@nxsw.ie",
-      "canonical_url": "https://lore.kernel.org/linux-media/4138a85a-e6b9-4a81-9025-b2f809988788@nxsw.ie/",
-      "canonical_title": "Re: [PATCH WIP v5 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+      "cluster_id": "dabfa4248044748a",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260601194040.18223-1-miguel.vadillo@intel.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260601194040.18223-1-miguel.vadillo@intel.com/",
+      "canonical_title": "[PATCH] ACPI: scan: Honor _DEP for Intel CVS devices",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/4138a85a-e6b9-4a81-9025-b2f809988788@nxsw.ie/",
-          "title": "Re: [PATCH WIP v5 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+          "url": "https://lore.kernel.org/linux-media/20260601194040.18223-1-miguel.vadillo@intel.com/",
+          "title": "[PATCH] ACPI: scan: Honor _DEP for Intel CVS devices",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "df391e43ada4ce11",
+      "cluster_key": "https://lore.kernel.org/linux-media/ah3qwz4cqhrbhzcl@casper.infradead.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/ah3qWZ4cqhrbHZcl@casper.infradead.org/",
+      "canonical_title": "Re: [PATCH 01/11] params: bound array element output to the caller's page buffer",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/ah3qWZ4cqhrbHZcl@casper.infradead.org/",
+          "title": "Re: [PATCH 01/11] params: bound array element output to the caller's page buffer",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bf0714f3155ba0fe",
+      "cluster_key": "https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/",
+      "canonical_title": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/",
+          "title": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/",
+          "title": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -467,6 +508,23 @@
       ]
     },
     {
+      "cluster_id": "8542056b3204b7ad",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260601204814.19148-2-asmirnou@pinefeat.co.uk",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260601204814.19148-2-asmirnou@pinefeat.co.uk/",
+      "canonical_title": "[PATCH v7 1/2] dt-bindings: Pinefeat cef168 lens control board",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260601204814.19148-2-asmirnou@pinefeat.co.uk/",
+          "title": "[PATCH v7 1/2] dt-bindings: Pinefeat cef168 lens control board",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "82a2574f42e172b5",
       "cluster_key": "https://lore.kernel.org/linux-media/cajz5v0gvcsowjl0oqkqag-vfinpb9rj06knokg9xaq+6wp0ygg@mail.gmail.com",
       "canonical_url": "https://lore.kernel.org/linux-media/CAJZ5v0gvcsowJL0oqKqaG-VFinpb9Rj06KNOkG9XaQ+6wp0Ygg@mail.gmail.com/",
@@ -484,16 +542,64 @@
       ]
     },
     {
-      "cluster_id": "8b3099de98cf7942",
-      "cluster_key": "https://lore.kernel.org/linux-media/a547e784-9e24-4dba-abcb-6c22130af2f2@ixit.cz",
-      "canonical_url": "https://lore.kernel.org/linux-media/a547e784-9e24-4dba-abcb-6c22130af2f2@ixit.cz/",
-      "canonical_title": "Re: [PATCH WIP v5 6/9] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init",
+      "cluster_id": "28dc5644cf8378d6",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/",
+          "title": "[PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/",
+          "title": "[PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980 - Hangxiang Ma",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "37c90a74c48bf094",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/",
+          "title": "[PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/",
+          "title": "[PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750 - Hangxiang Ma",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "fdc3aed227264cae",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260601210610.8912f1f00893@smtp.kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260601210610.8912F1F00893@smtp.kernel.org/",
+      "canonical_title": "Re: [PATCH v7 2/2] media: i2c: Pinefeat cef168 lens control board driver",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/a547e784-9e24-4dba-abcb-6c22130af2f2@ixit.cz/",
-          "title": "Re: [PATCH WIP v5 6/9] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init",
+          "url": "https://lore.kernel.org/linux-media/20260601210610.8912F1F00893@smtp.kernel.org/",
+          "title": "Re: [PATCH v7 2/2] media: i2c: Pinefeat cef168 lens control board driver",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -501,16 +607,16 @@
       ]
     },
     {
-      "cluster_id": "46ac47a570ec52c3",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260601164403.8ce831f00893@smtp.kernel.org",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260601164403.8CE831F00893@smtp.kernel.org/",
-      "canonical_title": "Re: [PATCH v14 5/5] media: qcom: camss: vfe: Add support for VFE gen4",
+      "cluster_id": "4dc0997729a84dfb",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260601205226.049ba1f00893@smtp.kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260601205226.049BA1F00893@smtp.kernel.org/",
+      "canonical_title": "Re: [PATCH v7 1/2] dt-bindings: Pinefeat cef168 lens control board",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260601164403.8CE831F00893@smtp.kernel.org/",
-          "title": "Re: [PATCH v14 5/5] media: qcom: camss: vfe: Add support for VFE gen4",
+          "url": "https://lore.kernel.org/linux-media/20260601205226.049BA1F00893@smtp.kernel.org/",
+          "title": "Re: [PATCH v7 1/2] dt-bindings: Pinefeat cef168 lens control board",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -518,16 +624,16 @@
       ]
     },
     {
-      "cluster_id": "2ca44d145bda9531",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260601155921.2a9831f00893@smtp.kernel.org",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260601155921.2A9831F00893@smtp.kernel.org/",
-      "canonical_title": "Re: [PATCH v14 2/5] media: qcom: camss: Add Kaanapali compatible camss driver",
+      "cluster_id": "a4a0b0a1186d1d8e",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260601204814.19148-3-asmirnou@pinefeat.co.uk",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260601204814.19148-3-asmirnou@pinefeat.co.uk/",
+      "canonical_title": "[PATCH v7 2/2] media: i2c: Pinefeat cef168 lens control board driver",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260601155921.2A9831F00893@smtp.kernel.org/",
-          "title": "Re: [PATCH v14 2/5] media: qcom: camss: Add Kaanapali compatible camss driver",
+          "url": "https://lore.kernel.org/linux-media/20260601204814.19148-3-asmirnou@pinefeat.co.uk/",
+          "title": "[PATCH v7 2/2] media: i2c: Pinefeat cef168 lens control board driver",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -535,33 +641,16 @@
       ]
     },
     {
-      "cluster_id": "38d01d83c4689820",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v4-5-1eb6f432cfd1@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v4-5-1eb6f432cfd1@oss.qualcomm.com/",
-      "canonical_title": "[PATCH v4 5/5] media: qcom: camss: vfe: Add support for VFE 980",
+      "cluster_id": "c2598292e6e32d52",
+      "cluster_key": "https://lore.kernel.org/linux-media/6a1de864.278b5b03.2bcf39.003b.gae@google.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/6a1de864.278b5b03.2bcf39.003b.GAE@google.com/",
+      "canonical_title": "[syzbot] [media?] KASAN: slab-use-after-free Read in em28xx_v4l2_open",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v4-5-1eb6f432cfd1@oss.qualcomm.com/",
-          "title": "[PATCH v4 5/5] media: qcom: camss: vfe: Add support for VFE 980",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "45e9e6e6c72dd1f7",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v4-1-1eb6f432cfd1@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v4-1-1eb6f432cfd1@oss.qualcomm.com/",
-      "canonical_title": "[PATCH v4 1/5] media: dt-bindings: Add CAMSS device for SM8750",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v4-1-1eb6f432cfd1@oss.qualcomm.com/",
-          "title": "[PATCH v4 1/5] media: dt-bindings: Add CAMSS device for SM8750",
+          "url": "https://lore.kernel.org/linux-media/6a1de864.278b5b03.2bcf39.003b.GAE@google.com/",
+          "title": "[syzbot] [media?] KASAN: slab-use-after-free Read in em28xx_v4l2_open",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -613,74 +702,6 @@
         {
           "url": "https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru",
           "title": "The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "fca43c61db562aa7",
-      "cluster_key": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
-      "canonical_url": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
-      "canonical_title": "What reinterpret_cast doesn&apos;t do -- Andreas Fertig",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
-          "title": "What reinterpret_cast doesn&apos;t do -- Andreas Fertig",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "cf974cc0bd172517",
-      "cluster_key": "https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko",
-      "canonical_url": "https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko",
-      "canonical_title": "Annotations for C++26 Hashing -- Krystian Piękoś",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko",
-          "title": "Annotations for C++26 Hashing -- Krystian Piękoś",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "214d719a12834106",
-      "cluster_key": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
-      "canonical_url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
-      "canonical_title": "C++26: Structured Bindings in Conditions -- Sandor Dargo",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
-          "title": "C++26: Structured Bindings in Conditions -- Sandor Dargo",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "4981c9af965291cd",
-      "cluster_key": "https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos",
-      "canonical_url": "https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos",
-      "canonical_title": "CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos",
-          "title": "CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos",
           "canonical": true,
           "reliability": "official-community",
           "manual_seed": false

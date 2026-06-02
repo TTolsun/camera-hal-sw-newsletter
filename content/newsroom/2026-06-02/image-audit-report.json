@@ -6,20 +6,20 @@
     "markdown": "newsletters/2026-06-02/newsletter.md",
     "html": "newsletters/2026-06-02/index.html"
   },
-  "mode": "publish-target",
+  "mode": "review-or-draft",
   "render_consistency_scope": "editor_draft",
   "summary": {
-    "article_count": 1,
+    "article_count": 2,
     "rendered_image_count": 1,
     "markdown_image_count": 1,
     "fallback_visual_count": 0,
-    "image_candidates_count": 1,
-    "valid_image_candidate_count": 1,
-    "selected_image_count": 1,
-    "empty_selected_with_candidates_count": 0,
+    "image_candidates_count": 2,
+    "valid_image_candidate_count": 2,
+    "selected_image_count": 0,
+    "empty_selected_with_candidates_count": 2,
     "selected_image_without_valid_candidate_count": 0,
     "selected_image_not_in_candidates_count": 0,
-    "repairable_article_count": 0,
+    "repairable_article_count": 2,
     "selected_by_image_selection_count": 0,
     "repaired_in_this_run_count": 0,
     "repaired_article_count": 0,
@@ -29,22 +29,39 @@
     "selected_image_render_mismatch_count": 0,
     "publish_blocking_issue_count": 0
   },
-  "repairable": false,
-  "repairable_articles": [],
+  "repairable": true,
+  "repairable_articles": [
+    {
+      "index": 1,
+      "headline": "Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화",
+      "selected_candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다."
+    },
+    {
+      "index": 2,
+      "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화",
+      "selected_candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다."
+    }
+  ],
   "articles": [
     {
       "index": 1,
-      "headline": "Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
-      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+      "headline": "Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화",
+      "selectedImage": "",
       "image_candidate_count": 1,
       "valid_image_candidate_count": 1,
       "selected_image_is_fallback": false,
-      "selected_image_in_candidates": true,
-      "selected_image_has_valid_candidate": true,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
       "selected_image_not_in_candidates": false,
       "selected_image_without_valid_candidate": false,
       "selected_image_evidence": null,
-      "repairable": false,
+      "repairable": true,
       "reasonCode": "selected",
       "reasonLabel": "대표 이미지 선택됨",
       "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
@@ -52,6 +69,38 @@
       "candidate_evidence": [
         {
           "candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 130,
+          "sourceKind": "og",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화",
+      "selectedImage": "",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 1,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": true,
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "selected_candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
           "reasonCode": "selected",
           "reasonLabel": "대표 이미지 선택됨",
           "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",

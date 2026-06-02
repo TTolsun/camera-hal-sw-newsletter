@@ -436,16 +436,52 @@
       }
     },
     {
-      "candidate_id": "5d511296a8725c4f",
-      "url": "https://lore.kernel.org/linux-media/4138a85a-e6b9-4a81-9025-b2f809988788@nxsw.ie/",
-      "title": "Re: [PATCH WIP v5 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
-      "source_quality_score": 0.719,
+      "candidate_id": "7216380668f1b87d",
+      "url": "https://lore.kernel.org/linux-media/20260601194040.18223-1-miguel.vadillo@intel.com/",
+      "title": "[PATCH] ACPI: scan: Honor _DEP for Intel CVS devices",
+      "source_quality_score": 0.788,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 0.85,
-        "camera_relevance": 0.81,
-        "android_hal_relevance": 0.81,
-        "technical_depth": 0.55,
+        "camera_relevance": 0.87,
+        "android_hal_relevance": 0.87,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "17655be25d2eda8a",
+      "url": "https://lore.kernel.org/linux-media/ah3qWZ4cqhrbHZcl@casper.infradead.org/",
+      "title": "Re: [PATCH 01/11] params: bound array element output to the caller's page buffer",
+      "source_quality_score": 0.692,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.63,
+        "android_hal_relevance": 0.63,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "9d6a71d7cc9d58e5",
+      "url": "https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/",
+      "title": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats",
+      "source_quality_score": 0.692,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.63,
+        "android_hal_relevance": 0.63,
+        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -490,6 +526,24 @@
       }
     },
     {
+      "candidate_id": "a9f9fcd2996928fa",
+      "url": "https://lore.kernel.org/linux-media/20260601204814.19148-2-asmirnou@pinefeat.co.uk/",
+      "title": "[PATCH v7 1/2] dt-bindings: Pinefeat cef168 lens control board",
+      "source_quality_score": 0.668,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "23968b3839671983",
       "url": "https://lore.kernel.org/linux-media/CAJZ5v0gvcsowJL0oqKqaG-VFinpb9Rj06KNOkG9XaQ+6wp0Ygg@mail.gmail.com/",
       "title": "Re: [PATCH v2 1/2] PM: hibernate: add pm_hibernation_snapshot_done() helper",
@@ -508,27 +562,9 @@
       }
     },
     {
-      "candidate_id": "c18aa1abc0c47cf8",
-      "url": "https://lore.kernel.org/linux-media/a547e784-9e24-4dba-abcb-6c22130af2f2@ixit.cz/",
-      "title": "Re: [PATCH WIP v5 6/9] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init",
-      "source_quality_score": 0.668,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.57,
-        "android_hal_relevance": 0.57,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "411358f5b33ae92e",
-      "url": "https://lore.kernel.org/linux-media/20260601164403.8CE831F00893@smtp.kernel.org/",
-      "title": "Re: [PATCH v14 5/5] media: qcom: camss: vfe: Add support for VFE gen4",
+      "candidate_id": "844f9dc618f3913b",
+      "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/",
+      "title": "[PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980",
       "source_quality_score": 0.644,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -544,45 +580,9 @@
       }
     },
     {
-      "candidate_id": "6174ab1217e332e4",
-      "url": "https://lore.kernel.org/linux-media/20260601155921.2A9831F00893@smtp.kernel.org/",
-      "title": "Re: [PATCH v14 2/5] media: qcom: camss: Add Kaanapali compatible camss driver",
-      "source_quality_score": 0.644,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.51,
-        "android_hal_relevance": 0.51,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "0548f17b5f112ca2",
-      "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v4-5-1eb6f432cfd1@oss.qualcomm.com/",
-      "title": "[PATCH v4 5/5] media: qcom: camss: vfe: Add support for VFE 980",
-      "source_quality_score": 0.644,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.51,
-        "android_hal_relevance": 0.51,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "8743687aa3219a36",
-      "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v4-1-1eb6f432cfd1@oss.qualcomm.com/",
-      "title": "[PATCH v4 1/5] media: dt-bindings: Add CAMSS device for SM8750",
+      "candidate_id": "416c9958f718e6d3",
+      "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/",
+      "title": "[PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750",
       "source_quality_score": 0.599,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -590,6 +590,78 @@
         "camera_relevance": 0.51,
         "android_hal_relevance": 0.51,
         "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "ce06aa4185e2bdfe",
+      "url": "https://lore.kernel.org/linux-media/20260601210610.8912F1F00893@smtp.kernel.org/",
+      "title": "Re: [PATCH v7 2/2] media: i2c: Pinefeat cef168 lens control board driver",
+      "source_quality_score": 0.644,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "e7175def782ac0c5",
+      "url": "https://lore.kernel.org/linux-media/20260601205226.049BA1F00893@smtp.kernel.org/",
+      "title": "Re: [PATCH v7 1/2] dt-bindings: Pinefeat cef168 lens control board",
+      "source_quality_score": 0.644,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "3cb9b8e7625d63bf",
+      "url": "https://lore.kernel.org/linux-media/20260601204814.19148-3-asmirnou@pinefeat.co.uk/",
+      "title": "[PATCH v7 2/2] media: i2c: Pinefeat cef168 lens control board driver",
+      "source_quality_score": 0.644,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c262a9daf99f6613",
+      "url": "https://lore.kernel.org/linux-media/6a1de864.278b5b03.2bcf39.003b.GAE@google.com/",
+      "title": "[syzbot] [media?] KASAN: slab-use-after-free Read in em28xx_v4l2_open",
+      "source_quality_score": 0.644,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -652,78 +724,6 @@
       }
     },
     {
-      "candidate_id": "f385ac0350cd70bf",
-      "url": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
-      "title": "What reinterpret_cast doesn&apos;t do -- Andreas Fertig",
-      "source_quality_score": 0.455,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "41e1cccd629f39cd",
-      "url": "https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko",
-      "title": "Annotations for C++26 Hashing -- Krystian Piękoś",
-      "source_quality_score": 0.431,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.39,
-        "android_hal_relevance": 0.39,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "ffe6fcbffd7a84f4",
-      "url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
-      "title": "C++26: Structured Bindings in Conditions -- Sandor Dargo",
-      "source_quality_score": 0.431,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.39,
-        "android_hal_relevance": 0.39,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "69c657b3b232fdc2",
-      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos",
-      "title": "CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos",
-      "source_quality_score": 0.431,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.39,
-        "android_hal_relevance": 0.39,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-fac75a8d436dc70f",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
@@ -758,11 +758,66 @@
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
       }
+    },
+    {
+      "candidate_id": "gemini-a528f73adc1e2d7b",
+      "url": "https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/",
+      "title": "Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong",
+      "source_quality_score": 0.635,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 0.15,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-723b6ee7c1854388",
+      "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/",
+      "title": "[PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980 - Hangxiang Ma",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-1087b2aa81ee577b",
+      "url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/",
+      "title": "[PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750 - Hangxiang Ma",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
     }
   ],
   "counts": {
     "strong_candidate": 1,
     "blocked_candidate": 39,
-    "review_candidate": 2
+    "review_candidate": 4,
+    "weak_candidate": 1
   }
 }
