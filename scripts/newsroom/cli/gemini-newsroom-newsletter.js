@@ -2233,22 +2233,22 @@ async function validateOrRepairEditor(value, {
   });
 }
 
-const FACT_CHECK_LOCATION_ALLOWLIST = [
-  /public_article\.decision_metadata\./,
-  /public_article\.story_contract_version/
+const FACT_CHECK_SCHEMA_FIELD_BLOCKLIST = [
+  /public_article\.(decision_metadata|story_contract_version|editorial_story)/,
+  /\.(relevance_bucket|editorial_priority|aosp_camera_directness|driver_stack_relevance|soc_platform_relevance|native_tooling_relevance|counts_as_|finalSelectionEligibility|source_gap_risk|main_article_readiness|do_not_claim|evidence_origin|source_hint|resolvedImage|imageCandidates|imageSource|imageAttribution|imageAlt|imageLicenseStatus|imageUsageDecisionReason|selectedImage|source_candidate_url|source_candidate_hash|article_group_key|tooling_workflow_type|camera_hal_checks|action_hints|is_ai_related|article_type)/
 ];
 
-function isAllowlistedFactCheckLocation(item) {
+function isSchemaFieldFactCheckViolation(item) {
   const location = String(item?.location || '');
-  return FACT_CHECK_LOCATION_ALLOWLIST.some(pattern => pattern.test(location));
+  return FACT_CHECK_SCHEMA_FIELD_BLOCKLIST.some(pattern => pattern.test(location));
 }
 
 function validateFactCheck(value) {
   if (!['PASS', 'NEEDS_FIX'].includes(value.status)) {
     value.status = ensureArray(value.must_fix).length > 0 ? 'NEEDS_FIX' : 'PASS';
   }
-  value.must_fix = ensureArray(value.must_fix).filter(item => !isAllowlistedFactCheckLocation(item));
-  value.recommended_fixes = ensureArray(value.recommended_fixes).filter(item => !isAllowlistedFactCheckLocation(item));
+  value.must_fix = ensureArray(value.must_fix).filter(item => !isSchemaFieldFactCheckViolation(item));
+  value.recommended_fixes = ensureArray(value.recommended_fixes).filter(item => !isSchemaFieldFactCheckViolation(item));
   value.source_gaps = ensureArray(value.source_gaps);
   value.source_gap_count = numberOrDefault(value.source_gap_count, value.source_gaps.length);
   value.final_comment = value.final_comment || '';
