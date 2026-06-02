@@ -4,106 +4,73 @@
   "newsletter_date": "2026-06-03",
   "proposals": [
     {
-      "proposal_id": "io26-media-pipeline",
-      "topic_gap": "Comprehensive updates on Android media pipeline, including Media3, MediaCodec, MediaRecorder, and camera output integration. This covers the latest tools and best practices for building premium media experiences on Android.",
+      "proposal_id": "P1",
+      "topic_gap": "New media pipeline toolkit for premium Android experiences, potentially impacting camera output processing and integration.",
       "source_family": "android-media",
       "allowed_domains": [
-        "youtube.com",
-        "android-developers.googleblog.com",
-        "developer.android.com"
+        "youtube.com"
       ],
       "search_keywords": [
         "Android media pipeline",
-        "Media3 camera",
-        "MediaCodec camera output",
-        "MediaRecorder updates",
-        "Android video processing",
-        "camera A/V sync",
+        "camera output",
+        "video processing",
+        "Media3",
+        "MediaCodec",
+        "MediaRecorder",
         "Google I/O 2026 media"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "New features or improvements in Media3, MediaCodec, MediaRecorder related to camera output or video processing.",
-        "Updates on A/V sync, preview/surface handling, or performance optimizations for camera-generated media.",
-        "Best practices or new APIs for integrating camera output into media pipelines."
+        "Details on new APIs or tools for media processing",
+        "Improvements in camera output handling, recording, or playback paths",
+        "Performance enhancements for media pipelines involving camera data"
       ],
       "risk_notes": [
-        "The YouTube playlist title is broad ('Supercharge your media pipeline'). Need to verify specific talks within the playlist are relevant to camera output and media pipeline components.",
-        "The blog post 'Building Premium Android Experiences at Google I/O ‘26' is a general roundup; need to find specific sections or linked content relevant to camera/media pipeline."
+        "YouTube playlist might contain generic content; need to verify specific talks related to camera/media pipeline.",
+        "Content might be high-level marketing, lacking technical depth."
       ]
     },
     {
-      "proposal_id": "io26-adaptive-apps",
-      "topic_gap": "Updates on building seamless Android experiences across devices with Jetpack Compose, potentially impacting camera UI development or cross-device camera usage patterns.",
-      "source_family": "android",
+      "proposal_id": "P2",
+      "topic_gap": "Updates on testing camera images using automation, specifically related to AOSP's Camera ITS box.",
+      "source_family": "camera-hal",
       "allowed_domains": [
-        "android-developers.googleblog.com",
-        "developer.android.com"
+        "source.android.com"
       ],
       "search_keywords": [
-        "Android adaptive camera UI",
-        "Jetpack Compose camera",
-        "cross-device camera experience",
-        "foldable camera",
-        "tablet camera"
+        "Android Camera ITS",
+        "camera testing automation",
+        "AOSP camera compatibility",
+        "Camera HAL testing"
       ],
       "candidate_urls": [
-        "https://goo.gle/AdaptiveApps_IO26"
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "Guidance or new APIs for adaptive camera UIs across different form factors (foldables, tablets).",
-        "Impact of Jetpack Compose on camera preview rendering or control interfaces.",
-        "Cross-device camera sharing or synchronization features."
+        "New or updated guidelines for Camera ITS box setup and usage",
+        "Changes in automated camera image testing procedures",
+        "Impact on Camera HAL compliance and testing"
       ],
       "risk_notes": [
-        "The title 'Building seamless Android experiences across devices with Jetpack Compose' is general. Need to ensure the content specifically addresses camera-related UI/UX or multi-device camera interactions.",
-        "Could be more focused on general UI/layout than camera-specific implementations."
+        "Documentation updates might be minor or re-organizations, not necessarily new features or significant changes."
       ]
     },
     {
-      "proposal_id": "io26-ai-android-camera",
-      "topic_gap": "Latest updates on AI integration within Android for intelligent experiences, with a focus on how these advancements might impact camera features, image processing, or on-device AI for photography.",
-      "source_family": "ai-engineering",
-      "allowed_domains": [
-        "android-developers.googleblog.com",
-        "developer.android.com"
-      ],
-      "search_keywords": [
-        "Android AI camera",
-        "on-device AI photography",
-        "Google AI Studio camera",
-        "computational photography AI",
-        "Android machine learning camera"
-      ],
-      "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-        "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
-      ],
-      "expected_evidence": [
-        "New APIs or tools for integrating AI models with camera streams or captured images.",
-        "Examples of on-device AI for computational photography, scene understanding, or real-time effects.",
-        "Improvements in AI inference performance relevant to camera applications."
-      ],
-      "risk_notes": [
-        "The blog post 'Build native Android apps in Google AI Studio' is broad. Need to find specific mentions or examples related to camera integration or image/video AI processing.",
-        "Could be focused on general AI development without direct camera relevance."
-      ]
-    },
-    {
-      "proposal_id": "linux-media-rust-bindings",
-      "topic_gap": "Recent developments in Linux kernel media subsystems, specifically regarding Rust bindings for GEM shmem, which could impact future camera driver development or memory management for camera buffers.",
+      "proposal_id": "P3",
+      "topic_gap": "Rust bindings for GEM shmem in the Linux kernel media subsystem, potentially impacting future Android Camera HAL implementations or low-level media processing.",
       "source_family": "linux-camera",
       "allowed_domains": [
         "lore.kernel.org"
       ],
       "search_keywords": [
-        "Linux media Rust",
-        "GEM shmem camera",
-        "V4L2 Rust bindings",
-        "kernel camera memory management",
-        "Android HAL Linux media"
+        "Linux kernel media",
+        "Rust bindings",
+        "GEM shmem",
+        "V4L2",
+        "media device drivers",
+        "Android kernel camera"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
@@ -111,14 +78,13 @@
         "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/"
       ],
       "expected_evidence": [
-        "Details on the implementation and benefits of Rust bindings for GEM shmem in the context of media/camera drivers.",
-        "Discussion on how this impacts memory handling for camera frames or video buffers.",
-        "Potential implications for Android Camera HAL or V4L2 drivers."
+        "Details on the purpose and implementation of Rust bindings for GEM shmem",
+        "Discussion on the benefits for media device drivers",
+        "Potential implications for Android's use of Linux kernel media components"
       ],
       "risk_notes": [
-        "These are mailing list patches, which are highly technical and might not have immediate, direct impact on Android HAL SW.",
-        "The relevance to Android Camera HAL might be indirect or long-term.",
-        "Requires deep technical understanding of kernel internals."
+        "Highly technical and low-level kernel development, may not have direct, immediate impact on Android Camera HAL SW.",
+        "Still in patch review stage, not yet merged into mainline kernel."
       ]
     }
   ]

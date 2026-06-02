@@ -4,6 +4,7 @@
 |---|---:|---|---|
 | strong_candidate | 0.893 | Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26 | https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY |
 | strong_candidate | 0.893 | 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O | https://goo.gle/AdaptiveApps_IO26 |
+| strong_candidate | 0.829 | Test camera images using automation | https://source.android.com/docs/compatibility/cts/camera-its-box |
 | blocked_candidate | 0.648 | 17 Things to know for Android developers at Google I/O | https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html |
 | blocked_candidate | 0.475 | Android UI Development is Compose First | https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html |
 | blocked_candidate | 0.601 | Top AI on Android updates for building intelligent experiences from Google I/O ‘26 | https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html |
@@ -41,9 +42,7 @@
 | blocked_candidate | 0.62 | Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris | https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/ |
 | blocked_candidate | 0.431 | Annotations for C++26 Hashing -- Krystian Piękoś | https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko |
 | blocked_candidate | 0.431 | C++26: Structured Bindings in Conditions -- Sandor Dargo | https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo |
-| blocked_candidate | 0.431 | CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos | https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos |
-| blocked_candidate | 0.492 | Android Developers Blog: Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html |
-| blocked_candidate | 0.492 | Android Developers Blog: Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today |
+| strong_candidate | 0.802 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
 | review_candidate | 0.72 | [PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings - Lyude Paul | https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/ |
 | review_candidate | 0.72 | [PATCH v16 0/6] Rust bindings for gem shmem - Lyude Paul | https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/ |
 | review_candidate | 0.72 | [PATCH v16 5/6] rust: faux: Allow retrieving a bound Device - Lyude Paul | https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/ |

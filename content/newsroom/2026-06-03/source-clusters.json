@@ -38,6 +38,30 @@
       ]
     },
     {
+      "cluster_id": "bb0e15b6742fce01",
+      "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "canonical_title": "Test camera images using automation",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "title": "Test camera images using automation",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "ef27814b2c8c8636",
       "cluster_key": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
@@ -144,8 +168,8 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "canonical_title": "Build native Android apps in Google AI Studio",
-      "candidate_count": 4,
-      "duplicate_count": 3,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
@@ -157,20 +181,6 @@
         {
           "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
           "title": "Start building today - Build native Android apps in Google AI Studio",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -685,23 +695,6 @@
         {
           "url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
           "title": "C++26: Structured Bindings in Conditions -- Sandor Dargo",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "4981c9af965291cd",
-      "cluster_key": "https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos",
-      "canonical_url": "https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos",
-      "canonical_title": "CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos",
-          "title": "CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos",
           "canonical": true,
           "reliability": "official-community",
           "manual_seed": false

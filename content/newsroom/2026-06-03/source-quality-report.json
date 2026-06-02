@@ -40,6 +40,24 @@
       }
     },
     {
+      "candidate_id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "source_quality_score": 0.829,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.89,
+        "android_hal_relevance": 0.89,
+        "technical_depth": 0.55,
+        "recency_score": 0.5,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "499a4a6dab8bbf43",
       "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "title": "17 Things to know for Android developers at Google I/O",
@@ -706,54 +724,18 @@
       }
     },
     {
-      "candidate_id": "69c657b3b232fdc2",
-      "url": "https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos",
-      "title": "CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos",
-      "source_quality_score": 0.431,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.39,
-        "android_hal_relevance": 0.39,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-fac75a8d436dc70f",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
+      "candidate_id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.802,
+      "source_quality_bucket": "strong_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-fe7a2b2ca51287c9",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-      "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -815,8 +797,8 @@
     }
   ],
   "counts": {
-    "strong_candidate": 2,
-    "blocked_candidate": 38,
+    "strong_candidate": 4,
+    "blocked_candidate": 35,
     "review_candidate": 5
   }
 }
