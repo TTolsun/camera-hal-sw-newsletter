@@ -268,6 +268,7 @@ function siteFooterHtml(rootPath = '') {
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </nav>
+    <div class="content-wrap footer-legal"><small>© 2026 Camera SW Newsletter</small></div>
   </footer>`;
 }
 
