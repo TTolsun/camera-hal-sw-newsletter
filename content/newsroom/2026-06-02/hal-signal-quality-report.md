@@ -2,8 +2,8 @@
 
 ## Gate Boundary
 
-- status: WARN
-- input_completeness: partial
+- status: NEEDS_FIX
+- input_completeness: complete
 - quality validation records HAL signal deductions: true
 - publish gate blocks HAL signal hard blockers through quality status: true
 - review artifacts preserved: true
@@ -11,27 +11,27 @@
 ## Inputs
 
 - missing required: none
-- optional input_unavailable: source_effectiveness_report, evidence_pack_summary
+- optional input_unavailable: none
 
 ## Summary
 
-- main_article_count: 1
-- strong_signal_count: 0
-- usable_signal_count: 1
+- main_article_count: 2
+- strong_signal_count: 2
+- usable_signal_count: 0
 - weak_signal_count: 0
 - watchlist_only_count: 0
 - blocked_source_gap_count: 0
-- article_count_with_hal_signal_capsule: 1
+- article_count_with_hal_signal_capsule: 2
 - article_count_without_hal_signal_capsule: 0
 - android_multimedia_camera_output_count: 0
 - soc_platform_signal_count: 0
 - generic_signal_hard_blocker_count: 0
 - hal_signal_hard_blocker_count: 0
 - hard_blocker_reason_code_counts: {}
-- hal_impact_axis_counts: {"camerax_app_compatibility":1}
-- actionability_level_counts: {"none":1}
-- effective_actionability_level_counts: {"concrete_check":1}
-- signal_quality_status_counts: {"usable_signal":1}
+- hal_impact_axis_counts: {"camerax_app_compatibility":1,"native_tooling_workflow":1}
+- actionability_level_counts: {"measurable_test":2}
+- effective_actionability_level_counts: {"measurable_test":2}
+- signal_quality_status_counts: {"strong_signal":2}
 
 ## Count Semantics
 
@@ -42,4 +42,5 @@
 
 | # | Article | signal_quality_status | actionability_level | effective_actionability_level | hal_impact_axes | capsule | hard_blocker_reason_codes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Google I/O 2026: Jetpack Compose와 CameraX를 통한 다중 기기 적응형 카메라 미리보기 구현 | usable_signal | none | concrete_check | camerax_app_compatibility | yes | none |
+| 1 | Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화 | strong_signal | measurable_test | measurable_test | camerax_app_compatibility | yes | none |
+| 2 | Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화 | strong_signal | measurable_test | measurable_test | native_tooling_workflow | yes | none |

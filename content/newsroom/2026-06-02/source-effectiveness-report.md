@@ -9,9 +9,9 @@ Date: 2026-06-02
 - Unregistered candidates: 0
 - Eligible candidates: 2
 - Selected candidates: 2
-- Rendered main articles: 1
+- Rendered main articles: 2
 - Source gap candidates: 37
-- Generic noise candidates: 28
+- Generic noise candidates: 29
 - Duplicate candidates: 1
 - Recommendations: NO_RECENT_SIGNAL: 55, KEEP_AND_FIX_PARSER: 7
 - Selected main source quality coverage: 3/3
@@ -26,16 +26,16 @@ Date: 2026-06-02
 | Metric | Key | Count |
 | --- | --- | --- |
 | source_url_quality | official_dated_release | 21 |
-| source_url_quality | engineering_blog_with_camera_evidence | 9 |
-| source_url_quality | project_mailing_list_release | 7 |
+| source_url_quality | project_mailing_list_release | 11 |
+| source_url_quality | engineering_blog_with_camera_evidence | 5 |
 | source_url_quality | undated_reference_page | 2 |
 | source_url_quality | official_site_update_row | 1 |
 | source_quality_status | blocked | 37 |
 | source_quality_status | allowed | 3 |
 | blocker | source_gap_risk | 37 |
-| blocker | reference_only | 30 |
-| blocker | candidate_only_without_primary_confirmation | 7 |
-| blocker | cross_check_required_but_missing | 7 |
+| blocker | reference_only | 29 |
+| blocker | candidate_only_without_primary_confirmation | 11 |
+| blocker | cross_check_required_but_missing | 11 |
 | blocker | undated_reference_page | 2 |
 
 
@@ -53,7 +53,7 @@ _없음_
 
 | Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
 | --- | --- | --- | --- | --- | --- | --- |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 14.44 | 18 | 2 | 2 | 1 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 29.44 | 18 | 2 | 2 | 2 |
 
 ## Sources Needing Parser Repair
 
@@ -64,8 +64,8 @@ _없음_
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 2 | 0 | 2 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 9 | 0 | 9 | main_eligible=false |
-| lore-linux-media-list | KEEP_AND_FIX_PARSER | 7 | 0 | 7 | main_eligible=false |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 5 | 0 | 5 | main_eligible=false |
+| lore-linux-media-list | KEEP_AND_FIX_PARSER | 11 | 0 | 11 | main_eligible=false |
 
 ## Generic Noise / Downgrade Candidates
 
@@ -130,13 +130,13 @@ _없음_
 | venturebeat-ai | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yozm-it | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 14.44 | 18 | 0.1111 | 1 | 0.5 | 0.8889 | 0.8333 | 1 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 29.44 | 18 | 0.1111 | 1 | 1 | 0.8889 | 0.8333 | 1 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 0 | 2 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
-| iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 9 | 0 | 0 | 0 | 1 | 0.4444 | 0 |
-| lore-linux-media-list | KEEP_AND_FIX_PARSER | 0 | 7 | 0 | 0 | 0 | 1 | 0.5714 | 0 |
+| iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 5 | 0 | 0 | 0 | 1 | 0.6 | 0 |
+| lore-linux-media-list | KEEP_AND_FIX_PARSER | 0 | 11 | 0 | 0 | 0 | 1 | 0.5455 | 0 |
 
 ## Warnings
 

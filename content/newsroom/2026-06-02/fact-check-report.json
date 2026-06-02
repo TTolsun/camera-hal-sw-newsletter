@@ -1,8 +1,81 @@
 {
-  "status": "PASS",
-  "must_fix": [],
+  "status": "NEEDS_FIX",
+  "must_fix": [
+    {
+      "location": "sections[0].public_article.decision_metadata.impact",
+      "problem": "impact_level enum violation: 'Low' is not a valid enum value. Allowed values are: 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent', 'driver_image_pipeline', 'stream_buffer_metadata', 'cts_vts_its_cdd', 'performance_latency_thermal', 'soc_resource_contention', 'native_tooling_workflow', 'no_hal_runtime_impact', 'unknown'.",
+      "suggestion": "Replace 'Low' with a valid enum value from the allowed list, e.g., 'app_api_or_framework_adjacent'.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.decision_metadata.scope",
+      "problem": "scope enum violation: 'Framework' is not a valid enum value. Allowed values are: 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent', 'driver_image_pipeline', 'stream_buffer_metadata', 'cts_vts_its_cdd', 'performance_latency_thermal', 'soc_resource_contention', 'native_tooling_workflow', 'no_hal_runtime_impact', 'unknown'.",
+      "suggestion": "Replace 'Framework' with a valid enum value from the allowed list, e.g., 'camera_framework_behavior'.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.decision_metadata.scope",
+      "problem": "scope enum violation: 'SoC' is not a valid enum value. Allowed values are: 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent', 'driver_image_pipeline', 'stream_buffer_metadata', 'cts_vts_its_cdd', 'performance_latency_thermal', 'soc_resource_contention', 'native_tooling_workflow', 'no_hal_runtime_impact', 'unknown'.",
+      "suggestion": "Replace 'SoC' with a valid enum value from the allowed list, e.g., 'soc_resource_contention'.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.decision_metadata.action",
+      "problem": "action enum violation: 'Watch' is not a valid enum value. Allowed values are: 'test', 'log', 'metric', 'device_class', 'api_component', 'stream_combination', 'owner', 'poc_handoff', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'Watch' with a valid enum value from the allowed list, e.g., 'watchlist'.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.decision_metadata.action",
+      "problem": "action enum violation: 'Test' is not a valid enum value. Allowed values are: 'test', 'log', 'metric', 'device_class', 'api_component', 'stream_combination', 'owner', 'poc_handoff', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'Test' with a valid enum value from the allowed list, e.g., 'test'.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[0].public_article.decision_metadata.overclaim_risk",
+      "problem": "overclaim_risk enum violation: 'High' is not a valid enum value. Allowed values are: 'low', 'medium', 'high'.",
+      "suggestion": "Replace 'High' with a valid enum value from the allowed list, e.g., 'high'.",
+      "source_url": "https://goo.gle/AdaptiveApps_IO26"
+    },
+    {
+      "location": "sections[1].public_article.decision_metadata.impact",
+      "problem": "impact_level enum violation: 'Medium' is not a valid enum value. Allowed values are: 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent', 'driver_image_pipeline', 'stream_buffer_metadata', 'cts_vts_its_cdd', 'performance_latency_thermal', 'soc_resource_contention', 'native_tooling_workflow', 'no_hal_runtime_impact', 'unknown'.",
+      "suggestion": "Replace 'Medium' with a valid enum value from the allowed list, e.g., 'native_tooling_workflow'.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.decision_metadata.scope",
+      "problem": "scope enum violation: 'Tooling' is not a valid enum value. Allowed values are: 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent', 'driver_image_pipeline', 'stream_buffer_metadata', 'cts_vts_its_cdd', 'performance_latency_thermal', 'soc_resource_contention', 'native_tooling_workflow', 'no_hal_runtime_impact', 'unknown'.",
+      "suggestion": "Replace 'Tooling' with a valid enum value from the allowed list, e.g., 'native_tooling_workflow'.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.decision_metadata.scope",
+      "problem": "scope enum violation: 'AI' is not a valid enum value. Allowed values are: 'direct_hal_contract', 'camera_framework_behavior', 'app_api_or_framework_adjacent', 'driver_image_pipeline', 'stream_buffer_metadata', 'cts_vts_its_cdd', 'performance_latency_thermal', 'soc_resource_contention', 'native_tooling_workflow', 'no_hal_runtime_impact', 'unknown'.",
+      "suggestion": "Replace 'AI' with a valid enum value from the allowed list, e.g., 'native_tooling_workflow' if it impacts tooling, or 'unknown' if the impact is not directly on HAL/driver.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.decision_metadata.action",
+      "problem": "action enum violation: 'Watch' is not a valid enum value. Allowed values are: 'test', 'log', 'metric', 'device_class', 'api_component', 'stream_combination', 'owner', 'poc_handoff', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'Watch' with a valid enum value from the allowed list, e.g., 'watchlist'.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.decision_metadata.action",
+      "problem": "action enum violation: 'Test' is not a valid enum value. Allowed values are: 'test', 'log', 'metric', 'device_class', 'api_component', 'stream_combination', 'owner', 'poc_handoff', 'reference_only', 'watchlist'.",
+      "suggestion": "Replace 'Test' with a valid enum value from the allowed list, e.g., 'test'.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    },
+    {
+      "location": "sections[1].public_article.decision_metadata.overclaim_risk",
+      "problem": "overclaim_risk enum violation: 'Medium' is not a valid enum value. Allowed values are: 'low', 'medium', 'high'.",
+      "suggestion": "Replace 'Medium' with a valid enum value from the allowed list, e.g., 'medium'.",
+      "source_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+    }
+  ],
   "recommended_fixes": [],
   "source_gaps": [],
   "source_gap_count": 0,
-  "final_comment": "The article is well-structured and adheres to the editorial policy. All facts are source-backed, and the Camera HAL perspective and action items are clearly defined without overclaiming. The image selection is appropriate and the overall tone is technical and relevant to the target audience."
+  "final_comment": "The content is well-written and follows the editorial policy. However, there are several enum violations in the `public_article.decision_metadata` fields. These fields must use the exact enum values specified in the schema. Please correct the `impact`, `scope`, `action`, and `overclaim_risk` fields to use the allowed enum values."
 }

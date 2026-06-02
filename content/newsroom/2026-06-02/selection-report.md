@@ -15,13 +15,14 @@
 - Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.
 - Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.
 - Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
+- Keep forbidden buckets out of main article selection: generic_tech_watchlist.
 
 ## Candidate Pool Preflight
 
 - candidate_shortage_reviewable: false
 - candidate_pool_preflight_passed: true
 - shortage_reason_codes: none
-- publishable_candidate_count: 2
+- publishable_candidate_count: 4
 - required_publishable_candidate_count: 1
 - reserve_candidate_count: 0
 - required_reserve_candidate_count: 0
@@ -29,26 +30,27 @@
 
 ## Homepage Headline
 
-- decision: replaced_by_new_candidate
+- decision: retained_current_above_margin
 - current_headline_key: url:https://goo.gle/AdaptiveApps_IO26
-- replacement_headline_key: url:https://goo.gle/AdaptiveApps_IO26
+- replacement_headline_key: unknown
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
-- previous_stored_current_score: 96
-- runtime_decayed_score: 92
-- last_scored_at: 2026-05-31
+- previous_stored_current_score: 100
+- runtime_decayed_score: 100
+- last_scored_at: 2026-06-02
 - scored_at: 2026-06-02
 - latest_inclusion_mode: selected_normally
 - injected_from_snapshot: false
 - removed_due_to_headline_inclusion_count: 0
-- exposure_history_coverage: forward_only since 2026-05-23
+- exposure_history_coverage: unknown since unknown
 
 ## Source Parser Hints
 
 - OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.
 - CAMERA_DRIVER_SOURCE_SHORTAGE: Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.
 - CAMERA_DRIVER_SOURCE_SHORTAGE: Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
+- CANDIDATE_POOL_SHORTAGE: Keep forbidden buckets out of main article selection: generic_tech_watchlist.
 
 ## Gate Summary
 

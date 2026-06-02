@@ -11,7 +11,7 @@
     "source_quality_report": "content/newsroom/2026-06-02/source-quality-report.json",
     "source_discovery_feedback_report": "content/newsroom/2026-06-02/source-discovery-feedback-report.json",
     "merged_candidate_manifest": "content/collected-news/2026-06-02/merged-candidate-manifest.json",
-    "evidence_pack_summary": null
+    "evidence_pack_summary": "content/newsroom/2026-06-02/evidence-pack-summary.json"
   },
   "evidence_completeness": {
     "candidate_input": true,
@@ -22,7 +22,7 @@
     "source_quality_report": true,
     "source_discovery_feedback_report": true,
     "merged_candidate_manifest": true,
-    "evidence_pack_summary": false
+    "evidence_pack_summary": true
   },
   "raw_candidate_count": 39,
   "eligible_candidate_count": 2,
@@ -32,7 +32,7 @@
     "actual_news_shortage": false,
     "parser_extraction_failure": true,
     "source_gap_risk": false,
-    "taxonomy_missing": false,
+    "taxonomy_missing": true,
     "fallback_only_composition": true,
     "duplicate_or_noop_source_discovery": true
   },
@@ -71,7 +71,13 @@
       }
     ],
     "source_gap_risk": [],
-    "taxonomy_missing": [],
+    "taxonomy_missing": [
+      {
+        "reason": "3 camera-relevant candidate(s) were not mapped to a known camera bucket.",
+        "source_artifact": "content/collected-news/2026-06-02/merged-candidates.json",
+        "severity": "medium"
+      }
+    ],
     "fallback_only_composition": [
       {
         "reason": "composition_mode indicates fallback composition: FALLBACK_COMPOSITION.",
@@ -81,17 +87,12 @@
     ],
     "duplicate_or_noop_source_discovery": [
       {
-        "reason": "Gemini discovery produced 2 candidate(s) but gemini_new_unique_url_count=0.",
+        "reason": "Gemini discovery produced 5 candidate(s) but gemini_new_unique_url_count=0.",
         "source_artifact": "content/collected-news/2026-06-02/merged-candidate-manifest.json",
         "severity": "medium"
       },
       {
-        "reason": "Gemini discovery produced no new publishable candidates.",
-        "source_artifact": "content/collected-news/2026-06-02/merged-candidate-manifest.json",
-        "severity": "medium"
-      },
-      {
-        "reason": "Duplicate discovery signal detected: gemini_manual_duplicate_url_count=2, duplicate_discovery_gap_count=0.",
+        "reason": "Duplicate discovery signal detected: gemini_manual_duplicate_url_count=5, duplicate_discovery_gap_count=0.",
         "source_artifact": "content/collected-news/2026-06-02/merged-candidate-manifest.json",
         "severity": "medium"
       }
@@ -755,16 +756,16 @@
       "source_name": "ISO C++ Blog",
       "reliability": "official-community",
       "priority": "high",
-      "raw_count": 9,
+      "raw_count": 5,
       "eligible_count": 0,
-      "blocked_count": 9,
+      "blocked_count": 5,
       "main_eligible_count": 0,
       "top_blockers": [
         "main_eligible=false",
         "source_gap_risk=true",
-        "reference_only=true",
-        "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
-        "finalSelectionEligibility=exclude"
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist"
       ],
       "parser_failure_signals": [
         "Generic noise candidates were detected from artifact exclusion metadata.",
@@ -915,9 +916,9 @@
       "source_name": "lore.kernel.org linux-media list",
       "reliability": "project-official",
       "priority": "high",
-      "raw_count": 7,
+      "raw_count": 11,
       "eligible_count": 0,
-      "blocked_count": 7,
+      "blocked_count": 11,
       "main_eligible_count": 0,
       "top_blockers": [
         "main_eligible=false",
@@ -1354,19 +1355,6 @@
     {
       "action": "KEEP_AND_FIX_PARSER",
       "action_label": "소스 유지, 파서 수정",
-      "source_id": "iso-cpp-blog",
-      "source_name": "ISO C++ Blog",
-      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
-      "severity": "high",
-      "source_artifact": "source-effectiveness-report.json",
-      "source_priority": "high",
-      "source_reliability": "official-community",
-      "blocked_count": 9,
-      "raw_count": 9
-    },
-    {
-      "action": "KEEP_AND_FIX_PARSER",
-      "action_label": "소스 유지, 파서 수정",
       "source_id": "lore-linux-media-list",
       "source_name": "lore.kernel.org linux-media list",
       "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
@@ -1374,8 +1362,21 @@
       "source_artifact": "source-effectiveness-report.json",
       "source_priority": "high",
       "source_reliability": "project-official",
-      "blocked_count": 7,
-      "raw_count": 7
+      "blocked_count": 11,
+      "raw_count": 11
+    },
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "iso-cpp-blog",
+      "source_name": "ISO C++ Blog",
+      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official-community",
+      "blocked_count": 5,
+      "raw_count": 5
     },
     {
       "action": "KEEP_AND_FIX_PARSER",
@@ -1430,11 +1431,20 @@
       "raw_count": 1
     },
     {
+      "action": "ADD_MULTIMEDIA_BUCKET",
+      "action_label": "Multimedia bucket 추가",
+      "source_id": "",
+      "source_name": "",
+      "reason": "3 camera-relevant candidate(s) were not mapped to a known camera bucket.",
+      "severity": "medium",
+      "source_artifact": "content/collected-news/2026-06-02/merged-candidates.json"
+    },
+    {
       "action": "REPAIR_SOURCE_DISCOVERY_DUPLICATES",
       "action_label": "Source discovery 중복 제거/수리",
       "source_id": "",
       "source_name": "",
-      "reason": "Gemini discovery produced 2 candidate(s) but gemini_new_unique_url_count=0.; Gemini discovery produced no new publishable candidates.; Duplicate discovery signal detected: gemini_manual_duplicate_url_count=2, duplicate_discovery_gap_count=0.",
+      "reason": "Gemini discovery produced 5 candidate(s) but gemini_new_unique_url_count=0.; Duplicate discovery signal detected: gemini_manual_duplicate_url_count=5, duplicate_discovery_gap_count=0.",
       "severity": "medium",
       "source_artifact": "content/collected-news/2026-06-02/merged-candidate-manifest.json"
     },
@@ -1450,26 +1460,7 @@
       "source_reliability": "official",
       "blocked_count": 0,
       "raw_count": 0
-    },
-    {
-      "action": "NO_ACTION_THIN_WEEK",
-      "action_label": "기사 부족 주간으로 판단, 조치 없음",
-      "source_id": "android-developers-blog-camera",
-      "source_name": "Android Developers Blog - Camera",
-      "reason": "No recent candidates were collected for this source.",
-      "severity": "medium",
-      "source_artifact": "source-effectiveness-report.json",
-      "source_priority": "high",
-      "source_reliability": "official",
-      "blocked_count": 0,
-      "raw_count": 0
     }
   ],
-  "warnings": [
-    {
-      "type": "missing_optional_artifact",
-      "message": "content/newsroom/2026-06-02/evidence-pack-summary.json not found; partial diagnosis will continue.",
-      "source_artifact": "content/newsroom/2026-06-02/evidence-pack-summary.json"
-    }
-  ]
+  "warnings": []
 }

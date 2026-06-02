@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-02",
   "validations": [
     {
-      "proposal_id": "P-ADBLOG-202605-ADAPTIVE-COMPOSE",
+      "proposal_id": "android-io-2026-adaptive-apps-compose",
       "candidate_url": "https://goo.gle/AdaptiveApps_IO26",
       "normalized_url": "https://goo.gle/AdaptiveApps_IO26",
       "accepted": false,
@@ -12,7 +12,7 @@
       "source_policy_match": ""
     },
     {
-      "proposal_id": "P-ADBLOG-202605-AI-STUDIO-NATIVE",
+      "proposal_id": "android-ai-studio-native-apps",
       "candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "accepted": true,
@@ -20,16 +20,40 @@
       "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "P-ADBLOG-202605-AI-STUDIO-NATIVE",
+      "proposal_id": "android-ai-studio-native-apps",
       "candidate_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
       "normalized_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "linux-media-qcom-iris-10bit-decoding",
+      "candidate_url": "https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/",
+      "normalized_url": "https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "linux-media-qcom-camss-sm8750",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "linux-media-qcom-camss-sm8750",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
     }
   ],
   "counts": {
     "domain_not_allowed": 1,
-    "accepted": 2
+    "accepted": 5
   }
 }

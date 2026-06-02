@@ -26,22 +26,25 @@
 | blocked_candidate | 0.48 | What's New in Wear OS 7 | https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html |
 | blocked_candidate | 0.551 | Overview | https://source.android.com/docs/security/bulletin/asb-overview |
 | blocked_candidate | 0.551 | June | https://source.android.com/docs/security/bulletin/2026/2026-06-01 |
-| blocked_candidate | 0.719 | Re: [PATCH WIP v5 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms | https://lore.kernel.org/linux-media/4138a85a-e6b9-4a81-9025-b2f809988788@nxsw.ie/ |
+| blocked_candidate | 0.788 | [PATCH] ACPI: scan: Honor _DEP for Intel CVS devices | https://lore.kernel.org/linux-media/20260601194040.18223-1-miguel.vadillo@intel.com/ |
+| blocked_candidate | 0.692 | Re: [PATCH 01/11] params: bound array element output to the caller's page buffer | https://lore.kernel.org/linux-media/ah3qWZ4cqhrbHZcl@casper.infradead.org/ |
+| blocked_candidate | 0.692 | Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats | https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/ |
 | blocked_candidate | 0.548 | How ref qualifiers led to deducing this | https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this |
 | blocked_candidate | 0.398 | C++: The Documentary trailer | https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer |
+| blocked_candidate | 0.668 | [PATCH v7 1/2] dt-bindings: Pinefeat cef168 lens control board | https://lore.kernel.org/linux-media/20260601204814.19148-2-asmirnou@pinefeat.co.uk/ |
 | blocked_candidate | 0.668 | Re: [PATCH v2 1/2] PM: hibernate: add pm_hibernation_snapshot_done() helper | https://lore.kernel.org/linux-media/CAJZ5v0gvcsowJL0oqKqaG-VFinpb9Rj06KNOkG9XaQ+6wp0Ygg@mail.gmail.com/ |
-| blocked_candidate | 0.668 | Re: [PATCH WIP v5 6/9] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init | https://lore.kernel.org/linux-media/a547e784-9e24-4dba-abcb-6c22130af2f2@ixit.cz/ |
-| blocked_candidate | 0.644 | Re: [PATCH v14 5/5] media: qcom: camss: vfe: Add support for VFE gen4 | https://lore.kernel.org/linux-media/20260601164403.8CE831F00893@smtp.kernel.org/ |
-| blocked_candidate | 0.644 | Re: [PATCH v14 2/5] media: qcom: camss: Add Kaanapali compatible camss driver | https://lore.kernel.org/linux-media/20260601155921.2A9831F00893@smtp.kernel.org/ |
-| blocked_candidate | 0.644 | [PATCH v4 5/5] media: qcom: camss: vfe: Add support for VFE 980 | https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v4-5-1eb6f432cfd1@oss.qualcomm.com/ |
-| blocked_candidate | 0.599 | [PATCH v4 1/5] media: dt-bindings: Add CAMSS device for SM8750 | https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v4-1-1eb6f432cfd1@oss.qualcomm.com/ |
+| blocked_candidate | 0.644 | [PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980 | https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/ |
+| blocked_candidate | 0.599 | [PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750 | https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/ |
+| blocked_candidate | 0.644 | Re: [PATCH v7 2/2] media: i2c: Pinefeat cef168 lens control board driver | https://lore.kernel.org/linux-media/20260601210610.8912F1F00893@smtp.kernel.org/ |
+| blocked_candidate | 0.644 | Re: [PATCH v7 1/2] dt-bindings: Pinefeat cef168 lens control board | https://lore.kernel.org/linux-media/20260601205226.049BA1F00893@smtp.kernel.org/ |
+| blocked_candidate | 0.644 | [PATCH v7 2/2] media: i2c: Pinefeat cef168 lens control board driver | https://lore.kernel.org/linux-media/20260601204814.19148-3-asmirnou@pinefeat.co.uk/ |
+| blocked_candidate | 0.644 | [syzbot] [media?] KASAN: slab-use-after-free Read in em28xx_v4l2_open | https://lore.kernel.org/linux-media/6a1de864.278b5b03.2bcf39.003b.GAE@google.com/ |
 | blocked_candidate | 0.455 | Upcoming C++ User Group meetings in June 2026 | https://isocpp.org//blog/2026/05/upcoming-cpp-user-group-meetings-in-june-2026 |
 | blocked_candidate | 0.455 | Let the Compiler Check Your Units -- Wu Yongwei | https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei |
 | blocked_candidate | 0.455 | The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo | https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru |
-| blocked_candidate | 0.455 | What reinterpret_cast doesn&apos;t do -- Andreas Fertig | https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig |
-| blocked_candidate | 0.431 | Annotations for C++26 Hashing -- Krystian Piękoś | https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko |
-| blocked_candidate | 0.431 | C++26: Structured Bindings in Conditions -- Sandor Dargo | https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo |
-| blocked_candidate | 0.431 | CppCon 2025 Could C++ Developers Handle an ABI Break Today? -- Luis Caro Campos | https://isocpp.org//blog/2026/05/cppcon-2025-could-cpp-developers-handle-an-abi-break-today-luis-caro-campos |
 | blocked_candidate | 0.492 | Android Developers Blog: Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html |
 | blocked_candidate | 0.492 | Android Developers Blog: Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today |
+| weak_candidate | 0.635 | Re: [PATCH v4 0/6] media: qcom: iris: add support for decoding 10bit formats - Neil Armstrong | https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/ |
+| review_candidate | 0.72 | [PATCH v5 5/5] media: qcom: camss: vfe: Add support for VFE 980 - Hangxiang Ma | https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/ |
+| review_candidate | 0.72 | [PATCH v5 1/5] media: dt-bindings: Add CAMSS device for SM8750 - Hangxiang Ma | https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/ |
 

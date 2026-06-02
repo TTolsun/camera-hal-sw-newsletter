@@ -4,8 +4,8 @@
   "newsletter_date": "2026-06-02",
   "proposals": [
     {
-      "proposal_id": "P-ADBLOG-202605-ADAPTIVE-COMPOSE",
-      "topic_gap": "How Jetpack Compose facilitates building seamless Android experiences across devices, potentially impacting camera UI/UX across form factors.",
+      "proposal_id": "android-io-2026-adaptive-apps-compose",
+      "topic_gap": "Android ecosystem is expanding, and developers need to build seamless experiences across devices. Jetpack Compose is highlighted as a key technology for adaptive development. This could impact how camera output is handled and displayed across various form factors.",
       "source_family": "android",
       "allowed_domains": [
         "goo.gle",
@@ -13,49 +13,101 @@
       ],
       "search_keywords": [
         "Jetpack Compose camera",
-        "Android adaptive camera UI",
+        "Android adaptive UI camera",
         "cross-device camera experience",
-        "Compose camera preview",
-        "foldable camera UI"
+        "Google I/O 2026 camera"
       ],
       "candidate_urls": [
         "https://goo.gle/AdaptiveApps_IO26"
       ],
       "expected_evidence": [
-        "Mentions of camera-related UI/UX for different device types (foldables, tablets, etc.)",
-        "Guidance on adapting camera preview, controls, or output display using Compose",
-        "Examples of adaptive layouts for camera applications"
+        "Mentions of Jetpack Compose for UI development across multiple devices.",
+        "Guidance on adapting camera preview/output UIs for different screen sizes or device types.",
+        "Examples or APIs related to handling media output in adaptive layouts."
       ],
       "risk_notes": [
-        "The URL is a shortlink and might redirect to a more generic blog post. Need to verify direct relevance to camera HAL/SW.",
-        "The title is broad; specific camera relevance needs to be confirmed within the content."
+        "The URL is a shortlink, which might redirect to a more generic I/O recap without specific camera relevance.",
+        "The title is broad; specific camera-related content might be minimal."
       ]
     },
     {
-      "proposal_id": "P-ADBLOG-202605-AI-STUDIO-NATIVE",
-      "topic_gap": "Updates on building native Android apps with Google AI Studio, specifically how it might integrate with or leverage camera capabilities for on-device AI/ML features.",
-      "source_family": "android",
+      "proposal_id": "android-ai-studio-native-apps",
+      "topic_gap": "Google I/O 2026 highlights building native Android apps in Google AI Studio. This could lead to new ways of integrating AI directly into camera applications or processing camera output using on-device AI models.",
+      "source_family": "ai-engineering",
       "allowed_domains": [
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
         "Android AI Studio camera",
         "on-device AI camera",
-        "camera ML Android",
-        "Google AI Studio camera integration",
-        "real-time camera AI"
+        "camera AI integration",
+        "Google I/O 2026 AI camera"
       ],
       "candidate_urls": [
         "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
         "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
       ],
       "expected_evidence": [
-        "Examples or APIs for integrating camera streams/images with on-device AI models built with Google AI Studio",
-        "Mentions of camera-based AI features (e.g., object detection, scene understanding, real-time filters)",
-        "Performance considerations for running AI models on camera input on Android devices"
+        "Details on how to use Google AI Studio for Android app development.",
+        "Examples or use cases involving camera input/output with AI models.",
+        "APIs or tools for integrating on-device AI with media pipelines."
       ],
       "risk_notes": [
-        "The article might be too high-level or focus on generic AI features without specific camera integration details. Need to look for concrete examples or APIs."
+        "The article might be too high-level and not provide concrete technical details relevant to Camera HAL SW.",
+        "Focus might be on general AI integration rather than specific camera-related AI features."
+      ]
+    },
+    {
+      "proposal_id": "linux-media-qcom-iris-10bit-decoding",
+      "topic_gap": "A patch series for the Linux media subsystem indicates support for decoding 10-bit formats on Qualcomm Iris. This is relevant for camera HAL as it suggests increased support for higher bit-depth video processing, which could impact camera recording capabilities and HDR support.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "Qualcomm Iris 10bit decoding",
+        "Linux media 10-bit video",
+        "camera HAL HDR support",
+        "V4L2 10bit"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/6896f76a-a778-44f9-97f3-8a19a1b0f41a@linaro.org/"
+      ],
+      "expected_evidence": [
+        "Specific details on 10-bit format decoding support for Qualcomm Iris.",
+        "Impact on video pipeline, HDR, or other camera-related features.",
+        "Mention of specific codecs or hardware blocks involved."
+      ],
+      "risk_notes": [
+        "Kernel mailing list discussions can be highly technical and might not directly translate to immediate Android HAL implications.",
+        "The patch might be under review and not yet merged, indicating future rather than current impact."
+      ]
+    },
+    {
+      "proposal_id": "linux-media-qcom-camss-sm8750",
+      "topic_gap": "Multiple patches on the Linux media mailing list indicate support for Qualcomm CAMSS (Camera Subsystem) on SM8750 (a potential future Snapdragon SoC). This directly relates to Camera HAL as it involves the underlying camera hardware abstraction and driver development for new platforms.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "Qualcomm CAMSS SM8750",
+        "VFE 980",
+        "Linux media camera driver",
+        "Camera HAL Snapdragon"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-5-dac36a190de8@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260601-add-support-for-camss-on-sm8750-v5-1-dac36a190de8@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Details on CAMSS integration for SM8750.",
+        "Information about VFE (Video Front End) 980 support.",
+        "New camera features or capabilities enabled by this hardware support."
+      ],
+      "risk_notes": [
+        "These are kernel patches, so they represent low-level driver work, not necessarily user-facing features.",
+        "The SM8750 is likely a future SoC, so the impact on current Android devices is indirect."
       ]
     }
   ]
