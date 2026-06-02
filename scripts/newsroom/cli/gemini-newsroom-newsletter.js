@@ -2260,6 +2260,39 @@ function validateFactCheck(value) {
   return value;
 }
 
+function collectValidEvidenceIds(reporter) {
+  const validIds = new Set();
+  for (const candidate of ensureArray(reporter?.candidates)) {
+    for (const block of ensureArray(candidate?.source_extraction?.evidence_blocks)) {
+      const id = String(block.evidence_id || block.id || '');
+      if (id) validIds.add(id);
+    }
+    for (const id of ensureArray(candidate?.primary_evidence_ids)) {
+      if (id) validIds.add(String(id));
+    }
+  }
+  return validIds;
+}
+
+function sanitizeClaimEvidenceIds(editor, reporter) {
+  const validIds = collectValidEvidenceIds(reporter);
+  const sections = ensureArray(editor?.sections);
+  if (sections.length === 0) return editor;
+  const sanitized = sections.map(section => {
+    const claims = ensureArray(section.claims);
+    if (claims.length === 0) return section;
+    const cleanedClaims = claims.map(claim => {
+      const ids = ensureArray(claim.evidence_ids);
+      if (ids.length === 0) return claim;
+      const kept = ids.filter(id => validIds.has(id));
+      if (kept.length === ids.length) return claim;
+      return { ...claim, evidence_ids: kept };
+    });
+    return { ...section, claims: cleanedClaims };
+  });
+  return { ...editor, sections: sanitized };
+}
+
 function containsTodo(files) {
   return files.some(file => fs.existsSync(file) && /\bTODO\b/.test(fs.readFileSync(file, 'utf8')));
 }
@@ -4327,6 +4360,7 @@ async function main() {
     buildStaleClaimReportMarkdown(staleScrub.report),
     'utf8'
   );
+  editor = sanitizeClaimEvidenceIds(editor, reporter);
   qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
     threshold: qualityGatePolicy.threshold,
     shortlistReport,
