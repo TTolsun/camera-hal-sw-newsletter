@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "manifest_type": "raw_candidate",
+  "newsletter_date": "2026-06-03",
+  "generated_at": "2026-06-02T17:42:44.992Z",
+  "workflow": "manual-source-collection-pr",
+  "candidate_artifact": "content/collected-news/2026-06-03/manual-candidates.json",
+  "candidate_artifact_hash": "adb1eda52d8145de9e1ea16bc0ad612d5ddf94c54d0775694c4c5e0737b61700",
+  "artifact_hash": "adb1eda52d8145de9e1ea16bc0ad612d5ddf94c54d0775694c4c5e0737b61700",
+  "candidate_count": 40,
+  "source_count": 59,
+  "source_registry_path": "data/news-sources.json",
+  "source_registry_hash": "a73c025720b37c293c3494b49873439079cad44357f472a4acbc6d1e4ab55acc",
+  "collection_intent": "",
+  "collection_intent_hash": "",
+  "collection_intent_status": "",
+  "seed_url_count": 0,
+  "keyword_hint_count": 0,
+  "llm_used": false,
+  "generator": "collect-news-candidates",
+  "github_run_id": "26837351165",
+  "github_sha": "a4dbf7c2e657230c44e48629f505dfde538e1a54"
+}
