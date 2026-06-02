@@ -21,13 +21,13 @@
 
 | # | 기사 | 선택된 대표 이미지 | 후보 | 검증 통과 후보 | 상태 |
 | ---: | --- | --- | ---: | ---: | --- |
-| 1 | Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화 | 없음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
-| 2 | Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화 | 없음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
+| 1 | Jetpack Compose와 CameraX의 통합: 폴더블 및 대화면 기기를 위한 적응형 카메라 미리보기 구현 | 없음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
+| 2 | Google AI Studio, 프롬프트만으로 무설치 Android 앱 빌드 지원 | 없음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
 
 ## 복원 가능 기사
 
-- 1. Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화: 대표 이미지 선택됨 (selected) - https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png
-- 2. Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화: 대표 이미지 선택됨 (selected) - https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png
+- 1. Jetpack Compose와 CameraX의 통합: 폴더블 및 대화면 기기를 위한 적응형 카메라 미리보기 구현: 대표 이미지 선택됨 (selected) - https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png
+- 2. Google AI Studio, 프롬프트만으로 무설치 Android 앱 빌드 지원: 대표 이미지 선택됨 (selected) - https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png
 
 ## 대표 이미지 출처 근거 재검토
 

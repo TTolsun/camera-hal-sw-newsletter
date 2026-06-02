@@ -1,11 +1,11 @@
 {
   "status": "FAILED_REPAIR_REVIEWABLE",
-  "fact_check_status": "NEEDS_FIX",
-  "must_fix_count": 12,
+  "fact_check_status": "PASS",
+  "must_fix_count": 0,
   "failure_kind": "",
   "failure_class": "",
   "quality_status": "NEEDS_FIX",
-  "quality_score": 78,
+  "quality_score": 36,
   "quality_threshold": 85,
   "publish_ready": false,
   "selection_publish_ready": false,
@@ -15,7 +15,7 @@
   "failure_stage": "editor repair attempt 1/2",
   "failure_reason": "Targeted repair changed main article count outside completion/replacement mode.",
   "quality_attempt_count": 1,
-  "quality_deduction_count": 5,
+  "quality_deduction_count": 10,
   "quota_error_count": 0,
   "invalid_json_count": 0,
   "model_usage": {
@@ -164,8 +164,8 @@
     "candidate_count": 45
   },
   "run_context": {
-    "github_run_id": "26792675018",
-    "github_sha": "977dfcbe3c3e901c921941e8e1b556fcb5fde167",
+    "github_run_id": "26797355264",
+    "github_sha": "68fe37fa4ede3f579dbdb93959312d16a0818161",
     "github_ref": "refs/heads/main"
   },
   "validate_ok": false,
@@ -202,7 +202,7 @@
     "sections": [
       {
         "section_index": 1,
-        "headline": "Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화",
+        "headline": "Jetpack Compose와 CameraX 통합을 통한 대화면 및 폴더블 기기 적응형 카메라 미리보기 지원",
         "public_article_pass": true,
         "reader_checkpoints_pass": true,
         "source_boundary_pass": true,
@@ -211,7 +211,7 @@
       },
       {
         "section_index": 2,
-        "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화",
+        "headline": "Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화",
         "public_article_pass": true,
         "reader_checkpoints_pass": true,
         "source_boundary_pass": true,

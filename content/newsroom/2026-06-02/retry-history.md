@@ -2,7 +2,7 @@
 
 | 시도 | 모델 | 점수 | 상태 | Rendered | Locked | Demoted | Reserve used | 중복 거절 | Source gap | Must-fix |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | repair-fallback | 78/85 | FAILED_REPAIR_REVIEWABLE | 2 | 0 | 0 | 0 | 0 | 0 | 12 |
+| 1 | repair-fallback | 36/85 | FAILED_REPAIR_REVIEWABLE | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## 후보 선택 진단
 
@@ -64,7 +64,7 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 
 ## 시도 1
 
-- 선택 기사: Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화; Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화
+- 선택 기사: Jetpack Compose와 CameraX 통합을 통한 대화면 및 폴더블 기기 적응형 카메라 미리보기 지원; Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화
 - Lock된 기사: 없음
 - Source gap section: 없음
 - Demoted section: 없음
@@ -81,4 +81,4 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 - Rejected main-ineligible candidate: 없음
 - Lock blocker: 없음
 - 거절된 중복 기사: 없음
-- 감점: 1pt editorial-story (briefing 2): Briefing bullet misses story structure elements: action_hint.; 1pt image-fallback (Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화): Article image uses a local fallback visual.; 4pt actionability (Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화): Article action item is not concrete enough for a HAL engineering team.; 1pt image-fallback (Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화): Article image uses a local fallback visual.; 15pt source-integrity: Fact checker returned 12 must_fix item(s).
+- 감점: 8pt source-integrity (Jetpack Compose와 CameraX 통합을 통한 대화면 및 폴더블 기기 적응형 카메라 미리보기 지원): Shared watch/release-note URL requires matching version_or_release or published_date evidence.; 8pt claim-evidence (Jetpack Compose와 CameraX 통합을 통한 대화면 및 폴더블 기기 적응형 카메라 미리보기 지원): Claim references unresolved evidence_id: sx:bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3:evidence_blocks:2b41feb08ba22d15.; 8pt scope-relevance (Jetpack Compose와 CameraX 통합을 통한 대화면 및 폴더블 기기 적응형 카메라 미리보기 지원): Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.; 1pt image-fallback (Jetpack Compose와 CameraX 통합을 통한 대화면 및 폴더블 기기 적응형 카메라 미리보기 지원): Article image uses a local fallback visual.; 8pt source-integrity (Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화): Shared watch/release-note URL requires matching version_or_release or published_date evidence.; 8pt claim-evidence (Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화): Claim references unresolved evidence_id: candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary.; 8pt scope-relevance (Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화): Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.; 6pt hal-signal (Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화): Fallback article lacks fallback_promotion_allowed=true or fallback_promotion_reason before main promotion.; 8pt hal-relevance (Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화): Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.; 1pt image-fallback (Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화): Article image uses a local fallback visual.

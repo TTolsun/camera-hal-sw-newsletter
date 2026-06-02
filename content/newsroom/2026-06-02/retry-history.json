@@ -2,7 +2,7 @@
   {
     "attempt": 1,
     "model": "repair-fallback",
-    "score": 78,
+    "score": 36,
     "threshold": 85,
     "status": "FAILED_REPAIR_REVIEWABLE",
     "rendered_main_article_count": 2,
@@ -15,12 +15,32 @@
     "underfilled_reason": "",
     "deductions": [
       {
-        "category": "editorial-story",
-        "points": 1,
-        "reason": "Briefing bullet misses story structure elements: action_hint.",
-        "location": "briefing 2",
-        "blocking": false,
-        "severity": "soft",
+        "category": "source-integrity",
+        "points": 8,
+        "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "location": "Jetpack Compose와 CameraX 통합을 통한 대화면 및 폴더블 기기 적응형 카메라 미리보기 지원",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "claim-evidence",
+        "points": 8,
+        "reason": "Claim references unresolved evidence_id: sx:bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3:evidence_blocks:2b41feb08ba22d15.",
+        "location": "Jetpack Compose와 CameraX 통합을 통한 대화면 및 폴더블 기기 적응형 카메라 미리보기 지원",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "unknown_evidence_id",
+        "dedupe_key": "1:claim:compose_camerax_adaptive_support:unknown_evidence_id"
+      },
+      {
+        "category": "scope-relevance",
+        "points": 8,
+        "reason": "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
+        "location": "Jetpack Compose와 CameraX 통합을 통한 대화면 및 폴더블 기기 적응형 카메라 미리보기 지원",
+        "blocking": true,
+        "severity": "hard",
         "reason_code": "",
         "dedupe_key": ""
       },
@@ -28,27 +48,7 @@
         "category": "image-fallback",
         "points": 1,
         "reason": "Article image uses a local fallback visual.",
-        "location": "Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화",
-        "blocking": false,
-        "severity": "soft",
-        "reason_code": "",
-        "dedupe_key": ""
-      },
-      {
-        "category": "actionability",
-        "points": 4,
-        "reason": "Article action item is not concrete enough for a HAL engineering team.",
-        "location": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화",
-        "blocking": false,
-        "severity": "soft",
-        "reason_code": "",
-        "dedupe_key": ""
-      },
-      {
-        "category": "image-fallback",
-        "points": 1,
-        "reason": "Article image uses a local fallback visual.",
-        "location": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화",
+        "location": "Jetpack Compose와 CameraX 통합을 통한 대화면 및 폴더블 기기 적응형 카메라 미리보기 지원",
         "blocking": false,
         "severity": "soft",
         "reason_code": "",
@@ -56,18 +56,68 @@
       },
       {
         "category": "source-integrity",
-        "points": 15,
-        "reason": "Fact checker returned 12 must_fix item(s).",
-        "location": "",
+        "points": 8,
+        "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "location": "Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화",
         "blocking": true,
         "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "claim-evidence",
+        "points": 8,
+        "reason": "Claim references unresolved evidence_id: candidate:fac75a8d436dc70ff2ea5e1c85a57ff555fd85f388670aaf754dc255a22a7bfc:source-summary.",
+        "location": "Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "unknown_evidence_id",
+        "dedupe_key": "2:claim:ai_studio_prompt_build:unknown_evidence_id"
+      },
+      {
+        "category": "scope-relevance",
+        "points": 8,
+        "reason": "Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.",
+        "location": "Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "hal-signal",
+        "points": 6,
+        "reason": "Fallback article lacks fallback_promotion_allowed=true or fallback_promotion_reason before main promotion.",
+        "location": "Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "hal-relevance",
+        "points": 8,
+        "reason": "Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.",
+        "location": "Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화",
+        "blocking": false,
+        "severity": "soft",
         "reason_code": "",
         "dedupe_key": ""
       }
     ],
     "selected_article_headlines": [
-      "Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화",
-      "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 및 워크플로우 가속화"
+      "Jetpack Compose와 CameraX 통합을 통한 대화면 및 폴더블 기기 적응형 카메라 미리보기 지원",
+      "Google AI Studio의 프롬프트 기반 Android 앱 빌드 기능을 통한 개발 워크플로우 가속화"
     ],
     "locked_article_headlines": [],
     "source_gap_sections": [],
@@ -97,7 +147,7 @@
     "lock_blockers": [],
     "rejected_duplicate_headlines": [],
     "source_gap_count": 0,
-    "must_fix_count": 12,
+    "must_fix_count": 0,
     "repair_failure": {
       "name": "EditorSemanticValidationError",
       "message": "Targeted repair changed main article count outside completion/replacement mode.",

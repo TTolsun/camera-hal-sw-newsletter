@@ -5,7 +5,7 @@
 - seed_used: false
 - public_output_expected: false
 - status: FAILED_REPAIR_REVIEWABLE
-- present: 73/81
+- present: 69/81
 - missing_required: 0
 - attention_required: 2
 
@@ -67,7 +67,6 @@
 - `content/collected-news/2026-06-02/raw-candidate-manifest.json` - present
 - `content/collected-news/2026-06-02/merged-candidates.json` - present
 - `content/collected-news/2026-06-02/merged-candidate-manifest.json` - present
-- `content/collected-news/2026-06-02/gemini-candidates.json` - present
 - `content/newsroom/2026-06-02/generation-status.json` - changed
 - `content/newsroom/2026-06-02/reporter-candidates.json` - changed
 - `content/newsroom/2026-06-02/editor-draft.json` - changed
@@ -79,8 +78,6 @@
 - `content/newsroom/2026-06-02/retry-history.json` - changed
 - `content/newsroom/2026-06-02/shortlisted-candidates.json` - present
 - `content/newsroom/2026-06-02/selection-report.json` - present
-- `content/newsroom/2026-06-02/linked-evidence-report.json` - present
-- `content/newsroom/2026-06-02/event-bundles.json` - present
 - `content/newsroom/2026-06-02/article-capsules.json` - present
 - `content/newsroom/2026-06-02/background-context.json` - present
 - `content/newsroom/2026-06-02/evidence-pack-summary.json` - present
@@ -99,7 +96,6 @@
 - `content/newsroom/2026-06-02/summary-cache-report.md` - present
 - `content/newsroom/2026-06-02/summary-cache-report.json` - present
 - `content/source-events/2026-06-02/source-change-events.md` - present
-- `content/source-events/2026-06-02/source-change-events.json` - present
 - `content/newsroom/2026-06-02/editor-draft-attempt-1.json` - present
 - `content/newsroom/2026-06-02/editor-draft-attempt-1.md` - present
 - `content/newsroom/2026-06-02/editor-public-article-judge-attempt-1.json` - present
