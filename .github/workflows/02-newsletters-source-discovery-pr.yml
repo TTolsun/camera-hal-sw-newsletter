@@ -1,4 +1,4 @@
-name: Newsroom 02 - Gemini Source Discovery PR
+name: Newsletters 02 - Source Discovery PR
 
 on:
   workflow_dispatch:

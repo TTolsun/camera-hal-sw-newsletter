@@ -6,9 +6,9 @@
 
 | 경로 | 역할 |
 | --- | --- |
-| `.github/workflows/01-newsroom-manual-source-collect-pr.yml` | 사람이 지정한 seed URL, keyword hint, 기본 후보 수집을 처리하는 1단계 workflow입니다. |
-| `.github/workflows/02-newsroom-gemini-source-discovery-pr.yml` | seed evidence 확장과 source discovery 후보 보강을 처리하는 2단계 workflow입니다. |
-| `.github/workflows/03-newsroom-final-pr.yml` | 승인된 후보와 evidence 기반으로 최종 newsletter PR을 만드는 3단계 workflow입니다. |
+| `.github/workflows/01-newsletters-source-collect-pr.yml` | 사람이 지정한 seed URL, keyword hint, 기본 후보 수집을 처리하는 1단계 workflow입니다. |
+| `.github/workflows/02-newsletters-source-discovery-pr.yml` | seed evidence 확장과 source discovery 후보 보강을 처리하는 2단계 workflow입니다. |
+| `.github/workflows/03-newsletters-editor-pr.yml` | 승인된 후보와 evidence 기반으로 최종 newsletter PR을 만드는 3단계 workflow입니다. |
 | `.github/workflows/validate-site.yml` | GitHub Pages site structure와 image validation을 확인하는 workflow입니다. |
 | `.github/workflows/AGENTS.md` | workflow 수정 시 따라야 하는 secret, gate, label, artifact 보존 규칙입니다. |
 | `.github/pull_request_template.md` | 기본 PR template입니다. |

@@ -19,9 +19,9 @@ Workflow dispatch input 이름은 기존 공개 계약인 `llm_provider`를 유�
 
 ## Workflow inventory
 
-- Stage 1 `01-newsroom-manual-source-collect-pr.yml`은 source collection만 수행하므로 `llm_provider` selector를 두지 않습니다.
-- Stage 2 `02-newsroom-gemini-source-discovery-pr.yml`은 optional LLM source discovery path가 있으므로 `llm_provider` selector를 둡니다.
-- Stage 3 `03-newsroom-final-pr.yml`은 final generation path가 있으므로 `llm_provider` selector를 둡니다.
+- Stage 1 `01-newsletters-source-collect-pr.yml`은 source collection만 수행하므로 `llm_provider` selector를 두지 않습니다.
+- Stage 2 `02-newsletters-source-discovery-pr.yml`은 optional LLM source discovery path가 있으므로 `llm_provider` selector를 둡니다.
+- Stage 3 `03-newsletters-editor-pr.yml`은 final generation path가 있으므로 `llm_provider` selector를 둡니다.
 
 Workflow YAML은 provider 기본값을 소유하지 않습니다. `default`는 runtime config의 code default로 normalize됩니다.
 

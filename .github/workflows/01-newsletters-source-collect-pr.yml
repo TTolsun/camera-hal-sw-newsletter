@@ -1,4 +1,4 @@
-name: Newsroom 01 - Manual Source Collection PR
+name: Newsletters 01 - Source Collection PR
 
 on:
   workflow_dispatch:

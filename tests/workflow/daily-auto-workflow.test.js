@@ -7,7 +7,7 @@ const path = require('node:path');
 
 test('daily auto PR coordinator calls 01 02 03 via workflow_call', () => {
   const workflowDir = path.join(__dirname, '..', '..', '.github', 'workflows');
-  const coordinator = fs.readFileSync(path.join(workflowDir, 'newsroom-daily-auto-pr.yml'), 'utf8');
+  const coordinator = fs.readFileSync(path.join(workflowDir, '00-newsletters-auto-daily-pr.yml'), 'utf8');
 
   assert.match(coordinator, /uses:\s*\.\/\.github\/workflows\/01-newsroom-manual-source-collect-pr\.yml/);
   assert.match(coordinator, /uses:\s*\.\/\.github\/workflows\/02-newsroom-gemini-source-discovery-pr\.yml/);

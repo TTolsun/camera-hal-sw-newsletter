@@ -141,7 +141,7 @@ v1에서는 수동 candidate 편집을 허용하지 않습니다. RAW PR은 cand
 
 ## Schedule Cutover
 
-현재 `Newsroom 01 - Manual Source Collection PR` (`.github/workflows/01-newsroom-manual-source-collect-pr.yml`) workflow가 예약된 RAW collection 진입점입니다.
+현재 `Newsletters 01 - Source Collection PR` (`.github/workflows/01-newsletters-source-collect-pr.yml`) workflow가 예약된 RAW collection 진입점입니다.
 
 - Stage 1은 daily schedule과 `workflow_dispatch`를 모두 지원합니다.
 - 레거시 all-in-one 주간 workflow는 제거해야 합니다.

@@ -15,7 +15,7 @@ const {
 } = require('../../scripts/newsroom/common/newsletter-policy');
 
 test('final newsroom workflow separates review PR success from publish-ready gate', () => {
-  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '03-newsroom-final-pr.yml');
+  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '03-newsletters-editor-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const validatePolicyStep = workflowStep(workflow, 'Validate newsletter policy');
   const checkPolicyDocsStep = workflowStep(workflow, 'Check policy docs');
@@ -206,7 +206,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
 });
 
 test('final newsroom workflow labels review publication and diagnostics-only mutually exclusively', () => {
-  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '03-newsroom-final-pr.yml');
+  const workflowPath = path.join(__dirname, '..', '..', '.github', 'workflows', '03-newsletters-editor-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const labelStep = workflowStep(workflow, 'Add pull request labels');
   const reviewPublicationStart = labelStep.indexOf('} else if (reviewPublicationReady) {');
@@ -231,9 +231,9 @@ test('final newsroom workflow labels review publication and diagnostics-only mut
 // Cross-stage contract. Reads all three workflow YAMLs.
 test('split newsroom workflows preserve #88 stage boundaries', () => {
   const workflowDir = path.join(__dirname, '..', '..', '.github', 'workflows');
-  const stage1 = fs.readFileSync(path.join(workflowDir, '01-newsroom-manual-source-collect-pr.yml'), 'utf8');
-  const stage2 = fs.readFileSync(path.join(workflowDir, '02-newsroom-gemini-source-discovery-pr.yml'), 'utf8');
-  const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsroom-final-pr.yml'), 'utf8');
+  const stage1 = fs.readFileSync(path.join(workflowDir, '01-newsletters-source-collect-pr.yml'), 'utf8');
+  const stage2 = fs.readFileSync(path.join(workflowDir, '02-newsletters-source-discovery-pr.yml'), 'utf8');
+  const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsletters-editor-pr.yml'), 'utf8');
   const stage2RunStep = workflowStep(stage2, 'Run Gemini source discovery');
   const stage2PrepareBodyStep = workflowStep(stage2, 'Prepare source discovery pull request body');
   const stage2CreatePrStep = workflowStep(stage2, 'Create source discovery pull request');
@@ -243,9 +243,9 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
     'utf8'
   );
 
-  assert.match(stage1, /^name: Newsroom 01 - Manual Source Collection PR/m);
-  assert.match(stage2, /^name: Newsroom 02 - Gemini Source Discovery PR/m);
-  assert.match(stage3, /^name: Newsroom 03 - Gemini Final Newsletter PR/m);
+  assert.match(stage1, /^name: Newsletters 01 - Source Collection PR/m);
+  assert.match(stage2, /^name: Newsletters 02 - Source Discovery PR/m);
+  assert.match(stage3, /^name: Newsletters 03 - Editor PR/m);
 
   assert.match(stage1, /workflow_dispatch:/);
   assert.match(stage1, /manual_source_urls:/);

@@ -1,4 +1,4 @@
-name: Newsroom 03 - Gemini Final Newsletter PR
+name: Newsletters 03 - Editor PR
 
 on:
   workflow_dispatch:

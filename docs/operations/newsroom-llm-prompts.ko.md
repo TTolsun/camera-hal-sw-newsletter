@@ -15,13 +15,13 @@ API key, runtime secret, 전체 prompt 원문, generated artifact 내용은 이 
 
 ## Workflow 요약
 
-### Newsroom 01 - Manual Source Collection PR
+### Newsletters 01 - Source Collection PR
 
 이름: Gemini prompt 없음
 
 목적: RAW 후보를 수집하고 review 가능한 `manual-candidates.json` 계열 artifact를 생성합니다.
 
-위치: `.github/workflows/01-newsroom-manual-source-collect-pr.yml`, `npm run collect`
+위치: `.github/workflows/01-newsletters-source-collect-pr.yml`, `npm run collect`
 
 Workflow/Stage: Stage 1 RAW collection
 
@@ -31,7 +31,7 @@ Workflow/Stage: Stage 1 RAW collection
 
 주요 guardrail: LLM credential을 요구하지 않으며 Gemini prompt를 실행하지 않습니다. Stage 1 결과는 Stage 2/Stage 3의 입력일 뿐 최종 발행물이 아닙니다.
 
-### Newsroom 02 - Gemini Source Discovery PR
+### Newsletters 02 - Source Discovery PR
 
 이름: Source discovery proposal prompt
 
@@ -39,7 +39,7 @@ Workflow/Stage: Stage 1 RAW collection
 
 위치: `scripts/newsroom/collect/gemini-source-discovery.js`의 `buildProposalPrompt()`와 `buildProposalPayload()`
 
-Workflow/Stage: `Newsroom 02 - Gemini Source Discovery PR`, `sourceDiscovery`
+Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
 주요 입력: newsletter date, 최대 40개 manual candidate 요약, enabled source registry 요약
 
@@ -47,7 +47,7 @@ Workflow/Stage: `Newsroom 02 - Gemini Source Discovery PR`, `sourceDiscovery`
 
 주요 guardrail: newsletter article을 작성하지 않습니다. 제공된 registry domain 또는 linked evidence domain의 source URL만 제안합니다. Deterministic fetch, normalize, schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영됩니다.
 
-## Newsroom 03 - Gemini Final Newsletter PR
+## Newsletters 03 - Editor PR
 
 ### 공통 prompt context
 
@@ -57,7 +57,7 @@ Workflow/Stage: `Newsroom 02 - Gemini Source Discovery PR`, `sourceDiscovery`
 
 위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`의 `commonContext`
 
-Workflow/Stage: `Newsroom 03 - Gemini Final Newsletter PR`, Stage 3 전체
+Workflow/Stage: `Newsletters 03 - Editor PR`, Stage 3 전체
 
 주요 입력: newsletter date, audience 설명, `docs/editorial-policy.md`, `docs/newsletter-template.md`, `docs/golden-examples/manual-quality-newsletter.md`
 
