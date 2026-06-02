@@ -256,18 +256,8 @@ function homepageHeaderHtml(rootPath = '') {
 }
 
 function siteFooterHtml(rootPath = '') {
+  void rootPath;
   return `<footer class="site-footer">
-    <nav class="content-wrap footer-inner" aria-label="Footer navigation">
-      <a class="site-brand homepage-brand" href="${escapeHtml(rootPath)}index.html" aria-label="Camera SW Newsletter">
-        <span>Camera SW</span>
-        <span class="brand-subtitle">Newsletter</span>
-      </a>
-      <div class="footer-links">
-        <a href="${escapeHtml(rootPath)}index.html">Home</a>
-        <a href="${escapeHtml(rootPath)}archive.html">Archive</a>
-        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
-      </div>
-    </nav>
     <div class="content-wrap footer-legal"><small>© 2026 Camera SW Newsletter</small></div>
   </footer>`;
 }
