@@ -23,6 +23,17 @@ on:
         required: false
         default: ""
         type: string
+  workflow_call:
+    inputs:
+      newsletter_date:
+        description: "Newsletter date in YYYY-MM-DD. Empty means today in KST."
+        required: false
+        type: string
+        default: ""
+    outputs:
+      date:
+        description: "Resolved newsletter date (YYYY-MM-DD)"
+        value: ${{ jobs.create-source-discovery-pr.outputs.date }}
 
 permissions:
   contents: write
@@ -35,10 +46,12 @@ concurrency:
 
 jobs:
   create-source-discovery-pr:
+    outputs:
+      date: ${{ steps.resolve-newsletter-date.outputs.date }}
     runs-on: ubuntu-latest
 
     env:
-      NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
+      NEWSLETTER_DATE: ${{ inputs.newsletter_date || github.event.inputs.newsletter_date || '' }}
       NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: "true"
       LLM_PROVIDER: ${{ github.event.inputs.llm_provider || 'default' }}
 
@@ -51,7 +64,7 @@ jobs:
       - name: Resolve newsletter date
         id: resolve-newsletter-date
         env:
-          INPUT_NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date }}
+          INPUT_NEWSLETTER_DATE: ${{ inputs.newsletter_date || github.event.inputs.newsletter_date || '' }}
         run: |
           set -euo pipefail
 
@@ -115,6 +128,7 @@ jobs:
 
       - name: Prepare source discovery pull request body
         id: pr-body
+        if: github.event_name == 'workflow_dispatch'
         run: |
           REPORT="content/newsroom/${NEWSLETTER_DATE}/gemini-source-discovery-report.md"
           {
@@ -122,6 +136,20 @@ jobs:
             cat "$REPORT"
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
+
+      - name: Commit discovery artifacts to main (auto mode)
+        if: github.event_name == 'workflow_call'
+        run: |
+          set -euo pipefail
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add content/collected-news/ content/newsroom/ || true
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "chore(newsroom): source discovery artifacts for ${{ steps.resolve-newsletter-date.outputs.date }}"
+            git push origin HEAD:main
+          fi
 
       - name: Upload source discovery debug artifacts
         if: always()
@@ -154,6 +182,7 @@ jobs:
           retention-days: 14
 
       - name: Ensure labels
+        if: github.event_name == 'workflow_dispatch'
         uses: actions/github-script@v7
         continue-on-error: true
         with:
@@ -180,6 +209,7 @@ jobs:
 
       - name: Create source discovery pull request
         id: cpr
+        if: github.event_name == 'workflow_dispatch'
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "Merge Camera HAL candidate artifacts ${{ steps.resolve-newsletter-date.outputs.date }}"

@@ -30,7 +30,7 @@ test('stage 2 and 3 manual workflows resolve empty newsletter dates to KST today
 
   for (const step of [stage2ResolveStep, stage3ResolveStep]) {
     assert.match(step, /id: resolve-newsletter-date/);
-    assert.match(step, /INPUT_NEWSLETTER_DATE: \$\{\{ github\.event\.inputs\.newsletter_date \}\}/);
+    assert.match(step, /INPUT_NEWSLETTER_DATE: \$\{\{ (?:inputs\.newsletter_date \|\| )?github\.event\.inputs\.newsletter_date(?: \|\| '')? \}\}/);
     assert.match(step, /TZ=Asia\/Seoul date \+%F/);
     assert.match(step, /\^\[0-9\]\{4\}-\[0-9\]\{2\}-\[0-9\]\{2\}\$/);
     assert.match(step, /newsletter_date must be YYYY-MM-DD: \$DATE/);
