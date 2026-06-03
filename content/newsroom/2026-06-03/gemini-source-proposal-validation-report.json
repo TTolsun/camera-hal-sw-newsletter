@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-03",
   "validations": [
     {
-      "proposal_id": "P001",
+      "proposal_id": "camera_hal_io26_media_pipeline_toolkit",
       "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "accepted": false,
@@ -12,7 +12,15 @@
       "source_policy_match": ""
     },
     {
-      "proposal_id": "P002",
+      "proposal_id": "camera_hal_io26_adaptive_experiences",
+      "candidate_url": "https://goo.gle/AdaptiveApps_IO26",
+      "normalized_url": "https://goo.gle/AdaptiveApps_IO26",
+      "accepted": false,
+      "rejected_reason": "domain_not_allowed",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "camerax_1_6_0_release",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "accepted": false,
@@ -26,7 +34,7 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "P002",
+      "proposal_id": "camerax_1_7_0_alpha01_release",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "accepted": false,
@@ -40,7 +48,15 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "P002",
+      "proposal_id": "aosp_camera_its_box_updates",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "camerax_1_6_1_release",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "accepted": false,
@@ -52,18 +68,10 @@
       "adapter_hint": "android-developers-jetpack-release",
       "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
       "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "P003",
-      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "android-compatibility-definition-document"
     }
   ],
   "counts": {
-    "domain_not_allowed": 1,
+    "domain_not_allowed": 2,
     "discovered_not_extractable": 3,
     "accepted": 1
   }

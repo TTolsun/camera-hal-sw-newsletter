@@ -44,7 +44,7 @@
 | parser gap | 2 | 보강 필요 |
 | Gemini parser failure | 3 | 보강 필요 |
 | rejected: parser_gap | 3 | source extraction 보강 필요 |
-| rejected: taxonomy_gap | 1 | bucket/classifier 또는 허용 domain 보강 필요 |
+| rejected: taxonomy_gap | 2 | bucket/classifier 또는 허용 domain 보강 필요 |
 
 ## 상세 report
 

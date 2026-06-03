@@ -4,88 +4,152 @@
   "newsletter_date": "2026-06-03",
   "proposals": [
     {
-      "proposal_id": "P001",
-      "topic_gap": "Google I/O '26 announcements related to Android media pipeline and camera output, focusing on new tools and features for developers.",
-      "source_family": "android-developers-blog",
+      "proposal_id": "camera_hal_io26_media_pipeline_toolkit",
+      "topic_gap": "Comprehensive updates on Android's media pipeline, including Camera HAL implications, from Google I/O '26.",
+      "source_family": "android",
       "allowed_domains": [
         "youtube.com",
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
-        "Google I/O 2026 Android media pipeline",
-        "Android camera output improvements",
-        "CameraX new features I/O 2026",
-        "Android media recording I/O 2026"
+        "Android media pipeline",
+        "Google I/O 2026 media",
+        "Camera HAL media",
+        "Media3 CameraX",
+        "MediaCodec Camera"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "New APIs or tools for camera output processing",
-        "Improvements in media recording or playback paths",
-        "Integration of CameraX with other media components",
-        "Performance enhancements for camera-related media operations"
+        "New APIs or features for camera output processing (e.g., Media3, MediaCodec, MediaRecorder)",
+        "Improvements in performance or efficiency for camera-generated media",
+        "Updates on A/V sync, preview, or recording paths",
+        "Mentions of CameraX or Camera2 API integration within the media pipeline"
       ],
       "risk_notes": [
-        "The YouTube playlist title is broad ('Supercharge your media pipeline'), so specific camera-output relevance needs to be confirmed by reviewing video content descriptions or transcripts.",
-        "May contain generic media playback content not relevant to camera HAL SW."
+        "Playlist may contain videos not directly relevant to camera HAL or output. Need to filter by video title/description."
       ]
     },
     {
-      "proposal_id": "P002",
-      "topic_gap": "Updates to CameraX, specifically new stable and alpha releases, indicating new features, bug fixes, or API changes relevant to camera application development.",
-      "source_family": "camerax-release-notes",
+      "proposal_id": "camera_hal_io26_adaptive_experiences",
+      "topic_gap": "Information on building seamless Android experiences across devices with Jetpack Compose, specifically how it impacts camera-generated content or camera UI.",
+      "source_family": "android",
+      "allowed_domains": [
+        "goo.gle",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Jetpack Compose camera",
+        "Android adaptive camera UI",
+        "cross-device camera experience",
+        "CameraX Compose"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Guidelines or best practices for camera UI implementation with Jetpack Compose on different form factors (foldables, tablets, etc.)",
+        "New Jetpack Compose components or modifiers relevant to camera preview, controls, or output display",
+        "Performance considerations for camera applications using Compose across devices"
+      ],
+      "risk_notes": [
+        "The link is a redirect. The content might be too high-level or not directly related to camera output/HAL. Need to verify direct relevance."
+      ]
+    },
+    {
+      "proposal_id": "camerax_1_6_0_release",
+      "topic_gap": "New features, improvements, or bug fixes in CameraX 1.6.0 that impact camera application development or underlying camera HAL behavior.",
+      "source_family": "camera-api",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
         "CameraX 1.6.0 release notes",
-        "CameraX 1.7.0-alpha01 features",
-        "CameraX 1.6.1 changes",
-        "AndroidX Camera updates"
+        "androidx.camera 1.6.0",
+        "CameraX new features"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
       ],
       "expected_evidence": [
-        "New CameraX features or use cases",
-        "API changes or deprecations",
-        "Bug fixes impacting camera functionality or performance",
-        "Improvements in camera preview, image capture, or video recording",
-        "Compatibility updates with new Android versions"
+        "New CameraX APIs or extensions",
+        "Changes in camera behavior or performance",
+        "Bug fixes related to camera capture, preview, or video recording",
+        "Compatibility updates with specific Android versions or devices"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camerax_1_7_0_alpha01_release",
+      "topic_gap": "Early insights into upcoming features or breaking changes in CameraX 1.7.0-alpha01 that could influence future camera HAL interactions or application design.",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.7.0-alpha01 release notes",
+        "androidx.camera 1.7.0-alpha01",
+        "CameraX alpha features"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+      ],
+      "expected_evidence": [
+        "Experimental CameraX APIs or features",
+        "Architectural changes or refactorings",
+        "Early indications of new camera capabilities being exposed",
+        "Potential future requirements for camera HAL implementations"
       ],
       "risk_notes": [
-        "Alpha releases may contain features that are not yet stable or may change, requiring careful review for long-term relevance.",
-        "Minor bug fix releases (like 1.6.1) might have limited impact on HAL SW unless they address critical camera pipeline issues."
+        "Alpha releases may contain unstable features or features that will be removed before a stable release. Focus on significant changes."
       ]
     },
     {
-      "proposal_id": "P003",
-      "topic_gap": "Updates to Camera Image Test Suite (ITS) documentation on AOSP, which indicates changes in camera testing methodologies or requirements for Android devices.",
-      "source_family": "aosp-site-updates",
+      "proposal_id": "aosp_camera_its_box_updates",
+      "topic_gap": "Updates or new documentation regarding Camera Image Test Suite (ITS) box for automated camera image testing, which is crucial for Camera HAL compliance and quality.",
+      "source_family": "aosp",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
-        "Android Camera ITS updates",
-        "AOSP camera testing changes",
-        "Camera HAL validation",
-        "Android compatibility camera"
+        "Camera ITS box",
+        "Android camera testing automation",
+        "Camera HAL compliance",
+        "AOSP camera ITS"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "New or updated Camera ITS test cases",
-        "Changes in hardware setup or testing procedures for camera validation",
-        "Impact on Camera HAL implementation or driver requirements",
-        "New metrics or criteria for camera image quality"
+        "New ITS test procedures or requirements",
+        "Updates to ITS hardware setup or calibration",
+        "Changes in camera image quality metrics or evaluation methods",
+        "Impact on Camera HAL implementation or testing strategies"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camerax_1_6_1_release",
+      "topic_gap": "Minor updates or bug fixes in CameraX 1.6.1 that could address critical issues or provide small improvements relevant to camera HAL interactions.",
+      "source_family": "android",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.6.1 release notes",
+        "androidx.camera 1.6.1"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "expected_evidence": [
+        "Specific bug fixes affecting camera stability or functionality",
+        "Performance optimizations for camera operations",
+        "Minor API adjustments or documentation clarifications"
       ],
       "risk_notes": [
-        "Documentation updates might be minor or re-organizations, requiring careful review to identify substantive changes relevant to HAL SW.",
-        "Focus is on testing, not direct API changes, but can imply underlying HAL requirements."
+        "Likely to be minor bug fixes, may not warrant a full article. Consider for a 'quick updates' section."
       ]
     }
   ]
