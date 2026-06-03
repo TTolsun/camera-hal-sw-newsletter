@@ -64,7 +64,5 @@ Date: 2026-06-03
 
 ## 경고
 
-| 유형 | 메시지 | Source artifact | 심각도 |
-| --- | --- | --- | --- |
-| missing_optional_artifact | content/newsroom/2026-06-03/evidence-pack-summary.json not found; partial diagnosis will continue. | content/newsroom/2026-06-03/evidence-pack-summary.json |  |
+_없음_
 

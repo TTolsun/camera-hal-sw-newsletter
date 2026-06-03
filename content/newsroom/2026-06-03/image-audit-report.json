@@ -6,16 +6,16 @@
     "markdown": "newsletters/2026-06-03/newsletter.md",
     "html": "newsletters/2026-06-03/index.html"
   },
-  "mode": "publish-target",
+  "mode": "review-or-draft",
   "render_consistency_scope": "editor_draft",
   "summary": {
-    "article_count": 1,
+    "article_count": 2,
     "rendered_image_count": 1,
     "markdown_image_count": 1,
     "fallback_visual_count": 0,
-    "image_candidates_count": 1,
-    "valid_image_candidate_count": 1,
-    "selected_image_count": 1,
+    "image_candidates_count": 2,
+    "valid_image_candidate_count": 2,
+    "selected_image_count": 2,
     "empty_selected_with_candidates_count": 0,
     "selected_image_without_valid_candidate_count": 0,
     "selected_image_not_in_candidates_count": 0,
@@ -26,16 +26,16 @@
     "unrepairable_no_candidate_count": 0,
     "excluded_validator_failed_count": 0,
     "excluded_attribution_missing_count": 0,
-    "selected_image_render_mismatch_count": 0,
-    "publish_blocking_issue_count": 0
+    "selected_image_render_mismatch_count": 1,
+    "publish_blocking_issue_count": 1
   },
   "repairable": false,
   "repairable_articles": [],
   "articles": [
     {
       "index": 1,
-      "headline": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
-      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
+      "headline": "Google I/O '26: CameraXViewfinder Composable 도입으로 폴더블·태블릿 뷰파인더 렌더링 최적화",
+      "selectedImage": "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20607",
       "image_candidate_count": 1,
       "valid_image_candidate_count": 1,
       "selected_image_is_fallback": false,
@@ -48,10 +48,42 @@
       "reasonCode": "selected",
       "reasonLabel": "대표 이미지 선택됨",
       "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
-      "selected_candidate_url": "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
+      "selected_candidate_url": "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20607",
       "candidate_evidence": [
         {
-          "candidate_url": "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
+          "candidate_url": "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20607",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 130,
+          "sourceKind": "og",
+          "contentType": "image/jpeg",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "CameraX 1.7.0-alpha01 출시: 커스텀 SessionConfig 제어 API 도입 및 ImageAnalysis 회전 버그 수정",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 1,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": true,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "selected_candidate_url": "https://developer.android.com/static/images/social/android-developers.png",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://developer.android.com/static/images/social/android-developers.png",
           "reasonCode": "selected",
           "reasonLabel": "대표 이미지 선택됨",
           "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
@@ -66,9 +98,32 @@
     }
   ],
   "consistency": {
-    "selected_image_render_mismatches": [],
+    "selected_image_render_mismatches": [
+      {
+        "index": 1,
+        "headline": "Google I/O '26: CameraXViewfinder Composable 도입으로 폴더블·태블릿 뷰파인더 렌더링 최적화",
+        "selectedImage": "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20607",
+        "markdown": false,
+        "html": false,
+        "reasonCode": "render_mismatch",
+        "reasonLabel": "렌더 결과 불일치",
+        "reasonText": "선택된 이미지가 Markdown 또는 HTML 산출물에 일관되게 반영되지 않았습니다."
+      }
+    ],
     "selected_image_without_valid_candidate_articles": []
   },
   "warnings": [],
-  "errors": []
+  "errors": [
+    {
+      "type": "selected_image_render_mismatch",
+      "index": 1,
+      "headline": "Google I/O '26: CameraXViewfinder Composable 도입으로 폴더블·태블릿 뷰파인더 렌더링 최적화",
+      "selectedImage": "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20607",
+      "markdown": false,
+      "html": false,
+      "reasonCode": "render_mismatch",
+      "reasonLabel": "렌더 결과 불일치",
+      "reasonText": "선택된 이미지가 Markdown 또는 HTML 산출물에 일관되게 반영되지 않았습니다."
+    }
+  ]
 }

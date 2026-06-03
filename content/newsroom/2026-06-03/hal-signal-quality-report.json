@@ -2,16 +2,16 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-06-03",
-  "generated_at": "2026-06-03T07:44:10.894Z",
-  "status": "WARN",
-  "input_completeness": "partial",
+  "generated_at": "2026-06-03T18:03:32.382Z",
+  "status": "NEEDS_FIX",
+  "input_completeness": "complete",
   "input_statuses": {
     "shortlisted_candidates": "loaded",
     "editor_draft": "loaded",
     "quality_report": "loaded",
-    "source_effectiveness_report": "input_unavailable",
+    "source_effectiveness_report": "loaded",
     "source_quality_report": "loaded",
-    "evidence_pack_summary": "input_unavailable",
+    "evidence_pack_summary": "loaded",
     "merged_candidate_manifest": "loaded"
   },
   "inputs": {
@@ -35,7 +35,7 @@
     "optional": {
       "source_effectiveness_report": {
         "path": "content/newsroom/2026-06-03/source-effectiveness-report.json",
-        "status": "input_unavailable",
+        "status": "loaded",
         "error": ""
       },
       "source_quality_report": {
@@ -45,7 +45,7 @@
       },
       "evidence_pack_summary": {
         "path": "content/newsroom/2026-06-03/evidence-pack-summary.json",
-        "status": "input_unavailable",
+        "status": "loaded",
         "error": ""
       },
       "merged_candidate_manifest": {
@@ -55,24 +55,21 @@
       }
     },
     "missing_required": [],
-    "unavailable_optional": [
-      "source_effectiveness_report",
-      "evidence_pack_summary"
-    ]
+    "unavailable_optional": []
   },
-  "quality_status": "PASS",
+  "quality_status": "NEEDS_FIX",
   "hal_signal_quality_summary": {
     "schema_version": 1,
-    "main_article_count": 1,
-    "strong_signal_count": 0,
-    "usable_signal_count": 0,
-    "weak_signal_count": 1,
+    "main_article_count": 2,
+    "strong_signal_count": 1,
+    "usable_signal_count": 1,
+    "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
-    "article_count_with_hal_signal_capsule": 1,
+    "article_count_with_hal_signal_capsule": 2,
     "article_count_without_hal_signal_capsule": 0,
-    "main_articles_with_owner_metric_log": 0,
-    "main_articles_with_concrete_action": 1,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 2,
     "fallback_main_article_count": 0,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
@@ -80,54 +77,80 @@
     "hal_signal_hard_blocker_count": 0,
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
-      "framework_hal_contract": 1,
-      "driver_image_pipeline": 1,
-      "stream_buffer_metadata": 1,
-      "camerax_app_compatibility": 1
+      "framework_hal_contract": 2,
+      "camerax_app_compatibility": 1,
+      "stream_buffer_metadata": 1
     },
     "actionability_level_counts": {
-      "none": 1
+      "owner_metric_log": 1,
+      "concrete_check": 1
     },
     "effective_actionability_level_counts": {
+      "owner_metric_log": 1,
       "concrete_check": 1
     },
     "signal_quality_status_counts": {
-      "weak_signal": 1
+      "strong_signal": 1,
+      "usable_signal": 1
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "Google I/O '26: CameraXViewfinder Composable 및 Media3 기반 프리미엄 미디어 파이프라인 툴킷 공개",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
         "framework_hal_contract",
-        "driver_image_pipeline",
-        "stream_buffer_metadata",
         "camerax_app_compatibility"
       ],
       "reader_owners": [
         "camera_hal_owner",
-        "camera_framework_owner",
-        "camerax_app_compat_owner",
-        "camera_driver_owner"
+        "camera_framework_owner"
       ],
-      "actionability_level": "none",
-      "effective_actionability_level": "concrete_check",
-      "actionability_upgrade_reason": "Contains source-bound API behavior action evidence: api,stream_buffer_metadata.",
-      "signal_quality_status": "weak_signal",
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
       "concrete_action_signal_count": 5,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "CameraX 1.6.0 릴리스는 Camera HAL 및 드라이버에 여러 가지 중요한 영향을 미칩니다. 새로운 API는 HAL이 지원하는 기능 조합에 대한 명확한 쿼리 메커니즘을 제공하여 HAL 구현의 유효성 검사 및 호환성 테스트를 개선할 수 있습니다.",
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "릴리스 노트에 명시적으로 언급되지 않는 한, 직접적인 Camera HAL API 또는 벤더 HAL 계약 변경을 주장하지 마십시오.",
-        "아티팩트 버전 테이블을 동작 변경 증거로 사용하지 마십시오.",
-        "CameraX 1.6.0의 버그 수정 내역은 상위 프레임워크 및 라이브러리 계층의 우회 조치이며, Camera HAL3 인터페이스 규격 자체나 드라이버 아키텍처를 직접 변경하는 것은 아닙니다.",
-        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
-        "Do not use artifact version tables as behavior-change evidence."
+        "이 발표는 상위 UI 라이브러리의 컴포넌트 추가 소식이며, Camera HAL3 인터페이스 자체나 하부 드라이버 계약을 직접 변경하는 것은 아닙니다."
       ],
-      "soc_signal_type": "platform_signal",
+      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "CameraX 1.7.0-alpha01: 고급 UseCase 구성을 위한 setSessionConfig() API 노출 및 ImageAnalysis 회전 버그 수정",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+      "fallback_guard_notes": [
+        "Java 11 타겟 전환은 빌드 툴체인의 변화일 뿐이며, Camera HAL의 C++ 구현이나 드라이버 자체의 런타임 동작에는 영향을 주지 않습니다."
+      ],
+      "soc_signal_type": "",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,
@@ -170,8 +193,5 @@
     ],
     "historical_rewrite_followup": "#108"
   },
-  "warnings": [
-    "Optional input_unavailable: source_effectiveness_report",
-    "Optional input_unavailable: evidence_pack_summary"
-  ]
+  "warnings": []
 }

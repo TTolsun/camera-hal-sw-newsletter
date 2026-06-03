@@ -9,7 +9,7 @@ Date: 2026-06-03
 - Unregistered candidates: 0
 - Eligible candidates: 7
 - Selected candidates: 3
-- Rendered main articles: 1
+- Rendered main articles: 2
 - Source gap candidates: 32
 - Generic noise candidates: 28
 - Duplicate candidates: 1
@@ -50,15 +50,16 @@ _없음_
 
 | Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
 | --- | --- | --- | --- | --- | --- | --- |
-| camerax-release-notes | KEEP | 87.5 | 2 | 2 | 1 | 1 |
+| camerax-release-notes | KEEP | 85 | 2 | 2 | 2 | 1 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 12.59 | 27 | 3 | 1 | 1 |
 
 ## Sources Needing Parser Repair
 
 | Source | Recommendation | Collected | Eligible | Source Gap | Top Reason |
 | --- | --- | --- | --- | --- | --- |
 | android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 3 | 0 | 3 | No RSS item, no published date, no concrete release/API/behavior change detected. |
-| android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | android-developers-blog | KEEP_AND_FIX_PARSER | 27 | 3 | 24 | main_eligible=false |
+| android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 2 | 0 | 2 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
@@ -126,9 +127,9 @@ _없음_
 | yozm-it | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 3 | 0 | 0 | 0 | 1 | 0 | 0 |
-| camerax-release-notes | KEEP | 87.5 | 2 | 1 | 0.5 | 1 | 0 | 0 | 0 |
+| camerax-release-notes | KEEP | 85 | 2 | 1 | 1 | 0.5 | 0 | 0 | 0 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 12.59 | 27 | 0.1111 | 0.3333 | 1 | 0.8889 | 0.8519 | 1 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 0 | 27 | 0.1111 | 0.6667 | 0 | 0.8889 | 0.8519 | 1 |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 0 | 2 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |

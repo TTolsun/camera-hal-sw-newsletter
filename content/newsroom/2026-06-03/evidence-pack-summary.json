@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-06-03",
-  "generated_at": "2026-06-03T07:44:16.430Z",
+  "generated_at": "2026-06-03T18:03:33.367Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -20,9 +20,7 @@
       "content/newsroom/2026-06-03/repair-failure.json",
       "content/newsroom/2026-06-03/stale-claim-report.json"
     ],
-    "missing": [
-      "content/newsroom/2026-06-03/repair-failure.json"
-    ],
+    "missing": [],
     "used": [
       "content/newsroom/2026-06-03/generation-status.json",
       "content/newsroom/2026-06-03/selection-report.json",
@@ -34,17 +32,18 @@
       "content/newsroom/2026-06-03/fact-check-report.json",
       "content/newsroom/2026-06-03/source-effectiveness-report.json",
       "content/source-events/2026-06-03/source-change-events.json",
+      "content/newsroom/2026-06-03/repair-failure.json",
       "content/newsroom/2026-06-03/stale-claim-report.json"
     ]
   },
   "publish_status": {
-    "status": "publish-ready",
-    "run_mode": "publish_ready",
-    "quality_score": 88,
+    "status": "needs-fix",
+    "run_mode": "diagnostics_only",
+    "quality_score": 67,
     "quality_threshold": 60,
     "fact_check_status": "PASS",
-    "final_publish_ready": true,
-    "public_newsletter_ready": true,
+    "final_publish_ready": false,
+    "public_newsletter_ready": false,
     "review_pr_ready": true
   },
   "selection_summary": {
@@ -67,17 +66,19 @@
     ]
   },
   "claim_validation_summary": {
-    "status": "available",
-    "bound_claims": 8,
-    "total_claims": 8,
-    "derived_evidence_mapping_count": 8,
-    "overclaim_risk": "low",
-    "available_article_count": 1,
+    "status": "needs_fix",
+    "bound_claims": 4,
+    "total_claims": 6,
+    "derived_evidence_mapping_count": 4,
+    "overclaim_risk": "medium",
+    "available_article_count": 2,
     "not_available_article_count": 0
   },
   "hal_impact_summary": {
     "axes": [
-      "\\bCameraX\\b"
+      "\\bCameraX\\b",
+      "\\bSessionConfig\\b",
+      "\\bCameraController\\b"
     ],
     "article_count_with_axes": 2,
     "article_count_without_axes": 1
@@ -104,7 +105,7 @@
       "hal_signal_capsule_missing": 3
     },
     "hal_impact_axis_counts": {
-      "framework_hal_contract": 2,
+      "framework_hal_contract": 3,
       "camerax_app_compatibility": 2
     },
     "actionability_level_counts": {
@@ -159,13 +160,15 @@
     },
     {
       "index": 2,
-      "title": "Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
-      "url": "https://goo.gle/AdaptiveApps_IO26",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "title": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
+        "framework_hal_contract",
         "camerax_app_compatibility"
       ],
       "reader_owners": [
+        "camera_hal_owner",
         "camera_framework_owner",
         "camerax_app_compat_owner"
       ],
@@ -199,8 +202,8 @@
     },
     {
       "index": 3,
-      "title": "CameraX Release Notes - CameraX 1.6.0",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
         "framework_hal_contract",
@@ -217,7 +220,7 @@
       "signal_quality_status": "weak_signal",
       "concrete_action_signal_count": 1,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "CameraX Release Notes (official, high, score 95): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_promotion_reason": "CameraX Release Notes (official, high, score 89): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 3 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [],
       "soc_signal_type": "",
       "soc_signal_source_allowed": true,
@@ -296,28 +299,28 @@
       "key_evidence": [
         "version_or_release: Google I/O ‘26",
         "api_or_component: CameraX / Android camera APIs",
-        "behavior_change: Jetpack CameraX와 Media3를 활용하여 폴더블폰, 태블릿 등 다양한 폼 팩터에서 완벽하게 확장되고 반응하는 고품질 미리보기를 제공하는 CameraXViewfinder Composable을 통해 네이티브와 같은 전문가 수준의 미디어 경험을 구..."
+        "behavior_change: By leveraging Jetpack CameraX and Media3, you can build professional-grade experiences that feel native across the entire ecosystem. It starts..."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "claim_validation": {
-        "status": "available",
-        "bound_claims": 8,
-        "total_claims": 8,
+        "status": "needs_fix",
+        "bound_claims": 0,
+        "total_claims": 2,
         "overclaim_risk": "low"
       }
     },
     {
-      "candidate_id": "https://goo.gle/AdaptiveApps_IO26",
-      "title": "Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
-      "url": "https://goo.gle/AdaptiveApps_IO26",
-      "source": "Android Developers Blog",
+      "candidate_id": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "source": "CameraX Release Notes",
       "source_tier": "unknown",
       "source_role": "unknown",
       "source_url_quality": "unknown",
       "source_reliability": "unknown",
       "freshness_window": "unknown",
-      "relevance_bucket": "android_platform_camera_adjacent",
-      "article_group_key": "article:https://goo.gle/adaptiveapps_io26",
+      "relevance_bucket": "direct_aosp_camera",
+      "article_group_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "tooling_workflow_type": "",
       "source_event_id": "",
       "evidence_id": "",
@@ -325,12 +328,12 @@
       "effective_date": "",
       "date_quality": {
         "effective_date": "",
-        "published_date_present": false,
-        "date_source": "missing",
-        "date_confidence": 0,
-        "needs_editor_date_review": true,
-        "main_article_date_eligible": false,
-        "date_field": ""
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
       },
       "related_context_candidates": [],
       "finalSelectionEligibility": "unknown",
@@ -339,22 +342,22 @@
       "evidence_score": null,
       "hal_impact_axes": [],
       "key_evidence": [
-        "version_or_release: Google I/O 2026",
-        "api_or_component: Jetpack Compose, CameraX",
-        "behavior_change: Google I/O 2026에서 Android 생태계가 '기본 적응형(Adaptive by Default)'으로 선언됨에 따라, 폴더블폰, 태블릿, XR 등 다양한 폼 팩터에서 일관된 카메라 미리보기를 구현하기 위해 Jetpack Compose와 Came..."
+        "version_or_release: CameraX 1.6.0",
+        "api_or_component: CameraX",
+        "behavior_change: 2026년 3월 25일 공식 발표된 CameraX 1.6.0 릴리스에서는 앱이 카메라 라이프사이클에 바인딩하기 전에 기기의 하드웨어 지원 여부를 미리 확인할 수 있는 강력한 기능 조합 쿼리 API가 도입되었습니다. 이와 함께 차세대 Android 17 대..."
       ],
       "selection_reason": "unknown",
       "claim_validation": {
-        "status": "not_available",
-        "bound_claims": null,
-        "total_claims": null,
-        "overclaim_risk": "unknown"
+        "status": "available",
+        "bound_claims": 4,
+        "total_claims": 4,
+        "overclaim_risk": "low"
       }
     },
     {
-      "candidate_id": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
-      "title": "CameraX Release Notes - CameraX 1.6.0",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "candidate_id": "444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "source": "CameraX Release Notes",
       "source_tier": "high",
       "source_role": "official_release_source",
@@ -362,7 +365,7 @@
       "source_reliability": "official",
       "freshness_window": "fallback",
       "relevance_bucket": "direct_aosp_camera",
-      "article_group_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "article_group_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "tooling_workflow_type": "",
       "source_event_id": "",
       "evidence_id": "",
@@ -383,14 +386,16 @@
       "has_dated_evidence": true,
       "evidence_score": 8,
       "hal_impact_axes": [
-        "\\bCameraX\\b"
+        "\\bCameraX\\b",
+        "\\bSessionConfig\\b",
+        "\\bCameraController\\b"
       ],
       "key_evidence": [
-        "version_or_release: CameraX 1.6.0",
+        "version_or_release: CameraX 1.7.0-alpha01",
         "api_or_component: CameraX / androidx.camera",
-        "behavior_change: CameraX 1.6.0에서는 개발자가 라이프사이클에 바인딩하기 전에 HDR, 안정화, 특정 해상도, CameraX 확장 또는 슬로우 모션과 같은 특정 유스케이스 및 기능 조합이 기기에서 지원되는지 쿼리할 수 있는 API가 도입되었습니다."
+        "behavior_change: Exposed the CameraController.setSessionConfig() API. This allows providing a custom SessionConfig for advanced UseCase configurations not dire..."
       ],
-      "selection_reason": "CameraX Release Notes (official, high, score 95): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "selection_reason": "CameraX Release Notes (official, high, score 89): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 3 article-level signal(s) from article_text.)",
       "claim_validation": {
         "status": "not_available",
         "bound_claims": null,
@@ -609,29 +614,31 @@
   ],
   "excluded_candidates_truncated": true,
   "failure_diagnostics": {
-    "quality_hard_failures": [],
+    "quality_hard_failures": [
+      "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+      "Fact claim is missing item-level evidence_ids."
+    ],
     "fact_check_must_fix": [],
-    "repair_failures": [],
+    "repair_failures": [
+      "Targeted repair changed locked section order or source binding."
+    ],
     "candidate_shortage_hints": [
       "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.",
       "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
     ],
     "source_gap_warnings": [],
-    "missing_artifacts": [
-      "content/newsroom/2026-06-03/repair-failure.json"
-    ],
+    "missing_artifacts": [],
     "invalid_artifacts": []
   },
   "warnings": [
-    "Missing optional artifact: content/newsroom/2026-06-03/repair-failure.json",
     "Fallback claim_validation.status=not_available for selected article: Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
-    "Fallback source_tier=unknown for selected article: Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
-    "Fallback source_role=unknown for selected article: Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
-    "Fallback source_url_quality=unknown for selected article: Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
-    "Fallback source_reliability=unknown for selected article: Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
-    "Fallback freshness_window=unknown for selected article: Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
-    "Fallback claim_validation.status=not_available for selected article: Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
-    "Fallback hal_impact_axes=[] for selected article: Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
-    "Fallback claim_validation.status=not_available for selected article: CameraX Release Notes - CameraX 1.6.0"
+    "Fallback source_tier=unknown for selected article: CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+    "Fallback source_role=unknown for selected article: CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+    "Fallback source_url_quality=unknown for selected article: CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+    "Fallback source_reliability=unknown for selected article: CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+    "Fallback freshness_window=unknown for selected article: CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+    "Fallback claim_validation.status=not_available for selected article: CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+    "Fallback hal_impact_axes=[] for selected article: CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+    "Fallback claim_validation.status=not_available for selected article: CameraX Release Notes - CameraX 1.7.0-alpha01"
   ]
 }

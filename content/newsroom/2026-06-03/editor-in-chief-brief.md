@@ -2,35 +2,37 @@
 
 ## 이번 주 핵심 메시지
 
-이번 주 뉴스레터에서는 Google I/O '26에서 발표된 Jetpack CameraX 및 Media3 기반의 미디어 파이프라인 최적화 소식과 함께, 공식 릴리스된 CameraX 1.6.0의 주요 기능 쿼리 API 도입 및 기기별 호환성 버그 수정 사항을 다룹니다. 상위 프레임워크 계층의 적응형 폼 팩터 대응 요구사항과 기기별 스트림/버퍼 예외 처리가 Camera HAL 및 드라이버 검증에 미치는 실무적 영향을 분석합니다.
+이번 주 뉴스레터에서는 Google I/O '26에서 발표된 Jetpack CameraX 및 Media3 기반의 프리미엄 미디어 파이프라인 구축 방안과 함께, CameraX 1.7.0-alpha01의 신규 API 및 ImageAnalysis 회전 버그 수정 사항을 다룹니다. 상위 프레임워크의 변화가 Camera HAL 및 드라이버 검증, 스트림 구성에 미치는 실무적 영향을 분석합니다.
 
 ## 메인으로 봐야 할 기사
 
-CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영
+Google I/O '26: CameraXViewfinder Composable 및 Media3 기반 프리미엄 미디어 파이프라인 툴킷 공개
 
 ## Camera HAL 업무 연결 포인트
-- 자사 타겟 기기에서 VideoCapture와 ImageCapture가 동시에 바인딩되고 토치가 활성화된 시나리오를 설정하여, 캡처 버퍼 획득 실패나 타임아웃이 발생하는지 2주 내에 회귀 테스트를 수행하십시오.
-- Samsung Z Fold 4 사례와 유사하게 특정 YUV 출력 해상도에서 이미지 픽셀이 깨지거나 왜곡(Distortion)되는 현상이 없는지, ISP 하드웨어 스케일러 및 DMA-BUF 정렬 설정을 점검하십시오.
-- JPEG 인코더가 출력하는 비트스트림 마커 앞의 패딩 바이트 규격을 확인하고, ExifInterface 업데이트 없이도 표준 파서에서 정상 인식되도록 HAL 인코딩 파라미터를 검증하십시오.
+- 폴더블 및 태블릿 기기에서 화면 상태 전환(접힘/펼침, 회전) 시 CameraXViewfinder가 요청하는 Preview Stream 해상도 변경 요청이 HAL에서 끊김 없이 처리되는지 확인합니다.
+- Compose 기반 카메라 앱 구동 시 미리보기 버퍼의 렌더링 지연(Latency) 및 프레임 드롭 여부를 기록합니다.
+- 커스텀 SessionConfig를 통해 전달되는 다양한 스트림 구성(Stream Configuration) 조합이 HAL의 configureStreams에서 정상적으로 지원되는지 검증합니다.
+- ImageAnalysis 스트림 구동 시, HAL 메타데이터의 회전 정보(Rotation Metadata)와 실제 이미지 버퍼의 회전 정렬 상태를 대조 테스트합니다.
 
 ## 검증 결과 요약
 
 - 상태: PASS
 - must_fix 개수: 0
 - source gap 개수: 0
-- 의견: 전반적으로 잘 작성된 뉴스레터입니다. CameraX 1.6.0 릴리스 노트에 대한 상세한 분석과 HAL/드라이버 관점의 해석이 훌륭합니다. 다만, `public_article.decision_metadata` 필드는 내부 필드이므로 public article에서 제거해야 합니다. 이 외에는 정책 위반 사항이 없습니다.
+- 의견: 제공된 JSON은 유효한 JSON 스키마를 따르지만, public_article.decision_metadata 필드의 enum 값들이 정책에 정의된 허용 목록과 일치하지 않습니다. impact, scope, action, overclaim_risk 필드의 값들을 수정해야 합니다. 이 외의 내용은 정책을 잘 준수하고 있습니다.
 
 ## 품질 게이트
-- 품질 점수: 88/100
+- 품질 점수: 67/100
 - 품질 기준: 60
-- 품질 상태: PASS
-- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 3); 1pt claim-binding (CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영); 1pt claim-binding (CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영); 1pt claim-binding (CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영)
+- 품질 상태: NEEDS_FIX
+- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 2); 1pt editorial-story (briefing 3); 8pt source-integrity (Google I/O '26: CameraXViewfinder Composable 및 Media3 기반 프리미엄 미디어 파이프라인 툴킷 공개); 8pt claim-contract (Google I/O '26: CameraXViewfinder Composable 및 Media3 기반 프리미엄 미디어 파이프라인 툴킷 공개)
 
 ## Article Structure Contract
 
 | # | Article | 5-section | Fact boundary | HAL impact axis | Actionability | Limitations |
 | ---: | --- | --- | --- | --- | --- | --- |
-| 1 | CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영 | pass | present | framework_hal_contract, driver_image_pipeline, stream_buffer_metadata, camerax_app_compatibility | none | public-limitation |
+| 1 | Google I/O '26: CameraXViewfinder Composable 및 Media3 기반 프리미엄 미디어 파이프라인 툴킷 공개 | pass | present | framework_hal_contract, camerax_app_compatibility | present | none |
+| 2 | CameraX 1.7.0-alpha01: 고급 UseCase 구성을 위한 setSessionConfig() API 노출 및 ImageAnalysis 회전 버그 수정 | pass | present | framework_hal_contract, stream_buffer_metadata | present | none |
 
 ## Stale Claim Gate
 
@@ -42,8 +44,8 @@ CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 
 
 ## 후보 선택 진단
 
-- Reporter candidates: 4
-- Reporter-selected candidates: 3
+- Reporter candidates: 5
+- Reporter-selected candidates: 4
 - Final input candidates: 41
 - Final eligible candidates: 3
 - Final selected articles: 3
@@ -55,9 +57,9 @@ CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 
 - Demoted candidates: unknown
 - Composition mode: NORMAL
 - Editor review required: false
-- Reporter-selected but final-excluded: 1
-- direct_aosp_camera: 2
-- android_platform_camera_adjacent: 1
+- Reporter-selected but final-excluded: 2
+- direct_aosp_camera: 3
+- android_platform_camera_adjacent: 0
 - camera_driver_image_pipeline: 0
 - android_multimedia_camera_output: 0
 - soc_platform_signal: 0
@@ -80,14 +82,14 @@ Source/parser recovery hint:
 
 Homepage Headline:
 - decision: retained_current_above_margin
-- current_headline_key: url:https://goo.gle/AdaptiveApps_IO26
+- current_headline_key: url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0
 - replacement_headline_key: unknown
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
-- runtime_decayed_score: 98
+- runtime_decayed_score: 100
 - previous_stored_current_score: 100
-- last_scored_at: 2026-06-02
+- last_scored_at: 2026-06-03
 - scored_at: 2026-06-03
 - included_as_latest: true
 - latest_inclusion_mode: injected_from_headline_snapshot
@@ -106,4 +108,4 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 
 ## 권장 판단
 
-APPROVE
+REQUEST_CHANGES

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-06-03",
-  "generated_at": "2026-06-03T07:44:09.786Z",
+  "generated_at": "2026-06-03T18:01:51.422Z",
   "status": "OK",
   "failure_stage": "",
   "failure_reason": "",
@@ -32,17 +32,17 @@
   "composition_summary": {
     "selected_article_count": 3,
     "bucket_counts": {
-      "direct_aosp_camera": 2,
+      "direct_aosp_camera": 3,
       "camera_driver_image_pipeline": 0,
-      "android_platform_camera_adjacent": 1,
+      "android_platform_camera_adjacent": 0,
       "android_multimedia_camera_output": 0,
       "soc_platform_signal": 0,
       "cpp_ai_tooling_fallback": 0,
       "generic_tech_watchlist": 0
     },
-    "direct_aosp_camera_count": 2,
+    "direct_aosp_camera_count": 3,
     "camera_driver_image_pipeline_count": 0,
-    "android_platform_camera_adjacent_count": 1,
+    "android_platform_camera_adjacent_count": 0,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
     "cpp_ai_tooling_fallback_count": 0,
@@ -80,11 +80,11 @@
   "headline_decision": {
     "decision": "retained_current_above_margin",
     "reason": "retained_current_above_margin",
-    "current_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "current_headline_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
     "replacement_headline_key": null,
     "previous_stored_current_score": 100,
-    "runtime_decayed_score": 98,
-    "last_scored_at": "2026-06-02",
+    "runtime_decayed_score": 100,
+    "last_scored_at": "2026-06-03",
     "scored_at": "2026-06-03",
     "retained": true,
     "replaced": false,
@@ -95,10 +95,7 @@
     "revalidation_failure_reason": "",
     "selected_normally": false,
     "latest_inclusion_required": true,
-    "removed_due_to_headline_inclusion_count": 0,
-    "public_rendered_headline_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-    "public_render_reconciled": true,
-    "public_render_reconciliation_reason": "selected_headline_not_rendered_in_public_issue"
+    "removed_due_to_headline_inclusion_count": 0
   },
   "headline_latest_inclusion": {
     "included": true,
@@ -108,11 +105,7 @@
     "removed_due_to_headline_inclusion_count": 0
   },
   "removed_due_to_headline_inclusion": [],
-  "article_exposure_coverage": {
-    "mode": "forward_only",
-    "coverage_starts_at": "2026-05-23",
-    "backfill_included": false
-  },
+  "article_exposure_coverage": null,
   "candidate_pool_preflight_passed": true,
   "candidate_shortage_reviewable": false,
   "candidate_shortage_summary": {
@@ -149,9 +142,9 @@
     "selected_article_count": 3,
     "deterministic_selected_count": 3,
     "reserve_candidate_count": 2,
-    "direct_aosp_camera_count": 2,
+    "direct_aosp_camera_count": 3,
     "camera_driver_image_pipeline_count": 0,
-    "android_platform_camera_adjacent_count": 1,
+    "android_platform_camera_adjacent_count": 0,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
     "cpp_ai_tooling_fallback_count": 0,
@@ -245,11 +238,5 @@
       "count": 5
     }
   ],
-  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
-  "headline_public_render_reconciliation": {
-    "applied": true,
-    "previous_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
-    "rendered_headline_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-    "reason": "selected_headline_not_rendered_in_public_issue"
-  }
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."
 }

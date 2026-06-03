@@ -1,26 +1,33 @@
 {
-  "status": "PASS",
+  "status": "QUALITY_NEEDS_FIX",
   "fact_check_status": "PASS",
   "must_fix_count": 0,
-  "failure_kind": "",
+  "failure_kind": "editorial_reviewable",
   "failure_class": "",
-  "quality_status": "PASS",
-  "quality_score": 88,
+  "quality_status": "NEEDS_FIX",
+  "quality_score": 67,
   "quality_threshold": 60,
   "publish_ready": true,
   "selection_publish_ready": true,
-  "final_publish_ready": true,
-  "editor_review_required": false,
+  "final_publish_ready": false,
+  "editor_review_required": true,
   "date": "2026-06-03",
   "failure_stage": "",
   "failure_reason": "",
-  "quality_attempt_count": 1,
-  "quality_deduction_count": 12,
+  "quality_attempt_count": 0,
+  "quality_deduction_count": 11,
   "quota_error_count": 0,
   "invalid_json_count": 0,
   "model_usage": {
     "reporter attempt 1/2": {
       "gemini-2.5-flash": {
+        "requests": 3,
+        "successes": 0,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 3
+      },
+      "gemini-2.5-flash-lite": {
         "requests": 1,
         "successes": 1,
         "invalid_json": 0,
@@ -57,6 +64,15 @@
     },
     "fact-checker attempt 1/2": {
       "gemini-2.5-flash": {
+        "requests": 1,
+        "successes": 1,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 0
+      }
+    },
+    "editor repair attempt 1/2": {
+      "gemini-3.5-flash": {
         "requests": 1,
         "successes": 1,
         "invalid_json": 0,
@@ -128,6 +144,19 @@
       "primary_resolved_by": "code_default",
       "resolved_by": "code_default",
       "global_override_applied": false
+    },
+    "editor repair attempt 1/2": {
+      "stage": "editor repair attempt 1/2",
+      "stage_group": "repair",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false
     }
   },
   "candidate_input": {
@@ -142,33 +171,74 @@
     "candidate_count": 41
   },
   "run_context": {
-    "github_run_id": "26870735116",
-    "github_sha": "24b1c76fbc8bc11ef9f1683c724cec2a754e6c39",
+    "github_run_id": "26903312500",
+    "github_sha": "b44aaaf5422eae7fbc3a1397d51daba35e026977",
     "github_ref": "refs/heads/main"
   },
-  "locked_article_count": 1,
+  "locked_article_count": 0,
   "repaired_section_count": 0,
   "failed_section_count": 0,
   "skipped_repair_section_count": 0,
   "rejected_duplicate_article_count": 0,
-  "validate_ok": true,
-  "public_output_expected": true,
+  "validate_ok": false,
+  "public_output_expected": false,
   "todo_found": false,
   "empty_source_sections": [],
   "source_gap_count": 0,
   "stale_claim_status": "PASS",
   "stale_claim_removed_count": 0,
   "stale_claim_hard_failure_count": 0,
-  "editor_semantic_validation": null,
+  "editor_semantic_validation": {
+    "name": "EditorSemanticValidationError",
+    "message": "Targeted repair changed locked section order or source binding.",
+    "details": {
+      "field": "sections",
+      "reason": "locked_section_order_or_source_drift",
+      "mode": "targeted-repair",
+      "index": 2,
+      "expected": {
+        "headline": "CameraX 1.7.0-alpha01: 고급 UseCase 구성을 위한 setSessionConfig() API 노출 및 ImageAnalysis 회전 버그 수정",
+        "category": "direct_aosp_camera",
+        "source_candidate_hash": "444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee",
+        "source_urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+        ]
+      },
+      "actual": {
+        "headline": "Google I/O '26: Jetpack Compose 기반 Adaptive UI 전환 가이드 및 CameraX를 통한 다중 폼팩터 뷰파인더 최적화 발표",
+        "category": "android_platform_camera_adjacent",
+        "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
+        "source_urls": [
+          "https://goo.gle/adaptiveapps_io26"
+        ]
+      },
+      "sectionCount": 2
+    },
+    "field": "sections",
+    "stage": "editor repair attempt 1/2",
+    "attempt": 1,
+    "status": "FAILED_REPAIR_REVIEWABLE",
+    "lastKnownValidAttempt": 1,
+    "fallbackEditorSectionCount": 2
+  },
   "editor_public_article_judge": {
     "date": "2026-06-03",
     "overall_pass": true,
-    "section_count_expected": 1,
-    "section_count_actual": 1,
+    "section_count_expected": 2,
+    "section_count_actual": 2,
     "sections": [
       {
         "section_index": 1,
-        "headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "headline": "Google I/O '26: CameraXViewfinder Composable 도입으로 폴더블·태블릿 뷰파인더 렌더링 최적화",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 2,
+        "headline": "CameraX 1.7.0-alpha01 출시: 커스텀 SessionConfig 제어 API 도입 및 ImageAnalysis 회전 버그 수정",
         "public_article_pass": true,
         "reader_checkpoints_pass": true,
         "source_boundary_pass": true,
@@ -177,53 +247,54 @@
       }
     ]
   },
-  "repairAttempted": false,
+  "repairAttempted": true,
   "repairSucceeded": false,
   "input_candidate_count": 41,
   "eligible_candidate_count": 3,
   "selected_article_count": 3,
   "deterministic_selected_count": 3,
-  "rendered_main_article_count": 1,
+  "rendered_main_article_count": 2,
   "selected_group_count": 3,
-  "rendered_group_count": 1,
+  "rendered_group_count": 2,
   "explicitly_demoted_group_count": 1,
   "hard_blocked_group_count": 0,
   "selected_representative_group_keys": [
     "article:https://youtube.com/playlist",
-    "article:https://goo.gle/adaptiveapps_io26",
-    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
   ],
   "rendered_group_keys": [
-    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+    "article:https://youtube.com/playlist",
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
   ],
   "explicitly_demoted_group_keys": [
-    "article:https://youtube.com/playlist"
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
   ],
   "hard_blocked_group_keys": [],
-  "group_coverage_ok": false,
+  "group_coverage_ok": true,
   "reserve_candidate_count": 2,
   "demoted_article_count": 0,
   "fallback_topic_count": 0,
-  "reporter_candidate_count": 4,
-  "reporter_selected_count": 3,
+  "reporter_candidate_count": 5,
+  "reporter_selected_count": 4,
   "final_input_candidate_count": 41,
   "final_eligible_candidate_count": 3,
   "final_selected_article_count": 3,
-  "reporter_selected_but_final_excluded_count": 1,
+  "reporter_selected_but_final_excluded_count": 2,
   "ai_selected_article_count": 1,
   "underfilled": false,
   "review_gate_passed": true,
-  "publish_gate_passed": true,
+  "publish_gate_passed": false,
   "min_final_articles": 1,
   "max_final_articles": 5,
   "absolute_min_reviewable_articles": 0,
   "min_non_fallback_publish_ready_articles": 0,
-  "composition_mode": "NORMAL",
+  "composition_mode": "NEEDS_FIX",
   "publish_mode": "DEEP",
   "publish_mode_detail": {
     "mode": "DEEP",
-    "core_count": 2,
-    "adjacent_count": 1,
+    "core_count": 3,
+    "adjacent_count": 0,
     "context_count": 0,
     "context_min_signals": 1
   },
@@ -232,17 +303,17 @@
   "composition_summary": {
     "selected_article_count": 3,
     "bucket_counts": {
-      "direct_aosp_camera": 2,
+      "direct_aosp_camera": 3,
       "camera_driver_image_pipeline": 0,
-      "android_platform_camera_adjacent": 1,
+      "android_platform_camera_adjacent": 0,
       "android_multimedia_camera_output": 0,
       "soc_platform_signal": 0,
       "cpp_ai_tooling_fallback": 0,
       "generic_tech_watchlist": 0
     },
-    "direct_aosp_camera_count": 2,
+    "direct_aosp_camera_count": 3,
     "camera_driver_image_pipeline_count": 0,
-    "android_platform_camera_adjacent_count": 1,
+    "android_platform_camera_adjacent_count": 0,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
     "cpp_ai_tooling_fallback_count": 0,
@@ -323,9 +394,9 @@
   "primary_camera_stack_topic_count": 3,
   "supporting_main_article_count": 0,
   "forbidden_main_article_count": 0,
-  "direct_aosp_camera_count": 2,
+  "direct_aosp_camera_count": 3,
   "camera_driver_image_pipeline_count": 0,
-  "android_platform_camera_adjacent_count": 1,
+  "android_platform_camera_adjacent_count": 0,
   "android_multimedia_camera_output_count": 0,
   "soc_platform_signal_count": 0,
   "cpp_ai_tooling_fallback_count": 0,
@@ -339,11 +410,11 @@
   "headline_decision": {
     "decision": "retained_current_above_margin",
     "reason": "retained_current_above_margin",
-    "current_headline_key": "url:https://goo.gle/AdaptiveApps_IO26",
+    "current_headline_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
     "replacement_headline_key": null,
     "previous_stored_current_score": 100,
-    "runtime_decayed_score": 98,
-    "last_scored_at": "2026-06-02",
+    "runtime_decayed_score": 100,
+    "last_scored_at": "2026-06-03",
     "scored_at": "2026-06-03",
     "retained": true,
     "replaced": false,
@@ -364,11 +435,7 @@
     "removed_due_to_headline_inclusion_count": 0
   },
   "removed_due_to_headline_inclusion": [],
-  "article_exposure_coverage": {
-    "mode": "forward_only",
-    "coverage_starts_at": "2026-05-23",
-    "backfill_included": false
-  },
+  "article_exposure_coverage": null,
   "exclusion_reason_summary": [
     {
       "reason": "final_selection_blocked=true",
@@ -454,19 +521,19 @@
     }
   ],
   "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
-  "public_newsletter_ready": true,
+  "public_newsletter_ready": false,
   "review_publication_ready": false,
-  "diagnostics_only": false,
-  "homepage_visible_after_merge": true,
-  "public_state": "PUBLISH_READY",
-  "run_mode": "publish_ready",
-  "effective_homepage_visible": true,
+  "diagnostics_only": true,
+  "homepage_visible_after_merge": false,
+  "public_state": "DIAGNOSTICS_ONLY",
+  "run_mode": "diagnostics_only",
+  "effective_homepage_visible": false,
   "existing_public_artifact_detected": true,
   "retention_valid": false,
   "retention_error": "",
-  "public_artifact_policy": "latest_public_ready",
-  "public_artifact_source": "latest_run",
+  "public_artifact_policy": "hide_existing_public_artifact_after_latest_diagnostics_only",
+  "public_artifact_source": "none",
   "reconciliation_required": false,
-  "reconciliation_action": "none_latest_public_ready",
-  "reconciliation_reason": "latest run is final publish-ready and public structure is valid"
+  "reconciliation_action": "removed_newsletters_index_entry",
+  "reconciliation_reason": "latest diagnostics-only run is not public-ready and no valid retention metadata exists"
 }

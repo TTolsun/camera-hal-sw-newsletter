@@ -25,17 +25,12 @@
 - content/newsroom/2026-06-03/editor-in-chief-brief.md
 - content/newsroom/2026-06-03/release-qa-report.md
 - content/newsroom/2026-06-03/artifact-manifest.json
-- newsletters/2026-06-03/newsletter.md
-- newsletters/2026-06-03/index.html
-- data/newsletters.json
-- data/homepage-headline.json
-- data/article-exposure-history.json
 
 ## 산출물 리뷰 순서
 
-- present: 56/80
-- missing_required: 1
-- attention_required: 1
+- present: 67/81
+- missing_required: 0
+- attention_required: 2
 
 ### 편집장 브리프
 
@@ -44,34 +39,38 @@
 
 ### 최종 기사 / 공개 출력
 
-- `newsletters/2026-06-03/newsletter.md` - changed
-- `newsletters/2026-06-03/index.html` - changed
-- `data/newsletters.json` - changed
-- `data/homepage-headline.json` - changed
-- `data/article-exposure-history.json` - changed
+- `newsletters/2026-06-03/newsletter.md` - present
+- `newsletters/2026-06-03/index.html` - present
+- `data/newsletters.json` - present
+- `data/homepage-headline.json` - present
+- `data/article-exposure-history.json` - present
 
 ### 사실성 / 품질 / HAL 게이트
 
 - `content/newsroom/2026-06-03/fact-check-report.md` - changed
 - `content/newsroom/2026-06-03/quality-report.md` - changed
-- `content/newsroom/2026-06-03/hal-signal-quality-report.md` - missing required (required_artifact_missing)
+- `content/newsroom/2026-06-03/hal-signal-quality-report.md` - present
 - `content/newsroom/2026-06-03/stale-claim-report.md` - changed
+- `content/newsroom/2026-06-03/image-audit-report.md` - present
 - `content/newsroom/2026-06-03/source-quality-report.md` - present
 
 ### 후보 선정 진단
 
 - `content/newsroom/2026-06-03/selection-diagnostics.md` - present
 - `content/newsroom/2026-06-03/selection-report.md` - present
+- `content/newsroom/2026-06-03/source-quality-diagnosis.md` - present
 
 ### 필요 시 확인
 
 - `content/newsroom/2026-06-03/release-qa-report.md` - changed
 - `content/newsroom/2026-06-03/retry-history.md` - changed
+- `content/newsroom/2026-06-03/source-effectiveness-report.md` - present
 - `content/newsroom/2026-06-03/source-discovery-feedback-report.md` - present
 - `content/newsroom/2026-06-03/gemini-source-discovery-report.md` - present
 
 ### 디버그 근거
 
+- `content/newsroom/2026-06-03/recovery-prompt.md` - changed
 - `content/collected-news/2026-06-03/manual-candidates.json` - present
 - `content/collected-news/2026-06-03/candidates.json` - present
 - `content/collected-news/2026-06-03/raw-candidate-manifest.json` - present
@@ -83,13 +82,18 @@
 - `content/newsroom/2026-06-03/editor-draft.md` - changed
 - `content/newsroom/2026-06-03/fact-check-report.json` - changed
 - `content/newsroom/2026-06-03/quality-report.json` - changed
+- `content/newsroom/2026-06-03/hal-signal-quality-report.json` - present
 - `content/newsroom/2026-06-03/stale-claim-report.json` - changed
 - `content/newsroom/2026-06-03/retry-history.json` - changed
 - `content/newsroom/2026-06-03/shortlisted-candidates.json` - changed
 - `content/newsroom/2026-06-03/selection-report.json` - present
 - `content/newsroom/2026-06-03/article-capsules.json` - changed
 - `content/newsroom/2026-06-03/background-context.json` - changed
+- `content/newsroom/2026-06-03/evidence-pack-summary.json` - present
+- `content/newsroom/2026-06-03/image-audit-report.json` - present
 - `content/newsroom/2026-06-03/source-quality-report.json` - present
+- `content/newsroom/2026-06-03/source-quality-diagnosis.json` - present
+- `content/newsroom/2026-06-03/source-effectiveness-report.json` - present
 - `content/newsroom/2026-06-03/source-discovery-feedback-report.json` - present
 - `content/newsroom/2026-06-03/source-clusters.json` - present
 - `content/newsroom/2026-06-03/gemini-source-proposals.json` - present
@@ -112,19 +116,14 @@
 - `content/newsroom/2026-06-03/reporter-candidates-attempt-1.json` - present
 - `content/newsroom/2026-06-03/artifact-manifest.json` - changed
 
+### 미분류 산출물
+
+- `content/newsroom/2026-06-03/repair-failure.json` - present
+
 
 ## npm run validate 실행 결과
 
-> camera-hal-sw-newsletter@1.0.0 validate:site
-> node scripts/validate-site.js
-
-Validated 17 newsletter entries.
-
-
-> camera-hal-sw-newsletter@1.0.0 validate:images
-> node scripts/validate-external-images.js
-
-Validated 2 article images.
+editorial_reviewable: skipped public validation because this review PR is not publishable.
 
 ## 잔여 TODO 여부
 
@@ -141,7 +140,7 @@ Validated 2 article images.
 - source gap 개수: 0
 
 ## 품질 게이트
-- 품질 점수: 88/100
+- 품질 점수: 67/100
 - 품질 기준: 60
-- 품질 상태: PASS
-- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 3); 1pt claim-binding (CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영); 1pt claim-binding (CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영); 1pt claim-binding (CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영)
+- 품질 상태: NEEDS_FIX
+- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 2); 1pt editorial-story (briefing 3); 8pt source-integrity (Google I/O '26: CameraXViewfinder Composable 및 Media3 기반 프리미엄 미디어 파이프라인 툴킷 공개); 8pt claim-contract (Google I/O '26: CameraXViewfinder Composable 및 Media3 기반 프리미엄 미디어 파이프라인 툴킷 공개)

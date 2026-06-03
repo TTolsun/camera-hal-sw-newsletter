@@ -20,7 +20,7 @@
     "collected_count": 39,
     "eligible_count": 7,
     "selected_count": 3,
-    "rendered_main_count": 1,
+    "rendered_main_count": 2,
     "source_gap_count": 32,
     "generic_noise_count": 28,
     "duplicate_count": 1,
@@ -249,8 +249,8 @@
       "synthetic": false,
       "collected_count": 27,
       "eligible_count": 3,
-      "selected_count": 2,
-      "rendered_main_count": 0,
+      "selected_count": 1,
+      "rendered_main_count": 1,
       "source_gap_count": 24,
       "camera_relevant_raw_count": 3,
       "parser_repair_reason_count": 0,
@@ -274,8 +274,8 @@
         "reference_only": 23
       },
       "selected_main_source_quality_coverage": {
-        "selected_main_count": 2,
-        "with_source_quality_count": 2
+        "selected_main_count": 1,
+        "with_source_quality_count": 1
       },
       "main_eligible_source_quality_coverage": {
         "main_eligible_candidate_count": 2,
@@ -291,11 +291,11 @@
       "reddit_cross_checked_count": 0,
       "reddit_only_blocked_count": 0,
       "eligible_rate": 0.1111,
-      "selection_rate": 0.6667,
-      "rendered_rate": 0,
+      "selection_rate": 0.3333,
+      "rendered_rate": 1,
       "source_gap_rate": 0.8889,
       "noise_rate": 0.8519,
-      "effectiveness_score": 0,
+      "effectiveness_score": 12.59,
       "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
         "Duplicate candidates detected: within_source=1, across_sources=0.",
@@ -326,7 +326,6 @@
         }
       ],
       "sample_selected_urls": [
-        "https://goo.gle/AdaptiveApps_IO26",
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "sample_excluded_urls": [
@@ -1338,7 +1337,7 @@
       "synthetic": false,
       "collected_count": 2,
       "eligible_count": 2,
-      "selected_count": 1,
+      "selected_count": 2,
       "rendered_main_count": 1,
       "source_gap_count": 0,
       "camera_relevant_raw_count": 2,
@@ -1359,8 +1358,8 @@
       },
       "source_quality_blocker_summary": {},
       "selected_main_source_quality_coverage": {
-        "selected_main_count": 1,
-        "with_source_quality_count": 1
+        "selected_main_count": 2,
+        "with_source_quality_count": 2
       },
       "main_eligible_source_quality_coverage": {
         "main_eligible_candidate_count": 2,
@@ -1376,18 +1375,19 @@
       "reddit_cross_checked_count": 0,
       "reddit_only_blocked_count": 0,
       "eligible_rate": 1,
-      "selection_rate": 0.5,
-      "rendered_rate": 1,
+      "selection_rate": 1,
+      "rendered_rate": 0.5,
       "source_gap_rate": 0,
       "noise_rate": 0,
-      "effectiveness_score": 87.5,
+      "effectiveness_score": 85,
       "recommendation": "KEEP",
       "reasons": [
         "Source contributed at least one rendered main article."
       ],
       "top_exclusion_reasons": [],
       "sample_selected_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
       ],
       "sample_excluded_urls": []
     },

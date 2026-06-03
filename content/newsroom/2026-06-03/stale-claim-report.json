@@ -5,8 +5,12 @@
   "removed_sections": [],
   "final_section_sources": [
     {
-      "title": "CameraX Release Notes - CameraX 1.6.0",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+    },
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
     }
   ],
   "stale_claim_items_removed": [],
@@ -14,7 +18,7 @@
   "unused_references_removed": [],
   "retained_release_claims": [
     {
-      "claim": "CameraX 1.6.0",
+      "claim": "CameraX 1.7.0-alpha01",
       "reason": "retained because the claim appears in final section evidence."
     }
   ],

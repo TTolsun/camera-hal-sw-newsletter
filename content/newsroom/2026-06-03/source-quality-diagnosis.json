@@ -11,7 +11,7 @@
     "source_quality_report": "content/newsroom/2026-06-03/source-quality-report.json",
     "source_discovery_feedback_report": "content/newsroom/2026-06-03/source-discovery-feedback-report.json",
     "merged_candidate_manifest": "content/collected-news/2026-06-03/merged-candidate-manifest.json",
-    "evidence_pack_summary": null
+    "evidence_pack_summary": "content/newsroom/2026-06-03/evidence-pack-summary.json"
   },
   "evidence_completeness": {
     "candidate_input": true,
@@ -22,7 +22,7 @@
     "source_quality_report": true,
     "source_discovery_feedback_report": true,
     "merged_candidate_manifest": true,
-    "evidence_pack_summary": false
+    "evidence_pack_summary": true
   },
   "raw_candidate_count": 39,
   "eligible_candidate_count": 7,
@@ -1455,11 +1455,5 @@
       "raw_count": 0
     }
   ],
-  "warnings": [
-    {
-      "type": "missing_optional_artifact",
-      "message": "content/newsroom/2026-06-03/evidence-pack-summary.json not found; partial diagnosis will continue.",
-      "source_artifact": "content/newsroom/2026-06-03/evidence-pack-summary.json"
-    }
-  ]
+  "warnings": []
 }
