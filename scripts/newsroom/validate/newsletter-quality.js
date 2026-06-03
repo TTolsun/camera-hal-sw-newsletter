@@ -61,6 +61,9 @@ const {
   validateEventType
 } = require('../common/date-signals');
 const {
+  candidateGroupKey
+} = require('../common/article-groups');
+const {
   SOURCE_QUALITY_FIELD_DRIFT,
   normalizeSourceQuality,
   sourceQualityFieldDrift
@@ -1834,12 +1837,30 @@ function salvagePublishableSubset(date, editor, reporter, factCheck, qualityRepo
   if (keepIndices.length < minArticles || keepIndices.length >= sections.length) return null;
 
   const keepSet = new Set(keepIndices);
+  const droppedIndices = sections.map((_, index) => index).filter(index => !keepSet.has(index));
   // Keep only the fact-check items that reference a SURVIVING section. Items that reference a
   // dropped section (or nothing identifiable) belong to removed content and are pruned. Matching
   // against kept sections is robust to headline variants on the dropped ones.
   const refsKept = probe => keepIndices.some(index => referencesSection(probe, index, sections[index]));
 
-  const subsetEditor = { ...editor, sections: keepIndices.map(index => sections[index]) };
+  // Dropped sections must be recorded as hard-blocked groups so the editor "selected group
+  // coverage" contract still holds (every selected group is rendered, demoted, or hard-blocked).
+  const droppedHardBlockedGroups = droppedIndices
+    .map(index => {
+      const section = sections[index];
+      const key = text(section.article_group_key || section.articleGroupKey) ||
+        candidateGroupKey({ url: ensureArray(section.sources)[0]?.url, title: section.headline });
+      return key
+        ? { article_group_key: key, hard_block_reason: 'thin-week salvage dropped unpublishable article', reason_code: 'quality_hard_blocker' }
+        : null;
+    })
+    .filter(Boolean);
+
+  const subsetEditor = {
+    ...editor,
+    sections: keepIndices.map(index => sections[index]),
+    hard_blocked_groups: [...ensureArray(editor.hard_blocked_groups), ...droppedHardBlockedGroups]
+  };
   const subsetFactCheck = {
     ...factCheck,
     must_fix: ensureArray(factCheck?.must_fix).filter(item => refsKept(factCheckProbe(item))),
