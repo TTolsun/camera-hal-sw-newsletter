@@ -1,0 +1,1714 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-03",
+  "score": 88,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "PASS",
+  "summary": "Quality score 88, threshold 60, max score 100. Editor review is ready.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "claim-binding",
+      "points": 1,
+      "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+      "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "source_url_derived_evidence_mapping",
+      "dedupe_key": "1:claim:camerax_1_6_0_release:source_url_derived_evidence_mapping"
+    },
+    {
+      "category": "claim-binding",
+      "points": 1,
+      "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+      "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "source_url_derived_evidence_mapping",
+      "dedupe_key": "1:claim:query_api_introduced:source_url_derived_evidence_mapping"
+    },
+    {
+      "category": "claim-binding",
+      "points": 1,
+      "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+      "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "source_url_derived_evidence_mapping",
+      "dedupe_key": "1:claim:android_17_crash_fix:source_url_derived_evidence_mapping"
+    },
+    {
+      "category": "claim-binding",
+      "points": 1,
+      "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+      "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "source_url_derived_evidence_mapping",
+      "dedupe_key": "1:claim:preview_stabilization_fix:source_url_derived_evidence_mapping"
+    },
+    {
+      "category": "claim-binding",
+      "points": 1,
+      "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+      "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "source_url_derived_evidence_mapping",
+      "dedupe_key": "1:claim:z_fold_4_yuv_exclude:source_url_derived_evidence_mapping"
+    },
+    {
+      "category": "claim-binding",
+      "points": 1,
+      "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+      "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "source_url_derived_evidence_mapping",
+      "dedupe_key": "1:claim:a53_torch_fix:source_url_derived_evidence_mapping"
+    },
+    {
+      "category": "claim-binding",
+      "points": 1,
+      "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+      "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "source_url_derived_evidence_mapping",
+      "dedupe_key": "1:claim:ultrawide_flash_fix:source_url_derived_evidence_mapping"
+    },
+    {
+      "category": "claim-binding",
+      "points": 1,
+      "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+      "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "source_url_derived_evidence_mapping",
+      "dedupe_key": "1:claim:exif_padding_fix:source_url_derived_evidence_mapping"
+    },
+    {
+      "category": "source-integrity",
+      "points": 1,
+      "reason": "CameraX source extraction failure: CameraX HAL boundary is missing from the article. (adjacent-content publishing: soft note, not a publish blocker)",
+      "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": "",
+      "adjacent_relaxed": true
+    },
+    {
+      "category": "scope-relevance",
+      "points": 1,
+      "reason": "1 final-selected candidate(s) have weak HAL/actionability scores under the expanded AOSP Camera / driver / SoC / native relevance model. (adjacent-content publishing: soft note, not a publish blocker)",
+      "location": "",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": "",
+      "adjacent_relaxed": true
+    }
+  ],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "category": "direct_aosp_camera",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.6.0",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "known_limitations",
+          "watch_items"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": true,
+        "has_watch_items": true,
+        "has_do_not_claim": false,
+        "limitation_visibility": "public-limitation"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "source_candidate_hash": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "claim-binding",
+          "points": 1,
+          "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence."
+        },
+        {
+          "category": "claim-binding",
+          "points": 1,
+          "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence."
+        },
+        {
+          "category": "claim-binding",
+          "points": 1,
+          "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence."
+        },
+        {
+          "category": "claim-binding",
+          "points": 1,
+          "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence."
+        },
+        {
+          "category": "claim-binding",
+          "points": 1,
+          "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence."
+        },
+        {
+          "category": "claim-binding",
+          "points": 1,
+          "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence."
+        },
+        {
+          "category": "claim-binding",
+          "points": 1,
+          "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence."
+        },
+        {
+          "category": "claim-binding",
+          "points": 1,
+          "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence."
+        },
+        {
+          "category": "source-integrity",
+          "points": 1,
+          "reason": "CameraX source extraction failure: CameraX HAL boundary is missing from the article. (adjacent-content publishing: soft note, not a publish blocker)"
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 8,
+    "total_claims": 8,
+    "derived_evidence_mapping_count": 8,
+    "overclaim_risk": "low",
+    "available_article_count": 1,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "claim_id": "claim:camerax_1_6_0_release",
+      "claim_type": "fact",
+      "status": "soft_warning",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "CameraX 1.6.0 정식 버전이 2026년 3월 25일에 릴리스되었습니다.",
+      "evidence_ids": [],
+      "resolved_evidence_ids": [
+        "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": true,
+      "issues": [
+        {
+          "reason_code": "source_url_derived_evidence_mapping",
+          "message": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+          "blocking": false,
+          "severity": "soft",
+          "support_checked_evidence_ids": [
+            "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+          ]
+        }
+      ]
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "claim_id": "claim:query_api_introduced",
+      "claim_type": "fact",
+      "status": "soft_warning",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "개발자가 라이프사이클 바인딩 전에 HDR, 안정화, 특정 해상도, CameraX 확장, 슬로우 모션 등의 기능 조합 지원 여부를 쿼리할 수 있는 API가 도입되었습니다.",
+      "evidence_ids": [],
+      "resolved_evidence_ids": [
+        "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": true,
+      "issues": [
+        {
+          "reason_code": "source_url_derived_evidence_mapping",
+          "message": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+          "blocking": false,
+          "severity": "soft",
+          "support_checked_evidence_ids": [
+            "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+          ]
+        }
+      ]
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "claim_id": "claim:android_17_crash_fix",
+      "claim_type": "fact",
+      "status": "soft_warning",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "다가올 Android 17 기기에서 알 수 없는 다이내믹 레인지 모드가 추가되어 발생하던 CameraX 앱의 크래시 문제를 수정했습니다.",
+      "evidence_ids": [],
+      "resolved_evidence_ids": [
+        "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": true,
+      "issues": [
+        {
+          "reason_code": "source_url_derived_evidence_mapping",
+          "message": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+          "blocking": false,
+          "severity": "soft",
+          "support_checked_evidence_ids": [
+            "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+          ]
+        }
+      ]
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "claim_id": "claim:preview_stabilization_fix",
+      "claim_type": "fact",
+      "status": "soft_warning",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "PREVIEW_STABILIZATION이 VideoCapture와 함께 사용될 때 Preview 유스케이스가 활성화되어 있지 않아도 일관된 결과를 제공하도록 기능 그룹 API를 수정했습니다.",
+      "evidence_ids": [],
+      "resolved_evidence_ids": [
+        "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": true,
+      "issues": [
+        {
+          "reason_code": "source_url_derived_evidence_mapping",
+          "message": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+          "blocking": false,
+          "severity": "soft",
+          "support_checked_evidence_ids": [
+            "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+          ]
+        }
+      ]
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "claim_id": "claim:z_fold_4_yuv_exclude",
+      "claim_type": "fact",
+      "status": "soft_warning",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "low",
+      "text": "Samsung Z Fold 4 기기에서 이미지 왜곡 문제를 일으키는 특정 YUV 포맷 출력 크기를 제외(Exclude) 조치했습니다.",
+      "evidence_ids": [],
+      "resolved_evidence_ids": [
+        "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": true,
+      "issues": [
+        {
+          "reason_code": "source_url_derived_evidence_mapping",
+          "message": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+          "blocking": false,
+          "severity": "soft",
+          "support_checked_evidence_ids": [
+            "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+          ]
+        }
+      ]
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "claim_id": "claim:a53_torch_fix",
+      "claim_type": "fact",
+      "status": "soft_warning",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "low",
+      "text": "Samsung A53 기기에서 VideoCapture 유스케이스가 바인딩된 상태에서 토치(Torch)를 켠 채 이미지 캡처를 수행할 때 간헐적으로 실패하던 문제를 해결했습니다.",
+      "evidence_ids": [],
+      "resolved_evidence_ids": [
+        "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": true,
+      "issues": [
+        {
+          "reason_code": "source_url_derived_evidence_mapping",
+          "message": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+          "blocking": false,
+          "severity": "soft",
+          "support_checked_evidence_ids": [
+            "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+          ]
+        }
+      ]
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "claim_id": "claim:ultrawide_flash_fix",
+      "claim_type": "fact",
+      "status": "soft_warning",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "일부 기기에서 초광각 카메라와 플래시를 함께 사용할 때 이미지가 어둡게 노출(Underexposed)되는 문제를 수정했습니다.",
+      "evidence_ids": [],
+      "resolved_evidence_ids": [
+        "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": true,
+      "issues": [
+        {
+          "reason_code": "source_url_derived_evidence_mapping",
+          "message": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+          "blocking": false,
+          "severity": "soft",
+          "support_checked_evidence_ids": [
+            "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+          ]
+        }
+      ]
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "claim_id": "claim:exif_padding_fix",
+      "claim_type": "fact",
+      "status": "soft_warning",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "low",
+      "text": "JPEG 인코더가 마커 앞에 채움 바이트(Fill bytes)를 추가하는 기기에서 이미지 캡처 실패를 해결하기 위해, 0xFF 패딩이 있는 JPEG 파싱 수정이 포함된 ExifInterface 종속성을 업데이트했습니다.",
+      "evidence_ids": [],
+      "resolved_evidence_ids": [
+        "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        },
+        {
+          "evidence_id": "",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed",
+          "derived_from_source_url": true
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": true,
+      "issues": [
+        {
+          "reason_code": "source_url_derived_evidence_mapping",
+          "message": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+          "blocking": false,
+          "severity": "soft",
+          "support_checked_evidence_ids": [
+            "candidate:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:source-summary",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-release-notes-1-migrated-to-a-high-performance-unified-camera-stack:688f544125e300f1",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:643c0e023f82c237",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:5417ea7050d08cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1e79b82bd70c61ba",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:4a5794f87519d870",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:a680216575517cb8",
+            "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:e54c63883abf623f"
+          ]
+        }
+      ]
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 1,
+    "strong_signal_count": 0,
+    "usable_signal_count": 0,
+    "weak_signal_count": 1,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 1,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 1,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "framework_hal_contract": 1,
+      "driver_image_pipeline": 1,
+      "stream_buffer_metadata": 1,
+      "camerax_app_compatibility": 1
+    },
+    "actionability_level_counts": {
+      "none": 1
+    },
+    "effective_actionability_level_counts": {
+      "concrete_check": 1
+    },
+    "signal_quality_status_counts": {
+      "weak_signal": 1
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "Contains source-bound API behavior action evidence: api,stream_buffer_metadata.",
+      "signal_quality_status": "weak_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "CameraX 1.6.0 릴리스는 Camera HAL 및 드라이버에 여러 가지 중요한 영향을 미칩니다. 새로운 API는 HAL이 지원하는 기능 조합에 대한 명확한 쿼리 메커니즘을 제공하여 HAL 구현의 유효성 검사 및 호환성 테스트를 개선할 수 있습니다.",
+      "fallback_guard_notes": [
+        "릴리스 노트에 명시적으로 언급되지 않는 한, 직접적인 Camera HAL API 또는 벤더 HAL 계약 변경을 주장하지 마십시오.",
+        "아티팩트 버전 테이블을 동작 변경 증거로 사용하지 마십시오.",
+        "CameraX 1.6.0의 버그 수정 내역은 상위 프레임워크 및 라이브러리 계층의 우회 조치이며, Camera HAL3 인터페이스 규격 자체나 드라이버 아키텍처를 직접 변경하는 것은 아닙니다.",
+        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+        "Do not use artifact version tables as behavior-change evidence."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 1,
+    "briefing_count": 3,
+    "camera_article_count": 1,
+    "legacy_regex_camera_article_count": 1,
+    "expanded_scope_article_count": 1,
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 1,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 0,
+    "publishable_scope_count": 1,
+    "composition_mode": "NORMAL",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "source_candidate_hash": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 1,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 0,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 1,
+      "multimedia": 0,
+      "platform": 0,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android_platform_camera_adjacent"
+      ],
+      "multimedia": [
+        "android_multimedia_camera_output"
+      ],
+      "platform": [
+        "soc_platform_signal"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 0,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 1,
+    "blocking_deduction_count": 0,
+    "blocking_deduction_categories": [],
+    "hard_fail_count": 0,
+    "soft_deduction_count": 12,
+    "article_gate_counts": {
+      "PASS": 1,
+      "DEMOTE": 0,
+      "FAIL": 0
+    },
+    "article_section_contract": {
+      "complete_count": 1,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {
+        "known_limitations": 1,
+        "watch_items": 1
+      },
+      "limitation_visibility_counts": {
+        "public-limitation": 1
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "known_limitations",
+            "watch_items"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": true,
+          "has_watch_items": true,
+          "has_do_not_claim": false,
+          "limitation_visibility": "public-limitation"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 8,
+      "total_claims": 8,
+      "derived_evidence_mapping_count": 8,
+      "overclaim_risk": "low",
+      "available_article_count": 1,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 8,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 1,
+      "strong_signal_count": 0,
+      "usable_signal_count": 0,
+      "weak_signal_count": 1,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 1,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 0,
+      "main_articles_with_concrete_action": 1,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "framework_hal_contract": 1,
+        "driver_image_pipeline": 1,
+        "stream_buffer_metadata": 1,
+        "camerax_app_compatibility": 1
+      },
+      "actionability_level_counts": {
+        "none": 1
+      },
+      "effective_actionability_level_counts": {
+        "concrete_check": 1
+      },
+      "signal_quality_status_counts": {
+        "weak_signal": 1
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "driver_image_pipeline",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "camera_driver_owner"
+        ],
+        "actionability_level": "none",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "Contains source-bound API behavior action evidence: api,stream_buffer_metadata.",
+        "signal_quality_status": "weak_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "CameraX 1.6.0 릴리스는 Camera HAL 및 드라이버에 여러 가지 중요한 영향을 미칩니다. 새로운 API는 HAL이 지원하는 기능 조합에 대한 명확한 쿼리 메커니즘을 제공하여 HAL 구현의 유효성 검사 및 호환성 테스트를 개선할 수 있습니다.",
+        "fallback_guard_notes": [
+          "릴리스 노트에 명시적으로 언급되지 않는 한, 직접적인 Camera HAL API 또는 벤더 HAL 계약 변경을 주장하지 마십시오.",
+          "아티팩트 버전 테이블을 동작 변경 증거로 사용하지 마십시오.",
+          "CameraX 1.6.0의 버그 수정 내역은 상위 프레임워크 및 라이브러리 계층의 우회 조치이며, Camera HAL3 인터페이스 규격 자체나 드라이버 아키텍처를 직접 변경하는 것은 아닙니다.",
+          "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+          "Do not use artifact version tables as behavior-change evidence."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "claim-binding",
+        "count": 8
+      },
+      {
+        "category": "editorial-story",
+        "count": 2
+      },
+      {
+        "category": "scope-relevance",
+        "count": 1
+      },
+      {
+        "category": "source-integrity",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-03",
+  "status": "PASS",
+  "removed_sections": [],
+  "final_section_sources": [
+    {
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [
+    {
+      "claim": "CameraX 1.6.0",
+      "reason": "retained because the claim appears in final section evidence."
+    }
+  ],
+  "hard_failures": []
+}
