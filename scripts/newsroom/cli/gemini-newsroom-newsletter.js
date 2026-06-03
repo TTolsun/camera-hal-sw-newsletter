@@ -254,6 +254,14 @@ function articleQualityVerdictPrompt() {
   ].join('\n');
 }
 
+function dateFramingGuardrail() {
+  return [
+    '시간 표현 정확성: "최근", "방금", "이번 주", "recently", "newly released" 같은 상대적 최신성 표현은 candidate의 published_date가 newsletter 날짜 기준 약 2주 이내일 때만 사용하세요.',
+    'released_date가 수 주~수 개월 전이면 상대 표현 대신 실제 시점을 명시하세요(예: "3월 출시된", "N주 전 공개된"). catch-up(지난 소식) 기사뿐 아니라 모든 main article에 동일하게 적용합니다.',
+    'published_date를 모르면 출시 시점을 단정하지 말고 시점 표현 자체를 생략하세요. 오래된 릴리스를 "최근/recently"로 표현하면 fact-check must_fix 대상입니다.'
+  ].join('\n');
+}
+
 function writeNewsletterDate(date, rootDir = root) {
   const tmpDir = path.join(rootDir, '.tmp');
   fs.mkdirSync(tmpDir, { recursive: true });
@@ -3566,6 +3574,7 @@ async function main() {
       [
         '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI editor입니다.',
         'AOSP Camera, Camera HAL, Camera Driver, SoC platform engineer가 10분 안에 읽을 수 있는 한국어 technical newsletter draft를 작성하세요.',
+        dateFramingGuardrail(),
         'docs/editorial-policy.md와 docs/newsletter-template.md를 정확히 따르세요.',
         `중복되지 않는 source material이 충분하면 Newsletter Policy range (${articleCountRangeText()}) 안에서 main articles를 작성하세요.`,
         `Final main article count는 ${publishGateCriteriaText()}를 만족해야 합니다.`,
@@ -3794,6 +3803,7 @@ async function main() {
           repairStage,
           [
           '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI repair editor입니다.',
+          dateFramingGuardrail(),
           'repair plan에 listed failed sections에 대한 regenerated section JSON만 반환하세요. full newsletter draft를 반환하지 마세요.',
           'repair-section action에서는 같은 source를 사용해 affected section만 복구하세요.',
           'replace-section action에서는 weak evidence를 다시 쓰지 말고 더 강한 supplied candidate로 section을 교체하세요.',
@@ -3964,6 +3974,7 @@ async function main() {
             completionStage,
             [
             '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI completion editor입니다.',
+            dateFramingGuardrail(),
             `${missingArticleCount}개의 추가 main article section만 반환하세요. full newsletter rewrite는 하지 마세요.`,
             '기존 valid sections는 URLs, titles, source names, source-date-title combinations를 exclusion해서 보존하세요.',
             '이 prompt에 제공된 eligible reporter candidates만 사용하세요. eligible list에서 빠진 candidate는 사용하지 마세요.',
