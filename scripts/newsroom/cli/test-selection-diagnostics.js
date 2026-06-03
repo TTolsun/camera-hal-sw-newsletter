@@ -210,10 +210,10 @@ const qualityReport = buildNewsletterQualityReport(
   { status: 'PASS', must_fix: [], source_gaps: [] },
   { threshold: 0, seedEvidencePack: null, adjacentContentPublishing: false }
 );
-const weakFinalDeduction = qualityReport.deductions.filter(deduction =>
-  /final-selected candidate\(s\) have weak HAL\/actionability scores/.test(deduction.reason)
-);
-assert.strictEqual(weakFinalDeduction.length, 1);
-assert.strictEqual(weakFinalDeduction[0].points, 2);
+// The deterministic "weak HAL/actionability scores" deduction was removed; editorial
+// usefulness for a Camera HAL SW engineer is now judged by the fact-checker LLM. The
+// diagnostic report must still build and expose deductions/metrics.
+assert.ok(Array.isArray(qualityReport.deductions));
+assert.ok(qualityReport.metrics);
 
 console.log('selection diagnostics fixture passed');

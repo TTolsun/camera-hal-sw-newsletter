@@ -337,8 +337,11 @@ test('generic bucket is not promoted by camera wording in generated text', () =>
   const genericResult = report.article_results.find(item => item.headline === generic.headline);
   assert.equal(genericResult.scope_count.relevance_bucket, 'generic_tech_watchlist');
   assert.match(genericResult.scope_count.exclusion_reason_if_not_counted, /forbidden by Newsletter Policy/);
-  assert.equal(genericResult.status, 'DEMOTE');
-  assert.equal(sectionPassesArticleGate(generic, report, { status: 'PASS', must_fix: [], source_gaps: [] }), false);
+  // Newsletter-level composition policy still flags a forbidden bucket promoted to main.
+  // Per-article editorial usefulness (topic-agnostic) is now the fact-checker's call, so the
+  // deterministic gate no longer DEMOTEs this article on topic alone.
+  assert.ok(report.deductions.some(item => item.reason.includes('Forbidden main bucket count')));
+  assert.equal(report.metrics.forbidden_main_article_count, 1);
 });
 
 test('quality gate blocks supporting main articles over publish-ready maximum', () => {
@@ -436,157 +439,10 @@ test('quality gate rejects unknown source event and date source enums on selecte
   ));
 });
 
-test('quality gate allows non-blocking actionability deductions above threshold', () => {
-  const sections = validSections(3).map((item, index) => index < 3
-    ? {
-        ...item,
-        action_items: [
-          'Within 2 weeks, assign a camera owner to compare Camera ITS logs before and after this change.'
-        ],
-        article_sections: {
-          ...item.article_sections,
-          action_items: [
-            'Within 2 weeks, assign a camera owner to compare Camera ITS logs before and after this change.'
-          ]
-        }
-      }
-    : item);
-  const report = reportFor(sections, reporterCandidatesFor(sections));
-
-  assert.equal(report.score, 88);
-  assert.equal(report.status, 'PASS');
-  assert.equal(report.metrics.blocking_deduction_count, 0);
-  assert.equal(report.metrics.hard_fail_count, 0);
-  assert.equal(report.metrics.soft_deduction_count, 3);
-  assert.ok(report.deductions.every(item => item.category === 'actionability'));
-  assert.ok(report.deductions.every(item => item.blocking === false));
-  assert.ok(report.deductions.every(item => item.severity === 'soft'));
-});
-
-test('quality gate treats missing HAL Signal Capsule as a hard blocker', () => {
-  const sections = [
-    section({ headline: 'Missing HAL Signal Capsule', url: 'https://example.com/missing-capsule', hal_signal_capsule: undefined }),
-    ...validSections().slice(1)
-  ];
-  const report = reportFor(sections, [
-    scopedCandidate('https://example.com/missing-capsule', 'direct_aosp_camera'),
-    ...reporterCandidatesFor(validSections()).slice(1)
-  ]);
-
-  assert.equal(report.status, 'NEEDS_FIX');
-  assert.ok(report.deductions.some(item =>
-    item.category === 'hal-signal-capsule' &&
-    item.blocking === true &&
-    item.reason.includes('Missing HAL Signal Capsule')
-  ));
-  assert.equal(report.metrics.hal_signal_quality_summary.article_count_without_hal_signal_capsule, 1);
-  assert.equal(report.article_results[0].status, 'FAIL');
-  assert.ok(report.main_article_signal_checks[0].hard_blocker_reason_codes.includes('hal_signal_capsule_missing'));
-});
-
-test('quality gate maps actionability_level none into publish-blocking HAL signal failure', () => {
-  const sections = [
-    section({
-      headline: 'Actionability none article',
-      url: 'https://example.com/actionability-none',
-      actionability_level: 'none',
-      action_items: [],
-      camera_hal_checks: ['Review source context with the camera owner.'],
-      specificity_checks: ['Version: synthetic release', 'Release date: 2026-05-01'],
-      hal_signal_capsule: {
-        why_now: 'The source is dated but has no concrete HAL verification path.',
-        reader_owners: ['camera_hal_owner'],
-        check_within_2_weeks: 'Review the dated source with the camera team within 2 weeks.',
-        impact_axes: ['framework_hal_contract'],
-        do_not_overstate: ['Do not claim a concrete HAL validation action without source evidence.']
-      }
-    }),
-    ...validSections().slice(1)
-  ];
-  const report = reportFor(sections, [
-    scopedCandidate('https://example.com/actionability-none', 'direct_aosp_camera'),
-    ...reporterCandidatesFor(validSections()).slice(1)
-  ]);
-
-  assert.equal(report.status, 'NEEDS_FIX');
-  assert.ok(report.deductions.some(item =>
-    item.category === 'hal-signal' &&
-    item.reason.includes('actionability_level=none')
-  ));
-  assert.ok(report.main_article_signal_checks[0].hard_blockers.includes('actionability_none'));
-  assert.ok(report.main_article_signal_checks[0].hard_blocker_reason_codes.includes('hal_actionability_none'));
-});
-
-test('quality gate blocks fallback promotion without explicit allowed reason', () => {
-  const sections = [
-    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
-    section({
-      headline: 'Native tooling fallback without promotion reason',
-      url: 'https://example.com/tooling',
-      category: 'C++ Tooling',
-      relevance_bucket: 'cpp_ai_tooling_fallback',
-      counts_as_primary_camera_topic: false,
-      counts_as_fallback_topic: true,
-      fallback_promotion_allowed: false,
-      fallback_promotion_reason: '',
-      what_changed: 'LLVM sanitizer workflow changed on 2026-05-01.',
-      evidence_summary: 'Version: LLVM 20.1; release date: 2026-05-01; API/component: LLVM sanitizer; behavior change: native debugging.',
-      background: 'Native sanitizer workflows improve Camera HAL and driver debugging productivity.',
-      camera_hal_perspective: 'Apply sanitizer checks to Camera HAL request/result handling and V4L2 buffer ownership tests.',
-      team_summary: 'Use this fallback item for native camera debugging productivity.'
-    }),
-    ...validSections().slice(2)
-  ];
-  const report = reportFor(sections, [
-    scopedCandidate('https://example.com/a', 'direct_aosp_camera'),
-    scopedCandidate('https://example.com/tooling', 'cpp_ai_tooling_fallback'),
-    ...reporterCandidatesFor(validSections()).slice(2)
-  ]);
-
-  assert.equal(report.status, 'NEEDS_FIX');
-  assert.ok(report.deductions.some(item =>
-    item.category === 'hal-signal' &&
-    item.reason.includes('Fallback article lacks fallback_promotion_allowed=true')
-  ));
-  assert.ok(report.main_article_signal_checks[1].hard_blockers.includes('fallback_promotion_missing_reason'));
-  assert.ok(report.main_article_signal_checks[1].hard_blocker_reason_codes.includes('fallback_promotion_not_allowed'));
-});
-
-test('quality gate blocks SoC platform signal without explicit camera pipeline link', () => {
-  const sections = [
-    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
-    section({
-      headline: 'SoC thermal platform signal without camera link',
-      url: 'https://example.com/soc-missing-link',
-      category: 'SoC',
-      relevance_bucket: 'soc_platform_signal',
-      soc_signal_source_allowed: true,
-      camera_pipeline_link: '',
-      fallback_promotion_allowed: true,
-      fallback_promotion_reason: 'Thermal/power signal may affect sustained camera usage.',
-      what_changed: 'Mobile SoC thermal behavior changed on 2026-05-01.',
-      evidence_summary: 'Version: platform note 1.0; release date: 2026-05-01; API/component: SoC thermal path; behavior change: sustained performance budget.',
-      background: 'Camera workloads may be affected by platform resources.',
-      camera_hal_perspective: 'Review camera thermal behavior and sustained workload limits.',
-      action_items: ['Assign camera owner to review thermal logs.'],
-      team_summary: 'Potential platform signal.'
-    }),
-    ...validSections().slice(2)
-  ];
-  const report = reportFor(sections, [
-    scopedCandidate('https://example.com/a', 'direct_aosp_camera'),
-    scopedCandidate('https://example.com/soc-missing-link', 'soc_platform_signal'),
-    ...reporterCandidatesFor(validSections()).slice(2)
-  ]);
-
-  assert.equal(report.status, 'NEEDS_FIX');
-  assert.ok(report.deductions.some(item =>
-    item.category === 'hal-signal' &&
-    item.reason.includes('explicit camera_pipeline_link')
-  ));
-  assert.ok(report.main_article_signal_checks[1].hard_blockers.includes('soc_platform_missing_camera_pipeline_link'));
-  assert.ok(report.main_article_signal_checks[1].hard_blocker_reason_codes.includes('soc_camera_pipeline_link_missing'));
-});
+// NOTE: editorial quality/depth gating (actionability, HAL signal capsule, fallback-promotion,
+// SoC camera-pipeline-link, HAL perspective depth) was removed from the deterministic gate.
+// Those judgments are now the fact-checker LLM's call (factCheck.article_quality), so their
+// former deterministic-deduction tests were deleted. Safety + composition tests remain below.
 
 test('quality gate allows no-AI HAL lineups when other hard gates pass', () => {
   const sections = [
@@ -671,27 +527,6 @@ test('quality gate fails missing dated evidence and source gap mapped candidates
   assert.ok(report.deductions.some(item => item.reason.includes('source_gap_risk=true')));
   assert.equal(report.article_results[0].status, 'FAIL');
   assert.equal(report.article_results[0].repair_action, 'replace-or-demote');
-});
-
-test('quality gate fails missing Camera HAL perspective and fewer than 2 action items', () => {
-  const sections = [
-    section({ camera_hal_perspective: 'Read it later.', action_items: ['Check it.'] }),
-    section({ headline: 'CameraX release B', url: 'https://example.com/b' }),
-    section({ headline: 'AOSP Camera change', url: 'https://example.com/c' }),
-    section({ headline: 'AI camera workflow', url: 'https://example.com/ai', is_ai_related: true, article_type: 'ai', what_changed: 'AI camera workflow changed on 2026-05-01 for Camera HAL stream testing.' })
-  ];
-  const report = reportFor(sections, [
-    scopedCandidate('https://example.com/camerax', 'direct_aosp_camera'),
-    scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
-    scopedCandidate('https://example.com/c', 'direct_aosp_camera'),
-    scopedCandidate('https://example.com/ai', 'direct_aosp_camera')
-  ], { adjacentContentPublishing: false });
-
-  assert.equal(report.status, 'NEEDS_FIX');
-  assert.ok(report.deductions.some(item => item.reason.includes('hal_driver_impact')));
-  assert.ok(report.deductions.some(item => item.reason.includes('at least 2 action_items')));
-  assert.equal(report.deductions.find(item => item.reason.includes('at least 2 action_items')).severity, 'soft');
-  assert.equal(report.article_results[0].status, 'DEMOTE');
 });
 
 test('cpp_fallback isFallbackOnly: cpp_ai_tooling_fallback 섹션은 항상 fallback-only', () => {

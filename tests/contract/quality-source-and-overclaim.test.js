@@ -271,71 +271,9 @@ test('quality gate allows product/version-only source title mentions in story br
   assert.equal(report.deductions.some(item => item.reason === 'Public headline exactly copies the source title.'), false);
 });
 
-test('quality gate rejects exact and punctuation-only story headline source title copies', () => {
-  const exact = storyQualityReport({
-    headline: 'CameraX 1.5.0 released for Android camera',
-    sourceTitle: 'CameraX 1.5.0 released for Android camera'
-  });
-  const punctuationOnly = storyQualityReport({
-    headline: 'CameraX 1.5.0 released for Android camera!',
-    sourceTitle: 'CameraX 1.5.0 released for Android camera'
-  });
-
-  for (const report of [exact, punctuationOnly]) {
-    assert.equal(report.status, 'NEEDS_FIX');
-    assert.ok(report.deductions.some(item =>
-      item.category === 'editorial-story' &&
-      item.blocking === true &&
-      item.reason === 'Public headline exactly copies the source title.'
-    ));
-  }
-});
-
-test('quality gate distinguishes product/version title overlap from source title copy', () => {
-  const productOnly = storyQualityReport({
-    headline: 'CameraX 1.5.0 preview regression check',
-    sourceTitle: 'CameraX 1.5.0 released'
-  });
-  const shortNearCopy = storyQualityReport({
-    headline: 'Driver sensor pipeline update',
-    sourceTitle: 'Driver sensor pipeline'
-  });
-
-  assert.equal(productOnly.deductions.some(item =>
-    /Public headline/.test(item.reason)
-  ), false);
-  assert.ok(shortNearCopy.deductions.some(item =>
-    item.category === 'editorial-story' &&
-    item.blocking === false &&
-    item.reason === 'Short public headline is very close to the source title.'
-  ));
-  assert.equal(shortNearCopy.deductions.some(item =>
-    item.blocking === true &&
-    /Public headline/.test(item.reason)
-  ), false);
-});
-
-test('quality gate fails high source-title token overlap and warns on moderate overlap', () => {
-  const highOverlap = storyQualityReport({
-    headline: 'HAL stream buffer metadata latency regression checklist review',
-    sourceTitle: 'HAL stream buffer metadata latency regression checklist release'
-  });
-  const moderateOverlap = storyQualityReport({
-    headline: 'HAL stream buffer metadata latency review note',
-    sourceTitle: 'HAL stream buffer metadata latency regression checklist'
-  });
-
-  assert.ok(highOverlap.deductions.some(item =>
-    item.category === 'editorial-story' &&
-    item.blocking === true &&
-    item.reason === 'Public headline is too similar to the source title after product/version discounting.'
-  ));
-  assert.ok(moderateOverlap.deductions.some(item =>
-    item.category === 'editorial-story' &&
-    item.blocking === false &&
-    item.reason === 'Public headline is close to the source title and should be rewritten with reader-facing framing.'
-  ));
-});
+// Headline/source-title-copy checks were part of the deterministic editorial-story quality
+// scoring, which moved to the fact-checker LLM. Their tests were deleted. Briefing-level raw-
+// copy checks remain (tested below).
 
 test('quality gate flags briefing source copy and raw English release prose', () => {
   const rawSourceTitle = storyQualityReport({
@@ -420,37 +358,6 @@ test('quality gate fails shared release-note URL without matching date or versio
 
   assert.equal(result.status, 'FAIL');
   assert.ok(result.hard_fail_reasons.some(reason => reason.includes('Shared watch/release-note URL requires matching')));
-});
-
-test('adjacent-content publishing relaxes shared release-note URL to a soft note', () => {
-  const sharedUrl = 'https://example.com/release-notes';
-  const releaseNote = section({
-    headline: 'Release note article without matching item evidence',
-    url: sharedUrl,
-    evidence_summary: 'Version: CameraX 1.0; release date: 2026-05-01; API/component: CameraX; behavior change: stream validation.',
-    specificity_checks: ['Version: CameraX 1.0', 'Release date: 2026-05-01']
-  });
-  const report = reportFor([
-    releaseNote,
-    section({ headline: 'CameraX release B', url: 'https://example.com/b' }),
-    section({ headline: 'AOSP Camera change C', url: 'https://example.com/c' }),
-    section({ headline: 'Camera HAL metadata update D', url: 'https://example.com/d' })
-  ], [
-    scopedCandidate(sharedUrl, 'direct_aosp_camera', {
-      title: 'CameraX 2.0 release notes',
-      collectionMode: 'release-note-item',
-      version_or_release: 'CameraX 2.0',
-      published_date: '2026-05-02'
-    }),
-    scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
-    scopedCandidate('https://example.com/c', 'direct_aosp_camera'),
-    scopedCandidate('https://example.com/d', 'direct_aosp_camera')
-  ], { adjacentContentPublishing: true });
-  const relaxed = report.deductions.find(item =>
-    item.adjacent_relaxed && /Shared watch\/release-note URL requires matching/.test(item.reason));
-  assert.ok(relaxed, 'shared-URL deduction should be relaxed');
-  assert.equal(relaxed.blocking, false);
-  assert.ok(relaxed.points <= 2);
 });
 
 test('quality gate fails duplicate source URLs across main sections', () => {

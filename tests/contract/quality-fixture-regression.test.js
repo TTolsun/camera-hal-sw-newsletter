@@ -40,9 +40,11 @@ test('bad regression fixtures cannot pass the main article quality gate', () => 
     scopedCandidate('https://example.com/b', 'direct_aosp_camera')
   ]);
 
+  // generic-AI / freebsd are forbidden (generic_tech_watchlist) main buckets. Per-article
+  // editorial usefulness is now the fact-checker's call, so the deterministic gate no longer
+  // DEMOTEs them on topic; the newsletter-level composition policy still blocks the lineup.
   assert.equal(report.status, 'NEEDS_FIX');
-  assert.notEqual(report.article_results.find(item => item.headline === genericAi.section.headline).status, 'PASS');
-  assert.notEqual(report.article_results.find(item => item.headline === freebsd.section.headline).status, 'PASS');
+  assert.ok(report.metrics.blocking_deduction_count > 0);
 });
 
 test('curated good quality fixtures remain passable synthetic contract samples', () => {
@@ -79,12 +81,14 @@ test('curated good quality fixtures remain passable synthetic contract samples',
 });
 
 test('bad quality fixture coverage remains non-PASS under the quality gate', () => {
+  // weak-hal-actionability was a quality/depth-only bad fixture; that judgment moved to the
+  // fact-checker LLM, so the deterministic gate no longer fails it. The remaining fixtures are
+  // safety-bad (missing source, source-gap risk, reference-only promotion, undated evidence).
   const fixturePaths = [
     'quality/bad/missing-source-url-main-article.json',
     'quality/bad/source-gap-risk-main-article.json',
     'quality/bad/reference-only-promoted-main-article.json',
-    'quality/bad/undated-evidence-main-article.json',
-    'quality/bad/weak-hal-actionability-main-article.json'
+    'quality/bad/undated-evidence-main-article.json'
   ];
   const fixtures = fixturePaths.map(readJsonFixture);
   const sections = fixtures.map(fixture => {

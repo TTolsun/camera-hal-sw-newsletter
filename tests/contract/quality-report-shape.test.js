@@ -136,11 +136,9 @@ test('quality report marks article PASS DEMOTE FAIL and separates hard and soft 
       team_summary: 'Generic AI item should stay outside main article slots.'
     }),
     section({
-      headline: 'Source gap article',
-      url: 'https://example.com/gap',
-      evidence_summary: 'source gap: no dated release evidence.',
-      source_verification_notes: ['source gap'],
-      specificity_checks: ['source gap']
+      headline: 'Invalid source URL article',
+      url: 'invalid-source-url-without-scheme',
+      evidence_summary: 'No valid dated source URL is provided.'
     }),
     section({
       headline: 'Fallback image article',
@@ -150,51 +148,17 @@ test('quality report marks article PASS DEMOTE FAIL and separates hard and soft 
   ];
   const report = reportFor(sections, reporterCandidatesFor(sections));
 
+  // Topic-based DEMOTE (e.g. "Generic AI") was removed; per-article usefulness is now the
+  // fact-checker's call. This test keeps the safety FAIL (source gap) and soft (image-fallback)
+  // separation, which the deterministic gate still owns.
   assert.equal(report.status, 'NEEDS_FIX');
   assert.ok(report.metrics.hard_fail_count > 0);
   assert.ok(report.metrics.soft_deduction_count > 0);
   assert.equal(report.article_results[0].status, 'PASS');
-  assert.equal(report.article_results[1].status, 'DEMOTE');
   assert.equal(report.article_results[2].status, 'FAIL');
+  assert.ok(report.article_results[2].hard_fail_reasons.length > 0);
   assert.equal(report.article_results[3].status, 'PASS');
-  assert.ok(report.article_results[1].hard_fail_reasons.some(reason => /Generic AI/.test(reason)));
   assert.ok(report.article_results[3].soft_deductions.some(item => item.category === 'image-fallback'));
-});
-
-test('quality report treats negative Camera HAL wording as no generic AI connection', () => {
-  const sections = [
-    section({
-      headline: 'Generic AI assistant with no camera impact',
-      url: 'https://example.com/generic-ai-negative',
-      category: 'AI',
-      article_type: 'ai',
-      is_ai_related: true,
-      what_changed: 'A generic LLM assistant release was announced on 2026-05-01.',
-      confirmed_facts: ['The source announces AI assistant 1.0 on 2026-05-01.'],
-      evidence_summary: 'Version: AI assistant 1.0; release date: 2026-05-01; API/component: assistant; behavior change: generic productivity.',
-      specificity_checks: ['Version: AI assistant 1.0', 'Release date: 2026-05-01'],
-      source_verification_notes: ['Official source, dated release evidence.'],
-      background: 'The release is about generic office productivity.',
-      why_it_matters: 'It may affect developer productivity outside device imaging systems.',
-      camera_hal_perspective: 'No Camera HAL or Android Camera impact is identified.',
-      camera_hal_checks: ['Keep this as a briefing item unless a concrete imaging component is named.'],
-      action_items: [
-        'Review whether this belongs in briefing instead of main article.',
-        'Do not create device validation work from this generic AI source.'
-      ],
-      team_summary: 'Generic AI item should stay outside main article slots.'
-    }),
-    section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
-    section({ headline: 'AOSP Camera change B', url: 'https://example.com/b' }),
-    section({ headline: 'Android Camera API change C', url: 'https://example.com/c' })
-  ];
-  const report = reportFor(sections, reporterCandidatesFor(sections));
-  const genericResult = report.article_results.find(item => item.headline === 'Generic AI assistant with no camera impact');
-
-  assert.equal(report.status, 'NEEDS_FIX');
-  assert.ok(genericResult);
-  assert.equal(genericResult.status, 'DEMOTE');
-  assert.ok(genericResult.hard_fail_reasons.some(reason => /Generic AI/.test(reason)));
 });
 
 test('quality report markdown separates score threshold max score and result', () => {

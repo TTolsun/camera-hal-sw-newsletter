@@ -46,24 +46,42 @@ for (const regression of hardFailRegressionCases.values()) {
   });
 }
 
-test('quality threshold follows configured numeric boundary behavior', () => {
-  assert.equal(determineQualityStatus(qualityGatePolicy.threshold - 1, qualityGatePolicy.threshold, {
+test('quality gate passes only when every safety check clears and every article is publishable', () => {
+  assert.equal(determineQualityStatus({
     sourceGapCount: 0,
     hasFactCheckMustFix: false,
-    blockingDeductions: []
-  }), 'NEEDS_FIX');
-  assert.equal(determineQualityStatus(qualityGatePolicy.threshold, qualityGatePolicy.threshold, {
-    sourceGapCount: 0,
-    hasFactCheckMustFix: false,
-    blockingDeductions: []
+    blockingDeductions: [],
+    unpublishableArticles: []
   }), 'PASS');
 });
 
-test('quality threshold does not override hard blockers at high scores', () => {
-  assert.equal(determineQualityStatus(qualityGatePolicy.threshold + 5, qualityGatePolicy.threshold, {
+test('quality gate fails an article the fact-checker marked not useful to a HAL SW engineer', () => {
+  assert.equal(determineQualityStatus({
     sourceGapCount: 0,
     hasFactCheckMustFix: false,
-    blockingDeductions: [{ category: 'composition', points: 4 }]
+    blockingDeductions: [],
+    unpublishableArticles: [{ section_index: 0, reason: 'generic, no concrete value for a HAL SW engineer' }]
+  }), 'NEEDS_FIX');
+});
+
+test('quality gate does not override hard blockers regardless of article verdicts', () => {
+  assert.equal(determineQualityStatus({
+    sourceGapCount: 0,
+    hasFactCheckMustFix: false,
+    blockingDeductions: [{ category: 'composition', points: 4 }],
+    unpublishableArticles: []
+  }), 'NEEDS_FIX');
+  assert.equal(determineQualityStatus({
+    sourceGapCount: 1,
+    hasFactCheckMustFix: false,
+    blockingDeductions: [],
+    unpublishableArticles: []
+  }), 'NEEDS_FIX');
+  assert.equal(determineQualityStatus({
+    sourceGapCount: 0,
+    hasFactCheckMustFix: true,
+    blockingDeductions: [],
+    unpublishableArticles: []
   }), 'NEEDS_FIX');
 });
 
