@@ -213,13 +213,20 @@
       "cluster_key": "https://source.android.com/docs/compatibility",
       "canonical_url": "https://source.android.com/docs/compatibility",
       "canonical_title": "Compatibility",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility",
           "title": "Compatibility",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility",
+          "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -509,13 +516,20 @@
       "cluster_key": "https://source.android.com/docs/compatibility/cdd",
       "canonical_url": "https://source.android.com/docs/compatibility/cdd",
       "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility/cdd",
           "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cdd",
+          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -634,6 +648,108 @@
         {
           "url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
           "title": "June",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f8d1cacd47b7c58b",
+      "cluster_key": "https://developer.android.com/media/platform/mediarecorder",
+      "canonical_url": "https://developer.android.com/media/platform/mediarecorder",
+      "canonical_title": "MediaRecorder overview &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/media/platform/mediarecorder",
+          "title": "MediaRecorder overview &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ae9e55f7b032d076",
+      "cluster_key": "https://developer.android.com/media/platform/supported-formats",
+      "canonical_url": "https://developer.android.com/media/platform/supported-formats",
+      "canonical_title": "Supported media formats &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/media/platform/supported-formats",
+          "title": "Supported media formats &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d4a0acfc0ac6ad6e",
+      "cluster_key": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e12f3fd8b75d5b1b",
+      "cluster_key": "https://developer.android.com/reference/android/provider/mediastore",
+      "canonical_url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "canonical_title": "MediaStore &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/android/provider/MediaStore",
+          "title": "MediaStore &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c53bd03c7a3d1de2",
+      "cluster_key": "https://developer.android.com/reference/android/media/mediacodec",
+      "canonical_url": "https://developer.android.com/reference/android/media/MediaCodec",
+      "canonical_title": "MediaCodec &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/android/media/MediaCodec",
+          "title": "MediaCodec &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c859401d27d636a0",
+      "cluster_key": "https://source.android.com/docs/whatsnew/site-updates",
+      "canonical_url": "https://source.android.com/docs/whatsnew/site-updates",
+      "canonical_title": "Site updates &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/site-updates",
+          "title": "Site updates &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false

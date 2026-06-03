@@ -42,5 +42,13 @@
 | blocked_candidate | 0.48 | What's New in Wear OS 7 | https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html |
 | blocked_candidate | 0.551 | Overview | https://source.android.com/docs/security/bulletin/asb-overview |
 | blocked_candidate | 0.551 | June | https://source.android.com/docs/security/bulletin/2026/2026-06-01 |
+| blocked_candidate | 0.492 | MediaRecorder overview &nbsp;\|&nbsp; Android media &nbsp;\|&nbsp; Android Developers | https://developer.android.com/media/platform/mediarecorder |
+| blocked_candidate | 0.492 | Supported media formats &nbsp;\|&nbsp; Android media &nbsp;\|&nbsp; Android Developers | https://developer.android.com/media/platform/supported-formats |
+| blocked_candidate | 0.492 | Photo picker &nbsp;\|&nbsp; App data and files &nbsp;\|&nbsp; Android Developers | https://developer.android.com/training/data-storage/shared/photo-picker |
+| blocked_candidate | 0.492 | MediaStore &nbsp;\|&nbsp; API reference &nbsp;\|&nbsp; Android Developers | https://developer.android.com/reference/android/provider/MediaStore |
+| blocked_candidate | 0.492 | MediaCodec &nbsp;\|&nbsp; API reference &nbsp;\|&nbsp; Android Developers | https://developer.android.com/reference/android/media/MediaCodec |
 | strong_candidate | 0.802 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
+| review_candidate | 0.672 | Build a Compatible Android Device &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility |
+| review_candidate | 0.708 | Site updates &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/whatsnew/site-updates |
+| review_candidate | 0.672 | Android Compatibility Definition Document &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cdd |
 
