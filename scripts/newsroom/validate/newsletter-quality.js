@@ -543,32 +543,6 @@ function hasGenericCameraXFallbackText(section = {}) {
     .test(value);
 }
 
-function hasCameraXHalBoundary(section = {}, hints = {}) {
-  if (!text(hints?.hal_boundary)) return false;
-  return /HAL boundary|not direct HAL|framework[-_\s]adjacent|framework adjacent|CameraX sits above camera2|above camera2|direct Camera HAL API.*not|not.*direct Camera HAL/i
-    .test(articleTextWithLegacyFields(section));
-}
-
-function hasCameraXValidationChecklist(section = {}, hints = {}) {
-  const articleText = articleTextWithLegacyFields(section);
-  const articleSections = normalizeArticleSections(section);
-  const actionItems = [
-    ...ensureArray(section.action_items),
-    ...ensureArray(section.camera_hal_checks),
-    ...ensureArray(articleSections.action_items)
-  ];
-  if (actionItems.length === 0) return false;
-  const targets = ensureArray(hints?.validation_targets).map(text).filter(Boolean);
-  if (targets.length === 0) {
-    return /\b(?:Camera ITS|CTS|VTS|stream|buffer|metadata|request\/result|VideoCapture|ImageAnalysis|CameraPipe|validation)\b/i
-      .test(articleText);
-  }
-  return targets.some(target => {
-    const terms = text(target).match(/\b(?:VideoCapture|ImageAnalysis|SessionConfig|CameraPipe|Camera2|stream|buffer|metadata|validation)\b/gi) || [];
-    return terms.some(term => new RegExp(`\\b${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(articleText));
-  });
-}
-
 function cameraXSourceExtractionViolations(section = {}, candidate = {}) {
   if (!isCameraXReleaseArticle(section, candidate)) return [];
   const extraction = sourceExtractionFor(section, candidate);
@@ -585,8 +559,9 @@ function cameraXSourceExtractionViolations(section = {}, candidate = {}) {
     violations.push('source_extraction.release.sections has no concrete release-note bullet');
   }
   if (hasGenericCameraXFallbackText(section)) violations.push('generic CameraX fallback text used as main article body');
-  if (!hasCameraXHalBoundary(section, hints)) violations.push('CameraX HAL boundary is missing from the article');
-  if (!hasCameraXValidationChecklist(section, hints)) violations.push('CameraX validation checklist is missing from the article');
+  // HAL-boundary discussion and validation-checklist depth are editorial-quality concerns
+  // (is this useful to a Camera HAL SW engineer?) judged by the fact-checker LLM, not source
+  // extraction integrity — so they are no longer deterministic publish blockers.
   return [...new Set(violations)];
 }
 
