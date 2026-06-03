@@ -14,11 +14,16 @@ const EMPTY_HEADLINE_STATE = {
   policy: {}
 };
 
-// Reference-window-eligible candidate: passes non-window exclusion checks
-// (dated evidence + main eligibility) but is 70/84 days old → reference window.
+// Reference-window-eligible candidate: a fully-classified strong CameraX release that
+// clears main_article_score_eligible (scope_relevance >= 2 via aosp_camera_directness),
+// but is 70/84 days old → reference window. Catch-up only promotes candidates that clear
+// the deterministic selection floor, so these fixtures carry the scope signal a real
+// classified candidate would.
 function refRelease(overrides = {}) {
   return {
     relevance_bucket: 'direct_aosp_camera',
+    aosp_camera_directness: 4,
+    counts_as_primary_camera_topic: true,
     has_dated_evidence: true,
     finalSelectionEligibility: 'main',
     api_or_component: 'CameraX',

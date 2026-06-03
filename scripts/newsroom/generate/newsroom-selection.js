@@ -1511,7 +1511,13 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   if (catchUpPolicy.enabled === true && selected.length < catchUpTarget) {
     const selectedKeys = new Set(selected.map(item => articleIdentityKey(item)));
     const pool = buildCatchUpPool(referenceContextCandidates, exposureHistory, catchUpPolicy)
-      .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)));
+      .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)))
+      // Thin-week guard: only promote catch-up candidates that clear the same deterministic
+      // selection floor as fresh main articles. The normal path (selectFinalArticlesFromPool)
+      // already selects from mainEligible; catch-up otherwise bypasses it and pads the lineup
+      // with weak fillers that the fact-checker later drops. main_article_score_eligible already
+      // subsumes dated-evidence/source-gap/scope checks, so this single test is enough.
+      .filter(candidate => candidate.main_article_score_eligible !== false);
     pool.sort(deterministicCandidateSort);
     const openSlots = Math.max(0, catchUpTarget - selected.length);
     const roomUnderMax = Math.max(0, articlePolicy.mainArticleCount.max - selected.length);
