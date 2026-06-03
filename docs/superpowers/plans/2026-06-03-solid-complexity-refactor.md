@@ -47,30 +47,39 @@ lines. New unit tests in `tests/unit/common/section-identity.test.js` cover the 
 
 **Verification:** `npm.cmd run test` (1322 pass) + `npm.cmd run validate` (EXIT 0).
 
-## Phase 2 — Fact-check / quality post-processing (planned)
+## Phase 2 — Fact-check / quality post-processing (DONE)
 
-Extract the post-generation editor/fact-check transforms (`sanitizeClaimEvidenceIds`,
+Extracted the post-generation editor/fact-check transforms (`sanitizeClaimEvidenceIds`,
 `stampCoverageType`, `pruneCatchUpFramingFactCheckItems`, `validateFactCheck`,
-`collectValidEvidenceIds`, `isSchemaFieldFactCheckViolation`) into
-`scripts/newsroom/cli/fact-check-postprocess.js`. These are nearly pure (read editor/factCheck/
-shortlistReport, return new objects). Three are currently exported (`stampCoverageType`,
-`pruneCatchUpFramingFactCheckItems`), so re-export them from the god-file to preserve the surface.
+`collectValidEvidenceIds`, `isSchemaFieldFactCheckViolation`, `isCatchUpFramingFalsePositive`,
+`FACT_CHECK_SCHEMA_FIELD_BLOCKLIST`) into `scripts/newsroom/cli/fact-check-postprocess.js`. Pure
+transforms. The god-file requires the four it uses and re-exports `stampCoverageType` +
+`pruneCatchUpFramingFactCheckItems`, so the surface is unchanged. God-file ~4678 → ~4566 lines.
+Direct unit coverage in `tests/unit/cli/fact-check-postprocess.test.js`.
 
-## Phase 3 — Decompose `buildNewsletterQualityReport` (planned)
+## Phase 3 — Decompose `buildNewsletterQualityReport` (DONE)
 
-Split the per-domain deduction logic into focused checker modules under
-`scripts/newsroom/validate/quality-checks/` (composition, fields, source-integrity, editorial-story,
-evidence-specificity, hal-depth, scope-relevance, actionability, hal-signal, newsletter-level), each
-exposing `check…(section, ctx) -> deductions[]`. `buildNewsletterQualityReport` becomes a thin
-orchestrator that runs the checkers and aggregates score/status. Public exports (`buildNewsletterQualityReport`,
-`buildQualityReportMarkdown`, the `sectionHas*`/`blockingDeductions`/`determineQualityStatus` helpers)
-stay intact. Highest value, highest risk (the publish gate) — do last, one checker at a time.
+The publish-critical quality gate's main function held a ~275-line, 17-step per-section loop. Each
+quality domain is now a named, pure descriptor-returning checker **in the same file** (cross-file
+modules were rejected because each checker needs 5–15 sibling predicate helpers — a separate file
+would force heavy coupling or a circular dependency): `requiredFieldDeductions`,
+`fieldHygieneDeductions`, `sourceBindingDeductions`, `editorialStoryDeductions`, `cameraXDeductions`,
+`evidenceSpecificityDeductions`, `halDepthDeductions`, `scopeRelevanceDeductions`,
+`actionabilityDeductions`, `halSignalDeductions`, `fallbackAndAiScopeDeductions`,
+`imageFallbackDeductions`. The loop applies them in identical order via `applyDeductionDescriptors`;
+the cross-section duplicate-URL pass and stateful claim/linked-evidence calls stay inline. Behaviour
+is unchanged (same deductions/points/options/order/counter). `buildNewsletterQualityReport` shrank
+507 → 283 lines. Verified by the full quality contract/fixture suite + selection-diagnostics fixture
++ validate, all identical.
 
-## Phase 4 — Split PR-body loaders from renderers (planned)
+## Phase 4 — Split PR-body loaders from renderers (DONE)
 
-Separate artifact loading (`load…Report` wrappers around `readJsonObjectIfExists`) from the
-`render…` markdown builders in `build-newsroom-pr-body.js`, so renderers become pure
-`(data) -> markdown` functions and IO is isolated and mockable. Preserve the 7 exports.
+Extracted the artifact IO/location concern from `build-newsroom-pr-body.js` into
+`scripts/newsroom/cli/pr-body-artifacts.js` (`readTextIfExists`, `readJsonIfExists`,
+`readJsonObjectIfExists`, the `newsroomArtifactPath`/`collectedArtifactPath` locators, and the
+`loadNewsroomReport`/`loadNewsroomJson`/`loadCollectedReport` date-scoped loaders). Renderers focus
+on formatting and call the shared loaders; the regular date-scoped reads were migrated to the
+loaders. Public surface unchanged. `pr-body-rendering` tests (32) + full suite + validate pass.
 
 ## Out of scope
 
