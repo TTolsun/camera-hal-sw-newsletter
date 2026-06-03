@@ -262,21 +262,68 @@ function siteFooterHtml(rootPath = '') {
   </footer>`;
 }
 
+function catchUpWeeksLabel(section) {
+  const days = Number(section.catch_up_age_days);
+  if (!Number.isFinite(days)) return '';
+  const weeks = Math.max(1, Math.round(days / 7));
+  return ` (${weeks}주 전 릴리스)`;
+}
+
 function normalizedSections(issue) {
   const usedAnchors = new Set();
-  return ensureArray(issue.sections).map((section, index) => {
+  const ordered = ensureArray(issue.sections)
+    .map((section, originalIndex) => ({ section, originalIndex }))
+    .sort((a, b) => {
+      const aCatch = a.section.coverage_type === 'catch_up' ? 1 : 0;
+      const bCatch = b.section.coverage_type === 'catch_up' ? 1 : 0;
+      return aCatch - bCatch || a.originalIndex - b.originalIndex;
+    });
+  return ordered.map(({ section }, index) => {
     const publicArticle = publicArticleForSection(section, { issue });
     const category = publicArticle.headline || `Main Article ${index + 1}`;
+    const isCatchUp = section.coverage_type === 'catch_up';
+    const badge = isCatchUp ? catchUpWeeksLabel(section) : '';
     return {
-      heading: `## ${index + 2}. ${category}`,
-      htmlHeading: `${index + 2}. ${category}`,
+      heading: `## ${index + 2}. ${category}${badge}`,
+      htmlHeading: `${index + 2}. ${category}${badge}`,
       headingCategory: category,
       className: section.article_type || (section.is_ai_related ? 'ai' : 'article'),
       anchorId: uniqueArticleAnchorId(category, index, usedAnchors),
       articleNumber: index + 1,
+      isCatchUp,
       section
     };
   });
+}
+
+const CATCH_UP_DIVIDER_HEADING = '지난 소식 (Catch-up)';
+
+function sectionsMarkdownWithCatchUpDivider(issue) {
+  let dividerEmitted = false;
+  return normalizedSections(issue)
+    .map(({ heading, section, isCatchUp }) => {
+      let prefix = '';
+      if (isCatchUp && !dividerEmitted) {
+        prefix = `## ${CATCH_UP_DIVIDER_HEADING}\n\n`;
+        dividerEmitted = true;
+      }
+      return prefix + publicArticleMarkdown(issue, heading, section);
+    })
+    .join('\n---\n\n');
+}
+
+function sectionsHtmlWithCatchUpDivider(issue) {
+  let dividerEmitted = false;
+  return normalizedSections(issue)
+    .map(({ htmlHeading, headingCategory, className, anchorId, articleNumber, section, isCatchUp }) => {
+      let prefix = '';
+      if (isCatchUp && !dividerEmitted) {
+        prefix = `      <h2 class="catch-up-divider">${escapeHtml(CATCH_UP_DIVIDER_HEADING)}</h2>\n`;
+        dividerEmitted = true;
+      }
+      return prefix + publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, articleNumber, section);
+    })
+    .join('\n\n');
 }
 
 function markdownTableCell(value) {
@@ -455,7 +502,7 @@ ${publicationNoticeMarkdown(issue)}
 
 ${bulletsMarkdown(issue.briefing)}
 ${quietCoreNoteMarkdown(issue)}
-${normalizedSections(issue).map(({ heading, section }) => publicArticleMarkdown(issue, heading, section)).join('\n---\n\n')}
+${sectionsMarkdownWithCatchUpDivider(issue)}
 
 ${watchPointsMarkdown(issue)}## 참고자료
 
@@ -557,9 +604,7 @@ function buildPublicHtml(issue) {
 
 ${publicationNoticeBlock}      ${issueBriefingHtml(issue)}
 ${quietCoreNoteHtml(issue)}
-${normalizedSections(issue).map(({ htmlHeading, headingCategory, className, anchorId, articleNumber, section }) =>
-    publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, articleNumber, section)
-  ).join('\n\n')}
+${sectionsHtmlWithCatchUpDivider(issue)}
 ${watchPointsHtml(issue)}
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">참고자료</h2>
