@@ -48,6 +48,7 @@ const {
 } = require('../common/article-identity');
 const {
   annotateArticleExposure,
+  everCoveredAsNewsletterArticle,
   readExposureHistory
 } = require('../common/article-exposure-history');
 const {
@@ -62,6 +63,7 @@ const {
   articlePolicy,
   articleCountRangeText,
   candidatePoolPreflightPolicy,
+  getCatchUpPolicy,
   getHeadlinePolicy,
   getPublishModePolicy,
   getPublishReadyCompositionPolicy,
@@ -1437,6 +1439,31 @@ function compositionReason(mode, summary) {
   return 'Normal composition: Primary Camera Stack topics satisfy the Newsletter Policy without supporting main articles.';
 }
 
+function catchUpCandidateHasEvidence(candidate) {
+  return Boolean(
+    text(candidate.version_or_release) ||
+    text(candidate.api_or_component) ||
+    text(candidate.behavior_change) ||
+    text(candidate.evidence_summary)
+  );
+}
+
+function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = getCatchUpPolicy()) {
+  if (!catchUpPolicy || catchUpPolicy.enabled !== true) return [];
+  const eligibleBuckets = new Set(ensureArray(catchUpPolicy.eligibleBuckets));
+  const maxAge = Number(catchUpPolicy.maxAgeDays) || 0;
+  const history = exposureHistory || { articles: [] };
+  return ensureArray(referenceCandidates).filter(candidate => {
+    const bucket = text(candidate.relevance_bucket || candidateScope(candidate).relevance_bucket);
+    if (!eligibleBuckets.has(bucket)) return false;
+    const age = Number(candidate.days_since_published);
+    if (!Number.isFinite(age) || age > maxAge) return false;
+    if (everCoveredAsNewsletterArticle(articleIdentityKey(candidate), history)) return false;
+    if (!catchUpCandidateHasEvidence(candidate)) return false;
+    return true;
+  });
+}
+
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const rawCandidates = ensureArray(collectedCandidates?.candidates || collectedCandidates);
   const cap = options.cap ?? SHORTLIST_CAP;
@@ -1706,6 +1733,7 @@ module.exports = {
   LINKED_EVIDENCE_RUNTIME_BONUS,
   LINKED_EVIDENCE_WATCH_PENALTY,
   MIN_CAMERA_HAL_DIRECTNESS,
+  buildCatchUpPool,
   buildShortlistReport,
   candidatePoolPreflightSummary,
   candidatePoolShortageReasonCodes,
