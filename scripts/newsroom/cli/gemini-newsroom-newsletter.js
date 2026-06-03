@@ -980,9 +980,8 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.native_workflow_evidence_score = numberOrDefault(collected.native_workflow_evidence_score ?? candidate.native_workflow_evidence_score);
     candidate.related_context_candidates = ensureArray(collected.related_context_candidates || candidate.related_context_candidates);
     candidate.imageCandidates = imageCandidatesForReporterCandidate(candidate, collectedByUrl);
-    // #477: attach a conservative, report-only HAL-facing impact signal. This is
-    // diagnostic enrichment for editors; it does not influence selection or any
-    // publish gate.
+    // #477: 후보에 보수적인 report-only HAL impact signal을 붙인다. editor용 진단
+    // 정보일 뿐이며 selection이나 publish gate 판정에는 영향을 주지 않는다.
     candidate.hal_signal = classifyHalImpact(candidate, {
       sourceQuality: { source_url_quality: candidate.source_url_quality || candidate.sourceUrlQuality }
     });
