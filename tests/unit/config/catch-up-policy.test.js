@@ -18,15 +18,27 @@ test('default policy exposes a normalized catchUpPolicy', () => {
   assert.equal(policy.enabled, true);
   assert.equal(policy.maxCatchUpArticles, 2);
   assert.equal(policy.maxAgeDays, 90);
-  assert.equal(policy.activationMode, 'thin_week_only');
+  assert.equal(policy.targetMainArticles, 3);
+  assert.equal(policy.activationMode, 'fill_open_slots');
   assert.ok(Array.isArray(policy.eligibleBuckets) && policy.eligibleBuckets.length > 0);
+});
+
+test('validation rejects targetMainArticles above mainArticleCount.max', () => {
+  const config = baseConfig();
+  config.catchUpPolicy = {
+    enabled: true, maxCatchUpArticles: 2, maxAgeDays: 90, targetMainArticles: 99,
+    eligibleBuckets: ['direct_aosp_camera'], activationMode: 'fill_open_slots'
+  };
+  const result = validateNewsletterPolicyConfig(config);
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some(e => e.includes('catchUpPolicy.targetMainArticles')));
 });
 
 test('validation rejects maxAgeDays below fallbackSelectionDays', () => {
   const config = baseConfig();
   config.catchUpPolicy = {
     enabled: true, maxCatchUpArticles: 2, maxAgeDays: 5,
-    eligibleBuckets: ['direct_aosp_camera'], activationMode: 'thin_week_only'
+    eligibleBuckets: ['direct_aosp_camera'], activationMode: 'fill_open_slots'
   };
   const result = validateNewsletterPolicyConfig(config);
   assert.equal(result.ok, false);
@@ -37,7 +49,7 @@ test('validation rejects maxCatchUpArticles above mainArticleCount.max', () => {
   const config = baseConfig();
   config.catchUpPolicy = {
     enabled: true, maxCatchUpArticles: 99, maxAgeDays: 90,
-    eligibleBuckets: ['direct_aosp_camera'], activationMode: 'thin_week_only'
+    eligibleBuckets: ['direct_aosp_camera'], activationMode: 'fill_open_slots'
   };
   const result = validateNewsletterPolicyConfig(config);
   assert.equal(result.ok, false);

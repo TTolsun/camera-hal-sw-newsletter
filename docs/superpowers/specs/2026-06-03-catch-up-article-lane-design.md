@@ -25,7 +25,7 @@ In **thin weeks only**, fill remaining main-article slots with significant Camer
 
 ## Design Decisions (confirmed)
 
-- **Activation:** thin-week-only. Catch-up never displaces fresh content; it only fills slots that primary+fallback could not.
+- **Activation:** fill-open-slots. When the fresh primary+fallback selection is below `targetMainArticles` (default 3), catch-up fills the remaining open main-article slots with strong uncovered releases — never displacing fresh, capped at `maxCatchUpArticles`. Self-limiting via once-only exposure dedup (a release is covered at most once), so it does not pad every issue indefinitely.
 - **Cap / age:** max **2** catch-up articles per issue; releases up to **90 days** old (reuses `referenceContextDays`).
 - **Labeling:** dedicated "## 지난 소식 (Catch-up)" section + per-article "○주 전 릴리스" badge.
 

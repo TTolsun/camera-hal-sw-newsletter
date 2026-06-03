@@ -1507,13 +1507,15 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     (options.root ? readExposureHistory(options.root, date) : null);
   const catchUpPolicy = options.catchUpPolicy || getCatchUpPolicy();
   let catchUpSelected = [];
-  if (catchUpPolicy.enabled === true && selected.length < articlePolicy.mainArticleCount.min) {
+  const catchUpTarget = Number(catchUpPolicy.targetMainArticles) || articlePolicy.mainArticleCount.min;
+  if (catchUpPolicy.enabled === true && selected.length < catchUpTarget) {
     const selectedKeys = new Set(selected.map(item => articleIdentityKey(item)));
     const pool = buildCatchUpPool(referenceContextCandidates, exposureHistory, catchUpPolicy)
       .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)));
     pool.sort(deterministicCandidateSort);
-    const room = articlePolicy.mainArticleCount.max - selected.length;
-    const take = Math.max(0, Math.min(catchUpPolicy.maxCatchUpArticles, room));
+    const openSlots = Math.max(0, catchUpTarget - selected.length);
+    const roomUnderMax = Math.max(0, articlePolicy.mainArticleCount.max - selected.length);
+    const take = Math.max(0, Math.min(catchUpPolicy.maxCatchUpArticles, openSlots, roomUnderMax));
     catchUpSelected = pool.slice(0, take).map(candidate => ({
       ...candidate,
       coverage_type: 'catch_up',

@@ -360,7 +360,7 @@ test('selection window enforcement excludes reference stale and unknown candidat
       published_date: 'not-a-date',
       camera_hal_relevance_score: 90
     })
-  ], { minArticles: 1 });
+  ], { minArticles: 1, catchUpPolicy: { enabled: false } });
   const selectedUrls = new Set(report.selected_articles.map(item => item.url));
   const reserveUrls = new Set(report.reserve_candidates.map(item => item.url));
   const excludedByUrl = new Map(report.excluded_candidates.map(item => [item.url, item]));
@@ -555,7 +555,7 @@ test('#124 acceptance: reference window remains context-only', () => {
       published_date: '2026-03-11',
       camera_hal_relevance_score: 100
     })
-  ], { minArticles: 1 });
+  ], { minArticles: 1, catchUpPolicy: { enabled: false } });
 
   assert.equal(report.selected_articles.some(item => item.url === 'https://example.com/124-reference-context'), false);
   assert.equal(report.reserve_candidates.some(item => item.url === 'https://example.com/124-reference-context'), false);

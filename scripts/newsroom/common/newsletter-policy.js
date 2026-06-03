@@ -95,7 +95,7 @@ function validateSelectionWindowPolicy(value, errors) {
   }
 }
 
-const KNOWN_CATCH_UP_ACTIVATION_MODES = Object.freeze(['thin_week_only']);
+const KNOWN_CATCH_UP_ACTIVATION_MODES = Object.freeze(['fill_open_slots']);
 
 function validateCatchUpPolicy(value, config, errors) {
   if (value === undefined) return; // optional; normalized to a default when absent
@@ -106,10 +106,18 @@ function validateCatchUpPolicy(value, config, errors) {
   if (typeof value.enabled !== 'boolean') {
     errors.push('catchUpPolicy.enabled must be a boolean.');
   }
+  const mainMin = config?.articlePolicy?.mainArticleCount?.min;
   const mainMax = config?.articlePolicy?.mainArticleCount?.max;
   validateInteger(value.maxCatchUpArticles, 'catchUpPolicy.maxCatchUpArticles', errors, { min: 1 });
   if (Number.isInteger(value.maxCatchUpArticles) && Number.isInteger(mainMax) && value.maxCatchUpArticles > mainMax) {
     errors.push('catchUpPolicy.maxCatchUpArticles cannot exceed articlePolicy.mainArticleCount.max.');
+  }
+  validateInteger(value.targetMainArticles, 'catchUpPolicy.targetMainArticles', errors, { min: 1 });
+  if (Number.isInteger(value.targetMainArticles) && Number.isInteger(mainMin) && value.targetMainArticles < mainMin) {
+    errors.push('catchUpPolicy.targetMainArticles must be >= articlePolicy.mainArticleCount.min.');
+  }
+  if (Number.isInteger(value.targetMainArticles) && Number.isInteger(mainMax) && value.targetMainArticles > mainMax) {
+    errors.push('catchUpPolicy.targetMainArticles cannot exceed articlePolicy.mainArticleCount.max.');
   }
   const fallbackDays = config?.selectionWindowPolicy?.fallbackSelectionDays;
   const referenceDays = config?.selectionWindowPolicy?.referenceContextDays;
@@ -296,14 +304,15 @@ function normalizePublishModePolicy(raw) {
 
 function normalizeCatchUpPolicy(raw) {
   if (!raw || typeof raw !== 'object') {
-    return { enabled: false, maxCatchUpArticles: 2, maxAgeDays: 90, eligibleBuckets: [], activationMode: 'thin_week_only' };
+    return { enabled: false, maxCatchUpArticles: 2, maxAgeDays: 90, targetMainArticles: 3, eligibleBuckets: [], activationMode: 'fill_open_slots' };
   }
   return {
     enabled: raw.enabled === true,
     maxCatchUpArticles: Number.isInteger(raw.maxCatchUpArticles) ? raw.maxCatchUpArticles : 2,
     maxAgeDays: Number.isInteger(raw.maxAgeDays) ? raw.maxAgeDays : 90,
+    targetMainArticles: Number.isInteger(raw.targetMainArticles) ? raw.targetMainArticles : 3,
     eligibleBuckets: unique(ensureArray(raw.eligibleBuckets)),
-    activationMode: raw.activationMode === 'thin_week_only' ? 'thin_week_only' : 'thin_week_only'
+    activationMode: 'fill_open_slots'
   };
 }
 
