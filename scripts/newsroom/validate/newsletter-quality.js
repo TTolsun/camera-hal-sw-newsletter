@@ -1830,15 +1830,17 @@ function salvagePublishableSubset(date, editor, reporter, factCheck, qualityRepo
   if (keepIndices.length < minArticles || keepIndices.length >= sections.length) return null;
 
   const keepSet = new Set(keepIndices);
-  const droppedIndices = sections.map((_, index) => index).filter(index => !keepSet.has(index));
-  const refsDropped = probe => droppedIndices.some(index => referencesSection(probe, index, sections[index]));
+  // Keep only the fact-check items that reference a SURVIVING section. Items that reference a
+  // dropped section (or nothing identifiable) belong to removed content and are pruned. Matching
+  // against kept sections is robust to headline variants on the dropped ones.
+  const refsKept = probe => keepIndices.some(index => referencesSection(probe, index, sections[index]));
 
   const subsetEditor = { ...editor, sections: keepIndices.map(index => sections[index]) };
   const subsetFactCheck = {
     ...factCheck,
-    must_fix: ensureArray(factCheck?.must_fix).filter(item => !refsDropped(factCheckProbe(item))),
-    source_gaps: ensureArray(factCheck?.source_gaps).filter(item => !refsDropped(factCheckProbe(item))),
-    recommended_fixes: ensureArray(factCheck?.recommended_fixes).filter(item => !refsDropped(factCheckProbe(item))),
+    must_fix: ensureArray(factCheck?.must_fix).filter(item => refsKept(factCheckProbe(item))),
+    source_gaps: ensureArray(factCheck?.source_gaps).filter(item => refsKept(factCheckProbe(item))),
+    recommended_fixes: ensureArray(factCheck?.recommended_fixes).filter(item => refsKept(factCheckProbe(item))),
     article_quality: keepIndices.map((originalIndex, newIndex) => {
       const verdict = ensureArray(factCheck?.article_quality).find(item => Number(item?.section_index) === originalIndex);
       return verdict ? { ...verdict, section_index: newIndex } : { section_index: newIndex, publishable: true, reason: '' };
@@ -1853,7 +1855,7 @@ function salvagePublishableSubset(date, editor, reporter, factCheck, qualityRepo
     editor: subsetEditor,
     factCheck: subsetFactCheck,
     qualityReport: subsetReport,
-    dropped_section_count: droppedIndices.length,
+    dropped_section_count: sections.length - keepIndices.length,
     kept_section_count: keepIndices.length
   };
 }

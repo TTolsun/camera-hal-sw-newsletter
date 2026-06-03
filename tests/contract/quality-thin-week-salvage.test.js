@@ -90,6 +90,26 @@ test('salvage prunes must_fix that references only the dropped section', () => {
   assert.equal(salvage.factCheck.status, 'PASS');
 });
 
+test('salvage prunes a source_gap that names a dropped section by a variant headline', () => {
+  const clean = section({ headline: 'CameraX 1.7.0-alpha01 SessionConfig API', url: 'https://example.com/clean' });
+  const broken = section({ headline: '[지난 소식] CameraX 1.6.0 정식 출시 (10주 전 릴리스)', url: 'invalid-source-url-without-scheme' });
+  const { editor, reporter, factCheck } = buildInputs(
+    [clean, broken],
+    [scopedCandidate('https://example.com/clean', 'direct_aosp_camera'), scopedCandidate('invalid-source-url-without-scheme', 'direct_aosp_camera')],
+    // The gap names the dropped section with a slightly different headline than editor.sections[1].
+    { source_gaps: ['Reporter eligibility violation; section="CameraX 1.6.0 정식 출시"'], source_gap_count: 1 }
+  );
+
+  const report = buildNewsletterQualityReport(DATE, editor, reporter, factCheck, {});
+  assert.equal(report.status, 'NEEDS_FIX');
+
+  const salvage = salvagePublishableSubset(DATE, editor, reporter, factCheck, report, {});
+  assert.ok(salvage, 'a gap on the dropped section must not block the clean subset');
+  assert.equal(salvage.factCheck.source_gaps.length, 0);
+  assert.equal(salvage.editor.sections[0].headline, clean.headline);
+  assert.equal(salvage.qualityReport.status, 'PASS');
+});
+
 test('salvage returns null when no clean subset meets the minimum article count', () => {
   const brokenA = section({ headline: 'Broken A', url: 'invalid-url-a-no-scheme' });
   const brokenB = section({ headline: 'Broken B', url: 'invalid-url-b-no-scheme' });
