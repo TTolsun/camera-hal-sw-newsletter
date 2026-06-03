@@ -6,6 +6,16 @@ const {
   resolvePublishStatus
 } = require('../common/publish-status');
 const {
+  collectedArtifactPath,
+  loadCollectedReport,
+  loadNewsroomJson,
+  loadNewsroomReport,
+  newsroomArtifactPath,
+  readJsonIfExists,
+  readJsonObjectIfExists,
+  readTextIfExists
+} = require('./pr-body-artifacts');
+const {
   articlePolicy,
   articleCountRangeText,
   publishGateCriteriaText
@@ -74,10 +84,6 @@ const EDITOR_BRIEF_REMOVED_SECTIONS = new Set([
   'Deterministic Final Selection Status',
   'Editor Action Guidance'
 ]);
-
-function readTextIfExists(filePath) {
-  return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8').trim() : '';
-}
 
 function valueOrUnknown(value) {
   if (value === null || value === undefined || value === '') return 'unknown';
@@ -327,11 +333,6 @@ function renderFinalSelectionStatus(status) {
     status.candidate_selection_note || 'Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.',
     ''
   ].join('\n');
-}
-
-function readJsonObjectIfExists(filePath) {
-  const value = readJsonIfExists(filePath);
-  return value && typeof value === 'object' && !Array.isArray(value) ? value : null;
 }
 
 function evidencePackValue(value, fallback = 'unknown') {
@@ -917,7 +918,7 @@ function renderSeedEvidenceUsageSummary(root, date) {
 function renderReviewOnlyStatus(status, handoff, root, date) {
   if (!handoff?.diagnosticsOnly) return '';
   const generationStatus = date
-    ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'generation-status.json')) || {}
+    ? loadNewsroomReport(root, date, 'generation-status.json') || {}
     : {};
   const failureStage = valueOrUnknown(generationStatus.failure_stage ?? status.failure_stage);
   const failureReason = valueOrUnknown(generationStatus.failure_reason ?? status.failure_reason);
@@ -1189,10 +1190,10 @@ function renderPublicNewsletterReadiness(root, date, handoff) {
 function renderFailureDiagnostics(root, date, status, handoff) {
   if (!handoff?.diagnosticsOnly) return '';
   const generationStatus = date
-    ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'generation-status.json')) || {}
+    ? loadNewsroomReport(root, date, 'generation-status.json') || {}
     : {};
   const repairFailure = date
-    ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'))
+    ? loadNewsroomReport(root, date, 'repair-failure.json')
     : null;
   const selectionHints = ensureArray(status.selection_shortage_hints);
   return [
@@ -1223,7 +1224,7 @@ function renderFailureDiagnostics(root, date, status, handoff) {
 
 function candidateShortageStatus(status = {}, root, date) {
   const generationStatus = date
-    ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'generation-status.json')) || {}
+    ? loadNewsroomReport(root, date, 'generation-status.json') || {}
     : {};
   return status.failure_kind === 'candidate_shortage_reviewable' ||
     generationStatus.failure_kind === 'candidate_shortage_reviewable';
@@ -1240,7 +1241,7 @@ function formatHintRows(hints) {
 
 function sourceEffectivenessHints(root, date) {
   if (!date) return [];
-  const report = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'source-effectiveness-report.json'));
+  const report = loadNewsroomReport(root, date, 'source-effectiveness-report.json');
   if (!report) return [];
   return ensureArray(report.sources)
     .filter(source => ['OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR', 'KEEP_AND_FIX_PARSER', 'REVIEW_SOURCE_OR_PARSER'].includes(source.recommendation))
@@ -1254,7 +1255,7 @@ function sourceEffectivenessHints(root, date) {
 
 function renderCatchUpSummary(root, date) {
   if (!date) return '';
-  const shortlist = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'));
+  const shortlist = loadNewsroomReport(root, date, 'shortlisted-candidates.json');
   const used = Number(shortlist?.catch_up_used_count || 0);
   if (!Number.isFinite(used) || used <= 0) return '';
   const titles = ensureArray(shortlist?.catch_up_articles)
@@ -1277,7 +1278,7 @@ function renderCatchUpSummary(root, date) {
 function renderCandidatePoolPreflight(root, date, status = {}) {
   if (!candidateShortageStatus(status, root, date)) return '';
   const selectionReport = date
-    ? readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'selection-report.json')) || {}
+    ? loadNewsroomReport(root, date, 'selection-report.json') || {}
     : {};
   const summary = selectionReport.candidate_shortage_summary || status.candidate_shortage_summary || {};
   const richHints = sourceEffectivenessHints(root, date);
@@ -1814,7 +1815,7 @@ function loadEditorialDecisionSource(root, date, status = {}) {
     }
   }
 
-  const selectionReport = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'selection-report.json'));
+  const selectionReport = loadNewsroomReport(root, date, 'selection-report.json');
   const selectionCandidates = selectionReportCandidates(selectionReport);
   if (selectionCandidates.length > 0) {
     return {
@@ -1830,7 +1831,7 @@ function loadEditorialDecisionSource(root, date, status = {}) {
     };
   }
 
-  const reporter = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'));
+  const reporter = loadNewsroomJson(root, date, 'reporter-candidates.json');
   const reporterItems = Array.isArray(reporter)
     ? reporter
     : reporter?.candidates || reporter?.selected_candidates || reporter?.selectedCandidates;
@@ -1847,7 +1848,7 @@ function loadEditorialDecisionSource(root, date, status = {}) {
     };
   }
 
-  const shortlist = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'));
+  const shortlist = loadNewsroomReport(root, date, 'shortlisted-candidates.json');
   const shortlistCandidates = [
     ...candidatesFromArray(shortlist?.primary_selected_articles, 'primary_selected', 'shortlisted-candidates'),
     ...candidatesFromArray(shortlist?.selected_articles, 'final_selected', 'shortlisted-candidates'),
@@ -1867,7 +1868,7 @@ function loadEditorialDecisionSource(root, date, status = {}) {
     };
   }
 
-  const collected = readJsonObjectIfExists(path.join(root, 'content', 'collected-news', date, 'candidates.json'));
+  const collected = loadCollectedReport(root, date, 'candidates.json');
   const collectedCandidates = candidatesFromArray(collected?.candidates, 'report_only', 'collected-candidates');
   if (collectedCandidates.length > 0) {
     return {
@@ -2112,7 +2113,7 @@ function renderCandidateRows(candidates, limit, reasonLabel) {
 }
 
 function eventBundleArtifact(root, date) {
-  return readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'event-bundles.json'));
+  return loadNewsroomJson(root, date, 'event-bundles.json');
 }
 
 function eventBundleRowsForFinalCandidates(root, date, finalCandidates = []) {
@@ -2348,7 +2349,7 @@ function renderGeneratedArtifacts(date, status = {}, root = process.cwd(), chang
 
 function readSelectionReport(root, date) {
   if (!date) return null;
-  return readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'selection-report.json'));
+  return loadNewsroomJson(root, date, 'selection-report.json');
 }
 
 function renderHomepageHeadlineDecision(root, date, status = {}) {
@@ -2448,20 +2449,11 @@ function renderPublicNewsletterNotice(status = {}, handoff = null) {
   ].join('\n');
 }
 
-function readJsonIfExists(filePath) {
-  if (!fs.existsSync(filePath)) return null;
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch (_) {
-    return null;
-  }
-}
-
 function renderArticleStructureContract(root, date) {
   if (!date) return '';
-  const editor = toLegacyEditorIssue(readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), { date });
+  const editor = toLegacyEditorIssue(loadNewsroomJson(root, date, 'editor-draft.json'), { date });
   if (!editor || !Array.isArray(editor.sections)) return '';
-  const qualityReport = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'quality-report.json'));
+  const qualityReport = loadNewsroomJson(root, date, 'quality-report.json');
   return [
     '## Article Structure Contract',
     '',
