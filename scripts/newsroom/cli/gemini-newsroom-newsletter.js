@@ -245,6 +245,15 @@ function cameraDeveloperToolingFactCheckPrompt() {
   ].join('\n');
 }
 
+function articleQualityVerdictPrompt() {
+  return [
+    'article_quality[]: 각 main section마다 하나씩, 그 기사가 발행할 만한 품질인지 판정하세요. section_index(0-based), headline, publishable(boolean), reason을 채우세요.',
+    '품질 기준은 "Camera HAL 관련 주제인가"가 아니라 "Camera HAL SW 엔지니어에게 실제로 도움이 되는 기사인가"입니다. 주제가 C++, AI/LLM, Linux, 빌드/디버그/성능 도구여도 HAL SW 엔지니어 업무에 도움이 되면 publishable=true로 판정하세요. 반대로 Camera HAL 주제라도 구체성·깊이·실행가능성이 없어 엔지니어에게 쓸모가 없으면 publishable=false로 판정하세요.',
+    'publishable=false면 reason에 "왜 HAL SW 엔지니어에게 도움이 안 되는지"를 구체적으로 적으세요(예: 버전/날짜/API/동작 변화 같은 구체 정보 없음, 일반론뿐, 후속 행동이 불명확). publishable=true면 reason에 그 기사가 엔지니어에게 주는 실질적 가치를 한 줄로 적으세요.',
+    '이 판정은 must_fix/source_gaps(사실·출처 검증)와 독립적입니다. 사실은 맞지만 품질이 부족하면 must_fix가 아니라 article_quality의 publishable=false로 표현하세요.'
+  ].join('\n');
+}
+
 function writeNewsletterDate(date, rootDir = root) {
   const tmpDir = path.join(rootDir, '.tmp');
   fs.mkdirSync(tmpDir, { recursive: true });
@@ -3692,6 +3701,7 @@ async function main() {
         articleClaimContractPrompt(),
         factCheckSeverityPrompt(),
         cameraDeveloperToolingFactCheckPrompt(),
+        articleQualityVerdictPrompt(),
         'AOSP Camera, camera driver, SoC platform, native development 또는 Camera developer workflow 해석이 전혀 없는 일반 AI/C++/SoC news는 must_fix[]에 넣으세요.',
         'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
         'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
@@ -3869,6 +3879,7 @@ async function main() {
           articleClaimContractPrompt(),
           factCheckSeverityPrompt(),
           cameraDeveloperToolingFactCheckPrompt(),
+          articleQualityVerdictPrompt(),
           'main article에서 release date, version/release, API/component 또는 library/artifact, concrete behavior change, expanded editorial-scope relevance가 누락되면 must_fix로 다루세요.',
           '남아 있는 source gap 또는 main article로 사용된 watchlist/reference page는 must_fix로 다루세요.',
           'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
@@ -4019,6 +4030,7 @@ async function main() {
             articleClaimContractPrompt(),
             factCheckSeverityPrompt(),
             cameraDeveloperToolingFactCheckPrompt(),
+            articleQualityVerdictPrompt(),
             'Added section이 eligible reporter candidates만 사용하는지, full draft가 Newsletter Policy article composition contract를 만족하는지에 집중하세요.',
             'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
             'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',

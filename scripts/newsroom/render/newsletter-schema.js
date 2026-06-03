@@ -436,6 +436,21 @@ const editorCompletionSchema = {
   required: ['sections']
 };
 
+// Per-article editorial-quality verdict. The criterion is NOT "is this a Camera HAL
+// topic" but "how useful is this article to a Camera HAL SW engineer" — a C++, AI, or
+// Linux article qualifies if it helps that engineer's work. The deterministic gate reads
+// `publishable` as a boolean; `reason` is for the review artifact.
+const articleQualityVerdict = {
+  type: 'OBJECT',
+  properties: {
+    section_index: number,
+    headline: string,
+    publishable: { type: 'BOOLEAN' },
+    reason: string
+  },
+  required: ['section_index', 'publishable', 'reason']
+};
+
 const factCheckSchema = {
   type: 'OBJECT',
   properties: {
@@ -447,9 +462,13 @@ const factCheckSchema = {
     recommended_fixes: stringArray,
     source_gaps: stringArray,
     source_gap_count: { type: 'NUMBER' },
+    article_quality: {
+      type: 'ARRAY',
+      items: articleQualityVerdict
+    },
     final_comment: string
   },
-  required: ['status', 'must_fix', 'recommended_fixes', 'source_gaps', 'source_gap_count', 'final_comment']
+  required: ['status', 'must_fix', 'recommended_fixes', 'source_gaps', 'source_gap_count', 'article_quality', 'final_comment']
 };
 
 const publicArticleJudgeIssue = {

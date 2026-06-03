@@ -41,6 +41,12 @@ function validateFactCheck(value) {
   value.recommended_fixes = ensureArray(value.recommended_fixes).filter(item => !isSchemaFieldFactCheckViolation(item));
   value.source_gaps = ensureArray(value.source_gaps);
   value.source_gap_count = numberOrDefault(value.source_gap_count, value.source_gaps.length);
+  value.article_quality = ensureArray(value.article_quality).map(item => ({
+    section_index: numberOrDefault(item?.section_index, -1),
+    headline: String(item?.headline || ''),
+    publishable: item?.publishable !== false,
+    reason: String(item?.reason || '')
+  }));
   value.final_comment = value.final_comment || '';
   if (!['PASS', 'NEEDS_FIX'].includes(value.status)) {
     value.status = value.must_fix.length > 0 ? 'NEEDS_FIX' : 'PASS';
