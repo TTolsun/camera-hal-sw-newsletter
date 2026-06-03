@@ -1,0 +1,279 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 88,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 1,
+    "locked_article_count": 1,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:claim:camerax_1_6_0_release:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:claim:query_api_introduced:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:claim:android_17_crash_fix:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:claim:preview_stabilization_fix:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:claim:z_fold_4_yuv_exclude:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:claim:a53_torch_fix:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:claim:ultrawide_flash_fix:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "claim-binding",
+        "points": 1,
+        "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+        "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "source_url_derived_evidence_mapping",
+        "dedupe_key": "1:claim:exif_padding_fix:source_url_derived_evidence_mapping"
+      },
+      {
+        "category": "source-integrity",
+        "points": 1,
+        "reason": "CameraX source extraction failure: CameraX HAL boundary is missing from the article. (adjacent-content publishing: soft note, not a publish blocker)",
+        "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": "",
+        "adjacent_relaxed": true
+      },
+      {
+        "category": "scope-relevance",
+        "points": 1,
+        "reason": "1 final-selected candidate(s) have weak HAL/actionability scores under the expanded AOSP Camera / driver / SoC / native relevance model. (adjacent-content publishing: soft note, not a publish blocker)",
+        "location": "",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": "",
+        "adjacent_relaxed": true
+      }
+    ],
+    "selected_article_headlines": [
+      "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영"
+    ],
+    "locked_article_headlines": [
+      "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+        ],
+        "source_titles": [
+          "CameraX Release Notes - CameraX 1.6.0"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "sources": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+        ],
+        "action": "repair-section",
+        "failure_type": "claim-binding",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "claim-binding",
+            "points": 1,
+            "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+            "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영"
+          },
+          {
+            "category": "claim-binding",
+            "points": 1,
+            "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+            "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영"
+          },
+          {
+            "category": "claim-binding",
+            "points": 1,
+            "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+            "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영"
+          },
+          {
+            "category": "claim-binding",
+            "points": 1,
+            "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+            "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영"
+          },
+          {
+            "category": "claim-binding",
+            "points": 1,
+            "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+            "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영"
+          },
+          {
+            "category": "claim-binding",
+            "points": 1,
+            "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+            "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영"
+          },
+          {
+            "category": "claim-binding",
+            "points": 1,
+            "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+            "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영"
+          },
+          {
+            "category": "claim-binding",
+            "points": 1,
+            "reason": "Claim omitted evidence_ids; source_urls were mapped to source-derived candidate evidence.",
+            "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영"
+          },
+          {
+            "category": "source-integrity",
+            "points": 1,
+            "reason": "CameraX source extraction failure: CameraX HAL boundary is missing from the article. (adjacent-content publishing: soft note, not a publish blocker)",
+            "location": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+        ],
+        "source_titles": [
+          "CameraX Release Notes - CameraX 1.6.0"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 0,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [
+      {
+        "title": "Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
+        "url": "https://goo.gle/AdaptiveApps_IO26",
+        "source": "Android Developers Blog",
+        "reason": "finalSelectionEligibility=unknown"
+      }
+    ],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

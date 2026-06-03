@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "report_type": "hal_signal_quality",
+  "date": "2026-06-03",
+  "generated_at": "2026-06-03T07:44:10.894Z",
+  "status": "WARN",
+  "input_completeness": "partial",
+  "input_statuses": {
+    "shortlisted_candidates": "loaded",
+    "editor_draft": "loaded",
+    "quality_report": "loaded",
+    "source_effectiveness_report": "input_unavailable",
+    "source_quality_report": "loaded",
+    "evidence_pack_summary": "input_unavailable",
+    "merged_candidate_manifest": "loaded"
+  },
+  "inputs": {
+    "required": {
+      "shortlisted_candidates": {
+        "path": "content/newsroom/2026-06-03/shortlisted-candidates.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "editor_draft": {
+        "path": "content/newsroom/2026-06-03/editor-draft.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "quality_report": {
+        "path": "content/newsroom/2026-06-03/quality-report.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "optional": {
+      "source_effectiveness_report": {
+        "path": "content/newsroom/2026-06-03/source-effectiveness-report.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "source_quality_report": {
+        "path": "content/newsroom/2026-06-03/source-quality-report.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "evidence_pack_summary": {
+        "path": "content/newsroom/2026-06-03/evidence-pack-summary.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "merged_candidate_manifest": {
+        "path": "content/collected-news/2026-06-03/merged-candidate-manifest.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "missing_required": [],
+    "unavailable_optional": [
+      "source_effectiveness_report",
+      "evidence_pack_summary"
+    ]
+  },
+  "quality_status": "PASS",
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 1,
+    "strong_signal_count": 0,
+    "usable_signal_count": 0,
+    "weak_signal_count": 1,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 1,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 1,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "framework_hal_contract": 1,
+      "driver_image_pipeline": 1,
+      "stream_buffer_metadata": 1,
+      "camerax_app_compatibility": 1
+    },
+    "actionability_level_counts": {
+      "none": 1
+    },
+    "effective_actionability_level_counts": {
+      "concrete_check": 1
+    },
+    "signal_quality_status_counts": {
+      "weak_signal": 1
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "CameraX 1.6.0 정식 릴리스: 유스케이스 조합 지원 사전 쿼리 API 도입 및 기기별 스트림/버퍼 호환성 패치 대거 반영",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "camera_driver_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "Contains source-bound API behavior action evidence: api,stream_buffer_metadata.",
+      "signal_quality_status": "weak_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "CameraX 1.6.0 릴리스는 Camera HAL 및 드라이버에 여러 가지 중요한 영향을 미칩니다. 새로운 API는 HAL이 지원하는 기능 조합에 대한 명확한 쿼리 메커니즘을 제공하여 HAL 구현의 유효성 검사 및 호환성 테스트를 개선할 수 있습니다.",
+      "fallback_guard_notes": [
+        "릴리스 노트에 명시적으로 언급되지 않는 한, 직접적인 Camera HAL API 또는 벤더 HAL 계약 변경을 주장하지 마십시오.",
+        "아티팩트 버전 테이블을 동작 변경 증거로 사용하지 마십시오.",
+        "CameraX 1.6.0의 버그 수정 내역은 상위 프레임워크 및 라이브러리 계층의 우회 조치이며, Camera HAL3 인터페이스 규격 자체나 드라이버 아키텍처를 직접 변경하는 것은 아닙니다.",
+        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+        "Do not use artifact version tables as behavior-change evidence."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "selection_shortage_hint_details": [
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "gate_boundary": {
+    "quality_validation_records_hal_signal_deductions": true,
+    "publish_gate_blocks_hal_signal_hard_blockers": true,
+    "review_artifacts_preserved": true,
+    "optional_input_unavailable_is_not_pass": true
+  },
+  "close_criteria": {
+    "report_generated": true,
+    "main_article_capsule_validation": true,
+    "actionability_hard_blocker_reflected": true,
+    "generic_fallback_soc_overpromotion_tests_required": true,
+    "source_expansion_followups": [
+      "#55",
+      "#57"
+    ],
+    "historical_rewrite_followup": "#108"
+  },
+  "warnings": [
+    "Optional input_unavailable: source_effectiveness_report",
+    "Optional input_unavailable: evidence_pack_summary"
+  ]
+}

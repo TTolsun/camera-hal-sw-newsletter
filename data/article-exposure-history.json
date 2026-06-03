@@ -7,6 +7,41 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "newsletter_date": "2026-06-03",
+      "newsletter_url": "newsletters/2026-06-03/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "retained_current_above_margin",
+      "exposed_at": "2026-06-03",
+      "first_exposed_at": "2026-06-03",
+      "last_exposed_at": "2026-06-03",
+      "exposure_count": 1,
+      "exposure_types": [
+        "homepage_headline"
+      ]
+    },
+    {
+      "article_identity_key": "content:2dca6397f6798483d79ea9e0",
+      "title": "",
+      "source_url": "",
+      "newsletter_date": "2026-06-03",
+      "newsletter_url": "newsletters/2026-06-03/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-06-03",
+      "cooldown_until": "2026-06-24",
+      "first_exposed_at": "2026-06-03",
+      "last_exposed_at": "2026-06-03",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
       "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "title": "CameraX 1.6.1: ListenableFuture 컴파일 오류 수정",
       "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
@@ -44,15 +79,15 @@
       "article_identity_key": "url:https://goo.gle/AdaptiveApps_IO26",
       "title": "Google I/O 2026: Jetpack Compose와 CameraX가 이끄는 다중 기기 적응형 카메라 미리보기 혁신",
       "source_url": "https://goo.gle/AdaptiveApps_IO26",
-      "newsletter_date": "2026-06-02",
+      "newsletter_date": "2026-06-03",
       "newsletter_url": "newsletters/2026-06-02/index.html",
       "exposure_type": "homepage_headline",
-      "headline_score": 100,
-      "reuse_reason": "replaced_by_new_candidate",
-      "exposed_at": "2026-06-02",
+      "headline_score": 98,
+      "reuse_reason": "retained_current_above_margin",
+      "exposed_at": "2026-06-03",
       "first_exposed_at": "2026-05-23",
-      "last_exposed_at": "2026-06-02",
-      "exposure_count": 7,
+      "last_exposed_at": "2026-06-03",
+      "exposure_count": 8,
       "exposure_types": [
         "homepage_headline"
       ]
