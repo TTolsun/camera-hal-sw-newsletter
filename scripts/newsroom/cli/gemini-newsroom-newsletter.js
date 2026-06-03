@@ -124,6 +124,9 @@ const {
   writeHomepageHeadlineState
 } = require('../common/homepage-headline');
 const {
+  renderedHeadlineState
+} = require('../common/headline-render-reconciliation');
+const {
   pruneResolvedFallbackImageFactCheckItems
 } = require('../common/fact-check-repair');
 const {
@@ -2232,7 +2235,28 @@ function persistHeadlineStateArtifacts({ date, shortlistReport, shouldWritePubli
     return { files: [], exposureCoverage: shortlistReport?.article_exposure_coverage || null };
   }
   const files = [];
-  const state = shortlistReport.homepage_headline_state;
+  // persist/validate 전에 헤드라인을 방금 렌더된 공개 이슈에 맞춰 reconcile한다.
+  // article anchor는 실행마다 달라지는 영문 헤드라인에서 파생되므로, retained 헤드라인의
+  // newsletter_article_url anchor가 이번 render에 없을 수 있고 validate:site는 그 anchor를 요구한다.
+  // ensure-public-newsletter-artifacts가 이후 동일하게 reconcile(멱등)하지만,
+  // generate가 먼저 해야 자체 validate:site가 일관된 상태를 본다.
+  const reconciled = renderedHeadlineState({
+    root,
+    date,
+    state: shortlistReport.homepage_headline_state,
+    shortlist: shortlistReport
+  });
+  const state = reconciled.state;
+  shortlistReport.homepage_headline_state = state;
+  if (reconciled.reconciliation?.applied) {
+    shortlistReport.headline_public_render_reconciliation = reconciled.reconciliation;
+    shortlistReport.headline_decision = {
+      ...(shortlistReport.headline_decision || {}),
+      public_rendered_headline_key: reconciled.reconciliation.rendered_headline_key,
+      public_render_reconciled: true,
+      public_render_reconciliation_reason: reconciled.reconciliation.reason
+    };
+  }
   const headlinePath = writeHomepageHeadlineState(root, state);
   files.push(path.relative(root, headlinePath).replace(/\\/g, '/'));
 
