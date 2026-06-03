@@ -11,7 +11,7 @@ const LLM_PROVIDER_VALUES = Object.freeze(['gemini', 'openapi']);
 const DEFAULT_LLM_MODEL = 'gemini-2.5-flash';
 const DEFAULT_LLM_FALLBACK_MODELS = ['gemini-2.5-flash-lite'];
 const DEFAULT_LLM_STAGE_MODELS = Object.freeze({
-  reporter: 'gemini-2.5-flash-lite',
+  reporter: 'gemini-2.5-flash',
   editor: 'gemini-3.5-flash',
   factcheck: 'gemini-2.5-flash',
   repair: 'gemini-3.5-flash',
