@@ -4,86 +4,87 @@
   "newsletter_date": "2026-06-03",
   "proposals": [
     {
-      "proposal_id": "proposal_1",
-      "topic_gap": "Camera HAL SW updates and new features for Android 17.",
-      "source_family": "Official Android media/camera-output",
-      "allowed_domains": [],
+      "proposal_id": "P001",
+      "topic_gap": "Google I/O '26 announcements related to media pipeline enhancements and premium Android experiences, specifically focusing on camera output and related media processing.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [
+        "youtube.com",
+        "android-developers.googleblog.com"
+      ],
       "search_keywords": [
-        "CameraX release notes",
-        "Android camera HAL updates",
-        "Android 17 camera features"
+        "Android media pipeline",
+        "Google I/O 2026 media",
+        "Android camera output",
+        "Media3 updates",
+        "MediaCodec improvements",
+        "MediaRecorder enhancements"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "New APIs or features for media processing (e.g., Media3, MediaCodec, MediaRecorder)",
+        "Improvements in camera output handling, preview, or recording",
+        "Performance enhancements for media pipelines",
+        "Integration with other Android components for premium media experiences"
+      ],
+      "risk_notes": [
+        "YouTube playlist might contain general Android content; need to filter for specific media/camera relevance.",
+        "Blog post title 'Building Premium Android Experiences' is broad; need to verify if it includes camera/media pipeline details."
+      ]
+    },
+    {
+      "proposal_id": "P002",
+      "topic_gap": "Updates to CameraX, including new features, bug fixes, or performance improvements in recent stable and alpha releases.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.6.0 release notes",
+        "CameraX 1.7.0-alpha01 features",
+        "AndroidX Camera updates",
+        "CameraX new features"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
       ],
       "expected_evidence": [
-        "CameraX release notes",
-        "Camera HAL updates",
-        "New camera features",
-        "Bug fixes and improvements"
+        "New CameraX features (e.g., new use cases, extensions)",
+        "API changes or deprecations",
+        "Bug fixes or performance optimizations related to camera functionality",
+        "Compatibility updates with new Android versions"
       ],
-      "risk_notes": []
+      "risk_notes": [
+        "Alpha releases might contain features that are not yet stable or might change."
+      ]
     },
     {
-      "proposal_id": "proposal_2",
-      "topic_gap": "Improvements in media pipeline and camera output handling for Android.",
-      "source_family": "Official Android media/camera-output",
-      "allowed_domains": [],
+      "proposal_id": "P003",
+      "topic_gap": "Updates or new documentation regarding camera image testing using automation, specifically Camera ITS Box.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [
+        "source.android.com"
+      ],
       "search_keywords": [
-        "Media3 release notes",
-        "Android MediaCodec updates",
-        "Android MediaRecorder improvements",
-        "Android Photo Picker",
-        "Android MediaStore",
-        "Android A/V sync"
+        "Android Camera ITS Box",
+        "automated camera testing Android",
+        "camera image quality testing AOSP",
+        "CTS camera testing"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/media3",
-        "https://developer.android.com/media/platform/mediarecorder",
-        "https://developer.android.com/media/platform/supported-formats",
-        "https://developer.android.com/training/data-storage/shared/photo-picker",
-        "https://developer.android.com/reference/android/provider/MediaStore",
-        "https://developer.android.com/reference/android/media/MediaCodec"
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "Media3 release notes",
-        "MediaCodec updates",
-        "MediaRecorder improvements",
-        "MediaStore enhancements",
-        "Photo Picker new features",
-        "Camera output processing",
-        "A/V sync improvements"
+        "New procedures or guidelines for Camera ITS Box testing",
+        "Updates to camera image quality validation methods",
+        "Information on automated camera testing for Android devices",
+        "Changes in compatibility requirements related to camera testing"
       ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "proposal_3",
-      "topic_gap": "Camera testing and compatibility updates for Android.",
-      "source_family": "Official Android media/camera-output",
-      "allowed_domains": [],
-      "search_keywords": [
-        "Android Camera ITS",
-        "Android CDD camera",
-        "Android CTS camera testing",
-        "Camera HAL compatibility"
-      ],
-      "candidate_urls": [
-        "https://source.android.com/docs/compatibility/cts/camera-its-box",
-        "https://source.android.com/docs/compatibility",
-        "https://source.android.com/docs/whatsnew/site-updates",
-        "https://source.android.com/docs/compatibility/cdd"
-      ],
-      "expected_evidence": [
-        "Camera ITS updates",
-        "Compatibility Definition Document (CDD) changes",
-        "Android Compatibility Test Suite (CTS) updates",
-        "New testing methodologies for camera"
-      ],
-      "risk_notes": []
+      "risk_notes": [
+        "The URL might be a static documentation page; need to verify if there are recent updates or changes relevant to the newsletter date."
+      ]
     }
   ]
 }
