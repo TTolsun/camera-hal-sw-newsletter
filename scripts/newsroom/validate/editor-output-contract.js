@@ -40,6 +40,10 @@ const {
   validateArticleClaims
 } = require('./claim-source-binding');
 const {
+  REPAIR_PATCH_CONTRACT_VIOLATION,
+  checkRepairPatchContract
+} = require('./repair-patch-contract');
+const {
   candidateGroupKey,
   EXPLICIT_DEMOTION_REASON_CODES,
   explicitDemotedGroups,
@@ -1375,8 +1379,21 @@ async function repairEditorOutputContract({
       });
       const repairedForValidation = cloneJson(repairedRaw);
       const repairedEditor = validate(repairedForValidation);
+      // #482: repair must be an article-preserving patch. group_coverage and
+      // blocked_context legitimately restructure sections, so they keep the
+      // looser preserve check; every other field is held to the strict
+      // identity/source/structure firewall, which rejects the LLM rewriting
+      // article identity before the output is ever accepted.
       if (!['sections.group_coverage', 'sections.blocked_context'].includes(repairField)) {
-        assertSectionsAndSourcesPreserved(invalidEditor, repairedRaw);
+        const patchContract = checkRepairPatchContract(invalidEditor, repairedRaw);
+        if (!patchContract.ok) {
+          throw semanticError('Editor semantic repair violated the article-preserving patch contract.', {
+            field: 'sections.repair_patch',
+            reason: REPAIR_PATCH_CONTRACT_VIOLATION,
+            violations: patchContract.violations,
+            sectionCount: ensureArray(repairedRaw?.sections).length
+          });
+        }
       }
       return {
         editor: repairedEditor,

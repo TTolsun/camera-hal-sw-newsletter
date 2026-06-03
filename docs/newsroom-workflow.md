@@ -178,7 +178,7 @@ fact-checker는 새 글을 쓰는 stage가 아니라 source gap, unsupported cla
 scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. provider/model은 code default이고, 나머지는 workflow와 runtime config의 기본값을 사용합니다.
 
 ```text
-LOOKBACK_DAYS=90
+LOOKBACK_DAYS=90  # 워크플로 명시값. runtime 기본값은 10 (#487)이며 scheduled run은 catch-up 풀(#483)을 위해 90을 유지
 LLM_PROVIDER=gemini
 LLM_MODEL unset
 GEMINI_MODEL unset

@@ -40,7 +40,11 @@ const DEFAULT_SELECTION_WINDOW_POLICY = getSelectionWindowPolicy();
 
 const DEFAULT_RUNTIME_CONFIG = {
   newsletterDate: '',
-  lookbackDays: 90,
+  // #487: default source collection lookback is 10 days. The daily collect
+  // workflow (01-newsletters-source-collect-pr.yml) still passes an explicit
+  // LOOKBACK_DAYS=90 to feed the catch-up pool until the weekly upsert model
+  // (#488) lands; this default applies to runs that do not set LOOKBACK_DAYS.
+  lookbackDays: 10,
   selectionWindowPolicy: {
     primarySelectionDays: DEFAULT_SELECTION_WINDOW_POLICY.primarySelectionDays,
     fallbackSelectionDays: DEFAULT_SELECTION_WINDOW_POLICY.fallbackSelectionDays,
