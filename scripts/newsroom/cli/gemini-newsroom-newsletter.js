@@ -134,7 +134,6 @@ const {
 } = require('../common/public-article-contract');
 const {
   buildNewsletterQualityReport,
-  salvagePublishableSubset,
   buildQualityReportMarkdown,
   deductionMatchesSection,
   sectionHasSourceGap,
@@ -1604,7 +1603,6 @@ function writeReviewableRepairFailureArtifacts({
   retryHistory = [],
   shortlistReport = null,
   attempt = 0,
-  allowSalvage = true,
   stage = 'repair',
   rootDir = root
 }) {
@@ -1628,34 +1626,6 @@ function writeReviewableRepairFailureArtifacts({
       strictClaimValidation: true,
       seedEvidencePack: readSeedEvidencePackForDate(date, rootDir)
     });
-  // Thin-week 부분 발행(salvage): 약한 채움 기사 때문에 전체를 실패 처리하기 전에, 발행 불가
-  // 기사를 빼고 깨끗한 부분집합만으로 게이트를 통과할 수 있으면 그 부분집합을 채택해 정상 발행으로
-  // 흘려보낸다. 실패 마커(editor_semantic_validation 등)는 박지 않는다. 부분집합도 게이트를 다시
-  // 통과하므로 안전 기준은 그대로다.
-  if (allowSalvage && fallbackQualityReport.status !== 'PASS') {
-    const salvage = salvagePublishableSubset(date, fallbackEditor, fallbackReporter, fallbackFactCheck, fallbackQualityReport, {
-      threshold: qualityGatePolicy.threshold,
-      shortlistReport: shortlistReport || generationRunState.shortlistReport,
-      strictClaimValidation: true,
-      seedEvidencePack: readSeedEvidencePackForDate(date, rootDir)
-    });
-    if (salvage) {
-      console.log(`Thin-week salvage during ${stage}: dropped ${salvage.dropped_section_count} unpublishable article(s); publishing ${salvage.kept_section_count} clean article(s).`);
-      generationRunState.lastKnownValidEditor = salvage.editor;
-      generationRunState.lastKnownValidFactCheck = salvage.factCheck;
-      generationRunState.lastKnownValidQualityReport = salvage.qualityReport;
-      generationRunState.factCheck = salvage.factCheck;
-      generationRunState.qualityReport = salvage.qualityReport;
-      recordEditorSemanticStatus({ repairAttempted: true, repairSucceeded: true });
-      return {
-        salvaged: true,
-        editor: salvage.editor,
-        factCheck: salvage.factCheck,
-        qualityReport: salvage.qualityReport,
-        retryHistory: ensureArray(retryHistory)
-      };
-    }
-  }
   const serializedError = serializeEditorValidationError(error, {
     stage,
     attempt,
@@ -3695,7 +3665,7 @@ async function main() {
       assertEditorRetryOutputContract(editor, editorRetryContract, reporter);
     } catch (error) {
       if (error instanceof EditorSemanticValidationError && generationRunState.lastKnownValidEditor) {
-        const outcome = writeReviewableRepairFailureArtifacts({
+        writeReviewableRepairFailureArtifacts({
           date,
           newsroomDir,
           error,
@@ -3707,12 +3677,6 @@ async function main() {
           attempt,
           stage: editorStage
         });
-        if (outcome?.salvaged) {
-          editor = outcome.editor;
-          factCheck = outcome.factCheck;
-          qualityReport = outcome.qualityReport;
-          break;
-        }
         return;
       }
       throw error;
@@ -3964,7 +3928,7 @@ async function main() {
           sourceGapSections(editor, factCheck).concat(eligibilityFindings.map(finding => finding.section))
         );
       } catch (error) {
-        const outcome = writeReviewableRepairFailureArtifacts({
+        writeReviewableRepairFailureArtifacts({
           date,
           newsroomDir,
           error,
@@ -3976,11 +3940,6 @@ async function main() {
           attempt,
           stage: repairStage
         });
-        if (outcome?.salvaged) {
-          editor = outcome.editor;
-          factCheck = outcome.factCheck;
-          qualityReport = outcome.qualityReport;
-        }
         break;
       }
     }
@@ -4121,7 +4080,7 @@ async function main() {
             sourceGapSections(editor, factCheck).concat(eligibilityFindings.map(finding => finding.section))
           );
         } catch (error) {
-          const outcome = writeReviewableRepairFailureArtifacts({
+          writeReviewableRepairFailureArtifacts({
             date,
             newsroomDir,
             error,
@@ -4133,12 +4092,6 @@ async function main() {
             attempt,
             stage: completionStage
           });
-          if (outcome?.salvaged) {
-            editor = outcome.editor;
-            factCheck = outcome.factCheck;
-            qualityReport = outcome.qualityReport;
-            break;
-          }
           return;
         }
       } else {
@@ -4246,26 +4199,13 @@ async function main() {
   editor = stampCoverageType(editor, shortlistReport);
   factCheck = pruneCatchUpFramingFactCheckItems(factCheck, editor);
   generationRunState.factCheck = factCheck;
-  const finalQualityOptions = {
+  qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
     threshold: qualityGatePolicy.threshold,
     shortlistReport,
     staleClaimReport: staleScrub.report,
     strictClaimValidation: true,
     seedEvidencePack
-  };
-  qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, finalQualityOptions);
-  if (qualityReport.status !== 'PASS') {
-    // 예외 없이 attempts가 소진된 thin-week 경로의 부분 발행(salvage). 발행 불가 기사를 빼고
-    // 깨끗한 부분집합만 발행한다. 부분집합도 게이트를 다시 통과한다.
-    const salvage = salvagePublishableSubset(date, editor, reporter, factCheck, qualityReport, finalQualityOptions);
-    if (salvage) {
-      console.log(`Thin-week salvage: dropped ${salvage.dropped_section_count} unpublishable article(s); publishing ${salvage.kept_section_count} clean article(s).`);
-      editor = salvage.editor;
-      factCheck = salvage.factCheck;
-      qualityReport = salvage.qualityReport;
-      generationRunState.factCheck = factCheck;
-    }
-  }
+  });
   generationRunState.qualityReport = qualityReport;
 
   writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
@@ -4556,7 +4496,6 @@ function writeTerminalFailureStatus(error) {
         retryHistory: generationRunState.retryHistory,
         shortlistReport: generationRunState.shortlistReport,
         attempt: generationRunState.currentQualityAttempt || generationRunState.lastKnownValidAttempt,
-        allowSalvage: false,
         stage: failureStageFromError(error)
       });
       return;
