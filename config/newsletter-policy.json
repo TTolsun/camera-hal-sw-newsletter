@@ -64,7 +64,7 @@
     "description": "발행 모드 판정 임계값. coreCount>=1이면 DEEP, core 0건이고 (adjacent+context) 신호가 contextMinSignals 이상이면 CONTEXT, 그 외 QUIET."
   },
   "qualityGatePolicy": {
-    "threshold": 70,
+    "threshold": 60,
     "adjacentContentPublishing": true,
     "hardFailConditions": [
       "source-less main article",

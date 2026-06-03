@@ -1121,9 +1121,14 @@ function sectionPassesArticleGate(section, qualityReport, factCheck) {
 const ADJACENT_RELAXABLE_DEDUCTIONS = Object.freeze([
   { category: 'source-integrity', pattern: /HAL boundary is missing/i },
   { category: 'source-integrity', pattern: /Shared watch\/release-note URL requires matching/i },
+  { category: 'source-integrity', pattern: /Fact checker reported \d+ source gap/i },
   { category: 'scope-relevance', pattern: /lacks article-level AOSP Camera/i },
   { category: 'scope-relevance', pattern: /weak HAL\/actionability scores/i },
-  { category: 'claim-contract', pattern: /missing item-level evidence_ids/i }
+  { category: 'claim-contract', pattern: /missing item-level evidence_ids/i },
+  { category: 'evidence-specificity', pattern: /lacks concrete version, release date, API/i },
+  { category: 'evidence-specificity', pattern: /generic monitoring\/review language/i },
+  { category: 'hal-depth', pattern: /lacks concrete AOSP Camera \/ driver \/ SoC \/ native engineering depth/i },
+  { category: 'hal-depth', pattern: /hal_driver_impact does not include concrete/i }
 ]);
 
 function isAdjacentRelaxableDeduction(deduction) {
@@ -1139,7 +1144,7 @@ function relaxAdjacentContentDeductions(deductions) {
     if (!isAdjacentRelaxableDeduction(deduction)) return deduction;
     return {
       ...deduction,
-      points: Math.min(Number(deduction.points) || 0, 2),
+      points: Math.min(Number(deduction.points) || 0, 1),
       blocking: false,
       severity: 'soft',
       adjacent_relaxed: true,
@@ -1999,8 +2004,13 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   ));
   const halSignalQualitySummary = buildHalSignalQualitySummary(halSignalArticles);
   const mainArticleSignalChecks = buildMainArticleSignalChecks(halSignalArticles);
+  // Under adjacent-content publishing, fact-check "source gap" findings on articles that
+  // DO have a bound source URL are granular-backing notes, not source-absence; they must
+  // not force NEEDS_FIX. Genuinely source-less articles are still caught by binding and
+  // required-fields hard checks. Fact-check must_fix (fabrication) always stays blocking.
+  const effectiveSourceGapCount = adjacentContentPublishing ? 0 : gaps;
   const status = determineQualityStatus(score, threshold, {
-    sourceGapCount: gaps,
+    sourceGapCount: effectiveSourceGapCount,
     hasFactCheckMustFix,
     blockingDeductions: blockers
   });

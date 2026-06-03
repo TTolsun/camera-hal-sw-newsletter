@@ -685,7 +685,7 @@ test('quality gate fails missing Camera HAL perspective and fewer than 2 action 
     scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
     scopedCandidate('https://example.com/c', 'direct_aosp_camera'),
     scopedCandidate('https://example.com/ai', 'direct_aosp_camera')
-  ]);
+  ], { adjacentContentPublishing: false });
 
   assert.equal(report.status, 'NEEDS_FIX');
   assert.ok(report.deductions.some(item => item.reason.includes('hal_driver_impact')));
