@@ -690,7 +690,7 @@ test('non-Pro model routing remains stage-specific without Pro fallback append',
     NEWSROOM_JUDGE_MODEL: 'gemini-2.5-flash-lite'
   });
 
-  assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-3.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModels(config), ['gemini-2.5-flash-lite', 'gemini-3.5-flash', 'gemini-2.5-flash']);
   assert.deepEqual(configuredModelsForStage(config, 'editor completion attempt 1/2'), ['gemini-3.5-flash', 'gemini-2.5-flash-lite']);
   assert.deepEqual(configuredModelsForStage(config, 'public article judge repair'), ['gemini-2.5-flash-lite']);
   assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, false);
