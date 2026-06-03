@@ -16,8 +16,8 @@
 ## Implementation Rules
 
 - CommonJS `require`, 2칸 들여쓰기, 세미콜론, Node 20 compatibility를 유지합니다.
-- prompt-only logic으로 deterministic validation을 대체하지 마세요.
-- quality gate, hard blocker, source integrity check, image fallback contract를 약화하지 마세요.
+- prompt-only logic으로 **safety** deterministic validation(source binding, fact-check must_fix, claim evidence_id, required fields, composition, stale claim, duplicate URL)을 대체하지 마세요. 단, **editorial 품질/깊이 판정**은 fact-checker(LLM)의 `article_quality[]` verdict("Camera HAL SW 엔지니어에게의 유용성", 주제 무관)가 담당하며 deterministic topic/depth heuristic으로 gate하지 않습니다.
+- safety hard blocker, source integrity check, image fallback contract, fact-checker usefulness verdict gate를 약화하지 마세요. publish gate는 numeric threshold가 아니라 (안전 검사 통과) AND (모든 기사 publishable)의 boolean입니다.
 - generated artifact path를 바꿀 때는 workflow, docs, tests를 함께 갱신해야 합니다.
 - root wrapper와 `scripts/lib/**` shim은 compatibility surface입니다. 별도 PR 없이 import path를 대량 교체하지 마세요.
 - 일시적인 실험, 재현, probe, local 분석용 script는 `scripts/`나 `scripts/newsroom/`에 남기지 않습니다. 영구 script가 필요하면 유지보수 가능한 CLI/tool로 범위와 검증을 명확히 합니다.

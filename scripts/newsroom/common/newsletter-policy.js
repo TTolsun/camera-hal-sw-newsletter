@@ -375,7 +375,6 @@ function normalizeNewsletterPolicyConfig(config) {
     },
     qualityGatePolicy: {
       threshold: quality.threshold,
-      adjacentContentPublishing: quality.adjacentContentPublishing === true,
       hardFailConditions: [...quality.hardFailConditions]
     }
   });
@@ -526,10 +525,8 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
       ? `- Catch-up (지난 소식) lane: when fresh selection is below ${catchUpPolicy.targetMainArticles} article(s), open main slots are filled with uncovered releases up to ${catchUpPolicy.maxAgeDays} days old from buckets ${catchUpPolicy.eligibleBuckets.map(bucket => `\`${bucket}\``).join(', ')}, at most ${catchUpPolicy.maxCatchUpArticles} per issue, covered once each; never displaces fresh content.`
       : '- Catch-up (지난 소식) lane: disabled.',
     `- Homepage headline policy: ${headlinePolicy.decayModel} decay; decay ${headlinePolicy.decayRatePerDay} point(s)/day; replacement margin ${headlinePolicy.replacementMargin}; minimum headline score ${headlinePolicy.minimumHeadlineScore}; latest inclusion required ${headlinePolicy.latestInclusionRequired}; history max ${headlinePolicy.historyMaxEntries}`,
-    `- Quality threshold: ${qualityGatePolicy.threshold}`,
-    qualityGatePolicy.adjacentContentPublishing
-      ? '- Adjacent-content publishing: enabled. Depth/source-type quality notes (missing HAL-boundary discussion, shared watch/release-note URL without a version, weak article-level camera-scope depth, claim missing item-level evidence_ids) are recorded as soft notes instead of publish blockers so real-sourced camera-adjacent content (release notes, conference sessions) can publish in weeks without deep Camera HAL material. Source-absence, fabrication, fact-check must_fix, duplicate URL, and stale-claim failures stay hard blockers.'
-      : '- Adjacent-content publishing: disabled. Depth/source-type concerns remain hard blockers.',
+    '- Publish gate: PASS requires no source gaps, no fact-check must_fix, no blocking deductions, and every article marked publishable by the fact-checker. There is no numeric quality threshold.',
+    '- Editorial quality: the fact-checker (LLM) judges each article on usefulness to a Camera HAL SW engineer (topic-agnostic — C++, AI, or Linux articles qualify when they help that engineer). Topic/depth heuristics are not used as deterministic publish gates.',
     `- Hard fail conditions remain blocking: ${qualityGatePolicy.hardFailConditions.join('; ')}`,
     '',
     POLICY_BLOCK_END

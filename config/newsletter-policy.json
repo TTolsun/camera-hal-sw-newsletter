@@ -65,7 +65,6 @@
   },
   "qualityGatePolicy": {
     "threshold": 60,
-    "adjacentContentPublishing": true,
     "hardFailConditions": [
       "source-less main article",
       "source candidate binding failure",

@@ -1737,10 +1737,6 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   ));
   const halSignalQualitySummary = buildHalSignalQualitySummary(halSignalArticles);
   const mainArticleSignalChecks = buildMainArticleSignalChecks(halSignalArticles);
-  // Under adjacent-content publishing, fact-check "source gap" findings on articles that
-  // DO have a bound source URL are granular-backing notes, not source-absence; they must
-  // not force NEEDS_FIX. Genuinely source-less articles are still caught by binding and
-  // required-fields hard checks. Fact-check must_fix (fabrication) always stays blocking.
   const status = determineQualityStatus({
     sourceGapCount: gaps,
     hasFactCheckMustFix,
