@@ -354,7 +354,8 @@ test('repair that changes sections or sources fatally fails and writes repair di
     }),
     error => {
       assert.ok(error instanceof EditorSemanticValidationError);
-      assert.equal(error.details.field, 'sections.sources');
+      assert.equal(error.details.field, 'sections.repair_patch');
+      assert.equal(error.details.reason, 'repair_patch_contract_violation');
       assert.equal(error.repairAttempted, true);
       assert.equal(error.repairSucceeded, false);
       return true;
@@ -363,9 +364,42 @@ test('repair that changes sections or sources fatally fails and writes repair di
 
   assert.equal(readJson(path.join(newsroomDir, 'editor-invalid-repair-attempt-3.json')).sections[0].sources[0].url, 'https://example.com/changed');
   const errorArtifact = readJson(path.join(newsroomDir, 'editor-validation-error-repair-attempt-3.json'));
-  assert.equal(errorArtifact.details.field, 'sections.sources');
+  assert.equal(errorArtifact.details.field, 'sections.repair_patch');
   assert.equal(errorArtifact.repairAttempted, true);
   assert.equal(errorArtifact.repairSucceeded, false);
+});
+
+test('repair that drops a selected section fatally fails (#482 2026-06-03 count-drift shape)', async () => {
+  const newsroomDir = tempNewsroomDir();
+  const draft = editor({ briefing: ['one', 'two', 'three', 'four'] });
+  const selectedCount = draft.sections.length;
+  assert.ok(selectedCount >= 2, 'fixture must have at least two selected sections');
+
+  await assert.rejects(
+    repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      attempt: 5,
+      stage: 'editor attempt 1/1',
+      newsroomDir,
+      normalizeSection,
+      repairFn: async ({ invalidEditor }) => ({
+        ...invalidEditor,
+        briefing: ['one', 'two', 'three'],
+        // The 2026-06-03 failure: repair silently changed the stable identity
+        // set by emitting fewer sections than were selected.
+        sections: invalidEditor.sections.slice(0, selectedCount - 1)
+      })
+    }),
+    error => {
+      assert.ok(error instanceof EditorSemanticValidationError);
+      assert.equal(error.details.field, 'sections.repair_patch');
+      assert.equal(error.details.reason, 'repair_patch_contract_violation');
+      assert.ok(error.details.violations.some(violation => violation.reason === 'section_count_changed'));
+      assert.equal(error.repairSucceeded, false);
+      return true;
+    }
+  );
 });
 
 test('repair output with invalid briefing writes repair diagnostics', async () => {
