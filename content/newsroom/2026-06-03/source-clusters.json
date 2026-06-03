@@ -38,6 +38,51 @@
       ]
     },
     {
+      "cluster_id": "49d58944bd3ca26f",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "canonical_title": "CameraX Release Notes - CameraX 1.6.0",
+      "candidate_count": 5,
+      "duplicate_count": 4,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+          "title": "CameraX Release Notes - CameraX 1.6.0",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+          "title": "CameraX Release Notes - CameraX 1.7.0-alpha01",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+          "title": "1.6.1",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "title": "1.3.0-beta02",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "title": "1.4.0-alpha07",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "bb0e15b6742fce01",
       "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
@@ -164,12 +209,29 @@
       ]
     },
     {
+      "cluster_id": "736ba21c4736e96f",
+      "cluster_key": "https://source.android.com/docs/compatibility",
+      "canonical_url": "https://source.android.com/docs/compatibility",
+      "canonical_title": "Compatibility",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility",
+          "title": "Compatibility",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "fac75a8d436dc70f",
       "cluster_key": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "canonical_title": "Build native Android apps in Google AI Studio",
-      "candidate_count": 4,
-      "duplicate_count": 3,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
@@ -181,20 +243,6 @@
         {
           "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
           "title": "Start building today - Build native Android apps in Google AI Studio",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
-          "title": "Android Developers Blog: Build native Android apps in Google AI Studio",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -229,6 +277,23 @@
         {
           "url": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
           "title": "I/O 2026: What's new in Google Play",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c688fc750ca4fd9a",
+      "cluster_key": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+      "canonical_title": "What's new in the Jetpack Compose April '26 release",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+          "title": "What's new in the Jetpack Compose April '26 release",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -355,6 +420,57 @@
       ]
     },
     {
+      "cluster_id": "70b911c01b6fce5e",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "canonical_title": "Gratitude saw 25% higher retention for widget users",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+          "title": "Gratitude saw 25% higher retention for widget users",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e3e46728deeff066",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "canonical_title": "A look ahead: Making it easier and faster to publish safer apps",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+          "title": "A look ahead: Making it easier and faster to publish safer apps",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b0bd5c24cc796850",
+      "cluster_key": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+      "canonical_title": "Streamline User Journeys with Verified Email via Credential Manager",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+          "title": "Streamline User Journeys with Verified Email via Credential Manager",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "0643321d4a8e79e3",
       "cluster_key": "https://android-developers.googleblog.com/2026/06/prioritizing-memory-efficiency-steps-for-android-17.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/prioritizing-memory-efficiency-steps-for-android-17.html",
@@ -416,6 +532,40 @@
         {
           "url": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
           "title": "Android XR Updates for Unity, Unreal, and Godot",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "11b022bd66224265",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+      "canonical_title": "Building for the Intelligence System on Android",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+          "title": "Building for the Intelligence System on Android",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "08b720ebcdf09388",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+      "canonical_title": "Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+          "title": "Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -486,210 +636,6 @@
           "title": "June",
           "canonical": true,
           "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "823f7e7641e8931c",
-      "cluster_key": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
-      "canonical_url": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
-      "canonical_title": "How ref qualifiers led to deducing this",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
-          "title": "How ref qualifiers led to deducing this",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "5126eff726f21536",
-      "cluster_key": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
-      "canonical_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
-      "canonical_title": "C++: The Documentary trailer",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
-          "title": "C++: The Documentary trailer",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "d58494d0aa7ff9ac",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
-      "canonical_title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-3-lyude@redhat.com/",
-          "title": "[PATCH v16 2/6] rust: drm: gem: Add vmap functions to shmem bindings",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "305370a2099e73a8",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
-      "canonical_title": "[PATCH v16 0/6] Rust bindings for gem shmem",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-1-lyude@redhat.com/",
-          "title": "[PATCH v16 0/6] Rust bindings for gem shmem",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "433dff3383524762",
-      "cluster_key": "https://isocpp.org//blog/2026/05/upcoming-cpp-user-group-meetings-in-june-2026",
-      "canonical_url": "https://isocpp.org//blog/2026/05/upcoming-cpp-user-group-meetings-in-june-2026",
-      "canonical_title": "Upcoming C++ User Group meetings in June 2026",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/upcoming-cpp-user-group-meetings-in-june-2026",
-          "title": "Upcoming C++ User Group meetings in June 2026",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "50f0f3505fec25bc",
-      "cluster_key": "https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei",
-      "canonical_url": "https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei",
-      "canonical_title": "Let the Compiler Check Your Units -- Wu Yongwei",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/let-the-compiler-check-your-units-wu-yongwei",
-          "title": "Let the Compiler Check Your Units -- Wu Yongwei",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "0d954a77489e88b2",
-      "cluster_key": "https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru",
-      "canonical_url": "https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru",
-      "canonical_title": "The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/the-road-to-import-boost-a-library-developers-journey-into-cpp20-modules-ru",
-          "title": "The road to &apos;import boost&apos;: a library developer&apos;s journey into C++20 modules -- Rubén Pérez Hidalgo",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "fca43c61db562aa7",
-      "cluster_key": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
-      "canonical_url": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
-      "canonical_title": "What reinterpret_cast doesn&apos;t do -- Andreas Fertig",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/what-reinterpret-cast-doesnt-do-andreas-fertig",
-          "title": "What reinterpret_cast doesn&apos;t do -- Andreas Fertig",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "f9f8807efb8da546",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
-      "canonical_title": "[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260602172807.1051806-6-lyude@redhat.com/",
-          "title": "[PATCH v16 5/6] rust: faux: Allow retrieving a bound Device",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "464dfc2c19c68fcc",
-      "cluster_key": "https://lore.kernel.org/linux-media/camvg2ssnyh=kukrdfnuotpyu7p17inyzcywckht4eazxdzdjfg@mail.gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/",
-      "canonical_title": "Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/CAMVG2ssnyH=KUKrdfnUOtPYU7p17inyzcYWcKhT4EAZxDzDjfg@mail.gmail.com/",
-          "title": "Re: [PATCH 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "cf974cc0bd172517",
-      "cluster_key": "https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko",
-      "canonical_url": "https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko",
-      "canonical_title": "Annotations for C++26 Hashing -- Krystian Piękoś",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/annotations-for-cpp26-hashing-krystian-piko",
-          "title": "Annotations for C++26 Hashing -- Krystian Piękoś",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "214d719a12834106",
-      "cluster_key": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
-      "canonical_url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
-      "canonical_title": "C++26: Structured Bindings in Conditions -- Sandor Dargo",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/05/cpp26-structured-bindings-in-conditions-sandor-dargo",
-          "title": "C++26: Structured Bindings in Conditions -- Sandor Dargo",
-          "canonical": true,
-          "reliability": "official-community",
           "manual_seed": false
         }
       ]
