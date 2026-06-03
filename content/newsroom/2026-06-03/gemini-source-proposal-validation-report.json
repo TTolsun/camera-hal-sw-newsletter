@@ -40,6 +40,20 @@
       "source_extraction_item_count": 0
     },
     {
+      "proposal_id": "P002",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
       "proposal_id": "P003",
       "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
@@ -50,7 +64,7 @@
   ],
   "counts": {
     "domain_not_allowed": 1,
-    "discovered_not_extractable": 2,
+    "discovered_not_extractable": 3,
     "accepted": 1
   }
 }

@@ -5,37 +5,35 @@
   "proposals": [
     {
       "proposal_id": "P001",
-      "topic_gap": "Google I/O '26 announcements related to media pipeline enhancements and premium Android experiences, specifically focusing on camera output and related media processing.",
+      "topic_gap": "Google I/O '26 announcements related to Android media pipeline and camera output, focusing on new tools and features for developers.",
       "source_family": "android-developers-blog",
       "allowed_domains": [
         "youtube.com",
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
-        "Android media pipeline",
-        "Google I/O 2026 media",
-        "Android camera output",
-        "Media3 updates",
-        "MediaCodec improvements",
-        "MediaRecorder enhancements"
+        "Google I/O 2026 Android media pipeline",
+        "Android camera output improvements",
+        "CameraX new features I/O 2026",
+        "Android media recording I/O 2026"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "New APIs or features for media processing (e.g., Media3, MediaCodec, MediaRecorder)",
-        "Improvements in camera output handling, preview, or recording",
-        "Performance enhancements for media pipelines",
-        "Integration with other Android components for premium media experiences"
+        "New APIs or tools for camera output processing",
+        "Improvements in media recording or playback paths",
+        "Integration of CameraX with other media components",
+        "Performance enhancements for camera-related media operations"
       ],
       "risk_notes": [
-        "YouTube playlist might contain general Android content; need to filter for specific media/camera relevance.",
-        "Blog post title 'Building Premium Android Experiences' is broad; need to verify if it includes camera/media pipeline details."
+        "The YouTube playlist title is broad ('Supercharge your media pipeline'), so specific camera-output relevance needs to be confirmed by reviewing video content descriptions or transcripts.",
+        "May contain generic media playback content not relevant to camera HAL SW."
       ]
     },
     {
       "proposal_id": "P002",
-      "topic_gap": "Updates to CameraX, including new features, bug fixes, or performance improvements in recent stable and alpha releases.",
+      "topic_gap": "Updates to CameraX, specifically new stable and alpha releases, indicating new features, bug fixes, or API changes relevant to camera application development.",
       "source_family": "camerax-release-notes",
       "allowed_domains": [
         "developer.android.com"
@@ -43,47 +41,51 @@
       "search_keywords": [
         "CameraX 1.6.0 release notes",
         "CameraX 1.7.0-alpha01 features",
-        "AndroidX Camera updates",
-        "CameraX new features"
+        "CameraX 1.6.1 changes",
+        "AndroidX Camera updates"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
       ],
       "expected_evidence": [
-        "New CameraX features (e.g., new use cases, extensions)",
+        "New CameraX features or use cases",
         "API changes or deprecations",
-        "Bug fixes or performance optimizations related to camera functionality",
+        "Bug fixes impacting camera functionality or performance",
+        "Improvements in camera preview, image capture, or video recording",
         "Compatibility updates with new Android versions"
       ],
       "risk_notes": [
-        "Alpha releases might contain features that are not yet stable or might change."
+        "Alpha releases may contain features that are not yet stable or may change, requiring careful review for long-term relevance.",
+        "Minor bug fix releases (like 1.6.1) might have limited impact on HAL SW unless they address critical camera pipeline issues."
       ]
     },
     {
       "proposal_id": "P003",
-      "topic_gap": "Updates or new documentation regarding camera image testing using automation, specifically Camera ITS Box.",
+      "topic_gap": "Updates to Camera Image Test Suite (ITS) documentation on AOSP, which indicates changes in camera testing methodologies or requirements for Android devices.",
       "source_family": "aosp-site-updates",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
-        "Android Camera ITS Box",
-        "automated camera testing Android",
-        "camera image quality testing AOSP",
-        "CTS camera testing"
+        "Android Camera ITS updates",
+        "AOSP camera testing changes",
+        "Camera HAL validation",
+        "Android compatibility camera"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "New procedures or guidelines for Camera ITS Box testing",
-        "Updates to camera image quality validation methods",
-        "Information on automated camera testing for Android devices",
-        "Changes in compatibility requirements related to camera testing"
+        "New or updated Camera ITS test cases",
+        "Changes in hardware setup or testing procedures for camera validation",
+        "Impact on Camera HAL implementation or driver requirements",
+        "New metrics or criteria for camera image quality"
       ],
       "risk_notes": [
-        "The URL might be a static documentation page; need to verify if there are recent updates or changes relevant to the newsletter date."
+        "Documentation updates might be minor or re-organizations, requiring careful review to identify substantive changes relevant to HAL SW.",
+        "Focus is on testing, not direct API changes, but can imply underlying HAL requirements."
       ]
     }
   ]
