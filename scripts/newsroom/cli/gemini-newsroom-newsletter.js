@@ -3839,7 +3839,7 @@ async function main() {
         '각 claim의 evidence_ids는 해당 기사 candidate의 source_extraction.evidence_ids에 실제로 존재하는 ID만 사용하세요. candidate에 evidence_ids가 없거나 source_extraction이 없으면 evidence_ids를 빈 배열([])로 두세요. 존재하지 않는 ID를 만들어 쓰지 마세요.',
         '각 기사의 public_article.editorial_story를 반드시 채우세요: reader_scenario(현업 HAL 엔지니어가 실제로 겪을 법한 디버깅/CI/리뷰 상황 — 가정법, 1~2문장), what_happened(source에서 확인되는 사실 요약, 1~2문장), why_it_matters(Camera HAL / Driver / native tooling 관점의 의미, 1~2문장), field_scenario(실제 capture session/HAL 설정/CI 시나리오 연결, 1~2문장), not_to_overclaim(source가 명시하지 않은 수치/API/계층 주장 한 줄 경고), editor_take(편집자 한 줄 판단). 모든 필드는 빈 문자열이 아니어야 합니다.',
         ensureArray(shortlistReport?.selected_articles).some(item => item.coverage_type === 'catch_up')
-          ? '일부 기사는 coverage_type=catch_up인 "지난 소식"입니다. 이 기사는 수 주 전 릴리스를 다시 정리하는 회고이므로 속보처럼 쓰지 말고 "N주 전 릴리스된 ~를 아직 확인하지 않았다면" 같은 회고 톤으로 작성하세요. 릴리스 날짜를 숨기지 말고 본문에 명시하세요. coverage_type 값은 입력 그대로 유지하세요.'
+          ? '입력 capsule에 coverage_type=catch_up으로 표시된 기사는 "지난 소식"입니다. 이 기사는 수 주 전 릴리스를 다시 정리하는 회고이므로 속보처럼 쓰지 말고 "N주 전 릴리스된 ~를 아직 확인하지 않았다면" 같은 회고 톤으로 작성하세요. 릴리스 날짜를 숨기지 말고 본문에 명시하세요.'
           : '',
         '사실과 해석을 분리하세요. source links를 보존하세요. schema와 일치하는 JSON만 반환하세요.',
         'briefing은 정확히 3개 item이어야 합니다.'

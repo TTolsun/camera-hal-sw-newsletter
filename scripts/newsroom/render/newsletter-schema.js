@@ -284,8 +284,6 @@ const section = {
     team_summary: string,
     is_ai_related: { type: 'BOOLEAN' },
     article_type: string,
-    coverage_type: enumString(['fresh', 'catch_up']),
-    catch_up_age_days: number,
     source_candidate_url: string,
     source_candidate_hash: string,
     article_group_key: string,

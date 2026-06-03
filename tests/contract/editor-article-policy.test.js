@@ -1207,14 +1207,11 @@ test('editor schema keeps hal_signal_capsule optional with required capsule keys
   );
 });
 
-test('section schema accepts optional coverage_type with fresh/catch_up enum', () => {
+test('coverage_type is NOT in the Gemini response schema (deterministically stamped instead)', () => {
+  // coverage_type / catch_up_age_days are set deterministically by stampCoverageType
+  // after generation, so they must NOT appear in the LLM response schema (keeps the
+  // already-large section object under Gemini structured-output complexity limits).
   const sectionSchema = editorSchema.properties.sections.items;
-  assert.ok(sectionSchema.properties.coverage_type, 'coverage_type must be defined on section schema');
-  assert.deepEqual(sectionSchema.properties.coverage_type.enum, ['fresh', 'catch_up']);
-  assert.ok(sectionSchema.properties.catch_up_age_days, 'catch_up_age_days must be defined on section schema');
-  assert.equal(
-    sectionSchema.required.includes('coverage_type'),
-    false,
-    'coverage_type must remain optional'
-  );
+  assert.equal(sectionSchema.properties.coverage_type, undefined);
+  assert.equal(sectionSchema.properties.catch_up_age_days, undefined);
 });
