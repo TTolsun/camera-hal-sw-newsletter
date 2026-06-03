@@ -2829,6 +2829,37 @@ function pruneResolvedFallbackImageFalsePositives(factCheck, editor) {
   return result.factCheck;
 }
 
+// catch-up 회고 프레이밍(지난 소식)에 대한 fact-checker 오탐을 catch_up 섹션에서만 제거한다.
+function isCatchUpFramingFalsePositive(item, catchUpIndexes) {
+  const location = String(item?.location || '');
+  const sectionMatch = location.match(/sections\[(\d+)\]/);
+  if (!sectionMatch) return false;
+  if (!catchUpIndexes.has(Number(sectionMatch[1]))) return false;
+  if (!/\.public_article\.(headline|lead)/.test(location)) return false;
+  const problem = String(item?.problem || '');
+  return /지난 소식|past news|retrospective|editorial framing|편집|회고|N주 전|주 전 릴리스/i.test(problem);
+}
+
+function pruneCatchUpFramingFactCheckItems(factCheck, editor) {
+  const sections = ensureArray(editor?.sections);
+  const catchUpIndexes = new Set(
+    sections.map((section, index) => (section.coverage_type === 'catch_up' ? index : -1)).filter(index => index >= 0)
+  );
+  if (catchUpIndexes.size === 0) return factCheck;
+  const before = ensureArray(factCheck?.must_fix).length;
+  const value = { ...factCheck };
+  value.must_fix = ensureArray(factCheck?.must_fix).filter(item => !isCatchUpFramingFalsePositive(item, catchUpIndexes));
+  value.recommended_fixes = ensureArray(factCheck?.recommended_fixes).filter(item => !isCatchUpFramingFalsePositive(item, catchUpIndexes));
+  const removed = before - value.must_fix.length;
+  if (removed > 0) {
+    console.warn(`Pruned ${removed} catch-up retrospective-framing fact-check false positive(s).`);
+    if (['PASS', 'NEEDS_FIX'].includes(value.status)) {
+      value.status = value.must_fix.length > 0 ? 'NEEDS_FIX' : 'PASS';
+    }
+  }
+  return value;
+}
+
 function finalArticleSlotDistribution(sections) {
   const distribution = {
     android_camera_platform_api: 0,
@@ -3924,6 +3955,7 @@ async function main() {
         'Camera HAL perspective가 약하거나 engineering relevance가 빠진 main article은 source-backed 보강이 가능하면 recommended_fixes[]에 넣고, source가 Camera developer relevance를 뒷받침하지 못하면 must_fix[] 또는 source_gaps[]에 넣으세요.',
         'Editor가 official-source 또는 cross-checked verification을 설명하지 않는 candidate-only 또는 requiresCrossCheck source 사용은 must_fix[]와 source_gaps[]에 모두 기록하세요.',
         'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
+        'coverage_type=catch_up인 "지난 소식" 기사는 수 주 전 릴리스를 회고로 다루도록 의도된 것입니다. headline/lead에 "지난 소식", "N주 전 릴리스된 ~" 같은 회고 editorial framing이 있어도 must_fix로 다루지 마세요. 이는 의도된 catch-up 프레이밍이며 source 날짜를 숨기지 않는 한 factual 위반이 아닙니다.',
         'style rewrite는 하지 마세요. factual errors, source problems, editorial-policy violations에만 집중하세요.',
         'schema와 일치하는 JSON만 반환하세요.'
       ].join('\n'),
@@ -4386,6 +4418,8 @@ async function main() {
   );
   editor = sanitizeClaimEvidenceIds(editor, reporter);
   editor = stampCoverageType(editor, shortlistReport);
+  factCheck = pruneCatchUpFramingFactCheckItems(factCheck, editor);
+  generationRunState.factCheck = factCheck;
   qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
     threshold: qualityGatePolicy.threshold,
     shortlistReport,
@@ -4747,6 +4781,7 @@ module.exports = {
   editorSemanticStatusExtra,
   failureClassFromError,
   stampCoverageType,
+  pruneCatchUpFramingFactCheckItems,
   failureStageFromError,
   hasTooFewMainArticlesDeduction,
   articleClaimContractPrompt,
