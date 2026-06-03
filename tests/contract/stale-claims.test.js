@@ -135,3 +135,30 @@ test('resolved stale fact-check items are pruned after scrub removes the claim',
   assert.deepEqual(pruned.source_gaps, []);
   assert.equal(pruned.source_gap_count, 0);
 });
+
+test('removed-section claim reused by a surviving section source is not a stale orphan', () => {
+  const playlistUrl = 'https://youtube.com/playlist?list=ABC';
+  const playlistTitle = 'Supercharge your media pipeline at Google I/O';
+  const survivingSection = {
+    headline: 'Adaptive camera preview with CameraX and Media3',
+    category: 'direct_aosp_camera',
+    version_or_release: 'CameraX 1.6.1',
+    api_or_component: 'CameraX',
+    behavior_change: 'media pipeline integration',
+    confirmed_facts: ['CameraX 1.6.1 integrates Media3.'],
+    article_sections: { verified_facts: ['CameraX 1.6.1 integrates Media3.'], background_context: 'x', hal_driver_impact: 'x', action_items: ['Check streams.'], team_share_points: 'x' },
+    sources: [source(playlistUrl, playlistTitle)]
+  };
+  const editor = {
+    date: '2026-06-03',
+    summary: 'Adaptive camera preview with CameraX and Media3.',
+    briefing: ['CameraX 1.6.1 integrates Media3.', 'Adaptive preview improves.', 'Check capture streams.'],
+    action_items: ['Validate capture streams within 2 weeks.'],
+    sections: [survivingSection],
+    references: [source(playlistUrl, playlistTitle)]
+  };
+  // The same playlist source was on a removed earlier section, so it lands in removedClaimKeys,
+  // but the surviving section legitimately re-uses it -> must NOT be a hard failure.
+  const result = scrubStaleClaims(editor, { date: '2026-06-03', reporter: { candidates: [] }, removedSections: [survivingSection] });
+  assert.equal(result.report.hard_failures.length, 0);
+});

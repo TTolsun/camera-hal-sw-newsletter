@@ -333,8 +333,19 @@ function scrubStaleClaims(editor, options = {}) {
     draft.action_items,
     draft.references
   ].map(text).join(' ');
+  // A claim from a removed section is NOT a stale orphan if a SURVIVING final section
+  // legitimately re-uses it (same headline, source URL/title, version, API, behavior, ...).
+  // Exclude those so the editor reworking a section but keeping its identity/source does
+  // not trip removed-section-claim-remains.
+  const finalSectionClaimValues = new Set();
+  for (const section of finalSections) {
+    for (const key of claimKeysForSection(section)) {
+      finalSectionClaimValues.add(text(key.value));
+    }
+  }
   const unresolvedStaleClaims = context.removedClaimKeys
     .filter(claim => textContainsClaim(finalGlobalText, claim))
+    .filter(claim => !finalSectionClaimValues.has(text(claim.value)))
     .map(claim => claim.value);
   if (unresolvedStaleClaims.length > 0) {
     report.hard_failures.push({
