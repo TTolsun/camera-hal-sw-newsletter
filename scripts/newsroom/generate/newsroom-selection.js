@@ -1505,6 +1505,24 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const reserve = reserveCandidates(selectionCandidatePool, selected, options);
   const exposureHistory = options.exposureHistory ||
     (options.root ? readExposureHistory(options.root, date) : null);
+  const catchUpPolicy = options.catchUpPolicy || getCatchUpPolicy();
+  let catchUpSelected = [];
+  if (catchUpPolicy.enabled === true && selected.length < articlePolicy.mainArticleCount.min) {
+    const selectedKeys = new Set(selected.map(item => articleIdentityKey(item)));
+    const pool = buildCatchUpPool(referenceContextCandidates, exposureHistory, catchUpPolicy)
+      .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)));
+    pool.sort(deterministicCandidateSort);
+    const room = articlePolicy.mainArticleCount.max - selected.length;
+    const take = Math.max(0, Math.min(catchUpPolicy.maxCatchUpArticles, room));
+    catchUpSelected = pool.slice(0, take).map(candidate => ({
+      ...candidate,
+      coverage_type: 'catch_up',
+      catch_up_age_days: Number(candidate.days_since_published),
+      selected: true,
+      selected_for_editor: true
+    }));
+    selected = [...selected, ...catchUpSelected];
+  }
   const warnings = selectionWarnings(selected, { exposureHistory });
   const errors = selectionErrors(selected);
   const composition = compositionSummary(selected);
@@ -1648,6 +1666,10 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     reference_context_candidates: referenceContextCandidates,
     demoted_candidates: [],
     excluded_candidates: excluded,
+    catch_up_used_count: catchUpSelected.length,
+    catch_up_articles: catchUpSelected.map(item => ({
+      title: item.title, url: item.url, catch_up_age_days: item.catch_up_age_days
+    })),
     selection_warnings: warnings,
     selection_errors: errors,
     headline_decision: headlineSelection.headline_decision,
