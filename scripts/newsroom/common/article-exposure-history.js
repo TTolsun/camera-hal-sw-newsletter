@@ -216,10 +216,21 @@ function dedupeByArticleIdentity(articles = []) {
   return out;
 }
 
+function everCoveredAsNewsletterArticle(identityKey, history = {}) {
+  const key = text(identityKey);
+  if (!key) return false;
+  return ensureArray(history.articles).some(item =>
+    text(item.article_identity_key) === key &&
+    (text(item.exposure_type) === 'newsletter_article' ||
+      ensureArray(item.exposure_types).includes('newsletter_article'))
+  );
+}
+
 module.exports = {
   EXPOSURE_HISTORY_REL_PATH,
   annotateArticleExposure,
   dedupeByArticleIdentity,
+  everCoveredAsNewsletterArticle,
   emptyExposureHistory,
   historyPath,
   normalizeExposureHistory,

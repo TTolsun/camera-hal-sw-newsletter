@@ -7,6 +7,7 @@ const test = require('node:test');
 const {
   annotateArticleExposure,
   dedupeByArticleIdentity,
+  everCoveredAsNewsletterArticle,
   readExposureHistory,
   recordArticleExposure,
   recordNewsletterArticles,
@@ -200,4 +201,35 @@ test('recordNewsletterArticles records all sections with newsletter_article type
   assert.equal(history.articles.length, 2);
   assert.ok(history.articles.every(a => a.exposure_type === 'newsletter_article'));
   assert.ok(history.articles.every(a => a.cooldown_until === '2026-06-24'));
+});
+
+test('everCoveredAsNewsletterArticle is true for any newsletter_article record ignoring cooldown', () => {
+  const history = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false },
+    articles: [{
+      article_identity_key: 'url:https://example.com/camerax-1.6.0',
+      exposure_type: 'newsletter_article',
+      newsletter_date: '2026-01-01',
+      cooldown_until: '2026-01-22'
+    }]
+  };
+  assert.strictEqual(everCoveredAsNewsletterArticle('url:https://example.com/camerax-1.6.0', history), true);
+});
+
+test('everCoveredAsNewsletterArticle is false when only homepage_headline exposure exists', () => {
+  const history = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false },
+    articles: [{
+      article_identity_key: 'url:https://example.com/headline-only',
+      exposure_type: 'homepage_headline',
+      newsletter_date: '2026-05-27'
+    }]
+  };
+  assert.strictEqual(everCoveredAsNewsletterArticle('url:https://example.com/headline-only', history), false);
+});
+
+test('everCoveredAsNewsletterArticle is false for an unknown key', () => {
+  assert.strictEqual(everCoveredAsNewsletterArticle('url:https://example.com/never', { articles: [] }), false);
 });
