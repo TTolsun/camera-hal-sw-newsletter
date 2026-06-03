@@ -52,7 +52,7 @@ test('defaults match workflow runtime defaults', () => {
   const config = readRuntimeConfig({});
 
   assert.equal(config.newsletterDate, DEFAULT_RUNTIME_CONFIG.newsletterDate);
-  assert.equal(config.lookbackDays, 21);
+  assert.equal(config.lookbackDays, 90);
   assert.deepEqual(config.selectionWindowPolicy, {
     primarySelectionDays: 7,
     fallbackSelectionDays: 21,

@@ -40,7 +40,7 @@ const DEFAULT_SELECTION_WINDOW_POLICY = getSelectionWindowPolicy();
 
 const DEFAULT_RUNTIME_CONFIG = {
   newsletterDate: '',
-  lookbackDays: 21,
+  lookbackDays: 90,
   selectionWindowPolicy: {
     primarySelectionDays: DEFAULT_SELECTION_WINDOW_POLICY.primarySelectionDays,
     fallbackSelectionDays: DEFAULT_SELECTION_WINDOW_POLICY.fallbackSelectionDays,
