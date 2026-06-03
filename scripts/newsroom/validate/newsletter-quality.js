@@ -1820,13 +1820,17 @@ function salvagePublishableSubset(date, editor, reporter, factCheck, qualityRepo
     ...ensureArray(factCheck?.source_gaps)
   ].map(factCheckProbe);
 
+  const debug = options.salvageDebug === true ? msg => console.log(`[salvage] ${msg}`) : () => {};
   const keepIndices = [];
   sections.forEach((section, index) => {
-    if (text(results[index]?.status) !== 'PASS') return;
-    if (unpublishable.has(index)) return;
-    if (blockingItems.some(probe => referencesSection(probe, index, section))) return;
+    const status = text(results[index]?.status);
+    if (status !== 'PASS') { debug(`drop #${index}: article status ${status || 'unknown'}`); return; }
+    if (unpublishable.has(index)) { debug(`drop #${index}: fact-checker publishable=false`); return; }
+    const blocker = blockingItems.find(probe => referencesSection(probe, index, section));
+    if (blocker) { debug(`drop #${index}: fact-check item references it (${blocker.slice(0, 60)})`); return; }
     keepIndices.push(index);
   });
+  debug(`keepIndices=[${keepIndices.join(',')}] of ${sections.length}; min=${minArticles}`);
   if (keepIndices.length < minArticles || keepIndices.length >= sections.length) return null;
 
   const keepSet = new Set(keepIndices);
@@ -1850,7 +1854,10 @@ function salvagePublishableSubset(date, editor, reporter, factCheck, qualityRepo
   subsetFactCheck.status = subsetFactCheck.must_fix.length > 0 ? 'NEEDS_FIX' : 'PASS';
 
   const subsetReport = buildNewsletterQualityReport(date, subsetEditor, reporter, subsetFactCheck, options);
-  if (subsetReport.status !== 'PASS') return null;
+  if (subsetReport.status !== 'PASS') {
+    debug(`subset re-gate NEEDS_FIX; blockers=${blockingDeductions(subsetReport.deductions).map(d => d.reason).join(' | ')}`);
+    return null;
+  }
   return {
     editor: subsetEditor,
     factCheck: subsetFactCheck,

@@ -4212,7 +4212,7 @@ async function main() {
     // 얇은 주 salvage: 약한 채움 기사 때문에 전체를 실패시키는 대신, 발행 불가 기사를 빼고
     // 최소 기사 수를 만족하는 깨끗한 부분집합만 발행한다. 부분집합도 게이트를 다시 통과하므로
     // 안전 기준은 그대로다.
-    const salvage = salvagePublishableSubset(date, editor, reporter, factCheck, qualityReport, finalQualityOptions);
+    const salvage = salvagePublishableSubset(date, editor, reporter, factCheck, qualityReport, { ...finalQualityOptions, salvageDebug: true });
     if (salvage) {
       console.log(`Thin-week salvage: dropped ${salvage.dropped_section_count} unpublishable article(s); publishing ${salvage.kept_section_count} clean article(s).`);
       editor = salvage.editor;
