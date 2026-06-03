@@ -191,34 +191,6 @@ function weightedTitleSimilarity(left, right) {
   return denominator > 0 ? intersection / denominator : 0;
 }
 
-function titleCopyFinding(section = {}, candidate = {}) {
-  const headline = text(section.public_article?.headline || section.headline);
-  const sourceTitle = text(candidate?.title || ensureArray(section.sources)[0]?.title);
-  if (!headline || !sourceTitle) return null;
-  const normalizedHeadline = normalizeForMatch(headline);
-  const normalizedSource = normalizeForMatch(sourceTitle);
-  if (normalizedHeadline && normalizedHeadline === normalizedSource) {
-    return {
-      severity: 'fail',
-      reason: 'Public headline exactly copies the source title.'
-    };
-  }
-  const headlineTokenCount = normalizedTokens(headline).length;
-  const similarity = weightedTitleSimilarity(headline, sourceTitle);
-  if (headlineTokenCount < 5) {
-    return similarity >= 0.85
-      ? { severity: 'warning', reason: 'Short public headline is very close to the source title.', similarity }
-      : null;
-  }
-  if (similarity >= 0.85) {
-    return { severity: 'fail', reason: 'Public headline is too similar to the source title after product/version discounting.', similarity };
-  }
-  if (similarity >= 0.7) {
-    return { severity: 'warning', reason: 'Public headline is close to the source title and should be rewritten with reader-facing framing.', similarity };
-  }
-  return null;
-}
-
 function candidateTitleSimilarity(section, candidate) {
   const sectionLabels = [
     section?.headline,
@@ -960,33 +932,6 @@ function fallbackSectionScope(section) {
   });
 }
 
-function hasSpecificEvidence(section) {
-  const evidence = [
-    section.evidence_summary,
-    section.specificity_checks,
-    section.source_verification_notes
-  ].map(text).join(' ');
-  return /(?:\b(?:Android|CameraX|libcamera|OpenCL|LLVM|Clang|C\+\+|NDK|SDK|Glaze)\s*\d|[A-Za-z0-9_+.-]+\s+\d+\.\d+(?:\.\d+)*|\b\d+\.\d+(?:\.\d+)*\b|\b\d{4}-\d{2}-\d{2}\b|\b(?:version|release|release date|published date|API\/component|behavior change|source gap|rolling page|no dated release|requires cross-check|official-source|cross-checked)\b|(?:version|release|API|component|extension|module|library):\s*\S+)/i
-    .test(evidence);
-}
-
-function hasGenericMonitoringWithoutEvidence(section) {
-  const body = sectionText(section);
-  const generic = /monitor|watch|track|follow|review|모니터|추적|확인|주시|검토/i.test(body);
-  return generic && !hasSpecificEvidence(section);
-}
-
-function hasHalDepth(section) {
-  return /Camera HAL|HAL|Android Camera|CameraX|AOSP Camera|Camera2|stream|buffer|metadata|request|result|CTS|VTS|Camera ITS|CDD|latency|frame drop|thermal|power|memory|memory bandwidth|binder|scheduling|scheduler|EAS|DVFS|CPU|GPU|NPU|DSP|SoC|ISP|image sensor|MIPI|CSI-2|DMA-BUF|V4L2|libcamera|media controller|YUV|RAW|PRIVATE|logical|physical|vendor tag|session parameter|native|C\+\+|LLVM|Clang|GCC|sanitizer|toolchain|debugging|test productivity/i
-    .test(sectionText(section));
-}
-
-function hasConcreteAction(section) {
-  const actions = normalizeArticleSections(section).action_items;
-  if (actions.length === 0) return false;
-  return actions.some(action => /test|log|metric|measure|CTS|VTS|Camera ITS|stream|metadata|latency|frame drop|thermal|device|owner|API|PoC|benchmark|profile|검증|테스트|측정|로그|지표|벤치마크|담당|기기/i.test(text(action)));
-}
-
 function hasValidAiRelevance(section) {
   if (!section.is_ai_related && !/\b(?:AI|agent|LLM|NPU|GPU|on-device|inference|model)\b/i.test(sectionText(section))) {
     return false;
@@ -995,27 +940,6 @@ function hasValidAiRelevance(section) {
     .test(sectionText(section));
 }
 
-function hasHalConnectionTerm(body) {
-  return /Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|image frame|stream|buffer|metadata|request|result|ImageAnalysis|ISP|image sensor|V4L2|libcamera|driver|SoC|CPU|GPU|NPU|DSP|thermal|power|DVFS|scheduler|memory bandwidth|native|C\+\+|LLVM|Clang|GCC|sanitizer|HAL workflow|Camera ITS|CTS|VTS/i
-    .test(body);
-}
-
-function hasNegativeHalConnectionWording(body) {
-  return [
-    /\b(?:no|without|lacks?|missing)\b[^.\n]{0,100}(?:Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|HAL workflow|Camera ITS|CTS|VTS)/i,
-    /\b(?:no|without|lacks?|missing)\b[^.\n]{0,100}(?:device imaging|imaging workflow|image pipeline|camera workflow)/i,
-    /\b(?:does not|doesn't|cannot|can't)\b[^.\n]{0,120}(?:Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|HAL workflow|Camera ITS|CTS|VTS)/i,
-    /(?:Camera HAL|Android Camera|CameraX|Camera2|\bcamera\b|HAL workflow|Camera ITS|CTS|VTS)[^.\n]{0,120}\b(?:not identified|not found|not applicable|absent|missing|none|unclear|irrelevant)\b/i
-  ].some(pattern => pattern.test(body));
-}
-
-function hasGenericAiWithoutHalConnection(section) {
-  const body = sectionText(section);
-  const aiRelated = section.is_ai_related === true || /\b(?:AI|agent|LLM|NPU|GPU|on-device|inference|model)\b/i.test(body);
-  if (!aiRelated) return false;
-  if (!hasHalConnectionTerm(body)) return true;
-  return hasNegativeHalConnectionWording(body);
-}
 
 function isValidSourceUrl(value) {
   const raw = text(value);
@@ -1113,46 +1037,6 @@ function sectionPassesArticleGate(section, qualityReport, factCheck) {
     !sectionHasSourceGap(section, factCheck);
 }
 
-// Depth / source-type quality concerns that are real but should NOT block publishing
-// real-sourced adjacent content (release notes, conference sessions, camera-adjacent
-// framework news) in weeks without deep Camera HAL material. These are recalibrated to
-// soft, low-weight notes when qualityGatePolicy.adjacentContentPublishing is enabled.
-// Source-absence / fabrication / fact-check failures are NEVER in this list and stay hard.
-const ADJACENT_RELAXABLE_DEDUCTIONS = Object.freeze([
-  { category: 'source-integrity', pattern: /HAL boundary is missing/i },
-  { category: 'source-integrity', pattern: /Shared watch\/release-note URL requires matching/i },
-  { category: 'source-integrity', pattern: /Fact checker reported \d+ source gap/i },
-  { category: 'scope-relevance', pattern: /lacks article-level AOSP Camera/i },
-  { category: 'scope-relevance', pattern: /weak HAL\/actionability scores/i },
-  { category: 'claim-contract', pattern: /missing item-level evidence_ids/i },
-  { category: 'evidence-specificity', pattern: /lacks concrete version, release date, API/i },
-  { category: 'evidence-specificity', pattern: /generic monitoring\/review language/i },
-  { category: 'hal-depth', pattern: /lacks concrete AOSP Camera \/ driver \/ SoC \/ native engineering depth/i },
-  { category: 'hal-depth', pattern: /hal_driver_impact does not include concrete/i }
-]);
-
-function isAdjacentRelaxableDeduction(deduction) {
-  const category = text(deduction?.category);
-  const reason = text(deduction?.reason);
-  return ADJACENT_RELAXABLE_DEDUCTIONS.some(rule =>
-    rule.category === category && rule.pattern.test(reason));
-}
-
-function relaxAdjacentContentDeductions(deductions) {
-  return ensureArray(deductions).map(deduction => {
-    if (deduction?.blocking === false) return deduction;
-    if (!isAdjacentRelaxableDeduction(deduction)) return deduction;
-    return {
-      ...deduction,
-      points: Math.min(Number(deduction.points) || 0, 1),
-      blocking: false,
-      severity: 'soft',
-      adjacent_relaxed: true,
-      reason: `${deduction.reason} (adjacent-content publishing: soft note, not a publish blocker)`
-    };
-  });
-}
-
 function blockingDeductions(deductions) {
   return ensureArray(deductions).filter(deduction => deduction?.blocking !== false);
 }
@@ -1185,16 +1069,6 @@ function optionalNumber(value) {
   if (value === undefined || value === null || String(value).trim() === '') return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
-}
-
-function scopeScore(scope) {
-  return Math.max(
-    Number(scope?.aosp_camera_directness || 0),
-    Number(scope?.driver_stack_relevance || 0),
-    Number(scope?.multimedia_camera_output_relevance || 0),
-    Number(scope?.soc_platform_relevance || 0),
-    Number(scope?.native_tooling_relevance || 0)
-  );
 }
 
 function scopeFromStructuredFields(value, origin) {
@@ -1316,12 +1190,6 @@ function sectionScope(section, binding) {
   const mergedMetadata = mergeScopeMetadata(sectionMetadata, candidateMetadata);
   if (mergedMetadata) return mergedMetadata;
   return diagnosticFallbackScope(section, binding);
-}
-
-function hasExpandedScope(scope) {
-  return scope?.publishable_scope === true &&
-    !isForbiddenMainBucket(scope.relevance_bucket) &&
-    scopeScore(scope) >= 2;
 }
 
 function sectionCountDetail(section, scope, index) {
@@ -1459,13 +1327,17 @@ function summarizeArticleSectionContracts(sections) {
   };
 }
 
-function determineQualityStatus(score, threshold, checks = {}) {
+// Publish gate: a simple boolean AND of objective safety checks plus the fact-checker's
+// per-article usefulness verdict. There is no numeric quality threshold — editorial quality
+// is the fact-checker's call (factCheck.article_quality), not a deterministic score.
+function determineQualityStatus(checks = {}) {
   const sourceGapCountValue = Number(checks.sourceGapCount || 0);
   const blockers = ensureArray(checks.blockingDeductions);
-  return score >= threshold &&
-    sourceGapCountValue === 0 &&
+  const unpublishable = ensureArray(checks.unpublishableArticles);
+  return sourceGapCountValue === 0 &&
     checks.hasFactCheckMustFix !== true &&
-    blockers.length === 0
+    blockers.length === 0 &&
+    unpublishable.length === 0
     ? 'PASS'
     : 'NEEDS_FIX';
 }
@@ -1656,134 +1528,10 @@ function sourceBindingDeductions(section, binding, scope, location) {
   return out;
 }
 
-function editorialStoryDeductions(section, binding, editor, index, location) {
-  if (binding.status !== 'bound') return [];
-  const storyTitleGate = editor.public_contract_version === STORY_PUBLIC_CONTRACT_VERSION ||
-    Number(section.public_article?.story_contract_version) === STORY_CONTRACT_VERSION;
-  if (!storyTitleGate) return [];
-  const out = [];
-  const titleFinding = titleCopyFinding(section, binding.candidate);
-  if (titleFinding) {
-    out.push({
-      category: 'editorial-story',
-      points: titleFinding.severity === 'fail' ? 6 : 2,
-      reason: titleFinding.reason,
-      location,
-      options: titleFinding.severity === 'fail' ? {} : { blocking: false, severity: 'soft' }
-    });
-  }
-  const storyIssues = validatePublicArticle(section, index, { issue: editor, requireStoryContract: true })
-    .filter(i => i.type === 'empty_editorial_story_field');
-  if (storyIssues.length > 0) {
-    out.push({
-      category: 'editorial-story',
-      points: storyIssues.length,
-      reason: `editorial_story fields incomplete: ${storyIssues.map(i => i.key).join(', ')}`,
-      location,
-      options: { blocking: false, severity: 'soft' }
-    });
-  }
-  return out;
-}
-
 function cameraXDeductions(section, binding, location) {
   const violations = cameraXSourceExtractionViolations(section, binding.status === 'bound' ? binding.candidate : null);
   if (violations.length === 0) return [];
   return [{ category: 'source-integrity', points: 8, reason: `CameraX source extraction failure: ${violations.join('; ')}.`, location }];
-}
-
-function evidenceSpecificityDeductions(section, location) {
-  const out = [];
-  if (!hasSpecificEvidence(section)) {
-    out.push({ category: 'evidence-specificity', points: 5, reason: 'Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.', location });
-  }
-  if (hasGenericMonitoringWithoutEvidence(section)) {
-    out.push({ category: 'evidence-specificity', points: 4, reason: 'Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.', location });
-  }
-  return out;
-}
-
-function halDepthDeductions(section, articleSections, location) {
-  const out = [];
-  if (!hasHalDepth(section)) {
-    out.push({ category: 'hal-depth', points: 4, reason: 'Article lacks concrete AOSP Camera / driver / SoC / native engineering depth.', location });
-  }
-  const halImpactOnly = {
-    ...section,
-    headline: '', category: '', what_changed: '', background: '', why_it_matters: '',
-    evidence_summary: '', specificity_checks: [], source_verification_notes: [], team_summary: '',
-    confirmed_facts: [], camera_hal_checks: [], action_items: [], sources: [],
-    article_sections: {
-      verified_facts: [], background_context: '', hal_driver_impact: articleSections.hal_driver_impact,
-      action_items: [], team_share_points: ''
-    },
-    camera_hal_perspective: ''
-  };
-  if (!hasHalDepth(halImpactOnly)) {
-    out.push({ category: 'hal-depth', points: 4, reason: 'Article hal_driver_impact does not include concrete AOSP Camera / driver / SoC / native perspective.', location });
-  }
-  return out;
-}
-
-function scopeRelevanceDeductions(section, scope, location) {
-  const out = [];
-  if (!hasExpandedScope(scope)) {
-    out.push({ category: 'scope-relevance', points: 8, reason: 'Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.', location });
-  }
-  return out;
-}
-
-function actionabilityDeductions(section, articleSections, location) {
-  const out = [];
-  if (ensureArray(articleSections.action_items).length < 2) {
-    out.push({ category: 'actionability', points: 4, reason: `Expected at least 2 action_items, found ${ensureArray(articleSections.action_items).length}.`, location, options: { blocking: false } });
-  }
-  if (!hasConcreteAction(section)) {
-    out.push({ category: 'actionability', points: 4, reason: 'Article action item is not concrete enough for a HAL engineering team.', location, options: { blocking: false } });
-  }
-  return out;
-}
-
-function halSignalDeductions(section, binding, scope, location) {
-  const out = [];
-  const halSignalInputValue = halSignalInput(section, binding.status === 'bound' ? binding.candidate : {}, scope);
-  const halSignal = normalizeHalSignalFields(halSignalInputValue);
-  const halSignalReason = {
-    missing_hal_impact_axis: 'Main article lacks a non-reference HAL impact axis.',
-    actionability_none: 'Main article has actionability_level=none and cannot be publish-ready.',
-    generic_review_actionability: 'Main article actionability_level=generic_review lacks at least two concrete owner/test/log/metric/API/stream/buffer/metadata signals.',
-    fallback_promotion_missing_reason: 'Fallback article lacks fallback_promotion_allowed=true or fallback_promotion_reason before main promotion.',
-    soc_platform_missing_camera_pipeline_link: 'SoC platform signal lacks explicit camera_pipeline_link.'
-  };
-  for (const blocker of ensureArray(halSignal.hal_signal_hard_blockers)) {
-    out.push({
-      category: 'hal-signal',
-      points: blocker === 'missing_hal_impact_axis' ? 8 : 6,
-      reason: halSignalReason[blocker] || `HAL signal hard blocker: ${blocker}.`,
-      location
-    });
-  }
-  const halSignalCapsule = normalizeHalSignalCapsule(section);
-  if (!halSignalCapsule.present) {
-    out.push({ category: 'hal-signal-capsule', points: 8, reason: 'Missing HAL Signal Capsule for main article.', location });
-  } else if (!halSignalCapsule.complete) {
-    out.push({ category: 'hal-signal-capsule', points: 6, reason: `Incomplete HAL Signal Capsule; missing keys: ${halSignalCapsule.missing_keys.join(', ')}.`, location });
-  }
-  return out;
-}
-
-function fallbackAndAiScopeDeductions(section, scope, location) {
-  const out = [];
-  if (/C\+\+|LLVM|Clang|GCC|Linux|libcamera|AI|agent|LLM|OpenCL|NPU|GPU|CPU|SoC|thermal|power/i.test(sectionText(section)) && !hasHalDepth(section)) {
-    out.push({ category: 'scope-relevance', points: 4, reason: 'Fallback article does not clearly connect back to AOSP Camera, driver, SoC platform, or native development work.', location });
-  }
-  if (hasGenericAiWithoutHalConnection(section) || ((section.is_ai_related === true || /\b(?:AI|agent|LLM|NPU|GPU|on-device|inference|model)\b/i.test(sectionText(section))) && !hasExpandedScope(scope))) {
-    out.push({ category: 'hal-relevance', points: 8, reason: 'Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.', location });
-  }
-  if (scope?.publishable_scope === true && isForbiddenMainBucket(scope.relevance_bucket)) {
-    out.push({ category: 'scope-relevance', points: 8, reason: `Bound candidate is ${scope.relevance_bucket} and cannot remain as a main article.`, location });
-  }
-  return out;
 }
 
 function imageFallbackDeductions(section, location) {
@@ -1909,7 +1657,6 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     sourceIntegrityViolationCount += applyDeductionDescriptors(state, sourceBindingDeductions(section, binding, scope, location));
     if (binding.status === 'bound') {
       addLinkedEvidenceQualityDeductions(state, section, binding.candidate, location);
-      applyDeductionDescriptors(state, editorialStoryDeductions(section, binding, editor, index, location));
     }
     const claimValidation = validateArticleClaims({
       section,
@@ -1921,12 +1668,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     claimValidations.push(claimValidation);
     addClaimValidationDeductions(state, claimValidation, location, claimDeductionKeys);
     sourceIntegrityViolationCount += applyDeductionDescriptors(state, cameraXDeductions(section, binding, location));
-    applyDeductionDescriptors(state, evidenceSpecificityDeductions(section, location));
-    applyDeductionDescriptors(state, halDepthDeductions(section, articleSections, location));
-    applyDeductionDescriptors(state, scopeRelevanceDeductions(section, scope, location));
-    applyDeductionDescriptors(state, actionabilityDeductions(section, articleSections, location));
-    applyDeductionDescriptors(state, halSignalDeductions(section, binding, scope, location));
-    applyDeductionDescriptors(state, fallbackAndAiScopeDeductions(section, scope, location));
+    // Editorial quality/depth (is this useful to a Camera HAL SW engineer?) is judged by the
+    // fact-checker LLM via factCheck.article_quality, not by deterministic topic heuristics.
     applyDeductionDescriptors(state, imageFallbackDeductions(section, location));
     for (const source of ensureArray(section.sources)) {
       const sourceUrl = source?.url || '';
@@ -1966,27 +1709,17 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     );
   }
 
-  const finalSelectedCandidates = ensureArray(reporter.candidates).filter(isFinalSelected);
-  const lowScoreSelected = finalSelectedCandidates.filter(candidate => {
-    if (candidate.relevance_bucket && candidate.relevance_bucket !== BUCKETS.GENERIC_TECH_WATCHLIST) {
-      return scopeScore(candidate) < 2;
-    }
-    const total =
-      Number(candidate.camera_hal_relevance_score || 0) +
-      Number(candidate.android_camera_relevance_score || 0) +
-      Number(candidate.practical_actionability_score || 0);
-    return total < 8;
-  });
-  if (lowScoreSelected.length > 0) {
-    boundedDeduct(state, 'scope-relevance', Math.min(8, lowScoreSelected.length * 2), `${lowScoreSelected.length} final-selected candidate(s) have weak HAL/actionability scores under the expanded AOSP Camera / driver / SoC / native relevance model.`);
-  }
+  // Editorial-quality verdict: the fact-checker LLM judges each article on usefulness to a
+  // Camera HAL SW engineer (topic-agnostic). An explicit publishable=false blocks the gate;
+  // deterministic code only reads the boolean and surfaces the reason for review.
+  const unpublishableArticles = ensureArray(factCheck.article_quality)
+    .filter(item => item && item.publishable === false)
+    .map(item => ({
+      section_index: Number(item.section_index),
+      headline: text(item.headline) || text(sections[Number(item.section_index)]?.headline),
+      reason: text(item.reason)
+    }));
 
-  const adjacentContentPublishing = options.adjacentContentPublishing !== undefined
-    ? options.adjacentContentPublishing === true
-    : qualityGatePolicy.adjacentContentPublishing === true;
-  if (adjacentContentPublishing) {
-    state.deductions = relaxAdjacentContentDeductions(state.deductions);
-  }
   const totalDeductions = state.deductions.reduce((sum, item) => sum + item.points, 0);
   const score = Math.max(0, 100 - totalDeductions);
   const hasFactCheckMustFix = factCheck.status === 'NEEDS_FIX' || mustFixCount > 0;
@@ -2008,11 +1741,11 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   // DO have a bound source URL are granular-backing notes, not source-absence; they must
   // not force NEEDS_FIX. Genuinely source-less articles are still caught by binding and
   // required-fields hard checks. Fact-check must_fix (fabrication) always stays blocking.
-  const effectiveSourceGapCount = adjacentContentPublishing ? 0 : gaps;
-  const status = determineQualityStatus(score, threshold, {
-    sourceGapCount: effectiveSourceGapCount,
+  const status = determineQualityStatus({
+    sourceGapCount: gaps,
     hasFactCheckMustFix,
-    blockingDeductions: blockers
+    blockingDeductions: blockers,
+    unpublishableArticles
   });
   return {
     schema_version: 1,
@@ -2022,9 +1755,10 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     threshold,
     status,
     summary: status === 'PASS'
-      ? `Quality score ${score}, threshold ${threshold}, max score 100. Editor review is ready.`
-      : `Quality score ${score}, threshold ${threshold}, max score 100. Resolve source gaps, fact-check items, composition issues, and deductions before publishing.`,
+      ? 'Safety checks passed and the fact-checker found every article useful to a Camera HAL SW engineer. Editor review is ready.'
+      : 'Resolve source gaps, fact-check must-fix items, composition blockers, and any article the fact-checker marked not useful to a Camera HAL SW engineer before publishing.',
     deductions: state.deductions,
+    unpublishable_articles: unpublishableArticles,
     article_results: articleResults,
     claim_validation_summary: claimValidationSummary,
     claim_results: claimResults,
