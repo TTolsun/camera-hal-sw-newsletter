@@ -1575,6 +1575,231 @@ function briefingStoryStructureFindings(briefing = [], editor = {}) {
   return findings;
 }
 
+// ---------------------------------------------------------------------------
+// Per-section quality checks.
+//
+// Each checker is a pure function returning an array of deduction descriptors
+// { category, points, reason, location, options? }. The orchestrator applies them
+// in order via boundedDeduct, so behaviour is identical to the previous inline loop
+// while each quality domain now has a single, named responsibility (SRP).
+// ---------------------------------------------------------------------------
+
+function requiredFieldDeductions(section, sectionContract, location) {
+  const out = [];
+  for (const field of ['headline', 'evidence_summary']) {
+    if (!text(section[field])) {
+      out.push({ category: 'required-fields', points: 3, reason: `Missing required article field: ${field}.`, location });
+    }
+  }
+  for (const field of ['specificity_checks', 'source_verification_notes', 'camera_hal_checks', 'sources']) {
+    if (ensureArray(section[field]).length === 0) {
+      out.push({ category: 'required-fields', points: 4, reason: `Missing required article list: ${field}.`, location });
+    }
+  }
+  for (const missingKey of sectionContract.missing_keys) {
+    out.push({
+      category: 'article-section-contract',
+      points: missingKey === 'hal_driver_impact' ? 4 : 3,
+      reason: `Missing normalized article section: ${missingKey}.`,
+      location,
+      options: { blocking: false }
+    });
+  }
+  return out;
+}
+
+function fieldHygieneDeductions(section, articleSections, guardrailImpactClass, location) {
+  return findFieldHygieneIssues({
+    ...section,
+    confirmed_facts: articleSections.verified_facts,
+    background: articleSections.background_context,
+    camera_hal_perspective: articleSections.hal_driver_impact,
+    action_items: articleSections.action_items,
+    team_summary: articleSections.team_share_points,
+    guardrail_impact_class: guardrailImpactClass
+  }).map(issue => ({
+    category: 'field-hygiene',
+    points: issue.blocking === false ? 2 : 8,
+    reason: issue.reason,
+    location,
+    options: issue.blocking === false ? { blocking: false, severity: issue.severity || 'soft' } : {}
+  }));
+}
+
+function sourceBindingDeductions(section, binding, scope, location) {
+  const out = [];
+  for (const source of ensureArray(section.sources)) {
+    if (!isValidSourceUrl(source?.url)) {
+      out.push({ category: 'source-integrity', points: 8, reason: `Missing or invalid source URL: ${source?.url || 'empty'}.`, location });
+    }
+  }
+  if (binding.status !== 'bound') {
+    out.push({
+      category: 'source-integrity',
+      points: 8,
+      reason: binding.status === 'ambiguous'
+        ? binding.reason
+        : binding.status === 'evidence_mismatch'
+          ? binding.reason
+          : 'Main article source URL does not bind to reporter/shortlist candidate metadata.',
+      location
+    });
+    return out;
+  }
+  const violation = candidateSelectionViolation(binding.candidate);
+  if (violation) {
+    out.push({ category: 'source-integrity', points: 8, reason: `Main article source maps to ineligible reporter/shortlist candidate: ${violation}.`, location });
+  }
+  if (scope?.publishable_scope !== true) {
+    out.push({ category: 'source-integrity', points: 8, reason: 'Bound source candidate lacks publishable relevance_bucket and scope score metadata.', location });
+  }
+  return out;
+}
+
+function editorialStoryDeductions(section, binding, editor, index, location) {
+  if (binding.status !== 'bound') return [];
+  const storyTitleGate = editor.public_contract_version === STORY_PUBLIC_CONTRACT_VERSION ||
+    Number(section.public_article?.story_contract_version) === STORY_CONTRACT_VERSION;
+  if (!storyTitleGate) return [];
+  const out = [];
+  const titleFinding = titleCopyFinding(section, binding.candidate);
+  if (titleFinding) {
+    out.push({
+      category: 'editorial-story',
+      points: titleFinding.severity === 'fail' ? 6 : 2,
+      reason: titleFinding.reason,
+      location,
+      options: titleFinding.severity === 'fail' ? {} : { blocking: false, severity: 'soft' }
+    });
+  }
+  const storyIssues = validatePublicArticle(section, index, { issue: editor, requireStoryContract: true })
+    .filter(i => i.type === 'empty_editorial_story_field');
+  if (storyIssues.length > 0) {
+    out.push({
+      category: 'editorial-story',
+      points: storyIssues.length,
+      reason: `editorial_story fields incomplete: ${storyIssues.map(i => i.key).join(', ')}`,
+      location,
+      options: { blocking: false, severity: 'soft' }
+    });
+  }
+  return out;
+}
+
+function cameraXDeductions(section, binding, location) {
+  const violations = cameraXSourceExtractionViolations(section, binding.status === 'bound' ? binding.candidate : null);
+  if (violations.length === 0) return [];
+  return [{ category: 'source-integrity', points: 8, reason: `CameraX source extraction failure: ${violations.join('; ')}.`, location }];
+}
+
+function evidenceSpecificityDeductions(section, location) {
+  const out = [];
+  if (!hasSpecificEvidence(section)) {
+    out.push({ category: 'evidence-specificity', points: 5, reason: 'Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.', location });
+  }
+  if (hasGenericMonitoringWithoutEvidence(section)) {
+    out.push({ category: 'evidence-specificity', points: 4, reason: 'Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.', location });
+  }
+  return out;
+}
+
+function halDepthDeductions(section, articleSections, location) {
+  const out = [];
+  if (!hasHalDepth(section)) {
+    out.push({ category: 'hal-depth', points: 4, reason: 'Article lacks concrete AOSP Camera / driver / SoC / native engineering depth.', location });
+  }
+  const halImpactOnly = {
+    ...section,
+    headline: '', category: '', what_changed: '', background: '', why_it_matters: '',
+    evidence_summary: '', specificity_checks: [], source_verification_notes: [], team_summary: '',
+    confirmed_facts: [], camera_hal_checks: [], action_items: [], sources: [],
+    article_sections: {
+      verified_facts: [], background_context: '', hal_driver_impact: articleSections.hal_driver_impact,
+      action_items: [], team_share_points: ''
+    },
+    camera_hal_perspective: ''
+  };
+  if (!hasHalDepth(halImpactOnly)) {
+    out.push({ category: 'hal-depth', points: 4, reason: 'Article hal_driver_impact does not include concrete AOSP Camera / driver / SoC / native perspective.', location });
+  }
+  return out;
+}
+
+function scopeRelevanceDeductions(section, scope, location) {
+  const out = [];
+  if (!hasExpandedScope(scope)) {
+    out.push({ category: 'scope-relevance', points: 8, reason: 'Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.', location });
+  }
+  return out;
+}
+
+function actionabilityDeductions(section, articleSections, location) {
+  const out = [];
+  if (ensureArray(articleSections.action_items).length < 2) {
+    out.push({ category: 'actionability', points: 4, reason: `Expected at least 2 action_items, found ${ensureArray(articleSections.action_items).length}.`, location, options: { blocking: false } });
+  }
+  if (!hasConcreteAction(section)) {
+    out.push({ category: 'actionability', points: 4, reason: 'Article action item is not concrete enough for a HAL engineering team.', location, options: { blocking: false } });
+  }
+  return out;
+}
+
+function halSignalDeductions(section, binding, scope, location) {
+  const out = [];
+  const halSignalInputValue = halSignalInput(section, binding.status === 'bound' ? binding.candidate : {}, scope);
+  const halSignal = normalizeHalSignalFields(halSignalInputValue);
+  const halSignalReason = {
+    missing_hal_impact_axis: 'Main article lacks a non-reference HAL impact axis.',
+    actionability_none: 'Main article has actionability_level=none and cannot be publish-ready.',
+    generic_review_actionability: 'Main article actionability_level=generic_review lacks at least two concrete owner/test/log/metric/API/stream/buffer/metadata signals.',
+    fallback_promotion_missing_reason: 'Fallback article lacks fallback_promotion_allowed=true or fallback_promotion_reason before main promotion.',
+    soc_platform_missing_camera_pipeline_link: 'SoC platform signal lacks explicit camera_pipeline_link.'
+  };
+  for (const blocker of ensureArray(halSignal.hal_signal_hard_blockers)) {
+    out.push({
+      category: 'hal-signal',
+      points: blocker === 'missing_hal_impact_axis' ? 8 : 6,
+      reason: halSignalReason[blocker] || `HAL signal hard blocker: ${blocker}.`,
+      location
+    });
+  }
+  const halSignalCapsule = normalizeHalSignalCapsule(section);
+  if (!halSignalCapsule.present) {
+    out.push({ category: 'hal-signal-capsule', points: 8, reason: 'Missing HAL Signal Capsule for main article.', location });
+  } else if (!halSignalCapsule.complete) {
+    out.push({ category: 'hal-signal-capsule', points: 6, reason: `Incomplete HAL Signal Capsule; missing keys: ${halSignalCapsule.missing_keys.join(', ')}.`, location });
+  }
+  return out;
+}
+
+function fallbackAndAiScopeDeductions(section, scope, location) {
+  const out = [];
+  if (/C\+\+|LLVM|Clang|GCC|Linux|libcamera|AI|agent|LLM|OpenCL|NPU|GPU|CPU|SoC|thermal|power/i.test(sectionText(section)) && !hasHalDepth(section)) {
+    out.push({ category: 'scope-relevance', points: 4, reason: 'Fallback article does not clearly connect back to AOSP Camera, driver, SoC platform, or native development work.', location });
+  }
+  if (hasGenericAiWithoutHalConnection(section) || ((section.is_ai_related === true || /\b(?:AI|agent|LLM|NPU|GPU|on-device|inference|model)\b/i.test(sectionText(section))) && !hasExpandedScope(scope))) {
+    out.push({ category: 'hal-relevance', points: 8, reason: 'Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.', location });
+  }
+  if (scope?.publishable_scope === true && isForbiddenMainBucket(scope.relevance_bucket)) {
+    out.push({ category: 'scope-relevance', points: 8, reason: `Bound candidate is ${scope.relevance_bucket} and cannot remain as a main article.`, location });
+  }
+  return out;
+}
+
+function imageFallbackDeductions(section, location) {
+  if (section.resolvedImage?.usedFallback !== true) return [];
+  return [{ category: 'image-fallback', points: 1, reason: 'Article image uses a local fallback visual.', location, options: { blocking: false } }];
+}
+
+function applyDeductionDescriptors(state, descriptors) {
+  let sourceIntegrity = 0;
+  for (const descriptor of ensureArray(descriptors)) {
+    boundedDeduct(state, descriptor.category, descriptor.points, descriptor.reason, descriptor.location, descriptor.options || {});
+    if (descriptor.category === 'source-integrity') sourceIntegrity += 1;
+  }
+  return sourceIntegrity;
+}
+
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
   editor = toLegacyEditorIssue(editor, { date });
   const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : qualityGatePolicy.threshold;
@@ -1587,7 +1812,6 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const claimValidations = [];
   const claimDeductionKeys = new Set();
   let sourceIntegrityViolationCount = 0;
-  const sourceUrlOwners = new Map();
 
   if (sections.length < articlePolicy.mainArticleCount.min || sections.length > articlePolicy.mainArticleCount.max) {
     boundedDeduct(state, 'composition', 8, `Main article count ${sections.length} is outside Newsletter Policy range (${articleCountRangeText()}).`);
@@ -1670,123 +1894,22 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     boundedDeduct(state, 'composition', 8, `Supporting main article count ${supportingMainArticleCount} exceeds publish-ready policy maximum (${publishReadyCompositionPolicy.supportingMainMaxAllowed}).`);
   }
 
+  const sourceUrlOwners = new Map();
   sections.forEach((section, index) => {
     const location = section.headline || section.category || `article ${index + 1}`;
     const binding = sectionBindings[index];
     const scope = sectionScopes[index];
     const articleSections = normalizeArticleSections(section);
     const sectionContract = articleSectionSummary(section);
-    const requiredTextFields = ['headline', 'evidence_summary'];
-    for (const field of requiredTextFields) {
-      if (!text(section[field])) {
-        boundedDeduct(state, 'required-fields', 3, `Missing required article field: ${field}.`, location);
-      }
-    }
-    for (const field of ['specificity_checks', 'source_verification_notes', 'camera_hal_checks', 'sources']) {
-      if (ensureArray(section[field]).length === 0) {
-        boundedDeduct(state, 'required-fields', 4, `Missing required article list: ${field}.`, location);
-      }
-    }
-    for (const missingKey of sectionContract.missing_keys) {
-      boundedDeduct(
-        state,
-        'article-section-contract',
-        missingKey === 'hal_driver_impact' ? 4 : 3,
-        `Missing normalized article section: ${missingKey}.`,
-        location,
-        { blocking: false }
-      );
-    }
-    for (const issue of findFieldHygieneIssues({
-      ...section,
-      confirmed_facts: articleSections.verified_facts,
-      background: articleSections.background_context,
-      camera_hal_perspective: articleSections.hal_driver_impact,
-      action_items: articleSections.action_items,
-      team_summary: articleSections.team_share_points,
-      guardrail_impact_class: text(sectionCountDetails[index]?.guardrail_impact_class) ||
-        inferGuardrailImpactClass(section)
-    })) {
-      boundedDeduct(
-        state,
-        'field-hygiene',
-        issue.blocking === false ? 2 : 8,
-        issue.reason,
-        location,
-        issue.blocking === false ? { blocking: false, severity: issue.severity || 'soft' } : {}
-      );
-    }
-    for (const source of ensureArray(section.sources)) {
-      if (!isValidSourceUrl(source?.url)) {
-        sourceIntegrityViolationCount += 1;
-        boundedDeduct(state, 'source-integrity', 8, `Missing or invalid source URL: ${source?.url || 'empty'}.`, location);
-      }
-    }
-    if (binding.status !== 'bound') {
-      sourceIntegrityViolationCount += 1;
-      boundedDeduct(
-        state,
-        'source-integrity',
-        8,
-        binding.status === 'ambiguous'
-          ? binding.reason
-          : binding.status === 'evidence_mismatch'
-            ? binding.reason
-            : 'Main article source URL does not bind to reporter/shortlist candidate metadata.',
-        location
-      );
-    } else {
-      const violation = candidateSelectionViolation(binding.candidate);
-      if (violation) {
-        sourceIntegrityViolationCount += 1;
-        boundedDeduct(
-          state,
-          'source-integrity',
-          8,
-          `Main article source maps to ineligible reporter/shortlist candidate: ${violation}.`,
-          location
-        );
-      }
-      if (scope?.publishable_scope !== true) {
-        sourceIntegrityViolationCount += 1;
-        boundedDeduct(
-          state,
-          'source-integrity',
-          8,
-          'Bound source candidate lacks publishable relevance_bucket and scope score metadata.',
-          location
-        );
-      }
+    const guardrailImpactClass = text(sectionCountDetails[index]?.guardrail_impact_class) ||
+      inferGuardrailImpactClass(section);
+
+    applyDeductionDescriptors(state, requiredFieldDeductions(section, sectionContract, location));
+    applyDeductionDescriptors(state, fieldHygieneDeductions(section, articleSections, guardrailImpactClass, location));
+    sourceIntegrityViolationCount += applyDeductionDescriptors(state, sourceBindingDeductions(section, binding, scope, location));
+    if (binding.status === 'bound') {
       addLinkedEvidenceQualityDeductions(state, section, binding.candidate, location);
-      const storyTitleGate = editor.public_contract_version === STORY_PUBLIC_CONTRACT_VERSION ||
-        Number(section.public_article?.story_contract_version) === STORY_CONTRACT_VERSION;
-      const titleFinding = storyTitleGate ? titleCopyFinding(section, binding.candidate) : null;
-      if (titleFinding) {
-        boundedDeduct(
-          state,
-          'editorial-story',
-          titleFinding.severity === 'fail' ? 6 : 2,
-          titleFinding.reason,
-          location,
-          titleFinding.severity === 'fail' ? {} : { blocking: false, severity: 'soft' }
-        );
-      }
-      if (storyTitleGate) {
-        const storyIssues = validatePublicArticle(section, index, {
-          issue: editor,
-          requireStoryContract: true
-        }).filter(i => i.type === 'empty_editorial_story_field');
-        if (storyIssues.length > 0) {
-          boundedDeduct(
-            state,
-            'editorial-story',
-            storyIssues.length,
-            `editorial_story fields incomplete: ${storyIssues.map(i => i.key).join(', ')}`,
-            location,
-            { blocking: false, severity: 'soft' }
-          );
-        }
-      }
+      applyDeductionDescriptors(state, editorialStoryDeductions(section, binding, editor, index, location));
     }
     const claimValidation = validateArticleClaims({
       section,
@@ -1797,137 +1920,14 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     });
     claimValidations.push(claimValidation);
     addClaimValidationDeductions(state, claimValidation, location, claimDeductionKeys);
-    const cameraXViolations = cameraXSourceExtractionViolations(
-      section,
-      binding.status === 'bound' ? binding.candidate : null
-    );
-    if (cameraXViolations.length > 0) {
-      sourceIntegrityViolationCount += 1;
-      boundedDeduct(
-        state,
-        'source-integrity',
-        8,
-        `CameraX source extraction failure: ${cameraXViolations.join('; ')}.`,
-        location
-      );
-    }
-    if (!hasSpecificEvidence(section)) {
-      boundedDeduct(state, 'evidence-specificity', 5, 'Article lacks concrete version, release date, API, component, behavior change, or explicit evidence note.', location);
-    }
-    if (hasGenericMonitoringWithoutEvidence(section)) {
-      boundedDeduct(state, 'evidence-specificity', 4, 'Article uses generic monitoring/review language without naming the concrete source, version, API, date, or behavior change.', location);
-    }
-    if (!hasHalDepth(section)) {
-      boundedDeduct(state, 'hal-depth', 4, 'Article lacks concrete AOSP Camera / driver / SoC / native engineering depth.', location);
-    }
-    if (!hasHalDepth({
-      ...section,
-      headline: '',
-      category: '',
-      what_changed: '',
-      background: '',
-      why_it_matters: '',
-      evidence_summary: '',
-      specificity_checks: [],
-      source_verification_notes: [],
-      team_summary: '',
-      confirmed_facts: [],
-      camera_hal_checks: [],
-      action_items: [],
-      sources: [],
-      article_sections: {
-        verified_facts: [],
-        background_context: '',
-        hal_driver_impact: articleSections.hal_driver_impact,
-        action_items: [],
-        team_share_points: ''
-      },
-      camera_hal_perspective: ''
-    })) {
-      boundedDeduct(state, 'hal-depth', 4, 'Article hal_driver_impact does not include concrete AOSP Camera / driver / SoC / native perspective.', location);
-    }
-    if (!hasExpandedScope(scope)) {
-      boundedDeduct(state, 'scope-relevance', 8, 'Main article lacks article-level AOSP Camera, camera driver/image pipeline, SoC platform, or native tooling relevance.', location);
-    }
-    if (ensureArray(articleSections.action_items).length < 2) {
-      boundedDeduct(
-        state,
-        'actionability',
-        4,
-        `Expected at least 2 action_items, found ${ensureArray(articleSections.action_items).length}.`,
-        location,
-        { blocking: false }
-      );
-    }
-    if (!hasConcreteAction(section)) {
-      boundedDeduct(
-        state,
-        'actionability',
-        4,
-        'Article action item is not concrete enough for a HAL engineering team.',
-        location,
-        { blocking: false }
-      );
-    }
-    const halSignalInputValue = halSignalInput(
-      section,
-      binding.status === 'bound' ? binding.candidate : {},
-      scope
-    );
-    const halSignal = normalizeHalSignalFields(halSignalInputValue);
-    const halSignalReason = {
-      missing_hal_impact_axis: 'Main article lacks a non-reference HAL impact axis.',
-      actionability_none: 'Main article has actionability_level=none and cannot be publish-ready.',
-      generic_review_actionability: 'Main article actionability_level=generic_review lacks at least two concrete owner/test/log/metric/API/stream/buffer/metadata signals.',
-      fallback_promotion_missing_reason: 'Fallback article lacks fallback_promotion_allowed=true or fallback_promotion_reason before main promotion.',
-      soc_platform_missing_camera_pipeline_link: 'SoC platform signal lacks explicit camera_pipeline_link.'
-    };
-    for (const blocker of ensureArray(halSignal.hal_signal_hard_blockers)) {
-      boundedDeduct(
-        state,
-        'hal-signal',
-        blocker === 'missing_hal_impact_axis' ? 8 : 6,
-        halSignalReason[blocker] || `HAL signal hard blocker: ${blocker}.`,
-        location
-      );
-    }
-    const halSignalCapsule = normalizeHalSignalCapsule(section);
-    if (!halSignalCapsule.present) {
-      boundedDeduct(
-        state,
-        'hal-signal-capsule',
-        8,
-        'Missing HAL Signal Capsule for main article.',
-        location
-      );
-    } else if (!halSignalCapsule.complete) {
-      boundedDeduct(
-        state,
-        'hal-signal-capsule',
-        6,
-        `Incomplete HAL Signal Capsule; missing keys: ${halSignalCapsule.missing_keys.join(', ')}.`,
-        location
-      );
-    }
-    if (/C\+\+|LLVM|Clang|GCC|Linux|libcamera|AI|agent|LLM|OpenCL|NPU|GPU|CPU|SoC|thermal|power/i.test(sectionText(section)) && !hasHalDepth(section)) {
-      boundedDeduct(state, 'scope-relevance', 4, 'Fallback article does not clearly connect back to AOSP Camera, driver, SoC platform, or native development work.', location);
-    }
-    if (hasGenericAiWithoutHalConnection(section) || ((section.is_ai_related === true || /\b(?:AI|agent|LLM|NPU|GPU|on-device|inference|model)\b/i.test(sectionText(section))) && !hasExpandedScope(scope))) {
-      boundedDeduct(state, 'hal-relevance', 8, 'Generic AI article lacks a concrete Camera HAL / Android Camera connection and must not stay as a main article.', location);
-    }
-    if (scope?.publishable_scope === true && isForbiddenMainBucket(scope.relevance_bucket)) {
-      boundedDeduct(state, 'scope-relevance', 8, `Bound candidate is ${scope.relevance_bucket} and cannot remain as a main article.`, location);
-    }
-    if (section.resolvedImage?.usedFallback === true) {
-      boundedDeduct(
-        state,
-        'image-fallback',
-        1,
-        'Article image uses a local fallback visual.',
-        location,
-        { blocking: false }
-      );
-    }
+    sourceIntegrityViolationCount += applyDeductionDescriptors(state, cameraXDeductions(section, binding, location));
+    applyDeductionDescriptors(state, evidenceSpecificityDeductions(section, location));
+    applyDeductionDescriptors(state, halDepthDeductions(section, articleSections, location));
+    applyDeductionDescriptors(state, scopeRelevanceDeductions(section, scope, location));
+    applyDeductionDescriptors(state, actionabilityDeductions(section, articleSections, location));
+    applyDeductionDescriptors(state, halSignalDeductions(section, binding, scope, location));
+    applyDeductionDescriptors(state, fallbackAndAiScopeDeductions(section, scope, location));
+    applyDeductionDescriptors(state, imageFallbackDeductions(section, location));
     for (const source of ensureArray(section.sources)) {
       const sourceUrl = source?.url || '';
       for (const key of urlKeys(sourceUrl)) {
