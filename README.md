@@ -125,8 +125,10 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 - Candidate pool preflight: publishable candidates at least 1; reserve candidates diagnostics only; camera stack candidates at least 0
 - Selection windows: primary 7 days; fallback 21 days; reference 90 days
 - Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.
+- Catch-up (지난 소식) lane: when fresh selection is below 3 article(s), open main slots are filled with uncovered releases up to 90 days old from buckets `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`, at most 2 per issue, covered once each; never displaces fresh content.
 - Homepage headline policy: linear decay; decay 2 point(s)/day; replacement margin 5; minimum headline score 40; latest inclusion required true; history max 50
 - Quality threshold: 70
+- Adjacent-content publishing: enabled. Depth/source-type quality notes (missing HAL-boundary discussion, shared watch/release-note URL without a version, weak article-level camera-scope depth, claim missing item-level evidence_ids) are recorded as soft notes instead of publish blockers so real-sourced camera-adjacent content (release notes, conference sessions) can publish in weeks without deep Camera HAL material. Source-absence, fabrication, fact-check must_fix, duplicate URL, and stale-claim failures stay hard blockers.
 - Hard fail conditions remain blocking: source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article; CameraX source extraction failure; blocked source quality; source quality drift
 
 <!-- NEWSLETTER_POLICY:END -->

@@ -415,11 +415,42 @@ test('quality gate fails shared release-note URL without matching date or versio
     scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
     scopedCandidate('https://example.com/c', 'direct_aosp_camera'),
     scopedCandidate('https://example.com/d', 'direct_aosp_camera')
-  ]);
+  ], { adjacentContentPublishing: false });
   const result = report.article_results.find(item => item.headline === releaseNote.headline);
 
   assert.equal(result.status, 'FAIL');
   assert.ok(result.hard_fail_reasons.some(reason => reason.includes('Shared watch/release-note URL requires matching')));
+});
+
+test('adjacent-content publishing relaxes shared release-note URL to a soft note', () => {
+  const sharedUrl = 'https://example.com/release-notes';
+  const releaseNote = section({
+    headline: 'Release note article without matching item evidence',
+    url: sharedUrl,
+    evidence_summary: 'Version: CameraX 1.0; release date: 2026-05-01; API/component: CameraX; behavior change: stream validation.',
+    specificity_checks: ['Version: CameraX 1.0', 'Release date: 2026-05-01']
+  });
+  const report = reportFor([
+    releaseNote,
+    section({ headline: 'CameraX release B', url: 'https://example.com/b' }),
+    section({ headline: 'AOSP Camera change C', url: 'https://example.com/c' }),
+    section({ headline: 'Camera HAL metadata update D', url: 'https://example.com/d' })
+  ], [
+    scopedCandidate(sharedUrl, 'direct_aosp_camera', {
+      title: 'CameraX 2.0 release notes',
+      collectionMode: 'release-note-item',
+      version_or_release: 'CameraX 2.0',
+      published_date: '2026-05-02'
+    }),
+    scopedCandidate('https://example.com/b', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/c', 'direct_aosp_camera'),
+    scopedCandidate('https://example.com/d', 'direct_aosp_camera')
+  ], { adjacentContentPublishing: true });
+  const relaxed = report.deductions.find(item =>
+    item.adjacent_relaxed && /Shared watch\/release-note URL requires matching/.test(item.reason));
+  assert.ok(relaxed, 'shared-URL deduction should be relaxed');
+  assert.equal(relaxed.blocking, false);
+  assert.ok(relaxed.points <= 2);
 });
 
 test('quality gate fails duplicate source URLs across main sections', () => {

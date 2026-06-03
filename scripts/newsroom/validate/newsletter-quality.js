@@ -1113,6 +1113,41 @@ function sectionPassesArticleGate(section, qualityReport, factCheck) {
     !sectionHasSourceGap(section, factCheck);
 }
 
+// Depth / source-type quality concerns that are real but should NOT block publishing
+// real-sourced adjacent content (release notes, conference sessions, camera-adjacent
+// framework news) in weeks without deep Camera HAL material. These are recalibrated to
+// soft, low-weight notes when qualityGatePolicy.adjacentContentPublishing is enabled.
+// Source-absence / fabrication / fact-check failures are NEVER in this list and stay hard.
+const ADJACENT_RELAXABLE_DEDUCTIONS = Object.freeze([
+  { category: 'source-integrity', pattern: /HAL boundary is missing/i },
+  { category: 'source-integrity', pattern: /Shared watch\/release-note URL requires matching/i },
+  { category: 'scope-relevance', pattern: /lacks article-level AOSP Camera/i },
+  { category: 'scope-relevance', pattern: /weak HAL\/actionability scores/i },
+  { category: 'claim-contract', pattern: /missing item-level evidence_ids/i }
+]);
+
+function isAdjacentRelaxableDeduction(deduction) {
+  const category = text(deduction?.category);
+  const reason = text(deduction?.reason);
+  return ADJACENT_RELAXABLE_DEDUCTIONS.some(rule =>
+    rule.category === category && rule.pattern.test(reason));
+}
+
+function relaxAdjacentContentDeductions(deductions) {
+  return ensureArray(deductions).map(deduction => {
+    if (deduction?.blocking === false) return deduction;
+    if (!isAdjacentRelaxableDeduction(deduction)) return deduction;
+    return {
+      ...deduction,
+      points: Math.min(Number(deduction.points) || 0, 2),
+      blocking: false,
+      severity: 'soft',
+      adjacent_relaxed: true,
+      reason: `${deduction.reason} (adjacent-content publishing: soft note, not a publish blocker)`
+    };
+  });
+}
+
 function blockingDeductions(deductions) {
   return ensureArray(deductions).filter(deduction => deduction?.blocking !== false);
 }
@@ -1941,6 +1976,12 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     boundedDeduct(state, 'scope-relevance', Math.min(8, lowScoreSelected.length * 2), `${lowScoreSelected.length} final-selected candidate(s) have weak HAL/actionability scores under the expanded AOSP Camera / driver / SoC / native relevance model.`);
   }
 
+  const adjacentContentPublishing = options.adjacentContentPublishing !== undefined
+    ? options.adjacentContentPublishing === true
+    : qualityGatePolicy.adjacentContentPublishing === true;
+  if (adjacentContentPublishing) {
+    state.deductions = relaxAdjacentContentDeductions(state.deductions);
+  }
   const totalDeductions = state.deductions.reduce((sum, item) => sum + item.points, 0);
   const score = Math.max(0, 100 - totalDeductions);
   const hasFactCheckMustFix = factCheck.status === 'NEEDS_FIX' || mustFixCount > 0;
