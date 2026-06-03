@@ -1252,6 +1252,28 @@ function sourceEffectivenessHints(root, date) {
     }));
 }
 
+function renderCatchUpSummary(root, date) {
+  if (!date) return '';
+  const shortlist = readJsonObjectIfExists(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'));
+  const used = Number(shortlist?.catch_up_used_count || 0);
+  if (!Number.isFinite(used) || used <= 0) return '';
+  const titles = ensureArray(shortlist?.catch_up_articles)
+    .map(item => {
+      const weeks = Number.isFinite(Number(item.catch_up_age_days))
+        ? `${Math.max(1, Math.round(Number(item.catch_up_age_days) / 7))}주 전`
+        : '';
+      return `${item.title}${weeks ? ` (${weeks})` : ''}`;
+    });
+  return [
+    '## 지난 소식 (Catch-up)',
+    '',
+    `이번 호는 fresh 기사가 부족해 ${used}건의 "지난 소식" 기사가 catch-up 레인으로 채워졌습니다.`,
+    ...titles.map(title => `- ${title}`),
+    '',
+    '이 기사는 수 주 전 릴리스를 회고로 다룬 것으로, 한 번만 다루도록 exposure history에 기록됩니다.'
+  ].join('\n');
+}
+
 function renderCandidatePoolPreflight(root, date, status = {}) {
   if (!candidateShortageStatus(status, root, date)) return '';
   const selectionReport = date
@@ -2531,6 +2553,7 @@ function buildNewsroomPrBody(options = {}) {
 
   lines.push(
     renderPublicNewsletterReadiness(root, date, handoff),
+    renderCatchUpSummary(root, date),
     renderCandidatePoolPreflight(root, date, status),
     renderFailureDiagnostics(root, date, status, handoff),
     renderPublicNewsletterNotice(status, handoff),
