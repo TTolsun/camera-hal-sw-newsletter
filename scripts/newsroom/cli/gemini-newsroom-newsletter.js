@@ -129,6 +129,7 @@ const {
 const {
   pruneResolvedFallbackImageFactCheckItems
 } = require('../common/fact-check-repair');
+const { classifyHalImpact } = require('../common/hal-impact-classifier');
 const {
   GENERATION_CONTRACT_VERSION,
   STORY_CONTRACT_VERSION,
@@ -1024,6 +1025,12 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.native_workflow_evidence_score = numberOrDefault(collected.native_workflow_evidence_score ?? candidate.native_workflow_evidence_score);
     candidate.related_context_candidates = ensureArray(collected.related_context_candidates || candidate.related_context_candidates);
     candidate.imageCandidates = imageCandidatesForReporterCandidate(candidate, collectedByUrl);
+    // #477: attach a conservative, report-only HAL-facing impact signal. This is
+    // diagnostic enrichment for editors; it does not influence selection or any
+    // publish gate.
+    candidate.hal_signal = classifyHalImpact(candidate, {
+      sourceQuality: { source_url_quality: candidate.source_url_quality || candidate.sourceUrlQuality }
+    });
     const rejectionReason = reporterCandidateRejectionReason(candidate);
     candidate.evidence_eligible = !rejectionReason;
     // Keep legacy aliases, but final/editor selection is owned by final_selected/selected_for_editor.
