@@ -53,6 +53,7 @@ const {
   sameStringSet,
   sectionLabelKey,
   sectionRepairSignature,
+  sectionSummary,
   sectionUrls,
   sectionsAreDuplicate,
   signaturesMatch,
@@ -131,6 +132,10 @@ const {
 } = require('../common/fact-check-repair');
 const { classifyHalImpact } = require('../common/hal-impact-classifier');
 const {
+  failureStageFromError,
+  failureClassFromError
+} = require('./generation-failure-classification');
+const {
   GENERATION_CONTRACT_VERSION,
   STORY_CONTRACT_VERSION,
   STORY_PUBLIC_CONTRACT_VERSION,
@@ -173,7 +178,11 @@ const {
   publicationBoundaryPrompt,
   publicArticleJudgePrompt,
   articleClaimContractPrompt,
-  claimRepairEvidencePrompt
+  claimRepairEvidencePrompt,
+  factCheckSeverityPrompt,
+  cameraDeveloperToolingFactCheckPrompt,
+  articleQualityVerdictPrompt,
+  dateFramingGuardrail
 } = require('./newsletter-prompts');
 
 const root = process.cwd();
@@ -230,40 +239,6 @@ function fail(message) {
 function cloneJson(value) {
   if (value === undefined) return undefined;
   return JSON.parse(JSON.stringify(value));
-}
-
-function factCheckSeverityPrompt() {
-  return [
-    'Fact-check 결과 매핑: 발행하면 안 되는 factual/source 오류는 must_fix[]에 넣으세요. 출처 커버리지, 날짜 근거, cross-check가 부족한 항목은 source_gaps[]에도 넣고 source_gap_count는 source_gaps.length와 일치시키세요.',
-    '같은 source 안에서 표현, 구체성, actionability를 보강하면 되는 항목만 recommended_fixes[]에 넣으세요. must_fix[]에는 가능한 한 location, problem, suggestion, source_url을 채우세요.',
-    'source_gaps[]와 recommended_fixes[]에는 headline 또는 source URL을 포함해 repair plan이 해당 section을 찾을 수 있게 하세요.'
-  ].join('\n');
-}
-
-function cameraDeveloperToolingFactCheckPrompt() {
-  return [
-    'C/C++, Android Studio, VS(Visual Studio) Code, Claude, Codex, Roo Code, OpenCode 같은 language, IDE, AI Agent, tooling news는 Camera 개발자가 실제로 사용하는 development workflow coverage로 허용될 수 있습니다.',
-    '이런 tooling article을 primary Camera runtime stack article이 아니라는 이유만으로 must_fix[] 또는 source_gaps[]에 넣지 마세요. 다만 허용하려면 source, selected capsule metadata, source_extraction 중 하나가 camera driver, Camera HAL/native code, Android camera app, build/test/debug/performance workflow 연결을 뒷받침해야 합니다. derived editorial hints는 framing 보조로만 사용하고, 단독 publishability 근거로 사용하지 마세요.',
-    '연결이 article text 또는 derived editorial hints에만 있고 source/capsule metadata/source_extraction이 뒷받침하지 않으면 recommended_fixes[]가 아니라 must_fix[] 또는 source_gaps[]로 분류하세요.',
-    '표현 보강만 필요하면 recommended_fixes[]에 넣으세요. Camera 개발자 workflow 연결이 source, selected capsule metadata, source_extraction에 전혀 없거나 Android HAL toolchain migration처럼 source가 뒷받침하지 않는 주장을 하면 must_fix[]에 넣고, supporting source/cross-check 부족이면 source_gaps[]에도 넣으세요.'
-  ].join('\n');
-}
-
-function articleQualityVerdictPrompt() {
-  return [
-    'article_quality[]: 각 main section마다 하나씩, 그 기사가 발행할 만한 품질인지 판정하세요. section_index(0-based), headline, publishable(boolean), reason을 채우세요.',
-    '품질 기준은 "Camera HAL 관련 주제인가"가 아니라 "Camera HAL SW 엔지니어에게 실제로 도움이 되는 기사인가"입니다. 주제가 C++, AI/LLM, Linux, 빌드/디버그/성능 도구여도 HAL SW 엔지니어 업무에 도움이 되면 publishable=true로 판정하세요. 반대로 Camera HAL 주제라도 구체성·깊이·실행가능성이 없어 엔지니어에게 쓸모가 없으면 publishable=false로 판정하세요.',
-    'publishable=false면 reason에 "왜 HAL SW 엔지니어에게 도움이 안 되는지"를 구체적으로 적으세요(예: 버전/날짜/API/동작 변화 같은 구체 정보 없음, 일반론뿐, 후속 행동이 불명확). publishable=true면 reason에 그 기사가 엔지니어에게 주는 실질적 가치를 한 줄로 적으세요.',
-    '이 판정은 must_fix/source_gaps(사실·출처 검증)와 독립적입니다. 사실은 맞지만 품질이 부족하면 must_fix가 아니라 article_quality의 publishable=false로 표현하세요.'
-  ].join('\n');
-}
-
-function dateFramingGuardrail() {
-  return [
-    '시간 표현 정확성: "최근", "방금", "이번 주", "recently", "newly released" 같은 상대적 최신성 표현은 candidate의 published_date가 newsletter 날짜 기준 약 2주 이내일 때만 사용하세요.',
-    'released_date가 수 주~수 개월 전이면 상대 표현 대신 실제 시점을 명시하세요(예: "3월 출시된", "N주 전 공개된"). catch-up(지난 소식) 기사뿐 아니라 모든 main article에 동일하게 적용합니다.',
-    'published_date를 모르면 출시 시점을 단정하지 말고 시점 표현 자체를 생략하세요. 오래된 릴리스를 "최근/recently"로 표현하면 fact-check must_fix 대상입니다.'
-  ].join('\n');
 }
 
 function writeNewsletterDate(date, rootDir = root) {
@@ -417,26 +392,6 @@ function writeSummaryCacheReport(date, diagnostics) {
 
   console.log(`[cache] Summary cache hits: ${report.totals.hit_count}/${report.totals.candidate_count}; misses: ${report.totals.miss_count}.`);
   return report;
-}
-
-function failureStageFromError(error) {
-  if (error?.stage) return error.stage;
-  const match = String(error?.message || '').match(/^\[([^\]]+)]/);
-  return match ? match[1] : 'generation';
-}
-
-function failureClassFromError(error) {
-  const message = String(error?.message || '');
-  if (error?.code === 'provider_not_implemented' || /provider_not_implemented|API failed|provider configuration failed/i.test(message)) {
-    return 'provider_failure';
-  }
-  if (error?.name === 'LlmJsonParseError' || error?.code === 'adapter_failure' || /adapter failure|not valid JSON|empty response/i.test(message)) {
-    return 'adapter_failure';
-  }
-  if (error?.name === 'NewsletterDomainValidationError' || error?.code === 'domain_validation_failure') {
-    return 'domain_validation_failure';
-  }
-  return '';
 }
 
 function buildGenerationStatus({
@@ -2490,17 +2445,6 @@ function mergeLockedSections(lockedSections, generatedSections, excludedSections
     merged.push(section);
   }
   return { sections: merged, rejected };
-}
-
-function sectionSummary(section, index) {
-  return {
-    index: index + 1,
-    headline: section.headline,
-    category: section.category,
-    relevance_bucket: section.relevance_bucket || '',
-    urls: sectionUrls(section),
-    source_titles: ensureArray(section.sources).map(source => source.title).filter(Boolean)
-  };
 }
 
 function sectionLockRecord(section, index, status = 'PASS', reason = '') {

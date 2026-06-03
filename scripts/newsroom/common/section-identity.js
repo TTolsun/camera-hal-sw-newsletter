@@ -176,6 +176,17 @@ function duplicateReasonForSections(left, right, context = 'locked') {
   return '';
 }
 
+function sectionSummary(section, index) {
+  return {
+    index: index + 1,
+    headline: section.headline,
+    category: section.category,
+    relevance_bucket: section.relevance_bucket || '',
+    urls: sectionUrls(section),
+    source_titles: ensureArray(section.sources).map(source => source.title).filter(Boolean)
+  };
+}
+
 function candidateDuplicatesSections(candidate, sections) {
   const candidateSection = {
     headline: candidate.title,
@@ -195,6 +206,7 @@ module.exports = {
   sameStringSet,
   sectionLabelKey,
   sectionRepairSignature,
+  sectionSummary,
   sectionUrls,
   sectionsAreDuplicate,
   signaturesMatch,

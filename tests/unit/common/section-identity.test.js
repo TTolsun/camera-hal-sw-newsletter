@@ -10,6 +10,7 @@ const {
   protectedRepairFieldsMatch,
   sameSectionLabel,
   sameStringSet,
+  sectionSummary,
   sectionsAreDuplicate,
   signaturesMatch,
   stableSectionKey,
@@ -17,6 +18,32 @@ const {
   titleSimilarity,
   urlKeys
 } = require('../../../scripts/newsroom/common/section-identity');
+
+test('sectionSummary builds a 1-based diagnostic summary with urls and source titles', () => {
+  const summary = sectionSummary({
+    headline: 'CameraX 1.6.0',
+    category: 'CameraX',
+    relevance_bucket: 'direct_aosp_camera',
+    sources: [
+      { title: 'Android Developers', url: 'https://developer.android.com/a' },
+      { title: '', url: 'https://developer.android.com/b' }
+    ]
+  }, 0);
+  assert.equal(summary.index, 1);
+  assert.equal(summary.headline, 'CameraX 1.6.0');
+  assert.equal(summary.category, 'CameraX');
+  assert.equal(summary.relevance_bucket, 'direct_aosp_camera');
+  assert.deepEqual(summary.urls, ['https://developer.android.com/a', 'https://developer.android.com/b']);
+  assert.deepEqual(summary.source_titles, ['Android Developers']);
+});
+
+test('sectionSummary defaults relevance_bucket and tolerates missing sources', () => {
+  const summary = sectionSummary({ headline: 'h', category: 'c' }, 2);
+  assert.equal(summary.index, 3);
+  assert.equal(summary.relevance_bucket, '');
+  assert.deepEqual(summary.urls, []);
+  assert.deepEqual(summary.source_titles, []);
+});
 
 test('normalizeTitle lowercases, strips diacritics and punctuation, collapses spaces', () => {
   assert.equal(normalizeTitle('CameraX 1.6.0: Release!'), 'camerax 1 6 0 release');
