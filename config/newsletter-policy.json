@@ -39,6 +39,17 @@
     "fallbackSelectionDays": 21,
     "referenceContextDays": 90
   },
+  "catchUpPolicy": {
+    "enabled": true,
+    "maxCatchUpArticles": 2,
+    "maxAgeDays": 90,
+    "eligibleBuckets": [
+      "direct_aosp_camera",
+      "camera_driver_image_pipeline",
+      "android_platform_camera_adjacent"
+    ],
+    "activationMode": "thin_week_only"
+  },
   "headlinePolicy": {
     "decayModel": "linear",
     "decayRatePerDay": 2,

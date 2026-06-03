@@ -95,6 +95,37 @@ function validateSelectionWindowPolicy(value, errors) {
   }
 }
 
+const KNOWN_CATCH_UP_ACTIVATION_MODES = Object.freeze(['thin_week_only']);
+
+function validateCatchUpPolicy(value, config, errors) {
+  if (value === undefined) return; // optional; normalized to a default when absent
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('catchUpPolicy must be an object.');
+    return;
+  }
+  if (typeof value.enabled !== 'boolean') {
+    errors.push('catchUpPolicy.enabled must be a boolean.');
+  }
+  const mainMax = config?.articlePolicy?.mainArticleCount?.max;
+  validateInteger(value.maxCatchUpArticles, 'catchUpPolicy.maxCatchUpArticles', errors, { min: 1 });
+  if (Number.isInteger(value.maxCatchUpArticles) && Number.isInteger(mainMax) && value.maxCatchUpArticles > mainMax) {
+    errors.push('catchUpPolicy.maxCatchUpArticles cannot exceed articlePolicy.mainArticleCount.max.');
+  }
+  const fallbackDays = config?.selectionWindowPolicy?.fallbackSelectionDays;
+  const referenceDays = config?.selectionWindowPolicy?.referenceContextDays;
+  validateInteger(value.maxAgeDays, 'catchUpPolicy.maxAgeDays', errors, { min: 1 });
+  if (Number.isInteger(value.maxAgeDays) && Number.isInteger(fallbackDays) && value.maxAgeDays < fallbackDays) {
+    errors.push('catchUpPolicy.maxAgeDays must be >= selectionWindowPolicy.fallbackSelectionDays.');
+  }
+  if (Number.isInteger(value.maxAgeDays) && Number.isInteger(referenceDays) && value.maxAgeDays > referenceDays) {
+    errors.push('catchUpPolicy.maxAgeDays must be <= selectionWindowPolicy.referenceContextDays.');
+  }
+  validateBucketList(value.eligibleBuckets, 'catchUpPolicy.eligibleBuckets', errors);
+  if (!KNOWN_CATCH_UP_ACTIVATION_MODES.includes(value.activationMode)) {
+    errors.push(`catchUpPolicy.activationMode must be one of: ${KNOWN_CATCH_UP_ACTIVATION_MODES.join(', ')}.`);
+  }
+}
+
 function validateHeadlinePolicy(value, errors) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     errors.push('headlinePolicy must be an object.');
@@ -199,6 +230,7 @@ function validateNewsletterPolicyConfig(config) {
   validateInteger(preflight.primaryCameraStackCandidateMin, 'candidatePoolPreflight.primaryCameraStackCandidateMin', errors, { min: 0 });
   validateInteger(preflight.cameraStackCandidateMin, 'candidatePoolPreflight.cameraStackCandidateMin', errors, { min: 0 });
   validateSelectionWindowPolicy(config.selectionWindowPolicy, errors);
+  validateCatchUpPolicy(config.catchUpPolicy, config, errors);
   validateHeadlinePolicy(config.headlinePolicy, errors);
   if (config.publishModePolicy !== undefined) {
     validatePublishModePolicy(config.publishModePolicy, errors);
@@ -262,6 +294,19 @@ function normalizePublishModePolicy(raw) {
   };
 }
 
+function normalizeCatchUpPolicy(raw) {
+  if (!raw || typeof raw !== 'object') {
+    return { enabled: false, maxCatchUpArticles: 2, maxAgeDays: 90, eligibleBuckets: [], activationMode: 'thin_week_only' };
+  }
+  return {
+    enabled: raw.enabled === true,
+    maxCatchUpArticles: Number.isInteger(raw.maxCatchUpArticles) ? raw.maxCatchUpArticles : 2,
+    maxAgeDays: Number.isInteger(raw.maxAgeDays) ? raw.maxAgeDays : 90,
+    eligibleBuckets: unique(ensureArray(raw.eligibleBuckets)),
+    activationMode: raw.activationMode === 'thin_week_only' ? 'thin_week_only' : 'thin_week_only'
+  };
+}
+
 function validatePublishModePolicy(value, errors) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     errors.push('publishModePolicy must be an object.');
@@ -310,6 +355,7 @@ function normalizeNewsletterPolicyConfig(config) {
       fallbackSelectionDays: selectionWindow.fallbackSelectionDays,
       referenceContextDays: selectionWindow.referenceContextDays
     },
+    catchUpPolicy: normalizeCatchUpPolicy(config.catchUpPolicy),
     headlinePolicy: {
       decayModel: headline.decayModel,
       decayRatePerDay: headline.decayRatePerDay,
@@ -362,6 +408,10 @@ function getCandidatePoolPreflightPolicy(policy = getDefaultNewsletterPolicy()) 
 
 function getSelectionWindowPolicy(policy = getDefaultNewsletterPolicy()) {
   return policy.selectionWindowPolicy;
+}
+
+function getCatchUpPolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.catchUpPolicy;
 }
 
 function getHeadlinePolicy(policy = getDefaultNewsletterPolicy()) {
@@ -549,6 +599,9 @@ module.exports = {
   get selectionWindowPolicy() {
     return getSelectionWindowPolicy();
   },
+  get catchUpPolicy() {
+    return getCatchUpPolicy();
+  },
   get headlinePolicy() {
     return getHeadlinePolicy();
   },
@@ -565,6 +618,7 @@ module.exports = {
   analyzeNewsletterPolicyBlock,
   articleCountRangeText,
   getCandidatePoolPreflightPolicy,
+  getCatchUpPolicy,
   getPublishModePolicy,
   getDefaultNewsletterPolicy,
   getHeadlinePolicy,
