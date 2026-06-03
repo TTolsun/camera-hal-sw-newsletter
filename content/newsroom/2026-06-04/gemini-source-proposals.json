@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-04",
+  "proposals": [
+    {
+      "proposal_id": "camera_hal_io_26_media_pipeline",
+      "topic_gap": "Google I/O '26 announcements related to Android media pipeline enhancements, particularly those impacting camera output, processing, and playback.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [
+        "youtube.com",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Google I/O 2026",
+        "Android media pipeline",
+        "camera output",
+        "Media3",
+        "MediaCodec",
+        "MediaRecorder",
+        "video processing",
+        "image processing",
+        "Android camera performance"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "Mentions of new APIs or improvements for camera output handling (e.g., higher resolutions, frame rates, HDR).",
+        "Updates to MediaCodec, MediaRecorder, or Media3 that affect camera-generated content.",
+        "Discussions on performance optimizations for media processing pipelines.",
+        "Information on new tools or best practices for developers working with camera and media."
+      ],
+      "risk_notes": [
+        "YouTube playlist might contain videos not directly relevant to camera HAL or media pipeline at a technical depth.",
+        "Need to filter for content specifically addressing camera output and processing, not just generic media playback."
+      ]
+    },
+    {
+      "proposal_id": "camerax_1_6_0_release",
+      "topic_gap": "New features, improvements, or bug fixes introduced in CameraX 1.6.0 that impact camera application development and potentially underlying HAL interactions.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.6.0",
+        "CameraX release notes",
+        "AndroidX camera",
+        "camera API updates"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "expected_evidence": [
+        "Details on new CameraX APIs or extensions.",
+        "Performance improvements or optimizations related to camera operations.",
+        "Bug fixes or stability enhancements.",
+        "Changes in behavior or compatibility with specific Android versions or devices."
+      ],
+      "risk_notes": [
+        "Release notes might be high-level; deeper technical implications might require further investigation or linked documentation."
+      ]
+    },
+    {
+      "proposal_id": "camerax_1_7_0_alpha01_release",
+      "topic_gap": "Early insights into upcoming features or breaking changes in CameraX 1.7.0-alpha01, providing a forward look for camera developers.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.7.0-alpha01",
+        "CameraX alpha",
+        "AndroidX camera preview",
+        "upcoming camera features"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+      ],
+      "expected_evidence": [
+        "Preview of new features or experimental APIs.",
+        "Information on architectural changes or deprecations.",
+        "Known issues or areas for developer feedback."
+      ],
+      "risk_notes": [
+        "Alpha releases are subject to change and may not reflect the final product.",
+        "Information might be limited due to its early stage."
+      ]
+    },
+    {
+      "proposal_id": "camera_its_automation_testing",
+      "topic_gap": "Updates or new documentation regarding automated testing of camera images using the Camera ITS box, relevant for camera HAL and OEM validation.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [
+        "source.android.com"
+      ],
+      "search_keywords": [
+        "Camera ITS box",
+        "camera image testing",
+        "Android camera compatibility",
+        "automated camera testing",
+        "AOSP camera"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "New guidelines or best practices for Camera ITS testing.",
+        "Updates to the Camera ITS box setup or procedures.",
+        "Information on new test cases or metrics for camera image quality.",
+        "Improvements in automation for camera testing."
+      ],
+      "risk_notes": [
+        "Documentation updates might be incremental and not represent major changes.",
+        "Focus might be on testing infrastructure rather than direct camera HAL changes."
+      ]
+    }
+  ]
+}
