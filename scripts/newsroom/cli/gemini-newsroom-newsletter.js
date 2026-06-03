@@ -2293,6 +2293,27 @@ function sanitizeClaimEvidenceIds(editor, reporter) {
   return { ...editor, sections: sanitized };
 }
 
+function stampCoverageType(editor, shortlistReport) {
+  const sections = ensureArray(editor?.sections);
+  if (sections.length === 0) return editor;
+  const catchUpByUrl = new Map();
+  for (const item of ensureArray(shortlistReport?.catch_up_articles)) {
+    const url = normalizeUrl(item.url);
+    if (url) catchUpByUrl.set(url, item);
+  }
+  const stamped = sections.map(section => {
+    const sourceUrl = ensureArray(section.sources)
+      .map(source => normalizeUrl(source?.url))
+      .find(url => url && catchUpByUrl.has(url));
+    if (sourceUrl) {
+      const match = catchUpByUrl.get(sourceUrl);
+      return { ...section, coverage_type: 'catch_up', catch_up_age_days: Number(match.catch_up_age_days) };
+    }
+    return { ...section, coverage_type: section.coverage_type === 'catch_up' ? 'catch_up' : 'fresh' };
+  });
+  return { ...editor, sections: stamped };
+}
+
 function containsTodo(files) {
   return files.some(file => fs.existsSync(file) && /\bTODO\b/.test(fs.readFileSync(file, 'utf8')));
 }
@@ -4361,6 +4382,7 @@ async function main() {
     'utf8'
   );
   editor = sanitizeClaimEvidenceIds(editor, reporter);
+  editor = stampCoverageType(editor, shortlistReport);
   qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
     threshold: qualityGatePolicy.threshold,
     shortlistReport,
@@ -4721,6 +4743,7 @@ module.exports = {
   buildSectionRepairPlan,
   editorSemanticStatusExtra,
   failureClassFromError,
+  stampCoverageType,
   failureStageFromError,
   hasTooFewMainArticlesDeduction,
   articleClaimContractPrompt,
