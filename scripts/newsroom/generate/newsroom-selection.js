@@ -1516,13 +1516,27 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     const openSlots = Math.max(0, catchUpTarget - selected.length);
     const roomUnderMax = Math.max(0, articlePolicy.mainArticleCount.max - selected.length);
     const take = Math.max(0, Math.min(catchUpPolicy.maxCatchUpArticles, openSlots, roomUnderMax));
-    catchUpSelected = pool.slice(0, take).map(candidate => ({
-      ...candidate,
-      coverage_type: 'catch_up',
-      catch_up_age_days: Number(candidate.days_since_published),
-      selected: true,
-      selected_for_editor: true
-    }));
+    catchUpSelected = pool.slice(0, take).map(candidate => {
+      // Promoting a reference-window candidate to a catch-up main article: clear the
+      // reference-window exclusion markers so the editor group-coverage validation does
+      // not try to demote it as selection_window_reference_not_main (an invalid reason).
+      const cleared = { ...candidate };
+      cleared.exclusion_reasons = ensureArray(candidate.exclusion_reasons)
+        .filter(reason => !/^selection_window=/.test(text(reason)));
+      delete cleared.selection_window_exclusion_reason;
+      delete cleared.fallback_window_promoted;
+      return {
+        ...cleared,
+        freshness_window: 'fallback',
+        coverage_type: 'catch_up',
+        catch_up_age_days: Number(candidate.days_since_published),
+        catch_up_origin_window: text(candidate.freshness_window) || 'reference',
+        selected: true,
+        selected_for_editor: true,
+        final_selected: true,
+        final_selection_eligibility: 'main'
+      };
+    });
     selected = [...selected, ...catchUpSelected];
   }
   const warnings = selectionWarnings(selected, { exposureHistory });

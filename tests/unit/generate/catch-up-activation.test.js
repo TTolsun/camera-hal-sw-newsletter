@@ -105,3 +105,22 @@ test('already-covered catch-up releases are not re-selected', () => {
   });
   assert.equal(report.catch_up_used_count, 0);
 });
+
+test('promoted catch-up article clears reference-window exclusion markers', () => {
+  const report = buildShortlistReport('2026-06-03', collected(), {
+    exposureHistory: { articles: [] },
+    homepageHeadlineState: EMPTY_HEADLINE_STATE,
+    catchUpPolicy: CATCH_UP_POLICY
+  });
+  const catchUp = report.selected_articles.filter(a => a.coverage_type === 'catch_up');
+  assert.ok(catchUp.length >= 1);
+  for (const article of catchUp) {
+    assert.ok(!article.selection_window_exclusion_reason, 'must not keep selection_window_exclusion_reason');
+    assert.ok(
+      !(article.exclusion_reasons || []).some(r => /^selection_window=/.test(String(r))),
+      'must not keep selection_window= exclusion markers'
+    );
+    assert.equal(article.freshness_window, 'fallback');
+    assert.equal(article.catch_up_origin_window, 'reference');
+  }
+});
