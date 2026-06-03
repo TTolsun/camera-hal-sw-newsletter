@@ -1789,6 +1789,75 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   };
 }
 
+// Thin-week salvage: when the full lineup is NEEDS_FIX but a clean subset of articles passes,
+// drop the failed/unpublishable articles and publish the clean subset (if it still meets the
+// minimum article count). "Clean" = article gate PASS, fact-checker publishable, and no must_fix
+// or source_gap referencing the section. Conservative: only salvages when the kept subset has a
+// genuinely empty fact-check footprint, so it never lowers the safety bar.
+function salvagePublishableSubset(date, editor, reporter, factCheck, qualityReport, options = {}) {
+  const sections = ensureArray(editor?.sections);
+  const minArticles = Number.isFinite(Number(options.minArticles))
+    ? Number(options.minArticles)
+    : articlePolicy.mainArticleCount.min;
+  if (sections.length <= minArticles) return null;
+
+  const results = ensureArray(qualityReport?.article_results);
+  const unpublishable = new Set(ensureArray(qualityReport?.unpublishable_articles).map(item => Number(item.section_index)));
+
+  const referencesSection = (probe, index, section) => {
+    const blob = String(probe || '');
+    const indexMatch = blob.match(/sections\[(\d+)\]/);
+    if (indexMatch) return Number(indexMatch[1]) === index;
+    const headline = text(section?.headline);
+    const url = text(ensureArray(section?.sources)[0]?.url);
+    return Boolean((headline && blob.includes(headline)) || (url && blob.includes(url)));
+  };
+  const factCheckProbe = item => typeof item === 'string'
+    ? item
+    : `${text(item?.location)} ${text(item?.source_url)} ${text(item?.problem)} ${text(item?.headline)}`;
+  const blockingItems = [
+    ...ensureArray(factCheck?.must_fix),
+    ...ensureArray(factCheck?.source_gaps)
+  ].map(factCheckProbe);
+
+  const keepIndices = [];
+  sections.forEach((section, index) => {
+    if (text(results[index]?.status) !== 'PASS') return;
+    if (unpublishable.has(index)) return;
+    if (blockingItems.some(probe => referencesSection(probe, index, section))) return;
+    keepIndices.push(index);
+  });
+  if (keepIndices.length < minArticles || keepIndices.length >= sections.length) return null;
+
+  const keepSet = new Set(keepIndices);
+  const droppedIndices = sections.map((_, index) => index).filter(index => !keepSet.has(index));
+  const refsDropped = probe => droppedIndices.some(index => referencesSection(probe, index, sections[index]));
+
+  const subsetEditor = { ...editor, sections: keepIndices.map(index => sections[index]) };
+  const subsetFactCheck = {
+    ...factCheck,
+    must_fix: ensureArray(factCheck?.must_fix).filter(item => !refsDropped(factCheckProbe(item))),
+    source_gaps: ensureArray(factCheck?.source_gaps).filter(item => !refsDropped(factCheckProbe(item))),
+    recommended_fixes: ensureArray(factCheck?.recommended_fixes).filter(item => !refsDropped(factCheckProbe(item))),
+    article_quality: keepIndices.map((originalIndex, newIndex) => {
+      const verdict = ensureArray(factCheck?.article_quality).find(item => Number(item?.section_index) === originalIndex);
+      return verdict ? { ...verdict, section_index: newIndex } : { section_index: newIndex, publishable: true, reason: '' };
+    })
+  };
+  subsetFactCheck.source_gap_count = subsetFactCheck.source_gaps.length;
+  subsetFactCheck.status = subsetFactCheck.must_fix.length > 0 ? 'NEEDS_FIX' : 'PASS';
+
+  const subsetReport = buildNewsletterQualityReport(date, subsetEditor, reporter, subsetFactCheck, options);
+  if (subsetReport.status !== 'PASS') return null;
+  return {
+    editor: subsetEditor,
+    factCheck: subsetFactCheck,
+    qualityReport: subsetReport,
+    dropped_section_count: droppedIndices.length,
+    kept_section_count: keepIndices.length
+  };
+}
+
 function buildQualityReportMarkdown(report) {
   const deductions = ensureArray(report.deductions);
   const hardItems = blockingDeductions(deductions);
@@ -2007,6 +2076,7 @@ module.exports = {
   MIN_MAIN_ARTICLES,
   MAX_MAIN_ARTICLES,
   buildNewsletterQualityReport,
+  salvagePublishableSubset,
   buildQualityReportMarkdown,
   deductionMatchesSection,
   sectionHasQualityDeductions,
