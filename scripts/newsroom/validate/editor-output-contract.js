@@ -636,6 +636,86 @@ function deterministicallyBackfillFactClaims(value, options = {}) {
   return { editor: changed ? repaired : null, reason_codes: [] };
 }
 
+// Find the single allowed-evidence binding that lets an EXISTING fact claim pass strict
+// claim validation, without changing the claim's text or impact_level. Returns the bound
+// evidence_ids/source_urls, or null when nothing binds (fail closed — never invent support).
+function bindEvidenceForExistingFactClaim({ section, candidate, articleIndex, seedEvidencePack, claim, allowedEvidence }) {
+  const factText = text(claim.text || claim.claim);
+  if (!factText) return null;
+  for (const evidence of allowedEvidence) {
+    const evidenceId = text(evidence.evidence_id);
+    const sourceUrls = ensureArray(evidence.source_urls).map(text).filter(Boolean);
+    if (!evidenceId || sourceUrls.length === 0) continue;
+    const trialClaim = { ...claim, evidence_ids: [evidenceId], source_urls: sourceUrls };
+    const trialSection = cloneJson(section);
+    trialSection.claims = [trialClaim];
+    const baseSections = trialSection.article_sections &&
+      typeof trialSection.article_sections === 'object' &&
+      !Array.isArray(trialSection.article_sections)
+      ? trialSection.article_sections
+      : {};
+    trialSection.article_sections = { ...baseSections, verified_facts: [factText] };
+    const result = validateArticleClaims({
+      section: trialSection,
+      candidate,
+      articleIndex,
+      strict: true,
+      seedEvidencePack
+    });
+    if (!hasBlockingClaimIssues(result)) {
+      return { evidence_ids: [evidenceId], source_urls: sourceUrls };
+    }
+  }
+  return null;
+}
+
+// Deterministic provenance completion: the LLM editor frequently writes source-backed fact
+// claims but omits the item-level evidence_ids pointer. This binds the omitted evidence_id from
+// the candidate's own allowed_claim_evidence, but ONLY when the strict claim validator (the
+// oracle) confirms the evidence actually supports the claim. Claims whose text is not supported
+// stay unbound and keep failing closed, so this never invents support nor weakens the gate.
+function bindMissingFactClaimEvidence(value, options = {}) {
+  const reporter = options.reporter || { candidates: [] };
+  const seedEvidencePack = options.seedEvidencePack || null;
+  const sections = ensureArray(value?.sections);
+  if (sections.length === 0) return value;
+  const candidateIndex = buildCandidateIndex(reporter);
+  const repaired = cloneJson(value);
+  let changed = false;
+
+  ensureArray(repaired.sections).forEach((section, index) => {
+    const claims = ensureArray(section.claims);
+    if (claims.length === 0) return;
+    const needsEvidence = claim =>
+      String(claim?.claim_type || claim?.claimType || '').trim().toLowerCase() === 'fact' &&
+      ensureArray(claim?.evidence_ids || claim?.evidenceIds).map(text).filter(Boolean).length === 0 &&
+      Boolean(text(claim?.text || claim?.claim));
+    if (!claims.some(needsEvidence)) return;
+    const candidate = candidateForSection(section, candidateIndex) || {};
+    const allowedEvidence = buildAllowedClaimEvidence(candidate, section, { seedEvidencePack });
+    if (allowedEvidence.length === 0) return;
+    claims.forEach(claim => {
+      if (!needsEvidence(claim)) return;
+      const bound = bindEvidenceForExistingFactClaim({
+        section,
+        candidate,
+        articleIndex: index,
+        seedEvidencePack,
+        claim,
+        allowedEvidence
+      });
+      if (!bound) return;
+      claim.evidence_ids = bound.evidence_ids;
+      if (ensureArray(claim.source_urls || claim.sourceUrls).map(text).filter(Boolean).length === 0) {
+        claim.source_urls = bound.source_urls;
+      }
+      changed = true;
+    });
+  });
+
+  return changed ? repaired : value;
+}
+
 function validateArticleSectionContract(value) {
   const issues = [];
   ensureArray(value.sections).forEach((section, index) => {
@@ -1439,6 +1519,7 @@ async function repairEditorOutputContract({
 module.exports = {
   EditorSemanticValidationError,
   assertSectionsAndSourcesPreserved,
+  bindMissingFactClaimEvidence,
   repairEditorOutputContract,
   serializeEditorValidationError,
   validateEditorArticlePolicy,
