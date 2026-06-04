@@ -168,6 +168,9 @@ const {
   ensureArray
 } = require('../render/newsletter-renderer');
 const {
+  writeWeeklyNewsletterArtifacts
+} = require('../render/weekly-newsletter-output');
+const {
   toEditorDraftArtifact
 } = require('../domain/newsletter-domain-normalize');
 const {
@@ -4265,10 +4268,18 @@ async function main() {
   const newsletterMd = path.join(newsletterDir, 'newsletter.md');
   const newsletterHtml = path.join(newsletterDir, 'index.html');
   const shouldWritePublicArtifacts = !editorialReviewable;
+  let weeklyArtifactFiles = [];
   if (shouldWritePublicArtifacts) {
     fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');
     fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');
     updateNewsletterData(date, editor);
+    // 추가 weekly 출력(#486): publish-ready일 때만 weekly 디렉터리 페이지와 별도 weekly 인덱스를 생성한다.
+    // 데일리 공개 산출물은 위에서 이미 기록했으므로, weekly 실패가 데일리 실행을 깨지 않도록 try/catch로 감싼다.
+    try {
+      weeklyArtifactFiles = writeWeeklyNewsletterArtifacts({ root, date, editor, tags: issueTags(editor) }).files;
+    } catch (error) {
+      console.error(`weekly newsletter output skipped: ${error.message}`);
+    }
   }
   const headlineArtifactResult = persistHeadlineStateArtifacts({
     date,
@@ -4314,7 +4325,8 @@ async function main() {
         `newsletters/${date}/newsletter.md`,
         `newsletters/${date}/index.html`,
         'data/newsletters.json',
-        ...headlineArtifactResult.files
+        ...headlineArtifactResult.files,
+        ...weeklyArtifactFiles
       ])
     : baseFiles;
   const generationStatusArtifact = buildGenerationStatus({
