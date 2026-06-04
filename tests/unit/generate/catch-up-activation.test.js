@@ -32,7 +32,9 @@ function refRelease(overrides = {}) {
 }
 
 // A thin-week collection: no fresh in-window candidate; only two reference-window
-// (70d / 84d old) CameraX releases. primary+fallback select 0 → thin week → catch-up.
+// (70d / 84d old) releases from DIFFERENT source pages. primary+fallback select 0 →
+// thin week → catch-up. Distinct pages keep this fixture focused on slot-filling and the
+// maxCatchUpArticles cap; same-release-note-page dedup is covered in release-page-dedup.test.js.
 function collected() {
   return { candidates: [
     refRelease({
@@ -40,8 +42,8 @@ function collected() {
       published_date: '2026-03-25', version_or_release: '1.6.0', behavior_change: 'CameraPipe migration'
     }),
     refRelease({
-      title: 'CameraX 1.7.0-alpha01', url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01',
-      published_date: '2026-03-11', version_or_release: '1.7.0-alpha01', behavior_change: 'SessionConfig API'
+      title: 'Camera HAL AIDL v3 interface update', url: 'https://source.android.com/docs/core/camera/aidl-v3',
+      published_date: '2026-03-11', version_or_release: 'AIDL v3', behavior_change: 'ICameraDevice interface change'
     })
   ] };
 }
@@ -101,7 +103,7 @@ test('total selected (fresh + catch-up) never exceeds targetMainArticles', () =>
 test('already-covered catch-up releases are not re-selected', () => {
   const history = { articles: [
     { article_identity_key: 'url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0', exposure_type: 'newsletter_article', newsletter_date: '2026-04-01' },
-    { article_identity_key: 'url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01', exposure_type: 'newsletter_article', newsletter_date: '2026-04-01' }
+    { article_identity_key: 'url:https://source.android.com/docs/core/camera/aidl-v3', exposure_type: 'newsletter_article', newsletter_date: '2026-04-01' }
   ] };
   const report = buildShortlistReport('2026-06-03', collected(), {
     exposureHistory: history,

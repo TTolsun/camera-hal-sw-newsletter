@@ -27,6 +27,13 @@ const {
   reliabilityScore
 } = require('./selection-scoring');
 const {
+  cameraReleaseExtractionViolation,
+  cameraReleasePageKey,
+  cameraReleaseVersionRank,
+  hasSourceExtractionBullet,
+  selectedHasSameCameraReleasePage
+} = require('./camera-release-notes');
+const {
   BUCKETS,
   classifyAospCameraStackCandidate,
   normalizeAospCameraScope
@@ -152,54 +159,6 @@ function finalSelectionEligibility(candidate) {
   return text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
 }
 
-function cameraReleasePageKey(candidate) {
-  const raw = candidateUrl(candidate);
-  if (!raw) return '';
-  try {
-    const parsed = new URL(raw);
-    if (
-      parsed.hostname.toLowerCase() === 'developer.android.com' &&
-      ['/jetpack/androidx/releases/camera', '/jetpack/androidx/releases/media3'].includes(parsed.pathname)
-    ) {
-      parsed.hash = '';
-      parsed.search = '';
-      return parsed.toString().replace(/\/$/, '').toLowerCase();
-    }
-  } catch {
-    return '';
-  }
-  return '';
-}
-
-function sourceExtractionItems(candidate) {
-  return [
-    ...(Array.isArray(candidate?.source_extraction?.release?.sections) ? candidate.source_extraction.release.sections : []),
-    ...(Array.isArray(candidate?.source_extraction?.minor_line_context?.sections) ? candidate.source_extraction.minor_line_context.sections : [])
-  ].flatMap(section => ensureArray(section?.items));
-}
-
-function hasSourceExtractionBullet(candidate) {
-  return sourceExtractionItems(candidate).some(item => text(item?.text || item?.source_text));
-}
-
-function hasGenericCameraXFallbackMetadata(candidate) {
-  const value = text(candidate.behavior_change || candidate.behaviorChange || candidate.what_changed || candidate.summary);
-  return /^CameraX(?:\s*\/\s*androidx\.camera)?\s+(?:update|updates|updated|release|released)(?:\.)?$/i.test(value) ||
-    /Maven Group versions?|View the Camera Library|This library was last updated on:/i.test(value);
-}
-
-function cameraReleaseExtractionViolation(candidate) {
-  if (!cameraReleasePageKey(candidate)) return '';
-  const quality = candidate.extraction_quality || candidate.source_extraction?.extraction_quality || {};
-  if (quality.used_fallback === true) return 'source_extraction.used_fallback=true';
-  if (quality.main_article_allowed === false) return 'source_extraction.main_article_allowed=false';
-  if (!hasSourceExtractionBullet(candidate) && hasGenericCameraXFallbackMetadata(candidate)) {
-    return 'CameraX release-note candidate has no concrete source_extraction bullet';
-  }
-  if (candidate.source_extraction && !hasSourceExtractionBullet(candidate)) return 'source_extraction.release.sections has no concrete bullet';
-  return '';
-}
-
 function exclusionReasons(candidate) {
   const reasons = [];
   const eligibility = finalSelectionEligibility(candidate);
@@ -316,19 +275,6 @@ function candidateBody(candidate) {
     candidate.reason,
     candidate.collection_reason
   ].map(text).join(' ');
-}
-
-function cameraReleaseVersionRank(candidate) {
-  if (!cameraReleasePageKey(candidate)) return { kind: 99, weight: 0 };
-  const value = text(candidate.version_or_release || candidate.versionOrRelease || candidate.title);
-  const match = value.match(/\b(\d+)\.(\d+)\.(\d+)(?:-([a-z]+)\d*)?/i);
-  if (!match) return { kind: 50, weight: 0 };
-  const suffix = text(match[4]).toLowerCase();
-  const patch = number(match[3]);
-  return {
-    kind: suffix ? 2 : patch > 0 ? 0 : 1,
-    weight: number(match[1]) * 1000000 + number(match[2]) * 10000 + patch * 100
-  };
 }
 
 function candidateScope(candidate) {
@@ -897,11 +843,6 @@ function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_C
       excluded: windows.windowExcluded.length
     }
   };
-}
-
-function selectedHasSameCameraReleasePage(selected, candidate) {
-  const key = cameraReleasePageKey(candidate);
-  return Boolean(key) && ensureArray(selected).some(item => cameraReleasePageKey(item) === key);
 }
 
 function pushUnique(selected, candidate, slot) {
@@ -1522,7 +1463,20 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     const openSlots = Math.max(0, catchUpTarget - selected.length);
     const roomUnderMax = Math.max(0, articlePolicy.mainArticleCount.max - selected.length);
     const take = Math.max(0, Math.min(catchUpPolicy.maxCatchUpArticles, openSlots, roomUnderMax));
-    catchUpSelected = pool.slice(0, take).map(candidate => {
+    // The catch-up lane must enforce the same release-note dedup that pushUnique applies to primary
+    // selection (#500). Otherwise a fresh main article and an older catch-up article from the same
+    // CameraX release-note page are both promoted, sharing one source URL across sections, which
+    // trips the "Duplicate source URL"/"Shared release-note URL" hard fails on thin days. The growing
+    // lineup is checked so two catch-up candidates from the same page cannot slip through together.
+    const catchUpAccepted = [];
+    for (const candidate of pool) {
+      if (catchUpAccepted.length >= take) break;
+      const lineup = [...selected, ...catchUpAccepted];
+      if (selectedHasSameCameraReleasePage(lineup, candidate)) continue;
+      if (lineup.some(existing => candidatesAreDuplicate(existing, candidate))) continue;
+      catchUpAccepted.push(candidate);
+    }
+    catchUpSelected = catchUpAccepted.map(candidate => {
       // Promoting a reference-window candidate to a catch-up main article: clear the
       // reference-window exclusion markers so the editor group-coverage validation does
       // not try to demote it as selection_window_reference_not_main (an invalid reason).
