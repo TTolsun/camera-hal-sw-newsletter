@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-05",
+  "proposals": [
+    {
+      "proposal_id": "camera_io_2026_media_pipeline",
+      "topic_gap": "Google I/O '26에서 Android 미디어 파이프라인 최적화 및 새로운 기능에 대한 업데이트가 있는지 확인합니다. 특히 Camera HAL SW에 영향을 미치는 Media3, MediaCodec, MediaRecorder, MediaStore, Photo Picker, preview/surface, WebRTC camera, A/V sync, gallery/media access, sharing, camera-generated playback paths와 관련된 내용을 찾습니다.",
+      "source_family": "android-media",
+      "allowed_domains": [
+        "youtube.com",
+        "android-developers.googleblog.com",
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "Android Media Pipeline",
+        "Google I/O 2026 Media",
+        "Media3",
+        "MediaCodec",
+        "MediaRecorder",
+        "Camera Output",
+        "Android Camera Media"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "Media3 또는 관련 미디어 API의 새로운 기능",
+        "카메라 출력 처리 또는 녹화에 대한 개선 사항",
+        "미디어 파이프라인 성능 최적화",
+        "카메라 관련 미디어 기능에 대한 코드 샘플 또는 데모"
+      ],
+      "risk_notes": [
+        "플레이리스트의 모든 비디오가 Camera HAL SW와 직접적인 관련이 없을 수 있습니다. 관련 비디오를 선별해야 합니다."
+      ]
+    },
+    {
+      "proposal_id": "camerax_1_6_0_release",
+      "topic_gap": "CameraX 1.6.0 릴리스에 포함된 주요 변경 사항, 새로운 기능 및 버그 수정 사항을 파악합니다. 특히 Camera HAL SW 개발자에게 영향을 미칠 수 있는 API 변경 사항, 성능 개선 또는 새로운 사용 사례에 중점을 둡니다.",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.6.0",
+        "CameraX release notes",
+        "AndroidX Camera 1.6.0",
+        "Camera HAL impact"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "expected_evidence": [
+        "CameraX 1.6.0의 주요 기능 목록",
+        "API 변경 사항 및 마이그레이션 가이드",
+        "버그 수정 및 안정성 개선 사항",
+        "Camera HAL 또는 내부 카메라 시스템과의 상호 작용에 대한 언급"
+      ],
+      "risk_notes": [
+        "릴리스 노트는 기술적 세부 사항이 부족할 수 있으며, 추가적인 컨텍스트를 위해 다른 문서를 참조해야 할 수 있습니다."
+      ]
+    },
+    {
+      "proposal_id": "camerax_1_7_0_alpha01_release",
+      "topic_gap": "CameraX 1.7.0-alpha01 릴리스의 초기 변경 사항 및 개발자 미리보기를 분석합니다. 향후 CameraX 버전에 도입될 수 있는 잠재적인 기능, API 변경 사항 또는 방향을 식별합니다.",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.7.0-alpha01",
+        "CameraX alpha release",
+        "AndroidX Camera 1.7.0",
+        "CameraX future features"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+      ],
+      "expected_evidence": [
+        "CameraX 1.7.0-alpha01의 새로운 기능 또는 실험적 API",
+        "알파 버전에서 예상되는 변경 사항",
+        "알려진 문제 또는 제한 사항",
+        "Camera HAL SW에 대한 잠재적 영향"
+      ],
+      "risk_notes": [
+        "알파 릴리스이므로 기능이 변경되거나 제거될 수 있으며, 문서가 불완전할 수 있습니다."
+      ]
+    },
+    {
+      "proposal_id": "camera_its_automation_testing",
+      "topic_gap": "Camera ITS (Image Test Suite)를 사용하여 카메라 이미지를 자동화된 방식으로 테스트하는 방법에 대한 업데이트 또는 새로운 지침을 조사합니다. 이는 Camera HAL SW 품질 보증 및 호환성 테스트에 중요합니다.",
+      "source_family": "aosp",
+      "allowed_domains": [
+        "source.android.com"
+      ],
+      "search_keywords": [
+        "Camera ITS automation",
+        "Android Camera testing",
+        "Camera Image Test Suite",
+        "Camera HAL compatibility"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Camera ITS 테스트 환경 설정 지침",
+        "새로운 ITS 테스트 케이스 또는 방법론",
+        "자동화된 카메라 이미지 테스트의 이점",
+        "Camera HAL 구현에 대한 테스트 요구 사항"
+      ],
+      "risk_notes": [
+        "문서가 일반적인 호환성 또는 테스트 설정에 중점을 둘 수 있으며, HAL SW 개발자를 위한 심층적인 기술 정보가 부족할 수 있습니다."
+      ]
+    }
+  ]
+}

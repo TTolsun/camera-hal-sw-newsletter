@@ -1,0 +1,644 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-06-05",
+  "clusters": [
+    {
+      "cluster_id": "43d1b942a84263ab",
+      "cluster_key": "https://youtube.com/playlist",
+      "canonical_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "canonical_title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+          "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bdcf8a4c506e5257",
+      "cluster_key": "https://goo.gle/adaptiveapps_io26",
+      "canonical_url": "https://goo.gle/AdaptiveApps_IO26",
+      "canonical_title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://goo.gle/AdaptiveApps_IO26",
+          "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "49d58944bd3ca26f",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "canonical_title": "CameraX Release Notes - CameraX 1.6.0",
+      "candidate_count": 5,
+      "duplicate_count": 4,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+          "title": "CameraX Release Notes - CameraX 1.6.0",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+          "title": "CameraX Release Notes - CameraX 1.7.0-alpha01",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+          "title": "1.6.1",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "title": "1.3.0-beta02",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "title": "1.4.0-alpha07",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bb0e15b6742fce01",
+      "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "canonical_title": "Test camera images using automation",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "title": "Test camera images using automation",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ef27814b2c8c8636",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "canonical_title": "17 Things to know for Android developers at Google I/O",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+          "title": "17 Things to know for Android developers at Google I/O",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1bd949b88ac6a778",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "canonical_title": "Android UI Development is Compose First",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+          "title": "Android UI Development is Compose First",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "652f5c50bcb656fe",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "canonical_title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+          "title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a315e38980974827",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+      "canonical_title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+          "title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "efec1690039b80c5",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+      "canonical_title": "Android Studio I/O Edition: What’s new in Android Developer tools",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+          "title": "Android Studio I/O Edition: What’s new in Android Developer tools",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "931e1972767ee114",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "canonical_title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+          "title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "736ba21c4736e96f",
+      "cluster_key": "https://source.android.com/docs/compatibility",
+      "canonical_url": "https://source.android.com/docs/compatibility",
+      "canonical_title": "Compatibility",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility",
+          "title": "Compatibility",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "fac75a8d436dc70f",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "canonical_title": "Build native Android apps in Google AI Studio",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "title": "Build native Android apps in Google AI Studio",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+          "title": "Start building today - Build native Android apps in Google AI Studio",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "dd3b2dadebc278d1",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
+      "canonical_title": "Increasing app discovery and engagement on Google TV",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html",
+          "title": "Increasing app discovery and engagement on Google TV",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "82f8513ebf26c678",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
+      "canonical_title": "I/O 2026: What's new in Google Play",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/io-2026-whats-new-in-google-play.html",
+          "title": "I/O 2026: What's new in Google Play",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c688fc750ca4fd9a",
+      "cluster_key": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+      "canonical_title": "What's new in the Jetpack Compose April '26 release",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/04/jetpack-compose-april-2026-updates.html",
+          "title": "What's new in the Jetpack Compose April '26 release",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2e09be47b7d035b1",
+      "cluster_key": "https://source.android.com/docs/core/camera",
+      "canonical_url": "https://source.android.com/docs/core/camera",
+      "canonical_title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a9d9fe9d783b530b",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/building-premium-android-experiences-google-io-26.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/building-premium-android-experiences-google-io-26.html",
+      "canonical_title": "Building Premium Android Experiences at Google I/O ‘26",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/building-premium-android-experiences-google-io-26.html",
+          "title": "Building Premium Android Experiences at Google I/O ‘26",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a428b00356ec8b02",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
+      "canonical_title": "Build for the future with the Android XR Developer Catalyst Program — Apply now!",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/apply-android-xr-developer-catalyst.html",
+          "title": "Build for the future with the Android XR Developer Catalyst Program — Apply now!",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "82c77d8b0de180fe",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
+      "canonical_title": "Adaptive development for the expanding Android ecosystem",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-adaptive-development-ecosystem.html",
+          "title": "Adaptive development for the expanding Android ecosystem",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "932c0c12ca1e56df",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
+      "canonical_title": "Updates to the Android XR SDK: Introducing Developer Preview 4",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-xr-sdk-developer-preview-4-updates.html",
+          "title": "Updates to the Android XR SDK: Introducing Developer Preview 4",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d4b81ad16bd8d236",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
+      "canonical_title": "Introducing Android Performance Analyzer : The Next Evolution in Profiling for Android",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/introducing-android-performance-analyzer.html",
+          "title": "Introducing Android Performance Analyzer : The Next Evolution in Profiling for Android",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "aedaad77a2bc7e4d",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+      "canonical_title": "Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/voip-native-visibility-telecom-alpha.html",
+          "title": "Bring Native Visibility to Your VoIP App Experience with Telecom's Latest Alpha",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "70b911c01b6fce5e",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+      "canonical_title": "Gratitude saw 25% higher retention for widget users",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html",
+          "title": "Gratitude saw 25% higher retention for widget users",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e3e46728deeff066",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+      "canonical_title": "A look ahead: Making it easier and faster to publish safer apps",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html",
+          "title": "A look ahead: Making it easier and faster to publish safer apps",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b0bd5c24cc796850",
+      "cluster_key": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+      "canonical_title": "Streamline User Journeys with Verified Email via Credential Manager",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html",
+          "title": "Streamline User Journeys with Verified Email via Credential Manager",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0643321d4a8e79e3",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/prioritizing-memory-efficiency-steps-for-android-17.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/prioritizing-memory-efficiency-steps-for-android-17.html",
+      "canonical_title": "Prioritizing Memory Efficiency: Essential Steps for Android 17",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/prioritizing-memory-efficiency-steps-for-android-17.html",
+          "title": "Prioritizing Memory Efficiency: Essential Steps for Android 17",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9e95b9aeb5650263",
+      "cluster_key": "https://source.android.com/docs/whatsnew",
+      "canonical_url": "https://source.android.com/docs/whatsnew",
+      "canonical_title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew",
+          "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b564c567eef7ae59",
+      "cluster_key": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_url": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cdd",
+          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b7e36d17d4d0d17e",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
+      "canonical_title": "Android XR Updates for Unity, Unreal, and Godot",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-xr-updates-unity-unreal-godot.html",
+          "title": "Android XR Updates for Unity, Unreal, and Godot",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "11b022bd66224265",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+      "canonical_title": "Building for the Intelligence System on Android",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html",
+          "title": "Building for the Intelligence System on Android",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "08b720ebcdf09388",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+      "canonical_title": "Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/how-karrot-increased-sales-with-gemini-firebase-ai-translation.html",
+          "title": "Gemini and Firebase AI Logic enabled Karrot to increase sales with a translation feature built in under 2 weeks",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "abcdde2af442be63",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
+      "canonical_title": "What's new in Android for Cars: Unifying platforms and unlocking premium experiences",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-for-cars-unifying-platforms-premium-experiences.html",
+          "title": "What's new in Android for Cars: Unifying platforms and unlocking premium experiences",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "879f4dccd9d4e0d7",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
+      "canonical_title": "What's New in Wear OS 7",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html",
+          "title": "What's New in Wear OS 7",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "827f3a39ff281180",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "canonical_title": "Overview",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "title": "Overview",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e6ebde2c2d5411c2",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+      "canonical_title": "June",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+          "title": "June",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}
