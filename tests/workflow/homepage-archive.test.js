@@ -899,3 +899,21 @@ test('newsletter issue page CSS uses homepage shell with issue landing layout', 
   assertCssDeclaration(issueCompactMascot, 'transform', 'none');
   assertCssDeclaration(issueCompactMascotImage, 'width', 'min(100%, 300px)');
 });
+
+test('getSafeNewsletterHref resolves a weekly entry to its weekly directory route (#486)', () => {
+  const weekly = {
+    weeklyKey: '2026-W23', date: '2026-06-01', title: 'Camera HAL Weekly 2026-W23',
+    html: 'newsletters/2026-W23/index.html', tags: ['Camera HAL']
+  };
+  assert.equal(NewsletterArchive.getSafeNewsletterHref(weekly), 'newsletters/2026-W23/index.html');
+  // a tampered weekly href falls back to the safe weekly route, never a per-date path
+  assert.equal(
+    NewsletterArchive.getSafeNewsletterHref({ ...weekly, html: 'https://evil.example/x' }),
+    'newsletters/2026-W23/index.html'
+  );
+  // daily entries are unchanged
+  assert.equal(
+    NewsletterArchive.getSafeNewsletterHref({ date: '2026-06-03', html: 'newsletters/2026-06-03/index.html' }),
+    'newsletters/2026-06-03/index.html'
+  );
+});
