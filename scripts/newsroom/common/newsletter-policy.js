@@ -239,6 +239,7 @@ function validateNewsletterPolicyConfig(config) {
   validateInteger(preflight.cameraStackCandidateMin, 'candidatePoolPreflight.cameraStackCandidateMin', errors, { min: 0 });
   validateSelectionWindowPolicy(config.selectionWindowPolicy, errors);
   validateCatchUpPolicy(config.catchUpPolicy, config, errors);
+  validateWeeklyArticlePolicy(config.weeklyArticlePolicy, errors);
   validateHeadlinePolicy(config.headlinePolicy, errors);
   if (config.publishModePolicy !== undefined) {
     validatePublishModePolicy(config.publishModePolicy, errors);
@@ -326,6 +327,47 @@ function validatePublishModePolicy(value, errors) {
   }
 }
 
+const DEFAULT_WEEKLY_ARTICLE_POLICY = {
+  dailyNewArticleLimit: 3,
+  weeklyArticleLimit: 10,
+  weeklyOverflowPolicy: 'rank_then_drop'
+};
+const KNOWN_WEEKLY_OVERFLOW_POLICIES = ['rank_then_drop'];
+
+function normalizeWeeklyArticlePolicy(raw) {
+  const source = raw && typeof raw === 'object' ? raw : {};
+  const overflow = String(source.weeklyOverflowPolicy || DEFAULT_WEEKLY_ARTICLE_POLICY.weeklyOverflowPolicy);
+  return {
+    dailyNewArticleLimit: Number.isInteger(source.dailyNewArticleLimit)
+      ? source.dailyNewArticleLimit
+      : DEFAULT_WEEKLY_ARTICLE_POLICY.dailyNewArticleLimit,
+    weeklyArticleLimit: Number.isInteger(source.weeklyArticleLimit)
+      ? source.weeklyArticleLimit
+      : DEFAULT_WEEKLY_ARTICLE_POLICY.weeklyArticleLimit,
+    weeklyOverflowPolicy: KNOWN_WEEKLY_OVERFLOW_POLICIES.includes(overflow)
+      ? overflow
+      : DEFAULT_WEEKLY_ARTICLE_POLICY.weeklyOverflowPolicy
+  };
+}
+
+function validateWeeklyArticlePolicy(value, errors) {
+  if (value === undefined) return; // optional; normalized to a default when absent
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('weeklyArticlePolicy must be an object.');
+    return;
+  }
+  validateInteger(value.dailyNewArticleLimit, 'weeklyArticlePolicy.dailyNewArticleLimit', errors, { min: 1 });
+  validateInteger(value.weeklyArticleLimit, 'weeklyArticlePolicy.weeklyArticleLimit', errors, { min: 1 });
+  if (Number.isInteger(value.dailyNewArticleLimit) &&
+    Number.isInteger(value.weeklyArticleLimit) &&
+    value.dailyNewArticleLimit > value.weeklyArticleLimit) {
+    errors.push('weeklyArticlePolicy.dailyNewArticleLimit cannot exceed weeklyArticleLimit.');
+  }
+  if (!KNOWN_WEEKLY_OVERFLOW_POLICIES.includes(String(value.weeklyOverflowPolicy))) {
+    errors.push(`weeklyArticlePolicy.weeklyOverflowPolicy must be one of: ${KNOWN_WEEKLY_OVERFLOW_POLICIES.join(', ')}.`);
+  }
+}
+
 function normalizeNewsletterPolicyConfig(config) {
   const article = config.articlePolicy;
   const preflight = config.candidatePoolPreflight;
@@ -365,6 +407,7 @@ function normalizeNewsletterPolicyConfig(config) {
       referenceContextDays: selectionWindow.referenceContextDays
     },
     catchUpPolicy: normalizeCatchUpPolicy(config.catchUpPolicy),
+    weeklyArticlePolicy: normalizeWeeklyArticlePolicy(config.weeklyArticlePolicy),
     headlinePolicy: {
       decayModel: headline.decayModel,
       decayRatePerDay: headline.decayRatePerDay,
@@ -421,6 +464,10 @@ function getSelectionWindowPolicy(policy = getDefaultNewsletterPolicy()) {
 
 function getCatchUpPolicy(policy = getDefaultNewsletterPolicy()) {
   return policy.catchUpPolicy;
+}
+
+function getWeeklyArticlePolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.weeklyArticlePolicy;
 }
 
 function getHeadlinePolicy(policy = getDefaultNewsletterPolicy()) {
@@ -616,6 +663,9 @@ module.exports = {
   get catchUpPolicy() {
     return getCatchUpPolicy();
   },
+  get weeklyArticlePolicy() {
+    return getWeeklyArticlePolicy();
+  },
   get headlinePolicy() {
     return getHeadlinePolicy();
   },
@@ -638,6 +688,7 @@ module.exports = {
   getHeadlinePolicy,
   getPublishReadyCompositionPolicy,
   getSelectionWindowPolicy,
+  getWeeklyArticlePolicy,
   isForbiddenMainBucket,
   isMainArticleAllowedBucket,
   isPrimaryCameraStackBucket,

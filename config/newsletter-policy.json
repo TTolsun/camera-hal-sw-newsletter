@@ -28,6 +28,11 @@
       "generic_tech_watchlist"
     ]
   },
+  "weeklyArticlePolicy": {
+    "dailyNewArticleLimit": 3,
+    "weeklyArticleLimit": 10,
+    "weeklyOverflowPolicy": "rank_then_drop"
+  },
   "candidatePoolPreflight": {
     "reserveMin": 0,
     "publishableCandidateMin": 1,
