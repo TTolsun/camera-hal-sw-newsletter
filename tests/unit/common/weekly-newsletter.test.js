@@ -7,6 +7,8 @@ const {
   weeklyKeyForDate,
   weekBoundsForDate,
   weeklyNewsletterRoute,
+  weeklyNewsletterIndexRoute,
+  weeklyNewsletterMarkdownRoute,
   weeklyNewsletterMetadata,
   isValidWeeklyKey
 } = require('../../../scripts/newsroom/common/weekly-newsletter');
@@ -42,6 +44,13 @@ test('weekBoundsForDate returns Monday..Sunday bounds and the weekly key', () =>
 
 test('weeklyNewsletterRoute builds the weekly public page route', () => {
   assert.equal(weeklyNewsletterRoute('2026-W23'), 'newsletters/2026-W23.html');
+});
+
+test('weeklyNewsletterIndexRoute and weeklyNewsletterMarkdownRoute build directory routes', () => {
+  assert.equal(weeklyNewsletterIndexRoute('2026-W23'), 'newsletters/2026-W23/index.html');
+  assert.equal(weeklyNewsletterMarkdownRoute('2026-W23'), 'newsletters/2026-W23/newsletter.md');
+  assert.throws(() => weeklyNewsletterIndexRoute('2026-06-04'), /YYYY-Www/);
+  assert.throws(() => weeklyNewsletterMarkdownRoute('2026-W00'), /YYYY-Www/);
 });
 
 test('weeklyNewsletterMetadata produces the documented metadata shape', () => {

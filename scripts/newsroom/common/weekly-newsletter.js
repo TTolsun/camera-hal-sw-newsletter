@@ -105,6 +105,23 @@ function weeklyNewsletterRoute(weeklyKey) {
   return `newsletters/${weeklyKey}.html`;
 }
 
+// Directory-form routes mirror the daily newsletters/<id>/{index.html,newsletter.md} contract that
+// validators, the archive href allow-list, and the commit allow-list assume, keeping the blast radius
+// of weekly wiring to a token widening (date -> date|weeklyKey) rather than a structural rewrite.
+function weeklyNewsletterIndexRoute(weeklyKey) {
+  if (!isValidWeeklyKey(weeklyKey)) {
+    throw new Error(`weekly key must be YYYY-Www: ${weeklyKey}`);
+  }
+  return `newsletters/${weeklyKey}/index.html`;
+}
+
+function weeklyNewsletterMarkdownRoute(weeklyKey) {
+  if (!isValidWeeklyKey(weeklyKey)) {
+    throw new Error(`weekly key must be YYYY-Www: ${weeklyKey}`);
+  }
+  return `newsletters/${weeklyKey}/newsletter.md`;
+}
+
 function weeklyNewsletterMetadata({ date, weeklyKey, title } = {}) {
   const bounds = date ? weekBoundsForDate(date) : weekBoundsForKey(weeklyKey);
   return {
@@ -121,6 +138,8 @@ module.exports = {
   weekBoundsForDate,
   weekBoundsForKey,
   weeklyKeyForDate,
+  weeklyNewsletterIndexRoute,
+  weeklyNewsletterMarkdownRoute,
   weeklyNewsletterMetadata,
   weeklyNewsletterRoute
 };
