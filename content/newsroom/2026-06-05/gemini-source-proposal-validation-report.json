@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-05",
   "validations": [
     {
-      "proposal_id": "camera_io_2026_media_pipeline",
+      "proposal_id": "io26-media-pipeline",
       "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "accepted": false,
@@ -12,35 +12,7 @@
       "source_policy_match": ""
     },
     {
-      "proposal_id": "camerax_1_6_0_release",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "camerax-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-jetpack-release",
-      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
-      "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "camerax_1_7_0_alpha01_release",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "camerax-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-jetpack-release",
-      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
-      "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "camera_its_automation_testing",
+      "proposal_id": "aosp-camera-its-updates",
       "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "accepted": true,
@@ -50,7 +22,6 @@
   ],
   "counts": {
     "domain_not_allowed": 1,
-    "discovered_not_extractable": 2,
     "accepted": 1
   }
 }
