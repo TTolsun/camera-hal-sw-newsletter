@@ -187,6 +187,46 @@ test('deterministic binding leaves unsupported fact claims unbound (no false evi
   assert.deepEqual(claim.evidence_ids, []);
 });
 
+test('deterministic binding reconciles an unresolved evidence_id to a supporting one', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const article = section({
+    headline: 'CameraX 1.6.1 fact claim citing an unresolved evidence_id',
+    url,
+    confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+    evidence_summary: 'Version: CameraX 1.6.1; release date: 2026-05-06; API/component: CameraX.',
+    claims: [{
+      claim_id: 'claim-1',
+      text: 'CameraX 1.6.1 release date: 2026-05-06.',
+      claim_type: 'fact',
+      evidence_ids: ['sx:does-not-exist-in-index:e'],
+      source_urls: ['https://example.com/wrong#1.6.1'],
+      impact_level: 'app_api_or_framework_adjacent',
+      overclaim_risk: 'low'
+    }]
+  });
+  const report = reportFor(
+    [article, ...validSections().slice(1)],
+    [
+      scopedCandidate(url, 'android_platform_camera_adjacent', {
+        primary_evidence_ids: ['seed-camerax-primary-01'],
+        compact_evidence: {
+          primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_urls: [url]
+        }
+      }),
+      ...reporterCandidatesFor(validSections()).slice(1)
+    ],
+    { strictClaimValidation: true }
+  );
+
+  // The cited id does not resolve, but real supporting evidence exists, so the pointer is
+  // reconciled instead of penalized as an unresolved-evidence-id reference.
+  assert.ok(!report.deductions.some(item => item.category === 'claim-evidence'));
+  const claim = report.claim_results.find(item => item.claim_id === 'claim-1');
+  assert.equal(claim.status, 'bound');
+  assert.deepEqual(claim.evidence_ids, ['seed-camerax-primary-01']);
+});
+
 test('pack-level evidence fallback is soft and reported as derived mapping', () => {
   const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
   const article = section({
