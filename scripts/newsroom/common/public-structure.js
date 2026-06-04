@@ -111,7 +111,7 @@ function rootIndexContractErrors(root) {
   if (read.error) return [`root index.html unreadable: ${read.error.message}`];
   const html = read.text;
   const checks = [
-    { label: "fetch('data/newsletters.json')", pattern: /fetch\(\s*['"]data\/newsletters\.json['"]/ },
+    { label: "fetch('data/newsletters-weekly.json')", pattern: /fetch\(\s*['"]data\/newsletters(?:-weekly)?\.json['"]/ },
     { label: 'loadNewsletters', pattern: /\bloadNewsletters\b/ },
     { label: 'latest-card', pattern: /latest-card/ },
     { label: 'archive-list', pattern: /archive-list/ }
