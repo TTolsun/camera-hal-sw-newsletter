@@ -73,7 +73,7 @@ const {
   validateArticleClaims
 } = require('./claim-source-binding');
 const {
-  reconcileFactClaimEvidence
+  bindMissingFactClaimEvidence
 } = require('./editor-output-contract');
 const {
   toLegacyEditorIssue
@@ -1531,12 +1531,11 @@ function applyDeductionDescriptors(state, descriptors) {
 
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
   editor = toLegacyEditorIssue(editor, { date });
-  // Deterministically reconcile item-level evidence_ids the editor omitted OR mis-cited
-  // (unresolved/unsupported pointer), but only where the strict claim oracle confirms the
-  // candidate evidence genuinely supports the claim. Unsupported (fabricated) claims stay
-  // unbound and keep failing closed; this scores true source-backed quality instead of
-  // penalizing an omitted or wrong provenance pointer on a genuinely source-backed claim.
-  editor = reconcileFactClaimEvidence(editor, {
+  // Deterministically complete item-level evidence_ids the editor omitted, but only where the
+  // strict claim oracle confirms the candidate evidence genuinely supports the claim. Unsupported
+  // claims stay unbound and keep failing closed; this scores true source-backed quality instead of
+  // penalizing a missing provenance pointer.
+  editor = bindMissingFactClaimEvidence(editor, {
     reporter,
     seedEvidencePack: options.seedEvidencePack || null
   });
