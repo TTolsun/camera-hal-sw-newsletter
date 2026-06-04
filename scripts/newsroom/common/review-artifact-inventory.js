@@ -231,11 +231,20 @@ function weeklyPublicOutputEntries(date) {
       reviewBlocking: false
     }),
     entry({
+      relPath: `newsletters/${weeklyKey}/issue.json`,
+      group: 'public_output',
+      role: 'weekly_public_issue',
+      required: REQUIRED_OPTIONAL,
+      reviewOrder: 35,
+      humanReadable: false,
+      reviewBlocking: false
+    }),
+    entry({
       relPath: 'data/newsletters-weekly.json',
       group: 'public_output',
       role: 'weekly_public_index',
       required: REQUIRED_OPTIONAL,
-      reviewOrder: 35,
+      reviewOrder: 36,
       humanReadable: false,
       reviewBlocking: false
     })
