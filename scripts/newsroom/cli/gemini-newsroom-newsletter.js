@@ -139,7 +139,8 @@ const {
   GENERATION_CONTRACT_VERSION,
   STORY_CONTRACT_VERSION,
   STORY_PUBLIC_CONTRACT_VERSION,
-  mergePublicArticleFromLlm
+  mergePublicArticleFromLlm,
+  validatePublicArticle
 } = require('../common/public-article-contract');
 const {
   buildNewsletterQualityReport,
@@ -170,6 +171,9 @@ const {
 const {
   writeWeeklyNewsletterArtifacts
 } = require('../render/weekly-newsletter-output');
+const {
+  buildWeeklyMergeResolver
+} = require('../llm/weekly-merge');
 const {
   toEditorDraftArtifact
 } = require('../domain/newsletter-domain-normalize');
@@ -3273,6 +3277,17 @@ function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = genera
   return filePath;
 }
 
+// #490: LLM이 병합한 weekly 기사를 기존 public-article 계약 검증기로 확인한 뒤에만 교체를 허용한다.
+// 검증 이슈나 오류가 있으면 기존 기사를 보존한다(fail closed).
+function validateMergedWeeklyArticle(mergedArticle) {
+  try {
+    const issues = validatePublicArticle(mergedArticle, 0, {});
+    return { ok: ensureArray(issues).length === 0, reason: ensureArray(issues).join('; ') };
+  } catch (error) {
+    return { ok: false, reason: error.message };
+  }
+}
+
 async function main() {
   const date = runtimeConfig.newsletterDate || kstDate();
   generationRunState.date = date;
@@ -4273,10 +4288,28 @@ async function main() {
     fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');
     fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');
     updateNewsletterData(date, editor);
-    // 추가 weekly 출력(#486): publish-ready일 때만 weekly 디렉터리 페이지와 별도 weekly 인덱스를 생성한다.
-    // 데일리 공개 산출물은 위에서 이미 기록했으므로, weekly 실패가 데일리 실행을 깨지 않도록 try/catch로 감싼다.
+    // 추가 weekly 출력(#486~#490): publish-ready일 때만 weekly 디렉터리 페이지/별도 인덱스를 생성하고,
+    // 같은 주 안의 중복 기사는 LLM이 append/merge/reject로 결정하며 merge는 검증 통과 시에만 교체한다.
+    // 데일리 산출물은 위에서 이미 기록했으므로, weekly 실패가 데일리 실행을 깨지 않도록 try/catch로 감싼다.
     try {
-      weeklyArtifactFiles = writeWeeklyNewsletterArtifacts({ root, date, editor, tags: issueTags(editor) }).files;
+      const weeklyMerge = buildWeeklyMergeResolver({
+        callLlmJson,
+        validateMergedArticle: validateMergedWeeklyArticle
+      });
+      const weeklyResult = await writeWeeklyNewsletterArtifacts({
+        root, date, editor, tags: issueTags(editor), ...weeklyMerge
+      });
+      weeklyArtifactFiles = weeklyResult.files;
+      if (ensureArray(weeklyResult.mergeWarnings).length > 0 ||
+        ensureArray(weeklyResult.mergeDecisions).some(decision => /merge/.test(decision.decision))) {
+        writeJson(path.join(newsroomDir, 'weekly-merge-report.json'), {
+          schema_version: 1,
+          date,
+          weekly_key: weeklyResult.weeklyKey,
+          decisions: weeklyResult.mergeDecisions,
+          warnings: weeklyResult.mergeWarnings
+        });
+      }
     } catch (error) {
       console.error(`weekly newsletter output skipped: ${error.message}`);
     }
