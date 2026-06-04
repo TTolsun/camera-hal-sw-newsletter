@@ -575,8 +575,8 @@ function validateRootHomepageContract(newsletters) {
   if (!fs.existsSync(indexPath)) return;
   const html = read(indexPath);
   const subscriptionState = validateSubscriptionConfig();
-  if (!/fetch\(\s*['"]data\/newsletters\.json['"]/.test(html)) {
-    fail('root index.html must fetch data/newsletters.json as the homepage/archive source of truth.');
+  if (!/fetch\(\s*['"]data\/newsletters-weekly\.json['"]/.test(html)) {
+    fail('root index.html must fetch data/newsletters-weekly.json as the homepage/archive source of truth.');
   }
   if (!/fetch\(\s*['"]data\/homepage-headline\.json['"]/.test(html)) {
     fail('root index.html must fetch data/homepage-headline.json through a separate headline loader.');
@@ -609,8 +609,8 @@ function validateArchivePageContract(newsletters) {
   if (!/assets\/js\/newsletter-archive\.js/.test(html)) {
     fail('archive.html must load assets/js/newsletter-archive.js.');
   }
-  if (!/fetch\(\s*['"]data\/newsletters\.json['"]/.test(html)) {
-    fail('archive.html must fetch data/newsletters.json as the archive source of truth.');
+  if (!/fetch\(\s*['"]data\/newsletters-weekly\.json['"]/.test(html)) {
+    fail('archive.html must fetch data/newsletters-weekly.json as the archive source of truth.');
   }
   for (const hook of [
     'data-page="archive"',

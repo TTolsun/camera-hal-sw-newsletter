@@ -89,7 +89,7 @@ async function renderHomepage(subscriptionState, options = {}) {
       if (url === 'data/homepage-headline.json') {
         return { ok: false, status: 404 };
       }
-      if (url === 'data/newsletters.json') {
+      if (url === 'data/newsletters-weekly.json') {
         return {
           ok: true,
           json: async () => []
