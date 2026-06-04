@@ -73,6 +73,9 @@ const {
   validateArticleClaims
 } = require('./claim-source-binding');
 const {
+  bindMissingFactClaimEvidence
+} = require('./editor-output-contract');
+const {
   toLegacyEditorIssue
 } = require('../domain/newsletter-domain-normalize');
 const {
@@ -1528,6 +1531,14 @@ function applyDeductionDescriptors(state, descriptors) {
 
 function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {}, options = {}) {
   editor = toLegacyEditorIssue(editor, { date });
+  // Deterministically complete item-level evidence_ids the editor omitted, but only where the
+  // strict claim oracle confirms the candidate evidence genuinely supports the claim. Unsupported
+  // claims stay unbound and keep failing closed; this scores true source-backed quality instead of
+  // penalizing a missing provenance pointer.
+  editor = bindMissingFactClaimEvidence(editor, {
+    reporter,
+    seedEvidencePack: options.seedEvidencePack || null
+  });
   const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : qualityGatePolicy.threshold;
   const sections = ensureArray(editor.sections);
   const state = { deductions: [] };

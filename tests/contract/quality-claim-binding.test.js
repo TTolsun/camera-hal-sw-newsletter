@@ -110,6 +110,83 @@ test('strict claim validation blocks factual fields without claims', () => {
   ));
 });
 
+test('deterministic binding fills missing evidence_ids on otherwise source-supported fact claims', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const article = section({
+    headline: 'CameraX 1.6.1 fact claim without evidence_ids',
+    url,
+    confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+    evidence_summary: 'Version: CameraX 1.6.1; release date: 2026-05-06; API/component: CameraX.',
+    claims: [{
+      claim_id: 'claim-1',
+      text: 'CameraX 1.6.1 release date: 2026-05-06.',
+      claim_type: 'fact',
+      evidence_ids: [],
+      source_urls: [url],
+      impact_level: 'app_api_or_framework_adjacent',
+      overclaim_risk: 'low'
+    }]
+  });
+  const report = reportFor(
+    [article, ...validSections().slice(1)],
+    [
+      scopedCandidate(url, 'android_platform_camera_adjacent', {
+        primary_evidence_ids: ['seed-camerax-primary-01'],
+        compact_evidence: {
+          primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_urls: [url]
+        }
+      }),
+      ...reporterCandidatesFor(validSections()).slice(1)
+    ],
+    { strictClaimValidation: true }
+  );
+
+  assert.ok(!report.deductions.some(item => item.reason_code === 'missing_fact_evidence_ids'));
+  const claim = report.claim_results.find(item => item.claim_id === 'claim-1');
+  assert.equal(claim.status, 'bound');
+  assert.deepEqual(claim.evidence_ids, ['seed-camerax-primary-01']);
+});
+
+test('deterministic binding leaves unsupported fact claims unbound (no false evidence binding)', () => {
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
+  const article = section({
+    headline: 'Unsupported fabricated fact claim',
+    url,
+    confirmed_facts: ['CameraX 9.9.9 adds a fabricated direct HAL API on 2099-01-01.'],
+    evidence_summary: 'Version: CameraX 9.9.9; release date: 2099-01-01; API/component: CameraX.',
+    claims: [{
+      claim_id: 'claim-fabricated',
+      text: 'CameraX 9.9.9 adds a fabricated direct HAL API on 2099-01-01.',
+      claim_type: 'fact',
+      evidence_ids: [],
+      source_urls: [url],
+      impact_level: 'app_api_or_framework_adjacent',
+      overclaim_risk: 'low'
+    }]
+  });
+  const report = reportFor(
+    [article, ...validSections().slice(1)],
+    [
+      scopedCandidate(url, 'android_platform_camera_adjacent', {
+        primary_evidence_ids: ['seed-camerax-primary-01'],
+        compact_evidence: {
+          primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+          evidence_urls: [url]
+        }
+      }),
+      ...reporterCandidatesFor(validSections()).slice(1)
+    ],
+    { strictClaimValidation: true }
+  );
+
+  // The claim text (fabricated 9.9.9 / 2099) is not supported by the 1.6.1 evidence,
+  // so the oracle refuses to bind: the claim stays unbound, not falsely evidence-backed.
+  const claim = report.claim_results.find(item => item.claim_id === 'claim-fabricated');
+  assert.notEqual(claim.status, 'bound');
+  assert.deepEqual(claim.evidence_ids, []);
+});
+
 test('pack-level evidence fallback is soft and reported as derived mapping', () => {
   const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1';
   const article = section({
