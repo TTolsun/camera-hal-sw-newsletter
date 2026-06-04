@@ -1,12 +1,13 @@
 'use strict';
 
-// Additive weekly newsletter output (#486 PR2) with same-week upsert (#488). On a publish-ready run
-// the orchestrator calls this to accumulate that run's articles into the matching ISO-week newsletter:
-// load the existing weekly issue, append non-duplicate articles (deterministic identity dedup), apply
-// the weekly article limits (#492), regenerate the weekly directory page, and upsert the separate
-// data/newsletters-weekly.json index. Daily output and data/newsletters.json are never touched.
-// LLM duplicate merge (#489) and merged-article validation (#490) layer on top of this deterministic
-// append; here a duplicate is simply skipped.
+// Additive weekly newsletter output (#486 PR2) with same-week upsert (#488), within-week duplicate
+// detection and LLM merge (#489), and merged-article validation (#490). On a publish-ready run the
+// orchestrator calls this to accumulate the run's articles into the matching ISO-week newsletter:
+// load the existing weekly issue, resolve each incoming article against the week (append / LLM merge /
+// reject, with merged articles validated before they replace existing ones), apply the weekly limits
+// (#492), regenerate the weekly directory page, and upsert the separate data/newsletters-weekly.json.
+// Daily output and data/newsletters.json are never touched. Without an injected LLM merge resolver
+// this falls back to the deterministic behavior (skip exact duplicates, keep the rest).
 
 const fs = require('fs');
 const path = require('path');
@@ -14,25 +15,10 @@ const path = require('path');
 const { buildWeeklyNewsletterPage } = require('./weekly-newsletter-page');
 const { weeklyKeyForDate } = require('../common/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../common/weekly-article-limits');
-const { articleIdentityKey } = require('../common/article-identity');
+const { resolveWeeklyArticles } = require('../generate/weekly-duplicate-merge');
 
 function ensureArray(value) {
   return Array.isArray(value) ? value : [];
-}
-
-function sectionSourceUrl(section = {}) {
-  return section.source_candidate_url ||
-    section.url ||
-    (ensureArray(section.sources)[0] && ensureArray(section.sources)[0].url) ||
-    '';
-}
-
-function sectionIdentity(section = {}) {
-  return articleIdentityKey({
-    url: sectionSourceUrl(section),
-    title: section.headline || section.title,
-    ...section
-  });
 }
 
 function loadExistingWeeklyIssue(root, weeklyKey) {
@@ -80,14 +66,18 @@ function upsertWeeklyIndex(root, entry) {
   return relPath;
 }
 
-function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, editor, tags = [] } = {}) {
+async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, editor, tags = [], mergeDuplicate, validateMerged } = {}) {
   const weeklyKey = weeklyKeyForDate(date);
   const existingIssue = loadExistingWeeklyIssue(root, weeklyKey);
   const existingSections = existingIssue ? ensureArray(existingIssue.sections) : [];
-  const existingKeys = new Set(existingSections.map(sectionIdentity));
 
-  const incomingNew = ensureArray(editor && editor.sections).filter(section => !existingKeys.has(sectionIdentity(section)));
-  const { articles } = applyWeeklyArticleLimits({ existing: existingSections, incoming: incomingNew });
+  const resolved = await resolveWeeklyArticles({
+    existingArticles: existingSections,
+    incomingArticles: ensureArray(editor && editor.sections),
+    mergeDuplicate,
+    validateMerged
+  });
+  const { articles } = applyWeeklyArticleLimits({ existing: resolved.existingArticles, incoming: resolved.appendedArticles });
 
   const mergedTags = [...new Set([
     ...ensureArray(existingIssue && existingIssue.tags).map(String),
@@ -127,7 +117,9 @@ function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, editor, ta
   return {
     weeklyKey: page.weeklyKey,
     weeklyArticleCount: articles.length,
-    addedArticleCount: incomingNew.length,
+    addedArticleCount: resolved.appendedArticles.length,
+    mergeWarnings: resolved.warnings,
+    mergeDecisions: resolved.decisions,
     files: [
       page.indexRoute,
       page.markdownRoute,

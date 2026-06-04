@@ -30,9 +30,9 @@ function draft() {
   };
 }
 
-test('retentionCommitAllowlist includes the weekly artifacts when they are present', () => {
+test('retentionCommitAllowlist includes the weekly artifacts when they are present', async () => {
   const root = tempRoot();
-  writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft(), tags: ['Camera HAL'] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft(), tags: ['Camera HAL'] });
   const allow = retentionCommitAllowlist({ root, date: '2026-06-04', runContext: { publicOutputExpected: true } });
   assert.ok(allow.includes('newsletters/2026-W23/index.html'), allow.join('\n'));
   assert.ok(allow.includes('newsletters/2026-W23/newsletter.md'));
@@ -40,7 +40,7 @@ test('retentionCommitAllowlist includes the weekly artifacts when they are prese
   assert.ok(allow.includes('data/newsletters-weekly.json'));
 });
 
-test('retentionCommitAllowlist omits the weekly artifacts when they are absent', () => {
+test('retentionCommitAllowlist omits the weekly artifacts when they are absent', async () => {
   const root = tempRoot();
   const allow = retentionCommitAllowlist({ root, date: '2026-06-04', runContext: { publicOutputExpected: true } });
   assert.ok(!allow.some(p => p.startsWith('newsletters/2026-W23/')), allow.join('\n'));

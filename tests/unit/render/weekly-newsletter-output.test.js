@@ -56,10 +56,10 @@ function readIssue(root, weeklyKey) {
   return JSON.parse(fs.readFileSync(path.join(root, 'newsletters', weeklyKey, 'issue.json'), 'utf8'));
 }
 
-test('a single publish-ready run writes the weekly page, issue.json, and a weekly index entry', () => {
+test('a single publish-ready run writes the weekly page, issue.json, and a weekly index entry', async () => {
   const root = tempRoot();
   const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0';
-  const result = writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', url)]), tags: ['Camera HAL'] });
+  const result = await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', url)]), tags: ['Camera HAL'] });
 
   assert.equal(result.weeklyKey, '2026-W23');
   assert.ok(result.files.includes('newsletters/2026-W23/index.html'));
@@ -69,10 +69,10 @@ test('a single publish-ready run writes the weekly page, issue.json, and a weekl
   assert.equal(readIssue(root, '2026-W23').sections.length, 1);
 });
 
-test('multiple runs in the same ISO week accumulate distinct articles into one weekly issue', () => {
+test('multiple runs in the same ISO week accumulate distinct articles into one weekly issue', async () => {
   const root = tempRoot();
-  writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', 'https://example.com/a')]), tags: [] });
-  writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', 'https://example.com/b')]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', 'https://example.com/a')]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', 'https://example.com/b')]), tags: [] });
 
   const issue = readIssue(root, '2026-W23');
   assert.equal(issue.sections.length, 2);
@@ -82,19 +82,19 @@ test('multiple runs in the same ISO week accumulate distinct articles into one w
   assert.equal(index[0].article_count, 2);
 });
 
-test('a duplicate article in the same week is not added twice', () => {
+test('a duplicate article in the same week is not added twice', async () => {
   const root = tempRoot();
   const url = 'https://example.com/same';
-  writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', url)]), tags: [] });
-  writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.6.0-again', url)]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', url)]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.6.0-again', url)]), tags: [] });
 
   assert.equal(readIssue(root, '2026-W23').sections.length, 1);
 });
 
-test('a run in a new ISO week creates a separate weekly issue', () => {
+test('a run in a new ISO week creates a separate weekly issue', async () => {
   const root = tempRoot();
-  writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('w23', 'https://example.com/a')]), tags: [] });
-  writeWeeklyNewsletterArtifacts({ root, date: '2026-06-11', editor: draft([section('w24', 'https://example.com/b')]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('w23', 'https://example.com/a')]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-11', editor: draft([section('w24', 'https://example.com/b')]), tags: [] });
 
   assert.equal(readIssue(root, '2026-W23').sections.length, 1);
   assert.equal(readIssue(root, '2026-W24').sections.length, 1);
@@ -102,10 +102,10 @@ test('a run in a new ISO week creates a separate weekly issue', () => {
   assert.deepEqual(index.map(i => i.weeklyKey), ['2026-W24', '2026-W23']);
 });
 
-test('a single run cannot add more than the daily intake limit of new articles', () => {
+test('a single run cannot add more than the daily intake limit of new articles', async () => {
   const root = tempRoot();
   const sections = [1, 2, 3, 4, 5].map(n => section(`v${n}`, `https://example.com/${n}`, n));
-  writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft(sections), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft(sections), tags: [] });
   // dailyNewArticleLimit default is 3
   assert.equal(readIssue(root, '2026-W23').sections.length, 3);
 });

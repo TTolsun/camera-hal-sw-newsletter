@@ -255,6 +255,15 @@ function exactCatalog(date) {
   return [
     ...weeklyPublicOutputEntries(date),
     entry({
+      relPath: newsroomRelPath(date, 'weekly-merge-report.json'),
+      group: 'gate_reports',
+      role: 'weekly_merge_report',
+      required: REQUIRED_OPTIONAL,
+      reviewOrder: 37,
+      humanReadable: false,
+      reviewBlocking: false
+    }),
+    entry({
       relPath: newsroomRelPath(date, '00-review-guide.md'),
       group: 'editorial_brief',
       role: 'generated_summary',
