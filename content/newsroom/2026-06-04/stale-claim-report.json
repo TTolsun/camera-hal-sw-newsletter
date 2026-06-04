@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-04",
+  "status": "PASS",
+  "removed_sections": [],
+  "final_section_sources": [
+    {
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+    },
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+    },
+    {
+      "title": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [
+    {
+      "claim": "CameraX 1.7.0-alpha01",
+      "reason": "retained because the claim appears in final section evidence."
+    },
+    {
+      "claim": "CameraX 1.6.0",
+      "reason": "retained because the claim appears in final section evidence."
+    }
+  ],
+  "hard_failures": []
+}

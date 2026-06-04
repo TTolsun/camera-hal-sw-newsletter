@@ -1,0 +1,1144 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-04",
+  "score": 36,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "NEEDS_FIX",
+  "summary": "Resolve source gaps, fact-check must-fix items, composition blockers, and any article the fact-checker marked not useful to a Camera HAL SW engineer before publishing.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "CameraX 1.7.0-alpha01 출시: 커스텀 SessionConfig 노출 및 ImageAnalysis 회전 버그 수정",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "source-integrity",
+      "points": 8,
+      "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+      "location": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "claim-evidence",
+      "points": 8,
+      "reason": "Claim references unresolved evidence_id: sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81.",
+      "location": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "unknown_evidence_id",
+      "dedupe_key": "3:claim:camerax160:release_date:unknown_evidence_id"
+    },
+    {
+      "category": "claim-evidence",
+      "points": 8,
+      "reason": "Claim references unresolved evidence_id: sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81.",
+      "location": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "unknown_evidence_id",
+      "dedupe_key": "3:claim:camerax160:zfold4_yuv:unknown_evidence_id"
+    },
+    {
+      "category": "claim-evidence",
+      "points": 8,
+      "reason": "Claim references unresolved evidence_id: sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d.",
+      "location": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "unknown_evidence_id",
+      "dedupe_key": "3:claim:camerax160:a53_torch:unknown_evidence_id"
+    },
+    {
+      "category": "claim-evidence",
+      "points": 8,
+      "reason": "Claim references unresolved evidence_id: sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81.",
+      "location": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "unknown_evidence_id",
+      "dedupe_key": "3:claim:camerax160:android17_crash:unknown_evidence_id"
+    },
+    {
+      "category": "source-integrity",
+      "points": 8,
+      "reason": "CameraX source extraction failure: source_extraction.release.sections has no concrete release-note bullet.",
+      "location": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "source-integrity",
+      "points": 8,
+      "reason": "Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.6.0.",
+      "location": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "source-integrity",
+      "points": 3,
+      "reason": "Fact checker reported 1 source gap(s).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "Google I/O '26: CameraX 및 Media3 기반의 프리미엄 미디어 파이프라인 구축 도구 공개",
+      "category": "direct_aosp_camera",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+          "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "Google I/O '26: CameraX 및 Media3 기반의 프리미엄 미디어 파이프라인 구축 도구 공개",
+        "source_candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+        "source_candidate_hash": "43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": []
+    },
+    {
+      "index": 2,
+      "headline": "CameraX 1.7.0-alpha01 출시: 커스텀 SessionConfig 노출 및 ImageAnalysis 회전 버그 수정",
+      "category": "direct_aosp_camera",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.7.0-alpha01",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "CameraX 1.7.0-alpha01 출시: 커스텀 SessionConfig 노출 및 ImageAnalysis 회전 버그 수정",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+        "source_candidate_hash": "444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "category": "direct_aosp_camera",
+      "status": "FAIL",
+      "repair_action": "replace-or-demote",
+      "sources": [
+        {
+          "title": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "source_candidate_hash": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "section_text_fallback",
+        "metadata_source": "section_text_fallback",
+        "binding_status": "evidence_mismatch",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "publishable_scope": false,
+        "missing_score_fields": [],
+        "count_reason": "section_text_fallback classified this section as direct_aosp_camera for diagnostics only.",
+        "exclusion_reason_if_not_counted": "Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available."
+      },
+      "guardrail_impact_class": "framework_adjacent",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [
+        "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "Claim references unresolved evidence_id: sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81.",
+        "Claim references unresolved evidence_id: sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d.",
+        "CameraX source extraction failure: source_extraction.release.sections has no concrete release-note bullet.",
+        "Duplicate source URL is used across main sections: https://developer.android.com/jetpack/androidx/releases/camera#1.6.0.",
+        "Source gap or ineligible source evidence mentions this section."
+      ],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "needs_fix",
+    "bound_claims": 5,
+    "total_claims": 9,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "medium",
+    "available_article_count": 3,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "Google I/O '26: CameraX 및 Media3 기반의 프리미엄 미디어 파이프라인 구축 도구 공개",
+      "claim_id": "claim:io26:camerax_media3_toolkit",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Google I/O '26에서 Jetpack CameraX 및 Media3를 결합한 미디어 파이프라인 툴킷이 발표되었습니다.",
+      "evidence_ids": [
+        "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407"
+      ],
+      "resolved_evidence_ids": [
+        "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407",
+          "resolved_evidence_id": "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Google I/O '26: CameraX 및 Media3 기반의 프리미엄 미디어 파이프라인 구축 도구 공개",
+      "claim_id": "claim:io26:camerax_viewfinder_composable",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "폴더블 및 태블릿을 포함한 다양한 폼 팩터에서 고품질 미리보기를 제공하기 위해 CameraXViewfinder Composable이 도입되었습니다.",
+      "evidence_ids": [
+        "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407"
+      ],
+      "resolved_evidence_ids": [
+        "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407",
+          "resolved_evidence_id": "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "CameraX 1.7.0-alpha01 출시: 커스텀 SessionConfig 노출 및 ImageAnalysis 회전 버그 수정",
+      "claim_id": "claim:camerax170:set_session_config",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "CameraX 1.7.0-alpha01에서 CameraController.setSessionConfig() API가 노출되었습니다.",
+      "evidence_ids": [
+        "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b"
+      ],
+      "resolved_evidence_ids": [
+        "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b",
+          "resolved_evidence_id": "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "CameraX 1.7.0-alpha01 출시: 커스텀 SessionConfig 노출 및 ImageAnalysis 회전 버그 수정",
+      "claim_id": "claim:camerax170:image_analysis_rotation",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "ImageAnalysis에서 출력 이미지 회전이 활성화되고 초기 상대 회전이 0도일 때 이미지가 올바르게 회전되지 않던 버그가 수정되었습니다.",
+      "evidence_ids": [
+        "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b"
+      ],
+      "resolved_evidence_ids": [
+        "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b",
+          "resolved_evidence_id": "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "CameraX 1.7.0-alpha01 출시: 커스텀 SessionConfig 노출 및 ImageAnalysis 회전 버그 수정",
+      "claim_id": "claim:camerax170:java11_target",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "CameraX 라이브러리가 Java 11 타겟 바이트코드를 사용하도록 전환되었습니다.",
+      "evidence_ids": [
+        "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b"
+      ],
+      "resolved_evidence_ids": [
+        "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b",
+          "resolved_evidence_id": "sx:444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee:release-camerax-1-7-0-alpha01-march-11-2026-camerax-androidx-camera-api-changes-api-changes:34f0e37fbe12181b",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "claim_id": "claim:camerax160:release_date",
+      "claim_type": "fact",
+      "status": "needs_fix",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "CameraX 1.6.0은 2026년 3월 25일에 정식 출시되었습니다.",
+      "evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "resolved_evidence_ids": [],
+      "invalid_evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": [
+        {
+          "reason_code": "unknown_evidence_id",
+          "message": "Claim references unresolved evidence_id: sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81.",
+          "blocking": true,
+          "severity": "hard"
+        }
+      ]
+    },
+    {
+      "article_index": 3,
+      "article_headline": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "claim_id": "claim:camerax160:zfold4_yuv",
+      "claim_type": "fact",
+      "status": "needs_fix",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "low",
+      "text": "삼성 Z Fold 4 기기에서 왜곡 문제를 일으키는 특정 YUV 포맷 출력 크기를 제외하는 패치가 적용되었습니다.",
+      "evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "resolved_evidence_ids": [],
+      "invalid_evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": [
+        {
+          "reason_code": "unknown_evidence_id",
+          "message": "Claim references unresolved evidence_id: sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81.",
+          "blocking": true,
+          "severity": "hard"
+        }
+      ]
+    },
+    {
+      "article_index": 3,
+      "article_headline": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "claim_id": "claim:camerax160:a53_torch",
+      "claim_type": "fact",
+      "status": "needs_fix",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "삼성 A53 기기에서 VideoCapture 유스케이스가 바인딩된 상태에서 토치(Torch) 활성화 시 이미지 캡처가 실패하던 문제가 수정되었습니다.",
+      "evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d"
+      ],
+      "resolved_evidence_ids": [],
+      "invalid_evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d"
+      ],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": [
+        {
+          "reason_code": "unknown_evidence_id",
+          "message": "Claim references unresolved evidence_id: sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d.",
+          "blocking": true,
+          "severity": "hard"
+        }
+      ]
+    },
+    {
+      "article_index": 3,
+      "article_headline": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "claim_id": "claim:camerax160:android17_crash",
+      "claim_type": "fact",
+      "status": "needs_fix",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Android 17 기기에서 알 수 없는 동적 범위 모드로 인해 발생할 수 있는 크래시 방지 패치가 포함되었습니다.",
+      "evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "resolved_evidence_ids": [],
+      "invalid_evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": [
+        {
+          "reason_code": "unknown_evidence_id",
+          "message": "Claim references unresolved evidence_id: sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81.",
+          "blocking": true,
+          "severity": "hard"
+        }
+      ]
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 3,
+    "strong_signal_count": 3,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 3,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 3,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "framework_hal_contract": 2,
+      "camerax_app_compatibility": 1,
+      "stream_buffer_metadata": 2,
+      "driver_image_pipeline": 1
+    },
+    "actionability_level_counts": {
+      "owner_metric_log": 1,
+      "measurable_test": 2
+    },
+    "effective_actionability_level_counts": {
+      "owner_metric_log": 1,
+      "measurable_test": 2
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 3
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "Google I/O '26: CameraX 및 Media3 기반의 프리미엄 미디어 파이프라인 구축 도구 공개",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 6,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 발표는 상위 UI 컴포넌트 추가에 한정되며, HAL3 규격이나 AIDL 인터페이스 자체를 변경하지는 않습니다."
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "CameraX 1.7.0-alpha01 출시: 커스텀 SessionConfig 노출 및 ImageAnalysis 회전 버그 수정",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "CameraX Release Notes (official, high, score 89): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+        "Do not use artifact version tables as behavior-change evidence.",
+        "이 API는 CameraX 내부 프레임워크의 래퍼 변경이며, Camera HAL3 AIDL 인터페이스 자체를 확장하지는 않습니다."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_driver_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "",
+      "fallback_guard_notes": [
+        "이 패치들은 프레임워크 수준의 우회(Quirks) 코드이며, HAL 인터페이스 규격 자체를 수정하는 것은 아닙니다."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 3,
+    "briefing_count": 3,
+    "camera_article_count": 2,
+    "legacy_regex_camera_article_count": 3,
+    "expanded_scope_article_count": 2,
+    "direct_aosp_camera_count": 2,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 2,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 0,
+    "publishable_scope_count": 2,
+    "composition_mode": "NORMAL",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "Google I/O '26: CameraX 및 Media3 기반의 프리미엄 미디어 파이프라인 구축 도구 공개",
+        "source_candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+        "source_candidate_hash": "43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "CameraX 1.7.0-alpha01 출시: 커스텀 SessionConfig 노출 및 ImageAnalysis 회전 버그 수정",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+        "source_candidate_hash": "444a7fa6e19a981f31c8003790dd666c2b1b352fd3973854e4f6149249fffdee",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 3,
+        "headline": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "source_candidate_hash": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "section_text_fallback",
+        "metadata_source": "section_text_fallback",
+        "binding_status": "evidence_mismatch",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "publishable_scope": false,
+        "missing_score_fields": [],
+        "count_reason": "section_text_fallback classified this section as direct_aosp_camera for diagnostics only.",
+        "exclusion_reason_if_not_counted": "Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available."
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 2,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 0,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 2,
+      "multimedia": 0,
+      "platform": 0,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android_platform_camera_adjacent"
+      ],
+      "multimedia": [
+        "android_multimedia_camera_output"
+      ],
+      "platform": [
+        "soc_platform_signal"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 0,
+    "fact_check_status": "NEEDS_FIX",
+    "must_fix_count": 0,
+    "source_gap_count": 1,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 3,
+    "blocking_deduction_count": 8,
+    "blocking_deduction_categories": [
+      "source-integrity",
+      "claim-evidence"
+    ],
+    "hard_fail_count": 8,
+    "soft_deduction_count": 4,
+    "article_gate_counts": {
+      "PASS": 2,
+      "DEMOTE": 0,
+      "FAIL": 1
+    },
+    "article_section_contract": {
+      "complete_count": 3,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {},
+      "limitation_visibility_counts": {
+        "none": 3
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "needs_fix",
+      "bound_claims": 5,
+      "total_claims": 9,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "medium",
+      "available_article_count": 3,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 3,
+      "strong_signal_count": 3,
+      "usable_signal_count": 0,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 3,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 1,
+      "main_articles_with_concrete_action": 3,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "framework_hal_contract": 2,
+        "camerax_app_compatibility": 1,
+        "stream_buffer_metadata": 2,
+        "driver_image_pipeline": 1
+      },
+      "actionability_level_counts": {
+        "owner_metric_log": 1,
+        "measurable_test": 2
+      },
+      "effective_actionability_level_counts": {
+        "owner_metric_log": 1,
+        "measurable_test": 2
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 3
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "Google I/O '26: CameraX 및 Media3 기반의 프리미엄 미디어 파이프라인 구축 도구 공개",
+        "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 6,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 발표는 상위 UI 컴포넌트 추가에 한정되며, HAL3 규격이나 AIDL 인터페이스 자체를 변경하지는 않습니다."
+        ],
+        "soc_signal_type": "accelerator_camera_workload",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "CameraX 1.7.0-alpha01 출시: 커스텀 SessionConfig 노출 및 ImageAnalysis 회전 버그 수정",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "CameraX Release Notes (official, high, score 89): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 3 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+          "Do not use artifact version tables as behavior-change evidence.",
+          "이 API는 CameraX 내부 프레임워크의 래퍼 변경이며, Camera HAL3 AIDL 인터페이스 자체를 확장하지는 않습니다."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "지난 소식: CameraX 1.6.0 정식 출시 및 특정 기기 YUV 왜곡·플래시 오동작 우회 패치 반영",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_driver_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "",
+        "fallback_guard_notes": [
+          "이 패치들은 프레임워크 수준의 우회(Quirks) 코드이며, HAL 인터페이스 규격 자체를 수정하는 것은 아닙니다."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "claim-evidence",
+        "count": 4
+      },
+      {
+        "category": "source-integrity",
+        "count": 4
+      },
+      {
+        "category": "editorial-story",
+        "count": 2
+      },
+      {
+        "category": "image-fallback",
+        "count": 1
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}
