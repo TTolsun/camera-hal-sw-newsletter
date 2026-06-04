@@ -13,6 +13,7 @@
   const TOPIC_KEYS = new Set(TOPICS.map(topic => topic.key));
   const SORT_KEYS = new Set(['latest', 'oldest']);
   const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+  const WEEKLY_KEY_PATTERN = /^\d{4}-W\d{2}$/;
 
   function escapeHtml(value) {
     return String(value ?? '')
@@ -140,15 +141,27 @@
     return `${pathname}${query ? `?${query}` : ''}${hash}`;
   }
 
+  function weeklyKeyOf(entry) {
+    const key = String(entry && entry.weeklyKey || '').trim();
+    return WEEKLY_KEY_PATTERN.test(key) ? key : '';
+  }
+
   function fallbackNewsletterHref(entry) {
+    const weeklyKey = weeklyKeyOf(entry);
+    if (weeklyKey) return `newsletters/${weeklyKey}/index.html`;
     const date = sortableDate(entry);
     return date ? `newsletters/${date}/index.html` : '';
   }
 
   function getSafeNewsletterHref(entry) {
     const raw = String(entry && entry.html || '').trim();
-    const date = sortableDate(entry);
     const fallback = fallbackNewsletterHref(entry);
+    const weeklyKey = weeklyKeyOf(entry);
+    if (weeklyKey) {
+      const allowedWeekly = new RegExp(`^newsletters/${weeklyKey}/(?:index\\.html)?$`);
+      return raw && allowedWeekly.test(raw) ? raw : fallback;
+    }
+    const date = sortableDate(entry);
     if (!raw || !date) return fallback;
     const allowed = new RegExp(`^newsletters/${date}/(?:index\\.html)?$`);
     if (allowed.test(raw)) return raw;
