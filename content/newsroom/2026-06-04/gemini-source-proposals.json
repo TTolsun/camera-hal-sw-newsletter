@@ -4,117 +4,81 @@
   "newsletter_date": "2026-06-04",
   "proposals": [
     {
-      "proposal_id": "camera_hal_io_26_media_pipeline",
-      "topic_gap": "Google I/O '26 announcements related to Android media pipeline enhancements, particularly those impacting camera output, processing, and playback.",
-      "source_family": "android-developers-blog",
+      "proposal_id": "P001",
+      "topic_gap": "Google I/O '26에서 발표된 Android 미디어 파이프라인 및 카메라 출력 관련 주요 업데이트 및 개선 사항",
+      "source_family": "android-media",
       "allowed_domains": [
         "youtube.com",
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
-        "Google I/O 2026",
         "Android media pipeline",
-        "camera output",
+        "Camera output",
         "Media3",
         "MediaCodec",
         "MediaRecorder",
-        "video processing",
-        "image processing",
-        "Android camera performance"
+        "Photo Picker",
+        "Google I/O 2026 media"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "Mentions of new APIs or improvements for camera output handling (e.g., higher resolutions, frame rates, HDR).",
-        "Updates to MediaCodec, MediaRecorder, or Media3 that affect camera-generated content.",
-        "Discussions on performance optimizations for media processing pipelines.",
-        "Information on new tools or best practices for developers working with camera and media."
+        "Media3, MediaCodec, MediaRecorder, Photo Picker, CameraX 등 Android 미디어 구성 요소의 새로운 기능 또는 개선 사항",
+        "카메라 출력 처리, 녹화, 미리보기, A/V 동기화 관련 업데이트",
+        "성능 최적화 또는 새로운 API 도입"
       ],
       "risk_notes": [
-        "YouTube playlist might contain videos not directly relevant to camera HAL or media pipeline at a technical depth.",
-        "Need to filter for content specifically addressing camera output and processing, not just generic media playback."
+        "재생/플레이어 전용, 스트리밍 전용, 오디오 전용 콘텐츠는 제외"
       ]
     },
     {
-      "proposal_id": "camerax_1_6_0_release",
-      "topic_gap": "New features, improvements, or bug fixes introduced in CameraX 1.6.0 that impact camera application development and potentially underlying HAL interactions.",
-      "source_family": "camerax-release-notes",
+      "proposal_id": "P002",
+      "topic_gap": "CameraX 1.6.0 및 1.7.0-alpha01 릴리스의 주요 변경 사항 및 개선 사항",
+      "source_family": "camera-api",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
         "CameraX 1.6.0",
-        "CameraX release notes",
-        "AndroidX camera",
-        "camera API updates"
-      ],
-      "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
-      ],
-      "expected_evidence": [
-        "Details on new CameraX APIs or extensions.",
-        "Performance improvements or optimizations related to camera operations.",
-        "Bug fixes or stability enhancements.",
-        "Changes in behavior or compatibility with specific Android versions or devices."
-      ],
-      "risk_notes": [
-        "Release notes might be high-level; deeper technical implications might require further investigation or linked documentation."
-      ]
-    },
-    {
-      "proposal_id": "camerax_1_7_0_alpha01_release",
-      "topic_gap": "Early insights into upcoming features or breaking changes in CameraX 1.7.0-alpha01, providing a forward look for camera developers.",
-      "source_family": "camerax-release-notes",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
-      "search_keywords": [
         "CameraX 1.7.0-alpha01",
-        "CameraX alpha",
-        "AndroidX camera preview",
-        "upcoming camera features"
+        "CameraX release notes",
+        "AndroidX Camera"
       ],
       "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
       ],
       "expected_evidence": [
-        "Preview of new features or experimental APIs.",
-        "Information on architectural changes or deprecations.",
-        "Known issues or areas for developer feedback."
+        "CameraX API 변경 사항",
+        "새로운 기능 또는 버그 수정",
+        "성능 개선 또는 안정성 향상",
+        "카메라 HAL 또는 하드웨어 통합 관련 변경 사항"
       ],
-      "risk_notes": [
-        "Alpha releases are subject to change and may not reflect the final product.",
-        "Information might be limited due to its early stage."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "camera_its_automation_testing",
-      "topic_gap": "Updates or new documentation regarding automated testing of camera images using the Camera ITS box, relevant for camera HAL and OEM validation.",
-      "source_family": "aosp-site-updates",
+      "proposal_id": "P003",
+      "topic_gap": "카메라 이미지 자동화 테스트(Camera ITS box) 관련 AOSP 업데이트",
+      "source_family": "aosp",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
         "Camera ITS box",
-        "camera image testing",
-        "Android camera compatibility",
-        "automated camera testing",
-        "AOSP camera"
+        "AOSP camera testing",
+        "Android compatibility",
+        "camera image quality"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "New guidelines or best practices for Camera ITS testing.",
-        "Updates to the Camera ITS box setup or procedures.",
-        "Information on new test cases or metrics for camera image quality.",
-        "Improvements in automation for camera testing."
+        "Camera ITS box 설정 또는 사용 방법에 대한 변경 사항",
+        "카메라 이미지 품질 테스트 관련 업데이트",
+        "호환성 테스트 스위트 (CTS) 또는 공급업체 테스트 스위트 (VTS) 관련 변경 사항"
       ],
-      "risk_notes": [
-        "Documentation updates might be incremental and not represent major changes.",
-        "Focus might be on testing infrastructure rather than direct camera HAL changes."
-      ]
+      "risk_notes": []
     }
   ]
 }

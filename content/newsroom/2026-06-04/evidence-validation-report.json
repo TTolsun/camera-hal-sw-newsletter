@@ -24,20 +24,18 @@
       "candidate_id": "8edd18929c9fbdd9",
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-      "deep_checked": false,
+      "deep_checked": true,
       "source_fetch_used": true,
-      "source_fetch_status": "failed",
-      "source_fetch_error": "fetch failed: 429",
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
       "validation_mode": "source_fetch",
-      "unsupported_claims": 1,
-      "supported_claims": 0,
+      "unsupported_claims": 0,
+      "supported_claims": 1,
       "final_selection_blocked": false,
-      "editor_review_required": true,
+      "editor_review_required": false,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "fetch_failed_review_required",
-      "reasons": [
-        "source_fetch_failed"
-      ]
+      "evidence_validation_status": "pass",
+      "reasons": []
     },
     {
       "candidate_id": "b42f0f8cfbaa9f26",
@@ -227,20 +225,18 @@
       "candidate_id": "4cd1324b82d886c6",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "title": "Build native Android apps in Google AI Studio",
-      "deep_checked": false,
+      "deep_checked": true,
       "source_fetch_used": true,
-      "source_fetch_status": "failed",
-      "source_fetch_error": "fetch failed: 429",
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
       "validation_mode": "source_fetch",
-      "unsupported_claims": 1,
-      "supported_claims": 0,
+      "unsupported_claims": 0,
+      "supported_claims": 1,
       "final_selection_blocked": false,
-      "editor_review_required": true,
+      "editor_review_required": false,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "fetch_failed_review_required",
-      "reasons": [
-        "source_fetch_failed"
-      ]
+      "evidence_validation_status": "pass",
+      "reasons": []
     },
     {
       "candidate_id": "8c8d41e8713d9d19",
@@ -772,8 +768,7 @@
     }
   ],
   "counts": {
-    "pass": 4,
-    "fetch_failed_review_required": 2,
+    "pass": 6,
     "not_checked": 2,
     "blocked": 33
   }
