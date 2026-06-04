@@ -4536,9 +4536,18 @@ function writeTerminalFailureStatus(error) {
   } catch (_) {
     // The status file below is the minimum required failure artifact.
   }
+  // editor가 유효 draft 없이 총체적으로 실패해도 결정론적 selection 아티팩트는 남아 있으므로, job을
+  // 죽이는 FAILED 대신 reviewable diagnostics PR로 라우팅한다(#503 정신).
+  const failedEditorReviewable = error instanceof EditorSemanticValidationError &&
+    !failedRawArtifactValidation &&
+    Boolean(generationRunState.shortlistReport);
   writeGenerationStatus(buildGenerationStatus({
     date,
-    status: failedRawArtifactValidation ? 'FAILED_RAW_ARTIFACT_VALIDATION' : 'FAILED',
+    status: failedRawArtifactValidation
+      ? 'FAILED_RAW_ARTIFACT_VALIDATION'
+      : failedEditorReviewable
+        ? 'FAILED_EDITOR_REVIEWABLE'
+        : 'FAILED',
     failureStage: failureStageFromError(error),
     failureReason: String(error?.message || error || 'Unknown generation failure.'),
     failureClass: failureClassFromError(error),
@@ -4551,6 +4560,10 @@ function writeTerminalFailureStatus(error) {
         generationRunState.currentQualityAttempt
       ),
       raw_artifact_validation_error: failedRawArtifactValidation ? error.details : null,
+      failure_kind: failedEditorReviewable ? 'editor_failed_reviewable' : '',
+      review_gate_passed: failedEditorReviewable ? true : undefined,
+      editor_review_required: failedEditorReviewable ? true : undefined,
+      public_output_expected: failedEditorReviewable ? false : undefined,
       ...editorSemanticStatusExtra(error),
       ...selectionStatusExtra(generationRunState.shortlistReport)
     }

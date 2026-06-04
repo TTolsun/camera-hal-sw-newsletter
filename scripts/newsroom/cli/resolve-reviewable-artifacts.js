@@ -21,6 +21,7 @@ const {
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const STATUS_FAILED_RAW_ARTIFACT_VALIDATION = 'FAILED_RAW_ARTIFACT_VALIDATION';
+const STATUS_FAILED_EDITOR_REVIEWABLE = 'FAILED_EDITOR_REVIEWABLE';
 const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
 const FAILURE_KIND_CANDIDATE_SHORTAGE_REVIEWABLE = 'candidate_shortage_reviewable';
 
@@ -30,7 +31,8 @@ const REVIEWABLE_STATUSES = new Set([
   'QUALITY_NEEDS_FIX',
   'UNDERFILLED_NEEDS_FIX',
   STATUS_FAILED_REPAIR_REVIEWABLE,
-  STATUS_FAILED_RAW_ARTIFACT_VALIDATION
+  STATUS_FAILED_RAW_ARTIFACT_VALIDATION,
+  STATUS_FAILED_EDITOR_REVIEWABLE
 ]);
 
 const CANONICAL_REVIEW_ARTIFACTS = [
@@ -59,6 +61,17 @@ const REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS = [
   'fact-check-report.json',
   'repair-failure.json',
   'generation-status.json'
+];
+
+// The editor can hard-fail (semantic validation) before any valid draft exists. The deterministic
+// selection artifacts written before the editor are still reviewable, so the daily job produces a
+// diagnostics PR instead of crashing. No editor-draft / quality-report is required here.
+const REQUIRED_FAILED_EDITOR_REVIEWABLE_ARTIFACTS = [
+  'generation-status.json',
+  'shortlisted-candidates.json',
+  'selection-report.json',
+  'selection-diagnostics.md',
+  'article-capsules.json'
 ];
 
 // Raw artifact validation fails before any LLM step, so only generation-status is guaranteed.
@@ -229,6 +242,7 @@ function resolveReviewableArtifacts(options = {}) {
   const statusReviewable = REVIEWABLE_STATUSES.has(status.status);
   const failedRepairReviewable = status.status === STATUS_FAILED_REPAIR_REVIEWABLE;
   const failedRawArtifactValidationReviewable = status.status === STATUS_FAILED_RAW_ARTIFACT_VALIDATION;
+  const failedEditorReviewable = status.status === STATUS_FAILED_EDITOR_REVIEWABLE;
   const changedRequiredPublicArtifacts = requiredPublicArtifacts.filter(filePath => changedArtifacts.includes(filePath));
   const editorialArtifacts = artifactReadResults(root, date, REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS);
   const editorialGenerationStatus = editorialArtifacts['generation-status.json'];
@@ -294,16 +308,20 @@ function resolveReviewableArtifacts(options = {}) {
     ? REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS.filter(file => !canonicalArtifacts.includes(file))
     : failedRawArtifactValidationReviewable
       ? REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS.filter(file => !canonicalArtifacts.includes(file))
-      : [];
+      : failedEditorReviewable
+        ? REQUIRED_FAILED_EDITOR_REVIEWABLE_ARTIFACTS.filter(file => !canonicalArtifacts.includes(file))
+        : [];
   const hasRequiredCanonicalArtifacts = failedRepairReviewable
     ? missingRequired.length === 0
     : failedRawArtifactValidationReviewable
       ? missingRequired.length === 0
-      : candidateShortageRequested
-        ? candidateShortageRejectReasons.length === 0
-        : editorialReviewableRequested
-          ? editorialRejectReasons.length === 0
-          : hasCanonicalDiagnostic;
+      : failedEditorReviewable
+        ? missingRequired.length === 0
+        : candidateShortageRequested
+          ? candidateShortageRejectReasons.length === 0
+          : editorialReviewableRequested
+            ? editorialRejectReasons.length === 0
+            : hasCanonicalDiagnostic;
   let hasReviewableArtifacts =
     hasRequiredCanonicalArtifacts &&
     statusReviewable &&
@@ -403,7 +421,7 @@ function resolveReviewableArtifacts(options = {}) {
       ? `canonical=${canonicalArtifacts.join(',')}`
       : 'canonical=none',
     `changed=${changedArtifacts.length > 0 ? changedArtifacts.join(',') : 'none'}`,
-    (failedRepairReviewable || failedRawArtifactValidationReviewable)
+    (failedRepairReviewable || failedRawArtifactValidationReviewable || failedEditorReviewable)
       ? `missing_required=${missingRequired.length > 0 ? missingRequired.join(',') : 'none'}`
       : '',
     failedRawArtifactValidationReviewable
@@ -549,6 +567,7 @@ module.exports = {
   CANONICAL_REVIEW_ARTIFACTS,
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS,
+  REQUIRED_FAILED_EDITOR_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS,
   REQUIRED_PUBLIC_NEWSLETTER_FILES,

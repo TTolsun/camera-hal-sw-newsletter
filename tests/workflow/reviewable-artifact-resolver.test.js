@@ -68,6 +68,25 @@ test('FAILED_REPAIR_REVIEWABLE status is reviewable but never publish-ready', ()
   assert.equal(outputs.composition_mode, 'NEEDS_FIX');
 });
 
+test('FAILED_EDITOR_REVIEWABLE is reviewable from the pre-editor selection artifacts (no editor draft required)', () => {
+  // The editor can hard-fail before any valid draft exists; the daily job must still produce a
+  // diagnostics PR from the deterministic selection artifacts instead of crashing.
+  const root = fsTempRoot('newsroom-pr-body-');
+  const date = '2026-05-09';
+  writeCandidateShortageReviewableArtifacts(root, date, {
+    status: { status: 'FAILED_EDITOR_REVIEWABLE', failure_kind: 'editor_failed_reviewable' }
+  });
+
+  const changedArtifacts = ['generation-status.json', 'shortlisted-candidates.json', 'selection-report.json', 'selection-diagnostics.md', 'article-capsules.json']
+    .map(file => `content/newsroom/${date}/${file}`);
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({ root, changedArtifacts }));
+
+  assert.equal(outputs.has_reviewable_artifacts, 'true');
+  assert.equal(outputs.review_pr_ready, 'true');
+  assert.equal(outputs.public_newsletter_ready, 'false');
+  assert.equal(outputs.diagnostics_only, 'true');
+});
+
 test('reviewable artifact resolver does not accept tmp status alone', () => {
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-08';
