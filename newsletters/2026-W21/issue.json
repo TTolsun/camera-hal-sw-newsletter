@@ -1,0 +1,292 @@
+{
+  "date": "2026-05-18",
+  "summary": "2026-05-18 ~ 2026-05-24 주간 다이제스트 (일별 이슈 5건).",
+  "briefing": [
+    "Tooling Watch Edition: Android Native Tooling - 이번 2026-05-24호는 1개 기사(구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동)를 정리했습니다.",
+    "이번 2026-05-23호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.",
+    "이번 2026-05-22호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화, Google AI Studio, 프롬프트 기반 Native Android 앱 생성 지원 및 카메라 API 연동."
+  ],
+  "sections": [
+    {
+      "category": "주간 다이제스트",
+      "headline": "Camera HAL / SW Newsletter - 2026-05-24",
+      "what_changed": "Tooling Watch Edition: Android Native Tooling - 이번 2026-05-24호는 1개 기사(구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동)를 정리했습니다.",
+      "public_article": {
+        "headline": "Camera HAL / SW Newsletter - 2026-05-24",
+        "lead": "Tooling Watch Edition: Android Native Tooling - 이번 2026-05-24호는 1개 기사(구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동)를 정리했습니다.",
+        "body_paragraphs": [
+          "Tooling Watch Edition: Android Native Tooling - 이번 2026-05-24호는 1개 기사(구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동)를 정리했습니다.",
+          "2026-05-24 일별 이슈를 주간 뉴스레터로 묶었습니다. 전체 내용과 출처는 일별 이슈 페이지에서 확인하세요."
+        ],
+        "camera_hal_takeaway": "주간 단위로 묶인 Camera HAL 관련 일별 이슈입니다.",
+        "reader_checkpoints": [
+          "2026-05-24 일별 이슈 전체를 확인하세요."
+        ],
+        "source_links": [
+          {
+            "title": "Android Developers Blog",
+            "url": "https://goo.gle/AdaptiveApps_IO26",
+            "source_role": "primary"
+          },
+          {
+            "title": "Android Developers Blog",
+            "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+            "source_role": "primary"
+          },
+          {
+            "title": "2026-05-24 일별 이슈",
+            "url": "newsletters/2026-05-24/index.html",
+            "source_role": "reference"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "Android Developers Blog",
+          "url": "https://goo.gle/AdaptiveApps_IO26"
+        },
+        {
+          "title": "Android Developers Blog",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+        },
+        {
+          "title": "2026-05-24 일별 이슈",
+          "url": "newsletters/2026-05-24/index.html"
+        }
+      ],
+      "tags": [
+        "Tooling Watch Edition",
+        "Tooling Watch"
+      ]
+    },
+    {
+      "category": "주간 다이제스트",
+      "headline": "Camera HAL / SW Newsletter - 2026-05-23",
+      "what_changed": "이번 2026-05-23호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.",
+      "public_article": {
+        "headline": "Camera HAL / SW Newsletter - 2026-05-23",
+        "lead": "이번 2026-05-23호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.",
+        "body_paragraphs": [
+          "이번 2026-05-23호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트, Google AI Studio native Android 앱 생성: Camera API 사용 범위 확인.",
+          "2026-05-23 일별 이슈를 주간 뉴스레터로 묶었습니다. 전체 내용과 출처는 일별 이슈 페이지에서 확인하세요."
+        ],
+        "camera_hal_takeaway": "주간 단위로 묶인 Camera HAL 관련 일별 이슈입니다.",
+        "reader_checkpoints": [
+          "2026-05-23 일별 이슈 전체를 확인하세요."
+        ],
+        "source_links": [
+          {
+            "title": "Android Developers Blog",
+            "url": "https://goo.gle/AdaptiveApps_IO26",
+            "source_role": "primary"
+          },
+          {
+            "title": "Android Developers Blog",
+            "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+            "source_role": "primary"
+          },
+          {
+            "title": "Android Developers Latest Updates",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+            "source_role": "primary"
+          },
+          {
+            "title": "2026-05-23 일별 이슈",
+            "url": "newsletters/2026-05-23/index.html",
+            "source_role": "reference"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "Android Developers Blog",
+          "url": "https://goo.gle/AdaptiveApps_IO26"
+        },
+        {
+          "title": "Android Developers Blog",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+        },
+        {
+          "title": "Android Developers Latest Updates",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        },
+        {
+          "title": "2026-05-23 일별 이슈",
+          "url": "newsletters/2026-05-23/index.html"
+        }
+      ],
+      "tags": [
+        "Camera HAL",
+        "Android"
+      ]
+    },
+    {
+      "category": "주간 다이제스트",
+      "headline": "Camera HAL / SW Newsletter - 2026-05-22",
+      "what_changed": "이번 2026-05-22호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화, Google AI Studio, 프롬프트 기반 Native Android 앱 생성 지원 및 카메라 API 연동.",
+      "public_article": {
+        "headline": "Camera HAL / SW Newsletter - 2026-05-22",
+        "lead": "이번 2026-05-22호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화, Google AI Studio, 프롬프트 기반 Native Android 앱 생성 지원 및 카메라 API 연동.",
+        "body_paragraphs": [
+          "이번 2026-05-22호는 Camera HAL / Driver / Native tooling 독자가 확인할 만한 세 가지 항목을 정리했습니다: Jetpack Compose와 CameraX를 활용한 다양한 화면 크기별 카메라 프리뷰 최적화, Google AI Studio, 프롬프트 기반 Native Android 앱 생성 지원 및 카메라 API 연동.",
+          "2026-05-22 일별 이슈를 주간 뉴스레터로 묶었습니다. 전체 내용과 출처는 일별 이슈 페이지에서 확인하세요."
+        ],
+        "camera_hal_takeaway": "주간 단위로 묶인 Camera HAL 관련 일별 이슈입니다.",
+        "reader_checkpoints": [
+          "2026-05-22 일별 이슈 전체를 확인하세요."
+        ],
+        "source_links": [
+          {
+            "title": "Android Developers Blog",
+            "url": "https://goo.gle/AdaptiveApps_IO26",
+            "source_role": "primary"
+          },
+          {
+            "title": "Android Developers Blog",
+            "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+            "source_role": "primary"
+          },
+          {
+            "title": "2026-05-22 일별 이슈",
+            "url": "newsletters/2026-05-22/index.html",
+            "source_role": "reference"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "Android Developers Blog",
+          "url": "https://goo.gle/AdaptiveApps_IO26"
+        },
+        {
+          "title": "Android Developers Blog",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html"
+        },
+        {
+          "title": "2026-05-22 일별 이슈",
+          "url": "newsletters/2026-05-22/index.html"
+        }
+      ],
+      "tags": [
+        "Camera HAL",
+        "Android"
+      ]
+    },
+    {
+      "category": "주간 다이제스트",
+      "headline": "Camera HAL / SW Newsletter - 2026-05-21",
+      "what_changed": "이번 2026-05-21호는 1개 기사(libcamera Release Announcements - libcamera v0.7.1)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+      "public_article": {
+        "headline": "Camera HAL / SW Newsletter - 2026-05-21",
+        "lead": "이번 2026-05-21호는 1개 기사(libcamera Release Announcements - libcamera v0.7.1)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+        "body_paragraphs": [
+          "이번 2026-05-21호는 1개 기사(libcamera Release Announcements - libcamera v0.7.1)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+          "2026-05-21 일별 이슈를 주간 뉴스레터로 묶었습니다. 전체 내용과 출처는 일별 이슈 페이지에서 확인하세요."
+        ],
+        "camera_hal_takeaway": "주간 단위로 묶인 Camera HAL 관련 일별 이슈입니다.",
+        "reader_checkpoints": [
+          "2026-05-21 일별 이슈 전체를 확인하세요."
+        ],
+        "source_links": [
+          {
+            "title": "Android Developers Blog",
+            "url": "https://goo.gle/AdaptiveApps_IO26",
+            "source_role": "primary"
+          },
+          {
+            "title": "Android Developers Blog",
+            "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+            "source_role": "primary"
+          },
+          {
+            "title": "ISO C++ Blog",
+            "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+            "source_role": "primary"
+          },
+          {
+            "title": "2026-05-21 일별 이슈",
+            "url": "newsletters/2026-05-21/index.html",
+            "source_role": "reference"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "Android Developers Blog",
+          "url": "https://goo.gle/AdaptiveApps_IO26"
+        },
+        {
+          "title": "Android Developers Blog",
+          "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today"
+        },
+        {
+          "title": "ISO C++ Blog",
+          "url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+        },
+        {
+          "title": "2026-05-21 일별 이슈",
+          "url": "newsletters/2026-05-21/index.html"
+        }
+      ],
+      "tags": [
+        "Camera HAL",
+        "Android"
+      ]
+    },
+    {
+      "category": "주간 다이제스트",
+      "headline": "Camera HAL / SW Newsletter - 2026-05-20",
+      "what_changed": "이번 2026-05-20호는 2개 기사(Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+      "public_article": {
+        "headline": "Camera HAL / SW Newsletter - 2026-05-20",
+        "lead": "이번 2026-05-20호는 2개 기사(Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+        "body_paragraphs": [
+          "이번 2026-05-20호는 2개 기사(Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!, Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+          "2026-05-20 일별 이슈를 주간 뉴스레터로 묶었습니다. 전체 내용과 출처는 일별 이슈 페이지에서 확인하세요."
+        ],
+        "camera_hal_takeaway": "주간 단위로 묶인 Camera HAL 관련 일별 이슈입니다.",
+        "reader_checkpoints": [
+          "2026-05-20 일별 이슈 전체를 확인하세요."
+        ],
+        "source_links": [
+          {
+            "title": "ISO C++ Blog",
+            "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+            "source_role": "primary"
+          },
+          {
+            "title": "2026-05-20 일별 이슈",
+            "url": "newsletters/2026-05-20/index.html",
+            "source_role": "reference"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "ISO C++ Blog",
+          "url": "https://isocpp.org//blog/2026/04/gcc-16.1"
+        },
+        {
+          "title": "2026-05-20 일별 이슈",
+          "url": "newsletters/2026-05-20/index.html"
+        }
+      ],
+      "tags": [
+        "Tooling Watch Edition",
+        "Tooling Watch",
+        "Android"
+      ]
+    }
+  ],
+  "references": [],
+  "weekly_key": "2026-W21",
+  "week_start_date": "2026-05-18",
+  "week_end_date": "2026-05-24",
+  "title": "Camera HAL Weekly 2026-W21",
+  "tags": [
+    "Tooling Watch Edition",
+    "Tooling Watch",
+    "Camera HAL",
+    "Android"
+  ]
+}

@@ -318,7 +318,7 @@
 
     async function loadArchiveNewsletters() {
       try {
-        const response = await fetch('data/newsletters.json', { cache: 'no-store' });
+        const response = await fetch('data/newsletters-weekly.json', { cache: 'no-store' });
         if (!response.ok) {
           throw new Error(`Failed to fetch newsletters.json: ${response.status}`);
         }

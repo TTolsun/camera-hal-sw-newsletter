@@ -136,7 +136,7 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
       if (url === 'config/subscription.json') {
         return { ok: false, status: 404 };
       }
-      assert.equal(url, 'data/newsletters.json');
+      assert.equal(url, 'data/newsletters-weekly.json');
       if (options.newsletterFetchError) {
         return { ok: false, status: 500 };
       }

@@ -133,7 +133,7 @@ async function renderArchivePage(newsletters, options = {}) {
     window,
     URLSearchParams,
     fetch: async (url, fetchOptions) => {
-      assert.equal(url, 'data/newsletters.json');
+      assert.equal(url, 'data/newsletters-weekly.json');
       assert.equal(fetchOptions.cache, 'no-store');
       if (options.fetchError) {
         return { ok: false, status: 500 };
