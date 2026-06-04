@@ -4,7 +4,7 @@
 
 - 상태: 검토 필요
 - 편집장 액션: parser/source feedback을 확인하고 후보 보강 여부를 판단하세요.
-- 가장 먼저 볼 항목: parser/source feedback warning이 있습니다. parser_gap_count=1
+- 가장 먼저 볼 항목: parser/source feedback warning이 있습니다. parser_gap_count=2
 
 ## 이번 PR 요약
 
@@ -41,9 +41,10 @@
 | seed 신규 unique 후보 | 0 | 없음 |
 | seed publishable 후보 | 0 | 없음 |
 | 중복 후보 | 1 | 확인 필요 |
-| parser gap | 1 | 보강 필요 |
-| Gemini parser failure | 0 | 없음 |
-| rejected: taxonomy_gap | 1 | bucket/classifier 또는 허용 domain 보강 필요 |
+| parser gap | 2 | 보강 필요 |
+| Gemini parser failure | 2 | 보강 필요 |
+| rejected: parser_gap | 2 | source extraction 보강 필요 |
+| rejected: taxonomy_gap | 2 | bucket/classifier 또는 허용 domain 보강 필요 |
 
 ## 상세 report
 

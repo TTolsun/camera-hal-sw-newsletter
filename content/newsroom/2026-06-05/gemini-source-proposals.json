@@ -4,57 +4,108 @@
   "newsletter_date": "2026-06-05",
   "proposals": [
     {
-      "proposal_id": "io26-media-pipeline",
-      "topic_gap": "Need to understand new features and best practices for Android media pipeline, especially those relevant to camera output, recording, and playback.",
-      "source_family": "android",
+      "proposal_id": "P001",
+      "topic_gap": "What are the latest updates and best practices for building premium Android media pipelines, especially concerning camera output and processing, as presented at Google I/O '26?",
+      "source_family": "android-media",
       "allowed_domains": [
         "youtube.com",
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
-        "Android Media3",
-        "MediaCodec",
-        "MediaRecorder",
-        "Camera Output",
-        "Android 17 media",
-        "Google I/O 2026 media"
+        "Google I/O 2026 media pipeline",
+        "Android camera output",
+        "Media3 updates I/O",
+        "CameraX I/O 2026",
+        "Android media processing"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "Specific API changes or new libraries related to Media3, MediaCodec, MediaRecorder, or camera-generated content handling.",
-        "Best practices for performance, efficiency, or new use cases for camera output.",
-        "Mentions of A/V sync, preview, or recording improvements."
+        "Specific sessions or talks related to camera, media processing, recording, or playback of camera-generated content.",
+        "New APIs, tools, or best practices for optimizing media pipeline performance or quality.",
+        "Mentions of CameraX, Media3, MediaCodec, MediaRecorder, or other relevant Android media components."
       ],
       "risk_notes": [
-        "YouTube playlist might contain videos not directly relevant to camera HAL SW, requiring careful selection.",
-        "General 'Premium Android Experiences' might not always focus on media/camera pipeline specifics."
+        "The playlist title is broad; need to verify if individual videos contain relevant camera/media pipeline content.",
+        "YouTube content may not always have easily extractable dated release notes, but I/O content is inherently dated."
       ]
     },
     {
-      "proposal_id": "aosp-camera-its-updates",
-      "topic_gap": "Need to identify updates to Camera ITS (Image Test Suite) for automated camera image testing, which directly impacts camera HAL compliance and quality.",
+      "proposal_id": "P002",
+      "topic_gap": "What are the latest developments and releases for CameraX, specifically versions 1.6.0 and 1.7.0-alpha01, and what new features, improvements, or bug fixes do they introduce for Android camera developers?",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.6.0 release notes",
+        "CameraX 1.7.0-alpha01 new features",
+        "AndroidX Camera updates",
+        "Jetpack Camera release"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+      ],
+      "expected_evidence": [
+        "Detailed release notes for CameraX 1.6.0 and 1.7.0-alpha01.",
+        "New features, API changes, deprecations, or bug fixes related to camera functionality.",
+        "Impact on camera app development, performance, or compatibility."
+      ],
+      "risk_notes": [
+        "Release notes are typically concise; may require further investigation for deeper context on specific changes."
+      ]
+    },
+    {
+      "proposal_id": "P003",
+      "topic_gap": "What are the latest updates to the Camera ITS (Image Test Suite) on AOSP, particularly regarding automation for testing camera images, and how do these changes impact camera HAL development and compatibility?",
       "source_family": "aosp",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
-        "Camera ITS",
-        "Android Camera testing",
-        "AOSP camera compatibility",
-        "automated camera testing"
+        "AOSP Camera ITS automation",
+        "Android camera image testing",
+        "Camera HAL compatibility testing",
+        "CTS camera updates"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "New or updated procedures for camera ITS testing.",
-        "Changes in hardware requirements or setup for ITS.",
-        "Impact on camera HAL implementation or testing strategies."
+        "Information on new or updated Camera ITS test procedures or requirements.",
+        "Details on automation capabilities for camera image testing.",
+        "Impact on camera HAL implementation, testing, or compliance with Android compatibility standards."
       ],
       "risk_notes": [
-        "This is a documentation update, not a feature release, so the impact might be on testing methodology rather than new camera features."
+        "Documentation updates might not always be explicitly dated, but the content itself is a direct change to AOSP documentation."
+      ]
+    },
+    {
+      "proposal_id": "P004",
+      "topic_gap": "What are the key announcements and insights from Google I/O '26 regarding building seamless Android experiences across devices with Jetpack Compose, and how might these impact camera-related UI/UX or multi-device camera applications?",
+      "source_family": "android",
+      "allowed_domains": [
+        "goo.gle",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Jetpack Compose multi-device camera",
+        "Android adaptive apps I/O 2026",
+        "Cross-device camera experience",
+        "Camera UI Jetpack Compose"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Discussions on adaptive layouts, multi-device UI, or cross-device experiences using Jetpack Compose.",
+        "Potential implications for camera preview, controls, or media gallery UIs across different form factors (e.g., foldables, tablets).",
+        "Mentions of specific Jetpack Compose features relevant to camera application development."
+      ],
+      "risk_notes": [
+        "The URL is a shortlink, which needs to be resolved to confirm the domain and content relevance. The title is broad, requiring careful review for camera-specific relevance."
       ]
     }
   ]
