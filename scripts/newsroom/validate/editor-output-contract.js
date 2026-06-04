@@ -37,6 +37,7 @@ const {
 } = require('../common/public-article-contract');
 const {
   buildAllowedClaimEvidence,
+  buildEvidenceIndex,
   validateArticleClaims
 } = require('./claim-source-binding');
 const {
@@ -669,12 +670,30 @@ function bindEvidenceForExistingFactClaim({ section, candidate, articleIndex, se
   return null;
 }
 
-// Deterministic provenance completion: the LLM editor frequently writes source-backed fact
-// claims but omits the item-level evidence_ids pointer. This binds the omitted evidence_id from
-// the candidate's own allowed_claim_evidence, but ONLY when the strict claim validator (the
-// oracle) confirms the evidence actually supports the claim. Claims whose text is not supported
-// stay unbound and keep failing closed, so this never invents support nor weakens the gate.
-function bindMissingFactClaimEvidence(value, options = {}) {
+// A claim's evidence pointer is "rebindable" when it is empty, or when NONE of its evidence_ids
+// resolve in the candidate's evidence index (the editor cited ids that do not exist). A claim
+// whose id resolves is left alone — its source-url/overclaim diagnostics are preserved.
+function factClaimEvidenceUnresolved(claim, evidenceIndex) {
+  const ids = ensureArray(claim?.evidence_ids || claim?.evidenceIds).map(text).filter(Boolean);
+  if (ids.length === 0) return true;
+  const byId = evidenceIndex && evidenceIndex.byId;
+  const packFallback = evidenceIndex && evidenceIndex.packFallback;
+  if (!byId) return true;
+  const resolves = id =>
+    byId.has(id) || (packFallback && packFallback.has(id) && byId.has(packFallback.get(id)));
+  return !ids.some(resolves);
+}
+
+// Deterministic provenance reconciliation. The LLM editor owns the prose; the item-level
+// evidence_ids pointer should be owned deterministically. The editor frequently omits the pointer
+// (empty evidence_ids) or cites ids that do not resolve, even when the candidate's own
+// allowed_claim_evidence genuinely supports the claim text. For each fact claim whose pointer is
+// empty or fully unresolved, this rebinds the supporting evidence_id from the candidate's allowed
+// evidence — but ONLY when the strict claim oracle confirms the evidence actually supports the
+// claim. Claims with no supporting evidence stay unbound and keep failing closed, so a genuinely
+// unsupported (fabricated) claim is never reconciled and the gate is never weakened. Claims whose
+// id already resolves are left untouched, preserving source-mismatch/overclaim diagnostics.
+function reconcileFactClaimEvidence(value, options = {}) {
   const reporter = options.reporter || { candidates: [] };
   const seedEvidencePack = options.seedEvidencePack || null;
   const sections = ensureArray(value?.sections);
@@ -686,16 +705,19 @@ function bindMissingFactClaimEvidence(value, options = {}) {
   ensureArray(repaired.sections).forEach((section, index) => {
     const claims = ensureArray(section.claims);
     if (claims.length === 0) return;
-    const needsEvidence = claim =>
+    const isFactWithText = claim =>
       String(claim?.claim_type || claim?.claimType || '').trim().toLowerCase() === 'fact' &&
-      ensureArray(claim?.evidence_ids || claim?.evidenceIds).map(text).filter(Boolean).length === 0 &&
       Boolean(text(claim?.text || claim?.claim));
-    if (!claims.some(needsEvidence)) return;
+    if (!claims.some(isFactWithText)) return;
     const candidate = candidateForSection(section, candidateIndex) || {};
+    const evidenceIndex = buildEvidenceIndex(candidate, section, { seedEvidencePack });
+    const rebindable = claims.filter(claim =>
+      isFactWithText(claim) && factClaimEvidenceUnresolved(claim, evidenceIndex)
+    );
+    if (rebindable.length === 0) return;
     const allowedEvidence = buildAllowedClaimEvidence(candidate, section, { seedEvidencePack });
     if (allowedEvidence.length === 0) return;
-    claims.forEach(claim => {
-      if (!needsEvidence(claim)) return;
+    rebindable.forEach(claim => {
       const bound = bindEvidenceForExistingFactClaim({
         section,
         candidate,
@@ -706,9 +728,7 @@ function bindMissingFactClaimEvidence(value, options = {}) {
       });
       if (!bound) return;
       claim.evidence_ids = bound.evidence_ids;
-      if (ensureArray(claim.source_urls || claim.sourceUrls).map(text).filter(Boolean).length === 0) {
-        claim.source_urls = bound.source_urls;
-      }
+      claim.source_urls = bound.source_urls;
       changed = true;
     });
   });
@@ -1519,7 +1539,7 @@ async function repairEditorOutputContract({
 module.exports = {
   EditorSemanticValidationError,
   assertSectionsAndSourcesPreserved,
-  bindMissingFactClaimEvidence,
+  reconcileFactClaimEvidence,
   repairEditorOutputContract,
   serializeEditorValidationError,
   validateEditorArticlePolicy,
