@@ -203,23 +203,6 @@
       ]
     },
     {
-      "candidate_id": "a008cc09dc1d5ea8",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "title": "CameraX Release Notes - CameraX 1.6.1",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "skipped",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
-      "reasons": []
-    },
-    {
       "candidate_id": "3ca2b58b92a0b76d",
       "url": "https://source.android.com/docs/compatibility",
       "title": "Compatibility",
@@ -520,6 +503,44 @@
       ]
     },
     {
+      "candidate_id": "473c2de5968532c9",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "1.6.1",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "metadata_only",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
+    },
+    {
+      "candidate_id": "f2f7a4ce6187ee89",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "title": "1.3.0-beta02",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "metadata_only",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
+    },
+    {
       "candidate_id": "126b8a669e4375b9",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
       "title": "1.4.0-alpha07",
@@ -729,25 +750,6 @@
       ]
     },
     {
-      "candidate_id": "b390576f02196ddd",
-      "url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
-      "title": "May",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
       "candidate_id": "gemini-bb0e15b6742fce01",
       "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
@@ -767,7 +769,7 @@
   ],
   "counts": {
     "pass": 6,
-    "not_checked": 3,
-    "blocked": 32
+    "not_checked": 2,
+    "blocked": 33
   }
 }
