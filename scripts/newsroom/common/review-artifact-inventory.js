@@ -20,6 +20,11 @@ const {
   seedMergeReportRelPath,
   toPosix
 } = require('./artifact-paths');
+const {
+  weeklyKeyForDate,
+  weeklyNewsletterIndexRoute,
+  weeklyNewsletterMarkdownRoute
+} = require('./weekly-newsletter');
 
 const REVIEW_ARTIFACT_SCHEMA_VERSION = 3;
 
@@ -197,8 +202,49 @@ function entry({
   };
 }
 
+// Additive weekly public artifacts (#486). Present only on publish-ready runs that emitted a weekly
+// page; optional and non-blocking, but committed (public_output grade) so they land in the review PR.
+function weeklyPublicOutputEntries(date) {
+  let weeklyKey;
+  try {
+    weeklyKey = weeklyKeyForDate(date);
+  } catch (_) {
+    return [];
+  }
+  return [
+    entry({
+      relPath: weeklyNewsletterIndexRoute(weeklyKey),
+      group: 'public_output',
+      role: 'weekly_public_html',
+      required: REQUIRED_OPTIONAL,
+      reviewOrder: 33,
+      humanReadable: true,
+      reviewBlocking: false
+    }),
+    entry({
+      relPath: weeklyNewsletterMarkdownRoute(weeklyKey),
+      group: 'public_output',
+      role: 'weekly_public_markdown',
+      required: REQUIRED_OPTIONAL,
+      reviewOrder: 34,
+      humanReadable: true,
+      reviewBlocking: false
+    }),
+    entry({
+      relPath: 'data/newsletters-weekly.json',
+      group: 'public_output',
+      role: 'weekly_public_index',
+      required: REQUIRED_OPTIONAL,
+      reviewOrder: 35,
+      humanReadable: false,
+      reviewBlocking: false
+    })
+  ];
+}
+
 function exactCatalog(date) {
   return [
+    ...weeklyPublicOutputEntries(date),
     entry({
       relPath: newsroomRelPath(date, '00-review-guide.md'),
       group: 'editorial_brief',
