@@ -152,7 +152,10 @@ test('reviewable artifact resolver accepts editorial reviewable handoff without 
   assert.match(outputs.reviewable_artifact_reason, /editorial_reject=none/);
 });
 
-test('reviewable artifact resolver requires HAL signal report for editorial handoff', () => {
+test('reviewable artifact resolver keeps editorial handoff reviewable without the best-effort HAL signal report', () => {
+  // #503: the HAL signal quality report is produced by a separate continue-on-error workflow step,
+  // not the generator, so its absence must not collapse a genuine editorial-review draft into a
+  // non-reviewable (job-failing) state.
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-09';
   writeEditorialReviewableArtifacts(root, date, { writeHalSignalQuality: false });
@@ -162,10 +165,12 @@ test('reviewable artifact resolver requires HAL signal report for editorial hand
     changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
   }));
 
-  assert.equal(outputs.has_reviewable_artifacts, 'false');
-  assert.equal(outputs.review_pr_ready, 'false');
-  assert.match(outputs.reviewable_artifact_reason, /missing_editorial_required=.*hal-signal-quality-report\.json/);
-  assert.match(outputs.reviewable_artifact_reason, /missing_editorial_required=.*hal-signal-quality-report\.md/);
+  assert.equal(outputs.has_reviewable_artifacts, 'true');
+  assert.equal(outputs.review_pr_ready, 'true');
+  assert.equal(outputs.diagnostics_only, 'true');
+  assert.equal(outputs.public_newsletter_ready, 'false');
+  assert.match(outputs.reviewable_artifact_reason, /editorial_reject=none/);
+  assert.doesNotMatch(outputs.reviewable_artifact_reason, /missing_editorial_required=.*hal-signal-quality-report/);
 });
 
 test('reviewable artifact resolver accepts editorial reviewable public and data writes when structurally ready', () => {
