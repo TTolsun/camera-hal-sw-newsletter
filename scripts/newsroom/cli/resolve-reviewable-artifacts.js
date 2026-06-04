@@ -50,12 +50,13 @@ const CANONICAL_REVIEW_ARTIFACTS = [
   'selection-diagnostics.md'
 ];
 
+// hal-signal-quality-report.* is produced by a separate best-effort (continue-on-error)
+// workflow step, not by the generator, so it must not gate reviewability (#503). It stays in
+// CANONICAL_REVIEW_ARTIFACTS so it is still bundled into the review PR when present.
 const REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS = [
   'editor-draft.json',
   'quality-report.json',
   'fact-check-report.json',
-  'hal-signal-quality-report.json',
-  'hal-signal-quality-report.md',
   'repair-failure.json',
   'generation-status.json'
 ];
@@ -69,8 +70,6 @@ const REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS = [
   'editor-draft.json',
   'quality-report.json',
   'fact-check-report.json',
-  'hal-signal-quality-report.json',
-  'hal-signal-quality-report.md',
   'generation-status.json'
 ];
 

@@ -742,6 +742,29 @@ test('ensure CLI reports missing public artifacts instead of building fallback',
   );
 });
 
+test('ensure CLI keeps a hard-fail editorial draft reviewable when the best-effort HAL signal report is missing', () => {
+  // #503: score >= threshold but a publish-blocking hard fail remains -> QUALITY_NEEDS_FIX editorial review.
+  // hal-signal-quality-report.* is produced by a separate continue-on-error workflow step, so a missing
+  // HAL signal report must not collapse the run into a job-failing throw and lose the diagnostics PR.
+  const root = fsTempRoot('newsroom-pr-body-');
+  const date = '2026-06-04';
+  writeEditorialReviewableArtifacts(root, date, {
+    writeHalSignalQuality: false,
+    status: { status: 'QUALITY_NEEDS_FIX', quality_status: 'NEEDS_FIX', quality_score: 78 },
+    generationStatus: { status: 'QUALITY_NEEDS_FIX', quality_status: 'NEEDS_FIX', quality_score: 78 },
+    quality: { status: 'NEEDS_FIX', score: 78 }
+  });
+
+  const changedArtifacts = ['editor-draft.json', 'fact-check-report.json', 'quality-report.json', 'generation-status.json']
+    .map(file => `content/newsroom/${date}/${file}`);
+
+  const result = ensurePublicNewsletterArtifacts({ root, date, noBuild: true, changedArtifacts });
+
+  assert.equal(result.outputs.public_newsletter_ready, 'false');
+  assert.equal(result.outputs.review_pr_ready, 'true');
+  assert.equal(result.outputs.diagnostics_only, 'true');
+});
+
 test('publication quality annotation reports quality and fact-check issues without failing', () => {
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-08';
