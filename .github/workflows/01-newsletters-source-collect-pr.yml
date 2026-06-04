@@ -10,7 +10,7 @@ on:
       lookback_days:
         description: "How many days to look back when collecting news candidates."
         required: false
-        default: "90"
+        default: "10"
         type: string
       manual_source_urls:
         description: "Optional ';'-separated http/https seed URLs. Empty uses content/collected-news/<date>/collection-intent.json if present."
@@ -28,7 +28,7 @@ on:
         description: "How many days to look back when collecting news candidates."
         required: false
         type: string
-        default: "90"
+        default: "10"
       auto_mode:
         description: "Set to true when called from the daily auto workflow (commit artifacts instead of creating PR)."
         required: false
@@ -57,11 +57,10 @@ jobs:
 
     env:
       NEWSLETTER_DATE: ${{ inputs.newsletter_date || github.event.inputs.newsletter_date || '' }}
-      # The runtime default lookback is 10 days (#487). This workflow keeps an
-      # explicit 90-day window so 22-90 day candidates are still collected to
-      # feed the catch-up pool (#483). Reduce to 10 only after the weekly upsert
-      # model (#488) accumulates articles across the week.
-      LOOKBACK_DAYS: ${{ inputs.lookback_days || github.event.inputs.lookback_days || '90' }}
+      # Default collection lookback is 10 days (#487). The weekly upsert model
+      # (#488) now accumulates articles across the ISO week, so the wide 90-day
+      # window that previously fed the catch-up pool is no longer the default.
+      LOOKBACK_DAYS: ${{ inputs.lookback_days || github.event.inputs.lookback_days || '10' }}
       NEWSROOM_MANUAL_SOURCE_URLS: ${{ github.event.inputs.manual_source_urls }}
 
     steps:
