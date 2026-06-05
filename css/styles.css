@@ -748,7 +748,7 @@ pre code {
 
 /* Latest card with one weekly article image on the right; text column + compact media column. */
 .latest-newsletter-card.has-latest-media {
-  grid-template-columns: minmax(0, 1fr) clamp(120px, 30%, 220px);
+  grid-template-columns: minmax(0, 1fr) clamp(300px, 75%, 550px);
   align-items: center;
   gap: var(--space-5);
 }
