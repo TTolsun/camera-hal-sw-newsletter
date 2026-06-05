@@ -3500,6 +3500,26 @@ async function main() {
   let excludedSections = [];
   let attemptedSections = [];
 
+  // 품질 게이트 빌드 + last-known-valid 기록 + 표준/시도별 아티팩트 영속화를 한 곳에 모은다.
+  // attempt/repair/completion 세 경로가 동일 시퀀스를 반복하던 것을 단일 함수로 통합한다.
+  // attemptType별 파일명 infix만 다르며, editor/qualityReport를 갱신해 반환한다.
+  const qualityReportFilenameInfix = { attempt: '', repair: 'repair-', completion: 'completion-' };
+  const runQualityGateAndPersist = (currentEditor, currentFactCheck, attempt, attemptType) => {
+    const infix = qualityReportFilenameInfix[attemptType] || '';
+    const qualityReport = buildNewsletterQualityReport(date, currentEditor, reporter, currentFactCheck, {
+      threshold: qualityGatePolicy.threshold,
+      shortlistReport,
+      strictClaimValidation: true,
+      seedEvidencePack
+    });
+    generationRunState.qualityReport = qualityReport;
+    const persistedEditor = recordLastKnownValidEditor(currentEditor, { date, reporter, factCheck: currentFactCheck, qualityReport, attempt, requireStoryContract: true, seedEvidencePack });
+    writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor: persistedEditor, factCheck: currentFactCheck, qualityReport });
+    writeJson(path.join(newsroomDir, `quality-report-${infix}attempt-${attempt}.json`), qualityReport);
+    fs.writeFileSync(path.join(newsroomDir, `quality-report-${infix}attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
+    return { editor: persistedEditor, qualityReport };
+  };
+
   for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
     generationRunState.currentQualityAttempt = attempt;
     const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
@@ -3731,17 +3751,7 @@ async function main() {
     writeJson(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.json`), factCheck);
     fs.writeFileSync(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
-    qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-      threshold: qualityGatePolicy.threshold,
-      shortlistReport,
-      strictClaimValidation: true,
-      seedEvidencePack
-    });
-    generationRunState.qualityReport = qualityReport;
-    editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true, seedEvidencePack });
-    writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
-    writeJson(path.join(newsroomDir, `quality-report-attempt-${attempt}.json`), qualityReport);
-    fs.writeFileSync(path.join(newsroomDir, `quality-report-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
+    ({ editor, qualityReport } = runQualityGateAndPersist(editor, factCheck, attempt, 'attempt'));
 
     let repairActions = [];
     let demotedSections = appendUniqueSections(
@@ -3905,17 +3915,7 @@ async function main() {
         writeJson(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.json`), factCheck);
         fs.writeFileSync(path.join(newsroomDir, `fact-check-repair-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
-        qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-          threshold: qualityGatePolicy.threshold,
-          shortlistReport,
-          strictClaimValidation: true,
-          seedEvidencePack
-        });
-        generationRunState.qualityReport = qualityReport;
-        editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true, seedEvidencePack });
-        writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
-        writeJson(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.json`), qualityReport);
-        fs.writeFileSync(path.join(newsroomDir, `quality-report-repair-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
+        ({ editor, qualityReport } = runQualityGateAndPersist(editor, factCheck, attempt, 'repair'));
         demotedSections = appendUniqueSections(
           demotedSections,
           sourceGapSections(editor, factCheck).concat(eligibilityFindings.map(finding => finding.section))
@@ -4056,17 +4056,7 @@ async function main() {
           writeJson(path.join(newsroomDir, `fact-check-completion-attempt-${attempt}.json`), factCheck);
           fs.writeFileSync(path.join(newsroomDir, `fact-check-completion-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');
 
-          qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-            threshold: qualityGatePolicy.threshold,
-            shortlistReport,
-            strictClaimValidation: true,
-            seedEvidencePack
-          });
-          generationRunState.qualityReport = qualityReport;
-          editor = recordLastKnownValidEditor(editor, { date, reporter, factCheck, qualityReport, attempt, requireStoryContract: true, seedEvidencePack });
-          writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor, factCheck, qualityReport });
-          writeJson(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.json`), qualityReport);
-          fs.writeFileSync(path.join(newsroomDir, `quality-report-completion-attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
+          ({ editor, qualityReport } = runQualityGateAndPersist(editor, factCheck, attempt, 'completion'));
           repairActions.push(`complete-missing-articles: requested ${missingArticleCount}, added ${Math.max(0, editor.sections.length - (articlePolicy.mainArticleCount.min - missingArticleCount))}`);
           demotedSections = appendUniqueSections(
             demotedSections,
