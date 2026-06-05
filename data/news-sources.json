@@ -840,7 +840,7 @@
     {
       "id": "libcamera-release-announcements",
       "name": "libcamera Release Announcements",
-      "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+      "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/",
       "rssUrl": null,
       "collectionModeHint": "release-note-watch",
       "category": "linux-camera",
@@ -933,12 +933,12 @@
       "id": "lwn-camera-media-articles",
       "name": "LWN Camera / Media Articles",
       "sourceUrl": "https://lwn.net/",
-      "rssUrl": null,
+      "rssUrl": "https://lwn.net/headlines/newrss",
       "category": "linux-kernel",
       "priority": "medium",
-      "reliability": "expert-media",
+      "reliability": "tech-media",
       "enabled": true,
-      "candidateOnly": true,
+      "candidateOnly": false,
       "requiresCrossCheck": true,
       "usageHint": "Linux camera/media subsystem 심층 분석 lead 확인; paywall 가능성이 있어 candidate-only로 취급",
       "keywords": [
@@ -956,7 +956,8 @@
       "sourceQualityNotes": [
         "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
         "requires primary-source cross-check before main promotion"
-      ]
+      ],
+      "collectionModeHint": "rss-source"
     },
     {
       "id": "phoronix-linux-camera-media",
@@ -992,7 +993,7 @@
       "id": "collabora-blog",
       "name": "Collabora Blog",
       "sourceUrl": "https://www.collabora.com/news-and-blog/",
-      "rssUrl": null,
+      "rssUrl": "https://www.collabora.com/newsroom-rss-feed.rss",
       "category": "linux-camera",
       "priority": "medium",
       "reliability": "engineering-blog",
@@ -1014,7 +1015,8 @@
       "mainArticlePolicy": "allowed",
       "requiresCrossCheckDefault": false,
       "evidenceGranularityHint": "article_level_concrete_source_fact",
-      "sourceQualityNotes": []
+      "sourceQualityNotes": [],
+      "collectionModeHint": "rss-source"
     },
     {
       "id": "kernelnewbies-linuxchanges",
@@ -2178,7 +2180,7 @@
       "priority": "high",
       "reliability": "project-official",
       "enabled": true,
-      "candidateOnly": true,
+      "candidateOnly": false,
       "requiresCrossCheck": true,
       "usageHint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
       "linkedEvidencePolicy": {
