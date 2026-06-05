@@ -303,7 +303,7 @@ function resolvePublishStatus(options = {}) {
     status.validate_ok === false;
 
   if (
-    hasOwn(rawStatus, 'final_publish_ready') &&
+    typeof statusFinalPublishReady === 'boolean' &&
     statusFinalPublishReady !== artifactFinalPublishReady &&
     !validationOnlyStatusMismatch &&
     !failedRepairReviewableStatus
