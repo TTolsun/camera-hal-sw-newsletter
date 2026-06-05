@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-06-06",
-  "generated_at": "2026-06-05T15:41:58.969Z",
+  "generated_at": "2026-06-05T18:33:16.259Z",
   "cache_root": "cache/news-summary",
   "totals": {
     "candidate_count": 6,
@@ -14,11 +14,7 @@
   "reasons": [
     {
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
-      "count": 4
-    },
-    {
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "count": 1
+      "count": 5
     },
     {
       "reason": "url-hit",
@@ -43,6 +39,22 @@
       "cache_record_path": ""
     },
     {
+      "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113",
+      "url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-05T16:19:29Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud",
+        "url_hash": "3a5bbe2bfb116e70fc890a911fd02f8a6a4e9f374b71c2086aff81d1066b64ba",
+        "published_date": "2026-06-05T16:19:29Z",
+        "content_hash": "a7e08ac45116c09cf007413cf84f9a3bbab8131d8e12af9047328be4603fd944"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
       "title": "[PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678",
       "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
       "source": "lore.kernel.org linux-media list",
@@ -52,6 +64,22 @@
         "url_hash": "31b40cccc0e6f0f42e7288e6b5c25b60ce7edd52eb67a02c09510a081c43554f",
         "published_date": "2026-06-05T15:26:51Z",
         "content_hash": "b669a2f53dbd3f5cb187f06b26573144e2ebbcee7216c2ade9c83bef0bece15c"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
+      "url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-05T15:57:19Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud",
+        "url_hash": "4d6d42eb41205357eae882f1aca18e759c831d0e4dbe6f083fc96efd15b25ce7",
+        "published_date": "2026-06-05T15:57:19Z",
+        "content_hash": "589bef076201764d703ef677eb0a7402070eab75dd73b954d54e995fc7970cc3"
       },
       "hit": false,
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
@@ -71,38 +99,6 @@
       },
       "hit": false,
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-      "source": "lore.kernel.org linux-media list",
-      "published_date": "2026-06-05T15:26:45Z",
-      "cache_key": {
-        "normalized_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com",
-        "url_hash": "1c98482100088b7897eb6f6abcbfcb57abd2511a3076c1e83c62421c55a9eac7",
-        "published_date": "2026-06-05T15:26:45Z",
-        "content_hash": "bafbf058df8eaddf64a7c2c9012b1d0e73a4a12a85f765cce51d9438fae209a4"
-      },
-      "hit": false,
-      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "[sailus-media-tree:partial-reg 7/9] drivers/media/mc/mc-event.c:17:10: fatal error: 'media/media-event.h' file not found",
-      "url": "https://lore.kernel.org/linux-media/202606052349.bOSyAnNd-lkp@intel.com/",
-      "source": "lore.kernel.org linux-media list",
-      "published_date": "2026-06-05T15:32:50Z",
-      "cache_key": {
-        "normalized_url": "https://lore.kernel.org/linux-media/202606052349.bosyannd-lkp@intel.com",
-        "url_hash": "a9d056c1f7df2552498c908bfaae07e463602ee7ccfd3d261dae5a3b4ec4d1b7",
-        "published_date": "2026-06-05T15:32:50Z",
-        "content_hash": "445e522b5cb8afb7c588f706842423af88bea5eb012ef2f28b05166f3e75735f"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
       "lookup_source": "none",
       "cache_record_path": ""
     },

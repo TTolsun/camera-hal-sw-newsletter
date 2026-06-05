@@ -2,16 +2,16 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-06-06",
-  "generated_at": "2026-06-05T15:43:21.213Z",
-  "status": "WARN",
-  "input_completeness": "partial",
+  "generated_at": "2026-06-05T18:34:42.505Z",
+  "status": "NEEDS_FIX",
+  "input_completeness": "complete",
   "input_statuses": {
     "shortlisted_candidates": "loaded",
     "editor_draft": "loaded",
     "quality_report": "loaded",
-    "source_effectiveness_report": "input_unavailable",
+    "source_effectiveness_report": "loaded",
     "source_quality_report": "loaded",
-    "evidence_pack_summary": "input_unavailable",
+    "evidence_pack_summary": "loaded",
     "merged_candidate_manifest": "loaded"
   },
   "inputs": {
@@ -35,7 +35,7 @@
     "optional": {
       "source_effectiveness_report": {
         "path": "content/newsroom/2026-06-06/source-effectiveness-report.json",
-        "status": "input_unavailable",
+        "status": "loaded",
         "error": ""
       },
       "source_quality_report": {
@@ -45,7 +45,7 @@
       },
       "evidence_pack_summary": {
         "path": "content/newsroom/2026-06-06/evidence-pack-summary.json",
-        "status": "input_unavailable",
+        "status": "loaded",
         "error": ""
       },
       "merged_candidate_manifest": {
@@ -55,12 +55,9 @@
       }
     },
     "missing_required": [],
-    "unavailable_optional": [
-      "source_effectiveness_report",
-      "evidence_pack_summary"
-    ]
+    "unavailable_optional": []
   },
-  "quality_status": "PASS",
+  "quality_status": "NEEDS_FIX",
   "hal_signal_quality_summary": {
     "schema_version": 1,
     "main_article_count": 1,
@@ -96,7 +93,7 @@
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
+      "title": "Google I/O '26: Jetpack CameraX와 Media3 툴킷을 통한 폴더블 및 대화면 미디어 파이프라인 최적화",
       "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
@@ -112,11 +109,12 @@
       "effective_actionability_level": "owner_metric_log",
       "actionability_upgrade_reason": "",
       "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 6,
+      "concrete_action_signal_count": 5,
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "이 발표는 Jetpack 라이브러리 수준의 UI 컴포넌트 추가이며, Camera HAL3 규격 자체나 AIDL 인터페이스의 직접적인 변경을 의미하지는 않습니다."
+        "CameraXViewfinder Composable의 도입이 Camera HAL3 AIDL 인터페이스 자체의 규격 변경을 수반하는 것은 아닙니다.",
+        "앱 레이어의 렌더링 최적화 툴킷이므로 HAL 내부 이미지 처리 알고리즘의 직접적인 변경을 강제하지 않습니다."
       ],
       "soc_signal_type": "accelerator_camera_workload",
       "soc_signal_source_allowed": true,
@@ -154,8 +152,5 @@
     ],
     "historical_rewrite_followup": "#108"
   },
-  "warnings": [
-    "Optional input_unavailable: source_effectiveness_report",
-    "Optional input_unavailable: evidence_pack_summary"
-  ]
+  "warnings": []
 }

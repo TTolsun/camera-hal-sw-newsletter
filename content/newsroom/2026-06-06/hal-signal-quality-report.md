@@ -2,8 +2,8 @@
 
 ## Gate Boundary
 
-- status: WARN
-- input_completeness: partial
+- status: NEEDS_FIX
+- input_completeness: complete
 - quality validation records HAL signal deductions: true
 - publish gate blocks HAL signal hard blockers through quality status: true
 - review artifacts preserved: true
@@ -11,7 +11,7 @@
 ## Inputs
 
 - missing required: none
-- optional input_unavailable: source_effectiveness_report, evidence_pack_summary
+- optional input_unavailable: none
 
 ## Summary
 
@@ -42,4 +42,4 @@
 
 | # | Article | signal_quality_status | actionability_level | effective_actionability_level | hal_impact_axes | capsule | hard_blocker_reason_codes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표 | strong_signal | owner_metric_log | owner_metric_log | framework_hal_contract, camerax_app_compatibility | yes | none |
+| 1 | Google I/O '26: Jetpack CameraX와 Media3 툴킷을 통한 폴더블 및 대화면 미디어 파이프라인 최적화 | strong_signal | owner_metric_log | owner_metric_log | framework_hal_contract, camerax_app_compatibility | yes | none |

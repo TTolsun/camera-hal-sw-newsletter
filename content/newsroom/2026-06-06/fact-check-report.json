@@ -1,16 +1,38 @@
 {
-  "status": "PASS",
-  "must_fix": [],
+  "status": "NEEDS_FIX",
+  "must_fix": [
+    {
+      "location": "$.briefing[1]",
+      "problem": "Mailing list sources are blocked from main article promotion due to missing primary confirmation and active source quality blockers. They should not be presented as confirmed facts in the briefing.",
+      "suggestion": "Remove this briefing item or rephrase it as a watchlist item, explicitly stating that it is from a mailing list and requires further confirmation. Do not present it as a confirmed change.",
+      "source_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/"
+    },
+    {
+      "location": "$.briefing[2]",
+      "problem": "Mailing list sources are blocked from main article promotion due to missing primary confirmation and active source quality blockers. They should not be presented as confirmed facts in the briefing.",
+      "suggestion": "Remove this briefing item or rephrase it as a watchlist item, explicitly stating that it is from a mailing list and requires further confirmation. Do not present it as a confirmed change.",
+      "source_url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/"
+    },
+    {
+      "location": "$.summary",
+      "problem": "The summary includes information from mailing list sources that are blocked from main article promotion due to missing primary confirmation and active source quality blockers. This information should not be presented as confirmed facts.",
+      "suggestion": "Rewrite the summary to only include information from the primary, allowed source. Remove any mention of the Linux media subsystem sensor driver patches.",
+      "source_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+    }
+  ],
   "recommended_fixes": [],
-  "source_gaps": [],
-  "source_gap_count": 0,
+  "source_gaps": [
+    "The briefing includes two items from lore.kernel.org linux-media list (Sony IMX678 and Aptina MT9M113 sensor driver patches). These sources are blocked from main article promotion because they require primary confirmation and have active source quality blockers. They should not be presented as confirmed facts in the briefing without explicit caveats or demotion to a watchlist.",
+    "The summary includes information from lore.kernel.org linux-media list (Sony IMX678 and Aptina MT9M113 sensor driver patches). These sources are blocked from main article promotion because they require primary confirmation and have active source quality blockers. This information should not be presented as confirmed facts in the summary."
+  ],
+  "source_gap_count": 2,
   "article_quality": [
     {
       "section_index": 0,
-      "headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
+      "headline": "Google I/O '26: Jetpack CameraX와 Media3 툴킷을 통한 폴더블 및 대화면 미디어 파이프라인 최적화",
       "publishable": true,
-      "reason": "Google I/O '26에서 발표된 CameraXViewfinder Composable은 폴더블 및 태블릿 기기에서 유연한 카메라 미리보기를 지원하며, 이는 HAL 계층의 동적 스트림 구성 성능 최적화 요구로 이어집니다. HAL 엔지니어에게 실질적인 검증 포인트를 제공합니다."
+      "reason": "Google I/O '26 발표는 CameraX와 Media3의 통합을 통해 폴더블 및 대화면 기기에서의 카메라 미리보기 최적화에 대한 구체적인 정보를 제공하며, 이는 HAL 엔지니어에게 스트림 재설정 및 버퍼 관리의 중요성을 강조합니다."
     }
   ],
-  "final_comment": "decision_metadata 필드는 deterministic builder가 생성하므로 fact-checker가 수정해서는 안 됩니다. 이 필드를 제거하거나 수정하지 마십시오."
+  "final_comment": "The main article from Google I/O '26 is publishable and provides relevant information for Camera HAL engineers regarding CameraX and Media3 integration for foldable/large screen devices. However, the briefing and summary incorrectly include information from mailing list sources that are blocked due to missing primary confirmation and active source quality blockers. These items must be removed or rephrased as watchlist items with appropriate caveats."
 }

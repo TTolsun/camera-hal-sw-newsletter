@@ -7,15 +7,15 @@ Date: 2026-06-06
 - Sources: 62 (registry=62, synthetic=0)
 - Collected candidates: 40
 - Unregistered candidates: 0
-- Eligible candidates: 12
+- Eligible candidates: 14
 - Selected candidates: 5
 - Rendered main articles: 1
-- Source gap candidates: 28
-- Generic noise candidates: 18
+- Source gap candidates: 26
+- Generic noise candidates: 20
 - Duplicate candidates: 0
-- Recommendations: NO_RECENT_SIGNAL: 50, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 2, KEEP_AND_FIX_PARSER: 8, KEEP_AND_MONITOR: 2
+- Recommendations: NO_RECENT_SIGNAL: 50, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 1, KEEP_AND_FIX_PARSER: 9, KEEP_AND_MONITOR: 2
 - Selected main source quality coverage: 5/5
-- Main-eligible source quality coverage: 6/6
+- Main-eligible source quality coverage: 7/7
 - Conditional source promoted/blocked: 2/14
 - Unknown source quality: 0
 - Source quality field drift: 0
@@ -28,12 +28,12 @@ Date: 2026-06-06
 | source_url_quality | official_dated_release | 12 |
 | source_url_quality | project_mailing_list_release | 9 |
 | source_url_quality | engineering_blog_with_camera_evidence | 8 |
-| source_url_quality | official_site_update_row | 6 |
-| source_url_quality | official_release_note_anchor | 3 |
+| source_url_quality | official_site_update_row | 5 |
+| source_url_quality | official_release_note_anchor | 4 |
 | source_url_quality | undated_reference_page | 2 |
-| source_quality_status | blocked | 32 |
-| source_quality_status | allowed | 8 |
-| blocker | source_gap_risk | 28 |
+| source_quality_status | blocked | 31 |
+| source_quality_status | allowed | 9 |
+| blocker | source_gap_risk | 26 |
 | blocker | reference_only | 19 |
 | blocker | cross_check_required_but_missing | 8 |
 | blocker | undated_reference_page | 2 |
@@ -59,13 +59,13 @@ _없음_
 
 | Source | Recommendation | Collected | Eligible | Source Gap | Top Reason |
 | --- | --- | --- | --- | --- | --- |
-| android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 3 | 0 | 3 | No RSS item, no published date, no concrete release/API/behavior change detected. |
 | libcamera-release-announcements | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 1 | 0 | 1 | No RSS item, no published date, no concrete release/API/behavior change detected. |
 | android-developers-blog | KEEP_AND_FIX_PARSER | 8 | 2 | 6 | main_eligible=false |
-| lore-linux-media-list | KEEP_AND_FIX_PARSER | 8 | 4 | 4 | main_eligible=false |
+| lore-linux-media-list | KEEP_AND_FIX_PARSER | 8 | 5 | 3 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
+| android-developers-latest-updates | KEEP_AND_FIX_PARSER | 2 | 1 | 1 | No RSS item, no published date, no concrete release/API/behavior change detected. |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 4 | 0 | 4 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
-| androidx-media3-release-notes | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
+| androidx-media3-release-notes | KEEP_AND_FIX_PARSER | 2 | 0 | 2 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | iso-cpp-blog | KEEP_AND_FIX_PARSER | 8 | 2 | 6 | main_eligible=false |
@@ -128,13 +128,13 @@ _없음_
 | venturebeat-ai | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yozm-it | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 3 | 0 | 0 | 0 | 1 | 0 | 0 |
 | libcamera-release-announcements | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
 | android-developers-blog | KEEP_AND_FIX_PARSER | 30 | 8 | 0.25 | 0.5 | 1 | 0.75 | 0.625 | 0 |
-| lore-linux-media-list | KEEP_AND_FIX_PARSER | 25 | 8 | 0.5 | 1 | 0 | 0.5 | 0.25 | 0 |
+| lore-linux-media-list | KEEP_AND_FIX_PARSER | 25 | 8 | 0.625 | 0.8 | 0 | 0.375 | 0.375 | 0 |
+| android-developers-latest-updates | KEEP_AND_FIX_PARSER | 5 | 2 | 0.5 | 0 | 0 | 0.5 | 0 | 0 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 0 | 4 | 0 | 0 | 0 | 1 | 1 | 0 |
-| androidx-media3-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
+| androidx-media3-release-notes | KEEP_AND_FIX_PARSER | 0 | 2 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 8 | 0.25 | 0 | 0 | 0.75 | 0.375 | 0 |
@@ -143,4 +143,5 @@ _없음_
 
 ## Warnings
 
-_없음_
+- Unattributed fact-check source gap could not be mapped to a source: The briefing includes two items from lore.kernel.org linux-media list (Sony IMX678 and Aptina MT9M113 sensor driver patches). These sources are blocked from main article promotion because they require primary confirmation and have active source quality blockers. They should not be presented as confirmed facts in the briefing without explicit caveats or demotion to a watchlist.
+- Unattributed fact-check source gap could not be mapped to a source: The summary includes information from lore.kernel.org linux-media list (Sony IMX678 and Aptina MT9M113 sensor driver patches). These sources are blocked from main article promotion because they require primary confirmation and have active source quality blockers. This information should not be presented as confirmed facts in the summary.

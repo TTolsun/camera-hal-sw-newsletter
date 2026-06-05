@@ -25,21 +25,12 @@
 - content/newsroom/2026-06-06/editor-in-chief-brief.md
 - content/newsroom/2026-06-06/release-qa-report.md
 - content/newsroom/2026-06-06/artifact-manifest.json
-- newsletters/2026-06-06/newsletter.md
-- newsletters/2026-06-06/index.html
-- data/newsletters.json
-- data/homepage-headline.json
-- data/article-exposure-history.json
-- newsletters/2026-W23/index.html
-- newsletters/2026-W23/newsletter.md
-- newsletters/2026-W23/issue.json
-- data/newsletters-weekly.json
 
 ## 산출물 리뷰 순서
 
-- present: 62/87
-- missing_required: 1
-- attention_required: 1
+- present: 71/86
+- missing_required: 0
+- attention_required: 2
 
 ### 편집장 브리프
 
@@ -48,38 +39,42 @@
 
 ### 최종 기사 / 공개 출력
 
-- `newsletters/2026-06-06/newsletter.md` - changed
-- `newsletters/2026-06-06/index.html` - changed
-- `data/newsletters.json` - changed
-- `data/homepage-headline.json` - changed
-- `newsletters/2026-W23/index.html` - changed
-- `data/article-exposure-history.json` - changed
-- `newsletters/2026-W23/newsletter.md` - changed
-- `newsletters/2026-W23/issue.json` - changed
-- `data/newsletters-weekly.json` - changed
+- `newsletters/2026-06-06/newsletter.md` - present
+- `newsletters/2026-06-06/index.html` - present
+- `data/newsletters.json` - present
+- `data/homepage-headline.json` - present
+- `newsletters/2026-W23/index.html` - present
+- `data/article-exposure-history.json` - present
+- `newsletters/2026-W23/newsletter.md` - present
+- `newsletters/2026-W23/issue.json` - present
+- `data/newsletters-weekly.json` - present
 
 ### 사실성 / 품질 / HAL 게이트
 
 - `content/newsroom/2026-06-06/fact-check-report.md` - changed
 - `content/newsroom/2026-06-06/quality-report.md` - changed
-- `content/newsroom/2026-06-06/hal-signal-quality-report.md` - missing required (required_artifact_missing)
+- `content/newsroom/2026-06-06/hal-signal-quality-report.md` - present
 - `content/newsroom/2026-06-06/stale-claim-report.md` - changed
+- `content/newsroom/2026-06-06/image-audit-report.md` - present
 - `content/newsroom/2026-06-06/source-quality-report.md` - present
 
 ### 후보 선정 진단
 
 - `content/newsroom/2026-06-06/selection-diagnostics.md` - present
 - `content/newsroom/2026-06-06/selection-report.md` - present
+- `content/newsroom/2026-06-06/source-quality-diagnosis.md` - present
 
 ### 필요 시 확인
 
 - `content/newsroom/2026-06-06/release-qa-report.md` - changed
 - `content/newsroom/2026-06-06/retry-history.md` - changed
+- `content/newsroom/2026-06-06/source-effectiveness-report.md` - present
 - `content/newsroom/2026-06-06/source-discovery-feedback-report.md` - present
 - `content/newsroom/2026-06-06/gemini-source-discovery-report.md` - present
 
 ### 디버그 근거
 
+- `content/newsroom/2026-06-06/recovery-prompt.md` - changed
 - `content/collected-news/2026-06-06/manual-candidates.json` - present
 - `content/collected-news/2026-06-06/candidates.json` - present
 - `content/collected-news/2026-06-06/raw-candidate-manifest.json` - present
@@ -91,13 +86,18 @@
 - `content/newsroom/2026-06-06/editor-draft.md` - changed
 - `content/newsroom/2026-06-06/fact-check-report.json` - changed
 - `content/newsroom/2026-06-06/quality-report.json` - changed
+- `content/newsroom/2026-06-06/hal-signal-quality-report.json` - present
 - `content/newsroom/2026-06-06/stale-claim-report.json` - changed
 - `content/newsroom/2026-06-06/retry-history.json` - changed
 - `content/newsroom/2026-06-06/shortlisted-candidates.json` - changed
 - `content/newsroom/2026-06-06/selection-report.json` - present
 - `content/newsroom/2026-06-06/article-capsules.json` - changed
 - `content/newsroom/2026-06-06/background-context.json` - changed
+- `content/newsroom/2026-06-06/evidence-pack-summary.json` - present
+- `content/newsroom/2026-06-06/image-audit-report.json` - present
 - `content/newsroom/2026-06-06/source-quality-report.json` - present
+- `content/newsroom/2026-06-06/source-quality-diagnosis.json` - present
+- `content/newsroom/2026-06-06/source-effectiveness-report.json` - present
 - `content/newsroom/2026-06-06/source-discovery-feedback-report.json` - present
 - `content/newsroom/2026-06-06/source-clusters.json` - present
 - `content/newsroom/2026-06-06/gemini-source-proposals.json` - present
@@ -112,9 +112,7 @@
 - `content/source-events/2026-06-06/source-change-events.json` - present
 - `content/newsroom/2026-06-06/editor-draft-attempt-1.json` - present
 - `content/newsroom/2026-06-06/editor-draft-attempt-1.md` - present
-- `content/newsroom/2026-06-06/editor-invalid-attempt-1.json` - present
 - `content/newsroom/2026-06-06/editor-public-article-judge-attempt-1.json` - changed
-- `content/newsroom/2026-06-06/editor-validation-error-attempt-1.json` - present
 - `content/newsroom/2026-06-06/fact-check-report-attempt-1.json` - present
 - `content/newsroom/2026-06-06/fact-check-report-attempt-1.md` - present
 - `content/newsroom/2026-06-06/quality-report-attempt-1.json` - present
@@ -122,19 +120,14 @@
 - `content/newsroom/2026-06-06/reporter-candidates-attempt-1.json` - present
 - `content/newsroom/2026-06-06/artifact-manifest.json` - changed
 
+### 미분류 산출물
+
+- `content/newsroom/2026-06-06/repair-failure.json` - present
+
 
 ## npm run validate 실행 결과
 
-> camera-hal-sw-newsletter@1.0.0 validate:site
-> node scripts/validate-site.js
-
-Validated 18 newsletter entries.
-
-
-> camera-hal-sw-newsletter@1.0.0 validate:images
-> node scripts/validate-external-images.js
-
-Validated 2 article images.
+editorial_reviewable: skipped public validation because this review PR is not publishable.
 
 ## 잔여 TODO 여부
 
@@ -146,12 +139,12 @@ Validated 2 article images.
 
 ## Gemini 검증 결과
 
-- 상태: PASS
-- must_fix 개수: 0
-- source gap 개수: 0
+- 상태: NEEDS_FIX
+- must_fix 개수: 3
+- source gap 개수: 2
 
 ## 품질 게이트
-- 품질 점수: 98/100
+- 품질 점수: 54/100
 - 품질 기준: 60
-- 품질 상태: PASS
-- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 2)
+- 품질 상태: NEEDS_FIX
+- 주요 감점: 1pt editorial-story (briefing 2); 8pt source-integrity (Google I/O '26: Jetpack CameraX와 Media3 툴킷을 통한 폴더블 및 대화면 미디어 파이프라인 최적화); 8pt claim-evidence (Google I/O '26: Jetpack CameraX와 Media3 툴킷을 통한 폴더블 및 대화면 미디어 파이프라인 최적화); 8pt claim-evidence (Google I/O '26: Jetpack CameraX와 Media3 툴킷을 통한 폴더블 및 대화면 미디어 파이프라인 최적화); 15pt source-integrity

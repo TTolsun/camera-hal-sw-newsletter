@@ -18,27 +18,27 @@
     "synthetic_source_count": 0,
     "unregistered_candidate_count": 0,
     "collected_count": 40,
-    "eligible_count": 12,
+    "eligible_count": 14,
     "selected_count": 5,
     "rendered_main_count": 1,
-    "source_gap_count": 28,
-    "generic_noise_count": 18,
+    "source_gap_count": 26,
+    "generic_noise_count": 20,
     "duplicate_count": 0,
     "source_url_quality_distribution": {
       "undated_reference_page": 2,
       "official_dated_release": 12,
-      "official_site_update_row": 6,
-      "official_release_note_anchor": 3,
+      "official_site_update_row": 5,
+      "official_release_note_anchor": 4,
       "engineering_blog_with_camera_evidence": 8,
       "project_mailing_list_release": 9
     },
     "source_quality_status_summary": {
-      "blocked": 32,
-      "allowed": 8
+      "blocked": 31,
+      "allowed": 9
     },
     "source_quality_blocker_summary": {
       "undated_reference_page": 2,
-      "source_gap_risk": 28,
+      "source_gap_risk": 26,
       "reference_only": 19,
       "cross_check_required_but_missing": 8
     },
@@ -47,8 +47,8 @@
       "with_source_quality_count": 5
     },
     "main_eligible_source_quality_coverage": {
-      "main_eligible_candidate_count": 6,
-      "with_source_quality_count": 6
+      "main_eligible_candidate_count": 7,
+      "with_source_quality_count": 7
     },
     "conditional_source_promoted_count": 2,
     "conditional_source_blocked_count": 14,
@@ -66,11 +66,11 @@
       },
       {
         "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
-        "count": 2
+        "count": 1
       },
       {
         "recommendation": "KEEP_AND_FIX_PARSER",
-        "count": 8
+        "count": 9
       },
       {
         "recommendation": "KEEP_AND_MONITOR",
@@ -407,30 +407,31 @@
       "candidate_only": false,
       "collection_mode_hint": "release-note-watch",
       "synthetic": false,
-      "collected_count": 3,
-      "eligible_count": 0,
+      "collected_count": 2,
+      "eligible_count": 1,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 3,
-      "camera_relevant_raw_count": 3,
-      "parser_repair_reason_count": 3,
-      "reference_only_count": 3,
-      "watchlist_count": 3,
-      "main_eligible_false_count": 3,
-      "briefing_only_count": 3,
+      "source_gap_count": 1,
+      "camera_relevant_raw_count": 2,
+      "parser_repair_reason_count": 1,
+      "reference_only_count": 1,
+      "watchlist_count": 1,
+      "main_eligible_false_count": 1,
+      "briefing_only_count": 1,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
       "source_url_quality_distribution": {
-        "official_site_update_row": 3
+        "official_site_update_row": 2
       },
       "source_quality_status_summary": {
-        "blocked": 3
+        "allowed": 1,
+        "blocked": 1
       },
       "source_quality_blocker_summary": {
-        "source_gap_risk": 3,
-        "reference_only": 3
+        "source_gap_risk": 1,
+        "reference_only": 1
       },
       "selected_main_source_quality_coverage": {
         "selected_main_count": 0,
@@ -449,44 +450,42 @@
       "reddit_candidate_count": 0,
       "reddit_cross_checked_count": 0,
       "reddit_only_blocked_count": 0,
-      "eligible_rate": 0,
+      "eligible_rate": 0.5,
       "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 1,
+      "source_gap_rate": 0.5,
       "noise_rate": 0,
-      "effectiveness_score": 0,
-      "recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
+      "effectiveness_score": 5,
+      "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
-        "Official or high-priority source produced camera-relevant candidates, but parser/source-extraction-like rejection reasons blocked eligibility.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
         "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
       "top_exclusion_reasons": [
         {
           "reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-          "count": 3
+          "count": 1
         },
         {
           "reason": "briefing_only=true",
-          "count": 3
+          "count": 1
         },
         {
           "reason": "finalSelectionEligibility=watchlist",
-          "count": 3
+          "count": 1
         },
         {
           "reason": "hasDatedEvidence=false",
-          "count": 3
+          "count": 1
         },
         {
           "reason": "main_eligible=false",
-          "count": 3
+          "count": 1
         }
       ],
       "sample_selected_urls": [],
       "sample_excluded_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
       ]
     },
     {
@@ -963,29 +962,30 @@
       "candidate_only": false,
       "collection_mode_hint": "release-note-watch",
       "synthetic": false,
-      "collected_count": 1,
+      "collected_count": 2,
       "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 1,
+      "source_gap_count": 2,
       "camera_relevant_raw_count": 0,
       "parser_repair_reason_count": 0,
-      "reference_only_count": 0,
-      "watchlist_count": 1,
-      "main_eligible_false_count": 1,
-      "briefing_only_count": 0,
+      "reference_only_count": 1,
+      "watchlist_count": 2,
+      "main_eligible_false_count": 2,
+      "briefing_only_count": 1,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 1,
+      "generic_noise_count": 2,
       "source_url_quality_distribution": {
-        "official_release_note_anchor": 1
+        "official_release_note_anchor": 2
       },
       "source_quality_status_summary": {
-        "blocked": 1
+        "blocked": 2
       },
       "source_quality_blocker_summary": {
-        "source_gap_risk": 1
+        "source_gap_risk": 2,
+        "reference_only": 1
       },
       "selected_main_source_quality_coverage": {
         "selected_main_count": 0,
@@ -1019,27 +1019,28 @@
       "top_exclusion_reasons": [
         {
           "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+          "count": 2
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 2
+        },
+        {
+          "reason": "source_gap_risk=true",
+          "count": 2
+        },
+        {
+          "reason": "briefing_only=true",
           "count": 1
         },
         {
           "reason": "finalSelectionEligibility=exclude",
           "count": 1
-        },
-        {
-          "reason": "hasDatedEvidence=false",
-          "count": 1
-        },
-        {
-          "reason": "main_eligible=false",
-          "count": 1
-        },
-        {
-          "reason": "source_gap_risk=true",
-          "count": 1
         }
       ],
       "sample_selected_urls": [],
       "sample_excluded_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
         "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4"
       ]
     },
@@ -2840,20 +2841,20 @@
       "collection_mode_hint": "rss-source",
       "synthetic": false,
       "collected_count": 8,
-      "eligible_count": 4,
+      "eligible_count": 5,
       "selected_count": 4,
       "rendered_main_count": 0,
-      "source_gap_count": 4,
+      "source_gap_count": 3,
       "camera_relevant_raw_count": 8,
       "parser_repair_reason_count": 0,
-      "reference_only_count": 2,
-      "watchlist_count": 2,
-      "main_eligible_false_count": 4,
-      "briefing_only_count": 2,
+      "reference_only_count": 3,
+      "watchlist_count": 3,
+      "main_eligible_false_count": 3,
+      "briefing_only_count": 3,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 2,
+      "generic_noise_count": 3,
       "source_url_quality_distribution": {
         "project_mailing_list_release": 8
       },
@@ -2862,16 +2863,16 @@
       },
       "source_quality_blocker_summary": {
         "cross_check_required_but_missing": 8,
-        "source_gap_risk": 4,
-        "reference_only": 2
+        "source_gap_risk": 3,
+        "reference_only": 3
       },
       "selected_main_source_quality_coverage": {
         "selected_main_count": 4,
         "with_source_quality_count": 4
       },
       "main_eligible_source_quality_coverage": {
-        "main_eligible_candidate_count": 1,
-        "with_source_quality_count": 1
+        "main_eligible_candidate_count": 2,
+        "with_source_quality_count": 2
       },
       "conditional_source_promoted_count": 0,
       "conditional_source_blocked_count": 8,
@@ -2882,11 +2883,11 @@
       "reddit_candidate_count": 0,
       "reddit_cross_checked_count": 0,
       "reddit_only_blocked_count": 0,
-      "eligible_rate": 0.5,
-      "selection_rate": 1,
+      "eligible_rate": 0.625,
+      "selection_rate": 0.8,
       "rendered_rate": 0,
-      "source_gap_rate": 0.5,
-      "noise_rate": 0.25,
+      "source_gap_rate": 0.375,
+      "noise_rate": 0.375,
       "effectiveness_score": 25,
       "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
@@ -2896,37 +2897,36 @@
       ],
       "top_exclusion_reasons": [
         {
-          "reason": "main_eligible=false",
-          "count": 4
-        },
-        {
-          "reason": "source_gap_risk=true",
-          "count": 4
-        },
-        {
-          "reason": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
-          "count": 2
-        },
-        {
           "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-          "count": 2
+          "count": 3
         },
         {
           "reason": "briefing_only=true",
-          "count": 2
+          "count": 3
+        },
+        {
+          "reason": "finalSelectionEligibility=watchlist",
+          "count": 3
+        },
+        {
+          "reason": "main_eligible=false",
+          "count": 3
+        },
+        {
+          "reason": "reference_only=true",
+          "count": 3
         }
       ],
       "sample_selected_urls": [
+        "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
+        "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
         "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
-        "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-        "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
-        "https://lore.kernel.org/linux-media/202606052349.bOSyAnNd-lkp@intel.com/"
+        "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/"
       ],
       "sample_excluded_urls": [
-        "https://lore.kernel.org/linux-media/20260605134047.597EC1F00893@smtp.kernel.org/",
-        "https://lore.kernel.org/linux-media/202606052235.rM24ifzS-lkp@intel.com/",
-        "https://lore.kernel.org/linux-media/aiLrsLM8N0VzrNMe@devvm7509.cco0.facebook.com/",
-        "https://lore.kernel.org/linux-media/c7f35621-2bdb-4e66-ac8a-6c7fc6f80f1c@seznam.cz/"
+        "https://lore.kernel.org/linux-media/20260605160253.637381F00893@smtp.kernel.org/",
+        "https://lore.kernel.org/linux-media/3dbef45d-9fed-46ab-806e-6ccd95ae0ee1@fritscher.net/",
+        "https://lore.kernel.org/linux-media/aiL3UM9aULBypEk7@devvm29614.prn0.facebook.com/"
       ]
     },
     {
@@ -4211,5 +4211,8 @@
       "sample_excluded_urls": []
     }
   ],
-  "warnings": []
+  "warnings": [
+    "Unattributed fact-check source gap could not be mapped to a source: The briefing includes two items from lore.kernel.org linux-media list (Sony IMX678 and Aptina MT9M113 sensor driver patches). These sources are blocked from main article promotion because they require primary confirmation and have active source quality blockers. They should not be presented as confirmed facts in the briefing without explicit caveats or demotion to a watchlist.",
+    "Unattributed fact-check source gap could not be mapped to a source: The summary includes information from lore.kernel.org linux-media list (Sony IMX678 and Aptina MT9M113 sensor driver patches). These sources are blocked from main article promotion because they require primary confirmation and have active source quality blockers. This information should not be presented as confirmed facts in the summary."
+  ]
 }

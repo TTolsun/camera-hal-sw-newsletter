@@ -21,7 +21,7 @@
 
 | # | 기사 | 선택된 대표 이미지 | 후보 | 검증 통과 후보 | 상태 |
 | ---: | --- | --- | ---: | ---: | --- |
-| 1 | Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
+| 1 | Google I/O '26: CameraX와 Media3 통합 툴킷 공개, 폴더블 및 대화면 레이아웃 대응 강화 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
 
 ## 복원 가능 기사
 
