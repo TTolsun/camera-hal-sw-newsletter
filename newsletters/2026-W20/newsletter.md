@@ -1,82 +1,127 @@
 # Camera HAL Weekly 2026-W20
 
-2026-05-11 ~ 2026-05-17 주간 다이제스트 (일별 이슈 3건).
+2026-05-11 ~ 2026-05-17 주간 뉴스레터 (기사 3건).
 
 
 
 ## 1. 이번 주 3줄 브리핑
 
-- 이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.
-- 이번 2026-05-12호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.
-- 이번 2026-05-11호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.
+- Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
+- CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
+- CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
-## 2. Camera HAL / SW Newsletter - 2026-05-15
-
-
-![Camera HAL / SW Newsletter - 2026-05-15 image](https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&amp;image=thelio_gcc16_1)
-
-_이미지: [libcamera Release Announcements](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html)_
+## 2. Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
 
 
-Camera HAL / SW Newsletter - 2026-05-15
+![Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22 image](https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1)
 
-이 항목은 2026-05-15 일별 이슈입니다. 기사별 Camera HAL/Driver 관점 분석과 전체 출처·이미지는 일별 이슈 페이지에서 확인하세요.
+_이미지: [Phoronix Linux Camera / Media](https://www.phoronix.com/review/gcc-16-vs-clang-22)_
+
+
+Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
+
+GCC 16 성능 비교 소식은 C++ compiler optimization과 binary performance를 관찰할 tooling 신호입니다. Android Camera HAL은 주로 Clang/LLVM 기반이므로 이 항목은 즉시 적용 변경이 아니라 장기 toolchain 비교 자료로 읽어야 합니다.
+
+Camera HAL native code는 build flag, sanitizer, LTO/PGO, warning policy 같은 toolchain 설정에 민감합니다. GCC 16 benchmark는 compiler optimization 동향을 보여주지만, Android product branch에 바로 GCC를 적용하거나 HAL runtime 성능 개선을 주장할 근거는 아닙니다.
+
+실무적으로는 Clang/LLVM 쪽 equivalent feature와 Android platform toolchain 정책을 함께 비교하는 정도가 적절합니다. host-side utility나 offline analysis tool이 GCC를 쓰는 경우에만 별도 benchmark를 열 수 있습니다.
+
+**Android Native / Tooling 관점**
+
+이 항목은 Camera HAL runtime 변경이 아니라 native tooling watch입니다. HAL 팀은 Android branch의 Clang/LLVM 정책을 기준으로 보고, host utility 또는 benchmark 환경에서만 제한적으로 비교해야 합니다.
+
+### 확인할 점
+
+- 현재 Android branch의 Clang/LLVM version, C++ standard flag, sanitizer 설정을 확인합니다.
+
+- GCC 16 성능 결과를 product HAL 성능 개선 근거로 쓰지 않습니다.
+
+- host-side tool이나 standalone benchmark가 GCC를 쓰는 경우에만 별도 비교를 진행합니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.
+Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
 
 **출처**
 
-- [libcamera Release Announcements](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html)
-- [ISO C++ Blog](https://isocpp.org//blog/2026/04/gcc-16.1)
-- [Phoronix Linux Camera / Media](https://www.phoronix.com/review/gcc-16-vs-clang-22)
-- [ISO C++ Blog](https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more)
-- [2026-05-15 일별 이슈](newsletters/2026-05-15/index.html)
+- [GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22](https://www.phoronix.com/review/gcc-16-vs-clang-22)
 
 ---
 
-## 3. Camera HAL / SW Newsletter - 2026-05-12
+## 3. CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
 
-![Camera HAL / SW Newsletter - 2026-05-12 image](https://developer.android.com/static/images/social/android-developers.png)
+![CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 image](https://developer.android.com/static/images/social/android-developers.png)
 
-_이미지: [2026-05-12 일별 이슈](newsletters/2026-05-12/index.html)_
+_이미지: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)_
 
 
-Camera HAL / SW Newsletter - 2026-05-12
+CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
-이 항목은 2026-05-12 일별 이슈입니다. 기사별 Camera HAL/Driver 관점 분석과 전체 출처·이미지는 일별 이슈 페이지에서 확인하세요.
+CameraX 1.6.1 release note는 viewfinder와 video 관련 artifact version을 포함한 AndroidX Camera 계층 업데이트입니다. Camera HAL 팀에는 direct contract 변경이 아니라 app-facing camera behavior를 smoke test로 확인할 계기입니다.
+
+CameraX와 Camera2는 HAL 위 계층이므로 release note를 곧바로 HAL API, stream, metadata 변경 근거로 쓰면 안 됩니다. 대신 reference app에서 Preview, ImageCapture, VideoCapture 조합이 기존 device matrix에서 깨지지 않는지 확인하는 방식이 안전합니다.
+
+특히 Camera2 interop, extensions, session configuration 실패가 보고되면 app/framework log와 HAL/device log를 나눠 봐야 합니다. HAL follow-up은 device log 또는 stream/buffer evidence가 있을 때만 엽니다.
+
+**Camera HAL / Driver 관점**
+
+CameraX 1.6.1은 app-facing compatibility 확인 항목입니다. HAL owner는 reference app smoke와 로그 분리를 통해 library issue와 device HAL regression을 구분해야 합니다.
+
+### 확인할 점
+
+- CameraX 1.6.1 dependency로 Preview + ImageCapture + VideoCapture smoke test를 실행할 조합을 정합니다.
+
+- `dumpsys media.camera`, app logcat, framework camera log에서 session configuration 실패를 분리해 확인합니다.
+
+- Camera2 interop 또는 extensions 관련 변경은 release note 범위 안에서만 해석합니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-이번 2026-05-12호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.
+CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
 **출처**
 
-- [2026-05-12 일별 이슈](newsletters/2026-05-12/index.html)
+- [1.6.1](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)
+- [CameraX 1.4.0-alpha07 release table row](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
 
 ---
 
-## 4. Camera HAL / SW Newsletter - 2026-05-11
+## 4. CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
 
-![Camera HAL / SW Newsletter - 2026-05-11 image](https://developer.android.com/static/images/social/android-developers.png?hl=es-419)
+![CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 image](https://developer.android.com/static/images/social/android-developers.png?hl=es-419)
 
-_이미지: [2026-05-11 일별 이슈](newsletters/2026-05-11/index.html)_
+_이미지: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)_
 
 
-Camera HAL / SW Newsletter - 2026-05-11
+CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
-이 항목은 2026-05-11 일별 이슈입니다. 기사별 Camera HAL/Driver 관점 분석과 전체 출처·이미지는 일별 이슈 페이지에서 확인하세요.
+AndroidX Camera release note의 CameraX 1.6.1 / 1.7.0-alpha01 artifact 업데이트는 app/framework camera compatibility 확인 신호입니다. HAL 팀은 이를 새 HAL 요구사항이 아니라 기존 CameraX/Camera2 조합의 회귀 확인 입력으로 다뤄야 합니다.
+
+CameraX는 Camera2 위에서 Preview, ImageCapture, VideoCapture 같은 use case를 앱 개발자가 다루기 쉽게 만드는 layer입니다. artifact version update는 app dependency matrix와 reference app smoke test가 필요한지 판단하는 자료이지, 그 자체로 device HAL behavior 변경을 의미하지 않습니다.
+
+회귀가 보일 때는 app logcat, framework camera log, HAL/device log를 분리해 원인을 나눠야 합니다. CameraX/library 문제인지 downstream HAL issue인지 구분하지 않으면 HAL owner에게 잘못된 action item이 생깁니다.
+
+**Camera HAL / Driver 관점**
+
+CameraX 업데이트는 app/framework compatibility 신호입니다. HAL 팀은 제품 dependency matrix와 reference app smoke 결과를 확인하고, device log 근거가 있을 때만 HAL follow-up으로 분리해야 합니다.
+
+### 확인할 점
+
+- CameraX 1.6.1 / 1.7.0-alpha01 artifact를 현재 product dependency matrix와 비교합니다.
+
+- Preview, ImageCapture, VideoCapture smoke run이 필요한 device/API 조합만 표시합니다.
+
+- 회귀가 있으면 app logcat, framework camera log, HAL/device log를 분리해 원인을 기록합니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-이번 2026-05-11호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.
+CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
 **출처**
 
-- [2026-05-11 일별 이슈](newsletters/2026-05-11/index.html)
+- [Android Developers Latest Updates](https://developer.android.com/latest-updates)
 
 
 ## 참고자료
