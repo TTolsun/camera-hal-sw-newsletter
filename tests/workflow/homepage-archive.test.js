@@ -434,7 +434,8 @@ test('archive card order, clamps, and tag overflow keep archive cards scannable'
     'card-summary'
   ]);
   assert.match(card, /<h3 class="card-title clamp-2">Archive card title<\/h3>/);
-  assert.match(card, /<p class="card-summary archive-card-summary clamp-3">Archive card summary<\/p>/);
+  // Weekly cards list each article title on its own line, so the summary is no longer line-clamped.
+  assert.match(card, /<p class="card-summary archive-card-summary">Archive card summary<\/p>/);
   assert.match(card, /<span class="tag">Camera HAL<\/span>/);
   assert.match(card, /<span class="tag">Camera &quot;HAL&quot; &amp; Android<\/span>/);
   assert.match(card, /<span class="tag">CameraX<\/span>/);
@@ -563,7 +564,7 @@ test('homepage malformed headline state is a headline-only fallback', async () =
   assert.equal(errors.length, 1);
 });
 
-test('homepage renders valid headline state with article URL priority, image, and escaped text', async () => {
+test('homepage renders valid headline state linking to the weekly issue, image, and escaped text', async () => {
   const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
     schemaVersion: 1,
     current_headline: {
@@ -592,7 +593,8 @@ test('homepage renders valid headline state with article URL priority, image, an
   assert.match(elements['headline-card'].innerHTML, /<div class="tag-row headline-tags"><span class="tag">Camera HAL<\/span><\/div>/);
   assert.match(elements['headline-card'].innerHTML, /class="card-title clamp-2"/);
   assert.match(elements['headline-card'].innerHTML, /class="card-summary clamp-3"/);
-  assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/index\.html#article-camerax-preview"/);
+  // "기사 보기" links to the matched issue page (the weekly newsletter), not the per-article anchor.
+  assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/index\.html">기사 보기<\/a>/);
   assert.match(elements['headline-card'].innerHTML, /기사 보기/);
   assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/newsletter\.md">Markdown<\/a>/);
   assert.match(elements['headline-card'].innerHTML, /Headline/);
@@ -741,7 +743,7 @@ test('homepage headline falls back to external source CTA when no newsletter URL
 test('homepage exposes clear Featured and Latest heading rows without changing heading levels', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
-  assert.match(html, /원래부터[\s\S]*hero-title-main[\s\S]*좋았던[\s\S]*hero-title-nowrap[\s\S]*것은[\s\S]*hero-title-main[\s\S]*없다[\s\S]*\./);
+  assert.match(html, /보이지 않는[\s\S]*hero-title-main[\s\S]*카메라의[\s\S]*오늘[\s\S]*hero-title-nowrap[\s\S]*그러나[\s\S]*hero-title-main[\s\S]*미래/);
   assert.match(html, /Camera HAL, Android, Linux Driver, AI 기술을 중심으로 모바일 카메라 기술의 변화를 추적합니다\./);
   assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">Home<\/a>[\s\S]*href="archive\.html">Archive<\/a>[\s\S]*href="https:\/\/github\.com\/TTolsun\/camera-hal-sw-newsletter">GitHub<\/a>/);
   assert.match(html, /<a class="button button-secondary" href="#archive">/);

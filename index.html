@@ -28,8 +28,8 @@
       <div class="hero-copy">
         <p class="eyebrow">Camera HAL - Android - Driver - AI</p>
         <h1 id="hero-title">
-          <span class="hero-title-line">원래부터 <span class="hero-title-main">좋았던</span></span>
-          <span class="hero-title-line hero-title-nowrap">것은 <span class="hero-title-main">없다</span>.</span>
+          <span class="hero-title-line">보이지 않는 <span class="hero-title-main">카메라의</span> 오늘,</span>
+          <span class="hero-title-line hero-title-nowrap">그러나 <span class="hero-title-main">미래</span></span>
         </h1>
         <p class="hero-description">
           Camera HAL, Android, Linux Driver, AI 기술을 중심으로 모바일 카메라 기술의 변화를 추적합니다.
@@ -284,16 +284,46 @@
       }
     }
 
+    // Match the headline's date to the WEEKLY newsletter whose ISO week contains it, so the
+    // headline CTA links to the weekly issue (not a single-day page). Falls back to an exact date.
     function findHeadlineNewsletter(headline, newsletters = []) {
       const date = String(headline && headline.newsletter_date || '').trim();
       if (!date) return null;
-      return newsletters.find(item => item && item.date === date) || null;
+      const within = newsletters.find(item => {
+        const start = String((item && (item.weekStartDate || item.week_start_date)) || '').trim();
+        const end = String((item && (item.weekEndDate || item.week_end_date)) || '').trim();
+        return start && end && date >= start && date <= end;
+      });
+      return within || newsletters.find(item => item && item.date === date) || null;
     }
 
-    // Card date chip shows the ISO week ("2026-W22" -> "W22") for weekly entries, else the raw date.
+    // Card date chip shows the week's date range ("06.01~06.07"). Falls back to the ISO week
+    // ("2026-W23" -> "W23") and then the raw date when range bounds are unavailable.
     function weekLabel(entry) {
+      const md = value => String(value).slice(5).replace('-', '.');
+      const start = String((entry && (entry.weekStartDate || entry.week_start_date)) || '').trim();
+      const end = String((entry && (entry.weekEndDate || entry.week_end_date)) || '').trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
+        return `${md(start)}~${md(end)}`;
+      }
       const key = String((entry && entry.weeklyKey) || '').trim();
       return /^\d{4}-W\d{2}$/.test(key) ? key.slice(5) : String((entry && entry.date) || '');
+    }
+
+    // Card title without the trailing "(MM.DD ~ MM.DD)" range (the range is shown in the date chip).
+    function cardTitle(entry) {
+      return String((entry && entry.title) || '').replace(/\s*\([^)]*\)\s*$/, '');
+    }
+
+    // Render the weekly card summary (this week's article titles) one per line so they stay
+    // distinguishable. Splits on newline or the legacy " · " separator for older index entries.
+    function cardSummaryHtml(entry) {
+      return String((entry && entry.summary) || '')
+        .split(/\n+|\s+·\s+/)
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map(escapeHtml)
+        .join('<br>');
     }
 
     function renderHeadlineMedia(headline) {
@@ -310,7 +340,10 @@
     }
 
     function renderHeadlineCta(headline, matchedNewsletter) {
-      const internalHref = safeInternalPath(headline.newsletter_article_url) || safeInternalPath(headline.newsletter_url);
+      // "기사 보기" links to the matched WEEKLY newsletter when available, instead of the
+      // single-day article/newsletter URL, so the headline opens its weekly issue.
+      const weeklyHref = matchedNewsletter && safeInternalPath(matchedNewsletter.html);
+      const internalHref = weeklyHref || safeInternalPath(headline.newsletter_article_url) || safeInternalPath(headline.newsletter_url);
       const sourceHref = isExternalUrl(headline.source_url) ? headline.source_url : '';
       const href = internalHref || sourceHref;
       const primaryLink = href
@@ -402,8 +435,8 @@
             <span class="issue-date">${escapeHtml(weekLabel(latest))}</span>
             <span class="status-chip">Latest</span>
           </div>
-          <h3 class="card-title clamp-2">${escapeHtml(latest.title)}</h3>
-          <p class="card-summary latest-card-summary clamp-3">${escapeHtml(latest.summary)}</p>
+          <h3 class="card-title clamp-2">${escapeHtml(cardTitle(latest))}</h3>
+          <p class="card-summary latest-card-summary">${cardSummaryHtml(latest)}</p>
           ${renderTagRow(latest.tags, 'latest-tags')}
         `;
 

@@ -234,12 +234,35 @@ function briefingHeading(issue = {}) {
   return issue.weekly_key ? '이번 주 기사' : '이번 주 3줄 브리핑';
 }
 
+// Weekly issues are labeled by ISO week ("2026-W22" -> "2026 W22"); daily issues fall back to date.
+function issueWeekLabel(issue = {}) {
+  const key = String(issue.weekly_key || '').trim();
+  return /^\d{4}-W\d{2}$/.test(key) ? key.replace('-W', ' W') : '';
+}
+
+// Weekly issue hero kicker shows the week's full date range ("2026.05.25 ~ 2026.05.31").
+function issueKickerText(issue = {}) {
+  const dot = value => String(value).replace(/-/g, '.');
+  const start = String(issue.week_start_date || '').trim();
+  const end = String(issue.week_end_date || '').trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
+    return `${dot(start)} ~ ${dot(end)}`;
+  }
+  return `주간 뉴스레터 ${issue.date || ''}`.trim();
+}
+
 function issuePageTitle(issue = {}) {
+  const weekLabel = issueWeekLabel(issue);
+  if (weekLabel) return `${weekLabel} Camera SW Newsletter`;
   const date = issueDisplayDate(issue);
   return date ? `Camera SW Newsletter - ${date}` : 'Camera SW Newsletter';
 }
 
 function issueTitleHtml(issue = {}) {
+  const weekLabel = issueWeekLabel(issue);
+  if (weekLabel) {
+    return `<span>${escapeHtml(weekLabel)} Camera SW</span><span>Newsletter</span>`;
+  }
   const date = issueDisplayDate(issue);
   return `<span>Camera SW</span><span>Newsletter${date ? ` - ${escapeHtml(date)}` : ''}</span>`;
 }
@@ -557,7 +580,7 @@ function issueHeroHtml(issue) {
   return `<header class="article-header issue-hero">
         <div class="issue-hero-copy">
           <div class="article-meta issue-hero-meta">
-            <span class="issue-kicker">주간 뉴스레터 ${escapeHtml(issue.date)}</span>
+            <span class="issue-kicker">${escapeHtml(issueKickerText(issue))}</span>
             <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
           </div>
           <h1 class="issue-title">${issueTitleHtml(issue)}</h1>
