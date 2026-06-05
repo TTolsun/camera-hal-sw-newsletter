@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-05",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 90,
-  "generated_at": "2026-06-05T02:15:49.566Z",
+  "generated_at": "2026-06-05T13:01:30.878Z",
   "sources_path": "data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -1617,7 +1617,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
           "sourceKind": "article-img",
@@ -1661,7 +1661,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
           "sourceKind": "article-img",
@@ -2129,7 +2129,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "og",
@@ -2143,7 +2143,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "article-img",
@@ -2157,23 +2157,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=hi",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "og",
@@ -2187,7 +2187,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "article-img",
@@ -2201,18 +2201,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=hi",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "main-article",
@@ -2438,7 +2438,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -2452,21 +2452,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
-          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
-          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Site Updates",
-          "validationStatus": "ok",
-          "contentLength": 1760
-        },
-        {
-          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=it",
+          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -2478,11 +2464,25 @@
           "attribution": "AOSP Site Updates",
           "validationStatus": "ok",
           "contentLength": 53935
+        },
+        {
+          "url": "https://source.android.com/static/docs/compatibility/cts/images/33x_scale_31cm.png",
+          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
+          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "sourceKind": "article-img",
+          "width": 350,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Site Updates",
+          "validationStatus": "ok",
+          "contentLength": 570718
         }
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -2496,21 +2496,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
-          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
-          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Site Updates",
-          "validationStatus": "ok",
-          "contentLength": 1760
-        },
-        {
-          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=it",
+          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -2522,6 +2508,20 @@
           "attribution": "AOSP Site Updates",
           "validationStatus": "ok",
           "contentLength": 53935
+        },
+        {
+          "url": "https://source.android.com/static/docs/compatibility/cts/images/33x_scale_31cm.png",
+          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
+          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "sourceKind": "article-img",
+          "width": 350,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Site Updates",
+          "validationStatus": "ok",
+          "contentLength": 570718
         }
       ],
       "candidateTier": "main-article",
@@ -4889,7 +4889,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=de",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -4903,7 +4903,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -4917,7 +4917,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=de",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -4933,7 +4933,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=de",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -4947,7 +4947,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -4961,7 +4961,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=de",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -5198,7 +5198,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility",
           "sourceKind": "article-img",
@@ -5242,7 +5242,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility",
           "sourceKind": "article-img",
@@ -13154,7 +13154,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
@@ -13198,7 +13198,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
@@ -16604,7 +16604,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -16618,7 +16618,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
@@ -16632,23 +16632,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -16662,7 +16662,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
@@ -16676,18 +16676,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -17964,7 +17964,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -17992,7 +17992,7 @@
           "contentLength": 1165
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -18008,7 +18008,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -18036,7 +18036,7 @@
           "contentLength": 1165
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -20237,7 +20237,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -20249,11 +20249,25 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
+          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
+          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Compatibility Definition Document",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -20265,6 +20279,20 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
+          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
+          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Compatibility Definition Document",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -20512,7 +20540,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 142419
+          "contentLength": 2048
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -20556,7 +20584,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 142419
+          "contentLength": 2048
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -21997,7 +22025,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -22011,7 +22039,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -22027,7 +22055,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -22041,7 +22069,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -22280,7 +22308,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
           "sourceKind": "article-img",
@@ -22292,11 +22320,25 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin",
+          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Security Bulletin",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
           "sourceKind": "article-img",
@@ -22308,6 +22350,20 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin",
+          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Security Bulletin",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -22535,7 +22591,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -22549,7 +22605,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=ar",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -22565,7 +22621,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -22579,7 +22635,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=ar",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -22645,6 +22701,243 @@
     },
     {
       "schema_version": 5,
+      "id": "gemini-ae9e55f7b032d076",
+      "source_candidate_id": "gemini-ae9e55f7b032d076",
+      "title": "Supported media formats &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+      "url": "https://developer.android.com/media/platform/supported-formats",
+      "articleUrl": "https://developer.android.com/media/platform/supported-formats",
+      "article_url": "https://developer.android.com/media/platform/supported-formats",
+      "source": "Android Supported Media Formats",
+      "source_name": "Android Supported Media Formats",
+      "sourceName": "Android Supported Media Formats",
+      "sourceUrl": "https://developer.android.com/media/platform/supported-formats",
+      "source_url": "https://developer.android.com/media/platform/supported-formats",
+      "source_id": "android-supported-formats-reference",
+      "category": "android-media",
+      "source_category": "android-media",
+      "section": "android-media",
+      "source_section": "android-media",
+      "priority": "medium",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "official_blog",
+      "source_type": "official_blog",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Camera HAL SW developers need to be aware of changes in Android's media pipeline that affect camera output, such as new supported formats, encoding/decoding capabilities, and A/V synchronization."
+      ],
+      "keywords": [
+        "Android media formats",
+        "MediaCodec updates",
+        "MediaStore changes",
+        "camera A/V sync"
+      ],
+      "evidence": [
+        "New supported media formats",
+        "Updates to MediaCodec capabilities",
+        "Changes in MediaStore APIs",
+        "Impact on camera recording and A/V sync"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "PROPOSAL-002",
+      "proposal_trace_id": "PROPOSAL-002",
+      "discovery_topic_gap": "Camera HAL SW developers need to be aware of changes in Android's media pipeline that affect camera output, such as new supported formats, encoding/decoding capabilities, and A/V synchronization.",
+      "discovery_source_family": "Official Android media/camera-output discovery intent",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-ae9e55f7b032d076",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-c53bd03c7a3d1de2",
+      "source_candidate_id": "gemini-c53bd03c7a3d1de2",
+      "title": "MediaCodec &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
+      "url": "https://developer.android.com/reference/android/media/MediaCodec",
+      "articleUrl": "https://developer.android.com/reference/android/media/MediaCodec",
+      "article_url": "https://developer.android.com/reference/android/media/MediaCodec",
+      "source": "MediaCodec Reference",
+      "source_name": "MediaCodec Reference",
+      "sourceName": "MediaCodec Reference",
+      "sourceUrl": "https://developer.android.com/reference/android/media/MediaCodec",
+      "source_url": "https://developer.android.com/reference/android/media/MediaCodec",
+      "source_id": "android-mediacodec-reference",
+      "category": "android-media",
+      "source_category": "android-media",
+      "section": "android-media",
+      "source_section": "android-media",
+      "priority": "low",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "official_blog",
+      "source_type": "official_blog",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Camera HAL SW developers need to be aware of changes in Android's media pipeline that affect camera output, such as new supported formats, encoding/decoding capabilities, and A/V synchronization."
+      ],
+      "keywords": [
+        "Android media formats",
+        "MediaCodec updates",
+        "MediaStore changes",
+        "camera A/V sync"
+      ],
+      "evidence": [
+        "New supported media formats",
+        "Updates to MediaCodec capabilities",
+        "Changes in MediaStore APIs",
+        "Impact on camera recording and A/V sync"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "PROPOSAL-002",
+      "proposal_trace_id": "PROPOSAL-002",
+      "discovery_topic_gap": "Camera HAL SW developers need to be aware of changes in Android's media pipeline that affect camera output, such as new supported formats, encoding/decoding capabilities, and A/V synchronization.",
+      "discovery_source_family": "Official Android media/camera-output discovery intent",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-c53bd03c7a3d1de2",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-e12f3fd8b75d5b1b",
+      "source_candidate_id": "gemini-e12f3fd8b75d5b1b",
+      "title": "MediaStore &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
+      "url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "articleUrl": "https://developer.android.com/reference/android/provider/MediaStore",
+      "article_url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "source": "MediaStore Reference",
+      "source_name": "MediaStore Reference",
+      "sourceName": "MediaStore Reference",
+      "sourceUrl": "https://developer.android.com/reference/android/provider/MediaStore",
+      "source_url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "source_id": "android-mediastore-reference",
+      "category": "android-media",
+      "source_category": "android-media",
+      "section": "android-media",
+      "source_section": "android-media",
+      "priority": "low",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "official_blog",
+      "source_type": "official_blog",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Camera HAL SW developers need to be aware of changes in Android's media pipeline that affect camera output, such as new supported formats, encoding/decoding capabilities, and A/V synchronization."
+      ],
+      "keywords": [
+        "Android media formats",
+        "MediaCodec updates",
+        "MediaStore changes",
+        "camera A/V sync"
+      ],
+      "evidence": [
+        "New supported media formats",
+        "Updates to MediaCodec capabilities",
+        "Changes in MediaStore APIs",
+        "Impact on camera recording and A/V sync"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "PROPOSAL-002",
+      "proposal_trace_id": "PROPOSAL-002",
+      "discovery_topic_gap": "Camera HAL SW developers need to be aware of changes in Android's media pipeline that affect camera output, such as new supported formats, encoding/decoding capabilities, and A/V synchronization.",
+      "discovery_source_family": "Official Android media/camera-output discovery intent",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-e12f3fd8b75d5b1b",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
+    },
+    {
+      "schema_version": 5,
       "id": "gemini-bb0e15b6742fce01",
       "source_candidate_id": "gemini-bb0e15b6742fce01",
       "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
@@ -22676,21 +22969,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Android 호환성 테스트 스위트(CTS)의 카메라 이미지 테스트(ITS) 박스 자동화에 대한 업데이트를 다룹니다. 이는 카메라 HAL SW의 품질 및 호환성 검증에 직접적인 영향을 미치므로, 새로운 테스트 방법론, 도구 또는 요구 사항 변경에 중점을 둡니다."
+        "Camera HAL SW developers need to understand how to effectively test camera functionality, especially in automated testing scenarios, to ensure device compatibility and performance."
       ],
       "keywords": [
-        "Camera ITS box automation",
-        "Android CTS camera",
-        "Camera HAL testing",
-        "AOSP camera compatibility",
-        "image quality testing"
+        "Android camera testing",
+        "Camera ITS",
+        "camera HAL compatibility"
       ],
       "evidence": [
-        "카메라 ITS 박스 테스트 자동화의 새로운 기능 또는 개선 사항",
-        "테스트 설정 및 실행 절차의 변경 사항",
-        "새로운 테스트 시나리오 또는 측정 항목",
-        "카메라 HAL 구현에 대한 새로운 호환성 요구 사항",
-        "ITS 테스트를 통한 이미지 품질 평가 방법론"
+        "Camera ITS (Image Test Suite) documentation",
+        "Guidelines for automated camera testing",
+        "Camera HAL compatibility requirements"
       ],
       "warnings": [],
       "publishedAt": "2026-05-27",
@@ -22708,10 +22997,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "P3",
-      "proposal_trace_id": "P3",
-      "discovery_topic_gap": "Android 호환성 테스트 스위트(CTS)의 카메라 이미지 테스트(ITS) 박스 자동화에 대한 업데이트를 다룹니다. 이는 카메라 HAL SW의 품질 및 호환성 검증에 직접적인 영향을 미치므로, 새로운 테스트 방법론, 도구 또는 요구 사항 변경에 중점을 둡니다.",
-      "discovery_source_family": "aosp",
+      "proposal_id": "PROPOSAL-003",
+      "proposal_trace_id": "PROPOSAL-003",
+      "discovery_topic_gap": "Camera HAL SW developers need to understand how to effectively test camera functionality, especially in automated testing scenarios, to ensure device compatibility and performance.",
+      "discovery_source_family": "Official Android media/camera-output discovery intent",
       "source_quality_score": 0.783,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-bb0e15b6742fce01",
@@ -22721,6 +23010,237 @@
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
       "evidence_validation_status": "pass"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-ef27814b2c8c8636",
+      "source_candidate_id": "gemini-ef27814b2c8c8636",
+      "title": "Android Developers Blog: 17 Things to know for Android developers at Google I/O",
+      "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "articleUrl": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "article_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "source": "Android Developers Blog",
+      "source_name": "Android Developers Blog",
+      "sourceName": "Android Developers Blog",
+      "sourceUrl": "https://android-developers.googleblog.com/",
+      "source_url": "https://android-developers.googleblog.com/",
+      "source_id": "android-developers-blog",
+      "category": "android",
+      "source_category": "android",
+      "section": "android",
+      "source_section": "android",
+      "priority": "high",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "official_blog",
+      "source_type": "official_blog",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Camera HAL SW developers should be aware of broader trends and best practices in Android development that indirectly impact camera usage, such as UI development with Compose and AI integration."
+      ],
+      "keywords": [
+        "Google I/O Android camera",
+        "Jetpack Compose media",
+        "Android AI camera features"
+      ],
+      "evidence": [
+        "Key takeaways from Google I/O related to Android development",
+        "Best practices for Jetpack Compose in media applications",
+        "AI/ML advancements relevant to camera features"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "PROPOSAL-004",
+      "proposal_trace_id": "PROPOSAL-004",
+      "discovery_topic_gap": "Camera HAL SW developers should be aware of broader trends and best practices in Android development that indirectly impact camera usage, such as UI development with Compose and AI integration.",
+      "discovery_source_family": "Official Android media/camera-output discovery intent",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-ef27814b2c8c8636",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-1bd949b88ac6a778",
+      "source_candidate_id": "gemini-1bd949b88ac6a778",
+      "title": "Android Developers Blog: Android UI Development is Compose First",
+      "url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "articleUrl": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "article_url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "source": "Android Developers Blog",
+      "source_name": "Android Developers Blog",
+      "sourceName": "Android Developers Blog",
+      "sourceUrl": "https://android-developers.googleblog.com/",
+      "source_url": "https://android-developers.googleblog.com/",
+      "source_id": "android-developers-blog",
+      "category": "android",
+      "source_category": "android",
+      "section": "android",
+      "source_section": "android",
+      "priority": "high",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "official_blog",
+      "source_type": "official_blog",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Camera HAL SW developers should be aware of broader trends and best practices in Android development that indirectly impact camera usage, such as UI development with Compose and AI integration."
+      ],
+      "keywords": [
+        "Google I/O Android camera",
+        "Jetpack Compose media",
+        "Android AI camera features"
+      ],
+      "evidence": [
+        "Key takeaways from Google I/O related to Android development",
+        "Best practices for Jetpack Compose in media applications",
+        "AI/ML advancements relevant to camera features"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "PROPOSAL-004",
+      "proposal_trace_id": "PROPOSAL-004",
+      "discovery_topic_gap": "Camera HAL SW developers should be aware of broader trends and best practices in Android development that indirectly impact camera usage, such as UI development with Compose and AI integration.",
+      "discovery_source_family": "Official Android media/camera-output discovery intent",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-1bd949b88ac6a778",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-652f5c50bcb656fe",
+      "source_candidate_id": "gemini-652f5c50bcb656fe",
+      "title": "Android Developers Blog: Top AI on Android updates for building intelligent experiences from Google I/O &#8216;26",
+      "url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "articleUrl": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "article_url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "source": "Android Developers Blog",
+      "source_name": "Android Developers Blog",
+      "sourceName": "Android Developers Blog",
+      "sourceUrl": "https://android-developers.googleblog.com/",
+      "source_url": "https://android-developers.googleblog.com/",
+      "source_id": "android-developers-blog",
+      "category": "android",
+      "source_category": "android",
+      "section": "android",
+      "source_section": "android",
+      "priority": "high",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "official_blog",
+      "source_type": "official_blog",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Camera HAL SW developers should be aware of broader trends and best practices in Android development that indirectly impact camera usage, such as UI development with Compose and AI integration."
+      ],
+      "keywords": [
+        "Google I/O Android camera",
+        "Jetpack Compose media",
+        "Android AI camera features"
+      ],
+      "evidence": [
+        "Key takeaways from Google I/O related to Android development",
+        "Best practices for Jetpack Compose in media applications",
+        "AI/ML advancements relevant to camera features"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "PROPOSAL-004",
+      "proposal_trace_id": "PROPOSAL-004",
+      "discovery_topic_gap": "Camera HAL SW developers should be aware of broader trends and best practices in Android development that indirectly impact camera usage, such as UI development with Compose and AI integration.",
+      "discovery_source_family": "Official Android media/camera-output discovery intent",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-652f5c50bcb656fe",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
     }
   ],
   "failures": [
