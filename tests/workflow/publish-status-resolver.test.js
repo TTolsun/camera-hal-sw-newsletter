@@ -180,6 +180,32 @@ test('publish status resolver blocks final publish when fact-check needs fix', (
   assert.deepEqual(resolved.status.consistency_errors, []);
 });
 
+test('publish status resolver does not flag a null status.final_publish_ready as a consistency error', () => {
+  // An editor-semantic failure (FAILED_EDITOR_REVIEWABLE) can leave
+  // final_publish_ready unset (null) in generation-status.json. A null is
+  // "undetermined", not a claim, so it must not contradict the reconciler's
+  // authoritative artifact_final_publish_ready=false and hard-fail the PR body.
+  const root = fsTempRoot('newsroom-pr-body-');
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    status: {
+      status: 'FAILED_EDITOR_REVIEWABLE',
+      final_publish_ready: null,
+      quality_status: 'NEEDS_FIX',
+      fact_check_status: 'NEEDS_FIX',
+      must_fix_count: 1
+    },
+    quality: { status: 'NEEDS_FIX', score: 10 },
+    factCheck: { status: 'NEEDS_FIX', must_fix: [{ issue: 'editor capsule invalid' }], source_gap_count: 1 }
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'failure' });
+
+  assert.equal(resolved.status.artifact_final_publish_ready, false);
+  assert.equal(resolved.status.final_publish_ready, false);
+  assert.deepEqual(resolved.status.consistency_errors, []);
+});
+
 test('publish status resolver blocks PUBLISH_READY when quality hard fail remains above threshold', () => {
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-08';
