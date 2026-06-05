@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-06",
+  "generated_at": "2026-06-05T15:41:58.969Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 6,
+    "hit_count": 1,
+    "miss_count": 5,
+    "by_url_hit_count": 1,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 4
+    },
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 1
+    },
+    {
+      "reason": "url-hit",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 02 Jun 2026 17:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://youtube.com/playlist",
+        "url_hash": "43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35",
+        "published_date": "Tue, 02 Jun 2026 17:00:00 +0000",
+        "content_hash": "759dcbe729d4f6472581cd4926cccf528e58906cdf164255dfc81f8ab229a227"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678",
+      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-05T15:26:51Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com",
+        "url_hash": "31b40cccc0e6f0f42e7288e6b5c25b60ce7edd52eb67a02c09510a081c43554f",
+        "published_date": "2026-06-05T15:26:51Z",
+        "content_hash": "b669a2f53dbd3f5cb187f06b26573144e2ebbcee7216c2ade9c83bef0bece15c"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678",
+      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-05T15:26:40Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com",
+        "url_hash": "db5ac4a09632f78902a577005cc8870644be99eb1256aeba5c4bf98e7474106f",
+        "published_date": "2026-06-05T15:26:40Z",
+        "content_hash": "2a574ff9d88f0d3e9983e6c136b470abab45a37a230015f2f5a22323496de64a"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
+      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-05T15:26:45Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com",
+        "url_hash": "1c98482100088b7897eb6f6abcbfcb57abd2511a3076c1e83c62421c55a9eac7",
+        "published_date": "2026-06-05T15:26:45Z",
+        "content_hash": "bafbf058df8eaddf64a7c2c9012b1d0e73a4a12a85f765cce51d9438fae209a4"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[sailus-media-tree:partial-reg 7/9] drivers/media/mc/mc-event.c:17:10: fatal error: 'media/media-event.h' file not found",
+      "url": "https://lore.kernel.org/linux-media/202606052349.bOSyAnNd-lkp@intel.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-05T15:32:50Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/202606052349.bosyannd-lkp@intel.com",
+        "url_hash": "a9d056c1f7df2552498c908bfaae07e463602ee7ccfd3d261dae5a3b4ec4d1b7",
+        "published_date": "2026-06-05T15:32:50Z",
+        "content_hash": "445e522b5cb8afb7c588f706842423af88bea5eb012ef2f28b05166f3e75735f"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "url": "https://goo.gle/AdaptiveApps_IO26",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 19 May 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://goo.gle/adaptiveapps_io26",
+        "url_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
+        "published_date": "Tue, 19 May 2026 13:00:00 +0000",
+        "content_hash": "07001fcff71ad48b61928d083d411a101099d62d0206dd9fd8c8b91c307b80b0"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3.json"
+    }
+  ]
+}
