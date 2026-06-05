@@ -21,6 +21,29 @@ function ensureArray(value) {
   return Array.isArray(value) ? value : [];
 }
 
+// Browser-safe (https) image for a weekly article section, used to show one article image on the
+// homepage Latest card. Returns '' when the section has no usable https image.
+function sectionBrowserImage(section = {}) {
+  const candidate = (section.resolvedImage && (section.resolvedImage.url || section.resolvedImage.src)) ||
+    section.selectedImage || '';
+  return /^https:\/\//i.test(String(candidate)) ? String(candidate) : '';
+}
+
+// Distinct https article images for the issue, in section order. The Latest card picks the first one
+// that does not match the homepage headline image (see index.html), so order/dedup are preserved.
+function weeklyArticleImages(sections = []) {
+  const seen = new Set();
+  const images = [];
+  for (const section of ensureArray(sections)) {
+    const image = sectionBrowserImage(section);
+    if (image && !seen.has(image)) {
+      seen.add(image);
+      images.push(image);
+    }
+  }
+  return images;
+}
+
 function loadExistingWeeklyIssue(root, weeklyKey) {
   const issuePath = path.join(root, 'newsletters', weeklyKey, 'issue.json');
   if (!fs.existsSync(issuePath)) return null;
@@ -117,7 +140,10 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
     html: page.indexRoute,
     md: page.markdownRoute,
     tags: mergedTags,
-    article_count: articles.length
+    article_count: articles.length,
+    // Distinct https article images (section order) so the homepage Latest card can show one
+    // article image that is not the headline image.
+    article_images: weeklyArticleImages(page.issue.sections)
   });
 
   return {

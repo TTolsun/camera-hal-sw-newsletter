@@ -459,6 +459,62 @@ test('archive card summary lists each article title on its own line and truncate
   assert.match(card, new RegExp(`<p class="card-summary archive-card-summary">${shortTitle}<br>${'A'.repeat(40)}\\.\\.</p>`));
 });
 
+test('latest card shows a weekly article image that is not the headline image', async () => {
+  const imgA = 'https://example.com/camerax.png';
+  const imgB = 'https://i.ytimg.com/vi/abc/hqdefault.jpg?days_since_epoch=20609';
+  const latest = {
+    ...newsletter('2026-06-06', 'Weekly issue'),
+    weeklyKey: '2026-W23',
+    weekStartDate: '2026-06-01',
+    weekEndDate: '2026-06-07',
+    article_count: 2,
+    article_images: [imgA, imgB]
+  };
+  const { elements } = await renderHomepage([latest], {
+    schemaVersion: 1,
+    current_headline: { image_url: 'https://i.ytimg.com/vi/abc/hqdefault.jpg?days_since_epoch=99999' }
+  });
+  const html = elements['latest-card'].innerHTML;
+  assert.match(html, /class="latest-card-media"/);
+  assert.match(html, /<img src="https:\/\/example\.com\/camerax\.png"/);
+  // The headline image (same ytimg path, different query) must not be reused here.
+  assert.doesNotMatch(html, /i\.ytimg\.com/);
+});
+
+test('latest card reuses the headline image only for a single-article (headline) week', async () => {
+  const img = 'https://i.ytimg.com/vi/abc/hqdefault.jpg';
+  const latest = {
+    ...newsletter('2026-06-06', 'Weekly issue'),
+    weeklyKey: '2026-W23',
+    weekStartDate: '2026-06-01',
+    weekEndDate: '2026-06-07',
+    article_count: 1,
+    article_images: [img]
+  };
+  const { elements } = await renderHomepage([latest], {
+    schemaVersion: 1,
+    current_headline: { image_url: img }
+  });
+  assert.match(elements['latest-card'].innerHTML, /<img src="https:\/\/i\.ytimg\.com\/vi\/abc\/hqdefault\.jpg"/);
+});
+
+test('latest card omits the image when the only weekly image is the headline image (multi-article week)', async () => {
+  const img = 'https://i.ytimg.com/vi/abc/hqdefault.jpg';
+  const latest = {
+    ...newsletter('2026-06-06', 'Weekly issue'),
+    weeklyKey: '2026-W23',
+    weekStartDate: '2026-06-01',
+    weekEndDate: '2026-06-07',
+    article_count: 2,
+    article_images: [img]
+  };
+  const { elements } = await renderHomepage([latest], {
+    schemaVersion: 1,
+    current_headline: { image_url: img }
+  });
+  assert.doesNotMatch(elements['latest-card'].innerHTML, /latest-card-media/);
+});
+
 test('archive cards omit empty tag rows while preserving the remaining child order', async () => {
   const archiveItem = {
     ...newsletter('2026-05-24', 'No tags archive card'),
