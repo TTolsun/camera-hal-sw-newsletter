@@ -5,140 +5,124 @@
   "proposals": [
     {
       "proposal_id": "P1",
-      "topic_gap": "Google I/O '26에서 발표된 Android 미디어 파이프라인 및 카메라 관련 업데이트에 대한 포괄적인 개요를 제공합니다.",
+      "topic_gap": "Google I/O '26에서 발표된 Android 미디어 파이프라인 및 카메라 관련 최신 정보를 요약하여 제공합니다. 특히 Media3 및 Jetpack Compose를 활용한 개발 경험 향상에 중점을 둡니다.",
       "source_family": "android-developers-blog",
       "allowed_domains": [
         "youtube.com",
-        "android-developers.googleblog.com"
+        "goo.gle"
       ],
       "search_keywords": [
-        "Google I/O 2026 Android media",
-        "Google I/O 2026 CameraX",
         "Google I/O 2026 Media3",
-        "Android media pipeline updates I/O 2026",
-        "Camera HAL Android I/O 2026"
+        "Android Media Pipeline",
+        "Jetpack Compose Camera",
+        "Android Camera I/O"
       ],
       "candidate_urls": [
-        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
-      ],
-      "expected_evidence": [
-        "Media3, MediaCodec, MediaRecorder, CameraX 등 Android 미디어 및 카메라 관련 라이브러리/API의 새로운 기능 또는 개선 사항",
-        "카메라 출력, 비디오 녹화, 미리보기, A/V 동기화와 관련된 발표",
-        "개발자 세션 또는 블로그 게시물에서 언급된 구체적인 코드 예시 또는 구현 가이드"
-      ],
-      "risk_notes": [
-        "YouTube 재생 목록은 광범위한 주제를 다룰 수 있으므로, 카메라 HAL SW와 직접적으로 관련된 콘텐츠를 선별해야 합니다.",
-        "세션 내용이 HAL SW 개발자에게 직접적인 영향을 미치지 않는 상위 수준의 앱 개발 주제일 수 있습니다."
-      ]
-    },
-    {
-      "proposal_id": "P2",
-      "topic_gap": "Google I/O '26에서 강조된 Jetpack Compose를 사용한 크로스 디바이스 Android 경험 구축이 카메라 HAL SW에 미치는 잠재적 영향에 대해 탐구합니다.",
-      "source_family": "android-developers-blog",
-      "allowed_domains": [
-        "goo.gle",
-        "android-developers.googleblog.com"
-      ],
-      "search_keywords": [
-        "Jetpack Compose camera",
-        "Android cross-device camera",
-        "Adaptive apps camera I/O 2026",
-        "CameraX Jetpack Compose",
-        "Multi-device camera experience Android"
-      ],
-      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
         "https://goo.gle/AdaptiveApps_IO26"
       ],
       "expected_evidence": [
-        "Jetpack Compose를 사용한 카메라 미리보기, 이미지 처리, 또는 미디어 캡처 UI의 개선 사항",
-        "다양한 폼 팩터(폴더블, 태블릿 등)에서 카메라 경험을 최적화하는 방법",
-        "크로스 디바이스 시나리오에서 카메라 HAL 상호작용 또는 성능에 대한 언급"
+        "Media3의 새로운 기능 및 개선 사항",
+        "Jetpack Compose를 활용한 미디어 앱 개발 사례",
+        "크로스 디바이스 미디어 경험 구축 관련 내용",
+        "카메라 출력 및 미디어 처리 관련 세션 요약"
       ],
-      "risk_notes": [
-        "이 주제는 주로 UI/UX 개발에 초점을 맞출 수 있으며, HAL SW에 직접적인 관련성이 낮을 수 있습니다.",
-        "카메라 관련 내용이 간접적으로 언급될 가능성이 높으므로, 주의 깊은 분석이 필요합니다."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "P3",
-      "topic_gap": "CameraX 1.6.0 및 1.7.0-alpha01 릴리스의 주요 변경 사항 및 개선 사항을 분석하여 HAL SW 개발자에게 미치는 영향을 파악합니다.",
+      "proposal_id": "P2",
+      "topic_gap": "CameraX 1.6.0 및 1.7.0-alpha01의 주요 변경 사항 및 새로운 기능을 상세히 설명하여 개발자들이 최신 CameraX 버전을 효과적으로 활용할 수 있도록 돕습니다.",
       "source_family": "camerax-release-notes",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
         "CameraX 1.6.0 release notes",
-        "CameraX 1.7.0-alpha01 features",
-        "AndroidX Camera updates",
-        "CameraX performance improvements",
-        "CameraX HAL impact"
+        "CameraX 1.7.0-alpha01 new features",
+        "Android CameraX updates"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
       ],
       "expected_evidence": [
-        "새로운 기능, API 변경 사항, 버그 수정 목록",
-        "성능 최적화 또는 안정성 개선에 대한 세부 정보",
-        "Camera2 API 또는 HAL 인터페이스와의 상호작용에 영향을 미치는 변경 사항"
+        "CameraX 1.6.0의 안정화된 기능 및 API 변경",
+        "CameraX 1.7.0-alpha01의 새로운 기능 및 실험적 API",
+        "카메라 기능 개선, 버그 수정, 성능 최적화 관련 내용",
+        "마이그레이션 가이드 또는 주의사항"
       ],
-      "risk_notes": [
-        "알파 릴리스는 변경될 수 있으며, 안정적인 버전만큼 상세한 문서가 없을 수 있습니다.",
-        "일부 변경 사항은 HAL SW가 아닌 상위 수준의 앱 개발에만 관련될 수 있습니다."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "P4",
-      "topic_gap": "카메라 이미지 자동화 테스트(CTS, ITS)의 최신 업데이트를 검토하여 카메라 HAL SW 호환성 및 품질 보증에 대한 통찰력을 얻습니다.",
+      "proposal_id": "P3",
+      "topic_gap": "Android 호환성 테스트 스위트(CTS)의 카메라 ITS(Image Test Suite) 박스를 사용한 카메라 이미지 테스트 자동화 방법에 대한 최신 정보를 제공합니다.",
       "source_family": "aosp-site-updates",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
-        "Android Camera ITS updates",
-        "Camera HAL compatibility testing",
-        "AOSP camera testing automation",
-        "CTS camera requirements",
-        "Camera image quality testing Android"
+        "Android Camera ITS box",
+        "CTS camera testing automation",
+        "AOSP camera compatibility"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "Camera ITS 테스트 박스 설정 또는 사용 방법 변경 사항",
-        "새로운 테스트 케이스 또는 기존 테스트의 개선 사항",
-        "카메라 HAL 구현 또는 드라이버에 대한 새로운 호환성 요구 사항"
+        "카메라 ITS 박스 설정 및 사용 방법",
+        "자동화된 카메라 이미지 테스트의 이점",
+        "CTS 카메라 테스트 관련 최신 업데이트 또는 가이드라인"
       ],
-      "risk_notes": [
-        "문서 업데이트는 새로운 기능보다는 기존 기능의 명확화 또는 사소한 변경일 수 있습니다.",
-        "일부 내용은 이미 알려진 정보의 재확인일 수 있습니다."
-      ]
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "P4",
+      "topic_gap": "Linux 미디어 서브시스템의 Qualcomm CAMSS C-PHY 관련 최신 패치 및 개발 동향을 다룹니다. 특히 MIPI CSI-2 C-PHY 초기화 및 주파수 계산 관련 변경 사항에 초점을 맞춥니다.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "Linux media Qualcomm CAMSS C-PHY",
+        "MIPI CSI-2 C-PHY init",
+        "kernel media driver updates"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-7-426c37e9008f@ixit.cz/",
+        "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-6-426c37e9008f@ixit.cz/",
+        "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-5-426c37e9008f@ixit.cz/"
+      ],
+      "expected_evidence": [
+        "Qualcomm CAMSS 드라이버의 C-PHY 지원 개선",
+        "MIPI CSI-2 C-PHY 초기화 및 구성 변경",
+        "링크 주파수 계산 방식 업데이트",
+        "Linux 커널 미디어 드라이버의 최신 개발 동향"
+      ],
+      "risk_notes": []
     },
     {
       "proposal_id": "P5",
-      "topic_gap": "CameraX 1.6.1 릴리스의 주요 변경 사항 및 개선 사항을 분석하여 HAL SW 개발자에게 미치는 영향을 파악합니다.",
-      "source_family": "android-developers-latest-updates",
+      "topic_gap": "C++26 표준의 최신 개발 동향과 주요 기능을 소개합니다. 특히 Reflection 및 관련 라이브러리(Glaze)의 발전과 GCC 16.1의 C++26 지원 강화에 중점을 둡니다.",
+      "source_family": "iso-cpp-blog",
       "allowed_domains": [
-        "developer.android.com"
+        "isocpp.org"
       ],
       "search_keywords": [
-        "CameraX 1.6.1 release notes",
-        "AndroidX Camera 1.6.1 updates",
-        "CameraX bug fixes",
-        "CameraX stability improvements"
+        "C++26 Reflection",
+        "GCC 16.1 C++26",
+        "Glaze C++26",
+        "C++ standard updates"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
       ],
       "expected_evidence": [
-        "CameraX 1.6.1의 버그 수정, 안정성 개선 또는 사소한 기능 업데이트 목록",
-        "이전 버전과의 호환성 변경 사항",
-        "Camera2 API 또는 HAL 인터페이스에 간접적으로 영향을 미칠 수 있는 수정 사항"
+        "GCC 16.1의 C++26 Reflection, Contracts, Safety Hardening 지원",
+        "Glaze 7.2 라이브러리의 C++26 Reflection 활용 사례",
+        "C++26 표준의 새로운 기능 및 언어 개선 사항"
       ],
-      "risk_notes": [
-        "점진적 릴리스이므로 주요 기능 변경보다는 버그 수정 및 안정성 개선에 중점을 둘 가능성이 높습니다.",
-        "HAL SW에 직접적인 영향을 미치는 변경 사항이 적을 수 있습니다."
-      ]
+      "risk_notes": []
     }
   ]
 }

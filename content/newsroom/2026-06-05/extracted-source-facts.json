@@ -13,7 +13,7 @@
       "claims": [
         {
           "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"zh-TW-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develope",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
           "confidence": "medium"
         }
       ],
@@ -36,7 +36,7 @@
       "claims": [
         {
           "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"fr-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
           "confidence": "medium"
         }
       ],
@@ -59,7 +59,7 @@
       "claims": [
         {
           "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"es-419-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open So",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
           "confidence": "medium"
         }
       ],
@@ -70,10 +70,10 @@
       "warnings": []
     },
     {
-      "id": "4cd1324b82d886c6",
-      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
-      "title": "Build native Android apps in Google AI Studio",
-      "published_at": "Tue, 19 May 2026 12:45:00 +0000",
+      "id": "f9e25e18977ed4d8",
+      "url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-5-426c37e9008f@ixit.cz/",
+      "title": "[PATCH v7 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
+      "published_at": "2026-06-05T13:14:45Z",
       "source_type": "rss_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -81,68 +81,137 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Posted by Emma-Louise Leavey, Group Product Manager and Mike Taylor-Cai, Product Manager Starting today Google AI Studio can build entire Android apps for you in minutes from just a prompt. You don't need to install any software or configure any libraries, which significantly lowers the barrier to development. Whether you’re a seasoned developer looking to prototype at lightning speed or a creator building your first-ever mobile experience, you can now go from a single prompt to a high-quality,",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "claim": "From: David Heidelberg Add a PHY configuration sequence for the sdm845 which uses a Qualcomm Gen 2 version 1.1 CSI-2 PHY. The PHY can be configured as two phase or three phase in C-PHY or D-PHY mode. This configuration supports three-phase C-PHY mode. Acked-by: Cory Keitz Signed-off-by: David Heidelberg --- .../platform/qcom/camss/camss-csiphy-3ph-1-0.c | 78 +++++++++++++++++++++- 1 file changed , 76 insertions(+), 2 deletions(-) diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-",
+          "evidence_text": "<html><head><title>[PATCH v7 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"scre",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.66,
-      "android_hal_relevance": 0.66,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.666,
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
       "warnings": []
     },
     {
-      "id": "8edd18929c9fbdd9",
-      "url": "https://goo.gle/AdaptiveApps_IO26",
-      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-      "published_at": "Tue, 19 May 2026 13:00:00 +0000",
-      "source_type": "roundup_child",
+      "id": "53bbad700c79699a",
+      "url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-6-426c37e9008f@ixit.cz/",
+      "title": "[PATCH v7 6/8] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init",
+      "published_at": "2026-06-05T13:14:45Z",
+      "source_type": "rss_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "claim": "From: David Heidelberg These values should improve C-PHY behaviour. Should match most recent Qualcomm code. Acked-by: Cory Keitz Suggested-by: Konrad Dybcio Signed-off-by: David Heidelberg --- .../media/platform/qcom/camss/camss-csiphy-3ph-1-0.c | 19 +++++++++---------- 1 file changed , 9 insertions(+), 10 deletions(-) diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c index d9136e422f45f..feafe8cc45e02 100644 --- a/dr",
+          "evidence_text": "<html><head><title>[PATCH v7 6/8] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"s",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 1,
-      "android_hal_relevance": 1,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.893,
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
       "warnings": []
     },
     {
-      "id": "9b460337b26c1fbb",
-      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
-      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
-      "published_at": "Tue, 02 Jun 2026 17:00:00 +0000",
-      "source_type": "roundup_child",
+      "id": "29252e9925ce7c3b",
+      "url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-7-426c37e9008f@ixit.cz/",
+      "title": "[PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency",
+      "published_at": "2026-06-05T13:14:45Z",
+      "source_type": "rss_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "By leveraging Jetpack CameraX and Media3, you can build professional-grade experiences that feel native across the entire ecosystem.&nbsp; It starts with high-fidelity capture using the CameraXViewfinder Composable, which ensures your preview remains perfectly scaled and responsive on any form factor, including foldables and tablets.",
-          "evidence_text": "<!DOCTYPE html><html style=\"font-size: 62.5%;font-family: Roboto, Arial, sans-serif;\" lang=\"en\" darker-dark-theme darker-dark-theme-deprecate system-icons color-version=\"v2_0\" typography typography-spacing><head><script data-id=\"_gd\" nonce=\"bUq8Kf3rMgZLFNrAW4nWTw\">window.WIZ_global_data = {\"AfY8Hf\":false,\"FL1an\":false,\"HiPsbb\":0,\"MUE6Ne\":\"youtube_web\",\"MuJWjd\":false,\"UUFaWc\":\"%.@.null,1000,2]\",\"cfb2h\":\"youtube.web-front-end-critical_20260603.05_p0\",\"fPDxwd\":[],\"hsFLT\":\"%.@.null,10,3]\",\"iCzhFc\":f",
+          "claim": "From: David Heidelberg Ensure that the link frequency divider correctly accounts for C-PHY operation. The divider differs between D-PHY and C-PHY, as described in the MIPI CSI-2 specification. For more details, see: https://docs.kernel.org/driver-api/media/tx-rx.html#pixel-rate Suggested-by: Sakari Ailus Acked-by: Cory Keitz Tested-by: Cory Keitz Reviewed-by: Bryan O'Donoghue Link: https://docs.kernel.org/driver-api/media/tx-rx.html#pixel-rate Signed-off-by: David Heidelberg --- drivers/media/pl",
+          "evidence_text": "<html><head><title>[PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"sc",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 1,
-      "android_hal_relevance": 1,
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
       "ai_relevance": 0.5,
-      "technical_depth": 0.893,
+      "technical_depth": 0.758,
       "warnings": []
     },
     {
-      "id": "3ca2b58b92a0b76d",
-      "url": "https://source.android.com/docs/compatibility",
-      "title": "Compatibility",
-      "published_at": "2026-03-01",
+      "id": "gemini-bad9f9927892cfe1",
+      "url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-7-426c37e9008f@ixit.cz/",
+      "title": "[PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg via B4 Relay",
+      "published_at": "2026-06-05",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg via B4 Relay",
+          "evidence_text": "<html><head><title>[PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"sc",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-f3cf32a414752d63",
+      "url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-6-426c37e9008f@ixit.cz/",
+      "title": "[PATCH v7 6/8] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay",
+      "published_at": "2026-06-05",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v7 6/8] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay",
+          "evidence_text": "<html><head><title>[PATCH v7 6/8] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-fea5d57ada25f99d",
+      "url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-5-426c37e9008f@ixit.cz/",
+      "title": "[PATCH v7 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay",
+      "published_at": "2026-06-05",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v7 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay",
+          "evidence_text": "<html><head><title>[PATCH v7 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"scre",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "781679b8fb4b611e",
+      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
+      "title": "Media3 Release Notes - Media3 1.9.4",
+      "published_at": "May 16, 2026",
       "source_type": "release_note_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -150,15 +219,61 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "March 2026 Compatibility Compatibility Updated Buy and set up a Gen2 box with a revised chart and an updated manufacturing vendor contact number.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"ko-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "claim": "May 16, 2026 Version 1.9.4 contains the following commits .",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.71,
-      "android_hal_relevance": 0.71,
+      "camera_relevance": 0.79,
+      "android_hal_relevance": 0.79,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.674,
+      "warnings": []
+    },
+    {
+      "id": "0aae5d6fff3e161d",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "published_at": "Thu, 30 Apr 2026 22:36:23 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is still experimental and must be enabled by&nbsp; -fmodules . Several C++26 features have been implemented: P2996R13 , Reflection ( PR120775 , enabled by&nbsp; -std=c++26 -freflection ) P3394R4 , Annotations for Reflection P3293R3 , Splicing a base class subobject P3096R",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
       "ai_relevance": 0,
-      "technical_depth": 0.676,
+      "technical_depth": 0.638,
+      "warnings": []
+    },
+    {
+      "id": "ecd2f14ba3d8477a",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "published_at": "Tue, 28 Apr 2026 22:25:57 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Glaze is a high-performance C++23 serialization library with compile-time reflection. It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more From the article: Glaze now supports C++26 reflection with experimental GCC and Clang compilers. GCC 16 will soon be released with this support. When enabled, Glaze replaces the traditional&nbsp; __PRETTY_FUNCTION__ &nbsp;parsing an",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-57.png\">\n    <link rel=\"ap",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.51,
+      "android_hal_relevance": 0.51,
+      "ai_relevance": 0,
+      "technical_depth": 0.614,
       "warnings": []
     }
   ]

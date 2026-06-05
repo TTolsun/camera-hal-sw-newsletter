@@ -12,7 +12,7 @@
       "source_policy_match": ""
     },
     {
-      "proposal_id": "P2",
+      "proposal_id": "P1",
       "candidate_url": "https://goo.gle/AdaptiveApps_IO26",
       "normalized_url": "https://goo.gle/AdaptiveApps_IO26",
       "accepted": false,
@@ -20,7 +20,7 @@
       "source_policy_match": ""
     },
     {
-      "proposal_id": "P3",
+      "proposal_id": "P2",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "accepted": false,
@@ -34,7 +34,7 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "P3",
+      "proposal_id": "P2",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "accepted": false,
@@ -48,7 +48,7 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "P4",
+      "proposal_id": "P3",
       "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "accepted": true,
@@ -56,23 +56,49 @@
       "source_policy_match": "android-compatibility-definition-document"
     },
     {
+      "proposal_id": "P4",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-7-426c37e9008f@ixit.cz/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-7-426c37e9008f@ixit.cz/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "P4",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-6-426c37e9008f@ixit.cz/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-6-426c37e9008f@ixit.cz/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "P4",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-5-426c37e9008f@ixit.cz/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260605-qcom-cphy-v7-5-426c37e9008f@ixit.cz/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
       "proposal_id": "P5",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "camerax-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-jetpack-release",
-      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
-      "source_extraction_item_count": 0
+      "candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "P5",
+      "candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "normalized_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
     }
   ],
   "counts": {
     "domain_not_allowed": 2,
-    "discovered_not_extractable": 3,
-    "accepted": 1
+    "discovered_not_extractable": 2,
+    "accepted": 6
   }
 }
