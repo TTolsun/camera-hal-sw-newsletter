@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-06",
   "validations": [
     {
-      "proposal_id": "android_io_2026_media_pipeline",
+      "proposal_id": "io26-media-pipeline",
       "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "accepted": false,
@@ -12,7 +12,7 @@
       "source_policy_match": ""
     },
     {
-      "proposal_id": "camerax_1_6_0_release",
+      "proposal_id": "camerax-1-6-0-release",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "accepted": false,
@@ -26,7 +26,7 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "camerax_1_7_0_alpha01_release",
+      "proposal_id": "camerax-1-7-0-alpha01-release",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "accepted": false,
@@ -40,7 +40,7 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "camera_image_testing_automation",
+      "proposal_id": "camera-its-box-updates",
       "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "accepted": true,
@@ -48,7 +48,7 @@
       "source_policy_match": "android-compatibility-definition-document"
     },
     {
-      "proposal_id": "linux_media_aptina_mt9m113_driver",
+      "proposal_id": "linux-media-aptina-mt9m113",
       "candidate_url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
       "accepted": true,
@@ -56,7 +56,7 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "linux_media_sony_imx678_driver",
+      "proposal_id": "linux-media-sony-imx678-driver",
       "candidate_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
       "accepted": true,

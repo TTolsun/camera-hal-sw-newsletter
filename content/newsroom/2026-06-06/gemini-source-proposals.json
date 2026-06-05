@@ -4,154 +4,164 @@
   "newsletter_date": "2026-06-06",
   "proposals": [
     {
-      "proposal_id": "android_io_2026_media_pipeline",
-      "topic_gap": "Google I/O 2026에서 발표된 Android 미디어 파이프라인 개선 사항 및 새로운 기능에 대한 정보가 필요합니다. 특히 Camera HAL SW에 영향을 미칠 수 있는 Media3, MediaCodec, MediaRecorder, MediaStore, Photo Picker, preview/surface, WebRTC camera, A/V sync, gallery/media access, sharing, camera-generated playback paths 관련 업데이트에 중점을 둡니다.",
+      "proposal_id": "io26-media-pipeline",
+      "topic_gap": "Comprehensive updates on Android media pipeline enhancements, including camera output, recording, and playback paths, as presented at Google I/O '26.",
       "source_family": "android",
       "allowed_domains": [
         "youtube.com",
-        "developer.android.com",
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
-        "Google I/O 2026 media pipeline",
-        "Android Media3",
-        "Android Camera HAL updates",
-        "Android MediaCodec",
-        "Android MediaRecorder"
+        "Android media pipeline",
+        "Google I/O 2026 media",
+        "CameraX",
+        "Media3",
+        "MediaCodec",
+        "MediaRecorder",
+        "camera output",
+        "recording",
+        "playback"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "Google I/O 2026 세션 요약 또는 전체 영상",
-        "미디어 파이프라인 관련 변경 사항 및 개선 사항 상세 설명",
-        "Camera HAL SW에 영향을 미치는 API 변경 또는 새로운 기능 언급"
+        "Keynote summaries or session deep-dives on Media3, MediaCodec, MediaRecorder, or camera-related APIs.",
+        "Discussions on performance, new features, or best practices for camera output processing and media playback.",
+        "Mentions of A/V sync improvements, new supported formats, or integration with camera hardware."
       ],
       "risk_notes": [
-        "YouTube 재생 목록은 구체적인 문서나 릴리스 노트가 아니므로, 관련 정보를 추출하기 위해 비디오 콘텐츠를 분석해야 합니다.",
-        "Camera HAL SW에 직접적인 관련이 없는 일반적인 미디어 업데이트일 수 있습니다."
+        "The playlist might contain general media topics not directly related to camera HAL or camera-generated output. Careful filtering will be needed.",
+        "Content could be high-level marketing rather than technical deep-dives relevant to HAL SW."
       ]
     },
     {
-      "proposal_id": "camerax_1_6_0_release",
-      "topic_gap": "CameraX 1.6.0 릴리스에 대한 자세한 정보가 필요합니다. 특히 Camera HAL SW 개발자에게 영향을 미칠 수 있는 새로운 기능, 개선 사항, 버그 수정 및 변경 사항에 중점을 둡니다.",
+      "proposal_id": "camerax-1-6-0-release",
+      "topic_gap": "Official release notes for CameraX 1.6.0, detailing new features, improvements, and bug fixes relevant to camera application development and HAL interactions.",
       "source_family": "camera-api",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
-        "CameraX 1.6.0 release notes",
-        "Android CameraX updates",
-        "androidx.camera 1.6.0"
+        "CameraX 1.6.0",
+        "AndroidX Camera release",
+        "camera API updates",
+        "camera features"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
       ],
       "expected_evidence": [
-        "CameraX 1.6.0 릴리스 노트의 상세 내용",
-        "새로운 API, 기능 또는 동작 변경에 대한 설명",
-        "Camera HAL SW와의 상호 작용 또는 요구 사항 변경 언급"
+        "Specific API changes, new functionalities, or behavioral modifications in CameraX 1.6.0.",
+        "Improvements in camera preview, image capture, video recording, or extension integrations.",
+        "Bug fixes or performance enhancements that impact camera HAL interactions or stability."
       ],
       "risk_notes": [
-        "릴리스 노트는 요약 정보일 수 있으며, 심층적인 기술적 세부 사항은 별도의 문서에서 찾아야 할 수 있습니다."
+        "Release notes are usually concise; further investigation into linked documentation or samples might be needed for deeper understanding."
       ]
     },
     {
-      "proposal_id": "camerax_1_7_0_alpha01_release",
-      "topic_gap": "CameraX 1.7.0-alpha01 릴리스에 대한 자세한 정보가 필요합니다. 특히 Camera HAL SW 개발자에게 영향을 미칠 수 있는 새로운 기능, 개선 사항, 버그 수정 및 변경 사항에 중점을 둡니다.",
+      "proposal_id": "camerax-1-7-0-alpha01-release",
+      "topic_gap": "Early insights into upcoming CameraX features and changes with the 1.7.0-alpha01 release, potentially indicating future directions for camera development.",
       "source_family": "camera-api",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
-        "CameraX 1.7.0-alpha01 release notes",
-        "Android CameraX alpha updates",
-        "androidx.camera 1.7.0-alpha01"
+        "CameraX 1.7.0-alpha01",
+        "AndroidX Camera alpha",
+        "future camera features"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
       ],
       "expected_evidence": [
-        "CameraX 1.7.0-alpha01 릴리스 노트의 상세 내용",
-        "새로운 API, 기능 또는 동작 변경에 대한 설명",
-        "Camera HAL SW와의 상호 작용 또는 요구 사항 변경 언급"
+        "Introduction of new experimental features or APIs in CameraX 1.7.0-alpha01.",
+        "Early indications of architectural changes or significant improvements.",
+        "Potential impact on camera HAL requirements or integration patterns."
       ],
       "risk_notes": [
-        "알파 버전이므로 변경 사항이 불안정하거나 향후 릴리스에서 변경될 수 있습니다.",
-        "릴리스 노트는 요약 정보일 수 있으며, 심층적인 기술적 세부 사항은 별도의 문서에서 찾아야 할 수 있습니다."
+        "Alpha releases are subject to change and may contain unstable features or APIs that won't make it to a stable release.",
+        "Information might be limited due to its early development stage."
       ]
     },
     {
-      "proposal_id": "camera_image_testing_automation",
-      "topic_gap": "카메라 이미지 테스트 자동화에 대한 새로운 정보가 필요합니다. 특히 Camera ITS Box와 같은 도구를 사용하여 카메라 이미지를 테스트하는 방법에 대한 AOSP 업데이트에 중점을 둡니다.",
+      "proposal_id": "camera-its-box-updates",
+      "topic_gap": "Updates to the Camera Image Test Suite (ITS) box documentation, indicating new or modified testing procedures for camera image quality and compatibility.",
       "source_family": "aosp",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
-        "Android Camera ITS Box",
-        "camera image test automation",
-        "AOSP camera testing",
-        "Camera HAL test"
+        "Camera ITS box",
+        "Android camera testing",
+        "camera compatibility",
+        "AOSP camera"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "Camera ITS Box를 사용한 카메라 이미지 테스트 자동화에 대한 새로운 문서 또는 업데이트된 지침",
-        "테스트 절차, 요구 사항 또는 모범 사례에 대한 설명",
-        "Camera HAL SW 개발자가 테스트 프로세스를 개선하는 데 도움이 되는 정보"
+        "Changes in test setup, equipment, or methodologies for Camera ITS.",
+        "New test cases or requirements for camera image quality, performance, or specific features.",
+        "Implications for camera HAL implementation and validation."
       ],
       "risk_notes": [
-        "이 문서는 이미 존재하는 문서의 업데이트일 수 있으며, 완전히 새로운 내용이 아닐 수 있습니다."
+        "Documentation updates might be minor or incremental, requiring careful review to identify significant changes."
       ]
     },
     {
-      "proposal_id": "linux_media_aptina_mt9m113_driver",
-      "topic_gap": "Linux 커널 미디어 하위 시스템에서 Aptina MT9M113 이미지 센서 드라이버에 대한 새로운 개발 또는 논의가 필요합니다.",
+      "proposal_id": "linux-media-aptina-mt9m113",
+      "topic_gap": "Kernel patch discussions regarding the addition or update of drivers for the Aptina MT9M113 image sensor, relevant for Linux camera stack and potential Android implications.",
       "source_family": "linux-camera",
       "allowed_domains": [
         "lore.kernel.org"
       ],
       "search_keywords": [
-        "linux-media aptina mt9m113",
-        "kernel media driver",
-        "image sensor driver"
+        "linux-media",
+        "Aptina MT9M113",
+        "image sensor driver",
+        "V4L2",
+        "kernel camera"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/"
       ],
       "expected_evidence": [
-        "Aptina MT9M113 드라이버 관련 패치 또는 논의 내용",
-        "새로운 기능, 버그 수정 또는 통합 계획에 대한 정보",
-        "드라이버가 Camera HAL SW에 간접적으로 영향을 미칠 수 있는 하위 수준 변경 사항"
+        "Details on the Aptina MT9M113 sensor's capabilities, interface, and driver implementation.",
+        "Discussions on V4L2 integration, media controller framework, or specific sensor features.",
+        "Potential relevance for Android devices using this sensor or similar Linux camera stack components."
       ],
       "risk_notes": [
-        "메일링 리스트의 내용은 기술적이고 상세하며, Camera HAL SW 개발자에게 직접적인 관련이 없는 하위 수준의 변경 사항일 수 있습니다."
+        "Kernel mailing list discussions can be highly technical and require deep understanding of Linux media subsystem.",
+        "Direct impact on Android HAL might be indirect, requiring analysis of how Linux kernel changes propagate."
       ]
     },
     {
-      "proposal_id": "linux_media_sony_imx678_driver",
-      "topic_gap": "Linux 커널 미디어 하위 시스템에서 Sony IMX678 이미지 센서 드라이버에 대한 새로운 개발 또는 논의가 필요합니다.",
+      "proposal_id": "linux-media-sony-imx678-driver",
+      "topic_gap": "Kernel patch discussions for adding a driver for the Sony IMX678 image sensor, providing insights into new sensor support in the Linux camera ecosystem.",
       "source_family": "linux-camera",
       "allowed_domains": [
         "lore.kernel.org"
       ],
       "search_keywords": [
-        "linux-media sony imx678",
-        "kernel media driver",
-        "image sensor driver"
+        "linux-media",
+        "Sony IMX678 driver",
+        "image sensor",
+        "V4L2",
+        "kernel camera"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/"
       ],
       "expected_evidence": [
-        "Sony IMX678 드라이버 관련 패치 또는 논의 내용",
-        "새로운 기능, 버그 수정 또는 통합 계획에 대한 정보",
-        "드라이버가 Camera HAL SW에 간접적으로 영향을 미칠 수 있는 하위 수준 변경 사항"
+        "Technical specifications and features of the Sony IMX678 sensor.",
+        "Details on the Linux driver implementation, including V4L2 subdev integration and media pipeline aspects.",
+        "Potential implications for Android devices adopting this sensor or similar Linux-based camera solutions."
       ],
       "risk_notes": [
-        "메일링 리스트의 내용은 기술적이고 상세하며, Camera HAL SW 개발자에게 직접적인 관련이 없는 하위 수준의 변경 사항일 수 있습니다."
+        "Similar to other kernel discussions, the content is highly technical and may not directly translate to Android HAL specifics.",
+        "The patch is part of a series; understanding the full context might require reviewing related patches."
       ]
     }
   ]

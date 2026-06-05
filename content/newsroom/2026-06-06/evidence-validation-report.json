@@ -203,23 +203,6 @@
       ]
     },
     {
-      "candidate_id": "a008cc09dc1d5ea8",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "title": "CameraX Release Notes - CameraX 1.6.1",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "skipped",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
-      "reasons": []
-    },
-    {
       "candidate_id": "3ca2b58b92a0b76d",
       "url": "https://source.android.com/docs/compatibility",
       "title": "Compatibility",
@@ -242,6 +225,44 @@
       "candidate_id": "2a30fe242da15a49",
       "url": "https://source.android.com/docs/core/camera",
       "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "metadata_only",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
+    },
+    {
+      "candidate_id": "473c2de5968532c9",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "1.6.1",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "metadata_only",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
+    },
+    {
+      "candidate_id": "f2f7a4ce6187ee89",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "title": "1.3.0-beta02",
       "deep_checked": false,
       "source_fetch_used": false,
       "source_fetch_status": "skipped",
@@ -502,17 +523,17 @@
       "candidate_id": "18550920b3f33abc",
       "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
       "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
+      "deep_checked": true,
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
       "source_fetch_error": "",
-      "validation_mode": "skipped",
+      "validation_mode": "source_fetch",
       "unsupported_claims": 0,
-      "supported_claims": 0,
+      "supported_claims": 1,
       "final_selection_blocked": false,
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
+      "evidence_validation_status": "pass",
       "reasons": []
     },
     {
@@ -703,25 +724,6 @@
       "candidate_id": "781679b8fb4b611e",
       "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
       "title": "Media3 Release Notes - Media3 1.9.4",
-      "deep_checked": true,
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "unsupported_claims": 0,
-      "supported_claims": 1,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
-      "candidate_id": "372089f64f07cd0e",
-      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
-      "title": "Media3 Release Notes - Media3 1.10.1",
       "deep_checked": false,
       "source_fetch_used": false,
       "source_fetch_status": "skipped",
@@ -790,8 +792,8 @@
     }
   ],
   "counts": {
-    "pass": 11,
-    "not_checked": 5,
-    "blocked": 27
+    "pass": 12,
+    "not_checked": 3,
+    "blocked": 28
   }
 }
