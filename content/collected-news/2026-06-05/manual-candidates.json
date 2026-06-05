@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-05",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 90,
-  "generated_at": "2026-06-05T02:15:18.257Z",
+  "generated_at": "2026-06-05T13:00:19.970Z",
   "sources_path": "data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -1599,7 +1599,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
           "sourceKind": "article-img",
@@ -1643,7 +1643,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
           "sourceKind": "article-img",
@@ -2102,7 +2102,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 3 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "og",
@@ -2116,7 +2116,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "article-img",
@@ -2130,23 +2130,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=hi",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "og",
@@ -2160,7 +2160,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "article-img",
@@ -2174,18 +2174,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=hi",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "main-article",
@@ -2402,7 +2402,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -2416,21 +2416,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
-          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
-          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Site Updates",
-          "validationStatus": "ok",
-          "contentLength": 1760
-        },
-        {
-          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=it",
+          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -2442,11 +2428,25 @@
           "attribution": "AOSP Site Updates",
           "validationStatus": "ok",
           "contentLength": 53935
+        },
+        {
+          "url": "https://source.android.com/static/docs/compatibility/cts/images/33x_scale_31cm.png",
+          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
+          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "sourceKind": "article-img",
+          "width": 350,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Site Updates",
+          "validationStatus": "ok",
+          "contentLength": 570718
         }
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -2460,21 +2460,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
-          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
-          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Site Updates",
-          "validationStatus": "ok",
-          "contentLength": 1760
-        },
-        {
-          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=it",
+          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -2486,6 +2472,20 @@
           "attribution": "AOSP Site Updates",
           "validationStatus": "ok",
           "contentLength": 53935
+        },
+        {
+          "url": "https://source.android.com/static/docs/compatibility/cts/images/33x_scale_31cm.png",
+          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
+          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "sourceKind": "article-img",
+          "width": 350,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Site Updates",
+          "validationStatus": "ok",
+          "contentLength": 570718
         }
       ],
       "candidateTier": "main-article",
@@ -4790,7 +4790,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=de",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -4804,7 +4804,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -4818,7 +4818,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=de",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -4834,7 +4834,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=de",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -4848,7 +4848,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -4862,7 +4862,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=de",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=it",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
@@ -5090,7 +5090,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility",
           "sourceKind": "article-img",
@@ -5134,7 +5134,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility",
           "sourceKind": "article-img",
@@ -13001,7 +13001,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
@@ -13045,7 +13045,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/core/camera",
           "articleUrl": "https://source.android.com/docs/core/camera",
           "sourceKind": "article-img",
@@ -16352,7 +16352,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -16366,7 +16366,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
@@ -16380,23 +16380,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -16410,7 +16410,7 @@
           "contentLength": 31847
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/android/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/android/images/lockup.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
@@ -16424,18 +16424,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -17694,7 +17694,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -17722,7 +17722,7 @@
           "contentLength": 1165
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -17738,7 +17738,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -17766,7 +17766,7 @@
           "contentLength": 1165
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -19958,7 +19958,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -19970,11 +19970,25 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
+          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
+          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Compatibility Definition Document",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -19986,6 +20000,20 @@
           "attribution": "Android Compatibility Definition Document",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=it",
+          "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
+          "articleUrl": "https://source.android.com/docs/compatibility/cdd",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Compatibility Definition Document",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -20224,7 +20252,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 142419
+          "contentLength": 2048
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -20268,7 +20296,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 142419
+          "contentLength": 2048
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -21664,7 +21692,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -21678,7 +21706,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -21694,7 +21722,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -21708,7 +21736,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -21938,7 +21966,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
           "sourceKind": "article-img",
@@ -21950,11 +21978,25 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin",
+          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Security Bulletin",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
           "sourceKind": "article-img",
@@ -21966,6 +22008,20 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin",
+          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Security Bulletin",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -22184,7 +22240,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -22198,7 +22254,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=ar",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -22214,7 +22270,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v5b93ab110c02dc91cc5b79fb160a3c37758bb2dfb04b22b9173ffe5646621934/androidsource/images/lockup.png",
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v24818332c90d61e5d34a589b2829727722a413c578565f115ef1e5a51367c594/androidsource/images/lockup.png",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
@@ -22228,7 +22284,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=ar",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "sourceKind": "article-img",
