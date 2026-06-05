@@ -442,7 +442,7 @@ test('archive card order, clamps, and tag overflow keep archive cards scannable'
   assert.match(card, /class="tag tag-more" aria-label="추가 태그 2개: Image Processing, AOSP &lt;Camera&gt;" title="Image Processing, AOSP &lt;Camera&gt;">\+2<\/span>/);
 });
 
-test('archive card summary lists each article title on its own line and truncates past 50 chars', async () => {
+test('archive card summary lists each article title on its own line and truncates past 40 chars', async () => {
   const shortTitle = 'CameraX 1.6.1 업데이트';
   const longTitle = 'A'.repeat(60);
   const archiveItem = {
@@ -455,8 +455,8 @@ test('archive card summary lists each article title on its own line and truncate
   ]);
   const [card] = archiveCards(elements['archive-list'].innerHTML);
 
-  // Titles render one per line, joined by <br>; titles longer than 50 chars are cut to 50 + "..".
-  assert.match(card, new RegExp(`<p class="card-summary archive-card-summary">${shortTitle}<br>${'A'.repeat(50)}\\.\\.</p>`));
+  // Titles render one per line, joined by <br>; titles longer than 40 chars are cut to 40 + "..".
+  assert.match(card, new RegExp(`<p class="card-summary archive-card-summary">${shortTitle}<br>${'A'.repeat(40)}\\.\\.</p>`));
 });
 
 test('archive cards omit empty tag rows while preserving the remaining child order', async () => {
