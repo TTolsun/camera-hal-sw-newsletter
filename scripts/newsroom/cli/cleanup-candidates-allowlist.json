@@ -3,17 +3,7 @@
     "scripts/newsroom/common/common.js#kstDate",
     "scripts/newsroom/common/common.js#htmlAttr"
   ],
-  "compat_surface": [
-    "scripts/lib/article-image-resolver.js",
-    "scripts/lib/common.js",
-    "scripts/lib/gemini-client.js",
-    "scripts/lib/image-candidates.js",
-    "scripts/lib/newsletter-renderer.js",
-    "scripts/lib/newsletter-schema.js",
-    "scripts/lib/selection-diagnostics.js",
-    "scripts/lib/source-monitor.js",
-    "scripts/lib/source-monitor-registry-validator.js"
-  ],
+  "compat_surface": [],
   "generated_artifact": [],
   "archive_reference": []
 }
