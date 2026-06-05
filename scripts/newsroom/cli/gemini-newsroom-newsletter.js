@@ -153,6 +153,7 @@ const {
 const {
   assertSectionsAndSourcesPreserved,
   EditorSemanticValidationError,
+  reconcileFactClaimEvidence,
   repairEditorOutputContract,
   serializeEditorValidationError,
   validateEditorOutputContract
@@ -3702,6 +3703,10 @@ async function main() {
     attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
     await resolveIssueArticleImages(editor, { root });
     warnResolvedImageFallbacks(editor);
+    // #502: editor draft 확정 직후, fact-check/quality/render 이전에 미해결 evidence_id를 한 번
+    // 결정론적으로 재바인딩한다(strict 오라클 통과 시에만; 미지원이면 unbound 유지). 이렇게 해야
+    // fact-check / quality 점수 / render 산출물 / publish 판정이 동일한 reconciled draft를 본다.
+    editor = reconcileFactClaimEvidence(editor, { reporter, seedEvidencePack });
     editor = recordLastKnownValidEditor(editor, { date, reporter, attempt, requireStoryContract: true, seedEvidencePack });
     writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor });
     writeJson(path.join(newsroomDir, `editor-draft-attempt-${attempt}.json`), editor);
@@ -3867,6 +3872,8 @@ async function main() {
         attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
         await resolveIssueArticleImages(editor, { root });
         warnResolvedImageFallbacks(editor);
+        // #502: 영속화·fact-check 이전에 미해결 evidence_id를 결정론적으로 재바인딩(fail-closed).
+        editor = reconcileFactClaimEvidence(editor, { reporter, seedEvidencePack });
         writeJson(path.join(newsroomDir, `editor-repair-attempt-${attempt}.json`), editor);
         writeJson(path.join(newsroomDir, `editor-repair-sections-attempt-${attempt}.json`), {
           locked_sections: preservedSections.map((section, index) => sectionSummary(section, index)),
@@ -4018,6 +4025,8 @@ async function main() {
           attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
           await resolveIssueArticleImages(editor, { root });
           warnResolvedImageFallbacks(editor);
+          // #502: 영속화·fact-check 이전에 미해결 evidence_id를 결정론적으로 재바인딩(fail-closed).
+          editor = reconcileFactClaimEvidence(editor, { reporter, seedEvidencePack });
           writeJson(path.join(newsroomDir, `editor-completion-attempt-${attempt}.json`), editor);
           fs.writeFileSync(path.join(newsroomDir, `editor-completion-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
 
