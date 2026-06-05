@@ -42,11 +42,5 @@
 | blocked_candidate | 0.551 | Overview | https://source.android.com/docs/security/bulletin/asb-overview |
 | blocked_candidate | 0.551 | June | https://source.android.com/docs/security/bulletin/2026/2026-06-01 |
 | blocked_candidate | 0.501 | May | https://source.android.com/docs/security/bulletin/2026/2026-05-01 |
-| blocked_candidate | 0.492 | Supported media formats &nbsp;\|&nbsp; Android media &nbsp;\|&nbsp; Android Developers | https://developer.android.com/media/platform/supported-formats |
-| blocked_candidate | 0.492 | MediaCodec &nbsp;\|&nbsp; API reference &nbsp;\|&nbsp; Android Developers | https://developer.android.com/reference/android/media/MediaCodec |
-| blocked_candidate | 0.492 | MediaStore &nbsp;\|&nbsp; API reference &nbsp;\|&nbsp; Android Developers | https://developer.android.com/reference/android/provider/MediaStore |
 | review_candidate | 0.783 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
-| blocked_candidate | 0.492 | Android Developers Blog: 17 Things to know for Android developers at Google I/O | https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html |
-| blocked_candidate | 0.492 | Android Developers Blog: Android UI Development is Compose First | https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html |
-| blocked_candidate | 0.492 | Android Developers Blog: Top AI on Android updates for building intelligent experiences from Google I/O &#8216;26 | https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html |
 

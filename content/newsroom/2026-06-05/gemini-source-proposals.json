@@ -4,100 +4,141 @@
   "newsletter_date": "2026-06-05",
   "proposals": [
     {
-      "proposal_id": "PROPOSAL-001",
-      "topic_gap": "Camera HAL SW developers need to understand the latest advancements and best practices in Android camera development, including new APIs, performance optimizations, and integration with AI/ML features.",
-      "source_family": "Official Android media/camera-output discovery intent",
+      "proposal_id": "P1",
+      "topic_gap": "Google I/O '26에서 발표된 Android 미디어 파이프라인 및 카메라 관련 업데이트에 대한 포괄적인 개요를 제공합니다.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [
+        "youtube.com",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Google I/O 2026 Android media",
+        "Google I/O 2026 CameraX",
+        "Google I/O 2026 Media3",
+        "Android media pipeline updates I/O 2026",
+        "Camera HAL Android I/O 2026"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "Media3, MediaCodec, MediaRecorder, CameraX 등 Android 미디어 및 카메라 관련 라이브러리/API의 새로운 기능 또는 개선 사항",
+        "카메라 출력, 비디오 녹화, 미리보기, A/V 동기화와 관련된 발표",
+        "개발자 세션 또는 블로그 게시물에서 언급된 구체적인 코드 예시 또는 구현 가이드"
+      ],
+      "risk_notes": [
+        "YouTube 재생 목록은 광범위한 주제를 다룰 수 있으므로, 카메라 HAL SW와 직접적으로 관련된 콘텐츠를 선별해야 합니다.",
+        "세션 내용이 HAL SW 개발자에게 직접적인 영향을 미치지 않는 상위 수준의 앱 개발 주제일 수 있습니다."
+      ]
+    },
+    {
+      "proposal_id": "P2",
+      "topic_gap": "Google I/O '26에서 강조된 Jetpack Compose를 사용한 크로스 디바이스 Android 경험 구축이 카메라 HAL SW에 미치는 잠재적 영향에 대해 탐구합니다.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [
+        "goo.gle",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Jetpack Compose camera",
+        "Android cross-device camera",
+        "Adaptive apps camera I/O 2026",
+        "CameraX Jetpack Compose",
+        "Multi-device camera experience Android"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Jetpack Compose를 사용한 카메라 미리보기, 이미지 처리, 또는 미디어 캡처 UI의 개선 사항",
+        "다양한 폼 팩터(폴더블, 태블릿 등)에서 카메라 경험을 최적화하는 방법",
+        "크로스 디바이스 시나리오에서 카메라 HAL 상호작용 또는 성능에 대한 언급"
+      ],
+      "risk_notes": [
+        "이 주제는 주로 UI/UX 개발에 초점을 맞출 수 있으며, HAL SW에 직접적인 관련성이 낮을 수 있습니다.",
+        "카메라 관련 내용이 간접적으로 언급될 가능성이 높으므로, 주의 깊은 분석이 필요합니다."
+      ]
+    },
+    {
+      "proposal_id": "P3",
+      "topic_gap": "CameraX 1.6.0 및 1.7.0-alpha01 릴리스의 주요 변경 사항 및 개선 사항을 분석하여 HAL SW 개발자에게 미치는 영향을 파악합니다.",
+      "source_family": "camerax-release-notes",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
-        "CameraX release notes",
-        "Android camera updates"
+        "CameraX 1.6.0 release notes",
+        "CameraX 1.7.0-alpha01 features",
+        "AndroidX Camera updates",
+        "CameraX performance improvements",
+        "CameraX HAL impact"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
       ],
       "expected_evidence": [
-        "CameraX release notes",
-        "New features in CameraX",
-        "Bug fixes in CameraX",
-        "Deprecations in CameraX"
+        "새로운 기능, API 변경 사항, 버그 수정 목록",
+        "성능 최적화 또는 안정성 개선에 대한 세부 정보",
+        "Camera2 API 또는 HAL 인터페이스와의 상호작용에 영향을 미치는 변경 사항"
       ],
-      "risk_notes": []
+      "risk_notes": [
+        "알파 릴리스는 변경될 수 있으며, 안정적인 버전만큼 상세한 문서가 없을 수 있습니다.",
+        "일부 변경 사항은 HAL SW가 아닌 상위 수준의 앱 개발에만 관련될 수 있습니다."
+      ]
     },
     {
-      "proposal_id": "PROPOSAL-002",
-      "topic_gap": "Camera HAL SW developers need to be aware of changes in Android's media pipeline that affect camera output, such as new supported formats, encoding/decoding capabilities, and A/V synchronization.",
-      "source_family": "Official Android media/camera-output discovery intent",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
-      "search_keywords": [
-        "Android media formats",
-        "MediaCodec updates",
-        "MediaStore changes",
-        "camera A/V sync"
-      ],
-      "candidate_urls": [
-        "https://developer.android.com/media/platform/supported-formats",
-        "https://developer.android.com/reference/android/media/MediaCodec",
-        "https://developer.android.com/reference/android/provider/MediaStore"
-      ],
-      "expected_evidence": [
-        "New supported media formats",
-        "Updates to MediaCodec capabilities",
-        "Changes in MediaStore APIs",
-        "Impact on camera recording and A/V sync"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "PROPOSAL-003",
-      "topic_gap": "Camera HAL SW developers need to understand how to effectively test camera functionality, especially in automated testing scenarios, to ensure device compatibility and performance.",
-      "source_family": "Official Android media/camera-output discovery intent",
+      "proposal_id": "P4",
+      "topic_gap": "카메라 이미지 자동화 테스트(CTS, ITS)의 최신 업데이트를 검토하여 카메라 HAL SW 호환성 및 품질 보증에 대한 통찰력을 얻습니다.",
+      "source_family": "aosp-site-updates",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
-        "Android camera testing",
-        "Camera ITS",
-        "camera HAL compatibility"
+        "Android Camera ITS updates",
+        "Camera HAL compatibility testing",
+        "AOSP camera testing automation",
+        "CTS camera requirements",
+        "Camera image quality testing Android"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "Camera ITS (Image Test Suite) documentation",
-        "Guidelines for automated camera testing",
-        "Camera HAL compatibility requirements"
+        "Camera ITS 테스트 박스 설정 또는 사용 방법 변경 사항",
+        "새로운 테스트 케이스 또는 기존 테스트의 개선 사항",
+        "카메라 HAL 구현 또는 드라이버에 대한 새로운 호환성 요구 사항"
       ],
-      "risk_notes": []
+      "risk_notes": [
+        "문서 업데이트는 새로운 기능보다는 기존 기능의 명확화 또는 사소한 변경일 수 있습니다.",
+        "일부 내용은 이미 알려진 정보의 재확인일 수 있습니다."
+      ]
     },
     {
-      "proposal_id": "PROPOSAL-004",
-      "topic_gap": "Camera HAL SW developers should be aware of broader trends and best practices in Android development that indirectly impact camera usage, such as UI development with Compose and AI integration.",
-      "source_family": "Official Android media/camera-output discovery intent",
+      "proposal_id": "P5",
+      "topic_gap": "CameraX 1.6.1 릴리스의 주요 변경 사항 및 개선 사항을 분석하여 HAL SW 개발자에게 미치는 영향을 파악합니다.",
+      "source_family": "android-developers-latest-updates",
       "allowed_domains": [
-        "android-developers.googleblog.com"
+        "developer.android.com"
       ],
       "search_keywords": [
-        "Google I/O Android camera",
-        "Jetpack Compose media",
-        "Android AI camera features"
+        "CameraX 1.6.1 release notes",
+        "AndroidX Camera 1.6.1 updates",
+        "CameraX bug fixes",
+        "CameraX stability improvements"
       ],
       "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
-        "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
-        "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
       ],
       "expected_evidence": [
-        "Key takeaways from Google I/O related to Android development",
-        "Best practices for Jetpack Compose in media applications",
-        "AI/ML advancements relevant to camera features"
+        "CameraX 1.6.1의 버그 수정, 안정성 개선 또는 사소한 기능 업데이트 목록",
+        "이전 버전과의 호환성 변경 사항",
+        "Camera2 API 또는 HAL 인터페이스에 간접적으로 영향을 미칠 수 있는 수정 사항"
       ],
-      "risk_notes": []
+      "risk_notes": [
+        "점진적 릴리스이므로 주요 기능 변경보다는 버그 수정 및 안정성 개선에 중점을 둘 가능성이 높습니다.",
+        "HAL SW에 직접적인 영향을 미치는 변경 사항이 적을 수 있습니다."
+      ]
     }
   ]
 }

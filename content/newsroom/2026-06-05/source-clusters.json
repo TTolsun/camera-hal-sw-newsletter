@@ -104,20 +104,13 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "canonical_title": "17 Things to know for Android developers at Google I/O",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
           "title": "17 Things to know for Android developers at Google I/O",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
-          "title": "Android Developers Blog: 17 Things to know for Android developers at Google I/O",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -128,20 +121,13 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
       "canonical_title": "Android UI Development is Compose First",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
           "title": "Android UI Development is Compose First",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
-          "title": "Android Developers Blog: Android UI Development is Compose First",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -152,20 +138,13 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
       "canonical_title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
           "title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
-          "title": "Android Developers Blog: Top AI on Android updates for building intelligent experiences from Google I/O &#8216;26",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -665,57 +644,6 @@
         {
           "url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
           "title": "May",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "ae9e55f7b032d076",
-      "cluster_key": "https://developer.android.com/media/platform/supported-formats",
-      "canonical_url": "https://developer.android.com/media/platform/supported-formats",
-      "canonical_title": "Supported media formats &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/media/platform/supported-formats",
-          "title": "Supported media formats &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "c53bd03c7a3d1de2",
-      "cluster_key": "https://developer.android.com/reference/android/media/mediacodec",
-      "canonical_url": "https://developer.android.com/reference/android/media/MediaCodec",
-      "canonical_title": "MediaCodec &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/android/media/MediaCodec",
-          "title": "MediaCodec &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "e12f3fd8b75d5b1b",
-      "cluster_key": "https://developer.android.com/reference/android/provider/mediastore",
-      "canonical_url": "https://developer.android.com/reference/android/provider/MediaStore",
-      "canonical_title": "MediaStore &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/android/provider/MediaStore",
-          "title": "MediaStore &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
