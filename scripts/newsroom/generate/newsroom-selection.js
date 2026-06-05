@@ -159,6 +159,25 @@ function finalSelectionEligibility(candidate) {
   return text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
 }
 
+// YouTube 등의 재생목록(playlist) URL은 dated article이 아니라 영상 모음(collection)이다.
+// 단일 영상(watch?v=)은 제외하지 않고, /playlist 경로이거나 v= 없이 list=만 있는 컬렉션만 본다.
+function isPlaylistCollectionUrl(value) {
+  const raw = text(value);
+  if (!raw) return false;
+  let parsed;
+  try {
+    parsed = new URL(raw);
+  } catch (_) {
+    return false;
+  }
+  const host = parsed.hostname.replace(/^www\./, '').replace(/^m\./, '').toLowerCase();
+  if (host !== 'youtube.com' && host !== 'youtu.be') return false;
+  if (/^\/playlist\/?$/.test(parsed.pathname)) return true;
+  return parsed.searchParams.has('list') &&
+    !parsed.searchParams.has('v') &&
+    !/\/watch/.test(parsed.pathname);
+}
+
 function exclusionReasons(candidate) {
   const reasons = [];
   const eligibility = finalSelectionEligibility(candidate);
@@ -171,6 +190,7 @@ function exclusionReasons(candidate) {
   const referenceOnly = bool(candidate.reference_only);
 
   if (!candidateUrl(candidate)) reasons.push('missing URL evidence');
+  if (isPlaylistCollectionUrl(candidateUrl(candidate))) reasons.push('playlist/collection URL is not a dated main article');
   if (!selectionDate(candidate) || !hasDatedEvidence || !hasPublishReadyDateEvidence(candidate)) reasons.push('missing dated evidence');
   if (isWatchPage && !hasDatedEvidence) reasons.push('watch page without dated evidence');
   if (!['main', 'short'].includes(eligibility)) reasons.push(`finalSelectionEligibility=${eligibility || 'unknown'}`);
