@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-05",
+  "status": "PASS",
+  "removed_sections": [],
+  "final_section_sources": [
+    {
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+    },
+    {
+      "title": "CameraX Release Notes",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+    },
+    {
+      "title": "Test camera images using automation",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [
+    {
+      "claim": "CameraX 1.6.0",
+      "reason": "retained because the claim appears in final section evidence."
+    }
+  ],
+  "hard_failures": []
+}

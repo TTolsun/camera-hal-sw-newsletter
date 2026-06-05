@@ -1,0 +1,34 @@
+{
+  "status": "NEEDS_FIX",
+  "must_fix": [],
+  "recommended_fixes": [
+    "The 'actionability_level' for candidate '43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35' is 'none'. Consider refining the action items to be more concrete and actionable for a Camera HAL engineer.",
+    "The 'actionability_level' for candidate '545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7' is 'none'. Consider refining the action items to be more concrete and actionable for a Camera HAL engineer.",
+    "The 'actionability_level' for candidate 'bb0e15b6742fce012e2e0220ecfba35983722daa6e6c21581c9c5d661584a54d' is 'none'. Consider refining the action items to be more concrete and actionable for a Camera HAL engineer."
+  ],
+  "source_gaps": [
+    "Reporter eligibility violation; section=\"CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 단말별 YUV 스트림 호환성 패치 반영\"; source=\"CameraX Release Notes\"; url=https://developer.android.com/jetpack/androidx/releases/camera#1.6.0; candidate=\"CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영\"; reason=finalSelectionEligibility=unknown; action=replace-or-demote"
+  ],
+  "source_gap_count": 1,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반의 통합 미디어 파이프라인 툴킷 발표",
+      "publishable": true,
+      "reason": "Google I/O 발표를 통해 CameraXViewfinder Composable이 도입되어 다양한 폼 팩터에서 미리보기 UI를 쉽게 통합할 수 있게 되었으며, 이는 HAL 개발자가 동적 스트림 재구성 및 버퍼 할당 안정성을 검증하는 데 중요한 가이드라인을 제공합니다."
+    },
+    {
+      "section_index": 1,
+      "headline": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 단말별 YUV 스트림 호환성 패치 반영",
+      "publishable": true,
+      "reason": "CameraX 1.6.0의 유스케이스 사전 쿼리 API 도입과 기기별 스트림 호환성 패치는 HAL 개발자가 스트림 조합 지원 정보 및 특정 단말의 YUV 왜곡, 플래시 제어 문제를 재점검하는 데 필요한 구체적인 정보를 제공합니다."
+    },
+    {
+      "section_index": 2,
+      "headline": "AOSP Camera ITS 업데이트: Honor Pad 20 태블릿 허용 목록 추가 및 테스트 지침 재정렬",
+      "publishable": true,
+      "reason": "AOSP Camera ITS 문서 업데이트는 Honor Pad 20 태블릿 허용 목록 추가 및 테스트 지침 재정렬을 포함하며, 이는 HAL 개발자가 CTS/ITS 검증 환경을 최신 AOSP 표준에 맞춰 동기화하는 데 실질적인 도움이 됩니다."
+    }
+  ],
+  "final_comment": "All articles are publishable and provide relevant information for Camera HAL engineers. Action items could be slightly more specific in some cases, but are generally actionable. No factual or source-related must-fix issues were found. Reporter eligibility violations were added as source gaps and require replacement or demotion."
+}
