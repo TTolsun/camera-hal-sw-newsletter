@@ -45,4 +45,8 @@
 | review_candidate | 0.783 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
 | review_candidate | 0.72 | Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley | https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/ |
 | strong_candidate | 0.81 | [PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678 - Jai Luthra | https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/ |
+| review_candidate | 0.72 | [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra | https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/ |
+| strong_candidate | 0.81 | [PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra | https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/ |
+| blocked_candidate | 0.5 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++ | https://isocpp.org//blog/2026/04/gcc-16.1 |
+| blocked_candidate | 0.455 | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more : Standard C++ | https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more |
 
