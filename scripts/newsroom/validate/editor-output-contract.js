@@ -674,7 +674,41 @@ function bindEvidenceForExistingFactClaim({ section, candidate, articleIndex, se
 // the candidate's own allowed_claim_evidence, but ONLY when the strict claim validator (the
 // oracle) confirms the evidence actually supports the claim. Claims whose text is not supported
 // stay unbound and keep failing closed, so this never invents support nor weakens the gate.
-function bindMissingFactClaimEvidence(value, options = {}) {
+// claim이 인용한 evidence_id가 "실제로 해석되지 않는"(unknown/blocked/proposal 등) 경우만 식별한다.
+// pack-fallback 같은 soft 매핑(derived_evidence_mapping, blocking:false)은 해석된 것으로 보고 제외한다.
+const UNRESOLVED_EVIDENCE_REASON_CODES = new Set([
+  'unknown_evidence_id',
+  'keyword_hint_is_not_evidence',
+  'gemini_proposal_is_not_evidence',
+  'blocked_or_failed_evidence_id',
+  'provenance_id_without_item_evidence'
+]);
+
+function factClaimHasUnresolvedEvidence({ section, candidate, articleIndex, seedEvidencePack, claim }) {
+  const factText = text(claim.text || claim.claim);
+  const trialSection = cloneJson(section);
+  trialSection.claims = [claim];
+  const baseSections = trialSection.article_sections &&
+    typeof trialSection.article_sections === 'object' &&
+    !Array.isArray(trialSection.article_sections)
+    ? trialSection.article_sections
+    : {};
+  trialSection.article_sections = { ...baseSections, verified_facts: [factText] };
+  const result = validateArticleClaims({
+    section: trialSection,
+    candidate,
+    articleIndex,
+    strict: true,
+    seedEvidencePack
+  });
+  const issues = [
+    ...ensureArray(result.issues),
+    ...ensureArray(result.claim_results).flatMap(claimResult => ensureArray(claimResult.issues))
+  ];
+  return issues.some(item => item.blocking !== false && UNRESOLVED_EVIDENCE_REASON_CODES.has(item.reason_code));
+}
+
+function reconcileFactClaimEvidence(value, options = {}) {
   const reporter = options.reporter || { candidates: [] };
   const seedEvidencePack = options.seedEvidencePack || null;
   const sections = ensureArray(value?.sections);
@@ -686,16 +720,30 @@ function bindMissingFactClaimEvidence(value, options = {}) {
   ensureArray(repaired.sections).forEach((section, index) => {
     const claims = ensureArray(section.claims);
     if (claims.length === 0) return;
-    const needsEvidence = claim =>
-      String(claim?.claim_type || claim?.claimType || '').trim().toLowerCase() === 'fact' &&
-      ensureArray(claim?.evidence_ids || claim?.evidenceIds).map(text).filter(Boolean).length === 0 &&
-      Boolean(text(claim?.text || claim?.claim));
-    if (!claims.some(needsEvidence)) return;
     const candidate = candidateForSection(section, candidateIndex) || {};
     const allowedEvidence = buildAllowedClaimEvidence(candidate, section, { seedEvidencePack });
     if (allowedEvidence.length === 0) return;
+    // 재바인딩 대상: fact claim 중 (a) evidence_ids가 비었거나(기존 missing 케이스),
+    // (b) 인용한 id가 strict 검증에서 blocking "미해결 id" 이슈를 내는 경우(#502 unresolved 케이스).
+    // pack-fallback처럼 soft(non-blocking)하게 해석되는 id는 그대로 둔다(게이트 진단 보존).
+    const needsReconcile = claim => {
+      if (String(claim?.claim_type || claim?.claimType || '').trim().toLowerCase() !== 'fact') return false;
+      if (!text(claim?.text || claim?.claim)) return false;
+      const currentIds = ensureArray(claim?.evidence_ids || claim?.evidenceIds).map(text).filter(Boolean);
+      if (currentIds.length === 0) return true;
+      return factClaimHasUnresolvedEvidence({
+        section,
+        candidate,
+        articleIndex: index,
+        seedEvidencePack,
+        claim
+      });
+    };
+    if (!claims.some(needsReconcile)) return;
     claims.forEach(claim => {
-      if (!needsEvidence(claim)) return;
+      if (!needsReconcile(claim)) return;
+      // strict 오라클이 evidence가 claim 텍스트를 실제 뒷받침한다고 확인할 때만 바인딩한다.
+      // 확인 실패면 그대로 두어 fail-closed(없던 근거를 만들지 않음, 게이트 약화 없음).
       const bound = bindEvidenceForExistingFactClaim({
         section,
         candidate,
@@ -715,6 +763,9 @@ function bindMissingFactClaimEvidence(value, options = {}) {
 
   return changed ? repaired : value;
 }
+
+// 빈 evidence_ids만 다루던 기존 이름은 호환을 위해 reconcile의 별칭으로 유지한다.
+const bindMissingFactClaimEvidence = reconcileFactClaimEvidence;
 
 function validateArticleSectionContract(value) {
   const issues = [];
@@ -1520,6 +1571,7 @@ module.exports = {
   EditorSemanticValidationError,
   assertSectionsAndSourcesPreserved,
   bindMissingFactClaimEvidence,
+  reconcileFactClaimEvidence,
   repairEditorOutputContract,
   serializeEditorValidationError,
   validateEditorArticlePolicy,
