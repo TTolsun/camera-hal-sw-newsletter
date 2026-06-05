@@ -718,50 +718,8 @@ function addLinkedEvidenceQualityDeductions(state, section, candidate, location)
   }
 }
 
-function claimIssueCategory(reasonCode = '') {
-  if ([
-    'missing_claims',
-    'missing_claim_id',
-    'empty_claim_text',
-    'invalid_claim_type',
-    'invalid_overclaim_risk',
-    'missing_source_urls',
-    'missing_fact_evidence_ids',
-    'duplicate_claim_id',
-    'missing_fact_claim'
-  ].includes(reasonCode)) return 'claim-contract';
-  if (reasonCode === 'invalid_impact_level') return 'claim-impact-level';
-  if ([
-    'source_url_mismatch',
-    'evidence_source_url_mismatch',
-    'source_url_fragment_mismatch',
-    'seed_evidence_pack_unmatched',
-    'seed_evidence_pack_ambiguous',
-    'seed_evidence_pack_url_only_shared_page_rejected',
-    'seed_evidence_pack_url_fallback_rejected',
-    'seed_evidence_pack_title_fallback_rejected',
-    'seed_evidence_pack_ref_out_of_range',
-    'seed_evidence_pack_ref_metadata_mismatch'
-  ].includes(reasonCode)) return 'claim-source-binding';
-  if (reasonCode === 'missing_matching_fact_claim') return 'claim-coverage';
-  if ([
-    'direct_hal_claim_without_direct_evidence',
-    'do_not_claim_violation',
-    'do_not_overstate_violation'
-  ].includes(reasonCode)) return 'claim-overclaim';
-  if ([
-    'unknown_evidence_id',
-    'keyword_hint_is_not_evidence',
-    'gemini_proposal_is_not_evidence',
-    'provenance_id_without_item_evidence',
-    'blocked_or_failed_evidence_id',
-    'derived_evidence_mapping',
-    'fact_claim_not_supported_by_evidence_text',
-    'runtime_claim_without_runtime_evidence',
-    'stream_buffer_metadata_without_stream_buffer_metadata_evidence'
-  ].includes(reasonCode)) return 'claim-evidence';
-  return 'claim-binding';
-}
+// claim 이슈 카테고리 매핑은 레지스트리 모듈로 분리했다(OCP). 여기서는 그대로 재노출한다.
+const { claimIssueCategory } = require('./claim-issue-category');
 
 function addClaimValidationDeductions(state, validation, location, seenKeys) {
   const claimIssues = [
