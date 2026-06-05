@@ -146,6 +146,7 @@ const {
   buildNewsletterQualityReport,
   buildQualityReportMarkdown,
   deductionMatchesSection,
+  salvagePublishableSubset,
   sectionHasSourceGap,
   sectionPassesArticleGate
 } = require('../validate/newsletter-quality');
@@ -4199,6 +4200,31 @@ async function main() {
     seedEvidencePack
   });
   generationRunState.qualityReport = qualityReport;
+
+  // Per-article 발행 회복력(thin-week salvage). 전체 draft가 일부 기사의
+  // per-article binding 실패(예: 한 소스의 claim-binding 분산) 때문에만 NEEDS_FIX이고,
+  // mainArticleCount.min 이상의 기사가 깨끗이 통과하면, 전체를 실패시키지 않고
+  // 통과한 subset만 발행한다. salvagePublishableSubset은 subset에 quality gate를
+  // 다시 적용해 PASS일 때만 결과를 반환(아니면 null)하므로, bound 안 된 콘텐츠를
+  // 발행하지 않고 이번 실행에서 바인딩 실패한 기사만 drop한다. attempt loop 종료
+  // 후(맨 끝)에 연결해 retry/lock 제어 흐름에 영향을 주지 않는다.
+  if (qualityReport.status !== 'PASS') {
+    const salvage = salvagePublishableSubset(date, editor, reporter, factCheck, qualityReport, {
+      threshold: qualityGatePolicy.threshold,
+      shortlistReport,
+      staleClaimReport: staleScrub.report,
+      strictClaimValidation: true,
+      seedEvidencePack
+    });
+    if (salvage) {
+      console.warn(`Thin-week salvage: dropped ${salvage.dropped_section_count} unpublishable article(s); publishing ${salvage.kept_section_count}.`);
+      editor = validateEditor(salvage.editor, date, reporter, { strictClaims: true, requireStoryContract: true });
+      factCheck = salvage.factCheck;
+      qualityReport = salvage.qualityReport;
+      generationRunState.factCheck = factCheck;
+      generationRunState.qualityReport = qualityReport;
+    }
+  }
 
   writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
   writeEditorDraftJson(path.join(newsroomDir, 'editor-draft.json'), editor, date);
