@@ -396,3 +396,17 @@ test('archive page shows fetch error state without exposing controls', async () 
   assert.match(elements['[data-archive-status]'].textContent, /아카이브를 불러오지 못했습니다/);
   assert.equal(errors.length, 1);
 });
+
+test('archive card date chip shows the ISO week label (W##) for weekly entries', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    weeklyKey: '2026-W22',
+    date: '2026-05-25',
+    title: '2026 W22 (05.25 ~ 05.31)',
+    summary: '기사 A · 기사 B',
+    tags: []
+  });
+  assert.match(html, /class="issue-date">W22</);
+  // The visible date chip shows the week label, not the raw start date.
+  assert.doesNotMatch(html, /class="issue-date">2026-05-25</);
+  assert.match(html, /2026 W22 \(05\.25 ~ 05\.31\)/);
+});

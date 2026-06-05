@@ -1,21 +1,20 @@
-# Camera HAL Weekly 2026-W19
+# 2026 W19 (05.04 ~ 05.10)
 
 2026-05-04 ~ 2026-05-10 주간 뉴스레터 (기사 6건).
 
 
 
-## 1. 이번 주 3줄 브리핑
+## 1. 이번 주 기사
 
 - libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트
 - libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선
 - Claude Code 2.1.128: Camera HAL workflow review 범위
+- 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위
+- Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위
+- C++26 assert(): Camera HAL debug-build 검토 범위
 
 ## 2. libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트
 
-
-![libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트 image](https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg)
-
-_이미지: [libcamera Release Announcements](https://gitlab.freedesktop.org/camera/libcamera/-/issues/300)_
 
 
 libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트
@@ -50,10 +49,6 @@ libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트
 
 ## 3. libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선
 
-
-![libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선 image](https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg)
-
-_이미지: [libcamera Release Announcements](https://gitlab.freedesktop.org/camera/libcamera/-/issues/311)_
 
 
 libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선

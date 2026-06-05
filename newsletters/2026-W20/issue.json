@@ -11,7 +11,6 @@
       "category": "주간 다이제스트",
       "headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
       "what_changed": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
-      "source_origin_date": "2026-05-15",
       "public_article": {
         "headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
         "lead": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
@@ -51,7 +50,6 @@
       "category": "주간 다이제스트",
       "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
       "what_changed": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
-      "source_origin_date": "2026-05-12",
       "public_article": {
         "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
         "lead": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
@@ -100,7 +98,6 @@
       "category": "주간 다이제스트",
       "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
       "what_changed": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
-      "source_origin_date": "2026-05-11",
       "public_article": {
         "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
         "lead": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
@@ -141,7 +138,7 @@
   "weekly_key": "2026-W20",
   "week_start_date": "2026-05-11",
   "week_end_date": "2026-05-17",
-  "title": "Camera HAL Weekly 2026-W20",
+  "title": "2026 W20 (05.11 ~ 05.17)",
   "tags": [
     "Tooling Watch Edition",
     "Tooling Watch",

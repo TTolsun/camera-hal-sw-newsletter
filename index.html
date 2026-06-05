@@ -290,6 +290,12 @@
       return newsletters.find(item => item && item.date === date) || null;
     }
 
+    // Card date chip shows the ISO week ("2026-W22" -> "W22") for weekly entries, else the raw date.
+    function weekLabel(entry) {
+      const key = String((entry && entry.weeklyKey) || '').trim();
+      return /^\d{4}-W\d{2}$/.test(key) ? key.slice(5) : String((entry && entry.date) || '');
+    }
+
     function renderHeadlineMedia(headline) {
       const imageSrc = safeImageSrc(headline.image_url);
       const fallback = '<span class="headline-media-fallback" aria-hidden="true">이미지 없음</span>';
@@ -393,7 +399,7 @@
         latestEl.classList.remove('loading-card');
         latestEl.innerHTML = `
           <div class="card-meta">
-            <span class="issue-date">${escapeHtml(latest.date)}</span>
+            <span class="issue-date">${escapeHtml(weekLabel(latest))}</span>
             <span class="status-chip">Latest</span>
           </div>
           <h3 class="card-title clamp-2">${escapeHtml(latest.title)}</h3>

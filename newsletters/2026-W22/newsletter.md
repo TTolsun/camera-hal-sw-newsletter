@@ -1,13 +1,13 @@
-# Camera HAL Weekly 2026-W22
+# 2026 W22 (05.25 ~ 05.31)
 
 2026-05-25 ~ 2026-05-31 주간 뉴스레터 (기사 2건).
 
 
 
-## 1. 이번 주 3줄 브리핑
+## 1. 이번 주 기사
 
-- Jetpack Compose를 활용한 멀티 디바이스 환경에서의 원활한 Android 카메라 경험 구축
-- 설치와 구성 없는 클라우드 기반 네이티브 Android 개발 환경 제공
+- Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원
+- Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신
 
 ## 2. Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원
 

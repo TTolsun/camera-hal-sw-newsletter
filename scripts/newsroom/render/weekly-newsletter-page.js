@@ -12,15 +12,31 @@ const {
   weeklyNewsletterMarkdownRoute
 } = require('../common/weekly-newsletter');
 
+// "2026-W22" + bounds -> "2026 W22 (05.25 ~ 05.31)".
+function weeklyDisplayTitle(bounds) {
+  const [year, week] = String(bounds.weeklyKey).split('-W');
+  const monthDay = value => String(value).slice(5).replace('-', '.');
+  return `${year} W${week} (${monthDay(bounds.weekStartDate)} ~ ${monthDay(bounds.weekEndDate)})`;
+}
+
+function articleTitles(sections = []) {
+  return sections
+    .map(section => (section && (section.public_article?.headline || section.headline)) || '')
+    .filter(Boolean);
+}
+
 function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
   const bounds = date ? weekBoundsForDate(date) : weekBoundsForKey(weeklyKey);
+  const titles = articleTitles(draft.sections);
   const issue = {
     ...draft,
     date: bounds.weekStartDate,
     weekly_key: bounds.weeklyKey,
     week_start_date: bounds.weekStartDate,
     week_end_date: bounds.weekEndDate,
-    title: `Camera HAL Weekly ${bounds.weeklyKey}`
+    title: weeklyDisplayTitle(bounds),
+    // Under the title we list this week's article titles instead of a 3-line briefing.
+    briefing: titles.length ? titles : draft.briefing
   };
   return {
     weeklyKey: bounds.weeklyKey,
@@ -34,4 +50,4 @@ function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
   };
 }
 
-module.exports = { buildWeeklyNewsletterPage };
+module.exports = { buildWeeklyNewsletterPage, weeklyDisplayTitle, articleTitles };

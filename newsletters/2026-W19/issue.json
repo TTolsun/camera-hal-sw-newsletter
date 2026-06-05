@@ -4,14 +4,16 @@
   "briefing": [
     "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
     "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
-    "Claude Code 2.1.128: Camera HAL workflow review 범위"
+    "Claude Code 2.1.128: Camera HAL workflow review 범위",
+    "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
+    "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+    "C++26 assert(): Camera HAL debug-build 검토 범위"
   ],
   "sections": [
     {
       "category": "주간 다이제스트",
       "headline": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
       "what_changed": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
-      "source_origin_date": "2026-05-07",
       "public_article": {
         "headline": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
         "lead": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
@@ -34,24 +36,19 @@
             "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
             "source_role": "primary"
           }
-        ],
-        "image": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg"
+        ]
       },
       "sources": [
         {
           "title": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
           "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300"
         }
-      ],
-      "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
-      "imageAttribution": "libcamera Release Announcements",
-      "imageSource": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300"
+      ]
     },
     {
       "category": "주간 다이제스트",
       "headline": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
       "what_changed": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
-      "source_origin_date": "2026-05-07",
       "public_article": {
         "headline": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
         "lead": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
@@ -74,24 +71,19 @@
             "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
             "source_role": "primary"
           }
-        ],
-        "image": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg"
+        ]
       },
       "sources": [
         {
           "title": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
           "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311"
         }
-      ],
-      "selectedImage": "https://gitlab.freedesktop.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg",
-      "imageAttribution": "libcamera Release Announcements",
-      "imageSource": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311"
+      ]
     },
     {
       "category": "주간 다이제스트",
       "headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
       "what_changed": "Claude Code 2.1.128: Camera HAL workflow review 범위",
-      "source_origin_date": "2026-05-05",
       "public_article": {
         "headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
         "lead": "Claude Code 2.1.128: Camera HAL workflow review 범위",
@@ -127,7 +119,6 @@
       "category": "주간 다이제스트",
       "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
       "what_changed": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
-      "source_origin_date": "2026-05-05",
       "public_article": {
         "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
         "lead": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
@@ -167,7 +158,6 @@
       "category": "주간 다이제스트",
       "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
       "what_changed": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
-      "source_origin_date": "2026-05-05",
       "public_article": {
         "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
         "lead": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
@@ -207,7 +197,6 @@
       "category": "주간 다이제스트",
       "headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
       "what_changed": "C++26 assert(): Camera HAL debug-build 검토 범위",
-      "source_origin_date": "2026-05-05",
       "public_article": {
         "headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
         "lead": "C++26 assert(): Camera HAL debug-build 검토 범위",
@@ -248,7 +237,7 @@
   "weekly_key": "2026-W19",
   "week_start_date": "2026-05-04",
   "week_end_date": "2026-05-10",
-  "title": "Camera HAL Weekly 2026-W19",
+  "title": "2026 W19 (05.04 ~ 05.10)",
   "tags": [
     "Camera HAL",
     "Android"

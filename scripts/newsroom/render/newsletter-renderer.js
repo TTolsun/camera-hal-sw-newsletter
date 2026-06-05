@@ -229,6 +229,11 @@ function issueDisplayDate(issue = {}) {
   return titleDate ? titleDate[0] : '';
 }
 
+// Weekly pages list the week's article titles under the issue title, so the section is "이번 주 기사".
+function briefingHeading(issue = {}) {
+  return issue.weekly_key ? '이번 주 기사' : '이번 주 3줄 브리핑';
+}
+
 function issuePageTitle(issue = {}) {
   const date = issueDisplayDate(issue);
   return date ? `Camera SW Newsletter - ${date}` : 'Camera SW Newsletter';
@@ -498,7 +503,7 @@ ${issue.summary}
 
 ${publicationNoticeMarkdown(issue)}
 
-## 1. 이번 주 3줄 브리핑
+## 1. ${briefingHeading(issue)}
 
 ${bulletsMarkdown(issue.briefing)}
 ${quietCoreNoteMarkdown(issue)}
@@ -576,7 +581,7 @@ function issueBriefingHtml(issue) {
         <div class="card issue-briefing-card">
           <div class="issue-section-heading">
             <span class="section-icon section-icon-list" aria-hidden="true"></span>
-            <h2 id="issue-briefing-title">이번 주 3줄 브리핑</h2>
+            <h2 id="issue-briefing-title">${briefingHeading(issue)}</h2>
           </div>
           <ul>${bulletsHtml(issue.briefing)}</ul>
         </div>
