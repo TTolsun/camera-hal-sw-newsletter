@@ -1,13 +1,12 @@
 # 2026 W20 (05.11 ~ 05.17)
 
-이번 주에는 ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’, ‘CameraX 1.6.1 업데이트: Android Camera 호환성 관찰’ 등 3건의 소식을 다룹니다.
+이번 주에는 ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’, ‘CameraX 1.6.1 업데이트: Android Camera 호환성 관찰’ 두 건의 소식을 다룹니다.
 
 
 
 ## 1. 이번 주 기사
 
 - Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
-- CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 - CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
 ## 2. Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
@@ -84,44 +83,6 @@ CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
 
 - [1.6.1](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)
 - [CameraX 1.4.0-alpha07 release table row](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
-
----
-
-## 4. CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
-
-
-![CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 image](https://developer.android.com/static/images/social/android-developers.png?hl=es-419)
-
-_이미지: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)_
-
-
-CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
-
-AndroidX Camera release note의 CameraX 1.6.1 / 1.7.0-alpha01 artifact 업데이트는 app/framework camera compatibility 확인 신호입니다. HAL 팀은 이를 새 HAL 요구사항이 아니라 기존 CameraX/Camera2 조합의 회귀 확인 입력으로 다뤄야 합니다.
-
-CameraX는 Camera2 위에서 Preview, ImageCapture, VideoCapture 같은 use case를 앱 개발자가 다루기 쉽게 만드는 layer입니다. artifact version update는 app dependency matrix와 reference app smoke test가 필요한지 판단하는 자료이지, 그 자체로 device HAL behavior 변경을 의미하지 않습니다.
-
-회귀가 보일 때는 app logcat, framework camera log, HAL/device log를 분리해 원인을 나눠야 합니다. CameraX/library 문제인지 downstream HAL issue인지 구분하지 않으면 HAL owner에게 잘못된 action item이 생깁니다.
-
-**Camera HAL / Driver 관점**
-
-CameraX 업데이트는 app/framework compatibility 신호입니다. HAL 팀은 제품 dependency matrix와 reference app smoke 결과를 확인하고, device log 근거가 있을 때만 HAL follow-up으로 분리해야 합니다.
-
-### 확인할 점
-
-- CameraX 1.6.1 / 1.7.0-alpha01 artifact를 현재 product dependency matrix와 비교합니다.
-
-- Preview, ImageCapture, VideoCapture smoke run이 필요한 device/API 조합만 표시합니다.
-
-- 회귀가 있으면 app logcat, framework camera log, HAL/device log를 분리해 원인을 기록합니다.
-
-### Camera HAL/Driver 관점에서의 의미
-
-CameraX 1.6.1 업데이트: Android Camera 호환성 관찰
-
-**출처**
-
-- [Android Developers Latest Updates](https://developer.android.com/latest-updates)
 
 
 ## 참고자료

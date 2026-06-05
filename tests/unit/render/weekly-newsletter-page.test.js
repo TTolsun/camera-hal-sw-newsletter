@@ -78,3 +78,12 @@ test('buildWeeklyNewsletterPage accepts an explicit weeklyKey', () => {
   assert.equal(page.weeklyKey, '2026-W23');
   assert.equal(page.indexRoute, 'newsletters/2026-W23/index.html');
 });
+
+test('buildWeeklyNewsletterPage drops duplicate-topic articles within the issue, keeping one', () => {
+  const draft = publishReadyDraft();
+  // Same article appended twice (duplicate topic): only one copy must survive.
+  draft.sections = [draft.sections[0], JSON.parse(JSON.stringify(draft.sections[0]))];
+  const page = buildWeeklyNewsletterPage(draft, { weeklyKey: '2026-W23' });
+  assert.equal(page.issue.sections.length, 1);
+  assert.deepEqual(page.issue.briefing, ['CameraX SessionConfig stable API']);
+});

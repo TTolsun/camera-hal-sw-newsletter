@@ -54,7 +54,7 @@
     "weekEndDate": "2026-05-17",
     "date": "2026-05-11",
     "title": "2026 W20",
-    "summary": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22\nCameraX 1.6.1 업데이트: Android Camera 호환성 관찰\nCameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+    "summary": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22\nCameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
     "html": "newsletters/2026-W20/index.html",
     "md": "newsletters/2026-W20/newsletter.md",
     "tags": [

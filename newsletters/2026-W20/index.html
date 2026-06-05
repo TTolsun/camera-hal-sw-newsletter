@@ -30,7 +30,7 @@
             <div class="tag-row issue-tags"><span class="tag">Tooling Watch Edition</span><span class="tag">Tooling Watch</span><span class="tag">Android</span><span class="tag">Camera HAL</span></div>
           </div>
           <h1 class="issue-title"><span>2026 W20 Camera SW</span><span>Newsletter</span></h1>
-          <p class="subtitle">이번 주에는 ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’, ‘CameraX 1.6.1 업데이트: Android Camera 호환성 관찰’ 등 3건의 소식을 다룹니다.</p>
+          <p class="subtitle">이번 주에는 ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’, ‘CameraX 1.6.1 업데이트: Android Camera 호환성 관찰’ 두 건의 소식을 다룹니다.</p>
         </div>
         <figure class="issue-hero-mascot" aria-label="HALley mascot">
           <img
@@ -50,7 +50,7 @@
             <span class="section-icon section-icon-list" aria-hidden="true"></span>
             <h2 id="issue-briefing-title">이번 주 기사</h2>
           </div>
-          <ul><li>Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</li><li>CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</li><li>CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</li></ul>
+          <ul><li>Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</li><li>CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</li></ul>
         </div>
       </section>
 
@@ -105,33 +105,6 @@
           </div>
           <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</p></div>
           <div class="source-list"><strong>출처</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">1.6.1</a></li><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07">CameraX 1.4.0-alpha07 release table row</a></li></ul></div>
-        </article>
-      </section>
-
-      <section class="section issue-story" id="article-camerax-1-6-1-android-camera-3" aria-labelledby="article-camerax-1-6-1-android-camera-3-title">
-        <span class="issue-story-number" aria-label="Article 3">3</span>
-        <article class="card issue-section article-card has-image article">
-          <div class="article-feature-row">
-            <figure class="article-media">
-            <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=es-419" alt="CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 image" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">이미지: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">Android Developers Latest Updates</a></figcaption>
-            </figure>
-            <div class="article-copy">
-              <h2 id="article-camerax-1-6-1-android-camera-3-title" class="article-title">CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</h2>
-              <p class="article-lead">CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</p>
-              <p>AndroidX Camera release note의 CameraX 1.6.1 / 1.7.0-alpha01 artifact 업데이트는 app/framework camera compatibility 확인 신호입니다. HAL 팀은 이를 새 HAL 요구사항이 아니라 기존 CameraX/Camera2 조합의 회귀 확인 입력으로 다뤄야 합니다.</p>
-              <p>CameraX는 Camera2 위에서 Preview, ImageCapture, VideoCapture 같은 use case를 앱 개발자가 다루기 쉽게 만드는 layer입니다. artifact version update는 app dependency matrix와 reference app smoke test가 필요한지 판단하는 자료이지, 그 자체로 device HAL behavior 변경을 의미하지 않습니다.</p>
-              <p>회귀가 보일 때는 app logcat, framework camera log, HAL/device log를 분리해 원인을 나눠야 합니다. CameraX/library 문제인지 downstream HAL issue인지 구분하지 않으면 HAL owner에게 잘못된 action item이 생깁니다.</p>
-              <p>**Camera HAL / Driver 관점**</p>
-              <p>CameraX 업데이트는 app/framework compatibility 신호입니다. HAL 팀은 제품 dependency matrix와 reference app smoke 결과를 확인하고, device log 근거가 있을 때만 HAL follow-up으로 분리해야 합니다.</p>
-              <p>### 확인할 점</p>
-              <p>- CameraX 1.6.1 / 1.7.0-alpha01 artifact를 현재 product dependency matrix와 비교합니다.</p>
-              <p>- Preview, ImageCapture, VideoCapture smoke run이 필요한 device/API 조합만 표시합니다.</p>
-              <p>- 회귀가 있으면 app logcat, framework camera log, HAL/device log를 분리해 원인을 기록합니다.</p>
-            </div>
-          </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</p></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://developer.android.com/latest-updates">Android Developers Latest Updates</a></li></ul></div>
         </article>
       </section>
 

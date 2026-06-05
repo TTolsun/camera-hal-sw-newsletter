@@ -171,6 +171,7 @@
       .split(/\n+|\s+·\s+/)
       .map(line => line.trim())
       .filter(Boolean)
+      .map(line => (line.length > 50 ? `${line.slice(0, 50)}..` : line))
       .map(escapeHtml)
       .join('<br>');
   }

@@ -11,6 +11,18 @@ const {
   weeklyNewsletterIndexRoute,
   weeklyNewsletterMarkdownRoute
 } = require('../common/weekly-newsletter');
+const { findWeeklyDuplicate } = require('../generate/weekly-duplicate-merge');
+
+// Keep one article per topic within a weekly issue: drop any section that duplicates an
+// already-kept one (same identity or near-identical headline, per the weekly duplicate rule).
+function dedupeWeeklySections(sections = []) {
+  const kept = [];
+  for (const section of Array.isArray(sections) ? sections : []) {
+    if (kept.length && findWeeklyDuplicate(section, kept)) continue;
+    kept.push(section);
+  }
+  return kept;
+}
 
 // "2026-W22" + bounds -> "2026 W22 (05.25 ~ 05.31)".
 function weeklyDisplayTitle(bounds) {
@@ -38,9 +50,11 @@ function weeklySummaryText(titles = []) {
 
 function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
   const bounds = date ? weekBoundsForDate(date) : weekBoundsForKey(weeklyKey);
-  const titles = articleTitles(draft.sections);
+  const sections = dedupeWeeklySections(draft.sections);
+  const titles = articleTitles(sections);
   const issue = {
     ...draft,
+    sections,
     date: bounds.weekStartDate,
     weekly_key: bounds.weeklyKey,
     week_start_date: bounds.weekStartDate,
@@ -64,4 +78,4 @@ function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
   };
 }
 
-module.exports = { buildWeeklyNewsletterPage, weeklyDisplayTitle, weeklySummaryText, articleTitles };
+module.exports = { buildWeeklyNewsletterPage, weeklyDisplayTitle, weeklySummaryText, articleTitles, dedupeWeeklySections };
