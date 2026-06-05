@@ -24,24 +24,27 @@
 | blocked_candidate | 0.551 | June | https://source.android.com/docs/security/bulletin/2026/2026-06-01 |
 | blocked_candidate | 0.501 | May | https://source.android.com/docs/security/bulletin/2026/2026-05-01 |
 | blocked_candidate | 0.466 | April | https://source.android.com/docs/security/bulletin/2026/2026-04-01 |
+| strong_candidate | 0.93 | Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 | https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/ |
 | strong_candidate | 0.93 | [PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678 | https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/ |
 | blocked_candidate | 0.764 | Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init | https://lore.kernel.org/linux-media/c7f35621-2bdb-4e66-ac8a-6c7fc6f80f1c@seznam.cz/ |
-| blocked_candidate | 0.764 | [sailus-media-tree:partial-reg 5/9] drivers/media/v4l2-core/v4l2-event.c:81:41: warning: variable 'evspec' is uninitialized when used within its own initialization | https://lore.kernel.org/linux-media/202606052235.rM24ifzS-lkp@intel.com/ |
+| review_candidate | 0.785 | Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 | https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/ |
 | blocked_candidate | 0.551 | C++26: A User-Friendly assert() macro -- Sandor Dargo | https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo |
 | blocked_candidate | 0.551 | 2026 Annual C++ Developer Survey "Lite" | https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1 |
-| blocked_candidate | 0.716 | Re: [PATCH net-next 1/4] net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding | https://lore.kernel.org/linux-media/aiLrsLM8N0VzrNMe@devvm7509.cco0.facebook.com/ |
+| blocked_candidate | 0.716 | Re: [PATCH net-next 1/4] net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding | https://lore.kernel.org/linux-media/aiL3UM9aULBypEk7@devvm29614.prn0.facebook.com/ |
 | review_candidate | 0.761 | [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 | https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/ |
 | strong_candidate | 0.806 | [PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 | https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/ |
 | blocked_candidate | 0.527 | Power of C++26 Reflection: Strong (opaque) type definitions -- r/cpp | https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp |
+| blocked_candidate | 0.692 | Re: [PATCH] dma-buf: udmabuf: validate create-list count before copying | https://lore.kernel.org/linux-media/20260605160253.637381F00893@smtp.kernel.org/ |
 | blocked_candidate | 0.548 | The libcamera-devel Archives | https://lists.libcamera.org/pipermail/libcamera-devel/ |
 | blocked_candidate | 0.548 | How ref qualifiers led to deducing this | https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this |
 | blocked_candidate | 0.398 | C++: The Documentary trailer | https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer |
 | weak_candidate | 0.638 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! | https://isocpp.org//blog/2026/04/gcc-16.1 |
 | blocked_candidate | 0.593 | CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal | https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph |
-| review_candidate | 0.758 | [sailus-media-tree:partial-reg 7/9] drivers/media/mc/mc-event.c:17:10: fatal error: 'media/media-event.h' file not found | https://lore.kernel.org/linux-media/202606052349.bOSyAnNd-lkp@intel.com/ |
 | weak_candidate | 0.614 | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more | https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more |
-| blocked_candidate | 0.596 | Re: [PATCH v7 4/8] media: qcom: camss: Initialize lanes after lane configuration is available | https://lore.kernel.org/linux-media/20260605134047.597EC1F00893@smtp.kernel.org/ |
 | blocked_candidate | 0.674 | Media3 Release Notes - Media3 1.9.4 | https://developer.android.com/jetpack/androidx/releases/media3#1.9.4 |
 | review_candidate | 0.783 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
+| review_candidate | 0.72 | Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley | https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/ |
 | strong_candidate | 0.81 | [PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678 - Jai Luthra | https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/ |
+| blocked_candidate | 0.5 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++ | https://isocpp.org//blog/2026/04/gcc-16.1 |
+| blocked_candidate | 0.455 | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more : Standard C++ | https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more |
 

@@ -4,138 +4,131 @@
   "newsletter_date": "2026-06-06",
   "proposals": [
     {
-      "proposal_id": "google_io_2026_media_pipeline",
-      "topic_gap": "Google I/O 2026 announcements related to Android media pipeline, potentially impacting camera output, recording, or playback.",
+      "proposal_id": "discovery-2026-06-06-001",
+      "topic_gap": "Google I/O '26 announcements related to media pipeline, camera, and cross-device experiences.",
       "source_family": "android",
       "allowed_domains": [
-        "youtube.com"
+        "youtube.com",
+        "goo.gle"
       ],
       "search_keywords": [
-        "Google I/O 2026",
-        "Android media pipeline",
-        "Media3",
-        "MediaCodec",
-        "MediaRecorder",
-        "camera output",
-        "video recording",
-        "image processing"
+        "Google I/O 2026 media pipeline",
+        "Android camera I/O 2026",
+        "Jetpack Compose camera",
+        "cross-device media Android"
       ],
       "candidate_urls": [
-        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+        "https://goo.gle/AdaptiveApps_IO26"
       ],
       "expected_evidence": [
-        "New APIs or features for Media3, MediaCodec, MediaRecorder, or other media components relevant to camera output.",
-        "Updates on performance, efficiency, or quality improvements for media processing.",
-        "Discussions on new use cases or best practices for camera-generated media."
+        "New APIs or features for camera-related media processing",
+        "Updates on Media3 or other media frameworks impacting camera output",
+        "Cross-device camera or media sharing capabilities",
+        "Improvements in camera preview or recording paths"
       ],
       "risk_notes": [
-        "YouTube playlist might contain videos not directly relevant to camera HAL or media pipeline for camera output.",
-        "Need to filter for specific talks or sessions that align with the newsletter's focus."
+        "YouTube playlist might contain many videos; need to filter for relevant camera/media content.",
+        "Shortened goo.gle URL needs to be resolved to confirm content relevance."
       ]
     },
     {
-      "proposal_id": "camerax_1_6_0_release",
-      "topic_gap": "New features, improvements, or bug fixes in CameraX 1.6.0 that affect camera application development or camera HAL interactions.",
+      "proposal_id": "discovery-2026-06-06-002",
+      "topic_gap": "Latest CameraX releases and their impact on Android camera development.",
       "source_family": "camera-api",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
-        "CameraX 1.6.0",
-        "AndroidX Camera",
-        "camera API updates",
-        "Jetpack Camera"
+        "CameraX 1.6.0 release notes",
+        "CameraX 1.7.0-alpha01 new features",
+        "AndroidX camera updates"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
-      ],
-      "expected_evidence": [
-        "Detailed release notes for CameraX 1.6.0.",
-        "Information on new camera capabilities exposed through CameraX.",
-        "Changes in API behavior or performance characteristics."
-      ],
-      "risk_notes": [
-        "Release notes might be too high-level; may need to cross-reference with other sources for deeper technical details."
-      ]
-    },
-    {
-      "proposal_id": "camerax_1_7_0_alpha01_release",
-      "topic_gap": "Early insights into upcoming features or architectural changes in CameraX 1.7.0-alpha01, potentially indicating future directions for Android camera development.",
-      "source_family": "camera-api",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
-      "search_keywords": [
-        "CameraX 1.7.0-alpha01",
-        "AndroidX Camera alpha",
-        "upcoming CameraX features"
-      ],
-      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
       ],
       "expected_evidence": [
-        "Alpha release notes for CameraX 1.7.0-alpha01.",
-        "Description of new experimental features or breaking changes.",
-        "Indications of future CameraX roadmap."
+        "New CameraX features or enhancements (e.g., capture modes, extensions)",
+        "Bug fixes or performance improvements relevant to camera HAL interaction",
+        "Changes in API behavior or compatibility"
       ],
       "risk_notes": [
-        "Alpha releases are subject to change and may not reflect the final product.",
-        "Information might be limited due to its early stage."
+        "Release notes can be very technical; need to extract user-facing impacts."
       ]
     },
     {
-      "proposal_id": "camera_its_box_updates",
-      "topic_gap": "Updates to Camera ITS (Image Test Suite) documentation, specifically regarding testing camera images using automation, which is crucial for Camera HAL compliance and quality.",
+      "proposal_id": "discovery-2026-06-06-003",
+      "topic_gap": "Updates to Camera ITS (Image Test Suite) for Android compatibility testing.",
       "source_family": "aosp",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
-        "Camera ITS",
-        "camera image testing",
-        "Android compatibility",
-        "camera automation",
-        "Camera HAL compliance"
+        "Android Camera ITS updates",
+        "Camera HAL testing",
+        "CTS camera changes"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "New or updated guidelines for Camera ITS testing procedures.",
-        "Information on new test cases or metrics for camera image quality.",
-        "Details on automation tools or setups for camera testing."
+        "New or updated Camera ITS tests",
+        "Changes in testing methodologies for camera image quality or functionality",
+        "Impact on camera HAL implementation for compliance"
       ],
       "risk_notes": [
-        "Documentation updates might be minor and not represent significant changes.",
-        "Focus needs to be on changes directly impacting camera HAL or driver development."
+        "Documentation updates might be minor; need to ensure significant changes."
       ]
     },
     {
-      "proposal_id": "sony_imx678_linux_driver_integration",
-      "topic_gap": "Integration of the Sony IMX678 image sensor driver into the Linux kernel media subsystem, indicating new hardware support and potential implications for Android camera HALs built on Linux.",
+      "proposal_id": "discovery-2026-06-06-004",
+      "topic_gap": "New image sensor drivers and bindings in the Linux kernel for media subsystem.",
       "source_family": "linux-camera",
       "allowed_domains": [
         "lore.kernel.org"
       ],
       "search_keywords": [
-        "Sony IMX678",
-        "Linux media driver",
-        "V4L2",
-        "image sensor",
-        "kernel camera",
-        "camera HAL"
+        "linux-media aptina mt9m113",
+        "linux-media sony imx678 driver",
+        "kernel camera sensor binding"
       ],
       "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
         "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/"
       ],
       "expected_evidence": [
-        "Details of the IMX678 sensor's capabilities and features.",
-        "Technical discussions around the driver implementation, such as V4L2 subdev interfaces, ISP integration, or control mechanisms.",
-        "Potential impact on Android devices using this sensor and the Linux kernel."
+        "Introduction of new camera sensor drivers (e.g., Aptina MT9M113, Sony IMX678)",
+        "Updates to device tree bindings for camera sensors",
+        "Discussion on sensor-specific features or issues relevant to HAL integration"
       ],
       "risk_notes": [
-        "Kernel mailing list discussions can be highly technical and require careful interpretation.",
-        "The patch might be under review and not yet merged into the mainline kernel."
+        "Kernel mailing list discussions can be highly technical and require careful interpretation of relevance to Android HAL."
+      ]
+    },
+    {
+      "proposal_id": "discovery-2026-06-06-005",
+      "topic_gap": "Updates to C++ standards and tooling relevant to camera HAL or native media components.",
+      "source_family": "cpp",
+      "allowed_domains": [
+        "isocpp.org"
+      ],
+      "search_keywords": [
+        "C++26 camera HAL",
+        "GCC 16.1 Android",
+        "C++ reflection camera"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+      ],
+      "expected_evidence": [
+        "New C++26 features that could impact camera HAL or media library development (e.g., reflection, contracts)",
+        "Compiler updates (e.g., GCC 16.1) with C++26 support",
+        "New libraries or tools leveraging modern C++ features relevant to performance or safety in camera/media stacks"
+      ],
+      "risk_notes": [
+        "General C++ updates might not directly impact Android Camera HAL; need to filter for specific relevance."
       ]
     }
   ]

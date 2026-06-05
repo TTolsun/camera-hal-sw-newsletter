@@ -400,6 +400,24 @@
       }
     },
     {
+      "candidate_id": "657d8158aa5653f4",
+      "url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
+      "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113",
+      "source_quality_score": 0.93,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "7674d786b492373b",
       "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
       "title": "[PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678",
@@ -436,18 +454,18 @@
       }
     },
     {
-      "candidate_id": "9af54860e67dfdcc",
-      "url": "https://lore.kernel.org/linux-media/202606052235.rM24ifzS-lkp@intel.com/",
-      "title": "[sailus-media-tree:partial-reg 5/9] drivers/media/v4l2-core/v4l2-event.c:81:41: warning: variable 'evspec' is uninitialized when used within its own initialization",
-      "source_quality_score": 0.764,
-      "source_quality_bucket": "blocked_candidate",
+      "candidate_id": "6db21c7bc2a7451e",
+      "url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
+      "title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
+      "source_quality_score": 0.785,
+      "source_quality_bucket": "review_candidate",
       "breakdown": {
         "reliability_score": 0.85,
-        "camera_relevance": 0.81,
-        "android_hal_relevance": 0.81,
-        "technical_depth": 0.85,
+        "camera_relevance": 0.75,
+        "android_hal_relevance": 0.75,
+        "technical_depth": 0.55,
         "recency_score": 1,
-        "evidence_strength": 0,
+        "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -490,8 +508,8 @@
       }
     },
     {
-      "candidate_id": "9c6ee352a021bd15",
-      "url": "https://lore.kernel.org/linux-media/aiLrsLM8N0VzrNMe@devvm7509.cco0.facebook.com/",
+      "candidate_id": "ff883db472e298c6",
+      "url": "https://lore.kernel.org/linux-media/aiL3UM9aULBypEk7@devvm29614.prn0.facebook.com/",
       "title": "Re: [PATCH net-next 1/4] net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding",
       "source_quality_score": 0.716,
       "source_quality_bucket": "blocked_candidate",
@@ -555,6 +573,24 @@
         "android_hal_relevance": 0.63,
         "technical_depth": 0.25,
         "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "2c1748b9d388e1c3",
+      "url": "https://lore.kernel.org/linux-media/20260605160253.637381F00893@smtp.kernel.org/",
+      "title": "Re: [PATCH] dma-buf: udmabuf: validate create-list count before copying",
+      "source_quality_score": 0.692,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.63,
+        "android_hal_relevance": 0.63,
+        "technical_depth": 0.85,
+        "recency_score": 1,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
@@ -652,24 +688,6 @@
       }
     },
     {
-      "candidate_id": "890a8f74a51d2c39",
-      "url": "https://lore.kernel.org/linux-media/202606052349.bOSyAnNd-lkp@intel.com/",
-      "title": "[sailus-media-tree:partial-reg 7/9] drivers/media/mc/mc-event.c:17:10: fatal error: 'media/media-event.h' file not found",
-      "source_quality_score": 0.758,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.57,
-        "android_hal_relevance": 0.57,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "ecd2f14ba3d8477a",
       "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
@@ -682,24 +700,6 @@
         "technical_depth": 0.55,
         "recency_score": 0.25,
         "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "8f4507fb181f7152",
-      "url": "https://lore.kernel.org/linux-media/20260605134047.597EC1F00893@smtp.kernel.org/",
-      "title": "Re: [PATCH v7 4/8] media: qcom: camss: Initialize lanes after lane configuration is available",
-      "source_quality_score": 0.596,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.39,
-        "android_hal_relevance": 0.39,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -742,6 +742,24 @@
       }
     },
     {
+      "candidate_id": "gemini-f5ad117f0c167686",
+      "url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
+      "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "gemini-883ccaf5da11631b",
       "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
       "title": "[PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678 - Jai Luthra",
@@ -758,12 +776,48 @@
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
       }
+    },
+    {
+      "candidate_id": "gemini-8635e5e9a3557c0d",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-a8865e6c6b3d243f",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
+      "source_quality_score": 0.455,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
     }
   ],
   "counts": {
-    "strong_candidate": 8,
-    "blocked_candidate": 28,
-    "review_candidate": 4,
+    "strong_candidate": 9,
+    "blocked_candidate": 29,
+    "review_candidate": 5,
     "weak_candidate": 2
   }
 }

@@ -345,6 +345,30 @@
       ]
     },
     {
+      "cluster_id": "3a5bbe2bfb116e70",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
+      "canonical_title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
+          "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
+          "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "31b40cccc0e6f0f4",
       "cluster_key": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
@@ -386,16 +410,16 @@
       ]
     },
     {
-      "cluster_id": "2ade291a5b5a65fc",
-      "cluster_key": "https://lore.kernel.org/linux-media/202606052235.rm24ifzs-lkp@intel.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/202606052235.rM24ifzS-lkp@intel.com/",
-      "canonical_title": "[sailus-media-tree:partial-reg 5/9] drivers/media/v4l2-core/v4l2-event.c:81:41: warning: variable 'evspec' is uninitialized when used within its own initialization",
+      "cluster_id": "4d6d42eb41205357",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
+      "canonical_title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/202606052235.rM24ifzS-lkp@intel.com/",
-          "title": "[sailus-media-tree:partial-reg 5/9] drivers/media/v4l2-core/v4l2-event.c:81:41: warning: variable 'evspec' is uninitialized when used within its own initialization",
+          "url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
+          "title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -437,15 +461,15 @@
       ]
     },
     {
-      "cluster_id": "c9acae2da3972b60",
-      "cluster_key": "https://lore.kernel.org/linux-media/ailrslm8n0vzrnme@devvm7509.cco0.facebook.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/aiLrsLM8N0VzrNMe@devvm7509.cco0.facebook.com/",
+      "cluster_id": "0ff554e986ccc4b3",
+      "cluster_key": "https://lore.kernel.org/linux-media/ail3um9aulbypek7@devvm29614.prn0.facebook.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/aiL3UM9aULBypEk7@devvm29614.prn0.facebook.com/",
       "canonical_title": "Re: [PATCH net-next 1/4] net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/aiLrsLM8N0VzrNMe@devvm7509.cco0.facebook.com/",
+          "url": "https://lore.kernel.org/linux-media/aiL3UM9aULBypEk7@devvm29614.prn0.facebook.com/",
           "title": "Re: [PATCH net-next 1/4] net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding",
           "canonical": true,
           "reliability": "project-official",
@@ -500,6 +524,23 @@
           "title": "Power of C++26 Reflection: Strong (opaque) type definitions -- r/cpp",
           "canonical": true,
           "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8e4e857f8396760b",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260605160253.637381f00893@smtp.kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260605160253.637381F00893@smtp.kernel.org/",
+      "canonical_title": "Re: [PATCH] dma-buf: udmabuf: validate create-list count before copying",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260605160253.637381F00893@smtp.kernel.org/",
+          "title": "Re: [PATCH] dma-buf: udmabuf: validate create-list count before copying",
+          "canonical": true,
+          "reliability": "project-official",
           "manual_seed": false
         }
       ]
@@ -560,13 +601,20 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
           "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
           "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        },
+        {
+          "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
+          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -590,29 +638,12 @@
       ]
     },
     {
-      "cluster_id": "a9d056c1f7df2552",
-      "cluster_key": "https://lore.kernel.org/linux-media/202606052349.bosyannd-lkp@intel.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/202606052349.bOSyAnNd-lkp@intel.com/",
-      "canonical_title": "[sailus-media-tree:partial-reg 7/9] drivers/media/mc/mc-event.c:17:10: fatal error: 'media/media-event.h' file not found",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/202606052349.bOSyAnNd-lkp@intel.com/",
-          "title": "[sailus-media-tree:partial-reg 7/9] drivers/media/mc/mc-event.c:17:10: fatal error: 'media/media-event.h' file not found",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "a8865e6c6b3d243f",
       "cluster_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
@@ -620,22 +651,12 @@
           "canonical": true,
           "reliability": "official-community",
           "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "0e9f562be85ed14a",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260605134047.597ec1f00893@smtp.kernel.org",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260605134047.597EC1F00893@smtp.kernel.org/",
-      "canonical_title": "Re: [PATCH v7 4/8] media: qcom: camss: Initialize lanes after lane configuration is available",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
+        },
         {
-          "url": "https://lore.kernel.org/linux-media/20260605134047.597EC1F00893@smtp.kernel.org/",
-          "title": "Re: [PATCH v7 4/8] media: qcom: camss: Initialize lanes after lane configuration is available",
-          "canonical": true,
-          "reliability": "project-official",
+          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
+          "canonical": false,
+          "reliability": "official-community",
           "manual_seed": false
         }
       ]
