@@ -146,10 +146,33 @@
     return WEEKLY_KEY_PATTERN.test(key) ? key : '';
   }
 
-  // Card date chip shows the ISO week ("2026-W22" -> "W22") for weekly entries, else the raw date.
+  // Card date chip shows the week's date range ("06.01~06.07"); falls back to the ISO week
+  // ("2026-W23" -> "W23") and then the raw date when range bounds are unavailable.
   function weekLabel(entry) {
+    const md = value => String(value).slice(5).replace('-', '.');
+    const start = String((entry && (entry.weekStartDate || entry.week_start_date)) || '').trim();
+    const end = String((entry && (entry.weekEndDate || entry.week_end_date)) || '').trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
+      return `${md(start)}~${md(end)}`;
+    }
     const key = weeklyKeyOf(entry);
     return key ? key.slice(5) : String((entry && entry.date) || '');
+  }
+
+  // Card title without the trailing "(MM.DD ~ MM.DD)" range (shown in the date chip instead).
+  function cardTitle(entry) {
+    return String((entry && entry.title) || '').replace(/\s*\([^)]*\)\s*$/, '');
+  }
+
+  // Render the weekly card summary (this week's article titles) one per line so each title stays
+  // distinguishable. Splits on newline or the legacy " · " separator for older index entries.
+  function cardSummaryHtml(entry) {
+    return String((entry && entry.summary) || '')
+      .split(/\n+|\s+·\s+/)
+      .map(line => line.trim())
+      .filter(Boolean)
+      .map(escapeHtml)
+      .join('<br>');
   }
 
   function fallbackNewsletterHref(entry) {
@@ -201,8 +224,8 @@
           <span class="issue-date">${escapeHtml(weekLabel(entry))}</span>
         </div>
         ${tagHtml}
-        <h3 class="card-title clamp-2">${escapeHtml(entry && entry.title)}</h3>
-        <p class="card-summary ${escapeHtml(summaryClass)} clamp-3">${escapeHtml(entry && entry.summary)}</p>
+        <h3 class="card-title clamp-2">${escapeHtml(cardTitle(entry))}</h3>
+        <p class="card-summary ${escapeHtml(summaryClass)}">${cardSummaryHtml(entry)}</p>
       </a>
     `;
   }

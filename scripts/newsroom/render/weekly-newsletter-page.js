@@ -25,6 +25,17 @@ function articleTitles(sections = []) {
     .filter(Boolean);
 }
 
+// Natural-language overview of what this week's issue covers, derived from the actual article
+// headlines so it always matches the content (the previous per-run editor summary did not).
+function weeklySummaryText(titles = []) {
+  const clean = titles.map(title => String(title || '').trim()).filter(Boolean);
+  if (!clean.length) return '';
+  const quote = title => `‘${title}’`;
+  if (clean.length === 1) return `이번 주에는 ${quote(clean[0])} 소식을 다룹니다.`;
+  if (clean.length === 2) return `이번 주에는 ${quote(clean[0])}, ${quote(clean[1])} 두 건의 소식을 다룹니다.`;
+  return `이번 주에는 ${quote(clean[0])}, ${quote(clean[1])} 등 ${clean.length}건의 소식을 다룹니다.`;
+}
+
 function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
   const bounds = date ? weekBoundsForDate(date) : weekBoundsForKey(weeklyKey);
   const titles = articleTitles(draft.sections);
@@ -35,6 +46,9 @@ function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
     week_start_date: bounds.weekStartDate,
     week_end_date: bounds.weekEndDate,
     title: weeklyDisplayTitle(bounds),
+    // The hero subtitle describes this week's coverage from the real article headlines so it
+    // matches the content; fall back to the per-run draft summary when there are no titles.
+    summary: weeklySummaryText(titles) || draft.summary,
     // Under the title we list this week's article titles instead of a 3-line briefing.
     briefing: titles.length ? titles : draft.briefing
   };
@@ -50,4 +64,4 @@ function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
   };
 }
 
-module.exports = { buildWeeklyNewsletterPage, weeklyDisplayTitle, articleTitles };
+module.exports = { buildWeeklyNewsletterPage, weeklyDisplayTitle, weeklySummaryText, articleTitles };

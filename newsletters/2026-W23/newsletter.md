@@ -1,6 +1,6 @@
 # 2026 W23 (06.01 ~ 06.07)
 
-Google I/O '26에서 발표된 Jetpack CameraX 및 Media3 기반의 새로운 CameraXViewfinder Composable을 통해 폴더블 및 태블릿 기기에서의 미디어 파이프라인과 카메라 미리보기 최적화 방안이 제시되었습니다. 또한, Linux 커널 메일링 리스트를 통해 Sony IMX678 이미지 센서용 V4L2 드라이버 및 dt-bindings 패치 세트가 공개되어 저수준 드라이버 통합을 위한 기반이 마련되었습니다.
+이번 주에는 ‘CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영’, ‘Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표’ 두 건의 소식을 다룹니다.
 
 
 

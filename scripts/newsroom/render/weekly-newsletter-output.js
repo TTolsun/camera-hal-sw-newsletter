@@ -106,10 +106,13 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
     weekStartDate: page.weekStartDate,
     weekEndDate: page.weekEndDate,
     date: page.weekStartDate,
-    title: page.issue.title,
-    // The card lists this week's article titles under the title (page.issue.briefing is the title list).
+    // Card title is the bare ISO week ("2026-W23" -> "2026 W23"); the week date range
+    // moves to the card date badge (weekStartDate/weekEndDate) so it is not duplicated here.
+    title: String(page.weeklyKey).replace('-W', ' W'),
+    // The card lists this week's article titles, one per line (newline-joined), so each title
+    // stays distinguishable. page.issue.briefing is the title list.
     summary: (Array.isArray(page.issue.briefing) && page.issue.briefing.length
-      ? page.issue.briefing.join(' · ')
+      ? page.issue.briefing.join('\n')
       : String(editor && editor.summary || (existingIssue && existingIssue.summary) || '')),
     html: page.indexRoute,
     md: page.markdownRoute,
