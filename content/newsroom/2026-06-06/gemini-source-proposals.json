@@ -4,145 +4,138 @@
   "newsletter_date": "2026-06-06",
   "proposals": [
     {
-      "proposal_id": "discovery-2026-06-06-001",
-      "topic_gap": "Google I/O '26에서 발표된 Android 미디어 파이프라인 및 크로스 디바이스 경험 개선 사항에 대한 심층 분석이 필요합니다. 특히 Camera HAL SW와 관련된 Media3, MediaCodec, MediaRecorder, MediaStore, Photo Picker, preview/surface, WebRTC camera, A/V sync, gallery/media access, sharing, camera-generated playback paths에 대한 구체적인 변경 사항과 영향에 초점을 맞춰야 합니다.",
+      "proposal_id": "google_io_2026_media_pipeline",
+      "topic_gap": "Google I/O 2026 announcements related to Android media pipeline, potentially impacting camera output, recording, or playback.",
       "source_family": "android",
       "allowed_domains": [
-        "youtube.com",
-        "goo.gle"
+        "youtube.com"
       ],
       "search_keywords": [
-        "Google I/O 2026 media pipeline",
-        "Android camera cross-device",
-        "Media3 camera improvements",
-        "Android MediaCodec camera",
-        "Android MediaRecorder updates",
-        "Android Photo Picker camera output",
-        "Android WebRTC camera",
-        "Android A/V sync camera"
+        "Google I/O 2026",
+        "Android media pipeline",
+        "Media3",
+        "MediaCodec",
+        "MediaRecorder",
+        "camera output",
+        "video recording",
+        "image processing"
       ],
       "candidate_urls": [
-        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
-        "https://goo.gle/AdaptiveApps_IO26"
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "Google I/O '26 세션 요약 또는 전체 영상",
-        "Android Developers Blog의 관련 게시물",
-        "Media3, MediaCodec, MediaRecorder, MediaStore, Photo Picker, CameraX 등 특정 API의 변경 사항",
-        "크로스 디바이스 카메라 및 미디어 사용 사례에 대한 정보"
+        "New APIs or features for Media3, MediaCodec, MediaRecorder, or other media components relevant to camera output.",
+        "Updates on performance, efficiency, or quality improvements for media processing.",
+        "Discussions on new use cases or best practices for camera-generated media."
       ],
       "risk_notes": [
-        "제공된 URL은 YouTube 재생 목록 및 단축 URL이므로 실제 내용이 Camera HAL SW와 직접적인 관련이 있는지 추가 검증이 필요합니다.",
-        "일반적인 Android 개발 업데이트가 아닌, 미디어 파이프라인 및 카메라 출력과 관련된 구체적인 내용에 집중해야 합니다."
+        "YouTube playlist might contain videos not directly relevant to camera HAL or media pipeline for camera output.",
+        "Need to filter for specific talks or sessions that align with the newsletter's focus."
       ]
     },
     {
-      "proposal_id": "discovery-2026-06-06-002",
-      "topic_gap": "CameraX 1.6.0 및 1.7.0-alpha01의 주요 변경 사항 및 개선 사항에 대한 정보가 필요합니다. 특히 Camera HAL SW 개발자에게 영향을 미칠 수 있는 API 변경, 새로운 기능, 성능 최적화 또는 버그 수정에 초점을 맞춰야 합니다.",
+      "proposal_id": "camerax_1_6_0_release",
+      "topic_gap": "New features, improvements, or bug fixes in CameraX 1.6.0 that affect camera application development or camera HAL interactions.",
       "source_family": "camera-api",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
-        "CameraX 1.6.0 release notes",
-        "CameraX 1.7.0-alpha01 new features",
-        "AndroidX Camera updates",
-        "CameraX API changes"
+        "CameraX 1.6.0",
+        "AndroidX Camera",
+        "camera API updates",
+        "Jetpack Camera"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
       ],
       "expected_evidence": [
-        "CameraX 1.6.0 및 1.7.0-alpha01의 공식 릴리스 노트",
-        "새로운 기능, API 변경, 버그 수정 목록",
-        "Camera HAL 또는 Camera2 API와의 상호작용 개선 사항"
+        "Detailed release notes for CameraX 1.6.0.",
+        "Information on new camera capabilities exposed through CameraX.",
+        "Changes in API behavior or performance characteristics."
       ],
       "risk_notes": [
-        "릴리스 노트는 상세하지만, Camera HAL SW 개발자에게 직접적인 영향을 미치는 내용이 아닐 수 있으므로 관련성을 주의 깊게 평가해야 합니다.",
-        "알파 버전의 변경 사항은 향후 변경될 수 있습니다."
+        "Release notes might be too high-level; may need to cross-reference with other sources for deeper technical details."
       ]
     },
     {
-      "proposal_id": "discovery-2026-06-06-003",
-      "topic_gap": "Android 호환성 테스트 스위트(CTS) 중 Camera ITS(Image Test Suite)를 사용하여 카메라 이미지를 자동화하여 테스트하는 새로운 방법에 대한 정보가 필요합니다. 이는 Camera HAL SW 품질 보증 및 호환성 유지에 중요합니다.",
+      "proposal_id": "camerax_1_7_0_alpha01_release",
+      "topic_gap": "Early insights into upcoming features or architectural changes in CameraX 1.7.0-alpha01, potentially indicating future directions for Android camera development.",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.7.0-alpha01",
+        "AndroidX Camera alpha",
+        "upcoming CameraX features"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+      ],
+      "expected_evidence": [
+        "Alpha release notes for CameraX 1.7.0-alpha01.",
+        "Description of new experimental features or breaking changes.",
+        "Indications of future CameraX roadmap."
+      ],
+      "risk_notes": [
+        "Alpha releases are subject to change and may not reflect the final product.",
+        "Information might be limited due to its early stage."
+      ]
+    },
+    {
+      "proposal_id": "camera_its_box_updates",
+      "topic_gap": "Updates to Camera ITS (Image Test Suite) documentation, specifically regarding testing camera images using automation, which is crucial for Camera HAL compliance and quality.",
       "source_family": "aosp",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
-        "Android Camera ITS automation",
-        "Camera HAL testing",
-        "Android compatibility camera",
-        "Camera image test suite"
+        "Camera ITS",
+        "camera image testing",
+        "Android compatibility",
+        "camera automation",
+        "Camera HAL compliance"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "Camera ITS 박스를 이용한 카메라 이미지 테스트 자동화 절차",
-        "테스트 설정, 실행, 결과 분석에 대한 가이드",
-        "Camera HAL SW 개발자가 테스트 프로세스를 개선하는 데 도움이 되는 정보"
+        "New or updated guidelines for Camera ITS testing procedures.",
+        "Information on new test cases or metrics for camera image quality.",
+        "Details on automation tools or setups for camera testing."
       ],
       "risk_notes": [
-        "AOSP 문서는 기술적이고 상세하지만, 새로운 변경 사항보다는 기존 프로세스에 대한 설명일 수 있습니다. 'Test camera images using automation'이라는 제목이 새로운 업데이트를 의미하는지 확인해야 합니다."
+        "Documentation updates might be minor and not represent significant changes.",
+        "Focus needs to be on changes directly impacting camera HAL or driver development."
       ]
     },
     {
-      "proposal_id": "discovery-2026-06-06-004",
-      "topic_gap": "Linux 커널 미디어 하위 시스템에 Sony IMX678 이미지 센서 드라이버가 추가되는 것에 대한 정보가 필요합니다. 이는 새로운 하드웨어 지원 및 Android 기기의 카메라 기능 확장에 대한 통찰력을 제공할 수 있습니다.",
+      "proposal_id": "sony_imx678_linux_driver_integration",
+      "topic_gap": "Integration of the Sony IMX678 image sensor driver into the Linux kernel media subsystem, indicating new hardware support and potential implications for Android camera HALs built on Linux.",
       "source_family": "linux-camera",
       "allowed_domains": [
         "lore.kernel.org"
       ],
       "search_keywords": [
-        "Linux media Sony IMX678 driver",
-        "kernel camera sensor support",
-        "IMX678 dt-bindings",
-        "Linux V4L2 IMX678"
+        "Sony IMX678",
+        "Linux media driver",
+        "V4L2",
+        "image sensor",
+        "kernel camera",
+        "camera HAL"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
-        "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-        "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/"
+        "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/"
       ],
       "expected_evidence": [
-        "Sony IMX678 이미지 센서 드라이버의 패치 설명 및 코드",
-        "드라이버의 기능, 지원되는 모드, 통합 세부 정보",
-        "관련된 dt-bindings 변경 사항"
+        "Details of the IMX678 sensor's capabilities and features.",
+        "Technical discussions around the driver implementation, such as V4L2 subdev interfaces, ISP integration, or control mechanisms.",
+        "Potential impact on Android devices using this sensor and the Linux kernel."
       ],
       "risk_notes": [
-        "메일링 리스트의 패치 시리즈는 기술적 세부 사항에 집중하며, 최종 병합 여부 및 시기는 불확실합니다.",
-        "Android HAL SW에 직접적인 영향을 미치기까지는 추가적인 통합 작업이 필요할 수 있습니다."
-      ]
-    },
-    {
-      "proposal_id": "discovery-2026-06-06-005",
-      "topic_gap": "C++26 표준의 새로운 기능, 특히 카메라 HAL SW 개발에 유용할 수 있는 Reflection, Contracts, Safety hardening, 그리고 C++20 기본 설정과 같은 컴파일러 업데이트에 대한 정보가 필요합니다.",
-      "source_family": "cpp",
-      "allowed_domains": [
-        "isocpp.org"
-      ],
-      "search_keywords": [
-        "C++26 Reflection camera HAL",
-        "GCC 16.1 C++26 features",
-        "C++26 contracts embedded",
-        "C++26 safety hardening",
-        "C++20 default compiler"
-      ],
-      "candidate_urls": [
-        "https://isocpp.org//blog/2026/04/gcc-16.1",
-        "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
-      ],
-      "expected_evidence": [
-        "GCC 16.1 릴리스 노트 또는 관련 블로그 게시물",
-        "C++26 Reflection, Contracts, Safety hardening 기능에 대한 설명",
-        "Glaze 7.2와 같은 라이브러리에서 C++26 Reflection을 활용하는 사례",
-        "Camera HAL SW 개발에 적용될 수 있는 잠재적 이점"
-      ],
-      "risk_notes": [
-        "C++ 표준 업데이트는 광범위하며, Camera HAL SW에 직접적인 영향을 미치는 내용은 제한적일 수 있습니다.",
-        "제공된 URL 중 하나는 특정 라이브러리에 대한 내용이므로, 일반적인 C++26 업데이트와의 관련성을 명확히 해야 합니다."
+        "Kernel mailing list discussions can be highly technical and require careful interpretation.",
+        "The patch might be under review and not yet merged into the mainline kernel."
       ]
     }
   ]
