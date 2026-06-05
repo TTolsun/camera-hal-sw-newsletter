@@ -76,6 +76,13 @@ const AUDIENCE = 'AOSP Camera / Camera Driver / SoC Platform / C++ engineer';
 
 const CANDIDATE_SCHEMA_VERSION = 6;
 
+// Final candidate pool handed to the newsroom. A per-source cap keeps a single
+// high-volume source (e.g. an Android Developers Blog roundup that explodes into
+// many child topics) from monopolizing the pool and evicting lower-ranked but
+// useful camera-driver / V4L2 / libcamera / ISP leads before the slice.
+const MAX_FINAL_CANDIDATES = 40;
+const MAX_CANDIDATES_PER_SOURCE = 8;
+
 const PRIORITY_WEIGHT = { high: 3, medium: 2, low: 1 };
 const RELIABILITY_WEIGHT = { official: 3, 'project-official': 2, 'official-community': 2 };
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -1182,6 +1189,20 @@ function isSourceChangeEventCandidate(item = {}) {
     item.collection_mode === 'source-change-event';
 }
 
+function capPerSource(candidates, maxPerSource) {
+  if (!Number.isFinite(maxPerSource) || maxPerSource <= 0) return [...candidates];
+  const perSourceCount = new Map();
+  const result = [];
+  for (const item of candidates) {
+    const key = item.source_id || item.source || '';
+    const count = perSourceCount.get(key) || 0;
+    if (count >= maxPerSource) continue;
+    perSourceCount.set(key, count + 1);
+    result.push(item);
+  }
+  return result;
+}
+
 function dedupe(candidates) {
   const ordered = [...candidates].sort((a, b) =>
     Number(isSourceChangeEventCandidate(b)) - Number(isSourceChangeEventCandidate(a))
@@ -1358,15 +1379,15 @@ async function main() {
     failures.push({ source: 'source-monitor', message: error.message });
   }
 
-  candidates = dedupe(candidates)
+  const rankedCandidates = dedupe(candidates)
     .filter(item => withinLookback(item, now, lookbackDays))
     .filter(item => item.cameraHalRelevanceScore >= 30 || item.source_priority === 'high')
     .sort((a, b) => {
       const priorityDelta = (PRIORITY_WEIGHT[b.source_priority] || 0) - (PRIORITY_WEIGHT[a.source_priority] || 0);
       const reliabilityDelta = (RELIABILITY_WEIGHT[b.source_reliability] || 0) - (RELIABILITY_WEIGHT[a.source_reliability] || 0);
       return priorityDelta || reliabilityDelta || b.relevanceScore - a.relevanceScore;
-    })
-    .slice(0, 40);
+    });
+  candidates = capPerSource(rankedCandidates, MAX_CANDIDATES_PER_SOURCE).slice(0, MAX_FINAL_CANDIDATES);
 
   const enrichedCandidates = [];
   for (const candidate of candidates) {
@@ -1441,7 +1462,10 @@ if (require.main === module) {
 
 module.exports = {
   CANDIDATE_SCHEMA_VERSION,
+  MAX_FINAL_CANDIDATES,
+  MAX_CANDIDATES_PER_SOURCE,
   canonicalContentUrl,
+  capPerSource,
   componentFromText,
   decisionFromCandidate,
   dedupe,
