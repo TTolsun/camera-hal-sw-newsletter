@@ -2,16 +2,16 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-06-06",
-  "generated_at": "2026-06-05T15:43:21.213Z",
-  "status": "WARN",
-  "input_completeness": "partial",
+  "generated_at": "2026-06-05T19:24:20.750Z",
+  "status": "NEEDS_FIX",
+  "input_completeness": "complete",
   "input_statuses": {
     "shortlisted_candidates": "loaded",
     "editor_draft": "loaded",
     "quality_report": "loaded",
-    "source_effectiveness_report": "input_unavailable",
+    "source_effectiveness_report": "loaded",
     "source_quality_report": "loaded",
-    "evidence_pack_summary": "input_unavailable",
+    "evidence_pack_summary": "loaded",
     "merged_candidate_manifest": "loaded"
   },
   "inputs": {
@@ -35,7 +35,7 @@
     "optional": {
       "source_effectiveness_report": {
         "path": "content/newsroom/2026-06-06/source-effectiveness-report.json",
-        "status": "input_unavailable",
+        "status": "loaded",
         "error": ""
       },
       "source_quality_report": {
@@ -45,7 +45,7 @@
       },
       "evidence_pack_summary": {
         "path": "content/newsroom/2026-06-06/evidence-pack-summary.json",
-        "status": "input_unavailable",
+        "status": "loaded",
         "error": ""
       },
       "merged_candidate_manifest": {
@@ -55,12 +55,9 @@
       }
     },
     "missing_required": [],
-    "unavailable_optional": [
-      "source_effectiveness_report",
-      "evidence_pack_summary"
-    ]
+    "unavailable_optional": []
   },
-  "quality_status": "PASS",
+  "quality_status": "NEEDS_FIX",
   "hal_signal_quality_summary": {
     "schema_version": 1,
     "main_article_count": 1,
@@ -71,7 +68,7 @@
     "blocked_source_gap_count": 0,
     "article_count_with_hal_signal_capsule": 1,
     "article_count_without_hal_signal_capsule": 0,
-    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_owner_metric_log": 0,
     "main_articles_with_concrete_action": 1,
     "fallback_main_article_count": 0,
     "android_multimedia_camera_output_count": 0,
@@ -80,14 +77,13 @@
     "hal_signal_hard_blocker_count": 0,
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
-      "framework_hal_contract": 1,
       "camerax_app_compatibility": 1
     },
     "actionability_level_counts": {
-      "owner_metric_log": 1
+      "measurable_test": 1
     },
     "effective_actionability_level_counts": {
-      "owner_metric_log": 1
+      "measurable_test": 1
     },
     "signal_quality_status_counts": {
       "strong_signal": 1
@@ -100,7 +96,6 @@
       "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
-        "framework_hal_contract",
         "camerax_app_compatibility"
       ],
       "reader_owners": [
@@ -108,17 +103,18 @@
         "camera_framework_owner",
         "camerax_app_compat_owner"
       ],
-      "actionability_level": "owner_metric_log",
-      "effective_actionability_level": "owner_metric_log",
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
       "actionability_upgrade_reason": "",
       "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 6,
+      "concrete_action_signal_count": 3,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_promotion_reason": "section_text_fallback classified this section as direct_aosp_camera for diagnostics only.",
       "fallback_guard_notes": [
-        "이 발표는 Jetpack 라이브러리 수준의 UI 컴포넌트 추가이며, Camera HAL3 규격 자체나 AIDL 인터페이스의 직접적인 변경을 의미하지는 않습니다."
+        "이 발표가 Camera HAL 인터페이스 규격이나 AIDL/HIDL 정의를 변경하는 것은 아닙니다.",
+        "상위 프레임워크의 렌더링 최적화 도구이므로 하드웨어 요구사항 변경으로 오해하지 마십시오."
       ],
-      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_type": "",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,
@@ -129,6 +125,13 @@
     }
   ],
   "selection_shortage_hint_details": [
+    {
+      "bucket": "direct_aosp_camera",
+      "severity": "medium",
+      "reason_code": "camerax_release_note_parser_missing_version_or_anchor",
+      "affected_sources": [],
+      "recommended_fix": "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence."
+    },
     {
       "bucket": "unknown",
       "severity": "medium",
@@ -154,8 +157,5 @@
     ],
     "historical_rewrite_followup": "#108"
   },
-  "warnings": [
-    "Optional input_unavailable: source_effectiveness_report",
-    "Optional input_unavailable: evidence_pack_summary"
-  ]
+  "warnings": []
 }

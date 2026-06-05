@@ -7,9 +7,9 @@
 - 렌더된 이미지 수 (`rendered_image_count`): 1
 - Markdown 이미지 수 (`markdown_image_count`): 1
 - 임시 시각 요소 수 (`fallback_visual_count`): 0
-- 이미지 후보 수 (`image_candidates_count`): 1
-- 검증 통과 이미지 후보 수 (`valid_image_candidate_count`): 1
-- 선택된 대표 이미지 수 (`selected_image_count`): 1
+- 이미지 후보 수 (`image_candidates_count`): 3
+- 검증 통과 이미지 후보 수 (`valid_image_candidate_count`): 0
+- 선택된 대표 이미지 수 (`selected_image_count`): 0
 - 출처 근거 부족 대표 이미지 수 (`selected_image_without_valid_candidate_count`): 0
 - 후보 목록 불일치 대표 이미지 수 (`selected_image_not_in_candidates_count`): 0
 - 복원 가능 기사 수 (`repairable_article_count`): 0
@@ -21,7 +21,7 @@
 
 | # | 기사 | 선택된 대표 이미지 | 후보 | 검증 통과 후보 | 상태 |
 | ---: | --- | --- | ---: | ---: | --- |
-| 1 | Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
+| 1 | Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
 
 ## 복원 가능 기사
 
