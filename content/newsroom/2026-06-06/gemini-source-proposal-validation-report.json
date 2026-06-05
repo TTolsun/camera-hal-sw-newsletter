@@ -4,17 +4,9 @@
   "newsletter_date": "2026-06-06",
   "validations": [
     {
-      "proposal_id": "android_io_2026_media_pipeline",
+      "proposal_id": "google_io_2026_media_pipeline",
       "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
-      "accepted": false,
-      "rejected_reason": "domain_not_allowed",
-      "source_policy_match": ""
-    },
-    {
-      "proposal_id": "android_io_2026_jetpack_compose_cross_device",
-      "candidate_url": "https://goo.gle/AdaptiveApps_IO26",
-      "normalized_url": "https://goo.gle/AdaptiveApps_IO26",
       "accepted": false,
       "rejected_reason": "domain_not_allowed",
       "source_policy_match": ""
@@ -48,17 +40,25 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "aosp_camera_its_box_updates",
+      "proposal_id": "camera_its_box_updates",
       "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "sony_imx678_linux_driver_integration",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
     }
   ],
   "counts": {
-    "domain_not_allowed": 2,
+    "domain_not_allowed": 1,
     "discovered_not_extractable": 2,
-    "accepted": 1
+    "accepted": 2
   }
 }

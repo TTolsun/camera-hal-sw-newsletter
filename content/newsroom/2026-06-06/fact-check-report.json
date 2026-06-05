@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
+      "publishable": true,
+      "reason": "Google I/O '26에서 발표된 CameraXViewfinder Composable은 폴더블 및 태블릿 기기에서 유연한 카메라 미리보기를 지원하며, 이는 HAL 계층의 동적 스트림 구성 성능 최적화 요구로 이어집니다. HAL 엔지니어에게 실질적인 검증 포인트를 제공합니다."
+    }
+  ],
+  "final_comment": "decision_metadata 필드는 deterministic builder가 생성하므로 fact-checker가 수정해서는 안 됩니다. 이 필드를 제거하거나 수정하지 마십시오."
+}

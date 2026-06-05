@@ -412,6 +412,23 @@
       ]
     },
     {
+      "candidate_id": "7674d786b492373b",
+      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
+      "title": "[PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678",
+      "deep_checked": true,
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "unsupported_claims": 0,
+      "supported_claims": 1,
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
+      "reasons": []
+    },
+    {
       "candidate_id": "e5b60330781f8ed7",
       "url": "https://lore.kernel.org/linux-media/c7f35621-2bdb-4e66-ac8a-6c7fc6f80f1c@seznam.cz/",
       "title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
@@ -486,6 +503,59 @@
       "reasons": [
         "source_gap_risk=true"
       ]
+    },
+    {
+      "candidate_id": "9c6ee352a021bd15",
+      "url": "https://lore.kernel.org/linux-media/aiLrsLM8N0VzrNMe@devvm7509.cco0.facebook.com/",
+      "title": "Re: [PATCH net-next 1/4] net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "metadata_only",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
+    },
+    {
+      "candidate_id": "18550920b3f33abc",
+      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
+      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
+      "deep_checked": true,
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "unsupported_claims": 0,
+      "supported_claims": 1,
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
+      "reasons": []
+    },
+    {
+      "candidate_id": "ae62948e9a7cefbb",
+      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
+      "title": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678",
+      "deep_checked": true,
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "unsupported_claims": 0,
+      "supported_claims": 1,
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
+      "reasons": []
     },
     {
       "candidate_id": "4e231c08cea859ce",
@@ -600,6 +670,23 @@
       ]
     },
     {
+      "candidate_id": "890a8f74a51d2c39",
+      "url": "https://lore.kernel.org/linux-media/202606052349.bOSyAnNd-lkp@intel.com/",
+      "title": "[sailus-media-tree:partial-reg 7/9] drivers/media/mc/mc-event.c:17:10: fatal error: 'media/media-event.h' file not found",
+      "deep_checked": true,
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "unsupported_claims": 0,
+      "supported_claims": 1,
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
+      "reasons": []
+    },
+    {
       "candidate_id": "ecd2f14ba3d8477a",
       "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
@@ -620,101 +707,6 @@
       "candidate_id": "8f4507fb181f7152",
       "url": "https://lore.kernel.org/linux-media/20260605134047.597EC1F00893@smtp.kernel.org/",
       "title": "Re: [PATCH v7 4/8] media: qcom: camss: Initialize lanes after lane configuration is available",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
-      "candidate_id": "74af8cf9b3ec10ed",
-      "url": "https://lore.kernel.org/linux-media/20260605133035.1273F1F00893@smtp.kernel.org/",
-      "title": "Re: [PATCH v7 2/8] media: qcom: camss: csiphy-3ph: Use odd bits for configuring C-PHY lanes",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
-      "candidate_id": "93dab5632e3f4d33",
-      "url": "https://lore.kernel.org/linux-media/20260605140028.DD2A31F00893@smtp.kernel.org/",
-      "title": "Re: [PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
-      "candidate_id": "95ac30f3f9f77bcb",
-      "url": "https://lore.kernel.org/linux-media/20260605133541.22569-3-boqun@kernel.org/",
-      "title": "[PATCH 1/3] rust: rcu: Add RcuBox type",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
-      "candidate_id": "721e43dc6b8b4ad5",
-      "url": "https://lore.kernel.org/linux-media/20260605133541.22569-1-boqun@kernel.org/",
-      "title": "[PATCH 0/3] rust: sync: Introduce Rcu*Box",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
-      "candidate_id": "95d31a501c4abcb2",
-      "url": "https://lore.kernel.org/linux-media/20260605133545.D70B11F00893@smtp.kernel.org/",
-      "title": "Re: [PATCH v7 3/8] media: qcom: camss: Prepare CSID for C-PHY support",
       "deep_checked": false,
       "source_fetch_used": false,
       "source_fetch_status": "skipped",
@@ -765,11 +757,28 @@
       "unsupported_claims_excluded": false,
       "evidence_validation_status": "pass",
       "reasons": []
+    },
+    {
+      "candidate_id": "gemini-883ccaf5da11631b",
+      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
+      "title": "[PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678 - Jai Luthra",
+      "deep_checked": true,
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "unsupported_claims": 0,
+      "supported_claims": 1,
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
+      "reasons": []
     }
   ],
   "counts": {
-    "pass": 5,
+    "pass": 10,
     "not_checked": 3,
-    "blocked": 33
+    "blocked": 29
   }
 }

@@ -1,8 +1,12 @@
 {
   "date": "2026-06-01",
-  "summary": "이번 주에는 ‘CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영’ 소식을 다룹니다.",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "2026 W23 (06.01 ~ 06.07)",
+  "summary": "이번 주에는 ‘CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영’, ‘Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표’ 두 건의 소식을 다룹니다.",
   "briefing": [
-    "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영"
+    "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+    "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표"
   ],
   "sections": [
     {
@@ -39,13 +43,256 @@
       "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
       "imageAttribution": "CameraX Release Notes",
       "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera"
+    },
+    {
+      "category": "direct_aosp_camera",
+      "headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
+      "what_changed": "Google I/O '26에서 Jetpack CameraX와 Media3를 결합하여 폴더블 및 태블릿을 포함한 다양한 폼 팩터에서 유연하게 확장되는 카메라 미리보기를 제공하는 CameraXViewfinder Composable이 발표되었습니다.",
+      "confirmed_facts": [
+        "발표 시점 및 플랫폼: Google I/O '26 (2026년 6월 2일)",
+        "대상 컴포넌트: Jetpack CameraX 및 Media3",
+        "신규 기능: CameraXViewfinder Composable 제공",
+        "지원 범위: 폴더블, 태블릿을 포함한 모든 폼 팩터에서의 반응형 카메라 미리보기 및 고품질 캡처 경험 구현"
+      ],
+      "evidence_summary": "Google I/O '26 공식 발표 자료에 따르면, Jetpack CameraX와 Media3 라이브러리를 결합하여 다양한 화면 크기와 폼 팩터에 대응할 수 있는 CameraXViewfinder Composable이 새롭게 도입되었습니다.",
+      "specificity_checks": [
+        "Version/Release: Google I/O '26",
+        "Release Date: 2026-06-02",
+        "API/Component: CameraX / Android camera APIs",
+        "Behavior Change: CameraXViewfinder Composable을 통해 폴더블 및 태블릿 기기에서 유연하게 반응하는 카메라 미리보기 구현 지원"
+      ],
+      "source_verification_notes": [
+        "공식 Android Developers Blog 및 Google I/O '26 세션 플레이리스트를 통해 확인된 사실입니다."
+      ],
+      "public_article": {
+        "headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
+        "lead": "Google I/O '26에서 Jetpack CameraX와 Media3를 활용하여 폴더블 및 태블릿 등 다양한 폼 팩터에서 유연하게 반응하는 카메라 미리보기를 제공하는 CameraXViewfinder Composable이 발표되었습니다.",
+        "body_paragraphs": [
+          "안드로이드 생태계가 고품질 미디어 라이프사이클을 지원하는 플랫폼으로 진화함에 따라, 구글은 첫 캡처부터 최종 재생까지의 개발 여정을 단순화하기 위한 툴킷을 제시했습니다. 이번 Google I/O '26 발표의 핵심은 Jetpack CameraX와 Media3의 긴밀한 통합입니다.",
+          "새롭게 도입된 CameraXViewfinder Composable은 선언형 UI 프레임워크인 Jetpack Compose 환경에서 카메라 미리보기를 쉽게 구현할 수 있도록 돕습니다. 특히 화면 크기가 동적으로 변하는 폴더블 기기나 대화면 태블릿 환경에서 레이아웃 변화에 맞춰 완벽하게 확장되고 반응하는 뷰파인더를 제공합니다.",
+          "이 툴킷은 애플리케이션 개발자가 복잡한 Surface 생명주기 관리나 화면 비율 계산 없이도 네이티브 수준의 고품질 카메라 및 재생 경험을 구축할 수 있도록 설계되었습니다. 이를 통해 앱 개발 프로세스가 크게 단축될 것으로 기대됩니다."
+        ],
+        "camera_hal_takeaway": "이번 변화는 Camera HAL의 직접적인 인터페이스 변경을 수반하지는 않지만, 프레임워크 및 앱 계층에서 HAL이 제공하는 스트림(Preview, ImageCapture)을 어떻게 소비하고 렌더링하는지 보여줍니다. 폴더블 기기의 화면 전환 시 발생할 수 있는 Surface 재구성 및 스트림 재설정 요청에 대해 HAL이 프레임 드롭 없이 안정적으로 버퍼를 공급해야 함을 시사합니다.",
+        "reader_checkpoints": [
+          "폴더블 및 태블릿 기기에서 화면 전환(접기/펴기) 시 CameraXViewfinder가 트리거하는 Surface 변경 요청이 HAL 스트림 재설정으로 이어지는지 확인합니다.",
+          "Media3 및 CameraX 조합 사용 시 Preview 스트림의 버퍼 생명주기와 프레임 드롭 여부를 디바이스 상에서 모니터링합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+            "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "Jetpack CameraX와 Media3를 활용한 고품질 안드로이드 미디어 경험 구축",
+        "editorial_story": {
+          "reader_scenario": "폴더블 폰에서 카메라 앱을 실행한 채 화면을 접거나 펼칠 때, 미리보기 화면이 끊기거나 왜곡되는 현상을 방지하기 위해 프레임워크와 HAL 간의 스트림 재구성 동작을 분석해야 하는 상황입니다.",
+          "what_happened": "Google I/O '26에서 Jetpack CameraX와 Media3를 결합하여 폴더블 및 태블릿 기기에 최적화된 반응형 미리보기를 제공하는 CameraXViewfinder Composable이 공개되었습니다.",
+          "why_it_matters": "앱 계층에서 Compose 기반의 유연한 뷰파인더를 적극 도입함에 따라, HAL 계층은 화면 크기 전환 시 발생하는 급격한 Surface 변경 및 스트림 재설정 요청을 지연 없이 처리해야 하는 성능적 요구를 받게 됩니다.",
+          "field_scenario": "실제 디바이스에서 화면 전환 테스트를 수행하며, CameraXViewfinder가 요구하는 새로운 Surface 크기에 맞춰 HAL이 YUV/PRIVATE 버퍼를 프레임 드롭 없이 즉각적으로 갱신하는지 검증합니다.",
+          "not_to_overclaim": "이 발표는 Jetpack 라이브러리 수준의 UI 컴포넌트 추가이며, Camera HAL3 규격 자체나 AIDL 인터페이스의 직접적인 변경을 의미하지는 않습니다.",
+          "editor_take": "앱 개발자들의 폴더블 대응이 쉬워진 만큼, HAL 및 드라이버 엔지니어는 동적 화면 전환 시의 스트림 안정성과 버퍼 관리 최적화에 더 집중해야 합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Framework"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "Google I/O '26(2026년 6월 2일)에서 Jetpack CameraX 및 Media3 통합 도구가 발표되었습니다.",
+          "새로운 CameraXViewfinder Composable은 폴더블 및 태블릿 기기에서 반응형 카메라 미리보기를 지원합니다."
+        ],
+        "background_context": "Jetpack Compose는 Android UI를 선언적으로 구축하기 위한 현대적인 툴킷입니다. CameraX와 같은 라이브러리와 함께 사용될 때, 개발자는 다양한 폼 팩터(예: 폴더블, 태블릿)에서 카메라 미리보기 및 캡처 UI를 유연하게 만들 수 있습니다. 이는 Camera HAL 자체의 직접적인 변경보다는, HAL이 제공하는 스트림과 버퍼를 사용하여 애플리케이션 계층에서 사용자 경험을 최적화하는 방식과 관련이 있습니다. HAL은 안정적인 카메라 스트림을 제공하고, 프레임워크는 이를 Compose UI 구성 요소에 효율적으로 전달하여 끊김 없는 미리보기 및 캡처 UX를 가능하게 합니다.",
+        "hal_driver_impact": "직접적인 HAL API 변경은 없으나, 앱 계층에서 뷰파인더 크기를 동적으로 변경함에 따라 HAL에 전달되는 Surface의 크기 전환이 잦아질 수 있습니다. HAL 개발자는 동적 스트림 구성(Dynamic Stream Configuration) 및 버퍼 할당 시 지연(Latency)과 프레임 드롭을 최소화하도록 드라이버와 HAL 내부 큐 관리를 최적화해야 합니다.",
+        "action_items": [
+          "폴더블 reference 기기에서 CameraXViewfinder Composable을 사용하는 샘플 앱을 구동하고, 화면 전환 시 HAL의 configure_streams 호출 빈도 및 소요 시간을 측정합니다.",
+          "화면 비율 변경 시 Preview 스트림의 버퍼 획득/반환 주기(Buffer Lifecycle)에서 병목이 발생하지 않는지 Perfetto 트레이스를 통해 분석합니다."
+        ],
+        "team_share_points": "Google I/O '26에서 발표된 CameraXViewfinder Composable 도입으로 인해 앱들의 동적 화면 전환 대응이 늘어날 것이므로, HAL 계층에서의 동적 스트림 재구성 성능을 사전에 점검해야 합니다."
+      },
+      "claims": [
+        {
+          "claim_id": "claim:io26_camerax_viewfinder_release_fact",
+          "text": "Google I/O '26(2026년 6월 2일)에서 Jetpack CameraX 및 Media3 통합 도구가 발표되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [],
+          "source_urls": [
+            "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:io26_camerax_viewfinder_behavior",
+          "text": "CameraXViewfinder Composable은 폴더블 및 태블릿을 포함한 모든 폼 팩터에서 반응형 카메라 미리보기를 제공합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [],
+          "source_urls": [
+            "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        }
+      ],
+      "background": "Jetpack Compose는 Android UI를 선언적으로 구축하기 위한 현대적인 툴킷입니다. CameraX와 같은 라이브러리와 함께 사용될 때, 개발자는 다양한 폼 팩터(예: 폴더블, 태블릿)에서 카메라 미리보기 및 캡처 UI를 유연하게 만들 수 있습니다. 이는 Camera HAL 자체의 직접적인 변경보다는, HAL이 제공하는 스트림과 버퍼를 사용하여 애플리케이션 계층에서 사용자 경험을 최적화하는 방식과 관련이 있습니다.",
+      "why_it_matters": "앱 계층에서 다양한 화면 크기에 유연하게 대응하는 뷰파인더를 사용함에 따라, 하위 카메라 프레임워크와 HAL은 동적인 Surface 변경 요청을 효율적으로 처리해야 합니다.",
+      "camera_hal_perspective": "HAL 엔지니어는 CameraXViewfinder가 요청하는 동적 레이아웃 변경 시, HAL 스트림 구성 및 버퍼 관리가 실시간으로 대응할 수 있는지 검증해야 합니다.",
+      "camera_hal_checks": [
+        "configure_streams 호출 시 지연 시간 측정",
+        "동적 Surface 변경 시 버퍼 생명주기 및 프레임 드롭 여부 점검"
+      ],
+      "action_hints": [
+        "CameraXViewfinder를 적용한 테스트 앱을 통해 폴더블 화면 전환 시나리오를 시뮬레이션하십시오."
+      ],
+      "action_items": [
+        "폴더블 reference 기기에서 CameraXViewfinder Composable을 사용하는 샘플 앱을 구동하고, 화면 전환 시 HAL의 configure_streams 호출 빈도 및 소요 시간을 측정합니다.",
+        "화면 비율 변경 시 Preview 스트림의 버퍼 획득/반환 주기(Buffer Lifecycle)에서 병목이 발생하지 않는지 Perfetto 트레이스를 통해 분석합니다."
+      ],
+      "team_summary": "Google I/O '26에서 발표된 CameraXViewfinder Composable은 폴더블 및 태블릿 기기에서 유연한 카메라 미리보기를 지원하며, 이는 HAL 계층의 동적 스트림 구성 성능 최적화 요구로 이어집니다.",
+      "is_ai_related": false,
+      "article_type": "camera-hal",
+      "imageCandidates": [
+        {
+          "url": "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20609",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentType": "image/jpeg",
+          "width": null,
+          "height": null,
+          "alt": ""
+        }
+      ],
+      "selectedImage": "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20609",
+      "imageSource": "https://android-developers.googleblog.com/",
+      "imageAttribution": "Android Developers Blog",
+      "imageAlt": "Google I/O '26 Android Developers session thumbnail",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "Google I/O '26 세션의 공식 플레이리스트 썸네일 이미지로, 기사 맥락과 직접적으로 부합하여 선택했습니다.",
+      "sources": [
+        {
+          "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+          "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "Google I/O '26에서 공식 발표된 최신 Jetpack CameraX 기능으로, 향후 앱 개발자들의 뷰파인더 구현 방식 변화에 선제적으로 대응해야 합니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "CameraXViewfinder Composable을 적용한 테스트 앱을 구동하여 동적 화면 전환 시 HAL 스트림 재구성 지연 시간을 측정하십시오.",
+        "impact_axes": [
+          "framework_hal_contract",
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "이 발표는 Jetpack 라이브러리 수준의 UI 컴포넌트 추가이며, Camera HAL3 규격 자체나 AIDL 인터페이스의 직접적인 변경을 의미하지는 않습니다."
+        ]
+      },
+      "source_candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "source_candidate_hash": "43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35",
+      "article_group_key": "article:https://youtube.com/playlist",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1,
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
+      "resolvedImage": {
+        "url": "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20609",
+        "src": "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20609",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": ""
+      },
+      "coverage_type": "fresh"
     }
   ],
-  "references": [],
+  "action_items": [
+    "폴더블 reference 기기에서 CameraXViewfinder Composable을 사용하는 샘플 앱을 구동하고, 화면 전환 시 HAL의 configure_streams 호출 빈도 및 소요 시간을 측정합니다.",
+    "화면 비율 변경 시 Preview 스트림의 버퍼 획득/반환 주기(Buffer Lifecycle)에서 병목이 발생하지 않는지 Perfetto 트레이스를 통해 분석합니다."
+  ],
+  "references": [
+    {
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [
+    {
+      "article_group_key": "article:https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com",
+      "hard_block_reason": "Mailing-list/community lead requires primary confirmation before main promotion.",
+      "reason_code": "blocked_source_quality"
+    },
+    {
+      "article_group_key": "article:https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com",
+      "hard_block_reason": "Mailing-list/community lead requires primary confirmation before main promotion.",
+      "reason_code": "blocked_source_quality"
+    },
+    {
+      "article_group_key": "article:https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com",
+      "hard_block_reason": "Mailing-list/community lead requires primary confirmation before main promotion.",
+      "reason_code": "blocked_source_quality"
+    },
+    {
+      "article_group_key": "article:https://lore.kernel.org/linux-media/202606052349.bosyannd-lkp@intel.com",
+      "hard_block_reason": "Mailing-list/community lead requires primary confirmation before main promotion.",
+      "reason_code": "blocked_source_quality"
+    }
+  ],
+  "selected_group_count": 5,
+  "rendered_group_count": 1,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 4,
+  "selected_representative_group_keys": [
+    "article:https://youtube.com/playlist",
+    "article:https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com",
+    "article:https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com",
+    "article:https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com",
+    "article:https://lore.kernel.org/linux-media/202606052349.bosyannd-lkp@intel.com"
+  ],
+  "rendered_group_keys": [
+    "article:https://youtube.com/playlist"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [
+    "article:https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com",
+    "article:https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com",
+    "article:https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com",
+    "article:https://lore.kernel.org/linux-media/202606052349.bosyannd-lkp@intel.com"
+  ],
+  "publish_mode": "DEEP",
   "weekly_key": "2026-W23",
   "week_start_date": "2026-06-01",
   "week_end_date": "2026-06-07",
-  "title": "2026 W23 (06.01 ~ 06.07)",
   "tags": [
     "Camera HAL",
     "Android"
