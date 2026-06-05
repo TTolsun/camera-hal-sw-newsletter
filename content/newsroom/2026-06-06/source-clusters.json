@@ -1,0 +1,654 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-06-06",
+  "clusters": [
+    {
+      "cluster_id": "43d1b942a84263ab",
+      "cluster_key": "https://youtube.com/playlist",
+      "canonical_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "canonical_title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+          "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bdcf8a4c506e5257",
+      "cluster_key": "https://goo.gle/adaptiveapps_io26",
+      "canonical_url": "https://goo.gle/AdaptiveApps_IO26",
+      "canonical_title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://goo.gle/AdaptiveApps_IO26",
+          "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "49d58944bd3ca26f",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "canonical_title": "CameraX Release Notes - CameraX 1.6.0",
+      "candidate_count": 5,
+      "duplicate_count": 4,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+          "title": "CameraX Release Notes - CameraX 1.6.0",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+          "title": "CameraX Release Notes - CameraX 1.7.0-alpha01",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+          "title": "1.6.1",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "title": "1.3.0-beta02",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "title": "1.4.0-alpha07",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bb0e15b6742fce01",
+      "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "canonical_title": "Test camera images using automation",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "title": "Test camera images using automation",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ef27814b2c8c8636",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "canonical_title": "17 Things to know for Android developers at Google I/O",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+          "title": "17 Things to know for Android developers at Google I/O",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1bd949b88ac6a778",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "canonical_title": "Android UI Development is Compose First",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+          "title": "Android UI Development is Compose First",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "652f5c50bcb656fe",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "canonical_title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+          "title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a315e38980974827",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+      "canonical_title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+          "title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "efec1690039b80c5",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+      "canonical_title": "Android Studio I/O Edition: What’s new in Android Developer tools",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html",
+          "title": "Android Studio I/O Edition: What’s new in Android Developer tools",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "931e1972767ee114",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+      "canonical_title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html",
+          "title": "How FotMob leveraged cross-device discovery to score record Wear OS adoption",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "736ba21c4736e96f",
+      "cluster_key": "https://source.android.com/docs/compatibility",
+      "canonical_url": "https://source.android.com/docs/compatibility",
+      "canonical_title": "Compatibility",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility",
+          "title": "Compatibility",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2e09be47b7d035b1",
+      "cluster_key": "https://source.android.com/docs/core/camera",
+      "canonical_url": "https://source.android.com/docs/core/camera",
+      "canonical_title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9e95b9aeb5650263",
+      "cluster_key": "https://source.android.com/docs/whatsnew",
+      "canonical_url": "https://source.android.com/docs/whatsnew",
+      "canonical_title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew",
+          "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b564c567eef7ae59",
+      "cluster_key": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_url": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cdd",
+          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "827f3a39ff281180",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "canonical_title": "Overview",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "title": "Overview",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e6ebde2c2d5411c2",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+      "canonical_title": "June",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+          "title": "June",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f378276c69cc505f",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
+      "canonical_title": "May",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
+          "title": "May",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "270978ec79bfcd6e",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/2026/2026-04-01",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/2026/2026-04-01",
+      "canonical_title": "April",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-04-01",
+          "title": "April",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4044f2a3d3ec320f",
+      "cluster_key": "https://lore.kernel.org/linux-media/c7f35621-2bdb-4e66-ac8a-6c7fc6f80f1c@seznam.cz",
+      "canonical_url": "https://lore.kernel.org/linux-media/c7f35621-2bdb-4e66-ac8a-6c7fc6f80f1c@seznam.cz/",
+      "canonical_title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/c7f35621-2bdb-4e66-ac8a-6c7fc6f80f1c@seznam.cz/",
+          "title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2ade291a5b5a65fc",
+      "cluster_key": "https://lore.kernel.org/linux-media/202606052235.rm24ifzs-lkp@intel.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/202606052235.rM24ifzS-lkp@intel.com/",
+      "canonical_title": "[sailus-media-tree:partial-reg 5/9] drivers/media/v4l2-core/v4l2-event.c:81:41: warning: variable 'evspec' is uninitialized when used within its own initialization",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/202606052235.rM24ifzS-lkp@intel.com/",
+          "title": "[sailus-media-tree:partial-reg 5/9] drivers/media/v4l2-core/v4l2-event.c:81:41: warning: variable 'evspec' is uninitialized when used within its own initialization",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "61c963a289f63e09",
+      "cluster_key": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "canonical_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "canonical_title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+          "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6ed585f7fc4c7353",
+      "cluster_key": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "canonical_url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "canonical_title": "2026 Annual C++ Developer Survey \"Lite\"",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+          "title": "2026 Annual C++ Developer Survey \"Lite\"",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "44f3597991199849",
+      "cluster_key": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
+      "canonical_url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
+      "canonical_title": "Power of C++26 Reflection: Strong (opaque) type definitions -- r/cpp",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
+          "title": "Power of C++26 Reflection: Strong (opaque) type definitions -- r/cpp",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a7d35653307227c6",
+      "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel",
+      "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "canonical_title": "The libcamera-devel Archives",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+          "title": "The libcamera-devel Archives",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "823f7e7641e8931c",
+      "cluster_key": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+      "canonical_url": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+      "canonical_title": "How ref qualifiers led to deducing this",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+          "title": "How ref qualifiers led to deducing this",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5126eff726f21536",
+      "cluster_key": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "canonical_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "canonical_title": "C++: The Documentary trailer",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+          "title": "C++: The Documentary trailer",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8635e5e9a3557c0d",
+      "cluster_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "canonical_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "canonical_title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5282bc7766ce3d8f",
+      "cluster_key": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "canonical_url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "canonical_title": "CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+          "title": "CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a8865e6c6b3d243f",
+      "cluster_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "canonical_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "canonical_title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0e9f562be85ed14a",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260605134047.597ec1f00893@smtp.kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260605134047.597EC1F00893@smtp.kernel.org/",
+      "canonical_title": "Re: [PATCH v7 4/8] media: qcom: camss: Initialize lanes after lane configuration is available",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260605134047.597EC1F00893@smtp.kernel.org/",
+          "title": "Re: [PATCH v7 4/8] media: qcom: camss: Initialize lanes after lane configuration is available",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3075550ca748d12b",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260605133035.1273f1f00893@smtp.kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260605133035.1273F1F00893@smtp.kernel.org/",
+      "canonical_title": "Re: [PATCH v7 2/8] media: qcom: camss: csiphy-3ph: Use odd bits for configuring C-PHY lanes",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260605133035.1273F1F00893@smtp.kernel.org/",
+          "title": "Re: [PATCH v7 2/8] media: qcom: camss: csiphy-3ph: Use odd bits for configuring C-PHY lanes",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "173dd1157f53ec2c",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260605140028.dd2a31f00893@smtp.kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260605140028.DD2A31F00893@smtp.kernel.org/",
+      "canonical_title": "Re: [PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260605140028.DD2A31F00893@smtp.kernel.org/",
+          "title": "Re: [PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cf62ff3eecfdb705",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260605133541.22569-3-boqun@kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260605133541.22569-3-boqun@kernel.org/",
+      "canonical_title": "[PATCH 1/3] rust: rcu: Add RcuBox type",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260605133541.22569-3-boqun@kernel.org/",
+          "title": "[PATCH 1/3] rust: rcu: Add RcuBox type",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "74890dfd21e13e84",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260605133541.22569-1-boqun@kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260605133541.22569-1-boqun@kernel.org/",
+      "canonical_title": "[PATCH 0/3] rust: sync: Introduce Rcu*Box",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260605133541.22569-1-boqun@kernel.org/",
+          "title": "[PATCH 0/3] rust: sync: Introduce Rcu*Box",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "78d6d2e1d4bc6371",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260605133545.d70b11f00893@smtp.kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260605133545.D70B11F00893@smtp.kernel.org/",
+      "canonical_title": "Re: [PATCH v7 3/8] media: qcom: camss: Prepare CSID for C-PHY support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260605133545.D70B11F00893@smtp.kernel.org/",
+          "title": "Re: [PATCH v7 3/8] media: qcom: camss: Prepare CSID for C-PHY support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5e9a33e9fbaae52e",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/media3",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
+      "canonical_title": "Media3 Release Notes - Media3 1.9.4",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
+          "title": "Media3 Release Notes - Media3 1.9.4",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}
