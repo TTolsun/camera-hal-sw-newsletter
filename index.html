@@ -322,6 +322,7 @@
         .split(/\n+|\s+·\s+/)
         .map(line => line.trim())
         .filter(Boolean)
+        .map(line => (line.length > 50 ? `${line.slice(0, 50)}..` : line))
         .map(escapeHtml)
         .join('<br>');
     }
@@ -340,9 +341,13 @@
     }
 
     function renderHeadlineCta(headline, matchedNewsletter) {
-      // "기사 보기" links to the matched WEEKLY newsletter when available, instead of the
-      // single-day article/newsletter URL, so the headline opens its weekly issue.
-      const weeklyHref = matchedNewsletter && safeInternalPath(matchedNewsletter.html);
+      // "기사 보기" opens the specific article inside the matched WEEKLY issue page: the weekly
+      // index route plus the article anchor taken from the headline's article-URL fragment. The
+      // weekly page reuses the same anchor ids, so this lands on the article, not the page top.
+      const anchorMatch = String(headline.newsletter_article_url || '').match(/#[A-Za-z0-9_-]+$/);
+      const anchor = anchorMatch ? anchorMatch[0] : '';
+      const weeklyBase = matchedNewsletter ? String(matchedNewsletter.html || '') : '';
+      const weeklyHref = weeklyBase ? safeInternalPath(`${weeklyBase}${anchor}`) : '';
       const internalHref = weeklyHref || safeInternalPath(headline.newsletter_article_url) || safeInternalPath(headline.newsletter_url);
       const sourceHref = isExternalUrl(headline.source_url) ? headline.source_url : '';
       const href = internalHref || sourceHref;

@@ -442,6 +442,23 @@ test('archive card order, clamps, and tag overflow keep archive cards scannable'
   assert.match(card, /class="tag tag-more" aria-label="추가 태그 2개: Image Processing, AOSP &lt;Camera&gt;" title="Image Processing, AOSP &lt;Camera&gt;">\+2<\/span>/);
 });
 
+test('archive card summary lists each article title on its own line and truncates past 50 chars', async () => {
+  const shortTitle = 'CameraX 1.6.1 업데이트';
+  const longTitle = 'A'.repeat(60);
+  const archiveItem = {
+    ...newsletter('2026-05-24', 'Archive card title'),
+    summary: `${shortTitle}\n${longTitle}`
+  };
+  const { elements } = await renderHomepage([
+    newsletter('2026-05-25', 'Latest issue'),
+    archiveItem
+  ]);
+  const [card] = archiveCards(elements['archive-list'].innerHTML);
+
+  // Titles render one per line, joined by <br>; titles longer than 50 chars are cut to 50 + "..".
+  assert.match(card, new RegExp(`<p class="card-summary archive-card-summary">${shortTitle}<br>${'A'.repeat(50)}\\.\\.</p>`));
+});
+
 test('archive cards omit empty tag rows while preserving the remaining child order', async () => {
   const archiveItem = {
     ...newsletter('2026-05-24', 'No tags archive card'),
@@ -593,8 +610,8 @@ test('homepage renders valid headline state linking to the weekly issue, image, 
   assert.match(elements['headline-card'].innerHTML, /<div class="tag-row headline-tags"><span class="tag">Camera HAL<\/span><\/div>/);
   assert.match(elements['headline-card'].innerHTML, /class="card-title clamp-2"/);
   assert.match(elements['headline-card'].innerHTML, /class="card-summary clamp-3"/);
-  // "기사 보기" links to the matched issue page (the weekly newsletter), not the per-article anchor.
-  assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/index\.html">기사 보기<\/a>/);
+  // "기사 보기" links to the matched issue page (the weekly newsletter) at the article's anchor.
+  assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/index\.html#article-camerax-preview">기사 보기<\/a>/);
   assert.match(elements['headline-card'].innerHTML, /기사 보기/);
   assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/newsletter\.md">Markdown<\/a>/);
   assert.match(elements['headline-card'].innerHTML, /Headline/);
