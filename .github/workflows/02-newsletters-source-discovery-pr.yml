@@ -150,7 +150,8 @@ jobs:
             echo "Nothing to commit."
           else
             git commit -m "chore(newsroom): source discovery artifacts for ${{ steps.resolve-newsletter-date.outputs.date }}"
-            git pull --rebase origin main
+            # git add 대상 밖의 추적 파일이 unstaged로 남아도 rebase가 실패하지 않도록 --autostash 사용.
+            git pull --rebase --autostash origin main
             git push origin HEAD:main
           fi
 
