@@ -5,7 +5,7 @@
     "weekEndDate": "2026-06-07",
     "date": "2026-06-01",
     "title": "Camera HAL Weekly 2026-W23",
-    "summary": "2026-06-01 ~ 2026-06-07 주간 다이제스트 (일별 이슈 1건).",
+    "summary": "2026-06-01 ~ 2026-06-07 주간 뉴스레터 (기사 1건).",
     "html": "newsletters/2026-W23/index.html",
     "md": "newsletters/2026-W23/newsletter.md",
     "tags": [
@@ -20,7 +20,7 @@
     "weekEndDate": "2026-05-31",
     "date": "2026-05-25",
     "title": "Camera HAL Weekly 2026-W22",
-    "summary": "2026-05-25 ~ 2026-05-31 주간 다이제스트 (일별 이슈 6건).",
+    "summary": "2026-05-25 ~ 2026-05-31 주간 뉴스레터 (기사 2건).",
     "html": "newsletters/2026-W22/index.html",
     "md": "newsletters/2026-W22/newsletter.md",
     "tags": [
@@ -29,7 +29,7 @@
       "Tooling Watch Edition",
       "Tooling Watch"
     ],
-    "article_count": 6
+    "article_count": 2
   },
   {
     "weeklyKey": "2026-W21",
@@ -37,7 +37,7 @@
     "weekEndDate": "2026-05-24",
     "date": "2026-05-18",
     "title": "Camera HAL Weekly 2026-W21",
-    "summary": "2026-05-18 ~ 2026-05-24 주간 다이제스트 (일별 이슈 5건).",
+    "summary": "2026-05-18 ~ 2026-05-24 주간 뉴스레터 (기사 5건).",
     "html": "newsletters/2026-W21/index.html",
     "md": "newsletters/2026-W21/newsletter.md",
     "tags": [
@@ -54,7 +54,7 @@
     "weekEndDate": "2026-05-17",
     "date": "2026-05-11",
     "title": "Camera HAL Weekly 2026-W20",
-    "summary": "2026-05-11 ~ 2026-05-17 주간 다이제스트 (일별 이슈 3건).",
+    "summary": "2026-05-11 ~ 2026-05-17 주간 뉴스레터 (기사 3건).",
     "html": "newsletters/2026-W20/index.html",
     "md": "newsletters/2026-W20/newsletter.md",
     "tags": [
@@ -71,13 +71,13 @@
     "weekEndDate": "2026-05-10",
     "date": "2026-05-04",
     "title": "Camera HAL Weekly 2026-W19",
-    "summary": "2026-05-04 ~ 2026-05-10 주간 다이제스트 (일별 이슈 2건).",
+    "summary": "2026-05-04 ~ 2026-05-10 주간 뉴스레터 (기사 6건).",
     "html": "newsletters/2026-W19/index.html",
     "md": "newsletters/2026-W19/newsletter.md",
     "tags": [
       "Camera HAL",
       "Android"
     ],
-    "article_count": 2
+    "article_count": 6
   }
 ]
