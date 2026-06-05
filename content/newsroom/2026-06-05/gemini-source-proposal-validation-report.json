@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-05",
   "validations": [
     {
-      "proposal_id": "camera_io26_media_pipeline",
+      "proposal_id": "P1",
       "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "accepted": false,
@@ -12,7 +12,7 @@
       "source_policy_match": ""
     },
     {
-      "proposal_id": "camerax_160_release",
+      "proposal_id": "P2",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "accepted": false,
@@ -26,7 +26,7 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "camerax_170_alpha01_release",
+      "proposal_id": "P2",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "accepted": false,
@@ -40,7 +40,7 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "camera_its_automation",
+      "proposal_id": "P3",
       "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "accepted": true,

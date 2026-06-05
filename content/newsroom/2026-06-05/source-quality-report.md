@@ -13,6 +13,7 @@
 | blocked_candidate | 0.601 | Android CLI Now Stable 1.0: Accelerate developing for Android using any agent | https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html |
 | blocked_candidate | 0.601 | Android Studio I/O Edition: What’s new in Android Developer tools | https://android-developers.googleblog.com/2026/05/whats-new-android-developer-tools.html |
 | blocked_candidate | 0.601 | How FotMob leveraged cross-device discovery to score record Wear OS adoption | https://android-developers.googleblog.com/2026/05/fotmob-wear-os-adoption-cross-device-discovery.html |
+| review_candidate | 0.78 | CameraX Release Notes - CameraX 1.6.1 | https://developer.android.com/jetpack/androidx/releases/camera#1.6.1 |
 | review_candidate | 0.676 | Compatibility | https://source.android.com/docs/compatibility |
 | review_candidate | 0.666 | Build native Android apps in Google AI Studio | https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html |
 | blocked_candidate | 0.577 | Increasing app discovery and engagement on Google TV | https://android-developers.googleblog.com/2026/05/increase-google-tv-app-discovery.html |
@@ -29,8 +30,6 @@
 | blocked_candidate | 0.552 | Gratitude saw 25% higher retention for widget users | https://android-developers.googleblog.com/2026/05/how-gratitude-widgets-boosted-user-retention-25-percent.html |
 | blocked_candidate | 0.552 | A look ahead: Making it easier and faster to publish safer apps | https://android-developers.googleblog.com/2026/05/making-it-easier-to-build-publish-safer-apps.html |
 | blocked_candidate | 0.642 | Streamline User Journeys with Verified Email via Credential Manager | https://android-developers.googleblog.com/2026/04/streamline-auth-credential-manager-verified-email.html |
-| blocked_candidate | 0.552 | 1.6.1 | https://developer.android.com/jetpack/androidx/releases/camera#1.6.1 |
-| blocked_candidate | 0.552 | 1.3.0-beta02 | https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02 |
 | blocked_candidate | 0.552 | 1.4.0-alpha07 | https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07 |
 | blocked_candidate | 0.529 | Prioritizing Memory Efficiency: Essential Steps for Android 17 | https://android-developers.googleblog.com/2026/06/prioritizing-memory-efficiency-steps-for-android-17.html |
 | blocked_candidate | 0.57 | What&apos;s new &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/whatsnew |
@@ -42,5 +41,6 @@
 | blocked_candidate | 0.48 | What's New in Wear OS 7 | https://android-developers.googleblog.com/2026/05/whats-new-wear-os-7.html |
 | blocked_candidate | 0.551 | Overview | https://source.android.com/docs/security/bulletin/asb-overview |
 | blocked_candidate | 0.551 | June | https://source.android.com/docs/security/bulletin/2026/2026-06-01 |
+| blocked_candidate | 0.501 | May | https://source.android.com/docs/security/bulletin/2026/2026-05-01 |
 | review_candidate | 0.783 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
 
