@@ -146,6 +146,12 @@
     return WEEKLY_KEY_PATTERN.test(key) ? key : '';
   }
 
+  // Card date chip shows the ISO week ("2026-W22" -> "W22") for weekly entries, else the raw date.
+  function weekLabel(entry) {
+    const key = weeklyKeyOf(entry);
+    return key ? key.slice(5) : String((entry && entry.date) || '');
+  }
+
   function fallbackNewsletterHref(entry) {
     const weeklyKey = weeklyKeyOf(entry);
     if (weeklyKey) return `newsletters/${weeklyKey}/index.html`;
@@ -192,7 +198,7 @@
     return `
       <a class="archive-card" href="${escapeHtml(href)}" aria-label="${escapeHtml(accessibleName)}">
         <div class="card-meta archive-card-meta">
-          <span class="issue-date">${escapeHtml(entry && entry.date)}</span>
+          <span class="issue-date">${escapeHtml(weekLabel(entry))}</span>
         </div>
         ${tagHtml}
         <h3 class="card-title clamp-2">${escapeHtml(entry && entry.title)}</h3>

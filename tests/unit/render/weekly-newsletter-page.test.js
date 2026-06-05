@@ -64,9 +64,11 @@ test('buildWeeklyNewsletterPage keys a single publish-ready draft by its ISO wee
   assert.equal(page.weekEndDate, '2026-06-07');
   assert.equal(page.indexRoute, 'newsletters/2026-W23/index.html');
   assert.equal(page.markdownRoute, 'newsletters/2026-W23/newsletter.md');
-  assert.equal(page.issue.title, 'Camera HAL Weekly 2026-W23');
+  assert.equal(page.issue.title, '2026 W23 (06.01 ~ 06.07)');
   assert.equal(page.issue.weekly_key, '2026-W23');
   assert.equal(page.issue.sections.length, 1);
+  // The under-title list is the week's article titles (not a 3-line briefing).
+  assert.deepEqual(page.issue.briefing, ['CameraX SessionConfig stable API']);
   assert.ok(typeof page.html === 'string' && page.html.length > 0);
   assert.ok(typeof page.markdown === 'string' && page.markdown.length > 0);
 });

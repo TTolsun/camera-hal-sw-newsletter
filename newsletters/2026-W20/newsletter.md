@@ -1,10 +1,10 @@
-# Camera HAL Weekly 2026-W20
+# 2026 W20 (05.11 ~ 05.17)
 
 2026-05-11 ~ 2026-05-17 주간 뉴스레터 (기사 3건).
 
 
 
-## 1. 이번 주 3줄 브리핑
+## 1. 이번 주 기사
 
 - Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
 - CameraX 1.6.1 업데이트: Android Camera 호환성 관찰

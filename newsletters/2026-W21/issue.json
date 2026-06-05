@@ -2,16 +2,17 @@
   "date": "2026-05-18",
   "summary": "2026-05-18 ~ 2026-05-24 주간 뉴스레터 (기사 5건).",
   "briefing": [
-    "Android Developers Blog · Tue, 19 May 2026 12:45:00 +0000",
+    "구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동",
     "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
-    "libcamera Release Announcements - libcamera v0.7.1"
+    "libcamera Release Announcements - libcamera v0.7.1",
+    "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+    "Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more"
   ],
   "sections": [
     {
       "category": "주간 다이제스트",
       "headline": "구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동",
       "what_changed": "Android Developers Blog · Tue, 19 May 2026 12:45:00 +0000",
-      "source_origin_date": "2026-05-24",
       "public_article": {
         "headline": "구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동",
         "lead": "Android Developers Blog · Tue, 19 May 2026 12:45:00 +0000",
@@ -46,7 +47,6 @@
       "category": "주간 다이제스트",
       "headline": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
       "what_changed": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
-      "source_origin_date": "2026-05-23",
       "public_article": {
         "headline": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
         "lead": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
@@ -85,7 +85,6 @@
       "category": "주간 다이제스트",
       "headline": "libcamera Release Announcements - libcamera v0.7.1",
       "what_changed": "libcamera Release Announcements - libcamera v0.7.1",
-      "source_origin_date": "2026-05-21",
       "public_article": {
         "headline": "libcamera Release Announcements - libcamera v0.7.1",
         "lead": "libcamera Release Announcements - libcamera v0.7.1",
@@ -121,7 +120,6 @@
       "category": "주간 다이제스트",
       "headline": "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
       "what_changed": "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "source_origin_date": "2026-05-20",
       "public_article": {
         "headline": "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
         "lead": "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
@@ -157,7 +155,6 @@
       "category": "주간 다이제스트",
       "headline": "Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
       "what_changed": "Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-      "source_origin_date": "2026-05-20",
       "public_article": {
         "headline": "Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
         "lead": "Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
@@ -194,7 +191,7 @@
   "weekly_key": "2026-W21",
   "week_start_date": "2026-05-18",
   "week_end_date": "2026-05-24",
-  "title": "Camera HAL Weekly 2026-W21",
+  "title": "2026 W21 (05.18 ~ 05.24)",
   "tags": [
     "Tooling Watch Edition",
     "Tooling Watch",

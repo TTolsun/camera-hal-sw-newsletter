@@ -1,14 +1,16 @@
-# Camera HAL Weekly 2026-W21
+# 2026 W21 (05.18 ~ 05.24)
 
 2026-05-18 ~ 2026-05-24 주간 뉴스레터 (기사 5건).
 
 
 
-## 1. 이번 주 3줄 브리핑
+## 1. 이번 주 기사
 
-- Android Developers Blog · Tue, 19 May 2026 12:45:00 +0000
+- 구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동
 - Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트
 - libcamera Release Announcements - libcamera v0.7.1
+- Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
+- Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
 
 ## 2. 구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동
 

@@ -2,14 +2,13 @@
   "date": "2026-06-01",
   "summary": "2026-06-01 ~ 2026-06-07 주간 뉴스레터 (기사 1건).",
   "briefing": [
-    "CameraX 1.6.0 Release Notes (March 25, 2026)"
+    "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영"
   ],
   "sections": [
     {
       "category": "주간 다이제스트",
       "headline": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
       "what_changed": "CameraX 1.6.0 Release Notes (March 25, 2026)",
-      "source_origin_date": "2026-06-03",
       "public_article": {
         "headline": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
         "lead": "CameraX 1.6.0 Release Notes (March 25, 2026)",
@@ -46,7 +45,7 @@
   "weekly_key": "2026-W23",
   "week_start_date": "2026-06-01",
   "week_end_date": "2026-06-07",
-  "title": "Camera HAL Weekly 2026-W23",
+  "title": "2026 W23 (06.01 ~ 06.07)",
   "tags": [
     "Camera HAL",
     "Android"

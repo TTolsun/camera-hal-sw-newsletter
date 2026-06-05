@@ -107,7 +107,10 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
     weekEndDate: page.weekEndDate,
     date: page.weekStartDate,
     title: page.issue.title,
-    summary: String(editor && editor.summary || (existingIssue && existingIssue.summary) || ''),
+    // The card lists this week's article titles under the title (page.issue.briefing is the title list).
+    summary: (Array.isArray(page.issue.briefing) && page.issue.briefing.length
+      ? page.issue.briefing.join(' · ')
+      : String(editor && editor.summary || (existingIssue && existingIssue.summary) || '')),
     html: page.indexRoute,
     md: page.markdownRoute,
     tags: mergedTags,
