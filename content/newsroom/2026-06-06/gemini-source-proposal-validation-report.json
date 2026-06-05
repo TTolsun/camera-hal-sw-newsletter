@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-06",
   "validations": [
     {
-      "proposal_id": "android-io26-media-pipeline",
+      "proposal_id": "android_io_2026_media_pipeline",
       "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "accepted": false,
@@ -12,7 +12,7 @@
       "source_policy_match": ""
     },
     {
-      "proposal_id": "camerax-1-6-0-release",
+      "proposal_id": "camerax_1_6_0_release",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "accepted": false,
@@ -26,7 +26,7 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "camerax-1-7-0-alpha01-release",
+      "proposal_id": "camerax_1_7_0_alpha01_release",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
       "accepted": false,
@@ -40,7 +40,7 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "camera-its-box-testing",
+      "proposal_id": "camera_image_testing_automation",
       "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "accepted": true,
@@ -48,7 +48,7 @@
       "source_policy_match": "android-compatibility-definition-document"
     },
     {
-      "proposal_id": "linux-media-aptina-mt9m113-driver",
+      "proposal_id": "linux_media_aptina_mt9m113_driver",
       "candidate_url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
       "accepted": true,
@@ -56,79 +56,17 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "linux-media-sony-imx678-driver",
+      "proposal_id": "linux_media_sony_imx678_driver",
       "candidate_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "camerax-1-6-1-release",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "camerax-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-jetpack-release",
-      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
-      "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "aosp-compatibility-updates",
-      "candidate_url": "https://source.android.com/docs/compatibility",
-      "normalized_url": "https://source.android.com/docs/compatibility",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "android-compatibility-definition-document"
-    },
-    {
-      "proposal_id": "linux-media-sony-imx678-dt-bindings",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "linux-media-sony-imx678-dt-bindings",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "linux-media-sony-imx678-dt-bindings",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "gcc-16-1-cpp26-reflection",
-      "candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-      "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "iso-cpp-blog"
-    },
-    {
-      "proposal_id": "glaze-7-2-cpp26-reflection",
-      "candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-      "normalized_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "iso-cpp-blog"
     }
   ],
   "counts": {
     "domain_not_allowed": 1,
-    "discovered_not_extractable": 3,
-    "accepted": 9
+    "discovered_not_extractable": 2,
+    "accepted": 3
   }
 }

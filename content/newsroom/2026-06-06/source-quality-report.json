@@ -418,24 +418,6 @@
       }
     },
     {
-      "candidate_id": "e5b60330781f8ed7",
-      "url": "https://lore.kernel.org/linux-media/c7f35621-2bdb-4e66-ac8a-6c7fc6f80f1c@seznam.cz/",
-      "title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
-      "source_quality_score": 0.764,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.81,
-        "android_hal_relevance": 0.81,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "6db21c7bc2a7451e",
       "url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
       "title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
@@ -670,6 +652,24 @@
       }
     },
     {
+      "candidate_id": "8f90085beb9696f8",
+      "url": "https://lore.kernel.org/linux-media/3dbef45d-9fed-46ab-806e-6ccd95ae0ee1@fritscher.net/",
+      "title": "Re: USB 2013:0462 PCTV Systems PCTV 461",
+      "source_quality_score": 0.668,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "ecd2f14ba3d8477a",
       "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
@@ -776,120 +776,12 @@
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
       }
-    },
-    {
-      "candidate_id": "gemini-736ba21c4736e96f",
-      "url": "https://source.android.com/docs/compatibility",
-      "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
-      "source_quality_score": 0.672,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.25,
-        "recency_score": 0.15,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-65018afcf008a9f4",
-      "url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
-      "title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Conor Dooley",
-      "source_quality_score": 0.72,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-5df469ecaf01e066",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra",
-      "source_quality_score": 0.72,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-6109dc2ba8ee8d64",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
-      "title": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-8635e5e9a3557c0d",
-      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
-      "source_quality_score": 0.5,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.55,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-a8865e6c6b3d243f",
-      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
-      "source_quality_score": 0.455,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
     }
   ],
   "counts": {
-    "strong_candidate": 10,
-    "blocked_candidate": 28,
-    "review_candidate": 9,
+    "strong_candidate": 9,
+    "blocked_candidate": 26,
+    "review_candidate": 6,
     "weak_candidate": 2
   }
 }

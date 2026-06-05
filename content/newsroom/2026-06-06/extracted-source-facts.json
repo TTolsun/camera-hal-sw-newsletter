@@ -82,7 +82,7 @@
       "claims": [
         {
           "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"id-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"tr-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
           "confidence": "medium"
         }
       ],
@@ -90,29 +90,6 @@
       "android_hal_relevance": 0.89,
       "ai_relevance": 0,
       "technical_depth": 0.829,
-      "warnings": []
-    },
-    {
-      "id": "gemini-6109dc2ba8ee8d64",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
-      "title": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra",
-      "published_at": "2026-06-05",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra",
-          "evidence_text": "<html><head><title>[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.81,
       "warnings": []
     },
     {
@@ -136,6 +113,121 @@
       "android_hal_relevance": 0.7,
       "ai_relevance": 0.5,
       "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-05-27",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.783,
+      "warnings": []
+    },
+    {
+      "id": "gemini-f5ad117f0c167686",
+      "url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
+      "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley",
+      "published_at": "2026-06-05",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley",
+          "evidence_text": "<html><head><title>Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nh",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "781679b8fb4b611e",
+      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
+      "title": "Media3 Release Notes - Media3 1.9.4",
+      "published_at": "May 16, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "May 16, 2026 Version 1.9.4 contains the following commits .",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"de-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.79,
+      "android_hal_relevance": 0.79,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.674,
+      "warnings": []
+    },
+    {
+      "id": "8edd18929c9fbdd9",
+      "url": "https://goo.gle/AdaptiveApps_IO26",
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "published_at": "Tue, 19 May 2026 13:00:00 +0000",
+      "source_type": "roundup_child",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
+      "warnings": []
+    },
+    {
+      "id": "9b460337b26c1fbb",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "published_at": "Tue, 02 Jun 2026 17:00:00 +0000",
+      "source_type": "roundup_child",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "By leveraging Jetpack CameraX and Media3, you can build professional-grade experiences that feel native across the entire ecosystem.&nbsp; It starts with high-fidelity capture using the CameraXViewfinder Composable, which ensures your preview remains perfectly scaled and responsive on any form factor, including foldables and tablets.",
+          "evidence_text": "<!DOCTYPE html><html style=\"font-size: 62.5%;font-family: Roboto, Arial, sans-serif;\" lang=\"en\" darker-dark-theme darker-dark-theme-deprecate system-icons color-version=\"v2_0\" typography typography-spacing><head><script data-id=\"_gd\" nonce=\"euTTdEQnOV8Ff2-RPTxNdA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"FL1an\":false,\"HiPsbb\":0,\"MUE6Ne\":\"youtube_web\",\"MuJWjd\":false,\"UUFaWc\":\"%.@.null,1000,2]\",\"cfb2h\":\"youtube.web-front-end-critical_20260603.05_p0\",\"fPDxwd\":[],\"hsFLT\":\"%.@.null,10,3]\",\"iCzhFc\":f",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
       "warnings": []
     },
     {
@@ -182,98 +274,6 @@
       "android_hal_relevance": 0.75,
       "ai_relevance": 0.5,
       "technical_depth": 0.785,
-      "warnings": []
-    },
-    {
-      "id": "gemini-bb0e15b6742fce01",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-      "published_at": "2026-05-27",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.783,
-      "warnings": []
-    },
-    {
-      "id": "18550920b3f33abc",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
-      "published_at": "2026-06-05T15:26:45Z",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Sony IMX678 is an 8.4 Megapixel (3856x2180) CMOS sensor, that can output pixels over MIPI CSI-2 bus. Add bindings for it. Runtime detection for mono vs color variant of this sensor is feasible by reading a register, but it's not always desirable given the sensor needs to be powered on for it, potentially flashing a privacy LED or wasting precious boot time. The manufacturer or vendor knows which sensor variant they are putting on their board, so we define the compatible property to expect the (c",
-          "evidence_text": "<html><head><title>[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../21",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.69,
-      "android_hal_relevance": 0.69,
-      "ai_relevance": 0,
-      "technical_depth": 0.761,
-      "warnings": []
-    },
-    {
-      "id": "gemini-5df469ecaf01e066",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra",
-      "published_at": "2026-06-05",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra",
-          "evidence_text": "<html><head><title>[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../21",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "gemini-65018afcf008a9f4",
-      "url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
-      "title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Conor Dooley",
-      "published_at": "2026-06-05",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Conor Dooley",
-          "evidence_text": "<html><head><title>Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Conor Dooley</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
       "warnings": []
     }
   ]
