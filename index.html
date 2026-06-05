@@ -327,6 +327,19 @@
         .join('<br>');
     }
 
+    // Pick one weekly article image for the Latest card. Prefer an image that is NOT the homepage
+    // headline image (compared without query strings, which carry volatile params). When the only
+    // available image is the headline's, show it only for a single-article (headline) week.
+    function latestCardImage(entry, headlineImageUrl) {
+      const images = (entry && Array.isArray(entry.article_images) ? entry.article_images : []).filter(Boolean);
+      if (!images.length) return '';
+      const base = url => String(url || '').split('?')[0];
+      const headlineBase = base(headlineImageUrl);
+      const distinct = images.find(url => base(url) !== headlineBase);
+      if (distinct) return distinct;
+      return Number(entry && entry.article_count) <= 1 ? images[0] : '';
+    }
+
     function renderHeadlineMedia(headline) {
       const imageSrc = safeImageSrc(headline.image_url);
       const fallback = '<span class="headline-media-fallback" aria-hidden="true">이미지 없음</span>';
@@ -434,16 +447,35 @@
           latestEl.setAttribute('href', latestHref);
           latestEl.setAttribute('aria-label', `${latest.date || ''} ${latest.title || ''} 최신 뉴스레터 열기`.trim());
         }
+
+        let headlineImageUrl = '';
+        try {
+          const headlineResponse = await fetch('data/homepage-headline.json', { cache: 'no-store' });
+          if (headlineResponse.ok) {
+            const headlineState = await headlineResponse.json();
+            headlineImageUrl = (headlineState && headlineState.current_headline && headlineState.current_headline.image_url) || '';
+          }
+        } catch (_error) { /* best-effort: no headline image to dedupe the Latest card image against */ }
+
+        const latestImage = safeImageSrc(latestCardImage(latest, headlineImageUrl));
+        const latestMediaHtml = latestImage
+          ? `<figure class="latest-card-media"><img src="${escapeHtml(latestImage)}" alt="${escapeHtml(cardTitle(latest))}" loading="lazy" decoding="async" data-homepage-image-fallback></figure>`
+          : '';
         latestEl.classList.remove('loading-card');
+        latestEl.classList.toggle('has-latest-media', Boolean(latestImage));
         latestEl.innerHTML = `
-          <div class="card-meta">
-            <span class="issue-date">${escapeHtml(weekLabel(latest))}</span>
-            <span class="status-chip">Latest</span>
+          <div class="latest-card-body">
+            <div class="card-meta">
+              <span class="issue-date">${escapeHtml(weekLabel(latest))}</span>
+              <span class="status-chip">Latest</span>
+            </div>
+            <h3 class="card-title clamp-2">${escapeHtml(cardTitle(latest))}</h3>
+            <p class="card-summary latest-card-summary">${cardSummaryHtml(latest)}</p>
+            ${renderTagRow(latest.tags, 'latest-tags')}
           </div>
-          <h3 class="card-title clamp-2">${escapeHtml(cardTitle(latest))}</h3>
-          <p class="card-summary latest-card-summary">${cardSummaryHtml(latest)}</p>
-          ${renderTagRow(latest.tags, 'latest-tags')}
+          ${latestMediaHtml}
         `;
+        attachHomepageImageFallbacks(latestEl);
 
         if (archiveItems.length === 0) {
           archiveEl.innerHTML = '<p class="muted">이전 뉴스레터가 없습니다.</p>';

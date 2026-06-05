@@ -746,6 +746,36 @@ pre code {
   outline-offset: 4px;
 }
 
+/* Latest card with one weekly article image on the right; text column + compact media column. */
+.latest-newsletter-card.has-latest-media {
+  grid-template-columns: minmax(0, 1fr) clamp(120px, 30%, 220px);
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.latest-card-body {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.latest-card-media {
+  margin: 0;
+  align-self: stretch;
+  overflow: hidden;
+  border: 1px solid rgba(24, 128, 56, 0.22);
+  border-radius: var(--radius-md);
+  background: #07110b;
+}
+
+.latest-card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 132px;
+  object-fit: cover;
+}
+
 .headline-section[hidden] {
   display: none;
 }
@@ -2319,6 +2349,14 @@ pre code {
   .action-card {
     border-radius: var(--radius-md);
     padding: var(--card-padding-sm);
+  }
+
+  .latest-newsletter-card.has-latest-media {
+    grid-template-columns: 1fr;
+  }
+
+  .latest-card-media {
+    order: -1;
   }
 
   .newsletter-issue-page .wrap {
