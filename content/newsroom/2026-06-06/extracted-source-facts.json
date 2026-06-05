@@ -82,7 +82,7 @@
       "claims": [
         {
           "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"ar-x-mtfrom-en\"\n      dir=\"rtl\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"id-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
           "confidence": "medium"
         }
       ],
@@ -90,6 +90,29 @@
       "android_hal_relevance": 0.89,
       "ai_relevance": 0,
       "technical_depth": 0.829,
+      "warnings": []
+    },
+    {
+      "id": "gemini-6109dc2ba8ee8d64",
+      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
+      "title": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra",
+      "published_at": "2026-06-05",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra",
+          "evidence_text": "<html><head><title>[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.81,
       "warnings": []
     },
     {
@@ -116,6 +139,52 @@
       "warnings": []
     },
     {
+      "id": "ae62948e9a7cefbb",
+      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
+      "title": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678",
+      "published_at": "2026-06-05T15:26:40Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hi, This series adds dt-bindings and a V4L2 driver for Sony IMX678 camera sensor. More details about the sensor and features supported in the driver are in the relevant patches. Support for binning and cropping has been dropped from this series, in favor of implementing it with the new raw sensor model proposed by Sakari. [1] I still have a branch [2] with patches for binning and cropping using the old model of S_SELECTION/S_FMT on the source pad, fixing the comments I received on v3 of this ser",
+          "evidence_text": "<html><head><title>[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.806,
+      "warnings": []
+    },
+    {
+      "id": "6db21c7bc2a7451e",
+      "url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
+      "title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
+      "published_at": "2026-06-05T15:57:19Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[-- Attachment #1: Type: text/plain, Size: 1655 bytes --] On Fri, Jun 05, 2026 at 08:56:28PM +0530, Jai Luthra wrote: > Sony IMX678 is an 8.4 Megapixel (3856x2180) CMOS sensor, that can output > pixels over MIPI CSI-2 bus. Add bindings for it. > > Runtime detection for mono vs color variant of this sensor is feasible > by reading a register, but it's not always desirable given the sensor > needs to be powered on for it, potentially flashing a privacy LED or > wasting precious boot time. > > The",
+          "evidence_text": "<html><head><title>Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Conor Dooley</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.785,
+      "warnings": []
+    },
+    {
       "id": "gemini-bb0e15b6742fce01",
       "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
@@ -139,9 +208,32 @@
       "warnings": []
     },
     {
-      "id": "gemini-f5ad117f0c167686",
-      "url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
-      "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley",
+      "id": "18550920b3f33abc",
+      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
+      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
+      "published_at": "2026-06-05T15:26:45Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Sony IMX678 is an 8.4 Megapixel (3856x2180) CMOS sensor, that can output pixels over MIPI CSI-2 bus. Add bindings for it. Runtime detection for mono vs color variant of this sensor is feasible by reading a register, but it's not always desirable given the sensor needs to be powered on for it, potentially flashing a privacy LED or wasting precious boot time. The manufacturer or vendor knows which sensor variant they are putting on their board, so we define the compatible property to expect the (c",
+          "evidence_text": "<html><head><title>[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../21",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0,
+      "technical_depth": 0.761,
+      "warnings": []
+    },
+    {
+      "id": "gemini-5df469ecaf01e066",
+      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
+      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra",
       "published_at": "2026-06-05",
       "source_type": "unknown",
       "source_fetch_used": true,
@@ -150,8 +242,31 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley",
-          "evidence_text": "<html><head><title>Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nh",
+          "claim": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra",
+          "evidence_text": "<html><head><title>[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../21",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-65018afcf008a9f4",
+      "url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
+      "title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Conor Dooley",
+      "published_at": "2026-06-05",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Conor Dooley",
+          "evidence_text": "<html><head><title>Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Conor Dooley</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref",
           "confidence": "medium"
         }
       ],
@@ -159,121 +274,6 @@
       "android_hal_relevance": 0.7,
       "ai_relevance": 0,
       "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "0aae5d6fff3e161d",
-      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "published_at": "Thu, 30 Apr 2026 22:36:23 +0000",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is still experimental and must be enabled by&nbsp; -fmodules . Several C++26 features have been implemented: P2996R13 , Reflection ( PR120775 , enabled by&nbsp; -std=c++26 -freflection ) P3394R4 , Annotations for Reflection P3293R3 , Splicing a base class subobject P3096R",
-          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.57,
-      "android_hal_relevance": 0.57,
-      "ai_relevance": 0,
-      "technical_depth": 0.638,
-      "warnings": []
-    },
-    {
-      "id": "ecd2f14ba3d8477a",
-      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-      "published_at": "Tue, 28 Apr 2026 22:25:57 +0000",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Glaze is a high-performance C++23 serialization library with compile-time reflection. It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more From the article: Glaze now supports C++26 reflection with experimental GCC and Clang compilers. GCC 16 will soon be released with this support. When enabled, Glaze replaces the traditional&nbsp; __PRETTY_FUNCTION__ &nbsp;parsing an",
-          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-57.png\">\n    <link rel=\"ap",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.51,
-      "android_hal_relevance": 0.51,
-      "ai_relevance": 0,
-      "technical_depth": 0.614,
-      "warnings": []
-    },
-    {
-      "id": "gemini-8635e5e9a3557c0d",
-      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
-      "published_at": "",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
-          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.5,
-      "warnings": []
-    },
-    {
-      "id": "gemini-a8865e6c6b3d243f",
-      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
-      "published_at": "",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
-          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-57.png\">\n    <link rel=\"ap",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.455,
-      "warnings": []
-    },
-    {
-      "id": "8edd18929c9fbdd9",
-      "url": "https://goo.gle/AdaptiveApps_IO26",
-      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-      "published_at": "Tue, 19 May 2026 13:00:00 +0000",
-      "source_type": "roundup_child",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 1,
-      "android_hal_relevance": 1,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.893,
       "warnings": []
     }
   ]
