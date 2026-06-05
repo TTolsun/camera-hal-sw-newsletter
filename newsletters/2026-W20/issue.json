@@ -11,14 +11,16 @@
       "category": "주간 다이제스트",
       "headline": "Camera HAL / SW Newsletter - 2026-05-15",
       "what_changed": "이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+      "selectedImage": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&amp;image=thelio_gcc16_1",
+      "imageSource": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
       "public_article": {
         "headline": "Camera HAL / SW Newsletter - 2026-05-15",
-        "lead": "이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+        "lead": "Camera HAL / SW Newsletter - 2026-05-15",
         "body_paragraphs": [
           "이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
-          "2026-05-15 일별 이슈를 주간 뉴스레터로 묶었습니다. 전체 내용과 출처는 일별 이슈 페이지에서 확인하세요."
+          "이 항목은 2026-05-15 일별 이슈입니다. 기사별 Camera HAL/Driver 관점 분석과 전체 출처·이미지는 일별 이슈 페이지에서 확인하세요."
         ],
-        "camera_hal_takeaway": "주간 단위로 묶인 Camera HAL 관련 일별 이슈입니다.",
+        "camera_hal_takeaway": "이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
         "reader_checkpoints": [
           "2026-05-15 일별 이슈 전체를 확인하세요."
         ],
@@ -48,7 +50,8 @@
             "url": "newsletters/2026-05-15/index.html",
             "source_role": "reference"
           }
-        ]
+        ],
+        "image": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&amp;image=thelio_gcc16_1"
       },
       "sources": [
         {
@@ -82,14 +85,16 @@
       "category": "주간 다이제스트",
       "headline": "Camera HAL / SW Newsletter - 2026-05-12",
       "what_changed": "이번 2026-05-12호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
+      "imageSource": "newsletters/2026-05-12/index.html",
       "public_article": {
         "headline": "Camera HAL / SW Newsletter - 2026-05-12",
-        "lead": "이번 2026-05-12호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+        "lead": "Camera HAL / SW Newsletter - 2026-05-12",
         "body_paragraphs": [
           "이번 2026-05-12호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
-          "2026-05-12 일별 이슈를 주간 뉴스레터로 묶었습니다. 전체 내용과 출처는 일별 이슈 페이지에서 확인하세요."
+          "이 항목은 2026-05-12 일별 이슈입니다. 기사별 Camera HAL/Driver 관점 분석과 전체 출처·이미지는 일별 이슈 페이지에서 확인하세요."
         ],
-        "camera_hal_takeaway": "주간 단위로 묶인 Camera HAL 관련 일별 이슈입니다.",
+        "camera_hal_takeaway": "이번 2026-05-12호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
         "reader_checkpoints": [
           "2026-05-12 일별 이슈 전체를 확인하세요."
         ],
@@ -97,9 +102,10 @@
           {
             "title": "2026-05-12 일별 이슈",
             "url": "newsletters/2026-05-12/index.html",
-            "source_role": "primary"
+            "source_role": "reference"
           }
-        ]
+        ],
+        "image": "https://developer.android.com/static/images/social/android-developers.png"
       },
       "sources": [
         {
@@ -116,14 +122,16 @@
       "category": "주간 다이제스트",
       "headline": "Camera HAL / SW Newsletter - 2026-05-11",
       "what_changed": "이번 2026-05-11호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
+      "imageSource": "newsletters/2026-05-11/index.html",
       "public_article": {
         "headline": "Camera HAL / SW Newsletter - 2026-05-11",
-        "lead": "이번 2026-05-11호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+        "lead": "Camera HAL / SW Newsletter - 2026-05-11",
         "body_paragraphs": [
           "이번 2026-05-11호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
-          "2026-05-11 일별 이슈를 주간 뉴스레터로 묶었습니다. 전체 내용과 출처는 일별 이슈 페이지에서 확인하세요."
+          "이 항목은 2026-05-11 일별 이슈입니다. 기사별 Camera HAL/Driver 관점 분석과 전체 출처·이미지는 일별 이슈 페이지에서 확인하세요."
         ],
-        "camera_hal_takeaway": "주간 단위로 묶인 Camera HAL 관련 일별 이슈입니다.",
+        "camera_hal_takeaway": "이번 2026-05-11호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
         "reader_checkpoints": [
           "2026-05-11 일별 이슈 전체를 확인하세요."
         ],
@@ -131,9 +139,10 @@
           {
             "title": "2026-05-11 일별 이슈",
             "url": "newsletters/2026-05-11/index.html",
-            "source_role": "primary"
+            "source_role": "reference"
           }
-        ]
+        ],
+        "image": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419"
       },
       "sources": [
         {
