@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const {
   LIMITATION_VISIBILITY,
   articleSectionSummary
@@ -12,10 +13,6 @@ const ARTICLE_STRUCTURE_CONTRACT_ROW_FIELDS = Object.freeze([
   'actionability',
   'limitations'
 ]);
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function objectValue(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value) ? value : {};

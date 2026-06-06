@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const crypto = require('crypto');
 const {
   FETCH_STATUSES,
@@ -38,10 +39,6 @@ const NON_EVIDENCE_ROLES = new Set([
   'blocked_or_deferred',
   'secondary_context'
 ]);
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();

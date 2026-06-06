@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const dns = require('dns');
 const fs = require('fs');
 const net = require('net');
@@ -61,10 +62,6 @@ class SeedEvidenceError extends Error {
     this.name = 'SeedEvidenceError';
     this.details = details;
   }
-}
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
 }
 
 function compact(value, max = 220) {

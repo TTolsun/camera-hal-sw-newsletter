@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const ARTICLE_SECTION_REQUIRED_KEYS = Object.freeze([
   'verified_facts',
   'background_context',
@@ -48,10 +49,6 @@ const EMPTY_NORMALIZED_ARTICLE_SECTIONS = Object.freeze({
   watch_items: Object.freeze([]),
   do_not_claim: Object.freeze([])
 });
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   if (Array.isArray(value)) return value.map(text).filter(Boolean).join('\n');

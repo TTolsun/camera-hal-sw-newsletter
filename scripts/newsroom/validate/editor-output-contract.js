@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const path = require('path');
 const { writeJson } = require('../common/common');
 const {
@@ -84,10 +85,6 @@ const REPAIRABLE_SEMANTIC_FIELDS = new Set([
   'sections.blocked_context',
   'sections.claims'
 ]);
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function cloneJson(value) {
   if (value === undefined) return undefined;

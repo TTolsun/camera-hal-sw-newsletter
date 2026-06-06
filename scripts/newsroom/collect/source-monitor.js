@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -35,10 +36,6 @@ const CANDIDATE_BLOCKED_EVENT_TYPES = new Set(['page_removed']);
 const SOURCE_MONITOR_REGISTRY_REL_PATH = 'data/source-monitor-registry.json';
 const SOURCE_SNAPSHOT_ROOT = path.join('data', 'source-snapshots');
 const SOURCE_EVENTS_ROOT = path.join('content', 'source-events');
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value || '').trim();

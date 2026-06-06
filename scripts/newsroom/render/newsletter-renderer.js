@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const {
   renderCandidateSelectionDiagnostics
 } = require('../generate/selection-diagnostics');
@@ -15,10 +16,6 @@ const {
 const {
   renderReleaseQaInventorySection
 } = require('../common/review-artifact-inventory');
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function escapeHtml(value) {
   return String(value ?? '')

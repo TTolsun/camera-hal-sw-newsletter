@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const REPORTER_SELECTION_NOTE =
   'Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.';
 
@@ -7,10 +8,6 @@ const {
   candidateGroupKey,
   groupCoverageSummary
 } = require('../common/article-groups');
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value || '').trim();

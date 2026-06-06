@@ -1,7 +1,4 @@
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
-
+const { ensureArray } = require('./value-coercion');
 function text(value) {
   if (Array.isArray(value)) return value.map(text).join(' ');
   if (value && typeof value === 'object') return Object.values(value).map(text).join(' ');

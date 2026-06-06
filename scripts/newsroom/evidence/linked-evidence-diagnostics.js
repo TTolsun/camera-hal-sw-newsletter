@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const {
@@ -32,10 +33,6 @@ const {
 
 const SCHEMA_VERSION = 1;
 const TOP_IDENTIFIER_LIMIT = 8;
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();

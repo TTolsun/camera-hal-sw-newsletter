@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -29,10 +30,6 @@ const DEFAULT_STATUS = {
   stale_claim_removed_count: 0,
   stale_claim_hard_failure_count: 0
 };
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function hasOwn(value, key) {
   return Object.prototype.hasOwnProperty.call(value || {}, key);
@@ -223,16 +220,13 @@ function readPublishStatusInputs(options = {}) {
   };
 }
 
-function resolvePublishStatus(options = {}) {
-  const inputs = options.inputs || readPublishStatusInputs(options);
-  const status = inputs.statusInput.status;
-  const rawStatus = inputs.statusInput.rawStatus;
-  const consistencyErrors = [];
-
+// artifact 읽기 단계의 일관성 오류만 수집한다.
+function collectArtifactConsistencyErrors(inputs) {
+  const errors = [];
   if (inputs.statusInput.error) {
-    consistencyErrors.push(`Could not read .tmp/newsletter-generation-status.json: ${inputs.statusInput.error.message}`);
+    errors.push(`Could not read .tmp/newsletter-generation-status.json: ${inputs.statusInput.error.message}`);
   }
-  for (const [name, artifact] of Object.entries({
+  const newsroomArtifactsByName = {
     'editor-draft.json': inputs.editor,
     'quality-report.json': inputs.quality,
     'fact-check-report.json': inputs.factCheck,
@@ -240,12 +234,17 @@ function resolvePublishStatus(options = {}) {
     'generation-status.json': inputs.generationStatus,
     'stale-claim-report.json': inputs.staleClaim,
     'shortlisted-candidates.json': inputs.shortlist
-  })) {
+  };
+  for (const [name, artifact] of Object.entries(newsroomArtifactsByName)) {
     if (artifact.error) {
-      consistencyErrors.push(`Could not read content/newsroom/${inputs.date}/${name}: ${artifact.error.message}`);
+      errors.push(`Could not read content/newsroom/${inputs.date}/${name}: ${artifact.error.message}`);
     }
   }
+  return errors;
+}
 
+// FAILED_REPAIR_REVIEWABLE 특수 상태의 검토 가능 여부와 누락 artifact 오류를 한곳에서 판정한다.
+function resolveReviewableRepairState(status, inputs) {
   const failedRepairReviewableStatus = status.status === STATUS_FAILED_REPAIR_REVIEWABLE;
   const repairReviewArtifacts = {
     'editor-draft.json': inputs.editor,
@@ -254,23 +253,30 @@ function resolvePublishStatus(options = {}) {
     'repair-failure.json': inputs.repairFailure,
     'generation-status.json': inputs.generationStatus
   };
+  const errors = [];
   if (failedRepairReviewableStatus) {
     for (const [name, artifact] of Object.entries(repairReviewArtifacts)) {
       if (!artifact.exists) {
-        consistencyErrors.push(`Missing reviewable repair artifact: content/newsroom/${inputs.date}/${name}`);
+        errors.push(`Missing reviewable repair artifact: content/newsroom/${inputs.date}/${name}`);
       }
     }
   }
   const reviewableRepairFailure = failedRepairReviewableStatus &&
     Object.values(repairReviewArtifacts).every(artifact => artifact.exists && !artifact.error);
+  return { failedRepairReviewableStatus, reviewableRepairFailure, errors };
+}
 
-  const factCheck = factCheckSummary(status, inputs.factCheck.value);
-  const quality = qualitySummary(status, inputs.quality.value);
-  const staleClaim = staleClaimSummary(status, inputs.staleClaim.value);
-  const selection = selectionSummary(status, inputs.shortlist.value);
-  const validateOutcome = resolveValidateOutcome(status, options);
-  const explicitStatusInput = inputs.statusInput.sourcePath === null;
-  const artifactFinalPublishReadyConditions = {
+// artifact 수준 발행 준비 정책: 조건 맵과 AND 판정을 함께 반환한다.
+function computeArtifactFinalPublishReady({
+  factCheck,
+  quality,
+  staleClaim,
+  selection,
+  inputs,
+  explicitStatusInput,
+  failedRepairReviewableStatus
+}) {
+  const conditions = {
     quality_report_present: explicitStatusInput || (inputs.quality.exists && !inputs.quality.error),
     fact_check_report_present: explicitStatusInput || (inputs.factCheck.exists && !inputs.factCheck.error),
     stale_claim_report_present: explicitStatusInput || (inputs.staleClaim.exists && !inputs.staleClaim.error),
@@ -284,15 +290,23 @@ function resolvePublishStatus(options = {}) {
     stale_claim_status_not_needs_fix: staleClaim.status !== 'NEEDS_FIX',
     stale_claim_hard_failure_count_zero: staleClaim.hardFailureCount === 0
   };
-  const artifactFinalPublishReady = !failedRepairReviewableStatus &&
-    Object.values(artifactFinalPublishReadyConditions).every(Boolean);
+  const ready = !failedRepairReviewableStatus && Object.values(conditions).every(Boolean);
+  return { conditions, ready };
+}
+
+// 최종 발행 준비: artifact 준비 상태에 site 검증 결과를 결합한다.
+function computeFinalPublishReady({ artifactFinalPublishReady, validateOutcome, failedRepairReviewableStatus }) {
   const validationPassed = validateOutcome === 'success';
-  const finalPublishReadyConditions = {
+  const conditions = {
     artifact_final_publish_ready: artifactFinalPublishReady,
     validate_outcome_success: validationPassed
   };
-  const finalPublishReady = !failedRepairReviewableStatus &&
-    Object.values(finalPublishReadyConditions).every(Boolean);
+  const ready = !failedRepairReviewableStatus && Object.values(conditions).every(Boolean);
+  return { conditions, ready, validationPassed };
+}
+
+// status.final_publish_ready 플래그가 재계산 결과와 불일치하는지 감지한다.
+function detectFinalPublishReadyMismatch({ rawStatus, status, artifactFinalPublishReady, failedRepairReviewableStatus }) {
   const statusFinalPublishReady = hasOwn(rawStatus, 'final_publish_ready')
     ? rawStatus.final_publish_ready
     : undefined;
@@ -302,18 +316,39 @@ function resolvePublishStatus(options = {}) {
     artifactFinalPublishReady === true &&
     status.validate_ok === false;
 
+  const errors = [];
   if (
     typeof statusFinalPublishReady === 'boolean' &&
     statusFinalPublishReady !== artifactFinalPublishReady &&
     !validationOnlyStatusMismatch &&
     !failedRepairReviewableStatus
   ) {
-    consistencyErrors.push(
+    errors.push(
       `status.final_publish_ready=${String(statusFinalPublishReady)} but artifact_final_publish_ready=${String(artifactFinalPublishReady)}`
     );
   }
+  return { statusFinalPublishReady, errors };
+}
 
-  const resolvedStatus = {
+// 결정된 값들로 공개 status 객체를 조립한다(정책 계산 없음).
+function buildResolvedStatus({
+  status,
+  factCheck,
+  quality,
+  staleClaim,
+  selection,
+  validateOutcome,
+  validationPassed,
+  artifactFinalPublishReady,
+  finalPublishReady,
+  statusFinalPublishReady,
+  failedRepairReviewableStatus,
+  reviewableRepairFailure,
+  artifactFinalPublishReadyConditions,
+  finalPublishReadyConditions,
+  consistencyErrors
+}) {
+  return {
     ...status,
     status: displayStatus(status, finalPublishReady, consistencyErrors, reviewableRepairFailure),
     generation_status: status.status || 'UNKNOWN',
@@ -350,6 +385,67 @@ function resolvePublishStatus(options = {}) {
     final_publish_ready_conditions: finalPublishReadyConditions,
     consistency_errors: consistencyErrors
   };
+}
+
+function resolvePublishStatus(options = {}) {
+  const inputs = options.inputs || readPublishStatusInputs(options);
+  const status = inputs.statusInput.status;
+  const rawStatus = inputs.statusInput.rawStatus;
+
+  const artifactConsistencyErrors = collectArtifactConsistencyErrors(inputs);
+  const reviewableRepair = resolveReviewableRepairState(status, inputs);
+  const failedRepairReviewableStatus = reviewableRepair.failedRepairReviewableStatus;
+
+  const factCheck = factCheckSummary(status, inputs.factCheck.value);
+  const quality = qualitySummary(status, inputs.quality.value);
+  const staleClaim = staleClaimSummary(status, inputs.staleClaim.value);
+  const selection = selectionSummary(status, inputs.shortlist.value);
+  const validateOutcome = resolveValidateOutcome(status, options);
+  const explicitStatusInput = inputs.statusInput.sourcePath === null;
+
+  const artifactReadiness = computeArtifactFinalPublishReady({
+    factCheck,
+    quality,
+    staleClaim,
+    selection,
+    inputs,
+    explicitStatusInput,
+    failedRepairReviewableStatus
+  });
+  const finalReadiness = computeFinalPublishReady({
+    artifactFinalPublishReady: artifactReadiness.ready,
+    validateOutcome,
+    failedRepairReviewableStatus
+  });
+  const mismatch = detectFinalPublishReadyMismatch({
+    rawStatus,
+    status,
+    artifactFinalPublishReady: artifactReadiness.ready,
+    failedRepairReviewableStatus
+  });
+
+  // 오류 발생 순서대로 합친다: artifact 읽기 -> 검토 repair 누락 -> final 불일치.
+  const consistencyErrors = artifactConsistencyErrors
+    .concat(reviewableRepair.errors)
+    .concat(mismatch.errors);
+
+  const resolvedStatus = buildResolvedStatus({
+    status,
+    factCheck,
+    quality,
+    staleClaim,
+    selection,
+    validateOutcome,
+    validationPassed: finalReadiness.validationPassed,
+    artifactFinalPublishReady: artifactReadiness.ready,
+    finalPublishReady: finalReadiness.ready,
+    statusFinalPublishReady: mismatch.statusFinalPublishReady,
+    failedRepairReviewableStatus,
+    reviewableRepairFailure: reviewableRepair.reviewableRepairFailure,
+    artifactFinalPublishReadyConditions: artifactReadiness.conditions,
+    finalPublishReadyConditions: finalReadiness.conditions,
+    consistencyErrors
+  });
 
   return {
     root: inputs.root,
@@ -363,11 +459,11 @@ function resolvePublishStatus(options = {}) {
     staleClaim,
     selection,
     validateOutcome,
-    artifactFinalPublishReady,
-    finalPublishReady,
-    validationPassed,
-    artifactFinalPublishReadyConditions,
-    finalPublishReadyConditions,
+    artifactFinalPublishReady: artifactReadiness.ready,
+    finalPublishReady: finalReadiness.ready,
+    validationPassed: finalReadiness.validationPassed,
+    artifactFinalPublishReadyConditions: artifactReadiness.conditions,
+    finalPublishReadyConditions: finalReadiness.conditions,
     consistencyErrors
   };
 }

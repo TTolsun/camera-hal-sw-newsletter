@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -25,10 +26,6 @@ const DECISION_REASONS = Object.freeze({
 const HEADLINE_STATE_REMEDIATION = 'Run newsletter generation to refresh or clear homepage headline state.';
 const HEADLINE_POLICY_SNAPSHOT_REMEDIATION = 'Re-run generation or update data/homepage-headline.json policy snapshot.';
 const REMOVED_DUE_TO_HEADLINE_INCLUSION_REASON = 'max_article_count_after_headline_injection';
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value || '').trim();

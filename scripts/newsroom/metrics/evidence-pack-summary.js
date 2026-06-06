@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -106,10 +107,6 @@ function artifactSpecs(date) {
       relPath: newsroomRelPath(date, 'stale-claim-report.json')
     }
   };
-}
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
 }
 
 function objectValue(value) {

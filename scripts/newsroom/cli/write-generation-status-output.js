@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -93,10 +94,6 @@ const OUTPUT_FIELDS = [
   'stale_claim_removed_count',
   'stale_claim_hard_failure_count'
 ];
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function readStatus(statusPath = path.join(process.cwd(), '.tmp', 'newsletter-generation-status.json')) {
   try {

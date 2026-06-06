@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const ANDROID_NATIVE_TOOLING_GROUP_KEY = 'android_native_tooling_workflow';
 const NATIVE_TOOLING_WORKFLOW_TYPE = 'native_tooling_workflow';
 
@@ -28,10 +29,6 @@ const FORBIDDEN_SOURCE_READY_NATIVE_DEMOTION_REASONS = Object.freeze([
   'supporting_only',
   'not_primary_camera_stack'
 ]);
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value || '').trim();

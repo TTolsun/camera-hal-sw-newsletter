@@ -18,10 +18,6 @@ const GENERIC_CHECKPOINT_PATTERNS = Object.freeze([
   /Publication 전에/i
 ]);
 
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
-
 function readText(filePath) {
   return fs.readFileSync(filePath, 'utf8');
 }

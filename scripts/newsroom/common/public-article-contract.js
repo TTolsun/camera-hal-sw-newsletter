@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const PUBLIC_ARTICLE_BASE_REQUIRED_KEYS = Object.freeze([
   'headline',
   'lead',
@@ -86,10 +87,6 @@ const {
 } = require('./source-url-key');
 
 const NO_IMMEDIATE_ACTION_TEXT = '즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.';
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   if (Array.isArray(value)) return value.map(text).filter(Boolean).join(' ');

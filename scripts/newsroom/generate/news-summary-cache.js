@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -5,10 +6,6 @@ const { normalizeUrl, normalizedUrlHash } = require('./newsroom-selection');
 
 const CACHE_SCHEMA_VERSION = 2;
 const DEFAULT_CACHE_DIR = path.join(process.cwd(), 'cache', 'news-summary');
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value || '').trim();

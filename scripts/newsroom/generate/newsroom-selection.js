@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const {
   normalizeShortlistReport
 } = require('./selection-diagnostics');
@@ -84,10 +85,6 @@ const {
 const { resolvePublishMode } = require('./publish-mode');
 
 const publishReadyCompositionPolicy = getPublishReadyCompositionPolicy();
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value || '').trim();

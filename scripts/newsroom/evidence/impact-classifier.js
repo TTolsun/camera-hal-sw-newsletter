@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const { FETCH_STATUSES } = require('./linked-evidence-types');
 
 const IMPACT_TYPES = Object.freeze({
@@ -31,10 +32,6 @@ const NON_CONTENT_FETCH_STATUSES = new Set([
 
 function text(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
-}
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
 }
 
 function bool(value, fallback = false) {

@@ -9,6 +9,7 @@
 // Daily output and data/newsletters.json are never touched. Without an injected LLM merge resolver
 // this falls back to the deterministic behavior (skip exact duplicates, keep the rest).
 
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -16,10 +17,6 @@ const { buildWeeklyNewsletterPage } = require('./weekly-newsletter-page');
 const { weeklyKeyForDate } = require('../common/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../common/weekly-article-limits');
 const { resolveWeeklyArticles } = require('../generate/weekly-duplicate-merge');
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 // Browser-safe (https) image for a weekly article section, used to show one article image on the
 // homepage Latest card. Returns '' when the section has no usable https image.

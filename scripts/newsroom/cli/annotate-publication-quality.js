@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -32,10 +33,6 @@ function usage() {
     '- --latest permits fallback to the latest public issue only when no changed public issue date is detected.',
     '- With no explicit target and no changed public issue date, the command fails instead of silently falling back.'
   ].join('\n');
-}
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
 }
 
 function toNumber(value) {

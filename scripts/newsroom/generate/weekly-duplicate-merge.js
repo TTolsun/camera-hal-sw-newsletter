@@ -8,14 +8,11 @@
 // deterministic default keeps near-duplicates (append) and only skips exact duplicates, matching the
 // #488 upsert behavior. The LLM and validator are injected so this module stays pure and testable.
 
+const { ensureArray } = require('../common/value-coercion');
 const { articleIdentityKey } = require('../common/article-identity');
 const { normalizeTitle, titleSimilarity } = require('./selection-normalizers');
 
 const NEAR_DUPLICATE_TITLE_SIMILARITY = 0.82;
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function sectionSourceUrl(section = {}) {
   return section.source_candidate_url ||

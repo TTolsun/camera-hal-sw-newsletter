@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
@@ -92,10 +93,6 @@ const REVIEW_ONLY_LEDGER_ISSUE =
   'review-only public artifact, editor review required before publish confidence; no historical provenance backfill required';
 const PUBLISH_READY_LEDGER_ISSUE =
   'current generated public artifact; no historical provenance backfill required';
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function toRepoPath(value) {
   return String(value || '').replace(/\\/g, '/').replace(/^\.\//, '');

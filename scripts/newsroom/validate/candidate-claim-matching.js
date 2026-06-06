@@ -1,5 +1,6 @@
 'use strict';
 
+const { ensureArray } = require('../common/value-coercion');
 const {
   normalizeUrl,
   normalizedUrlHash
@@ -9,10 +10,6 @@ function text(value) {
   if (Array.isArray(value)) return value.map(text).join(' ');
   if (value && typeof value === 'object') return Object.values(value).map(text).join(' ');
   return String(value || '').trim();
-}
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
 }
 
 function normalizeForMatch(value) {

@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const fs = require('fs');
 const path = require('path');
 const {
@@ -24,10 +25,6 @@ const DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS = Object.freeze([
 ]);
 const repoRoot = path.resolve(__dirname, '..', '..', '..');
 const policyPath = path.join(repoRoot, POLICY_REL_PATH);
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function unique(values) {
   return [...new Set(ensureArray(values))];

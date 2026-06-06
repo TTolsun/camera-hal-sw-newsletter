@@ -13,6 +13,7 @@
 // inferHalImpactAxes() inference, so this classifier adds a HAL-reader-facing
 // signal layer without forking a second axis vocabulary.
 
+const { ensureArray } = require('./value-coercion');
 const {
   HAL_IMPACT_AXES,
   inferHalImpactAxes
@@ -81,10 +82,6 @@ const AXIS_TO_CAMERA_PATH = Object.freeze({
   framework_hal_contract: 'capture',
   camerax_app_compatibility: 'capture'
 });
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function normalizeEnum(value) {
   return String(value === undefined || value === null ? '' : value)

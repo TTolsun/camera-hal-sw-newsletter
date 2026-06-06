@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const {
   BUCKETS,
   classifyAospCameraStackCandidate
@@ -35,10 +36,6 @@ const RAW_ARTIFACT_PATTERNS = Object.freeze([
     pattern: /\.\.\.\s*vers\b|\bvers\s*$/gi
   }
 ]);
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   if (Array.isArray(value)) return value.map(text).filter(Boolean).join(' ');

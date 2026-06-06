@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const {
   isFinalSelected
 } = require('../generate/selection-diagnostics');
@@ -104,10 +105,6 @@ const {
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;
 const MIN_MAIN_ARTICLES = articlePolicy.mainArticleCount.min;
 const MAX_MAIN_ARTICLES = articlePolicy.mainArticleCount.max;
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
-
 function text(value) {
   if (Array.isArray(value)) return value.map(text).join(' ');
   if (value && typeof value === 'object') return Object.values(value).map(text).join(' ');
