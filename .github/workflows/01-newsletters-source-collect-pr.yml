@@ -98,6 +98,7 @@ jobs:
         run: npm run test
 
       - name: Collect RAW news candidates
+        id: collect
         run: npm run collect
 
       - name: Resolve RAW metadata
@@ -201,3 +202,15 @@ jobs:
             data/source-snapshots/**
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Write workflow run summary
+        if: always()
+        continue-on-error: true
+        env:
+          SUMMARY_PROFILE: source-collect
+          OUTCOME_COLLECT: ${{ steps.collect.outcome }}
+          NEWSLETTER_DATE: ${{ steps.raw-meta.outputs.date }}
+          PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          DEBUG_ARTIFACT_NAME: newsroom-raw-debug-${{ github.run_id }}
+        run: node scripts/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"
