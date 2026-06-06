@@ -4,265 +4,186 @@
   "newsletter_date": "2026-06-06",
   "proposals": [
     {
-      "proposal_id": "google-io-2026-media-pipeline",
-      "topic_gap": "Google I/O 2026 announcements related to Android media pipeline enhancements, potentially impacting camera output processing, recording, or playback paths.",
-      "source_family": "android-developers-blog",
+      "proposal_id": "discovery-2026-06-06-001",
+      "topic_gap": "Google I/O '26에서 발표된 Android 미디어 파이프라인 및 카메라 관련 최신 업데이트를 다룹니다. 특히 Media3 릴리스와 관련된 변경 사항에 초점을 맞춥니다.",
+      "source_family": "android-media",
       "allowed_domains": [
         "youtube.com",
+        "developer.android.com",
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
-        "Android media pipeline",
-        "CameraX",
-        "Media3",
-        "MediaCodec",
+        "Android Media3",
+        "Google I/O 2026 media",
+        "Android camera pipeline",
         "MediaRecorder",
-        "Google I/O 2026 camera"
+        "MediaCodec"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "Mentions of new APIs or features for camera output handling (e.g., Media3, MediaCodec, MediaRecorder).",
-        "Improvements in video processing, encoding, or decoding relevant to camera-generated content.",
-        "Discussions on performance or efficiency gains for media pipelines involving camera streams."
+        "Media3의 새로운 기능 또는 개선 사항",
+        "CameraX와 Media3의 통합 또는 상호 운용성 업데이트",
+        "카메라 출력 처리 또는 미디어 녹화 관련 성능 향상"
       ],
       "risk_notes": [
-        "The YouTube playlist title is broad ('Supercharge your media pipeline'). Need to verify specific talks for camera-output relevance.",
-        "May contain generic media playback or streaming topics not relevant to camera HAL SW."
+        "YouTube 재생목록은 광범위한 주제를 다룰 수 있으므로, 카메라 HAL SW와 직접적인 관련이 있는 세션 선별이 필요합니다."
       ]
     },
     {
-      "proposal_id": "google-io-2026-jetpack-compose-cross-device",
-      "topic_gap": "Google I/O 2026 announcements regarding Jetpack Compose for seamless Android experiences across devices, specifically looking for implications on camera UI/UX or cross-device camera output sharing/display.",
-      "source_family": "android-developers-blog",
+      "proposal_id": "discovery-2026-06-06-002",
+      "topic_gap": "Jetpack Compose를 사용한 크로스 디바이스 Android 경험 구축에 대한 Google I/O '26 업데이트가 카메라 출력/미디어 액세스에 미치는 영향을 탐색합니다.",
+      "source_family": "android",
       "allowed_domains": [
         "goo.gle",
+        "developer.android.com",
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
         "Jetpack Compose camera",
+        "Android adaptive apps media",
         "cross-device camera",
-        "adaptive apps camera",
-        "Google I/O 2026 camera UI"
+        "Google I/O 2026 Compose"
       ],
       "candidate_urls": [
         "https://goo.gle/AdaptiveApps_IO26"
       ],
       "expected_evidence": [
-        "New Compose APIs or guidelines for camera preview integration.",
-        "Improvements in handling camera output across different form factors (foldables, tablets, Wear OS).",
-        "Discussions on shared camera experiences or multi-device camera control."
+        "Jetpack Compose를 사용한 카메라 미리보기/표면 처리 개선",
+        "크로스 디바이스 환경에서 카메라 출력 공유 또는 액세스에 대한 업데이트",
+        "미디어 관련 UI 컴포넌트의 Compose 지원 강화"
       ],
       "risk_notes": [
-        "The title is generic ('Building seamless Android experiences across devices with Jetpack Compose'). Need to verify specific camera-related content.",
-        "May focus on general UI/UX without direct impact on camera HAL or media pipeline."
+        "일반적인 UI/UX 업데이트일 수 있으므로, 카메라 출력 또는 미디어 파이프라인에 직접적인 영향을 미치는 내용을 선별해야 합니다."
       ]
     },
     {
-      "proposal_id": "camerax-1-6-0-release",
-      "topic_gap": "New features, bug fixes, or behavioral changes introduced in CameraX 1.6.0 that impact camera application development, performance, or interaction with the Camera HAL.",
-      "source_family": "camerax-release-notes",
+      "proposal_id": "discovery-2026-06-06-003",
+      "topic_gap": "CameraX 1.6.0 및 1.7.0-alpha01 릴리스에 포함된 새로운 기능, 개선 사항 및 버그 수정 사항을 검토합니다.",
+      "source_family": "camera-api",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
         "CameraX 1.6.0",
-        "AndroidX Camera release",
+        "CameraX 1.7.0-alpha01",
+        "AndroidX camera release notes",
         "CameraX new features"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
-      ],
-      "expected_evidence": [
-        "Details on new CameraX APIs, use cases, or extensions.",
-        "Improvements in camera initialization, preview, image capture, or video recording.",
-        "Bug fixes or performance optimizations related to camera operations.",
-        "Compatibility changes or new device support."
-      ],
-      "risk_notes": [
-        "Release notes can be very technical; need to extract key actionable insights for the newsletter."
-      ]
-    },
-    {
-      "proposal_id": "camerax-1-7-0-alpha01-release",
-      "topic_gap": "Early insights into upcoming features or significant changes in CameraX 1.7.0-alpha01, providing a glimpse into the future direction of CameraX development.",
-      "source_family": "camerax-release-notes",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
-      "search_keywords": [
-        "CameraX 1.7.0-alpha01",
-        "AndroidX Camera alpha",
-        "CameraX upcoming features"
-      ],
-      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
       ],
       "expected_evidence": [
-        "Descriptions of new experimental APIs or functionalities.",
-        "Indications of architectural changes or major refactorings.",
-        "Early feedback opportunities or known issues."
+        "새로운 CameraX API 또는 기능",
+        "성능 최적화 또는 안정성 개선",
+        "특정 카메라 기능(예: HDR, 확장 범위)에 대한 지원 업데이트",
+        "버그 수정 및 알려진 문제"
       ],
       "risk_notes": [
-        "Alpha releases might contain unstable features or features that could be removed before stable release.",
-        "Information might be preliminary and subject to change."
+        "알파 릴리스는 변경될 수 있는 기능이 포함될 수 있습니다."
       ]
     },
     {
-      "proposal_id": "aosp-camera-its-box-updates",
-      "topic_gap": "Updates to the Camera Image Test Suite (ITS) box documentation, indicating changes or new requirements for camera image quality testing in Android devices.",
-      "source_family": "aosp-site-updates",
+      "proposal_id": "discovery-2026-06-06-004",
+      "topic_gap": "카메라 이미지 테스트 자동화에 대한 AOSP 업데이트를 조사하여 Camera HAL SW 개발 및 검증에 대한 시사점을 파악합니다.",
+      "source_family": "aosp",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
-        "Camera ITS box",
+        "Camera ITS automation",
         "Android camera testing",
         "AOSP camera compatibility",
-        "camera image quality"
+        "Camera HAL validation"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "New or updated test procedures for camera image quality.",
-        "Changes in hardware requirements for ITS testing.",
-        "Guidance on setting up or using the Camera ITS box.",
-        "Impact on Camera HAL implementations for passing ITS tests."
+        "Camera ITS(Image Test Suite)의 새로운 기능 또는 개선 사항",
+        "카메라 테스트 자동화를 위한 새로운 도구 또는 워크플로우",
+        "Camera HAL 구현에 대한 테스트 요구 사항 변경"
       ],
       "risk_notes": [
-        "Documentation updates can sometimes be minor or rephrasing without significant technical changes."
+        "문서 업데이트이므로, 실제 기술 변경 사항을 명확히 식별해야 합니다."
       ]
     },
     {
-      "proposal_id": "camerax-1-6-1-release",
-      "topic_gap": "Minor updates, bug fixes, or performance improvements in CameraX 1.6.1 that could affect camera application stability or performance.",
-      "source_family": "android-developers-latest-updates",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
-      "search_keywords": [
-        "CameraX 1.6.1",
-        "AndroidX Camera bug fix",
-        "CameraX update"
-      ],
-      "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
-      ],
-      "expected_evidence": [
-        "Specific bug fixes related to camera operations.",
-        "Minor performance enhancements.",
-        "Stability improvements for CameraX applications."
-      ],
-      "risk_notes": [
-        "Likely to be minor updates; may not warrant a full article but good for a short mention."
-      ]
-    },
-    {
-      "proposal_id": "kernel-media-csiphy-3ph-gen2-v1-1-init",
-      "topic_gap": "Updates to the Linux kernel media subsystem, specifically concerning Qualcomm's Camera Subsystem (CAMSS) CSI-PHY, indicating new hardware support or improvements in MIPI CSI-2 C-PHY initialization.",
-      "source_family": "lore-linux-media-list",
+      "proposal_id": "discovery-2026-06-06-005",
+      "topic_gap": "Linux 커널 미디어 하위 시스템에서 MIPI CSI-2 C-PHY 초기화 및 관련 카메라 드라이버 업데이트를 추적합니다.",
+      "source_family": "linux-camera",
       "allowed_domains": [
         "lore.kernel.org"
       ],
       "search_keywords": [
-        "linux-media",
-        "qcom camss",
-        "csiphy",
-        "MIPI CSI-2 C-PHY",
-        "kernel camera driver"
+        "linux-media MIPI CSI-2 C-PHY",
+        "qcom camss csiphy",
+        "kernel camera driver",
+        "Gen2 v1.1"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/"
       ],
       "expected_evidence": [
-        "Details on Gen2 v1.1 MIPI CSI-2 C-PHY support.",
-        "Impact on camera sensor integration or performance for Qualcomm platforms.",
-        "New driver features or bug fixes related to CSI-PHY."
+        "MIPI CSI-2 C-PHY Gen2 v1.1 지원 추가 또는 개선",
+        "Qualcomm CAMSS 드라이버 업데이트",
+        "새로운 카메라 센서 또는 인터페이스 지원"
       ],
       "risk_notes": [
-        "Kernel mailing list discussions can be highly technical and require deep understanding to extract relevant information.",
-        "May be very low-level and not directly impact Camera HAL SW unless it enables new hardware capabilities."
+        "커널 패치 메일링 리스트는 매우 기술적이며, Android HAL에 직접적인 영향을 미치지 않는 하위 수준의 변경 사항일 수 있습니다."
       ]
     },
     {
-      "proposal_id": "cpp26-reflection-glaze-7-2",
-      "topic_gap": "Advancements in C++26 reflection features and their practical application in libraries like Glaze, potentially impacting how camera-related data structures or configurations are handled in native Android components.",
-      "source_family": "iso-cpp-blog",
+      "proposal_id": "discovery-2026-06-06-006",
+      "topic_gap": "C++26 표준의 발전과 카메라 HAL SW 개발에 잠재적으로 영향을 미칠 수 있는 관련 도구 체인 업데이트를 모니터링합니다.",
+      "source_family": "cpp",
       "allowed_domains": [
         "isocpp.org"
       ],
       "search_keywords": [
-        "C++26 reflection",
-        "Glaze library",
-        "native camera code",
-        "C++ serialization"
+        "C++26 camera HAL",
+        "GCC 16.1 C++26",
+        "Glaze C++26 reflection",
+        "C++ standard camera development"
       ],
       "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1",
         "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
       ],
       "expected_evidence": [
-        "Examples of C++26 reflection being used for serialization/deserialization of complex data types.",
-        "Performance benefits or code simplification due to reflection in data handling.",
-        "Potential for more robust and maintainable native code for camera metadata or configuration."
+        "C++26의 새로운 언어 기능(예: Reflection, Contracts)이 카메라 HAL 또는 관련 라이브러리에 미칠 수 있는 영향",
+        "GCC 16.1과 같은 컴파일러의 C++26 지원 업데이트",
+        "직렬화 라이브러리(예: Glaze)의 C++26 Reflection 활용 사례"
       ],
       "risk_notes": [
-        "General C++ advancements may not have direct or immediate impact on Android Camera HAL SW.",
-        "Requires interpretation of how these C++ features could be applied in the Android context."
+        "C++ 표준 업데이트는 HAL SW에 간접적인 영향만 미칠 수 있으며, 직접적인 카메라 기능 변경은 아닐 수 있습니다."
       ]
     },
     {
-      "proposal_id": "gcc-16-1-cpp26-features",
-      "topic_gap": "Release of GCC 16.1 with C++26 features (reflection, contracts, safety hardening), potentially influencing the development of native Android Camera HAL components and drivers.",
-      "source_family": "iso-cpp-blog",
-      "allowed_domains": [
-        "isocpp.org"
-      ],
-      "search_keywords": [
-        "GCC 16.1",
-        "C++26 compiler",
-        "Android native development",
-        "Camera HAL C++"
-      ],
-      "candidate_urls": [
-        "https://isocpp.org//blog/2026/04/gcc-16.1"
-      ],
-      "expected_evidence": [
-        "New compiler features that could improve code safety, performance, or expressiveness in camera-related C++ code.",
-        "Impact on build systems or toolchains used for Android native development.",
-        "Discussions on how these features can be leveraged in embedded or performance-critical contexts."
-      ],
-      "risk_notes": [
-        "Compiler releases are broad; need to identify specific features relevant to camera HAL or performance-critical media components.",
-        "Adoption of new compiler versions in AOSP might take time."
-      ]
-    },
-    {
-      "proposal_id": "kernel-media-v4l2-mem2mem-multijob",
-      "topic_gap": "Updates to the Linux kernel's V4L2 memory-to-memory (mem2mem) framework to support running multiple jobs in parallel, which could improve performance for camera processing pipelines on Android devices.",
-      "source_family": "lore-linux-media-list",
+      "proposal_id": "discovery-2026-06-06-007",
+      "topic_gap": "Linux 미디어 하위 시스템에서 V4L2 mem2mem 드라이버의 병렬 작업 처리 지원과 Rockchip RGA(Raster Graphics Accelerator) 드라이버의 멀티코어 스케줄링 개선 사항을 조사합니다.",
+      "source_family": "linux-camera",
       "allowed_domains": [
         "lore.kernel.org"
       ],
       "search_keywords": [
-        "linux-media",
-        "V4L2 mem2mem",
-        "parallel jobs",
-        "camera processing",
-        "hardware accelerator"
+        "linux-media v4l2-mem2mem parallel jobs",
+        "rockchip rga multicore",
+        "kernel media processing",
+        "camera stream buffer handling"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/"
       ],
       "expected_evidence": [
-        "Performance improvements for video encoding/decoding or image processing tasks.",
-        "Better utilization of hardware accelerators (e.g., RGA, ISP) for camera-related operations.",
-        "Impact on multi-stream camera use cases or concurrent media processing."
+        "V4L2 mem2mem 드라이버의 성능 향상",
+        "Rockchip RGA 드라이버의 멀티코어 활용 및 처리량 증가",
+        "카메라 스트림 처리 또는 이미지 전처리 파이프라인에 대한 영향"
       ],
       "risk_notes": [
-        "Highly technical kernel patch discussion; requires careful analysis to determine relevance to Android Camera HAL SW.",
-        "May be specific to certain hardware (e.g., Rockchip RGA) and not broadly applicable."
+        "커널 패치는 매우 기술적이며, Android HAL에 직접적인 영향을 미치지 않는 하위 수준의 변경 사항일 수 있습니다."
       ]
     }
   ]
