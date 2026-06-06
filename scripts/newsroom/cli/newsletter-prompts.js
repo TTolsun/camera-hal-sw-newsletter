@@ -133,6 +133,23 @@ function claimRepairEvidencePrompt() {
   ].join('\n');
 }
 
+// #482: repair-section fix는 free-form rewrite가 아니라 patch-only로 제한한다.
+// 모델이 어떤 기사가 존재하는지(section 개수/순서/identity/source binding)는
+// 바꿀 수 없고, 독자-facing 문구만 교체한다. 반환은 {patches:[...]}만 허용한다.
+function editorRepairPatchPrompt() {
+  return [
+    'Patch-only repair contract: full editor 또는 full section JSON을 반환하지 마세요. {patches:[...]} 객체만 반환하세요.',
+    '각 patch는 section_index, op, path, value를 가집니다. section_key는 제공되면 section_index와 같은 section을 가리키도록 echo하세요.',
+    'op는 "replace"만 허용됩니다. path는 반드시 "/article_sections/" 또는 "/public_article/"로 시작해야 합니다.',
+    'section_index는 이 prompt가 제공한 failed-section 목록의 index와 정확히 일치해야 하며, 목록에 없는 section은 patch하지 마세요.',
+    '수정 가능한 경로(독자-facing 문구)만 patch하세요: /article_sections/verified_facts/{i}, /article_sections/background_context, /article_sections/hal_driver_impact, /article_sections/action_items/{i}, /article_sections/team_share_points, /article_sections/known_limitations/{i}, /article_sections/do_not_claim/{i}, /public_article/headline, /public_article/source_subtitle, /public_article/lead, /public_article/body_paragraphs/{i}, /public_article/camera_hal_takeaway, /public_article/reader_checkpoints/{i}, /public_article/editorial_story/{field}.',
+    'verified_facts/action_items/known_limitations/do_not_claim/body_paragraphs/reader_checkpoints는 string 배열이므로, path는 element index까지 지정하고(/.../0) value는 교체할 string 하나입니다. /text 같은 하위 경로를 붙이지 마세요.',
+    'editorial_story의 하위 string field는 /public_article/editorial_story/editor_take 처럼 지정하세요. top-level editorial_story로 지정하지 마세요.',
+    '수정 금지(이런 path는 거부되어 repair가 diagnostics-only로 실패합니다): /sources, /public_article/source_links, source URL, source_candidate_hash, candidate_id, article_identity_key, coverage_type, published_date, evidence id, section 개수/순서.',
+    '새 evidence id 또는 source URL을 만들지 말고, source가 직접 뒷받침하지 않는 release/HAL/runtime 사실을 patch value에 새로 쓰지 마세요. 보강할 source evidence가 없으면 해당 patch를 생략하세요.'
+  ].join('\n');
+}
+
 function factCheckSeverityPrompt() {
   return [
     'Fact-check 결과 매핑: 발행하면 안 되는 factual/source 오류는 must_fix[]에 넣으세요. 출처 커버리지, 날짜 근거, cross-check가 부족한 항목은 source_gaps[]에도 넣고 source_gap_count는 source_gaps.length와 일치시키세요.',
@@ -176,6 +193,7 @@ module.exports = {
   publicArticleJudgePrompt,
   articleClaimContractPrompt,
   claimRepairEvidencePrompt,
+  editorRepairPatchPrompt,
   factCheckSeverityPrompt,
   cameraDeveloperToolingFactCheckPrompt,
   articleQualityVerdictPrompt,

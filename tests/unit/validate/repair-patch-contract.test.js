@@ -18,11 +18,17 @@ function section(overrides = {}) {
     published_date: '2026-06-01',
     candidate_id: 'cand_001',
     sources: [{ title: 'Android Developers', url: 'https://developer.android.com/jetpack/androidx/releases/camera' }],
+    // Production shape: verified_facts/action_items are plain string arrays
+    // (newsletter-schema.js stringArray), NOT { text } objects.
     article_sections: {
-      verified_facts: [{ text: 'fact one' }, { text: 'fact two' }],
+      verified_facts: ['fact one', 'fact two'],
       background_context: 'bg'
     },
-    public_article: { headline: 'CameraX 1.6.0', body: 'body text' },
+    public_article: {
+      headline: 'CameraX 1.6.0',
+      body_paragraphs: ['body text'],
+      editorial_story: { editor_take: 'take', what_happened: 'happened' }
+    },
     ...overrides
   };
 }
@@ -50,7 +56,7 @@ test('checkRepairPatchContract accepts a repair that only changes verified_facts
   const repaired = editor([
     section({
       source_candidate_hash: 'h1',
-      article_sections: { verified_facts: [{ text: 'corrected fact' }, { text: 'fact two' }], background_context: 'bg' }
+      article_sections: { verified_facts: ['corrected fact', 'fact two'], background_context: 'bg' }
     })
   ]);
   const result = checkRepairPatchContract(base, repaired);
@@ -94,16 +100,25 @@ test('checkRepairPatchContract rejects a repair that changes a section stable id
   assert.ok(result.violations.some(v => v.reason === 'section_removed' || v.reason === 'section_added'));
 });
 
-test('applyRepairPatches applies a verified_facts text patch and preserves section count', () => {
+test('applyRepairPatches applies a verified_facts string patch and preserves section count', () => {
   const base = editor([section({ source_candidate_hash: 'h1' }), section({ source_candidate_hash: 'h2' })]);
-  const patches = [{ section_index: 0, op: 'replace', path: '/article_sections/verified_facts/0/text', value: 'patched fact' }];
+  const patches = [{ section_index: 0, op: 'replace', path: '/article_sections/verified_facts/0', value: 'patched fact' }];
   const result = applyRepairPatches(base, patches);
   assert.equal(result.ok, true);
   assert.equal(result.output.sections.length, 2);
-  assert.equal(result.output.sections[0].article_sections.verified_facts[0].text, 'patched fact');
+  assert.equal(result.output.sections[0].article_sections.verified_facts[0], 'patched fact');
   // base is never mutated
-  assert.equal(base.sections[0].article_sections.verified_facts[0].text, 'fact one');
+  assert.equal(base.sections[0].article_sections.verified_facts[0], 'fact one');
   // the applied result still satisfies the contract
+  assert.equal(checkRepairPatchContract(base, result.output).ok, true);
+});
+
+test('applyRepairPatches applies a public_article editorial_story patch', () => {
+  const base = editor([section({ source_candidate_hash: 'h1' })]);
+  const patches = [{ section_index: 0, op: 'replace', path: '/public_article/editorial_story/editor_take', value: 'revised take' }];
+  const result = applyRepairPatches(base, patches);
+  assert.equal(result.ok, true);
+  assert.equal(result.output.sections[0].public_article.editorial_story.editor_take, 'revised take');
   assert.equal(checkRepairPatchContract(base, result.output).ok, true);
 });
 

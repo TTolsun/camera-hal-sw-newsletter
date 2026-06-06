@@ -30,6 +30,7 @@ const {
   reporterSchema,
   editorSchema,
   editorCompletionSchema,
+  editorRepairPatchSchema,
   factCheckSchema,
   publicArticleJudgeSchema,
   backgroundContextSchema
@@ -162,6 +163,10 @@ const {
   validateRenderedIssueStructure
 } = require('../validate/rendered-issue-structure');
 const {
+  applyRepairPatches,
+  REPAIR_PATCH_CONTRACT_VIOLATION
+} = require('../validate/repair-patch-contract');
+const {
   buildMarkdown,
   buildHtml,
   buildFactCheckMarkdown,
@@ -188,6 +193,7 @@ const {
   publicArticleJudgePrompt,
   articleClaimContractPrompt,
   claimRepairEvidencePrompt,
+  editorRepairPatchPrompt,
   factCheckSeverityPrompt,
   cameraDeveloperToolingFactCheckPrompt,
   articleQualityVerdictPrompt,
@@ -1517,6 +1523,70 @@ function validateTargetedRepairResult({
     references: []
   }, date, reporter, { strictClaims: false });
   return true;
+}
+
+// #482: repair-plan item에는 안정적인 section index가 없고, patch 모델은
+// section_key(stableSectionKey)를 echo한다. 각 patch를 현재 editor의 실제
+// index로 다시 매핑해 applyRepairPatches가 의도한 section만 수정하게 하고,
+// 사라졌거나 범위를 벗어난 section을 가리키는 patch는 거부한다.
+function remapRepairPatchSections(sections, patches) {
+  const normalized = [];
+  const violations = [];
+  for (const patch of ensureArray(patches)) {
+    const key = patch && patch.section_key ? String(patch.section_key).trim() : '';
+    let index = Number.isInteger(patch && patch.section_index) ? patch.section_index : -1;
+    if (key) {
+      index = sections.findIndex(section => stableSectionKey(section) === key);
+      if (index < 0) {
+        violations.push({ reason: REPAIR_PATCH_CONTRACT_VIOLATION, detail: 'section_key_not_found', section_key: key, patch });
+        continue;
+      }
+    }
+    if (index < 0 || index >= sections.length) {
+      violations.push({ reason: REPAIR_PATCH_CONTRACT_VIOLATION, detail: 'section_index_out_of_range', section_index: patch ? patch.section_index : undefined, patch });
+      continue;
+    }
+    normalized.push({ ...patch, section_index: index, section_key: stableSectionKey(sections[index]) });
+  }
+  return { normalized, violations };
+}
+
+// #482: article-preserving repair patch를 마지막 valid editor에 결정론적으로
+// 적용하고 identity 가드를 다시 확인한다. 모델은 field-level patch만 반환하므로
+// 어떤 기사가 존재하는지는 구조적으로 바뀔 수 없다. 보호 필드나 사라진 section을
+// 가리키는 patch면 { ok:false, violations }(호출부는 직전 editor를 유지하고
+// reviewable 실패로 보고), 정상이면 가드를 통과한 patched editor를 반환한다.
+function applyRepairPatchesAndValidate({
+  editor,
+  patches = [],
+  reporter = { candidates: [] },
+  date = generationRunState.date
+} = {}) {
+  const baseEditor = cloneJson(editor);
+  const beforeSections = ensureArray(baseEditor.sections);
+  const { normalized, violations: remapViolations } = remapRepairPatchSections(beforeSections, patches);
+  if (remapViolations.length > 0) {
+    return { ok: false, editor: baseEditor, violations: remapViolations };
+  }
+  const applied = applyRepairPatches(baseEditor, normalized);
+  if (!applied.ok) {
+    return { ok: false, editor: baseEditor, violations: applied.violations };
+  }
+  const patchedSections = ensureArray(applied.output.sections);
+  // 최후의 가드: patch-only 편집에서는 identity set, 개수, 보호 필드가 구조적으로
+  // 불변이다. 이 검사는 방어선으로 남아, patch가 applyRepairPatches allowlist를
+  // 빠져나간 경우에만 throw(-> reviewable 실패)한다.
+  validateTargetedRepairResult({
+    beforeSections,
+    repairSections: patchedSections,
+    afterSections: patchedSections,
+    lockedSections: beforeSections,
+    mode: 'targeted-repair',
+    allowCountChange: false,
+    date,
+    reporter
+  });
+  return { ok: true, editor: applied.output, violations: [] };
 }
 
 function writeCanonicalReviewArtifacts({
@@ -3792,6 +3862,55 @@ async function main() {
         const preservedSections = sectionsOutsideRepairPlan(editor.sections, repairPlan);
         const repairFactCheckStage = `fact-checker repair attempt ${attempt}/${totalAttempts}`;
         console.warn(`Quality attempt ${attempt}/${totalAttempts} is below threshold; running editor repair pass for ${repairPlan.length} section(s).`);
+        // #482: repair-section만 있는 plan은 article-preserving이므로 field-level
+        // patch를 결정론적으로 적용해 모델이 어떤 기사가 존재하는지 바꾸지 못하게
+        // 한다. 구조 변경 action(replace-section / replace-or-demote)은 정당하게
+        // section을 재구성하므로 아래 else 분기의 full-section 경로와 가드를 쓴다.
+        const structuralRepairPlan = repairPlan.filter(item => item.action !== 'repair-section');
+        if (structuralRepairPlan.length === 0) {
+          repairActions = repairPlan.map(item => `repair-section(patch): ${item.headline}`);
+          const failedKeys = new Set(failedSections.map(stableSectionKey));
+          const patchTargets = ensureArray(editor.sections)
+            .map((section, index) => ({ section, index }))
+            .filter(({ section }) => failedKeys.has(stableSectionKey(section)))
+            .map(({ section, index }) => ({
+              section_index: index,
+              section_key: stableSectionKey(section),
+              summary: sectionSummary(section, index),
+              article_sections: section.article_sections,
+              public_article: section.public_article
+            }));
+          const patchResponse = await callLlmJson(
+            repairStage,
+            [
+              '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI repair editor입니다.',
+              dateFramingGuardrail(),
+              editorRepairPatchPrompt(),
+              linkedEvidencePromptGuardrails(),
+              sourceExtractionPromptGuardrails(),
+              articleSectionContractPrompt(),
+              publicArticleContractPrompt(),
+              publicationBoundaryPrompt(),
+              articleClaimContractPrompt(),
+              claimRepairEvidencePrompt(),
+              'schema와 일치하는 {patches:[...]} JSON만 반환하세요.'
+            ].join('\n'),
+            `${commonContext}\n\nFailed sections to patch JSON:\n${JSON.stringify(patchTargets, null, 2)}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
+            editorRepairPatchSchema
+          );
+          const patches = ensureArray(patchResponse && patchResponse.patches);
+          writeJson(path.join(newsroomDir, `editor-repair-patches-attempt-${attempt}.json`), { patches });
+          const patchResult = applyRepairPatchesAndValidate({ editor, patches, reporter, date });
+          if (!patchResult.ok) {
+            throw targetedRepairError('Editor repair violated the article-preserving patch contract.', {
+              field: 'sections.repair_patch',
+              reason: REPAIR_PATCH_CONTRACT_VIOLATION,
+              violations: patchResult.violations,
+              sectionCount: ensureArray(editor.sections).length
+            });
+          }
+          editor = validateEditor(patchResult.editor, date, reporter, { strictClaims: true, requireStoryContract: true });
+        } else {
         const repairCandidateRejections = [];
         const repairAllowsReserve = demotedSections.length > 0;
         const repairCandidatePool = availableCompletionCandidates(
@@ -3859,6 +3978,7 @@ async function main() {
           ...editor,
           sections: repairMerged.sections
         }, date, reporter, { strictClaims: true, requireStoryContract: true });
+        }
         editor = await validatePublicArticleJudgeOrRepair({
           date,
           editor,
@@ -4634,9 +4754,11 @@ module.exports = {
   recordEditorSemanticStatus,
   availableCompletionCandidates,
   backgroundContextStageEnabled,
+  applyRepairPatchesAndValidate,
   mergeLockedSections,
   normalizeSectionImageFields,
   recordLastKnownValidEditor,
+  remapRepairPatchSections,
   sectionsMatchingRepairPlan,
   sectionsOutsideRepairPlan,
   validateCompletionSections,
