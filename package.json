@@ -34,7 +34,7 @@
     "check:repo-hygiene": "node scripts/check-repo-hygiene.js",
     "check:artifact-retention": "node scripts/check-artifact-retention.js",
     "validate": "npm run check:encoding && npm run check:repo-hygiene && npm run check:artifact-retention && npm run check:fixtures && npm run check:domain-model-boundary && npm run check:circular-dependencies && npm run validate:policy && npm run check:policy-docs && npm run validate:config && npm run validate:site && npm run validate:archive && npm run validate:public && npm run validate:images && npm run validate:quality && npm run validate:localization",
-    "validate:post-generation": "npm run check:encoding && npm run check:repo-hygiene && npm run check:fixtures && npm run check:domain-model-boundary && npm run validate:policy && npm run check:policy-docs && npm run validate:config && npm run validate:site && npm run validate:archive && npm run validate:public && npm run validate:images && npm run validate:llm-publication-quality && npm run validate:localization",
+    "validate:post-generation": "npm run check:encoding && npm run check:repo-hygiene && npm run check:fixtures && npm run check:domain-model-boundary && npm run check:circular-dependencies && npm run validate:policy && npm run check:policy-docs && npm run validate:config && npm run validate:site && npm run validate:archive && npm run validate:public && npm run validate:images && npm run validate:llm-publication-quality && npm run validate:localization",
     "validate:policy": "node scripts/validate-newsletter-policy.js",
     "validate:archive": "node scripts/validate-archive.js",
     "validate:source-quality-rollout": "node scripts/newsroom/validate/validate-source-quality-rollout-exit.js",

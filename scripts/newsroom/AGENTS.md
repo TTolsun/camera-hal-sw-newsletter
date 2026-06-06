@@ -15,7 +15,7 @@
 
 ## Module Dependency Rules
 
-- 모듈 간 순환 의존성(circular dependency)을 만들지 마세요. `npm.cmd run check:circular-dependencies`가 `scripts/newsroom/**`의 상대경로 require 그래프를 분석해 순환을 검출하며, `validate` 체인에 포함됩니다. 현재 baseline은 순환 0개입니다.
+- 모듈 간 순환 의존성(circular dependency)을 만들지 마세요. `npm.cmd run check:circular-dependencies`가 `scripts/newsroom/**`의 상대경로 require 그래프를 분석해 순환을 검출하며, `validate`와 `validate:post-generation` 체인에 포함됩니다. 현재 baseline은 순환 0개입니다.
 - 이 검사는 그래프 기준이므로 파일을 옮겨서 순환을 숨길 수 없습니다. 순환이 생기면 shared contract를 `common/`으로 분리해 한 방향 의존으로 끊으세요.
 - 권장 의존 방향(가이드): `common/`은 도메인 모듈(`collect/`, `generate/`, `llm/`, `render/`, `validate/`)을 import하지 않습니다. `collect/`는 `generate/`·`render/`·`validate/`를 import하지 않습니다. 실행 흐름은 collect -> generate -> llm/render -> validate 한 방향입니다.
 

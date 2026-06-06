@@ -3,12 +3,18 @@
 // 모듈 간 순환 의존성(circular dependency)을 검출하는 구조 검사입니다.
 // scripts/newsroom/** 의 상대경로 require 그래프를 만들고, 순환이 있으면 실패합니다.
 // 외부 패키지에 의존하지 않도록 require 파싱과 그래프 분석을 직접 수행합니다.
+//
+// 한계(정적 정규식 기반): 동적 require(`require(변수)`, `require.resolve(...)`)와
+// 주석/문자열 리터럴 안의 require 표기는 추적하지 않습니다. 루트 `scripts/*.js` wrapper와
+// `scripts/lib/**` shim도 범위 밖입니다. 이들은 의도적으로 얇은 한 방향 indirection이라
+// 순환을 만들지 않으며, 이 검사는 순환을 추가로 만들지 않도록 막는 가드가 목적입니다.
 
 const fs = require('node:fs');
 const path = require('node:path');
 
 const NEWSROOM_ROOT = path.join(__dirname, 'newsroom');
-const RELATIVE_REQUIRE_PATTERN = /require\(\s*['"]([^'"]+)['"]\s*\)/g;
+// 앞에 식별자 문자나 `.`이 오면 `foo.require(...)` 같은 메서드 호출이므로 제외합니다.
+const RELATIVE_REQUIRE_PATTERN = /(?<![A-Za-z0-9_.$])require\(\s*['"]([^'"]+)['"]\s*\)/g;
 
 // 소스 텍스트에서 상대경로(`./`, `../`) require 지정자만 추출합니다.
 function parseRelativeRequires(source) {
