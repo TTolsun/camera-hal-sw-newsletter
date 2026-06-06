@@ -53,6 +53,7 @@ const {
 const {
   articleIdentityKey
 } = require('../common/article-identity');
+const { isPlaylistCollectionUrl } = require('../common/playlist-url');
 const {
   annotateArticleExposure,
   everCoveredAsNewsletterArticle,
@@ -157,25 +158,6 @@ function fieldBoolean(candidate, camel, snake, fallback = false) {
 
 function finalSelectionEligibility(candidate) {
   return text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
-}
-
-// YouTube 등의 재생목록(playlist) URL은 dated article이 아니라 영상 모음(collection)이다.
-// 단일 영상(watch?v=)은 제외하지 않고, /playlist 경로이거나 v= 없이 list=만 있는 컬렉션만 본다.
-function isPlaylistCollectionUrl(value) {
-  const raw = text(value);
-  if (!raw) return false;
-  let parsed;
-  try {
-    parsed = new URL(raw);
-  } catch (_) {
-    return false;
-  }
-  const host = parsed.hostname.replace(/^www\./, '').replace(/^m\./, '').toLowerCase();
-  if (host !== 'youtube.com' && host !== 'youtu.be') return false;
-  if (/^\/playlist\/?$/.test(parsed.pathname)) return true;
-  return parsed.searchParams.has('list') &&
-    !parsed.searchParams.has('v') &&
-    !/\/watch/.test(parsed.pathname);
 }
 
 function exclusionReasons(candidate) {

@@ -7,6 +7,7 @@ const {
   computeKstAgeDays,
   emptyHeadlineState,
   HEADLINE_STATE_REMEDIATION,
+  headlineEligibilityRejection,
   headlineSnapshotFromCandidate,
   isHeadlineEligible,
   REMOVED_DUE_TO_HEADLINE_INCLUSION_REASON,
@@ -39,6 +40,25 @@ function headlineCandidate(overrides = {}) {
     ...overrides
   };
 }
+
+test('a YouTube playlist headline is rejected as a collection, not a dated article', () => {
+  // 저장된 homepage headline이 재생목록(컬렉션) URL이면 매 run 메인으로 주입되어 게이트를
+  // hard-fail시킨다. 재검증(headlineEligibilityRejection)에서 거부해 clear/교체되게 한다.
+  const playlist = headlineCandidate({
+    source_url: 'https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY'
+  });
+
+  assert.equal(headlineEligibilityRejection(playlist, { policy }), 'playlist_collection_url');
+  assert.equal(isHeadlineEligible(playlist, { policy }), false);
+});
+
+test('a single YouTube watch video headline is not rejected as a playlist collection', () => {
+  const watch = headlineCandidate({
+    source_url: 'https://www.youtube.com/watch?v=Wh3LWb_Phfk'
+  });
+
+  assert.notEqual(headlineEligibilityRejection(watch, { policy }), 'playlist_collection_url');
+});
 
 test('KST age day calculation uses KST date boundary and clamps future dates', () => {
   assert.equal(computeKstAgeDays('2026-05-22', '2026-05-23'), 1);
