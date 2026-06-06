@@ -4389,25 +4389,36 @@ async function main() {
   writeCostReport(date);
 
   editor.publish_mode = currentPublishMode(shortlistReport);
-  const newsletterMarkdown = buildMarkdown(editor);
-  const newsletterHtmlContent = buildHtml(editor);
-  generationRunState.stageTracker.pass('render', generationRunState.currentQualityAttempt);
-  assertTerminalPublicationContracts({
-    date,
-    editor,
-    markdown: newsletterMarkdown,
-    html: newsletterHtmlContent,
-    newsroomDir,
-    shortlistReport,
-    qualityReport,
-    factCheck
-  });
-  assertJsonArtifactsReadable([
-    path.join(newsroomDir, 'editor-draft.json'),
-    path.join(newsroomDir, 'background-context.json'),
-    path.join(newsroomDir, 'fact-check-report.json'),
-    path.join(newsroomDir, 'quality-report.json')
-  ]);
+  // render는 callLlmJson 초크포인트를 거치지 않으므로 여기서 직접 계측한다(기록 전용).
+  // 빌드/터미널 검증이 실패하면 render를 'failed'로 남겨 요약 다이어그램이 실패와 일치하게 한다.
+  const renderAttempt = generationRunState.currentQualityAttempt;
+  generationRunState.stageTracker.start('render', renderAttempt);
+  let newsletterMarkdown;
+  let newsletterHtmlContent;
+  try {
+    newsletterMarkdown = buildMarkdown(editor);
+    newsletterHtmlContent = buildHtml(editor);
+    assertTerminalPublicationContracts({
+      date,
+      editor,
+      markdown: newsletterMarkdown,
+      html: newsletterHtmlContent,
+      newsroomDir,
+      shortlistReport,
+      qualityReport,
+      factCheck
+    });
+    assertJsonArtifactsReadable([
+      path.join(newsroomDir, 'editor-draft.json'),
+      path.join(newsroomDir, 'background-context.json'),
+      path.join(newsroomDir, 'fact-check-report.json'),
+      path.join(newsroomDir, 'quality-report.json')
+    ]);
+    generationRunState.stageTracker.pass('render', renderAttempt);
+  } catch (error) {
+    generationRunState.stageTracker.fail('render', renderAttempt, 'render', error && error.message);
+    throw error;
+  }
 
   const baseFiles = [
     generationRunState.candidateInput?.candidate_artifact || collectedCandidatesRelPath(date),

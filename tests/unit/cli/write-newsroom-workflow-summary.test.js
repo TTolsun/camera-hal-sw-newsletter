@@ -120,3 +120,52 @@ test('malformed input still renders a non-empty summary without throwing', () =>
   const unknown = renderWorkflowSummary({ profile: 'does-not-exist' });
   assert.ok(unknown.length > 0);
 });
+
+test('review-only run (publish_gate_passed=false, upstream passed) shows Publish skipped, not failed', () => {
+  const md = renderWorkflowSummary({
+    profile: 'newsroom-final',
+    status: { stage_status_log: passLog(), publish_gate_passed: false },
+    meta: { review_publication_ready: 'true' }
+  });
+  assert.match(md, /publish\["Publish"\]:::skipped/);
+  assert.doesNotMatch(md, /publish\["Publish"\]:::failed/);
+  assert.match(md, /최초 실패:\*\* 없음/);
+});
+
+test('terminal failure with stale publish_gate_passed=true does not paint an all-green pipeline', () => {
+  const md = renderWorkflowSummary({
+    profile: 'newsroom-final',
+    status: {
+      stage_status_log: passLog(),
+      publish_gate_passed: true,
+      failure_stage: 'generation',
+      failure_reason: 'Terminal structural validation failed.'
+    },
+    meta: { diagnostics_only: 'true' }
+  });
+  assert.doesNotMatch(md, /publish\["Publish"\]:::passed/);
+  assert.match(md, /publish\["Publish"\]:::skipped/);
+  assert.match(md, /최초 실패:\*\* `generation`/);
+});
+
+test('render failure in the log colors Render failed and Publish skipped (not passed)', () => {
+  const md = renderWorkflowSummary({
+    profile: 'newsroom-final',
+    status: {
+      stage_status_log: [
+        { role: 'reporter', attempt: 1, status: 'passed' },
+        { role: 'editor', attempt: 1, status: 'passed' },
+        { role: 'factcheck', attempt: 1, status: 'passed' },
+        { role: 'quality_gate', attempt: 1, status: 'passed' },
+        { role: 'render', attempt: 1, status: 'failed' }
+      ],
+      publish_gate_passed: true,
+      failure_stage: 'render',
+      failure_reason: 'buildHtml threw.'
+    },
+    meta: { diagnostics_only: 'true' }
+  });
+  assert.match(md, /render\["Render"\]:::failed/);
+  assert.match(md, /publish\["Publish"\]:::skipped/);
+  assert.doesNotMatch(md, /publish\["Publish"\]:::passed/);
+});
