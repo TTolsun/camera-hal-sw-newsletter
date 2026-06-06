@@ -47,6 +47,11 @@ test('failure status includes required Gemini diagnostic fields', () => {
   assert.equal(typeof status.model_usage, 'object');
 });
 
+test('generation status carries a stage_status_log array (#398)', () => {
+  const status = buildGenerationStatus({ date: '2026-05-03', status: 'STARTED' });
+  assert.ok(Array.isArray(status.stage_status_log));
+});
+
 test('failure stage is extracted from bracketed Gemini errors', () => {
   assert.equal(
     failureStageFromError(new Error('[fact-checker attempt 1/4] Gemini API failed.')),
