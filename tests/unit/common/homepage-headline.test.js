@@ -93,114 +93,82 @@ test('missing score breakdown still produces a deterministic eligible score', ()
   assert.equal(isHeadlineEligible(candidate, { policy }), true);
 });
 
-test('equal score below replacement margin retains current headline and injects it into latest', () => {
+test('headline is the most recent Camera HAL article in the issue (by source date)', () => {
+  const result = applyHomepageHeadlineSelection({
+    date: '2026-06-06',
+    selectedArticles: [
+      headlineCandidate({ title: 'Older camera article', source_url: 'https://source.android.com/docs/camera/older', published_date: '2026-05-20' }),
+      headlineCandidate({ title: 'Newer camera article', source_url: 'https://source.android.com/docs/camera/newer', published_date: '2026-05-25' })
+    ],
+    currentState: emptyHeadlineState({ date: '2026-06-06', policy }),
+    policy
+  });
+
+  assert.equal(result.headline_decision.reason, 'latest_camera_hal_article');
+  assert.equal(result.homepage_headline_state.current_headline.title, 'Newer camera article');
+});
+
+test('retains the current headline when the issue has no Camera HAL article (never blanks)', () => {
   const current = headlineSnapshotFromCandidate(headlineCandidate({
-    source_url: 'https://source.android.com/docs/camera/current',
-    deterministic_score: 80
-  }), {
-    date: '2026-05-22',
-    policy,
-    scoredAt: '2026-05-22'
-  });
-  const state = {
-    ...emptyHeadlineState({ date: '2026-05-22', policy }),
-    current_headline: current
-  };
+    title: 'Existing camera headline',
+    source_url: 'https://source.android.com/docs/camera/existing',
+    published_date: '2026-05-22'
+  }), { date: '2026-05-22', policy, scoredAt: '2026-05-22' });
+
   const result = applyHomepageHeadlineSelection({
-    date: '2026-05-23',
+    date: '2026-06-06',
     selectedArticles: [headlineCandidate({
-      source_url: 'https://source.android.com/docs/camera/new',
-      deterministic_score: 76
+      title: 'Generic non-camera article',
+      source_url: 'https://example.com/generic',
+      relevance_bucket: 'generic_tech_watchlist',
+      published_date: '2026-06-05'
     })],
-    eligibleCandidates: [],
-    currentState: state,
+    currentState: { ...emptyHeadlineState({ date: '2026-05-22', policy }), current_headline: current },
     policy
   });
 
-  assert.equal(result.headline_decision.reason, 'retained_current_above_margin');
-  assert.equal(result.headline_latest_inclusion.injected_from_snapshot, true);
-  assert.ok(result.selected_articles.some(article => article.injected_from_headline_snapshot === true));
-  assert.equal(result.homepage_headline_state.current_headline.article_identity_key, current.article_identity_key);
+  assert.notEqual(result.homepage_headline_state.current_headline, null);
+  assert.equal(result.homepage_headline_state.current_headline.title, 'Existing camera headline');
 });
 
-test('null current headline seeds from current issue candidate', () => {
+test('a YouTube playlist or non-camera article is excluded even if it is newer', () => {
   const result = applyHomepageHeadlineSelection({
-    date: '2026-05-23',
-    selectedArticles: [headlineCandidate()],
-    eligibleCandidates: [],
-    currentState: emptyHeadlineState({ date: '2026-05-23', policy }),
+    date: '2026-06-06',
+    selectedArticles: [
+      headlineCandidate({ title: 'Newer Google IO playlist', source_url: 'https://youtube.com/playlist?list=PLabc', published_date: '2026-06-05' }),
+      headlineCandidate({ title: 'Valid camera article', source_url: 'https://source.android.com/docs/camera/valid', published_date: '2026-05-20' })
+    ],
+    currentState: emptyHeadlineState({ date: '2026-06-06', policy }),
     policy
   });
 
-  assert.equal(result.headline_decision.reason, 'seeded_from_current_issue');
-  assert.equal(result.headline_latest_inclusion.mode, 'selected_normally');
-  assert.equal(result.homepage_headline_state.current_headline.title, 'Camera HAL stream metadata update');
+  assert.equal(result.homepage_headline_state.current_headline.title, 'Valid camera article');
 });
 
-test('replacement can use eligible candidate that is not already selected', () => {
+test('the headline is never injected into the issue article list', () => {
   const current = headlineSnapshotFromCandidate(headlineCandidate({
-    source_url: 'https://source.android.com/docs/camera/current',
-    deterministic_score: 60
-  }), {
-    date: '2026-05-22',
-    policy,
-    scoredAt: '2026-05-22'
-  });
-  const eligibleOnly = headlineCandidate({
-    title: 'Higher priority Camera HAL headline',
-    source_url: 'https://source.android.com/docs/camera/high-priority',
-    deterministic_score: 95
-  });
+    title: 'Retained headline from a past issue',
+    source_url: 'https://source.android.com/docs/camera/past',
+    published_date: '2026-06-01'
+  }), { date: '2026-06-01', policy, scoredAt: '2026-06-01' });
+
   const result = applyHomepageHeadlineSelection({
-    date: '2026-05-23',
+    date: '2026-06-06',
     selectedArticles: [headlineCandidate({
-      title: 'Selected lower score article',
-      source_url: 'https://source.android.com/docs/camera/selected-low',
-      deterministic_score: 62
+      title: 'This issue camera article',
+      source_url: 'https://source.android.com/docs/camera/this-issue',
+      published_date: '2026-05-25'
     })],
-    eligibleCandidates: [eligibleOnly],
-    currentState: {
-      ...emptyHeadlineState({ date: '2026-05-22', policy }),
-      current_headline: current
-    },
+    currentState: { ...emptyHeadlineState({ date: '2026-06-01', policy }), current_headline: current },
     policy
   });
 
-  assert.equal(result.headline_decision.reason, 'replaced_by_new_candidate');
-  assert.equal(result.homepage_headline_state.current_headline.title, 'Higher priority Camera HAL headline');
-  assert.equal(result.headline_latest_inclusion.mode, 'injected_from_headline_snapshot');
-  assert.ok(result.selected_articles.some(article => article.injected_from_headline_snapshot === true));
-});
-
-test('headline injection records candidate removed by max article count', () => {
-  const selectedArticles = Array.from({ length: 5 }, (_, index) => headlineCandidate({
-    title: `Selected Camera HAL article ${index}`,
-    source_url: `https://source.android.com/docs/camera/selected-${index}`,
-    deterministic_score: 62 - index,
-    editorial_priority: index === 4 ? 99 : index + 1
-  }));
-  const headlineOnly = headlineCandidate({
-    title: 'Highest eligible homepage headline',
-    source_url: 'https://source.android.com/docs/camera/highest-headline-only',
-    deterministic_score: 98,
-    editorial_priority: 1
-  });
-
-  const result = applyHomepageHeadlineSelection({
-    date: '2026-05-23',
-    selectedArticles,
-    eligibleCandidates: [headlineOnly],
-    currentState: emptyHeadlineState({ date: '2026-05-23', policy }),
-    policy
-  });
-
-  assert.equal(result.selected_articles.length, 5);
-  assert.equal(result.headline_decision.reason, 'seeded_from_current_issue');
-  assert.equal(result.headline_latest_inclusion.mode, 'injected_from_headline_snapshot');
-  assert.equal(result.headline_latest_inclusion.removed_due_to_headline_inclusion_count, 1);
-  assert.equal(result.removed_due_to_headline_inclusion.length, 1);
-  assert.equal(result.removed_due_to_headline_inclusion[0].title, 'Selected Camera HAL article 4');
-  assert.equal(result.removed_due_to_headline_inclusion[0].reason, REMOVED_DUE_TO_HEADLINE_INCLUSION_REASON);
+  // current(06-01) is newer than this issue's article(05-25) -> retained, never injected
+  assert.equal(result.selected_articles.length, 1);
+  assert.equal(result.headline_latest_inclusion.injected_from_snapshot, false);
+  assert.equal(result.removed_due_to_headline_inclusion.length, 0);
+  assert.ok(result.selected_articles.every(article => article.injected_from_headline_snapshot !== true));
+  assert.equal(result.homepage_headline_state.current_headline.title, 'Retained headline from a past issue');
 });
 
 test('state validator accepts null headline and rejects missing snapshot evidence', () => {

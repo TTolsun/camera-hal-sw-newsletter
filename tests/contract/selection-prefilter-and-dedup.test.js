@@ -278,72 +278,50 @@ test('CameraX release-note body candidate supersedes latest-updates discovery ro
   ));
 });
 
-test('retained homepage headline is revalidated before injection into final selection', () => {
+test('homepage headline is never injected into the issue selection', () => {
+  // 과거 이슈의 더 최신 소스 헤드라인을 유지하더라도 이슈 기사 목록에 주입하지 않는다.
   const retained = headlineSnapshotFromCandidate(policyPrimaryCandidate(90, {
     title: 'Retained Camera HAL metadata headline',
     url: 'https://source.android.com/docs/camera/retained-headline',
     source: 'source.android.com',
-    deterministic_score: 88,
-    published_date: '2026-05-20',
+    published_date: '2026-06-05',
     hasDatedEvidence: true
   }), {
-    date: '2026-05-20',
-    scoredAt: '2026-05-20'
+    date: '2026-06-05',
+    scoredAt: '2026-06-05'
   });
   const report = buildShortlistReport('2026-05-21', [
     policyPrimaryCandidate(1, {
       url: 'https://source.android.com/docs/camera/current-candidate',
       source: 'source.android.com',
-      deterministic_score: 70
+      published_date: '2026-05-15'
     })
   ], {
     homepageHeadlineState: {
-      ...emptyHeadlineState({ date: '2026-05-20' }),
+      ...emptyHeadlineState({ date: '2026-06-05' }),
       current_headline: retained
     }
   });
 
-  assert.equal(report.headline_decision.reason, 'retained_current_above_margin');
-  assert.equal(report.headline_latest_inclusion.injected_from_snapshot, true);
-  assert.ok(report.selected_articles.some(article => article.injected_from_headline_snapshot === true));
-  assert.ok(report.selected_articles.every(article =>
-    !(article.headline_latest_inclusion_mode === 'selected_normally' && article.injected_from_headline_snapshot === true)
-  ));
+  assert.equal(report.headline_latest_inclusion.injected_from_snapshot, false);
+  assert.ok(report.selected_articles.every(article => article.injected_from_headline_snapshot !== true));
+  assert.equal(report.removed_due_to_headline_inclusion.length, 0);
 });
 
-test('headline injection collapses duplicates by article identity and keeps max article count', () => {
-  const retained = headlineSnapshotFromCandidate(policyPrimaryCandidate(91, {
-    title: 'Retained Camera HAL metadata headline',
-    url: 'https://source.android.com/docs/camera/retained-headline-max',
-    source: 'source.android.com',
-    deterministic_score: 88,
-    published_date: '2026-05-20',
-    hasDatedEvidence: true
-  }), {
-    date: '2026-05-20',
-    scoredAt: '2026-05-20'
-  });
+test('homepage headline does not add or drop issue articles', () => {
   const candidates = Array.from({ length: 7 }, (_, index) => policyPrimaryCandidate(index, {
     url: `https://source.android.com/docs/camera/current-${index}`,
     source: 'source.android.com',
-    deterministic_score: 65 - index,
-    editorial_priority: index + 1
+    published_date: `2026-05-${10 + index}`
   }));
   const report = buildShortlistReport('2026-05-21', candidates, {
-    homepageHeadlineState: {
-      ...emptyHeadlineState({ date: '2026-05-20' }),
-      current_headline: retained
-    }
+    homepageHeadlineState: emptyHeadlineState({ date: '2026-05-20' })
   });
 
+  // 헤드라인은 이슈에 주입/제거되지 않으므로 inclusion 흔적이 전혀 없다.
   assert.equal(report.selected_articles.length <= articlePolicy.mainArticleCount.max, true);
-  assert.ok(report.selected_articles.some(article => article.article_identity_key === retained.article_identity_key));
-  assert.equal(new Set(report.selected_articles.map(article => article.article_identity_key)).size, report.selected_articles.length);
-  assert.equal(Array.isArray(report.removed_due_to_headline_inclusion), true);
-  assert.equal(
-    report.headline_decision.removed_due_to_headline_inclusion_count,
-    report.removed_due_to_headline_inclusion.length
-  );
+  assert.equal(report.removed_due_to_headline_inclusion.length, 0);
+  assert.ok(report.selected_articles.every(article => article.injected_from_headline_snapshot !== true));
 });
 
 test('generic CameraX metadata fallback cannot become a main candidate without source_extraction bullet', () => {
