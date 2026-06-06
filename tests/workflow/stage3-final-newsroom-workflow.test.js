@@ -61,6 +61,11 @@ test('final newsroom workflow separates review PR success from publish-ready gat
     '- name: Audit newsletter image lineage',
     '- name: Snapshot newsroom debug artifacts'
   ]);
+  const summaryStep = workflowStep(workflow, 'Write workflow run summary');
+  assert.match(summaryStep, /if: always\(\)/);
+  assert.match(summaryStep, /continue-on-error:\s*true/);
+  assert.match(summaryStep, /SUMMARY_PROFILE: newsroom-final/);
+  assert.match(summaryStep, /run: node scripts\/write-newsroom-workflow-summary\.js/);
   assert.match(workflow, /llm_provider:/);
   assert.match(workflow, /-\s+"openapi"/);
   assert.match(workflow, /llm_model:/);

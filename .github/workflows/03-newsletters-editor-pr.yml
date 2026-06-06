@@ -446,6 +446,29 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
+      - name: Write workflow run summary
+        if: always()
+        continue-on-error: true
+        env:
+          SUMMARY_PROFILE: newsroom-final
+          OUTCOME_GENERATE: ${{ steps.generate.outcome }}
+          OUTCOME_ENSURE_PUBLIC: ${{ steps.ensure-public-newsletter.outcome }}
+          OUTCOME_VALIDATE: ${{ steps.validate.outcome || 'skipped' }}
+          PUBLIC_NEWSLETTER_READY: ${{ steps.meta.outputs.public_newsletter_ready }}
+          PUBLIC_NEWSLETTER_REASON: ${{ steps.meta.outputs.public_newsletter_reason }}
+          REVIEW_PR_READY: ${{ steps.meta.outputs.review_pr_ready }}
+          REVIEWABLE_ARTIFACT_REASON: ${{ steps.meta.outputs.reviewable_artifact_reason }}
+          DIAGNOSTICS_ONLY: ${{ steps.meta.outputs.diagnostics_only }}
+          REVIEW_PUBLICATION_READY: ${{ steps.meta.outputs.review_publication_ready }}
+          GENERATION_STATUS: ${{ steps.generation-status.outputs.status }}
+          HAS_AI_PUBLISH_READY: ${{ steps.final-publish-status.outputs.has_ai_publish_ready }}
+          COMPOSITION_MODE: ${{ steps.final-publish-status.outputs.composition_mode }}
+          PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+          NEWSLETTER_DATE: ${{ steps.meta.outputs.date }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          DEBUG_ARTIFACT_NAME: newsroom-final-debug-${{ github.run_id }}
+        run: node scripts/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"
+
       - name: Fail if no reviewable PR can be created
         if: steps.meta.outputs.review_pr_ready != 'true'
         run: |
