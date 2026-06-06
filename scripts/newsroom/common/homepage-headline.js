@@ -10,6 +10,7 @@ const {
   articlePolicy,
   getHeadlinePolicy
 } = require('./newsletter-policy');
+const { isPlaylistCollectionUrl } = require('./playlist-url');
 
 const HEADLINE_STATE_REL_PATH = path.join('data', 'homepage-headline.json');
 const SCHEMA_VERSION = 1;
@@ -229,6 +230,7 @@ function candidateQualityFlags(candidate = {}) {
 function headlineEligibilityRejection(candidate = {}, { policy = getHeadlinePolicy(), runtimeScore = null } = {}) {
   const source = sourceUrl(candidate);
   if (!source) return 'missing_source_url';
+  if (isPlaylistCollectionUrl(source)) return 'playlist_collection_url';
   const key = articleIdentityKey(candidate);
   if (!key) return 'missing_article_identity_key';
   const dateEvidence = candidateDateEvidence(candidate);
