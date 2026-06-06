@@ -400,52 +400,16 @@
       }
     },
     {
-      "candidate_id": "657d8158aa5653f4",
-      "url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
-      "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113",
-      "source_quality_score": 0.93,
+      "candidate_id": "7ccb854c9cb74cea",
+      "url": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/",
+      "title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
+      "source_quality_score": 0.83,
       "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 1,
-        "android_hal_relevance": 1,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "7674d786b492373b",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
-      "title": "[PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678",
-      "source_quality_score": 0.93,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 1,
-        "android_hal_relevance": 1,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "6db21c7bc2a7451e",
-      "url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
-      "title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
-      "source_quality_score": 0.785,
-      "source_quality_bucket": "review_candidate",
       "breakdown": {
         "reliability_score": 0.85,
         "camera_relevance": 0.75,
         "android_hal_relevance": 0.75,
-        "technical_depth": 0.55,
+        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -490,60 +454,6 @@
       }
     },
     {
-      "candidate_id": "ff883db472e298c6",
-      "url": "https://lore.kernel.org/linux-media/aiL3UM9aULBypEk7@devvm29614.prn0.facebook.com/",
-      "title": "Re: [PATCH net-next 1/4] net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding",
-      "source_quality_score": 0.716,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.69,
-        "android_hal_relevance": 0.69,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "18550920b3f33abc",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
-      "source_quality_score": 0.761,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.69,
-        "android_hal_relevance": 0.69,
-        "technical_depth": 0.55,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "ae62948e9a7cefbb",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
-      "title": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678",
-      "source_quality_score": 0.806,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.69,
-        "android_hal_relevance": 0.69,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "4e231c08cea859ce",
       "url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
       "title": "Power of C++26 Reflection: Strong (opaque) type definitions -- r/cpp",
@@ -562,16 +472,16 @@
       }
     },
     {
-      "candidate_id": "2c1748b9d388e1c3",
-      "url": "https://lore.kernel.org/linux-media/20260605160253.637381F00893@smtp.kernel.org/",
-      "title": "Re: [PATCH] dma-buf: udmabuf: validate create-list count before copying",
-      "source_quality_score": 0.692,
+      "candidate_id": "3c6cc7e872f5c654",
+      "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-16-3ec2b15675f7@pengutronix.de/",
+      "title": "[PATCH 16/17] arm64: dts: rockchip: add rga3 dt nodes to rk3588",
+      "source_quality_score": 0.647,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 0.85,
         "camera_relevance": 0.63,
         "android_hal_relevance": 0.63,
-        "technical_depth": 0.85,
+        "technical_depth": 0.55,
         "recency_score": 1,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -670,24 +580,6 @@
       }
     },
     {
-      "candidate_id": "8f90085beb9696f8",
-      "url": "https://lore.kernel.org/linux-media/3dbef45d-9fed-46ab-806e-6ccd95ae0ee1@fritscher.net/",
-      "title": "Re: USB 2013:0462 PCTV Systems PCTV 461",
-      "source_quality_score": 0.668,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.57,
-        "android_hal_relevance": 0.57,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "ecd2f14ba3d8477a",
       "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
@@ -700,6 +592,114 @@
         "technical_depth": 0.55,
         "recency_score": 0.25,
         "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "5de0900a03ea5b24",
+      "url": "https://lore.kernel.org/linux-media/20260605222245.35A3C1F00893@smtp.kernel.org/",
+      "title": "Re: [PATCH 06/17] media: rockchip: rga: move power handling to device_run",
+      "source_quality_score": 0.644,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "bb72aad54889f410",
+      "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-6-3ec2b15675f7@pengutronix.de/",
+      "title": "[PATCH 06/17] media: rockchip: rga: move power handling to device_run",
+      "source_quality_score": 0.644,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "3e4221e57b9a9b8a",
+      "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-15-3ec2b15675f7@pengutronix.de/",
+      "title": "[PATCH 15/17] media: rockchip: rga: schedule jobs to multiple cores",
+      "source_quality_score": 0.644,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c3cdca4fd3e7b372",
+      "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
+      "title": "[PATCH 05/17] media: v4l2-mem2mem: support running multiple jobs in parallel",
+      "source_quality_score": 0.734,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "915194d97ca318a3",
+      "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-17-3ec2b15675f7@pengutronix.de/",
+      "title": "[PATCH 17/17] iommu/rockchip: disable fetch dte time limit",
+      "source_quality_score": 0.62,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "5a3e7d6e1154dece",
+      "url": "https://lore.kernel.org/linux-media/20260605222625.690F01F00893@smtp.kernel.org/",
+      "title": "Re: [PATCH 17/17] iommu/rockchip: disable fetch dte time limit",
+      "source_quality_score": 0.506,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.39,
+        "android_hal_relevance": 0.39,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -742,9 +742,9 @@
       }
     },
     {
-      "candidate_id": "gemini-f5ad117f0c167686",
-      "url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
-      "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley",
+      "candidate_id": "gemini-c94b47b9aefd64fc",
+      "url": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/",
+      "title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init - Bryan O&#39;Donoghue",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
       "breakdown": {
@@ -760,45 +760,27 @@
       }
     },
     {
-      "candidate_id": "gemini-883ccaf5da11631b",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
-      "title": "[PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678 - Jai Luthra",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
+      "candidate_id": "gemini-a8865e6c6b3d243f",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
+      "source_quality_score": 0.455,
+      "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-5df469ecaf01e066",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra",
-      "source_quality_score": 0.72,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
         "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
       }
     },
     {
-      "candidate_id": "gemini-6109dc2ba8ee8d64",
-      "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
-      "title": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra",
+      "candidate_id": "gemini-6ad6cd93705be0c8",
+      "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
+      "title": "[PATCH 05/17] media: v4l2-mem2mem: support running multiple jobs in parallel - Sven P&#252;schel",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "breakdown": {
@@ -830,30 +812,12 @@
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
       }
-    },
-    {
-      "candidate_id": "gemini-a8865e6c6b3d243f",
-      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
-      "source_quality_score": 0.455,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
     }
   ],
   "counts": {
-    "strong_candidate": 10,
-    "blocked_candidate": 29,
-    "review_candidate": 6,
+    "strong_candidate": 7,
+    "blocked_candidate": 32,
+    "review_candidate": 4,
     "weak_candidate": 2
   }
 }

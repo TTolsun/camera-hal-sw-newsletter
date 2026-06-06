@@ -24,29 +24,27 @@
 | blocked_candidate | 0.551 | June | https://source.android.com/docs/security/bulletin/2026/2026-06-01 |
 | blocked_candidate | 0.501 | May | https://source.android.com/docs/security/bulletin/2026/2026-05-01 |
 | blocked_candidate | 0.466 | April | https://source.android.com/docs/security/bulletin/2026/2026-04-01 |
-| strong_candidate | 0.93 | Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 | https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/ |
-| strong_candidate | 0.93 | [PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678 | https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/ |
-| review_candidate | 0.785 | Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 | https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/ |
+| strong_candidate | 0.83 | Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init | https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/ |
 | blocked_candidate | 0.551 | C++26: A User-Friendly assert() macro -- Sandor Dargo | https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo |
 | blocked_candidate | 0.551 | 2026 Annual C++ Developer Survey "Lite" | https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1 |
-| blocked_candidate | 0.716 | Re: [PATCH net-next 1/4] net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding | https://lore.kernel.org/linux-media/aiL3UM9aULBypEk7@devvm29614.prn0.facebook.com/ |
-| review_candidate | 0.761 | [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 | https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/ |
-| strong_candidate | 0.806 | [PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 | https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/ |
 | blocked_candidate | 0.527 | Power of C++26 Reflection: Strong (opaque) type definitions -- r/cpp | https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp |
-| blocked_candidate | 0.692 | Re: [PATCH] dma-buf: udmabuf: validate create-list count before copying | https://lore.kernel.org/linux-media/20260605160253.637381F00893@smtp.kernel.org/ |
+| blocked_candidate | 0.647 | [PATCH 16/17] arm64: dts: rockchip: add rga3 dt nodes to rk3588 | https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-16-3ec2b15675f7@pengutronix.de/ |
 | blocked_candidate | 0.548 | The libcamera-devel Archives | https://lists.libcamera.org/pipermail/libcamera-devel/ |
 | blocked_candidate | 0.548 | How ref qualifiers led to deducing this | https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this |
 | blocked_candidate | 0.398 | C++: The Documentary trailer | https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer |
 | weak_candidate | 0.638 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! | https://isocpp.org//blog/2026/04/gcc-16.1 |
 | blocked_candidate | 0.593 | CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal | https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph |
-| blocked_candidate | 0.668 | Re: USB 2013:0462 PCTV Systems PCTV 461 | https://lore.kernel.org/linux-media/3dbef45d-9fed-46ab-806e-6ccd95ae0ee1@fritscher.net/ |
 | weak_candidate | 0.614 | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more | https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more |
+| blocked_candidate | 0.644 | Re: [PATCH 06/17] media: rockchip: rga: move power handling to device_run | https://lore.kernel.org/linux-media/20260605222245.35A3C1F00893@smtp.kernel.org/ |
+| blocked_candidate | 0.644 | [PATCH 06/17] media: rockchip: rga: move power handling to device_run | https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-6-3ec2b15675f7@pengutronix.de/ |
+| blocked_candidate | 0.644 | [PATCH 15/17] media: rockchip: rga: schedule jobs to multiple cores | https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-15-3ec2b15675f7@pengutronix.de/ |
+| review_candidate | 0.734 | [PATCH 05/17] media: v4l2-mem2mem: support running multiple jobs in parallel | https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/ |
+| blocked_candidate | 0.62 | [PATCH 17/17] iommu/rockchip: disable fetch dte time limit | https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-17-3ec2b15675f7@pengutronix.de/ |
+| blocked_candidate | 0.506 | Re: [PATCH 17/17] iommu/rockchip: disable fetch dte time limit | https://lore.kernel.org/linux-media/20260605222625.690F01F00893@smtp.kernel.org/ |
 | blocked_candidate | 0.674 | Media3 Release Notes - Media3 1.9.4 | https://developer.android.com/jetpack/androidx/releases/media3#1.9.4 |
 | review_candidate | 0.783 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
-| review_candidate | 0.72 | Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley | https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/ |
-| strong_candidate | 0.81 | [PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678 - Jai Luthra | https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/ |
-| review_candidate | 0.72 | [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra | https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/ |
-| strong_candidate | 0.81 | [PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra | https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/ |
-| blocked_candidate | 0.5 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++ | https://isocpp.org//blog/2026/04/gcc-16.1 |
+| review_candidate | 0.72 | Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init - Bryan O&#39;Donoghue | https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/ |
 | blocked_candidate | 0.455 | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more : Standard C++ | https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more |
+| strong_candidate | 0.81 | [PATCH 05/17] media: v4l2-mem2mem: support running multiple jobs in parallel - Sven P&#252;schel | https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/ |
+| blocked_candidate | 0.5 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++ | https://isocpp.org//blog/2026/04/gcc-16.1 |
 

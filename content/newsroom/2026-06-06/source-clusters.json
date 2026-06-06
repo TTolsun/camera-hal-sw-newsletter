@@ -345,65 +345,24 @@
       ]
     },
     {
-      "cluster_id": "3a5bbe2bfb116e70",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
-      "canonical_title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113",
+      "cluster_id": "4aa171fae9198b0c",
+      "cluster_key": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/",
+      "canonical_title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
       "candidate_count": 2,
       "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
-          "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113",
+          "url": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/",
+          "title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         },
         {
-          "url": "https://lore.kernel.org/linux-media/20260605-idly-geek-23c0459b2445@spud/",
-          "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Conor Dooley",
+          "url": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/",
+          "title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init - Bryan O&#39;Donoghue",
           "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "31b40cccc0e6f0f4",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
-      "canonical_title": "[PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
-          "title": "[PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
-          "title": "[PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678 - Jai Luthra",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "4d6d42eb41205357",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
-      "canonical_title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260605-bullion-polka-bb32563c904b@spud/",
-          "title": "Re: [PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
-          "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -444,71 +403,6 @@
       ]
     },
     {
-      "cluster_id": "0ff554e986ccc4b3",
-      "cluster_key": "https://lore.kernel.org/linux-media/ail3um9aulbypek7@devvm29614.prn0.facebook.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/aiL3UM9aULBypEk7@devvm29614.prn0.facebook.com/",
-      "canonical_title": "Re: [PATCH net-next 1/4] net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/aiL3UM9aULBypEk7@devvm29614.prn0.facebook.com/",
-          "title": "Re: [PATCH net-next 1/4] net: devmem: allow rx-buf-size > PAGE_SIZE per dmabuf binding",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "1c98482100088b78",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-      "canonical_title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-          "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-          "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Sony IMX678 - Jai Luthra",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "db5ac4a09632f789",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
-      "canonical_title": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
-          "title": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
-          "title": "[PATCH v4 0/2] media: Add bindings and driver for Sony IMX678 - Jai Luthra",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "44f3597991199849",
       "cluster_key": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
       "canonical_url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
@@ -526,16 +420,16 @@
       ]
     },
     {
-      "cluster_id": "8e4e857f8396760b",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260605160253.637381f00893@smtp.kernel.org",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260605160253.637381F00893@smtp.kernel.org/",
-      "canonical_title": "Re: [PATCH] dma-buf: udmabuf: validate create-list count before copying",
+      "cluster_id": "f482670dfad11e3b",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-16-3ec2b15675f7@pengutronix.de",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-16-3ec2b15675f7@pengutronix.de/",
+      "canonical_title": "[PATCH 16/17] arm64: dts: rockchip: add rga3 dt nodes to rk3588",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260605160253.637381F00893@smtp.kernel.org/",
-          "title": "Re: [PATCH] dma-buf: udmabuf: validate create-list count before copying",
+          "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-16-3ec2b15675f7@pengutronix.de/",
+          "title": "[PATCH 16/17] arm64: dts: rockchip: add rga3 dt nodes to rk3588",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -635,23 +529,6 @@
       ]
     },
     {
-      "cluster_id": "3755749ccd720033",
-      "cluster_key": "https://lore.kernel.org/linux-media/3dbef45d-9fed-46ab-806e-6ccd95ae0ee1@fritscher.net",
-      "canonical_url": "https://lore.kernel.org/linux-media/3dbef45d-9fed-46ab-806e-6ccd95ae0ee1@fritscher.net/",
-      "canonical_title": "Re: USB 2013:0462 PCTV Systems PCTV 461",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/3dbef45d-9fed-46ab-806e-6ccd95ae0ee1@fritscher.net/",
-          "title": "Re: USB 2013:0462 PCTV Systems PCTV 461",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "a8865e6c6b3d243f",
       "cluster_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
@@ -671,6 +548,115 @@
           "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
           "canonical": false,
           "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cf47965ba3ef3ae9",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260605222245.35a3c1f00893@smtp.kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260605222245.35A3C1F00893@smtp.kernel.org/",
+      "canonical_title": "Re: [PATCH 06/17] media: rockchip: rga: move power handling to device_run",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260605222245.35A3C1F00893@smtp.kernel.org/",
+          "title": "Re: [PATCH 06/17] media: rockchip: rga: move power handling to device_run",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a3d24aa25a8357e5",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-6-3ec2b15675f7@pengutronix.de",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-6-3ec2b15675f7@pengutronix.de/",
+      "canonical_title": "[PATCH 06/17] media: rockchip: rga: move power handling to device_run",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-6-3ec2b15675f7@pengutronix.de/",
+          "title": "[PATCH 06/17] media: rockchip: rga: move power handling to device_run",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3a390349e37532cc",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-15-3ec2b15675f7@pengutronix.de",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-15-3ec2b15675f7@pengutronix.de/",
+      "canonical_title": "[PATCH 15/17] media: rockchip: rga: schedule jobs to multiple cores",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-15-3ec2b15675f7@pengutronix.de/",
+          "title": "[PATCH 15/17] media: rockchip: rga: schedule jobs to multiple cores",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9a96c80a1dd42edc",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
+      "canonical_title": "[PATCH 05/17] media: v4l2-mem2mem: support running multiple jobs in parallel",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
+          "title": "[PATCH 05/17] media: v4l2-mem2mem: support running multiple jobs in parallel",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
+          "title": "[PATCH 05/17] media: v4l2-mem2mem: support running multiple jobs in parallel - Sven P&#252;schel",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2cb6b17fb2e80ccf",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-17-3ec2b15675f7@pengutronix.de",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-17-3ec2b15675f7@pengutronix.de/",
+      "canonical_title": "[PATCH 17/17] iommu/rockchip: disable fetch dte time limit",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-17-3ec2b15675f7@pengutronix.de/",
+          "title": "[PATCH 17/17] iommu/rockchip: disable fetch dte time limit",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4f44122cd50b19e0",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260605222625.690f01f00893@smtp.kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260605222625.690F01F00893@smtp.kernel.org/",
+      "canonical_title": "Re: [PATCH 17/17] iommu/rockchip: disable fetch dte time limit",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260605222625.690F01F00893@smtp.kernel.org/",
+          "title": "Re: [PATCH 17/17] iommu/rockchip: disable fetch dte time limit",
+          "canonical": true,
+          "reliability": "project-official",
           "manual_seed": false
         }
       ]
