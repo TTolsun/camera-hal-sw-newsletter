@@ -436,6 +436,35 @@ const editorCompletionSchema = {
   required: ['sections']
 };
 
+// #482: article-preserving repair patch. A repair-section fix returns only
+// field-level replacements, never a full section rewrite, so the model cannot
+// change which articles exist. `value` is intentionally STRING-only: every
+// patchable leaf is a string or an element of a stringArray, so a string covers
+// all of them while blocking an object/array that could smuggle in identity
+// fields (sources, candidate_id, coverage_type, ...).
+const editorRepairPatch = {
+  type: 'OBJECT',
+  properties: {
+    section_index: number,
+    section_key: string,
+    op: enumString(['replace']),
+    path: string,
+    value: string
+  },
+  required: ['op', 'path', 'value']
+};
+
+const editorRepairPatchSchema = {
+  type: 'OBJECT',
+  properties: {
+    patches: {
+      type: 'ARRAY',
+      items: editorRepairPatch
+    }
+  },
+  required: ['patches']
+};
+
 // Per-article editorial-quality verdict. The criterion is NOT "is this a Camera HAL
 // topic" but "how useful is this article to a Camera HAL SW engineer" — a C++, AI, or
 // Linux article qualifies if it helps that engineer's work. The deterministic gate reads
@@ -560,6 +589,7 @@ module.exports = {
   reporterSchema,
   editorSchema,
   editorCompletionSchema,
+  editorRepairPatchSchema,
   factCheckSchema,
   publicArticleJudgeSchema,
   backgroundContextSchema
