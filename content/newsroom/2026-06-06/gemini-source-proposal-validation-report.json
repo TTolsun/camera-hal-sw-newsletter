@@ -56,7 +56,21 @@
       "source_policy_match": "android-compatibility-definition-document"
     },
     {
-      "proposal_id": "linux-media-csiphy-gen2-v1-1-mipi-csi-2",
+      "proposal_id": "camerax-1-6-1-release",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "kernel-media-csiphy-3ph-gen2-v1-1-init",
       "candidate_url": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/",
       "normalized_url": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/",
       "accepted": true,
@@ -64,20 +78,12 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "cpp-26-reflection-glaze-7-2",
+      "proposal_id": "cpp26-reflection-glaze-7-2",
       "candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "normalized_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "iso-cpp-blog"
-    },
-    {
-      "proposal_id": "linux-media-v4l2-mem2mem-parallel-jobs",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
     },
     {
       "proposal_id": "gcc-16-1-cpp26-features",
@@ -86,11 +92,19 @@
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "kernel-media-v4l2-mem2mem-multijob",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
     }
   ],
   "counts": {
     "domain_not_allowed": 2,
-    "discovered_not_extractable": 2,
+    "discovered_not_extractable": 3,
     "accepted": 5
   }
 }

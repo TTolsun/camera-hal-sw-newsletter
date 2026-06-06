@@ -5,259 +5,264 @@
   "proposals": [
     {
       "proposal_id": "google-io-2026-media-pipeline",
-      "topic_gap": "Google I/O 2026 announcements related to Android media pipeline, particularly focusing on camera output, processing, and playback.",
-      "source_family": "android",
+      "topic_gap": "Google I/O 2026 announcements related to Android media pipeline enhancements, potentially impacting camera output processing, recording, or playback paths.",
+      "source_family": "android-developers-blog",
       "allowed_domains": [
         "youtube.com",
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
-        "Google I/O 2026",
         "Android media pipeline",
-        "camera output",
+        "CameraX",
         "Media3",
         "MediaCodec",
         "MediaRecorder",
-        "video processing",
-        "A/V sync"
+        "Google I/O 2026 camera"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "New APIs or features for camera output handling (e.g., Media3, MediaCodec, MediaRecorder)",
-        "Improvements in video processing or encoding related to camera streams",
-        "Updates on A/V synchronization for camera-generated content",
-        "Discussions on performance or efficiency gains for media pipelines involving camera data"
+        "Mentions of new APIs or features for camera output handling (e.g., Media3, MediaCodec, MediaRecorder).",
+        "Improvements in video processing, encoding, or decoding relevant to camera-generated content.",
+        "Discussions on performance or efficiency gains for media pipelines involving camera streams."
       ],
       "risk_notes": [
-        "The playlist might contain many videos not relevant to Camera HAL SW. Need to filter by title/description for camera-related content.",
-        "Focus on 'Supercharge your media pipeline' suggests relevance, but specific camera output details need to be confirmed."
+        "The YouTube playlist title is broad ('Supercharge your media pipeline'). Need to verify specific talks for camera-output relevance.",
+        "May contain generic media playback or streaming topics not relevant to camera HAL SW."
       ]
     },
     {
       "proposal_id": "google-io-2026-jetpack-compose-cross-device",
-      "topic_gap": "Google I/O 2026 announcements on building seamless Android experiences across devices, specifically looking for implications on camera-related UI/UX or media sharing.",
-      "source_family": "android",
+      "topic_gap": "Google I/O 2026 announcements regarding Jetpack Compose for seamless Android experiences across devices, specifically looking for implications on camera UI/UX or cross-device camera output sharing/display.",
+      "source_family": "android-developers-blog",
       "allowed_domains": [
         "goo.gle",
         "android-developers.googleblog.com"
       ],
       "search_keywords": [
-        "Google I/O 2026",
-        "Jetpack Compose",
-        "cross-device",
-        "adaptive apps",
-        "camera UI",
-        "media sharing"
+        "Jetpack Compose camera",
+        "cross-device camera",
+        "adaptive apps camera",
+        "Google I/O 2026 camera UI"
       ],
       "candidate_urls": [
         "https://goo.gle/AdaptiveApps_IO26"
       ],
       "expected_evidence": [
-        "New Jetpack Compose components or guidelines for camera preview surfaces across different form factors (foldables, tablets)",
-        "Improvements in sharing camera-generated media between devices",
-        "Adaptive UI patterns for camera applications on various screen sizes"
+        "New Compose APIs or guidelines for camera preview integration.",
+        "Improvements in handling camera output across different form factors (foldables, tablets, Wear OS).",
+        "Discussions on shared camera experiences or multi-device camera control."
       ],
       "risk_notes": [
-        "The primary focus might be on general UI/UX, not necessarily camera-specific. Need to identify concrete camera-related content.",
-        "The URL is a shortlink, need to verify the final destination and its direct relevance."
+        "The title is generic ('Building seamless Android experiences across devices with Jetpack Compose'). Need to verify specific camera-related content.",
+        "May focus on general UI/UX without direct impact on camera HAL or media pipeline."
       ]
     },
     {
       "proposal_id": "camerax-1-6-0-release",
-      "topic_gap": "Updates and new features in CameraX 1.6.0, focusing on API changes, performance improvements, or bug fixes relevant to camera application development.",
-      "source_family": "camera-api",
+      "topic_gap": "New features, bug fixes, or behavioral changes introduced in CameraX 1.6.0 that impact camera application development, performance, or interaction with the Camera HAL.",
+      "source_family": "camerax-release-notes",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
         "CameraX 1.6.0",
-        "AndroidX Camera",
-        "camera API",
-        "release notes",
-        "camera features"
+        "AndroidX Camera release",
+        "CameraX new features"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
       ],
       "expected_evidence": [
-        "Specific API changes or additions in CameraX 1.6.0",
-        "Performance optimizations for camera operations (e.g., capture, preview, video recording)",
-        "Bug fixes or stability improvements affecting camera functionality",
-        "New features related to camera controls, image processing, or output formats"
+        "Details on new CameraX APIs, use cases, or extensions.",
+        "Improvements in camera initialization, preview, image capture, or video recording.",
+        "Bug fixes or performance optimizations related to camera operations.",
+        "Compatibility changes or new device support."
       ],
       "risk_notes": [
-        "Release notes can sometimes be very technical and require careful interpretation of their impact on Camera HAL SW."
+        "Release notes can be very technical; need to extract key actionable insights for the newsletter."
       ]
     },
     {
       "proposal_id": "camerax-1-7-0-alpha01-release",
-      "topic_gap": "Early insights into upcoming features and changes in CameraX 1.7.0-alpha01, which could indicate future directions for Android camera development.",
-      "source_family": "camera-api",
+      "topic_gap": "Early insights into upcoming features or significant changes in CameraX 1.7.0-alpha01, providing a glimpse into the future direction of CameraX development.",
+      "source_family": "camerax-release-notes",
       "allowed_domains": [
         "developer.android.com"
       ],
       "search_keywords": [
         "CameraX 1.7.0-alpha01",
-        "AndroidX Camera",
-        "alpha release",
-        "experimental camera features",
-        "future camera API"
+        "AndroidX Camera alpha",
+        "CameraX upcoming features"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
       ],
       "expected_evidence": [
-        "Experimental APIs or preview features in CameraX 1.7.0-alpha01",
-        "Indications of architectural changes or significant new capabilities",
-        "Early bug reports or known issues that might affect future camera implementations"
+        "Descriptions of new experimental APIs or functionalities.",
+        "Indications of architectural changes or major refactorings.",
+        "Early feedback opportunities or known issues."
       ],
       "risk_notes": [
-        "Alpha releases are subject to change and may not reflect the final product. Information might be less stable.",
-        "Details might be sparse or highly technical."
+        "Alpha releases might contain unstable features or features that could be removed before stable release.",
+        "Information might be preliminary and subject to change."
       ]
     },
     {
       "proposal_id": "aosp-camera-its-box-updates",
-      "topic_gap": "Updates to the Camera Image Test Suite (ITS) documentation, specifically regarding automated camera image testing, which is crucial for Camera HAL compliance and quality.",
-      "source_family": "aosp",
+      "topic_gap": "Updates to the Camera Image Test Suite (ITS) box documentation, indicating changes or new requirements for camera image quality testing in Android devices.",
+      "source_family": "aosp-site-updates",
       "allowed_domains": [
         "source.android.com"
       ],
       "search_keywords": [
-        "Camera ITS",
-        "Android compatibility",
-        "camera testing",
-        "automated camera tests",
-        "Camera HAL validation",
-        "image quality testing"
+        "Camera ITS box",
+        "Android camera testing",
+        "AOSP camera compatibility",
+        "camera image quality"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "New or updated test procedures for Camera ITS",
-        "Changes in hardware requirements for the ITS box",
-        "New metrics or criteria for evaluating camera image quality",
-        "Guidance on setting up or running ITS tests for camera HAL validation"
+        "New or updated test procedures for camera image quality.",
+        "Changes in hardware requirements for ITS testing.",
+        "Guidance on setting up or using the Camera ITS box.",
+        "Impact on Camera HAL implementations for passing ITS tests."
       ],
       "risk_notes": [
-        "Documentation updates can sometimes be minor or purely editorial, requiring careful review for substantive changes."
+        "Documentation updates can sometimes be minor or rephrasing without significant technical changes."
       ]
     },
     {
-      "proposal_id": "linux-media-csiphy-gen2-v1-1-mipi-csi-2",
-      "topic_gap": "Kernel-level updates related to MIPI CSI-2 C-PHY initialization, specifically for Qualcomm's camss (Camera Subsystem) and Gen2 v1.1, indicating hardware interface improvements relevant to camera sensor integration.",
-      "source_family": "linux-camera",
+      "proposal_id": "camerax-1-6-1-release",
+      "topic_gap": "Minor updates, bug fixes, or performance improvements in CameraX 1.6.1 that could affect camera application stability or performance.",
+      "source_family": "android-developers-latest-updates",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.6.1",
+        "AndroidX Camera bug fix",
+        "CameraX update"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "expected_evidence": [
+        "Specific bug fixes related to camera operations.",
+        "Minor performance enhancements.",
+        "Stability improvements for CameraX applications."
+      ],
+      "risk_notes": [
+        "Likely to be minor updates; may not warrant a full article but good for a short mention."
+      ]
+    },
+    {
+      "proposal_id": "kernel-media-csiphy-3ph-gen2-v1-1-init",
+      "topic_gap": "Updates to the Linux kernel media subsystem, specifically concerning Qualcomm's Camera Subsystem (CAMSS) CSI-PHY, indicating new hardware support or improvements in MIPI CSI-2 C-PHY initialization.",
+      "source_family": "lore-linux-media-list",
       "allowed_domains": [
         "lore.kernel.org"
       ],
       "search_keywords": [
         "linux-media",
         "qcom camss",
-        "csiphy-3ph",
+        "csiphy",
         "MIPI CSI-2 C-PHY",
-        "Gen2 v1.1",
-        "camera kernel driver"
+        "kernel camera driver"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/"
       ],
       "expected_evidence": [
-        "Details on Gen2 v1.1 MIPI CSI-2 C-PHY initialization for Qualcomm camss",
-        "Impact on camera sensor integration or performance at the driver level",
-        "Changes in kernel camera driver architecture for CSI-2 interfaces"
+        "Details on Gen2 v1.1 MIPI CSI-2 C-PHY support.",
+        "Impact on camera sensor integration or performance for Qualcomm platforms.",
+        "New driver features or bug fixes related to CSI-PHY."
       ],
       "risk_notes": [
-        "Highly technical kernel patch discussion, requires deep understanding of Linux media subsystem and MIPI CSI-2.",
-        "May not directly impact Android Camera HAL, but provides context on underlying hardware support."
+        "Kernel mailing list discussions can be highly technical and require deep understanding to extract relevant information.",
+        "May be very low-level and not directly impact Camera HAL SW unless it enables new hardware capabilities."
       ]
     },
     {
-      "proposal_id": "cpp-26-reflection-glaze-7-2",
-      "topic_gap": "Updates on C++26 reflection features and their practical application, as demonstrated by Glaze 7.2, which could influence future C++ development practices in Camera HAL or related native components.",
-      "source_family": "cpp",
+      "proposal_id": "cpp26-reflection-glaze-7-2",
+      "topic_gap": "Advancements in C++26 reflection features and their practical application in libraries like Glaze, potentially impacting how camera-related data structures or configurations are handled in native Android components.",
+      "source_family": "iso-cpp-blog",
       "allowed_domains": [
         "isocpp.org"
       ],
       "search_keywords": [
         "C++26 reflection",
-        "Glaze 7.2",
-        "C++ serialization",
-        "camera HAL C++",
-        "native camera components"
+        "Glaze library",
+        "native camera code",
+        "C++ serialization"
       ],
       "candidate_urls": [
         "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
       ],
       "expected_evidence": [
-        "Examples of C++26 reflection usage in Glaze 7.2 for serialization/deserialization",
-        "Discussion on how reflection simplifies data handling or API design",
-        "Potential benefits for performance or code generation in C++ camera modules"
+        "Examples of C++26 reflection being used for serialization/deserialization of complex data types.",
+        "Performance benefits or code simplification due to reflection in data handling.",
+        "Potential for more robust and maintainable native code for camera metadata or configuration."
       ],
       "risk_notes": [
-        "General C++ language features might not have immediate or direct impact on Android Camera HAL SW, but could influence long-term architectural decisions.",
-        "The article focuses on various data formats, need to identify specific relevance to camera metadata or configuration."
-      ]
-    },
-    {
-      "proposal_id": "linux-media-v4l2-mem2mem-parallel-jobs",
-      "topic_gap": "Kernel patch enabling parallel job execution in v4l2-mem2mem, which could significantly improve performance for camera-related memory-to-memory operations (e.g., ISP processing, video encoding/decoding).",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
-      "search_keywords": [
-        "linux-media",
-        "v4l2-mem2mem",
-        "parallel jobs",
-        "multi-core processing",
-        "ISP acceleration",
-        "video encoding",
-        "kernel camera driver"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/"
-      ],
-      "expected_evidence": [
-        "Details on how parallel jobs are supported in v4l2-mem2mem",
-        "Performance benchmarks or expected improvements for media processing pipelines",
-        "Implications for multi-core hardware acceleration in camera systems",
-        "Specific use cases relevant to camera ISP or video encoder/decoder offloading"
-      ],
-      "risk_notes": [
-        "Highly technical kernel patch, requires understanding of V4L2 and memory-to-memory operations.",
-        "Impact on Android Camera HAL would be indirect, through improved kernel capabilities."
+        "General C++ advancements may not have direct or immediate impact on Android Camera HAL SW.",
+        "Requires interpretation of how these C++ features could be applied in the Android context."
       ]
     },
     {
       "proposal_id": "gcc-16-1-cpp26-features",
-      "topic_gap": "Release of GCC 16.1 with C++26 features, including reflection, contracts, and safety hardening, which could impact the compilation and development of C++ components within the Android Camera HAL.",
-      "source_family": "cpp",
+      "topic_gap": "Release of GCC 16.1 with C++26 features (reflection, contracts, safety hardening), potentially influencing the development of native Android Camera HAL components and drivers.",
+      "source_family": "iso-cpp-blog",
       "allowed_domains": [
         "isocpp.org"
       ],
       "search_keywords": [
         "GCC 16.1",
-        "C++26",
-        "C++ reflection",
-        "C++ contracts",
-        "compiler updates",
-        "Android NDK C++",
+        "C++26 compiler",
+        "Android native development",
         "Camera HAL C++"
       ],
       "candidate_urls": [
         "https://isocpp.org//blog/2026/04/gcc-16.1"
       ],
       "expected_evidence": [
-        "Overview of C++26 features supported in GCC 16.1 (reflection, contracts, safety hardening)",
-        "Potential benefits for code quality, safety, and maintainability in C++ camera modules",
-        "Impact on build toolchains used for Android Camera HAL development"
+        "New compiler features that could improve code safety, performance, or expressiveness in camera-related C++ code.",
+        "Impact on build systems or toolchains used for Android native development.",
+        "Discussions on how these features can be leveraged in embedded or performance-critical contexts."
       ],
       "risk_notes": [
-        "General compiler updates may not have immediate or direct impact on Camera HAL SW, but are important for long-term tooling and language evolution.",
-        "Need to assess if these features are adopted in Android's NDK/toolchain for Camera HAL."
+        "Compiler releases are broad; need to identify specific features relevant to camera HAL or performance-critical media components.",
+        "Adoption of new compiler versions in AOSP might take time."
+      ]
+    },
+    {
+      "proposal_id": "kernel-media-v4l2-mem2mem-multijob",
+      "topic_gap": "Updates to the Linux kernel's V4L2 memory-to-memory (mem2mem) framework to support running multiple jobs in parallel, which could improve performance for camera processing pipelines on Android devices.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "linux-media",
+        "V4L2 mem2mem",
+        "parallel jobs",
+        "camera processing",
+        "hardware accelerator"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/"
+      ],
+      "expected_evidence": [
+        "Performance improvements for video encoding/decoding or image processing tasks.",
+        "Better utilization of hardware accelerators (e.g., RGA, ISP) for camera-related operations.",
+        "Impact on multi-stream camera use cases or concurrent media processing."
+      ],
+      "risk_notes": [
+        "Highly technical kernel patch discussion; requires careful analysis to determine relevance to Android Camera HAL SW.",
+        "May be specific to certain hardware (e.g., Rockchip RGA) and not broadly applicable."
       ]
     }
   ]
