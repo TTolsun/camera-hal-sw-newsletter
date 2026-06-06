@@ -16,11 +16,10 @@ const HEADLINE_STATE_REL_PATH = path.join('data', 'homepage-headline.json');
 const SCHEMA_VERSION = 1;
 const DAY_MS = 24 * 60 * 60 * 1000;
 const DECISION_REASONS = Object.freeze({
-  RETAINED_CURRENT_ABOVE_MARGIN: 'retained_current_above_margin',
-  REPLACED_BY_NEW_CANDIDATE: 'replaced_by_new_candidate',
-  CLEARED_BELOW_MINIMUM_SCORE: 'cleared_below_minimum_score',
-  CLEARED_FAILED_REVALIDATION: 'cleared_failed_revalidation',
-  SEEDED_FROM_CURRENT_ISSUE: 'seeded_from_current_issue',
+  // 단순 규칙: 소스 날짜가 가장 최신인 Camera HAL 연관 기사를 헤드라인으로.
+  LATEST_CAMERA_HAL_ARTICLE: 'latest_camera_hal_article',
+  RETAINED_CURRENT_NEWER: 'retained_current_newer',
+  RETAINED_NO_ELIGIBLE_CANDIDATE: 'retained_no_eligible_candidate',
   NO_ELIGIBLE_CANDIDATE: 'no_eligible_candidate'
 });
 const HEADLINE_STATE_REMEDIATION = 'Run newsletter generation to refresh or clear homepage headline state.';
@@ -138,6 +137,38 @@ function isFallbackTopic(candidate = {}) {
   return text(candidate.relevance_bucket || candidate.category) === 'cpp_ai_tooling_fallback' ||
     candidate.fallback_only === true ||
     candidate.fallback_topic === true;
+}
+
+// "Camera HAL 연관" = 직접 카메라 스택 버킷 + 카메라 출력(멀티미디어). soc/AI/generic은 제외.
+const CAMERA_HAL_HEADLINE_BUCKETS = new Set([
+  ...ensureArray(articlePolicy.primaryCameraStack?.buckets),
+  'android_multimedia_camera_output'
+]);
+
+function isCameraHalRelatedHeadline(candidate = {}) {
+  // 후보(top-level relevance_bucket)와 저장된 헤드라인 스냅샷(snapshot.category) 둘 다 본다.
+  return CAMERA_HAL_HEADLINE_BUCKETS.has(
+    text(candidate.relevance_bucket || candidate.category || candidate.snapshot?.category)
+  );
+}
+
+// 비교용 소스 날짜(타임스탬프). 파싱 불가하면 NaN -> 헤드라인 후보에서 제외.
+function headlineSourceTimestamp(candidate = {}) {
+  const date = candidateDateEvidence(candidate).date;
+  if (!date) return NaN;
+  return Date.parse(date);
+}
+
+// 헤드라인이 될 수 있는 유효한 기사: 소스 URL 있음, 재생목록 아님, Camera HAL 연관,
+// 비교 가능한 소스 날짜 있음, blocked source 아님.
+function isEligibleHeadlineArticle(candidate = {}) {
+  const url = sourceUrl(candidate);
+  if (!url) return false;
+  if (isPlaylistCollectionUrl(url)) return false;
+  if (!isCameraHalRelatedHeadline(candidate)) return false;
+  if (Number.isNaN(headlineSourceTimestamp(candidate))) return false;
+  if (candidateQualityFlags(candidate).blocked_source === true) return false;
+  return true;
 }
 
 function computeHeadlineScore(candidate = {}, policy = getHeadlinePolicy()) {
@@ -399,138 +430,6 @@ function writeHomepageHeadlineState(root = process.cwd(), state) {
   return filePath;
 }
 
-function headlineCandidatePool(selectedArticles = [], eligibleCandidates = []) {
-  const byKey = new Map();
-  for (const candidate of [...ensureArray(selectedArticles), ...ensureArray(eligibleCandidates)]) {
-    const key = articleIdentityKey(candidate);
-    if (!key || byKey.has(key)) continue;
-    byKey.set(key, { ...candidate, article_identity_key: key });
-  }
-  return [...byKey.values()];
-}
-
-function bestHeadlineCandidate(candidates = [], policy = getHeadlinePolicy()) {
-  return headlineCandidatePool([], candidates)
-    .map(candidate => ({
-      candidate,
-      score: computeHeadlineScore(candidate, policy).headline_score
-    }))
-    .filter(item => isHeadlineEligible(item.candidate, { policy, runtimeScore: item.score }))
-    .sort((a, b) =>
-      b.score - a.score ||
-      number(a.candidate.editorial_priority, 99) - number(b.candidate.editorial_priority, 99) ||
-      text(a.candidate.title).localeCompare(text(b.candidate.title))
-    )[0] || null;
-}
-
-function markNormalHeadlineArticle(article, headline) {
-  const isHeadline = headline && articleIdentityKey(article) === headline.article_identity_key;
-  if (!isHeadline) return article;
-  return {
-    ...article,
-    article_identity_key: headline.article_identity_key,
-    included_as_headline_latest: true,
-    headline_latest_inclusion_mode: 'selected_normally',
-    injected_from_headline_snapshot: false,
-    snapshot_revalidated: true
-  };
-}
-
-function injectedArticleFromHeadline(headline) {
-  return {
-    title: headline.title,
-    summary: headline.summary,
-    url: headline.source_url,
-    source_url: headline.source_url,
-    source: headline.snapshot?.source_name || '',
-    newsletter_date: headline.newsletter_date,
-    newsletter_url: headline.newsletter_url,
-    newsletter_article_url: headline.newsletter_article_url || '',
-    image_url: headline.image_url || '',
-    image_alt: headline.image_alt || '',
-    article_identity_key: headline.article_identity_key,
-    relevance_bucket: headline.snapshot?.category || '',
-    deterministic_score: headline.current_score,
-    headline_score: headline.current_score,
-    score_breakdown: headline.score_breakdown || {},
-    selected: true,
-    selected_for_editor: true,
-    final_selected: true,
-    primary_selected: true,
-    included_as_headline_latest: true,
-    headline_latest_inclusion_mode: 'injected_from_headline_snapshot',
-    injected_from_headline_snapshot: true,
-    snapshot_revalidated: true,
-    selection_slot: 'homepage-headline-retained',
-    selection_stage: 'deterministic-primary',
-    date_evidence: headline.date_evidence,
-    quality_flags: headline.quality_flags
-  };
-}
-
-function applyHeadlineInclusion(selected, headline, policy) {
-  const marked = ensureArray(selected).map(article => markNormalHeadlineArticle(article, headline));
-  const selectedNormally = marked.some(article => article.headline_latest_inclusion_mode === 'selected_normally');
-  let injected = false;
-  if (policy.latestInclusionRequired && !selectedNormally) {
-    marked.push(injectedArticleFromHeadline(headline));
-    injected = true;
-  }
-  return { selected: marked, selectedNormally, injected };
-}
-
-function removedDueToHeadlineInclusionRecord(article) {
-  return {
-    article_identity_key: articleIdentityKey(article),
-    title: text(article.title),
-    source_url: text(sourceUrl(article) || article.source_url || article.url),
-    deterministic_score: number(article.deterministic_score ?? article.headline_score, null),
-    editorial_priority: number(article.editorial_priority, null),
-    reason: REMOVED_DUE_TO_HEADLINE_INCLUSION_REASON
-  };
-}
-
-function collapseAndLimitSelected(articles, maxArticles = articlePolicy.mainArticleCount.max) {
-  const byKey = new Map();
-  for (const article of ensureArray(articles)) {
-    const key = articleIdentityKey(article);
-    if (!byKey.has(key)) {
-      byKey.set(key, { ...article, article_identity_key: key });
-      continue;
-    }
-    const existing = byKey.get(key);
-    byKey.set(key, {
-      ...existing,
-      ...article,
-      included_as_headline_latest: existing.included_as_headline_latest || article.included_as_headline_latest,
-      injected_from_headline_snapshot: existing.injected_from_headline_snapshot || article.injected_from_headline_snapshot,
-      snapshot_revalidated: existing.snapshot_revalidated || article.snapshot_revalidated
-    });
-  }
-  const out = [...byKey.values()];
-  if (out.length <= maxArticles) {
-    return {
-      selected: out,
-      removed_due_to_headline_inclusion: []
-    };
-  }
-  const overflow = out.length - maxArticles;
-  const dropCandidates = out
-    .filter(item => item.injected_from_headline_snapshot !== true)
-    .sort((a, b) =>
-      number(b.editorial_priority, 99) - number(a.editorial_priority, 99) ||
-      number(a.deterministic_score ?? a.headline_score) - number(b.deterministic_score ?? b.headline_score) ||
-      text(b.title).localeCompare(text(a.title))
-    )
-    .slice(0, overflow);
-  const dropKeys = dropCandidates.map(articleIdentityKey);
-  const dropSet = new Set(dropKeys);
-  return {
-    selected: out.filter(item => !dropSet.has(articleIdentityKey(item))).slice(0, maxArticles),
-    removed_due_to_headline_inclusion: dropCandidates.map(removedDueToHeadlineInclusionRecord)
-  };
-}
-
 function updatedState({ date, currentHeadline, previousHeadline, decision, policy }) {
   const history = previousHeadline && previousHeadline.article_identity_key !== currentHeadline?.article_identity_key
     ? [{
@@ -582,158 +481,52 @@ function applyHomepageHeadlineSelection({
 } = {}) {
   const previousState = currentState || emptyHeadlineState({ date, policy });
   const current = previousState.current_headline || null;
-  const pool = headlineCandidatePool(selectedArticles, eligibleCandidates);
-  const best = bestHeadlineCandidate(pool, policy);
-  const existingValidation = current
-    ? validateCurrentHeadline(current, { policy, scoredAt: date })
-    : { ok: true, reason: 'current_headline_null' };
-  let headline = null;
-  let selected = ensureArray(selectedArticles).map(article => ({ ...article, article_identity_key: articleIdentityKey(article) }));
-  let decision;
+  // inclusion 제거: 헤드라인은 이슈에 강제 삽입하지 않으므로 selected는 입력 그대로 둔다.
+  const selected = ensureArray(selectedArticles).map(article => ({ ...article, article_identity_key: articleIdentityKey(article) }));
 
-  if (!current) {
-    if (best) {
-      headline = headlineSnapshotFromCandidate(best.candidate, { date, newsletterUrl, policy, scoredAt: date });
-      const inclusion = applyHeadlineInclusion(selected, headline, policy);
-      selected = inclusion.selected;
-      decision = buildDecision({
-        reason: DECISION_REASONS.SEEDED_FROM_CURRENT_ISSUE,
-        replacement_headline_key: headline.article_identity_key,
-        previous_stored_current_score: null,
-        runtime_decayed_score: headline.current_score,
-        last_scored_at: null,
-        scored_at: date,
-        seeded: true,
-        injected: inclusion.injected,
-        snapshot_revalidated: true,
-        selected_normally: inclusion.selectedNormally,
-        latest_inclusion_required: policy.latestInclusionRequired
-      });
-    } else {
-      decision = buildDecision({
-        reason: DECISION_REASONS.NO_ELIGIBLE_CANDIDATE,
-        scored_at: date,
-        latest_inclusion_required: policy.latestInclusionRequired
-      });
-    }
-  } else if (!existingValidation.ok) {
-    if (best) {
-      headline = headlineSnapshotFromCandidate(best.candidate, { date, newsletterUrl, policy, scoredAt: date });
-      const inclusion = applyHeadlineInclusion(selected, headline, policy);
-      selected = inclusion.selected;
-      decision = buildDecision({
-        reason: DECISION_REASONS.REPLACED_BY_NEW_CANDIDATE,
-        current_headline_key: current.article_identity_key,
-        replacement_headline_key: headline.article_identity_key,
-        previous_stored_current_score: existingValidation.previous_stored_current_score,
-        runtime_decayed_score: existingValidation.runtime_decayed_score,
-        last_scored_at: existingValidation.last_scored_at,
-        scored_at: date,
-        replaced: true,
-        injected: inclusion.injected,
-        snapshot_revalidated: false,
-        revalidation_failure_reason: existingValidation.reason,
-        selected_normally: inclusion.selectedNormally,
-        latest_inclusion_required: policy.latestInclusionRequired
-      });
-    } else {
-      decision = buildDecision({
-        reason: DECISION_REASONS.CLEARED_FAILED_REVALIDATION,
-        current_headline_key: current.article_identity_key,
-        previous_stored_current_score: existingValidation.previous_stored_current_score,
-        runtime_decayed_score: existingValidation.runtime_decayed_score,
-        last_scored_at: existingValidation.last_scored_at,
-        scored_at: date,
-        cleared: true,
-        revalidation_failure_reason: existingValidation.reason,
-        latest_inclusion_required: policy.latestInclusionRequired
-      });
-    }
-  } else if (existingValidation.runtime_decayed_score < policy.minimumHeadlineScore) {
-    if (best) {
-      headline = headlineSnapshotFromCandidate(best.candidate, { date, newsletterUrl, policy, scoredAt: date });
-      const inclusion = applyHeadlineInclusion(selected, headline, policy);
-      selected = inclusion.selected;
-      decision = buildDecision({
-        reason: DECISION_REASONS.REPLACED_BY_NEW_CANDIDATE,
-        current_headline_key: current.article_identity_key,
-        replacement_headline_key: headline.article_identity_key,
-        previous_stored_current_score: existingValidation.previous_stored_current_score,
-        runtime_decayed_score: existingValidation.runtime_decayed_score,
-        last_scored_at: existingValidation.last_scored_at,
-        scored_at: date,
-        replaced: true,
-        injected: inclusion.injected,
-        snapshot_revalidated: true,
-        selected_normally: inclusion.selectedNormally,
-        latest_inclusion_required: policy.latestInclusionRequired
-      });
-    } else {
-      decision = buildDecision({
-        reason: DECISION_REASONS.CLEARED_BELOW_MINIMUM_SCORE,
-        current_headline_key: current.article_identity_key,
-        previous_stored_current_score: existingValidation.previous_stored_current_score,
-        runtime_decayed_score: existingValidation.runtime_decayed_score,
-        last_scored_at: existingValidation.last_scored_at,
-        scored_at: date,
-        cleared: true,
-        snapshot_revalidated: true,
-        latest_inclusion_required: policy.latestInclusionRequired
-      });
-    }
-  } else {
-    const bestScore = best ? best.score : -1;
-    if (best && bestScore >= existingValidation.runtime_decayed_score + policy.replacementMargin) {
-      headline = headlineSnapshotFromCandidate(best.candidate, { date, newsletterUrl, policy, scoredAt: date });
-      const inclusion = applyHeadlineInclusion(selected, headline, policy);
-      selected = inclusion.selected;
-      decision = buildDecision({
-        reason: DECISION_REASONS.REPLACED_BY_NEW_CANDIDATE,
-        current_headline_key: current.article_identity_key,
-        replacement_headline_key: headline.article_identity_key,
-        previous_stored_current_score: existingValidation.previous_stored_current_score,
-        runtime_decayed_score: existingValidation.runtime_decayed_score,
-        last_scored_at: existingValidation.last_scored_at,
-        scored_at: date,
-        replaced: true,
-        injected: inclusion.injected,
-        snapshot_revalidated: true,
-        selected_normally: inclusion.selectedNormally,
-        latest_inclusion_required: policy.latestInclusionRequired
-      });
-    } else {
-      headline = {
-        ...current,
-        current_score: existingValidation.runtime_decayed_score,
-        last_scored_at: date
-      };
-      selected = selected.map(article => markNormalHeadlineArticle(article, headline));
-      const selectedNormally = selected.some(article => article.headline_latest_inclusion_mode === 'selected_normally');
-      let injected = false;
-      if (policy.latestInclusionRequired && !selectedNormally) {
-        selected.push(injectedArticleFromHeadline(headline));
-        injected = true;
-      }
-      decision = buildDecision({
-        reason: DECISION_REASONS.RETAINED_CURRENT_ABOVE_MARGIN,
-        current_headline_key: current.article_identity_key,
-        previous_stored_current_score: existingValidation.previous_stored_current_score,
-        runtime_decayed_score: existingValidation.runtime_decayed_score,
-        last_scored_at: existingValidation.last_scored_at,
-        scored_at: date,
-        retained: true,
-        injected,
-        snapshot_revalidated: true,
-        selected_normally: selectedNormally,
-        latest_inclusion_required: policy.latestInclusionRequired
-      });
+  // 이번 이슈의 Camera HAL 연관 + 유효한 기사 + (유효하면) 현재 헤드라인을 비교 풀로.
+  const issueCandidates = ensureArray(selectedArticles).filter(isEligibleHeadlineArticle);
+  const currentEligible = current && isEligibleHeadlineArticle(current) ? current : null;
+  const rankPool = currentEligible ? [...issueCandidates, currentEligible] : issueCandidates;
+
+  // 소스 날짜가 가장 최신인 기사를 선택. 동률이면 먼저 온 것(이슈 후보 우선) 유지.
+  let chosen = null;
+  for (const candidate of rankPool) {
+    if (!chosen || headlineSourceTimestamp(candidate) > headlineSourceTimestamp(chosen)) {
+      chosen = candidate;
     }
   }
 
-  const collapseResult = collapseAndLimitSelected(selected, articlePolicy.mainArticleCount.max);
-  selected = collapseResult.selected;
-  const removedDueToHeadlineInclusion = collapseResult.removed_due_to_headline_inclusion;
-  decision.removed_due_to_headline_inclusion_count = removedDueToHeadlineInclusion.length;
+  let headline;
+  let reason;
+  if (!chosen) {
+    // 이번 이슈에 Camera HAL 기사 없음 + current 무효 → current 유지(있으면) 또는 빈 상태.
+    headline = current || null;
+    reason = current ? DECISION_REASONS.RETAINED_NO_ELIGIBLE_CANDIDATE : DECISION_REASONS.NO_ELIGIBLE_CANDIDATE;
+  } else if (chosen === currentEligible) {
+    // 현재 헤드라인이 이번 이슈 후보보다 최신(또는 이슈에 후보 없음) → 그대로 유지(주입 없음).
+    headline = current;
+    reason = issueCandidates.length === 0
+      ? DECISION_REASONS.RETAINED_NO_ELIGIBLE_CANDIDATE
+      : DECISION_REASONS.RETAINED_CURRENT_NEWER;
+  } else {
+    headline = headlineSnapshotFromCandidate(chosen, { date, newsletterUrl, policy, scoredAt: date });
+    reason = DECISION_REASONS.LATEST_CAMERA_HAL_ARTICLE;
+  }
+
+  const retained = reason === DECISION_REASONS.RETAINED_CURRENT_NEWER ||
+    reason === DECISION_REASONS.RETAINED_NO_ELIGIBLE_CANDIDATE;
+  const decision = buildDecision({
+    reason,
+    current_headline_key: current ? current.article_identity_key : null,
+    replacement_headline_key: headline ? headline.article_identity_key : null,
+    scored_at: date,
+    retained,
+    replaced: Boolean(headline) && !retained && Boolean(current),
+    seeded: Boolean(headline) && !retained && !current,
+    snapshot_revalidated: Boolean(headline),
+    selected_normally: true
+  });
   decision.previous_state = previousState;
   const nextState = updatedState({
     date,
@@ -749,13 +542,13 @@ function applyHomepageHeadlineSelection({
     headline_decision: decision,
     homepage_headline_state: nextState,
     headline_latest_inclusion: {
-      included: selected.some(article => article.included_as_headline_latest === true),
-      mode: selected.find(article => article.included_as_headline_latest === true)?.headline_latest_inclusion_mode || 'none',
-      injected_from_snapshot: selected.some(article => article.injected_from_headline_snapshot === true),
-      snapshot_revalidated: selected.some(article => article.snapshot_revalidated === true),
-      removed_due_to_headline_inclusion_count: removedDueToHeadlineInclusion.length
+      included: false,
+      mode: 'none',
+      injected_from_snapshot: false,
+      snapshot_revalidated: Boolean(headline),
+      removed_due_to_headline_inclusion_count: 0
     },
-    removed_due_to_headline_inclusion: removedDueToHeadlineInclusion
+    removed_due_to_headline_inclusion: []
   };
 }
 
