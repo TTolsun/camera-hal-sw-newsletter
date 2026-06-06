@@ -2,17 +2,17 @@
 
 ## Gate Result
 
-- Quality score: 98
+- Quality score: 77
 - Quality threshold: 60
 - Max score: 100
-- Result: PASS
-- Summary: Safety checks passed and the fact-checker found every article useful to a Camera HAL SW engineer. Editor review is ready.
+- Result: NEEDS_FIX
+- Summary: Resolve source gaps, fact-check must-fix items, composition blockers, and any article the fact-checker marked not useful to a Camera HAL SW engineer before publishing.
 
 ## Publication Mode
 
 - publication_mode: n/a
 - homepage_visibility: n/a
-- content_quality_score: 98
+- content_quality_score: 77
 - camera_relevance_score: n/a
 - publication_mode_decision: n/a
 - fallback_only: false
@@ -57,40 +57,46 @@
 - generic_signal_hard_blocker_count: 0
 - hal_signal_hard_blocker_count: 0
 - hard_blocker_reason_code_counts: {}
-- hal_impact_axis_counts: {"framework_hal_contract":1,"camerax_app_compatibility":1}
+- hal_impact_axis_counts: {"framework_hal_contract":1,"stream_buffer_metadata":1}
 - actionability_level_counts: {"owner_metric_log":1}
 - effective_actionability_level_counts: {"owner_metric_log":1}
 
 | # | Article | signal_quality_status | actionability_level | effective_actionability_level | hal_impact_axes | HAL Signal Capsule | hard_blocker_reason_codes |
 | ---: | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표 | strong_signal | owner_metric_log | owner_metric_log | framework_hal_contract, camerax_app_compatibility | complete | none |
+| 1 | CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | strong_signal | owner_metric_log | owner_metric_log | framework_hal_contract, stream_buffer_metadata | complete | none |
 
 ## Fact Check And Source Integrity
 
-- Fact-check status: PASS
-- Must-fix count: 0
-- Source-gap count: 0
+- Fact-check status: NEEDS_FIX
+- Must-fix count: 3
+- Source-gap count: 2
 - Stale claim status: PASS
 - Stale claim removals: 0
 - Stale claim hard failures: 0
 - Source integrity violation count: 0
-- Blocking deduction count: 0
-- Blocking deduction categories: none
-- Hard fail count: 0
+- Blocking deduction count: 2
+- Blocking deduction categories: source-integrity
+- Hard fail count: 2
 - Soft deduction count: 2
 
 ## Claim Binding
 
 - Claim validation status: available
-- Claim coverage: bound_claims=2; total_claims=2
+- Claim coverage: bound_claims=8; total_claims=8
 - Derived evidence mapping count: 0
 - Overclaim risk: low
 - Uncovered fact count: 0
 
 | Article | Claim | Type | Status | Impact | Risk | Reason codes | Evidence | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표 | claim:io26_camerax_viewfinder_release_fact: Google I/O '26(2026년 6월 2일)에서 Jetpack CameraX 및 Media3 통합 도구가 발표되었습니다. | fact | bound | app_api_or_framework_adjacent | low | none | sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407 | https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY |
-| Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표 | claim:io26_camerax_viewfinder_behavior: CameraXViewfinder Composable은 폴더블 및 태블릿을 포함한 모든 폼 팩터에서 반응형 카메라 미리보기를 제공합니다. | fact | bound | app_api_or_framework_adjacent | low | none | sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407 | https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY |
+| CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | camerax_1_6_0_release: CameraX 1.6.0 버전이 2026년 3월 25일에 공식 릴리스되었습니다. | fact | bound | app_api_or_framework_adjacent | low | none | sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81 | https://developer.android.com/jetpack/androidx/releases/camera#1.6.0 |
+| CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | camerax_query_api: 개발자가 라이프사이클 바인딩 전에 HDR, 안정화, 특정 해상도, 확장 기능 등의 지원 여부를 쿼리할 수 있는 API가 추가되었습니다. | fact | bound | camera_framework_behavior | low | none | sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81 | https://developer.android.com/jetpack/androidx/releases/camera#1.6.0 |
+| CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | camerax_android_17_crash: 다가올 Android 17 기기에서 알 수 없는 동적 범위 모드로 인해 발생하던 크래시 문제를 해결했으며, 이 수정 사항은 1.5.2 버전에도 체리픽되었습니다. | fact | bound | camera_framework_behavior | low | none | sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf | https://developer.android.com/jetpack/androidx/releases/camera#1.6.0 |
+| CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | camerax_preview_stabilization_bug: PREVIEW_STABILIZATION을 VideoCapture와 함께 사용할 때 Preview 유스케이스가 활성화되어 있지 않으면 일관되지 않은 결과를 반환하던 버그가 수정... | fact | bound | camera_framework_behavior | low | none | sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d | https://developer.android.com/jetpack/androidx/releases/camera#1.6.0 |
+| CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | camerax_z_fold_4_yuv: 삼성 Z Fold 4 기기에서 이미지 왜곡을 유발하는 특정 YUV 포맷 출력 해상도를 제외 처리(Exclude)했습니다. | fact | bound | camera_framework_behavior | low | none | sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81 | https://developer.android.com/jetpack/androidx/releases/camera#1.6.0 |
+| CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | camerax_a53_torch: 삼성 A53 기기에서 VideoCapture가 바인딩된 상태로 토치를 켜고 캡처할 때 간헐적으로 실패하던 이슈를 수정했습니다. | fact | bound | camera_framework_behavior | low | none | sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d | https://developer.android.com/jetpack/androidx/releases/camera#1.6.0 |
+| CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | camerax_ultrawide_flash_underexposure: 초광각 카메라에서 플래시 사용 시 일부 기기에서 이미지가 어둡게 나오던(Underexposed) 현상을 수정했습니다. | fact | bound | camera_framework_behavior | low | none | sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81 | https://developer.android.com/jetpack/androidx/releases/camera#1.6.0 |
+| CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | camerax_exif_padding_fix: ExifInterface 종속성을 업데이트하여 0xFF 패딩이 포함된 JPEG 파싱 오류를 해결했습니다. | fact | bound | app_api_or_framework_adjacent | low | none | sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81 | https://developer.android.com/jetpack/androidx/releases/camera#1.6.0 |
 
 ### Uncovered Facts
 
@@ -103,26 +109,28 @@
 
 | # | Article | 5-section | Fact boundary | HAL impact axis | Actionability | Limitations |
 | ---: | --- | --- | --- | --- | --- | --- |
-| 1 | Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표 | pass | present | framework_hal_contract, camerax_app_compatibility | present | none |
+| 1 | CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | pass | present | framework_hal_contract, stream_buffer_metadata | present | none |
 
 ## Article Gate Results
 
 | # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | fallback | publishable_scope | binding_status | binding_source | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
 | ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | PASS | preserve | Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표 | direct_aosp_camera | 1 | true | false | false | false | true | bound | shortlist_selected | merged | none | direct_aosp_camera counts toward primary_camera_stack_count. | none | none | none |
+| 1 | FAIL | repair-section | CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | direct_aosp_camera | 1 | true | false | false | false | true | bound | shortlist_selected | merged | none | direct_aosp_camera counts toward primary_camera_stack_count. | none | Fact-check must_fix item mentions this section. | none |
 
 ## Hard Fails
 
-- none
+- 15 pt [source-integrity] Fact checker returned 3 must_fix item(s).
+- 6 pt [source-integrity] Fact checker reported 2 source gap(s).
 
 ## Soft Deductions
 
-- 1 pt [editorial-story] briefing 1: Briefing bullet misses story structure elements: action_hint.
 - 1 pt [editorial-story] briefing 2: Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.
+- 1 pt [editorial-story] briefing 3: Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.
 
 ## Top Deduction Categories
 
 - editorial-story (2)
+- source-integrity (2)
 
 ## Candidate Exclusion Summary
 
@@ -130,5 +138,7 @@
 
 ## Deductions
 
-- 1 pt [editorial-story] briefing 1: Briefing bullet misses story structure elements: action_hint.
 - 1 pt [editorial-story] briefing 2: Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.
+- 1 pt [editorial-story] briefing 3: Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.
+- 15 pt [source-integrity] Fact checker returned 3 must_fix item(s).
+- 6 pt [source-integrity] Fact checker reported 2 source gap(s).

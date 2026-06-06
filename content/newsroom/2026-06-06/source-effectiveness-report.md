@@ -7,15 +7,15 @@ Date: 2026-06-06
 - Sources: 62 (registry=62, synthetic=0)
 - Collected candidates: 40
 - Unregistered candidates: 0
-- Eligible candidates: 12
-- Selected candidates: 5
+- Eligible candidates: 10
+- Selected candidates: 3
 - Rendered main articles: 1
-- Source gap candidates: 28
-- Generic noise candidates: 18
+- Source gap candidates: 30
+- Generic noise candidates: 20
 - Duplicate candidates: 0
-- Recommendations: NO_RECENT_SIGNAL: 50, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 2, KEEP_AND_FIX_PARSER: 8, KEEP_AND_MONITOR: 2
-- Selected main source quality coverage: 5/5
-- Main-eligible source quality coverage: 6/6
+- Recommendations: NO_RECENT_SIGNAL: 50, OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: 2, KEEP: 1, KEEP_AND_FIX_PARSER: 8, KEEP_AND_MONITOR: 1
+- Selected main source quality coverage: 3/3
+- Main-eligible source quality coverage: 5/5
 - Conditional source promoted/blocked: 2/14
 - Unknown source quality: 0
 - Source quality field drift: 0
@@ -33,8 +33,8 @@ Date: 2026-06-06
 | source_url_quality | undated_reference_page | 2 |
 | source_quality_status | blocked | 32 |
 | source_quality_status | allowed | 8 |
-| blocker | source_gap_risk | 28 |
-| blocker | reference_only | 19 |
+| blocker | source_gap_risk | 30 |
+| blocker | reference_only | 21 |
 | blocker | cross_check_required_but_missing | 8 |
 | blocker | undated_reference_page | 2 |
 
@@ -53,7 +53,7 @@ _없음_
 
 | Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
 | --- | --- | --- | --- | --- | --- | --- |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 30 | 8 | 2 | 1 | 1 |
+| camerax-release-notes | KEEP | 87.5 | 2 | 2 | 1 | 1 |
 
 ## Sources Needing Parser Repair
 
@@ -61,9 +61,9 @@ _없음_
 | --- | --- | --- | --- | --- | --- |
 | android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 3 | 0 | 3 | No RSS item, no published date, no concrete release/API/behavior change detected. |
 | libcamera-release-announcements | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 1 | 0 | 1 | No RSS item, no published date, no concrete release/API/behavior change detected. |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 8 | 2 | 6 | main_eligible=false |
-| lore-linux-media-list | KEEP_AND_FIX_PARSER | 8 | 4 | 4 | main_eligible=false |
+| lore-linux-media-list | KEEP_AND_FIX_PARSER | 8 | 2 | 6 | main_eligible=false |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 8 | 2 | 6 | main_eligible=false |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 4 | 0 | 4 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | androidx-media3-release-notes | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 1 | 0 | 1 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. |
@@ -130,17 +130,18 @@ _없음_
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | android-developers-latest-updates | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 3 | 0 | 0 | 0 | 1 | 0 | 0 |
 | libcamera-release-announcements | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
-| android-developers-blog | KEEP_AND_FIX_PARSER | 30 | 8 | 0.25 | 0.5 | 1 | 0.75 | 0.625 | 0 |
-| lore-linux-media-list | KEEP_AND_FIX_PARSER | 25 | 8 | 0.5 | 1 | 0 | 0.5 | 0.25 | 0 |
+| camerax-release-notes | KEEP | 87.5 | 2 | 1 | 0.5 | 1 | 0 | 0 | 0 |
+| lore-linux-media-list | KEEP_AND_FIX_PARSER | 5 | 8 | 0.25 | 1 | 0 | 0.75 | 0.5 | 0 |
 | android-compatibility-definition-document | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
+| android-developers-blog | KEEP_AND_FIX_PARSER | 0 | 8 | 0.25 | 0 | 0 | 0.75 | 0.625 | 0 |
 | android-security-bulletin | KEEP_AND_FIX_PARSER | 0 | 4 | 0 | 0 | 0 | 1 | 1 | 0 |
 | androidx-media3-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-camera-documentation | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | aosp-whats-new-release-notes | KEEP_AND_FIX_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | iso-cpp-blog | KEEP_AND_FIX_PARSER | 0 | 8 | 0.25 | 0 | 0 | 0.75 | 0.375 | 0 |
 | aosp-site-updates | KEEP_AND_MONITOR | 35 | 2 | 1 | 0 | 0 | 0 | 0 | 0 |
-| camerax-release-notes | KEEP_AND_MONITOR | 35 | 2 | 1 | 0 | 0 | 0 | 0 | 0 |
 
 ## Warnings
 
-_없음_
+- Unattributed fact-check source gap could not be mapped to a source: The briefing item about device-specific fixes (Samsung Galaxy S6, Z Fold 4, A53) lacks explicit mention that these are CameraX-level fixes, not direct HAL/driver changes, which could create a source gap regarding the true impact level.
+- Unattributed fact-check source gap could not be mapped to a source: The mailing list candidates (Qualcomm CAMSS C-PHY Gen2 v1.1 and V4L2 mem2mem parallel processing) are used in the briefing and summary despite having a 'blocked' source quality status and requiring cross-check. This indicates a source gap for confirmed changes.

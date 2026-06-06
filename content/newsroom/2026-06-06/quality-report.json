@@ -1,22 +1,12 @@
 {
   "schema_version": 1,
   "date": "2026-06-06",
-  "score": 98,
+  "score": 77,
   "max_score": 100,
   "threshold": 60,
-  "status": "PASS",
-  "summary": "Safety checks passed and the fact-checker found every article useful to a Camera HAL SW engineer. Editor review is ready.",
+  "status": "NEEDS_FIX",
+  "summary": "Resolve source gaps, fact-check must-fix items, composition blockers, and any article the fact-checker marked not useful to a Camera HAL SW engineer before publishing.",
   "deductions": [
-    {
-      "category": "editorial-story",
-      "points": 1,
-      "reason": "Briefing bullet misses story structure elements: action_hint.",
-      "location": "briefing 1",
-      "blocking": false,
-      "severity": "soft",
-      "reason_code": "",
-      "dedupe_key": ""
-    },
     {
       "category": "editorial-story",
       "points": 1,
@@ -26,20 +16,56 @@
       "severity": "soft",
       "reason_code": "",
       "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "source-integrity",
+      "points": 15,
+      "reason": "Fact checker returned 3 must_fix item(s).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "source-integrity",
+      "points": 6,
+      "reason": "Fact checker reported 2 source gap(s).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
     }
   ],
-  "unpublishable_articles": [],
+  "unpublishable_articles": [
+    {
+      "section_index": 0,
+      "headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+      "reason": "The article includes unconfirmed mailing list discussions in the briefing and summary, which violates the editorial policy for confirmed facts. While the CameraX section is good, the overall newsletter quality is degraded by the inclusion of blocked sources as if they were confirmed news."
+    }
+  ],
   "article_results": [
     {
       "index": 1,
-      "headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
+      "headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
       "category": "direct_aosp_camera",
-      "status": "PASS",
-      "repair_action": "preserve",
+      "status": "FAIL",
+      "repair_action": "repair-section",
       "sources": [
         {
-          "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
-          "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+          "title": "CameraX Release Notes - CameraX 1.6.0",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
         }
       ],
       "section_contract": {
@@ -55,9 +81,9 @@
       },
       "scope_count": {
         "index": 1,
-        "headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
-        "source_candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
-        "source_candidate_hash": "43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35",
+        "headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "source_candidate_hash": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
         "relevance_bucket": "direct_aosp_camera",
         "editorial_priority": 1,
         "counts_as_primary_camera_topic": true,
@@ -80,18 +106,20 @@
       "guardrail_impact_class": "direct_hal_contract",
       "hal_impact_axes": [
         "framework_hal_contract",
-        "camerax_app_compatibility"
+        "stream_buffer_metadata"
       ],
       "actionability_level": "",
       "effective_actionability_level": "",
-      "hard_fail_reasons": [],
+      "hard_fail_reasons": [
+        "Fact-check must_fix item mentions this section."
+      ],
       "soft_deductions": []
     }
   ],
   "claim_validation_summary": {
     "status": "available",
-    "bound_claims": 2,
-    "total_claims": 2,
+    "bound_claims": 8,
+    "total_claims": 8,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
     "available_article_count": 1,
@@ -100,33 +128,33 @@
   "claim_results": [
     {
       "article_index": 1,
-      "article_headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
-      "claim_id": "claim:io26_camerax_viewfinder_release_fact",
+      "article_headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+      "claim_id": "camerax_1_6_0_release",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "app_api_or_framework_adjacent",
       "overclaim_risk": "low",
-      "text": "Google I/O '26(2026년 6월 2일)에서 Jetpack CameraX 및 Media3 통합 도구가 발표되었습니다.",
+      "text": "CameraX 1.6.0 버전이 2026년 3월 25일에 공식 릴리스되었습니다.",
       "evidence_ids": [
-        "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407"
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
       ],
       "resolved_evidence_ids": [
-        "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407"
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407",
-          "resolved_evidence_id": "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407",
+          "evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -134,33 +162,237 @@
     },
     {
       "article_index": 1,
-      "article_headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
-      "claim_id": "claim:io26_camerax_viewfinder_behavior",
+      "article_headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+      "claim_id": "camerax_query_api",
       "claim_type": "fact",
       "status": "bound",
-      "impact_level": "app_api_or_framework_adjacent",
+      "impact_level": "camera_framework_behavior",
       "overclaim_risk": "low",
-      "text": "CameraXViewfinder Composable은 폴더블 및 태블릿을 포함한 모든 폼 팩터에서 반응형 카메라 미리보기를 제공합니다.",
+      "text": "개발자가 라이프사이클 바인딩 전에 HDR, 안정화, 특정 해상도, 확장 기능 등의 지원 여부를 쿼리할 수 있는 API가 추가되었습니다.",
       "evidence_ids": [
-        "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407"
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
       ],
       "resolved_evidence_ids": [
-        "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407"
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407",
-          "resolved_evidence_id": "sx:43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35:evidence_blocks:97f7fd6266fe4407",
+          "evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+      "claim_id": "camerax_android_17_crash",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "다가올 Android 17 기기에서 알 수 없는 동적 범위 모드로 인해 발생하던 크래시 문제를 해결했으며, 이 수정 사항은 1.5.2 버전에도 체리픽되었습니다.",
+      "evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:914d1acec07b5cbf",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+      "claim_id": "camerax_preview_stabilization_bug",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "PREVIEW_STABILIZATION을 VideoCapture와 함께 사용할 때 Preview 유스케이스가 활성화되어 있지 않으면 일관되지 않은 결과를 반환하던 버그가 수정되었습니다.",
+      "evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+      "claim_id": "camerax_z_fold_4_yuv",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "삼성 Z Fold 4 기기에서 이미지 왜곡을 유발하는 특정 YUV 포맷 출력 해상도를 제외 처리(Exclude)했습니다.",
+      "evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+      "claim_id": "camerax_a53_torch",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "삼성 A53 기기에서 VideoCapture가 바인딩된 상태로 토치를 켜고 캡처할 때 간헐적으로 실패하던 이슈를 수정했습니다.",
+      "evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+      "claim_id": "camerax_ultrawide_flash_underexposure",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "초광각 카메라에서 플래시 사용 시 일부 기기에서 이미지가 어둡게 나오던(Underexposed) 현상을 수정했습니다.",
+      "evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+      "claim_id": "camerax_exif_padding_fix",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "ExifInterface 종속성을 업데이트하여 0xFF 패딩이 포함된 JPEG 파싱 오류를 해결했습니다.",
+      "evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "resolved_evidence_id": "sx:545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7:release-camerax-1-6-0-march-25-2026-camerax-androidx-camera-bug-fixes-bug-fixes:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -188,7 +420,7 @@
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
       "framework_hal_contract": 1,
-      "camerax_app_compatibility": 1
+      "stream_buffer_metadata": 1
     },
     "actionability_level_counts": {
       "owner_metric_log": 1
@@ -203,29 +435,31 @@
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
-      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "title": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
         "framework_hal_contract",
-        "camerax_app_compatibility"
+        "stream_buffer_metadata"
       ],
       "reader_owners": [
         "camera_hal_owner",
-        "camera_framework_owner",
-        "camerax_app_compat_owner"
+        "camera_framework_owner"
       ],
       "actionability_level": "owner_metric_log",
       "effective_actionability_level": "owner_metric_log",
       "actionability_upgrade_reason": "",
       "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 6,
+      "concrete_action_signal_count": 5,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_promotion_reason": "CameraX Release Notes (official, high, score 95): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "이 발표는 Jetpack 라이브러리 수준의 UI 컴포넌트 추가이며, Camera HAL3 규격 자체나 AIDL 인터페이스의 직접적인 변경을 의미하지는 않습니다."
+        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+        "Do not use artifact version tables as behavior-change evidence.",
+        "이 업데이트는 상위 Jetpack 라이브러리의 변경 사항이며, Android Camera HAL3 API 자체나 AIDL 인터페이스 규격이 직접 변경된 것은 아닙니다.",
+        "기기별 우회 코드는 특정 단말의 특이성에 대응한 것이므로, 모든 벤더 단말에 동일한 버그가 존재한다고 단정하지 마십시오."
       ],
-      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_type": "isp_image_pipeline",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,
@@ -257,9 +491,9 @@
     "section_count_details": [
       {
         "index": 1,
-        "headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
-        "source_candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
-        "source_candidate_hash": "43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35",
+        "headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "source_candidate_hash": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
         "relevance_bucket": "direct_aosp_camera",
         "editorial_priority": 1,
         "counts_as_primary_camera_topic": true,
@@ -317,21 +551,23 @@
       ]
     },
     "ai_article_count": 0,
-    "fact_check_status": "PASS",
-    "must_fix_count": 0,
-    "source_gap_count": 0,
+    "fact_check_status": "NEEDS_FIX",
+    "must_fix_count": 3,
+    "source_gap_count": 2,
     "stale_claim_status": "PASS",
     "stale_claim_removed_count": 0,
     "stale_claim_hard_failure_count": 0,
     "source_integrity_violation_count": 0,
-    "blocking_deduction_count": 0,
-    "blocking_deduction_categories": [],
-    "hard_fail_count": 0,
+    "blocking_deduction_count": 2,
+    "blocking_deduction_categories": [
+      "source-integrity"
+    ],
+    "hard_fail_count": 2,
     "soft_deduction_count": 2,
     "article_gate_counts": {
-      "PASS": 1,
+      "PASS": 0,
       "DEMOTE": 0,
-      "FAIL": 0
+      "FAIL": 1
     },
     "article_section_contract": {
       "complete_count": 1,
@@ -363,8 +599,8 @@
     },
     "claim_validation_summary": {
       "status": "available",
-      "bound_claims": 2,
-      "total_claims": 2,
+      "bound_claims": 8,
+      "total_claims": 8,
       "derived_evidence_mapping_count": 0,
       "overclaim_risk": "low",
       "available_article_count": 1,
@@ -392,7 +628,7 @@
       "hard_blocker_reason_code_counts": {},
       "hal_impact_axis_counts": {
         "framework_hal_contract": 1,
-        "camerax_app_compatibility": 1
+        "stream_buffer_metadata": 1
       },
       "actionability_level_counts": {
         "owner_metric_log": 1
@@ -407,29 +643,31 @@
     "main_article_signal_checks": [
       {
         "index": 1,
-        "title": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
-        "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+        "title": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
         "relevance_bucket": "direct_aosp_camera",
         "hal_impact_axes": [
           "framework_hal_contract",
-          "camerax_app_compatibility"
+          "stream_buffer_metadata"
         ],
         "reader_owners": [
           "camera_hal_owner",
-          "camera_framework_owner",
-          "camerax_app_compat_owner"
+          "camera_framework_owner"
         ],
         "actionability_level": "owner_metric_log",
         "effective_actionability_level": "owner_metric_log",
         "actionability_upgrade_reason": "",
         "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 6,
+        "concrete_action_signal_count": 5,
         "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_promotion_reason": "CameraX Release Notes (official, high, score 95): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
         "fallback_guard_notes": [
-          "이 발표는 Jetpack 라이브러리 수준의 UI 컴포넌트 추가이며, Camera HAL3 규격 자체나 AIDL 인터페이스의 직접적인 변경을 의미하지는 않습니다."
+          "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+          "Do not use artifact version tables as behavior-change evidence.",
+          "이 업데이트는 상위 Jetpack 라이브러리의 변경 사항이며, Android Camera HAL3 API 자체나 AIDL 인터페이스 규격이 직접 변경된 것은 아닙니다.",
+          "기기별 우회 코드는 특정 단말의 특이성에 대응한 것이므로, 모든 벤더 단말에 동일한 버그가 존재한다고 단정하지 마십시오."
         ],
-        "soc_signal_type": "accelerator_camera_workload",
+        "soc_signal_type": "isp_image_pipeline",
         "soc_signal_source_allowed": true,
         "camera_pipeline_link": "",
         "has_hal_signal_capsule": true,
@@ -442,6 +680,10 @@
     "top_deduction_categories": [
       {
         "category": "editorial-story",
+        "count": 2
+      },
+      {
+        "category": "source-integrity",
         "count": 2
       }
     ],

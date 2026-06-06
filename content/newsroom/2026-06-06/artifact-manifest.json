@@ -1,228 +1,263 @@
 {
   "schema_version": 3,
   "date": "2026-06-06",
-  "generated_at": "2026-06-05T15:43:20.990Z",
+  "generated_at": "2026-06-06T06:54:42.188Z",
   "review_summary": {
-    "total": 87,
-    "present": 62,
-    "missing": 25,
-    "missingRequired": 1,
-    "reviewBlocking": 12,
-    "attentionRequired": 1,
+    "total": 88,
+    "present": 73,
+    "missing": 15,
+    "missingRequired": 0,
+    "reviewBlocking": 10,
+    "attentionRequired": 2,
     "seedUsed": false,
-    "publicOutputExpected": true,
-    "status": "PASS"
+    "publicOutputExpected": false,
+    "status": "NEEDS_FIX"
   },
   "files": [
     {
       "path": "content/collected-news/2026-06-06/candidates.json",
-      "size": 1053635,
-      "sha256": "40a3338ab12efeae88667dd28b54a3d1bf2ae9218eb57523eb0c80a372366fb0"
+      "size": 1049506,
+      "sha256": "d8dc4abcc0fa58f6fe5a87f89f10df4921556e0cd1c834497ef06dc2300fb386"
     },
     {
       "path": "content/collected-news/2026-06-06/manual-candidates.json",
-      "size": 1053635,
-      "sha256": "40a3338ab12efeae88667dd28b54a3d1bf2ae9218eb57523eb0c80a372366fb0"
+      "size": 1049506,
+      "sha256": "d8dc4abcc0fa58f6fe5a87f89f10df4921556e0cd1c834497ef06dc2300fb386"
     },
     {
       "path": "content/collected-news/2026-06-06/merged-candidate-manifest.json",
       "size": 2671,
-      "sha256": "4655ba323b2b66ba19e8c6a17f6fb8108000082b4c65b6fc30479aec49903cee"
+      "sha256": "9e7ee388c286cad55421c10effe3551602ba768f12c17fed650107801d0a26eb"
     },
     {
       "path": "content/collected-news/2026-06-06/merged-candidates.json",
-      "size": 1076166,
-      "sha256": "45b8fd5fb7a8d18d98e138753e339619048548f5f5cb175f68e4143dc15225b4"
+      "size": 1082086,
+      "sha256": "a77ff9e2118ad75a5303c0543efc01e03d16f37110d7db9abefabe88ee96612d"
     },
     {
       "path": "content/collected-news/2026-06-06/raw-candidate-manifest.json",
       "size": 949,
-      "sha256": "58252025b08baab51a18609d9cf1bacded1c88b1818ac74ab71182a6c270c60f"
+      "sha256": "398b94c88ebf693fc3ab313ace7ecfa4e78bf1d4ce07b92618c695a591e283bb"
     },
     {
       "path": "content/newsroom/2026-06-06/00-review-guide.md",
-      "size": 5049,
-      "sha256": "f5d8c5ec137b0956db354284fb3e1c985521fa0ee50950b570a69b2ec0fdb1b7"
+      "size": 5414,
+      "sha256": "cf70e365e8ddd637f31b591eb06ef5b01fe29c745832dbfaec9abd129d4810d9"
     },
     {
       "path": "content/newsroom/2026-06-06/article-capsules.json",
-      "size": 130032,
-      "sha256": "26241a2ce14ab7ba8d82d69355c679ed4e59e77550064e6e46d4483b4c10184f"
+      "size": 119296,
+      "sha256": "37676c173108c624e48f5500483f3f46448f4b92b65526613b0a8c020fcc87ba"
     },
     {
       "path": "content/newsroom/2026-06-06/background-context.json",
-      "size": 6653,
-      "sha256": "7d15613cc2cc74f257a57be9e218879203d9fd2b4fb36b71a50f09e1174864c8"
+      "size": 4460,
+      "sha256": "cdfe922ed5da8b8a2afdea31e0f4e44d41228455c429840f2fcdda32a3478bb6"
     },
     {
       "path": "content/newsroom/2026-06-06/cost-report.md",
-      "size": 1982,
-      "sha256": "2c04696455189ff1918e28c7af60998b8a89d78ac55b1c8a553a4613b5fdfbb6"
+      "size": 2266,
+      "sha256": "7c4e34e1e9b67cbd8d485654ea8f2f67c51788ce54cbba78ac71254e1161f3e4"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft-attempt-1.json",
-      "size": 20436,
-      "sha256": "28d43862311629db81db281ec08f2d6cee2c8ed63a0befe2517a24efd20b8209"
+      "size": 29359,
+      "sha256": "ff12230b0306ad1d18168cae51f8b3883bc35e7f038d3ee3d624a3da0d73f450"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft-attempt-1.md",
-      "size": 3858,
-      "sha256": "4067c9d132c4f38c20b443872516d21c98885b02d932b32525df44b562715b37"
+      "size": 4587,
+      "sha256": "5022f969fac6853ebde8aa017a7c4c983cf89abeb487e08222c26e35fbc70aa9"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft.json",
-      "size": 42325,
-      "sha256": "8aaa22e6d176c6e0647faec2119f7d7199468fcde1be19d678034f24245483c3"
+      "size": 60352,
+      "sha256": "35878281a738b439facf11b2a6b918e45d1836cfd0b0bc677013944399c5c2e2"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft.md",
-      "size": 3858,
-      "sha256": "4067c9d132c4f38c20b443872516d21c98885b02d932b32525df44b562715b37"
+      "size": 4638,
+      "sha256": "89d9d88954c648e3d74df041873b9b1eb83b83856eaef03fff8125ac2d5d8b8e"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-in-chief-brief.md",
-      "size": 4344,
-      "sha256": "8add79b5d5b0cb82fc2268fa888f3c704c3692d893616f41ec082a34a49332a9"
+      "size": 5159,
+      "sha256": "1c71055b8a8cede9868f88af5633b842db54b7601479cd52bb42c12124cfff95"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-invalid-attempt-1.json",
-      "size": 18249,
-      "sha256": "87b81a9c0d4df77ac0387aedc4ee9fc3e2fc2db5b9189ded81fea7170f89aa35"
+      "size": 24615,
+      "sha256": "1760f206319a1beaa814412f7da8827e900e27de5f28cd4de7bc7ac3c6610a5c"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-public-article-judge-attempt-1.json",
-      "size": 439,
-      "sha256": "26d88372eed9ba69d7cac1797db9fb4572a15cce4824c307a446975b0fd77a9b"
+      "size": 471,
+      "sha256": "167fd3d9328835e5f7f265e3a77a6f7720409e444e9fadc03463b981319ace0a"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-validation-error-attempt-1.json",
-      "size": 1232,
-      "sha256": "afc8f4e82fc0e1c79fc68f986a90bac6d6c7d964276b64a34f5ac9961644ddbf"
+      "size": 2744,
+      "sha256": "2f2d7ca82104a3d5099fa82950b22d92736eac44bed93b89130b7745b92c77bd"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/evidence-pack-summary.json",
+      "size": 34327,
+      "sha256": "3f810257be1eecaf4970009659f107ee4527061b38b3f4e8531106b45aaa992f"
     },
     {
       "path": "content/newsroom/2026-06-06/evidence-validation-report.json",
-      "size": 28498,
-      "sha256": "6dbd2845d37c48450faa5db228ec664bea75653ccfd90384e7fcb6ac25afc32e"
+      "size": 30679,
+      "sha256": "6ee52de979125a92c825fb50a108403c98e4fa65302c3f33976f53b00f1a9264"
     },
     {
       "path": "content/newsroom/2026-06-06/extracted-source-facts.json",
-      "size": 17175,
-      "sha256": "90f443e583fe53cca720c7d51ddb269707a013e5dc60f2406bf71b778199c707"
+      "size": 18426,
+      "sha256": "4d629d5cecf61718675e7e54f69eed8c0af9580f1709ac87ddb49d335f264f77"
     },
     {
       "path": "content/newsroom/2026-06-06/fact-check-report-attempt-1.json",
-      "size": 839,
-      "sha256": "a2d9ebb331a5374340ad4ce495bee16238e29bd16fac3e0bbc4f43113b637c75"
+      "size": 3989,
+      "sha256": "75dd939ad8e56e362ca975092ab3691de13006ae82eb0d707ecbb0cb1bd74ab8"
     },
     {
       "path": "content/newsroom/2026-06-06/fact-check-report-attempt-1.md",
-      "size": 345,
-      "sha256": "f68935e9fe4427336b5afcbcfb96d1fac77e966939a5358bbbae4b91d8ed4b2e"
+      "size": 3293,
+      "sha256": "42e4d7fac4b4f8b18e5d12a6f1d1e44a7801a05ace6a4c43dd02dbf08e444b59"
     },
     {
       "path": "content/newsroom/2026-06-06/fact-check-report.json",
-      "size": 839,
-      "sha256": "a2d9ebb331a5374340ad4ce495bee16238e29bd16fac3e0bbc4f43113b637c75"
+      "size": 3989,
+      "sha256": "75dd939ad8e56e362ca975092ab3691de13006ae82eb0d707ecbb0cb1bd74ab8"
     },
     {
       "path": "content/newsroom/2026-06-06/fact-check-report.md",
-      "size": 345,
-      "sha256": "f68935e9fe4427336b5afcbcfb96d1fac77e966939a5358bbbae4b91d8ed4b2e"
+      "size": 3293,
+      "sha256": "42e4d7fac4b4f8b18e5d12a6f1d1e44a7801a05ace6a4c43dd02dbf08e444b59"
     },
     {
       "path": "content/newsroom/2026-06-06/gemini-source-discovery-report.md",
       "size": 3171,
-      "sha256": "83ce4020090da41e0a67abbb253a29777bc8e4f70973addde7dae78f31324696"
+      "sha256": "2a4fbb9b01c556bc7485729271bef96be8f453d629b3f6cc341489a3c6813d31"
     },
     {
       "path": "content/newsroom/2026-06-06/gemini-source-proposal-validation-report.json",
-      "size": 3069,
-      "sha256": "747a7eac5f264d505e911d92316b00e096d432414c9ba1a42d641eab8df43733"
+      "size": 4448,
+      "sha256": "56322b32bc80bf9b43d39f7662a02194be2b6946a60d1b93606e4551168c4878"
     },
     {
       "path": "content/newsroom/2026-06-06/gemini-source-proposals.json",
-      "size": 5730,
-      "sha256": "b65280d336749632f7050db0363ee8ed5b6296d8db9cc2b808fb1ffd096c4978"
+      "size": 8122,
+      "sha256": "9d400d6231061b580da817aa9d71f9dbff45ec567d856a217a6496c439c796f0"
     },
     {
       "path": "content/newsroom/2026-06-06/gemini-usage-report.json",
       "size": 2781,
-      "sha256": "0182862afafc48d33d92510242456513396476f10f9f39f1c479af322348108a"
+      "sha256": "4007c95720d4657f2dc87924da6c63a7f00433506a5b68aa230e483c0fdad91c"
     },
     {
       "path": "content/newsroom/2026-06-06/generation-status.json",
-      "size": 15875,
-      "sha256": "0a1779299a139a99d32ad9ef482903652cff74ea0eb6b1bb5b52ede66012e9dd"
+      "size": 16256,
+      "sha256": "e25ce1e055eeb465d41856f37f9ef13a1908339dd3ecedfafa09b1efd05b20bb"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/hal-signal-quality-report.json",
+      "size": 5726,
+      "sha256": "e8e9c7fb9fa1cbed76ed191cded525551f411db020e5ca056bf4f21ffad2240f"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/hal-signal-quality-report.md",
+      "size": 1819,
+      "sha256": "5f53c29cc8034205a33fd653012eaea8d2841996b1516d65974d0a837cfaf9b0"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/image-audit-report.json",
+      "size": 3094,
+      "sha256": "aef017f5abb22f7d7c2827c69040c5b1e78d2aa379b19ca8d5d9dfa8d3b7ecb9"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/image-audit-report.md",
+      "size": 1361,
+      "sha256": "b30b40ebc02924d9bce481c61d2b411d7e22ca0cb0bece03675ae2f8dcb3c3f4"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report-attempt-1.json",
-      "size": 17042,
-      "sha256": "a8f77e28cba34c583c5b6f73b417e45aa482b4d0df6d315bf601ddc87d4cf8e8"
+      "size": 30375,
+      "sha256": "4aa9bf403ea675bbcb1837524e2737e27e7c6bc19023df66ce3b43bfb6185ba0"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report-attempt-1.md",
-      "size": 6426,
-      "sha256": "e6e5382a2c9ad6c30cad2e776a68ad7dd258b34f35117761ae69468076372e9b"
+      "size": 10694,
+      "sha256": "191046baf6501694f38e8e36d38db547e2618e5d01a47937fd834918b20c55c8"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report.json",
-      "size": 17039,
-      "sha256": "bb97fca2b81a794e9751cb7e44a8457ec1d2597a05dc45e23d4dae897ab1dfe6"
+      "size": 30372,
+      "sha256": "bcaa0f5ca242621de61aff473aa5499a367664d7545f3ab3579738418b3b909e"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report.md",
-      "size": 6423,
-      "sha256": "d5a57574281d6f965a99efcec9e0d708ffe6b555339ea07a965c2756aaadd6fe"
+      "size": 10691,
+      "sha256": "f1145f34b2a9034a082b061034b77b13360f1183584e929fadb791ad6bc5de1d"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/recovery-prompt.md",
+      "size": 1735146,
+      "sha256": "0aff76d0fe7e3474104adf9216eb18f5a4454462d8fdc0446d80887d74019a5d"
     },
     {
       "path": "content/newsroom/2026-06-06/release-qa-report.md",
-      "size": 6605,
-      "sha256": "fd92b5d00c08a61f7a5f66042a6855633d022ea0c1bcb305932f857032240ed9"
+      "size": 6887,
+      "sha256": "d70f556026c4adebbdae3bcb55b3de08721edf58724dd551569ca9e1b6dd25ad"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/repair-failure.json",
+      "size": 568,
+      "sha256": "430056cc3a92e6490e8476e7e9d14e993a64ed576808e8fea5a2af7b20757cd8"
     },
     {
       "path": "content/newsroom/2026-06-06/reporter-candidates-attempt-1.json",
-      "size": 136581,
-      "sha256": "a87dfc291777784d10341168d1d8fef5abfad1e620864bdb180d3b39e0ec0a54"
+      "size": 121487,
+      "sha256": "35dcd05352b4626f0c078937aa6ff9d62156a3cc3624bcf364758bc19f1f8bf7"
     },
     {
       "path": "content/newsroom/2026-06-06/reporter-candidates.json",
-      "size": 136581,
-      "sha256": "a87dfc291777784d10341168d1d8fef5abfad1e620864bdb180d3b39e0ec0a54"
+      "size": 121487,
+      "sha256": "35dcd05352b4626f0c078937aa6ff9d62156a3cc3624bcf364758bc19f1f8bf7"
     },
     {
       "path": "content/newsroom/2026-06-06/retry-history.json",
-      "size": 3435,
-      "sha256": "7058a96941bea5832cf61c31f5868988537b03ba27a21306c2cf29b4667fc5c7"
+      "size": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
     },
     {
       "path": "content/newsroom/2026-06-06/retry-history.md",
-      "size": 3453,
-      "sha256": "db87374588672dc87fb4ac35da5df81a730974100ff386ec58ecba366acd4214"
+      "size": 2261,
+      "sha256": "b91e85e3e45c6ea7b0671328db010f46e7d84400f6d6e9a8d8dbcea0dbeb5b00"
     },
     {
       "path": "content/newsroom/2026-06-06/selection-diagnostics.md",
-      "size": 2543,
-      "sha256": "e591bde0b8e568eb4d52f6d0fd55e433d649dc8f250510880602d94bc493ee78"
+      "size": 2618,
+      "sha256": "3463542727b9d9ff7d4ad166d053074f4f3d40f3bc8b08e739a911b8ccecab61"
     },
     {
       "path": "content/newsroom/2026-06-06/selection-report.json",
-      "size": 7476,
-      "sha256": "6b07d7e4d20a95d850fc6cfe381411b0ff307a8d79c0b872eced3bdc4fdc9a2e"
+      "size": 7712,
+      "sha256": "7f8976d668546800cd119c9c74b023ed5a6be43104ab238e0be3d612a9ca5a04"
     },
     {
       "path": "content/newsroom/2026-06-06/selection-report.md",
-      "size": 1851,
-      "sha256": "3f96a64c909abd9215212cb847b814207f813def74e8e64d9a5e5a9c7a16cbf9"
+      "size": 2112,
+      "sha256": "5fd01f63b84f6379c10305585fb29ee2371e35dac7b17c565f55d0f870caf2c9"
     },
     {
       "path": "content/newsroom/2026-06-06/shortlisted-candidates.json",
-      "size": 1608211,
-      "sha256": "24f95ee1142654360365bc5f793008c73d9e994211fc811a53c1074c078818be"
+      "size": 1652101,
+      "sha256": "5d7f56b5020e37b55a7de0e7b61f1feaed9eb6edaac7b6256b1ec2631b24859c"
     },
     {
       "path": "content/newsroom/2026-06-06/source-clusters.json",
-      "size": 27904,
-      "sha256": "60f16d9e076cef4c4e4f75290b5d63e89231fea320d119c494ca86d0e98ebc05"
+      "size": 28875,
+      "sha256": "c184cc4c691c7631ecb5da2d7b582a7857976f00114b85c117783f69a5a48fdd"
     },
     {
       "path": "content/newsroom/2026-06-06/source-discovery-feedback-report.json",
@@ -235,39 +270,59 @@
       "sha256": "e05a65f7deb81cf7bc92e97552434ad05d6e1ba5e43095ff49dfdbca595ab8b0"
     },
     {
+      "path": "content/newsroom/2026-06-06/source-effectiveness-report.json",
+      "size": 144700,
+      "sha256": "4ac209c7d32536e768cc4a03b586ee7f5b3c1098731afede9a8529c1e5e5838d"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/source-effectiveness-report.md",
+      "size": 8630,
+      "sha256": "16995b649961257b9f7d51227a52e243d28c8b0395c71949519ff48b3e4622e1"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/source-quality-diagnosis.json",
+      "size": 58267,
+      "sha256": "c2aa69264b359ba433ca9aeeaf17749f88ec01abc3b1a47043e1cefcf7708029"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/source-quality-diagnosis.md",
+      "size": 6502,
+      "sha256": "014fa317a0274cb52a7ac55f922e6d12c4c3ed545537c58b04c9c545981029e8"
+    },
+    {
       "path": "content/newsroom/2026-06-06/source-quality-report.json",
-      "size": 27289,
-      "sha256": "2bb701b7c6ad56c4c110dae44232c97bfae3db9524f148f6d2a273f6103549a2"
+      "size": 29317,
+      "sha256": "6477076a8f3c1d960fda71d2ca84f572f2798e915d44f57214bf763c4850dd6c"
     },
     {
       "path": "content/newsroom/2026-06-06/source-quality-report.md",
-      "size": 7113,
-      "sha256": "b7af2364753430a8d9009fb6355356ec2b870e523b974018048605517238a5df"
+      "size": 7685,
+      "sha256": "742b31cf011433d0809508464616485ec43ea896c9c9be425a59789bd155e196"
     },
     {
       "path": "content/newsroom/2026-06-06/stale-claim-report.json",
-      "size": 567,
-      "sha256": "821fec216081e394008d44cdfbb1ebf1d8c739acc51460110d64e98b4e51f7af"
+      "size": 579,
+      "sha256": "c91b731e812f3c3ee0bb14acd4086ce6218024721ce04a633a0de3ca79ca47e3"
     },
     {
       "path": "content/newsroom/2026-06-06/stale-claim-report.md",
-      "size": 255,
-      "sha256": "4b0d7ffeaaff1f474517473f7f42af9391f237847584004f08e7aedcdcb20f9f"
+      "size": 327,
+      "sha256": "346cb859e038557910216def7bb7e52a869404684b70d65119afcc420cae455c"
     },
     {
       "path": "content/newsroom/2026-06-06/summary-cache-report.json",
-      "size": 5693,
-      "sha256": "1bb0114513353e1f60b0be1e34eb2615904ce12d7de6cd084aff8a583e335cc4"
+      "size": 3860,
+      "sha256": "612b681dca8bb7ec0927cb48fd7af9fbcb5a29987359eaf5be6bae5b10496c3c"
     },
     {
       "path": "content/newsroom/2026-06-06/summary-cache-report.md",
-      "size": 1801,
-      "sha256": "5c397308d4accd7ab37ae3201e935dd02b46e2f918506594b3f01ac41c71c58f"
+      "size": 1227,
+      "sha256": "f60587e7de2df9dc8a538ebdac58ca7b1726f04fdacdc198b6e86d4d20fa6416"
     },
     {
       "path": "content/source-events/2026-06-06/source-change-events.json",
       "size": 173989,
-      "sha256": "b529a9d9218a01c29f8bf803b03aa26fd46993fbe9fdbf346cbcb2ffc4fbd6d0"
+      "sha256": "a61992b47f174a9305debaff3718171b77d10c90362178afff1bf4da6340c859"
     },
     {
       "path": "content/source-events/2026-06-06/source-change-events.md",
@@ -281,13 +336,13 @@
     },
     {
       "path": "data/homepage-headline.json",
-      "size": 9364,
-      "sha256": "06510b0132a0826d770c1e371f50784747bf031b7031f33310aa72f7cc54781e"
+      "size": 7163,
+      "sha256": "4b818edf88f2fbe48b0c1f9ea478529f9726bcf8443288e2f46d095733db1772"
     },
     {
       "path": "data/newsletters-weekly.json",
-      "size": 3557,
-      "sha256": "8f91b379a25713a58a0523dbb987c577e06fa0ae46cb003ecbc5605e9980dac7"
+      "size": 5831,
+      "sha256": "e72f173c5d418699fc43ad3fe6115f8e199f3221f5b5ace388b3d91e7c804ee3"
     },
     {
       "path": "data/newsletters.json",
@@ -306,18 +361,18 @@
     },
     {
       "path": "newsletters/2026-W23/index.html",
-      "size": 12362,
-      "sha256": "6a71939903b73d8913de1e4faf0ba86a59d42b8c34bfea0602fdd976df17a948"
+      "size": 12151,
+      "sha256": "40ab3658f659d6b85bb29ab5faf621914d6914293d6b212f7405736226f0c045"
     },
     {
       "path": "newsletters/2026-W23/issue.json",
-      "size": 24809,
-      "sha256": "12d28e1824d2299214818b3c4731f840e055e53c47ff7b87d1ecce5e791bbb28"
+      "size": 24613,
+      "sha256": "17fb665eb24e512bd8acf5c026e7f4c126d520c262baa3125122daa4d01a67e5"
     },
     {
       "path": "newsletters/2026-W23/newsletter.md",
-      "size": 7476,
-      "sha256": "760c512a70cc2b3c2539e695e9241e8d5aeb9b82370dc9bf616781c32be228d7"
+      "size": 7280,
+      "sha256": "fa2448e7d87ff73a1740be9aa41bda67196a4a6d3a9eb92025f49bc8e0c81664"
     }
   ],
   "review_artifacts": [
@@ -336,8 +391,8 @@
       "changed": true,
       "derived": true,
       "retention_grade": "review_required_compact",
-      "size": 5049,
-      "sha256": "f5d8c5ec137b0956db354284fb3e1c985521fa0ee50950b570a69b2ec0fdb1b7"
+      "size": 5414,
+      "sha256": "cf70e365e8ddd637f31b591eb06ef5b01fe29c745832dbfaec9abd129d4810d9"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-in-chief-brief.md",
@@ -354,8 +409,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 4344,
-      "sha256": "8add79b5d5b0cb82fc2268fa888f3c704c3692d893616f41ec082a34a49332a9"
+      "size": 5159,
+      "sha256": "1c71055b8a8cede9868f88af5633b842db54b7601479cd52bb42c12124cfff95"
     },
     {
       "path": "content/newsroom/2026-06-06/seed-evidence-pack.md",
@@ -399,13 +454,13 @@
       "label": "최종 기사 / 공개 출력",
       "role": "public_markdown",
       "required": "when_public_output",
-      "requiredActive": true,
+      "requiredActive": false,
       "present": true,
       "human_readable": true,
-      "review_blocking": true,
+      "review_blocking": false,
       "review_attention_required": false,
       "review_order": 30,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "public_source_of_truth",
       "size": 3858,
@@ -417,13 +472,13 @@
       "label": "최종 기사 / 공개 출력",
       "role": "public_html",
       "required": "when_public_output",
-      "requiredActive": true,
+      "requiredActive": false,
       "present": true,
       "human_readable": true,
-      "review_blocking": true,
+      "review_blocking": false,
       "review_attention_required": false,
       "review_order": 31,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "public_source_of_truth",
       "size": 7691,
@@ -435,13 +490,13 @@
       "label": "최종 기사 / 공개 출력",
       "role": "public_index",
       "required": "when_public_output",
-      "requiredActive": true,
+      "requiredActive": false,
       "present": true,
       "human_readable": false,
-      "review_blocking": true,
+      "review_blocking": false,
       "review_attention_required": false,
       "review_order": 32,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "public_source_of_truth",
       "size": 13040,
@@ -459,11 +514,11 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 33,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "public_source_of_truth",
-      "size": 9364,
-      "sha256": "06510b0132a0826d770c1e371f50784747bf031b7031f33310aa72f7cc54781e"
+      "size": 7163,
+      "sha256": "4b818edf88f2fbe48b0c1f9ea478529f9726bcf8443288e2f46d095733db1772"
     },
     {
       "path": "newsletters/2026-W23/index.html",
@@ -477,11 +532,11 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 33,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "public_source_of_truth",
-      "size": 12362,
-      "sha256": "6a71939903b73d8913de1e4faf0ba86a59d42b8c34bfea0602fdd976df17a948"
+      "size": 12151,
+      "sha256": "40ab3658f659d6b85bb29ab5faf621914d6914293d6b212f7405736226f0c045"
     },
     {
       "path": "data/article-exposure-history.json",
@@ -495,7 +550,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 34,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "public_source_of_truth",
       "size": 4501,
@@ -513,11 +568,11 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 34,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "public_source_of_truth",
-      "size": 7476,
-      "sha256": "760c512a70cc2b3c2539e695e9241e8d5aeb9b82370dc9bf616781c32be228d7"
+      "size": 7280,
+      "sha256": "fa2448e7d87ff73a1740be9aa41bda67196a4a6d3a9eb92025f49bc8e0c81664"
     },
     {
       "path": "newsletters/2026-W23/issue.json",
@@ -531,11 +586,11 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 35,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "public_source_of_truth",
-      "size": 24809,
-      "sha256": "12d28e1824d2299214818b3c4731f840e055e53c47ff7b87d1ecce5e791bbb28"
+      "size": 24613,
+      "sha256": "17fb665eb24e512bd8acf5c026e7f4c126d520c262baa3125122daa4d01a67e5"
     },
     {
       "path": "data/newsletters-weekly.json",
@@ -549,11 +604,11 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 36,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "public_source_of_truth",
-      "size": 3557,
-      "sha256": "8f91b379a25713a58a0523dbb987c577e06fa0ae46cb003ecbc5605e9980dac7"
+      "size": 5831,
+      "sha256": "e72f173c5d418699fc43ad3fe6115f8e199f3221f5b5ace388b3d91e7c804ee3"
     },
     {
       "path": "content/newsroom/2026-06-06/weekly-merge-report.json",
@@ -588,8 +643,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 345,
-      "sha256": "f68935e9fe4427336b5afcbcfb96d1fac77e966939a5358bbbae4b91d8ed4b2e"
+      "size": 3293,
+      "sha256": "42e4d7fac4b4f8b18e5d12a6f1d1e44a7801a05ace6a4c43dd02dbf08e444b59"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report.md",
@@ -606,8 +661,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 6423,
-      "sha256": "d5a57574281d6f965a99efcec9e0d708ffe6b555339ea07a965c2756aaadd6fe"
+      "size": 10691,
+      "sha256": "f1145f34b2a9034a082b061034b77b13360f1183584e929fadb791ad6bc5de1d"
     },
     {
       "path": "content/newsroom/2026-06-06/hal-signal-quality-report.md",
@@ -616,20 +671,16 @@
       "role": "hal_signal_gate",
       "required": "always",
       "requiredActive": true,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": true,
-      "review_attention_required": true,
+      "review_attention_required": false,
       "review_order": 42,
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": null,
-      "sha256": null,
-      "warning": {
-        "code": "required_artifact_missing",
-        "message": "Required review artifact is missing for this run context."
-      }
+      "size": 1819,
+      "sha256": "5f53c29cc8034205a33fd653012eaea8d2841996b1516d65974d0a837cfaf9b0"
     },
     {
       "path": "content/newsroom/2026-06-06/stale-claim-report.md",
@@ -646,8 +697,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 255,
-      "sha256": "4b0d7ffeaaff1f474517473f7f42af9391f237847584004f08e7aedcdcb20f9f"
+      "size": 327,
+      "sha256": "346cb859e038557910216def7bb7e52a869404684b70d65119afcc420cae455c"
     },
     {
       "path": "content/newsroom/2026-06-06/image-audit-report.md",
@@ -656,16 +707,16 @@
       "role": "image_audit",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
-      "review_blocking": false,
+      "review_blocking": true,
       "review_attention_required": false,
       "review_order": 44,
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": null,
-      "sha256": null
+      "size": 1361,
+      "sha256": "b30b40ebc02924d9bce481c61d2b411d7e22ca0cb0bece03675ae2f8dcb3c3f4"
     },
     {
       "path": "content/newsroom/2026-06-06/source-quality-report.md",
@@ -682,8 +733,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 7113,
-      "sha256": "b7af2364753430a8d9009fb6355356ec2b870e523b974018048605517238a5df"
+      "size": 7685,
+      "sha256": "742b31cf011433d0809508464616485ec43ea896c9c9be425a59789bd155e196"
     },
     {
       "path": "content/newsroom/2026-06-06/selection-diagnostics.md",
@@ -700,8 +751,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 2543,
-      "sha256": "e591bde0b8e568eb4d52f6d0fd55e433d649dc8f250510880602d94bc493ee78"
+      "size": 2618,
+      "sha256": "3463542727b9d9ff7d4ad166d053074f4f3d40f3bc8b08e739a911b8ccecab61"
     },
     {
       "path": "content/newsroom/2026-06-06/selection-report.md",
@@ -718,8 +769,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 1851,
-      "sha256": "3f96a64c909abd9215212cb847b814207f813def74e8e64d9a5e5a9c7a16cbf9"
+      "size": 2112,
+      "sha256": "5fd01f63b84f6379c10305585fb29ee2371e35dac7b17c565f55d0f870caf2c9"
     },
     {
       "path": "content/newsroom/2026-06-06/source-quality-diagnosis.md",
@@ -728,7 +779,7 @@
       "role": "source_quality_diagnosis",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
@@ -736,8 +787,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": null,
-      "sha256": null
+      "size": 6502,
+      "sha256": "014fa317a0274cb52a7ac55f922e6d12c4c3ed545537c58b04c9c545981029e8"
     },
     {
       "path": "content/newsroom/2026-06-06/seed-fetch-report.md",
@@ -764,16 +815,16 @@
       "role": "recovery_prompt",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
-      "review_attention_required": false,
+      "review_attention_required": true,
       "review_order": 61,
       "changed": true,
       "derived": false,
       "retention_grade": "debug_heavy",
-      "size": null,
-      "sha256": null
+      "size": 1735146,
+      "sha256": "0aff76d0fe7e3474104adf9216eb18f5a4454462d8fdc0446d80887d74019a5d"
     },
     {
       "path": "content/newsroom/2026-06-06/release-qa-report.md",
@@ -790,8 +841,8 @@
       "changed": true,
       "derived": true,
       "retention_grade": "review_required_compact",
-      "size": 6605,
-      "sha256": "fd92b5d00c08a61f7a5f66042a6855633d022ea0c1bcb305932f857032240ed9"
+      "size": 6887,
+      "sha256": "d70f556026c4adebbdae3bcb55b3de08721edf58724dd551569ca9e1b6dd25ad"
     },
     {
       "path": "content/newsroom/2026-06-06/retry-history.md",
@@ -808,8 +859,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 3453,
-      "sha256": "db87374588672dc87fb4ac35da5df81a730974100ff386ec58ecba366acd4214"
+      "size": 2261,
+      "sha256": "b91e85e3e45c6ea7b0671328db010f46e7d84400f6d6e9a8d8dbcea0dbeb5b00"
     },
     {
       "path": "content/newsroom/2026-06-06/linked-evidence-diagnostics.md",
@@ -854,7 +905,7 @@
       "role": "source_effectiveness",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
@@ -862,8 +913,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": null,
-      "sha256": null
+      "size": 8630,
+      "sha256": "16995b649961257b9f7d51227a52e243d28c8b0395c71949519ff48b3e4622e1"
     },
     {
       "path": "content/newsroom/2026-06-06/source-discovery-feedback-report.md",
@@ -899,7 +950,7 @@
       "derived": false,
       "retention_grade": "review_required_compact",
       "size": 3171,
-      "sha256": "83ce4020090da41e0a67abbb253a29777bc8e4f70973addde7dae78f31324696"
+      "sha256": "2a4fbb9b01c556bc7485729271bef96be8f453d629b3f6cc341489a3c6813d31"
     },
     {
       "path": "content/newsroom/2026-06-06/news-candidates.md",
@@ -952,8 +1003,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 1053635,
-      "sha256": "40a3338ab12efeae88667dd28b54a3d1bf2ae9218eb57523eb0c80a372366fb0"
+      "size": 1049506,
+      "sha256": "d8dc4abcc0fa58f6fe5a87f89f10df4921556e0cd1c834497ef06dc2300fb386"
     },
     {
       "path": "content/collected-news/2026-06-06/candidates.json",
@@ -970,8 +1021,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 1053635,
-      "sha256": "40a3338ab12efeae88667dd28b54a3d1bf2ae9218eb57523eb0c80a372366fb0"
+      "size": 1049506,
+      "sha256": "d8dc4abcc0fa58f6fe5a87f89f10df4921556e0cd1c834497ef06dc2300fb386"
     },
     {
       "path": "content/collected-news/2026-06-06/raw-candidate-manifest.json",
@@ -989,7 +1040,7 @@
       "derived": false,
       "retention_grade": "review_required_compact",
       "size": 949,
-      "sha256": "58252025b08baab51a18609d9cf1bacded1c88b1818ac74ab71182a6c270c60f"
+      "sha256": "398b94c88ebf693fc3ab313ace7ecfa4e78bf1d4ce07b92618c695a591e283bb"
     },
     {
       "path": "content/collected-news/2026-06-06/merged-candidates.json",
@@ -1006,8 +1057,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 1076166,
-      "sha256": "45b8fd5fb7a8d18d98e138753e339619048548f5f5cb175f68e4143dc15225b4"
+      "size": 1082086,
+      "sha256": "a77ff9e2118ad75a5303c0543efc01e03d16f37110d7db9abefabe88ee96612d"
     },
     {
       "path": "content/collected-news/2026-06-06/merged-candidate-manifest.json",
@@ -1025,7 +1076,7 @@
       "derived": false,
       "retention_grade": "review_required_compact",
       "size": 2671,
-      "sha256": "4655ba323b2b66ba19e8c6a17f6fb8108000082b4c65b6fc30479aec49903cee"
+      "sha256": "9e7ee388c286cad55421c10effe3551602ba768f12c17fed650107801d0a26eb"
     },
     {
       "path": "content/collected-news/2026-06-06/gemini-candidates.json",
@@ -1132,8 +1183,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 15875,
-      "sha256": "0a1779299a139a99d32ad9ef482903652cff74ea0eb6b1bb5b52ede66012e9dd"
+      "size": 16256,
+      "sha256": "e25ce1e055eeb465d41856f37f9ef13a1908339dd3ecedfafa09b1efd05b20bb"
     },
     {
       "path": "content/newsroom/2026-06-06/reporter-candidates.json",
@@ -1150,8 +1201,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "debug_heavy",
-      "size": 136581,
-      "sha256": "a87dfc291777784d10341168d1d8fef5abfad1e620864bdb180d3b39e0ec0a54"
+      "size": 121487,
+      "sha256": "35dcd05352b4626f0c078937aa6ff9d62156a3cc3624bcf364758bc19f1f8bf7"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft.json",
@@ -1168,8 +1219,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "debug_heavy",
-      "size": 42325,
-      "sha256": "8aaa22e6d176c6e0647faec2119f7d7199468fcde1be19d678034f24245483c3"
+      "size": 60352,
+      "sha256": "35878281a738b439facf11b2a6b918e45d1836cfd0b0bc677013944399c5c2e2"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft.md",
@@ -1186,8 +1237,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "debug_heavy",
-      "size": 3858,
-      "sha256": "4067c9d132c4f38c20b443872516d21c98885b02d932b32525df44b562715b37"
+      "size": 4638,
+      "sha256": "89d9d88954c648e3d74df041873b9b1eb83b83856eaef03fff8125ac2d5d8b8e"
     },
     {
       "path": "content/newsroom/2026-06-06/fact-check-report.json",
@@ -1204,8 +1255,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 839,
-      "sha256": "a2d9ebb331a5374340ad4ce495bee16238e29bd16fac3e0bbc4f43113b637c75"
+      "size": 3989,
+      "sha256": "75dd939ad8e56e362ca975092ab3691de13006ae82eb0d707ecbb0cb1bd74ab8"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report.json",
@@ -1222,8 +1273,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 17039,
-      "sha256": "bb97fca2b81a794e9751cb7e44a8457ec1d2597a05dc45e23d4dae897ab1dfe6"
+      "size": 30372,
+      "sha256": "bcaa0f5ca242621de61aff473aa5499a367664d7545f3ab3579738418b3b909e"
     },
     {
       "path": "content/newsroom/2026-06-06/hal-signal-quality-report.json",
@@ -1232,7 +1283,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1240,8 +1291,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": null,
-      "sha256": null
+      "size": 5726,
+      "sha256": "e8e9c7fb9fa1cbed76ed191cded525551f411db020e5ca056bf4f21ffad2240f"
     },
     {
       "path": "content/newsroom/2026-06-06/stale-claim-report.json",
@@ -1258,8 +1309,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 567,
-      "sha256": "821fec216081e394008d44cdfbb1ebf1d8c739acc51460110d64e98b4e51f7af"
+      "size": 579,
+      "sha256": "c91b731e812f3c3ee0bb14acd4086ce6218024721ce04a633a0de3ca79ca47e3"
     },
     {
       "path": "content/newsroom/2026-06-06/retry-history.json",
@@ -1276,8 +1327,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 3435,
-      "sha256": "7058a96941bea5832cf61c31f5868988537b03ba27a21306c2cf29b4667fc5c7"
+      "size": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
     },
     {
       "path": "content/newsroom/2026-06-06/shortlisted-candidates.json",
@@ -1294,8 +1345,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "debug_heavy",
-      "size": 1608211,
-      "sha256": "24f95ee1142654360365bc5f793008c73d9e994211fc811a53c1074c078818be"
+      "size": 1652101,
+      "sha256": "5d7f56b5020e37b55a7de0e7b61f1feaed9eb6edaac7b6256b1ec2631b24859c"
     },
     {
       "path": "content/newsroom/2026-06-06/selection-report.json",
@@ -1312,8 +1363,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 7476,
-      "sha256": "6b07d7e4d20a95d850fc6cfe381411b0ff307a8d79c0b872eced3bdc4fdc9a2e"
+      "size": 7712,
+      "sha256": "7f8976d668546800cd119c9c74b023ed5a6be43104ab238e0be3d612a9ca5a04"
     },
     {
       "path": "content/newsroom/2026-06-06/linked-evidence-report.json",
@@ -1366,8 +1417,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "debug_heavy",
-      "size": 130032,
-      "sha256": "26241a2ce14ab7ba8d82d69355c679ed4e59e77550064e6e46d4483b4c10184f"
+      "size": 119296,
+      "sha256": "37676c173108c624e48f5500483f3f46448f4b92b65526613b0a8c020fcc87ba"
     },
     {
       "path": "content/newsroom/2026-06-06/background-context.json",
@@ -1384,8 +1435,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "debug_heavy",
-      "size": 6653,
-      "sha256": "7d15613cc2cc74f257a57be9e218879203d9fd2b4fb36b71a50f09e1174864c8"
+      "size": 4460,
+      "sha256": "cdfe922ed5da8b8a2afdea31e0f4e44d41228455c429840f2fcdda32a3478bb6"
     },
     {
       "path": "content/newsroom/2026-06-06/evidence-pack-summary.json",
@@ -1394,7 +1445,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1402,8 +1453,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": null,
-      "sha256": null
+      "size": 34327,
+      "sha256": "3f810257be1eecaf4970009659f107ee4527061b38b3f4e8531106b45aaa992f"
     },
     {
       "path": "content/newsroom/2026-06-06/image-audit-report.json",
@@ -1412,7 +1463,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1420,8 +1471,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": null,
-      "sha256": null
+      "size": 3094,
+      "sha256": "aef017f5abb22f7d7c2827c69040c5b1e78d2aa379b19ca8d5d9dfa8d3b7ecb9"
     },
     {
       "path": "content/newsroom/2026-06-06/source-quality-report.json",
@@ -1438,8 +1489,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 27289,
-      "sha256": "2bb701b7c6ad56c4c110dae44232c97bfae3db9524f148f6d2a273f6103549a2"
+      "size": 29317,
+      "sha256": "6477076a8f3c1d960fda71d2ca84f572f2798e915d44f57214bf763c4850dd6c"
     },
     {
       "path": "content/newsroom/2026-06-06/source-quality-diagnosis.json",
@@ -1448,7 +1499,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1456,8 +1507,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": null,
-      "sha256": null
+      "size": 58267,
+      "sha256": "c2aa69264b359ba433ca9aeeaf17749f88ec01abc3b1a47043e1cefcf7708029"
     },
     {
       "path": "content/newsroom/2026-06-06/source-effectiveness-report.json",
@@ -1466,7 +1517,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1474,8 +1525,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": null,
-      "sha256": null
+      "size": 144700,
+      "sha256": "4ac209c7d32536e768cc4a03b586ee7f5b3c1098731afede9a8529c1e5e5838d"
     },
     {
       "path": "content/newsroom/2026-06-06/source-discovery-feedback-report.json",
@@ -1510,8 +1561,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 27904,
-      "sha256": "60f16d9e076cef4c4e4f75290b5d63e89231fea320d119c494ca86d0e98ebc05"
+      "size": 28875,
+      "sha256": "c184cc4c691c7631ecb5da2d7b582a7857976f00114b85c117783f69a5a48fdd"
     },
     {
       "path": "content/newsroom/2026-06-06/gemini-source-proposals.json",
@@ -1528,8 +1579,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 5730,
-      "sha256": "b65280d336749632f7050db0363ee8ed5b6296d8db9cc2b808fb1ffd096c4978"
+      "size": 8122,
+      "sha256": "9d400d6231061b580da817aa9d71f9dbff45ec567d856a217a6496c439c796f0"
     },
     {
       "path": "content/newsroom/2026-06-06/gemini-source-proposal-validation-report.json",
@@ -1546,8 +1597,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 3069,
-      "sha256": "747a7eac5f264d505e911d92316b00e096d432414c9ba1a42d641eab8df43733"
+      "size": 4448,
+      "sha256": "56322b32bc80bf9b43d39f7662a02194be2b6946a60d1b93606e4551168c4878"
     },
     {
       "path": "content/newsroom/2026-06-06/gemini-usage-report.json",
@@ -1565,7 +1616,7 @@
       "derived": false,
       "retention_grade": "review_required_compact",
       "size": 2781,
-      "sha256": "0182862afafc48d33d92510242456513396476f10f9f39f1c479af322348108a"
+      "sha256": "4007c95720d4657f2dc87924da6c63a7f00433506a5b68aa230e483c0fdad91c"
     },
     {
       "path": "content/newsroom/2026-06-06/extracted-source-facts.json",
@@ -1582,8 +1633,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 17175,
-      "sha256": "90f443e583fe53cca720c7d51ddb269707a013e5dc60f2406bf71b778199c707"
+      "size": 18426,
+      "sha256": "4d629d5cecf61718675e7e54f69eed8c0af9580f1709ac87ddb49d335f264f77"
     },
     {
       "path": "content/newsroom/2026-06-06/evidence-validation-report.json",
@@ -1600,8 +1651,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 28498,
-      "sha256": "6dbd2845d37c48450faa5db228ec664bea75653ccfd90384e7fcb6ac25afc32e"
+      "size": 30679,
+      "sha256": "6ee52de979125a92c825fb50a108403c98e4fa65302c3f33976f53b00f1a9264"
     },
     {
       "path": "content/newsroom/2026-06-06/cost-report.md",
@@ -1618,8 +1669,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 1982,
-      "sha256": "2c04696455189ff1918e28c7af60998b8a89d78ac55b1c8a553a4613b5fdfbb6"
+      "size": 2266,
+      "sha256": "7c4e34e1e9b67cbd8d485654ea8f2f67c51788ce54cbba78ac71254e1161f3e4"
     },
     {
       "path": "content/newsroom/2026-06-06/summary-cache-report.md",
@@ -1636,8 +1687,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 1801,
-      "sha256": "5c397308d4accd7ab37ae3201e935dd02b46e2f918506594b3f01ac41c71c58f"
+      "size": 1227,
+      "sha256": "f60587e7de2df9dc8a538ebdac58ca7b1726f04fdacdc198b6e86d4d20fa6416"
     },
     {
       "path": "content/newsroom/2026-06-06/summary-cache-report.json",
@@ -1654,8 +1705,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact",
-      "size": 5693,
-      "sha256": "1bb0114513353e1f60b0be1e34eb2615904ce12d7de6cd084aff8a583e335cc4"
+      "size": 3860,
+      "sha256": "612b681dca8bb7ec0927cb48fd7af9fbcb5a29987359eaf5be6bae5b10496c3c"
     },
     {
       "path": "content/source-events/2026-06-06/source-change-events.md",
@@ -1691,7 +1742,7 @@
       "derived": false,
       "retention_grade": "debug_heavy",
       "size": 173989,
-      "sha256": "b529a9d9218a01c29f8bf803b03aa26fd46993fbe9fdbf346cbcb2ffc4fbd6d0"
+      "sha256": "a61992b47f174a9305debaff3718171b77d10c90362178afff1bf4da6340c859"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft-attempt-1.json",
@@ -1708,8 +1759,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "transient_attempt",
-      "size": 20436,
-      "sha256": "28d43862311629db81db281ec08f2d6cee2c8ed63a0befe2517a24efd20b8209"
+      "size": 29359,
+      "sha256": "ff12230b0306ad1d18168cae51f8b3883bc35e7f038d3ee3d624a3da0d73f450"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft-attempt-1.md",
@@ -1726,8 +1777,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "transient_attempt",
-      "size": 3858,
-      "sha256": "4067c9d132c4f38c20b443872516d21c98885b02d932b32525df44b562715b37"
+      "size": 4587,
+      "sha256": "5022f969fac6853ebde8aa017a7c4c983cf89abeb487e08222c26e35fbc70aa9"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-invalid-attempt-1.json",
@@ -1744,8 +1795,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "transient_attempt",
-      "size": 18249,
-      "sha256": "87b81a9c0d4df77ac0387aedc4ee9fc3e2fc2db5b9189ded81fea7170f89aa35"
+      "size": 24615,
+      "sha256": "1760f206319a1beaa814412f7da8827e900e27de5f28cd4de7bc7ac3c6610a5c"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-public-article-judge-attempt-1.json",
@@ -1762,8 +1813,8 @@
       "changed": true,
       "derived": false,
       "retention_grade": "transient_attempt",
-      "size": 439,
-      "sha256": "26d88372eed9ba69d7cac1797db9fb4572a15cce4824c307a446975b0fd77a9b"
+      "size": 471,
+      "sha256": "167fd3d9328835e5f7f265e3a77a6f7720409e444e9fadc03463b981319ace0a"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-validation-error-attempt-1.json",
@@ -1780,8 +1831,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "transient_attempt",
-      "size": 1232,
-      "sha256": "afc8f4e82fc0e1c79fc68f986a90bac6d6c7d964276b64a34f5ac9961644ddbf"
+      "size": 2744,
+      "sha256": "2f2d7ca82104a3d5099fa82950b22d92736eac44bed93b89130b7745b92c77bd"
     },
     {
       "path": "content/newsroom/2026-06-06/fact-check-report-attempt-1.json",
@@ -1798,8 +1849,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "transient_attempt",
-      "size": 839,
-      "sha256": "a2d9ebb331a5374340ad4ce495bee16238e29bd16fac3e0bbc4f43113b637c75"
+      "size": 3989,
+      "sha256": "75dd939ad8e56e362ca975092ab3691de13006ae82eb0d707ecbb0cb1bd74ab8"
     },
     {
       "path": "content/newsroom/2026-06-06/fact-check-report-attempt-1.md",
@@ -1816,8 +1867,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "transient_attempt",
-      "size": 345,
-      "sha256": "f68935e9fe4427336b5afcbcfb96d1fac77e966939a5358bbbae4b91d8ed4b2e"
+      "size": 3293,
+      "sha256": "42e4d7fac4b4f8b18e5d12a6f1d1e44a7801a05ace6a4c43dd02dbf08e444b59"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report-attempt-1.json",
@@ -1834,8 +1885,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "transient_attempt",
-      "size": 17042,
-      "sha256": "a8f77e28cba34c583c5b6f73b417e45aa482b4d0df6d315bf601ddc87d4cf8e8"
+      "size": 30375,
+      "sha256": "4aa9bf403ea675bbcb1837524e2737e27e7c6bc19023df66ce3b43bfb6185ba0"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report-attempt-1.md",
@@ -1852,8 +1903,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "transient_attempt",
-      "size": 6426,
-      "sha256": "e6e5382a2c9ad6c30cad2e776a68ad7dd258b34f35117761ae69468076372e9b"
+      "size": 10694,
+      "sha256": "191046baf6501694f38e8e36d38db547e2618e5d01a47937fd834918b20c55c8"
     },
     {
       "path": "content/newsroom/2026-06-06/reporter-candidates-attempt-1.json",
@@ -1870,8 +1921,8 @@
       "changed": false,
       "derived": false,
       "retention_grade": "transient_attempt",
-      "size": 136581,
-      "sha256": "a87dfc291777784d10341168d1d8fef5abfad1e620864bdb180d3b39e0ec0a54"
+      "size": 121487,
+      "sha256": "35dcd05352b4626f0c078937aa6ff9d62156a3cc3624bcf364758bc19f1f8bf7"
     },
     {
       "path": "content/newsroom/2026-06-06/artifact-manifest.json",
@@ -1888,296 +1939,356 @@
       "changed": true,
       "derived": true,
       "retention_grade": "review_required_compact",
-      "size": 78856,
-      "sha256": "cd09e6e9c3a38c373e90bd5f4c0a08109daee3768d33a871148fecd74be7f7ed"
+      "size": 84670,
+      "sha256": "fafce315f3768482fd44f5454452098104d776fb5ca6e266a7dd60806ec18e4f"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/repair-failure.json",
+      "group": "unknown_artifacts",
+      "label": "미분류 산출물",
+      "role": "unclassified",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": true,
+      "review_order": 95,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "debug_heavy",
+      "size": 568,
+      "sha256": "430056cc3a92e6490e8476e7e9d14e993a64ed576808e8fea5a2af7b20757cd8"
     }
   ],
-  "missing_required_review_artifacts": [
-    "content/newsroom/2026-06-06/hal-signal-quality-report.md"
-  ],
-  "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248",
+  "missing_required_review_artifacts": [],
+  "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002",
   "retention_summary": {
-    "review_required_compact": 36,
+    "review_required_compact": 45,
     "public_source_of_truth": 9,
-    "debug_heavy": 7,
+    "debug_heavy": 9,
     "transient_attempt": 10
   },
   "retained_heavy_artifacts": [
     {
-      "path": "content/newsroom/2026-06-06/reporter-candidates.json",
-      "size": 136581,
-      "sha256": "a87dfc291777784d10341168d1d8fef5abfad1e620864bdb180d3b39e0ec0a54",
+      "path": "content/newsroom/2026-06-06/recovery-prompt.md",
+      "size": 1735146,
+      "sha256": "0aff76d0fe7e3474104adf9216eb18f5a4454462d8fdc0446d80887d74019a5d",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/reporter-candidates.json",
+      "size": 121487,
+      "sha256": "35dcd05352b4626f0c078937aa6ff9d62156a3cc3624bcf364758bc19f1f8bf7",
+      "retention_grade": "debug_heavy",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft.json",
-      "size": 42325,
-      "sha256": "8aaa22e6d176c6e0647faec2119f7d7199468fcde1be19d678034f24245483c3",
+      "size": 60352,
+      "sha256": "35878281a738b439facf11b2a6b918e45d1836cfd0b0bc677013944399c5c2e2",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft.md",
-      "size": 3858,
-      "sha256": "4067c9d132c4f38c20b443872516d21c98885b02d932b32525df44b562715b37",
+      "size": 4638,
+      "sha256": "89d9d88954c648e3d74df041873b9b1eb83b83856eaef03fff8125ac2d5d8b8e",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/shortlisted-candidates.json",
-      "size": 1608211,
-      "sha256": "24f95ee1142654360365bc5f793008c73d9e994211fc811a53c1074c078818be",
+      "size": 1652101,
+      "sha256": "5d7f56b5020e37b55a7de0e7b61f1feaed9eb6edaac7b6256b1ec2631b24859c",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/article-capsules.json",
-      "size": 130032,
-      "sha256": "26241a2ce14ab7ba8d82d69355c679ed4e59e77550064e6e46d4483b4c10184f",
+      "size": 119296,
+      "sha256": "37676c173108c624e48f5500483f3f46448f4b92b65526613b0a8c020fcc87ba",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/background-context.json",
-      "size": 6653,
-      "sha256": "7d15613cc2cc74f257a57be9e218879203d9fd2b4fb36b71a50f09e1174864c8",
+      "size": 4460,
+      "sha256": "cdfe922ed5da8b8a2afdea31e0f4e44d41228455c429840f2fcdda32a3478bb6",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/source-events/2026-06-06/source-change-events.json",
       "size": 173989,
-      "sha256": "b529a9d9218a01c29f8bf803b03aa26fd46993fbe9fdbf346cbcb2ffc4fbd6d0",
+      "sha256": "a61992b47f174a9305debaff3718171b77d10c90362178afff1bf4da6340c859",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft-attempt-1.json",
-      "size": 20436,
-      "sha256": "28d43862311629db81db281ec08f2d6cee2c8ed63a0befe2517a24efd20b8209",
+      "size": 29359,
+      "sha256": "ff12230b0306ad1d18168cae51f8b3883bc35e7f038d3ee3d624a3da0d73f450",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-draft-attempt-1.md",
-      "size": 3858,
-      "sha256": "4067c9d132c4f38c20b443872516d21c98885b02d932b32525df44b562715b37",
+      "size": 4587,
+      "sha256": "5022f969fac6853ebde8aa017a7c4c983cf89abeb487e08222c26e35fbc70aa9",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-invalid-attempt-1.json",
-      "size": 18249,
-      "sha256": "87b81a9c0d4df77ac0387aedc4ee9fc3e2fc2db5b9189ded81fea7170f89aa35",
+      "size": 24615,
+      "sha256": "1760f206319a1beaa814412f7da8827e900e27de5f28cd4de7bc7ac3c6610a5c",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-public-article-judge-attempt-1.json",
-      "size": 439,
-      "sha256": "26d88372eed9ba69d7cac1797db9fb4572a15cce4824c307a446975b0fd77a9b",
+      "size": 471,
+      "sha256": "167fd3d9328835e5f7f265e3a77a6f7720409e444e9fadc03463b981319ace0a",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-validation-error-attempt-1.json",
-      "size": 1232,
-      "sha256": "afc8f4e82fc0e1c79fc68f986a90bac6d6c7d964276b64a34f5ac9961644ddbf",
+      "size": 2744,
+      "sha256": "2f2d7ca82104a3d5099fa82950b22d92736eac44bed93b89130b7745b92c77bd",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/fact-check-report-attempt-1.json",
-      "size": 839,
-      "sha256": "a2d9ebb331a5374340ad4ce495bee16238e29bd16fac3e0bbc4f43113b637c75",
+      "size": 3989,
+      "sha256": "75dd939ad8e56e362ca975092ab3691de13006ae82eb0d707ecbb0cb1bd74ab8",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/fact-check-report-attempt-1.md",
-      "size": 345,
-      "sha256": "f68935e9fe4427336b5afcbcfb96d1fac77e966939a5358bbbae4b91d8ed4b2e",
+      "size": 3293,
+      "sha256": "42e4d7fac4b4f8b18e5d12a6f1d1e44a7801a05ace6a4c43dd02dbf08e444b59",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report-attempt-1.json",
-      "size": 17042,
-      "sha256": "a8f77e28cba34c583c5b6f73b417e45aa482b4d0df6d315bf601ddc87d4cf8e8",
+      "size": 30375,
+      "sha256": "4aa9bf403ea675bbcb1837524e2737e27e7c6bc19023df66ce3b43bfb6185ba0",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report-attempt-1.md",
-      "size": 6426,
-      "sha256": "e6e5382a2c9ad6c30cad2e776a68ad7dd258b34f35117761ae69468076372e9b",
+      "size": 10694,
+      "sha256": "191046baf6501694f38e8e36d38db547e2618e5d01a47937fd834918b20c55c8",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     },
     {
       "path": "content/newsroom/2026-06-06/reporter-candidates-attempt-1.json",
-      "size": 136581,
-      "sha256": "a87dfc291777784d10341168d1d8fef5abfad1e620864bdb180d3b39e0ec0a54",
+      "size": 121487,
+      "sha256": "35dcd05352b4626f0c078937aa6ff9d62156a3cc3624bcf364758bc19f1f8bf7",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-27024437248"
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/repair-failure.json",
+      "size": 568,
+      "sha256": "430056cc3a92e6490e8476e7e9d14e993a64ed576808e8fea5a2af7b20757cd8",
+      "retention_grade": "debug_heavy",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-27055421002"
     }
   ],
   "committed_artifacts": [
     {
       "path": "content/collected-news/2026-06-06/candidates.json",
-      "size": 1053635,
-      "sha256": "40a3338ab12efeae88667dd28b54a3d1bf2ae9218eb57523eb0c80a372366fb0",
+      "size": 1049506,
+      "sha256": "d8dc4abcc0fa58f6fe5a87f89f10df4921556e0cd1c834497ef06dc2300fb386",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/collected-news/2026-06-06/manual-candidates.json",
-      "size": 1053635,
-      "sha256": "40a3338ab12efeae88667dd28b54a3d1bf2ae9218eb57523eb0c80a372366fb0",
+      "size": 1049506,
+      "sha256": "d8dc4abcc0fa58f6fe5a87f89f10df4921556e0cd1c834497ef06dc2300fb386",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/collected-news/2026-06-06/merged-candidate-manifest.json",
       "size": 2671,
-      "sha256": "4655ba323b2b66ba19e8c6a17f6fb8108000082b4c65b6fc30479aec49903cee",
+      "sha256": "9e7ee388c286cad55421c10effe3551602ba768f12c17fed650107801d0a26eb",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/collected-news/2026-06-06/merged-candidates.json",
-      "size": 1076166,
-      "sha256": "45b8fd5fb7a8d18d98e138753e339619048548f5f5cb175f68e4143dc15225b4",
+      "size": 1082086,
+      "sha256": "a77ff9e2118ad75a5303c0543efc01e03d16f37110d7db9abefabe88ee96612d",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/collected-news/2026-06-06/raw-candidate-manifest.json",
       "size": 949,
-      "sha256": "58252025b08baab51a18609d9cf1bacded1c88b1818ac74ab71182a6c270c60f",
+      "sha256": "398b94c88ebf693fc3ab313ace7ecfa4e78bf1d4ce07b92618c695a591e283bb",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/00-review-guide.md",
-      "size": 5049,
-      "sha256": "f5d8c5ec137b0956db354284fb3e1c985521fa0ee50950b570a69b2ec0fdb1b7",
+      "size": 5414,
+      "sha256": "cf70e365e8ddd637f31b591eb06ef5b01fe29c745832dbfaec9abd129d4810d9",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/cost-report.md",
-      "size": 1982,
-      "sha256": "2c04696455189ff1918e28c7af60998b8a89d78ac55b1c8a553a4613b5fdfbb6",
+      "size": 2266,
+      "sha256": "7c4e34e1e9b67cbd8d485654ea8f2f67c51788ce54cbba78ac71254e1161f3e4",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/editor-in-chief-brief.md",
-      "size": 4344,
-      "sha256": "8add79b5d5b0cb82fc2268fa888f3c704c3692d893616f41ec082a34a49332a9",
+      "size": 5159,
+      "sha256": "1c71055b8a8cede9868f88af5633b842db54b7601479cd52bb42c12124cfff95",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/evidence-pack-summary.json",
+      "size": 34327,
+      "sha256": "3f810257be1eecaf4970009659f107ee4527061b38b3f4e8531106b45aaa992f",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/evidence-validation-report.json",
-      "size": 28498,
-      "sha256": "6dbd2845d37c48450faa5db228ec664bea75653ccfd90384e7fcb6ac25afc32e",
+      "size": 30679,
+      "sha256": "6ee52de979125a92c825fb50a108403c98e4fa65302c3f33976f53b00f1a9264",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/extracted-source-facts.json",
-      "size": 17175,
-      "sha256": "90f443e583fe53cca720c7d51ddb269707a013e5dc60f2406bf71b778199c707",
+      "size": 18426,
+      "sha256": "4d629d5cecf61718675e7e54f69eed8c0af9580f1709ac87ddb49d335f264f77",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/fact-check-report.json",
-      "size": 839,
-      "sha256": "a2d9ebb331a5374340ad4ce495bee16238e29bd16fac3e0bbc4f43113b637c75",
+      "size": 3989,
+      "sha256": "75dd939ad8e56e362ca975092ab3691de13006ae82eb0d707ecbb0cb1bd74ab8",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/fact-check-report.md",
-      "size": 345,
-      "sha256": "f68935e9fe4427336b5afcbcfb96d1fac77e966939a5358bbbae4b91d8ed4b2e",
+      "size": 3293,
+      "sha256": "42e4d7fac4b4f8b18e5d12a6f1d1e44a7801a05ace6a4c43dd02dbf08e444b59",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/gemini-source-discovery-report.md",
       "size": 3171,
-      "sha256": "83ce4020090da41e0a67abbb253a29777bc8e4f70973addde7dae78f31324696",
+      "sha256": "2a4fbb9b01c556bc7485729271bef96be8f453d629b3f6cc341489a3c6813d31",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/gemini-source-proposal-validation-report.json",
-      "size": 3069,
-      "sha256": "747a7eac5f264d505e911d92316b00e096d432414c9ba1a42d641eab8df43733",
+      "size": 4448,
+      "sha256": "56322b32bc80bf9b43d39f7662a02194be2b6946a60d1b93606e4551168c4878",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/gemini-source-proposals.json",
-      "size": 5730,
-      "sha256": "b65280d336749632f7050db0363ee8ed5b6296d8db9cc2b808fb1ffd096c4978",
+      "size": 8122,
+      "sha256": "9d400d6231061b580da817aa9d71f9dbff45ec567d856a217a6496c439c796f0",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/gemini-usage-report.json",
       "size": 2781,
-      "sha256": "0182862afafc48d33d92510242456513396476f10f9f39f1c479af322348108a",
+      "sha256": "4007c95720d4657f2dc87924da6c63a7f00433506a5b68aa230e483c0fdad91c",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/generation-status.json",
-      "size": 15875,
-      "sha256": "0a1779299a139a99d32ad9ef482903652cff74ea0eb6b1bb5b52ede66012e9dd",
+      "size": 16256,
+      "sha256": "e25ce1e055eeb465d41856f37f9ef13a1908339dd3ecedfafa09b1efd05b20bb",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/hal-signal-quality-report.json",
+      "size": 5726,
+      "sha256": "e8e9c7fb9fa1cbed76ed191cded525551f411db020e5ca056bf4f21ffad2240f",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/hal-signal-quality-report.md",
+      "size": 1819,
+      "sha256": "5f53c29cc8034205a33fd653012eaea8d2841996b1516d65974d0a837cfaf9b0",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/image-audit-report.json",
+      "size": 3094,
+      "sha256": "aef017f5abb22f7d7c2827c69040c5b1e78d2aa379b19ca8d5d9dfa8d3b7ecb9",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/image-audit-report.md",
+      "size": 1361,
+      "sha256": "b30b40ebc02924d9bce481c61d2b411d7e22ca0cb0bece03675ae2f8dcb3c3f4",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report.json",
-      "size": 17039,
-      "sha256": "bb97fca2b81a794e9751cb7e44a8457ec1d2597a05dc45e23d4dae897ab1dfe6",
+      "size": 30372,
+      "sha256": "bcaa0f5ca242621de61aff473aa5499a367664d7545f3ab3579738418b3b909e",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/quality-report.md",
-      "size": 6423,
-      "sha256": "d5a57574281d6f965a99efcec9e0d708ffe6b555339ea07a965c2756aaadd6fe",
+      "size": 10691,
+      "sha256": "f1145f34b2a9034a082b061034b77b13360f1183584e929fadb791ad6bc5de1d",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/release-qa-report.md",
-      "size": 6605,
-      "sha256": "fd92b5d00c08a61f7a5f66042a6855633d022ea0c1bcb305932f857032240ed9",
+      "size": 6887,
+      "sha256": "d70f556026c4adebbdae3bcb55b3de08721edf58724dd551569ca9e1b6dd25ad",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/retry-history.json",
-      "size": 3435,
-      "sha256": "7058a96941bea5832cf61c31f5868988537b03ba27a21306c2cf29b4667fc5c7",
+      "size": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/retry-history.md",
-      "size": 3453,
-      "sha256": "db87374588672dc87fb4ac35da5df81a730974100ff386ec58ecba366acd4214",
+      "size": 2261,
+      "sha256": "b91e85e3e45c6ea7b0671328db010f46e7d84400f6d6e9a8d8dbcea0dbeb5b00",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/selection-diagnostics.md",
-      "size": 2543,
-      "sha256": "e591bde0b8e568eb4d52f6d0fd55e433d649dc8f250510880602d94bc493ee78",
+      "size": 2618,
+      "sha256": "3463542727b9d9ff7d4ad166d053074f4f3d40f3bc8b08e739a911b8ccecab61",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/selection-report.json",
-      "size": 7476,
-      "sha256": "6b07d7e4d20a95d850fc6cfe381411b0ff307a8d79c0b872eced3bdc4fdc9a2e",
+      "size": 7712,
+      "sha256": "7f8976d668546800cd119c9c74b023ed5a6be43104ab238e0be3d612a9ca5a04",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/selection-report.md",
-      "size": 1851,
-      "sha256": "3f96a64c909abd9215212cb847b814207f813def74e8e64d9a5e5a9c7a16cbf9",
+      "size": 2112,
+      "sha256": "5fd01f63b84f6379c10305585fb29ee2371e35dac7b17c565f55d0f870caf2c9",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/source-clusters.json",
-      "size": 27904,
-      "sha256": "60f16d9e076cef4c4e4f75290b5d63e89231fea320d119c494ca86d0e98ebc05",
+      "size": 28875,
+      "sha256": "c184cc4c691c7631ecb5da2d7b582a7857976f00114b85c117783f69a5a48fdd",
       "retention_grade": "review_required_compact"
     },
     {
@@ -2193,39 +2304,63 @@
       "retention_grade": "review_required_compact"
     },
     {
+      "path": "content/newsroom/2026-06-06/source-effectiveness-report.json",
+      "size": 144700,
+      "sha256": "4ac209c7d32536e768cc4a03b586ee7f5b3c1098731afede9a8529c1e5e5838d",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/source-effectiveness-report.md",
+      "size": 8630,
+      "sha256": "16995b649961257b9f7d51227a52e243d28c8b0395c71949519ff48b3e4622e1",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/source-quality-diagnosis.json",
+      "size": 58267,
+      "sha256": "c2aa69264b359ba433ca9aeeaf17749f88ec01abc3b1a47043e1cefcf7708029",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "content/newsroom/2026-06-06/source-quality-diagnosis.md",
+      "size": 6502,
+      "sha256": "014fa317a0274cb52a7ac55f922e6d12c4c3ed545537c58b04c9c545981029e8",
+      "retention_grade": "review_required_compact"
+    },
+    {
       "path": "content/newsroom/2026-06-06/source-quality-report.json",
-      "size": 27289,
-      "sha256": "2bb701b7c6ad56c4c110dae44232c97bfae3db9524f148f6d2a273f6103549a2",
+      "size": 29317,
+      "sha256": "6477076a8f3c1d960fda71d2ca84f572f2798e915d44f57214bf763c4850dd6c",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/source-quality-report.md",
-      "size": 7113,
-      "sha256": "b7af2364753430a8d9009fb6355356ec2b870e523b974018048605517238a5df",
+      "size": 7685,
+      "sha256": "742b31cf011433d0809508464616485ec43ea896c9c9be425a59789bd155e196",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/stale-claim-report.json",
-      "size": 567,
-      "sha256": "821fec216081e394008d44cdfbb1ebf1d8c739acc51460110d64e98b4e51f7af",
+      "size": 579,
+      "sha256": "c91b731e812f3c3ee0bb14acd4086ce6218024721ce04a633a0de3ca79ca47e3",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/stale-claim-report.md",
-      "size": 255,
-      "sha256": "4b0d7ffeaaff1f474517473f7f42af9391f237847584004f08e7aedcdcb20f9f",
+      "size": 327,
+      "sha256": "346cb859e038557910216def7bb7e52a869404684b70d65119afcc420cae455c",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/summary-cache-report.json",
-      "size": 5693,
-      "sha256": "1bb0114513353e1f60b0be1e34eb2615904ce12d7de6cd084aff8a583e335cc4",
+      "size": 3860,
+      "sha256": "612b681dca8bb7ec0927cb48fd7af9fbcb5a29987359eaf5be6bae5b10496c3c",
       "retention_grade": "review_required_compact"
     },
     {
       "path": "content/newsroom/2026-06-06/summary-cache-report.md",
-      "size": 1801,
-      "sha256": "5c397308d4accd7ab37ae3201e935dd02b46e2f918506594b3f01ac41c71c58f",
+      "size": 1227,
+      "sha256": "f60587e7de2df9dc8a538ebdac58ca7b1726f04fdacdc198b6e86d4d20fa6416",
       "retention_grade": "review_required_compact"
     },
     {
@@ -2242,14 +2377,14 @@
     },
     {
       "path": "data/homepage-headline.json",
-      "size": 9364,
-      "sha256": "06510b0132a0826d770c1e371f50784747bf031b7031f33310aa72f7cc54781e",
+      "size": 7163,
+      "sha256": "4b818edf88f2fbe48b0c1f9ea478529f9726bcf8443288e2f46d095733db1772",
       "retention_grade": "public_source_of_truth"
     },
     {
       "path": "data/newsletters-weekly.json",
-      "size": 3557,
-      "sha256": "8f91b379a25713a58a0523dbb987c577e06fa0ae46cb003ecbc5605e9980dac7",
+      "size": 5831,
+      "sha256": "e72f173c5d418699fc43ad3fe6115f8e199f3221f5b5ace388b3d91e7c804ee3",
       "retention_grade": "public_source_of_truth"
     },
     {
@@ -2272,20 +2407,20 @@
     },
     {
       "path": "newsletters/2026-W23/index.html",
-      "size": 12362,
-      "sha256": "6a71939903b73d8913de1e4faf0ba86a59d42b8c34bfea0602fdd976df17a948",
+      "size": 12151,
+      "sha256": "40ab3658f659d6b85bb29ab5faf621914d6914293d6b212f7405736226f0c045",
       "retention_grade": "public_source_of_truth"
     },
     {
       "path": "newsletters/2026-W23/issue.json",
-      "size": 24809,
-      "sha256": "12d28e1824d2299214818b3c4731f840e055e53c47ff7b87d1ecce5e791bbb28",
+      "size": 24613,
+      "sha256": "17fb665eb24e512bd8acf5c026e7f4c126d520c262baa3125122daa4d01a67e5",
       "retention_grade": "public_source_of_truth"
     },
     {
       "path": "newsletters/2026-W23/newsletter.md",
-      "size": 7476,
-      "sha256": "760c512a70cc2b3c2539e695e9241e8d5aeb9b82370dc9bf616781c32be228d7",
+      "size": 7280,
+      "sha256": "fa2448e7d87ff73a1740be9aa41bda67196a4a6d3a9eb92025f49bc8e0c81664",
       "retention_grade": "public_source_of_truth"
     }
   ]

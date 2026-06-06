@@ -11,7 +11,7 @@
     "source_quality_report": "content/newsroom/2026-06-06/source-quality-report.json",
     "source_discovery_feedback_report": "content/newsroom/2026-06-06/source-discovery-feedback-report.json",
     "merged_candidate_manifest": "content/collected-news/2026-06-06/merged-candidate-manifest.json",
-    "evidence_pack_summary": null
+    "evidence_pack_summary": "content/newsroom/2026-06-06/evidence-pack-summary.json"
   },
   "evidence_completeness": {
     "candidate_input": true,
@@ -22,18 +22,18 @@
     "source_quality_report": true,
     "source_discovery_feedback_report": true,
     "merged_candidate_manifest": true,
-    "evidence_pack_summary": false
+    "evidence_pack_summary": true
   },
   "raw_candidate_count": 40,
-  "eligible_candidate_count": 12,
-  "primary_camera_stack_count": 5,
+  "eligible_candidate_count": 10,
+  "primary_camera_stack_count": 3,
   "android_multimedia_camera_output_count": 0,
   "diagnosis": {
     "actual_news_shortage": false,
     "parser_extraction_failure": true,
     "source_gap_risk": false,
     "taxonomy_missing": true,
-    "fallback_only_composition": true,
+    "fallback_only_composition": false,
     "duplicate_or_noop_source_discovery": true
   },
   "diagnosis_reasons": {
@@ -83,26 +83,20 @@
     "source_gap_risk": [],
     "taxonomy_missing": [
       {
-        "reason": "2 camera-relevant candidate(s) were not mapped to a known camera bucket.",
+        "reason": "3 camera-relevant candidate(s) were not mapped to a known camera bucket.",
         "source_artifact": "content/collected-news/2026-06-06/merged-candidates.json",
         "severity": "medium"
       }
     ],
-    "fallback_only_composition": [
-      {
-        "reason": "composition_mode indicates fallback composition: FALLBACK_COMPOSITION.",
-        "source_artifact": "content/newsroom/2026-06-06/generation-status.json",
-        "severity": "medium"
-      }
-    ],
+    "fallback_only_composition": [],
     "duplicate_or_noop_source_discovery": [
       {
-        "reason": "Gemini discovery produced 2 candidate(s) but gemini_new_unique_url_count=0.",
+        "reason": "Gemini discovery produced 5 candidate(s) but gemini_new_unique_url_count=0.",
         "source_artifact": "content/collected-news/2026-06-06/merged-candidate-manifest.json",
         "severity": "medium"
       },
       {
-        "reason": "Duplicate discovery signal detected: gemini_manual_duplicate_url_count=2, duplicate_discovery_gap_count=1.",
+        "reason": "Duplicate discovery signal detected: gemini_manual_duplicate_url_count=5, duplicate_discovery_gap_count=1.",
         "source_artifact": "content/collected-news/2026-06-06/merged-candidate-manifest.json",
         "severity": "medium"
       }
@@ -507,7 +501,7 @@
       "source_discovery_new_publishable_count": null,
       "recommended_action": "KEEP_AND_MONITOR",
       "recommended_action_label": "유지하고 추적",
-      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+      "source_effectiveness_recommendation": "KEEP"
     },
     {
       "source_id": "claude-code-changelog",
@@ -950,15 +944,15 @@
       "reliability": "project-official",
       "priority": "high",
       "raw_count": 8,
-      "eligible_count": 4,
-      "blocked_count": 4,
-      "main_eligible_count": 1,
+      "eligible_count": 2,
+      "blocked_count": 6,
+      "main_eligible_count": 0,
       "top_blockers": [
         "main_eligible=false",
         "source_gap_risk=true",
-        "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
         "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-        "briefing_only=true"
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist"
       ],
       "parser_failure_signals": [
         "Generic noise candidates were detected from artifact exclusion metadata.",
@@ -1408,7 +1402,7 @@
       "source_artifact": "source-effectiveness-report.json",
       "source_priority": "high",
       "source_reliability": "project-official",
-      "blocked_count": 4,
+      "blocked_count": 6,
       "raw_count": 8
     },
     {
@@ -1503,11 +1497,5 @@
       "raw_count": 1
     }
   ],
-  "warnings": [
-    {
-      "type": "missing_optional_artifact",
-      "message": "content/newsroom/2026-06-06/evidence-pack-summary.json not found; partial diagnosis will continue.",
-      "source_artifact": "content/newsroom/2026-06-06/evidence-pack-summary.json"
-    }
-  ]
+  "warnings": []
 }

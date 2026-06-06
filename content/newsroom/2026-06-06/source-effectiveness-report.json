@@ -18,11 +18,11 @@
     "synthetic_source_count": 0,
     "unregistered_candidate_count": 0,
     "collected_count": 40,
-    "eligible_count": 12,
-    "selected_count": 5,
+    "eligible_count": 10,
+    "selected_count": 3,
     "rendered_main_count": 1,
-    "source_gap_count": 28,
-    "generic_noise_count": 18,
+    "source_gap_count": 30,
+    "generic_noise_count": 20,
     "duplicate_count": 0,
     "source_url_quality_distribution": {
       "undated_reference_page": 2,
@@ -38,17 +38,17 @@
     },
     "source_quality_blocker_summary": {
       "undated_reference_page": 2,
-      "source_gap_risk": 28,
-      "reference_only": 19,
+      "source_gap_risk": 30,
+      "reference_only": 21,
       "cross_check_required_but_missing": 8
     },
     "selected_main_source_quality_coverage": {
-      "selected_main_count": 5,
-      "with_source_quality_count": 5
+      "selected_main_count": 3,
+      "with_source_quality_count": 3
     },
     "main_eligible_source_quality_coverage": {
-      "main_eligible_candidate_count": 6,
-      "with_source_quality_count": 6
+      "main_eligible_candidate_count": 5,
+      "with_source_quality_count": 5
     },
     "conditional_source_promoted_count": 2,
     "conditional_source_blocked_count": 14,
@@ -69,12 +69,16 @@
         "count": 2
       },
       {
+        "recommendation": "KEEP",
+        "count": 1
+      },
+      {
         "recommendation": "KEEP_AND_FIX_PARSER",
         "count": 8
       },
       {
         "recommendation": "KEEP_AND_MONITOR",
-        "count": 2
+        "count": 1
       }
     ]
   },
@@ -248,8 +252,8 @@
       "synthetic": false,
       "collected_count": 8,
       "eligible_count": 2,
-      "selected_count": 1,
-      "rendered_main_count": 1,
+      "selected_count": 0,
+      "rendered_main_count": 0,
       "source_gap_count": 6,
       "camera_relevant_raw_count": 2,
       "parser_repair_reason_count": 0,
@@ -273,8 +277,8 @@
         "reference_only": 5
       },
       "selected_main_source_quality_coverage": {
-        "selected_main_count": 1,
-        "with_source_quality_count": 1
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
       },
       "main_eligible_source_quality_coverage": {
         "main_eligible_candidate_count": 2,
@@ -290,11 +294,11 @@
       "reddit_cross_checked_count": 0,
       "reddit_only_blocked_count": 0,
       "eligible_rate": 0.25,
-      "selection_rate": 0.5,
-      "rendered_rate": 1,
+      "selection_rate": 0,
+      "rendered_rate": 0,
       "source_gap_rate": 0.75,
       "noise_rate": 0.625,
-      "effectiveness_score": 30,
+      "effectiveness_score": 0,
       "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
         "Generic noise candidates were detected from artifact exclusion metadata.",
@@ -323,9 +327,7 @@
           "count": 5
         }
       ],
-      "sample_selected_urls": [
-        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
-      ],
+      "sample_selected_urls": [],
       "sample_excluded_urls": [
         "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
         "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
@@ -1368,8 +1370,8 @@
       "synthetic": false,
       "collected_count": 2,
       "eligible_count": 2,
-      "selected_count": 0,
-      "rendered_main_count": 0,
+      "selected_count": 1,
+      "rendered_main_count": 1,
       "source_gap_count": 0,
       "camera_relevant_raw_count": 2,
       "parser_repair_reason_count": 0,
@@ -1389,8 +1391,8 @@
       },
       "source_quality_blocker_summary": {},
       "selected_main_source_quality_coverage": {
-        "selected_main_count": 0,
-        "with_source_quality_count": 0
+        "selected_main_count": 1,
+        "with_source_quality_count": 1
       },
       "main_eligible_source_quality_coverage": {
         "main_eligible_candidate_count": 2,
@@ -1406,15 +1408,19 @@
       "reddit_cross_checked_count": 0,
       "reddit_only_blocked_count": 0,
       "eligible_rate": 1,
-      "selection_rate": 0,
-      "rendered_rate": 0,
+      "selection_rate": 0.5,
+      "rendered_rate": 1,
       "source_gap_rate": 0,
       "noise_rate": 0,
-      "effectiveness_score": 35,
-      "recommendation": "KEEP_AND_MONITOR",
-      "reasons": [],
+      "effectiveness_score": 87.5,
+      "recommendation": "KEEP",
+      "reasons": [
+        "Source contributed at least one rendered main article."
+      ],
       "top_exclusion_reasons": [],
-      "sample_selected_urls": [],
+      "sample_selected_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
       "sample_excluded_urls": []
     },
     {
@@ -2840,20 +2846,20 @@
       "collection_mode_hint": "rss-source",
       "synthetic": false,
       "collected_count": 8,
-      "eligible_count": 4,
-      "selected_count": 4,
+      "eligible_count": 2,
+      "selected_count": 2,
       "rendered_main_count": 0,
-      "source_gap_count": 4,
+      "source_gap_count": 6,
       "camera_relevant_raw_count": 8,
       "parser_repair_reason_count": 0,
-      "reference_only_count": 2,
-      "watchlist_count": 2,
-      "main_eligible_false_count": 4,
-      "briefing_only_count": 2,
+      "reference_only_count": 4,
+      "watchlist_count": 4,
+      "main_eligible_false_count": 6,
+      "briefing_only_count": 4,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
-      "generic_noise_count": 2,
+      "generic_noise_count": 4,
       "source_url_quality_distribution": {
         "project_mailing_list_release": 8
       },
@@ -2862,16 +2868,16 @@
       },
       "source_quality_blocker_summary": {
         "cross_check_required_but_missing": 8,
-        "source_gap_risk": 4,
-        "reference_only": 2
+        "source_gap_risk": 6,
+        "reference_only": 4
       },
       "selected_main_source_quality_coverage": {
-        "selected_main_count": 4,
-        "with_source_quality_count": 4
+        "selected_main_count": 2,
+        "with_source_quality_count": 2
       },
       "main_eligible_source_quality_coverage": {
-        "main_eligible_candidate_count": 1,
-        "with_source_quality_count": 1
+        "main_eligible_candidate_count": 0,
+        "with_source_quality_count": 0
       },
       "conditional_source_promoted_count": 0,
       "conditional_source_blocked_count": 8,
@@ -2882,12 +2888,12 @@
       "reddit_candidate_count": 0,
       "reddit_cross_checked_count": 0,
       "reddit_only_blocked_count": 0,
-      "eligible_rate": 0.5,
+      "eligible_rate": 0.25,
       "selection_rate": 1,
       "rendered_rate": 0,
-      "source_gap_rate": 0.5,
-      "noise_rate": 0.25,
-      "effectiveness_score": 25,
+      "source_gap_rate": 0.75,
+      "noise_rate": 0.5,
+      "effectiveness_score": 5,
       "recommendation": "KEEP_AND_FIX_PARSER",
       "reasons": [
         "Generic noise candidates were detected from artifact exclusion metadata.",
@@ -2897,36 +2903,35 @@
       "top_exclusion_reasons": [
         {
           "reason": "main_eligible=false",
-          "count": 4
+          "count": 6
         },
         {
           "reason": "source_gap_risk=true",
-          "count": 4
-        },
-        {
-          "reason": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
-          "count": 2
+          "count": 6
         },
         {
           "reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-          "count": 2
+          "count": 4
         },
         {
           "reason": "briefing_only=true",
-          "count": 2
+          "count": 4
+        },
+        {
+          "reason": "finalSelectionEligibility=watchlist",
+          "count": 4
         }
       ],
       "sample_selected_urls": [
-        "https://lore.kernel.org/linux-media/20260605-imx678-v4-0-58e57c67143d@ideasonboard.com/",
-        "https://lore.kernel.org/linux-media/20260605-imx678-v4-1-58e57c67143d@ideasonboard.com/",
-        "https://lore.kernel.org/linux-media/20260605-imx678-v4-2-58e57c67143d@ideasonboard.com/",
-        "https://lore.kernel.org/linux-media/202606052349.bOSyAnNd-lkp@intel.com/"
+        "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
+        "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/"
       ],
       "sample_excluded_urls": [
-        "https://lore.kernel.org/linux-media/20260605134047.597EC1F00893@smtp.kernel.org/",
-        "https://lore.kernel.org/linux-media/202606052235.rM24ifzS-lkp@intel.com/",
-        "https://lore.kernel.org/linux-media/aiLrsLM8N0VzrNMe@devvm7509.cco0.facebook.com/",
-        "https://lore.kernel.org/linux-media/c7f35621-2bdb-4e66-ac8a-6c7fc6f80f1c@seznam.cz/"
+        "https://lore.kernel.org/linux-media/20260605192608.c1a88f75f22ed797a1e51070@linux-foundation.org/",
+        "https://lore.kernel.org/linux-media/20260605222245.35A3C1F00893@smtp.kernel.org/",
+        "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-15-3ec2b15675f7@pengutronix.de/",
+        "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-16-3ec2b15675f7@pengutronix.de/",
+        "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-6-3ec2b15675f7@pengutronix.de/"
       ]
     },
     {
@@ -4211,5 +4216,8 @@
       "sample_excluded_urls": []
     }
   ],
-  "warnings": []
+  "warnings": [
+    "Unattributed fact-check source gap could not be mapped to a source: The briefing item about device-specific fixes (Samsung Galaxy S6, Z Fold 4, A53) lacks explicit mention that these are CameraX-level fixes, not direct HAL/driver changes, which could create a source gap regarding the true impact level.",
+    "Unattributed fact-check source gap could not be mapped to a source: The mailing list candidates (Qualcomm CAMSS C-PHY Gen2 v1.1 and V4L2 mem2mem parallel processing) are used in the briefing and summary despite having a 'blocked' source quality status and requiring cross-check. This indicates a source gap for confirmed changes."
+  ]
 }

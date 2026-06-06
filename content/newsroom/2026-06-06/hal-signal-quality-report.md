@@ -2,8 +2,8 @@
 
 ## Gate Boundary
 
-- status: WARN
-- input_completeness: partial
+- status: NEEDS_FIX
+- input_completeness: complete
 - quality validation records HAL signal deductions: true
 - publish gate blocks HAL signal hard blockers through quality status: true
 - review artifacts preserved: true
@@ -11,7 +11,7 @@
 ## Inputs
 
 - missing required: none
-- optional input_unavailable: source_effectiveness_report, evidence_pack_summary
+- optional input_unavailable: none
 
 ## Summary
 
@@ -28,7 +28,7 @@
 - generic_signal_hard_blocker_count: 0
 - hal_signal_hard_blocker_count: 0
 - hard_blocker_reason_code_counts: {}
-- hal_impact_axis_counts: {"framework_hal_contract":1,"camerax_app_compatibility":1}
+- hal_impact_axis_counts: {"framework_hal_contract":1,"stream_buffer_metadata":1}
 - actionability_level_counts: {"owner_metric_log":1}
 - effective_actionability_level_counts: {"owner_metric_log":1}
 - signal_quality_status_counts: {"strong_signal":1}
@@ -42,4 +42,4 @@
 
 | # | Article | signal_quality_status | actionability_level | effective_actionability_level | hal_impact_axes | capsule | hard_blocker_reason_codes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표 | strong_signal | owner_metric_log | owner_metric_log | framework_hal_contract, camerax_app_compatibility | yes | none |
+| 1 | CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용 | strong_signal | owner_metric_log | owner_metric_log | framework_hal_contract, stream_buffer_metadata | yes | none |

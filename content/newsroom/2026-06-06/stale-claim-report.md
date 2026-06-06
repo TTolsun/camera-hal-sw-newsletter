@@ -18,7 +18,7 @@ PASS
 
 ## Retained Release Claims
 
-- none
+- CameraX 1.6.0: retained because the claim appears in final section evidence.
 
 ## Hard Failures
 

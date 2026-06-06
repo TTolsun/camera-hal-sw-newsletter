@@ -1,16 +1,38 @@
 {
-  "status": "PASS",
-  "must_fix": [],
+  "status": "NEEDS_FIX",
+  "must_fix": [
+    {
+      "location": "$.briefing[1]",
+      "problem": "Mailing list discussions are not confirmed changes and should not be presented as such in the briefing.",
+      "suggestion": "Remove the mention of unconfirmed mailing list discussions from the briefing. Briefing items should only include confirmed facts or explicitly framed as 'discussions' or 'proposals' with appropriate caveats.",
+      "source_url": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/"
+    },
+    {
+      "location": "$.briefing[2]",
+      "problem": "The briefing item presents device-specific fixes from CameraX as '상위 프레임워크 계층에서 수정되었습니다' (fixed at the higher framework layer) without explicitly stating that these are CameraX fixes, which could be misleading about the direct HAL/driver impact.",
+      "suggestion": "Clarify that these fixes are within CameraX and not necessarily direct HAL/driver changes, or rephrase to indicate they are CameraX-level workarounds for underlying device issues.",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+    },
+    {
+      "location": "$.summary",
+      "problem": "The summary mentions 'Linux 미디어 메일링 리스트에서 논의 중인 Qualcomm CAMSS C-PHY Gen2 v1.1 및 V4L2 mem2mem 병렬 처리 지원 등 카메라 드라이버 및 이미지 파이프라인의 성능 향상을 위한 저수준 커널 패치 동향을 함께 공유합니다.' (also sharing low-level kernel patch trends for camera driver and image pipeline performance improvements, such as Qualcomm CAMSS C-PHY Gen2 v1.1 and V4L2 mem2mem parallel processing support being discussed on the Linux media mailing list). These are unconfirmed mailing list discussions and should not be presented as 'trends' or 'shared' in the main summary, especially when the source quality is blocked.",
+      "suggestion": "Remove any mention of unconfirmed mailing list discussions from the summary. The summary should only reflect confirmed facts or explicitly frame unconfirmed items as 'potential' or 'under discussion' with appropriate caveats.",
+      "source_url": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/"
+    }
+  ],
   "recommended_fixes": [],
-  "source_gaps": [],
-  "source_gap_count": 0,
+  "source_gaps": [
+    "The mailing list candidates (Qualcomm CAMSS C-PHY Gen2 v1.1 and V4L2 mem2mem parallel processing) are used in the briefing and summary despite having a 'blocked' source quality status and requiring cross-check. This indicates a source gap for confirmed changes.",
+    "The briefing item about device-specific fixes (Samsung Galaxy S6, Z Fold 4, A53) lacks explicit mention that these are CameraX-level fixes, not direct HAL/driver changes, which could create a source gap regarding the true impact level."
+  ],
+  "source_gap_count": 2,
   "article_quality": [
     {
       "section_index": 0,
-      "headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
-      "publishable": true,
-      "reason": "Google I/O '26에서 발표된 CameraXViewfinder Composable은 폴더블 및 태블릿 기기에서 유연한 카메라 미리보기를 지원하며, 이는 HAL 계층의 동적 스트림 구성 성능 최적화 요구로 이어집니다. HAL 엔지니어에게 실질적인 검증 포인트를 제공합니다."
+      "headline": "CameraX 1.6.0 공식 릴리스: 유스케이스 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 적용",
+      "publishable": false,
+      "reason": "The article includes unconfirmed mailing list discussions in the briefing and summary, which violates the editorial policy for confirmed facts. While the CameraX section is good, the overall newsletter quality is degraded by the inclusion of blocked sources as if they were confirmed news."
     }
   ],
-  "final_comment": "decision_metadata 필드는 deterministic builder가 생성하므로 fact-checker가 수정해서는 안 됩니다. 이 필드를 제거하거나 수정하지 마십시오."
+  "final_comment": "The CameraX article itself is well-written and adheres to the policy for confirmed facts. However, the overall newsletter's briefing and summary include unconfirmed mailing list discussions as if they were confirmed news, which violates the editorial policy. These items have 'blocked' source quality status and require cross-check, making their inclusion as 'news' problematic. The briefing and summary need to be revised to only include confirmed facts or explicitly frame unconfirmed items with appropriate caveats."
 }

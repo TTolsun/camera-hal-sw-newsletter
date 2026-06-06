@@ -2,7 +2,7 @@
 
 ## 요약
 
-- 상태: 정상 또는 조치 없음
+- 상태: 차단
 - 기사 수 (`article_count`): 1
 - 렌더된 이미지 수 (`rendered_image_count`): 1
 - Markdown 이미지 수 (`markdown_image_count`): 1
@@ -15,13 +15,13 @@
 - 복원 가능 기사 수 (`repairable_article_count`): 0
 - 이번 repair 실행 복원 수 (`repaired_in_this_run_count`): 0
 - imageSelection 선택 상태 수 (`selected_by_image_selection_count`): 0
-- publish 차단 이슈 수 (`publish_blocking_issue_count`): 0
+- publish 차단 이슈 수 (`publish_blocking_issue_count`): 1
 
 ## 기사별 상태
 
 | # | 기사 | 선택된 대표 이미지 | 후보 | 검증 통과 후보 | 상태 |
 | ---: | --- | --- | ---: | ---: | --- |
-| 1 | Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
+| 1 | CameraX 1.6.0 릴리스: 기능 조합 사전 검증 API 도입 및 삼성 기기 호환성 패치 대거 반영 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
 
 ## 복원 가능 기사
 
@@ -33,4 +33,4 @@
 
 ## 렌더 일관성
 
-- 불일치 없음
+- 1. CameraX 1.6.0 릴리스: 기능 조합 사전 검증 API 도입 및 삼성 기기 호환성 패치 대거 반영: 렌더 결과 불일치 (render_mismatch)
