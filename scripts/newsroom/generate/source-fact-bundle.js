@@ -1,9 +1,6 @@
+const { ensureArray } = require('../common/value-coercion');
 const MAX_FACTS = 12;
 const MAX_FACT_LENGTH = 300;
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   if (Array.isArray(value)) return value.map(text).filter(Boolean).join(' ');

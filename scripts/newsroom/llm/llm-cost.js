@@ -1,8 +1,5 @@
+const { ensureArray } = require('../common/value-coercion');
 const TOKENS_PER_MILLION = 1000000;
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function number(value, fallback = 0) {
   const parsed = Number(value);

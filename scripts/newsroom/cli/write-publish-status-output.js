@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const {
   resolvePublishStatus
 } = require('../common/publish-status');
@@ -43,10 +44,6 @@ function scalar(value, fallback = 'n/a') {
   if (typeof value === 'boolean') return value ? 'true' : 'false';
   if (value === null || value === undefined || value === '') return fallback;
   return String(value);
-}
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
 }
 
 function reasonSummaryText(items) {

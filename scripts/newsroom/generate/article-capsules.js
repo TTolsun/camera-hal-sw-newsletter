@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const CAPSULE_TOKEN_TARGET = '700-1200';
 const MAX_TEXT = 420;
 const MAX_EVIDENCE_ITEMS = 3;
@@ -26,10 +27,6 @@ const {
 const {
   buildAllowedClaimEvidence
 } = require('../validate/claim-source-binding');
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value || '').trim();

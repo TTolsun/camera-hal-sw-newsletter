@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const {
@@ -67,10 +68,6 @@ function readJsonIfExists(filePath) {
     warn(`Could not parse ${path.relative(root, filePath)} for quality warnings: ${error.message}`);
     return null;
   }
-}
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
 }
 
 function finiteNumber(value) {

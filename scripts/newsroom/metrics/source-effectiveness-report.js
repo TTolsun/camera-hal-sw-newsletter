@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -33,10 +34,6 @@ const RECOMMENDATION_ORDER = [
   'DISABLE_OR_REVIEW',
   'KEEP_AND_MONITOR'
 ];
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   if (value === null || value === undefined) return '';

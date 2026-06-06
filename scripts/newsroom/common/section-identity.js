@@ -7,11 +7,8 @@
 // orchestrator (gemini-newsroom-newsletter.js) so the orchestrator no longer owns this
 // concern.
 
+const { ensureArray } = require('./value-coercion');
 const { normalizeUrl } = require('../generate/newsroom-selection');
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function stringOrEmpty(value) {
   return String(value || '').trim();

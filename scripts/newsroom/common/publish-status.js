@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -29,10 +30,6 @@ const DEFAULT_STATUS = {
   stale_claim_removed_count: 0,
   stale_claim_hard_failure_count: 0
 };
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function hasOwn(value, key) {
   return Object.prototype.hasOwnProperty.call(value || {}, key);

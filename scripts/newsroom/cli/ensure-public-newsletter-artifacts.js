@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -30,10 +31,6 @@ const {
 //   or reviewable failure artifacts.
 // - It must not mark review-only artifacts as publish-ready.
 // - It may exit successfully with public_newsletter_ready=false when review_pr_ready=true.
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
-
 function readJsonIfExists(filePath) {
   if (!fs.existsSync(filePath)) return null;
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));

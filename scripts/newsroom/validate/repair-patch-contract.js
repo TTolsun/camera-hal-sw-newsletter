@@ -13,6 +13,7 @@
 //
 // Pure transforms only — no IO, no LLM, no shared state.
 
+const { ensureArray } = require('../common/value-coercion');
 const {
   stableSectionKey
 } = require('../common/section-identity');
@@ -23,10 +24,6 @@ const REPAIR_PATCH_CONTRACT_VIOLATION = 'repair_patch_contract_violation';
 // prose). Everything outside these roots is article identity / source binding
 // and must not be touched by a repair patch.
 const PATCHABLE_SECTION_ROOTS = Object.freeze(['article_sections', 'public_article']);
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function stringOrEmpty(value) {
   return String(value === undefined || value === null ? '' : value).trim();

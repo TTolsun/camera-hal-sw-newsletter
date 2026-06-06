@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -67,10 +68,6 @@ const PARSER_REPAIR_RECOMMENDATIONS = new Set([
   'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR',
   'KEEP_AND_FIX_PARSER'
 ]);
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function objectValue(value) {
   return value && typeof value === 'object' && !Array.isArray(value) ? value : {};

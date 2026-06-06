@@ -1,3 +1,4 @@
+const { ensureArray } = require('../common/value-coercion');
 const crypto = require('crypto');
 
 const {
@@ -28,10 +29,6 @@ const {
   STREAM_BUFFER_TERMS,
   RUNTIME_TERMS
 } = require('../common/source-binding-policy');
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
-
 function objectValue(value) {
   return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
 }

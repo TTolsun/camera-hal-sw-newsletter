@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -56,10 +57,6 @@ const REVIEW_PUBLIC_NOTICE = Object.freeze([
   '검토 발행본입니다.',
   '각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.'
 ]);
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   if (Array.isArray(value)) return value.map(text).filter(Boolean).join(' ');

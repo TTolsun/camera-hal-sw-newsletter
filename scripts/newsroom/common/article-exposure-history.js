@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -8,10 +9,6 @@ const {
 
 const EXPOSURE_HISTORY_REL_PATH = path.join('data', 'article-exposure-history.json');
 const SCHEMA_VERSION = 1;
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value || '').trim();

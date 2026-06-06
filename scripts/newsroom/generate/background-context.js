@@ -1,10 +1,7 @@
+const { ensureArray } = require('../common/value-coercion');
 const {
   buildStaticBackgroundContext
 } = require('./article-field-builder');
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value || '').trim();

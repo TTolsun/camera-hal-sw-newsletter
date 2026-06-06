@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const {
   BUCKETS
 } = require('./aosp-camera-scope');
@@ -24,10 +25,6 @@ const CAMERA_ANCHOR_BUCKETS = new Set([
   BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
   BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT
 ]);
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   return String(value ?? '').trim();

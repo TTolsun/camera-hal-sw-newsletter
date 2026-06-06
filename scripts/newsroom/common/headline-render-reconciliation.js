@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -24,10 +25,6 @@ const {
 // newsletter_article_url anchor가 새로 렌더된 이슈에 없을 수 있다. validate-site는 그
 // anchor가 존재할 것을 요구하므로, generate 파이프라인과 public-artifact ensure 단계 모두
 // 상태를 쓰고 검증하기 전에 헤드라인을 render에 맞춰 reconcile한다.
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function stripHtml(value = '') {
   return decodeHtml(String(value).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' '));

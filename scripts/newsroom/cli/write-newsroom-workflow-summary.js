@@ -9,6 +9,7 @@
 // renderWorkflowSummary는 순수 함수(IO 없음)라 단위 테스트가 쉽다. main()만 파일/환경을
 // 읽고 쓴다. 시크릿, raw LLM 응답, 기사 본문은 출력하지 않는다.
 
+const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -62,10 +63,6 @@ const STATUS_CLASS = Object.freeze({
   skipped: 'skipped',
   pending: 'pending'
 });
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function text(value) {
   if (value === null || value === undefined) return '';

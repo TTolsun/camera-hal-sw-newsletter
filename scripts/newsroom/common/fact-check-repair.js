@@ -1,9 +1,6 @@
+const { ensureArray } = require('./value-coercion');
 const fs = require('fs');
 const path = require('path');
-
-function ensureArray(value) {
-  return Array.isArray(value) ? value : [];
-}
 
 function normalizePath(value = '') {
   return String(value).replace(/\\/g, '/').replace(/^\/+/, '');
