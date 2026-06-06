@@ -222,3 +222,15 @@ jobs:
           title: "[Newsroom Source Discovery] Candidate boundary - ${{ steps.resolve-newsletter-date.outputs.date }}"
           body: ${{ steps.pr-body.outputs.body }}
           labels: newsletter,aosp-camera,source-discovery
+
+      - name: Write workflow run summary
+        if: always()
+        continue-on-error: true
+        env:
+          SUMMARY_PROFILE: source-discovery
+          OUTCOME_DISCOVERY: ${{ steps.source-discovery.outcome }}
+          NEWSLETTER_DATE: ${{ steps.resolve-newsletter-date.outputs.date }}
+          PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          DEBUG_ARTIFACT_NAME: newsroom-source-discovery-debug-${{ github.run_id }}
+        run: node scripts/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"

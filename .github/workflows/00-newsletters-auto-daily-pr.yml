@@ -42,3 +42,27 @@ jobs:
     with:
       newsletter_date: ${{ needs.collect.outputs.date }}
     secrets: inherit
+
+  summary:
+    needs: [collect, discover, generate]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Write workflow run summary
+        continue-on-error: true
+        env:
+          SUMMARY_PROFILE: auto-daily
+          OUTCOME_COLLECT: ${{ needs.collect.result }}
+          OUTCOME_DISCOVERY: ${{ needs.discover.result }}
+          OUTCOME_EDITOR: ${{ needs.generate.result }}
+          NEWSLETTER_DATE: ${{ needs.collect.outputs.date }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node scripts/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"
