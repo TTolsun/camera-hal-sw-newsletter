@@ -94,19 +94,30 @@ function latestStatusForRole(log, role) {
 }
 
 function resolveInternalNodes(profile, input) {
-  const log = ensureArray(input.status && input.status.stage_status_log);
-  const publishGatePassed = input.status && input.status.publish_gate_passed;
+  const status = input.status || {};
+  const log = ensureArray(status.stage_status_log);
+  const publishGatePassed = status.publish_gate_passed;
+  // failure_stage가 있으면 런이 종료 실패한 것 — 다이어그램이 "최초 실패" 텍스트와
+  // 모순(전부 초록)되지 않도록 같은 신호로 쓴다.
+  const terminallyFailed = Boolean(text(status.failure_stage));
+
+  // 기록된 단계는 실제 상태를 그대로 색칠한다. publish는 단계가 아니라 게이트라
+  // 아래에서 따로 판정한다(빨강 'failed'는 실제로 죽은 상위 단계에만 쓴다).
   const raw = profile.nodes.map(node => {
-    if (node.key === 'publish') {
-      if (publishGatePassed === true) return { ...node, status: 'passed' };
-      if (publishGatePassed === false) return { ...node, status: 'failed' };
-      return { ...node, status: null };
-    }
+    if (node.key === 'publish') return { ...node, status: null };
     return { ...node, status: latestStatusForRole(log, node.key) };
   });
+
   const failureIndex = raw.findIndex(node => node.status === 'failed');
+  const pipelineFailed = terminallyFailed || failureIndex !== -1;
+
   return raw.map((node, index) => {
     if (node.status) return node;
+    if (node.key === 'publish') {
+      // 상위 단계 실패나 종료 실패면 발행은 일어나지 않았다. 발행 게이트 통과일 때만 초록.
+      if (pipelineFailed) return { ...node, status: 'skipped' };
+      return { ...node, status: publishGatePassed === true ? 'passed' : 'skipped' };
+    }
     if (node.key === 'repair') return { ...node, status: 'skipped' };
     if (failureIndex !== -1 && index > failureIndex) return { ...node, status: 'skipped' };
     return { ...node, status: 'pending' };

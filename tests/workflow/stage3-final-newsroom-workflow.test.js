@@ -344,7 +344,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
 test('generation path guards public artifacts for editorial reviewable failures', () => {
   const generatorPath = path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js');
   const generator = fs.readFileSync(generatorPath, 'utf8');
-  const renderedMarkdownIndex = generator.indexOf('const newsletterMarkdown = buildMarkdown(editor);');
+  const renderedMarkdownIndex = generator.indexOf('newsletterMarkdown = buildMarkdown(editor);');
   const structuralGuardIndex = generator.indexOf('assertTerminalPublicationContracts({', renderedMarkdownIndex);
   const generationStatusIndex = generator.indexOf("let generationStatus = 'PASS';");
   const factCheckNeedsFixIndex = generator.indexOf("factCheck.status === 'NEEDS_FIX' && mustFixCount > 0", generationStatusIndex);
