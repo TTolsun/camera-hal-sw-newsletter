@@ -21,7 +21,7 @@ const { readRuntimeConfig } = require('../common/runtime-config');
 const {
   buildCostReport,
   buildCostReportMarkdown,
-  callLlmJson,
+  callLlmJson: callLlmJsonRaw,
   getLlmDiagnostics,
   getLlmCostCalls,
   getLlmModelUsage
@@ -94,6 +94,10 @@ const {
   renderCandidateSelectionDiagnostics,
   selectionDiagnosticsFromReports
 } = require('../generate/selection-diagnostics');
+const {
+  roleFromStageLabel,
+  createStageStatusTracker
+} = require('../generate/stage-status-tracker');
 const {
   candidateGroupKey,
   explicitDemotedGroups,
@@ -223,8 +227,26 @@ const generationRunState = {
   editorPublicArticleJudge: null,
   repairAttempted: false,
   repairSucceeded: false,
-  candidateInput: null
+  candidateInput: null,
+  stageTracker: createStageStatusTracker()
 };
+
+// callLlmJson 계측 래퍼 (#398). 모든 LLM 단계(reporter/editor/repair/factcheck/
+// background-context/judge)가 이 한 지점을 통과하므로, 여기서 start/pass/fail만
+// 기록하면 내부 시퀀스 전체가 잡힌다. 기록 전용이라 결과나 게이트 판정에 영향 없다.
+async function callLlmJson(stage, ...args) {
+  const role = roleFromStageLabel(stage);
+  const attempt = generationRunState.currentQualityAttempt;
+  generationRunState.stageTracker.start(role, attempt, stage);
+  try {
+    const result = await callLlmJsonRaw(stage, ...args);
+    generationRunState.stageTracker.pass(role, attempt, stage);
+    return result;
+  } catch (error) {
+    generationRunState.stageTracker.fail(role, attempt, stage, error && error.message);
+    throw error;
+  }
+}
 
 function editorDraftArtifact(editor, date, options = {}) {
   return toEditorDraftArtifact(editor, {
@@ -436,6 +458,7 @@ function buildGenerationStatus({
     quality_score: qualityReport?.score ?? null,
     quality_threshold: qualityReport?.threshold ?? qualityGatePolicy.threshold,
     quality_deduction_count: ensureArray(qualityReport?.deductions).length,
+    stage_status_log: generationRunState.stageTracker.toLog(),
     quota_error_count: diagnostics.quota_error_count,
     invalid_json_count: diagnostics.invalid_json_count,
     model_usage: diagnostics.model_usage,
@@ -3588,6 +3611,11 @@ async function main() {
     writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor: persistedEditor, factCheck: currentFactCheck, qualityReport });
     writeJson(path.join(newsroomDir, `quality-report-${infix}attempt-${attempt}.json`), qualityReport);
     fs.writeFileSync(path.join(newsroomDir, `quality-report-${infix}attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
+    if (qualityReport && qualityReport.status === 'PASS') {
+      generationRunState.stageTracker.pass('quality_gate', attempt);
+    } else {
+      generationRunState.stageTracker.fail('quality_gate', attempt, '', qualityReport && qualityReport.status);
+    }
     return { editor: persistedEditor, qualityReport };
   };
 
@@ -4363,6 +4391,7 @@ async function main() {
   editor.publish_mode = currentPublishMode(shortlistReport);
   const newsletterMarkdown = buildMarkdown(editor);
   const newsletterHtmlContent = buildHtml(editor);
+  generationRunState.stageTracker.pass('render', generationRunState.currentQualityAttempt);
   assertTerminalPublicationContracts({
     date,
     editor,
