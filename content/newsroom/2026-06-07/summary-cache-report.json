@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-07",
+  "generated_at": "2026-06-07T02:34:02.407Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 6,
+    "hit_count": 1,
+    "miss_count": 5,
+    "by_url_hit_count": 1,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 5
+    },
+    {
+      "reason": "url-hit",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "[PATCH v5 0/2] media: i2c: add Aptina MT9M113 image sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v5-0-2088c7358e11@herrie.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-06T12:35:28Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v5-0-2088c7358e11@herrie.org",
+        "url_hash": "d708a9e99088cec72d5e4a7ce8e2134f4f4f30087e280b466da9c65a7c65ef3f",
+        "published_date": "2026-06-06T12:35:28Z",
+        "content_hash": "1e56ae78ffdba4543781463fd7bcc9640231189570afca7f5b007d7cf99cf145"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-2-8f6d0f79f4d1@herrie.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-06T19:01:03Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-2-8f6d0f79f4d1@herrie.org",
+        "url_hash": "0ac159fd9d39e5facade282d69323be3d9d9c14cf23594109bf24d3a6ecc0560",
+        "published_date": "2026-06-06T19:01:03Z",
+        "content_hash": "257140b828d4b170330279e9323babe217496845d520364c3f3770c415450e44"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v6 1/2] dt-bindings: media: i2c: add aptina,mt9m113",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-1-8f6d0f79f4d1@herrie.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-06T19:01:03Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-1-8f6d0f79f4d1@herrie.org",
+        "url_hash": "686da93e5be809ff3d79135bd081cc19569afab15a988fdd94abc7313c900ab6",
+        "published_date": "2026-06-06T19:01:03Z",
+        "content_hash": "20edaa3d994ad59a719dfaf0a7d54058f1a472d16cd4e1501e2509e9fa13aeec"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH v4 2/2] media: i2c: imx678: Add driver for Sony IMX678",
+      "url": "https://lore.kernel.org/linux-media/PN0P287MB1828B9AF2057CE964675318E8B1E2@PN0P287MB1828.INDP287.PROD.OUTLOOK.COM/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-06T16:21:41Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/pn0p287mb1828b9af2057ce964675318e8b1e2@pn0p287mb1828.indp287.prod.outlook.com",
+        "url_hash": "bdc39383e3708d186c0e96c1441c18b51f83145547a057349351b4cb6551c9bf",
+        "published_date": "2026-06-06T16:21:41Z",
+        "content_hash": "f4a157444d1e0bbb554092c736687b3d6b7ef30c888e4c50b2cd7554bd1d226a"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v6 0/2] media: i2c: add Aptina MT9M113 image sensor driver - Herman van Hazendonk via B4 Relay",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-0-8f6d0f79f4d1@herrie.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-06",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-0-8f6d0f79f4d1@herrie.org",
+        "url_hash": "b55b709b231257550b9c2b214d2561012796d966cfe71f89dc7ad818594a7fe1",
+        "published_date": "2026-06-06",
+        "content_hash": "70274eec186067a7468b59f05504099ee4624a5e11596b24f816c2d58dc6c2de"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "url": "https://goo.gle/AdaptiveApps_IO26",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 19 May 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://goo.gle/adaptiveapps_io26",
+        "url_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
+        "published_date": "Tue, 19 May 2026 13:00:00 +0000",
+        "content_hash": "07001fcff71ad48b61928d083d411a101099d62d0206dd9fd8c8b91c307b80b0"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3.json"
+    }
+  ]
+}
