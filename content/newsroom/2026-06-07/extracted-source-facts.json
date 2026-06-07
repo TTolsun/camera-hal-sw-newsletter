@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "810753bdc2746d96",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-0-8f6d0f79f4d1@herrie.org/",
+      "title": "[PATCH v6 0/2] media: i2c: add Aptina MT9M113 image sensor driver",
+      "published_at": "2026-06-06T19:01:03Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add a V4L2 subdev driver for the Aptina (now ON Semiconductor) MT9M113 1.3 megapixel SoC image sensor with embedded ISP, as used on the HP TouchPad (apq8060) front camera. The sensor is programmed over I2C and streams YUV / RGB / monochrome over a 1-lane MIPI CSI-2 D-PHY link. v6 addresses six Sashiko Gemini 3.1 findings raised on the v5 patchset, all of which are real bugs introduced (or exposed) by the v3-r2 release- callback restructure. One of them — the use-after-free in mt9m113_remove() du",
+          "evidence_text": "<html><head><title>[PATCH v6 0/2] media: i2c: add Aptina MT9M113 image sensor driver - Herman van Hazendonk via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefe",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "98d72599e2f23486",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-1-8f6d0f79f4d1@herrie.org/",
+      "title": "[PATCH v6 1/2] dt-bindings: media: i2c: add aptina,mt9m113",
+      "published_at": "2026-06-06T19:01:03Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "From: Herman van Hazendonk Add the binding for the Aptina (now ON Semiconductor) MT9M113 1.3 megapixel SoC image sensor with on-die ISP. The chip is used as the front (user-facing) camera on the HP TouchPad tablet and connects to the host SoC over MIPI CSI-2. The binding describes the chip's i2c address, optional reset and standby GPIOs, the per-supply regulators (VDD, VDD_IO, VDDA), the external clock input, and the CSI-2 endpoint pads exposed via the \"port\" subnode. Assisted-by: Claude:claude-",
+          "evidence_text": "<html><head><title>[PATCH v6 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Herman van Hazendonk via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-colo",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "cb0998d2250ca063",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-2-8f6d0f79f4d1@herrie.org/",
+      "title": "[PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver",
+      "published_at": "2026-06-06T19:01:03Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "From: Herman van Hazendonk Add a V4L2 subdev driver for the Aptina MT9M113 1.3 Megapixel SoC image sensor (1280x1024 active pixel array) with on-chip ISP. The sensor exposes: - dual context operation: Context A (640x480 preview, binned) and Context B (1280x1024 capture) selectable at runtime; - single-lane MIPI CSI-2 output, YUV422 in UYVY or YUYV byte order (the byte order is selected via the chroma/luma swap bit in MODE_OUTPUT_FORMAT_{A,B}); - I2C MCU-indirect register access through the 0x098",
+          "evidence_text": "<html><head><title>[PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - Herman van Hazendonk via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "e44ac074ade8e08a",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v5-0-2088c7358e11@herrie.org/",
+      "title": "[PATCH v5 0/2] media: i2c: add Aptina MT9M113 image sensor driver",
+      "published_at": "2026-06-06T12:35:28Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add a V4L2 subdev driver for the Aptina (now ON Semiconductor) MT9M113 1.3 megapixel SoC image sensor with embedded ISP, as used on the HP TouchPad (apq8060) front camera. The sensor is programmed over I2C and streams YUV / RGB / monochrome over a 1-lane MIPI CSI-2 D-PHY link. v5 addresses 5 Sashiko findings on the v4 patchset plus a follow-up regression caught by an on-HW unbind-during-stream-start race test (see \"Test results\" below). Signed-off-by: Herman van Hazendonk --- Changes in v5: - [L",
+          "evidence_text": "<html><head><title>[PATCH v5 0/2] media: i2c: add Aptina MT9M113 image sensor driver - Herman van Hazendonk via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefe",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "32d47419b73dfe54",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v5-1-2088c7358e11@herrie.org/",
+      "title": "[PATCH v5 1/2] dt-bindings: media: i2c: add aptina,mt9m113",
+      "published_at": "2026-06-06T12:35:28Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "From: Herman van Hazendonk Add the binding for the Aptina (now ON Semiconductor) MT9M113 1.3 megapixel SoC image sensor with on-die ISP. The chip is used as the front (user-facing) camera on the HP TouchPad tablet and connects to the host SoC over MIPI CSI-2. The binding describes the chip's i2c address, optional reset and standby GPIOs, the per-supply regulators (VDD, VDD_IO, VDDA), the external clock input, and the CSI-2 endpoint pads exposed via the \"port\" subnode. Assisted-by: Claude:claude-",
+          "evidence_text": "<html><head><title>[PATCH v5 1/2] dt-bindings: media: i2c: add aptina,mt9m113 - Herman van Hazendonk via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-colo",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "728c286160faf6f6",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v5-2-2088c7358e11@herrie.org/",
+      "title": "[PATCH v5 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver",
+      "published_at": "2026-06-06T12:35:28Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "From: Herman van Hazendonk Add a V4L2 subdev driver for the Aptina MT9M113 1.3 Megapixel SoC image sensor (1280x1024 active pixel array) with on-chip ISP. The sensor exposes: - dual context operation: Context A (640x480 preview, binned) and Context B (1280x1024 capture) selectable at runtime; - single-lane MIPI CSI-2 output, YUV422 in UYVY or YUYV byte order (the byte order is selected via the chroma/luma swap bit in MODE_OUTPUT_FORMAT_{A,B}); - I2C MCU-indirect register access through the 0x098",
+          "evidence_text": "<html><head><title>[PATCH v5 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - Herman van Hazendonk via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "7ecd440af856451f",
+      "url": "https://lore.kernel.org/linux-media/20260606191308.884C41F00893@smtp.kernel.org/",
+      "title": "Re: [PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver",
+      "published_at": "2026-06-06T19:13:09Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider: - [High] The `mt9m113_start_streaming()` error path explicitly powers off the hardware but leaves the PM state as `RPM_ACTIVE`. Subsequent operations (like STREAMON retries, `s_ctrl`, or `remove`) trust the active PM state and perform illegal operations, causing clk/regulator refcount underflows and I2C timeouts. - [High] Tying the allocation lifetime of the sensor structure to V4L2 subdev `.release` callb",
+          "evidence_text": "<html><head><title>Re: [PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - sashiko-bot</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sch",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.87,
+      "android_hal_relevance": 0.87,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.878,
+      "warnings": []
+    },
+    {
+      "id": "b42f0f8cfbaa9f26",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "published_at": "March 25, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"ru-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.95,
+      "android_hal_relevance": 0.95,
+      "ai_relevance": 0,
+      "technical_depth": 0.873,
+      "warnings": []
+    },
+    {
+      "id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "published_at": "2026-05-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.829,
+      "warnings": []
+    },
+    {
+      "id": "gemini-56706095d5f9ffc0",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v5-2-2088c7358e11@herrie.org/",
+      "title": "[PATCH v5 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - Herman van Hazendonk via B4 Relay",
+      "published_at": "2026-06-06",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v5 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - Herman van Hazendonk via B4 Relay",
+          "evidence_text": "<html><head><title>[PATCH v5 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - Herman van Hazendonk via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-63b2bd4d111eb20b",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-2-8f6d0f79f4d1@herrie.org/",
+      "title": "[PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - Herman van Hazendonk via B4 Relay",
+      "published_at": "2026-06-06",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - Herman van Hazendonk via B4 Relay",
+          "evidence_text": "<html><head><title>[PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - Herman van Hazendonk via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-90102692836a37f1",
+      "url": "https://lore.kernel.org/linux-media/20260606191308.884C41F00893@smtp.kernel.org/",
+      "title": "Re: [PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - sashiko-bot",
+      "published_at": "2026-06-06",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - sashiko-bot",
+          "evidence_text": "<html><head><title>Re: [PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver - sashiko-bot</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sch",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    }
+  ]
+}

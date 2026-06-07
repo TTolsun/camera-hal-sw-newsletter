@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-07",
+  "proposals": [
+    {
+      "proposal_id": "google_io_2026_media_pipeline",
+      "topic_gap": "Google I/O 2026 announcements related to Android media pipeline and camera output, specifically focusing on new toolkits and premium experiences.",
+      "source_family": "android",
+      "allowed_domains": [
+        "youtube.com"
+      ],
+      "search_keywords": [
+        "Google I/O 2026 media pipeline",
+        "Android camera output",
+        "Android media toolkit",
+        "Android premium media experiences"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "New APIs or tools for camera output processing",
+        "Improvements in media recording or playback paths",
+        "Performance enhancements for camera-generated content",
+        "Discussions on 'premium experiences' related to media"
+      ],
+      "risk_notes": [
+        "Playlist might contain general media topics not directly related to camera output or HAL.",
+        "Need to filter for specific talks relevant to camera/media pipeline."
+      ]
+    },
+    {
+      "proposal_id": "google_io_2026_jetpack_compose_cross_device",
+      "topic_gap": "Google I/O 2026 announcements on building seamless Android experiences across devices with Jetpack Compose, potentially impacting camera-related UI or cross-device media sharing.",
+      "source_family": "android",
+      "allowed_domains": [
+        "goo.gle"
+      ],
+      "search_keywords": [
+        "Google I/O 2026 Jetpack Compose camera",
+        "Android cross-device camera",
+        "Adaptive apps media"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "New Jetpack Compose features for camera UI",
+        "Cross-device camera usage scenarios",
+        "Improvements in media sharing or access across devices"
+      ],
+      "risk_notes": [
+        "May be too generic on UI development and not directly relevant to camera HAL or output.",
+        "Need to ensure the content specifically touches upon camera or media output implications."
+      ]
+    },
+    {
+      "proposal_id": "camerax_1_6_0_release",
+      "topic_gap": "New features, bug fixes, or behavioral changes introduced in CameraX 1.6.0 that impact camera application development or underlying HAL interactions.",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.6.0 release notes",
+        "androidx.camera 1.6.0",
+        "CameraX new features"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "expected_evidence": [
+        "API changes in CameraX 1.6.0",
+        "Improvements in camera capture, preview, or video recording",
+        "Bug fixes related to camera behavior or stability",
+        "Performance optimizations"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camerax_1_7_0_alpha01_release",
+      "topic_gap": "Early preview of upcoming features or significant changes in CameraX 1.7.0-alpha01, indicating future directions for camera application development.",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.7.0-alpha01 release notes",
+        "androidx.camera 1.7.0-alpha01",
+        "CameraX alpha features"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+      ],
+      "expected_evidence": [
+        "Experimental APIs or features in CameraX 1.7.0-alpha01",
+        "Preview of major architectural changes",
+        "Indications of future camera capabilities"
+      ],
+      "risk_notes": [
+        "Alpha releases might contain features that are not finalized or subject to change."
+      ]
+    },
+    {
+      "proposal_id": "aosp_camera_its_updates",
+      "topic_gap": "Updates to the Camera Image Test Suite (ITS) documentation, particularly regarding automated testing of camera images, which directly impacts Camera HAL and driver validation.",
+      "source_family": "aosp",
+      "allowed_domains": [
+        "source.android.com"
+      ],
+      "search_keywords": [
+        "AOSP Camera ITS",
+        "Android camera image testing",
+        "Camera HAL validation"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "New or updated Camera ITS test procedures",
+        "Changes in camera image quality requirements",
+        "Guidance on setting up ITS for camera testing",
+        "Impact on camera HAL implementation or tuning"
+      ],
+      "risk_notes": [
+        "Documentation updates might be minor and not reflect significant changes in requirements."
+      ]
+    },
+    {
+      "proposal_id": "linux_media_aptina_mt9m113_driver",
+      "topic_gap": "New or updated Linux kernel driver for the Aptina MT9M113 image sensor, indicating ongoing development in the Linux media subsystem that could eventually influence Android camera HAL implementations or embedded camera systems.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "linux-media Aptina MT9M113",
+        "V4L2 driver",
+        "image sensor kernel"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-2-8f6d0f79f4d1@herrie.org/",
+        "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-1-8f6d0f79f4d1@herrie.org/",
+        "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-0-8f6d0f79f4d1@herrie.org/",
+        "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v5-2-2088c7358e11@herrie.org/",
+        "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v5-0-2088c7358e11@herrie.org/",
+        "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v5-1-2088c7358e11@herrie.org/",
+        "https://lore.kernel.org/linux-media/20260606191308.884C41F00893@smtp.kernel.org/"
+      ],
+      "expected_evidence": [
+        "Details of the Aptina MT9M113 sensor driver implementation",
+        "Discussions on V4L2 integration or media controller framework",
+        "Potential impact on embedded Linux camera systems or future Android HALs using similar sensors"
+      ],
+      "risk_notes": [
+        "Kernel mailing list discussions can be highly technical and require deep understanding of Linux media subsystem.",
+        "Relevance to Android HAL might be indirect or long-term."
+      ]
+    }
+  ]
+}
