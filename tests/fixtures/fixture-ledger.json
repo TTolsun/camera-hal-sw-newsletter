@@ -514,6 +514,17 @@
       ]
     },
     {
+      "path": "source-html/android-security-bulletin-2026-06.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Android security monthly bulletin camera/media CVE extraction",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
+    },
+    {
       "path": "source-html/aosp-camera-documentation.html",
       "source": "curated",
       "allowedUse": "parser-source-html",
