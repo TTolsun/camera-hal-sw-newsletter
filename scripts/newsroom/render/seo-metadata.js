@@ -38,15 +38,48 @@ function xmlEscape(value = '') {
     .replace(/>/g, '&gt;');
 }
 
-function buildStaticSitemap() {
-  const entries = [SITE_BASE_URL, `${SITE_BASE_URL}archive.html`];
+function urlElement({ loc, lastmod }) {
+  const lines = ['  <url>', `    <loc>${xmlEscape(loc)}</loc>`];
+  if (lastmod) lines.push(`    <lastmod>${xmlEscape(lastmod)}</lastmod>`);
+  lines.push('  </url>');
+  return lines.join('\n');
+}
+
+function renderSitemapXml(entries) {
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...entries.map(loc => `  <url>\n    <loc>${xmlEscape(loc)}</loc>\n  </url>`),
+    ...entries.map(urlElement),
     '</urlset>',
     ''
   ].join('\n');
+}
+
+// 안정적인 두 진입점만 담는 정적 sitemap. 발행 데이터가 없을 때의 기준이다.
+function buildStaticSitemap() {
+  return renderSitemapXml([
+    { loc: SITE_BASE_URL },
+    { loc: `${SITE_BASE_URL}archive.html` }
+  ]);
+}
+
+// index + archive + 각 weekly 발행물을 enumerate한다. 발행물 목록은 라이브 사이트가 쓰는
+// data/newsletters-weekly.json 항목(weeklyKey/html/weekEndDate)을 그대로 받는다.
+function buildSitemap(weeklyIssues = []) {
+  const issues = Array.isArray(weeklyIssues) ? weeklyIssues : [];
+  const entries = [
+    { loc: SITE_BASE_URL },
+    { loc: `${SITE_BASE_URL}archive.html` }
+  ];
+  for (const issue of issues) {
+    const html = String(issue?.html || '').trim();
+    if (!html) continue;
+    entries.push({
+      loc: absoluteUrl(html),
+      lastmod: String(issue.weekEndDate || issue.date || '').trim()
+    });
+  }
+  return renderSitemapXml(entries);
 }
 
 // head의 <meta>/<link> 태그를 {element, attrs} 목록으로 파싱한다(속성 순서 무관).
@@ -108,6 +141,7 @@ module.exports = {
   REQUIRED_SEO_TAGS,
   absoluteUrl,
   buildStaticSitemap,
+  buildSitemap,
   parseHeadTags,
   missingSeoTags,
   seoTagUrl

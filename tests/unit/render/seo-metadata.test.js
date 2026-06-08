@@ -6,6 +6,7 @@ const {
   DEFAULT_OG_IMAGE,
   absoluteUrl,
   buildStaticSitemap,
+  buildSitemap,
   missingSeoTags,
   seoTagUrl
 } = require('../../../scripts/newsroom/render/seo-metadata');
@@ -47,6 +48,27 @@ test('buildStaticSitemap lists the two stable entry points and is data-independe
   assert.ok(xml.includes(`<loc>${SITE_BASE_URL}archive.html</loc>`));
   assert.equal((xml.match(/<url>/g) || []).length, 2);
   assert.ok(xml.endsWith('\n'));
+});
+
+test('buildSitemap enumerates index, archive, and each weekly issue with lastmod', () => {
+  const xml = buildSitemap([
+    { weeklyKey: '2026-W23', html: 'newsletters/2026-W23/index.html', weekEndDate: '2026-06-07', date: '2026-06-01' },
+    { weeklyKey: '2026-W22', html: 'newsletters/2026-W22/index.html', date: '2026-05-25' }
+  ]);
+  assert.ok(xml.includes(`<loc>${SITE_BASE_URL}</loc>`));
+  assert.ok(xml.includes(`<loc>${SITE_BASE_URL}archive.html</loc>`));
+  assert.ok(xml.includes(`<loc>${SITE_BASE_URL}newsletters/2026-W23/index.html</loc>`));
+  assert.ok(xml.includes(`<loc>${SITE_BASE_URL}newsletters/2026-W22/index.html</loc>`));
+  assert.ok(xml.includes('<lastmod>2026-06-07</lastmod>')); // weekEndDate preferred
+  assert.ok(xml.includes('<lastmod>2026-05-25</lastmod>')); // falls back to date
+  assert.equal((xml.match(/<url>/g) || []).length, 4); // index + archive + 2 issues
+  assert.ok(xml.endsWith('\n'));
+});
+
+test('buildSitemap skips entries with no html and equals static sitemap when empty', () => {
+  const xml = buildSitemap([{ weeklyKey: '2026-W23' }]);
+  assert.equal((xml.match(/<url>/g) || []).length, 2); // only index + archive
+  assert.equal(buildSitemap([]), buildStaticSitemap());
 });
 
 test('missingSeoTags returns empty when all required share tags are present', () => {

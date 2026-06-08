@@ -69,6 +69,16 @@ test('a single publish-ready run writes the weekly page, issue.json, and a weekl
   assert.equal(readIssue(root, '2026-W23').sections.length, 1);
 });
 
+test('publishing a weekly issue regenerates sitemap.xml with the issue URL', async () => {
+  const root = tempRoot();
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', 'https://example.com/a')]), tags: [] });
+
+  const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
+  assert.ok(sitemap.includes('https://ttolsun.github.io/camera-hal-sw-newsletter/'));
+  assert.ok(sitemap.includes('https://ttolsun.github.io/camera-hal-sw-newsletter/archive.html'));
+  assert.ok(sitemap.includes('newsletters/2026-W23/index.html'));
+});
+
 test('multiple runs in the same ISO week accumulate distinct articles into one weekly issue', async () => {
   const root = tempRoot();
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', 'https://example.com/a')]), tags: [] });
