@@ -1,0 +1,503 @@
+{
+  "status": "FAILED_EDITOR_REVIEWABLE",
+  "fact_check_status": "UNKNOWN",
+  "must_fix_count": 0,
+  "failure_kind": "editor_failed_reviewable",
+  "failure_class": "",
+  "quality_status": "UNKNOWN",
+  "quality_score": null,
+  "quality_threshold": 60,
+  "publish_ready": true,
+  "selection_publish_ready": true,
+  "final_publish_ready": null,
+  "editor_review_required": false,
+  "date": "2026-06-08",
+  "failure_stage": "editor attempt 1/2",
+  "failure_reason": "Editor output failed claim binding validation.",
+  "quality_attempt_count": 1,
+  "quality_deduction_count": 0,
+  "stage_status_log": [
+    {
+      "role": "reporter",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "reporter attempt 1/2"
+    },
+    {
+      "role": "background-context",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "background-context attempt 1/2"
+    },
+    {
+      "role": "editor",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor attempt 1/2"
+    },
+    {
+      "role": "repair",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor attempt 1/2 semantic repair"
+    }
+  ],
+  "quota_error_count": 0,
+  "invalid_json_count": 0,
+  "model_usage": {
+    "reporter attempt 1/2": {
+      "gemini-2.5-flash": {
+        "requests": 1,
+        "successes": 1,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 0
+      }
+    },
+    "background-context attempt 1/2": {
+      "gemini-2.5-flash": {
+        "requests": 1,
+        "successes": 1,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 0
+      }
+    },
+    "editor attempt 1/2": {
+      "gemini-3.5-flash": {
+        "requests": 1,
+        "successes": 1,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 0
+      }
+    },
+    "editor attempt 1/2 semantic repair": {
+      "gemini-3.5-flash": {
+        "requests": 1,
+        "successes": 1,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 0
+      }
+    }
+  },
+  "model_routing": {
+    "reporter attempt 1/2": {
+      "stage": "reporter attempt 1/2",
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false
+    },
+    "background-context attempt 1/2": {
+      "stage": "background-context attempt 1/2",
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false
+    },
+    "editor attempt 1/2": {
+      "stage": "editor attempt 1/2",
+      "stage_group": "editor",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false
+    },
+    "editor attempt 1/2 semantic repair": {
+      "stage": "editor attempt 1/2 semantic repair",
+      "stage_group": "repair",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false
+    }
+  },
+  "candidate_input": {
+    "mode": "artifact",
+    "candidate_artifact": "content/collected-news/2026-06-08/merged-candidates.json",
+    "candidate_artifact_hash": "d8856c3cf2291368678c06c4ebfe943e4b7c169199959ab9907ebf2ad24bb5d1",
+    "manifest": "content/collected-news/2026-06-08/merged-candidate-manifest.json",
+    "manifest_type": "merged_candidate",
+    "manifest_status": "validated",
+    "llm_used": true,
+    "merge_mode": "gemini_source_discovery",
+    "candidate_count": 46
+  },
+  "run_context": {
+    "github_run_id": "27112844008",
+    "github_sha": "b71a286258a5d172aa0038a4eb436bb6d85916b6",
+    "github_ref": "refs/heads/main"
+  },
+  "raw_artifact_validation_error": null,
+  "review_gate_passed": true,
+  "public_output_expected": false,
+  "editor_semantic_validation": {
+    "name": "EditorSemanticValidationError",
+    "message": "Editor output failed claim binding validation.",
+    "details": {
+      "field": "sections.claims",
+      "actualCount": 1,
+      "sectionCount": 1,
+      "issues": [
+        {
+          "index": 1,
+          "headline": "Linux V4L2 서브디바이스 클라이언트 기능 및 포맷 정보 관리 구조 개선 (v5 패치)",
+          "status": "needs_fix",
+          "issues": [
+            {
+              "reason_code": "unknown_evidence_id",
+              "message": "Claim references unresolved evidence_id: candidate:217feaf12567b5f136633b102e88359d61ed3a27654c02d403e343982caa13cc:source-summary."
+            },
+            {
+              "reason_code": "unknown_evidence_id",
+              "message": "Claim references unresolved evidence_id: candidate:b0667143fb75775ebb4b6643b64ef41c5e4db6f56e8c9f7b172dc7df6d2caf7d:source-summary."
+            }
+          ],
+          "uncovered_facts": []
+        }
+      ]
+    },
+    "field": "sections.claims",
+    "stage": "editor attempt 1/2",
+    "attempt": 1,
+    "initial": {
+      "name": "EditorSemanticValidationError",
+      "message": "Editor output failed claim binding validation.",
+      "details": {
+        "field": "sections.claims",
+        "actualCount": 1,
+        "sectionCount": 1,
+        "issues": [
+          {
+            "index": 1,
+            "headline": "Linux V4L2 서브디바이스 클라이언트 기능 및 포맷 정보 관리 구조 개선 (v5 패치)",
+            "status": "needs_fix",
+            "issues": [
+              {
+                "reason_code": "unknown_evidence_id",
+                "message": "Claim references unresolved evidence_id: candidate:217feaf12567b5f136633b102e88359d61ed3a27654c02d403e343982caa13cc:source-summary."
+              },
+              {
+                "reason_code": "unknown_evidence_id",
+                "message": "Claim references unresolved evidence_id: candidate:b0667143fb75775ebb4b6643b64ef41c5e4db6f56e8c9f7b172dc7df6d2caf7d:source-summary."
+              }
+            ],
+            "uncovered_facts": []
+          }
+        ]
+      },
+      "field": "sections.claims",
+      "stage": "editor attempt 1/2",
+      "attempt": 1
+    }
+  },
+  "editor_public_article_judge": null,
+  "repairAttempted": true,
+  "repairSucceeded": false,
+  "input_candidate_count": 46,
+  "eligible_candidate_count": 4,
+  "selected_article_count": 3,
+  "deterministic_selected_count": 3,
+  "rendered_main_article_count": null,
+  "selected_group_count": 3,
+  "rendered_group_count": null,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://lore.kernel.org/linux-media/20260607215356.842932-9-sakari.ailus@linux.intel.com",
+    "article:https://lore.kernel.org/linux-media/20260607215356.842932-8-sakari.ailus@linux.intel.com",
+    "article:https://lore.kernel.org/linux-media/20260607215356.842932-10-sakari.ailus@linux.intel.com"
+  ],
+  "rendered_group_keys": [],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "group_coverage_ok": null,
+  "reserve_candidate_count": 1,
+  "demoted_article_count": 0,
+  "locked_article_count": null,
+  "fallback_topic_count": 0,
+  "reporter_candidate_count": 4,
+  "reporter_selected_count": 4,
+  "final_input_candidate_count": 46,
+  "final_eligible_candidate_count": 4,
+  "final_selected_article_count": 3,
+  "reporter_selected_but_final_excluded_count": 1,
+  "ai_selected_article_count": 3,
+  "underfilled": false,
+  "publish_gate_passed": true,
+  "min_final_articles": 1,
+  "max_final_articles": 5,
+  "absolute_min_reviewable_articles": 0,
+  "min_non_fallback_publish_ready_articles": 0,
+  "composition_mode": "NORMAL",
+  "publish_mode": "DEEP",
+  "publish_mode_detail": {
+    "mode": "DEEP",
+    "core_count": 3,
+    "adjacent_count": 0,
+    "context_count": 0,
+    "context_min_signals": 1
+  },
+  "selection_composition_mode": "NORMAL",
+  "composition_reason": "Normal composition: Primary Camera Stack topics satisfy the Newsletter Policy without supporting main articles.",
+  "composition_summary": {
+    "selected_article_count": 3,
+    "bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 3,
+      "android_platform_camera_adjacent": 0,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 3,
+    "android_platform_camera_adjacent_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 3,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 3,
+    "fallback_topic_count": 0
+  },
+  "eligible_composition_summary": {
+    "selected_article_count": 4,
+    "bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 3,
+      "android_platform_camera_adjacent": 1,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 3,
+    "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 4,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 4,
+    "fallback_topic_count": 0
+  },
+  "candidate_pool_preflight_passed": true,
+  "candidate_shortage_reviewable": false,
+  "candidate_shortage_summary": {
+    "publishable_candidate_count": 4,
+    "required_publishable_candidate_count": 1,
+    "reserve_candidate_count": 1,
+    "required_reserve_candidate_count": 0,
+    "primary_camera_stack_candidate_count": 4,
+    "required_primary_camera_stack_candidate_count": 0,
+    "camera_stack_candidate_count": 4,
+    "required_camera_stack_candidate_count": 0,
+    "direct_camera_or_driver_candidate_count": 3,
+    "camera_adjacent_candidate_count": 1,
+    "supporting_candidate_count": 0,
+    "selected_article_count": 3,
+    "selected_primary_camera_stack_count": 3
+  },
+  "shortage_reason_codes": [],
+  "publish_gate_reason_codes": [],
+  "publish_gate_reason_summary": [],
+  "publish_ready_composition_policy": {
+    "primaryCameraStackMinRequired": 0,
+    "directAospCameraOrDriverMinRequired": 0,
+    "supportingMainMaxAllowed": 1,
+    "directAospCameraOrDriverBuckets": [
+      "direct_aosp_camera",
+      "camera_driver_image_pipeline"
+    ]
+  },
+  "source_parser_hints": [
+    {
+      "code": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR",
+      "source_id": "unknown",
+      "reason": "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence."
+    },
+    {
+      "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "non_fallback_reviewable_article_count": 3,
+  "eligible_non_fallback_reviewable_article_count": 4,
+  "primary_camera_stack_topic_count": 3,
+  "supporting_main_article_count": 0,
+  "forbidden_main_article_count": 0,
+  "direct_aosp_camera_count": 0,
+  "camera_driver_image_pipeline_count": 3,
+  "android_platform_camera_adjacent_count": 0,
+  "android_multimedia_camera_output_count": 0,
+  "soc_platform_signal_count": 0,
+  "cpp_ai_tooling_fallback_count": 0,
+  "generic_tech_watchlist_count": 0,
+  "selection_warnings": [],
+  "selection_errors": [],
+  "selection_shortage_hints": [
+    "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
+    "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+  ],
+  "headline_decision": {
+    "decision": "retained_no_eligible_candidate",
+    "reason": "retained_no_eligible_candidate",
+    "current_headline_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+    "replacement_headline_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+    "previous_stored_current_score": null,
+    "runtime_decayed_score": null,
+    "last_scored_at": null,
+    "scored_at": "2026-06-08",
+    "retained": true,
+    "replaced": false,
+    "cleared": false,
+    "seeded": false,
+    "injected": false,
+    "snapshot_revalidated": true,
+    "revalidation_failure_reason": "",
+    "selected_normally": true,
+    "latest_inclusion_required": false,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "headline_latest_inclusion": {
+    "included": false,
+    "mode": "none",
+    "injected_from_snapshot": false,
+    "snapshot_revalidated": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "removed_due_to_headline_inclusion": [],
+  "article_exposure_coverage": null,
+  "exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 32
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 31
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 31
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 24
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 20
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 20
+    },
+    {
+      "reason": "selection_window=reference_not_main",
+      "count": 17
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 13
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 11
+    },
+    {
+      "reason": "watch page without dated evidence",
+      "count": 11
+    }
+  ],
+  "final_exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 32
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 31
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 31
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 24
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 20
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 20
+    },
+    {
+      "reason": "selection_window=reference_not_main",
+      "count": 17
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 13
+    },
+    {
+      "reason": "finalSelectionEligibility=exclude",
+      "count": 11
+    },
+    {
+      "reason": "watch page without dated evidence",
+      "count": 11
+    }
+  ],
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
+  "public_newsletter_ready": false,
+  "review_publication_ready": false,
+  "diagnostics_only": true,
+  "homepage_visible_after_merge": false,
+  "public_state": "DIAGNOSTICS_ONLY",
+  "run_mode": "diagnostics_only",
+  "effective_homepage_visible": false,
+  "existing_public_artifact_detected": false,
+  "retention_valid": false,
+  "retention_error": "",
+  "public_artifact_policy": "hide_existing_public_artifact_after_latest_diagnostics_only",
+  "public_artifact_source": "none",
+  "reconciliation_required": false,
+  "reconciliation_action": "removed_newsletters_index_entry",
+  "reconciliation_reason": "latest diagnostics-only run has no effective public artifacts"
+}

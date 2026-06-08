@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-06-08",
+  "source_of_truth": "content/newsroom/2026-06-08/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-06-08/newsletter.md",
+    "html": "newsletters/2026-06-08/index.html"
+  },
+  "mode": "review-or-draft",
+  "render_consistency_scope": "editor_draft",
+  "summary": {
+    "article_count": 0,
+    "rendered_image_count": 0,
+    "markdown_image_count": 0,
+    "fallback_visual_count": 0,
+    "image_candidates_count": 0,
+    "valid_image_candidate_count": 0,
+    "selected_image_count": 0,
+    "empty_selected_with_candidates_count": 0,
+    "selected_image_without_valid_candidate_count": 0,
+    "selected_image_not_in_candidates_count": 0,
+    "repairable_article_count": 0,
+    "selected_by_image_selection_count": 0,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
+    "unrepairable_no_candidate_count": 0,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [],
+  "consistency": {
+    "selected_image_render_mismatches": [],
+    "selected_image_without_valid_candidate_articles": []
+  },
+  "warnings": [
+    {
+      "type": "missing_source_of_truth",
+      "message": "editor-draft.json is missing; image audit cannot inspect this date.",
+      "source_artifact": "content/newsroom/2026-06-08/editor-draft.json"
+    }
+  ],
+  "errors": []
+}
