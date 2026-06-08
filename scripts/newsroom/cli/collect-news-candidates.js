@@ -30,6 +30,9 @@ const {
   resolveLinkedReleaseNoteEvidenceItems
 } = require('../collect/linked-release-note-evidence');
 const {
+  resolveSecurityBulletinCveItems
+} = require('../collect/security-bulletin-cve');
+const {
   DEFAULT_SECTION_MAP,
   normalizeEnabledSources,
   normalizeSourceEntry,
@@ -1355,7 +1358,13 @@ async function main() {
       const feed = sourceFeed(source);
       const target = feed || fetchUrlForContent(source.url);
       const text = await fetchText(target);
-      const sourceSpecificItems = parseSourceSpecificItems(text, source);
+      const indexItems = parseSourceSpecificItems(text, source);
+      // 보안 게시판은 인덱스 페이지의 월별 링크만 보던 source-gap이 있어, 최신 월별 페이지를
+      // 따라가 카메라/미디어 CVE를 CVE별 후보로 만든다. 관련 CVE가 없으면 인덱스 동작을 유지한다.
+      const bulletinCveItems = source.id === 'android-security-bulletin'
+        ? await resolveSecurityBulletinCveItems(indexItems, source, { fetchTextImpl: fetchText })
+        : [];
+      const sourceSpecificItems = bulletinCveItems.length > 0 ? bulletinCveItems : indexItems;
       const resolvedSourceSpecificItems = sourceSpecificItems.length > 0
         ? await resolveLinkedReleaseNoteEvidenceItems(sourceSpecificItems, source, { fetchTextImpl: fetchText })
         : [];
