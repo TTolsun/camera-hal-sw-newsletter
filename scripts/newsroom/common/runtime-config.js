@@ -94,6 +94,9 @@ const DEFAULT_RUNTIME_CONFIG = {
   newsroomCandidateInputMode: 'default',
   newsroomCandidateInputPath: '',
   newsroomEnableGeminiSourceDiscovery: false,
+  // #429 linked evidence expansion은 Gemini source discovery가 켜진 run 안에서만 동작하고
+  // non-failing이므로 기본 켜되, 문제 시 source discovery 전체를 끄지 않고 이 단계만 끌 수 있게 한다.
+  newsroomEnableLinkedEvidenceDiscovery: true,
   githubEventName: ''
 };
 
@@ -418,6 +421,15 @@ function readRuntimeConfig(env = process.env, options = {}) {
       'NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY',
       { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomEnableGeminiSourceDiscovery }
     ),
+    newsroomEnableLinkedEvidenceDiscovery: parseBoolean(
+      envValue(
+        env,
+        'NEWSROOM_ENABLE_LINKED_EVIDENCE_DISCOVERY',
+        DEFAULT_RUNTIME_CONFIG.newsroomEnableLinkedEvidenceDiscovery
+      ),
+      'NEWSROOM_ENABLE_LINKED_EVIDENCE_DISCOVERY',
+      { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomEnableLinkedEvidenceDiscovery }
+    ),
     githubEventName: String(envValue(env, 'GITHUB_EVENT_NAME', DEFAULT_RUNTIME_CONFIG.githubEventName) || '').trim(),
     geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim())
   };
@@ -668,6 +680,8 @@ function sanitizeRuntimeConfig(config) {
     newsroomCandidateInputPath: config.newsroomCandidateInputPath ?? DEFAULT_RUNTIME_CONFIG.newsroomCandidateInputPath,
     newsroomEnableGeminiSourceDiscovery:
       config.newsroomEnableGeminiSourceDiscovery ?? DEFAULT_RUNTIME_CONFIG.newsroomEnableGeminiSourceDiscovery,
+    newsroomEnableLinkedEvidenceDiscovery:
+      config.newsroomEnableLinkedEvidenceDiscovery ?? DEFAULT_RUNTIME_CONFIG.newsroomEnableLinkedEvidenceDiscovery,
     githubEventName: config.githubEventName,
     proPolicy: 'disabled',
     proModelConfigured: configuredModelList(config).some(isProModel),

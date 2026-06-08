@@ -108,6 +108,36 @@ test('collectExpansionLinks keeps allowed evidence links and drops noise/unsuppo
   assert.ok(manualUrlSet.has('https://android-developers.googleblog.com/2026/05/existing.html'));
 });
 
+function releaseLinks(prefix, count) {
+  return Array.from({ length: count }, (_, i) => ({
+    url: `https://github.com/androidx/androidx/releases/tag/${prefix}-${i}`,
+    text: `${prefix} release ${i}`,
+    source_field: 'rss.body',
+    extraction_method: 'html_anchor'
+  }));
+}
+
+test('collectExpansionLinks caps links per candidate', () => {
+  const perCandidate = collectExpansionLinks(
+    [{ id: 'c1', title: 'one', url: 'https://android-developers.googleblog.com/2026/05/one.html', outgoing_links: releaseLinks('camera', 12) }],
+    sourceRegistry(),
+    { maxLinksPerCandidate: 5, maxLinksPerRun: 100 }
+  );
+  assert.equal(perCandidate.links.length, 5);
+});
+
+test('collectExpansionLinks caps total links per run across candidates', () => {
+  const perRun = collectExpansionLinks(
+    [
+      { id: 'c1', title: 'one', url: 'https://android-developers.googleblog.com/2026/05/one.html', outgoing_links: releaseLinks('a', 6) },
+      { id: 'c2', title: 'two', url: 'https://android-developers.googleblog.com/2026/05/two.html', outgoing_links: releaseLinks('b', 6) }
+    ],
+    sourceRegistry(),
+    { maxLinksPerCandidate: 50, maxLinksPerRun: 3 }
+  );
+  assert.equal(perRun.links.length, 3);
+});
+
 test('collectExpansionLinks attaches parent lineage and link context', () => {
   const { links } = collectExpansionLinks(manualCandidates(), sourceRegistry());
   const cameraLink = links.find(link => link.url.includes('releases/camera'));

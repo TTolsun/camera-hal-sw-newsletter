@@ -41,6 +41,12 @@ const LINKED_DISCOVERY_STATUS = Object.freeze({
   FOUND: 'FOUND_DERIVED_CANDIDATES'
 });
 
+// extract-only지만 후보 풀이 두꺼운 날 수십~수백 개 링크가 하나의 flash-lite 프롬프트로
+// 몰리는 것을 막기 위해 per-candidate / per-run 상한을 둔다. 기본값은 기존 linked-evidence
+// 정책(linkedEvidenceMaxLinksPerCandidate=8, linkedEvidenceMaxLinksPerRun=40)과 일치시킨다.
+const DEFAULT_MAX_LINKS_PER_CANDIDATE = 8;
+const DEFAULT_MAX_LINKS_PER_RUN = 40;
+
 const KEPT_EVIDENCE_ROLES = new Set([
   EVIDENCE_ROLES.PRIMARY_EVIDENCE,
   EVIDENCE_ROLES.SECONDARY_CONTEXT
@@ -51,6 +57,10 @@ const LINKED_DISCOVERY_SYSTEM_PROMPT =
 
 function text(value) {
   return String(value || '').trim();
+}
+
+function positiveLimit(value, fallback) {
+  return Number.isInteger(value) && value > 0 ? value : fallback;
 }
 
 function buildExpansionPolicy(sourceRegistry = {}) {
@@ -74,8 +84,10 @@ function primaryCandidateUrl(candidate = {}) {
   return canonicalDocumentUrl(candidate.url || candidate.articleUrl || candidate.article_url || '');
 }
 
-function collectExpansionLinks(manualCandidates = [], sourceRegistry = {}) {
+function collectExpansionLinks(manualCandidates = [], sourceRegistry = {}, limits = {}) {
   const candidates = Array.isArray(manualCandidates) ? manualCandidates : [];
+  const maxPerCandidate = positiveLimit(limits.maxLinksPerCandidate, DEFAULT_MAX_LINKS_PER_CANDIDATE);
+  const maxPerRun = positiveLimit(limits.maxLinksPerRun, DEFAULT_MAX_LINKS_PER_RUN);
   const policy = buildExpansionPolicy(sourceRegistry);
   const manualUrlSet = new Set();
   for (const candidate of candidates) {
@@ -85,15 +97,19 @@ function collectExpansionLinks(manualCandidates = [], sourceRegistry = {}) {
   const seen = new Set();
   const links = [];
   for (const candidate of candidates) {
+    if (links.length >= maxPerRun) break;
     const parentUrl = primaryCandidateUrl(candidate);
     const classified = classifyOutgoingLinks(candidate.outgoing_links || [], policy);
+    let keptForCandidate = 0;
     for (const link of classified) {
+      if (keptForCandidate >= maxPerCandidate || links.length >= maxPerRun) break;
       if (!KEPT_EVIDENCE_ROLES.has(link.evidence_role)) continue;
       const url = canonicalDocumentUrl(link.url);
       if (!url) continue;
       if (manualUrlSet.has(url)) continue;
       if (seen.has(url)) continue;
       seen.add(url);
+      keptForCandidate += 1;
       links.push({
         url,
         link_context: text(link.text),
@@ -255,13 +271,14 @@ function buildDerivedCandidates(selectedLinks = [], sourceRegistry = {}) {
   return candidates;
 }
 
+// derived_new_unique_url_count는 manual URL 집합 대비로 sourceDiscoveryCandidateStats가
+// 권위 있게 재계산하므로(candidate-artifacts.js) 여기서는 중복·오해 소지가 있어 내보내지 않는다.
 function expansionStats(status, { extractedLinkCount = 0, newsworthyLinkCount = 0, derivedCount = 0 } = {}) {
   return {
     linked_discovery_status: status,
     extracted_link_count: extractedLinkCount,
     newsworthy_link_count: newsworthyLinkCount,
-    derived_candidate_count: derivedCount,
-    derived_new_unique_url_count: derivedCount
+    derived_candidate_count: derivedCount
   };
 }
 
@@ -271,13 +288,15 @@ async function expandLinkedEvidenceCandidates({
   sourceRegistry = {},
   callLlmJsonBudgetedImpl,
   budget,
-  enabled = false
+  enabled = false,
+  maxLinksPerCandidate,
+  maxLinksPerRun
 } = {}) {
   if (!enabled) {
     return { derivedCandidates: [], stats: expansionStats(LINKED_DISCOVERY_STATUS.DISABLED) };
   }
   const callImpl = callLlmJsonBudgetedImpl || callGeminiJsonBudgeted;
-  const { links } = collectExpansionLinks(manualCandidates, sourceRegistry);
+  const { links } = collectExpansionLinks(manualCandidates, sourceRegistry, { maxLinksPerCandidate, maxLinksPerRun });
   const selected = await selectNewsworthyLinks({ date, links, callLlmJsonBudgetedImpl: callImpl, budget });
   const derivedCandidates = buildDerivedCandidates(selected, sourceRegistry);
   const status = derivedCandidates.length > 0

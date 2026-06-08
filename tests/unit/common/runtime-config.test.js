@@ -103,6 +103,7 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.newsroomCandidateInputMode, 'default');
   assert.equal(config.newsroomCandidateInputPath, '');
   assert.equal(config.newsroomEnableGeminiSourceDiscovery, false);
+  assert.equal(config.newsroomEnableLinkedEvidenceDiscovery, true);
   assert.equal(config.geminiApiKeyConfigured, false);
 });
 
@@ -523,6 +524,14 @@ test('source discovery stage routes to its own group on gemini-2.5-flash-lite', 
   assert.deepEqual(configuredModelsForStage(config, 'sourceDiscovery'), ['gemini-2.5-flash-lite']);
 });
 
+test('linked evidence discovery is enabled by default and can be disabled via env', () => {
+  assert.equal(readRuntimeConfig({}).newsroomEnableLinkedEvidenceDiscovery, true);
+  assert.equal(
+    readRuntimeConfig({ NEWSROOM_ENABLE_LINKED_EVIDENCE_DISCOVERY: 'false' }).newsroomEnableLinkedEvidenceDiscovery,
+    false
+  );
+});
+
 test('source discovery stage honors NEWSROOM_SOURCEDISCOVERY_MODEL override', () => {
   const config = readRuntimeConfig({ NEWSROOM_SOURCEDISCOVERY_MODEL: 'gemini-2.5-flash' });
   assert.equal(config.llmStageModels.sourceDiscovery, 'gemini-2.5-flash');
@@ -660,6 +669,7 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.newsroomCandidateInputMode, 'default');
   assert.equal(sanitized.newsroomCandidateInputPath, '');
   assert.equal(sanitized.newsroomEnableGeminiSourceDiscovery, false);
+  assert.equal(sanitized.newsroomEnableLinkedEvidenceDiscovery, true);
   assert.equal(sanitized.proPolicy, 'disabled');
   assert.equal(sanitized.proModelConfigured, false);
   assert.equal(Object.prototype.hasOwnProperty.call(sanitized, 'proModelAllowed'), false);
