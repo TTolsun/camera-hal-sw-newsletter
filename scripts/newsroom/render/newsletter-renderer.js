@@ -516,6 +516,41 @@ function watchPointsHtml(issue) {
       </section>\n`;
 }
 
+const REFERENCE_ARTICLES_HEADING = '참고 / 더 읽을거리';
+
+function escapeMarkdownLinkText(value) {
+  return String(value).replace(/[[\]]/g, '\\$&');
+}
+
+function referenceArticlesMarkdown(issue) {
+  const articles = Array.isArray(issue?.reference_articles) ? issue.reference_articles : [];
+  if (!articles.length) return '';
+  const bullets = articles
+    .map(article => `- [${escapeMarkdownLinkText(article.title)}](<${article.url}>) — ${article.source} (${article.published_date}) · ${article.note}`)
+    .join('\n');
+  return `## ${REFERENCE_ARTICLES_HEADING}
+
+${bullets}
+
+`;
+}
+
+function referenceArticlesHtml(issue) {
+  const articles = Array.isArray(issue?.reference_articles) ? issue.reference_articles : [];
+  if (!articles.length) return '';
+  const items = articles
+    .map(article => `<li><a href="${escapeHtml(article.url)}">${escapeHtml(article.title)}</a> — ${escapeHtml(article.source)} (${escapeHtml(article.published_date)}) · ${escapeHtml(article.note)}</li>`)
+    .join('');
+  return `\n      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <div class="card issue-reference-articles-card">
+          <div class="issue-section-heading">
+            <h2 id="issue-reference-articles-title">${escapeHtml(REFERENCE_ARTICLES_HEADING)}</h2>
+          </div>
+          <ul>${items}</ul>
+        </div>
+      </section>\n`;
+}
+
 function buildPublicMarkdown(issue) {
   return `# ${issue.title}
 
@@ -529,7 +564,7 @@ ${bulletsMarkdown(issue.briefing)}
 ${quietCoreNoteMarkdown(issue)}
 ${sectionsMarkdownWithCatchUpDivider(issue)}
 
-${watchPointsMarkdown(issue)}## 참고자료
+${watchPointsMarkdown(issue)}${referenceArticlesMarkdown(issue)}## 참고자료
 
 ${sourceListMarkdown(issue.references)}
 `;
@@ -630,7 +665,7 @@ function buildPublicHtml(issue) {
 ${publicationNoticeBlock}      ${issueBriefingHtml(issue)}
 ${quietCoreNoteHtml(issue)}
 ${sectionsHtmlWithCatchUpDivider(issue)}
-${watchPointsHtml(issue)}
+${watchPointsHtml(issue)}${referenceArticlesHtml(issue)}
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">참고자료</h2>
         <div class="card reference-list"><ul>${sourceListHtml(issue.references)}</ul></div>
