@@ -481,6 +481,46 @@ test('source discovery stats separate seed evidence records from Gemini records'
   assert.equal(stats.gemini_new_unique_url_count, 1);
 });
 
+test('source discovery stats report linked evidence derived candidates only when status is provided', () => {
+  const base = sourceDiscoveryCandidateStats({
+    manualCandidates: [{ url: 'https://example.com/a' }],
+    mergedCandidates: [{ url: 'https://example.com/a' }]
+  });
+  assert.equal(Object.prototype.hasOwnProperty.call(base, 'linked_discovery_status'), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(base, 'derived_candidate_count'), false);
+
+  const stats = sourceDiscoveryCandidateStats({
+    manualCandidates: [{ url: 'https://example.com/a' }],
+    derivedCandidates: [
+      {
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera',
+        origin: 'gemini_linked_discovery',
+        finalSelectionEligibility: 'short',
+        source_gap_risk: false,
+        main_eligible: true
+      },
+      {
+        url: 'https://example.com/a',
+        origin: 'gemini_linked_discovery',
+        finalSelectionEligibility: 'watchlist',
+        source_gap_risk: true,
+        main_eligible: false
+      }
+    ],
+    mergedCandidates: [
+      { url: 'https://example.com/a' },
+      { url: 'https://developer.android.com/jetpack/androidx/releases/camera' }
+    ],
+    linkedDiscoveryStatus: 'FOUND_DERIVED_CANDIDATES'
+  });
+
+  assert.equal(stats.linked_discovery_status, 'FOUND_DERIVED_CANDIDATES');
+  assert.equal(stats.derived_candidate_count, 2);
+  assert.equal(stats.derived_unique_url_count, 2);
+  assert.equal(stats.derived_new_unique_url_count, 1);
+  assert.equal(stats.derived_publishable_candidate_count, 1);
+});
+
 test('source discovery summary reports no new publishable Gemini candidates distinctly from duplicate URLs', () => {
   const stats = sourceDiscoveryCandidateStats({
     manualCandidates: [

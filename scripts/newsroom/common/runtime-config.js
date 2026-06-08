@@ -15,14 +15,16 @@ const DEFAULT_LLM_STAGE_MODELS = Object.freeze({
   editor: 'gemini-3.5-flash',
   factcheck: 'gemini-2.5-flash',
   repair: 'gemini-3.5-flash',
-  judge: 'gemini-2.5-flash-lite'
+  judge: 'gemini-2.5-flash-lite',
+  sourceDiscovery: 'gemini-2.5-flash-lite'
 });
 const LLM_STAGE_MODEL_ENV_KEYS = Object.freeze({
   reporter: 'NEWSROOM_REPORTER_MODEL',
   editor: 'NEWSROOM_EDITOR_MODEL',
   factcheck: 'NEWSROOM_FACTCHECK_MODEL',
   repair: 'NEWSROOM_REPAIR_MODEL',
-  judge: 'NEWSROOM_JUDGE_MODEL'
+  judge: 'NEWSROOM_JUDGE_MODEL',
+  sourceDiscovery: 'NEWSROOM_SOURCEDISCOVERY_MODEL'
 });
 const PRO_DISABLED_ENV_KEYS = Object.freeze([
   'NEWSROOM_ALLOW_PRO_ON_SCHEDULE',
@@ -59,7 +61,8 @@ const DEFAULT_RUNTIME_CONFIG = {
     editor: 'code_default',
     factcheck: 'code_default',
     repair: 'code_default',
-    judge: 'code_default'
+    judge: 'code_default',
+    sourceDiscovery: 'code_default'
   },
   geminiModel: DEFAULT_LLM_MODEL,
   geminiFallbackModels: DEFAULT_LLM_FALLBACK_MODELS,
