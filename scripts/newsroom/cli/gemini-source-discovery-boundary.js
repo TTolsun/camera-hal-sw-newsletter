@@ -69,6 +69,9 @@ const {
   runGeminiSourceDiscovery
 } = require('../collect/gemini-source-discovery');
 const {
+  expandLinkedEvidenceCandidates
+} = require('../collect/linked-evidence-candidate-expansion');
+const {
   approvedCollectionIntentFromManifest
 } = require('../collect/collection-intent');
 const {
@@ -334,6 +337,8 @@ function renderReport({
         ['Gemini 후보', stats?.gemini_candidate_count ?? geminiCandidateCount ?? 'unknown', llmUsed ? '실행됨' : '비활성/pass-through'],
         ['Gemini 신규 unique 후보', stats?.gemini_new_unique_url_count ?? 'unknown', Number(stats?.gemini_new_unique_url_count ?? 0) > 0 ? '있음' : '없음'],
         ['Gemini publishable 후보', stats?.gemini_publishable_candidate_count ?? 0, Number(stats?.gemini_publishable_candidate_count ?? 0) > 0 ? '있음' : '없음'],
+        ['linked evidence 파생 후보', stats?.derived_candidate_count ?? 0, Number(stats?.derived_candidate_count ?? 0) > 0 ? '있음' : '없음(non-failing)'],
+        ['linked 파생 publishable 후보', stats?.derived_publishable_candidate_count ?? 0, Number(stats?.derived_publishable_candidate_count ?? 0) > 0 ? '있음' : '없음'],
         ['seed 후보', stats?.seed_candidate_count ?? 0, Number(stats?.seed_candidate_count ?? 0) > 0 ? '있음' : '없음'],
         ['seed 신규 unique 후보', stats?.seed_new_unique_url_count ?? 0, Number(stats?.seed_new_unique_url_count ?? 0) > 0 ? '있음' : '없음'],
         ['seed publishable 후보', stats?.seed_publishable_candidate_count ?? 0, Number(stats?.seed_publishable_candidate_count ?? 0) > 0 ? '있음' : '없음'],
@@ -1188,9 +1193,29 @@ async function runEnabled({
   const manualCandidates = candidateItems(manualPayload);
   const seedCandidates = seedExpansion?.seedCandidates || [];
   const geminiCandidates = discovery.promotedCandidates;
+
+  // #429: linked evidence expansion. 수동 후보에 이미 보존된 outgoing_links에서 아직 모르는
+  // 공식/등록 도메인 링크를 골라 Gemini(sourceDiscovery 단계)가 뉴스레터 가치를 판정하고,
+  // 통과한 링크를 origin=gemini_linked_discovery 파생 후보로 만들어 동일 selection 게이트에
+  // 흘려보낸다. extract-only, non-failing.
+  const sourceRegistryPath = path.join(root, 'data', 'news-sources.json');
+  const sourceRegistry = fs.existsSync(sourceRegistryPath)
+    ? readJson(sourceRegistryPath)
+    : { sources: [] };
+  const linkedExpansion = await expandLinkedEvidenceCandidates({
+    date,
+    manualCandidates,
+    sourceRegistry,
+    callLlmJsonBudgetedImpl,
+    budget,
+    enabled: true
+  });
+  const derivedCandidates = linkedExpansion.derivedCandidates;
+
   const mergedInput = [
     ...(seedExpansion ? seedExpansion.mergedCandidates : manualCandidates),
-    ...geminiCandidates
+    ...geminiCandidates,
+    ...derivedCandidates
   ];
   const seedUsed = seedExpansion?.stats?.seed_used === true;
   const mergeMode = seedUsed ? 'seed_evidence_plus_gemini_discovery' : 'gemini_source_discovery';
@@ -1221,11 +1246,14 @@ async function runEnabled({
   });
 
   const geminiAnnotatedCandidates = evidence.annotatedCandidates.filter(item => item.origin === 'gemini_discovery');
+  const derivedAnnotatedCandidates = evidence.annotatedCandidates.filter(item => item.origin === 'gemini_linked_discovery');
   const discoveryStats = sourceDiscoveryCandidateStats({
     manualCandidates,
     seedCandidates,
     geminiCandidates: geminiAnnotatedCandidates,
-    mergedCandidates: evidence.annotatedCandidates
+    derivedCandidates: derivedAnnotatedCandidates,
+    mergedCandidates: evidence.annotatedCandidates,
+    linkedDiscoveryStatus: linkedExpansion.stats.linked_discovery_status
   });
   if (seedExpansion?.stats) {
     Object.assign(discoveryStats, seedExpansion.stats);

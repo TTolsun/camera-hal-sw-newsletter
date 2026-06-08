@@ -136,11 +136,21 @@ function isPublishableSeedCandidate(candidate = {}) {
     ['main', 'short'].includes(finalSelectionEligibility(candidate));
 }
 
+function isPublishableDerivedCandidate(candidate = {}) {
+  return candidate.origin === 'gemini_linked_discovery' &&
+    Boolean(normalizedCandidateUrl(candidate)) &&
+    !boolTrue(candidate.source_gap_risk) &&
+    !boolFalse(candidate.main_eligible) &&
+    ['main', 'short'].includes(finalSelectionEligibility(candidate));
+}
+
 function sourceDiscoveryCandidateStats({
   manualCandidates = [],
   seedCandidates = [],
   geminiCandidates = [],
-  mergedCandidates = []
+  derivedCandidates = [],
+  mergedCandidates = [],
+  linkedDiscoveryStatus = ''
 } = {}) {
   const manualRecords = Array.isArray(manualCandidates) ? manualCandidates : [];
   const seedRecords = Array.isArray(seedCandidates) ? seedCandidates : [];
@@ -195,6 +205,21 @@ function sourceDiscoveryCandidateStats({
       seed_fetch_failed_count: seedRecords.filter(candidate => text(candidate.seed_fetch_status) === 'failed').length,
       seed_primary_evidence_count: seedRecords.reduce((count, candidate) =>
         count + (Array.isArray(candidate.primary_evidence_ids) ? candidate.primary_evidence_ids.length : 0), 0)
+    });
+  }
+  if (text(linkedDiscoveryStatus)) {
+    const derivedRecords = Array.isArray(derivedCandidates) ? derivedCandidates : [];
+    const derivedUrls = normalizedUrlSet(derivedRecords);
+    let derivedNewUniqueUrlCount = 0;
+    for (const url of derivedUrls) {
+      if (!manualUrls.has(url)) derivedNewUniqueUrlCount += 1;
+    }
+    Object.assign(stats, {
+      linked_discovery_status: text(linkedDiscoveryStatus),
+      derived_candidate_count: derivedRecords.length,
+      derived_unique_url_count: derivedUrls.size,
+      derived_new_unique_url_count: derivedNewUniqueUrlCount,
+      derived_publishable_candidate_count: derivedRecords.filter(isPublishableDerivedCandidate).length
     });
   }
   return stats;
