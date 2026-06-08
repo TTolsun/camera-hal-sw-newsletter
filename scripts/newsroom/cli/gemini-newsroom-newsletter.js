@@ -180,6 +180,9 @@ const {
   ensureArray
 } = require('../render/newsletter-renderer');
 const {
+  buildReferenceArticles
+} = require('../render/reference-articles');
+const {
   writeWeeklyNewsletterArtifacts
 } = require('../render/weekly-newsletter-output');
 const {
@@ -4396,6 +4399,12 @@ async function main() {
   let newsletterMarkdown;
   let newsletterHtmlContent;
   try {
+    // 결정론적 '참고 / 더 읽을거리' 섹션: reference 윈도우(22~90일) 후보 중 적격 버킷의
+    // dated+sourced 항목을 메인과 중복 없이 주입한다(LLM claim 없음).
+    editor.reference_articles = buildReferenceArticles(
+      ensureArray(shortlistReport?.reference_context_candidates),
+      { excludeUrls: ensureArray(shortlistReport?.selected_articles).map(article => article && article.url).filter(Boolean) }
+    );
     newsletterMarkdown = buildMarkdown(editor);
     newsletterHtmlContent = buildHtml(editor);
     assertTerminalPublicationContracts({
