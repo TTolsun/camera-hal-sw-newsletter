@@ -1202,13 +1202,16 @@ async function runEnabled({
   const sourceRegistry = fs.existsSync(sourceRegistryPath)
     ? readJson(sourceRegistryPath)
     : { sources: [] };
+  const runtimeConfig = readRuntimeConfig(env);
   const linkedExpansion = await expandLinkedEvidenceCandidates({
     date,
     manualCandidates,
     sourceRegistry,
     callLlmJsonBudgetedImpl,
     budget,
-    enabled: true
+    enabled: runtimeConfig.newsroomEnableLinkedEvidenceDiscovery,
+    maxLinksPerCandidate: runtimeConfig.linkedEvidenceMaxLinksPerCandidate,
+    maxLinksPerRun: runtimeConfig.linkedEvidenceMaxLinksPerRun
   });
   const derivedCandidates = linkedExpansion.derivedCandidates;
 
