@@ -64,25 +64,16 @@ const STATUS_CLASS = Object.freeze({
   pending: 'pending'
 });
 
-// 파이프라인 다이어그램 테마 (블랙 대시보드 스타일).
-// GitHub Actions 요약/PR 본문은 보는 사람의 라이트/다크 모드로 렌더되므로, 노드를 자체
-// 네이비 배경을 가진 subgraph 패널 안에 넣어 두 모드에서 동일하게 보이게 한다. GitHub
-// mermaid는 base 테마만 커스터마이즈할 수 있고 색은 hex만 허용한다.
-const DIAGRAM_THEME_INIT =
-  "%%{init: {'theme':'base','themeVariables':{" +
-  "'fontFamily':'Inter, \"Noto Sans KR\", system-ui, sans-serif'," +
-  "'fontSize':'15px','lineColor':'#5b6b86'," +
-  "'clusterBkg':'#151d2b','clusterBorder':'#2b3a52','titleColor':'#9fb0c9'}}}%%";
-
+// 파이프라인 다이어그램 상태 색.
+// GitHub은 mermaid 테마를 고정하지 않으면 prefers-color-scheme로 라이트 모드엔 밝은 캔버스,
+// 다크 모드엔 어두운 캔버스를 자동 렌더한다. 그래서 init 테마나 패널 배경을 지정하지 않고
+// (모드별 자동 분기를 살리고), 노드 상태색만 두 모드 모두에서 또렷한 솔리드 채움으로 고정한다.
 const DIAGRAM_CLASS_DEFS = Object.freeze([
-  'classDef passed fill:#2f9b56,stroke:#0a1221,color:#eafff1;',
-  'classDef failed fill:#ff5c6c,stroke:#3a0a10,color:#1a0306;',
-  'classDef skipped fill:#28344a,stroke:#3a4a66,color:#9fb0c9;',
-  'classDef pending fill:#d6ff00,stroke:#3a4000,color:#1a1f00;'
+  'classDef passed fill:#1f9d57,stroke:#0c5a30,color:#ffffff;',
+  'classDef failed fill:#e5484d,stroke:#8e1116,color:#ffffff;',
+  'classDef skipped fill:#8b98a9,stroke:#5b6b86,color:#ffffff;',
+  'classDef pending fill:#e3b341,stroke:#8a6400,color:#241a00;'
 ]);
-
-const DIAGRAM_PANEL_STYLE = 'style panel fill:#151d2b,stroke:#2b3a52,color:#9fb0c9;';
-const DIAGRAM_LINK_STYLE = 'linkStyle default stroke:#5b6b86,stroke-width:2px;';
 
 function text(value) {
   if (value === null || value === undefined) return '';
@@ -171,23 +162,18 @@ function renderMermaid(nodes, panelTitle) {
   const chain = nodes
     .map(node => `${node.key}["${node.label}"]:::${STATUS_CLASS[node.status] || 'pending'}`)
     .join(' --> ');
-  const lines = [
+  // 테마를 고정하지 않아 GitHub이 라이트/다크 모드에 맞는 캔버스를 자동 적용한다. 패널(subgraph)도
+  // 채움 없이 두어 모드에 따라 자동 색을 따르고, 노드 상태색만 classDef로 고정한다.
+  return [
     '```mermaid',
-    DIAGRAM_THEME_INIT,
     'flowchart LR',
     `  subgraph panel["${panelTitle}"]`,
     '  direction LR',
     `    ${chain}`,
     '  end',
     ...DIAGRAM_CLASS_DEFS.map(def => `  ${def}`),
-    `  ${DIAGRAM_PANEL_STYLE}`
-  ];
-  // 단일 노드 프로필은 엣지가 없어 linkStyle default가 mermaid 오류를 내므로, 엣지가 있을 때만 더한다.
-  if (nodes.length > 1) {
-    lines.push(`  ${DIAGRAM_LINK_STYLE}`);
-  }
-  lines.push('```');
-  return lines.join('\n');
+    '```'
+  ].join('\n');
 }
 
 function renderTable(nodes) {
