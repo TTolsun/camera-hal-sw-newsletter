@@ -16,6 +16,10 @@ const {
 const {
   renderReleaseQaInventorySection
 } = require('../common/review-artifact-inventory');
+const {
+  SITE_BASE_URL,
+  DEFAULT_OG_IMAGE
+} = require('./seo-metadata');
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -643,6 +647,35 @@ function issueBriefingHtml(issue) {
       </section>`;
 }
 
+function issueCanonicalUrl(issue = {}) {
+  const slug = String(issue.weekly_key || issue.date || '').trim();
+  return `${SITE_BASE_URL}newsletters/${slug}/index.html`;
+}
+
+// #51 후속: 기사 페이지(newsletters/<slug>/index.html)의 share/SEO 메타.
+// og:type=article, canonical/og:url은 발행물의 공개 경로(주간이면 weekly_key, 아니면 date),
+// description은 issue summary, 대표 이미지는 기본 preview(HALley)를 쓴다.
+function articleSeoHead(issue = {}) {
+  const title = issuePageTitle(issue);
+  const description = String(issue.summary || '').trim();
+  const url = issueCanonicalUrl(issue);
+  const image = DEFAULT_OG_IMAGE;
+  return [
+    `  <meta name="description" content="${escapeHtml(description)}" />`,
+    `  <link rel="canonical" href="${escapeHtml(url)}" />`,
+    '  <meta property="og:type" content="article" />',
+    '  <meta property="og:site_name" content="Camera SW Newsletter" />',
+    `  <meta property="og:title" content="${escapeHtml(title)}" />`,
+    `  <meta property="og:description" content="${escapeHtml(description)}" />`,
+    `  <meta property="og:url" content="${escapeHtml(url)}" />`,
+    `  <meta property="og:image" content="${escapeHtml(image)}" />`,
+    '  <meta name="twitter:card" content="summary_large_image" />',
+    `  <meta name="twitter:title" content="${escapeHtml(title)}" />`,
+    `  <meta name="twitter:description" content="${escapeHtml(description)}" />`,
+    `  <meta name="twitter:image" content="${escapeHtml(image)}" />`
+  ].join('\n');
+}
+
 function buildPublicHtml(issue) {
   const publicationNotice = publicationNoticeHtml(issue);
   const publicationNoticeBlock = publicationNotice ? `      ${publicationNotice}\n\n` : '';
@@ -653,6 +686,7 @@ function buildPublicHtml(issue) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${escapeHtml(issuePageTitle(issue))}</title>
+${articleSeoHead(issue)}
   <link rel="stylesheet" href="../../css/styles.css" />
 </head>
 <body class="homepage newsletter-issue-page">
