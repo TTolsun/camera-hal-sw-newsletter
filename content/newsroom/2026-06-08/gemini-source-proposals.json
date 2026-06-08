@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-08",
+  "proposals": [
+    {
+      "proposal_id": "P001",
+      "topic_gap": "Google I/O '26에서 발표된 Android 미디어 파이프라인 및 카메라 관련 최신 업데이트 및 기능 개선 사항에 대한 정보 부족.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [
+        "youtube.com",
+        "goo.gle",
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android Media Pipeline",
+        "Google I/O 2026 Media",
+        "Android Camera I/O",
+        "Media3 updates",
+        "Adaptive Apps Camera"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Media3, MediaCodec, MediaRecorder, Photo Picker 등 Android 미디어 구성 요소의 새로운 기능 또는 개선 사항",
+        "카메라 출력 처리, 미리보기, 녹화, A/V 동기화와 관련된 변경 사항",
+        "다중 장치 및 적응형 앱 경험에서 카메라 및 미디어 사용 사례 관련 정보"
+      ],
+      "risk_notes": [
+        "YouTube 플레이리스트는 개별 비디오의 구체적인 날짜 정보를 제공하지 않을 수 있으며, 관련성이 낮은 일반적인 Android 개발 주제가 포함될 수 있음.",
+        "goo.gle 단축 URL은 최종 목적지를 확인해야 함."
+      ]
+    },
+    {
+      "proposal_id": "P002",
+      "topic_gap": "CameraX 라이브러리의 최신 안정화 및 알파 릴리스에 대한 변경 사항 및 새로운 기능 정보 부족.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX 1.6.0 release",
+        "CameraX 1.7.0-alpha01 new features",
+        "AndroidX Camera updates"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01"
+      ],
+      "expected_evidence": [
+        "CameraX 1.6.0 및 1.7.0-alpha01의 주요 변경 사항, 버그 수정 및 새로운 기능",
+        "카메라 기능, 성능 또는 안정성 개선 사항",
+        "개발자 API 변경 사항 또는 새로운 사용 사례"
+      ],
+      "risk_notes": [
+        "릴리스 노트는 기술적 세부 사항에 집중하며, 광범위한 영향에 대한 분석이 필요할 수 있음."
+      ]
+    },
+    {
+      "proposal_id": "P003",
+      "topic_gap": "Android 호환성 테스트 스위트(CTS)의 카메라 이미지 테스트 자동화에 대한 업데이트 정보 부족.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [
+        "source.android.com"
+      ],
+      "search_keywords": [
+        "Camera ITS Box",
+        "Android Camera Compatibility Test",
+        "Automated Camera Testing AOSP"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "카메라 ITS(Image Test Suite) 박스를 사용한 자동화된 카메라 이미지 테스트 방법론",
+        "카메라 HAL 구현의 호환성 및 품질 보증에 대한 새로운 가이드라인 또는 요구 사항",
+        "테스트 절차 또는 도구의 변경 사항"
+      ],
+      "risk_notes": [
+        "기술 문서이므로 HAL 개발자에게 직접적인 관련성이 높지만, 광범위한 독자를 위한 요약 및 중요성 강조가 필요함."
+      ]
+    },
+    {
+      "proposal_id": "P004",
+      "topic_gap": "Linux 커널 미디어 스택의 V4L2 서브디바이스 및 스트림 관리와 관련된 최신 개발 사항에 대한 정보 부족.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "Linux media V4L2 subdev",
+        "kernel camera stream management",
+        "v4l2_subdev_get_fmt_ci",
+        "enable_streams disable_streams documentation"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260607215356.842932-9-sakari.ailus@linux.intel.com/",
+        "https://lore.kernel.org/linux-media/20260607215356.842932-8-sakari.ailus@linux.intel.com/",
+        "https://lore.kernel.org/linux-media/20260607215356.842932-10-sakari.ailus@linux.intel.com/"
+      ],
+      "expected_evidence": [
+        "V4L2 서브디바이스 클라이언트 기능 및 포맷 정보 관리 개선 사항",
+        "스트림 활성화/비활성화 문서화 개선",
+        "리눅스 커널의 카메라 및 미디어 드라이버 개발 관련 변경 사항"
+      ],
+      "risk_notes": [
+        "메일링 리스트 패치이므로 매우 기술적이고 상세하며, HAL 개발자에게 직접적인 영향이 없을 수 있음. 관련성을 명확히 해야 함.",
+        "패치 시리즈의 일부이므로 전체 맥락을 이해하기 위해 다른 패치도 검토해야 할 수 있음."
+      ]
+    },
+    {
+      "proposal_id": "P005",
+      "topic_gap": "C++26 표준의 최신 기능 및 컴파일러 지원에 대한 정보 부족, 특히 카메라 HAL 개발에 잠재적으로 영향을 미칠 수 있는 부분.",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [
+        "isocpp.org"
+      ],
+      "search_keywords": [
+        "C++26 reflection",
+        "GCC 16.1 C++26",
+        "Glaze 7.2 C++26",
+        "C++ for Camera HAL"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1",
+        "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+      ],
+      "expected_evidence": [
+        "GCC 16.1의 C++26 기능 지원 (reflection, contracts, safety hardening)",
+        "C++26 reflection을 활용한 데이터 직렬화 라이브러리 (Glaze 7.2) 업데이트",
+        "C++26의 새로운 기능이 카메라 HAL 또는 관련 시스템 개발에 미칠 수 있는 잠재적 영향"
+      ],
+      "risk_notes": [
+        "C++ 표준 업데이트는 직접적인 카메라 HAL 변경 사항이 아니므로, HAL 개발에 대한 관련성을 명확히 설명해야 함.",
+        "일반적인 C++ 개발 소식이므로, 카메라/미디어 스택과의 연결고리를 찾아야 함."
+      ]
+    }
+  ]
+}
