@@ -247,6 +247,17 @@ function weeklyPublicOutputEntries(date) {
       reviewOrder: 36,
       humanReadable: false,
       reviewBlocking: false
+    }),
+    // #51: sitemap.xml은 주간 발행 목록(newsletters-weekly.json)이 바뀔 때 함께 재생성되므로
+    // 같은 public_output 등급으로 commit allowlist에 포함시켜 review PR에 실린다.
+    entry({
+      relPath: 'sitemap.xml',
+      group: 'public_output',
+      role: 'sitemap',
+      required: REQUIRED_OPTIONAL,
+      reviewOrder: 36,
+      humanReadable: false,
+      reviewBlocking: false
     })
   ];
 }

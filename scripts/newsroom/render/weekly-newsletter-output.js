@@ -14,6 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { buildWeeklyNewsletterPage } = require('./weekly-newsletter-page');
+const { writeSitemap } = require('./generate-sitemap');
 const { weeklyKeyForDate } = require('../common/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../common/weekly-article-limits');
 const { resolveWeeklyArticles } = require('../generate/weekly-duplicate-merge');
@@ -83,6 +84,9 @@ function upsertWeeklyIndex(root, entry) {
     .sort((a, b) => String(b.weeklyKey || '').localeCompare(String(a.weeklyKey || '')));
   fs.mkdirSync(path.dirname(dataPath), { recursive: true });
   fs.writeFileSync(dataPath, `${JSON.stringify(updated, null, 2)}\n`, 'utf8');
+  // #51: 주간 발행 목록이 바뀌면 sitemap.xml을 같은 흐름에서 재생성한다. sitemap.xml은
+  // publish PR commit allowlist에 포함되어 newsletters-weekly.json과 함께 main으로 반영된다.
+  writeSitemap(root);
   return relPath;
 }
 

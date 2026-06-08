@@ -10,8 +10,7 @@ const path = require('path');
 const {
   SITE_BASE_URL,
   missingSeoTags,
-  seoTagUrl,
-  buildStaticSitemap
+  seoTagUrl
 } = require('../render/seo-metadata');
 
 const root = process.cwd();
@@ -41,15 +40,28 @@ function checkStaticPageMeta() {
   }
 }
 
+// sitemap은 발행 흐름에서 재생성되므로 데이터와의 byte 동기를 강제하지 않는다(다양한 편집
+// 경로에서 깨지지 않도록). 대신 구조만 검증한다: 유효한 urlset, 안정적인 진입점 포함,
+// 모든 <loc>가 사이트 base 아래의 절대 https URL.
 function checkSitemap() {
   const file = path.join(root, 'sitemap.xml');
   if (!fs.existsSync(file)) {
     errors.push('sitemap.xml이 없습니다.');
     return;
   }
-  const committed = fs.readFileSync(file, 'utf8');
-  if (committed !== buildStaticSitemap()) {
-    errors.push('sitemap.xml이 정적 sitemap 정책과 다릅니다. seo-metadata.js의 buildStaticSitemap() 출력으로 맞추세요.');
+  const xml = fs.readFileSync(file, 'utf8');
+  if (!xml.includes('<urlset') || !xml.includes('http://www.sitemaps.org/schemas/sitemap/0.9')) {
+    errors.push('sitemap.xml이 유효한 urlset 문서가 아닙니다.');
+    return;
+  }
+  if (!xml.includes(`<loc>${SITE_BASE_URL}</loc>`) || !xml.includes(`<loc>${SITE_BASE_URL}archive.html</loc>`)) {
+    errors.push('sitemap.xml은 최소한 사이트 루트(/)와 archive.html을 포함해야 합니다.');
+  }
+  const locs = [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map(match => match[1]);
+  for (const loc of locs) {
+    if (!loc.startsWith(SITE_BASE_URL)) {
+      errors.push(`sitemap.xml의 모든 URL은 ${SITE_BASE_URL} 아래의 절대 URL이어야 합니다: ${loc}`);
+    }
   }
 }
 

@@ -21,6 +21,7 @@
     "newsroom:repair-images": "node scripts/repair-newsletter-images.js",
     "audit:historical-newsletters": "node scripts/audit-historical-newsletters.js",
     "sync:policy-docs": "node scripts/sync-policy-docs.js",
+    "generate:sitemap": "node scripts/newsroom/render/generate-sitemap.js",
     "test": "npm run test:unit && npm run test:script",
     "test:unit": "node scripts/run-node-tests.js tests",
     "test:source-effectiveness": "node --test tests/workflow/source-effectiveness-report.test.js",
