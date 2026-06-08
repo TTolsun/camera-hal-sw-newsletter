@@ -170,32 +170,28 @@ test('render failure in the log colors Render failed and Publish skipped (not pa
   assert.doesNotMatch(md, /publish\["Publish"\]:::passed/);
 });
 
-test('pipeline diagram uses the black-dashboard theme: init directive, titled panel, dark palette', () => {
+test('pipeline diagram pins no theme (GitHub auto light/dark) and uses a both-mode status palette', () => {
   const md = renderWorkflowSummary({
     profile: 'newsroom-final',
     status: { stage_status_log: passLog(), publish_gate_passed: true },
     meta: { has_ai_publish_ready: 'true' }
   });
-  // self-contained dark theme so it reads the same in GitHub light and dark mode
-  assert.match(md, /%%\{init: \{'theme':'base'/);
-  assert.match(md, /'clusterBkg':'#151d2b'/);
-  // nodes live inside a titled panel that carries the navy background
+  // no fixed theme or panel fill: GitHub renders a light canvas in light mode and a dark canvas in dark mode
+  assert.doesNotMatch(md, /%%\{init/);
+  assert.doesNotMatch(md, /style panel fill/);
+  assert.doesNotMatch(md, /linkStyle/);
+  // nodes are framed by an auto-theming panel titled after the profile
   assert.match(md, /subgraph panel\["Newsroom Final"\]/);
-  assert.match(md, /style panel fill:#151d2b/);
-  // dark-dashboard status palette
-  assert.match(md, /classDef passed fill:#2f9b56/);
-  assert.match(md, /classDef pending fill:#d6ff00/);
-  // multi-node pipeline styles its edges
-  assert.match(md, /linkStyle default stroke:#5b6b86/);
+  // solid status palette chosen to read on both light and dark canvases
+  assert.match(md, /classDef passed fill:#1f9d57/);
+  assert.match(md, /classDef pending fill:#e3b341/);
 });
 
-test('single-node profile renders inside a panel and omits linkStyle (no edges)', () => {
+test('single-node profile renders inside a panel', () => {
   const md = renderWorkflowSummary({
     profile: 'source-collect',
     step_outcomes: { collect: 'success' }
   });
   assert.match(md, /subgraph panel\["Source Collect"\]/);
   assert.match(md, /collect\["Collect"\]:::passed/);
-  // a single node has no edges; linkStyle default would make mermaid throw
-  assert.doesNotMatch(md, /linkStyle/);
 });
