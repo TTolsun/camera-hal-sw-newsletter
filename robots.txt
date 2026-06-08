@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ttolsun.github.io/camera-hal-sw-newsletter/sitemap.xml

@@ -40,6 +40,7 @@ jobs:
           npm run validate:site
           npm run validate:images
           npm run validate:localization
+          npm run validate:seo
 
       - name: Annotate publication quality and fact-check status
         if: always()
