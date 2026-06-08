@@ -33,6 +33,9 @@ const {
   resolveSecurityBulletinCveItems
 } = require('../collect/security-bulletin-cve');
 const {
+  resolveLibcameraReleaseAnnouncementItems
+} = require('../collect/libcamera-release-announcements');
+const {
   DEFAULT_SECTION_MAP,
   normalizeEnabledSources,
   normalizeSourceEntry,
@@ -1359,12 +1362,16 @@ async function main() {
       const target = feed || fetchUrlForContent(source.url);
       const text = await fetchText(target);
       const indexItems = parseSourceSpecificItems(text, source);
-      // 보안 게시판은 인덱스 페이지의 월별 링크만 보던 source-gap이 있어, 최신 월별 페이지를
-      // 따라가 카메라/미디어 CVE를 CVE별 후보로 만든다. 관련 CVE가 없으면 인덱스 동작을 유지한다.
-      const bulletinCveItems = source.id === 'android-security-bulletin'
-        ? await resolveSecurityBulletinCveItems(indexItems, source, { fetchTextImpl: fetchText })
-        : [];
-      const sourceSpecificItems = bulletinCveItems.length > 0 ? bulletinCveItems : indexItems;
+      // 일부 공식 소스는 인덱스 페이지(월별/아카이브 링크)만 연결돼 있어 인덱스 파싱만으로는
+      // dated 증거를 못 만든다(source-gap). 최신 상세 페이지를 따라가 dated 후보를 만들고,
+      // 만들지 못하면 기존 인덱스 동작을 유지한다.
+      let followedItems = [];
+      if (source.id === 'android-security-bulletin') {
+        followedItems = await resolveSecurityBulletinCveItems(indexItems, source, { fetchTextImpl: fetchText });
+      } else if (source.id === 'libcamera-release-announcements') {
+        followedItems = await resolveLibcameraReleaseAnnouncementItems(text, source, { fetchTextImpl: fetchText });
+      }
+      const sourceSpecificItems = followedItems.length > 0 ? followedItems : indexItems;
       const resolvedSourceSpecificItems = sourceSpecificItems.length > 0
         ? await resolveLinkedReleaseNoteEvidenceItems(sourceSpecificItems, source, { fetchTextImpl: fetchText })
         : [];

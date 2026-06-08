@@ -635,6 +635,39 @@
       ]
     },
     {
+      "path": "source-html/libcamera-release-v0.8.0.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "libcamera dated release announcement extraction",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
+    },
+    {
+      "path": "source-html/libcamera-pipermail-index.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "libcamera pipermail index month-archive follow",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
+    },
+    {
+      "path": "source-html/libcamera-pipermail-2026-may.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "libcamera pipermail month-archive release message follow",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
+    },
+    {
       "path": "source-html/llvm-release-notes.html",
       "source": "curated",
       "allowedUse": "parser-source-html",
