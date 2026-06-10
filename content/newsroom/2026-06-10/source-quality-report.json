@@ -724,18 +724,36 @@
       }
     },
     {
-      "candidate_id": "gemini-bb0e15b6742fce01",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-      "source_quality_score": 0.783,
-      "source_quality_bucket": "review_candidate",
+      "candidate_id": "gemini-d4a0acfc0ac6ad6e",
+      "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.55,
-        "recency_score": 0.8,
-        "evidence_strength": 0.9,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-e12f3fd8b75d5b1b",
+      "url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "title": "MediaStore &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -868,6 +886,24 @@
       }
     },
     {
+      "candidate_id": "gemini-fa0d645879e771f0",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "title": "The libcamera-devel Archives",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "gemini-8635e5e9a3557c0d",
       "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
@@ -904,6 +940,42 @@
       }
     },
     {
+      "candidate_id": "gemini-736ba21c4736e96f",
+      "url": "https://source.android.com/docs/compatibility",
+      "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.672,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 0.15,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.783,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "gemini-linked-45111a50490175f2",
       "url": "https://developer.android.com/media/camera/camerax",
       "title": "CameraX",
@@ -914,6 +986,60 @@
         "camera_relevance": 0,
         "android_hal_relevance": 0,
         "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-58d9ec89937d9617",
+      "url": "https://developer.android.com/media/camera/camerax/video-capture",
+      "title": "VideoCapture",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-eb09ee752aa3ba14",
+      "url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
+      "title": "CameraEffect",
+      "source_quality_score": 0.413,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-520fe52c7e358499",
+      "url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
+      "title": "ImageAnalysis",
+      "source_quality_score": 0.413,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.55,
         "recency_score": 0.25,
         "evidence_strength": 0.55,
         "duplicate_penalty": 0,
@@ -938,30 +1064,12 @@
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
       }
-    },
-    {
-      "candidate_id": "gemini-linked-7317dd637c497758",
-      "url": "https://source.android.com/docs/security/bulletin",
-      "title": "Bulletins",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
     }
   ],
   "counts": {
     "strong_candidate": 8,
-    "blocked_candidate": 32,
-    "review_candidate": 8,
-    "weak_candidate": 5
+    "blocked_candidate": 35,
+    "review_candidate": 9,
+    "weak_candidate": 7
   }
 }

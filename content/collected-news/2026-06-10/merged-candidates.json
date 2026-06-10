@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-10",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 90,
-  "generated_at": "2026-06-10T00:50:08.321Z",
+  "generated_at": "2026-06-10T01:44:38.563Z",
   "sources_path": "data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -312,7 +312,7 @@
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 4 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
           "sourceKind": "og",
@@ -340,23 +340,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
           "sourceKind": "og",
@@ -384,18 +384,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "main-article",
@@ -2005,7 +2005,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
           "sourceKind": "og",
@@ -2033,23 +2033,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=es-419",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
           "sourceKind": "og",
@@ -2077,18 +2077,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=es-419",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "main-article",
@@ -2320,7 +2320,21 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
+          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
+          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Site Updates",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -2332,20 +2346,6 @@
           "attribution": "AOSP Site Updates",
           "validationStatus": "ok",
           "contentLength": 53935
-        },
-        {
-          "url": "https://source.android.com/static/docs/compatibility/cts/images/33x_scale_31cm.png",
-          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
-          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-          "sourceKind": "article-img",
-          "width": 350,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Site Updates",
-          "validationStatus": "ok",
-          "contentLength": 570718
         }
       ],
       "image_candidates": [
@@ -2364,7 +2364,21 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
+          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
+          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Site Updates",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -2376,20 +2390,6 @@
           "attribution": "AOSP Site Updates",
           "validationStatus": "ok",
           "contentLength": 53935
-        },
-        {
-          "url": "https://source.android.com/static/docs/compatibility/cts/images/33x_scale_31cm.png",
-          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
-          "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-          "sourceKind": "article-img",
-          "width": 350,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Site Updates",
-          "validationStatus": "ok",
-          "contentLength": 570718
         }
       ],
       "candidateTier": "main-article",
@@ -4457,7 +4457,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ru",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -4485,23 +4485,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=ru",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ru",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "og",
@@ -4529,18 +4529,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=ru",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "short-news",
@@ -4780,7 +4780,21 @@
           "contentLength": 4824
         },
         {
-          "url": "https://developer.android.com/images/cluster-illustrations/success-guide-16-9.svg",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=ar",
+          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
+          "articleUrl": "https://source.android.com/docs/compatibility",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Site Updates",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://developer.android.com/images/cluster-illustrations/success-guide-16-9.svg?hl=ar",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility",
           "sourceKind": "article-img",
@@ -4792,20 +4806,6 @@
           "attribution": "AOSP Site Updates",
           "validationStatus": "ok",
           "contentLength": 5911
-        },
-        {
-          "url": "https://developer.android.com/images/picto-icons/android-badge.svg",
-          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
-          "articleUrl": "https://source.android.com/docs/compatibility",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Site Updates",
-          "validationStatus": "ok",
-          "contentLength": 2986
         }
       ],
       "image_candidates": [
@@ -4824,7 +4824,21 @@
           "contentLength": 4824
         },
         {
-          "url": "https://developer.android.com/images/cluster-illustrations/success-guide-16-9.svg",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=ar",
+          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
+          "articleUrl": "https://source.android.com/docs/compatibility",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "AOSP Site Updates",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://developer.android.com/images/cluster-illustrations/success-guide-16-9.svg?hl=ar",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility",
           "sourceKind": "article-img",
@@ -4836,20 +4850,6 @@
           "attribution": "AOSP Site Updates",
           "validationStatus": "ok",
           "contentLength": 5911
-        },
-        {
-          "url": "https://developer.android.com/images/picto-icons/android-badge.svg",
-          "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
-          "articleUrl": "https://source.android.com/docs/compatibility",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP Site Updates",
-          "validationStatus": "ok",
-          "contentLength": 2986
         }
       ],
       "candidateTier": "short-news",
@@ -11849,7 +11849,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -11877,23 +11877,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=id",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -11921,18 +11921,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=id",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -12931,7 +12931,7 @@
           "contentLength": 1165
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=es-419",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -12975,7 +12975,7 @@
           "contentLength": 1165
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=es-419",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
           "sourceUrl": "https://source.android.com/docs/whatsnew",
           "articleUrl": "https://source.android.com/docs/whatsnew",
           "sourceKind": "article-img",
@@ -15190,7 +15190,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=id",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -15220,7 +15220,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=id",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -15476,7 +15476,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=de",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -15506,7 +15506,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=de",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
           "sourceKind": "article-img",
@@ -15757,20 +15757,6 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=es-419",
-          "sourceUrl": "https://source.android.com/docs/security/bulletin",
-          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Security Bulletin",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -15787,20 +15773,6 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=es-419",
-          "sourceUrl": "https://source.android.com/docs/security/bulletin",
-          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Security Bulletin",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -24001,7 +23973,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ko",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
           "sourceKind": "og",
@@ -24029,7 +24001,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=ko",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
           "sourceKind": "article-img",
@@ -24045,7 +24017,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ko",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
           "sourceKind": "og",
@@ -24073,7 +24045,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=ko",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
           "sourceKind": "article-img",
@@ -24510,7 +24482,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=he",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
           "sourceKind": "og",
@@ -24538,23 +24510,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=he",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Media3 Release Notes",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=he",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
           "sourceKind": "og",
@@ -24582,18 +24554,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=he",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Media3 Release Notes",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -26522,23 +26494,23 @@
     },
     {
       "schema_version": 5,
-      "id": "gemini-bb0e15b6742fce01",
-      "source_candidate_id": "gemini-bb0e15b6742fce01",
-      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "article_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "source": "Android Compatibility Definition Document",
-      "source_name": "Android Compatibility Definition Document",
-      "sourceName": "Android Compatibility Definition Document",
-      "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
-      "source_url": "https://source.android.com/docs/compatibility/cdd",
-      "source_id": "android-compatibility-definition-document",
-      "category": "compatibility",
-      "source_category": "compatibility",
-      "section": "compatibility",
-      "source_section": "compatibility",
-      "priority": "high",
+      "id": "gemini-d4a0acfc0ac6ad6e",
+      "source_candidate_id": "gemini-d4a0acfc0ac6ad6e",
+      "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+      "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "articleUrl": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "article_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "source": "Photo Picker Documentation",
+      "source_name": "Photo Picker Documentation",
+      "sourceName": "Photo Picker Documentation",
+      "sourceUrl": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "source_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "source_id": "android-photo-picker-reference",
+      "category": "android-media",
+      "source_category": "android-media",
+      "section": "android-media",
+      "source_section": "android-media",
+      "priority": "medium",
       "reliability": "official",
       "source_reliability": "official",
       "origin": "gemini_discovery",
@@ -26553,47 +26525,126 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Changes and updates related to camera image testing and automation within the Android ecosystem."
+        "Improvements or changes in how Android applications access and manage camera-generated media through the Photo Picker or MediaStore."
       ],
       "keywords": [
-        "Android camera testing automation",
-        "Camera ITS updates",
-        "Camera HAL compatibility"
+        "Photo Picker updates",
+        "MediaStore changes",
+        "camera output access",
+        "gallery integration"
       ],
       "evidence": [
-        "Camera ITS documentation",
-        "Automated camera testing methods",
-        "Updates to camera compatibility tests"
+        "Documentation updates for Photo Picker or MediaStore.",
+        "Information on new features or changes affecting camera output access or gallery integration."
       ],
-      "warnings": [],
-      "publishedAt": "2026-05-27",
-      "published_date": "2026-05-27",
-      "hasDatedEvidence": true,
-      "has_dated_evidence": true,
-      "finalSelectionEligibility": "short",
-      "final_selection_eligibility": "short",
-      "source_gap_risk": false,
-      "source_gap_risk_level": "low",
-      "main_eligible": true,
-      "briefing_only": false,
-      "reference_only": false,
-      "relevanceScore": 70,
-      "relevance_score": 70,
-      "cameraHalRelevanceScore": 70,
-      "camera_hal_relevance_score": 70,
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
       "proposal_id": "camera-hal-sw-20260610-003",
       "proposal_trace_id": "camera-hal-sw-20260610-003",
-      "discovery_topic_gap": "Changes and updates related to camera image testing and automation within the Android ecosystem.",
+      "discovery_topic_gap": "Improvements or changes in how Android applications access and manage camera-generated media through the Photo Picker or MediaStore.",
       "discovery_source_family": "Official Android media/camera-output discovery intent",
-      "source_quality_score": 0.783,
-      "source_quality_bucket": "review_candidate",
-      "source_quality_report_ref": "gemini-bb0e15b6742fce01",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-d4a0acfc0ac6ad6e",
       "duplicate_of_selected_source": false,
-      "stale_claim_risk": "low",
-      "final_selection_blocked": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass"
+      "evidence_validation_status": "blocked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-e12f3fd8b75d5b1b",
+      "source_candidate_id": "gemini-e12f3fd8b75d5b1b",
+      "title": "MediaStore &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
+      "url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "articleUrl": "https://developer.android.com/reference/android/provider/MediaStore",
+      "article_url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "source": "MediaStore Reference",
+      "source_name": "MediaStore Reference",
+      "sourceName": "MediaStore Reference",
+      "sourceUrl": "https://developer.android.com/reference/android/provider/MediaStore",
+      "source_url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "source_id": "android-mediastore-reference",
+      "category": "android-media",
+      "source_category": "android-media",
+      "section": "android-media",
+      "source_section": "android-media",
+      "priority": "low",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "official_blog",
+      "source_type": "official_blog",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Improvements or changes in how Android applications access and manage camera-generated media through the Photo Picker or MediaStore."
+      ],
+      "keywords": [
+        "Photo Picker updates",
+        "MediaStore changes",
+        "camera output access",
+        "gallery integration"
+      ],
+      "evidence": [
+        "Documentation updates for Photo Picker or MediaStore.",
+        "Information on new features or changes affecting camera output access or gallery integration."
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "camera-hal-sw-20260610-003",
+      "proposal_trace_id": "camera-hal-sw-20260610-003",
+      "discovery_topic_gap": "Improvements or changes in how Android applications access and manage camera-generated media through the Photo Picker or MediaStore.",
+      "discovery_source_family": "Official Android media/camera-output discovery intent",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-e12f3fd8b75d5b1b",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
     },
     {
       "schema_version": 5,
@@ -26628,17 +26679,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware."
+        "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines."
       ],
       "keywords": [
-        "linux kernel media camera driver",
+        "linux kernel media driver",
         "V4L2 updates",
-        "linux-media list patches"
+        "camera sensor driver",
+        "ISP driver changes"
       ],
       "evidence": [
-        "Kernel patches for camera drivers",
-        "Discussions on V4L2 and media controller",
-        "Updates to specific camera sensor drivers (e.g., ov8865, imx219)"
+        "Kernel patches related to camera drivers (e.g., ov8865, imx219, qcom venus).",
+        "Changes in the media subsystem that impact camera sensor integration or stream management."
       ],
       "warnings": [],
       "publishedAt": "2026-06-09",
@@ -26658,8 +26709,8 @@
       "camera_hal_relevance_score": 70,
       "proposal_id": "camera-hal-sw-20260610-004",
       "proposal_trace_id": "camera-hal-sw-20260610-004",
-      "discovery_topic_gap": "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware.",
-      "discovery_source_family": "Linux Kernel Camera/Media",
+      "discovery_topic_gap": "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines.",
+      "discovery_source_family": "Linux kernel media subsystem",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "source_quality_report_ref": "gemini-4a98a2852603a041",
@@ -26703,17 +26754,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware."
+        "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines."
       ],
       "keywords": [
-        "linux kernel media camera driver",
+        "linux kernel media driver",
         "V4L2 updates",
-        "linux-media list patches"
+        "camera sensor driver",
+        "ISP driver changes"
       ],
       "evidence": [
-        "Kernel patches for camera drivers",
-        "Discussions on V4L2 and media controller",
-        "Updates to specific camera sensor drivers (e.g., ov8865, imx219)"
+        "Kernel patches related to camera drivers (e.g., ov8865, imx219, qcom venus).",
+        "Changes in the media subsystem that impact camera sensor integration or stream management."
       ],
       "warnings": [],
       "publishedAt": "2026-06-09",
@@ -26733,8 +26784,8 @@
       "camera_hal_relevance_score": 70,
       "proposal_id": "camera-hal-sw-20260610-004",
       "proposal_trace_id": "camera-hal-sw-20260610-004",
-      "discovery_topic_gap": "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware.",
-      "discovery_source_family": "Linux Kernel Camera/Media",
+      "discovery_topic_gap": "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines.",
+      "discovery_source_family": "Linux kernel media subsystem",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "source_quality_report_ref": "gemini-1a6772d1b49c2b9e",
@@ -26778,17 +26829,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware."
+        "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines."
       ],
       "keywords": [
-        "linux kernel media camera driver",
+        "linux kernel media driver",
         "V4L2 updates",
-        "linux-media list patches"
+        "camera sensor driver",
+        "ISP driver changes"
       ],
       "evidence": [
-        "Kernel patches for camera drivers",
-        "Discussions on V4L2 and media controller",
-        "Updates to specific camera sensor drivers (e.g., ov8865, imx219)"
+        "Kernel patches related to camera drivers (e.g., ov8865, imx219, qcom venus).",
+        "Changes in the media subsystem that impact camera sensor integration or stream management."
       ],
       "warnings": [],
       "publishedAt": "2026-06-09",
@@ -26808,8 +26859,8 @@
       "camera_hal_relevance_score": 70,
       "proposal_id": "camera-hal-sw-20260610-004",
       "proposal_trace_id": "camera-hal-sw-20260610-004",
-      "discovery_topic_gap": "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware.",
-      "discovery_source_family": "Linux Kernel Camera/Media",
+      "discovery_topic_gap": "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines.",
+      "discovery_source_family": "Linux kernel media subsystem",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "source_quality_report_ref": "gemini-c03593a2f735c0ca",
@@ -26853,17 +26904,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware."
+        "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines."
       ],
       "keywords": [
-        "linux kernel media camera driver",
+        "linux kernel media driver",
         "V4L2 updates",
-        "linux-media list patches"
+        "camera sensor driver",
+        "ISP driver changes"
       ],
       "evidence": [
-        "Kernel patches for camera drivers",
-        "Discussions on V4L2 and media controller",
-        "Updates to specific camera sensor drivers (e.g., ov8865, imx219)"
+        "Kernel patches related to camera drivers (e.g., ov8865, imx219, qcom venus).",
+        "Changes in the media subsystem that impact camera sensor integration or stream management."
       ],
       "warnings": [],
       "publishedAt": "2026-06-08",
@@ -26883,8 +26934,8 @@
       "camera_hal_relevance_score": 70,
       "proposal_id": "camera-hal-sw-20260610-004",
       "proposal_trace_id": "camera-hal-sw-20260610-004",
-      "discovery_topic_gap": "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware.",
-      "discovery_source_family": "Linux Kernel Camera/Media",
+      "discovery_topic_gap": "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines.",
+      "discovery_source_family": "Linux kernel media subsystem",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-02739c85ed307b5d",
@@ -26928,17 +26979,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware."
+        "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines."
       ],
       "keywords": [
-        "linux kernel media camera driver",
+        "linux kernel media driver",
         "V4L2 updates",
-        "linux-media list patches"
+        "camera sensor driver",
+        "ISP driver changes"
       ],
       "evidence": [
-        "Kernel patches for camera drivers",
-        "Discussions on V4L2 and media controller",
-        "Updates to specific camera sensor drivers (e.g., ov8865, imx219)"
+        "Kernel patches related to camera drivers (e.g., ov8865, imx219, qcom venus).",
+        "Changes in the media subsystem that impact camera sensor integration or stream management."
       ],
       "warnings": [],
       "publishedAt": "2026-06-09",
@@ -26958,8 +27009,8 @@
       "camera_hal_relevance_score": 70,
       "proposal_id": "camera-hal-sw-20260610-004",
       "proposal_trace_id": "camera-hal-sw-20260610-004",
-      "discovery_topic_gap": "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware.",
-      "discovery_source_family": "Linux Kernel Camera/Media",
+      "discovery_topic_gap": "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines.",
+      "discovery_source_family": "Linux kernel media subsystem",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-155d5af02bed46ce",
@@ -27003,17 +27054,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware."
+        "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines."
       ],
       "keywords": [
-        "linux kernel media camera driver",
+        "linux kernel media driver",
         "V4L2 updates",
-        "linux-media list patches"
+        "camera sensor driver",
+        "ISP driver changes"
       ],
       "evidence": [
-        "Kernel patches for camera drivers",
-        "Discussions on V4L2 and media controller",
-        "Updates to specific camera sensor drivers (e.g., ov8865, imx219)"
+        "Kernel patches related to camera drivers (e.g., ov8865, imx219, qcom venus).",
+        "Changes in the media subsystem that impact camera sensor integration or stream management."
       ],
       "warnings": [],
       "publishedAt": "2026-06-09",
@@ -27033,8 +27084,8 @@
       "camera_hal_relevance_score": 70,
       "proposal_id": "camera-hal-sw-20260610-004",
       "proposal_trace_id": "camera-hal-sw-20260610-004",
-      "discovery_topic_gap": "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware.",
-      "discovery_source_family": "Linux Kernel Camera/Media",
+      "discovery_topic_gap": "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines.",
+      "discovery_source_family": "Linux kernel media subsystem",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-4df3f6dafe0a617f",
@@ -27078,17 +27129,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware."
+        "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines."
       ],
       "keywords": [
-        "linux kernel media camera driver",
+        "linux kernel media driver",
         "V4L2 updates",
-        "linux-media list patches"
+        "camera sensor driver",
+        "ISP driver changes"
       ],
       "evidence": [
-        "Kernel patches for camera drivers",
-        "Discussions on V4L2 and media controller",
-        "Updates to specific camera sensor drivers (e.g., ov8865, imx219)"
+        "Kernel patches related to camera drivers (e.g., ov8865, imx219, qcom venus).",
+        "Changes in the media subsystem that impact camera sensor integration or stream management."
       ],
       "warnings": [],
       "publishedAt": "2026-06-09",
@@ -27108,8 +27159,8 @@
       "camera_hal_relevance_score": 70,
       "proposal_id": "camera-hal-sw-20260610-004",
       "proposal_trace_id": "camera-hal-sw-20260610-004",
-      "discovery_topic_gap": "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware.",
-      "discovery_source_family": "Linux Kernel Camera/Media",
+      "discovery_topic_gap": "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines.",
+      "discovery_source_family": "Linux kernel media subsystem",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-66264ce4c41a3fc2",
@@ -27119,6 +27170,82 @@
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
       "evidence_validation_status": "pass"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-fa0d645879e771f0",
+      "source_candidate_id": "gemini-fa0d645879e771f0",
+      "title": "The libcamera-devel Archives",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "articleUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "article_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "source": "libcamera Release Announcements",
+      "source_name": "libcamera Release Announcements",
+      "sourceName": "libcamera Release Announcements",
+      "sourceUrl": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "source_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "source_id": "libcamera-release-announcements",
+      "category": "linux-camera",
+      "source_category": "linux-camera",
+      "section": "linux-camera",
+      "source_section": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "source_reliability": "project-official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "unknown",
+      "source_type": "unknown",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Updates and discussions on the libcamera project, which is increasingly relevant for modern camera stacks on Linux and potentially Android."
+      ],
+      "keywords": [
+        "libcamera-devel mailing list",
+        "libcamera updates",
+        "camera pipeline development"
+      ],
+      "evidence": [
+        "Mailing list discussions or announcements related to libcamera development.",
+        "Information on new features, bug fixes, or camera support within libcamera."
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "camera-hal-sw-20260610-005",
+      "proposal_trace_id": "camera-hal-sw-20260610-005",
+      "discovery_topic_gap": "Updates and discussions on the libcamera project, which is increasingly relevant for modern camera stacks on Linux and potentially Android.",
+      "discovery_source_family": "Linux camera stack",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-fa0d645879e771f0",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
     },
     {
       "schema_version": 5,
@@ -27153,17 +27280,16 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "New developments and features in C++ relevant to camera software development, including C++26 features."
+        "Recent advancements or discussions in C++ that could impact camera software development, such as new language features or performance optimizations."
       ],
       "keywords": [
-        "C++26 features camera",
-        "GCC 16.1 release notes",
-        "C++ reflection for media"
+        "C++26 features",
+        "GCC release notes",
+        "C++ performance optimizations"
       ],
       "evidence": [
-        "GCC release notes mentioning C++26 features",
-        "Libraries supporting C++26 reflection",
-        "Performance improvements in C++ compilers"
+        "Release notes for C++ compilers (e.g., GCC 16.1).",
+        "Articles discussing new C++ features (e.g., C++26 reflection) and their potential applications."
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -27183,10 +27309,10 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "camera-hal-sw-20260610-005",
-      "proposal_trace_id": "camera-hal-sw-20260610-005",
-      "discovery_topic_gap": "New developments and features in C++ relevant to camera software development, including C++26 features.",
-      "discovery_source_family": "C++ Language and Tooling",
+      "proposal_id": "camera-hal-sw-20260610-006",
+      "proposal_trace_id": "camera-hal-sw-20260610-006",
+      "discovery_topic_gap": "Recent advancements or discussions in C++ that could impact camera software development, such as new language features or performance optimizations.",
+      "discovery_source_family": "C++ language and tooling",
       "source_quality_score": 0.5,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-8635e5e9a3557c0d",
@@ -27230,17 +27356,16 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "New developments and features in C++ relevant to camera software development, including C++26 features."
+        "Recent advancements or discussions in C++ that could impact camera software development, such as new language features or performance optimizations."
       ],
       "keywords": [
-        "C++26 features camera",
-        "GCC 16.1 release notes",
-        "C++ reflection for media"
+        "C++26 features",
+        "GCC release notes",
+        "C++ performance optimizations"
       ],
       "evidence": [
-        "GCC release notes mentioning C++26 features",
-        "Libraries supporting C++26 reflection",
-        "Performance improvements in C++ compilers"
+        "Release notes for C++ compilers (e.g., GCC 16.1).",
+        "Articles discussing new C++ features (e.g., C++26 reflection) and their potential applications."
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -27260,10 +27385,10 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "camera-hal-sw-20260610-005",
-      "proposal_trace_id": "camera-hal-sw-20260610-005",
-      "discovery_topic_gap": "New developments and features in C++ relevant to camera software development, including C++26 features.",
-      "discovery_source_family": "C++ Language and Tooling",
+      "proposal_id": "camera-hal-sw-20260610-006",
+      "proposal_trace_id": "camera-hal-sw-20260610-006",
+      "discovery_topic_gap": "Recent advancements or discussions in C++ that could impact camera software development, such as new language features or performance optimizations.",
+      "discovery_source_family": "C++ language and tooling",
       "source_quality_score": 0.455,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-a8865e6c6b3d243f",
@@ -27273,6 +27398,154 @@
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
       "evidence_validation_status": "blocked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-736ba21c4736e96f",
+      "source_candidate_id": "gemini-736ba21c4736e96f",
+      "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility",
+      "articleUrl": "https://source.android.com/docs/compatibility",
+      "article_url": "https://source.android.com/docs/compatibility",
+      "source": "Android Compatibility Definition Document",
+      "source_name": "Android Compatibility Definition Document",
+      "sourceName": "Android Compatibility Definition Document",
+      "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
+      "source_url": "https://source.android.com/docs/compatibility/cdd",
+      "source_id": "android-compatibility-definition-document",
+      "category": "compatibility",
+      "source_category": "compatibility",
+      "section": "compatibility",
+      "source_section": "compatibility",
+      "priority": "high",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "official_blog",
+      "source_type": "official_blog",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Updates related to Android compatibility and testing, specifically for camera hardware and features."
+      ],
+      "keywords": [
+        "Android Compatibility Definition Document",
+        "Camera ITS updates",
+        "Android CTS camera tests"
+      ],
+      "evidence": [
+        "Updates to the Android Compatibility Definition Document (CDD).",
+        "Information on Camera ITS (Instrumentation Test Suite) or CTS (Compatibility Test Suite) changes relevant to camera."
+      ],
+      "warnings": [],
+      "publishedAt": "2024-12-12",
+      "published_date": "2024-12-12",
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_gap_risk": false,
+      "source_gap_risk_level": "low",
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "relevanceScore": 70,
+      "relevance_score": 70,
+      "cameraHalRelevanceScore": 70,
+      "camera_hal_relevance_score": 70,
+      "proposal_id": "camera-hal-sw-20260610-007",
+      "proposal_trace_id": "camera-hal-sw-20260610-007",
+      "discovery_topic_gap": "Updates related to Android compatibility and testing, specifically for camera hardware and features.",
+      "discovery_source_family": "Android Compatibility Program",
+      "source_quality_score": 0.672,
+      "source_quality_bucket": "review_candidate",
+      "source_quality_report_ref": "gemini-736ba21c4736e96f",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "high",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-bb0e15b6742fce01",
+      "source_candidate_id": "gemini-bb0e15b6742fce01",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "article_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "source": "Android Compatibility Definition Document",
+      "source_name": "Android Compatibility Definition Document",
+      "sourceName": "Android Compatibility Definition Document",
+      "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
+      "source_url": "https://source.android.com/docs/compatibility/cdd",
+      "source_id": "android-compatibility-definition-document",
+      "category": "compatibility",
+      "source_category": "compatibility",
+      "section": "compatibility",
+      "source_section": "compatibility",
+      "priority": "high",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "official_blog",
+      "source_type": "official_blog",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Updates related to Android compatibility and testing, specifically for camera hardware and features."
+      ],
+      "keywords": [
+        "Android Compatibility Definition Document",
+        "Camera ITS updates",
+        "Android CTS camera tests"
+      ],
+      "evidence": [
+        "Updates to the Android Compatibility Definition Document (CDD).",
+        "Information on Camera ITS (Instrumentation Test Suite) or CTS (Compatibility Test Suite) changes relevant to camera."
+      ],
+      "warnings": [],
+      "publishedAt": "2026-05-27",
+      "published_date": "2026-05-27",
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_gap_risk": false,
+      "source_gap_risk_level": "low",
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "relevanceScore": 70,
+      "relevance_score": 70,
+      "cameraHalRelevanceScore": 70,
+      "camera_hal_relevance_score": 70,
+      "proposal_id": "camera-hal-sw-20260610-007",
+      "proposal_trace_id": "camera-hal-sw-20260610-007",
+      "discovery_topic_gap": "Updates related to Android compatibility and testing, specifically for camera hardware and features.",
+      "discovery_source_family": "Android Compatibility Program",
+      "source_quality_score": 0.783,
+      "source_quality_bucket": "review_candidate",
+      "source_quality_report_ref": "gemini-bb0e15b6742fce01",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "low",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass"
     },
     {
       "schema_version": 5,
@@ -27318,7 +27591,7 @@
         "parent_url": "https://goo.gle/AdaptiveApps_IO26",
         "anchor_text": "CameraX",
         "evidence_role": "secondary_context",
-        "selection_reason": "This URL is about CameraX, a key library for Android camera development, which is relevant to the Camera HAL SW newsletter.",
+        "selection_reason": "This URL is directly related to CameraX, a key library for camera development on Android. It's relevant to the Camera HAL and V4L2/libcamera ecosystem.",
         "links": [
           {
             "url": "https://developer.android.com/media/camera/camerax",
@@ -27330,6 +27603,195 @@
       "source_quality_score": 0.458,
       "source_quality_bucket": "weak_candidate",
       "source_quality_report_ref": "gemini-linked-45111a50490175f2",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "not_checked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-linked-58d9ec89937d9617",
+      "source_candidate_id": "gemini-linked-58d9ec89937d9617",
+      "title": "VideoCapture",
+      "url": "https://developer.android.com/media/camera/camerax/video-capture",
+      "articleUrl": "https://developer.android.com/media/camera/camerax/video-capture",
+      "article_url": "https://developer.android.com/media/camera/camerax/video-capture",
+      "source": "Android Developer Newsletter",
+      "source_name": "Android Developer Newsletter",
+      "sourceName": "Android Developer Newsletter",
+      "sourceUrl": "https://developer.android.com/newsletter",
+      "source_url": "https://developer.android.com/newsletter",
+      "source_id": "android-developer-newsletter",
+      "category": "android",
+      "source_category": "android",
+      "section": "android",
+      "source_section": "android",
+      "priority": "medium",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_linked_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "derived_from_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "parent_candidate_id": "",
+      "parentUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "parent_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "parentTitle": "CameraX Release Notes - CameraX 1.6.0",
+      "parent_title": "CameraX Release Notes - CameraX 1.6.0",
+      "anchorText": "VideoCapture",
+      "anchor_text": "VideoCapture",
+      "link_context": "VideoCapture",
+      "evidence_role": "secondary_context",
+      "suggested_article_type": "Feature Deep Dive",
+      "outgoing_links": [],
+      "source_extraction": {
+        "mode": "gemini_linked_discovery",
+        "parent_candidate_id": "",
+        "parent_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+        "anchor_text": "VideoCapture",
+        "evidence_role": "secondary_context",
+        "selection_reason": "This URL specifically covers video capture with CameraX, a relevant topic for camera development.",
+        "links": [
+          {
+            "url": "https://developer.android.com/media/camera/camerax/video-capture",
+            "text": "VideoCapture",
+            "role": "derived_candidate"
+          }
+        ]
+      },
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "source_quality_report_ref": "gemini-linked-58d9ec89937d9617",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "not_checked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-linked-eb09ee752aa3ba14",
+      "source_candidate_id": "gemini-linked-eb09ee752aa3ba14",
+      "title": "CameraEffect",
+      "url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
+      "articleUrl": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
+      "article_url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
+      "source": "Android Developer Newsletter",
+      "source_name": "Android Developer Newsletter",
+      "sourceName": "Android Developer Newsletter",
+      "sourceUrl": "https://developer.android.com/newsletter",
+      "source_url": "https://developer.android.com/newsletter",
+      "source_id": "android-developer-newsletter",
+      "category": "android",
+      "source_category": "android",
+      "section": "android",
+      "source_section": "android",
+      "priority": "medium",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_linked_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "derived_from_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "parent_candidate_id": "",
+      "parentUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "parent_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "parentTitle": "CameraX Release Notes - CameraX 1.6.0",
+      "parent_title": "CameraX Release Notes - CameraX 1.6.0",
+      "anchorText": "CameraEffect",
+      "anchor_text": "CameraEffect",
+      "link_context": "CameraEffect",
+      "evidence_role": "secondary_context",
+      "suggested_article_type": "API Reference",
+      "outgoing_links": [],
+      "source_extraction": {
+        "mode": "gemini_linked_discovery",
+        "parent_candidate_id": "",
+        "parent_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+        "anchor_text": "CameraEffect",
+        "evidence_role": "secondary_context",
+        "selection_reason": "CameraEffect in CameraX allows for custom image processing, which is directly related to ISP and image sensor functionalities.",
+        "links": [
+          {
+            "url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
+            "text": "CameraEffect",
+            "role": "derived_candidate"
+          }
+        ]
+      },
+      "source_quality_score": 0.413,
+      "source_quality_bucket": "weak_candidate",
+      "source_quality_report_ref": "gemini-linked-eb09ee752aa3ba14",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "not_checked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-linked-520fe52c7e358499",
+      "source_candidate_id": "gemini-linked-520fe52c7e358499",
+      "title": "ImageAnalysis",
+      "url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
+      "articleUrl": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
+      "article_url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
+      "source": "Android Developer Newsletter",
+      "source_name": "Android Developer Newsletter",
+      "sourceName": "Android Developer Newsletter",
+      "sourceUrl": "https://developer.android.com/newsletter",
+      "source_url": "https://developer.android.com/newsletter",
+      "source_id": "android-developer-newsletter",
+      "category": "android",
+      "source_category": "android",
+      "section": "android",
+      "source_section": "android",
+      "priority": "medium",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "gemini_linked_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "derived_from_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "parent_candidate_id": "",
+      "parentUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "parent_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "parentTitle": "CameraX Release Notes - CameraX 1.6.0",
+      "parent_title": "CameraX Release Notes - CameraX 1.6.0",
+      "anchorText": "ImageAnalysis",
+      "anchor_text": "ImageAnalysis",
+      "link_context": "ImageAnalysis",
+      "evidence_role": "secondary_context",
+      "suggested_article_type": "API Reference",
+      "outgoing_links": [],
+      "source_extraction": {
+        "mode": "gemini_linked_discovery",
+        "parent_candidate_id": "",
+        "parent_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+        "anchor_text": "ImageAnalysis",
+        "evidence_role": "secondary_context",
+        "selection_reason": "This references the ImageAnalysis use case in CameraX, which is a core component for processing camera data and relevant to HAL/driver level.",
+        "links": [
+          {
+            "url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
+            "text": "ImageAnalysis",
+            "role": "derived_candidate"
+          }
+        ]
+      },
+      "source_quality_score": 0.413,
+      "source_quality_bucket": "weak_candidate",
+      "source_quality_report_ref": "gemini-linked-520fe52c7e358499",
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": false,
@@ -27381,7 +27843,7 @@
         "parent_url": "https://source.android.com/docs/core/camera",
         "anchor_text": "Release notes",
         "evidence_role": "primary_evidence",
-        "selection_reason": "This link points to Android release notes, which may contain updates relevant to camera HAL or driver changes.",
+        "selection_reason": "Release notes for the Android Open Source Project often contain information about camera-related changes and improvements.",
         "links": [
           {
             "url": "https://source.android.com/docs/whatsnew/release-notes",
@@ -27393,69 +27855,6 @@
       "source_quality_score": 0.413,
       "source_quality_bucket": "weak_candidate",
       "source_quality_report_ref": "gemini-linked-83920430c1be5b76",
-      "duplicate_of_selected_source": false,
-      "stale_claim_risk": "",
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-linked-7317dd637c497758",
-      "source_candidate_id": "gemini-linked-7317dd637c497758",
-      "title": "Bulletins",
-      "url": "https://source.android.com/docs/security/bulletin",
-      "articleUrl": "https://source.android.com/docs/security/bulletin",
-      "article_url": "https://source.android.com/docs/security/bulletin",
-      "source": "Android Security Bulletin",
-      "source_name": "Android Security Bulletin",
-      "sourceName": "Android Security Bulletin",
-      "sourceUrl": "https://source.android.com/docs/security/bulletin",
-      "source_url": "https://source.android.com/docs/security/bulletin",
-      "source_id": "android-security-bulletin",
-      "category": "security",
-      "source_category": "security",
-      "section": "security",
-      "source_section": "security",
-      "priority": "high",
-      "reliability": "official",
-      "source_reliability": "official",
-      "origin": "gemini_linked_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "derived_from_url": "https://source.android.com/docs/compatibility/cdd",
-      "parent_candidate_id": "",
-      "parentUrl": "https://source.android.com/docs/compatibility/cdd",
-      "parent_url": "https://source.android.com/docs/compatibility/cdd",
-      "parentTitle": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
-      "parent_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
-      "anchorText": "Bulletins",
-      "anchor_text": "Bulletins",
-      "link_context": "Bulletins",
-      "evidence_role": "primary_evidence",
-      "suggested_article_type": "Security Update",
-      "outgoing_links": [],
-      "source_extraction": {
-        "mode": "gemini_linked_discovery",
-        "parent_candidate_id": "",
-        "parent_url": "https://source.android.com/docs/compatibility/cdd",
-        "anchor_text": "Bulletins",
-        "evidence_role": "primary_evidence",
-        "selection_reason": "Security bulletins can sometimes include critical updates or vulnerabilities related to camera components, making this relevant.",
-        "links": [
-          {
-            "url": "https://source.android.com/docs/security/bulletin",
-            "text": "Bulletins",
-            "role": "derived_candidate"
-          }
-        ]
-      },
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "source_quality_report_ref": "gemini-linked-7317dd637c497758",
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": false,
@@ -27475,6 +27874,10 @@
     },
     {
       "source": "OpenAI News",
+      "message": "403 Forbidden"
+    },
+    {
+      "source": "요즘IT",
       "message": "403 Forbidden"
     }
   ]

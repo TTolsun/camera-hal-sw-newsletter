@@ -2,13 +2,13 @@
 
 status=WARNING
 parser_gap_count=2
-duplicate_discovery_gap_count=1
+duplicate_discovery_gap_count=2
 gemini_parser_failure_count=3
 
 | Action | Reason | Candidate | Adapter | Duplicate Discovery | Duplicate Match | Confidence | URL |
 |---|---|---|---|---|---|---|---|
 | PARSER_REPAIR_REQUIRED | missing_source_extraction | AOSP Site Updates - May 2026 | aosp-site-updates | true | exact_normalized_url | high | https://source.android.com/docs/compatibility/cts/camera-its-box |
-| PARSER_REPAIR_REQUIRED | missing_source_extraction | AOSP Site Updates - March 2026 |  | false |  | high | https://source.android.com/docs/compatibility |
+| PARSER_REPAIR_REQUIRED | missing_source_extraction | AOSP Site Updates - March 2026 |  | true | exact_normalized_url | high | https://source.android.com/docs/compatibility |
 
 ## Gemini parser extraction failures
 
@@ -54,8 +54,8 @@ gemini_parser_failure_count=3
   - url: https://source.android.com/docs/compatibility
   - adapter_hint: 
   - reason: missing_source_extraction
-  - duplicate_discovered_by_gemini: false
-  - duplicate_match_type: 
+  - duplicate_discovered_by_gemini: true
+  - duplicate_match_type: exact_normalized_url
   - confidence: high
   - source_gap_risk: false
   - evidence_validation_status: blocked

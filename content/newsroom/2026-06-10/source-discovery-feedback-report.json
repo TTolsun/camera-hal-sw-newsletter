@@ -4,7 +4,7 @@
   "date": "2026-06-10",
   "status": "WARNING",
   "parser_gap_count": 2,
-  "duplicate_discovery_gap_count": 1,
+  "duplicate_discovery_gap_count": 2,
   "gemini_parser_failure_count": 3,
   "gemini_parser_failures": [
     {
@@ -71,8 +71,8 @@
       "url": "https://source.android.com/docs/compatibility",
       "source_id": "aosp-site-updates",
       "adapter_hint": null,
-      "duplicate_discovered_by_gemini": false,
-      "duplicate_match_type": null,
+      "duplicate_discovered_by_gemini": true,
+      "duplicate_match_type": "exact_normalized_url",
       "source_gap_risk": false,
       "evidence_validation_status": "blocked",
       "source_quality_bucket": "review_candidate",

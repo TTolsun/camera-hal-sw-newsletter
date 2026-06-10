@@ -13,7 +13,7 @@
       "claims": [
         {
           "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"id-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
           "confidence": "medium"
         }
       ],
@@ -254,10 +254,10 @@
       "warnings": []
     },
     {
-      "id": "781679b8fb4b611e",
-      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
-      "title": "Media3 Release Notes - Media3 1.9.4",
-      "published_at": "May 16, 2026",
+      "id": "3ca2b58b92a0b76d",
+      "url": "https://source.android.com/docs/compatibility",
+      "title": "Compatibility",
+      "published_at": "2026-03-01",
       "source_type": "release_note_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -265,15 +265,15 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "May 16, 2026 Version 1.9.4 contains the following commits .",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"it-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "claim": "March 2026 Compatibility Compatibility Updated Buy and set up a Gen2 box with a revised chart and an updated manufacturing vendor contact number.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"fa-x-mtfrom-en\"\n      dir=\"rtl\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.79,
-      "android_hal_relevance": 0.79,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.674,
+      "camera_relevance": 0.71,
+      "android_hal_relevance": 0.71,
+      "ai_relevance": 0,
+      "technical_depth": 0.676,
       "warnings": []
     }
   ]

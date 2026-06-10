@@ -47,11 +47,19 @@
     },
     {
       "proposal_id": "camera-hal-sw-20260610-003",
-      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "candidate_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "normalized_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
       "accepted": true,
       "rejected_reason": "",
-      "source_policy_match": "android-compatibility-definition-document"
+      "source_policy_match": "android-photo-picker-reference"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-003",
+      "candidate_url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "normalized_url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-mediastore-reference"
     },
     {
       "proposal_id": "camera-hal-sw-20260610-004",
@@ -111,6 +119,14 @@
     },
     {
       "proposal_id": "camera-hal-sw-20260610-005",
+      "candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "normalized_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "libcamera-release-announcements"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-006",
       "candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "accepted": true,
@@ -118,16 +134,32 @@
       "source_policy_match": "iso-cpp-blog"
     },
     {
-      "proposal_id": "camera-hal-sw-20260610-005",
+      "proposal_id": "camera-hal-sw-20260610-006",
       "candidate_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "normalized_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-007",
+      "candidate_url": "https://source.android.com/docs/compatibility",
+      "normalized_url": "https://source.android.com/docs/compatibility",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-007",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
     }
   ],
   "counts": {
     "discovered_not_extractable": 3,
-    "accepted": 10
+    "accepted": 14
   }
 }

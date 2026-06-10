@@ -5,12 +5,13 @@
   "proposals": [
     {
       "proposal_id": "camera-hal-sw-20260610-001",
-      "topic_gap": "Updates on Android's camera HAL, focusing on new features, performance improvements, and bug fixes.",
+      "topic_gap": "Recent updates to the Android Camera HAL and related components, focusing on performance, new features, or bug fixes.",
       "source_family": "Official Android media/camera-output discovery intent",
       "allowed_domains": [],
       "search_keywords": [
         "CameraX release notes",
-        "Android camera HAL updates"
+        "Android Camera HAL updates",
+        "Camera2 API changes"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
@@ -18,60 +19,61 @@
       ],
       "expected_evidence": [
         "CameraX release notes",
-        "New features in CameraX",
-        "Bug fixes in CameraX"
+        "Specific version updates with bug fixes or new features related to camera output or pipeline."
       ],
       "risk_notes": []
     },
     {
       "proposal_id": "camera-hal-sw-20260610-002",
-      "topic_gap": "Recent advancements in Android's media pipeline, particularly concerning camera output and A/V synchronization.",
+      "topic_gap": "Changes in Android's media pipeline, specifically concerning camera input and output processing, A/V sync, and playback integration.",
       "source_family": "Official Android media/camera-output discovery intent",
       "allowed_domains": [],
       "search_keywords": [
         "Media3 release notes",
-        "Android A/V sync camera",
-        "Media3 camera output"
+        "Android media pipeline",
+        "camera output",
+        "A/V sync"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
       ],
       "expected_evidence": [
         "Media3 release notes",
-        "Improvements in A/V sync",
-        "Camera output handling in Media3"
+        "Updates related to camera output, A/V synchronization, or integration with camera-generated media."
       ],
       "risk_notes": []
     },
     {
       "proposal_id": "camera-hal-sw-20260610-003",
-      "topic_gap": "Changes and updates related to camera image testing and automation within the Android ecosystem.",
+      "topic_gap": "Improvements or changes in how Android applications access and manage camera-generated media through the Photo Picker or MediaStore.",
       "source_family": "Official Android media/camera-output discovery intent",
       "allowed_domains": [],
       "search_keywords": [
-        "Android camera testing automation",
-        "Camera ITS updates",
-        "Camera HAL compatibility"
+        "Photo Picker updates",
+        "MediaStore changes",
+        "camera output access",
+        "gallery integration"
       ],
       "candidate_urls": [
-        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+        "https://developer.android.com/training/data-storage/shared/photo-picker",
+        "https://developer.android.com/reference/android/provider/MediaStore"
       ],
       "expected_evidence": [
-        "Camera ITS documentation",
-        "Automated camera testing methods",
-        "Updates to camera compatibility tests"
+        "Documentation updates for Photo Picker or MediaStore.",
+        "Information on new features or changes affecting camera output access or gallery integration."
       ],
       "risk_notes": []
     },
     {
       "proposal_id": "camera-hal-sw-20260610-004",
-      "topic_gap": "Linux kernel-level modifications and discussions impacting camera and media drivers, specifically for Android-compatible hardware.",
-      "source_family": "Linux Kernel Camera/Media",
+      "topic_gap": "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines.",
+      "source_family": "Linux kernel media subsystem",
       "allowed_domains": [],
       "search_keywords": [
-        "linux kernel media camera driver",
+        "linux kernel media driver",
         "V4L2 updates",
-        "linux-media list patches"
+        "camera sensor driver",
+        "ISP driver changes"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260609232255.13559-2-eng.juri@gmail.com/",
@@ -83,30 +85,67 @@
         "https://lore.kernel.org/linux-media/o3zjmtmordfzeimgowakpsz7jit7q4wsxb3j64gmvgkvre5y37@ztafjbpwqavd/"
       ],
       "expected_evidence": [
-        "Kernel patches for camera drivers",
-        "Discussions on V4L2 and media controller",
-        "Updates to specific camera sensor drivers (e.g., ov8865, imx219)"
+        "Kernel patches related to camera drivers (e.g., ov8865, imx219, qcom venus).",
+        "Changes in the media subsystem that impact camera sensor integration or stream management."
       ],
       "risk_notes": []
     },
     {
       "proposal_id": "camera-hal-sw-20260610-005",
-      "topic_gap": "New developments and features in C++ relevant to camera software development, including C++26 features.",
-      "source_family": "C++ Language and Tooling",
+      "topic_gap": "Updates and discussions on the libcamera project, which is increasingly relevant for modern camera stacks on Linux and potentially Android.",
+      "source_family": "Linux camera stack",
       "allowed_domains": [],
       "search_keywords": [
-        "C++26 features camera",
-        "GCC 16.1 release notes",
-        "C++ reflection for media"
+        "libcamera-devel mailing list",
+        "libcamera updates",
+        "camera pipeline development"
+      ],
+      "candidate_urls": [
+        "https://lists.libcamera.org/pipermail/libcamera-devel/"
+      ],
+      "expected_evidence": [
+        "Mailing list discussions or announcements related to libcamera development.",
+        "Information on new features, bug fixes, or camera support within libcamera."
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-006",
+      "topic_gap": "Recent advancements or discussions in C++ that could impact camera software development, such as new language features or performance optimizations.",
+      "source_family": "C++ language and tooling",
+      "allowed_domains": [],
+      "search_keywords": [
+        "C++26 features",
+        "GCC release notes",
+        "C++ performance optimizations"
       ],
       "candidate_urls": [
         "https://isocpp.org//blog/2026/04/gcc-16.1",
         "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
       ],
       "expected_evidence": [
-        "GCC release notes mentioning C++26 features",
-        "Libraries supporting C++26 reflection",
-        "Performance improvements in C++ compilers"
+        "Release notes for C++ compilers (e.g., GCC 16.1).",
+        "Articles discussing new C++ features (e.g., C++26 reflection) and their potential applications."
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-007",
+      "topic_gap": "Updates related to Android compatibility and testing, specifically for camera hardware and features.",
+      "source_family": "Android Compatibility Program",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Compatibility Definition Document",
+        "Camera ITS updates",
+        "Android CTS camera tests"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility",
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Updates to the Android Compatibility Definition Document (CDD).",
+        "Information on Camera ITS (Instrumentation Test Suite) or CTS (Compatibility Test Suite) changes relevant to camera."
       ],
       "risk_notes": []
     }
