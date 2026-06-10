@@ -5,66 +5,129 @@
   "proposals": [
     {
       "proposal_id": "camera-hal-sw-20260610-001",
-      "topic_gap": "Camera HAL SW updates and new features",
-      "source_family": "official-android-media",
+      "topic_gap": "Camera HAL SW updates and improvements in recent Android releases.",
+      "source_family": "android-developers-blog",
       "allowed_domains": [],
       "search_keywords": [
-        "CameraX release notes",
-        "Android camera updates"
+        "Android Camera HAL updates",
+        "Camera API changes",
+        "developer productivity camera"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
       ],
       "expected_evidence": [
-        "CameraX release notes",
-        "New features or bug fixes related to camera capture, processing, or output"
+        "Camera HAL",
+        "Camera API",
+        "performance improvements",
+        "new features"
       ],
       "risk_notes": []
     },
     {
       "proposal_id": "camera-hal-sw-20260610-002",
-      "topic_gap": "Camera HAL SW driver-level changes and bug fixes",
-      "source_family": "linux-kernel-camera",
+      "topic_gap": "Recent advancements and changes in the CameraX library relevant to HAL developers.",
+      "source_family": "camerax-release-notes",
       "allowed_domains": [],
       "search_keywords": [
-        "linux media kernel commits",
-        "V4L2 driver updates",
-        "camera HAL driver fixes"
+        "CameraX 1.6.1 release notes",
+        "CameraX HAL changes"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260609232255.13559-2-eng.juri@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260609232255.13559-1-eng.juri@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260609200931.670292-1-rhys@tumelty.co.uk/",
-        "https://lore.kernel.org/linux-media/178102372666.1799417.2096397903236324900@freya/",
-        "https://lore.kernel.org/linux-media/f793c665-ac99-4afe-a64b-bbd6d40044e5@kernel.org/",
-        "https://lore.kernel.org/linux-media/20260609-shikra_vpu-v1-3-3a32bb38b080@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/o3zjmtmordfzeimgowakpsz7jit7q4wsxb3j64gmvgkvre5y37@ztafjbpwqavd/"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
       ],
       "expected_evidence": [
-        "Kernel commit messages",
-        "Bug fixes for camera sensors or drivers",
-        "Improvements to camera pipeline or streaming"
+        "CameraX release notes",
+        "Camera HAL integration",
+        "new features",
+        "bug fixes"
       ],
       "risk_notes": []
     },
     {
       "proposal_id": "camera-hal-sw-20260610-003",
-      "topic_gap": "Camera HAL SW testing and compatibility",
-      "source_family": "aosp-site-updates",
+      "topic_gap": "Kernel-level driver updates and patches for camera and media pipelines in Linux.",
+      "source_family": "lore-linux-media-list",
       "allowed_domains": [],
       "search_keywords": [
-        "Android Camera ITS",
-        "Camera HAL compatibility",
-        "CTS camera testing"
+        "linux media v4l2 patches",
+        "camera driver updates",
+        "kernel camera HAL"
       ],
       "candidate_urls": [
-        "https://source.android.com/docs/compatibility/cts/camera-its-box",
-        "https://source.android.com/docs/compatibility"
+        "https://lore.kernel.org/linux-media/20260610-v4l2-add-ftrace-v2-4-9756edf72ac1@collabora.com/",
+        "https://lore.kernel.org/linux-media/20260610-v4l2-add-ftrace-v2-0-9756edf72ac1@collabora.com/",
+        "https://lore.kernel.org/linux-media/20260610142329.3836808-1-sumit.semwal@linaro.org/"
       ],
       "expected_evidence": [
-        "Updates to camera testing frameworks",
-        "Information on camera compatibility requirements"
+        "V4L2",
+        "media controller",
+        "camera drivers",
+        "HAL integration",
+        "kernel patches"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-004",
+      "topic_gap": "Updates and discussions regarding the libcamera project, relevant to embedded camera development.",
+      "source_family": "libcamera-release-announcements",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera updates",
+        "embedded camera development",
+        "camera HAL libcamera"
+      ],
+      "candidate_urls": [
+        "https://lists.libcamera.org/pipermail/libcamera-devel/"
+      ],
+      "expected_evidence": [
+        "libcamera",
+        "camera pipeline",
+        "driver support",
+        "embedded systems"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-005",
+      "topic_gap": "Android Compatibility Definition Document (CDD) updates impacting camera HAL implementations.",
+      "source_family": "android-compatibility-definition-document",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android CDD camera",
+        "Camera HAL compatibility",
+        "Android camera requirements"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cdd"
+      ],
+      "expected_evidence": [
+        "CDD",
+        "Camera HAL requirements",
+        "compatibility",
+        "testing"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-006",
+      "topic_gap": "Security bulletins and updates related to the Android camera framework and vendor implementations.",
+      "source_family": "android-security-bulletin",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android security bulletin camera",
+        "Camera HAL vulnerabilities",
+        "vendor security updates"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/security/bulletin/2026/2026-06-01"
+      ],
+      "expected_evidence": [
+        "Android Security Bulletin",
+        "Camera HAL security",
+        "vulnerabilities",
+        "patches"
       ],
       "risk_notes": []
     }

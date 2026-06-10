@@ -13,7 +13,7 @@
       "claims": [
         {
           "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"zh-CN-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develope",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
           "confidence": "medium"
         }
       ],
@@ -24,33 +24,10 @@
       "warnings": []
     },
     {
-      "id": "aa590c05e10ba56b",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "title": "Test camera images using automation",
-      "published_at": "2026-05-01",
-      "source_type": "release_note_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.89,
-      "android_hal_relevance": 0.89,
-      "ai_relevance": 0,
-      "technical_depth": 0.829,
-      "warnings": []
-    },
-    {
-      "id": "gemini-1a6772d1b49c2b9e",
-      "url": "https://lore.kernel.org/linux-media/20260609232255.13559-1-eng.juri@gmail.com/",
-      "title": "[PATCH 1/2] media: i2c: ov8865: Program the mode on stream start if needed - Jurison Murati",
-      "published_at": "2026-06-09",
+      "id": "gemini-0277cc6d431e9c1d",
+      "url": "https://lore.kernel.org/linux-media/20260610-v4l2-add-ftrace-v2-0-9756edf72ac1@collabora.com/",
+      "title": "[PATCH v2 0/9] v4l2: Add tracing for stateless codecs - Detlev Casanova",
+      "published_at": "2026-06-10",
       "source_type": "unknown",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -58,8 +35,8 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "[PATCH 1/2] media: i2c: ov8865: Program the mode on stream start if needed - Jurison Murati",
-          "evidence_text": "<html><head><title>[PATCH 1/2] media: i2c: ov8865: Program the mode on stream start if needed - Jurison Murati</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
+          "claim": "[PATCH v2 0/9] v4l2: Add tracing for stateless codecs - Detlev Casanova",
+          "evidence_text": "<html><head><title>[PATCH v2 0/9] v4l2: Add tracing for stateless codecs - Detlev Casanova</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=..",
           "confidence": "medium"
         }
       ],
@@ -70,10 +47,10 @@
       "warnings": []
     },
     {
-      "id": "gemini-4a98a2852603a041",
-      "url": "https://lore.kernel.org/linux-media/20260609232255.13559-2-eng.juri@gmail.com/",
-      "title": "[PATCH 2/2] media: i2c: ov8865: Drop PM runtime reference if stream start fails - Jurison Murati",
-      "published_at": "2026-06-09",
+      "id": "gemini-e08e8596d4aa7dda",
+      "url": "https://lore.kernel.org/linux-media/20260610-v4l2-add-ftrace-v2-4-9756edf72ac1@collabora.com/",
+      "title": "[PATCH v2 4/9] media: Add tgid and fd to the v4l2-requests trace fields - Detlev Casanova",
+      "published_at": "2026-06-10",
       "source_type": "unknown",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -81,31 +58,8 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "[PATCH 2/2] media: i2c: ov8865: Drop PM runtime reference if stream start fails - Jurison Murati",
-          "evidence_text": "<html><head><title>[PATCH 2/2] media: i2c: ov8865: Drop PM runtime reference if stream start fails - Jurison Murati</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-co",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.81,
-      "warnings": []
-    },
-    {
-      "id": "gemini-c03593a2f735c0ca",
-      "url": "https://lore.kernel.org/linux-media/20260609200931.670292-1-rhys@tumelty.co.uk/",
-      "title": "Re: [PATCH] media: atomisp: Fix local variable shadowing warnings - Rhys Tumelty",
-      "published_at": "2026-06-09",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Re: [PATCH] media: atomisp: Fix local variable shadowing warnings - Rhys Tumelty",
-          "evidence_text": "<html><head><title>Re: [PATCH] media: atomisp: Fix local variable shadowing warnings - Rhys Tumelty</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)",
+          "claim": "[PATCH v2 4/9] media: Add tgid and fd to the v4l2-requests trace fields - Detlev Casanova",
+          "evidence_text": "<html><head><title>[PATCH v2 4/9] media: Add tgid and fd to the v4l2-requests trace fields - Detlev Casanova</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sch",
           "confidence": "medium"
         }
       ],
@@ -116,10 +70,10 @@
       "warnings": []
     },
     {
-      "id": "gemini-bb0e15b6742fce01",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-      "published_at": "2026-05-27",
+      "id": "gemini-e6ebde2c2d5411c2",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+      "title": "Android Security Bulletin—June 2026 &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-06-01",
       "source_type": "official_blog",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -127,7 +81,7 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "claim": "Android Security Bulletin—June 2026 &nbsp;|&nbsp; Android Open Source Project",
           "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
           "confidence": "medium"
         }
@@ -135,106 +89,14 @@
       "camera_relevance": 0.7,
       "android_hal_relevance": 0.7,
       "ai_relevance": 0,
-      "technical_depth": 0.783,
+      "technical_depth": 0.737,
       "warnings": []
     },
     {
-      "id": "gemini-155d5af02bed46ce",
-      "url": "https://lore.kernel.org/linux-media/f793c665-ac99-4afe-a64b-bbd6d40044e5@kernel.org/",
-      "title": "Re: [PATCH 1/3] dt-bindings: media: qcom,qcm2290-venus: document shikra Iris compatible - Bryan O&#39;Donoghue",
-      "published_at": "2026-06-09",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Re: [PATCH 1/3] dt-bindings: media: qcom,qcm2290-venus: document shikra Iris compatible - Bryan O&#39;Donoghue",
-          "evidence_text": "<html><head><title>Re: [PATCH 1/3] dt-bindings: media: qcom,qcm2290-venus: document shikra Iris compatible - Bryan O&#39;Donoghue</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen a",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "gemini-4df3f6dafe0a617f",
-      "url": "https://lore.kernel.org/linux-media/20260609-shikra_vpu-v1-3-3a32bb38b080@oss.qualcomm.com/",
-      "title": "[PATCH 3/3] arm64: dts: qcom: shikra-evk: Enable Iris core - Vikash Garodia",
-      "published_at": "2026-06-09",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH 3/3] arm64: dts: qcom: shikra-evk: Enable Iris core - Vikash Garodia",
-          "evidence_text": "<html><head><title>[PATCH 3/3] arm64: dts: qcom: shikra-evk: Enable Iris core - Vikash Garodia</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhre",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "gemini-66264ce4c41a3fc2",
-      "url": "https://lore.kernel.org/linux-media/o3zjmtmordfzeimgowakpsz7jit7q4wsxb3j64gmvgkvre5y37@ztafjbpwqavd/",
-      "title": "Re: [PATCH 2/3] arm64: dts: qcom: shikra: Add Iris video codec node - Dmitry Baryshkov",
-      "published_at": "2026-06-09",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Re: [PATCH 2/3] arm64: dts: qcom: shikra: Add Iris video codec node - Dmitry Baryshkov",
-          "evidence_text": "<html><head><title>Re: [PATCH 2/3] arm64: dts: qcom: shikra: Add Iris video codec node - Dmitry Baryshkov</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "gemini-02739c85ed307b5d",
-      "url": "https://lore.kernel.org/linux-media/178102372666.1799417.2096397903236324900@freya/",
-      "title": "Re: [PATCH v5 06/10] media: imx219: Fix vertical blanking and exposure for analogue binning - Jai Luthra",
-      "published_at": "2026-06-08",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Re: [PATCH v5 06/10] media: imx219: Fix vertical blanking and exposure for analogue binning - Jai Luthra",
-          "evidence_text": "<html><head><title>Re: [PATCH v5 06/10] media: imx219: Fix vertical blanking and exposure for analogue binning - Jai Luthra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pr",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "6d223b5d8a496207",
-      "url": "https://lore.kernel.org/linux-media/20260609232255.13559-2-eng.juri@gmail.com/",
-      "title": "[PATCH 2/2] media: i2c: ov8865: Drop PM runtime reference if stream start fails",
-      "published_at": "2026-06-09T23:23:01Z",
+      "id": "03550949cb7eb459",
+      "url": "https://lore.kernel.org/linux-media/20260610-v4l2-add-ftrace-v2-4-9756edf72ac1@collabora.com/",
+      "title": "[PATCH v2 4/9] media: Add tgid and fd to the v4l2-requests trace fields",
+      "published_at": "2026-06-10T14:34:20Z",
       "source_type": "rss_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -242,22 +104,91 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "ov8865_s_stream() takes a runtime PM reference when enabling the stream, but returns without releasing it if ov8865_sw_standby() fails, leaving the reference unbalanced and the sensor powered indefinitely. Signed-off-by: Jurison Murati --- --- a/drivers/media/i2c/ov8865.c +++ b/drivers/media/i2c/ov8865.c @@ -2647,8 +2647,11 @@ ret = ov8865_sw_standby(sensor, !enable); mutex_unlock(&sensor->mutex); - if (ret) + if (ret) { + if (enable) + pm_runtime_put(sensor->dev); return ret; + } state->streami",
-          "evidence_text": "<html><head><title>[PATCH 2/2] media: i2c: ov8865: Drop PM runtime reference if stream start fails - Jurison Murati</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-co",
+          "claim": "With these fields, userspace can better track which trace event matches with a given stream. Even though the trace shows the PID (based on current->tgid), trace functions could be called from other contexts, therefore showing the wrong PID, or none at all. These will ensure that the trace event can be matched with the PID/FD that opened and configured the video device file. Signed-off-by: Detlev Casanova Reviewed-by: Nicolas Dufresne --- drivers/media/test-drivers/visl/visl-dec.c | 68 ++-- inclu",
+          "evidence_text": "<html><head><title>[PATCH v2 4/9] media: Add tgid and fd to the v4l2-requests trace fields - Detlev Casanova</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sch",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.63,
-      "android_hal_relevance": 0.63,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.692,
+      "camera_relevance": 0.51,
+      "android_hal_relevance": 0.51,
+      "ai_relevance": 0,
+      "technical_depth": 0.734,
       "warnings": []
     },
     {
-      "id": "3ca2b58b92a0b76d",
-      "url": "https://source.android.com/docs/compatibility",
-      "title": "Compatibility",
-      "published_at": "2026-03-01",
+      "id": "c1afac25d1cdf719",
+      "url": "https://lore.kernel.org/linux-media/20260610-v4l2-add-ftrace-v2-0-9756edf72ac1@collabora.com/",
+      "title": "[PATCH v2 0/9] v4l2: Add tracing for stateless codecs",
+      "published_at": "2026-06-10T14:34:10Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hi ! This patchset aims to improve codec event tracing in v4l2. The traces added in visl by Daniel Almeida are moved to the global trace events. They are adapted to trace each each field separately and not just the whole struct so that userspace can filter on different fields and libraries like libtracefs and libtraceevent can be used to list the fields instead of parsing the trace printk's. The trace event templates are also reworked to avoid long lines, but quoted string splits are kept as the",
+          "evidence_text": "<html><head><title>[PATCH v2 0/9] v4l2: Add tracing for stateless codecs - Detlev Casanova</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=..",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.51,
+      "android_hal_relevance": 0.51,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.734,
+      "warnings": []
+    },
+    {
+      "id": "gemini-1b79d633c003d9ec",
+      "url": "https://lore.kernel.org/linux-media/20260610142329.3836808-1-sumit.semwal@linaro.org/",
+      "title": "[PATCH] dma-buf: move system_cc_shared heap under separate Kconfig - Sumit Semwal",
+      "published_at": "2026-06-10",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH] dma-buf: move system_cc_shared heap under separate Kconfig - Sumit Semwal",
+          "evidence_text": "<html><head><title>[PATCH] dma-buf: move system_cc_shared heap under separate Kconfig - Sumit Semwal</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "5293b25a93416b26",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "title": "Top 3 updates for Android developer productivity",
+      "published_at": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Simona Milanovic, Developer Relations Engineer Every year, Google I/O brings new announcements and resources across ecosystems and products, including Android development. As development shifts toward AI and agent-assisted tooling, we’ve expanded our offerings to better support you, however you decide to build for Android. To help you stay up to date, here is a summary of the top 3 announcements for Android Developer Productivity at I/O . 1. Android CLI is now stable Android CLI is now",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.78,
+      "android_hal_relevance": 0.78,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.715,
+      "warnings": []
+    },
+    {
+      "id": "781679b8fb4b611e",
+      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
+      "title": "Media3 Release Notes - Media3 1.9.4",
+      "published_at": "May 16, 2026",
       "source_type": "release_note_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -265,15 +196,84 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "March 2026 Compatibility Compatibility Updated Buy and set up a Gen2 box with a revised chart and an updated manufacturing vendor contact number.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"it-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "claim": "May 16, 2026 Version 1.9.4 contains the following commits .",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"pt-BR-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develope",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.71,
-      "android_hal_relevance": 0.71,
+      "camera_relevance": 0.79,
+      "android_hal_relevance": 0.79,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.674,
+      "warnings": []
+    },
+    {
+      "id": "gemini-b564c567eef7ae59",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2025-05-29",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
       "ai_relevance": 0,
-      "technical_depth": 0.676,
+      "technical_depth": 0.672,
+      "warnings": []
+    },
+    {
+      "id": "df4d682cc51d783d",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "",
+      "source_type": "documentation_page",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "No RSS feed is configured. Use this source page as a change/release-note watch target.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"ja-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.53,
+      "android_hal_relevance": 0.53,
+      "ai_relevance": 0,
+      "technical_depth": 0.57,
+      "warnings": []
+    },
+    {
+      "id": "6c59b42e064fcb7a",
+      "url": "https://lore.kernel.org/linux-media/20260610142329.3836808-1-sumit.semwal@linaro.org/",
+      "title": "[PATCH] dma-buf: move system_cc_shared heap under separate Kconfig",
+      "published_at": "2026-06-10T14:23:48Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "From: Arnd Bergmann While system heap and system_cc_shared heap share a lot of code and hence the same source file, their users have different needs. system heap users need it to be a loadable module, while system_cc_shared heap users don't. Building as a loadable module breaks system_cc_shared heap on powerpc and s390 due to un-exported set_memory_encrypted / set_memory_decrypted functions. Fix these by reorganising code to put the system_cc_shared heap under a new Kconfig symbol, which allows",
+          "evidence_text": "<html><head><title>[PATCH] dma-buf: move system_cc_shared heap under separate Kconfig - Sumit Semwal</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.51,
+      "android_hal_relevance": 0.51,
+      "ai_relevance": 0,
+      "technical_depth": 0.554,
       "warnings": []
     }
   ]
