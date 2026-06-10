@@ -173,6 +173,17 @@ jobs:
         continue-on-error: true
         run: npm run generate
 
+      # Bind real article images before the publish-blocking image audit. The editor
+      # leaves selectedImage empty when image rights/relevance are uncertain; this
+      # deterministic repair binds the best valid imageCandidate per the audit rules
+      # so a valid image is used when one exists. The local fallback visual is kept
+      # only for articles that genuinely have no valid candidate.
+      - name: Bind valid article images
+        id: repair-images
+        if: always() && steps.generate.outcome == 'success' && steps.resolve-newsletter-date.outputs.date != ''
+        continue-on-error: true
+        run: npm run newsroom:repair-images -- --date "${{ steps.resolve-newsletter-date.outputs.date }}"
+
       - name: Generate HAL signal quality report
         if: always() && steps.resolve-newsletter-date.outputs.date != ''
         continue-on-error: true
