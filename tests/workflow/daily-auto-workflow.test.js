@@ -19,6 +19,10 @@ test('daily auto PR coordinator calls 01 02 03 via workflow_call', () => {
 
   assert.match(coordinator, /needs:\s*\[collect,\s*discover\]/);
 
+  // Source discovery is optional enrichment: its failure must not block generate.
+  // generate keeps sequencing after discover but runs whenever collect succeeded.
+  assert.match(coordinator, /if:\s*\$\{\{\s*always\(\)\s*&&\s*needs\.collect\.result\s*==\s*'success'\s*\}\}/);
+
   assert.match(coordinator, /^\s*schedule:/m);
   assert.match(coordinator, /cron: "0 0 \* \* \*"/);
 

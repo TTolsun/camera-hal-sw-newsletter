@@ -38,6 +38,12 @@ jobs:
 
   generate:
     needs: [collect, discover]
+    # Source discovery (job 02) is an optional enrichment stage that proposes new
+    # sources; its failure must not hard-block the daily newsletter. Run generate
+    # whenever collect succeeded, regardless of discover's result. Generate reads
+    # collect's committed candidates in artifact mode and degrades gracefully when
+    # discover's merged candidates are absent.
+    if: ${{ always() && needs.collect.result == 'success' }}
     uses: ./.github/workflows/03-newsletters-editor-pr.yml
     with:
       newsletter_date: ${{ needs.collect.outputs.date }}
