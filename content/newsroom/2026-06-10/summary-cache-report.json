@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-10",
+  "generated_at": "2026-06-10T15:34:13.480Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 4,
+    "hit_count": 0,
+    "miss_count": 4,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 4
+    }
+  ],
+  "entries": [
+    {
+      "title": "[PATCH v2 0/9] v4l2: Add tracing for stateless codecs",
+      "url": "https://lore.kernel.org/linux-media/20260610-v4l2-add-ftrace-v2-0-9756edf72ac1@collabora.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-10T14:34:10Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260610-v4l2-add-ftrace-v2-0-9756edf72ac1@collabora.com",
+        "url_hash": "6e010e0ce1d677204abe5fa2df1974fa8cf1ae14875c4e68573a65b7931d25be",
+        "published_date": "2026-06-10T14:34:10Z",
+        "content_hash": "ea7b60b993b8259910b3a58de7536fb9c5348d344c52f53046b18d693c8034ca"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2 4/9] media: Add tgid and fd to the v4l2-requests trace fields",
+      "url": "https://lore.kernel.org/linux-media/20260610-v4l2-add-ftrace-v2-4-9756edf72ac1@collabora.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-10T14:34:20Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260610-v4l2-add-ftrace-v2-4-9756edf72ac1@collabora.com",
+        "url_hash": "03e768e683e2e46a4df514443d50fe73e67782abfc3bd64e2fb11f18932997a0",
+        "published_date": "2026-06-10T14:34:20Z",
+        "content_hash": "58cc73d98283477f86a8a6117cb2b55da39f40a1b3a8e140e7981315aa64d4f8"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/tools/agents/android-cli",
+        "url_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "url_hash": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

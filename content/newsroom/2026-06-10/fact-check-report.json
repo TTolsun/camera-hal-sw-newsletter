@@ -1,0 +1,59 @@
+{
+  "status": "NEEDS_FIX",
+  "must_fix": [
+    {
+      "location": "sections[0].background",
+      "problem": "sections[0].background 필드는 더 이상 사용되지 않는 레거시 필드입니다. 대신 article_sections.background_context를 사용해야 합니다.",
+      "suggestion": "sections[0].background 필드를 제거하세요. 내용은 article_sections.background_context에 이미 잘 포함되어 있습니다.",
+      "source_url": "docs/editorial-policy.md"
+    },
+    {
+      "location": "sections[0].why_it_matters",
+      "problem": "sections[0].why_it_matters 필드는 더 이상 사용되지 않는 레거시 필드입니다. 대신 article_sections.hal_driver_impact 또는 public_article.editorial_story.why_it_matters를 사용해야 합니다.",
+      "suggestion": "sections[0].why_it_matters 필드를 제거하세요. 내용은 article_sections.hal_driver_impact와 public_article.editorial_story.why_it_matters에 이미 잘 포함되어 있습니다.",
+      "source_url": "docs/editorial-policy.md"
+    },
+    {
+      "location": "sections[0].camera_hal_perspective",
+      "problem": "sections[0].camera_hal_perspective 필드는 더 이상 사용되지 않는 레거시 필드입니다. 대신 article_sections.hal_driver_impact를 사용해야 합니다.",
+      "suggestion": "sections[0].camera_hal_perspective 필드를 제거하세요. 내용은 article_sections.hal_driver_impact에 이미 잘 포함되어 있습니다.",
+      "source_url": "docs/editorial-policy.md"
+    },
+    {
+      "location": "sections[0].team_summary",
+      "problem": "sections[0].team_summary 필드는 더 이상 사용되지 않는 레거시 필드입니다. 대신 article_sections.team_share_points를 사용해야 합니다.",
+      "suggestion": "sections[0].team_summary 필드를 제거하세요. 내용은 article_sections.team_share_points에 이미 잘 포함되어 있습니다.",
+      "source_url": "docs/editorial-policy.md"
+    },
+    {
+      "location": "sections[0].sources",
+      "problem": "sections[0].sources 필드는 더 이상 사용되지 않는 레거시 필드입니다. 대신 public_article.source_links를 사용해야 합니다.",
+      "suggestion": "sections[0].sources 필드를 제거하세요. 내용은 public_article.source_links에 이미 잘 포함되어 있습니다.",
+      "source_url": "docs/editorial-policy.md"
+    },
+    {
+      "location": "sections[0].actionability_level",
+      "problem": "sections[0].actionability_level 필드는 더 이상 사용되지 않는 레거시 필드입니다. 대신 hal_signal_capsule.actionability_level을 사용해야 합니다.",
+      "suggestion": "sections[0].actionability_level 필드를 제거하세요. 내용은 hal_signal_capsule에 이미 잘 포함되어 있습니다.",
+      "source_url": "docs/editorial-policy.md"
+    },
+    {
+      "location": "sections[0].effective_actionability_level",
+      "problem": "sections[0].effective_actionability_level 필드는 더 이상 사용되지 않는 레거시 필드입니다. 대신 hal_signal_capsule.effective_actionability_level을 사용해야 합니다.",
+      "suggestion": "sections[0].effective_actionability_level 필드를 제거하세요. 내용은 hal_signal_capsule에 이미 잘 포함되어 있습니다.",
+      "source_url": "docs/editorial-policy.md"
+    }
+  ],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "Android 개발자 생산성 도구 'Android skills' 저장소 확장 및 CameraX 마이그레이션 지원 추가",
+      "publishable": true,
+      "reason": "AI 도구 지원으로 CameraX 마이그레이션이 가속화될 것이라는 점을 명확히 설명하고, HAL 엔지니어가 검증해야 할 구체적인 스트림 조합 및 성능 측정 항목을 제시하여 실질적인 가치를 제공합니다."
+    }
+  ],
+  "final_comment": "전반적으로 잘 작성된 기사입니다. 레거시 필드들을 제거하면 됩니다."
+}

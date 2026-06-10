@@ -1,0 +1,525 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-10",
+  "score": 81,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "NEEDS_FIX",
+  "summary": "Resolve source gaps, fact-check must-fix items, composition blockers, and any article the fact-checker marked not useful to a Camera HAL SW engineer before publishing.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Android 개발자 생산성 도구 'Android skills' 저장소 확장 및 CameraX 마이그레이션 지원 추가",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "source-integrity",
+      "points": 15,
+      "reason": "Fact checker returned 7 must_fix item(s).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "Android 개발자 생산성 도구 'Android skills' 저장소 확장 및 CameraX 마이그레이션 지원 추가",
+      "category": "android_platform_camera_adjacent",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+          "url": "https://developer.android.com/tools/agents/android-cli#skills-add"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "Android 개발자 생산성 도구 'Android skills' 저장소 확장 및 CameraX 마이그레이션 지원 추가",
+        "source_candidate_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "source_candidate_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "editorial_priority": 3,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "framework_adjacent",
+      "hal_impact_axes": [
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 3,
+    "total_claims": 3,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 1,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "Android 개발자 생산성 도구 'Android skills' 저장소 확장 및 CameraX 마이그레이션 지원 추가",
+      "claim_id": "claim:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:blog-announcement",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "2026년 6월 9일, Android Developers Blog를 통해 개발자 생산성 도구 업데이트가 발표되었습니다.",
+      "evidence_ids": [
+        "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0"
+      ],
+      "resolved_evidence_ids": [
+        "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0",
+          "resolved_evidence_id": "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Android 개발자 생산성 도구 'Android skills' 저장소 확장 및 CameraX 마이그레이션 지원 추가",
+      "claim_id": "claim:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:skills-add",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Android CLI 및 GitHub를 통해 제공되는 Android skills 저장소에 'Migration to CameraX' 관련 스킬이 추가되었습니다.",
+      "evidence_ids": [
+        "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0"
+      ],
+      "resolved_evidence_ids": [
+        "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0",
+          "resolved_evidence_id": "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Android 개발자 생산성 도구 'Android skills' 저장소 확장 및 CameraX 마이그레이션 지원 추가",
+      "claim_id": "claim:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:skills-definition",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Android skills는 LLM(Large Language Model)이 특정 개발 패턴 및 모범 사례를 따르도록 전문 워크플로우와 도메인 지식을 제공하는 역할을 합니다.",
+      "evidence_ids": [
+        "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0"
+      ],
+      "resolved_evidence_ids": [
+        "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0",
+          "resolved_evidence_id": "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 1,
+    "strong_signal_count": 0,
+    "usable_signal_count": 1,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 1,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 1,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "camerax_app_compatibility": 1
+    },
+    "actionability_level_counts": {
+      "none": 1
+    },
+    "effective_actionability_level_counts": {
+      "concrete_check": 1
+    },
+    "signal_quality_status_counts": {
+      "usable_signal": 1
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "Android 개발자 생산성 도구 'Android skills' 저장소 확장 및 CameraX 마이그레이션 지원 추가",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "hal_impact_axes": [
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "Contains source-bound API behavior action evidence: api,stream_buffer_metadata.",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 4 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 업데이트는 Camera HAL 인터페이스나 드라이버 동작에 직접적인 변경을 가져오지 않습니다.",
+        "AI 기능이 카메라 데이터 경로, 온디바이스 추론, NPU/GPU 스케줄링 등에 직접적인 영향을 미친다는 증거는 없습니다."
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 1,
+    "briefing_count": 3,
+    "camera_article_count": 1,
+    "legacy_regex_camera_article_count": 1,
+    "expanded_scope_article_count": 1,
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 1,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 0,
+    "publishable_scope_count": 1,
+    "composition_mode": "NORMAL",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "Android 개발자 생산성 도구 'Android skills' 저장소 확장 및 CameraX 마이그레이션 지원 추가",
+        "source_candidate_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "source_candidate_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "editorial_priority": 3,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 1,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 1,
+      "multimedia": 0,
+      "platform": 0,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android_platform_camera_adjacent"
+      ],
+      "multimedia": [
+        "android_multimedia_camera_output"
+      ],
+      "platform": [
+        "soc_platform_signal"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 1,
+    "fact_check_status": "NEEDS_FIX",
+    "must_fix_count": 7,
+    "source_gap_count": 0,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 1,
+    "blocking_deduction_categories": [
+      "source-integrity"
+    ],
+    "hard_fail_count": 1,
+    "soft_deduction_count": 4,
+    "article_gate_counts": {
+      "PASS": 1,
+      "DEMOTE": 0,
+      "FAIL": 0
+    },
+    "article_section_contract": {
+      "complete_count": 1,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {},
+      "limitation_visibility_counts": {
+        "none": 1
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 3,
+      "total_claims": 3,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 1,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 1,
+      "strong_signal_count": 0,
+      "usable_signal_count": 1,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 1,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 0,
+      "main_articles_with_concrete_action": 1,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "camerax_app_compatibility": 1
+      },
+      "actionability_level_counts": {
+        "none": 1
+      },
+      "effective_actionability_level_counts": {
+        "concrete_check": 1
+      },
+      "signal_quality_status_counts": {
+        "usable_signal": 1
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "Android 개발자 생산성 도구 'Android skills' 저장소 확장 및 CameraX 마이그레이션 지원 추가",
+        "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "hal_impact_axes": [
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "none",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "Contains source-bound API behavior action evidence: api,stream_buffer_metadata.",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 4 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 업데이트는 Camera HAL 인터페이스나 드라이버 동작에 직접적인 변경을 가져오지 않습니다.",
+          "AI 기능이 카메라 데이터 경로, 온디바이스 추론, NPU/GPU 스케줄링 등에 직접적인 영향을 미친다는 증거는 없습니다."
+        ],
+        "soc_signal_type": "accelerator_camera_workload",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "editorial-story",
+        "count": 3
+      },
+      {
+        "category": "image-fallback",
+        "count": 1
+      },
+      {
+        "category": "source-integrity",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}
