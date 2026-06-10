@@ -59,8 +59,8 @@
       "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "canonical_title": "CameraX Release Notes - CameraX 1.6.0",
-      "candidate_count": 3,
-      "duplicate_count": 2,
+      "candidate_count": 4,
+      "duplicate_count": 3,
       "candidates": [
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
@@ -71,7 +71,14 @@
         },
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "title": "CameraX Release Notes - CameraX 1.6.1",
+          "title": "1.6.1",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "title": "1.3.0-beta02",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -199,20 +206,13 @@
       "cluster_key": "https://source.android.com/docs/compatibility",
       "canonical_url": "https://source.android.com/docs/compatibility",
       "canonical_title": "Compatibility",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility",
           "title": "Compatibility",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://source.android.com/docs/compatibility",
-          "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -417,20 +417,13 @@
       "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel",
       "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
       "canonical_title": "The libcamera-devel Archives",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
           "title": "The libcamera-devel Archives",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
-          "title": "The libcamera-devel Archives",
-          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -475,20 +468,13 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
           "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
           "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        },
-        {
-          "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
-          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -540,20 +526,13 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
           "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
           "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        },
-        {
-          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-          "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
-          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -581,20 +560,13 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260609200931.670292-1-rhys@tumelty.co.uk",
       "canonical_url": "https://lore.kernel.org/linux-media/20260609200931.670292-1-rhys@tumelty.co.uk/",
       "canonical_title": "Re: [PATCH] media: atomisp: Fix local variable shadowing warnings",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260609200931.670292-1-rhys@tumelty.co.uk/",
           "title": "Re: [PATCH] media: atomisp: Fix local variable shadowing warnings",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260609200931.670292-1-rhys@tumelty.co.uk/",
-          "title": "Re: [PATCH] media: atomisp: Fix local variable shadowing warnings - Rhys Tumelty",
-          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -721,47 +693,6 @@
       ]
     },
     {
-      "cluster_id": "d4a0acfc0ac6ad6e",
-      "cluster_key": "https://developer.android.com/training/data-storage/shared/photo-picker",
-      "canonical_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-      "canonical_title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "e12f3fd8b75d5b1b",
-      "cluster_key": "https://developer.android.com/reference/android/provider/mediastore",
-      "canonical_url": "https://developer.android.com/reference/android/provider/MediaStore",
-      "canonical_title": "MediaStore &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/android/provider/MediaStore",
-          "title": "MediaStore &nbsp;|&nbsp; API reference &nbsp;|&nbsp; Android Developers",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "45111a50490175f2",
       "cluster_key": "https://developer.android.com/media/camera/camerax",
       "canonical_url": "https://developer.android.com/media/camera/camerax",
@@ -796,40 +727,6 @@
       ]
     },
     {
-      "cluster_id": "eb09ee752aa3ba14",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/cameraeffect",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
-      "canonical_title": "CameraEffect",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
-          "title": "CameraEffect",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "520fe52c7e358499",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/imageanalysis",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
-      "canonical_title": "ImageAnalysis",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
-          "title": "ImageAnalysis",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "83920430c1be5b76",
       "cluster_key": "https://source.android.com/docs/whatsnew/release-notes",
       "canonical_url": "https://source.android.com/docs/whatsnew/release-notes",
@@ -842,6 +739,40 @@
           "title": "Release notes",
           "canonical": true,
           "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7317dd637c497758",
+      "cluster_key": "https://source.android.com/docs/security/bulletin",
+      "canonical_url": "https://source.android.com/docs/security/bulletin",
+      "canonical_title": "Bulletins",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin",
+          "title": "Bulletins",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0b0026aa4b152e98",
+      "cluster_key": "https://lists.libcamera.org/listinfo/libcamera-devel",
+      "canonical_url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+      "canonical_title": "more information about this list",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "title": "more information about this list",
+          "canonical": true,
+          "reliability": "project-official",
           "manual_seed": false
         }
       ]

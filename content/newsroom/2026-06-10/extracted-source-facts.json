@@ -13,7 +13,7 @@
       "claims": [
         {
           "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"id-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
           "confidence": "medium"
         }
       ],
@@ -93,29 +93,6 @@
       "warnings": []
     },
     {
-      "id": "gemini-c03593a2f735c0ca",
-      "url": "https://lore.kernel.org/linux-media/20260609200931.670292-1-rhys@tumelty.co.uk/",
-      "title": "Re: [PATCH] media: atomisp: Fix local variable shadowing warnings - Rhys Tumelty",
-      "published_at": "2026-06-09",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Re: [PATCH] media: atomisp: Fix local variable shadowing warnings - Rhys Tumelty",
-          "evidence_text": "<html><head><title>Re: [PATCH] media: atomisp: Fix local variable shadowing warnings - Rhys Tumelty</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.81,
-      "warnings": []
-    },
-    {
       "id": "gemini-bb0e15b6742fce01",
       "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
@@ -128,7 +105,7 @@
       "claims": [
         {
           "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"fr-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
           "confidence": "medium"
         }
       ],
@@ -254,10 +231,10 @@
       "warnings": []
     },
     {
-      "id": "3ca2b58b92a0b76d",
-      "url": "https://source.android.com/docs/compatibility",
-      "title": "Compatibility",
-      "published_at": "2026-03-01",
+      "id": "781679b8fb4b611e",
+      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
+      "title": "Media3 Release Notes - Media3 1.9.4",
+      "published_at": "May 16, 2026",
       "source_type": "release_note_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -265,15 +242,38 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "March 2026 Compatibility Compatibility Updated Buy and set up a Gen2 box with a revised chart and an updated manufacturing vendor contact number.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"fa-x-mtfrom-en\"\n      dir=\"rtl\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "claim": "May 16, 2026 Version 1.9.4 contains the following commits .",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.71,
-      "android_hal_relevance": 0.71,
+      "camera_relevance": 0.79,
+      "android_hal_relevance": 0.79,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.674,
+      "warnings": []
+    },
+    {
+      "id": "5b574cd1a91f8a3e",
+      "url": "https://lore.kernel.org/linux-media/20260609232255.13559-1-eng.juri@gmail.com/",
+      "title": "[PATCH 1/2] media: i2c: ov8865: Program the mode on stream start if needed",
+      "published_at": "2026-06-09T23:23:00Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The sensor registers are only written in the runtime PM resume handler; ov8865_set_fmt() merely stores the requested mode, relying on the sensor being runtime suspended between uses so that the next resume applies it. That assumption breaks when something keeps the sensor powered. On IPU3 platforms, ipu_bridge instantiates the VCM device with a DL_FLAG_PM_RUNTIME device link to the sensor, so a userspace process holding the VCM subdev open (e.g. wireplumber's camera monitor) pins the sensor runt",
+          "evidence_text": "<html><head><title>[PATCH 1/2] media: i2c: ov8865: Program the mode on stream start if needed - Jurison Murati</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
       "ai_relevance": 0,
-      "technical_depth": 0.676,
+      "technical_depth": 0.668,
       "warnings": []
     }
   ]

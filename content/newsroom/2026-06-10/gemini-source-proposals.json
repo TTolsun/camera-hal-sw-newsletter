@@ -4,148 +4,152 @@
   "newsletter_date": "2026-06-10",
   "proposals": [
     {
-      "proposal_id": "camera-hal-sw-20260610-001",
-      "topic_gap": "Recent updates to the Android Camera HAL and related components, focusing on performance, new features, or bug fixes.",
-      "source_family": "Official Android media/camera-output discovery intent",
+      "proposal_id": "camera-x-1.6.0-release",
+      "topic_gap": "CameraX 1.6.0 release notes detailing new features, bug fixes, or API changes relevant to camera output or media pipeline.",
+      "source_family": "camerax-release-notes",
       "allowed_domains": [],
       "search_keywords": [
+        "CameraX 1.6.0",
         "CameraX release notes",
-        "Android Camera HAL updates",
-        "Camera2 API changes"
+        "CameraX camera output",
+        "CameraX media pipeline"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
       ],
       "expected_evidence": [
-        "CameraX release notes",
-        "Specific version updates with bug fixes or new features related to camera output or pipeline."
+        "CameraX 1.6.0 release notes",
+        "New features or bug fixes for camera output",
+        "API changes impacting media pipeline"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260610-002",
-      "topic_gap": "Changes in Android's media pipeline, specifically concerning camera input and output processing, A/V sync, and playback integration.",
-      "source_family": "Official Android media/camera-output discovery intent",
+      "proposal_id": "linux-media-ov8865-patch",
+      "topic_gap": "Kernel patch for the ov8865 camera driver addressing stream start failures or programming modes, indicating potential improvements or fixes in camera HAL interaction.",
+      "source_family": "lore-linux-media-list",
       "allowed_domains": [],
       "search_keywords": [
+        "linux-media ov8865 patch",
+        "camera driver stream start",
+        "ov8865 kernel patch"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260609232255.13559-1-eng.juri@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260609232255.13559-2-eng.juri@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Kernel patch for ov8865 driver",
+        "Fixes for stream start",
+        "Mode programming on stream start",
+        "Camera HAL interaction"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-imx219-patch",
+      "topic_gap": "Kernel patch for the imx219 camera driver fixing vertical blanking and exposure for analogue binning, suggesting improvements in image sensor data processing.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux-media imx219 patch",
+        "imx219 kernel driver",
+        "analogue binning fix"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/178102372666.1799417.2096397903236324900@freya/"
+      ],
+      "expected_evidence": [
+        "Kernel patch for imx219 driver",
+        "Vertical blanking fix",
+        "Exposure fix for analogue binning",
+        "Image sensor data processing"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-qcom-qcm2290-venus-patch",
+      "topic_gap": "Kernel device tree binding patch for qcom,qcm2290-venus, documenting a new compatible device (shikra Iris), indicating potential new hardware support for camera or media processing.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux-media qcom qcm2290 venus patch",
+        "shikra Iris camera",
+        "qcm2290 venus device tree"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/f793c665-ac99-4afe-a64b-bbd6d40044e5@kernel.org/"
+      ],
+      "expected_evidence": [
+        "Kernel dt-bindings patch",
+        "qcom,qcm2290-venus",
+        "shikra Iris compatible",
+        "New hardware support for camera/media"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-qcom-shikra-iris-patch",
+      "topic_gap": "Kernel patches for arm64 dts enabling the Iris video codec node and core on the shikra platform, suggesting advancements in Qualcomm's media processing capabilities for camera devices.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux-media qcom shikra iris patch",
+        "shikra video codec",
+        "Qualcomm camera processing"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260609-shikra_vpu-v1-3-3a32bb38b080@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/o3zjmtmordfzeimgowakpsz7jit7q4wsxb3j64gmvgkvre5y37@ztafjbpwqavd/"
+      ],
+      "expected_evidence": [
+        "Kernel DTS patches",
+        "arm64 dts shikra",
+        "Iris video codec node",
+        "Qualcomm media processing"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "media3-1.10.1-release",
+      "topic_gap": "Media3 1.10.1 release notes detailing updates to media playback, recording, or A/V synchronization features relevant to camera-generated media.",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3 1.10.1",
         "Media3 release notes",
-        "Android media pipeline",
-        "camera output",
-        "A/V sync"
+        "Media3 camera output",
+        "Media3 A/V sync"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
       ],
       "expected_evidence": [
-        "Media3 release notes",
-        "Updates related to camera output, A/V synchronization, or integration with camera-generated media."
+        "Media3 1.10.1 release notes",
+        "Updates to media playback",
+        "Recording features",
+        "A/V sync improvements"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260610-003",
-      "topic_gap": "Improvements or changes in how Android applications access and manage camera-generated media through the Photo Picker or MediaStore.",
-      "source_family": "Official Android media/camera-output discovery intent",
+      "proposal_id": "camera-its-box-update",
+      "topic_gap": "Update on the Camera ITS box and automation testing for camera images, indicating advancements in camera hardware validation and quality assurance.",
+      "source_family": "aosp-site-updates",
       "allowed_domains": [],
       "search_keywords": [
-        "Photo Picker updates",
-        "MediaStore changes",
-        "camera output access",
-        "gallery integration"
+        "Camera ITS box",
+        "Android camera testing",
+        "camera image automation"
       ],
       "candidate_urls": [
-        "https://developer.android.com/training/data-storage/shared/photo-picker",
-        "https://developer.android.com/reference/android/provider/MediaStore"
-      ],
-      "expected_evidence": [
-        "Documentation updates for Photo Picker or MediaStore.",
-        "Information on new features or changes affecting camera output access or gallery integration."
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260610-004",
-      "topic_gap": "Low-level camera driver or hardware integration changes within the Linux kernel, particularly affecting camera sensors and media pipelines.",
-      "source_family": "Linux kernel media subsystem",
-      "allowed_domains": [],
-      "search_keywords": [
-        "linux kernel media driver",
-        "V4L2 updates",
-        "camera sensor driver",
-        "ISP driver changes"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260609232255.13559-2-eng.juri@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260609232255.13559-1-eng.juri@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260609200931.670292-1-rhys@tumelty.co.uk/",
-        "https://lore.kernel.org/linux-media/178102372666.1799417.2096397903236324900@freya/",
-        "https://lore.kernel.org/linux-media/f793c665-ac99-4afe-a64b-bbd6d40044e5@kernel.org/",
-        "https://lore.kernel.org/linux-media/20260609-shikra_vpu-v1-3-3a32bb38b080@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/o3zjmtmordfzeimgowakpsz7jit7q4wsxb3j64gmvgkvre5y37@ztafjbpwqavd/"
-      ],
-      "expected_evidence": [
-        "Kernel patches related to camera drivers (e.g., ov8865, imx219, qcom venus).",
-        "Changes in the media subsystem that impact camera sensor integration or stream management."
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260610-005",
-      "topic_gap": "Updates and discussions on the libcamera project, which is increasingly relevant for modern camera stacks on Linux and potentially Android.",
-      "source_family": "Linux camera stack",
-      "allowed_domains": [],
-      "search_keywords": [
-        "libcamera-devel mailing list",
-        "libcamera updates",
-        "camera pipeline development"
-      ],
-      "candidate_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/"
-      ],
-      "expected_evidence": [
-        "Mailing list discussions or announcements related to libcamera development.",
-        "Information on new features, bug fixes, or camera support within libcamera."
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260610-006",
-      "topic_gap": "Recent advancements or discussions in C++ that could impact camera software development, such as new language features or performance optimizations.",
-      "source_family": "C++ language and tooling",
-      "allowed_domains": [],
-      "search_keywords": [
-        "C++26 features",
-        "GCC release notes",
-        "C++ performance optimizations"
-      ],
-      "candidate_urls": [
-        "https://isocpp.org//blog/2026/04/gcc-16.1",
-        "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
-      ],
-      "expected_evidence": [
-        "Release notes for C++ compilers (e.g., GCC 16.1).",
-        "Articles discussing new C++ features (e.g., C++26 reflection) and their potential applications."
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260610-007",
-      "topic_gap": "Updates related to Android compatibility and testing, specifically for camera hardware and features.",
-      "source_family": "Android Compatibility Program",
-      "allowed_domains": [],
-      "search_keywords": [
-        "Android Compatibility Definition Document",
-        "Camera ITS updates",
-        "Android CTS camera tests"
-      ],
-      "candidate_urls": [
-        "https://source.android.com/docs/compatibility",
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "Updates to the Android Compatibility Definition Document (CDD).",
-        "Information on Camera ITS (Instrumentation Test Suite) or CTS (Compatibility Test Suite) changes relevant to camera."
+        "Camera ITS box updates",
+        "Automation testing for camera images",
+        "Camera hardware validation",
+        "Quality assurance for camera output"
       ],
       "risk_notes": []
     }
