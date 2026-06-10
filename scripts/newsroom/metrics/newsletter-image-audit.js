@@ -766,9 +766,6 @@ async function buildNewsletterImageAuditReport(options = {}) {
     sum + article.candidateEvidence.filter(item => item.reasonCode === 'missing_attribution').length, 0);
   const selectedImageRenderMismatchCount = mismatches.length;
   const isPublishTarget = publishTarget(issue || {}, status);
-  const selectedMissingWithValidCandidates = articles.filter(article =>
-    article.valid_image_candidate_count > 0 && !article.selectedImage
-  ).length;
   const selectedImageWithoutValidCandidateArticles = articles.filter(article =>
     article.selected_image_without_valid_candidate
   );
@@ -797,9 +794,13 @@ async function buildNewsletterImageAuditReport(options = {}) {
       warnings.push(item);
     }
   }
+  // An article with no editor-selected image safely renders the local fallback visual
+  // (the designed fallback-image contract), so it is a repairable quality nudge tracked
+  // via empty_selected_with_candidates_count / repairable_articles, not a hard publish
+  // blocker. Genuine image-safety problems stay blocking: a selected image without a
+  // valid candidate, and a selected image missing from the rendered output (mismatch).
   const publishBlockingIssueCount = isPublishTarget
-    ? selectedMissingWithValidCandidates + selectedImageRenderMismatchCount
-      + selectedImageWithoutValidCandidateArticles.length
+    ? selectedImageRenderMismatchCount + selectedImageWithoutValidCandidateArticles.length
     : selectedImageRenderMismatchCount;
 
   return {

@@ -209,6 +209,27 @@ test('audit keeps publish-target render mismatch blocking for normal public issu
   assert.equal(report.summary.publish_blocking_issue_count, 1);
 });
 
+test('audit does not publish-block an article that safely uses the local fallback when no image was selected', async () => {
+  const root = tempRoot('newsletter-image-empty-selected-fallback-');
+  const date = '2026-05-29';
+  const fixture = issue(date, {
+    selectedImage: '',
+    imageCandidates: [validImage()]
+  });
+  fixture.publication_mode = 'public';
+  writeIssue(root, fixture);
+
+  const report = await buildNewsletterImageAuditReport({ root, date });
+
+  assert.equal(report.summary.valid_image_candidate_count, 1);
+  assert.equal(report.summary.selected_image_count, 0);
+  assert.equal(report.summary.empty_selected_with_candidates_count, 1);
+  // No editor-selected image safely renders the local fallback visual: a repairable
+  // quality nudge tracked above, not a hard publish blocker.
+  assert.equal(report.summary.publish_blocking_issue_count, 0);
+  assert.equal(report.repairable, true);
+});
+
 test('fallback_public audit uses editor draft as public issue source of truth', async () => {
   const root = tempRoot('newsletter-image-fallback-public-scope-');
   const date = '2026-05-27';
