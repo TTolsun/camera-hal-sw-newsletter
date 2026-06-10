@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-10",
   "validations": [
     {
-      "proposal_id": "camera-x-1.6.0-release",
+      "proposal_id": "camera-hal-sw-20260610-001",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "accepted": false,
@@ -18,15 +18,21 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "linux-media-ov8865-patch",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260609232255.13559-1-eng.juri@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260609232255.13559-1-eng.juri@gmail.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
+      "proposal_id": "camera-hal-sw-20260610-001",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "linux-media-ov8865-patch",
+      "proposal_id": "camera-hal-sw-20260610-002",
       "candidate_url": "https://lore.kernel.org/linux-media/20260609232255.13559-2-eng.juri@gmail.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260609232255.13559-2-eng.juri@gmail.com/",
       "accepted": true,
@@ -34,7 +40,23 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "linux-media-imx219-patch",
+      "proposal_id": "camera-hal-sw-20260610-002",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260609232255.13559-1-eng.juri@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260609232255.13559-1-eng.juri@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-002",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260609200931.670292-1-rhys@tumelty.co.uk/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260609200931.670292-1-rhys@tumelty.co.uk/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-002",
       "candidate_url": "https://lore.kernel.org/linux-media/178102372666.1799417.2096397903236324900@freya/",
       "normalized_url": "https://lore.kernel.org/linux-media/178102372666.1799417.2096397903236324900@freya/",
       "accepted": true,
@@ -42,7 +64,7 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "linux-media-qcom-qcm2290-venus-patch",
+      "proposal_id": "camera-hal-sw-20260610-002",
       "candidate_url": "https://lore.kernel.org/linux-media/f793c665-ac99-4afe-a64b-bbd6d40044e5@kernel.org/",
       "normalized_url": "https://lore.kernel.org/linux-media/f793c665-ac99-4afe-a64b-bbd6d40044e5@kernel.org/",
       "accepted": true,
@@ -50,7 +72,7 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "linux-media-qcom-shikra-iris-patch",
+      "proposal_id": "camera-hal-sw-20260610-002",
       "candidate_url": "https://lore.kernel.org/linux-media/20260609-shikra_vpu-v1-3-3a32bb38b080@oss.qualcomm.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260609-shikra_vpu-v1-3-3a32bb38b080@oss.qualcomm.com/",
       "accepted": true,
@@ -58,7 +80,7 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "linux-media-qcom-shikra-iris-patch",
+      "proposal_id": "camera-hal-sw-20260610-002",
       "candidate_url": "https://lore.kernel.org/linux-media/o3zjmtmordfzeimgowakpsz7jit7q4wsxb3j64gmvgkvre5y37@ztafjbpwqavd/",
       "normalized_url": "https://lore.kernel.org/linux-media/o3zjmtmordfzeimgowakpsz7jit7q4wsxb3j64gmvgkvre5y37@ztafjbpwqavd/",
       "accepted": true,
@@ -66,23 +88,17 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "media3-1.10.1-release",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "androidx-media3-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-media3-release",
-      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
-      "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "camera-its-box-update",
+      "proposal_id": "camera-hal-sw-20260610-003",
       "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260610-003",
+      "candidate_url": "https://source.android.com/docs/compatibility",
+      "normalized_url": "https://source.android.com/docs/compatibility",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "android-compatibility-definition-document"
@@ -90,6 +106,6 @@
   ],
   "counts": {
     "discovered_not_extractable": 2,
-    "accepted": 7
+    "accepted": 9
   }
 }

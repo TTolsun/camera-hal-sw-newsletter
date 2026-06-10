@@ -12,10 +12,9 @@
 | blocked_candidate | 0.475 | Android UI Development is Compose First | https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html |
 | blocked_candidate | 0.601 | Top AI on Android updates for building intelligent experiences from Google I/O ‘26 | https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html |
 | blocked_candidate | 0.601 | Android CLI Now Stable 1.0: Accelerate developing for Android using any agent | https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html |
+| review_candidate | 0.78 | CameraX Release Notes - CameraX 1.6.1 | https://developer.android.com/jetpack/androidx/releases/camera#1.6.1 |
 | review_candidate | 0.676 | Compatibility | https://source.android.com/docs/compatibility |
 | blocked_candidate | 0.618 | Camera &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/core/camera |
-| blocked_candidate | 0.552 | 1.6.1 | https://developer.android.com/jetpack/androidx/releases/camera#1.6.1 |
-| blocked_candidate | 0.552 | 1.3.0-beta02 | https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02 |
 | blocked_candidate | 0.552 | 1.4.0-alpha07 | https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07 |
 | blocked_candidate | 0.57 | What&apos;s new &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/whatsnew |
 | blocked_candidate | 0.57 | Android Compatibility Definition Document &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cdd |
@@ -42,16 +41,19 @@
 | blocked_candidate | 0.596 | Re: [PATCH 2/3] arm64: dts: qcom: shikra: Add Iris video codec node | https://lore.kernel.org/linux-media/o3zjmtmordfzeimgowakpsz7jit7q4wsxb3j64gmvgkvre5y37@ztafjbpwqavd/ |
 | blocked_candidate | 0.674 | Media3 Release Notes - Media3 1.9.4 | https://developer.android.com/jetpack/androidx/releases/media3#1.9.4 |
 | blocked_candidate | 0.65 | Media3 Release Notes - Media3 1.10.1 | https://developer.android.com/jetpack/androidx/releases/media3#1.10.1 |
-| strong_candidate | 0.81 | [PATCH 1/2] media: i2c: ov8865: Program the mode on stream start if needed - Jurison Murati | https://lore.kernel.org/linux-media/20260609232255.13559-1-eng.juri@gmail.com/ |
+| blocked_candidate | 0.626 | Photo picker &nbsp;\|&nbsp; App data and files &nbsp;\|&nbsp; Android Developers | https://developer.android.com/training/data-storage/shared/photo-picker |
 | strong_candidate | 0.81 | [PATCH 2/2] media: i2c: ov8865: Drop PM runtime reference if stream start fails - Jurison Murati | https://lore.kernel.org/linux-media/20260609232255.13559-2-eng.juri@gmail.com/ |
+| strong_candidate | 0.81 | [PATCH 1/2] media: i2c: ov8865: Program the mode on stream start if needed - Jurison Murati | https://lore.kernel.org/linux-media/20260609232255.13559-1-eng.juri@gmail.com/ |
+| strong_candidate | 0.81 | Re: [PATCH] media: atomisp: Fix local variable shadowing warnings - Rhys Tumelty | https://lore.kernel.org/linux-media/20260609200931.670292-1-rhys@tumelty.co.uk/ |
 | review_candidate | 0.72 | Re: [PATCH v5 06/10] media: imx219: Fix vertical blanking and exposure for analogue binning - Jai Luthra | https://lore.kernel.org/linux-media/178102372666.1799417.2096397903236324900@freya/ |
 | review_candidate | 0.72 | Re: [PATCH 1/3] dt-bindings: media: qcom,qcm2290-venus: document shikra Iris compatible - Bryan O&#39;Donoghue | https://lore.kernel.org/linux-media/f793c665-ac99-4afe-a64b-bbd6d40044e5@kernel.org/ |
 | review_candidate | 0.72 | [PATCH 3/3] arm64: dts: qcom: shikra-evk: Enable Iris core - Vikash Garodia | https://lore.kernel.org/linux-media/20260609-shikra_vpu-v1-3-3a32bb38b080@oss.qualcomm.com/ |
 | review_candidate | 0.72 | Re: [PATCH 2/3] arm64: dts: qcom: shikra: Add Iris video codec node - Dmitry Baryshkov | https://lore.kernel.org/linux-media/o3zjmtmordfzeimgowakpsz7jit7q4wsxb3j64gmvgkvre5y37@ztafjbpwqavd/ |
 | review_candidate | 0.783 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
+| review_candidate | 0.672 | Build a Compatible Android Device &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility |
 | weak_candidate | 0.458 | CameraX | https://developer.android.com/media/camera/camerax |
-| weak_candidate | 0.367 | VideoCapture | https://developer.android.com/media/camera/camerax/video-capture |
 | weak_candidate | 0.413 | Release notes | https://source.android.com/docs/whatsnew/release-notes |
+| weak_candidate | 0.367 | Latest security bulletins | https://source.android.com/docs/whatsnew/latest-security-bulletins |
+| weak_candidate | 0.367 | Latest Compatibility Definition Document (CDD) | https://source.android.com/docs/whatsnew/latest-cdd |
 | weak_candidate | 0.367 | Bulletins | https://source.android.com/docs/security/bulletin |
-| weak_candidate | 0.33 | more information about this list | https://lists.libcamera.org/listinfo/libcamera-devel |
 
