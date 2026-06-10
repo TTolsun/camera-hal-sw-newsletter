@@ -13,8 +13,8 @@
     },
     {
       "proposal_id": "camera-hal-sw-20260610-002",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "accepted": false,
       "rejected_reason": "discovered_not_extractable",
       "source_policy_match": "camerax-release-notes",
@@ -42,40 +42,16 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "camera-hal-sw-20260610-003",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260610142329.3836808-1-sumit.semwal@linaro.org/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260610142329.3836808-1-sumit.semwal@linaro.org/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
       "proposal_id": "camera-hal-sw-20260610-004",
-      "candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
-      "normalized_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "libcamera-release-announcements"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260610-005",
-      "candidate_url": "https://source.android.com/docs/compatibility/cdd",
-      "normalized_url": "https://source.android.com/docs/compatibility/cdd",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "android-compatibility-definition-document"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260610-006",
-      "candidate_url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
-      "normalized_url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "android-security-bulletin"
     }
   ],
   "counts": {
-    "accepted": 7,
+    "accepted": 4,
     "discovered_not_extractable": 1
   }
 }
