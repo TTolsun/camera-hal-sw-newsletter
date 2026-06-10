@@ -461,13 +461,20 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
           "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
           "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        },
+        {
+          "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
+          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -519,13 +526,20 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
           "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
           "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        },
+        {
+          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
+          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -727,40 +741,6 @@
       ]
     },
     {
-      "cluster_id": "58d9ec89937d9617",
-      "cluster_key": "https://developer.android.com/media/camera/camerax/video-capture",
-      "canonical_url": "https://developer.android.com/media/camera/camerax/video-capture",
-      "canonical_title": "VideoCapture",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/media/camera/camerax/video-capture",
-          "title": "VideoCapture",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "9f031f019885b48d",
-      "cluster_key": "https://issuetracker.google.com/issues/497571473",
-      "canonical_url": "https://issuetracker.google.com/issues/497571473",
-      "canonical_title": "b/497571473",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://issuetracker.google.com/issues/497571473",
-          "title": "b/497571473",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "83920430c1be5b76",
       "cluster_key": "https://source.android.com/docs/whatsnew/release-notes",
       "canonical_url": "https://source.android.com/docs/whatsnew/release-notes",
@@ -771,40 +751,6 @@
         {
           "url": "https://source.android.com/docs/whatsnew/release-notes",
           "title": "Release notes",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "0779844e3674fa79",
-      "cluster_key": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "canonical_url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "canonical_title": "Latest security bulletins",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-          "title": "Latest security bulletins",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "584a6a0cadfdd7d4",
-      "cluster_key": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "canonical_url": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "canonical_title": "Latest Compatibility Definition Document (CDD)",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://source.android.com/docs/whatsnew/latest-cdd",
-          "title": "Latest Compatibility Definition Document (CDD)",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false

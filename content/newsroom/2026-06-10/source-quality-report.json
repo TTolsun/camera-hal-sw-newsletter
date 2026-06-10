@@ -724,6 +724,24 @@
       }
     },
     {
+      "candidate_id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.783,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "gemini-4a98a2852603a041",
       "url": "https://lore.kernel.org/linux-media/20260609232255.13559-2-eng.juri@gmail.com/",
       "title": "[PATCH 2/2] media: i2c: ov8865: Drop PM runtime reference if stream start fails - Jurison Murati",
@@ -850,18 +868,36 @@
       }
     },
     {
-      "candidate_id": "gemini-bb0e15b6742fce01",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-      "source_quality_score": 0.783,
-      "source_quality_bucket": "review_candidate",
+      "candidate_id": "gemini-8635e5e9a3557c0d",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
       "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
         "technical_depth": 0.55,
-        "recency_score": 0.8,
-        "evidence_strength": 0.9,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-a8865e6c6b3d243f",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
+      "source_quality_score": 0.455,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -886,42 +922,6 @@
       }
     },
     {
-      "candidate_id": "gemini-linked-58d9ec89937d9617",
-      "url": "https://developer.android.com/media/camera/camerax/video-capture",
-      "title": "VideoCapture",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-9f031f019885b48d",
-      "url": "https://issuetracker.google.com/issues/497571473",
-      "title": "b/497571473",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-linked-83920430c1be5b76",
       "url": "https://source.android.com/docs/whatsnew/release-notes",
       "title": "Release notes",
@@ -932,42 +932,6 @@
         "camera_relevance": 0,
         "android_hal_relevance": 0,
         "technical_depth": 0.55,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-0779844e3674fa79",
-      "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "title": "Latest security bulletins",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-584a6a0cadfdd7d4",
-      "url": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "title": "Latest Compatibility Definition Document (CDD)",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
         "recency_score": 0.25,
         "evidence_strength": 0.55,
         "duplicate_penalty": 0,
@@ -996,8 +960,8 @@
   ],
   "counts": {
     "strong_candidate": 8,
-    "blocked_candidate": 30,
+    "blocked_candidate": 32,
     "review_candidate": 8,
-    "weak_candidate": 9
+    "weak_candidate": 5
   }
 }
