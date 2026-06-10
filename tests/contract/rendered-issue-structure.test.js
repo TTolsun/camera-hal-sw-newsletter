@@ -201,7 +201,10 @@ test('rendered issue structure does not enforce non-structural quality gates', (
   const { result } = validateFixture({
     sections: validSections(1).map(section => ({
       ...section,
-      camera_hal_perspective: 'Weak.',
+      article_sections: {
+        ...section.article_sections,
+        hal_driver_impact: 'Weak.'
+      },
       action_items: ['Do something.']
     }))
   });

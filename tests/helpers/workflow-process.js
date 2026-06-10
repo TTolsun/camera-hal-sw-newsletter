@@ -140,9 +140,6 @@ function onePublishableSupportingEditorDraft(date, candidate) {
         'Behavior change: sustained camera preview frame latency'
       ],
       source_verification_notes: ['Example Platform Source is treated as the official source in this mock workflow test.'],
-      background: 'Sustained ISP/NPU thermal behavior can affect preview latency, frame drops, and buffer queue pressure in camera workloads.',
-      why_it_matters: 'Owners get a measurable follow-up path for stream, buffer, metadata, and Camera ITS validation.',
-      camera_hal_perspective: 'Compare preview latency, stream buffer metadata, Camera ITS logs, and frame-drop metrics on a representative thermal workload.',
       camera_hal_checks: [
         'Compare Camera ITS logs before and after the SoC thermal note.',
         'Measure preview latency, frame drops, and buffer queue pressure on one representative device class.'

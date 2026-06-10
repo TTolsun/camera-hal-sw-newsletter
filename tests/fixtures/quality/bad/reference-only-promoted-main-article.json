@@ -16,7 +16,9 @@
   "section": {
     "headline": "Reference-only Camera documentation promoted as news",
     "what_changed": "An undated Camera documentation page was promoted as if it were a dated main article.",
-    "camera_hal_perspective": "Reference pages can inform review context but cannot stand alone as a source-backed main article.",
+    "article_sections": {
+      "hal_driver_impact": "Reference pages can inform review context but cannot stand alone as a source-backed main article."
+    },
     "sources": [
       {
         "title": "Camera reference documentation",

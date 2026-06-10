@@ -30,8 +30,6 @@ function section(headline, url, overrides = {}) {
     headline,
     confirmed_facts: [`${headline} fact`],
     what_changed: `${headline} changed camera-relevant behavior.`,
-    background: `${headline} background for Camera HAL readers.`,
-    camera_hal_perspective: `${headline} should be checked inside source-backed HAL boundaries.`,
     camera_hal_checks: [`Check ${headline} source-bound behavior.`],
     action_items: [`Review ${headline} within 2 weeks with the owning team.`],
     article_sections: {
@@ -228,14 +226,12 @@ test('interpretation fields without source binding are not merged', () => {
       confirmed_facts: ['source-less fact'],
       action_items: ['UNBOUND ACTION MUST NOT MERGE'],
       camera_hal_checks: ['UNBOUND CHECK MUST NOT MERGE'],
-      camera_hal_perspective: 'UNBOUND PERSPECTIVE MUST NOT MERGE',
       sources: []
     }
   };
   mergeDonorIntoSection(survivor, donorRecord, 'source-less');
   assert.equal(JSON.stringify(survivor.action_items).includes('UNBOUND ACTION'), false);
   assert.equal(JSON.stringify(survivor.camera_hal_checks).includes('UNBOUND CHECK'), false);
-  assert.equal(survivor.camera_hal_perspective.includes('UNBOUND PERSPECTIVE'), false);
   assert.equal(survivor.confirmed_facts.includes('source-less fact'), true);
 });
 

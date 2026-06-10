@@ -13,12 +13,8 @@ function section(index, overrides = {}) {
     evidence_summary: `Evidence ${index}`,
     specificity_checks: [`Check ${index}`],
     source_verification_notes: [`Source note ${index}`],
-    background: `Background ${index}`,
-    why_it_matters: `Why ${index}`,
-    camera_hal_perspective: `HAL perspective ${index}`,
     camera_hal_checks: [`HAL check ${index}`],
     action_items: [`Action ${index}`],
-    team_summary: `Summary ${index}`,
     is_ai_related: false,
     article_type: 'camera-hal',
     hal_impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
@@ -75,10 +71,10 @@ function section(index, overrides = {}) {
   if (!Object.prototype.hasOwnProperty.call(overrides, 'article_sections')) {
     value.article_sections = {
       verified_facts: value.confirmed_facts,
-      background_context: value.background,
-      hal_driver_impact: value.camera_hal_perspective,
+      background_context: `Background ${index}`,
+      hal_driver_impact: `HAL perspective ${index}`,
       action_items: value.action_items,
-      team_share_points: value.team_summary
+      team_share_points: `Summary ${index}`
     };
   }
   return value;

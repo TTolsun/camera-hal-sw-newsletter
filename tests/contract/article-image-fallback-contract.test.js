@@ -26,12 +26,15 @@ function section(overrides = {}) {
     evidence_summary: 'The source names Android camera workflow and AI inference changes.',
     specificity_checks: ['Names Android camera workflow.'],
     source_verification_notes: ['Checked source article URL.'],
-    background: 'Camera apps use frame streams that can feed AI inference.',
-    why_it_matters: 'HAL teams need to watch frame latency and memory pressure.',
-    camera_hal_perspective: 'Camera HAL stream buffers and metadata timing can be affected.',
     camera_hal_checks: ['Check stream latency with AI enabled.'],
     action_items: ['Run a frame latency smoke test.', 'Check memory pressure logs.'],
-    team_summary: 'Review AI inference impact on camera paths.',
+    article_sections: {
+      verified_facts: ['Android camera workflow update was published.'],
+      background_context: 'Camera apps use frame streams that can feed AI inference.',
+      hal_driver_impact: 'Camera HAL stream buffers and metadata timing can be affected.',
+      action_items: ['Run a frame latency smoke test.', 'Check memory pressure logs.'],
+      team_share_points: 'Review AI inference impact on camera paths.'
+    },
     is_ai_related: true,
     article_type: 'ai',
     imageCandidates: [

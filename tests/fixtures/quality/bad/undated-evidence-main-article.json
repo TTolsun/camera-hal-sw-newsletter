@@ -16,7 +16,9 @@
   "section": {
     "headline": "Undated Camera workflow update",
     "what_changed": "A Camera workflow update is described without dated evidence.",
-    "camera_hal_perspective": "HAL teams need dated source evidence before treating this as a current validation trigger.",
+    "article_sections": {
+      "hal_driver_impact": "HAL teams need dated source evidence before treating this as a current validation trigger."
+    },
     "sources": [
       {
         "title": "Undated Camera workflow page",

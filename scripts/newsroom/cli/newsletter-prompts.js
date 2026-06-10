@@ -33,7 +33,7 @@ function articleSectionContractPrompt() {
     'article_sections는 required keys인 verified_facts, background_context, hal_driver_impact, action_items, team_share_points를 반드시 포함해야 합니다.',
     'article_sections는 optional arrays인 known_limitations, watch_items, do_not_claim을 추가로 포함할 수 있습니다.',
     'known_limitations와 watch_items는 optional arrays입니다. do_not_claim은 guardrail array이며 verified_facts에 복사하면 안 됩니다.',
-    'article_sections는 legacy artifact compatibility 때문에만 optional로 남아 있습니다. 이 contract를 legacy fields로 충족했다고 간주하지 마세요.',
+    'article_sections는 모든 main article의 canonical 구조입니다. section 최상위에 background, why_it_matters, camera_hal_perspective, team_summary 같은 평면 prose 필드를 출력하지 마세요. 해당 내용은 article_sections.background_context, article_sections.hal_driver_impact, article_sections.team_share_points로만 제공하세요.',
     'article_sections.verified_facts는 source-backed facts의 canonical 배열입니다. evidence 바인딩이 필요한 모든 사실(특히 confirmed_facts에만 둘 법한 더 구체적인 사실)을 verified_facts에도 반드시 포함하세요. HAL 해석이나 권고는 verified_facts에 넣지 마세요.',
     'article_sections.background_context는 AOSP Camera / Camera HAL / driver / SoC platform reader에게 필요한 맥락을 설명하는 string이어야 합니다.',
     'article_sections.hal_driver_impact는 제공된 source가 직접 뒷받침하지 않는 runtime/API behavior를 주장하지 않으면서 Camera HAL, driver, stream, buffer, metadata, native tooling, SoC platform 관점의 실무 영향을 해석하는 string이어야 합니다.',

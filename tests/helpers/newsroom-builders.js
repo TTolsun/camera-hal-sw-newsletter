@@ -37,9 +37,6 @@ function retrySection(headline, url) {
     evidence_summary: `Version/release: ${headline}; release date: 2026-05-01; API/component: Camera HAL.`,
     specificity_checks: ['Release date: 2026-05-01', 'API/component: Camera HAL'],
     source_verification_notes: ['Synthetic official source for targeted retry tests.'],
-    background: `${headline} is relevant to AOSP Camera validation context.`,
-    why_it_matters: `${headline} gives HAL teams a review target.`,
-    camera_hal_perspective: `${headline} should be checked through stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.`,
     camera_hal_checks: ['Run Camera ITS and inspect stream/metadata logs.'],
     hal_impact_axes: ['framework_hal_contract', 'stream_buffer_metadata'],
     reader_owners: ['camera_hal_owner', 'camera_test_owner'],
@@ -71,7 +68,6 @@ function retrySection(headline, url) {
       'Assign a HAL owner to inspect Camera ITS logs within 2 weeks.',
       'Measure preview latency, frame drop, and metadata consistency on a representative device.'
     ],
-    team_summary: `${headline} should be shared as a HAL validation input.`,
     article_sections: {
       verified_facts: [`${headline} was published on 2026-05-01.`],
       background_context: `${headline} is relevant to AOSP Camera validation context.`,

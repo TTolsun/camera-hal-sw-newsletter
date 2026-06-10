@@ -403,7 +403,6 @@ test('claim-level direct HAL overclaim is reported once by dedupe key', () => {
   const article = section({
     headline: 'CameraX direct HAL overclaim claim',
     url,
-    camera_hal_perspective: 'CameraX 1.6.1 changes direct Camera HAL API behavior.',
     article_sections: {
       verified_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
       background_context: 'CameraX sits above camera2.',
@@ -454,14 +453,19 @@ test('claim validation allows cautious CameraX risk_note without direct HAL over
     headline: 'CameraX cautious indirect HAL risk note',
     url,
     what_changed: 'CameraX 1.6.1 was released on 2026-05-06 as an AndroidX camera library update.',
-    background: 'CameraX sits above camera2 and is framework-adjacent evidence.',
-    camera_hal_perspective: 'Treat this as an app-facing CameraX signal and validate stream and buffer behavior through regression checks before claiming HAL runtime impact.',
     camera_hal_checks: ['Run CameraX preview and capture regression checks for stream and buffer behavior.'],
     action_items: ['Schedule CameraX regression checks before any HAL runtime claim is made.'],
     confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
     evidence_summary: 'CameraX 1.6.1 release date: 2026-05-06.',
     specificity_checks: ['Version: CameraX 1.6.1', 'Release date: 2026-05-06'],
     source_verification_notes: ['Official AndroidX CameraX release-note evidence.'],
+    article_sections: {
+      verified_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+      background_context: 'CameraX sits above camera2 and is framework-adjacent evidence.',
+      hal_driver_impact: 'Treat this as an app-facing CameraX signal and validate stream and buffer behavior through regression checks before claiming HAL runtime impact.',
+      action_items: ['Schedule CameraX regression checks before any HAL runtime claim is made.'],
+      team_share_points: 'Use CameraX 1.6.1 as a cautious framework-adjacent signal.'
+    },
     claims: [
       {
         claim_id: 'claim-1',
@@ -729,12 +733,15 @@ test('linked evidence absent or unresolved without inference does not create ove
       url: 'https://example.com/unresolved-limited',
       what_changed: 'CameraX source note was reviewed on 2026-05-01.',
       evidence_summary: 'Version: CameraX source note; release date: 2026-05-01; API/component: CameraX; behavior change: not claimed.',
-      background: 'This item is kept as source review context.',
-      why_it_matters: 'Teams can record the item for later source review.',
-      camera_hal_perspective: 'Use this as limited triage context only.',
       action_items: ['Within 2 weeks, record the source review status.'],
-      team_summary: 'Keep the item as limited source review context.',
-      source_verification_notes: ['Official source checked; linked evidence is unresolved diagnostic context only.']
+      source_verification_notes: ['Official source checked; linked evidence is unresolved diagnostic context only.'],
+      article_sections: {
+        verified_facts: ['CameraX source note was reviewed on 2026-05-01.'],
+        background_context: 'This item is kept as source review context.',
+        hal_driver_impact: 'Use this as limited triage context only.',
+        action_items: ['Within 2 weeks, record the source review status.'],
+        team_share_points: 'Keep the item as limited source review context.'
+      }
     }),
     linkedEvidenceCandidate('https://example.com/unresolved-limited', 'direct_aosp_camera', {
       linked_evidence_summary: linkedEvidenceSummary({

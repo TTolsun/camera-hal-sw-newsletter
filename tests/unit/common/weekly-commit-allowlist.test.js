@@ -18,7 +18,6 @@ function draft() {
     date: '2026-06-04', title: 'Daily', summary: 's', briefing: ['a', 'b', 'c'],
     sections: [{
       category: 'Android Camera', headline: 'CameraX', what_changed: 'x', evidence_summary: 'e',
-      background: 'b', camera_hal_perspective: 'p', team_summary: 't',
       confirmed_facts: ['f1', 'f2'], specificity_checks: ['v=1'], source_verification_notes: ['o'],
       camera_hal_checks: ['c1', 'c2'], action_items: ['a1', 'a2'],
       article_sections: { verified_facts: ['f1'], background_context: 'b', hal_driver_impact: 'p', action_items: ['a1'], team_share_points: 't' },

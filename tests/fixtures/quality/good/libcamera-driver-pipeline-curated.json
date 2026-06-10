@@ -17,7 +17,9 @@
   "section": {
     "headline": "libcamera release updates camera pipeline validation",
     "what_changed": "libcamera v0.7.1 was released on 2026-05-06 with camera pipeline fixes relevant to V4L2 and ISP validation.",
-    "camera_hal_perspective": "Camera HAL owners should compare V4L2 buffer ownership, stream metadata, frame timing, and ISP handoff behavior before and after the release.",
+    "article_sections": {
+      "hal_driver_impact": "Camera HAL owners should compare V4L2 buffer ownership, stream metadata, frame timing, and ISP handoff behavior before and after the release."
+    },
     "sources": [
       {
         "title": "libcamera v0.7.1 release",

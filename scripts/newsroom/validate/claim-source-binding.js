@@ -1013,7 +1013,7 @@ function factCoveredByClaim(factText, claim, evidenceIndex) {
 function factsToCover(section = {}) {
   // article_sections.verified_facts만 canonical source-backed facts이며 claim 바인딩(증거 결속)의
   // 유일한 대상이다. confirmed_facts / evidence_summary는 legacy/intermediate 필드로 발행물
-  // (public_article.*)에 노출되지 않고, article_sections 부재 시 buildArticleSectionsFromLegacyFields가
+  // (public_article.*)에 노출되지 않고, article_sections 부재 시 buildArticleSectionsFromSectionFields가
   // confirmed_facts -> verified_facts로 backfill한다. 동일 사실을 verified_facts와 함께 paraphrase로
   // 중복 나열하던 두 필드까지 coverage를 요구하면 같은 사실을 2~3회 바인딩해야 해 false uncovered를
   // 유발하므로 coverage 대상에서 제외한다(가드: 에디터 프롬프트가 verified_facts를 source-backed facts의

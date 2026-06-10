@@ -74,8 +74,9 @@ test('article section contract prompt fixes the five normalized keys and guardra
   assert.match(prompt, /do_not_claim/);
   assert.match(prompt, /optional arrays/);
   assert.match(prompt, /guardrail array/);
-  assert.match(prompt, /legacy artifact compatibility 때문에만 optional/);
-  assert.match(prompt, /legacy fields로 충족했다고 간주하지 마세요/);
+  assert.match(prompt, /article_sections는 모든 main article의 canonical 구조입니다/);
+  assert.match(prompt, /section 최상위에 background, why_it_matters, camera_hal_perspective, team_summary 같은 평면 prose 필드를 출력하지 마세요/);
+  assert.match(prompt, /article_sections\.background_context, article_sections\.hal_driver_impact, article_sections\.team_share_points로만 제공하세요/);
   assert.match(prompt, /source-backed facts/);
   assert.match(prompt, /Jetpack Compose/);
   assert.match(prompt, /CameraX 앱 화면 guidance/);

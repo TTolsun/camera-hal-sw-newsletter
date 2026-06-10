@@ -504,15 +504,12 @@ function isCameraXReleaseArticle(section = {}, candidate = {}) {
   ].some(cameraXReleaseUrl);
 }
 
-function articleTextWithLegacyFields(section = {}) {
+function articleText(section = {}) {
   const articleSections = normalizeArticleSections(section);
   return [
     section.category,
     section.headline,
     section.what_changed,
-    section.background,
-    section.why_it_matters,
-    section.camera_hal_perspective,
     section.confirmed_facts,
     section.evidence_summary,
     section.specificity_checks,
@@ -537,7 +534,7 @@ function fieldBuilderWarningsFor(section = {}, candidate = {}) {
 
 function hasRawCameraXTableArtifact(section = {}) {
   return /Maven Group versions?|View the Camera Library|Close\b|camera-[a-z0-9-]+\s+(?:-|\d+\.\d+\S*)\s+(?:-|\d+\.\d+\S*)/i
-    .test(articleTextWithLegacyFields(section));
+    .test(articleText(section));
 }
 
 function hasGenericCameraXFallbackText(section = {}) {
@@ -584,12 +581,13 @@ function boundedDeduct(state, category, points, reason, location = '', options =
 }
 
 function linkedEvidenceArticleText(section) {
+  const articleSections = normalizeArticleSections(section || {});
   return [
     section?.headline,
     section?.what_changed,
-    section?.background,
-    section?.why_it_matters,
-    section?.camera_hal_perspective,
+    articleSections.background_context,
+    articleSections.hal_driver_impact,
+    articleSections.team_share_points,
     section?.evidence_summary,
     section?.confirmed_facts,
     section?.source_verification_notes,
@@ -1346,10 +1344,6 @@ function fieldHygieneDeductions(section, articleSections, guardrailImpactClass, 
   return findFieldHygieneIssues({
     ...section,
     confirmed_facts: articleSections.verified_facts,
-    background: articleSections.background_context,
-    camera_hal_perspective: articleSections.hal_driver_impact,
-    action_items: articleSections.action_items,
-    team_summary: articleSections.team_share_points,
     guardrail_impact_class: guardrailImpactClass
   }).map(issue => ({
     category: 'field-hygiene',

@@ -3,6 +3,7 @@ const {
   BUCKETS,
   classifyAospCameraStackCandidate
 } = require('../common/aosp-camera-scope');
+const { normalizeArticleSections } = require('../common/article-section-contract');
 
 const GUARDRAIL_IMPACT_CLASSES = Object.freeze({
   DIRECT_HAL_CONTRACT: 'direct_hal_contract',
@@ -332,7 +333,7 @@ function backgroundOverlapIssue(background, whatChanged, overlapThreshold) {
   const overlap = normalizedTokenOverlap(backgroundText, changedText);
   const baseIssue = {
     type: 'field_overlap',
-    field: 'background',
+    field: 'background_context',
     overlap,
     background_token_count: backgroundTokens.length,
     changed_token_count: changedTokens.length
@@ -345,7 +346,7 @@ function backgroundOverlapIssue(background, whatChanged, overlapThreshold) {
       overlap_kind: 'exact_duplicate',
       severity: 'hard',
       blocking: true,
-      reason: 'background exactly duplicates what_changed.'
+      reason: 'background_context exactly duplicates what_changed.'
     };
   }
   if (
@@ -358,7 +359,7 @@ function backgroundOverlapIssue(background, whatChanged, overlapThreshold) {
       overlap_kind: 'semantic_overlap',
       severity: 'hard',
       blocking: true,
-      reason: `background overlaps what_changed too much (${overlap.toFixed(2)} >= ${overlapThreshold}).`
+      reason: `background_context overlaps what_changed too much (${overlap.toFixed(2)} >= ${overlapThreshold}).`
     };
   }
   if (
@@ -371,7 +372,7 @@ function backgroundOverlapIssue(background, whatChanged, overlapThreshold) {
       overlap_kind: 'short_overlap_warning',
       severity: 'warning',
       blocking: false,
-      reason: 'background and what_changed overlap, but token count is below hard-fail threshold.'
+      reason: 'background_context and what_changed overlap, but token count is below hard-fail threshold.'
     };
   }
   return null;
@@ -405,17 +406,18 @@ function findFieldHygieneIssues(section = {}, options = {}) {
     ? Number(options.overlapThreshold)
     : OVERLAP_THRESHOLD;
   const issues = [];
-  const checkedFields = [
-    'what_changed',
-    'background',
-    'camera_hal_perspective',
-    'why_it_matters',
-    'team_summary',
-    'evidence_summary',
-    'confirmed_facts'
-  ];
-  for (const field of checkedFields) {
-    for (const artifact of rawArtifactMatches(section[field])) {
+  const articleSections = normalizeArticleSections(section);
+  const checkedFields = {
+    what_changed: section.what_changed,
+    background_context: articleSections.background_context,
+    hal_driver_impact: articleSections.hal_driver_impact,
+    team_share_points: articleSections.team_share_points,
+    verified_facts: articleSections.verified_facts,
+    evidence_summary: section.evidence_summary,
+    confirmed_facts: section.confirmed_facts
+  };
+  for (const [field, fieldValue] of Object.entries(checkedFields)) {
+    for (const artifact of rawArtifactMatches(fieldValue)) {
       issues.push({
         type: 'raw_artifact',
         field,
@@ -426,7 +428,7 @@ function findFieldHygieneIssues(section = {}, options = {}) {
       });
     }
   }
-  const overlapIssue = backgroundOverlapIssue(section.background, section.what_changed, overlapThreshold);
+  const overlapIssue = backgroundOverlapIssue(articleSections.background_context, section.what_changed, overlapThreshold);
   if (overlapIssue) issues.push(overlapIssue);
   for (const classification of confirmedFactClassificationLeaks(section)) {
     issues.push({

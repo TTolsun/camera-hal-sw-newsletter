@@ -584,7 +584,10 @@ test('editor field hygiene rejects raw table text and background overlap', () =>
     sections: [
       section(1, {
         what_changed: 'CameraX 1.6.1 changed Android camera compatibility behavior.',
-        background: 'camera-view 1.6.1 - - 1.7.0-alpha01 camera-video 1.6.1 - - 1.7.0-alpha01 View the Camera Library Close Maven Group versions'
+        article_sections: {
+          ...section(1).article_sections,
+          background_context: 'camera-view 1.6.1 - - 1.7.0-alpha01 camera-video 1.6.1 - - 1.7.0-alpha01 View the Camera Library Close Maven Group versions'
+        }
       }),
       section(2),
       section(3)
@@ -594,7 +597,10 @@ test('editor field hygiene rejects raw table text and background overlap', () =>
     sections: [
       section(1, {
         what_changed: 'CameraX 1.6.1 changed Android camera compatibility behavior for validation.',
-        background: 'CameraX 1.6.1 changed Android camera compatibility behavior for validation.'
+        article_sections: {
+          ...section(1).article_sections,
+          background_context: 'CameraX 1.6.1 changed Android camera compatibility behavior for validation.'
+        }
       }),
       section(2),
       section(3)
@@ -630,7 +636,10 @@ test('editor field hygiene passes short overlap warnings and rejects semantic ov
     sections: [
       section(1, {
         what_changed: 'CameraX Android compatibility validation.',
-        background: 'CameraX Android compatibility checks.'
+        article_sections: {
+          ...section(1).article_sections,
+          background_context: 'CameraX Android compatibility checks.'
+        }
       }),
       section(2),
       section(3)
@@ -640,7 +649,10 @@ test('editor field hygiene passes short overlap warnings and rejects semantic ov
     sections: [
       section(1, {
         what_changed: 'CameraX release updates Android camera compatibility validation behavior today.',
-        background: 'CameraX release updates Android camera compatibility validation behavior now.'
+        article_sections: {
+          ...section(1).article_sections,
+          background_context: 'CameraX release updates Android camera compatibility validation behavior now.'
+        }
       }),
       section(2),
       section(3)
@@ -664,7 +676,7 @@ test('editor field hygiene passes short overlap warnings and rejects semantic ov
 });
 
 test('editor field hygiene leaves semantic direct HAL claim validity to LLM and editor judgment', () => {
-  for (const camera_hal_perspective of [
+  for (const halDriverImpact of [
     'This is a direct HAL API contract change for stream buffers.',
     'No, this is direct HAL API behavior.',
     'This is not only a CameraX update; it is direct HAL API behavior.',
@@ -676,7 +688,10 @@ test('editor field hygiene leaves semantic direct HAL claim validity to LLM and 
         section(1, {
           relevance_bucket: 'android_platform_camera_adjacent',
           impact_claim_level: 'direct_hal_change',
-          camera_hal_perspective
+          article_sections: {
+            ...section(1).article_sections,
+            hal_driver_impact: halDriverImpact
+          }
         }),
         section(2),
         section(3)
@@ -692,7 +707,10 @@ test('editor field hygiene allows direct HAL claims for direct source scope and 
     sections: [
       section(1, {
         aosp_camera_directness: 5,
-        camera_hal_perspective: '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.'
+        article_sections: {
+          ...section(1).article_sections,
+          hal_driver_impact: '이 항목은 직접 HAL API 변경이며 HAL buffer contract 변경입니다.'
+        }
       }),
       section(2),
       section(3)
@@ -702,7 +720,10 @@ test('editor field hygiene allows direct HAL claims for direct source scope and 
     sections: [
       section(1, {
         relevance_bucket: 'android_platform_camera_adjacent',
-        camera_hal_perspective: '직접 HAL API 변경으로 단정하지 않습니다. source evidence가 없으면 HAL contract impact를 claim하지 않습니다.'
+        article_sections: {
+          ...section(1).article_sections,
+          hal_driver_impact: '직접 HAL API 변경으로 단정하지 않습니다. source evidence가 없으면 HAL contract impact를 claim하지 않습니다.'
+        }
       }),
       section(2),
       section(3)
