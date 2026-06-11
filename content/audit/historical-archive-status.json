@@ -1,5 +1,13 @@
 [
   {
+    "date": "2026-06-11",
+    "archive_status": "stable_archive",
+    "historical_cleanup_reviewed": true,
+    "known_limitations": [],
+    "historical_cleanup_context": "current_generation_archive_review",
+    "public_visibility": "listed"
+  },
+  {
     "date": "2026-06-06",
     "archive_status": "stable_archive",
     "historical_cleanup_reviewed": true,
