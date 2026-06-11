@@ -18,7 +18,9 @@
     "article_type": "ai",
     "is_ai_related": true,
     "what_changed": "A generic AI assistant release was announced on 2026-05-01.",
-    "camera_hal_perspective": "No concrete Camera HAL or Android Camera impact is identified.",
+    "article_sections": {
+      "hal_driver_impact": "No concrete Camera HAL or Android Camera impact is identified."
+    },
     "sources": [
       {
         "title": "Generic AI release",

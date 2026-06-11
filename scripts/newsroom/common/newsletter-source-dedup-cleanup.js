@@ -415,11 +415,9 @@ function mergeDonorIntoSection(section, donorRecord, sourceKey) {
 
   section.confirmed_facts = mergeStringArray(section.confirmed_facts, donor.confirmed_facts);
   section.what_changed = mergeTextField(section.what_changed, donor.what_changed);
-  section.background = mergeTextField(section.background, donor.background);
   section.article_sections = mergeArticleSections(section.article_sections || {}, donor.article_sections || {});
 
   if (sourceBound) {
-    section.camera_hal_perspective = mergeTextField(section.camera_hal_perspective, donor.camera_hal_perspective);
     section.camera_hal_checks = mergeStringArray(section.camera_hal_checks, donor.camera_hal_checks);
     section.action_items = mergeStringArray(section.action_items, donor.action_items);
   }
@@ -452,8 +450,8 @@ function ensureHalSignalCapsule(section) {
 
 function publicParagraphsForSection(section, publicHeadline) {
   const articleSections = section.article_sections || {};
-  const background = readerParagraph(articleSections.background_context) || readerParagraph(section.background);
-  const impact = readerParagraph(articleSections.hal_driver_impact) || readerParagraph(section.camera_hal_perspective);
+  const background = readerParagraph(articleSections.background_context);
+  const impact = readerParagraph(articleSections.hal_driver_impact);
   const paragraphs = mergeStringArray([background, impact], [])
     .filter(item => !/발행 전에|출처 URL|게시일|follow-up validation 필요 여부/i.test(item))
     .slice(0, 2);
@@ -543,14 +541,12 @@ function rebuildPublicArticle(section) {
   const primarySource = sourceLinks[0]?.title || sourceLinks[0]?.url || '공개 source';
   const leadFallback = `${primarySource}는 ${publicHeadline} 관련 내용을 공개했습니다. Camera HAL / Android camera 독자는 이 내용을 실제 제품 경로와 연결되는지 확인할 참고 신호로 읽어야 합니다.`;
   const lead = sentenceLead(firstReaderText([
-    section.background,
     section.article_sections?.background_context,
     section.what_changed,
     section.article_sections?.verified_facts
   ]), leadFallback);
   const perspective = firstReaderText([
-    section.article_sections?.hal_driver_impact,
-    section.camera_hal_perspective
+    section.article_sections?.hal_driver_impact
   ]) || (sectionIsFallback(section)
     ? '직접 HAL 변경으로 단정하지 않고, native build/test/debug workflow에 줄 수 있는 간접 신호로만 봅니다.'
     : 'Camera HAL / Driver owner는 공개 출처가 직접 말한 범위 안에서 stream, buffer, metadata, pipeline 검증 필요성을 확인합니다.');

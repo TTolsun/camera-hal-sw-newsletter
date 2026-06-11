@@ -32,9 +32,13 @@ test('quality gate counts article buckets from structured candidate metadata', (
       category: 'Driver',
       what_changed: 'libcamera 0.5.0 updated image sensor pipeline behavior on 2026-05-01.',
       evidence_summary: 'Version: libcamera 0.5.0; release date: 2026-05-01; API/component: libcamera image sensor pipeline; behavior change: driver pipeline support.',
-      background: 'V4L2 and libcamera changes can affect camera driver validation and ISP handoff.',
-      camera_hal_perspective: 'Map libcamera image sensor behavior to V4L2 capture, ISP tuning, stream buffers, and Camera ITS coverage.',
-      team_summary: 'Use the driver pipeline update as a V4L2/libcamera validation trigger.'
+      article_sections: {
+        verified_facts: ['libcamera 0.5.0 updated image sensor pipeline behavior on 2026-05-01.'],
+        background_context: 'V4L2 and libcamera changes can affect camera driver validation and ISP handoff.',
+        hal_driver_impact: 'Map libcamera image sensor behavior to V4L2 capture, ISP tuning, stream buffers, and Camera ITS coverage.',
+        action_items: ['Run V4L2 capture and ISP tuning validation for the libcamera pipeline update.'],
+        team_share_points: 'Use the driver pipeline update as a V4L2/libcamera validation trigger.'
+      }
     }),
     section({
       headline: 'Snapdragon NPU thermal update',
@@ -43,9 +47,13 @@ test('quality gate counts article buckets from structured candidate metadata', (
       camera_pipeline_link: 'Sustained SoC thermal budget maps to camera preview frame latency and buffer queue pressure.',
       what_changed: 'Snapdragon NPU thermal behavior changed on 2026-05-01 for sustained image processing.',
       evidence_summary: 'Version: platform note 1.0; release date: 2026-05-01; API/component: Snapdragon NPU thermal path; behavior change: sustained performance budget.',
-      background: 'SoC thermal and power behavior affects camera preview, image processing, and frame latency.',
-      camera_hal_perspective: 'Track ISP/NPU thermal throttling, frame latency, buffer queue pressure, and sustained camera workload metrics.',
-      team_summary: 'Use this as SoC performance budget input for camera workloads.'
+      article_sections: {
+        verified_facts: ['Snapdragon NPU thermal behavior changed on 2026-05-01 for sustained image processing.'],
+        background_context: 'SoC thermal and power behavior affects camera preview, image processing, and frame latency.',
+        hal_driver_impact: 'Track ISP/NPU thermal throttling, frame latency, buffer queue pressure, and sustained camera workload metrics.',
+        action_items: ['Measure ISP/NPU thermal throttling and frame latency under sustained camera workloads.'],
+        team_share_points: 'Use this as SoC performance budget input for camera workloads.'
+      }
     }),
     section({
       headline: 'GCC 16.1 C++ native performance update',
@@ -53,9 +61,13 @@ test('quality gate counts article buckets from structured candidate metadata', (
       category: 'C++ Tooling',
       what_changed: 'GCC 16.1 changed C++ native performance diagnostics on 2026-05-01.',
       evidence_summary: 'Version: GCC 16.1; release date: 2026-05-01; API/component: GCC C++ compiler; behavior change: native diagnostics.',
-      background: 'Native compiler diagnostics can shorten Camera HAL and driver test/debug loops.',
-      camera_hal_perspective: 'Apply sanitizer and compiler diagnostics to native Camera HAL, V4L2 bridge, and image pipeline debug builds.',
-      team_summary: 'Use the toolchain update for native camera debugging productivity.'
+      article_sections: {
+        verified_facts: ['GCC 16.1 changed C++ native performance diagnostics on 2026-05-01.'],
+        background_context: 'Native compiler diagnostics can shorten Camera HAL and driver test/debug loops.',
+        hal_driver_impact: 'Apply sanitizer and compiler diagnostics to native Camera HAL, V4L2 bridge, and image pipeline debug builds.',
+        action_items: ['Apply sanitizer and compiler diagnostics to native Camera HAL and image pipeline debug builds.'],
+        team_share_points: 'Use the toolchain update for native camera debugging productivity.'
+      }
     })
   ];
   const report = reportFor(sections, [
@@ -88,8 +100,13 @@ test('quality gate counts multimedia camera output as supporting, not primary', 
       category: 'Camera Output / Multimedia',
       what_changed: 'Android introduces Advanced Professional Video for camera capture output on 2026-05-01.',
       evidence_summary: 'Release date: 2026-05-01; API/component: Advanced Professional Video; behavior change: camera output support.',
-      background: 'APV is an Android media output signal for camera capture workflows, not a direct HAL contract change.',
-      camera_hal_perspective: 'Treat this as camera output / multimedia supporting context unless source evidence names HAL API or vendor implementation changes.'
+      article_sections: {
+        verified_facts: ['Android introduces Advanced Professional Video for camera capture output on 2026-05-01.'],
+        background_context: 'APV is an Android media output signal for camera capture workflows, not a direct HAL contract change.',
+        hal_driver_impact: 'Treat this as camera output / multimedia supporting context unless source evidence names HAL API or vendor implementation changes.',
+        action_items: ['Track APV camera output behavior as supporting multimedia context.'],
+        team_share_points: 'Keep APV as camera output / multimedia supporting context.'
+      }
     })
   ];
   const report = reportFor(sections, [
@@ -314,9 +331,13 @@ test('generic bucket is not promoted by camera wording in generated text', () =>
     category: 'Generic',
     what_changed: 'FreeBSD 15.1 Beta changed generic OS packaging on 2026-05-01.',
     evidence_summary: 'Version: FreeBSD 15.1 Beta; release date: 2026-05-01; API/component: OS release; behavior change: generic package update.',
-    background: 'This paragraph mentions Camera HAL and Android Camera, but the source candidate is generic.',
-    camera_hal_perspective: 'Camera HAL teams should not treat this generic release as a direct camera or driver signal.',
-    team_summary: 'Keep this in watchlist unless a concrete camera, driver, SoC, or native tooling path appears.'
+    article_sections: {
+      verified_facts: ['FreeBSD 15.1 Beta changed generic OS packaging on 2026-05-01.'],
+      background_context: 'This paragraph mentions Camera HAL and Android Camera, but the source candidate is generic.',
+      hal_driver_impact: 'Camera HAL teams should not treat this generic release as a direct camera or driver signal.',
+      action_items: ['Keep tracking the generic release for any future concrete camera path.'],
+      team_share_points: 'Keep this in watchlist unless a concrete camera, driver, SoC, or native tooling path appears.'
+    }
   });
   const sections = [
     section({ headline: 'CameraX release A', url: 'https://example.com/a' }),
@@ -353,9 +374,13 @@ test('quality gate blocks supporting main articles over publish-ready maximum', 
       category: 'SoC',
       what_changed: 'Snapdragon ISP thermal behavior changed on 2026-05-01.',
       evidence_summary: 'Version: Snapdragon ISP note 1.0; release date: 2026-05-01; API/component: Snapdragon ISP; behavior change: thermal budget.',
-      background: 'ISP thermal budget affects image pipeline latency and sustained camera capture.',
-      camera_hal_perspective: 'Measure camera preview frame latency, ISP throttling, buffer pressure, and thermal headroom.',
-      team_summary: 'Use this SoC signal as fallback review material for camera workloads.'
+      article_sections: {
+        verified_facts: ['Snapdragon ISP thermal behavior changed on 2026-05-01.'],
+        background_context: 'ISP thermal budget affects image pipeline latency and sustained camera capture.',
+        hal_driver_impact: 'Measure camera preview frame latency, ISP throttling, buffer pressure, and thermal headroom.',
+        action_items: ['Measure camera preview frame latency and ISP throttling under thermal load.'],
+        team_share_points: 'Use this SoC signal as fallback review material for camera workloads.'
+      }
     }),
     section({
       headline: 'GPU camera inference latency update C',
@@ -363,9 +388,13 @@ test('quality gate blocks supporting main articles over publish-ready maximum', 
       category: 'SoC',
       what_changed: 'GPU inference latency behavior changed on 2026-05-01.',
       evidence_summary: 'Version: GPU platform note 1.0; release date: 2026-05-01; API/component: GPU inference path; behavior change: latency.',
-      background: 'GPU latency can affect camera frame analysis and image pipeline throughput.',
-      camera_hal_perspective: 'Compare GPU camera inference latency, frame drops, and thermal behavior on representative devices.',
-      team_summary: 'Use this as SoC fallback material for camera performance review.'
+      article_sections: {
+        verified_facts: ['GPU inference latency behavior changed on 2026-05-01.'],
+        background_context: 'GPU latency can affect camera frame analysis and image pipeline throughput.',
+        hal_driver_impact: 'Compare GPU camera inference latency, frame drops, and thermal behavior on representative devices.',
+        action_items: ['Compare GPU camera inference latency and frame drops on representative devices.'],
+        team_share_points: 'Use this as SoC fallback material for camera performance review.'
+      }
     }),
     section({
       headline: 'LLVM sanitizer C++ workflow update D',
@@ -373,9 +402,13 @@ test('quality gate blocks supporting main articles over publish-ready maximum', 
       category: 'C++ Tooling',
       what_changed: 'LLVM sanitizer workflow changed on 2026-05-01.',
       evidence_summary: 'Version: LLVM 20.1; release date: 2026-05-01; API/component: LLVM sanitizer; behavior change: native debugging.',
-      background: 'Native sanitizer workflows improve Camera HAL and driver debugging productivity.',
-      camera_hal_perspective: 'Apply sanitizer checks to Camera HAL request/result handling and V4L2 buffer ownership tests.',
-      team_summary: 'Use this fallback item for native camera debugging productivity.'
+      article_sections: {
+        verified_facts: ['LLVM sanitizer workflow changed on 2026-05-01.'],
+        background_context: 'Native sanitizer workflows improve Camera HAL and driver debugging productivity.',
+        hal_driver_impact: 'Apply sanitizer checks to Camera HAL request/result handling and V4L2 buffer ownership tests.',
+        action_items: ['Apply sanitizer checks to Camera HAL request/result handling and V4L2 buffer ownership tests.'],
+        team_share_points: 'Use this fallback item for native camera debugging productivity.'
+      }
     })
   ];
   const report = reportFor(sections, [

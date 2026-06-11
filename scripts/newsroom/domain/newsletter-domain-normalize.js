@@ -159,10 +159,13 @@ function normalizeArticle(input = {}, index = 0, diagnostics = [], options = {})
     sourceExtractionRef: text(input.sourceExtractionRef || input.source_extraction_ref || legacySection.sourceExtractionRef || legacySection.source_extraction_ref),
     seedUsed: input.seedUsed ?? input.seed_used ?? legacySection.seedUsed ?? legacySection.seed_used ?? null,
     mergeMode: text(input.mergeMode || input.merge_mode || legacySection.mergeMode || legacySection.merge_mode),
+    backgroundContext: text(
+      input.backgroundContext ||
+      legacySection.article_sections?.background_context
+    ),
     halPerspective: text(
       input.halPerspective ||
       legacySection.article_sections?.hal_driver_impact ||
-      legacySection.camera_hal_perspective ||
       legacySection.public_article?.camera_hal_takeaway
     ),
     actionItems,
@@ -173,7 +176,7 @@ function normalizeArticle(input = {}, index = 0, diagnostics = [], options = {})
       legacySection.article_sections?.do_not_claim ||
       legacySection.hal_signal_capsule?.do_not_overstate
     ).map(text).filter(Boolean),
-    teamShareLine: text(input.teamShareLine || input.team_share_line || legacySection.team_summary || legacySection.article_sections?.team_share_points),
+    teamShareLine: text(input.teamShareLine || input.team_share_line || legacySection.article_sections?.team_share_points),
     selectedImage: input.selectedImage ?? legacySection.selectedImage ?? null,
     resolvedImage: input.resolvedImage || legacySection.resolvedImage || null,
     qualityHints: input.qualityHints || input.quality_hints || legacySection.quality_hints || {},
@@ -251,7 +254,6 @@ function toLegacySection(article = {}, index = 0) {
     evidence_summary: legacy.evidence_summary || article.evidenceSummary,
     specificity_checks: legacy.specificity_checks || article.specificityChecks || {},
     source_verification_notes: legacy.source_verification_notes || article.sourceVerificationNotes || [],
-    camera_hal_perspective: legacy.camera_hal_perspective || article.halPerspective,
     action_items: legacy.action_items || actionItems,
     do_not_overstate: legacy.do_not_overstate || article.doNotOverstate || [],
     selectedImage: legacy.selectedImage ?? article.selectedImage ?? '',
@@ -269,7 +271,7 @@ function toLegacySection(article = {}, index = 0) {
     },
     article_sections: legacy.article_sections || {
       verified_facts: [],
-      background_context: legacy.background || '',
+      background_context: article.backgroundContext || '',
       hal_driver_impact: article.halPerspective || '',
       action_items: actionItems,
       team_share_points: article.teamShareLine || ''

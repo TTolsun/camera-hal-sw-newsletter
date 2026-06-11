@@ -16,7 +16,9 @@
   "section": {
     "headline": "Camera pipeline article without a source URL",
     "what_changed": "A camera pipeline update is described without a source URL.",
-    "camera_hal_perspective": "HAL teams cannot validate this item without source evidence.",
+    "article_sections": {
+      "hal_driver_impact": "HAL teams cannot validate this item without source evidence."
+    },
     "sources": []
   }
 }

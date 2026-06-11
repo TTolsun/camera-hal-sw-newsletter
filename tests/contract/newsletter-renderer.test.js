@@ -20,10 +20,7 @@ function issue(overrides = {}) {
       category: 'Tooling Watch / Fallback',
       headline: 'Internal fallback headline must not render',
       confirmed_facts: ['Legacy fact must not render.'],
-      background: 'Legacy background must not render.',
-      camera_hal_perspective: 'Legacy HAL impact must not render.',
       action_items: ['Publication 전에 source URL과 published date가 article text와 맞는지 확인합니다.'],
-      team_summary: 'Legacy team share must not render.',
       public_article: {
         headline: 'CameraX release gives HAL teams a target',
         lead: 'CameraX release gives HAL teams a dated compatibility validation signal.',

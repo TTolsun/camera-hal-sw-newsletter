@@ -102,7 +102,16 @@ function storyIssue(overrides = {}) {
       category: 'Android Platform / CameraX',
       headline,
       what_changed: 'CameraX preview behavior changed in a dated release note.',
-      camera_hal_perspective: 'CameraX preview path를 Camera ITS와 stream metadata로 확인합니다.',
+      article_sections: {
+        verified_facts: ['CameraX preview behavior changed in a dated release note.'],
+        background_context: 'CameraX preview는 Android 카메라 애플리케이션 계층입니다.',
+        hal_driver_impact: 'CameraX preview path를 Camera ITS와 stream metadata로 확인합니다.',
+        action_items: [
+          'Camera ITS smoke test를 실행합니다.',
+          'preview latency와 stream metadata 차이를 비교합니다.'
+        ],
+        team_share_points: 'CameraX preview 호환성을 camera owner와 공유합니다.'
+      },
       action_items: [
         'Camera ITS smoke test를 실행합니다.',
         'preview latency와 stream metadata 차이를 비교합니다.'
@@ -126,7 +135,6 @@ function legacyIssue() {
       category: 'Legacy',
       headline: 'Legacy Camera article',
       what_changed: 'Legacy article stays on the old public article contract.',
-      camera_hal_perspective: 'Camera HAL readers keep the legacy rendering path.',
       action_items: [
         'Run Camera ITS smoke test for Legacy Source preview stream metadata.',
         'Compare Legacy Source preview latency and frame-drop logs.'

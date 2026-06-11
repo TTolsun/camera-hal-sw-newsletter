@@ -105,11 +105,6 @@ function regressionSection(item, overrides = {}) {
     headline: item.title,
     what_changed: item.summary,
     evidence_summary: `${item.title} uses dated source evidence.`,
-    background: item.relevance_bucket === 'camera_driver_image_pipeline'
-      ? 'Driver and image pipeline changes are reviewed as camera-stack integration signals.'
-      : 'CameraX and Android camera framework changes are reviewed as compatibility and validation signals above the HAL boundary.',
-    camera_hal_perspective: 'Camera HAL team checks stream, buffer, metadata, CTS/VTS, and Camera ITS impact before follow-up work.',
-    team_summary: `${item.title} should be reviewed by camera owners.`,
     confirmed_facts: [`${item.title} was published on ${item.published_date}.`, `component=${item.component}`],
     specificity_checks: ['dated evidence present', `bucket=${item.relevance_bucket}`],
     source_verification_notes: ['Source URL is bound to candidate metadata.'],
@@ -135,13 +130,16 @@ function regressionSection(item, overrides = {}) {
     sources: [{ title: item.title, url: item.url }],
     ...overrides
   };
+  const halDriverImpact = 'Camera HAL team checks stream, buffer, metadata, CTS/VTS, and Camera ITS impact before follow-up work.';
   if (!Object.prototype.hasOwnProperty.call(overrides, 'article_sections')) {
     value.article_sections = {
       verified_facts: value.confirmed_facts,
-      background_context: value.background,
-      hal_driver_impact: value.camera_hal_perspective,
+      background_context: item.relevance_bucket === 'camera_driver_image_pipeline'
+        ? 'Driver and image pipeline changes are reviewed as camera-stack integration signals.'
+        : 'CameraX and Android camera framework changes are reviewed as compatibility and validation signals above the HAL boundary.',
+      hal_driver_impact: halDriverImpact,
       action_items: value.action_items,
-      team_share_points: value.team_summary
+      team_share_points: `${item.title} should be reviewed by camera owners.`
     };
   }
   if (!Object.prototype.hasOwnProperty.call(overrides, 'public_article')) {
@@ -152,7 +150,7 @@ function regressionSection(item, overrides = {}) {
         `${value.headline}는 날짜가 있는 출처 근거를 바탕으로 선택된 항목입니다.`,
         '실무 해석은 stream, buffer, metadata, Camera ITS, latency, frame-drop 검증 범위로 제한합니다.'
       ],
-      camera_hal_takeaway: value.camera_hal_perspective,
+      camera_hal_takeaway: halDriverImpact,
       reader_checkpoints: value.action_items,
       source_links: value.sources.map(source => ({
         title: source.title,
@@ -331,9 +329,6 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
         headline: 'CameraX release note',
         what_changed: 'CameraX release note changed a camera component.',
         evidence_summary: 'Android Developers dated release note is used as source evidence.',
-        background: 'CameraX is part of the Android camera application layer.',
-        camera_hal_perspective: 'Camera HAL team checks stream, buffer, metadata, CTS/VTS, and Camera ITS impact before follow-up work.',
-        team_summary: 'Camera team should review compatibility impact.',
         confirmed_facts: ['CameraX release note exists.', 'The source link is dated.'],
         specificity_checks: ['version=1.0.0', 'component=CameraX'],
         source_verification_notes: ['Source URL is official.'],
@@ -458,7 +453,13 @@ function writePr39LikeRegressionFixture(root, date = '2026-05-09') {
       regressionSection(gcc, {
         category: 'C++ / Tooling',
         headline: 'GCC 16.1',
-        camera_hal_perspective: 'GCC 16.1 is presented as a direct HAL toolchain change.'
+        article_sections: {
+          verified_facts: ['GCC 16.1 was published.'],
+          background_context: 'GCC 16.1 is a C++ toolchain release reviewed as native tooling context.',
+          hal_driver_impact: 'GCC 16.1 is presented as a direct HAL toolchain change.',
+          action_items: ['Start GCC 16.1 migration.'],
+          team_share_points: 'GCC 16.1 should be reviewed by native tooling owners.'
+        }
       })
     ],
     action_items: ['Run libcamera tests.', 'Run CameraX tests.', 'Start GCC 16.1 migration.'],
@@ -566,13 +567,25 @@ function writeRun25590436113LikeFallbackFixture(root, options = {}) {
     briefing: ['CameraX wording needs repair.', 'libcamera has a source gap.', 'GCC fallback is not publishable.'],
     sections: [
       regressionSection(camerax14, {
-        camera_hal_perspective: 'Speculative CameraX HAL wording that must be rebuilt from the bound candidate.'
+        article_sections: {
+          verified_facts: ['CameraX 1.4 release note exists.'],
+          background_context: 'CameraX and Android camera framework changes are reviewed as compatibility signals above the HAL boundary.',
+          hal_driver_impact: 'Speculative CameraX HAL wording that must be rebuilt from the bound candidate.',
+          action_items: ['Repair CameraX wording.'],
+          team_share_points: 'CameraX 1.4 should be reviewed by camera owners.'
+        }
       }),
       regressionSection(libcamera),
       regressionSection(gcc, {
         category: 'C++ / Tooling',
         headline: 'GCC 16.1',
-        camera_hal_perspective: 'GCC 16.1 is presented as a direct HAL toolchain change.'
+        article_sections: {
+          verified_facts: ['GCC 16.1 was published.'],
+          background_context: 'GCC 16.1 is a C++ toolchain release reviewed as native tooling context.',
+          hal_driver_impact: 'GCC 16.1 is presented as a direct HAL toolchain change.',
+          action_items: ['Start GCC migration.'],
+          team_share_points: 'GCC 16.1 should be reviewed by native tooling owners.'
+        }
       })
     ],
     action_items: ['Repair CameraX wording.', 'Investigate libcamera source gap.', 'Start GCC migration.'],

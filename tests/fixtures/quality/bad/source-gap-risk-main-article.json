@@ -16,7 +16,9 @@
   "section": {
     "headline": "Source gap camera article",
     "what_changed": "The article claims a Camera HAL validation impact but lacks source-backed dated evidence.",
-    "camera_hal_perspective": "This cannot become a main article while source_gap_risk=true.",
+    "article_sections": {
+      "hal_driver_impact": "This cannot become a main article while source_gap_risk=true."
+    },
     "sources": [
       {
         "title": "Unverified source gap item",

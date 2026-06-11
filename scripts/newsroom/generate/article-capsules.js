@@ -444,7 +444,6 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
       candidate.relevance_reason ||
       candidate.collection_reason ||
       candidate.reason ||
-      candidate.camera_hal_perspective ||
       buildHalPerspective(fieldCandidate) ||
       candidate.summary,
       MAX_TEXT

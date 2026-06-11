@@ -333,13 +333,21 @@ const hardFailRegressionCases = new Map([
           confirmed_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
           evidence_summary: 'Version: CameraX 1.6.1; release date: 2026-05-06; API/component: CameraX / androidx.camera; behavior change: compatibility validation target.',
           specificity_checks: ['Version: CameraX 1.6.1', 'Release date: 2026-05-06'],
-          background: 'CameraX sits above camera2 and should be treated as framework-adjacent, not direct HAL contract evidence.',
-          camera_hal_perspective: 'Use this as a framework-adjacent Android Camera signal, then validate Camera ITS scenes, stream behavior, buffer handling, and request/result metadata on representative devices.',
           camera_hal_checks: ['Run Camera ITS focused scenes and compare request/result metadata.'],
           action_items: [
             'Within 2 weeks, assign a camera owner to run Camera ITS on CameraX-backed preview and capture paths.',
             'Measure stream latency, frame drops, and metadata consistency before and after CameraX 1.6.1.'
-          ]
+          ],
+          article_sections: {
+            verified_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
+            background_context: 'CameraX sits above camera2 and should be treated as framework-adjacent, not direct HAL contract evidence.',
+            hal_driver_impact: 'Use this as a framework-adjacent Android Camera signal, then validate Camera ITS scenes, stream behavior, buffer handling, and request/result metadata on representative devices.',
+            action_items: [
+              'Within 2 weeks, assign a camera owner to run Camera ITS on CameraX-backed preview and capture paths.',
+              'Measure stream latency, frame drops, and metadata consistency before and after CameraX 1.6.1.'
+            ],
+            team_share_points: 'Use CameraX 1.6.1 as a concrete compatibility validation trigger.'
+          }
         }),
         ...validSections().slice(1)
       ];

@@ -26,10 +26,7 @@ function legacyIssue() {
       evidence_summary: 'CameraX release note gives a dated compatibility validation target.',
       specificity_checks: ['Version: CameraX 1.5.0'],
       source_verification_notes: ['Official source, dated release evidence.'],
-      background: 'CameraX sits above camera2 and can expose compatibility regressions.',
-      camera_hal_perspective: 'Validate stream, buffer, metadata, and Camera ITS behavior.',
       action_items: ['Run Camera ITS preview latency checks within 2 weeks.'],
-      team_summary: 'Use CameraX as a compatibility validation trigger.',
       do_not_overstate: ['Do not claim a direct HAL API change.'],
       sources: [{
         title: 'CameraX release note',

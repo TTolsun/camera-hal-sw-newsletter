@@ -116,17 +116,12 @@ test('complete=true ignores missing optional keys', () => {
   assert.deepEqual(result.diagnostics.present_optional_keys, []);
 });
 
-test('normalizeArticleSections ignores legacy fields when article_sections is missing', () => {
+test('normalizeArticleSections returns empty result when article_sections is missing', () => {
   const result = normalizeArticleSections({
-    confirmed_facts: ['Legacy fact.'],
-    what_changed: 'Legacy change.',
-    background: 'Legacy background.',
-    why_it_matters: 'Legacy importance.',
-    camera_hal_perspective: 'Legacy HAL perspective.',
-    action_hints: ['Legacy hint.'],
-    action_items: ['Legacy action.'],
-    team_summary: 'Legacy team summary.',
-    do_not_claim: ['Legacy guardrail.']
+    confirmed_facts: ['Section-level fact.'],
+    what_changed: 'Section-level change.',
+    action_hints: ['Section-level hint.'],
+    action_items: ['Section-level action.']
   });
 
   assert.deepEqual(result.verified_facts, []);
@@ -171,9 +166,7 @@ test('incomplete article_sections reports missing required keys without legacy f
       verified_facts: ['CameraX 1.5.0 was released.'],
       background_context: 'CameraX sits above Camera2.'
     },
-    camera_hal_perspective: 'Legacy HAL perspective.',
-    action_items: ['Legacy action.'],
-    team_summary: 'Legacy team summary.'
+    action_items: ['Section-level action.']
   });
 
   assert.deepEqual(result.verified_facts, ['CameraX 1.5.0 was released.']);
@@ -221,8 +214,7 @@ test('articleSectionSummary includes optional diagnostics and limitation visibil
       known_limitations: ['No direct HAL contract change is stated.'],
       watch_items: ['Track CameraX SessionConfig regressions.'],
       do_not_claim: ['Do not claim direct Camera HAL API changes.']
-    },
-    camera_hal_perspective: 'Legacy HAL perspective mismatch.'
+    }
   });
 
   assert.deepEqual(summary, {

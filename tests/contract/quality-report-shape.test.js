@@ -87,7 +87,6 @@ test('quality report records missing article_sections keys without legacy fallba
   const sections = [
     section({
       headline: 'CameraX release with missing team share point',
-      why_it_matters: 'Legacy why_it_matters must not satisfy team_share_points.',
       article_sections: {
         verified_facts: ['CameraX 1.5.0 release date: 2026-05-01.'],
         background_context: 'CameraX sits above camera2 and can expose compatibility regressions.',
@@ -126,14 +125,21 @@ test('quality report marks article PASS DEMOTE FAIL and separates hard and soft 
       confirmed_facts: ['The source announces AI assistant 1.0 on 2026-05-01.'],
       evidence_summary: 'Version: AI assistant 1.0; release date: 2026-05-01; API/component: assistant; behavior change: generic productivity.',
       specificity_checks: ['Version: AI assistant 1.0', 'Release date: 2026-05-01'],
-      background: 'The release is about generic office productivity.',
-      camera_hal_perspective: 'No concrete device imaging workflow is named.',
       camera_hal_checks: ['Track only as a briefing item.'],
       action_items: [
         'Review whether this belongs in briefing instead of main article.',
         'Do not create device validation work from this generic AI source.'
       ],
-      team_summary: 'Generic AI item should stay outside main article slots.'
+      article_sections: {
+        verified_facts: ['The source announces AI assistant 1.0 on 2026-05-01.'],
+        background_context: 'The release is about generic office productivity.',
+        hal_driver_impact: 'No concrete device imaging workflow is named.',
+        action_items: [
+          'Review whether this belongs in briefing instead of main article.',
+          'Do not create device validation work from this generic AI source.'
+        ],
+        team_share_points: 'Generic AI item should stay outside main article slots.'
+      }
     }),
     section({
       headline: 'Invalid source URL article',
@@ -264,7 +270,10 @@ test('quality gate treats short background overlap as non-blocking field hygiene
       headline: 'CameraX short overlap',
       url,
       what_changed: 'CameraX Android compatibility validation.',
-      background: 'CameraX Android compatibility checks.'
+      article_sections: {
+        ...section().article_sections,
+        background_context: 'CameraX Android compatibility checks.'
+      }
     }),
     ...validSections().slice(1)
   ];
@@ -292,8 +301,11 @@ test('quality gate accepts distinct CameraX and libcamera background context', (
       headline: 'libcamera pipeline update',
       url: libcameraUrl,
       what_changed: 'libcamera 0.5.0 updated image sensor pipeline behavior on 2026-05-01.',
-      background: 'V4L2 and libcamera changes can affect camera driver validation and ISP handoff.',
-      camera_hal_perspective: 'Review this as driver and image pipeline input before deciding whether Android camera integration follow-up is needed.'
+      article_sections: {
+        ...section().article_sections,
+        background_context: 'V4L2 and libcamera changes can affect camera driver validation and ISP handoff.',
+        hal_driver_impact: 'Review this as driver and image pipeline input before deciding whether Android camera integration follow-up is needed.'
+      }
     }),
     ...validSections().slice(1)
   ];

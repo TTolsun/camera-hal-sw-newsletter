@@ -1243,10 +1243,8 @@ function normalizeEditorSection(section, index, reporter) {
     evidence_summary: stringOrEmpty(section.evidence_summary),
     specificity_checks: ensureArray(section.specificity_checks),
     source_verification_notes: ensureArray(section.source_verification_notes),
-    camera_hal_perspective: section.camera_hal_perspective || section.why_it_matters || '',
     action_items: actionItems.length > 0 ? actionItems : actionHints,
     action_hints: actionHints.length > 0 ? actionHints : actionItems,
-    team_summary: section.team_summary || section.why_it_matters || '',
     is_ai_related: Boolean(section.is_ai_related),
     article_type: section.article_type || (section.is_ai_related ? 'ai' : 'camera-hal'),
     sources: ensureArray(section.sources).filter(source => source && source.url)
@@ -2718,7 +2716,7 @@ function finalArticleSlotDistribution(sections) {
       section.category,
       section.headline,
       section.evidence_summary,
-      section.camera_hal_perspective,
+      section.article_sections?.hal_driver_impact,
       section.article_type,
       ensureArray(section.sources).map(source => `${source.title} ${source.url}`).join(' ')
     ].join(' ');
@@ -3714,8 +3712,8 @@ async function main() {
         editorRetryContract ? 'locked section만 반환하면 invalid입니다. sections array는 partial handoff가 아니라 전체 target draft여야 합니다.' : '',
         lockedSections.length > 0 ? 'Previous attempt에서 quality-passing 상태였던 locked article은 그대로 유지하세요. Complete final sections array 안에는 missing replacement article만 새로 생성하세요.' : '',
         lockedSections.length > 0 ? 'locked article URLs, titles/headlines, source names, 또는 같은 source + published date + similar title 조합을 중복하지 마세요.' : '',
-        'marketing tone은 피하세요. 모든 article에는 confirmed_facts, background, camera_hal_perspective, action_items, team_summary, sources를 포함하세요.',
-        'background는 background-context.json의 background_context를 먼저 사용하세요. 없으면 article capsule의 background_context_static을 사용합니다. raw source UI/table snippet을 background에 복사하지 마세요.',
+        'marketing tone은 피하세요. 모든 article에는 confirmed_facts, sources, 그리고 article_sections(verified_facts, background_context, hal_driver_impact, action_items, team_share_points)를 포함하세요.',
+        'article_sections.background_context는 background-context.json의 background_context를 먼저 사용하세요. 없으면 article capsule의 background_context_static을 사용합니다. raw source UI/table snippet을 background_context에 복사하지 마세요.',
         'Jetpack Compose, Jetpack Navigation 3, CameraX-adjacent, Android adaptive UI article은 바로 결론으로 가지 말고 Compose/Navigation/adaptive UI가 왜 camera preview/capture UX 검증과 연결되는지 한 문단의 배경설명을 먼저 제공하세요.',
         'candidate와 background context의 source facts를 보고 article_sections.hal_driver_impact, public_article.camera_hal_takeaway, claims[].impact_level에서 public-facing impact wording과 claim-level classification을 작성하세요.',
         '모든 article은 evidence_summary, specificity_checks, source_verification_notes를 포함해야 합니다.',
@@ -3842,6 +3840,7 @@ async function main() {
         'Editor가 official-source 또는 cross-checked verification을 설명하지 않는 candidate-only 또는 requiresCrossCheck source 사용은 must_fix[]와 source_gaps[]에 모두 기록하세요.',
         'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
         'coverage_type=catch_up인 "지난 소식" 기사는 수 주 전 릴리스를 회고로 다루도록 의도된 것입니다. headline/lead에 "지난 소식", "N주 전 릴리스된 ~" 같은 회고 editorial framing이 있어도 must_fix로 다루지 마세요. 이는 의도된 catch-up 프레이밍이며 source 날짜를 숨기지 않는 한 factual 위반이 아닙니다.',
+        'editor schema에 정의된 유효한 필드의 존재 자체를 deprecated/legacy로 판정하거나 must_fix로 올리지 마세요. 존재하지 않는 폐기(deprecation)/legacy 정책이나 출처를 지어내지 마세요. must_fix[]는 source가 직접 반증하는 factual 오류, 누락/위조된 출처, 명시된 editorial-policy 위반 전용입니다.',
         'style rewrite는 하지 마세요. factual errors, source problems, editorial-policy violations에만 집중하세요.',
         'schema와 일치하는 JSON만 반환하세요.'
       ].join('\n'),
@@ -4043,6 +4042,7 @@ async function main() {
           [
           '당신은 repaired AOSP Camera / Driver / SoC Platform Newsletter draft의 AI fact checker입니다.',
           'factuality, missing sources, exaggerated language, missing dates, source gaps, editorial-policy violations를 확인하세요.',
+          'editor schema에 정의된 유효한 필드의 존재 자체를 deprecated/legacy로 판정하거나 must_fix로 올리지 마세요. 존재하지 않는 폐기 정책이나 출처를 지어내지 마세요. must_fix[]는 source가 직접 반증하는 factual 오류, 누락/위조된 출처, 명시된 editorial-policy 위반 전용입니다.',
           linkedEvidencePromptGuardrails(),
           sourceExtractionPromptGuardrails(),
           articleSectionContractPrompt(),
@@ -4137,7 +4137,7 @@ async function main() {
             publicationBoundaryPrompt(),
             articleClaimContractPrompt(),
             'exclusion context에 있는 locked, duplicate/rejected, source-gap, ineligible sections를 중복하지 마세요.',
-            '각 새 section은 같은 editorial contract인 confirmed_facts, background, camera_hal_perspective, action_items, team_summary, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, sources를 만족해야 합니다.',
+            '각 새 section은 같은 editorial contract인 confirmed_facts, evidence_summary, specificity_checks, source_verification_notes, camera_hal_checks, sources, 그리고 article_sections(verified_facts, background_context, hal_driver_impact, action_items, team_share_points)를 만족해야 합니다.',
             '각 new section은 제공된 candidate metadata/source text만 사용해 release date, version/release, API/component 또는 library/artifact, concrete behavior change, relevance_bucket, AOSP Camera / driver / SoC / native tooling relevance를 명명해야 합니다.',
             'Exclusion context에 있는 duplicate URL, duplicate title, duplicate source-date-title combination을 거부하세요.',
             'facts를 검증할 수 없으면 해당 candidate로 main article을 만들지 말고 newsletter를 underfilled 상태로 남겨 editor review에 넘기세요.',
@@ -4187,6 +4187,7 @@ async function main() {
             [
             '당신은 completed AOSP Camera / Driver / SoC Platform Newsletter draft의 AI fact checker입니다.',
             'factuality, missing sources, exaggerated language, missing dates, source gaps, editorial-policy violations를 확인하세요.',
+            'editor schema에 정의된 유효한 필드의 존재 자체를 deprecated/legacy로 판정하거나 must_fix로 올리지 마세요. 존재하지 않는 폐기 정책이나 출처를 지어내지 마세요. must_fix[]는 source가 직접 반증하는 factual 오류, 누락/위조된 출처, 명시된 editorial-policy 위반 전용입니다.',
             linkedEvidencePromptGuardrails(),
             sourceExtractionPromptGuardrails(),
             articleSectionContractPrompt(),

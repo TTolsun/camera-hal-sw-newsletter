@@ -308,21 +308,27 @@ function uniqueText(values) {
   return output;
 }
 
+function asObject(value) {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+}
+
 function mergeBackgroundContext(section = {}) {
+  const publicArticle = asObject(section.public_article);
   return uniqueText([
-    section.background,
-    section.why_it_matters,
-    section.evidence_summary
+    section.evidence_summary,
+    ...ensureArray(publicArticle.body_paragraphs)
   ]).join('\n\n');
 }
 
-function buildArticleSectionsFromLegacyFields(section = {}) {
+function buildArticleSectionsFromSectionFields(section = {}) {
   const reasonCodes = [];
+  const publicArticle = asObject(section.public_article);
+  const editorialStory = asObject(publicArticle.editorial_story);
   const verifiedFacts = uniqueText(section.confirmed_facts);
   const backgroundContext = mergeBackgroundContext(section);
-  const halDriverImpact = text(section.camera_hal_perspective);
-  const actionItems = uniqueText(section.action_items);
-  const teamSharePoints = text(section.team_summary);
+  const halDriverImpact = text(publicArticle.camera_hal_takeaway);
+  const actionItems = uniqueText([section.action_items, section.camera_hal_checks]);
+  const teamSharePoints = text(editorialStory.editor_take || publicArticle.camera_hal_takeaway);
   if (!backgroundContext) reasonCodes.push('missing_background_context');
   if (!halDriverImpact) reasonCodes.push('missing_hal_driver_impact');
   if (actionItems.length === 0) reasonCodes.push('missing_action_items');
@@ -393,13 +399,14 @@ function buildStoryFromPublicArticle(section = {}, publicArticle = {}) {
     ...ensureArray(section.do_not_overstate),
     ...ensureArray(section.hal_signal_capsule?.do_not_overstate)
   ]);
+  const articleSections = normalizeArticleSections(section);
   return {
     reader_scenario: `${headline}을 Camera HAL / Driver / Native tooling 리뷰 범위에 넣을지 판단하는 현업 상황을 가정합니다.`,
     what_happened: text(publicArticle.lead || section.what_changed || section.evidence_summary),
-    why_it_matters: text(publicArticle.camera_hal_takeaway || section.camera_hal_perspective || section.why_it_matters),
+    why_it_matters: text(publicArticle.camera_hal_takeaway || articleSections.hal_driver_impact),
     field_scenario: checkpoints.join(' ') || text(section.camera_hal_checks || section.action_items),
     not_to_overclaim: limitations.join(' ') || 'source가 직접 말하지 않는 HAL runtime, driver branch, vendor tag, pipeline 영향으로 확대하지 않습니다.',
-    editor_take: text(section.team_summary || publicArticle.camera_hal_takeaway || `${headline}은 source 범위 안에서만 확인합니다.`)
+    editor_take: text(articleSections.team_share_points || publicArticle.camera_hal_takeaway || `${headline}은 source 범위 안에서만 확인합니다.`)
   };
 }
 
@@ -475,7 +482,7 @@ function deterministicallyRepairEditorSchema(value, options = {}) {
     }
     const normalized = normalizeArticleSections(section);
     if (!(normalized.diagnostics.article_sections_present && normalized.diagnostics.complete)) {
-      const candidate = buildArticleSectionsFromLegacyFields(section);
+      const candidate = buildArticleSectionsFromSectionFields(section);
       reasonCodes.push(...candidate.reason_codes);
       section.article_sections = candidate.article_sections;
       const repairedNormalized = normalizeArticleSections(section);

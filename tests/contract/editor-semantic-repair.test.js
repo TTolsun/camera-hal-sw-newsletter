@@ -47,10 +47,10 @@ test('semantic repair deterministically restores missing article_sections from s
   assert.equal(result.deterministicRepair, true);
   assert.deepEqual(result.editor.sections[0].article_sections, {
     verified_facts: ['Fact 1'],
-    background_context: 'Background 1 Why 1 Evidence 1',
+    background_context: 'Evidence 1 Headline 1 was selected from dated source evidence for Camera HAL readers. The practical interpretation for Headline 1 stays limited to stream and metadata validation.',
     hal_driver_impact: 'HAL perspective 1',
-    action_items: ['Action 1'],
-    team_share_points: 'Summary 1',
+    action_items: ['Action 1', 'HAL check 1'],
+    team_share_points: 'HAL perspective 1',
     do_not_claim: ['Do not overstate direct HAL impact.']
   });
   assert.equal(require('fs').existsSync(path.join(newsroomDir, 'editor-invalid-attempt-1.json')), true);
@@ -143,7 +143,11 @@ test('semantic repair falls back to LLM repair with deterministic reason code fo
     sections: [
       section(1, {
         article_sections: undefined,
-        camera_hal_perspective: ''
+        public_article: {
+          ...section(1).public_article,
+          camera_hal_takeaway: '',
+          editorial_story: { editor_take: 'Source 범위 안에서만 확인합니다.' }
+        }
       }),
       section(2),
       section(3)

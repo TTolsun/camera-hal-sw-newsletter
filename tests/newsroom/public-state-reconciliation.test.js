@@ -55,7 +55,7 @@ function publicIssue(date, overrides = {}) {
         `${section.headline} is represented here as a reader-facing public article fixture.`,
         'The operational meaning stays limited to stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.'
       ],
-      camera_hal_takeaway: section.camera_hal_perspective,
+      camera_hal_takeaway: section.article_sections.hal_driver_impact,
       reader_checkpoints: [
         `Assign owner ${index + 1} to review the public source and map it to one Camera HAL validation lane.`,
         `Record one fixture-specific metric for article ${index + 1} before treating it as implementation guidance.`

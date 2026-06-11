@@ -16,10 +16,14 @@ function section(overrides = {}) {
     headline: 'CameraX 1.5 release note',
     what_changed: 'CameraX 1.5.0 changed Android Camera compatibility behavior.',
     evidence_summary: 'Version: CameraX 1.5.0; API/component: CameraX.',
-    background: 'CameraX affects camera2 compatibility validation.',
-    camera_hal_perspective: 'Validate request/result metadata and stream behavior.',
     action_items: ['Run Camera ITS before publishing.', 'Compare capture latency.'],
-    team_summary: 'Use CameraX as a compatibility signal.',
+    article_sections: {
+      verified_facts: ['CameraX 1.5.0 changed Android Camera compatibility behavior.'],
+      background_context: 'CameraX affects camera2 compatibility validation.',
+      hal_driver_impact: 'Validate request/result metadata and stream behavior.',
+      action_items: ['Run Camera ITS before publishing.', 'Compare capture latency.'],
+      team_share_points: 'Use CameraX as a compatibility signal.'
+    },
     sources: [source('https://example.com/camerax', 'CameraX release note')],
     ...overrides
   };

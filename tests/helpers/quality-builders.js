@@ -20,15 +20,11 @@ function section(overrides = {}) {
     evidence_summary: 'Version: CameraX 1.5.0; release date: 2026-05-01; API/component: CameraX; behavior change: compatibility validation target.',
     specificity_checks: ['Version: CameraX 1.5.0', 'Release date: 2026-05-01'],
     source_verification_notes: ['Official source, dated release evidence.'],
-    background: 'CameraX sits above camera2 and exposes compatibility regressions that can map back to Camera HAL stream and metadata behavior.',
-    why_it_matters: 'HAL teams can use this as a regression check input.',
-    camera_hal_perspective: 'Validate request/result metadata, stream combinations, Camera ITS scenes, latency, frame drop, thermal, and buffer behavior on representative devices.',
     camera_hal_checks: ['Run Camera ITS focused scenes on CameraX-backed capture paths.'],
     action_items: [
       'Within 2 weeks, assign a camera owner to compare Camera ITS logs before and after CameraX 1.5.0.',
       'Measure preview/capture latency and frame drop metrics on at least one legacy and one flagship device.'
     ],
-    team_summary: 'Use CameraX 1.5.0 as a concrete compatibility validation trigger.',
     is_ai_related: false,
     article_type: 'camera-hal',
     hal_impact_axes: ['framework_hal_contract', 'stream_buffer_metadata', 'camerax_app_compatibility'],
@@ -54,13 +50,14 @@ function section(overrides = {}) {
     sources: [source(overrides.url || 'https://example.com/camerax')],
     ...overrides
   };
+  const halDriverImpact = 'Validate request/result metadata, stream combinations, Camera ITS scenes, latency, frame drop, thermal, and buffer behavior on representative devices.';
   if (!Object.prototype.hasOwnProperty.call(overrides, 'article_sections')) {
     value.article_sections = {
       verified_facts: value.confirmed_facts,
-      background_context: value.background,
-      hal_driver_impact: value.camera_hal_perspective,
+      background_context: 'CameraX sits above camera2 and exposes compatibility regressions that can map back to Camera HAL stream and metadata behavior.',
+      hal_driver_impact: halDriverImpact,
       action_items: value.action_items,
-      team_share_points: value.team_summary
+      team_share_points: 'Use CameraX 1.5.0 as a concrete compatibility validation trigger.'
     };
   }
   if (!Object.prototype.hasOwnProperty.call(overrides, 'public_article')) {
@@ -71,7 +68,7 @@ function section(overrides = {}) {
         `${value.headline} was selected from dated source evidence for Camera HAL readers.`,
         'The practical interpretation stays limited to stream, buffer, metadata, Camera ITS, latency, and frame-drop validation.'
       ],
-      camera_hal_takeaway: value.camera_hal_perspective,
+      camera_hal_takeaway: halDriverImpact,
       reader_checkpoints: value.action_items,
       source_links: value.sources.map(source => ({
         title: source.title,

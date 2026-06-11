@@ -120,7 +120,6 @@ test('domain validation reports missing article id, source URL, sourceRefs, and 
 test('public article only legacy sections fail until domain fields can be derived', () => {
   const validation = validateNewsletterIssueModel(legacyEditor({
     evidence_summary: '',
-    camera_hal_perspective: '',
     article_sections: {},
     action_items: [],
     sources: [],

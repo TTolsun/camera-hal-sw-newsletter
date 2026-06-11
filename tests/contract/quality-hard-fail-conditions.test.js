@@ -91,7 +91,10 @@ test('quality gate hard-fails raw background table artifacts', () => {
     section({
       headline: 'CameraX raw table leak',
       url,
-      background: 'camera-view 1.6.1 - - 1.7.0-alpha01 camera-video 1.6.1 - - 1.7.0-alpha01 View the Camera Library Close Maven Group versions'
+      article_sections: {
+        ...section().article_sections,
+        background_context: 'camera-view 1.6.1 - - 1.7.0-alpha01 camera-video 1.6.1 - - 1.7.0-alpha01 View the Camera Library Close Maven Group versions'
+      }
     }),
     ...validSections().slice(1)
   ];
@@ -113,7 +116,10 @@ test('quality gate hard-fails exact duplicate and semantic background overlap', 
       headline: 'CameraX exact duplicate',
       url: exactUrl,
       what_changed: 'CameraX changed.',
-      background: 'CameraX changed.'
+      article_sections: {
+        ...section().article_sections,
+        background_context: 'CameraX changed.'
+      }
     }),
     ...validSections().slice(1)
   ], [
@@ -125,7 +131,10 @@ test('quality gate hard-fails exact duplicate and semantic background overlap', 
       headline: 'CameraX semantic overlap',
       url: semanticUrl,
       what_changed: 'CameraX release updates Android camera compatibility validation behavior today.',
-      background: 'CameraX release updates Android camera compatibility validation behavior now.'
+      article_sections: {
+        ...section().article_sections,
+        background_context: 'CameraX release updates Android camera compatibility validation behavior now.'
+      }
     }),
     ...validSections().slice(1)
   ], [

@@ -17,7 +17,9 @@
   "section": {
     "headline": "Generic IT dashboard release",
     "what_changed": "A dashboard product release mentions automation but does not connect to Camera HAL, Android Camera, frame, stream, buffer, metadata, ISP, GPU, or NPU work.",
-    "camera_hal_perspective": "No concrete Camera HAL action is identified.",
+    "article_sections": {
+      "hal_driver_impact": "No concrete Camera HAL action is identified."
+    },
     "sources": [
       {
         "title": "Generic dashboard release",

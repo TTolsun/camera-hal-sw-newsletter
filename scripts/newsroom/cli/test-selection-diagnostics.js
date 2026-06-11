@@ -147,8 +147,6 @@ function qualitySection(index, url, headlineSuffix = '') {
     source_verification_notes: [
       `Verified source URL ${url} for dated Camera HAL evidence.`
     ],
-    background: `Camera HAL owners need this Camera2 stream metadata context for CTS and VTS validation ${index}.`,
-    camera_hal_perspective: `Camera HAL stream buffer metadata request/result validation needs CTS, VTS, Camera ITS, latency, and frame drop checks ${index}.`,
     camera_hal_checks: [
       `Run CTS Camera ITS stream metadata validation on device class ${index}.`
     ],
@@ -156,7 +154,18 @@ function qualitySection(index, url, headlineSuffix = '') {
       `Run CTS Camera ITS stream metadata test on device class ${index} within 2 weeks.`,
       `Collect camera HAL latency metric and frame drop log for stream combination ${index}.`
     ],
-    team_summary: `Camera HAL team should validate stream metadata request/result behavior ${index}.`,
+    article_sections: {
+      verified_facts: [
+        `Release date 2026-05-03 names Camera HAL stream metadata component ${index}.`
+      ],
+      background_context: `Camera HAL owners need this Camera2 stream metadata context for CTS and VTS validation ${index}.`,
+      hal_driver_impact: `Camera HAL stream buffer metadata request/result validation needs CTS, VTS, Camera ITS, latency, and frame drop checks ${index}.`,
+      action_items: [
+        `Run CTS Camera ITS stream metadata test on device class ${index} within 2 weeks.`,
+        `Collect camera HAL latency metric and frame drop log for stream combination ${index}.`
+      ],
+      team_share_points: `Camera HAL team should validate stream metadata request/result behavior ${index}.`
+    },
     is_ai_related: index === 1,
     article_type: index === 1 ? 'AI Camera HAL workflow' : 'Android Camera platform',
     sources: [

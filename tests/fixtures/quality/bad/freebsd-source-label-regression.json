@@ -30,7 +30,9 @@
   "section": {
     "headline": "FreeBSD 15.1 Beta 1 release",
     "what_changed": "FreeBSD 15.1 Beta 1 was released for early testing.",
-    "camera_hal_perspective": "The source does not identify a concrete Camera HAL, Android Camera, frame, stream, buffer, metadata, ISP, GPU, or NPU workflow.",
+    "article_sections": {
+      "hal_driver_impact": "The source does not identify a concrete Camera HAL, Android Camera, frame, stream, buffer, metadata, ISP, GPU, or NPU workflow."
+    },
     "sources": [
       {
         "title": "FreeBSD 15.1 Beta Released For Early Testing",
