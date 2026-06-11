@@ -49,7 +49,7 @@
 | review_candidate | 0.72 | [PATCH v8 6/9] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay | https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz/ |
 | review_candidate | 0.72 | Re: [PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg | https://lore.kernel.org/linux-media/d99ada08-ab7e-42c3-9e6b-174a4631dc4a@ixit.cz/ |
 | review_candidate | 0.72 | [PATCH v8 8/9] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg via B4 Relay | https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz/ |
-| review_candidate | 0.72 | Re: [PATCH 1/3] dt-bindings: media: qcom,qcm2290-venus: document shikra Iris compatible - Vikash Garodia | https://lore.kernel.org/linux-media/5e1be8c3-3e41-4a4f-bb70-3bc6bad7f26d@oss.qualcomm.com/ |
+| blocked_candidate | 0.5 | The libcamera-devel Archives | https://lists.libcamera.org/pipermail/libcamera-devel/ |
 | weak_candidate | 0.458 | CameraX | https://developer.android.com/media/camera/camerax |
 | weak_candidate | 0.367 | VideoCapture | https://developer.android.com/media/camera/camerax/video-capture |
 | weak_candidate | 0.413 | Release notes | https://source.android.com/docs/whatsnew/release-notes |

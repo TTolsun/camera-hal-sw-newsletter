@@ -857,21 +857,23 @@
       "reasons": []
     },
     {
-      "candidate_id": "gemini-eedcdfde74b8c54d",
-      "url": "https://lore.kernel.org/linux-media/5e1be8c3-3e41-4a4f-bb70-3bc6bad7f26d@oss.qualcomm.com/",
-      "title": "Re: [PATCH 1/3] dt-bindings: media: qcom,qcm2290-venus: document shikra Iris compatible - Vikash Garodia",
+      "candidate_id": "gemini-fa0d645879e771f0",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "title": "The libcamera-devel Archives",
       "deep_checked": false,
       "source_fetch_used": false,
       "source_fetch_status": "skipped",
       "source_fetch_error": "",
-      "validation_mode": "skipped",
+      "validation_mode": "metadata_only",
       "unsupported_claims": 0,
       "supported_claims": 0,
-      "final_selection_blocked": false,
+      "final_selection_blocked": true,
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
-      "reasons": []
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
     },
     {
       "candidate_id": "gemini-linked-45111a50490175f2",
@@ -960,8 +962,8 @@
     }
   ],
   "counts": {
-    "not_checked": 15,
+    "not_checked": 14,
     "pass": 11,
-    "blocked": 27
+    "blocked": 28
   }
 }
