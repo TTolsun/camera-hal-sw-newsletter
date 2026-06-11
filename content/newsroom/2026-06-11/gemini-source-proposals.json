@@ -5,77 +5,130 @@
   "proposals": [
     {
       "proposal_id": "camera-hal-sw-20260611-001",
-      "topic_gap": "Recent updates in Android's camera HAL and related low-level camera stack components, focusing on new features, performance improvements, or bug fixes.",
-      "source_family": "Official Android media/camera-output discovery intent",
+      "topic_gap": "New features or improvements in Android camera HAL for better performance or new capabilities.",
+      "source_family": "android-developers-blog",
       "allowed_domains": [],
       "search_keywords": [
-        "CameraX 1.6.0",
         "Android camera HAL",
-        "Camera ITS updates"
+        "camera performance",
+        "camera features"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
       ],
       "expected_evidence": [
-        "CameraX release notes detailing new features or fixes.",
-        "Information on Camera ITS (Integration Test Suite) updates or new testing methodologies for camera hardware."
+        "Camera HAL updates",
+        "performance improvements",
+        "new camera features"
       ],
-      "risk_notes": [
-        "The CameraX release notes might be too high-level and not directly related to HAL changes.",
-        "Camera ITS documentation might not reflect recent HAL-level changes."
-      ]
+      "risk_notes": []
     },
     {
       "proposal_id": "camera-hal-sw-20260611-002",
-      "topic_gap": "Low-level camera sensor driver updates and integration on Linux/Android platforms, including support for new sensors or improvements in existing ones.",
-      "source_family": "Linux kernel camera driver updates",
+      "topic_gap": "Updates to CameraX library affecting camera HAL interaction or camera output processing.",
+      "source_family": "camerax-release-notes",
       "allowed_domains": [],
       "search_keywords": [
-        "linux kernel media drivers",
-        "C-PHY camera",
-        "Sony IMX471 driver",
-        "Qualcomm camss"
+        "CameraX release notes",
+        "CameraX HAL",
+        "CameraX camera output"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-0-cd4387785179@ixit.cz/",
-        "https://lore.kernel.org/linux-media/ainh3vUs_FWj4bLR@kekkonen.localdomain/",
-        "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz/",
-        "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz/",
-        "https://lore.kernel.org/linux-media/d99ada08-ab7e-42c3-9e6b-174a4631dc4a@ixit.cz/",
-        "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz/"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
       ],
       "expected_evidence": [
-        "Kernel patch descriptions detailing new sensor drivers or modifications.",
-        "Discussions on C-PHY configuration and its impact on camera performance.",
-        "Updates related to specific image sensor models (e.g., Sony IMX471)."
+        "CameraX release notes",
+        "camera HAL changes",
+        "camera output processing"
       ],
-      "risk_notes": [
-        "These are mailing list archives and may require careful filtering to extract relevant information.",
-        "The focus might be on Linux kernel specifics rather than direct Android HAL integration."
-      ]
+      "risk_notes": []
     },
     {
       "proposal_id": "camera-hal-sw-20260611-003",
-      "topic_gap": "Updates and discussions on the libcamera project, which is increasingly relevant for camera stacks on various platforms, including potential Android integration.",
-      "source_family": "libcamera project updates",
+      "topic_gap": "Linux kernel media subsystem changes relevant to Android camera HAL drivers.",
+      "source_family": "lore-linux-media-list",
       "allowed_domains": [],
       "search_keywords": [
-        "libcamera-devel",
-        "libcamera updates",
-        "camera pipeline"
+        "linux kernel media",
+        "camera HAL driver",
+        "C-PHY",
+        "MIPI CSI-2"
       ],
       "candidate_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/"
+        "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz/",
+        "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz/",
+        "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz/"
       ],
       "expected_evidence": [
-        "Release announcements or significant code changes within the libcamera project.",
-        "Discussions on new features, bug fixes, or support for new hardware."
+        "Linux kernel media drivers",
+        "camera HAL integration",
+        "C-PHY configuration",
+        "MIPI CSI-2"
       ],
-      "risk_notes": [
-        "The mailing list archive can be extensive and may require significant effort to identify relevant camera HAL-related information.",
-        "Direct relevance to Android's camera HAL might be limited unless specific integration efforts are discussed."
-      ]
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260611-004",
+      "topic_gap": "New developments or best practices in Android media pipeline for camera output.",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3 camera output",
+        "Android media pipeline",
+        "A/V sync"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
+      ],
+      "expected_evidence": [
+        "Media3 release notes",
+        "camera output processing",
+        "A/V sync",
+        "recording"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260611-005",
+      "topic_gap": "Android compatibility requirements or testing methods for camera HAL.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android camera compatibility",
+        "Camera ITS",
+        "camera HAL testing"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Camera ITS",
+        "compatibility testing",
+        "camera HAL validation"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260611-006",
+      "topic_gap": "Updates to Linux kernel drivers for image sensors used in Android devices.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel image sensor driver",
+        "Sony IMX471",
+        "IMX219"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/ainh3vUs_FWj4bLR@kekkonen.localdomain/",
+        "https://lore.kernel.org/linux-media/202606110952.Y6lTwJmm-lkp@intel.com/"
+      ],
+      "expected_evidence": [
+        "Linux kernel drivers",
+        "image sensor support",
+        "Sony IMX471",
+        "IMX219"
+      ],
+      "risk_notes": []
     }
   ]
 }

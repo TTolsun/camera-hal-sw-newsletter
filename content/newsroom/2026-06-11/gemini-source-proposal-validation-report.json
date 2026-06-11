@@ -5,8 +5,16 @@
   "validations": [
     {
       "proposal_id": "camera-hal-sw-20260611-001",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260611-002",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "accepted": false,
       "rejected_reason": "discovered_not_extractable",
       "source_policy_match": "camerax-release-notes",
@@ -18,39 +26,7 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "camera-hal-sw-20260611-001",
-      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "android-compatibility-definition-document"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260611-002",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-0-cd4387785179@ixit.cz/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-0-cd4387785179@ixit.cz/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260611-002",
-      "candidate_url": "https://lore.kernel.org/linux-media/ainh3vUs_FWj4bLR@kekkonen.localdomain/",
-      "normalized_url": "https://lore.kernel.org/linux-media/ainh3vUs_FWj4bLR@kekkonen.localdomain/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260611-002",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260611-002",
+      "proposal_id": "camera-hal-sw-20260611-003",
       "candidate_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz/",
       "accepted": true,
@@ -58,15 +34,15 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "camera-hal-sw-20260611-002",
-      "candidate_url": "https://lore.kernel.org/linux-media/d99ada08-ab7e-42c3-9e6b-174a4631dc4a@ixit.cz/",
-      "normalized_url": "https://lore.kernel.org/linux-media/d99ada08-ab7e-42c3-9e6b-174a4631dc4a@ixit.cz/",
+      "proposal_id": "camera-hal-sw-20260611-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz/",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "camera-hal-sw-20260611-002",
+      "proposal_id": "camera-hal-sw-20260611-003",
       "candidate_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz/",
       "accepted": true,
@@ -74,16 +50,46 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "camera-hal-sw-20260611-003",
-      "candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
-      "normalized_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "proposal_id": "camera-hal-sw-20260611-004",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "androidx-media3-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-media3-release",
+      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260611-005",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "accepted": true,
       "rejected_reason": "",
-      "source_policy_match": "libcamera-release-announcements"
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260611-006",
+      "candidate_url": "https://lore.kernel.org/linux-media/ainh3vUs_FWj4bLR@kekkonen.localdomain/",
+      "normalized_url": "https://lore.kernel.org/linux-media/ainh3vUs_FWj4bLR@kekkonen.localdomain/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260611-006",
+      "candidate_url": "https://lore.kernel.org/linux-media/202606110952.Y6lTwJmm-lkp@intel.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/202606110952.Y6lTwJmm-lkp@intel.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
     }
   ],
   "counts": {
-    "discovered_not_extractable": 1,
-    "accepted": 8
+    "accepted": 7,
+    "discovered_not_extractable": 2
   }
 }

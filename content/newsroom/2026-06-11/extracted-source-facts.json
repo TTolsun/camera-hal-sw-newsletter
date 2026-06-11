@@ -13,7 +13,7 @@
       "claims": [
         {
           "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"ko-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
           "confidence": "medium"
         }
       ],
@@ -59,7 +59,7 @@
       "claims": [
         {
           "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"es-419-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open So",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
           "confidence": "medium"
         }
       ],
@@ -105,7 +105,7 @@
       "claims": [
         {
           "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"ja-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
           "confidence": "medium"
         }
       ],
@@ -162,52 +162,6 @@
       "warnings": []
     },
     {
-      "id": "f204e21a80d8be8a",
-      "url": "https://lore.kernel.org/linux-media/d99ada08-ab7e-42c3-9e6b-174a4631dc4a@ixit.cz/",
-      "title": "Re: [PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency",
-      "published_at": "2026-06-10T17:44:40Z",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "On 10/06/2026 10:23, Wenmeng Liu wrote: > > > On 6/5/2026 9:14 PM, David Heidelberg via B4 Relay wrote: >> From: David Heidelberg >> >> Ensure that the link frequency divider correctly accounts for C-PHY >> operation. The divider differs between D-PHY and C-PHY, as described >> in the MIPI CSI-2 specification. >> >> For more details, see: >> https://docs.kernel.org/driver-api/media/tx-rx.html#pixel-rate >> >> Suggested-by: Sakari Ailus >> Acked-by: Cory Keitz >> Tested-by: Cory Keitz >> Reviewed",
-          "evidence_text": "<html><head><title>Re: [PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and ",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.57,
-      "android_hal_relevance": 0.57,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.758,
-      "warnings": []
-    },
-    {
-      "id": "6a0f12cd90d300b1",
-      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-0-cd4387785179@ixit.cz/",
-      "title": "[PATCH v8 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
-      "published_at": "2026-06-10T18:28:26Z",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Note: WIP tag added, as not everything from the previous review round has been addressed. # Short summary This patch series extends the Qualcomm CAMSS (Camera Subsystem), including CSID and CSIPHY components, to support C-PHY mode configuration. # Background and motivation Modern smartphone cameras increasingly rely on MIPI C-PHY rather than D-PHY, thanks to its higher data throughput and signal efficiency. As a result, many OEMs adopt C-PHY interfaces for main (rear) cameras on Qualcomm-based d",
-          "evidence_text": "<html><head><title>[PATCH v8 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms - David Heidelberg via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.87,
-      "android_hal_relevance": 0.87,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.743,
-      "warnings": []
-    },
-    {
       "id": "6aa85a0390c2678d",
       "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz/",
       "title": "[PATCH v8 8/9] media: qcom: camss: Account for C-PHY when calculating link frequency",
@@ -228,6 +182,29 @@
       "android_hal_relevance": 0.51,
       "ai_relevance": 0.5,
       "technical_depth": 0.734,
+      "warnings": []
+    },
+    {
+      "id": "gemini-5ac40af61545a28f",
+      "url": "https://lore.kernel.org/linux-media/202606110952.Y6lTwJmm-lkp@intel.com/",
+      "title": "Re: [PATCH v2] media: i2c: imx219: Fix PIXEL_RATE for special binning mode - kernel test robot",
+      "published_at": "2020-01-20",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v2] media: i2c: imx219: Fix PIXEL_RATE for special binning mode - kernel test robot",
+          "evidence_text": "<html><head><title>Re: [PATCH v2] media: i2c: imx219: Fix PIXEL_RATE for special binning mode - kernel test robot</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-colo",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.725,
       "warnings": []
     },
     {
@@ -267,6 +244,29 @@
         {
           "claim": "[PATCH v8 7/9] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay",
           "evidence_text": "<html><head><title>[PATCH v8 7/9] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-ea2618b286cb9ad5",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz/",
+      "title": "[PATCH v8 8/9] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg via B4 Relay",
+      "published_at": "2026-06-10",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v8 8/9] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg via B4 Relay",
+          "evidence_text": "<html><head><title>[PATCH v8 8/9] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"sc",
           "confidence": "medium"
         }
       ],
