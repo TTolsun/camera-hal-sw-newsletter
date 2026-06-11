@@ -1,0 +1,967 @@
+{
+  "schema_version": 1,
+  "report_type": "source_quality",
+  "newsletter_date": "2026-06-11",
+  "candidates": [
+    {
+      "candidate_id": "1dbe1c628b26e5d5",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "source_quality_score": 0.893,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "9b460337b26c1fbb",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "source_quality_score": 0.893,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "8edd18929c9fbdd9",
+      "url": "https://goo.gle/AdaptiveApps_IO26",
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "source_quality_score": 0.893,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "b42f0f8cfbaa9f26",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "source_quality_score": 0.873,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.95,
+        "android_hal_relevance": 0.95,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "source_quality_score": 0.829,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.89,
+        "android_hal_relevance": 0.89,
+        "technical_depth": 0.55,
+        "recency_score": 0.5,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "499a4a6dab8bbf43",
+      "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "title": "17 Things to know for Android developers at Google I/O",
+      "source_quality_score": 0.648,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.84,
+        "android_hal_relevance": 0.84,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "5293b25a93416b26",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "title": "Top 3 updates for Android developer productivity",
+      "source_quality_score": 0.715,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.78,
+        "android_hal_relevance": 0.78,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "106481b888f83d2f",
+      "url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "title": "Android UI Development is Compose First",
+      "source_quality_score": 0.475,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.78,
+        "android_hal_relevance": 0.78,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0.15
+      }
+    },
+    {
+      "candidate_id": "efa3bb9b7c31e6f5",
+      "url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
+      "source_quality_score": 0.601,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.72,
+        "android_hal_relevance": 0.72,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "2b43719b9f6ba6e5",
+      "url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+      "title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
+      "source_quality_score": 0.601,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.72,
+        "android_hal_relevance": 0.72,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "3ca2b58b92a0b76d",
+      "url": "https://source.android.com/docs/compatibility",
+      "title": "Compatibility",
+      "source_quality_score": 0.676,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.71,
+        "android_hal_relevance": 0.71,
+        "technical_depth": 0.25,
+        "recency_score": 0.15,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "2a30fe242da15a49",
+      "url": "https://source.android.com/docs/core/camera",
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.618,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.65,
+        "android_hal_relevance": 0.65,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "473c2de5968532c9",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "1.6.1",
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "f2f7a4ce6187ee89",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "title": "1.3.0-beta02",
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "126b8a669e4375b9",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "title": "1.4.0-alpha07",
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "f01073bfa5c3aebb",
+      "url": "https://source.android.com/docs/whatsnew",
+      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.57,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.53,
+        "android_hal_relevance": 0.53,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "df4d682cc51d783d",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.57,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.53,
+        "android_hal_relevance": 0.53,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "e4c5879011f89cfb",
+      "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "title": "Overview",
+      "source_quality_score": 0.531,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.41,
+        "android_hal_relevance": 0.41,
+        "technical_depth": 0.25,
+        "recency_score": 0.8,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "f14d5a039bc8cdfc",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+      "title": "June",
+      "source_quality_score": 0.531,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.41,
+        "android_hal_relevance": 0.41,
+        "technical_depth": 0.25,
+        "recency_score": 0.8,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "b390576f02196ddd",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-05-01",
+      "title": "May",
+      "source_quality_score": 0.501,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.41,
+        "android_hal_relevance": 0.41,
+        "technical_depth": 0.25,
+        "recency_score": 0.5,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "4c142c43db6b0976",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-04-01",
+      "title": "April",
+      "source_quality_score": 0.466,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.41,
+        "android_hal_relevance": 0.41,
+        "technical_depth": 0.25,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "6a0f12cd90d300b1",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-0-cd4387785179@ixit.cz/",
+      "title": "[PATCH v8 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+      "source_quality_score": 0.743,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.87,
+        "android_hal_relevance": 0.87,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "de79c80844c689be",
+      "url": "https://lore.kernel.org/linux-media/ainh3vUs_FWj4bLR@kekkonen.localdomain/",
+      "title": "Re: [PATCH v4 3/3] media: i2c: imx471: Add Sony IMX471 image sensor driver",
+      "source_quality_score": 0.854,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.81,
+        "android_hal_relevance": 0.81,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c56b2068eed9cd86",
+      "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
+      "source_quality_score": 0.551,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.69,
+        "android_hal_relevance": 0.69,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "0689bdb0d230395b",
+      "url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "title": "2026 Annual C++ Developer Survey \"Lite\"",
+      "source_quality_score": 0.551,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.69,
+        "android_hal_relevance": 0.69,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "4e231c08cea859ce",
+      "url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
+      "title": "Power of C++26 Reflection: Strong (opaque) type definitions -- r/cpp",
+      "source_quality_score": 0.527,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.63,
+        "android_hal_relevance": 0.63,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "1af2d169617d9973",
+      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "title": "The libcamera-devel Archives",
+      "source_quality_score": 0.548,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "8ffaeec3cdd6f9f5",
+      "url": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+      "title": "How ref qualifiers led to deducing this",
+      "source_quality_score": 0.548,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "bcc2371b528699db",
+      "url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "title": "C++: The Documentary trailer",
+      "source_quality_score": 0.398,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0.15
+      }
+    },
+    {
+      "candidate_id": "0aae5d6fff3e161d",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "source_quality_score": 0.638,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "704642d864af9ccd",
+      "url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "title": "CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal",
+      "source_quality_score": 0.593,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "150e3ffb5f07ea45",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz/",
+      "title": "[PATCH v8 7/9] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init",
+      "source_quality_score": 0.758,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "d64bd4ac656e276b",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz/",
+      "title": "[PATCH v8 6/9] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
+      "source_quality_score": 0.758,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "f204e21a80d8be8a",
+      "url": "https://lore.kernel.org/linux-media/d99ada08-ab7e-42c3-9e6b-174a4631dc4a@ixit.cz/",
+      "title": "Re: [PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency",
+      "source_quality_score": 0.758,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "ecd2f14ba3d8477a",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "source_quality_score": 0.614,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "6aa85a0390c2678d",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz/",
+      "title": "[PATCH v8 8/9] media: qcom: camss: Account for C-PHY when calculating link frequency",
+      "source_quality_score": 0.734,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "9f8d5b13fdd58e02",
+      "url": "https://lore.kernel.org/linux-media/aineK26VD67Fmibd@kekkonen.localdomain/",
+      "title": "Re: [PATCH v4 1/3] media: ipu-bridge: Add DMI information of Lenovo X9 to the image upside-down list",
+      "source_quality_score": 0.62,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "760cc9c2efacd58d",
+      "url": "https://lore.kernel.org/linux-media/5e1be8c3-3e41-4a4f-bb70-3bc6bad7f26d@oss.qualcomm.com/",
+      "title": "Re: [PATCH 1/3] dt-bindings: media: qcom,qcm2290-venus: document shikra Iris compatible",
+      "source_quality_score": 0.62,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "781679b8fb4b611e",
+      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
+      "title": "Media3 Release Notes - Media3 1.9.4",
+      "source_quality_score": 0.674,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.79,
+        "android_hal_relevance": 0.79,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "372089f64f07cd0e",
+      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
+      "title": "Media3 Release Notes - Media3 1.10.1",
+      "source_quality_score": 0.65,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.73,
+        "android_hal_relevance": 0.73,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.783,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-e2cfe40125a47dcb",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-0-cd4387785179@ixit.cz/",
+      "title": "[PATCH v8 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms - David Heidelberg via B4 Relay",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-d3a7272650803071",
+      "url": "https://lore.kernel.org/linux-media/ainh3vUs_FWj4bLR@kekkonen.localdomain/",
+      "title": "Re: [PATCH v4 3/3] media: i2c: imx471: Add Sony IMX471 image sensor driver - Sakari Ailus",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-9bf6c08020237690",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz/",
+      "title": "[PATCH v8 7/9] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-5b0fa22368f9bb00",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz/",
+      "title": "[PATCH v8 6/9] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-e529114b8507f1bc",
+      "url": "https://lore.kernel.org/linux-media/d99ada08-ab7e-42c3-9e6b-174a4631dc4a@ixit.cz/",
+      "title": "Re: [PATCH v7 7/8] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-ea2618b286cb9ad5",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz/",
+      "title": "[PATCH v8 8/9] media: qcom: camss: Account for C-PHY when calculating link frequency - David Heidelberg via B4 Relay",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-eedcdfde74b8c54d",
+      "url": "https://lore.kernel.org/linux-media/5e1be8c3-3e41-4a4f-bb70-3bc6bad7f26d@oss.qualcomm.com/",
+      "title": "Re: [PATCH 1/3] dt-bindings: media: qcom,qcm2290-venus: document shikra Iris compatible - Vikash Garodia",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-45111a50490175f2",
+      "url": "https://developer.android.com/media/camera/camerax",
+      "title": "CameraX",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-58d9ec89937d9617",
+      "url": "https://developer.android.com/media/camera/camerax/video-capture",
+      "title": "VideoCapture",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-83920430c1be5b76",
+      "url": "https://source.android.com/docs/whatsnew/release-notes",
+      "title": "Release notes",
+      "source_quality_score": 0.413,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-7317dd637c497758",
+      "url": "https://source.android.com/docs/security/bulletin",
+      "title": "Bulletins",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-2232a511d6b41164",
+      "url": "https://lore.kernel.org/r/20260605-qcom-cphy-v7-0-426c37e9008f@ixit.cz",
+      "title": "https://lore.kernel.org/r/20260605-qcom-cphy-v7-0-426c37e9008f@ixit.cz",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    }
+  ],
+  "counts": {
+    "strong_candidate": 7,
+    "blocked_candidate": 26,
+    "review_candidate": 13,
+    "weak_candidate": 7
+  }
+}

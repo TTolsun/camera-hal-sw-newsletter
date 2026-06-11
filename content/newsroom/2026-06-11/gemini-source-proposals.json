@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-11",
+  "proposals": [
+    {
+      "proposal_id": "android-camera-hal-updates-2026-06",
+      "topic_gap": "Recent updates or discussions regarding Android Camera HAL, including new features, bug fixes, or performance improvements, particularly those relevant to recent hardware or software releases.",
+      "source_family": "Official Android media/camera-output discovery intent",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Camera HAL",
+        "Camera ITS",
+        "V4L2 driver",
+        "Qualcomm camera",
+        "C-PHY",
+        "MIPI CSI-2"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box",
+        "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-0-cd4387785179@ixit.cz/",
+        "https://lore.kernel.org/linux-media/ainh3vUs_FWj4bLR@kekkonen.localdomain/",
+        "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz/",
+        "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz/",
+        "https://lore.kernel.org/linux-media/d99ada08-ab7e-42c3-9e6b-174a4631dc4a@ixit.cz/",
+        "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz/",
+        "https://lore.kernel.org/linux-media/5e1be8c3-3e41-4a4f-bb70-3bc6bad7f26d@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Camera HAL driver updates",
+        "Camera ITS test updates",
+        "New camera sensor support",
+        "Performance improvements in camera pipeline",
+        "Bug fixes related to camera hardware"
+      ],
+      "risk_notes": [
+        "Some of these links are to mailing lists and may require filtering for relevant content.",
+        "The 'Test camera images using automation' link is a general guide and may not contain specific recent updates."
+      ]
+    },
+    {
+      "proposal_id": "android-media3-updates-2026-06",
+      "topic_gap": "Recent updates to Android's Media3 library, focusing on camera-related features, A/V sync improvements, or new codec support that impacts camera output processing.",
+      "source_family": "Official Android media/camera-output discovery intent",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3 release notes",
+        "Android media playback",
+        "A/V sync",
+        "MediaCodec",
+        "camera recording"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
+      ],
+      "expected_evidence": [
+        "Media3 release notes mentioning camera integration",
+        "Updates to A/V synchronization features",
+        "New codec support relevant to camera recording",
+        "Bug fixes in media playback or recording related to camera input"
+      ],
+      "risk_notes": [
+        "The provided URL is for a specific beta version and might not represent the latest stable release or significant changes."
+      ]
+    },
+    {
+      "proposal_id": "camerax-updates-2026-06",
+      "topic_gap": "Latest release notes or significant changes for CameraX, highlighting new APIs, bug fixes, or improvements in camera functionality for Android developers.",
+      "source_family": "Official Android media/camera-output discovery intent",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX release notes",
+        "Android camera API",
+        "Jetpack CameraX",
+        "camera preview",
+        "camera capture"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "expected_evidence": [
+        "CameraX release notes",
+        "New features or APIs in CameraX",
+        "Bug fixes for camera preview or capture",
+        "Compatibility updates for camera hardware"
+      ],
+      "risk_notes": [
+        "The provided URL is for a specific version (1.6.0) and might not reflect the absolute latest changes if a newer version has been released since the data was collected."
+      ]
+    }
+  ]
+}
