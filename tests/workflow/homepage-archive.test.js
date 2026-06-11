@@ -515,6 +515,28 @@ test('latest card omits the image when the only weekly image is the headline ima
   assert.doesNotMatch(elements['latest-card'].innerHTML, /latest-card-media/);
 });
 
+test('latest card renders the site-relative fallback image when the weekly has no https article image', async () => {
+  // 유효 https 이미지가 없는 주는 article_images에 fallback 자산 경로 1개가 담기며,
+  // 이는 헤드라인 이미지와 절대 같지 않으므로 article_count와 무관하게 항상 노출된다.
+  for (const articleCount of [1, 2]) {
+    const latest = {
+      ...newsletter('2026-06-06', 'Weekly issue'),
+      weeklyKey: '2026-W23',
+      weekStartDate: '2026-06-01',
+      weekEndDate: '2026-06-07',
+      article_count: articleCount,
+      article_images: ['assets/images/fallback/android.svg']
+    };
+    const { elements } = await renderHomepage([latest], {
+      schemaVersion: 1,
+      current_headline: { image_url: 'https://i.ytimg.com/vi/abc/hqdefault.jpg' }
+    });
+    const html = elements['latest-card'].innerHTML;
+    assert.match(html, /class="latest-card-media"/);
+    assert.match(html, /<img src="assets\/images\/fallback\/android\.svg"/);
+  }
+});
+
 test('archive cards omit empty tag rows while preserving the remaining child order', async () => {
   const archiveItem = {
     ...newsletter('2026-05-24', 'No tags archive card'),

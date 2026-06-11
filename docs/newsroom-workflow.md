@@ -95,6 +95,12 @@ editor는 deterministic final article input과 locked/retry context만 받습니
   - `content/newsroom/YYYY-MM-DD/artifact-manifest.json`: date-scoped review package manifest입니다. `files[]`와 `review_artifacts[]`는 review inventory 기준으로 생성합니다.
   - snapshot root `artifact-manifest.json`: workflow snapshot manifest입니다. `.tmp/**`, cache, debug file 같은 snapshot file을 추가로 포함할 수 있으며 같은 `schema_version=3`와 review metadata field를 사용합니다.
 
+### 결정론적 이미지 바인딩 repair
+
+editor는 이미지 권리/관련성이 불확실하면 `selectedImage`를 비워 두고, renderer는 local fallback visual을 사용합니다. 생성이 끝나면 workflow가 `npm run newsroom:repair-images -- --date <date>`를 실행해 editor-draft의 valid `imageCandidates` 중 audit 규칙을 통과한 후보를 deterministic하게 binding하고 daily Markdown/HTML을 재생성합니다. local fallback visual은 valid candidate가 정말 없는 기사에만 남습니다.
+
+repair는 같은 ISO week의 weekly 산출물도 함께 동기화합니다. weekly upsert는 같은 identity 기사를 exact duplicate로 거부하므로 재실행으로는 수리된 이미지가 weekly에 반영되지 않습니다. 대신 repair가 identity가 일치하는 weekly section의 image field를 daily editor-draft 상태로 복사해 `newsletters/<weeklyKey>/{index.html,newsletter.md,issue.json}`을 재생성하고, `data/newsletters-weekly.json` entry의 `article_images`를 갱신합니다. weekly artifact가 없으면 no-op이고 재실행해도 결과가 수렴(idempotent)합니다. repairable article이 0인 날짜도 `--date` 실행 시 weekly 동기화는 항상 수행하므로 stale weekly를 재실행으로 복구할 수 있습니다(`--all-repairable`은 repairable 0인 날짜를 방문하지 않습니다). `article_images`는 https 이미지가 하나도 없으면 site-root-relative fallback 경로 1개를 담아 홈페이지 Latest card가 항상 이미지를 갖게 합니다.
+
 ## Role 6. Validator
 
 `npm run validate`가 repository-wide safety gate입니다. Stage 3 final workflow의 post-generation gate는 `npm run validate:post-generation`을 사용합니다. 이 chain은 `validate:quality`를 다시 실행하지 않고, final Markdown/HTML public artifact를 `validate:llm-publication-quality`의 LLM API judge로 확인합니다.

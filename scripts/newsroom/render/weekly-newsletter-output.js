@@ -8,6 +8,12 @@
 // (#492), regenerate the weekly directory page, and upsert the separate data/newsletters-weekly.json.
 // Daily output and data/newsletters.json are never touched. Without an injected LLM merge resolver
 // this falls back to the deterministic behavior (skip exact duplicates, keep the rest).
+//
+// Weekly artifacts are written DURING generation, but the deterministic image repair
+// (newsroom:repair-images) rewrites the daily editor draft AFTER generation. The exact-duplicate
+// reject above means a re-run cannot carry the repaired image into the weekly issue, so the repair
+// step calls syncWeeklyArticleImages to converge the weekly section image fields and the weekly
+// index article_images to the repaired daily state.
 
 const { ensureArray } = require('../common/value-coercion');
 const fs = require('fs');
@@ -17,7 +23,7 @@ const { buildWeeklyNewsletterPage } = require('./weekly-newsletter-page');
 const { writeSitemap } = require('./generate-sitemap');
 const { weeklyKeyForDate } = require('../common/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../common/weekly-article-limits');
-const { resolveWeeklyArticles } = require('../generate/weekly-duplicate-merge');
+const { resolveWeeklyArticles, sectionIdentity } = require('../generate/weekly-duplicate-merge');
 
 // Browser-safe (https) image for a weekly article section, used to show one article image on the
 // homepage Latest card. Returns '' when the section has no usable https image.
@@ -27,8 +33,20 @@ function sectionBrowserImage(section = {}) {
   return /^https:\/\//i.test(String(candidate)) ? String(candidate) : '';
 }
 
+// '../../assets/images/fallback/android.svg' -> 'assets/images/fallback/android.svg'.
+// 홈페이지(사이트 루트)에서 그대로 쓸 수 있는 fallback 자산 경로만 반환하고, 그 외 로컬 경로는
+// 이미지 fallback 계약에 따라 방출하지 않는다.
+function normalizedFallbackImagePath(section = {}) {
+  const candidate = (section.resolvedImage && (section.resolvedImage.url || section.resolvedImage.src)) ||
+    section.selectedImage || '';
+  const normalized = String(candidate).replace(/^(?:\.\.\/)+/, '');
+  return normalized.startsWith('assets/images/fallback/') ? normalized : '';
+}
+
 // Distinct https article images for the issue, in section order. The Latest card picks the first one
 // that does not match the homepage headline image (see index.html), so order/dedup are preserved.
+// When no https image exists in the whole issue, one site-root-relative fallback asset path is
+// emitted instead so the Latest card always has an image to show.
 function weeklyArticleImages(sections = []) {
   const seen = new Set();
   const images = [];
@@ -37,6 +55,12 @@ function weeklyArticleImages(sections = []) {
     if (image && !seen.has(image)) {
       seen.add(image);
       images.push(image);
+    }
+  }
+  if (images.length === 0) {
+    for (const section of ensureArray(sections)) {
+      const fallback = normalizedFallbackImagePath(section);
+      if (fallback) return [fallback];
     }
   }
   return images;
@@ -88,6 +112,82 @@ function upsertWeeklyIndex(root, entry) {
   // publish PR commit allowlist에 포함되어 newsletters-weekly.json과 함께 main으로 반영된다.
   writeSitemap(root);
   return relPath;
+}
+
+// repair(applySelectedCandidate)가 daily editor-draft 섹션에 기록하는 이미지 필드 집합.
+// weekly 동기화는 정확히 이 projection만 복사해 콘텐츠 병합 없이 이미지 상태만 수렴시킨다.
+const SECTION_IMAGE_FIELDS = [
+  'selectedImage',
+  'imageSource',
+  'imageAttribution',
+  'imageAlt',
+  'imageLicenseStatus',
+  'imageUsageDecisionReason',
+  'imageSelection',
+  'resolvedImage'
+];
+
+function sectionImageProjection(section = {}) {
+  const projection = {};
+  for (const field of SECTION_IMAGE_FIELDS) {
+    if (section[field] !== undefined) projection[field] = section[field];
+  }
+  return projection;
+}
+
+// Converge the weekly issue of `date`'s ISO week to the daily editor-draft image state. The weekly
+// upsert rejects same-identity articles as exact duplicates, so the post-generation image repair
+// cannot reach the weekly through a re-run; this targeted sync copies only the image fields of
+// identity-matched sections, regenerates the weekly page, and refreshes article_images in
+// data/newsletters-weekly.json (entries are never created here; sitemap is untouched).
+// LLM 병합으로 identity가 바뀐 weekly 섹션은 매칭되지 않아 그대로 유지된다.
+function syncWeeklyArticleImages({ root = process.cwd(), date, sections } = {}) {
+  const weeklyKey = weeklyKeyForDate(date);
+  const result = { weeklyKey, synced: false, patchedSectionCount: 0, articleImagesUpdated: false, files: [] };
+  const issue = loadExistingWeeklyIssue(root, weeklyKey);
+  if (!issue) return { ...result, reason: 'missing_weekly_issue' };
+  const dailySections = ensureArray(sections).filter(Boolean);
+  if (dailySections.length === 0) return { ...result, reason: 'missing_daily_sections' };
+
+  const dailyByIdentity = new Map(
+    dailySections.map(dailySection => [sectionIdentity(dailySection), dailySection])
+  );
+  for (const weeklySection of ensureArray(issue.sections)) {
+    const dailySection = dailyByIdentity.get(sectionIdentity(weeklySection));
+    if (!dailySection) continue;
+    // 다운그레이드 가드: daily 섹션이 실제 https 이미지로 해석될 때만 weekly를 덮어쓴다.
+    // (같은 주 다른 날짜의 미수리 fallback 상태가 이미 바인딩된 weekly 이미지를 지우지 않게)
+    if (!sectionBrowserImage(dailySection)) continue;
+    const projection = sectionImageProjection(dailySection);
+    if (JSON.stringify(sectionImageProjection(weeklySection)) === JSON.stringify(projection)) continue;
+    Object.assign(weeklySection, JSON.parse(JSON.stringify(projection)));
+    result.patchedSectionCount += 1;
+  }
+
+  let currentSections = ensureArray(issue.sections);
+  if (result.patchedSectionCount > 0) {
+    const page = buildWeeklyNewsletterPage(issue, { weeklyKey });
+    const dir = path.join(root, 'newsletters', weeklyKey);
+    fs.writeFileSync(path.join(dir, 'index.html'), page.html, 'utf8');
+    fs.writeFileSync(path.join(dir, 'newsletter.md'), page.markdown, 'utf8');
+    fs.writeFileSync(path.join(dir, 'issue.json'), `${JSON.stringify(page.issue, null, 2)}\n`, 'utf8');
+    currentSections = ensureArray(page.issue.sections);
+    result.files.push(page.indexRoute, page.markdownRoute, `newsletters/${weeklyKey}/issue.json`);
+  }
+
+  const articleImages = weeklyArticleImages(currentSections);
+  const dataPath = path.join(root, 'data', 'newsletters-weekly.json');
+  const index = readWeeklyIndex(dataPath);
+  const entry = index.find(item => item && item.weeklyKey === weeklyKey);
+  if (entry && JSON.stringify(ensureArray(entry.article_images)) !== JSON.stringify(articleImages)) {
+    entry.article_images = articleImages;
+    fs.writeFileSync(dataPath, `${JSON.stringify(index, null, 2)}\n`, 'utf8');
+    result.articleImagesUpdated = true;
+    result.files.push('data/newsletters-weekly.json');
+  }
+
+  result.synced = true;
+  return result;
 }
 
 async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, editor, tags = [], mergeDuplicate, validateMerged } = {}) {
@@ -162,4 +262,4 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
   };
 }
 
-module.exports = { writeWeeklyNewsletterArtifacts };
+module.exports = { syncWeeklyArticleImages, writeWeeklyNewsletterArtifacts };

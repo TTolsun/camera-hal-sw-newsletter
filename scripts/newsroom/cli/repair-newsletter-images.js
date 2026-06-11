@@ -56,6 +56,12 @@ async function main(argv = process.argv.slice(2), root = process.cwd()) {
   console.log(`Repaired ${repairedArticleCount} article image selection(s).`);
   for (const item of repairs) {
     console.log(`- ${item.date}: ${item.repairedArticleCount}`);
+    if (item.weeklySync) {
+      console.log(item.weeklySync.synced
+        ? `  weekly ${item.weeklySync.weeklyKey}: synced ${item.weeklySync.patchedSectionCount} section(s)` +
+          (item.weeklySync.articleImagesUpdated ? ', article_images updated' : '')
+        : `  weekly ${item.weeklySync.weeklyKey}: skipped (${item.weeklySync.reason})`);
+    }
   }
   return 0;
 }

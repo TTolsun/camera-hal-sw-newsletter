@@ -15,6 +15,9 @@ const {
   imageReasonLabelKo,
   imageReasonTextKo
 } = require('../render/newsletter-image-audit-labels.ko');
+const {
+  syncWeeklyArticleImages
+} = require('../render/weekly-newsletter-output');
 
 const DIRECT_EXTRACTION_SOURCE_KINDS = new Set([
   'og',
@@ -1137,7 +1140,11 @@ async function repairNewsletterImagesForDate(options = {}) {
   });
   if (before.summary.repairable_article_count === 0) {
     await writeNewsletterImageAuditArtifacts({ ...options, root, date, failOnPublishBlocking: false });
-    return { date, repairedArticleCount: 0, report: before };
+    // 수리할 기사가 없어도 weekly는 이전 실행에서 stale 상태로 남아 있을 수 있으므로
+    // 항상 daily editor-draft 기준으로 동기화한다(재실행 수렴 경로).
+    const draft = readJsonIfExists(reportPaths(root, date).editorPath);
+    const weeklySync = syncWeeklyArticleImages({ root, date, sections: draft && draft.sections });
+    return { date, repairedArticleCount: 0, weeklySync, report: before };
   }
 
   const paths = reportPaths(root, date);
@@ -1161,6 +1168,10 @@ async function repairNewsletterImagesForDate(options = {}) {
   writeText(paths.newsletterMarkdownPath, markdown);
   writeText(paths.newsletterHtmlPath, html);
 
+  // weekly 산출물은 생성 중에 이미 작성되었고 같은 identity 기사는 exact-duplicate로 거부되므로,
+  // 수리된 이미지 상태를 weekly issue/index(article_images)로 직접 동기화한다.
+  const weeklySync = syncWeeklyArticleImages({ root, date, sections: issue.sections });
+
   const result = await writeNewsletterImageAuditArtifacts({
     ...options,
     root,
@@ -1172,6 +1183,7 @@ async function repairNewsletterImagesForDate(options = {}) {
   return {
     date,
     repairedArticleCount,
+    weeklySync,
     report: result.report
   };
 }
