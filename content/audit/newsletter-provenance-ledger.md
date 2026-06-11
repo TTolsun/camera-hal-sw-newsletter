@@ -15,6 +15,7 @@
 
 | Date | Original generation mode | Known quality issues | Rewrite allowed | Rewrite status | Archive status | Public visibility | Cleanup context |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-06-11 | current_generation | publish-ready public artifact; no historical provenance backfill required | no | none | stable_archive | listed | current_generation_archive_review |
 | 2026-06-06 | current_generation | publish-ready public artifact; no historical provenance backfill required | no | none | stable_archive | listed | current_generation_archive_review |
 | 2026-06-03 | current_generation | publish-ready under adjacent-content publishing; CameraX 1.6.0 catch-up retrospective; no historical provenance backfill required | no | none | stable_archive | listed | current_generation_archive_review |
 | 2026-06-02 | current_generation | review-only public artifact, editor review required before publish confidence; no historical provenance backfill required | no | none | stable_archive | unlisted | review_only_publication |
