@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-11",
+  "generated_at": "2026-06-11T02:38:53.396Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 6,
+    "hit_count": 2,
+    "miss_count": 4,
+    "by_url_hit_count": 2,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 4
+    },
+    {
+      "reason": "url-hit",
+      "count": 2
+    }
+  ],
+  "entries": [
+    {
+      "title": "Re: [PATCH v4 3/3] media: i2c: imx471: Add Sony IMX471 image sensor driver",
+      "url": "https://lore.kernel.org/linux-media/ainh3vUs_FWj4bLR@kekkonen.localdomain/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-10T22:15:00Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/ainh3vus_fwj4blr@kekkonen.localdomain",
+        "url_hash": "4ff879d8ef0a80ddfe8e2c9a0c28e7d8cc89e1d240bae8f257c26db1ec7524c8",
+        "published_date": "2026-06-10T22:15:00Z",
+        "content_hash": "90557be13615e9d95b34a5f7d921ebb2878500052de75d559a5d141763af41f3"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v8 7/9] media: qcom: camss: csiphy-3ph: Update Gen2 v1.1 MIPI CSI-2 C-PHY init",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-10T18:28:26Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz",
+        "url_hash": "41a6fef9eec55d88fef79adbe633b570abe1741171f839032fc16eaac5468e5a",
+        "published_date": "2026-06-10T18:28:26Z",
+        "content_hash": "830870895b71dea9dc8ebfa4133c77392f50d6ebbaedd2931c66371ecf7d7af4"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v8 8/9] media: qcom: camss: Account for C-PHY when calculating link frequency",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-10T18:28:26Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz",
+        "url_hash": "ca0abe93ebac1719e8524c32725bf1ba95e10a795c0f30cf88e0b6b0b854f4d5",
+        "published_date": "2026-06-10T18:28:26Z",
+        "content_hash": "a88027db60a3ff5d1c36cb47580d3cc5faaae54917d3751c92071c68b64b62ca"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v8 6/9] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init - David Heidelberg via B4 Relay",
+      "url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-10",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz",
+        "url_hash": "8c8b4edfb3a4bc1ce8c67805ca32b8b32758862d3913d8cb42e3938d48445951",
+        "published_date": "2026-06-10",
+        "content_hash": "e59e7bab77abc8f24e31447b79821988eb411d3fa5f44c38d6bf8f0da51d4854"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/tools/agents/android-cli",
+        "url_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee.json"
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "url_hash": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe.json"
+    }
+  ]
+}

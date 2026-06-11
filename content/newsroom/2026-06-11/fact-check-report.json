@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "Android CLI 및 GitHub Skills 저장소에 'Migration to CameraX' 신규 스킬 추가",
+      "publishable": true,
+      "reason": "Android CLI에 CameraX 마이그레이션 스킬이 추가되어 상위 프레임워크의 CameraX 채택을 가속화할 수 있으며, 이는 HAL 팀이 CameraX 표준 스트림 시나리오에서의 성능 및 버퍼 안정성 검증을 강화해야 할 필요성을 제시합니다."
+    }
+  ],
+  "final_comment": "The article is well-structured and provides relevant information for Camera HAL engineers regarding the 'Migration to CameraX' skill. However, the `decision_metadata` fields in `public_article` contain invalid enum values that need to be corrected according to the schema. Specifically, 'Medium', 'Tooling', 'AI', 'Framework', 'SoC', 'Watch', 'Test', and 'High' should be replaced with valid enum values from the provided list."
+}

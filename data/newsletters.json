@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-06-11",
+    "title": "Camera HAL / SW Newsletter - 2026-06-11",
+    "summary": "이번 주에는 Android 개발자 생산성 도구에 CameraX 마이그레이션 스킬이 추가되어 상위 프레임워크 계층의 CameraX 채택이 가속화될 전망입니다. 또한, Linux 커널 미디어 드라이버 메일링 리스트를 통해 Qualcomm CAMSS의 MIPI CSI-2 C-PHY 초기화 및 링크 주파수 계산 로직 개선, Sony IMX471 센서 드라이버의 전원 관리 제안 등 하위 드라이버 및 이미지 파이프라인의 안정성을 높이기 위한 다양한 패치 논의가 진행되었습니다.",
+    "html": "newsletters/2026-06-11/index.html",
+    "md": "newsletters/2026-06-11/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-06-06",
     "title": "Camera HAL / SW Newsletter - 2026-06-06",
     "summary": "Google I/O '26에서 발표된 Jetpack CameraX 및 Media3 기반의 새로운 CameraXViewfinder Composable을 통해 폴더블 및 태블릿 기기에서의 미디어 파이프라인과 카메라 미리보기 최적화 방안이 제시되었습니다. 또한, Linux 커널 메일링 리스트를 통해 Sony IMX678 이미지 센서용 V4L2 드라이버 및 dt-bindings 패치 세트가 공개되어 저수준 드라이버 통합을 위한 기반이 마련되었습니다.",

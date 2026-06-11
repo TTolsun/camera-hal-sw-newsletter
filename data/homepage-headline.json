@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-06-06T00:00:00+09:00",
+  "updated_at": "2026-06-11T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-    "title": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
-    "summary": "2026년 3월 25일 공식 발표된 CameraX 1.6.0 릴리스에서는 앱이 카메라 라이프사이클에 바인딩하기 전에 기기의 하드웨어 지원 여부를 미리 확인할 수 있는 강력한 기능 조합 쿼리 API가 도입되었습니다. 이와 함께 차세대 Android 17 대응 크래시 패치와 Samsung Z Fold 4, A53 등 특정 단말에서 보고된 YUV 스트림 왜곡 및 플래시 연동 캡처 실패를 우회하는 호환성 패치가 대거 적용되었습니다.",
-    "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-    "newsletter_date": "2026-06-03",
-    "newsletter_url": "newsletters/2026-06-03/index.html",
-    "selected_at": "2026-06-03",
+    "article_identity_key": "url:https://developer.android.com/tools/agents/android-cli",
+    "title": "Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망",
+    "summary": "Android 개발자 생산성 향상을 위한 공식 도구에 'Migration to CameraX' 스킬이 새롭게 도입되었습니다. 이번 업데이트는 개발자들이 기존의 복잡한 카메라 구현에서 Jetpack CameraX 라이브러리로 마이그레이션하는 과정을 LLM 기반 워크플로우를 통해 지원함으로써, 상위 애플리케이션 계층에서의 CameraX 채택을 더욱 가속화할 것으로 기대됩니다.",
+    "source_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+    "newsletter_date": "2026-06-11",
+    "newsletter_url": "newsletters/2026-06-11/index.html",
+    "selected_at": "2026-06-11",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-06-03",
+    "last_scored_at": "2026-06-11",
     "date_evidence": {
-      "date": "March 25, 2026",
+      "date": "Tue, 09 Jun 2026 13:00:00 +0000",
       "date_field": "published_date",
       "evidence_level": "primary",
       "publish_ready_date_evidence": true
@@ -37,14 +37,59 @@
       "total": 100
     },
     "snapshot": {
-      "category": "direct_aosp_camera",
-      "source_name": "CameraX Release Notes"
+      "category": "android_platform_camera_adjacent",
+      "source_name": "Android Developers Blog"
     },
-    "newsletter_article_url": "newsletters/2026-06-03/index.html#article-camerax-1-6-0-api",
-    "image_url": "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
-    "image_alt": "Android Developers CameraX Release Notes Logo"
+    "newsletter_article_url": "newsletters/2026-06-11/index.html#article-android-cli-migration-to-camerax",
+    "image_url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+    "image_alt": "Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+      "summary": "2026년 3월 25일 공식 발표된 CameraX 1.6.0 릴리스에서는 앱이 카메라 라이프사이클에 바인딩하기 전에 기기의 하드웨어 지원 여부를 미리 확인할 수 있는 강력한 기능 조합 쿼리 API가 도입되었습니다. 이와 함께 차세대 Android 17 대응 크래시 패치와 Samsung Z Fold 4, A53 등 특정 단말에서 보고된 YUV 스트림 왜곡 및 플래시 연동 캡처 실패를 우회하는 호환성 패치가 대거 적용되었습니다.",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "newsletter_date": "2026-06-03",
+      "newsletter_url": "newsletters/2026-06-03/index.html",
+      "selected_at": "2026-06-03",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-06-03",
+      "date_evidence": {
+        "date": "March 25, 2026",
+        "date_field": "published_date",
+        "evidence_level": "primary",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "direct_aosp_camera",
+        "source_name": "CameraX Release Notes"
+      },
+      "newsletter_article_url": "newsletters/2026-06-03/index.html#article-camerax-1-6-0-api",
+      "image_url": "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
+      "image_alt": "Android Developers CameraX Release Notes Logo",
+      "replaced_at": "2026-06-11",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
       "title": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드로 카메라 프로토타이핑 가속화",

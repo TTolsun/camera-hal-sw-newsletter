@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-06-11",
+  "source_of_truth": "content/newsroom/2026-06-11/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-06-11/newsletter.md",
+    "html": "newsletters/2026-06-11/index.html"
+  },
+  "mode": "publish-target",
+  "render_consistency_scope": "editor_draft",
+  "summary": {
+    "article_count": 1,
+    "rendered_image_count": 1,
+    "markdown_image_count": 1,
+    "fallback_visual_count": 0,
+    "image_candidates_count": 1,
+    "valid_image_candidate_count": 1,
+    "selected_image_count": 1,
+    "empty_selected_with_candidates_count": 0,
+    "selected_image_without_valid_candidate_count": 0,
+    "selected_image_not_in_candidates_count": 0,
+    "repairable_article_count": 0,
+    "selected_by_image_selection_count": 1,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
+    "unrepairable_no_candidate_count": 0,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 1,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": true,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "selected_candidate_url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 130,
+          "sourceKind": "og",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        }
+      ]
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": [],
+    "selected_image_without_valid_candidate_articles": []
+  },
+  "warnings": [],
+  "errors": []
+}

@@ -1,0 +1,277 @@
+{
+  "date": "2026-06-08",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "2026 W24 (06.08 ~ 06.14)",
+  "summary": "이번 주에는 ‘Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망’ 소식을 다룹니다.",
+  "briefing": [
+    "Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망"
+  ],
+  "sections": [
+    {
+      "category": "android_platform_camera_adjacent",
+      "headline": "Android CLI 및 GitHub Skills 저장소에 'Migration to CameraX' 신규 스킬 추가",
+      "what_changed": "2026년 6월 9일 공개된 Android 개발자 생산성 업데이트에 따르면, Android CLI 및 GitHub를 통해 제공되는 Android skills 저장소에 'Migration to CameraX' 관련 스킬이 추가되어 LLM 기반 개발 도구가 CameraX 마이그레이션 워크플로우를 지원할 수 있게 되었습니다.",
+      "confirmed_facts": [
+        "Android CLI 및 GitHub의 Android skills 저장소에 새로운 개발 패턴 스킬들이 추가되었습니다.",
+        "추가된 스킬 중에는 'Migration to CameraX' 관련 전문 워크플로우가 포함되어 있습니다."
+      ],
+      "evidence_summary": "Android Developers Blog의 생산성 업데이트 발표를 통해 Android CLI 및 GitHub 레포지토리 내 CameraX 마이그레이션 지원 스킬 추가 사실이 확인되었습니다.",
+      "specificity_checks": [
+        "Release Date: 2026-06-09",
+        "Component: CameraX / Android camera APIs",
+        "Source: Android Developers Blog"
+      ],
+      "source_verification_notes": [
+        "해당 변경은 Camera HAL의 직접적인 런타임 변경이 아니며, 상위 애플리케이션 개발자의 CameraX 전환을 돕는 LLM 기반 도구 스킬 추가 사항입니다."
+      ],
+      "public_article": {
+        "headline": "Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망",
+        "lead": "Android 개발자 생산성 향상을 위한 공식 도구에 'Migration to CameraX' 스킬이 새롭게 도입되었습니다. 이번 업데이트는 개발자들이 기존의 복잡한 카메라 구현에서 Jetpack CameraX 라이브러리로 마이그레이션하는 과정을 LLM 기반 워크플로우를 통해 지원함으로써, 상위 애플리케이션 계층에서의 CameraX 채택을 더욱 가속화할 것으로 기대됩니다.",
+        "body_paragraphs": [
+          "구글은 Android CLI 및 GitHub를 통해 제공되는 Android skills 저장소를 확장하여 개발자들이 모범 사례(Best Practices)에 기반한 특정 개발 패턴을 더 쉽게 적용할 수 있도록 돕고 있습니다. 이번에 추가된 스킬 중에는 'Migration to CameraX'가 포함되어 복잡한 카메라 API 전환 작업을 정형화된 워크플로우로 안내합니다.",
+          "CameraX는 Android Camera2 API를 추상화하여 수명 주기 관리와 미리보기, 이미지 캡처, 비디오 캡처 등의 사용 사례를 단순화하는 Jetpack 라이브러리입니다. 이번 도구 지원을 통해 더 많은 앱 개발사들이 CameraX로 전환하게 되면, Camera HAL 계층으로 들어오는 스트림 구성 및 메타데이터 요청 패턴 역시 CameraX의 표준 동작 방식을 따르게 될 가능성이 높습니다.",
+          "따라서 Camera HAL 및 드라이버 엔지니어들은 상위 프레임워크의 이러한 도구적 변화가 가져올 표준화된 스트림 조합 요구사항을 이해하고, HAL 계층에서의 호환성 및 안정성 검증을 선제적으로 준비할 필요가 있습니다."
+        ],
+        "camera_hal_takeaway": "이번 변화는 Camera HAL 자체의 직접적인 API 계약 변경은 아니지만, 상위 앱들의 CameraX 전환을 촉진하여 HAL로 전달되는 스트림 구성(Stream Configuration)과 메타데이터 요청이 CameraX의 표준 사용 패턴으로 수렴하도록 유도합니다. HAL 팀은 CameraX 호환성 검증 시나리오를 강화해야 합니다.",
+        "reader_checkpoints": [
+          "상위 애플리케이션의 CameraX 전환에 따른 표준 스트림 조합(Preview + ImageCapture + VideoCapture)의 HAL 측 동작을 검증하십시오.",
+          "CameraX가 생성하는 메타데이터 요청 패턴이 로컬 HAL 구현과 충돌하지 않는지 호환성 테스트를 수행하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "Android CLI Skills Update",
+            "url": "https://developer.android.com/tools/agents/android-cli#skills-add"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "Android Developers Blog - Top 3 updates for Android developer productivity",
+        "editorial_story": {
+          "reader_scenario": "앱 개발팀에서 AI 마이그레이션 도구를 사용해 기존 Camera2 코드를 CameraX로 대거 전환하기 시작하면서, HAL 계층으로 유입되는 스트림 구성 요청 패턴이 급격히 단순화되거나 표준화되는 상황입니다.",
+          "what_happened": "Android CLI 및 GitHub의 Android skills 저장소에 'Migration to CameraX' 스킬이 추가되어 개발자들의 CameraX 마이그레이션 워크플로우를 LLM이 가이드할 수 있게 되었습니다.",
+          "why_it_matters": "상위 앱들의 CameraX 채택이 가속화되면 HAL 계층은 CameraX가 요구하는 표준 스트림 조합 및 메타데이터 계약과의 완벽한 호환성을 보장해야 합니다.",
+          "field_scenario": "CameraX의 Preview, ImageCapture 사용 시나리오에서 HAL 계층의 버퍼 라이프사이클 및 프레임 드롭 여부를 CTS 및 로컬 스트림 검증 툴로 확인하는 시나리오와 연결됩니다.",
+          "not_to_overclaim": "이 업데이트는 개발자 도구의 스킬 추가 사항일 뿐이며, Camera HAL API 규격이나 런타임 동작을 직접 변경하는 하드웨어 수준의 업데이트가 아닙니다.",
+          "editor_take": "상위 프레임워크의 CameraX 채택 도구 지원은 장기적으로 HAL 검증 대상을 표준화하는 긍정적 요인이므로, CameraX 호환성 기준에 맞춘 HAL 최적화가 필요합니다."
+        },
+        "decision_metadata": {
+          "impact": "Medium",
+          "scope": [
+            "Tooling",
+            "AI",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "High"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "Android CLI 및 GitHub의 Android skills 저장소에 새로운 개발 패턴 스킬들이 추가되었습니다.",
+          "추가된 스킬 중에는 'Migration to CameraX' 관련 전문 워크플로우가 포함되어 있습니다."
+        ],
+        "background_context": "CameraX는 Android Camera2 API 위에 구축된 Jetpack 라이브러리로, 개발자들이 카메라 기능을 더 쉽게 통합하고 사용할 수 있도록 돕습니다. CameraX는 수명 주기 관리, 사용 사례 추상화(미리보기, 이미지 캡처, 비디오 캡처, 이미지 분석), 기기 호환성 개선 등을 제공합니다. Android skills 저장소에 'Migration to CameraX' 관련 스킬이 추가되었다는 것은 개발자들이 기존 Camera2 또는 다른 카메라 구현에서 CameraX로 전환하는 데 필요한 가이드와 자동화된 지원이 강화되었음을 의미합니다. 이는 Camera HAL 팀에게 CameraX가 생성하는 사용 패턴, 스트림 구성 요청, 메타데이터 사용 방식 등을 이해하고 HAL 구현이 CameraX의 요구사항과 호환성을 유지하는 것이 중요함을 시사합니다.",
+        "hal_driver_impact": "직접적인 HAL/드라이버 변경은 없으나, 상위 앱의 CameraX 전환 활성화로 인해 Preview, ImageCapture, VideoCapture, ImageAnalysis 등의 표준 스트림 조합 요청이 증가할 것입니다. HAL 계층에서는 이러한 표준 사용 사례에서의 버퍼 획득/해제 주기 및 프레임 드롭 안정성을 보장해야 합니다.",
+        "action_items": [
+          "CameraX 호환성 테스트 스위트(CTS)를 활용하여 현재 개발 중인 기기의 CameraX 기본 사용 사례(Preview, Capture, Analysis) 호환성을 재검증하십시오.",
+          "로컬 HAL 메타데이터 처리 로직이 CameraX의 표준 요청 패턴과 호환되는지 확인하고, 비표준 벤더 태그 의존성을 줄이는 방안을 검토하십시오."
+        ],
+        "team_share_points": "Android CLI 도구에 CameraX 마이그레이션 스킬이 추가되어 앱 개발사들의 CameraX 전환이 빨라질 것입니다. HAL 팀은 CameraX 표준 스트림 시나리오에서의 성능 및 버퍼 안정성 검증을 강화해야 합니다."
+      },
+      "claims": [
+        {
+          "claim_id": "claim:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:1",
+          "text": "Android CLI 및 GitHub의 Android skills 저장소에 새로운 개발 패턴 스킬들이 추가되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [],
+          "source_urls": [
+            "https://developer.android.com/tools/agents/android-cli#skills-add"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:2",
+          "text": "추가된 스킬 중에는 'Migration to CameraX' 관련 전문 워크플로우가 포함되어 있습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [],
+          "source_urls": [
+            "https://developer.android.com/tools/agents/android-cli#skills-add"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "CameraX Preview + ImageCapture 스트림 조합 검증",
+        "CameraX ImageAnalysis 버퍼 라이프사이클 모니터링"
+      ],
+      "action_hints": [
+        "CameraX 마이그레이션 가이드에 따른 상위 앱 동작 변화 분석"
+      ],
+      "action_items": [
+        "CameraX 호환성 테스트 스위트(CTS)를 활용하여 현재 개발 중인 기기의 CameraX 기본 사용 사례 호환성을 재검증하십시오.",
+        "로컬 HAL 메타데이터 처리 로직이 CameraX의 표준 요청 패턴과 호환되는지 확인하십시오."
+      ],
+      "is_ai_related": true,
+      "article_type": "tooling_workflow",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentType": "image/png",
+          "width": null,
+          "height": null,
+          "alt": ""
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No high-quality, specific image with clear licensing was available; generic logo-only image was skipped.",
+      "sources": [
+        {
+          "title": "Android CLI Skills Update",
+          "url": "https://developer.android.com/tools/agents/android-cli#skills-add"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "2026년 6월 9일 공식 발표된 Android 개발자 생산성 도구 업데이트로, 상위 프레임워크의 CameraX 채택 속도에 직접적인 영향을 미칠 수 있습니다.",
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "CameraX 표준 사용 사례(Preview, Capture, Analysis)에서의 버퍼 획득/해제 주기 및 프레임 드롭 안정성을 검증하십시오.",
+        "impact_axes": [
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "이 업데이트는 개발자 도구의 마이그레이션 가이드 기능 추가이며, Camera HAL API 규격이나 런타임 드라이버 동작을 직접 변경하는 하드웨어 수준의 업데이트가 아닙니다."
+        ]
+      },
+      "source_candidate_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source_candidate_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+      "article_group_key": "article:https://developer.android.com/tools/agents/android-cli#skills-add",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "editorial_priority": 3,
+      "aosp_camera_directness": 2,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "CameraX 호환성 테스트 스위트(CTS)를 활용하여 현재 개발 중인 기기의 CameraX 기본 사용 사례(Preview, Capture, Analysis) 호환성을 재검증하십시오.",
+    "로컬 HAL 메타데이터 처리 로직이 CameraX의 표준 요청 패턴과 호환되는지 확인하고, 비표준 벤더 태그 의존성을 줄이는 방안을 검토하십시오."
+  ],
+  "references": [
+    {
+      "title": "Android CLI Skills Update",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add"
+    }
+  ],
+  "explicitly_demoted_groups": [
+    {
+      "article_group_key": "article:https://lore.kernel.org/linux-media/ainh3vus_fwj4blr@kekkonen.localdomain",
+      "demotion_reason": "Mailing-list/community lead requires primary confirmation and has source quality blockers.",
+      "reason_code": "duplicate_or_near_duplicate"
+    }
+  ],
+  "hard_blocked_groups": [
+    {
+      "article_group_key": "article:https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz",
+      "hard_block_reason": "Source requires primary confirmation before main promotion and has cross-check blockers.",
+      "reason_code": "blocked_source_quality"
+    }
+  ],
+  "selected_group_count": 5,
+  "rendered_group_count": 1,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 4,
+  "selected_representative_group_keys": [
+    "article:https://lore.kernel.org/linux-media/ainh3vus_fwj4blr@kekkonen.localdomain",
+    "article:https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz",
+    "article:https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz",
+    "article:https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz",
+    "article:https://developer.android.com/tools/agents/android-cli#skills-add"
+  ],
+  "rendered_group_keys": [
+    "article:https://developer.android.com/tools/agents/android-cli#skills-add"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [
+    "article:https://lore.kernel.org/linux-media/ainh3vus_fwj4blr@kekkonen.localdomain",
+    "article:https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-7-cd4387785179@ixit.cz",
+    "article:https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-8-cd4387785179@ixit.cz",
+    "article:https://lore.kernel.org/linux-media/20260610-qcom-cphy-v8-6-cd4387785179@ixit.cz"
+  ],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "CameraX Release Notes - CameraX 1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "published_date": "May 06, 2026",
+      "note": "AOSP Camera 프레임워크 관련 참고"
+    },
+    {
+      "title": "Test camera images using automation",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "source": "AOSP Site Updates",
+      "published_date": "2026-05-01",
+      "note": "AOSP Camera 프레임워크 관련 참고"
+    },
+    {
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "url": "https://goo.gle/AdaptiveApps_IO26",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 19 May 2026 13:00:00 +0000",
+      "note": "Android 플랫폼 · 카메라 인접 주제 참고"
+    },
+    {
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "source": "ISO C++ Blog",
+      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
+      "note": "C++ / AI 네이티브 툴링 참고"
+    }
+  ],
+  "weekly_key": "2026-W24",
+  "week_start_date": "2026-06-08",
+  "week_end_date": "2026-06-14",
+  "tags": [
+    "Camera HAL",
+    "Android"
+  ]
+}
