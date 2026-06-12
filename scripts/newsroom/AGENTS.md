@@ -6,7 +6,9 @@
 
 - `cli/`: command entrypoint, workflow-facing output, validation command wrapper입니다.
 - `collect/`: source page/RSS parsing과 candidate collection입니다.
+- `sources/`: source registry(`registry.js`)와 source별 parser adapter(`adapters/**`)입니다.
 - `generate/`: deterministic selection, article capsule, generation orchestration, summary cache logic입니다.
+- `evidence/`: linked-evidence 추출·해소·진단과 candidate evidence 검증입니다.
 - `llm/`: Gemini/Internal LLM provider client, model policy, retry/cost diagnostics입니다.
 - `metrics/`: source effectiveness와 newsroom 운영 지표 report입니다.
 - `render/`: newsletter schema, Markdown/HTML rendering, image resolution입니다.
