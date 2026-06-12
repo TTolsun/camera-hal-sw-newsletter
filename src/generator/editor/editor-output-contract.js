@@ -1,31 +1,31 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const path = require('path');
-const { writeJson } = require('../../../src/core/common/common');
+const { writeJson } = require('../../core/common/common');
 const {
   normalizeUrl
-} = require('../generate/newsroom-selection');
+} = require('../select/newsroom-selection');
 const {
   articlePolicy,
   articleCountRangeText,
   isForbiddenMainBucket,
   isPrimaryCameraStackBucket
-} = require('../../../src/core/common/newsletter-policy');
+} = require('../../core/common/newsletter-policy');
 const {
   findFieldHygieneIssues,
   inferGuardrailImpactClass
-} = require('../generate/article-field-builder');
+} = require('../reporter/article-field-builder');
 const {
   ARTICLE_SECTION_ALLOWED_KEYS,
   ARTICLE_SECTION_KEYS,
   ARTICLE_SECTION_OPTIONAL_KEYS,
   normalizeArticleSections,
   unexpectedArticleSectionKeys
-} = require('../common/article-section-contract');
+} = require('../reporter/article-section-contract');
 const {
   CAPSULE_REQUIRED_FIELDS,
   completeHalSignalCapsuleFromExistingFields,
   normalizeHalSignalCapsule
-} = require('../common/hal-signal-quality');
+} = require('../reporter/hal-signal-quality');
 const {
   PUBLIC_ARTICLE_REQUIRED_KEYS,
   PUBLIC_ARTICLE_STORY_REQUIRED_KEYS,
@@ -35,15 +35,15 @@ const {
   publicArticleForSection,
   storyContractMarkers,
   validatePublicArticle
-} = require('../common/public-article-contract');
+} = require('../reporter/public-article-contract');
 const {
   buildAllowedClaimEvidence,
   validateArticleClaims
-} = require('./claim-source-binding');
+} = require('../quality/claim-source-binding');
 const {
   REPAIR_PATCH_CONTRACT_VIOLATION,
   checkRepairPatchContract
-} = require('./repair-patch-contract');
+} = require('../repair/repair-patch-contract');
 const {
   candidateGroupKey,
   EXPLICIT_DEMOTION_REASON_CODES,
@@ -54,14 +54,14 @@ const {
   HARD_BLOCK_REASON_CODES,
   isNativeToolingWorkflow,
   normalizeUrl: normalizeGroupUrl
-} = require('../../../src/core/common/article-groups');
+} = require('../../core/common/article-groups');
 const {
   normalizeSourceQuality
-} = require('../../../src/core/collect/source-quality-classifier');
+} = require('../../core/collect/source-quality-classifier');
 const {
   isDomainDraftArtifact,
   toLegacyEditorIssue
-} = require('../../../src/core/domain/newsletter-domain-normalize');
+} = require('../../core/domain/newsletter-domain-normalize');
 
 const REQUIRED_BRIEFING_COUNT = 3;
 
