@@ -1,4 +1,4 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const dns = require('dns');
 const fs = require('fs');
 const net = require('net');
@@ -19,32 +19,32 @@ const {
   seedMergeReportMarkdownRelPath,
   seedMergeReportPath,
   seedMergeReportRelPath
-} = require('../common/artifact-paths');
+} = require('../../../src/core/common/artifact-paths');
 const {
   decodeHtml,
   htmlAttr,
   readJson,
   writeJson
-} = require('../common/common');
+} = require('../../../src/core/common/common');
 const {
   classifyOutgoingLinks,
   EVIDENCE_ROLES
 } = require('../evidence');
 const {
   extractOutgoingLinksFromHtml
-} = require('./outgoing-links');
+} = require('../../../src/core/collect/outgoing-links');
 const {
   parseSourceSpecificItems
-} = require('./source-item-parsers');
+} = require('../../../src/core/collect/source-item-parsers');
 const {
   sourceForUrl,
   stableId,
   text,
   urlHostname
-} = require('./source-intelligence-utils');
+} = require('../../../src/core/collect/source-intelligence-utils');
 const {
   CANDIDATE_SCHEMA_VERSION
-} = require('../cli/collect-news-candidates');
+} = require('../../../src/core/cli/collect-news-candidates');
 
 const SCHEMA_VERSION = 1;
 const DEFAULT_LIMITS = Object.freeze({

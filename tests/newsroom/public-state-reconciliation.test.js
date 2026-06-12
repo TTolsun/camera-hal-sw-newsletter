@@ -24,13 +24,13 @@ const {
   tempRoot,
   writeJson,
   writeText
-} = require('../helpers/fs');
+} = require('../../src/core/test/helpers/fs');
 const {
   validateHistoricalArchive
 } = require('../../scripts/newsroom/validate/historical-archive');
 const {
   validSections
-} = require('../helpers/quality-builders');
+} = require('../../src/core/test/helpers/quality-builders');
 
 function writeRootIndex(root) {
   writeText(path.join(root, 'index.html'), [

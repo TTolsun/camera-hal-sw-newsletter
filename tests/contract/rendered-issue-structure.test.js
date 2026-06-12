@@ -12,12 +12,12 @@ const {
 } = require('../../scripts/newsroom/render/newsletter-renderer');
 const {
   validSections
-} = require('../helpers/quality-builders');
+} = require('../../src/core/test/helpers/quality-builders');
 const {
   tempRoot,
   writeJson,
   writeText
-} = require('../helpers/fs');
+} = require('../../src/core/test/helpers/fs');
 
 const repoRoot = path.join(__dirname, '..', '..');
 const validateSitePath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-site.js');

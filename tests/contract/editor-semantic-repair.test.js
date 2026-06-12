@@ -16,7 +16,7 @@ const {
   tempNewsroomDir,
   readJson,
   buildGroupCoverageFixture
-} = require('../helpers/editor-builders');
+} = require('../../src/core/test/helpers/editor-builders');
 
 const DATE = '2026-05-08';
 

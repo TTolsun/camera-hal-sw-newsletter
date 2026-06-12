@@ -15,7 +15,7 @@
 // step calls syncWeeklyArticleImages to converge the weekly section image fields and the weekly
 // index article_images to the repaired daily state.
 
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 

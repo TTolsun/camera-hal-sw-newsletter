@@ -363,7 +363,7 @@ PR에서 다음 항목을 확인합니다.
 
 Source quality(출처 품질)는 수집과 Stage 3 생성 사이에 실행 가능한 정책 계층을 추가합니다.
 
-- Candidate 수집은 article capsule 생성 전에 `scripts/newsroom/collect/source-quality-classifier.js`를 실행합니다.
+- Candidate 수집은 article capsule 생성 전에 `src/core/collect/source-quality-classifier.js`를 실행합니다.
 - 새 candidate는 canonical `source_quality`를 포함하며, 평면 source quality 필드는 호환성 mirror입니다.
 - `article-capsules.json`에는 `source_quality`, `main_article_readiness`, `do_not_claim[]`이 포함됩니다.
 - `main_article_readiness`는 source readiness, HAL signal readiness, deterministic `selection_input_ready`를 결합합니다. `selection_ready`는 `selection_input_ready`의 deprecated 호환 alias입니다.
@@ -381,7 +381,7 @@ Source quality(출처 품질)는 수집과 Stage 3 생성 사이에 실행 가�
 
 `detected_at`, `first_seen_at`, `last_seen_at`은 pipeline 관찰 시점 또는 snapshot state입니다. detected_at, first_seen_at, last_seen_at은 source의 실제 발행일이나 freshness 근거가 아니다. 이 값들은 freshness/date-source/publish-ready evidence로 사용하지 않습니다.
 
-`date_source`와 `date_confidence`는 `scripts/newsroom/common/date-signals.js`의 allowlist와 baseline을 따릅니다. `date_confidence >= 85`인 source date signal만 source relevance와 source binding이 함께 통과할 때 publish-ready date evidence 후보가 될 수 있습니다. `snapshot_detected_at` 및 `content_hash_changed_without_date`는 editor review 또는 watchlist signal로만 다루며 publish-ready date evidence가 아닙니다.
+`date_source`와 `date_confidence`는 `src/core/common/date-signals.js`의 allowlist와 baseline을 따릅니다. `date_confidence >= 85`인 source date signal만 source relevance와 source binding이 함께 통과할 때 publish-ready date evidence 후보가 될 수 있습니다. `snapshot_detected_at` 및 `content_hash_changed_without_date`는 editor review 또는 watchlist signal로만 다루며 publish-ready date evidence가 아닙니다.
 
 Source monitor report는 `Source Snapshot Changes`, `Source Change Events`, `Evidence Identity / Duplicate Guard`, `Date Quality` 섹션을 포함합니다. Public newsletter artifact에는 raw snapshot state, previous/current diff payload, `processed_source_event_ids`, `processed_evidence_ids`를 노출하지 않습니다.
 

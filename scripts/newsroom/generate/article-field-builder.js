@@ -1,8 +1,8 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const {
   BUCKETS,
   classifyAospCameraStackCandidate
-} = require('../common/aosp-camera-scope');
+} = require('../../../src/core/common/aosp-camera-scope');
 const { normalizeArticleSections } = require('../common/article-section-contract');
 
 const GUARDRAIL_IMPACT_CLASSES = Object.freeze({

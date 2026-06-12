@@ -4,7 +4,7 @@ const path = require('path');
 const {
   kstDate,
   readJson
-} = require('../common/common');
+} = require('../../../src/core/common/common');
 const {
   evidenceValidationReportPath,
   evidenceValidationReportRelPath,
@@ -47,24 +47,24 @@ const {
   sourceQualityReportMarkdownRelPath,
   sourceQualityReportPath,
   sourceQualityReportRelPath
-} = require('../common/artifact-paths');
+} = require('../../../src/core/common/artifact-paths');
 const {
   sourceDiscoveryCandidateStats,
   sourceDiscoveryStatsSummary,
   writeMergedCandidateArtifacts
-} = require('../common/candidate-artifacts');
+} = require('../../../src/core/common/candidate-artifacts');
 const {
   createGeminiUsageBudget
 } = require('../common/gemini-usage-budget');
 const {
   writeJson
-} = require('../common/common');
+} = require('../../../src/core/common/common');
 const {
   readRuntimeConfig
-} = require('../common/runtime-config');
+} = require('../../../src/core/common/runtime-config');
 const {
   renderEditorPrSummary
-} = require('../common/editor-pr-summary');
+} = require('../../../src/core/common/editor-pr-summary');
 const {
   runGeminiSourceDiscovery
 } = require('../collect/gemini-source-discovery');
@@ -73,7 +73,7 @@ const {
 } = require('../collect/linked-evidence-candidate-expansion');
 const {
   approvedCollectionIntentFromManifest
-} = require('../collect/collection-intent');
+} = require('../../../src/core/collect/collection-intent');
 const {
   runSeedEvidenceExpansion
 } = require('../collect/seed-evidence');
@@ -94,7 +94,7 @@ const {
   candidateTitle,
   candidateUrl,
   text
-} = require('../collect/source-intelligence-utils');
+} = require('../../../src/core/collect/source-intelligence-utils');
 
 const FAILED_LLM_CREDENTIALS = 'FAILED_LLM_CREDENTIALS';
 const SEED_ONLY_LLM_CREDENTIALS_MISSING = 'SEED_ONLY_LLM_CREDENTIALS_MISSING';

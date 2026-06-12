@@ -12,11 +12,11 @@ const {
   section,
   validSections,
   reporterCandidatesFor
-} = require('../helpers/quality-builders');
+} = require('../../src/core/test/helpers/quality-builders');
 const {
   seedEvidencePack,
   seedPack
-} = require('../helpers/quality-fixtures');
+} = require('../../src/core/test/helpers/quality-fixtures');
 
 function linkedEvidenceSummary(overrides = {}) {
   return {

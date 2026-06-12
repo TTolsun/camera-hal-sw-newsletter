@@ -1,11 +1,11 @@
-const { ensureArray } = require('./value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
 const {
   articleIdentityKey,
   sourceUrl
-} = require('./article-identity');
+} = require('../../../src/core/common/article-identity');
 
 const EXPOSURE_HISTORY_REL_PATH = path.join('data', 'article-exposure-history.json');
 const SCHEMA_VERSION = 1;

@@ -1,4 +1,4 @@
-const { ensureArray } = require('./value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const ARTICLE_SECTION_REQUIRED_KEYS = Object.freeze([
   'verified_facts',
   'background_context',

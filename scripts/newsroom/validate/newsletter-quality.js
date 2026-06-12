@@ -1,4 +1,4 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const {
   isFinalSelected
 } = require('../generate/selection-diagnostics');
@@ -21,7 +21,7 @@ const {
   BUCKETS,
   BUCKET_PRIORITY,
   classifyAospCameraStackCandidate
-} = require('../common/aosp-camera-scope');
+} = require('../../../src/core/common/aosp-camera-scope');
 const {
   articlePolicy,
   publishReadyCompositionPolicy,
@@ -31,11 +31,11 @@ const {
   isPrimaryCameraStackBucket,
   isSupportingMainBucket,
   publishGateCriteriaText
-} = require('../common/newsletter-policy');
+} = require('../../../src/core/common/newsletter-policy');
 const {
   IMPACT_TYPES,
   RECOMMENDED_ARTICLE_TYPES
-} = require('../evidence/impact-classifier');
+} = require('../../../src/core/evidence/impact-classifier');
 const {
   findFieldHygieneIssues,
   inferGuardrailImpactClass
@@ -60,15 +60,15 @@ const {
   dateQualityForCandidate,
   validateDateSource,
   validateEventType
-} = require('../common/date-signals');
+} = require('../../../src/core/common/date-signals');
 const {
   candidateGroupKey
-} = require('../common/article-groups');
+} = require('../../../src/core/common/article-groups');
 const {
   SOURCE_QUALITY_FIELD_DRIFT,
   normalizeSourceQuality,
   sourceQualityFieldDrift
-} = require('../collect/source-quality-classifier');
+} = require('../../../src/core/collect/source-quality-classifier');
 const {
   summarizeClaimValidation,
   validateArticleClaims
@@ -78,7 +78,7 @@ const {
 } = require('./editor-output-contract');
 const {
   toLegacyEditorIssue
-} = require('../domain/newsletter-domain-normalize');
+} = require('../../../src/core/domain/newsletter-domain-normalize');
 const {
   EDITORIAL_STORY_KEYS,
   STORY_CONTRACT_VERSION,
@@ -99,7 +99,7 @@ const {
   BRIEFING_WHAT_PATTERN,
   BRIEFING_READER_PATTERN,
   BRIEFING_ACTION_PATTERN
-} = require('../common/quality-gate-policy');
+} = require('../../../src/core/common/quality-gate-policy');
 
 // Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;

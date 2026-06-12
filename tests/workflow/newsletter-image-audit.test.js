@@ -22,7 +22,7 @@ const {
 } = require('../../scripts/newsroom/render/newsletter-image-audit-labels.ko');
 const {
   retrySection
-} = require('../helpers/newsroom-builders');
+} = require('../../src/core/test/helpers/newsroom-builders');
 
 function tempRoot(prefix) {
   return fs.mkdtempSync(path.join(os.tmpdir(), prefix));

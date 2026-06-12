@@ -16,11 +16,11 @@ const {
   registryAllowedDomains,
   urlHostname,
   stableId
-} = require('./source-intelligence-utils');
+} = require('../../../src/core/collect/source-intelligence-utils');
 const {
   classifyOutgoingLinks,
   EVIDENCE_ROLES
-} = require('../evidence/linked-evidence-link-classifier');
+} = require('../../../src/core/evidence/linked-evidence-link-classifier');
 const { callGeminiJsonBudgeted } = require('../generate/gemini-client');
 
 // seed-evidence.js의 sourcePolicy와 동일한 공식 evidence 도메인 신뢰 집합.

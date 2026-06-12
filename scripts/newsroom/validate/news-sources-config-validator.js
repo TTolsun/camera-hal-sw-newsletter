@@ -1,11 +1,11 @@
 const {
   sectionMapValidationErrors
-} = require('../collect/news-source-section-resolver');
+} = require('../../../src/core/collect/news-source-section-resolver');
 const {
   MAIN_ARTICLE_POLICIES,
   SOURCE_ROLES,
   SOURCE_URL_QUALITIES
-} = require('../collect/source-quality-classifier');
+} = require('../../../src/core/collect/source-quality-classifier');
 
 const REQUIRED_SOURCE_FIELDS = [
   'id',

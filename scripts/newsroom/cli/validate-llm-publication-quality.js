@@ -7,7 +7,7 @@ const {
 const {
   newsroomDir,
   newsroomRelPath
-} = require('../common/artifact-paths');
+} = require('../../../src/core/common/artifact-paths');
 
 const string = { type: 'STRING' };
 

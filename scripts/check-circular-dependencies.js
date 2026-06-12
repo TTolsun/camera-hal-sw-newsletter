@@ -12,7 +12,15 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const NEWSROOM_ROOT = path.join(__dirname, 'newsroom');
+const REPO_ROOT = path.resolve(__dirname, '..');
+// 구현 코드가 이전(#262 src 재구성) 중에는 scripts/newsroom 과 src 양쪽에 걸쳐 있습니다.
+// 두 위치를 모두 스캔해야 이동된 core 모듈의 순환도 빠짐없이 검사합니다. 존재하는 루트만 사용합니다.
+const IMPLEMENTATION_ROOTS = [
+  path.join(__dirname, 'newsroom'),
+  path.join(REPO_ROOT, 'src')
+].filter((dir) => {
+  try { return fs.statSync(dir).isDirectory(); } catch (error) { return false; }
+});
 // 앞에 식별자 문자나 `.`이 오면 `foo.require(...)` 같은 메서드 호출이므로 제외합니다.
 const RELATIVE_REQUIRE_PATTERN = /(?<![A-Za-z0-9_.$])require\(\s*['"]([^'"]+)['"]\s*\)/g;
 
@@ -89,6 +97,38 @@ function buildRequireGraph(rootDirectory) {
   return graph;
 }
 
+// 여러 루트 디렉터리의 파일을 하나의 require 그래프로 묶습니다.
+// 키는 baseDirectory(보통 repo 루트) 기준 상대경로라서 루트 간(scripts/newsroom <-> src)
+// 의존성도 같은 키 공간에서 해석됩니다.
+function buildRequireGraphForRoots(rootDirectories, baseDirectory) {
+  const files = [];
+  for (const rootDirectory of rootDirectories) {
+    files.push(...collectJavascriptFiles(rootDirectory));
+  }
+  const fileSet = new Set(files);
+  const toKey = (absolutePath) => path.relative(baseDirectory, absolutePath).split(path.sep).join('/');
+
+  const graph = {};
+  for (const file of files) {
+    graph[toKey(file)] = [];
+  }
+  for (const file of files) {
+    const source = fs.readFileSync(file, 'utf8');
+    const dependencies = [];
+    for (const specifier of parseRelativeRequires(source)) {
+      const resolved = resolveRelativeRequire(file, specifier);
+      if (resolved && fileSet.has(resolved)) {
+        const dependencyKey = toKey(resolved);
+        if (!dependencies.includes(dependencyKey)) {
+          dependencies.push(dependencyKey);
+        }
+      }
+    }
+    graph[toKey(file)] = dependencies;
+  }
+  return graph;
+}
+
 // Tarjan SCC로 순환을 찾습니다. 결과는 결정론을 위해 멤버와 그룹 모두 정렬합니다.
 function findCircularDependencies(graph) {
   const nodes = Object.keys(graph);
@@ -152,11 +192,11 @@ function formatCircularDependency(cycle) {
 }
 
 function main() {
-  const graph = buildRequireGraph(NEWSROOM_ROOT);
+  const graph = buildRequireGraphForRoots(IMPLEMENTATION_ROOTS, REPO_ROOT);
   const cycles = findCircularDependencies(graph);
 
   if (cycles.length > 0) {
-    console.error(`Circular dependency check found ${cycles.length} cycle(s) in scripts/newsroom:`);
+    console.error(`Circular dependency check found ${cycles.length} cycle(s) in scripts/newsroom and src:`);
     for (const cycle of cycles) {
       console.error(`  ${formatCircularDependency(cycle)}`);
     }
@@ -175,6 +215,7 @@ module.exports = {
   collectJavascriptFiles,
   resolveRelativeRequire,
   buildRequireGraph,
+  buildRequireGraphForRoots,
   findCircularDependencies,
   formatCircularDependency
 };

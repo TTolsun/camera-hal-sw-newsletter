@@ -19,7 +19,7 @@ const {
   seedMergeReportMarkdownRelPath,
   seedMergeReportRelPath,
   toPosix
-} = require('./artifact-paths');
+} = require('../../../src/core/common/artifact-paths');
 const {
   weeklyKeyForDate,
   weeklyNewsletterIndexRoute,

@@ -10,13 +10,13 @@ const {
   publishReadyGateReasonCodes,
   scoreCandidate
 } = require('../../scripts/newsroom/generate/newsroom-selection');
-const { candidate } = require('../helpers/newsroom-builders');
+const { candidate } = require('../../src/core/test/helpers/newsroom-builders');
 const {
   buildShortlistReport,
   policyPrimaryCandidate,
   policyDriverCandidate,
   policySupportingCandidate
-} = require('../helpers/selection-builders');
+} = require('../../src/core/test/helpers/selection-builders');
 
 function policyMultimediaCandidate(index = 0, overrides = {}) {
   return candidate({

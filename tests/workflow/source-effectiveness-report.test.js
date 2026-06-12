@@ -11,9 +11,9 @@ const {
 const {
   tempRoot,
   writeJson
-} = require('../helpers/fs');
+} = require('../../src/core/test/helpers/fs');
 
-const fixture = require('../fixtures/source-effectiveness/basic-source-effectiveness.json');
+const fixture = require('../../src/core/test/fixtures/source-effectiveness/basic-source-effectiveness.json');
 
 function buildReport(overrides = {}) {
   return buildSourceEffectivenessReport({

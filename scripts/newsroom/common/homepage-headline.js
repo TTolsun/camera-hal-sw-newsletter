@@ -1,4 +1,4 @@
-const { ensureArray } = require('./value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -6,11 +6,11 @@ const {
   articleIdentityKey,
   contentHash,
   sourceUrl
-} = require('./article-identity');
+} = require('../../../src/core/common/article-identity');
 const {
   articlePolicy,
   getHeadlinePolicy
-} = require('./newsletter-policy');
+} = require('../../../src/core/common/newsletter-policy');
 const { isPlaylistCollectionUrl } = require('./playlist-url');
 
 const HEADLINE_STATE_REL_PATH = path.join('data', 'homepage-headline.json');

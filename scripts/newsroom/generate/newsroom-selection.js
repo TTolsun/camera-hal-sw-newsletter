@@ -1,4 +1,4 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const {
   normalizeShortlistReport
 } = require('./selection-diagnostics');
@@ -38,7 +38,7 @@ const {
   BUCKETS,
   classifyAospCameraStackCandidate,
   normalizeAospCameraScope
-} = require('../common/aosp-camera-scope');
+} = require('../../../src/core/common/aosp-camera-scope');
 const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
   NATIVE_TOOLING_WORKFLOW_TYPE,
@@ -46,14 +46,14 @@ const {
   candidateGroupKey,
   groupCoverageSummary,
   isNativeToolingWorkflow
-} = require('../common/article-groups');
+} = require('../../../src/core/common/article-groups');
 const {
   dateQualityForCandidate,
   resolveCandidateDateEvidence
-} = require('../common/date-signals');
+} = require('../../../src/core/common/date-signals');
 const {
   articleIdentityKey
-} = require('../common/article-identity');
+} = require('../../../src/core/common/article-identity');
 const { isPlaylistCollectionUrl } = require('../common/playlist-url');
 const {
   annotateArticleExposure,
@@ -81,7 +81,7 @@ const {
   isMainArticleAllowedBucket,
   isPrimaryCameraStackBucket,
   publishGateCriteriaText
-} = require('../common/newsletter-policy');
+} = require('../../../src/core/common/newsletter-policy');
 const { resolvePublishMode } = require('./publish-mode');
 
 const publishReadyCompositionPolicy = getPublishReadyCompositionPolicy();

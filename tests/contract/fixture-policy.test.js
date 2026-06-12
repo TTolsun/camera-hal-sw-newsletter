@@ -8,7 +8,7 @@ const {
   readJsonFixture,
   readTextFixture,
   resolveFixturePath
-} = require('../helpers/fixture-loader');
+} = require('../../src/core/test/helpers/fixture-loader');
 const {
   FORBIDDEN_GOOD_FIXTURE_PROVENANCE
 } = require('../../scripts/newsroom/validate/historical-archive');

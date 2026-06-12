@@ -1,4 +1,4 @@
-const { ensureArray } = require('./value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');

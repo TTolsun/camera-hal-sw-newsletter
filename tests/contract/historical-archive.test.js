@@ -20,7 +20,7 @@ const {
   tempRoot,
   writeJson,
   writeText
-} = require('../helpers/fs');
+} = require('../../src/core/test/helpers/fs');
 
 function writePublicIssue(root, date, text = '') {
   writeText(path.join(root, 'newsletters', date, 'newsletter.md'), [
@@ -453,7 +453,7 @@ test('historical archive validator rejects forbidden public article provenance i
   writePublicIssue(root, date);
   writeArchiveDocs(root, [date]);
   writeStatus(root, [statusEntry(date)]);
-  writeJson(path.join(root, 'tests', 'fixtures', 'quality', 'good', 'historical-public-article.json'), {
+  writeJson(path.join(root, 'src', 'core', 'test', 'fixtures', 'quality', 'good', 'historical-public-article.json'), {
     metadata: {
       provenance: 'generated_newsletter_public_article'
     },

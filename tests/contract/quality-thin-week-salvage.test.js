@@ -10,7 +10,7 @@ const {
 const {
   scopedCandidate,
   section
-} = require('../helpers/quality-builders');
+} = require('../../src/core/test/helpers/quality-builders');
 
 const DATE = '2026-06-03';
 

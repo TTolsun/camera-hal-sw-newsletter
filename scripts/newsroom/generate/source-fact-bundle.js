@@ -1,4 +1,4 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const MAX_FACTS = 12;
 const MAX_FACT_LENGTH = 300;
 

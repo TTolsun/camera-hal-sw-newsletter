@@ -19,7 +19,7 @@ const {
   articlePolicy,
   articleCountRangeText,
   publishGateCriteriaText
-} = require('../common/newsletter-policy');
+} = require('../../../src/core/common/newsletter-policy');
 const {
   renderEditorPublicationPolicyMarkdown
 } = require('../common/editor-publication-policy');
@@ -51,7 +51,7 @@ const {
 } = require('../common/review-artifact-inventory');
 const {
   renderEditorPrSummary
-} = require('../common/editor-pr-summary');
+} = require('../../../src/core/common/editor-pr-summary');
 const {
   formatReasonSummary
 } = require('../common/status-format');
@@ -64,7 +64,7 @@ const {
 } = require('../common/markdown');
 const {
   toLegacyEditorIssue
-} = require('../domain/newsletter-domain-normalize');
+} = require('../../../src/core/domain/newsletter-domain-normalize');
 
 const EDITOR_BRIEF_ALLOWED_SECTIONS = new Set([
   '이번 주 핵심 메시지',

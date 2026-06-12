@@ -4,7 +4,7 @@ const {
   normalizeNewsletterPolicyConfig,
   readPolicyConfig,
   validateNewsletterPolicyConfig
-} = require('../common/newsletter-policy');
+} = require('../../../src/core/common/newsletter-policy');
 
 const root = process.cwd();
 const configPath = path.resolve(root, process.argv[2] || POLICY_REL_PATH);
