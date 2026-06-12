@@ -11,9 +11,9 @@
 ## 2. Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망
 
 
-![Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망 image](../../assets/images/fallback/android.svg)
+![Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망](https://developer.android.com/static/images/social/android-developers.png?hl=hi)
 
-_이미지: [Android CLI Skills Update](https://developer.android.com/tools/agents/android-cli#skills-add)_
+_이미지: [Android Developers Blog](https://developer.android.com/tools/agents/android-cli#skills-add)_
 
 
 _Android Developers Blog - Top 3 updates for Android developer productivity_
