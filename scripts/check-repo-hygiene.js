@@ -88,7 +88,7 @@ function hasOneOffPhrase(value) {
 function isOneOffScriptPath(filePath) {
   const normalizedPath = normalizePath(filePath);
   const segments = normalizedPath.split('/').filter(Boolean);
-  if (segments[0] !== 'scripts') return false;
+  if (segments[0] !== 'scripts' && segments[0] !== 'src') return false;
 
   const extension = path.posix.extname(normalizedPath).toLowerCase();
   if (!ONE_OFF_SCRIPT_EXTENSIONS.has(extension)) return false;
@@ -172,7 +172,7 @@ function findRepoHygieneIssues(files, options = {}) {
     } else if (/^[^/]+-scratch\.md$/.test(filePath)) {
       issues.push(issue(filePath, 'tracked_agent_scratch', 'root scratch markdown files must stay local-only'));
     } else if (isOneOffScriptPath(filePath)) {
-      issues.push(issue(filePath, 'tracked_one_off_script', 'one-off scripts under scripts/ must stay outside the repo or become maintained project tools'));
+      issues.push(issue(filePath, 'tracked_one_off_script', 'one-off scripts under scripts/ and src/ must stay outside the repo or become maintained project tools'));
     }
   }
 
