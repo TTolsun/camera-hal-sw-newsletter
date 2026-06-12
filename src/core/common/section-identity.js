@@ -8,7 +8,7 @@
 // concern.
 
 const { ensureArray } = require('./value-coercion');
-const { normalizeUrl } = require('../../../scripts/newsroom/generate/newsroom-selection');
+const { normalizeUrl } = require('../../generator/select/newsroom-selection');
 
 function stringOrEmpty(value) {
   return String(value || '').trim();

@@ -1,1 +1,1 @@
-module.exports = require('./newsroom/cli/run-wrapper')(__filename, 'newsroom/cli/validate-pr-body.js');
+module.exports = require('./newsroom/cli/run-wrapper')(__filename, '../src/generator/publish/validate-pr-body.js');

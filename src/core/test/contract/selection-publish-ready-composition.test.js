@@ -8,7 +8,7 @@ const {
   publishGatePasses,
   publishReadyGateReasonCodes,
   selectionErrors
-} = require('../../../../scripts/newsroom/generate/newsroom-selection');
+} = require('../../../generator/select/newsroom-selection');
 const {
   articlePolicy,
   publishReadyCompositionPolicy

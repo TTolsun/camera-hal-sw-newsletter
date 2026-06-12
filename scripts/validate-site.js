@@ -1,1 +1,1 @@
-module.exports = require('./newsroom/cli/run-wrapper')(__filename, 'newsroom/cli/validate-site.js');
+module.exports = require('./newsroom/cli/run-wrapper')(__filename, '../src/generator/publish/validate-site.js');

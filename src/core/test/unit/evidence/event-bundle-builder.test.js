@@ -8,7 +8,7 @@ const {
   LINKED_EVIDENCE_TYPES,
   buildEventBundles
 } = require('../../../../discovery');
-const { buildShortlistReport } = require('../../../../../scripts/newsroom/generate/newsroom-selection');
+const { buildShortlistReport } = require('../../../../generator/select/newsroom-selection');
 const { candidate } = require('../../helpers/newsroom-builders');
 
 function releaseCandidate(overrides = {}) {

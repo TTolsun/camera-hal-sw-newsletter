@@ -8,8 +8,8 @@ const {
   EditorSemanticValidationError,
   repairEditorOutputContract,
   validateEditorOutputContract
-} = require('../../../../scripts/newsroom/validate/editor-output-contract');
-const { editorSchema } = require('../../../../scripts/newsroom/render/newsletter-schema');
+} = require('../../../generator/editor/editor-output-contract');
+const { editorSchema } = require('../../../generator/render/newsletter-schema');
 const {
   buildGenerationStatus,
   editorSemanticStatusExtra

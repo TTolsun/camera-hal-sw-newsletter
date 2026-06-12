@@ -9,7 +9,7 @@ const {
   writeGenerationStatus,
   writeNewsletterDate,
   writeSelectionDiagnosticsArtifact
-} = require('../../../../scripts/newsroom/cli/gemini-newsroom-newsletter');
+} = require('../../../generator/publish/gemini-newsroom-newsletter');
 const { articlePolicy } = require('../../common/newsletter-policy');
 const {
   readJson,

@@ -1,1 +1,1 @@
-module.exports = require('./newsroom/cli/run-wrapper')(__filename, 'newsroom/cli/write-generation-status-output.js');
+module.exports = require('./newsroom/cli/run-wrapper')(__filename, '../src/generator/publish/write-generation-status-output.js');

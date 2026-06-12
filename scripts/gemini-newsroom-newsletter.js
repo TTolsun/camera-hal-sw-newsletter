@@ -1,1 +1,1 @@
-module.exports = require('./newsroom/cli/run-wrapper')(__filename, 'newsroom/cli/gemini-newsroom-newsletter.js');
+module.exports = require('./newsroom/cli/run-wrapper')(__filename, '../src/generator/publish/gemini-newsroom-newsletter.js');

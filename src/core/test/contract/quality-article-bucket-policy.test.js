@@ -7,14 +7,14 @@ const {
   buildNewsletterQualityReport,
   buildQualityReportMarkdown,
   sectionPassesArticleGate
-} = require('../../../../scripts/newsroom/validate/newsletter-quality');
+} = require('../../../generator/quality/newsletter-quality');
 const {
   articlePolicy,
   qualityGatePolicy
 } = require('../../common/newsletter-policy');
 const {
   isFallbackOnly
-} = require('../../../../scripts/newsroom/common/public-article-contract');
+} = require('../../../generator/reporter/public-article-contract');
 const {
   reportFor,
   scopedCandidate,

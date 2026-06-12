@@ -1,6 +1,6 @@
 const {
   extractJson
-} = require('../../../../scripts/newsroom/llm/llm-errors');
+} = require('../../../generator/reporter/llm-errors');
 const {
   normalizeNewsletterIssue
 } = require('../../domain/newsletter-domain-normalize');

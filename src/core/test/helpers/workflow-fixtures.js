@@ -3,7 +3,7 @@ const path = require('node:path');
 
 const {
   LEDGER_PATH: AUDIT_LEDGER_PATH
-} = require('../../../../scripts/newsroom/common/audit-paths');
+} = require('../../../generator/reporter/audit-paths');
 const {
   articlePolicy,
   candidatePoolPreflightPolicy,
@@ -12,7 +12,7 @@ const {
 const {
   buildHtml,
   buildMarkdown
-} = require('../../../../scripts/newsroom/render/newsletter-renderer');
+} = require('../../../generator/render/newsletter-renderer');
 const { writeJson, writeText } = require('./fs');
 
 function cameraXRegressionExtraction(title, url) {

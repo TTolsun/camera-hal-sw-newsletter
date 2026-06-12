@@ -11,9 +11,9 @@ const {
 } = require('../../../../scripts/gemini-newsroom-newsletter');
 const {
   NewsletterDomainValidationError
-} = require('../../../../scripts/newsroom/domain/newsletter-domain-errors');
+} = require('../../../generator/reporter/newsletter-domain-errors');
 const { qualityGatePolicy } = require('../../common/newsletter-policy');
-const { backgroundContextSchema } = require('../../../../scripts/newsroom/render/newsletter-schema');
+const { backgroundContextSchema } = require('../../../generator/render/newsletter-schema');
 
 test('failure status includes required Gemini diagnostic fields', () => {
   const status = buildGenerationStatus({

@@ -10,7 +10,7 @@ const {
   reporterInputFromShortlist,
   scoreCandidate,
   selectFinalArticles
-} = require('../../../../scripts/newsroom/generate/newsroom-selection');
+} = require('../../../generator/select/newsroom-selection');
 const {
   articlePolicy
 } = require('../../common/newsletter-policy');
@@ -283,7 +283,7 @@ test('reporter input omits linked evidence diagnostics without changing order or
 });
 
 test('deterministic score ordering is stable and shortlist is capped', () => {
-  const { SHORTLIST_CAP } = require('../../../../scripts/newsroom/generate/newsroom-selection');
+  const { SHORTLIST_CAP } = require('../../../generator/select/newsroom-selection');
   const items = Array.from({ length: 15 }, (_, index) => candidate({
     title: `CameraX release ${index} component ${String.fromCharCode(65 + index)}`,
     url: `https://example.com/release-${index}`,

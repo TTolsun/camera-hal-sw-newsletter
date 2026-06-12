@@ -1,1 +1,1 @@
-module.exports = require('./newsroom/cli/run-wrapper')(__filename, 'newsroom/cli/write-artifact-manifest.js');
+module.exports = require('./newsroom/cli/run-wrapper')(__filename, '../src/generator/publish/write-artifact-manifest.js');

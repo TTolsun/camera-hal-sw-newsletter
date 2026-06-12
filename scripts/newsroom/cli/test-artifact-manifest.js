@@ -2,7 +2,7 @@ const assert = require('assert');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { buildManifest } = require('./write-artifact-manifest');
+const { buildManifest } = require('../../../src/generator/publish/write-artifact-manifest');
 const {
   buildDateReviewManifest,
   buildReviewArtifactInventory,
@@ -12,7 +12,7 @@ const {
   REVIEW_REQUIRED_COMPACT,
   DEBUG_HEAVY,
   TRANSIENT_ATTEMPT
-} = require('../common/review-artifact-inventory');
+} = require('../../../src/generator/reporter/review-artifact-inventory');
 const {
   collectedCandidatesRelPath,
   newsroomRelPath,

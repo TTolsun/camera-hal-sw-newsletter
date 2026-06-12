@@ -11,7 +11,7 @@ const {
   analyzeLinkedEvidenceForCandidates,
   writeLinkedEvidenceDiagnosticsArtifacts
 } = require('../../../../discovery');
-const { buildShortlistReport } = require('../../../../../scripts/newsroom/generate/newsroom-selection');
+const { buildShortlistReport } = require('../../../../generator/select/newsroom-selection');
 const { candidate } = require('../../helpers/newsroom-builders');
 const { readTextFixture } = require('../../helpers/fixture-loader');
 

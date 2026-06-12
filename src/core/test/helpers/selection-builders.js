@@ -2,13 +2,13 @@
 
 const {
   buildShortlistReport: buildShortlistReportBase
-} = require('../../../../scripts/newsroom/generate/newsroom-selection');
+} = require('../../../generator/select/newsroom-selection');
 const {
   articlePolicy
 } = require('../../common/newsletter-policy');
 const {
   emptyHeadlineState
-} = require('../../../../scripts/newsroom/common/homepage-headline');
+} = require('../../../generator/reporter/homepage-headline');
 const { candidate } = require('./newsroom-builders');
 
 const FALLBACK_WINDOW_TEST_MIN_ARTICLES = 3;

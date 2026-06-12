@@ -6,7 +6,7 @@ const test = require('node:test');
 
 const {
   buildNewsletterQualityReport
-} = require('../../../../scripts/newsroom/validate/newsletter-quality');
+} = require('../../../generator/quality/newsletter-quality');
 const {
   articlePolicy,
   getHeadlinePolicy,
@@ -14,7 +14,7 @@ const {
 } = require('../../common/newsletter-policy');
 const {
   policySnapshot
-} = require('../../../../scripts/newsroom/common/homepage-headline');
+} = require('../../../generator/reporter/homepage-headline');
 const {
   reporterCandidatesFor,
   validSections
@@ -26,8 +26,8 @@ const {
 } = require('../helpers/fs');
 
 const repoRoot = path.join(__dirname, '..', '..', '..', '..');
-const validateSitePath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-site.js');
-const validateQualityPath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-quality.js');
+const validateSitePath = path.join(repoRoot, 'src', 'generator', 'publish', 'validate-site.js');
+const validateQualityPath = path.join(repoRoot, 'src', 'generator', 'publish', 'validate-quality.js');
 
 function runScript(scriptPath, root, env = {}) {
   return spawnSync(process.execPath, [scriptPath], {
