@@ -5,7 +5,7 @@ const {
   EVIDENCE_ROLES,
   classifyOutgoingLink,
   classifyOutgoingLinks
-} = require('../../../scripts/newsroom/evidence');
+} = require('../../..');
 
 const androidPolicy = {
   enabled: true,

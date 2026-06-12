@@ -6,7 +6,7 @@ const {
   selectNewsworthyLinks,
   buildDerivedCandidates,
   expandLinkedEvidenceCandidates
-} = require('../../../scripts/newsroom/collect/linked-evidence-candidate-expansion');
+} = require('../../../linked-evidence-candidate-expansion');
 
 function sourceRegistry() {
   return {

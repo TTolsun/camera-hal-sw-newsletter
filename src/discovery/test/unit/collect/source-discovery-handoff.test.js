@@ -6,7 +6,7 @@ const test = require('node:test');
 const {
   FAILED_LLM_CREDENTIALS,
   sourceDiscoveryHandoff
-} = require('../../../scripts/newsroom/cli/gemini-source-discovery-boundary');
+} = require('../../../gemini-source-discovery-boundary');
 
 const MERGED_ARTIFACT = 'content/collected-news/2026-06-03/merged-candidates.json';
 

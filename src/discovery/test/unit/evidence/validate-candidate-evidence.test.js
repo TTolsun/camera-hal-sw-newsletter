@@ -3,10 +3,10 @@ const test = require('node:test');
 
 const {
   selectEvidenceFetchTargets
-} = require('../../../scripts/newsroom/cli/gemini-source-discovery-boundary');
+} = require('../../../gemini-source-discovery-boundary');
 const {
   validateCandidateEvidence
-} = require('../../../scripts/newsroom/evidence/validate-candidate-evidence');
+} = require('../../../validate-candidate-evidence');
 
 function candidate(index, overrides = {}) {
   return {
