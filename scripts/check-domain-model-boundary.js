@@ -36,10 +36,10 @@ const TEXT_EXTENSIONS = Object.freeze(new Set([
 const ALLOWED_PATHS = Object.freeze([
   /^scripts\/newsroom\/llm\//,
   /^scripts\/newsroom\/adapters\/llm\//,
+  /^src\/core\/llm\//,
   /^src\/core\/adapters\/llm\//,
-  /^src\/.*\/llm\//,
   /^tests\/.*\/llm-response\//,
-  /^src\/.*\/llm-response\//,
+  /^src\/core\/test\/.*\/llm-response\//,
   /^docs\/workflows\/llm-provider-domain-boundary\.md$/
 ]);
 
