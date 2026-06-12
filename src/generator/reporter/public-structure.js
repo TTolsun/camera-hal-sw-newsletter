@@ -3,10 +3,10 @@ const path = require('path');
 
 const {
   validateRenderedIssueStructure
-} = require('../validate/rendered-issue-structure');
+} = require('../quality/rendered-issue-structure');
 const {
   validatePublicNewsletterArtifacts
-} = require('../validate/public-newsletter');
+} = require('../quality/public-newsletter');
 
 const REQUIRED_PUBLIC_NEWSLETTER_FILES = [
   'newsletters/${date}/newsletter.md',

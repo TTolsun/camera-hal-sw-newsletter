@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const PUBLIC_ARTICLE_BASE_REQUIRED_KEYS = Object.freeze([
   'headline',
   'lead',
@@ -84,7 +84,7 @@ const PUBLIC_SOURCE_ROLE_ALIASES = Object.freeze({
 
 const {
   normalizeNewsSourceKey
-} = require('../../../src/core/common/source-url-key');
+} = require('../../core/common/source-url-key');
 
 const NO_IMMEDIATE_ACTION_TEXT = '즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.';
 

@@ -13,11 +13,11 @@
 // inferHalImpactAxes() inference, so this classifier adds a HAL-reader-facing
 // signal layer without forking a second axis vocabulary.
 
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const {
   HAL_IMPACT_AXES,
   inferHalImpactAxes
-} = require('../domain/hal-signal-quality');
+} = require('./hal-signal-quality');
 
 // Source URL qualities that directly, datably state a change.
 const OFFICIAL_DATED_QUALITIES = new Set([

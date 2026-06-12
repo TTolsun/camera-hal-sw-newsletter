@@ -1,14 +1,14 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
 const {
   decodeHtml
-} = require('../../../src/core/common/common');
+} = require('../../core/common/common');
 const {
   articleIdentityKey,
   normalizeArticleUrl
-} = require('../../../src/core/common/article-identity');
+} = require('../../core/common/article-identity');
 const {
   uniqueArticleAnchorId
 } = require('./article-anchor');
