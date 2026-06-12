@@ -21,7 +21,7 @@ const {
 
 function usage() {
   return [
-    'Usage: node scripts/annotate-publication-quality.js [--date YYYY-MM-DD] [--all] [--latest]',
+    'Usage: node src/generator/publish/annotate-publication-quality.js [--date YYYY-MM-DD] [--all] [--latest]',
     '',
     'Reports publication quality and fact-check issues as GitHub Actions annotations.',
     'Quality issues do not fail the command; invalid CLI/system inputs do.',

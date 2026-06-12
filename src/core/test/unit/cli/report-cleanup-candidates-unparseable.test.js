@@ -8,7 +8,7 @@ const {
   UNPARSEABLE_REQUIRE_PATTERNS,
   UNPARSEABLE_EXPORT_PATTERNS,
   findUnparseableReasons,
-} = require(path.resolve(__dirname, '../../../../../scripts/newsroom/cli/report-cleanup-candidates.js'));
+} = require(path.resolve(__dirname, '../../../tooling/cli/report-cleanup-candidates.js'));
 
 // UNPARSEABLE_REQUIRE_PATTERNS — 백틱 제거 회귀(PR #449) 방지
 test('template literal require는 동적 require로 탐지되어야 한다', () => {

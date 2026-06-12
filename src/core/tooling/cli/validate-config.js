@@ -6,10 +6,10 @@ const {
 } = require('../validate/news-sources-config-validator');
 const {
   validateSourceMonitorRegistryText
-} = require('../../../src/core/validate/source-monitor-registry-validator');
+} = require('../../validate/source-monitor-registry-validator');
 
 const root = process.cwd();
-const configPath = path.resolve(root, process.argv[2] || path.join('data', 'news-sources.json'));
+const configPath = path.resolve(root, process.argv[2] || path.join('src', 'core', 'data', 'news-sources.json'));
 const displayPath = path.relative(root, configPath).replace(/\\/g, '/') || configPath;
 
 let text;

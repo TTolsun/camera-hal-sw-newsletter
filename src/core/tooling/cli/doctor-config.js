@@ -1,7 +1,7 @@
 const {
   readRuntimeConfig,
   sanitizeRuntimeConfig
-} = require('../../../src/core/common/runtime-config');
+} = require('../../common/runtime-config');
 
 function main() {
   try {

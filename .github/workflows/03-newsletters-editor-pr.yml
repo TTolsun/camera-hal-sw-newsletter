@@ -194,17 +194,17 @@ jobs:
       - name: Ensure public newsletter artifacts
         id: ensure-public-newsletter
         if: always()
-        run: node scripts/ensure-public-newsletter-artifacts.js
+        run: node src/generator/publish/ensure-public-newsletter-artifacts.js
 
       - name: Resolve newsletter metadata
         id: meta
         if: always()
-        run: node scripts/resolve-reviewable-artifacts.js >> "$GITHUB_OUTPUT"
+        run: node src/generator/publish/resolve-reviewable-artifacts.js >> "$GITHUB_OUTPUT"
 
       - name: Resolve generation status
         id: generation-status
         if: always()
-        run: node scripts/write-generation-status-output.js >> "$GITHUB_OUTPUT"
+        run: node src/generator/publish/write-generation-status-output.js >> "$GITHUB_OUTPUT"
 
       - name: Check URL summary cache directory
         id: summary-cache
@@ -229,7 +229,7 @@ jobs:
         if: steps.meta.outputs.public_newsletter_ready == 'true'
         env:
           VALIDATE_OUTCOME: ${{ steps.validate.outcome || 'skipped' }}
-        run: node scripts/write-publish-status-output.js >> "$GITHUB_OUTPUT"
+        run: node src/generator/publish/write-publish-status-output.js >> "$GITHUB_OUTPUT"
 
       - name: Generate source effectiveness report
         if: always() && steps.meta.outputs.review_pr_ready == 'true'
@@ -311,7 +311,7 @@ jobs:
             echo "No generated date marker found; skipping date-scoped artifact copy."
           fi
 
-          node scripts/write-artifact-manifest.js "$SNAPSHOT" "$DATE"
+          node src/generator/publish/write-artifact-manifest.js "$SNAPSHOT" "$DATE"
 
       - name: Save URL summary cache
         if: always() && steps.summary-cache.outputs.exists == 'true'
@@ -331,8 +331,8 @@ jobs:
           HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION: none
         run: |
           mkdir -p .tmp
-          node scripts/build-newsroom-pr-body.js > .tmp/newsroom-pr-body.md
-          node scripts/validate-pr-body.js .tmp/newsroom-pr-body.md --type newsletter --date "${{ steps.meta.outputs.date }}" --require-publish-status-consistency
+          node src/generator/publish/build-newsroom-pr-body.js > .tmp/newsroom-pr-body.md
+          node src/generator/publish/validate-pr-body.js .tmp/newsroom-pr-body.md --type newsletter --date "${{ steps.meta.outputs.date }}" --require-publish-status-consistency
           {
             echo "body<<EOF"
             cat .tmp/newsroom-pr-body.md
@@ -378,7 +378,7 @@ jobs:
         if: steps.meta.outputs.review_pr_ready == 'true'
         run: |
           set -euo pipefail
-          PATHS="$(node scripts/print-retention-commit-allowlist.js --date "${{ steps.meta.outputs.date }}" --root .)"
+          PATHS="$(node src/generator/publish/print-retention-commit-allowlist.js --date "${{ steps.meta.outputs.date }}" --root .)"
           {
             echo "paths<<EOF"
             echo "$PATHS"
@@ -480,7 +480,7 @@ jobs:
           NEWSLETTER_DATE: ${{ steps.meta.outputs.date }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           DEBUG_ARTIFACT_NAME: newsroom-final-debug-${{ github.run_id }}
-        run: node scripts/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"
+        run: node src/core/tooling/cli/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"
 
       - name: Fail if no reviewable PR can be created
         if: steps.meta.outputs.review_pr_ready != 'true'

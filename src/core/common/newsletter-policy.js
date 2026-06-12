@@ -5,7 +5,7 @@ const {
   BUCKETS
 } = require('./aosp-camera-scope');
 
-const POLICY_REL_PATH = path.join('config', 'newsletter-policy.json');
+const POLICY_REL_PATH = path.join('src', 'core', 'config', 'newsletter-policy.json');
 const POLICY_BLOCK_BEGIN = '<!-- NEWSLETTER_POLICY:BEGIN -->';
 const POLICY_BLOCK_END = '<!-- NEWSLETTER_POLICY:END -->';
 const REQUIRED_HARD_FAIL_CONDITIONS = [
@@ -542,7 +542,7 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
     : `reserve candidates at least ${policy.candidatePoolPreflight.reserveMin}`;
   return [
     POLICY_BLOCK_BEGIN,
-    '<!-- This block is generated. Update config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->',
+    '<!-- This block is generated. Update src/core/config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->',
     '',
     '### Newsletter Policy',
     '',

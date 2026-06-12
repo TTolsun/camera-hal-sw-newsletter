@@ -8,7 +8,7 @@ const test = require('node:test');
 
 const {
   buildGenerationStatusOutputs
-} = require('../../../../scripts/write-generation-status-output');
+} = require('../../../generator/publish/write-generation-status-output');
 const {
   articlePolicy,
   qualityGatePolicy
@@ -21,7 +21,7 @@ const {
   REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS,
   requiredPublicFiles,
   resolveReviewableArtifacts
-} = require('../../../../scripts/resolve-reviewable-artifacts');
+} = require('../../../generator/publish/resolve-reviewable-artifacts');
 const {
   tempRoot: fsTempRoot,
   writeJson,
@@ -621,7 +621,7 @@ test('root wrapper CLIs expose review handoff outputs', () => {
 
   const resolveOutput = execFileSync(
     process.execPath,
-    [path.join(repoRoot, 'scripts', 'resolve-reviewable-artifacts.js')],
+    [path.join(repoRoot, 'src', 'generator', 'publish', 'resolve-reviewable-artifacts.js')],
     { cwd: resolveRoot, encoding: 'utf8' }
   );
 
@@ -648,7 +648,7 @@ test('root wrapper CLIs expose review handoff outputs', () => {
   const ensureOutput = execFileSync(
     process.execPath,
     [
-      path.join(repoRoot, 'scripts', 'ensure-public-newsletter-artifacts.js'),
+      path.join(repoRoot, 'src', 'generator', 'publish', 'ensure-public-newsletter-artifacts.js'),
       '--date',
       date,
       '--no-build'

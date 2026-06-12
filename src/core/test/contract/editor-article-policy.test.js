@@ -13,7 +13,7 @@ const { editorSchema } = require('../../../generator/render/newsletter-schema');
 const {
   buildGenerationStatus,
   editorSemanticStatusExtra
-} = require('../../../../scripts/gemini-newsroom-newsletter');
+} = require('../../../generator/publish/gemini-newsroom-newsletter');
 const {
   articlePolicy
 } = require('../../common/newsletter-policy');

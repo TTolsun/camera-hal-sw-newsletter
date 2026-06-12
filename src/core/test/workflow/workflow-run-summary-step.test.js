@@ -26,7 +26,7 @@ for (const [file, profile] of STEP_PROFILES) {
     assert.match(step, /if: always\(\)/);
     assert.match(step, /continue-on-error:\s*true/);
     assert.match(step, new RegExp(`SUMMARY_PROFILE: ${profile}`));
-    assert.match(step, /run: node scripts\/write-newsroom-workflow-summary\.js/);
+    assert.match(step, /run: node src\/core\/tooling\/cli\/write-newsroom-workflow-summary\.js/);
   });
 }
 
@@ -36,5 +36,5 @@ test('00 auto-daily adds an always-run summary job over the child workflows', ()
   assert.match(coordinator, /SUMMARY_PROFILE: auto-daily/);
   assert.match(coordinator, /OUTCOME_COLLECT: \$\{\{ needs\.collect\.result \}\}/);
   assert.match(coordinator, /OUTCOME_EDITOR: \$\{\{ needs\.generate\.result \}\}/);
-  assert.match(coordinator, /run: node scripts\/write-newsroom-workflow-summary\.js/);
+  assert.match(coordinator, /run: node src\/core\/tooling\/cli\/write-newsroom-workflow-summary\.js/);
 });

@@ -17,7 +17,7 @@ const {
 const SCHEMA_VERSION = REVIEW_ARTIFACT_SCHEMA_VERSION;
 
 function usage() {
-  console.error('Usage: node scripts/write-artifact-manifest.js <snapshot_dir> <date>');
+  console.error('Usage: node src/generator/publish/write-artifact-manifest.js <snapshot_dir> <date>');
   process.exit(1);
 }
 

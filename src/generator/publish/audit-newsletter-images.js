@@ -7,7 +7,7 @@ const {
 
 function usage() {
   return [
-    'Usage: node scripts/audit-newsletter-images.js [--date YYYY-MM-DD] [--all] [--live-validation] [--fail-on-publish-blocking]',
+    'Usage: node src/generator/publish/audit-newsletter-images.js [--date YYYY-MM-DD] [--all] [--live-validation] [--fail-on-publish-blocking]',
     '',
     'Default: --all'
   ].join('\n');

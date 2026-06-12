@@ -126,7 +126,7 @@ jobs:
         id: source-discovery
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/gemini-source-discovery-boundary.js --date "${NEWSLETTER_DATE}"
+        run: node src/discovery/gemini-source-discovery-boundary.js --date "${NEWSLETTER_DATE}"
 
       - name: Prepare source discovery pull request body
         id: pr-body
@@ -233,4 +233,4 @@ jobs:
           PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           DEBUG_ARTIFACT_NAME: newsroom-source-discovery-debug-${{ github.run_id }}
-        run: node scripts/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"
+        run: node src/core/tooling/cli/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"

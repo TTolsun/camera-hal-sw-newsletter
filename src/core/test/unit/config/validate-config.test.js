@@ -7,7 +7,7 @@ const {
   VALID_SOURCE_ROLES,
   VALID_SOURCE_URL_QUALITY_HINTS,
   validateNewsSourcesConfigText
-} = require('../../../../../scripts/newsroom/validate/news-sources-config-validator');
+} = require('../../../tooling/validate/news-sources-config-validator');
 const {
   normalizeEnabledSources,
   resolveSection

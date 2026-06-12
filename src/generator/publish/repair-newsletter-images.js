@@ -4,8 +4,8 @@ const {
 
 function usage() {
   return [
-    'Usage: node scripts/repair-newsletter-images.js --date YYYY-MM-DD',
-    '       node scripts/repair-newsletter-images.js --all-repairable',
+    'Usage: node src/generator/publish/repair-newsletter-images.js --date YYYY-MM-DD',
+    '       node src/generator/publish/repair-newsletter-images.js --all-repairable',
     '',
     'Repairs only existing imageCandidates that pass deterministic image audit rules.'
   ].join('\n');

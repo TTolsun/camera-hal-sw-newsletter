@@ -6,7 +6,7 @@ const test = require('node:test');
 
 const {
   violationsForFile
-} = require('../../../../../scripts/check-domain-model-boundary');
+} = require('../../../tooling/check-domain-model-boundary');
 
 test('domain model boundary guard blocks raw provider shapes outside the LLM adapter boundary', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'domain-boundary-'));

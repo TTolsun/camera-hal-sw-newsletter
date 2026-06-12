@@ -542,7 +542,7 @@ async function runSeedEvidenceExpansion({
   date,
   manualPayload,
   collectionIntent,
-  sourceRegistryPath = path.join(root, 'data', 'news-sources.json'),
+  sourceRegistryPath = path.join(root, 'src', 'core', 'data', 'news-sources.json'),
   fetchImpl = globalThis.fetch,
   lookupImpl,
   limits = {}

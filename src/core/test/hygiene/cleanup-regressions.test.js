@@ -86,7 +86,7 @@ test('repo root has no scratch/temp tracked files', () => {
   assert.deepEqual(issues, [], issues.join('\n'));
 });
 
-test('scripts/newsroom does not require scripts/lib shim modules', () => {
+test('src does not require legacy scripts/lib shim modules', () => {
   const issues = [];
   function walk(dir) {
     for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -100,8 +100,8 @@ test('scripts/newsroom does not require scripts/lib shim modules', () => {
       }
     }
   }
-  // 구현 코드가 src 재구성(#262) 중에는 scripts/newsroom 과 src 양쪽에 있으므로 둘 다 검사합니다.
-  for (const root of [path.join(REPO_ROOT, 'scripts', 'newsroom'), path.join(REPO_ROOT, 'src')]) {
+  // #262 src 재구성 완료 후 구현 코드는 모두 src/ 아래에 있습니다.
+  for (const root of [path.join(REPO_ROOT, 'src')]) {
     if (fs.existsSync(root)) walk(root);
   }
   assert.deepEqual(issues, [], issues.join('\n'));

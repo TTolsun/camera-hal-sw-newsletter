@@ -10,7 +10,7 @@ const {
 
 function usage() {
   return [
-    'Usage: node scripts/build-hal-signal-quality-report.js [--date YYYY-MM-DD]',
+    'Usage: node src/generator/publish/build-hal-signal-quality-report.js [--date YYYY-MM-DD]',
     '',
     'Date priority: --date, NEWSLETTER_DATE, .tmp/newsletter-date.txt, today KST.'
   ].join('\n');

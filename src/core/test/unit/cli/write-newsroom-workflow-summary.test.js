@@ -7,7 +7,7 @@ const {
   renderWorkflowSummary,
   classifyPublication,
   statusFromOutcome
-} = require('../../../../../scripts/newsroom/cli/write-newsroom-workflow-summary');
+} = require('../../../tooling/cli/write-newsroom-workflow-summary');
 
 function passLog() {
   return [

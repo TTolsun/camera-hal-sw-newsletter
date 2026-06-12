@@ -4,11 +4,11 @@ const path = require('path');
 const {
   buildHalSignalQualityReport,
   loadHalSignalQualityInputs
-} = require('../../../src/generator/render/hal-signal-quality-report');
+} = require('../../../generator/render/hal-signal-quality-report');
 
 function usage() {
   return [
-    'Usage: node scripts/build-hal-signal-quality-scorecard.js --dates YYYY-MM-DD[,YYYY-MM-DD...] [--output path]',
+    'Usage: node src/core/tooling/cli/build-hal-signal-quality-scorecard.js --dates YYYY-MM-DD[,YYYY-MM-DD...] [--output path]',
     '',
     'The scorecard builder is read-only unless --output is provided.'
   ].join('\n');

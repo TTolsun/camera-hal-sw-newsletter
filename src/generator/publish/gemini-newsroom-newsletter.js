@@ -210,7 +210,7 @@ const {
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
 const dataPath = path.join(root, 'data', 'newsletters.json');
-const sourceRegistryPath = path.join(root, 'data', 'news-sources.json');
+const sourceRegistryPath = path.join(root, 'src', 'core', 'data', 'news-sources.json');
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
 const generationRunState = {
@@ -3407,7 +3407,7 @@ async function main() {
   const newsletterDir = path.join(root, 'newsletters', date);
 
   if (!fs.existsSync(sourceRegistryPath) && !fs.existsSync(sourcesPath)) {
-    fail('Missing data/news-sources.json and docs/news-sources.md.');
+    fail('Missing src/core/data/news-sources.json and docs/news-sources.md.');
   }
 
   const candidates = readJson(candidatePath);
@@ -3557,7 +3557,7 @@ async function main() {
   const commonContext = [
     `Newsletter date: ${date}`,
     'Audience: AOSP Camera / Camera HAL / Camera Driver / SoC Platform / C++ engineer',
-    '수집된 candidate JSON, data/news-sources.json, docs/news-sources.md, 아래 editorial documents만 사용하세요. web browsing은 하지 마세요.',
+    '수집된 candidate JSON, src/core/data/news-sources.json, docs/news-sources.md, 아래 editorial documents만 사용하세요. web browsing은 하지 마세요.',
     'source names와 source URLs는 그대로 유지하세요. 확인된 사실과 해석을 분리하세요.',
     '최종 newsletter text는 한국어로 작성하세요. 공식 title, source name, product name, URL, code identifier, JSON key, enum 값은 원문을 유지할 수 있습니다.',
     '',

@@ -10,7 +10,7 @@ const {
 
 function usage() {
   return [
-    'Usage: node scripts/build-evidence-pack-summary.js [--date YYYY-MM-DD]',
+    'Usage: node src/generator/publish/build-evidence-pack-summary.js [--date YYYY-MM-DD]',
     '',
     'Date priority: --date, NEWSLETTER_DATE, .tmp/newsletter-date.txt, today KST.'
   ].join('\n');

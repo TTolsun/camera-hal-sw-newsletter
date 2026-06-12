@@ -20,8 +20,8 @@ const { readJsonFixture } = require('../helpers/fixture-loader');
 
 function tempRoot() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'seed-url-evidence-'));
-  fs.mkdirSync(path.join(root, 'data'), { recursive: true });
-  fs.writeFileSync(path.join(root, 'data', 'news-sources.json'), JSON.stringify({
+  fs.mkdirSync(path.join(root, 'src', 'core', 'data'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'src', 'core', 'data', 'news-sources.json'), JSON.stringify({
     schemaVersion: 2,
     sources: [{
       id: 'android',

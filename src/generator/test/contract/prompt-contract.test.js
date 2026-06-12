@@ -12,7 +12,7 @@ const {
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
   sourceExtractionPromptGuardrails
-} = require('../../../../scripts/gemini-newsroom-newsletter');
+} = require('../../publish/gemini-newsroom-newsletter');
 const {
   reporterSchema,
   publicArticleJudgeSchema

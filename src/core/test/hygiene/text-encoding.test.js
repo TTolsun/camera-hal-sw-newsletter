@@ -8,7 +8,7 @@ const {
   detectTextEncodingIssues,
   formatIssue,
   isCandidateTextPath
-} = require('../../../../scripts/check-text-encoding');
+} = require('../../tooling/check-text-encoding');
 
 function issuesFor(value, filePath = 'example.md') {
   return detectTextEncodingIssues(Buffer.from(value, 'utf8'), filePath);

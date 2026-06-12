@@ -152,10 +152,10 @@ function checkLatestPublicNewsletterArtifacts() {
 }
 
 function checkSourceRegistry() {
-  const registry = readJson(path.join('data', 'news-sources.json'));
+  const registry = readJson(path.join('src', 'core', 'data', 'news-sources.json'));
   for (const source of registry.sources || []) {
     if (!hangulPattern.test(String(source.usageHint || ''))) {
-      errors.push(`data/news-sources.json: ${source.id}.usageHint는 한국어 설명을 포함해야 합니다.`);
+      errors.push(`src/core/data/news-sources.json: ${source.id}.usageHint는 한국어 설명을 포함해야 합니다.`);
     }
   }
 }

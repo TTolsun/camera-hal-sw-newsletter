@@ -23,7 +23,7 @@ const {
   modelGroupForStage
 } = require('../../../llm/model-policy');
 
-const doctorConfigScript = path.join(__dirname, '..', '..', '..', '..', '..', 'scripts', 'doctor-config.js');
+const doctorConfigScript = path.join(__dirname, '..', '..', '..', '..', '..', 'src', 'core', 'tooling', 'cli', 'doctor-config.js');
 
 function doctorConfigEnv(overrides = {}) {
   const baseEnv = { ...process.env };

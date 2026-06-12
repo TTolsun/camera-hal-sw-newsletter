@@ -8,10 +8,10 @@ const test = require('node:test');
 const {
   buildNewsroomPrBody,
   renderCandidateTraceability
-} = require('../../../../scripts/build-newsroom-pr-body');
+} = require('../../../generator/publish/build-newsroom-pr-body');
 const {
   buildRawCandidatePrBody
-} = require('../../../../scripts/build-raw-candidate-pr-body');
+} = require('../../../collector/build-raw-candidate-pr-body');
 const {
   FAILED_LLM_CREDENTIALS,
   renderReport: renderSourceDiscoveryReport
@@ -27,12 +27,12 @@ const {
 const {
   validatePrBodyText,
   extractSections
-} = require('../../../../scripts/validate-pr-body');
+} = require('../../../generator/publish/validate-pr-body');
 const {
   REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS,
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
-} = require('../../../../scripts/resolve-reviewable-artifacts');
+} = require('../../../generator/publish/resolve-reviewable-artifacts');
 const {
   tempRoot: fsTempRoot,
   writeJson,

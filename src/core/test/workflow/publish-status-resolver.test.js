@@ -6,7 +6,7 @@ const test = require('node:test');
 
 const {
   buildNewsroomPrBody
-} = require('../../../../scripts/build-newsroom-pr-body');
+} = require('../../../generator/publish/build-newsroom-pr-body');
 const {
   articlePolicy,
   qualityGatePolicy,
@@ -25,7 +25,7 @@ const {
 } = require('../../common/publication-mode');
 const {
   buildPublishStatusOutputs
-} = require('../../../../scripts/write-publish-status-output');
+} = require('../../../generator/publish/write-publish-status-output');
 const {
   tempRoot: fsTempRoot,
   writeText

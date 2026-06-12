@@ -10,13 +10,12 @@ const {
   buildRequireGraph,
   buildRequireGraphForRoots,
   formatCircularDependency
-} = require('../../../../scripts/check-circular-dependencies');
+} = require('../../tooling/check-circular-dependencies');
 
-// 구현 코드가 이전(#262 src 재구성) 중이라 scripts/newsroom 과 src 양쪽에 걸쳐 있습니다.
+// #262 src 재구성 완료 후 구현 코드는 모두 src/ 아래에 있습니다.
 // 존재하는 루트만 모아서 한 그래프로 검사합니다.
 const REPO_ROOT_FOR_TEST = path.resolve(__dirname, '..', '..', '..', '..');
 const IMPLEMENTATION_ROOTS_FOR_TEST = [
-  path.join(REPO_ROOT_FOR_TEST, 'scripts', 'newsroom'),
   path.join(REPO_ROOT_FOR_TEST, 'src')
 ].filter((dir) => {
   try { return fs.statSync(dir).isDirectory(); } catch (error) { return false; }

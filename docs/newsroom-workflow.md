@@ -332,11 +332,11 @@ PR에서 다음 항목을 확인합니다.
 `qualityGatePolicy.hardFailConditions`는 `config/newsletter-policy.json`에 있는 hard fail inventory의 source of truth입니다. `score`는 숫자 품질 점수일 뿐이며 hard fail blocker를 덮어쓸 수 없습니다. `score >= qualityGatePolicy.threshold`여도 blocking deduction, `source_gap`, fact-check `must_fix`, stale claim hard failure, strict mode의 `quality-report.json` recompute drift가 있으면 해당 이슈는 `publish-ready` / `final_publish_ready`가 아닙니다.
 
 <!-- NEWSLETTER_POLICY:BEGIN -->
-<!-- This block is generated. Update config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
+<!-- This block is generated. Update src/core/config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
 
 ### Newsletter Policy
 
-- Source of truth: `config/newsletter-policy.json`
+- Source of truth: `src/core/config/newsletter-policy.json`
 - Main article count: 1-5
 - One-article policy: a public newsletter may contain a single fully publishable main article.
 - Article count alone does not make a one-article issue degraded or review-only; hard quality gates still apply.
@@ -398,7 +398,7 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 `03-newsletters-editor-pr.yml`의 `peter-evans/create-pull-request` 스텝은 `add-paths` 허용목록으로 `public_source_of_truth`+`review_required_compact` artifact만 커밋합니다. `debug_heavy`+`transient_attempt` artifact는 `newsroom-final-debug-<run_id>` Actions artifact에 full set이 보존되고, `artifact-manifest.json`의 `retained_heavy_artifacts[]`에 path/size/sha256/retention_grade/retention_location이 기록됩니다.
 
-허용목록은 `scripts/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 생성합니다. PR diff에 `debug_heavy`/`transient_attempt` 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 참조하세요.
+허용목록은 `src/generator/publish/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 생성합니다. PR diff에 `debug_heavy`/`transient_attempt` 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 참조하세요.
 
 이 정책은 발행 안전성·source binding·image lineage·review-publication state 판정을 약화하지 않습니다. validate:post-generation, resolve-reviewable-artifacts, pr-body 생성은 commit 스텝보다 먼저 in-run working tree에서 실행되므로 add-paths 허용목록의 영향을 받지 않습니다.
 

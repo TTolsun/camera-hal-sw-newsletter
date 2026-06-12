@@ -1,37 +1,26 @@
 # scripts
 
-이 폴더의 root `scripts/*.js` 파일은 npm scripts와 GitHub Actions에서 기존 command path를 유지하기 위한 compatibility wrapper입니다.
+이 폴더에는 더 이상 실행 가능한 newsroom 코드가 없습니다. #262 src 재구성으로 모든 구현과 tooling은 `src/` 아래로 이동했고, 과거 root `scripts/*.js` compatibility wrapper와 `scripts/newsroom/cli/run-wrapper.js`는 제거되었습니다.
 
-실제 newsroom 구현은 `scripts/newsroom/` 아래에 있습니다. root wrapper나 `scripts/lib/**` compatibility shim에는 business logic을 추가하지 마세요. 호환 계층 자체를 바꾸는 작업이 아니라면 구현 변경은 `scripts/newsroom/`에서 시작합니다.
+새 위치는 다음과 같습니다.
 
-`scripts/newsroom/`의 실제 하위 폴더는 `cli`, `collect`, `common`, `evidence`, `generate`, `llm`, `metrics`, `render`, `sources`, `validate`입니다. 새 구현 위치를 고를 때는 먼저 [scripts/newsroom/README.md](newsroom/README.md)의 module map을 확인합니다.
-
-## Wrapper 예시
-
-현재 root wrapper는 `scripts/newsroom/cli/run-wrapper.js`를 통해 실제 CLI entrypoint로 위임합니다.
-
-| Wrapper | 실제 구현 |
+| 이전 위치 | 새 위치 |
 | --- | --- |
-| `scripts/collect-news-candidates.js` | `scripts/newsroom/cli/collect-news-candidates.js` |
-| `scripts/build-raw-candidate-pr-body.js` | `scripts/newsroom/cli/build-raw-candidate-pr-body.js` |
-| `scripts/gemini-newsroom-newsletter.js` | `scripts/newsroom/cli/gemini-newsroom-newsletter.js` |
-| `scripts/audit-historical-newsletters.js` | `scripts/newsroom/cli/audit-historical-newsletters.js` |
-| `scripts/gemini-source-discovery-boundary.js` | `scripts/newsroom/cli/gemini-source-discovery-boundary.js` |
-| `scripts/validate-archive.js` | `scripts/newsroom/cli/validate-archive.js` |
-| `scripts/validate-newsroom-budget.js` | `scripts/newsroom/cli/validate-newsroom-budget.js` |
-| `scripts/validate-quality.js` | `scripts/newsroom/cli/validate-quality.js` |
-| `scripts/write-artifact-manifest.js` | `scripts/newsroom/cli/write-artifact-manifest.js` |
+| `scripts/newsroom/{common,domain,evidence,sources}/**` core 모듈 | `src/core/**` |
+| `scripts/newsroom/collect/**` (collector) | `src/collector/**`, `src/core/collect/**` |
+| `scripts/newsroom/collect`·`evidence` discovery 모듈 | `src/discovery/**` |
+| `scripts/newsroom/{generate,llm,render,metrics,validate}/**` generator | `src/generator/**` |
+| root `scripts/check-*.js`, `scripts/newsroom/cli/**` tooling | `src/core/tooling/**` |
+| `config/newsletter-policy.json` | `src/core/config/newsletter-policy.json` |
+| `data/news-sources.json` | `src/core/data/news-sources.json` |
 
-## 편집 시 주의사항
+npm scripts와 GitHub Actions는 모두 새 `src/<layer>/<entry>.js` 경로를 직접 호출합니다. 더 이상 wrapper를 거치지 않습니다. 구현 변경은 해당 layer의 `src/` 디렉터리에서 시작합니다. layer 경계와 모듈 배치 규칙은 [src/AGENTS.md](../src/AGENTS.md)와 root [AGENTS.md](../AGENTS.md)를 확인합니다.
 
-- Root `scripts/*.js` 파일은 command compatibility surface로 유지합니다.
-- `scripts/lib/**`는 과거 import path를 위한 compatibility shim으로 유지합니다.
-- Collector, generator, renderer, validator, runtime config 변경은 `scripts/newsroom/` 아래 실제 구현에서 처리합니다.
-- Wrapper 동작이나 command contract를 바꾸면 관련 tests, workflow, docs를 함께 갱신합니다.
+남아 있는 문서(`scripts/newsroom/AGENTS.md`, `scripts/newsroom/README.md`, 이 파일)는 과거 경로를 참조하는 독자를 새 `src/` 구조로 안내하기 위한 것입니다.
 
 ## 검증
 
-Wrapper, shim, command contract를 수정한 뒤에는 아래 명령을 우선 확인합니다.
+구현이나 command contract를 수정한 뒤에는 아래 명령을 우선 확인합니다.
 
 ```powershell
 npm.cmd run test

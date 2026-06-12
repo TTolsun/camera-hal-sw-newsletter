@@ -121,7 +121,7 @@ jobs:
         if: inputs.auto_mode != true
         run: |
           mkdir -p .tmp
-          node scripts/build-raw-candidate-pr-body.js --date "${{ steps.raw-meta.outputs.date }}" > .tmp/raw-candidate-pr-body.md
+          node src/collector/build-raw-candidate-pr-body.js --date "${{ steps.raw-meta.outputs.date }}" > .tmp/raw-candidate-pr-body.md
           {
             echo "body<<EOF"
             cat .tmp/raw-candidate-pr-body.md
@@ -213,4 +213,4 @@ jobs:
           PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           DEBUG_ARTIFACT_NAME: newsroom-raw-debug-${{ github.run_id }}
-        run: node scripts/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"
+        run: node src/core/tooling/cli/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"

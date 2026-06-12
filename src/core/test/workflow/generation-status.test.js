@@ -8,7 +8,7 @@ const {
   failureStageFromError,
   selectionStatusExtra,
   validateCompletionSections
-} = require('../../../../scripts/gemini-newsroom-newsletter');
+} = require('../../../generator/publish/gemini-newsroom-newsletter');
 const {
   NewsletterDomainValidationError
 } = require('../../../generator/reporter/newsletter-domain-errors');
