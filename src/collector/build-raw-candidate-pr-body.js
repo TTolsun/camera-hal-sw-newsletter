@@ -3,7 +3,7 @@ const fs = require('fs');
 const {
   kstDate,
   readJson
-} = require('../../../src/core/common/common');
+} = require('../core/common/common');
 const {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
@@ -11,16 +11,16 @@ const {
   manualCandidatesRelPath,
   rawCandidateManifestPath,
   rawCandidateManifestRelPath
-} = require('../../../src/core/common/artifact-paths');
+} = require('../core/common/artifact-paths');
 const {
   BUCKETS
-} = require('../../../src/core/common/aosp-camera-scope');
+} = require('../core/common/aosp-camera-scope');
 const {
   readRuntimeConfig
-} = require('../../../src/core/common/runtime-config');
+} = require('../core/common/runtime-config');
 const {
   renderEditorPrSummary
-} = require('../../../src/core/common/editor-pr-summary');
+} = require('../core/common/editor-pr-summary');
 
 const DIRECT_CAMERA_BUCKETS = new Set([
   BUCKETS.DIRECT_AOSP_CAMERA,

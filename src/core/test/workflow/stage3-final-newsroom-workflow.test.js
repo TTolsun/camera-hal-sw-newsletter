@@ -244,7 +244,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   const stage2CreatePrStep = workflowStep(stage2, 'Create source discovery pull request');
   const stage2UploadStep = workflowStep(stage2, 'Upload source discovery debug artifacts');
   const rawPrBodyBuilder = fs.readFileSync(
-    path.join(__dirname, '..', '..', '..', '..', 'scripts', 'newsroom', 'cli', 'build-raw-candidate-pr-body.js'),
+    path.join(__dirname, '..', '..', '..', '..', 'src', 'collector', 'build-raw-candidate-pr-body.js'),
     'utf8'
   );
 
