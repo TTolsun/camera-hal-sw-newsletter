@@ -1,10 +1,10 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const {
   isFinalSelected
-} = require('../generate/selection-diagnostics');
+} = require('../select/selection-diagnostics');
 const {
   normalizedUrlHash
-} = require('../generate/newsroom-selection');
+} = require('../select/newsroom-selection');
 const {
   normalizeForMatch,
   urlKeys,
@@ -21,7 +21,7 @@ const {
   BUCKETS,
   BUCKET_PRIORITY,
   classifyAospCameraStackCandidate
-} = require('../../../src/core/common/aosp-camera-scope');
+} = require('../../core/common/aosp-camera-scope');
 const {
   articlePolicy,
   publishReadyCompositionPolicy,
@@ -31,60 +31,60 @@ const {
   isPrimaryCameraStackBucket,
   isSupportingMainBucket,
   publishGateCriteriaText
-} = require('../../../src/core/common/newsletter-policy');
+} = require('../../core/common/newsletter-policy');
 const {
   IMPACT_TYPES,
   RECOMMENDED_ARTICLE_TYPES
-} = require('../../../src/core/evidence/impact-classifier');
+} = require('../../core/evidence/impact-classifier');
 const {
   findFieldHygieneIssues,
   inferGuardrailImpactClass
-} = require('../generate/article-field-builder');
+} = require('../reporter/article-field-builder');
 const {
   ARTICLE_SECTION_KEYS,
   LIMITATION_VISIBILITY,
   articleSectionSummary,
   normalizeArticleSections
-} = require('../common/article-section-contract');
+} = require('../reporter/article-section-contract');
 const {
   articleSectionContractRows,
   articleSectionContractRowValues
-} = require('../common/article-structure-summary');
+} = require('../reporter/article-structure-summary');
 const {
   buildHalSignalQualitySummary,
   buildMainArticleSignalChecks,
   normalizeHalSignalCapsule,
   normalizeHalSignalFields
-} = require('../common/hal-signal-quality');
+} = require('../reporter/hal-signal-quality');
 const {
   dateQualityForCandidate,
   validateDateSource,
   validateEventType
-} = require('../../../src/core/common/date-signals');
+} = require('../../core/common/date-signals');
 const {
   candidateGroupKey
-} = require('../../../src/core/common/article-groups');
+} = require('../../core/common/article-groups');
 const {
   SOURCE_QUALITY_FIELD_DRIFT,
   normalizeSourceQuality,
   sourceQualityFieldDrift
-} = require('../../../src/core/collect/source-quality-classifier');
+} = require('../../core/collect/source-quality-classifier');
 const {
   summarizeClaimValidation,
   validateArticleClaims
 } = require('./claim-source-binding');
 const {
   bindMissingFactClaimEvidence
-} = require('./editor-output-contract');
+} = require('../editor/editor-output-contract');
 const {
   toLegacyEditorIssue
-} = require('../../../src/core/domain/newsletter-domain-normalize');
+} = require('../../core/domain/newsletter-domain-normalize');
 const {
   EDITORIAL_STORY_KEYS,
   STORY_CONTRACT_VERSION,
   STORY_PUBLIC_CONTRACT_VERSION,
   validatePublicArticle
-} = require('../common/public-article-contract');
+} = require('../reporter/public-article-contract');
 const {
   PRODUCT_VERSION_TOKEN_PATTERN,
   RELEASE_BOILERPLATE_TOKEN_PATTERN,
@@ -99,7 +99,7 @@ const {
   BRIEFING_WHAT_PATTERN,
   BRIEFING_READER_PATTERN,
   BRIEFING_ACTION_PATTERN
-} = require('../../../src/core/common/quality-gate-policy');
+} = require('../../core/common/quality-gate-policy');
 
 // Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;

@@ -1,13 +1,13 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const crypto = require('crypto');
 
 const {
   normalizeUrl,
   normalizedUrlHash
-} = require('../generate/newsroom-selection');
+} = require('../select/newsroom-selection');
 const {
   normalizeArticleSections
-} = require('../common/article-section-contract');
+} = require('../reporter/article-section-contract');
 const {
   CLAIM_TYPES,
   CLAIM_TYPE_VALUES,
@@ -28,7 +28,7 @@ const {
   POSITIVE_SUPPORT_WORDING,
   STREAM_BUFFER_TERMS,
   RUNTIME_TERMS
-} = require('../common/source-binding-policy');
+} = require('../reporter/source-binding-policy');
 function objectValue(value) {
   return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
 }

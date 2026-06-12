@@ -4,7 +4,7 @@ const {
   NO_IMMEDIATE_ACTION_TEXT,
   publicProseLeakageIssues,
   publicUrlError
-} = require('../common/public-article-contract');
+} = require('../reporter/public-article-contract');
 
 const GENERIC_CHECKPOINT_PATTERNS = Object.freeze([
   /source URL/i,

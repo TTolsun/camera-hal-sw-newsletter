@@ -1,10 +1,10 @@
 'use strict';
 
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const {
   normalizeUrl,
   normalizedUrlHash
-} = require('../generate/newsroom-selection');
+} = require('../select/newsroom-selection');
 
 function text(value) {
   if (Array.isArray(value)) return value.map(text).join(' ');

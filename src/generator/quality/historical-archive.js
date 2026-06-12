@@ -4,7 +4,7 @@ const path = require('path');
 const {
   readJson,
   writeJson
-} = require('../../../src/core/common/common');
+} = require('../../core/common/common');
 const {
   DATE_PATTERN,
   ARCHIVE_STATUSES,
@@ -12,12 +12,12 @@ const {
   MATERIAL_REWRITE_STATUS,
   FAKE_SEED_PROVENANCE_PATTERN,
   FORBIDDEN_GOOD_FIXTURE_PROVENANCE
-} = require('../common/archive-policy');
+} = require('../reporter/archive-policy');
 const {
   CLEANUP_REPORT_PATH: AUDIT_CLEANUP_REPORT_PATH,
   LEDGER_PATH: AUDIT_LEDGER_PATH,
   INVENTORY_PATH: AUDIT_INVENTORY_PATH
-} = require('../common/audit-paths');
+} = require('../reporter/audit-paths');
 
 const REWRITE_DIFF_PREFIX = 'content/audit/historical-rewrite-diff/';
 
