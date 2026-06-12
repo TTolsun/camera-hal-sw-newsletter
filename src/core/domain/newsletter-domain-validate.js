@@ -1,10 +1,10 @@
 const {
   NEWSLETTER_DOMAIN_SCHEMA_VERSION
-} = require('./newsletter-domain-schema');
+} = require('../../../scripts/newsroom/domain/newsletter-domain-schema');
 const {
   NewsletterDomainValidationError,
   domainIssue
-} = require('./newsletter-domain-errors');
+} = require('../../../scripts/newsroom/domain/newsletter-domain-errors');
 const {
   ensureArray,
   normalizeNewsletterIssue

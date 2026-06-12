@@ -6,18 +6,18 @@ const {
   readJson,
   readTextIfExists,
   writeJson
-} = require('../common/common');
+} = require('../../../src/core/common/common');
 const {
   collectedCandidatesRelPath,
   newsroomDir: artifactNewsroomDir,
   newsroomRelPath,
   seedEvidencePackPath
-} = require('../common/artifact-paths');
+} = require('../../../src/core/common/artifact-paths');
 const {
   CandidateArtifactValidationError,
   resolveCandidateInputArtifact
-} = require('../common/candidate-artifacts');
-const { readRuntimeConfig } = require('../common/runtime-config');
+} = require('../../../src/core/common/candidate-artifacts');
+const { readRuntimeConfig } = require('../../../src/core/common/runtime-config');
 const {
   buildCostReport,
   buildCostReportMarkdown,
@@ -35,7 +35,7 @@ const {
   publicArticleJudgeSchema,
   backgroundContextSchema
 } = require('../render/newsletter-schema');
-const { isSafeExternalImageUrl } = require('../render/image-candidates');
+const { isSafeExternalImageUrl } = require('../../../src/core/render/image-candidates');
 const { resolveIssueArticleImages } = require('../render/article-image-resolver');
 const {
   COMPOSITION_MODES,
@@ -64,14 +64,14 @@ const {
   stableSectionKeySet,
   titleSimilarity,
   urlKeys
-} = require('../common/section-identity');
+} = require('../../../src/core/common/section-identity');
 const {
   pruneCatchUpFramingFactCheckItems,
   sanitizeClaimEvidenceIds,
   stampCoverageType,
   validateFactCheck
 } = require('./fact-check-postprocess');
-const { BUCKETS, BUCKET_PRIORITY } = require('../common/aosp-camera-scope');
+const { BUCKETS, BUCKET_PRIORITY } = require('../../../src/core/common/aosp-camera-scope');
 const {
   buildArticleCapsuleReport,
   capsuleInputForCandidates,
@@ -102,7 +102,7 @@ const {
   candidateGroupKey,
   explicitDemotedGroups,
   groupCoverageSummary
-} = require('../common/article-groups');
+} = require('../../../src/core/common/article-groups');
 const {
   buildStaleClaimReportMarkdown,
   pruneResolvedStaleFactCheckItems,
@@ -114,7 +114,7 @@ const {
   qualityGatePolicy,
   publishGateCriteriaText,
   publishReadyCompositionPolicy
-} = require('../common/newsletter-policy');
+} = require('../../../src/core/common/newsletter-policy');
 const {
   readExposureHistory,
   recordArticleExposure,
@@ -190,7 +190,7 @@ const {
 } = require('../llm/weekly-merge');
 const {
   toEditorDraftArtifact
-} = require('../domain/newsletter-domain-normalize');
+} = require('../../../src/core/domain/newsletter-domain-normalize');
 const {
   linkedEvidencePromptGuardrails,
   sourceExtractionPromptGuardrails,

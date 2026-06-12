@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { readRuntimeConfig } = require('../common/runtime-config');
+const { readRuntimeConfig } = require('../../../src/core/common/runtime-config');
 const { createDiagnosticsState } = require('./llm-diagnostics');
 const {
   buildCostReport: buildLlmCostReport,
@@ -18,7 +18,7 @@ const {
 const { resolveProvider } = require('./providers/provider-registry');
 const {
   modelGroupInfoForStage
-} = require('./model-policy');
+} = require('../../../src/core/llm/model-policy');
 
 const geminiProvider = resolveProvider('gemini');
 

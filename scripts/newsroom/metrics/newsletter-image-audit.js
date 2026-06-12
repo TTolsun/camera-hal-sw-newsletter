@@ -9,7 +9,7 @@ const {
 const {
   REJECT_PATH_PATTERN,
   validateImageUrl
-} = require('../render/image-candidates');
+} = require('../../../src/core/render/image-candidates');
 const {
   assertKnownImageReasonCode,
   imageReasonLabelKo,

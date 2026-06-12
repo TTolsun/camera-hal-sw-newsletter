@@ -3,7 +3,7 @@ const path = require('path');
 
 const {
   kstDate
-} = require('../common/common');
+} = require('../../../src/core/common/common');
 const {
   writeSourceEffectivenessArtifacts
 } = require('../metrics/source-effectiveness-report');

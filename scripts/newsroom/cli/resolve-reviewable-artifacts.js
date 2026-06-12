@@ -4,7 +4,7 @@ const { execFileSync } = require('child_process');
 
 const {
   kstDate
-} = require('../common/common');
+} = require('../../../src/core/common/common');
 const {
   readJsonIfExists
 } = require('../common/json');

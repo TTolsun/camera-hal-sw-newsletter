@@ -1,10 +1,10 @@
-const { ensureArray } = require('./value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
 const {
   qualityGatePolicy
-} = require('./newsletter-policy');
+} = require('../../../src/core/common/newsletter-policy');
 const {
   readJsonIfExists
 } = require('./json');

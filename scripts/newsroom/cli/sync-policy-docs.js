@@ -3,7 +3,7 @@ const path = require('path');
 const {
   analyzeNewsletterPolicyBlock,
   replaceNewsletterPolicyBlock
-} = require('../common/newsletter-policy');
+} = require('../../../src/core/common/newsletter-policy');
 
 const policyDocPaths = [
   'README.md',

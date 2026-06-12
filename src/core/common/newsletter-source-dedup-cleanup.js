@@ -18,26 +18,26 @@ const {
 } = require('./common');
 const {
   normalizeHalSignalFields
-} = require('./hal-signal-quality');
+} = require('../../../scripts/newsroom/common/hal-signal-quality');
 const {
   publicArticleForSection
-} = require('./public-article-contract');
+} = require('../../../scripts/newsroom/common/public-article-contract');
 const {
   buildHtml,
   buildMarkdown,
   issueTags
-} = require('../render/newsletter-renderer');
+} = require('../../../scripts/newsroom/render/newsletter-renderer');
 const {
   buildNewsletterQualityReport,
   buildQualityReportMarkdown
-} = require('../validate/newsletter-quality');
+} = require('../../../scripts/newsroom/validate/newsletter-quality');
 const {
   auditHistoricalArchive
-} = require('../validate/historical-archive');
+} = require('../../../scripts/newsroom/validate/historical-archive');
 const {
   LEDGER_PATH: AUDIT_LEDGER_PATH,
   INVENTORY_PATH: AUDIT_INVENTORY_PATH
-} = require('./audit-paths');
+} = require('../../../scripts/newsroom/common/audit-paths');
 const {
   isReleaseVersionAnchor,
   normalizeNewsSourceKey

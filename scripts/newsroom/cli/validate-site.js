@@ -1,17 +1,17 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const {
   readJson,
   repoPath
-} = require('../common/common');
+} = require('../../../src/core/common/common');
 const {
   newsroomDir
-} = require('../common/artifact-paths');
+} = require('../../../src/core/common/artifact-paths');
 const {
   articlePolicy,
   articleCountRangeText
-} = require('../common/newsletter-policy');
+} = require('../../../src/core/common/newsletter-policy');
 const {
   HEADLINE_STATE_REL_PATH,
   validateHomepageHeadlineState

@@ -1,6 +1,6 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const path = require('path');
-const { writeJson } = require('../common/common');
+const { writeJson } = require('../../../src/core/common/common');
 const {
   normalizeUrl
 } = require('../generate/newsroom-selection');
@@ -9,7 +9,7 @@ const {
   articleCountRangeText,
   isForbiddenMainBucket,
   isPrimaryCameraStackBucket
-} = require('../common/newsletter-policy');
+} = require('../../../src/core/common/newsletter-policy');
 const {
   findFieldHygieneIssues,
   inferGuardrailImpactClass
@@ -54,14 +54,14 @@ const {
   HARD_BLOCK_REASON_CODES,
   isNativeToolingWorkflow,
   normalizeUrl: normalizeGroupUrl
-} = require('../common/article-groups');
+} = require('../../../src/core/common/article-groups');
 const {
   normalizeSourceQuality
-} = require('../collect/source-quality-classifier');
+} = require('../../../src/core/collect/source-quality-classifier');
 const {
   isDomainDraftArtifact,
   toLegacyEditorIssue
-} = require('../domain/newsletter-domain-normalize');
+} = require('../../../src/core/domain/newsletter-domain-normalize');
 
 const REQUIRED_BRIEFING_COUNT = 3;
 

@@ -4,7 +4,7 @@ const path = require('path');
 const {
   readJson,
   repoPath
-} = require('../common/common');
+} = require('../../../src/core/common/common');
 const {
   historicalPolicyWarningReason,
   strictTargetDates

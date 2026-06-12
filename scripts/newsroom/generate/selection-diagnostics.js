@@ -1,4 +1,4 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const REPORTER_SELECTION_NOTE =
   'Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.';
 
@@ -7,7 +7,7 @@ const REPORTER_SELECTED_ALIAS_NOTE =
 const {
   candidateGroupKey,
   groupCoverageSummary
-} = require('../common/article-groups');
+} = require('../../../src/core/common/article-groups');
 
 function text(value) {
   return String(value || '').trim();

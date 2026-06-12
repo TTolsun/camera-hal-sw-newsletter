@@ -1,4 +1,4 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const TOKENS_PER_MILLION = 1000000;
 
 function number(value, fallback = 0) {

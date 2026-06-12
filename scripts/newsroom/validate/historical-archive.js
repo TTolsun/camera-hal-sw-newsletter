@@ -4,7 +4,7 @@ const path = require('path');
 const {
   readJson,
   writeJson
-} = require('../common/common');
+} = require('../../../src/core/common/common');
 const {
   DATE_PATTERN,
   ARCHIVE_STATUSES,

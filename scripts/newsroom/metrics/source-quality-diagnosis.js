@@ -1,4 +1,4 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -7,7 +7,7 @@ const {
   readJson,
   repoPath,
   writeJson
-} = require('../common/common');
+} = require('../../../src/core/common/common');
 const {
   collectedCandidatesRelPath,
   manualCandidatesRelPath,
@@ -15,7 +15,7 @@ const {
   mergedCandidatesRelPath,
   newsroomDir,
   newsroomRelPath
-} = require('../common/artifact-paths');
+} = require('../../../src/core/common/artifact-paths');
 const {
   normalizeUrl
 } = require('../generate/newsroom-selection');

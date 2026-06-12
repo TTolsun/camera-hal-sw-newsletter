@@ -1,4 +1,4 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const {
   buildStaticBackgroundContext
 } = require('./article-field-builder');

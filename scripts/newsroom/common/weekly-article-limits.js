@@ -3,7 +3,7 @@
 // Weekly article-count limits (#492). Pure, deterministic helpers used by the weekly upsert (#488):
 // a per-run daily intake cap and a weekly total cap with a rank_then_drop overflow policy.
 
-const { getWeeklyArticlePolicy } = require('./newsletter-policy');
+const { getWeeklyArticlePolicy } = require('../../../src/core/common/newsletter-policy');
 
 function articleRankScore(article) {
   const value = Number(

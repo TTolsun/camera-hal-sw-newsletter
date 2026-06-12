@@ -1,4 +1,4 @@
-const { ensureArray } = require('./value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const {
   LIMITATION_VISIBILITY,
   articleSectionSummary

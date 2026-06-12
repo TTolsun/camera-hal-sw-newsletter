@@ -1,4 +1,4 @@
-const { ensureArray } = require('../common/value-coercion');
+const { ensureArray } = require('../../../src/core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -6,20 +6,20 @@ const {
   kstDate,
   readJson,
   writeJson
-} = require('../common/common');
+} = require('../../../src/core/common/common');
 const {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
   newsroomDir,
   newsroomRelPath
-} = require('../common/artifact-paths');
+} = require('../../../src/core/common/artifact-paths');
 const {
   normalizeUrl
 } = require('../generate/newsroom-selection');
 const {
   normalizeSourceQuality,
   sourceQualityFieldDrift
-} = require('../collect/source-quality-classifier');
+} = require('../../../src/core/collect/source-quality-classifier');
 
 const SCHEMA_VERSION = 2;
 const MAX_SAMPLE_URLS = 5;

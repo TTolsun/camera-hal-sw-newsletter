@@ -1,10 +1,10 @@
 const { ensureArray } = require('../common/value-coercion');
 const {
   NEWSLETTER_DOMAIN_SCHEMA_VERSION
-} = require('./newsletter-domain-schema');
+} = require('../../../scripts/newsroom/domain/newsletter-domain-schema');
 const {
   domainIssue
-} = require('./newsletter-domain-errors');
+} = require('../../../scripts/newsroom/domain/newsletter-domain-errors');
 
 function text(value) {
   return String(value ?? '').trim();

@@ -18,11 +18,11 @@ const {
   newsroomRelPath,
   seedEvidencePackMarkdownRelPath,
   seedMergeReportMarkdownRelPath
-} = require('../common/artifact-paths');
+} = require('../../../src/core/common/artifact-paths');
 const {
   articlePolicy,
   qualityGatePolicy
-} = require('../common/newsletter-policy');
+} = require('../../../src/core/common/newsletter-policy');
 
 const date = '2026-05-03';
 
