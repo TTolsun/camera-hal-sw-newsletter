@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "b42f0f8cfbaa9f26",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "published_at": "March 25, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.95,
+      "android_hal_relevance": 0.95,
+      "ai_relevance": 0,
+      "technical_depth": 0.873,
+      "warnings": []
+    },
+    {
+      "id": "655e38df7644101a",
+      "url": "https://lore.kernel.org/linux-media/20260611204148.1423192-4-niklas.soderlund+renesas@ragnatech.se/",
+      "title": "[PATCH v10 03/13] media: rppx1: Add framework to support Dreamchip RPPX1 ISP",
+      "published_at": "2026-06-11T20:42:13Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add a framework driver for Dreamchip RPPX1 ISP. The driver aims to provide a framework for other V4L2 based drivers to drive the RPPX1 functionality. The reason for this split is that the RPPX1 IP itself do not provide any DMA engines to drive data to/from the device, instead it depends on other IP blocks to implement these features. While the peripherals around the RPPX1 ISP used in different designs and by different vendors are different the RPPX1 core itself is the same. For this reason the f",
+          "evidence_text": "<html><head><title>[PATCH v10 03/13] media: rppx1: Add framework to support Dreamchip RPPX1 ISP - Niklas S&#246;derlund</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefer",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.83,
+      "warnings": []
+    },
+    {
+      "id": "6a412edc1c582ca4",
+      "url": "https://lore.kernel.org/linux-media/20260611204148.1423192-2-niklas.soderlund+renesas@ragnatech.se/",
+      "title": "[PATCH v10 01/13] media: Add RPP_X1_PARAMS and RPP_X1_STATS meta formats",
+      "published_at": "2026-06-11T20:42:08Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "From: Jai Luthra Register V4L2 metadata fourcc codes for the Dreamchip RPP-X1 ISP parameters and statistics buffers. These formats are used by the driver to exchange ISP configuration and 3A statistics with userspace through the extensible parameters framework. Signed-off-by: Jai Luthra Reviewed-by: Jacopo Mondi Reviewed-by: Niklas Söderlund Signed-off-by: Niklas Söderlund --- drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++ include/uapi/linux/videodev2.h | 4 ++++ 2 files changed , 6 insertions(+) di",
+          "evidence_text": "<html><head><title>[PATCH v10 01/13] media: Add RPP_X1_PARAMS and RPP_X1_STATS meta formats - Niklas S&#246;derlund</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-co",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.83,
+      "warnings": []
+    },
+    {
+      "id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "published_at": "2026-05-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.829,
+      "warnings": []
+    },
+    {
+      "id": "gemini-14bd5360b4d2ff0d",
+      "url": "https://lore.kernel.org/linux-media/20260611204148.1423192-4-niklas.soderlund+renesas@ragnatech.se/",
+      "title": "[PATCH v10 03/13] media: rppx1: Add framework to support Dreamchip RPPX1 ISP - Niklas S&#246;derlund",
+      "published_at": "2026-06-11",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v10 03/13] media: rppx1: Add framework to support Dreamchip RPPX1 ISP - Niklas S&#246;derlund",
+          "evidence_text": "<html><head><title>[PATCH v10 03/13] media: rppx1: Add framework to support Dreamchip RPPX1 ISP - Niklas S&#246;derlund</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefer",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-6ccb0af9ab27eb03",
+      "url": "https://lore.kernel.org/linux-media/20260611204148.1423192-5-niklas.soderlund+renesas@ragnatech.se/",
+      "title": "[PATCH v10 04/13] media: rcar-isp: Add support for ISPCORE - Niklas S&#246;derlund",
+      "published_at": "2026-06-11",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v10 04/13] media: rcar-isp: Add support for ISPCORE - Niklas S&#246;derlund",
+          "evidence_text": "<html><head><title>[PATCH v10 04/13] media: rcar-isp: Add support for ISPCORE - Niklas S&#246;derlund</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dar",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-b8089b8fa83cb8a3",
+      "url": "https://lore.kernel.org/linux-media/20260611204148.1423192-1-niklas.soderlund+renesas@ragnatech.se/",
+      "title": "[PATCH v10 00/13] media: Add support for R-Car ISP using Dreamchip RPPX1 ISP - Niklas S&#246;derlund",
+      "published_at": "2026-06-11",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v10 00/13] media: Add support for R-Car ISP using Dreamchip RPPX1 ISP - Niklas S&#246;derlund",
+          "evidence_text": "<html><head><title>[PATCH v10 00/13] media: Add support for R-Car ISP using Dreamchip RPPX1 ISP - Niklas S&#246;derlund</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefer",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "8ec8649c6028d409",
+      "url": "https://lore.kernel.org/linux-media/20260611204148.1423192-5-niklas.soderlund+renesas@ragnatech.se/",
+      "title": "[PATCH v10 04/13] media: rcar-isp: Add support for ISPCORE",
+      "published_at": "2026-06-11T20:42:15Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The Renesas R-Car ISP block consists of two different IP blocks, one CSI-2 Channel Selector (CSISP) and one traditional ISP for image operation (ISPCORE). The R-Car ISP driver currently supports the CSISP functionality as part of the video capture pipeline, this change adds support for the ISPCORE functionality. The ISPCORE functionality is further split in two parts, a Renesas specific part and a Dream Chip Real-time Pixel Processor IP part (RPPX1). The Renesas part deals with I/O to/from the b",
+          "evidence_text": "<html><head><title>[PATCH v10 04/13] media: rcar-isp: Add support for ISPCORE - Niklas S&#246;derlund</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dar",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0,
+      "technical_depth": 0.806,
+      "warnings": []
+    },
+    {
+      "id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-05-27",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.783,
+      "warnings": []
+    },
+    {
+      "id": "f6b1918b044ef65c",
+      "url": "https://lore.kernel.org/linux-media/20260611204148.1423192-3-niklas.soderlund+renesas@ragnatech.se/",
+      "title": "[PATCH v10 02/13] media: uapi: Add extensible param and stats blocks for RPPX1",
+      "published_at": "2026-06-11T20:42:10Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "From: Jai Luthra Add the scaffolding for the parameters and statistics buffers for Dreamchip RPPX1. The parameters for each ISP function block will be added together with the logic for it. In addition to the scaffolding add a common struct that describes the measurement window. This struct is not specific to any block and will used by many of them. Signed-off-by: Jai Luthra [Niklas: Commit message] Signed-off-by: Niklas Söderlund Reviewed-by: Jacopo Mondi --- * Changes since v9 - Drop linux/type",
+          "evidence_text": "<html><head><title>[PATCH v10 02/13] media: uapi: Add extensible param and stats blocks for RPPX1 - Niklas S&#246;derlund</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pref",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "31d77ef3f512b9e4",
+      "url": "https://lore.kernel.org/linux-media/20260612-shikra_vpu-v2-0-bf8727370a1e@oss.qualcomm.com/",
+      "title": "[PATCH v2 0/3] media: qcom: Add support for the iris codec on shikra",
+      "published_at": "2026-06-11T19:50:13Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The shikra platform uses AR50_LITE IP core as video en/decoder codec block (the same as agatti platform). Extend iris driver to support this platform. This has been tested on the Qualcomm shikra boards, shikra-cqm-evk, shikra-cqs-evk and shikra-iqs-evk boards with HFI Gen2 firmware. v4l2-compliance results: v4l2-compliance -d /dev/video1 -s v4l2-compliance 1.31.0-5396, 64 bits, 64-bit time_t v4l2-compliance SHA: 3f22c6fcee75 2025-09-18 09:49:23 Compliance test for iris_driver device /dev/video1:",
+          "evidence_text": "<html><head><title>[PATCH v2 0/3] media: qcom: Add support for the iris codec on shikra - Vikash Garodia</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0,
+      "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "15d7afbc3a3ec0a3",
+      "url": "https://lore.kernel.org/linux-media/20260611204148.1423192-1-niklas.soderlund+renesas@ragnatech.se/",
+      "title": "[PATCH v10 00/13] media: Add support for R-Car ISP using Dreamchip RPPX1 ISP",
+      "published_at": "2026-06-11T20:42:06Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hello, This series adds support for two different devices that together enable ISP support on Renesas R-Car Gen4 ISP processing. The first driver added is for Dreamchip RPPX1 ISP, this device purely deals with image processing algorithms, statistics and image conversion; but have no DMA engines. The second driver is for the R-Car ISP CORE, this device deals with DMA to/from the RPPX1 ISP and provides a V4L2 user-space interface for the ISP. The R-Car ISP driver uses the RPPX1 framework to drive",
+          "evidence_text": "<html><head><title>[PATCH v10 00/13] media: Add support for R-Car ISP using Dreamchip RPPX1 ISP - Niklas S&#246;derlund</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefer",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    }
+  ]
+}

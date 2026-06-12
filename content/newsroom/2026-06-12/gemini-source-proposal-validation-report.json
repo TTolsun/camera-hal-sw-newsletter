@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-06-12",
+  "validations": [
+    {
+      "proposal_id": "proposal-1",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "proposal-1",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "androidx-media3-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-media3-release",
+      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "proposal-1",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "androidx-media3-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-media3-release",
+      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260611204148.1423192-4-niklas.soderlund+renesas@ragnatech.se/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260611204148.1423192-4-niklas.soderlund+renesas@ragnatech.se/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260611204148.1423192-2-niklas.soderlund+renesas@ragnatech.se/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260611204148.1423192-2-niklas.soderlund+renesas@ragnatech.se/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260611204148.1423192-5-niklas.soderlund+renesas@ragnatech.se/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260611204148.1423192-5-niklas.soderlund+renesas@ragnatech.se/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260611204148.1423192-3-niklas.soderlund+renesas@ragnatech.se/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260611204148.1423192-3-niklas.soderlund+renesas@ragnatech.se/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260612-shikra_vpu-v2-0-bf8727370a1e@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260612-shikra_vpu-v2-0-bf8727370a1e@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260611204148.1423192-1-niklas.soderlund+renesas@ragnatech.se/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260611204148.1423192-1-niklas.soderlund+renesas@ragnatech.se/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-3",
+      "candidate_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "normalized_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-photo-picker-reference"
+    },
+    {
+      "proposal_id": "proposal-3",
+      "candidate_url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "normalized_url": "https://developer.android.com/reference/android/provider/MediaStore",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-mediastore-reference"
+    }
+  ],
+  "counts": {
+    "discovered_not_extractable": 3,
+    "accepted": 9
+  }
+}

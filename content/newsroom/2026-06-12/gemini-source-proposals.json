@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-12",
+  "proposals": [
+    {
+      "proposal_id": "proposal-1",
+      "topic_gap": "Recent updates to Android's media pipeline, focusing on camera output and A/V synchronization.",
+      "source_family": "Official Android media/camera-output discovery intent",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX release",
+        "Media3 release",
+        "Android camera pipeline",
+        "A/V sync Android"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
+      ],
+      "expected_evidence": [
+        "CameraX release notes",
+        "Media3 release notes",
+        "New features or bug fixes related to camera capture, encoding, or playback.",
+        "Changes affecting A/V synchronization in media playback."
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-2",
+      "topic_gap": "New developments in camera HAL and driver support on Android, particularly for new hardware or improved performance.",
+      "source_family": "Official Android media/camera-output discovery intent",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android camera HAL",
+        "Linux kernel camera driver",
+        "ISP support",
+        "Camera ITS updates",
+        "media controller driver"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box",
+        "https://lore.kernel.org/linux-media/20260611204148.1423192-4-niklas.soderlund+renesas@ragnatech.se/",
+        "https://lore.kernel.org/linux-media/20260611204148.1423192-2-niklas.soderlund+renesas@ragnatech.se/",
+        "https://lore.kernel.org/linux-media/20260611204148.1423192-5-niklas.soderlund+renesas@ragnatech.se/",
+        "https://lore.kernel.org/linux-media/20260611204148.1423192-3-niklas.soderlund+renesas@ragnatech.se/",
+        "https://lore.kernel.org/linux-media/20260612-shikra_vpu-v2-0-bf8727370a1e@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260611204148.1423192-1-niklas.soderlund+renesas@ragnatech.se/"
+      ],
+      "expected_evidence": [
+        "Camera ITS (Integrated Test Suite) updates or new test cases.",
+        "Kernel patches related to camera drivers, ISP (Image Signal Processor), or media frameworks.",
+        "Support for new camera hardware or codecs.",
+        "Changes in HAL (Hardware Abstraction Layer) interfaces for camera."
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-3",
+      "topic_gap": "Advancements in media access and sharing capabilities on Android, including Photo Picker and MediaStore.",
+      "source_family": "Official Android media/camera-output discovery intent",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Photo Picker",
+        "MediaStore updates",
+        "camera content access Android",
+        "media sharing Android"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/training/data-storage/shared/photo-picker",
+        "https://developer.android.com/reference/android/provider/MediaStore"
+      ],
+      "expected_evidence": [
+        "Updates to Photo Picker functionality or best practices.",
+        "Changes or new features in MediaStore for accessing camera-generated content.",
+        "Information on how camera output is indexed or managed by MediaStore.",
+        "New ways to share media captured by the camera."
+      ],
+      "risk_notes": [
+        "Reference docs are not standalone articles. They should be proposed only if a dated release note or other dated source provides concrete change evidence that these docs supplement."
+      ]
+    }
+  ]
+}
