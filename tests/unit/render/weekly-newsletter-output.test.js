@@ -6,7 +6,10 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
-const { writeWeeklyNewsletterArtifacts } = require('../../../scripts/newsroom/render/weekly-newsletter-output');
+const {
+  syncWeeklyArticleImages,
+  writeWeeklyNewsletterArtifacts
+} = require('../../../scripts/newsroom/render/weekly-newsletter-output');
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'weekly-output-'));
@@ -115,4 +118,179 @@ test('a single run cannot add more than the daily intake limit of new articles',
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft(sections), tags: [] });
   // dailyNewArticleLimit default is 3
   assert.equal(readIssue(root, '2026-W23').sections.length, 3);
+});
+
+// 로컬 fallback visual 상태의 섹션 (renderer가 fallback SVG로 해석한 daily 결과 그대로).
+function fallbackImageSection(id, url) {
+  return {
+    ...section(id, url),
+    selectedImage: '',
+    resolvedImage: {
+      url: '../../assets/images/fallback/android.svg',
+      src: '../../assets/images/fallback/android.svg',
+      originalUrl: '',
+      originalSrc: '',
+      usedFallback: true,
+      reason: 'no selected image; local fallback visual used'
+    }
+  };
+}
+
+// repair(applySelectedCandidate)가 daily editor-draft에 기록하는 이미지 필드 집합을 그대로 갖는 섹션.
+function repairedImageSection(id, url, imageUrl) {
+  return {
+    ...section(id, url),
+    selectedImage: imageUrl,
+    imageSource: 'https://publisher.example.com',
+    imageAttribution: 'Example Publisher',
+    imageAlt: `CameraX ${id}`,
+    imageLicenseStatus: 'unknown',
+    imageUsageDecisionReason: '대표 이미지 선택됨',
+    imageSelection: { reasonCode: 'selected', candidateUrl: imageUrl },
+    resolvedImage: {
+      url: imageUrl,
+      src: imageUrl,
+      originalUrl: '',
+      originalSrc: '',
+      usedFallback: false,
+      reason: 'selected image candidate'
+    }
+  };
+}
+
+function readWeeklyIndexFile(root) {
+  return JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters-weekly.json'), 'utf8'));
+}
+
+function weeklyArtifactPaths(root, weeklyKey) {
+  return [
+    path.join(root, 'newsletters', weeklyKey, 'index.html'),
+    path.join(root, 'newsletters', weeklyKey, 'newsletter.md'),
+    path.join(root, 'newsletters', weeklyKey, 'issue.json'),
+    path.join(root, 'data', 'newsletters-weekly.json')
+  ];
+}
+
+function snapshotFiles(paths) {
+  return paths.map(filePath => [filePath, fs.readFileSync(filePath, 'utf8')]);
+}
+
+test('article_images falls back to one site-root-relative fallback path when no https image exists', async () => {
+  const root = tempRoot();
+  await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor: draft([fallbackImageSection('1.7.0', 'https://example.com/a')]),
+    tags: []
+  });
+
+  assert.deepEqual(readWeeklyIndexFile(root)[0].article_images, ['assets/images/fallback/android.svg']);
+});
+
+test('article_images stays empty when sections have neither https nor fallback-asset images', async () => {
+  const root = tempRoot();
+  const local = {
+    ...section('1.7.0', 'https://example.com/a'),
+    selectedImage: '',
+    resolvedImage: { url: '../../some/other/local.png', src: '../../some/other/local.png', usedFallback: true }
+  };
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([local]), tags: [] });
+
+  assert.deepEqual(readWeeklyIndexFile(root)[0].article_images, []);
+});
+
+test('syncWeeklyArticleImages patches the matching weekly section, rewrites weekly artifacts, and updates article_images', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/camerax-release';
+  const imageUrl = 'https://publisher.example.com/images/camera-card.png';
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]), tags: [] });
+  const sitemapBefore = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
+
+  const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repairedImageSection('1.7.0', url, imageUrl)] });
+
+  assert.equal(result.synced, true);
+  assert.equal(result.weeklyKey, '2026-W23');
+  assert.equal(result.patchedSectionCount, 1);
+  assert.equal(result.articleImagesUpdated, true);
+  const issue = readIssue(root, '2026-W23');
+  assert.equal(issue.sections[0].selectedImage, imageUrl);
+  assert.equal(issue.sections[0].resolvedImage.usedFallback, false);
+  assert.equal(issue.sections[0].imageSelection.reasonCode, 'selected');
+  assert.match(fs.readFileSync(path.join(root, 'newsletters', '2026-W23', 'index.html'), 'utf8'), new RegExp(imageUrl.replace(/[.\/]/g, '\\$&')));
+  assert.match(fs.readFileSync(path.join(root, 'newsletters', '2026-W23', 'newsletter.md'), 'utf8'), new RegExp(imageUrl.replace(/[.\/]/g, '\\$&')));
+  assert.deepEqual(readWeeklyIndexFile(root)[0].article_images, [imageUrl]);
+  // article_images만 갱신하며 sitemap은 재생성하지 않는다.
+  assert.equal(fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8'), sitemapBefore);
+});
+
+test('syncWeeklyArticleImages is a no-op when the weekly issue.json is missing', () => {
+  const root = tempRoot();
+
+  const result = syncWeeklyArticleImages({
+    root,
+    date: '2026-06-04',
+    sections: [repairedImageSection('1.7.0', 'https://example.com/a', 'https://publisher.example.com/img.png')]
+  });
+
+  assert.equal(result.synced, false);
+  assert.equal(result.reason, 'missing_weekly_issue');
+  assert.equal(fs.existsSync(path.join(root, 'newsletters')), false);
+  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters-weekly.json')), false);
+});
+
+test('syncWeeklyArticleImages is a no-op for missing daily sections and non-matching identity', async () => {
+  const root = tempRoot();
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', 'https://example.com/a')]), tags: [] });
+  const snapshot = snapshotFiles(weeklyArtifactPaths(root, '2026-W23'));
+
+  const emptyResult = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [] });
+  assert.equal(emptyResult.synced, false);
+  assert.equal(emptyResult.reason, 'missing_daily_sections');
+
+  const unmatchedResult = syncWeeklyArticleImages({
+    root,
+    date: '2026-06-04',
+    sections: [repairedImageSection('9.9.9', 'https://example.com/unrelated', 'https://publisher.example.com/img.png')]
+  });
+  assert.equal(unmatchedResult.synced, true);
+  assert.equal(unmatchedResult.patchedSectionCount, 0);
+
+  for (const [filePath, before] of snapshot) {
+    assert.equal(fs.readFileSync(filePath, 'utf8'), before);
+  }
+});
+
+test('syncWeeklyArticleImages does not downgrade a bound weekly image to a daily fallback state', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/camerax-release';
+  const imageUrl = 'https://publisher.example.com/images/camera-card.png';
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([repairedImageSection('1.7.0', url, imageUrl)]), tags: [] });
+  const snapshot = snapshotFiles(weeklyArtifactPaths(root, '2026-W23'));
+
+  const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [fallbackImageSection('1.7.0', url)] });
+
+  assert.equal(result.synced, true);
+  assert.equal(result.patchedSectionCount, 0);
+  for (const [filePath, before] of snapshot) {
+    assert.equal(fs.readFileSync(filePath, 'utf8'), before);
+  }
+});
+
+test('syncWeeklyArticleImages is idempotent', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/camerax-release';
+  const repaired = repairedImageSection('1.7.0', url, 'https://publisher.example.com/images/camera-card.png');
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]), tags: [] });
+
+  const first = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repaired] });
+  assert.equal(first.patchedSectionCount, 1);
+  const snapshot = snapshotFiles(weeklyArtifactPaths(root, '2026-W23'));
+
+  const second = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repaired] });
+  assert.equal(second.synced, true);
+  assert.equal(second.patchedSectionCount, 0);
+  assert.equal(second.articleImagesUpdated, false);
+  for (const [filePath, before] of snapshot) {
+    assert.equal(fs.readFileSync(filePath, 'utf8'), before);
+  }
 });

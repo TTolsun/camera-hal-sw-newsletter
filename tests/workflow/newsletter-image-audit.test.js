@@ -15,6 +15,9 @@ const {
   buildMarkdown
 } = require('../../scripts/newsroom/render/newsletter-renderer');
 const {
+  writeWeeklyNewsletterArtifacts
+} = require('../../scripts/newsroom/render/weekly-newsletter-output');
+const {
   assertKnownImageReasonCode
 } = require('../../scripts/newsroom/render/newsletter-image-audit-labels.ko');
 const {
@@ -132,6 +135,67 @@ test('repair command rewrites editor draft and regenerates public Markdown and H
   for (const [filePath, before] of snapshot) {
     assert.equal(fs.readFileSync(filePath, 'utf8'), before);
   }
+});
+
+test('repair binds the selected image into the date\'s weekly issue and weekly index', async () => {
+  const root = tempRoot('newsletter-image-repair-weekly-');
+  const date = '2026-05-30';
+  const fixture = issue(date, { imageCandidates: [validImage()] });
+  writeIssue(root, fixture);
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: fixture, tags: [] });
+
+  const repairs = await repairNewsletterImages({ root, date });
+
+  assert.equal(repairs[0].repairedArticleCount, 1);
+  assert.equal(repairs[0].weeklySync.synced, true);
+  assert.equal(repairs[0].weeklySync.patchedSectionCount, 1);
+  const weeklyKey = repairs[0].weeklySync.weeklyKey;
+  const weeklyIssue = JSON.parse(fs.readFileSync(path.join(root, 'newsletters', weeklyKey, 'issue.json'), 'utf8'));
+  assert.equal(weeklyIssue.sections[0].selectedImage, 'https://publisher.example.com/images/camera-card.png');
+  assert.equal(weeklyIssue.sections[0].resolvedImage.usedFallback, false);
+  assert.match(fs.readFileSync(path.join(root, 'newsletters', weeklyKey, 'index.html'), 'utf8'), /camera-card\.png/);
+  const weeklyIndex = JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters-weekly.json'), 'utf8'));
+  assert.deepEqual(
+    weeklyIndex.find(entry => entry.weeklyKey === weeklyKey).article_images,
+    ['https://publisher.example.com/images/camera-card.png']
+  );
+});
+
+test('repair with zero repairable articles still converges a stale weekly issue', async () => {
+  const root = tempRoot('newsletter-image-repair-weekly-stale-');
+  const date = '2026-05-30';
+  const selectedImage = 'https://publisher.example.com/images/camera-card.png';
+  // Weekly는 repair 이전(이미지 미바인딩) 상태로 작성되었고,
+  const staleFixture = issue(date, { imageCandidates: [validImage()] });
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: staleFixture, tags: [] });
+  // daily editor-draft는 이미 바인딩 완료(repairable 0) 상태인 시나리오: 재실행으로 weekly만 수렴해야 한다.
+  writeIssue(root, issue(date, {
+    imageCandidates: [validImage()],
+    selectedImage,
+    imageSource: 'https://publisher.example.com',
+    imageAttribution: 'Example Publisher',
+    imageAlt: 'Camera update card',
+    imageLicenseStatus: 'unknown',
+    resolvedImage: {
+      url: selectedImage,
+      src: selectedImage,
+      originalUrl: '',
+      originalSrc: '',
+      usedFallback: false,
+      reason: 'selected image candidate'
+    }
+  }));
+
+  const repairs = await repairNewsletterImages({ root, date });
+
+  assert.equal(repairs[0].repairedArticleCount, 0);
+  assert.equal(repairs[0].weeklySync.synced, true);
+  assert.equal(repairs[0].weeklySync.patchedSectionCount, 1);
+  const weeklyKey = repairs[0].weeklySync.weeklyKey;
+  const weeklyIssue = JSON.parse(fs.readFileSync(path.join(root, 'newsletters', weeklyKey, 'issue.json'), 'utf8'));
+  assert.equal(weeklyIssue.sections[0].selectedImage, selectedImage);
+  const weeklyIndex = JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters-weekly.json'), 'utf8'));
+  assert.deepEqual(weeklyIndex.find(entry => entry.weeklyKey === weeklyKey).article_images, [selectedImage]);
 });
 
 test('audit flags selectedImage without a valid provenance candidate for publish target', async () => {
