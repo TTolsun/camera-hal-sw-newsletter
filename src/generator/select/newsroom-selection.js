@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const {
   normalizeShortlistReport
 } = require('./selection-diagnostics');
@@ -33,12 +33,12 @@ const {
   cameraReleaseVersionRank,
   hasSourceExtractionBullet,
   selectedHasSameCameraReleasePage
-} = require('./camera-release-notes');
+} = require('../reporter/camera-release-notes');
 const {
   BUCKETS,
   classifyAospCameraStackCandidate,
   normalizeAospCameraScope
-} = require('../../../src/core/common/aosp-camera-scope');
+} = require('../../core/common/aosp-camera-scope');
 const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
   NATIVE_TOOLING_WORKFLOW_TYPE,
@@ -46,27 +46,27 @@ const {
   candidateGroupKey,
   groupCoverageSummary,
   isNativeToolingWorkflow
-} = require('../../../src/core/common/article-groups');
+} = require('../../core/common/article-groups');
 const {
   dateQualityForCandidate,
   resolveCandidateDateEvidence
-} = require('../../../src/core/common/date-signals');
+} = require('../../core/common/date-signals');
 const {
   articleIdentityKey
-} = require('../../../src/core/common/article-identity');
-const { isPlaylistCollectionUrl } = require('../common/playlist-url');
+} = require('../../core/common/article-identity');
+const { isPlaylistCollectionUrl } = require('../reporter/playlist-url');
 const {
   annotateArticleExposure,
   everCoveredAsNewsletterArticle,
   readExposureHistory
-} = require('../common/article-exposure-history');
+} = require('../reporter/article-exposure-history');
 const {
   applyHomepageHeadlineSelection,
   candidateDateEvidence,
   candidateQualityFlags,
   computeHeadlineScore,
   readHomepageHeadlineState
-} = require('../common/homepage-headline');
+} = require('../reporter/homepage-headline');
 const {
   POLICY_REL_PATH,
   articlePolicy,
@@ -81,7 +81,7 @@ const {
   isMainArticleAllowedBucket,
   isPrimaryCameraStackBucket,
   publishGateCriteriaText
-} = require('../../../src/core/common/newsletter-policy');
+} = require('../../core/common/newsletter-policy');
 const { resolvePublishMode } = require('./publish-mode');
 
 const publishReadyCompositionPolicy = getPublishReadyCompositionPolicy();

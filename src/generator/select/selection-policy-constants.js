@@ -2,11 +2,11 @@
 
 const {
   BUCKETS
-} = require('../../../src/core/common/aosp-camera-scope');
+} = require('../../core/common/aosp-camera-scope');
 const {
   articlePolicy,
   getPublishReadyCompositionPolicy
-} = require('../../../src/core/common/newsletter-policy');
+} = require('../../core/common/newsletter-policy');
 
 const SHORTLIST_CAP = 12;
 const RESERVE_MIN_CANDIDATES = 4;

@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const CAPSULE_TOKEN_TARGET = '700-1200';
 const MAX_TEXT = 420;
 const MAX_EVIDENCE_ITEMS = 3;
@@ -8,25 +8,25 @@ const {
   buildOverclaimGuardrails,
   buildStaticBackgroundContext,
   cleanBehaviorChange
-} = require('./article-field-builder');
+} = require('../reporter/article-field-builder');
 const {
   normalizeHalSignalFields
-} = require('../common/hal-signal-quality');
+} = require('../reporter/hal-signal-quality');
 const {
   normalizeSourceQuality,
   sourceQualityFieldDrift,
   sourceQualityFlatFields
-} = require('../../../src/core/collect/source-quality-classifier');
+} = require('../../core/collect/source-quality-classifier');
 const {
   candidateGroupKey,
   compactContextCandidate
-} = require('../../../src/core/common/article-groups');
+} = require('../../core/common/article-groups');
 const {
   buildArticleSourceFactBundle
-} = require('./source-fact-bundle');
+} = require('../reporter/source-fact-bundle');
 const {
   buildAllowedClaimEvidence
-} = require('../validate/claim-source-binding');
+} = require('../quality/claim-source-binding');
 
 function text(value) {
   return String(value || '').trim();
