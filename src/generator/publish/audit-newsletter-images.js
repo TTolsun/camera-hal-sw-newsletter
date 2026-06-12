@@ -3,7 +3,7 @@ const path = require('path');
 const {
   writeNewsletterImageAuditAggregate,
   writeNewsletterImageAuditArtifacts
-} = require('../metrics/newsletter-image-audit');
+} = require('../render/newsletter-image-audit');
 
 function usage() {
   return [

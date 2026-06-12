@@ -2,18 +2,18 @@ const fs = require('fs');
 const path = require('path');
 const {
   buildNewsletterQualityReport
-} = require('../validate/newsletter-quality');
-const { qualityGatePolicy } = require('../../../src/core/common/newsletter-policy');
-const { readJson } = require('../../../src/core/common/common');
+} = require('../quality/newsletter-quality');
+const { qualityGatePolicy } = require('../../core/common/newsletter-policy');
+const { readJson } = require('../../core/common/common');
 const {
   newsroomDir,
   newsroomRelPath,
   seedEvidencePackPath
-} = require('../../../src/core/common/artifact-paths');
+} = require('../../core/common/artifact-paths');
 const {
   historicalPolicyWarningReason,
   strictTargetDates
-} = require('../common/validation-targets');
+} = require('../reporter/validation-targets');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');

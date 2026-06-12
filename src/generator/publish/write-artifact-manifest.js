@@ -5,14 +5,14 @@ const { execFileSync } = require('child_process');
 const {
   collectedCandidatesRelPath,
   newsroomRelPath
-} = require('../../../src/core/common/artifact-paths');
+} = require('../../core/common/artifact-paths');
 const {
   REVIEW_ARTIFACT_SCHEMA_VERSION,
   DEBUG_HEAVY,
   TRANSIENT_ATTEMPT,
   buildReviewArtifactInventory,
   resolveRetentionLocation
-} = require('../common/review-artifact-inventory');
+} = require('../reporter/review-artifact-inventory');
 
 const SCHEMA_VERSION = REVIEW_ARTIFACT_SCHEMA_VERSION;
 

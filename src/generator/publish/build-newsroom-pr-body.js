@@ -4,7 +4,7 @@ const path = require('path');
 const {
   ensureArray,
   resolvePublishStatus
-} = require('../common/publish-status');
+} = require('../reporter/publish-status');
 const {
   collectedArtifactPath,
   loadCollectedReport,
@@ -19,23 +19,23 @@ const {
   articlePolicy,
   articleCountRangeText,
   publishGateCriteriaText
-} = require('../../../src/core/common/newsletter-policy');
+} = require('../../core/common/newsletter-policy');
 const {
   renderEditorPublicationPolicyMarkdown
-} = require('../common/editor-publication-policy');
+} = require('../reporter/editor-publication-policy');
 const {
   EDITORIAL_DECISION_HEADINGS,
   EDITORIAL_DECISION_TABLE_COLUMNS,
   buildDecisionGuardrailKo,
   buildDecisionReasonKo,
   classifyEditorialDecision
-} = require('../common/editorial-decision-summary');
+} = require('../reporter/editorial-decision-summary');
 const {
   articleSectionContractMarkdown
 } = require('../render/newsletter-renderer');
 const {
   DIAGNOSIS_KEYS
-} = require('../metrics/source-quality-diagnosis');
+} = require('../render/source-quality-diagnosis');
 const {
   DIAGNOSIS_LABELS_KO,
   RECOMMENDED_ACTION_LABELS_KO
@@ -48,23 +48,23 @@ const {
 const {
   buildReviewArtifactInventory,
   renderGeneratedArtifactsSummary
-} = require('../common/review-artifact-inventory');
+} = require('../reporter/review-artifact-inventory');
 const {
   renderEditorPrSummary
-} = require('../../../src/core/common/editor-pr-summary');
+} = require('../../core/common/editor-pr-summary');
 const {
   formatReasonSummary
-} = require('../common/status-format');
+} = require('../reporter/status-format');
 const {
   sanitizeMarkdownTableCell,
   sanitizeMarkdownLinkUrl,
   markdownTableCell,
   trustedMarkdownTableCell,
   renderMarkdownTable
-} = require('../common/markdown');
+} = require('../reporter/markdown');
 const {
   toLegacyEditorIssue
-} = require('../../../src/core/domain/newsletter-domain-normalize');
+} = require('../../core/domain/newsletter-domain-normalize');
 
 const EDITOR_BRIEF_ALLOWED_SECTIONS = new Set([
   '이번 주 핵심 메시지',

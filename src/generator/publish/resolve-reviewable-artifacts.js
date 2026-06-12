@@ -4,10 +4,10 @@ const { execFileSync } = require('child_process');
 
 const {
   kstDate
-} = require('../../../src/core/common/common');
+} = require('../../core/common/common');
 const {
   readJsonIfExists
-} = require('../common/json');
+} = require('../reporter/json');
 const {
   readStatus,
   renderGithubOutputs
@@ -17,7 +17,7 @@ const {
   newsletterIndexDateStatus,
   publicNewsletterStructureStatus,
   requiredPublicFiles
-} = require('../common/public-structure');
+} = require('../reporter/public-structure');
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const STATUS_FAILED_RAW_ARTIFACT_VALIDATION = 'FAILED_RAW_ARTIFACT_VALIDATION';

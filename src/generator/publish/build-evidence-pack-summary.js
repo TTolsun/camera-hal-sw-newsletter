@@ -3,14 +3,14 @@ const path = require('path');
 
 const {
   kstDate
-} = require('../../../src/core/common/common');
+} = require('../../core/common/common');
 const {
-  writeSourceEffectivenessArtifacts
-} = require('../metrics/source-effectiveness-report');
+  writeEvidencePackSummaryArtifacts
+} = require('../render/evidence-pack-summary');
 
 function usage() {
   return [
-    'Usage: node scripts/build-source-effectiveness-report.js [--date YYYY-MM-DD]',
+    'Usage: node scripts/build-evidence-pack-summary.js [--date YYYY-MM-DD]',
     '',
     'Date priority: --date, NEWSLETTER_DATE, .tmp/newsletter-date.txt, today KST.'
   ].join('\n');
@@ -59,11 +59,13 @@ function main(argv = process.argv.slice(2), env = process.env, root = process.cw
     return 0;
   }
   const date = resolveDate(options, env, root);
-  const result = writeSourceEffectivenessArtifacts({ root, date });
+  const result = writeEvidencePackSummaryArtifacts({ root, date });
   console.log(`Wrote ${path.relative(root, result.jsonPath).replace(/\\/g, '/')}`);
-  console.log(`Wrote ${path.relative(root, result.markdownPath).replace(/\\/g, '/')}`);
   if (result.report.warnings.length > 0) {
-    console.warn(`Source effectiveness warnings: ${result.report.warnings.length}`);
+    console.warn(`Evidence Pack warnings: ${result.report.warnings.length}`);
+  }
+  if (result.report.failure_diagnostics.invalid_artifacts.length > 0) {
+    console.warn(`Evidence Pack invalid artifacts: ${result.report.failure_diagnostics.invalid_artifacts.length}`);
   }
   return 0;
 }

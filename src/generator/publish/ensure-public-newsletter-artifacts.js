@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -15,16 +15,16 @@ const {
   readExposureHistory,
   recordArticleExposure,
   writeExposureHistory
-} = require('../common/article-exposure-history');
+} = require('../reporter/article-exposure-history');
 const {
   writeHomepageHeadlineState
-} = require('../common/homepage-headline');
+} = require('../reporter/homepage-headline');
 const {
   renderedHeadlineState
-} = require('../common/headline-render-reconciliation');
+} = require('../reporter/headline-render-reconciliation');
 const {
   reconcilePublicState
-} = require('../common/public-state-reconciliation');
+} = require('../reporter/public-state-reconciliation');
 
 // Contract:
 // - This command ensures the workflow has either publishable public newsletter artifacts

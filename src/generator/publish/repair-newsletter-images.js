@@ -1,6 +1,6 @@
 const {
   repairNewsletterImages
-} = require('../metrics/newsletter-image-audit');
+} = require('../render/newsletter-image-audit');
 
 function usage() {
   return [

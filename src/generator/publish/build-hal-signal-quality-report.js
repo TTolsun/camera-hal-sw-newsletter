@@ -3,10 +3,10 @@ const path = require('path');
 
 const {
   kstDate
-} = require('../../../src/core/common/common');
+} = require('../../core/common/common');
 const {
   writeHalSignalQualityArtifacts
-} = require('../metrics/hal-signal-quality-report');
+} = require('../render/hal-signal-quality-report');
 
 function usage() {
   return [

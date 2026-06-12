@@ -1,33 +1,33 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const {
   readJson,
   repoPath
-} = require('../../../src/core/common/common');
+} = require('../../core/common/common');
 const {
   newsroomDir
-} = require('../../../src/core/common/artifact-paths');
+} = require('../../core/common/artifact-paths');
 const {
   articlePolicy,
   articleCountRangeText
-} = require('../../../src/core/common/newsletter-policy');
+} = require('../../core/common/newsletter-policy');
 const {
   HEADLINE_STATE_REL_PATH,
   validateHomepageHeadlineState
-} = require('../common/homepage-headline');
+} = require('../reporter/homepage-headline');
 const {
   historicalPolicyWarningReason,
   strictTargetDates
-} = require('../common/validation-targets');
+} = require('../reporter/validation-targets');
 const {
   validateRenderedIssueStructure
-} = require('../validate/rendered-issue-structure');
+} = require('../quality/rendered-issue-structure');
 const {
   buildRemediationMessage,
   latestDiagnosticsOnly,
   validateRetentionMetadata
-} = require('../common/public-state-reconciliation');
+} = require('../reporter/public-state-reconciliation');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'data', 'newsletters.json');

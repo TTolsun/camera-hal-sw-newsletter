@@ -1,6 +1,6 @@
 const {
   validateHistoricalArchive
-} = require('../validate/historical-archive');
+} = require('../quality/historical-archive');
 
 function main() {
   const result = validateHistoricalArchive({

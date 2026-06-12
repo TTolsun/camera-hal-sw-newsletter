@@ -4,18 +4,18 @@ const path = require('path');
 const {
   readJson,
   repoPath
-} = require('../../../src/core/common/common');
+} = require('../../core/common/common');
 const {
   historicalPolicyWarningReason,
   strictTargetDates
-} = require('../common/validation-targets');
+} = require('../reporter/validation-targets');
 const {
   validatePublicNewsletterArtifacts,
   validatePublicNewsletterFiles
-} = require('../validate/public-newsletter');
+} = require('../quality/public-newsletter');
 const {
   validatePublicArticle
-} = require('../common/public-article-contract');
+} = require('../reporter/public-article-contract');
 
 const root = process.cwd();
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');

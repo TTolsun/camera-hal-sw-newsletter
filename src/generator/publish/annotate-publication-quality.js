@@ -1,23 +1,23 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
 const {
   readJson
-} = require('../../../src/core/common/common');
+} = require('../../core/common/common');
 const {
   qualityGatePolicy
-} = require('../../../src/core/common/newsletter-policy');
+} = require('../../core/common/newsletter-policy');
 const {
   newsroomRelPath,
   seedEvidencePackRelPath
-} = require('../../../src/core/common/artifact-paths');
+} = require('../../core/common/artifact-paths');
 const {
   strictTargetDates
-} = require('../common/validation-targets');
+} = require('../reporter/validation-targets');
 const {
   buildNewsletterQualityReport
-} = require('../validate/newsletter-quality');
+} = require('../quality/newsletter-quality');
 
 function usage() {
   return [

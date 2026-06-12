@@ -2,7 +2,7 @@ const {
   DEFAULT_AUDIT_REPORT_PATH,
   DEFAULT_CLEANUP_REPORT_PATH,
   auditHistoricalArchive
-} = require('../validate/historical-archive');
+} = require('../quality/historical-archive');
 
 function main() {
   const result = auditHistoricalArchive({

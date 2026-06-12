@@ -1,13 +1,13 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
 const {
   renderCandidateSelectionDiagnostics
-} = require('../generate/selection-diagnostics');
+} = require('../select/selection-diagnostics');
 const {
   formatReasonSummary
-} = require('../common/status-format');
+} = require('../reporter/status-format');
 
 const DEFAULT_STATUS = {
   status: 'UNKNOWN',

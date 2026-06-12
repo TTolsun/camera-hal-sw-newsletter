@@ -6,18 +6,18 @@ const {
   readJson,
   readTextIfExists,
   writeJson
-} = require('../../../src/core/common/common');
+} = require('../../core/common/common');
 const {
   collectedCandidatesRelPath,
   newsroomDir: artifactNewsroomDir,
   newsroomRelPath,
   seedEvidencePackPath
-} = require('../../../src/core/common/artifact-paths');
+} = require('../../core/common/artifact-paths');
 const {
   CandidateArtifactValidationError,
   resolveCandidateInputArtifact
-} = require('../../../src/core/common/candidate-artifacts');
-const { readRuntimeConfig } = require('../../../src/core/common/runtime-config');
+} = require('../../core/common/candidate-artifacts');
+const { readRuntimeConfig } = require('../../core/common/runtime-config');
 const {
   buildCostReport,
   buildCostReportMarkdown,
@@ -25,7 +25,7 @@ const {
   getLlmDiagnostics,
   getLlmCostCalls,
   getLlmModelUsage
-} = require('../llm/llm-client');
+} = require('../reporter/llm-client');
 const {
   reporterSchema,
   editorSchema,
@@ -35,7 +35,7 @@ const {
   publicArticleJudgeSchema,
   backgroundContextSchema
 } = require('../render/newsletter-schema');
-const { isSafeExternalImageUrl } = require('../../../src/core/render/image-candidates');
+const { isSafeExternalImageUrl } = require('../../core/render/image-candidates');
 const { resolveIssueArticleImages } = require('../render/article-image-resolver');
 const {
   COMPOSITION_MODES,
@@ -43,7 +43,7 @@ const {
   normalizeUrl,
   normalizedUrlHash,
   reporterInputFromShortlist
-} = require('../generate/newsroom-selection');
+} = require('../select/newsroom-selection');
 const {
   candidateDuplicatesSections,
   duplicateReasonForSections,
@@ -64,78 +64,78 @@ const {
   stableSectionKeySet,
   titleSimilarity,
   urlKeys
-} = require('../../../src/core/common/section-identity');
+} = require('../../core/common/section-identity');
 const {
   pruneCatchUpFramingFactCheckItems,
   sanitizeClaimEvidenceIds,
   stampCoverageType,
   validateFactCheck
 } = require('./fact-check-postprocess');
-const { BUCKETS, BUCKET_PRIORITY } = require('../../../src/core/common/aosp-camera-scope');
+const { BUCKETS, BUCKET_PRIORITY } = require('../../core/common/aosp-camera-scope');
 const {
   buildArticleCapsuleReport,
   capsuleInputForCandidates,
   capsuleInputFromReport,
   compactSelectionContext
-} = require('../generate/article-capsules');
+} = require('../select/article-capsules');
 const {
   buildStaticBackgroundContextReport
-} = require('../generate/background-context');
+} = require('../reporter/background-context');
 const {
   annotateCandidatesWithCache,
   buildSummaryCacheReport,
   buildSummaryCacheReportMarkdown,
   writeCacheRecord
-} = require('../generate/news-summary-cache');
+} = require('../reporter/news-summary-cache');
 const {
   isFinalSelected,
   normalizeReporterReport,
   normalizeShortlistReport,
   renderCandidateSelectionDiagnostics,
   selectionDiagnosticsFromReports
-} = require('../generate/selection-diagnostics');
+} = require('../select/selection-diagnostics');
 const {
   roleFromStageLabel,
   createStageStatusTracker
-} = require('../generate/stage-status-tracker');
+} = require('../select/stage-status-tracker');
 const {
   candidateGroupKey,
   explicitDemotedGroups,
   groupCoverageSummary
-} = require('../../../src/core/common/article-groups');
+} = require('../../core/common/article-groups');
 const {
   buildStaleClaimReportMarkdown,
   pruneResolvedStaleFactCheckItems,
   scrubStaleClaims
-} = require('../common/stale-claims');
+} = require('../reporter/stale-claims');
 const {
   articlePolicy,
   articleCountRangeText,
   qualityGatePolicy,
   publishGateCriteriaText,
   publishReadyCompositionPolicy
-} = require('../../../src/core/common/newsletter-policy');
+} = require('../../core/common/newsletter-policy');
 const {
   readExposureHistory,
   recordArticleExposure,
   recordNewsletterArticles,
   writeExposureHistory
-} = require('../common/article-exposure-history');
+} = require('../reporter/article-exposure-history');
 const {
   buildDateReviewManifest,
   buildReviewArtifactInventory,
   renderReviewGuideMarkdown
-} = require('../common/review-artifact-inventory');
+} = require('../reporter/review-artifact-inventory');
 const {
   writeHomepageHeadlineState
-} = require('../common/homepage-headline');
+} = require('../reporter/homepage-headline');
 const {
   renderedHeadlineState
-} = require('../common/headline-render-reconciliation');
+} = require('../reporter/headline-render-reconciliation');
 const {
   pruneResolvedFallbackImageFactCheckItems
-} = require('../common/fact-check-repair');
-const { classifyHalImpact } = require('../common/hal-impact-classifier');
+} = require('../reporter/fact-check-repair');
+const { classifyHalImpact } = require('../reporter/hal-impact-classifier');
 const {
   failureStageFromError,
   failureClassFromError
@@ -146,7 +146,7 @@ const {
   STORY_PUBLIC_CONTRACT_VERSION,
   mergePublicArticleFromLlm,
   validatePublicArticle
-} = require('../common/public-article-contract');
+} = require('../reporter/public-article-contract');
 const {
   buildNewsletterQualityReport,
   buildQualityReportMarkdown,
@@ -154,7 +154,7 @@ const {
   salvagePublishableSubset,
   sectionHasSourceGap,
   sectionPassesArticleGate
-} = require('../validate/newsletter-quality');
+} = require('../quality/newsletter-quality');
 const {
   assertSectionsAndSourcesPreserved,
   EditorSemanticValidationError,
@@ -162,14 +162,14 @@ const {
   repairEditorOutputContract,
   serializeEditorValidationError,
   validateEditorOutputContract
-} = require('../validate/editor-output-contract');
+} = require('../editor/editor-output-contract');
 const {
   validateRenderedIssueStructure
-} = require('../validate/rendered-issue-structure');
+} = require('../quality/rendered-issue-structure');
 const {
   applyRepairPatches,
   REPAIR_PATCH_CONTRACT_VIOLATION
-} = require('../validate/repair-patch-contract');
+} = require('../repair/repair-patch-contract');
 const {
   buildMarkdown,
   buildHtml,
@@ -187,10 +187,10 @@ const {
 } = require('../render/weekly-newsletter-output');
 const {
   buildWeeklyMergeResolver
-} = require('../llm/weekly-merge');
+} = require('../editor/weekly-merge');
 const {
   toEditorDraftArtifact
-} = require('../../../src/core/domain/newsletter-domain-normalize');
+} = require('../../core/domain/newsletter-domain-normalize');
 const {
   linkedEvidencePromptGuardrails,
   sourceExtractionPromptGuardrails,

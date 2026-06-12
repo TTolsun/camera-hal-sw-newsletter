@@ -1,7 +1,7 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const {
   resolvePublishStatus
-} = require('../common/publish-status');
+} = require('../reporter/publish-status');
 const {
   renderGithubOutputs
 } = require('./write-generation-status-output');

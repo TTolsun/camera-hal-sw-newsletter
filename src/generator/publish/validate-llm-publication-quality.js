@@ -3,11 +3,11 @@ const path = require('path');
 const {
   callLlmJson,
   getLlmDiagnostics
-} = require('../llm/llm-client');
+} = require('../reporter/llm-client');
 const {
   newsroomDir,
   newsroomRelPath
-} = require('../../../src/core/common/artifact-paths');
+} = require('../../core/common/artifact-paths');
 
 const string = { type: 'STRING' };
 

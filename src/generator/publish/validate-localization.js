@@ -5,7 +5,7 @@ const {
   rawEnglishProseRuns,
   visibleHtmlText,
   visibleMarkdownText
-} = require('../validate/public-newsletter');
+} = require('../quality/public-newsletter');
 
 const root = process.cwd();
 const errors = [];

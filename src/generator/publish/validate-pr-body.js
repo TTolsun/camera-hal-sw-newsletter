@@ -1,13 +1,13 @@
 const fs = require('fs');
 const {
   resolvePublishStatus
-} = require('../common/publish-status');
+} = require('../reporter/publish-status');
 const {
   EDITORIAL_DECISION_HEADINGS,
   EDITORIAL_DECISION_LABELS,
   EDITORIAL_DECISION_TABLE_COLUMNS,
   PIPELINE_STATUS_LABELS
-} = require('../common/editorial-decision-summary');
+} = require('../reporter/editorial-decision-summary');
 
 const FORBIDDEN_ENGLISH_HEADINGS = [
   '## Generation Status',
