@@ -44,7 +44,7 @@ const {
   FAILED_LLM_CREDENTIALS,
   buildSourceDiscoveryFeedbackReport,
   run: runSourceDiscoveryBoundary
-} = require('../../../../../scripts/newsroom/cli/gemini-source-discovery-boundary');
+} = require('../../../../discovery/gemini-source-discovery-boundary');
 const {
   readTextFixture
 } = require('../../helpers/fixture-loader');

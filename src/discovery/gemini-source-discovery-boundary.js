@@ -4,7 +4,7 @@ const path = require('path');
 const {
   kstDate,
   readJson
-} = require('../../../src/core/common/common');
+} = require('../core/common/common');
 const {
   evidenceValidationReportPath,
   evidenceValidationReportRelPath,
@@ -47,54 +47,54 @@ const {
   sourceQualityReportMarkdownRelPath,
   sourceQualityReportPath,
   sourceQualityReportRelPath
-} = require('../../../src/core/common/artifact-paths');
+} = require('../core/common/artifact-paths');
 const {
   sourceDiscoveryCandidateStats,
   sourceDiscoveryStatsSummary,
   writeMergedCandidateArtifacts
-} = require('../../../src/core/common/candidate-artifacts');
+} = require('../core/common/candidate-artifacts');
 const {
   createGeminiUsageBudget
-} = require('../common/gemini-usage-budget');
+} = require('./gemini-usage-budget');
 const {
   writeJson
-} = require('../../../src/core/common/common');
+} = require('../core/common/common');
 const {
   readRuntimeConfig
-} = require('../../../src/core/common/runtime-config');
+} = require('../core/common/runtime-config');
 const {
   renderEditorPrSummary
-} = require('../../../src/core/common/editor-pr-summary');
+} = require('../core/common/editor-pr-summary');
 const {
   runGeminiSourceDiscovery
-} = require('../collect/gemini-source-discovery');
+} = require('./gemini-source-discovery');
 const {
   expandLinkedEvidenceCandidates
-} = require('../collect/linked-evidence-candidate-expansion');
+} = require('./linked-evidence-candidate-expansion');
 const {
   approvedCollectionIntentFromManifest
-} = require('../../../src/core/collect/collection-intent');
+} = require('../core/collect/collection-intent');
 const {
   runSeedEvidenceExpansion
-} = require('../collect/seed-evidence');
+} = require('./seed-evidence');
 const {
   extractSourceFacts
-} = require('../collect/extract-source-facts');
+} = require('./extract-source-facts');
 const {
   checkSourceDuplicates
-} = require('../collect/check-source-duplicates');
+} = require('./check-source-duplicates');
 const {
   renderSourceQualityMarkdown,
   scoreSourceCandidates
-} = require('../collect/score-source-candidates');
+} = require('./score-source-candidates');
 const {
   validateCandidateEvidence
-} = require('../evidence/validate-candidate-evidence');
+} = require('./validate-candidate-evidence');
 const {
   candidateTitle,
   candidateUrl,
   text
-} = require('../../../src/core/collect/source-intelligence-utils');
+} = require('../core/collect/source-intelligence-utils');
 
 const FAILED_LLM_CREDENTIALS = 'FAILED_LLM_CREDENTIALS';
 const SEED_ONLY_LLM_CREDENTIALS_MISSING = 'SEED_ONLY_LLM_CREDENTIALS_MISSING';

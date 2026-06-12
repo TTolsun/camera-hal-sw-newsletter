@@ -6,7 +6,7 @@ const {
   numeric,
   stableId,
   text
-} = require('../../../src/core/collect/source-intelligence-utils');
+} = require('../core/collect/source-intelligence-utils');
 
 function reliabilityScore(candidate = {}) {
   const reliability = text(candidate.reliability || candidate.source_reliability).toLowerCase();

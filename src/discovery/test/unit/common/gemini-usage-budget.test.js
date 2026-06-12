@@ -4,7 +4,7 @@ const test = require('node:test');
 const {
   createGeminiUsageBudget,
   diagnosticStageCounts
-} = require('../../../scripts/newsroom/common/gemini-usage-budget');
+} = require('../../../gemini-usage-budget');
 
 function config(overrides = {}) {
   return {

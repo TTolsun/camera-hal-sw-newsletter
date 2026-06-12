@@ -10,7 +10,7 @@ const {
   normalizeLinkedEvidence,
   normalizeLinkedEvidenceList,
   truncateRawExcerpt
-} = require('../../../scripts/newsroom/evidence');
+} = require('../../..');
 
 test('normalizer preserves every valid fetch_status enum value', () => {
   for (const fetchStatus of FETCH_STATUS_VALUES) {

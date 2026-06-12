@@ -6,16 +6,16 @@ const {
   geminiSourceProposalValidationReportRelPath,
   geminiSourceProposalsPath,
   geminiSourceProposalsRelPath
-} = require('../../../src/core/common/artifact-paths');
+} = require('../core/common/artifact-paths');
 const {
   readJson,
   writeJson
-} = require('../../../src/core/common/common');
+} = require('../core/common/common');
 const {
   callGeminiJsonBudgeted,
   getGeminiCostCalls,
   getGeminiDiagnostics
-} = require('../generate/gemini-client');
+} = require('./gemini-client');
 const {
   candidateTitle,
   canonicalContentUrl,
@@ -27,15 +27,15 @@ const {
   sourceForUrl,
   stableId,
   text
-} = require('../../../src/core/collect/source-intelligence-utils');
+} = require('../core/collect/source-intelligence-utils');
 const {
   fetchTextWithConfiguredLimit,
   resolveLinkedReleaseNoteEvidenceItems
-} = require('../../../src/core/collect/linked-release-note-evidence');
+} = require('../core/collect/linked-release-note-evidence');
 const {
   hasConcreteVersionedReleaseExtraction,
   parseSourceSpecificItems
-} = require('../../../src/core/collect/source-item-parsers');
+} = require('../core/collect/source-item-parsers');
 
 const PROPOSAL_TYPE = 'gemini_source_discovery';
 

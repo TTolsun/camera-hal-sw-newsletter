@@ -3,7 +3,7 @@ const {
   candidateUrl,
   stableId,
   text
-} = require('../../../src/core/collect/source-intelligence-utils');
+} = require('../core/collect/source-intelligence-utils');
 
 function canonicalRank(candidate = {}) {
   if (candidate.manualSeed === true || candidate.manual_seed === true) return 0;

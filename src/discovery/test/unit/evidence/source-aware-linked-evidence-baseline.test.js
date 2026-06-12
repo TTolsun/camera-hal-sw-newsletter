@@ -5,8 +5,8 @@ const {
   LINKED_EVIDENCE_TYPES,
   extractLinkedEvidenceFromCandidate,
   extractLinkedEvidenceFromText
-} = require('../../../scripts/newsroom/evidence');
-const { readTextFixture } = require('../../../src/core/test/helpers/fixture-loader');
+} = require('../../..');
+const { readTextFixture } = require('../../../../core/test/helpers/fixture-loader');
 
 function evidenceByUrl(items) {
   return new Map(items.map(item => [item.url, item]));

@@ -15,7 +15,7 @@ const {
 const {
   FAILED_LLM_CREDENTIALS,
   renderReport: renderSourceDiscoveryReport
-} = require('../../../../scripts/newsroom/cli/gemini-source-discovery-boundary');
+} = require('../../../discovery/gemini-source-discovery-boundary');
 const {
   renderEditorPrSummary
 } = require('../../common/editor-pr-summary');
