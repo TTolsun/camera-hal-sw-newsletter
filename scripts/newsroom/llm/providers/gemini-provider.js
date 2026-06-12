@@ -151,13 +151,81 @@ function thinkingBudgetForStage(stage, config) {
   return 0;
 }
 
-function thinkingConfigForStage(stage, config) {
+const FLASH_LITE_MIN_THINKING_BUDGET = 512;
+const MAX_THINKING_BUDGET = 24576;
+
+// Gemini 모델 패밀리별 thinking 설정 방식이 다르다.
+// - 3.x(gemini-3.x): thinkingLevel(LOW/MEDIUM/HIGH)만 허용, thinkingBudget 동봉 금지(보내면 400).
+// - flash-lite: thinkingBudget 512~24576만 유효(0 불가, 기본 off).
+// - 그 외(2.5/2.0-flash, 미상): thinkingBudget 그대로(0=off 허용).
+function geminiThinkingFamily(model) {
+  const name = String(model || '').trim().toLowerCase();
+  if (/^gemini-3/.test(name)) return 'thinking_level';
+  if (/^gemini-2\.5-flash-lite\b/.test(name)) return 'budget_positive';
+  return 'budget';
+}
+
+// 단계별 thinkingBudget 의도를 3.x의 thinkingLevel로 번역한다.
+function budgetToThinkingLevel(budget) {
+  const value = Number.isInteger(budget) ? budget : 0;
+  if (value <= 512) return 'LOW';
+  if (value <= 2048) return 'MEDIUM';
+  return 'HIGH';
+}
+
+function thinkingConfigForStage(stage, config, model) {
   const requested = thinkingBudgetForStage(stage, config);
-  return {
-    requested,
-    applied: requested,
-    note: ''
-  };
+  const family = geminiThinkingFamily(model);
+
+  if (family === 'thinking_level') {
+    const thinkingLevel = budgetToThinkingLevel(requested);
+    return {
+      requested,
+      applied: requested,
+      note: `gemini 3.x: thinkingBudget ${requested} -> thinkingLevel=${thinkingLevel}`,
+      mode: 'thinking_level',
+      thinkingLevel
+    };
+  }
+
+  if (family === 'budget_positive') {
+    if (!Number.isInteger(requested) || requested <= 0) {
+      return {
+        requested,
+        applied: 0,
+        note: 'flash-lite: thinkingBudget 0 -> thinkingConfig 생략',
+        mode: 'omit'
+      };
+    }
+    if (requested < FLASH_LITE_MIN_THINKING_BUDGET) {
+      return {
+        requested,
+        applied: FLASH_LITE_MIN_THINKING_BUDGET,
+        note: `flash-lite: thinkingBudget ${requested} -> ${FLASH_LITE_MIN_THINKING_BUDGET} 클램프`,
+        mode: 'budget'
+      };
+    }
+    if (requested > MAX_THINKING_BUDGET) {
+      return {
+        requested,
+        applied: MAX_THINKING_BUDGET,
+        note: `flash-lite: thinkingBudget ${requested} -> ${MAX_THINKING_BUDGET} 클램프`,
+        mode: 'budget'
+      };
+    }
+    return { requested, applied: requested, note: '', mode: 'budget' };
+  }
+
+  // 2.5/2.0-flash 및 미상: budget 그대로(0=off 허용), 유효 상한만 클램프.
+  if (Number.isInteger(requested) && requested > MAX_THINKING_BUDGET) {
+    return {
+      requested,
+      applied: MAX_THINKING_BUDGET,
+      note: `thinkingBudget ${requested} -> ${MAX_THINKING_BUDGET} 클램프`,
+      mode: 'budget'
+    };
+  }
+  return { requested, applied: requested, note: '', mode: 'budget' };
 }
 
 function schemaConfig(responseSchema, temperature) {
@@ -174,15 +242,15 @@ function apiVersionForModel() {
 }
 
 function buildGeminiRequest({ model, stage, systemInstruction, prompt, responseSchema, config }) {
-  const thinkingBudget = thinkingConfigForStage(stage, config);
+  const thinkingBudget = thinkingConfigForStage(stage, config, model);
   const requestConfig = {
     systemInstruction,
     ...schemaConfig(responseSchema, temperatureForStage(stage, config))
   };
-  if (Number.isInteger(thinkingBudget.applied)) {
-    requestConfig.thinkingConfig = {
-      thinkingBudget: thinkingBudget.applied
-    };
+  if (thinkingBudget.mode === 'thinking_level') {
+    requestConfig.thinkingConfig = { thinkingLevel: thinkingBudget.thinkingLevel };
+  } else if (thinkingBudget.mode === 'budget' && Number.isInteger(thinkingBudget.applied)) {
+    requestConfig.thinkingConfig = { thinkingBudget: thinkingBudget.applied };
   }
   return {
     request: {
@@ -252,6 +320,9 @@ module.exports = {
   temperatureForStage,
 
   thinkingBudgetForStage,
+  thinkingConfigForStage,
+  budgetToThinkingLevel,
+  geminiThinkingFamily,
 
   usageMetadataFromResponse,
 

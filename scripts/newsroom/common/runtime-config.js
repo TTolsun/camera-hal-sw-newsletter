@@ -14,7 +14,7 @@ const DEFAULT_LLM_STAGE_MODELS = Object.freeze({
   reporter: 'gemini-2.5-flash',
   editor: 'gemini-3.5-flash',
   factcheck: 'gemini-2.5-flash',
-  repair: 'gemini-3.5-flash',
+  repair: 'gemini-2.5-flash',
   judge: 'gemini-2.5-flash-lite',
   sourceDiscovery: 'gemini-2.5-flash-lite'
 });
@@ -75,9 +75,9 @@ const DEFAULT_RUNTIME_CONFIG = {
   newsroomMaxCostUsd: 0.25,
   geminiThinkingBudgetReporter: 0,
   geminiThinkingBudgetEditor: 1024,
-  geminiThinkingBudgetRepair: 0,
-  geminiThinkingBudgetFactcheck: 1024,
-  geminiThinkingBudgetJudge: 1024,
+  geminiThinkingBudgetRepair: 1024,
+  geminiThinkingBudgetFactcheck: 2048,
+  geminiThinkingBudgetJudge: 512,
   geminiThinkingBudgetScoring: 0,
   geminiTemperatureDefault: 0.35,
   geminiTemperatureSourceDiscovery: 0.45,
@@ -313,32 +313,32 @@ function readRuntimeConfig(env = process.env, options = {}) {
     geminiThinkingBudgetReporter: parseInteger(
       envValue(env, 'GEMINI_THINKING_BUDGET_REPORTER', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetReporter),
       'GEMINI_THINKING_BUDGET_REPORTER',
-      { min: 0 }
+      { min: 0, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetReporter, defaultOnEmpty: true }
     ),
     geminiThinkingBudgetEditor: parseInteger(
       envValue(env, 'GEMINI_THINKING_BUDGET_EDITOR', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetEditor),
       'GEMINI_THINKING_BUDGET_EDITOR',
-      { min: 0 }
+      { min: 0, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetEditor, defaultOnEmpty: true }
     ),
     geminiThinkingBudgetRepair: parseInteger(
       envValue(env, 'GEMINI_THINKING_BUDGET_REPAIR', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetRepair),
       'GEMINI_THINKING_BUDGET_REPAIR',
-      { min: 0 }
+      { min: 0, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetRepair, defaultOnEmpty: true }
     ),
     geminiThinkingBudgetFactcheck: parseInteger(
       envValue(env, 'GEMINI_THINKING_BUDGET_FACTCHECK', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetFactcheck),
       'GEMINI_THINKING_BUDGET_FACTCHECK',
-      { min: 0 }
+      { min: 0, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetFactcheck, defaultOnEmpty: true }
     ),
     geminiThinkingBudgetJudge: parseInteger(
       envValue(env, 'GEMINI_THINKING_BUDGET_JUDGE', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetJudge),
       'GEMINI_THINKING_BUDGET_JUDGE',
-      { min: 0 }
+      { min: 0, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetJudge, defaultOnEmpty: true }
     ),
     geminiThinkingBudgetScoring: parseInteger(
       envValue(env, 'GEMINI_THINKING_BUDGET_SCORING', DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetScoring),
       'GEMINI_THINKING_BUDGET_SCORING',
-      { min: 0 }
+      { min: 0, defaultValue: DEFAULT_RUNTIME_CONFIG.geminiThinkingBudgetScoring, defaultOnEmpty: true }
     ),
     geminiTemperatureDefault: parseNumber(
       envValue(env, 'GEMINI_TEMPERATURE_DEFAULT', DEFAULT_RUNTIME_CONFIG.geminiTemperatureDefault),

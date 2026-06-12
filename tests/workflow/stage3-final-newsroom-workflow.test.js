@@ -84,7 +84,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /NEWSROOM_FACTCHECK_MODEL: \$\{\{ vars\.NEWSROOM_FACTCHECK_MODEL \|\| '' \}\}/);
   assert.match(workflow, /NEWSROOM_REPAIR_MODEL: \$\{\{ vars\.NEWSROOM_REPAIR_MODEL \|\| '' \}\}/);
   assert.match(workflow, /NEWSROOM_JUDGE_MODEL: \$\{\{ vars\.NEWSROOM_JUDGE_MODEL \|\| '' \}\}/);
-  assert.match(workflow, /GEMINI_THINKING_BUDGET_JUDGE: \$\{\{ vars\.GEMINI_THINKING_BUDGET_JUDGE \|\| '0' \}\}/);
+  assert.match(workflow, /GEMINI_THINKING_BUDGET_JUDGE: \$\{\{ vars\.GEMINI_THINKING_BUDGET_JUDGE \|\| '' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MODE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MODE \|\| 'extract_only' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE \|\| '8' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN \|\| '40' \}\}/);

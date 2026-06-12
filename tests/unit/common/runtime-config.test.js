@@ -48,6 +48,23 @@ function doctorConfigEnv(overrides = {}) {
   };
 }
 
+test('빈 문자열 thinking budget env는 코드 기본값으로 해석된다 (drift 해소)', () => {
+  const config = readRuntimeConfig({
+    GEMINI_THINKING_BUDGET_REPORTER: '',
+    GEMINI_THINKING_BUDGET_EDITOR: '',
+    GEMINI_THINKING_BUDGET_REPAIR: '',
+    GEMINI_THINKING_BUDGET_FACTCHECK: '',
+    GEMINI_THINKING_BUDGET_JUDGE: '',
+    GEMINI_THINKING_BUDGET_SCORING: ''
+  });
+  assert.equal(config.geminiThinkingBudgetReporter, 0);
+  assert.equal(config.geminiThinkingBudgetEditor, 1024);
+  assert.equal(config.geminiThinkingBudgetRepair, 1024);
+  assert.equal(config.geminiThinkingBudgetFactcheck, 2048);
+  assert.equal(config.geminiThinkingBudgetJudge, 512);
+  assert.equal(config.geminiThinkingBudgetScoring, 0);
+});
+
 test('defaults match workflow runtime defaults', () => {
   const config = readRuntimeConfig({});
 
@@ -84,9 +101,9 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.newsroomMaxCostUsd, 0.25);
   assert.equal(config.geminiThinkingBudgetReporter, 0);
   assert.equal(config.geminiThinkingBudgetEditor, 1024);
-  assert.equal(config.geminiThinkingBudgetRepair, 0);
-  assert.equal(config.geminiThinkingBudgetFactcheck, 1024);
-  assert.equal(config.geminiThinkingBudgetJudge, 1024);
+  assert.equal(config.geminiThinkingBudgetRepair, 1024);
+  assert.equal(config.geminiThinkingBudgetFactcheck, 2048);
+  assert.equal(config.geminiThinkingBudgetJudge, 512);
   assert.equal(config.geminiThinkingBudgetScoring, 0);
   assert.equal(config.geminiTemperatureDefault, 0.35);
   assert.equal(config.geminiTemperatureSourceDiscovery, 0.45);
@@ -232,7 +249,7 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.geminiThinkingBudgetEditor, 1024);
   assert.equal(config.geminiThinkingBudgetRepair, 0);
   assert.equal(config.geminiThinkingBudgetFactcheck, 0);
-  assert.equal(config.geminiThinkingBudgetJudge, 1024);
+  assert.equal(config.geminiThinkingBudgetJudge, 512);
   assert.equal(config.geminiThinkingBudgetScoring, 0);
   assert.equal(config.linkedEvidenceMode, 'resolve_allowed_official_links');
   assert.equal(config.linkedEvidenceMaxLinksPerCandidate, 4);
@@ -660,7 +677,7 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.newsroomMaxCostUsd, 0.25);
   assert.equal(sanitized.newsroomMaxSectionRepairs, 1);
   assert.equal(sanitized.geminiThinkingBudgetEditor, 1024);
-  assert.equal(sanitized.geminiThinkingBudgetJudge, 1024);
+  assert.equal(sanitized.geminiThinkingBudgetJudge, 512);
   assert.equal(sanitized.linkedEvidenceMode, 'extract_only');
   assert.equal(sanitized.linkedEvidenceMaxLinksPerCandidate, 8);
   assert.equal(sanitized.linkedEvidenceMaxLinksPerRun, 40);
