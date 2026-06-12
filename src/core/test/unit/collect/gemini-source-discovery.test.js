@@ -21,14 +21,14 @@ const {
   FAILED_LLM_CREDENTIALS,
   SEED_ONLY_LLM_CREDENTIALS_MISSING,
   run: runSourceDiscoveryBoundary
-} = require('../../../../../scripts/newsroom/cli/gemini-source-discovery-boundary');
+} = require('../../../../discovery/gemini-source-discovery-boundary');
 const {
   buildProposalPrompt,
   promoteProposalUrls
-} = require('../../../../../scripts/newsroom/collect/gemini-source-discovery');
+} = require('../../../../discovery/gemini-source-discovery');
 const {
   calculateSourceQuality
-} = require('../../../../../scripts/newsroom/collect/score-source-candidates');
+} = require('../../../../discovery/score-source-candidates');
 const {
   sourceDiscoveryCandidateStats,
   sourceDiscoveryStatsSummary

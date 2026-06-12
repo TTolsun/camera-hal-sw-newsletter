@@ -10,7 +10,7 @@ const {
   RAW_EXCERPT_MAX_LENGTH,
   analyzeLinkedEvidenceForCandidates,
   writeLinkedEvidenceDiagnosticsArtifacts
-} = require('../../../../../scripts/newsroom/evidence');
+} = require('../../../../discovery');
 const { buildShortlistReport } = require('../../../../../scripts/newsroom/generate/newsroom-selection');
 const { candidate } = require('../../helpers/newsroom-builders');
 const { readTextFixture } = require('../../helpers/fixture-loader');

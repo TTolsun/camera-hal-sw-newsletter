@@ -9,7 +9,7 @@ const {
   fetchPublicText,
   mergeSeedCandidates,
   runSeedEvidenceExpansion
-} = require('../../../../scripts/newsroom/collect/seed-evidence');
+} = require('../../../discovery/seed-evidence');
 const {
   seedCandidatesPath,
   seedEvidencePackPath,
