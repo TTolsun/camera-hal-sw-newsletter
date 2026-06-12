@@ -7,13 +7,13 @@ const {
   buildSourceEffectivenessReport,
   renderSourceEffectivenessMarkdown,
   writeSourceEffectivenessArtifacts
-} = require('../../scripts/newsroom/metrics/source-effectiveness-report');
+} = require('../../render/source-effectiveness-report');
 const {
   tempRoot,
   writeJson
-} = require('../../src/core/test/helpers/fs');
+} = require('../../../core/test/helpers/fs');
 
-const fixture = require('../../src/core/test/fixtures/source-effectiveness/basic-source-effectiveness.json');
+const fixture = require('../../../core/test/fixtures/source-effectiveness/basic-source-effectiveness.json');
 
 function buildReport(overrides = {}) {
   return buildSourceEffectivenessReport({

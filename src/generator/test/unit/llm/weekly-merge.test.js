@@ -3,8 +3,8 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { buildWeeklyMergeResolver, WEEKLY_MERGE_RESPONSE_SCHEMA } = require('../../../scripts/newsroom/llm/weekly-merge');
-const { resolveWeeklyArticles } = require('../../../scripts/newsroom/generate/weekly-duplicate-merge');
+const { buildWeeklyMergeResolver, WEEKLY_MERGE_RESPONSE_SCHEMA } = require('../../../editor/weekly-merge');
+const { resolveWeeklyArticles } = require('../../../reporter/weekly-duplicate-merge');
 
 function article(headline, url) {
   return { headline, source_candidate_url: url, sources: [{ url }] };

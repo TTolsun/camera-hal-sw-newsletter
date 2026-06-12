@@ -5,7 +5,7 @@ const {
   thinkingConfigForStage,
   budgetToThinkingLevel,
   buildRequest
-} = require('../../../scripts/newsroom/llm/providers/gemini-provider');
+} = require('../../../reporter/providers/gemini-provider');
 
 // 단계별 thinking budget(코드 정본 기본값 반영: factcheck 2048, judge 512, repair 1024)
 const baseConfig = {

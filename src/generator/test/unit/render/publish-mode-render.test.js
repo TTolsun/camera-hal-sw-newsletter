@@ -6,7 +6,7 @@ const test = require('node:test');
 const {
   buildMarkdown,
   buildHtml
-} = require('../../../scripts/newsroom/render/newsletter-renderer');
+} = require('../../../render/newsletter-renderer');
 
 function baseIssue(overrides = {}) {
   return {

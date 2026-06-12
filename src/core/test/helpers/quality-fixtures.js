@@ -53,7 +53,7 @@ const {
 } = require('./quality-builders');
 const {
   buildNewsletterQualityReport
-} = require('../../../../scripts/newsroom/validate/newsletter-quality');
+} = require('../../../generator/quality/newsletter-quality');
 const {
   qualityGatePolicy
 } = require('../../common/newsletter-policy');

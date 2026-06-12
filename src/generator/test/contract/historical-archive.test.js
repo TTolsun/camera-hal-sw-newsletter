@@ -9,18 +9,18 @@ const {
   buildInventoryFinalMetrics,
   parseInventoryTableRows,
   validateHistoricalArchive
-} = require('../../scripts/newsroom/validate/historical-archive');
+} = require('../../quality/historical-archive');
 const {
   CLEANUP_REPORT_PATH: AUDIT_CLEANUP_REPORT_PATH,
   INVENTORY_PATH: AUDIT_INVENTORY_PATH,
   LEDGER_PATH: AUDIT_LEDGER_PATH
-} = require('../../scripts/newsroom/common/audit-paths');
+} = require('../../reporter/audit-paths');
 const {
   readJson,
   tempRoot,
   writeJson,
   writeText
-} = require('../../src/core/test/helpers/fs');
+} = require('../../../core/test/helpers/fs');
 
 function writePublicIssue(root, date, text = '') {
   writeText(path.join(root, 'newsletters', date, 'newsletter.md'), [

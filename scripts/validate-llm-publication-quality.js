@@ -1,1 +1,1 @@
-module.exports = require('./newsroom/cli/run-wrapper')(__filename, 'newsroom/cli/validate-llm-publication-quality.js');
+module.exports = require('./newsroom/cli/run-wrapper')(__filename, '../src/generator/publish/validate-llm-publication-quality.js');

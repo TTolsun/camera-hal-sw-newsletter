@@ -1,1 +1,1 @@
-module.exports = require('./newsroom/cli/run-wrapper')(__filename, 'newsroom/cli/resolve-reviewable-artifacts.js');
+module.exports = require('./newsroom/cli/run-wrapper')(__filename, '../src/generator/publish/resolve-reviewable-artifacts.js');

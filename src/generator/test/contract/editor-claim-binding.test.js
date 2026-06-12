@@ -6,16 +6,16 @@ const test = require('node:test');
 const {
   EditorSemanticValidationError,
   validateEditorOutputContract
-} = require('../../scripts/newsroom/validate/editor-output-contract');
+} = require('../../editor/editor-output-contract');
 const {
   articleClaimContractPrompt
-} = require('../../scripts/gemini-newsroom-newsletter');
+} = require('../../../../scripts/gemini-newsroom-newsletter');
 const {
   section,
   editor,
   reporterForClaimTests,
   normalizeSection
-} = require('../../src/core/test/helpers/editor-builders');
+} = require('../../../core/test/helpers/editor-builders');
 
 test('strict editor claim binding requires a fact claim for factual article fields', () => {
   const draft = editor({

@@ -14,12 +14,12 @@ const {
 } = require('../../common/newsletter-policy');
 const {
   resolvePublishStatus
-} = require('../../../../scripts/newsroom/common/publish-status');
+} = require('../../../generator/reporter/publish-status');
 const {
   buildHtml,
   buildMarkdown,
   issueTags
-} = require('../../../../scripts/newsroom/render/newsletter-renderer');
+} = require('../../../generator/render/newsletter-renderer');
 const {
   publicationDecisionForSections
 } = require('../../common/publication-mode');

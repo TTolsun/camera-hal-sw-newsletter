@@ -6,17 +6,17 @@ const test = require('node:test');
 const {
   repairEditorOutputContract,
   validateEditorOutputContract
-} = require('../../scripts/newsroom/validate/editor-output-contract');
+} = require('../../editor/editor-output-contract');
 const {
   deriveDecisionMetadata
-} = require('../../scripts/newsroom/common/public-article-contract');
+} = require('../../reporter/public-article-contract');
 const {
   section,
   editor,
   storyPublicArticle,
   storyEditor,
   normalizeSection
-} = require('../../src/core/test/helpers/editor-builders');
+} = require('../../../core/test/helpers/editor-builders');
 
 const DATE = '2026-05-08';
 

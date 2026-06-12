@@ -4,13 +4,13 @@ const test = require('node:test');
 const {
   checkArtifactRetentionTracked,
   mustNotBeTracked
-} = require('../../scripts/newsroom/validate/artifact-retention-tracked-check');
+} = require('../../../../scripts/newsroom/validate/artifact-retention-tracked-check');
 const {
   DEBUG_HEAVY,
   TRANSIENT_ATTEMPT,
   REVIEW_REQUIRED_COMPACT,
   classifyArtifactPath
-} = require('../../scripts/newsroom/common/review-artifact-inventory');
+} = require('../../reporter/review-artifact-inventory');
 
 // Pass a fake tracked-paths list via _trackedPaths to avoid real git invocation in tests.
 function makeCheck(trackedPaths) {

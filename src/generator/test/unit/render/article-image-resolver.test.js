@@ -8,7 +8,7 @@ const {
   resolveArticleImage,
   fallbackAssetForSection,
   issueRelativePath
-} = require('../../../scripts/newsroom/render/article-image-resolver');
+} = require('../../../render/article-image-resolver');
 
 function tempRoot(prefix) {
   return fs.mkdtempSync(path.join(os.tmpdir(), prefix));

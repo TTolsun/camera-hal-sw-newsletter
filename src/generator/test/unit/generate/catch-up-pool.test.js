@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { buildCatchUpPool } = require('../../../scripts/newsroom/generate/newsroom-selection');
+const { buildCatchUpPool } = require('../../../select/newsroom-selection');
 
 const POLICY = {
   enabled: true,

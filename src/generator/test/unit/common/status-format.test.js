@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { formatReasonSummary } = require('../../../scripts/newsroom/common/status-format');
+const { formatReasonSummary } = require('../../../reporter/status-format');
 
 test('formatReasonSummary counts reasons correctly', () => {
   const items = [

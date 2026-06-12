@@ -3,7 +3,7 @@ const test = require('node:test');
 
 const {
   pruneResolvedFallbackImageFactCheckItems
-} = require('../../../scripts/newsroom/common/fact-check-repair');
+} = require('../../../reporter/fact-check-repair');
 
 function fallbackSection(overrides = {}) {
   return {

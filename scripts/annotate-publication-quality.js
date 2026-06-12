@@ -1,1 +1,1 @@
-module.exports = require('./newsroom/cli/run-wrapper')(__filename, 'newsroom/cli/annotate-publication-quality.js');
+module.exports = require('./newsroom/cli/run-wrapper')(__filename, '../src/generator/publish/annotate-publication-quality.js');

@@ -9,13 +9,13 @@ const {
   MAX_EXCLUDED_CANDIDATES,
   buildEvidencePackSummary,
   writeEvidencePackSummaryArtifacts
-} = require('../../scripts/newsroom/metrics/evidence-pack-summary');
+} = require('../../render/evidence-pack-summary');
 const {
   readJson,
   tempRoot,
   writeJson,
   writeText
-} = require('../../src/core/test/helpers/fs');
+} = require('../../../core/test/helpers/fs');
 
 const DATE = '2026-05-14';
 const GENERATED_AT = '2026-05-14T00:00:00.000Z';

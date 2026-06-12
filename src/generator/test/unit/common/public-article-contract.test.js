@@ -3,7 +3,7 @@ const test = require('node:test');
 
 const {
   publicUrlError
-} = require('../../../scripts/newsroom/common/public-article-contract');
+} = require('../../../reporter/public-article-contract');
 
 test('public URL contract blocks source monitor internal artifacts', () => {
   assert.equal(

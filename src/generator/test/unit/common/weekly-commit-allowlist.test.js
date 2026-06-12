@@ -6,8 +6,8 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
-const { retentionCommitAllowlist } = require('../../../scripts/newsroom/common/review-artifact-inventory');
-const { writeWeeklyNewsletterArtifacts } = require('../../../scripts/newsroom/render/weekly-newsletter-output');
+const { retentionCommitAllowlist } = require('../../../reporter/review-artifact-inventory');
+const { writeWeeklyNewsletterArtifacts } = require('../../../render/weekly-newsletter-output');
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'weekly-allowlist-'));

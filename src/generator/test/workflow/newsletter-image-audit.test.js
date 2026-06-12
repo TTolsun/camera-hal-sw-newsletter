@@ -9,20 +9,20 @@ const {
   buildNewsletterImageAuditReport,
   repairNewsletterImages,
   writeNewsletterImageAuditAggregate
-} = require('../../scripts/newsroom/metrics/newsletter-image-audit');
+} = require('../../render/newsletter-image-audit');
 const {
   buildHtml,
   buildMarkdown
-} = require('../../scripts/newsroom/render/newsletter-renderer');
+} = require('../../render/newsletter-renderer');
 const {
   writeWeeklyNewsletterArtifacts
-} = require('../../scripts/newsroom/render/weekly-newsletter-output');
+} = require('../../render/weekly-newsletter-output');
 const {
   assertKnownImageReasonCode
-} = require('../../scripts/newsroom/render/newsletter-image-audit-labels.ko');
+} = require('../../render/newsletter-image-audit-labels.ko');
 const {
   retrySection
-} = require('../../src/core/test/helpers/newsroom-builders');
+} = require('../../../core/test/helpers/newsroom-builders');
 
 function tempRoot(prefix) {
   return fs.mkdtempSync(path.join(os.tmpdir(), prefix));

@@ -3,8 +3,8 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { exclusionReasons } = require('../../scripts/newsroom/generate/newsroom-selection');
-const { policyPrimaryCandidate } = require('../../src/core/test/helpers/selection-builders');
+const { exclusionReasons } = require('../../select/newsroom-selection');
+const { policyPrimaryCandidate } = require('../../../core/test/helpers/selection-builders');
 
 // YouTube 등의 재생목록(playlist) URL은 dated article이 아니라 영상 모음(collection)이다.
 // dated evidence가 붙어 있어도 메인 기사로 승격되면 source-integrity 게이트가 "shared watch

@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { buildMarkdown, buildHtml } = require('../../../scripts/newsroom/render/newsletter-renderer');
+const { buildMarkdown, buildHtml } = require('../../../render/newsletter-renderer');
 
 function issueWithCatchUp() {
   return {

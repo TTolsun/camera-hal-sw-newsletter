@@ -1,1 +1,1 @@
-module.exports = require('./newsroom/cli/run-wrapper')(__filename, 'newsroom/cli/validate-external-images.js');
+module.exports = require('./newsroom/cli/run-wrapper')(__filename, '../src/generator/publish/validate-external-images.js');

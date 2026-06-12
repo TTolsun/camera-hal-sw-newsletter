@@ -9,14 +9,14 @@ const {
   hasPlatformSignalTerm,
   publishReadyGateReasonCodes,
   scoreCandidate
-} = require('../../scripts/newsroom/generate/newsroom-selection');
-const { candidate } = require('../../src/core/test/helpers/newsroom-builders');
+} = require('../../select/newsroom-selection');
+const { candidate } = require('../../../core/test/helpers/newsroom-builders');
 const {
   buildShortlistReport,
   policyPrimaryCandidate,
   policyDriverCandidate,
   policySupportingCandidate
-} = require('../../src/core/test/helpers/selection-builders');
+} = require('../../../core/test/helpers/selection-builders');
 
 function policyMultimediaCandidate(index = 0, overrides = {}) {
   return candidate({
@@ -316,7 +316,7 @@ test('versioned C++ toolchain evidence is concrete but not counted as direct cam
 });
 
 test('cpp_fallback stays supporting-only and is not promoted to non-fallback', () => {
-  const { compositionSummary } = require('../../scripts/newsroom/generate/newsroom-selection');
+  const { compositionSummary } = require('../../select/newsroom-selection');
   const genericFallback = candidate({
     title: 'LLVM 20 general compiler release',
     url: 'https://example.com/llvm-20-general',

@@ -3,7 +3,7 @@ const test = require('node:test');
 
 const {
   normalizeHeadlineImageUrl
-} = require('../../../scripts/newsroom/common/homepage-headline');
+} = require('../../../reporter/homepage-headline');
 
 const NEWSLETTER_URL = 'newsletters/2026-05-29/index.html';
 

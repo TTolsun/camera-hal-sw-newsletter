@@ -12,7 +12,7 @@ const {
   isHeadlineEligible,
   REMOVED_DUE_TO_HEADLINE_INCLUSION_REASON,
   validateHomepageHeadlineState
-} = require('../../../scripts/newsroom/common/homepage-headline');
+} = require('../../../reporter/homepage-headline');
 
 const policy = Object.freeze({
   decayModel: 'linear',

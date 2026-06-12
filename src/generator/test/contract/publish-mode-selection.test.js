@@ -3,9 +3,9 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { buildShortlistReport } = require('../../scripts/newsroom/generate/newsroom-selection');
-const { PUBLISH_MODES } = require('../../scripts/newsroom/generate/publish-mode');
-const { emptyHeadlineState } = require('../../scripts/newsroom/common/homepage-headline');
+const { buildShortlistReport } = require('../../select/newsroom-selection');
+const { PUBLISH_MODES } = require('../../select/publish-mode');
+const { emptyHeadlineState } = require('../../reporter/homepage-headline');
 
 // 빈 후보 풀 → 발행 신호 없음 → QUIET
 // emptyHeadlineState 를 주입해 디스크의 직전 헤드라인 상태가 빈 선택을 오염시키지 않도록 한다.

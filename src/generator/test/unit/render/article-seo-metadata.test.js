@@ -3,8 +3,8 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { buildHtml } = require('../../../scripts/newsroom/render/newsletter-renderer');
-const { SITE_BASE_URL, DEFAULT_OG_IMAGE, missingSeoTags, seoTagUrl } = require('../../../scripts/newsroom/render/seo-metadata');
+const { buildHtml } = require('../../../render/newsletter-renderer');
+const { SITE_BASE_URL, DEFAULT_OG_IMAGE, missingSeoTags, seoTagUrl } = require('../../../render/seo-metadata');
 
 function baseIssue(overrides = {}) {
   return {

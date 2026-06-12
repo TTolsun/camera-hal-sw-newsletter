@@ -4,7 +4,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const { readJsonIfExists } = require('../../../scripts/newsroom/common/json');
+const { readJsonIfExists } = require('../../../reporter/json');
 
 test('readJsonIfExists returns exists=false for nonexistent file', () => {
   const result = readJsonIfExists(path.join(os.tmpdir(), `no-such-file-${Date.now()}.json`));

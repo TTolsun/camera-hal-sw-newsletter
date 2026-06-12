@@ -5,18 +5,18 @@ const test = require('node:test');
 
 const {
   buildQualityReportMarkdown
-} = require('../../scripts/newsroom/validate/newsletter-quality');
+} = require('../../quality/newsletter-quality');
 const {
   reportFor,
   scopedCandidate,
   section,
   validSections,
   reporterCandidatesFor
-} = require('../../src/core/test/helpers/quality-builders');
+} = require('../../../core/test/helpers/quality-builders');
 const {
   seedEvidencePack,
   seedPack
-} = require('../../src/core/test/helpers/quality-fixtures');
+} = require('../../../core/test/helpers/quality-fixtures');
 
 function linkedEvidenceSummary(overrides = {}) {
   return {

@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { buildWeeklyNewsletterPage } = require('../../../scripts/newsroom/render/weekly-newsletter-page');
+const { buildWeeklyNewsletterPage } = require('../../../render/weekly-newsletter-page');
 
 // A minimal but renderer-valid publish-ready editor draft (mirrors the known-good public issue shape
 // used by tests/helpers/workflow-fixtures.js writePublicNewsletterArtifacts).

@@ -5,8 +5,8 @@ const test = require('node:test');
 
 const {
   reconcileFactClaimEvidence
-} = require('../../../scripts/newsroom/validate/editor-output-contract');
-const { editor, section, reporterForClaimTests } = require('../../../src/core/test/helpers/editor-builders');
+} = require('../../../editor/editor-output-contract');
+const { editor, section, reporterForClaimTests } = require('../../../../core/test/helpers/editor-builders');
 
 // #502: LLM editor가 source 기반 fact claim에 후보 evidence index에 없는 evidence_id를
 // 인용하면 `claim-evidence: unresolved evidence_id` 차감이 발생한다. reconcile은 실제 뒷받침

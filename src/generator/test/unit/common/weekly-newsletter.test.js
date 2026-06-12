@@ -11,7 +11,7 @@ const {
   weeklyNewsletterMarkdownRoute,
   weeklyNewsletterMetadata,
   isValidWeeklyKey
-} = require('../../../scripts/newsroom/common/weekly-newsletter');
+} = require('../../../reporter/weekly-newsletter');
 
 // The issue #486 worked example: a date in ISO week 23 of 2026 maps to 2026-W23,
 // whose Monday is 2026-06-01 and Sunday is 2026-06-07.

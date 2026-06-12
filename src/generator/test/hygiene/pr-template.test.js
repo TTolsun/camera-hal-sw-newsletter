@@ -5,9 +5,9 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
-const { rawEnglishProseRuns } = require('../../scripts/newsroom/validate/public-newsletter');
+const { rawEnglishProseRuns } = require('../../quality/public-newsletter');
 
-const root = path.join(__dirname, '..', '..');
+const root = path.join(__dirname, '..', '..', '..', '..');
 
 function repoPath(...parts) {
   return path.join(root, ...parts);
@@ -78,13 +78,13 @@ test('code docs PR template keeps code safety checklist guardrails', () => {
 });
 
 test('localization validator scans split PR template directory', () => {
-  const text = readTemplate('scripts', 'newsroom', 'cli', 'validate-localization.js');
+  const text = readTemplate('src', 'generator', 'publish', 'validate-localization.js');
 
   assert.match(text, /path\.join\('\.github', 'PULL_REQUEST_TEMPLATE'\)/);
 });
 
 test('localization validator scans prompt and latest public newsletter surfaces', () => {
-  const text = readTemplate('scripts', 'newsroom', 'cli', 'validate-localization.js');
+  const text = readTemplate('src', 'generator', 'publish', 'validate-localization.js');
 
   assert.match(text, /promptHostFiles/);
   assert.match(text, /checkPromptHosts/);
@@ -113,7 +113,7 @@ test('localization validator reports homepage headline display errors in readabl
   });
 
   const result = spawnSync(process.execPath, [
-    repoPath('scripts', 'newsroom', 'cli', 'validate-localization.js')
+    repoPath('src', 'generator', 'publish', 'validate-localization.js')
   ], {
     cwd: root,
     encoding: 'utf8'
@@ -137,7 +137,7 @@ test('localization validator allows canonical English newsletter brand titles', 
   });
 
   const result = spawnSync(process.execPath, [
-    repoPath('scripts', 'newsroom', 'cli', 'validate-localization.js')
+    repoPath('src', 'generator', 'publish', 'validate-localization.js')
   ], {
     cwd: root,
     encoding: 'utf8'
@@ -148,9 +148,9 @@ test('localization validator allows canonical English newsletter brand titles', 
 
 test('prompt host files do not keep long English prose instructions', () => {
   const promptHostFiles = [
-    ['scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'],
-    ['scripts', 'newsroom', 'cli', 'build-newsroom-pr-body.js'],
-    ['scripts', 'newsroom', 'render', 'newsletter-renderer.js']
+    ['src', 'generator', 'publish', 'gemini-newsroom-newsletter.js'],
+    ['src', 'generator', 'publish', 'build-newsroom-pr-body.js'],
+    ['src', 'generator', 'render', 'newsletter-renderer.js']
   ];
 
   for (const parts of promptHostFiles) {

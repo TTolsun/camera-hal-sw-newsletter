@@ -9,7 +9,7 @@ const {
   buildSitemap,
   missingSeoTags,
   seoTagUrl
-} = require('../../../scripts/newsroom/render/seo-metadata');
+} = require('../../../render/seo-metadata');
 
 function completeHead(overrides = {}) {
   const canonical = overrides.canonical ?? `<link rel="canonical" href="${SITE_BASE_URL}" />`;

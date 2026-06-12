@@ -1,4 +1,4 @@
-const { configuredModelsForStage } = require('../../../../src/core/llm/model-policy');
+const { configuredModelsForStage } = require('../../../core/llm/model-policy');
 
 function providerNotImplemented() {
   const error = new Error('provider_not_implemented: openapi is a reserved LLM provider enum and has no production HTTP client in this issue.');

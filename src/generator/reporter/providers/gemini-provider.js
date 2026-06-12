@@ -3,7 +3,7 @@ const { TOKENS_PER_MILLION, number, roundUsd } = require('../llm-cost');
 const {
   configuredModelsForStage,
   isGeminiProModel
-} = require('../../../../src/core/llm/model-policy');
+} = require('../../../core/llm/model-policy');
 const { isFreeTierQuotaExhausted } = require('../llm-errors');
 
 const PRICING_SOURCE_URL = 'https://ai.google.dev/gemini-api/docs/pricing';

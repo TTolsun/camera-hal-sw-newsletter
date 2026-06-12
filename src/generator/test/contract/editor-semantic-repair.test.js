@@ -8,7 +8,7 @@ const {
   EditorSemanticValidationError,
   repairEditorOutputContract,
   validateEditorOutputContract
-} = require('../../scripts/newsroom/validate/editor-output-contract');
+} = require('../../editor/editor-output-contract');
 const {
   section,
   editor,
@@ -16,7 +16,7 @@ const {
   tempNewsroomDir,
   readJson,
   buildGroupCoverageFixture
-} = require('../../src/core/test/helpers/editor-builders');
+} = require('../../../core/test/helpers/editor-builders');
 
 const DATE = '2026-05-08';
 

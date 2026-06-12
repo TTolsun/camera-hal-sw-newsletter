@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const test = require('node:test');
 
-const { resolveArticleImage, resolveIssueArticleImages } = require('../../scripts/newsroom/render/article-image-resolver');
-const { buildHtml, buildMarkdown } = require('../../scripts/newsroom/render/newsletter-renderer');
+const { resolveArticleImage, resolveIssueArticleImages } = require('../../render/article-image-resolver');
+const { buildHtml, buildMarkdown } = require('../../render/newsletter-renderer');
 
 function tempRoot() {
   fs.mkdirSync(path.join(process.cwd(), '.tmp'), { recursive: true });

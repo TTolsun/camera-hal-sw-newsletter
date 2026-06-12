@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { PUBLISH_MODES, resolvePublishMode } = require('../../../scripts/newsroom/generate/publish-mode');
+const { PUBLISH_MODES, resolvePublishMode } = require('../../../select/publish-mode');
 
 function summary(overrides = {}) {
   return {

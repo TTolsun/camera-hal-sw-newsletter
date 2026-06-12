@@ -6,11 +6,11 @@ const test = require('node:test');
 const {
   buildNewsletterQualityReport,
   salvagePublishableSubset
-} = require('../../scripts/newsroom/validate/newsletter-quality');
+} = require('../../quality/newsletter-quality');
 const {
   scopedCandidate,
   section
-} = require('../../src/core/test/helpers/quality-builders');
+} = require('../../../core/test/helpers/quality-builders');
 
 const DATE = '2026-06-03';
 

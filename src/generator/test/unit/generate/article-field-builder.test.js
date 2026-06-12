@@ -10,7 +10,7 @@ const {
   cleanBehaviorChange,
   findFieldHygieneIssues,
   inferGuardrailImpactClass
-} = require('../../../scripts/newsroom/generate/article-field-builder');
+} = require('../../../reporter/article-field-builder');
 
 function cameraXCandidate(overrides = {}) {
   return {

@@ -4,13 +4,13 @@ const test = require('node:test');
 const {
   buildHtml,
   buildMarkdown
-} = require('../../scripts/newsroom/render/newsletter-renderer');
+} = require('../../render/newsletter-renderer');
 const {
   toEditorDraftArtifact
-} = require('../../src/core/domain/newsletter-domain-normalize');
+} = require('../../../core/domain/newsletter-domain-normalize');
 const {
   buildNewsletterQualityReport
-} = require('../../scripts/newsroom/validate/newsletter-quality');
+} = require('../../quality/newsletter-quality');
 
 function legacyIssue() {
   return {

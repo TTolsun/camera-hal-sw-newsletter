@@ -1,9 +1,9 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const {
   BUCKETS,
   classifyAospCameraStackCandidate
-} = require('../../../src/core/common/aosp-camera-scope');
-const { normalizeArticleSections } = require('../common/article-section-contract');
+} = require('../../core/common/aosp-camera-scope');
+const { normalizeArticleSections } = require('./article-section-contract');
 
 const GUARDRAIL_IMPACT_CLASSES = Object.freeze({
   DIRECT_HAL_CONTRACT: 'direct_hal_contract',

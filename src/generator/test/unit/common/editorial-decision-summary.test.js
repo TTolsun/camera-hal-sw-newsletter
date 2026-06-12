@@ -7,7 +7,7 @@ const {
   buildDecisionReasonKo,
   classifyEditorialDecision,
   pipelineStatusLabel
-} = require('../../../scripts/newsroom/common/editorial-decision-summary');
+} = require('../../../reporter/editorial-decision-summary');
 
 function candidate(overrides = {}) {
   return {

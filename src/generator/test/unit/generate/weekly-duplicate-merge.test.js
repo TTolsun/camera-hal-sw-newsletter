@@ -6,7 +6,7 @@ const test = require('node:test');
 const {
   findWeeklyDuplicate,
   resolveWeeklyArticles
-} = require('../../../scripts/newsroom/generate/weekly-duplicate-merge');
+} = require('../../../reporter/weekly-duplicate-merge');
 
 function article(headline, url, extra = {}) {
   return { headline, source_candidate_url: url, sources: [{ url }], ...extra };

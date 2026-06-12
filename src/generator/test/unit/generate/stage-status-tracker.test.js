@@ -7,7 +7,7 @@ const {
   STAGE_STATUSES,
   roleFromStageLabel,
   createStageStatusTracker
-} = require('../../../scripts/newsroom/generate/stage-status-tracker');
+} = require('../../../select/stage-status-tracker');
 
 test('roleFromStageLabel maps runtime stage labels to canonical roles', () => {
   assert.equal(roleFromStageLabel('reporter attempt 1/2'), 'reporter');

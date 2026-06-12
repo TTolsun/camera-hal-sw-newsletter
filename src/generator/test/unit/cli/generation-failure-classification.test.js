@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const {
   failureStageFromError,
   failureClassFromError
-} = require('../../../scripts/newsroom/cli/generation-failure-classification');
+} = require('../../../publish/generation-failure-classification');
 
 test('failureStageFromError prefers an explicit error.stage', () => {
   assert.equal(failureStageFromError({ stage: 'fact-checker' }), 'fact-checker');

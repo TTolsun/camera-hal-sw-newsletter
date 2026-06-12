@@ -3,10 +3,10 @@ const test = require('node:test');
 
 const {
   normalizeSectionImageFields
-} = require('../../../scripts/gemini-newsroom-newsletter');
+} = require('../../../../../scripts/gemini-newsroom-newsletter');
 const {
   analyzeImageCandidateFromMetadata
-} = require('../../../scripts/newsroom/metrics/newsletter-image-audit');
+} = require('../../../render/newsletter-image-audit');
 
 const IMAGE_URL = 'https://blogger.googleusercontent.com/img/og-image.png';
 const ARTICLE_URL = 'https://goo.gle/AdaptiveApps_IO26';

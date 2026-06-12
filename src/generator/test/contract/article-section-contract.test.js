@@ -11,7 +11,7 @@ const {
   articleSectionSummary,
   normalizeArticleSections,
   unexpectedArticleSectionKeys
-} = require('../../scripts/newsroom/common/article-section-contract');
+} = require('../../reporter/article-section-contract');
 
 const REQUIRED_KEYS = [
   'verified_facts',

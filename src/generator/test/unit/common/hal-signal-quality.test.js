@@ -12,7 +12,7 @@ const {
   inferHalImpactAxes,
   normalizeHalSignalCapsule,
   normalizeHalSignalFields
-} = require('../../../scripts/newsroom/common/hal-signal-quality');
+} = require('../../../reporter/hal-signal-quality');
 
 function article(overrides = {}) {
   return {

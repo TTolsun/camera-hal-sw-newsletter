@@ -8,7 +8,7 @@ const {
   buildHalSignalQualityReport,
   loadHalSignalQualityInputs,
   writeHalSignalQualityArtifacts
-} = require('../../scripts/newsroom/metrics/hal-signal-quality-report');
+} = require('../../render/hal-signal-quality-report');
 
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });

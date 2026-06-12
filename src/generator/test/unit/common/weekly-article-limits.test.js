@@ -6,7 +6,7 @@ const test = require('node:test');
 const {
   getWeeklyArticlePolicy,
   applyWeeklyArticleLimits
-} = require('../../../scripts/newsroom/common/weekly-article-limits');
+} = require('../../../reporter/weekly-article-limits');
 
 function article(id, score) {
   return { id, score };

@@ -237,7 +237,7 @@ function tempNewsroomDir() {
 }
 
 function loadFreshNewsletterCli() {
-  const cliPath = require.resolve('../../../../scripts/newsroom/cli/gemini-newsroom-newsletter');
+  const cliPath = require.resolve('../../../generator/publish/gemini-newsroom-newsletter');
   delete require.cache[cliPath];
   return require(cliPath);
 }

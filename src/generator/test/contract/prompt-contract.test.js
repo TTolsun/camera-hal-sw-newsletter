@@ -12,19 +12,19 @@ const {
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
   sourceExtractionPromptGuardrails
-} = require('../../scripts/gemini-newsroom-newsletter');
+} = require('../../../../scripts/gemini-newsroom-newsletter');
 const {
   reporterSchema,
   publicArticleJudgeSchema
-} = require('../../scripts/newsroom/render/newsletter-schema');
+} = require('../../render/newsletter-schema');
 
 function promptHostSource() {
   const host = fs.readFileSync(
-    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js'),
+    path.join(__dirname, '..', '..', 'publish', 'gemini-newsroom-newsletter.js'),
     'utf8'
   );
   const prompts = fs.readFileSync(
-    path.join(__dirname, '..', '..', 'scripts', 'newsroom', 'cli', 'newsletter-prompts.js'),
+    path.join(__dirname, '..', '..', 'publish', 'newsletter-prompts.js'),
     'utf8'
   );
   return `${host}\n${prompts}`;

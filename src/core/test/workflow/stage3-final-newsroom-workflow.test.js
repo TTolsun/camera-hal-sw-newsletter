@@ -342,7 +342,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
 });
 
 test('generation path guards public artifacts for editorial reviewable failures', () => {
-  const generatorPath = path.join(__dirname, '..', '..', '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js');
+  const generatorPath = path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'gemini-newsroom-newsletter.js');
   const generator = fs.readFileSync(generatorPath, 'utf8');
   const renderedMarkdownIndex = generator.indexOf('newsletterMarkdown = buildMarkdown(editor);');
   const structuralGuardIndex = generator.indexOf('assertTerminalPublicationContracts({', renderedMarkdownIndex);
@@ -389,7 +389,7 @@ test('generation path guards public artifacts for editorial reviewable failures'
 });
 
 test('generation path passes runtime selection window policy into shortlist report', () => {
-  const generatorPath = path.join(__dirname, '..', '..', '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js');
+  const generatorPath = path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'gemini-newsroom-newsletter.js');
   const generator = fs.readFileSync(generatorPath, 'utf8');
   const runtimeConfigIndex = generator.indexOf('const runtimeConfig = readRuntimeConfig(process.env);');
   const shortlistIndex = generator.indexOf('let shortlistReport = buildShortlistReport(date, candidates, {');
@@ -406,7 +406,7 @@ test('generation path passes runtime selection window policy into shortlist repo
 });
 
 test('validate-site uses shared rendered issue structural validator', () => {
-  const validateSitePath = path.join(__dirname, '..', '..', '..', '..', 'scripts', 'newsroom', 'cli', 'validate-site.js');
+  const validateSitePath = path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'validate-site.js');
   const validateSite = fs.readFileSync(validateSitePath, 'utf8');
 
   assert.match(validateSite, /validateRenderedIssueStructure/);

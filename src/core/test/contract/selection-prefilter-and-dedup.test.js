@@ -9,14 +9,14 @@ const {
   normalizeTitle,
   normalizeUrl,
   summarizeExclusionReasons
-} = require('../../../../scripts/newsroom/generate/newsroom-selection');
+} = require('../../../generator/select/newsroom-selection');
 const {
   articlePolicy
 } = require('../../common/newsletter-policy');
 const {
   emptyHeadlineState,
   headlineSnapshotFromCandidate
-} = require('../../../../scripts/newsroom/common/homepage-headline');
+} = require('../../../generator/reporter/homepage-headline');
 const { candidate } = require('../helpers/newsroom-builders');
 const {
   buildShortlistReport,
@@ -111,7 +111,7 @@ test('exclusion reason reports reference-only candidates', () => {
 });
 
 test('derived editorial do_not_claim text does not increase Camera HAL directness score', () => {
-  const { scoreCandidate } = require('../../../../scripts/newsroom/generate/newsroom-selection');
+  const { scoreCandidate } = require('../../../generator/select/newsroom-selection');
   const baseCandidate = candidate({
     title: 'CameraX Release Notes - CameraX 1.6.1',
     url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
@@ -148,7 +148,7 @@ test('derived editorial do_not_claim text does not increase Camera HAL directnes
 });
 
 test('derived editorial relevance bucket hint does not classify a generic candidate', () => {
-  const { scoreCandidate } = require('../../../../scripts/newsroom/generate/newsroom-selection');
+  const { scoreCandidate } = require('../../../generator/select/newsroom-selection');
   const baseCandidate = candidate({
     title: 'Generic platform release notes',
     url: 'https://example.com/platform-release-notes',

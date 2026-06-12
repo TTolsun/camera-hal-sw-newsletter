@@ -6,18 +6,18 @@ const test = require('node:test');
 const {
   EditorSemanticValidationError,
   validateEditorOutputContract
-} = require('../../scripts/newsroom/validate/editor-output-contract');
+} = require('../../editor/editor-output-contract');
 const {
   isConcreteCheckpoint,
   mergePublicArticleFromLlm,
   mergePublicArticlesFromLlmSections,
   validatePublicArticle
-} = require('../../scripts/newsroom/common/public-article-contract');
+} = require('../../reporter/public-article-contract');
 const {
   section,
   editor,
   normalizeSection
-} = require('../../src/core/test/helpers/editor-builders');
+} = require('../../../core/test/helpers/editor-builders');
 
 const DATE = '2026-05-08';
 

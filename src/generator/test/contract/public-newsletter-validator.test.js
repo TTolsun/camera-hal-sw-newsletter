@@ -3,10 +3,10 @@ const test = require('node:test');
 
 const {
   validatePublicNewsletterArtifacts
-} = require('../../scripts/newsroom/validate/public-newsletter');
+} = require('../../quality/public-newsletter');
 const {
   publicArticlePathIssues
-} = require('../../scripts/newsroom/cli/validate-public-newsletter');
+} = require('../../publish/validate-public-newsletter');
 
 function markdown(overrides = {}) {
   const checkpoints = overrides.checkpoints || [

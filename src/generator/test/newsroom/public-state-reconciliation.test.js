@@ -6,7 +6,7 @@ const test = require('node:test');
 const {
   buildHtml,
   buildMarkdown
-} = require('../../scripts/newsroom/render/newsletter-renderer');
+} = require('../../render/newsletter-renderer');
 const {
   PUBLIC_ARTIFACT_POLICIES,
   PUBLIC_STATES,
@@ -15,22 +15,22 @@ const {
   classifyLatestPublicState,
   reconcilePublicState,
   validateRetentionMetadata
-} = require('../../scripts/newsroom/common/public-state-reconciliation');
+} = require('../../reporter/public-state-reconciliation');
 const {
   LEDGER_PATH: AUDIT_LEDGER_PATH
-} = require('../../scripts/newsroom/common/audit-paths');
+} = require('../../reporter/audit-paths');
 const {
   readJson,
   tempRoot,
   writeJson,
   writeText
-} = require('../../src/core/test/helpers/fs');
+} = require('../../../core/test/helpers/fs');
 const {
   validateHistoricalArchive
-} = require('../../scripts/newsroom/validate/historical-archive');
+} = require('../../quality/historical-archive');
 const {
   validSections
-} = require('../../src/core/test/helpers/quality-builders');
+} = require('../../../core/test/helpers/quality-builders');
 
 function writeRootIndex(root) {
   writeText(path.join(root, 'index.html'), [

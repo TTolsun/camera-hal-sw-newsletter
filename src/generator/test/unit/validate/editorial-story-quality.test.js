@@ -6,11 +6,11 @@ const test = require('node:test');
 const {
   EDITORIAL_STORY_KEYS,
   validatePublicArticle
-} = require('../../../scripts/newsroom/common/public-article-contract');
+} = require('../../../reporter/public-article-contract');
 const {
   STORY_CONTRACT_VERSION,
   STORY_PUBLIC_CONTRACT_VERSION
-} = require('../../../scripts/newsroom/common/public-article-contract');
+} = require('../../../reporter/public-article-contract');
 
 function storyArticle(overrides = {}) {
   return {

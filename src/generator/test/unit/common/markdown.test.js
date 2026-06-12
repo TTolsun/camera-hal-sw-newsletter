@@ -6,7 +6,7 @@ const {
   sanitizeMarkdownLinkUrl,
   trustedMarkdownTableCell,
   renderMarkdownTable
-} = require('../../../scripts/newsroom/common/markdown');
+} = require('../../../reporter/markdown');
 
 test('sanitizeMarkdownTableCell escapes pipe characters', () => {
   assert.equal(sanitizeMarkdownTableCell('a|b'), 'a\\|b');

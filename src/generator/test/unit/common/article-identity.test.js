@@ -4,7 +4,7 @@ const test = require('node:test');
 const {
   articleIdentityKey,
   normalizeArticleUrl
-} = require('../../../src/core/common/article-identity');
+} = require('../../../../core/common/article-identity');
 
 test('article identity prefers canonical URL and strips tracking params', () => {
   const key = articleIdentityKey({

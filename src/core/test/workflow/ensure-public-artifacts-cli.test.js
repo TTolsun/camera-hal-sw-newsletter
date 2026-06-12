@@ -66,7 +66,7 @@ test('candidate shortage generator exits before LLM calls when credentials are e
   });
 
   const result = spawnSync(process.execPath, [
-    path.join(__dirname, '..', '..', '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js')
+    path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'gemini-newsroom-newsletter.js')
   ], {
     cwd: root,
     encoding: 'utf8',
@@ -197,7 +197,7 @@ test.skip('Workflow 03 enters LLM generation with one publishable candidate and 
   let result;
   try {
     result = await runNodeAsync([
-      path.join(__dirname, '..', '..', '..', '..', 'scripts', 'newsroom', 'cli', 'gemini-newsroom-newsletter.js')
+      path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'gemini-newsroom-newsletter.js')
     ], {
       cwd: root,
       env: {

@@ -10,9 +10,9 @@ const assert = require('node:assert/strict');
 const {
   applyRepairPatchesAndValidate,
   remapRepairPatchSections
-} = require('../../../scripts/newsroom/cli/gemini-newsroom-newsletter');
-const { editor, section } = require('../../../src/core/test/helpers/editor-builders');
-const { stableSectionKey } = require('../../../src/core/common/section-identity');
+} = require('../../../publish/gemini-newsroom-newsletter');
+const { editor, section } = require('../../../../core/test/helpers/editor-builders');
+const { stableSectionKey } = require('../../../../core/common/section-identity');
 
 const DATE = '2026-05-08';
 

@@ -5,7 +5,7 @@ const {
   checkRepairPatchContract,
   applyRepairPatches,
   REPAIR_PATCH_CONTRACT_VIOLATION
-} = require('../../../scripts/newsroom/validate/repair-patch-contract');
+} = require('../../../repair/repair-patch-contract');
 
 function section(overrides = {}) {
   return {

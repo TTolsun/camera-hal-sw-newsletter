@@ -6,7 +6,7 @@ const test = require('node:test');
 const {
   freshnessWindowMetadata,
   scoreCandidate
-} = require('../../../../scripts/newsroom/generate/newsroom-selection');
+} = require('../../../generator/select/newsroom-selection');
 const {
   articlePolicy
 } = require('../../common/newsletter-policy');
@@ -186,7 +186,7 @@ test('selection window enforcement promotes fallback only when primary window is
 });
 
 test('fallback rescue uses uncapped selection pool when primary fills shortlist cap', () => {
-  const { SHORTLIST_CAP } = require('../../../../scripts/newsroom/generate/newsroom-selection');
+  const { SHORTLIST_CAP } = require('../../../generator/select/newsroom-selection');
   const fillerTitles = [
     'Primary filler build queue note',
     'Primary filler lab device note',

@@ -5,7 +5,7 @@
 // not also own this CameraX-specific knowledge (single responsibility). Every helper operates on
 // a candidate object and is pure.
 
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 function text(value) {
   return String(value || '').trim();
 }

@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { buildReferenceArticles } = require('../../../scripts/newsroom/render/reference-articles');
+const { buildReferenceArticles } = require('../../../render/reference-articles');
 
 function candidate(overrides = {}) {
   return {

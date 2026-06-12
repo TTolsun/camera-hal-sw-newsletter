@@ -20,7 +20,7 @@ test('LLM prompt guardrails prohibit linked evidence overclaim without exposing 
   assert.match(guardrails, /build_dependency_fix, test_only_change, documentation_only/);
   assert.match(guardrails, /stream, buffer, metadata, request, result, ImageCapture, VideoCapture, Surface, CameraPipe/);
 
-  const cliPath = require.resolve('../../../../scripts/newsroom/cli/gemini-newsroom-newsletter');
+  const cliPath = require.resolve('../../../generator/publish/gemini-newsroom-newsletter');
   const source = fs.readFileSync(cliPath, 'utf8');
   const promptUsageCount = (source.match(/linkedEvidencePromptGuardrails\(\),/g) || []).length;
   assert.ok(promptUsageCount >= 7);

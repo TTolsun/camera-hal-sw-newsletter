@@ -8,10 +8,10 @@ const {
   readJsonFixture,
   readTextFixture,
   resolveFixturePath
-} = require('../../src/core/test/helpers/fixture-loader');
+} = require('../../../core/test/helpers/fixture-loader');
 const {
   FORBIDDEN_GOOD_FIXTURE_PROVENANCE
-} = require('../../scripts/newsroom/validate/historical-archive');
+} = require('../../quality/historical-archive');
 
 const GENERATED_ARTIFACT_PATH_PATTERN = /\b(?:content\/newsroom|content\/collected-news|newsletters)\/\d{4}-\d{2}-\d{2}\b/;
 const MINIMIZED_GENERATED_REGRESSION_SOURCE = 'minimized-generated-regression';

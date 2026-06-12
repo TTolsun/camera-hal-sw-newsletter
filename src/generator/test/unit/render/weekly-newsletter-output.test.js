@@ -9,7 +9,7 @@ const test = require('node:test');
 const {
   syncWeeklyArticleImages,
   writeWeeklyNewsletterArtifacts
-} = require('../../../scripts/newsroom/render/weekly-newsletter-output');
+} = require('../../../render/weekly-newsletter-output');
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'weekly-output-'));

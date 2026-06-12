@@ -9,16 +9,16 @@ const {
   buildPostCleanupReport,
   mergeDonorIntoSection,
   normalizeNewsSourceKey
-} = require('../../src/core/common/newsletter-source-dedup-cleanup');
+} = require('../../../core/common/newsletter-source-dedup-cleanup');
 const {
   normalizeNewsSourceKey: normalizePureNewsSourceKey
-} = require('../../src/core/common/source-url-key');
+} = require('../../../core/common/source-url-key');
 const {
   readJson,
   tempRoot,
   writeJson,
   writeText
-} = require('../../src/core/test/helpers/fs');
+} = require('../../../core/test/helpers/fs');
 
 function source(url) {
   return { title: 'Source article', url };

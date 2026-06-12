@@ -8,8 +8,8 @@ const {
   stableLinkedEvidenceItemId,
   stableSourceExtractionItemId,
   validateArticleClaims
-} = require('../../../scripts/newsroom/validate/claim-source-binding');
-const { readJsonFixture } = require('../../../src/core/test/helpers/fixture-loader');
+} = require('../../../quality/claim-source-binding');
+const { readJsonFixture } = require('../../../../core/test/helpers/fixture-loader');
 
 function section(overrides = {}) {
   return {

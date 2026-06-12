@@ -8,10 +8,10 @@ const path = require('node:path');
 
 const {
   renderedHeadlineState
-} = require('../../scripts/newsroom/common/headline-render-reconciliation');
+} = require('../../reporter/headline-render-reconciliation');
 const {
   writePublicNewsletterArtifacts
-} = require('../../src/core/test/helpers/workflow-fixtures');
+} = require('../../../core/test/helpers/workflow-fixtures');
 
 const DATE = '2026-06-03';
 // The default fixture renders one article whose source is the CameraX 1.0.0 release note.

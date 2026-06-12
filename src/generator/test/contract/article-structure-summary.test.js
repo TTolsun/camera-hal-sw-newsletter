@@ -6,7 +6,7 @@ const {
   articleSectionContractRow,
   articleSectionContractRows,
   articleSectionContractRowValues
-} = require('../../scripts/newsroom/common/article-structure-summary');
+} = require('../../reporter/article-structure-summary');
 
 function completeSection(overrides = {}) {
   return {

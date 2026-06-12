@@ -5,10 +5,10 @@ const {
   articleSectionContractMarkdown,
   buildHtml,
   buildMarkdown
-} = require('../../scripts/newsroom/render/newsletter-renderer');
+} = require('../../render/newsletter-renderer');
 const {
   siteHeaderHtml
-} = require('../../assets/js/site-header');
+} = require('../../../../assets/js/site-header');
 
 function issue(overrides = {}) {
   return {

@@ -5,16 +5,16 @@ const test = require('node:test');
 
 const {
   buildNewsroomPrBody
-} = require('../../scripts/build-newsroom-pr-body');
+} = require('../../../../scripts/build-newsroom-pr-body');
 const {
   buildSourceQualityDiagnosisReport,
   renderSourceQualityDiagnosisMarkdown,
   writeSourceQualityDiagnosisArtifacts
-} = require('../../scripts/newsroom/metrics/source-quality-diagnosis');
+} = require('../../render/source-quality-diagnosis');
 const {
   tempRoot,
   writeJson
-} = require('../../src/core/test/helpers/fs');
+} = require('../../../core/test/helpers/fs');
 
 const date = '2026-05-20';
 

@@ -12,7 +12,7 @@ const {
   recordArticleExposure,
   recordNewsletterArticles,
   writeExposureHistory
-} = require('../../../scripts/newsroom/common/article-exposure-history');
+} = require('../../../reporter/article-exposure-history');
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'article-exposure-history-'));

@@ -18,7 +18,7 @@ const {
 } = require('../helpers/quality-builders');
 const {
   determineQualityStatus
-} = require('../../../../scripts/newsroom/validate/newsletter-quality');
+} = require('../../../generator/quality/newsletter-quality');
 
 test('qualityGatePolicy.hardFailConditions have config-driven regression test coverage', () => {
   const configuredConditions = new Set(qualityGatePolicy.hardFailConditions);

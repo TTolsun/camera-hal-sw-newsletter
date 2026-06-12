@@ -1,4 +1,4 @@
-const { buildNewsletterQualityReport } = require('../../../../scripts/newsroom/validate/newsletter-quality');
+const { buildNewsletterQualityReport } = require('../../../generator/quality/newsletter-quality');
 const { articlePolicy } = require('../../common/newsletter-policy');
 
 function source(url, title = 'Source') {

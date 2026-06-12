@@ -8,7 +8,7 @@ const {
   isSchemaFieldFactCheckViolation,
   sanitizeClaimEvidenceIds,
   validateFactCheck
-} = require('../../../scripts/newsroom/cli/fact-check-postprocess');
+} = require('../../../publish/fact-check-postprocess');
 
 test('isSchemaFieldFactCheckViolation flags internal/schema-owned locations', () => {
   assert.equal(isSchemaFieldFactCheckViolation({ location: 'sections[0].public_article.decision_metadata.impact' }), true);

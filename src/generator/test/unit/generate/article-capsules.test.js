@@ -7,10 +7,10 @@ const {
   capsuleInputForCandidates,
   capsuleInputFromReport,
   compactSelectionContext
-} = require('../../../scripts/newsroom/generate/article-capsules');
+} = require('../../../select/article-capsules');
 const {
   stableSourceExtractionItemId
-} = require('../../../scripts/newsroom/validate/claim-source-binding');
+} = require('../../../quality/claim-source-binding');
 
 function candidate(overrides = {}) {
   return {

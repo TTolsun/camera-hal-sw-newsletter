@@ -6,7 +6,7 @@ const test = require('node:test');
 const {
   buildNewsletterQualityReport,
   buildQualityReportMarkdown
-} = require('../../../../scripts/newsroom/validate/newsletter-quality');
+} = require('../../../generator/quality/newsletter-quality');
 const {
   articlePolicy,
   articleCountRangeText,

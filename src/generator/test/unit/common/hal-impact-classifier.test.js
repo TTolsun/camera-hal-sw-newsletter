@@ -1,8 +1,8 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { classifyHalImpact } = require('../../../scripts/newsroom/common/hal-impact-classifier');
-const { HAL_IMPACT_AXES } = require('../../../scripts/newsroom/domain/hal-signal-quality');
+const { classifyHalImpact } = require('../../../reporter/hal-impact-classifier');
+const { HAL_IMPACT_AXES } = require('../../../reporter/hal-signal-quality');
 
 const VALID_CONFIDENCE = new Set(['high', 'medium', 'low']);
 const VALID_EVIDENCE = new Set(['direct', 'inferred', 'weak']);

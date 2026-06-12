@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { buildShortlistReport } = require('../../../scripts/newsroom/generate/newsroom-selection');
+const { buildShortlistReport } = require('../../../select/newsroom-selection');
 
 // Empty headline state so the test never reads the real repo's homepage-headline.json.
 const EMPTY_HEADLINE_STATE = {

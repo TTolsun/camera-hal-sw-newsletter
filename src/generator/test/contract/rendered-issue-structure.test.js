@@ -5,22 +5,22 @@ const test = require('node:test');
 
 const {
   validateRenderedIssueStructure
-} = require('../../scripts/newsroom/validate/rendered-issue-structure');
+} = require('../../quality/rendered-issue-structure');
 const {
   buildMarkdown,
   buildHtml
-} = require('../../scripts/newsroom/render/newsletter-renderer');
+} = require('../../render/newsletter-renderer');
 const {
   validSections
-} = require('../../src/core/test/helpers/quality-builders');
+} = require('../../../core/test/helpers/quality-builders');
 const {
   tempRoot,
   writeJson,
   writeText
-} = require('../../src/core/test/helpers/fs');
+} = require('../../../core/test/helpers/fs');
 
-const repoRoot = path.join(__dirname, '..', '..');
-const validateSitePath = path.join(repoRoot, 'scripts', 'newsroom', 'cli', 'validate-site.js');
+const repoRoot = path.join(__dirname, '..', '..', '..', '..');
+const validateSitePath = path.join(repoRoot, 'src', 'generator', 'publish', 'validate-site.js');
 const LEGACY_SOURCE_LABEL = '\u7570\uc496\ucfc2';
 
 function escapeRegExp(value) {
