@@ -7,7 +7,7 @@ const {
   validateEditorOutputContract
 } = require('../../scripts/newsroom/validate/editor-output-contract');
 
-const { buildGroupCoverageFixture } = require('../helpers/editor-builders');
+const { buildGroupCoverageFixture } = require('../../src/core/test/helpers/editor-builders');
 
 test('DEEP mode rejects missing selected group (current behavior)', () => {
   const { editor, reporter } = buildGroupCoverageFixture();

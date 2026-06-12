@@ -11,8 +11,8 @@ const {
   applyRepairPatchesAndValidate,
   remapRepairPatchSections
 } = require('../../../scripts/newsroom/cli/gemini-newsroom-newsletter');
-const { editor, section } = require('../../helpers/editor-builders');
-const { stableSectionKey } = require('../../../scripts/newsroom/common/section-identity');
+const { editor, section } = require('../../../src/core/test/helpers/editor-builders');
+const { stableSectionKey } = require('../../../src/core/common/section-identity');
 
 const DATE = '2026-05-08';
 

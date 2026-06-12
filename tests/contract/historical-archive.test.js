@@ -20,7 +20,7 @@ const {
   tempRoot,
   writeJson,
   writeText
-} = require('../helpers/fs');
+} = require('../../src/core/test/helpers/fs');
 
 function writePublicIssue(root, date, text = '') {
   writeText(path.join(root, 'newsletters', date, 'newsletter.md'), [

@@ -11,7 +11,7 @@ const {
 } = require('../../scripts/newsroom/common/headline-render-reconciliation');
 const {
   writePublicNewsletterArtifacts
-} = require('../helpers/workflow-fixtures');
+} = require('../../src/core/test/helpers/workflow-fixtures');
 
 const DATE = '2026-06-03';
 // The default fixture renders one article whose source is the CameraX 1.0.0 release note.
