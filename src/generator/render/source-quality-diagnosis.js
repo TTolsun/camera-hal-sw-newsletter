@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -7,7 +7,7 @@ const {
   readJson,
   repoPath,
   writeJson
-} = require('../../../src/core/common/common');
+} = require('../../core/common/common');
 const {
   collectedCandidatesRelPath,
   manualCandidatesRelPath,
@@ -15,14 +15,14 @@ const {
   mergedCandidatesRelPath,
   newsroomDir,
   newsroomRelPath
-} = require('../../../src/core/common/artifact-paths');
+} = require('../../core/common/artifact-paths');
 const {
   normalizeUrl
-} = require('../generate/newsroom-selection');
+} = require('../select/newsroom-selection');
 const {
   DIAGNOSIS_LABELS_KO,
   RECOMMENDED_ACTION_LABELS_KO
-} = require('../render/source-quality-diagnosis-labels.ko');
+} = require('./source-quality-diagnosis-labels.ko');
 
 const SCHEMA_VERSION = 1;
 const REPORT_TYPE = 'source_quality_diagnosis';

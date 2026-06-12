@@ -2,7 +2,7 @@ const {
   CLAIM_TYPES,
   CLAIM_IMPACT_LEVELS,
   OVERCLAIM_RISKS
-} = require('../validate/claim-source-binding');
+} = require('../quality/claim-source-binding');
 
 const string = { type: 'STRING' };
 const number = { type: 'NUMBER' };

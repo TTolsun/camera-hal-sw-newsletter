@@ -15,15 +15,15 @@
 // step calls syncWeeklyArticleImages to converge the weekly section image fields and the weekly
 // index article_images to the repaired daily state.
 
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
 const { buildWeeklyNewsletterPage } = require('./weekly-newsletter-page');
 const { writeSitemap } = require('./generate-sitemap');
-const { weeklyKeyForDate } = require('../common/weekly-newsletter');
-const { applyWeeklyArticleLimits } = require('../common/weekly-article-limits');
-const { resolveWeeklyArticles, sectionIdentity } = require('../generate/weekly-duplicate-merge');
+const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
+const { applyWeeklyArticleLimits } = require('../reporter/weekly-article-limits');
+const { resolveWeeklyArticles, sectionIdentity } = require('../reporter/weekly-duplicate-merge');
 
 // Browser-safe (https) image for a weekly article section, used to show one article image on the
 // homepage Latest card. Returns '' when the section has no usable https image.

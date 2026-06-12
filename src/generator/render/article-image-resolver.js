@@ -3,10 +3,10 @@ const path = require('path');
 const {
   MIN_CONTENT_LENGTH,
   validateImageUrl
-} = require('../../../src/core/render/image-candidates');
+} = require('../../core/render/image-candidates');
 const {
   analyzeImageCandidateFromMetadata
-} = require('../metrics/newsletter-image-audit');
+} = require('./newsletter-image-audit');
 
 function comparableUrl(value) {
   const raw = String(value || '').trim();

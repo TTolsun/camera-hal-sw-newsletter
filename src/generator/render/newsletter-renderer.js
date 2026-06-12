@@ -1,21 +1,21 @@
-const { ensureArray } = require('../../../src/core/common/value-coercion');
+const { ensureArray } = require('../../core/common/value-coercion');
 const {
   renderCandidateSelectionDiagnostics
-} = require('../generate/selection-diagnostics');
+} = require('../select/selection-diagnostics');
 const {
   articleSectionContractRows: buildArticleSectionContractRows,
   articleSectionContractRowValues
-} = require('../common/article-structure-summary');
+} = require('../reporter/article-structure-summary');
 const {
   STORY_CONTRACT_VERSION,
   publicArticleForSection
-} = require('../common/public-article-contract');
+} = require('../reporter/public-article-contract');
 const {
   uniqueArticleAnchorId
-} = require('../common/article-anchor');
+} = require('../reporter/article-anchor');
 const {
   renderReleaseQaInventorySection
-} = require('../common/review-artifact-inventory');
+} = require('../reporter/review-artifact-inventory');
 const {
   SITE_BASE_URL,
   DEFAULT_OG_IMAGE

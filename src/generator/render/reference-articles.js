@@ -2,8 +2,8 @@
 // selection이 이미 만든 reference_context_candidates(22~90일 reference 윈도우)에서
 // 적격 버킷 + dated + sourced 항목만 골라 메인 기사와 중복을 제거하고 상한까지 만든다.
 // LLM이 아니라 결정론 코드가 만들어, editor claim-binding 실패 경로를 피한다.
-const { BUCKETS } = require('../../../src/core/domain/aosp-camera-scope');
-const { normalizeUrl } = require('../generate/selection-normalizers');
+const { BUCKETS } = require('../../core/domain/aosp-camera-scope');
+const { normalizeUrl } = require('../select/selection-normalizers');
 
 // generic_tech_watchlist를 뺀 모든 도메인 버킷이 참고 섹션 적격이다.
 // 도메인 enum에서 파생해 버킷이 바뀌어도 동기화가 유지되도록 한다.

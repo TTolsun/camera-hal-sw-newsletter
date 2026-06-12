@@ -5,12 +5,12 @@ const {
   kstDate,
   readJson,
   writeJson
-} = require('../../../src/core/common/common');
+} = require('../../core/common/common');
 const {
   mergedCandidateManifestRelPath,
   newsroomDir,
   newsroomRelPath
-} = require('../../../src/core/common/artifact-paths');
+} = require('../../core/common/artifact-paths');
 const {
   HAL_SIGNAL_SCHEMA_VERSION,
   buildHalSignalQualitySummary,
@@ -18,7 +18,7 @@ const {
   buildSelectionShortageHintDetails,
   ensureArray,
   renderHalSignalQualityMarkdown
-} = require('../common/hal-signal-quality');
+} = require('../reporter/hal-signal-quality');
 
 const REQUIRED_INPUTS = Object.freeze({
   shortlisted_candidates: date => newsroomRelPath(date, 'shortlisted-candidates.json'),

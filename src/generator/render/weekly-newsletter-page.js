@@ -10,8 +10,8 @@ const {
   weekBoundsForKey,
   weeklyNewsletterIndexRoute,
   weeklyNewsletterMarkdownRoute
-} = require('../common/weekly-newsletter');
-const { findWeeklyDuplicate } = require('../generate/weekly-duplicate-merge');
+} = require('../reporter/weekly-newsletter');
+const { findWeeklyDuplicate } = require('../reporter/weekly-duplicate-merge');
 
 // Keep one article per topic within a weekly issue: drop any section that duplicates an
 // already-kept one (same identity or near-identical headline, per the weekly duplicate rule).

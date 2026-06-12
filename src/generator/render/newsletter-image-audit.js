@@ -5,19 +5,19 @@ const {
   buildHtml,
   buildMarkdown,
   ensureArray
-} = require('../render/newsletter-renderer');
+} = require('./newsletter-renderer');
 const {
   REJECT_PATH_PATTERN,
   validateImageUrl
-} = require('../../../src/core/render/image-candidates');
+} = require('../../core/render/image-candidates');
 const {
   assertKnownImageReasonCode,
   imageReasonLabelKo,
   imageReasonTextKo
-} = require('../render/newsletter-image-audit-labels.ko');
+} = require('./newsletter-image-audit-labels.ko');
 const {
   syncWeeklyArticleImages
-} = require('../render/weekly-newsletter-output');
+} = require('./weekly-newsletter-output');
 
 const DIRECT_EXTRACTION_SOURCE_KINDS = new Set([
   'og',
