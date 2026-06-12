@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const fixturesRoot = path.resolve(__dirname, '..', 'fixtures', 'fixtures');
+const fixturesRoot = path.resolve(__dirname, '..', 'fixtures');
 
 function resolveFixturePath(relativePath) {
   const resolved = path.resolve(fixturesRoot, relativePath);

@@ -13,7 +13,7 @@ const {
   writeJson
 } = require('../../src/core/test/helpers/fs');
 
-const fixture = require('../../src/core/test/fixtures/fixtures/source-effectiveness/basic-source-effectiveness.json');
+const fixture = require('../../src/core/test/fixtures/source-effectiveness/basic-source-effectiveness.json');
 
 function buildReport(overrides = {}) {
   return buildSourceEffectivenessReport({

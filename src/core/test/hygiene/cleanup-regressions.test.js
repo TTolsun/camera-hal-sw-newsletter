@@ -67,7 +67,7 @@ test('tests/fixtures does not embed generated-artifact YYYY-MM-DD paths', () => 
       }
     }
   }
-  walk(path.join(REPO_ROOT, 'src', 'core', 'test', 'fixtures', 'fixtures'));
+  walk(path.join(REPO_ROOT, 'src', 'core', 'test', 'fixtures'));
   assert.deepEqual(issues, [], issues.join('\n'));
 });
 
