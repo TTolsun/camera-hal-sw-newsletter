@@ -1,4 +1,4 @@
-const target = require.resolve('../llm/llm-client');
+const target = require.resolve('../../scripts/newsroom/llm/llm-client');
 delete require.cache[target];
 const llmClient = require(target);
 
