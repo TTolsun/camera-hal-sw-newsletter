@@ -7,7 +7,7 @@ const {
   buildGenerationStatusOutputs,
   readStatus,
   renderGithubOutputs
-} = require('../../../../scripts/write-generation-status-output');
+} = require('../../../generator/publish/write-generation-status-output');
 const {
   articlePolicy,
   headlinePolicy,

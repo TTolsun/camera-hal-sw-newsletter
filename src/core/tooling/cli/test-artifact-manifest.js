@@ -2,7 +2,7 @@ const assert = require('assert');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { buildManifest } = require('../../../src/generator/publish/write-artifact-manifest');
+const { buildManifest } = require('../../../generator/publish/write-artifact-manifest');
 const {
   buildDateReviewManifest,
   buildReviewArtifactInventory,
@@ -12,17 +12,17 @@ const {
   REVIEW_REQUIRED_COMPACT,
   DEBUG_HEAVY,
   TRANSIENT_ATTEMPT
-} = require('../../../src/generator/reporter/review-artifact-inventory');
+} = require('../../../generator/reporter/review-artifact-inventory');
 const {
   collectedCandidatesRelPath,
   newsroomRelPath,
   seedEvidencePackMarkdownRelPath,
   seedMergeReportMarkdownRelPath
-} = require('../../../src/core/common/artifact-paths');
+} = require('../../common/artifact-paths');
 const {
   articlePolicy,
   qualityGatePolicy
-} = require('../../../src/core/common/newsletter-policy');
+} = require('../../common/newsletter-policy');
 
 const date = '2026-05-03';
 

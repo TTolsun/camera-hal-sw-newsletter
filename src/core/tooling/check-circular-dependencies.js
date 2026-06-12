@@ -1,22 +1,21 @@
 #!/usr/bin/env node
 
 // 모듈 간 순환 의존성(circular dependency)을 검출하는 구조 검사입니다.
-// scripts/newsroom/** 의 상대경로 require 그래프를 만들고, 순환이 있으면 실패합니다.
+// src/** 의 상대경로 require 그래프를 만들고, 순환이 있으면 실패합니다.
 // 외부 패키지에 의존하지 않도록 require 파싱과 그래프 분석을 직접 수행합니다.
 //
 // 한계(정적 정규식 기반): 동적 require(`require(변수)`, `require.resolve(...)`)와
-// 주석/문자열 리터럴 안의 require 표기는 추적하지 않습니다. 루트 `scripts/*.js` wrapper와
-// `scripts/lib/**` shim도 범위 밖입니다. 이들은 의도적으로 얇은 한 방향 indirection이라
-// 순환을 만들지 않으며, 이 검사는 순환을 추가로 만들지 않도록 막는 가드가 목적입니다.
+// 주석/문자열 리터럴 안의 require 표기는 추적하지 않습니다. 이 검사는 src 트리에
+// 순환을 추가로 만들지 않도록 막는 가드가 목적입니다.
 
 const fs = require('node:fs');
 const path = require('node:path');
 
-const REPO_ROOT = path.resolve(__dirname, '..');
-// 구현 코드가 이전(#262 src 재구성) 중에는 scripts/newsroom 과 src 양쪽에 걸쳐 있습니다.
-// 두 위치를 모두 스캔해야 이동된 core 모듈의 순환도 빠짐없이 검사합니다. 존재하는 루트만 사용합니다.
+// 이 파일은 <repo>/src/core/tooling/check-circular-dependencies.js 입니다.
+const REPO_ROOT = path.resolve(__dirname, '..', '..', '..');
+// 구현 코드는 #262 src 재구성 완료 후 모두 src/ 아래에 있습니다.
+// src 트리만 스캔합니다. 존재하는 루트만 사용합니다.
 const IMPLEMENTATION_ROOTS = [
-  path.join(__dirname, 'newsroom'),
   path.join(REPO_ROOT, 'src')
 ].filter((dir) => {
   try { return fs.statSync(dir).isDirectory(); } catch (error) { return false; }
@@ -98,7 +97,7 @@ function buildRequireGraph(rootDirectory) {
 }
 
 // 여러 루트 디렉터리의 파일을 하나의 require 그래프로 묶습니다.
-// 키는 baseDirectory(보통 repo 루트) 기준 상대경로라서 루트 간(scripts/newsroom <-> src)
+// 키는 baseDirectory(보통 repo 루트) 기준 상대경로라서 src 하위 디렉터리 간
 // 의존성도 같은 키 공간에서 해석됩니다.
 function buildRequireGraphForRoots(rootDirectories, baseDirectory) {
   const files = [];
@@ -196,7 +195,7 @@ function main() {
   const cycles = findCircularDependencies(graph);
 
   if (cycles.length > 0) {
-    console.error(`Circular dependency check found ${cycles.length} cycle(s) in scripts/newsroom and src:`);
+    console.error(`Circular dependency check found ${cycles.length} cycle(s) in src:`);
     for (const cycle of cycles) {
       console.error(`  ${formatCircularDependency(cycle)}`);
     }

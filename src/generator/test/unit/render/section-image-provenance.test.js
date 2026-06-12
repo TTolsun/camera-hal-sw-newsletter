@@ -3,7 +3,7 @@ const test = require('node:test');
 
 const {
   normalizeSectionImageFields
-} = require('../../../../../scripts/gemini-newsroom-newsletter');
+} = require('../../../publish/gemini-newsroom-newsletter');
 const {
   analyzeImageCandidateFromMetadata
 } = require('../../../render/newsletter-image-audit');

@@ -6,7 +6,7 @@ const test = require('node:test');
 
 const {
   validateSourceQualityRolloutExit
-} = require('../../../../../scripts/newsroom/validate/validate-source-quality-rollout-exit');
+} = require('../../../tooling/validate/validate-source-quality-rollout-exit');
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'source-quality-rollout-'));

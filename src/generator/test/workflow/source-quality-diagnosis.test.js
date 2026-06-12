@@ -5,7 +5,7 @@ const test = require('node:test');
 
 const {
   buildNewsroomPrBody
-} = require('../../../../scripts/build-newsroom-pr-body');
+} = require('../../publish/build-newsroom-pr-body');
 const {
   buildSourceQualityDiagnosisReport,
   renderSourceQualityDiagnosisMarkdown,

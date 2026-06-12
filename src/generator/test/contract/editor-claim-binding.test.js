@@ -9,7 +9,7 @@ const {
 } = require('../../editor/editor-output-contract');
 const {
   articleClaimContractPrompt
-} = require('../../../../scripts/gemini-newsroom-newsletter');
+} = require('../../publish/gemini-newsroom-newsletter');
 const {
   section,
   editor,

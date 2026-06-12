@@ -15,8 +15,8 @@
 | [docs/newsroom-workflow.md](docs/newsroom-workflow.md) | 후보 수집부터 PR 생성까지의 워크플로(workflow)를 설명합니다. |
 | [docs/operations/README.ko.md](docs/operations/README.ko.md) | 수동 실행, PR 리뷰, 릴리스, 산출물 리뷰 순서입니다. |
 | [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md) | GitHub Actions Secret과 Variable 기본값을 설명합니다. |
-| [docs/config/news-sources-fields.ko.md](docs/config/news-sources-fields.ko.md) | `data/news-sources.json` field 계약을 설명합니다. |
-| [scripts/README.md](scripts/README.md) | scripts 래퍼(wrapper)와 실제 뉴스룸 구현 진입점을 설명합니다. |
+| [docs/config/news-sources-fields.ko.md](docs/config/news-sources-fields.ko.md) | `src/core/data/news-sources.json` field 계약을 설명합니다. |
+| [scripts/README.md](scripts/README.md) | #262 재구성으로 `src/`로 이동한 구현 진입점 매핑을 설명합니다. |
 
 뉴스레터 생성은 아래 흐름으로 진행됩니다. 중요한 점은 생성 성공과 발행 가능 상태가 다르다는 것입니다.
 
@@ -58,22 +58,22 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | `npm.cmd run test` | 단위/통합 테스트 회귀 확인 | `tests/` 전수 결과 |
 | `npm.cmd run validate` | docs·정책·인코딩·site 무결성 검사 | `validate:*` 체인 보고 |
 | `npm.cmd run ci` | test + validate 한꺼번에 | 변경 범위 넓을 때 1차 신뢰도 확인 |
-| `npm.cmd run collect` | `data/news-sources.json` 기반 후보 수집 | `content/collected-news/YYYY-MM-DD/` |
+| `npm.cmd run collect` | `src/core/data/news-sources.json` 기반 후보 수집 | `content/collected-news/YYYY-MM-DD/` |
 | `npm.cmd run generate` | LLM 뉴스룸 파이프라인 (Gemini 공급자 사용 시 `GEMINI_API_KEY` 필요) | `content/newsroom/YYYY-MM-DD/` |
 
 공급자/모델 재정의와 사내 API Secret 설정은 [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md)를 확인합니다.
 
-폴더 구조는 목적별로 나뉘어 있습니다. 실제 구현은 `scripts/newsroom/`에 있고, 검토 산출물과 공개 발행물은 `content/`와 `newsletters/`에 분리됩니다.
+폴더 구조는 목적별로 나뉘어 있습니다. 실제 구현과 tooling은 모두 `src/`에 있고(#262 재구성으로 root `scripts/` wrapper는 제거됨), 검토 산출물과 공개 발행물은 `content/`와 `newsletters/`에 분리됩니다.
 
 ## 저장소 구조
 
 | 경로 | 역할 |
 | --- | --- |
 | [`.github/`](.github/README.md) | issue/PR 템플릿, 뉴스룸 PR 워크플로, 검증 워크플로입니다. |
-| [`config/`](config/README.md) | 뉴스레터 정책과 예산 설정입니다. |
-| [`data/`](data/README.md) | `newsletters.json`과 머신 가독형 source 레지스트리입니다. |
+| [`config/`](config/README.md) | newsroom 예산 등 일부 설정입니다. (뉴스레터 정책은 `src/core/config/newsletter-policy.json`로 이동) |
+| [`data/`](data/README.md) | `newsletters.json` 등 public index data입니다. (source 레지스트리는 `src/core/data/news-sources.json`로 이동) |
 | [`docs/`](docs/README.md) | 운영 문서, 용어집, source 안내입니다. |
-| [`scripts/newsroom/`](scripts/newsroom/README.md) | 실제 수집기(collector), 생성기(generator), 렌더러(renderer), 검증기(validator) 구현입니다. |
+| [`src/`](scripts/README.md) | 실제 수집기(collector), 생성기(generator), 렌더러(renderer), 검증기(validator), tooling 구현입니다. core/collector/discovery/generator layer로 나뉩니다. |
 | [`tests/`](tests/README.md) | Node 내장 테스트 러너 기반 회귀 테스트(regression test)입니다. |
 | [`content/`](content/README.md) | 수집 후보와 뉴스룸 리뷰 산출물입니다. |
 | [`newsletters/`](newsletters/README.md) | 공개 뉴스레터 Markdown/HTML 출력물입니다. |
@@ -106,11 +106,11 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 - generated artifact를 good/golden fixture(검증된 fixture)로 자동 신뢰하지 않습니다.
 
 <!-- NEWSLETTER_POLICY:BEGIN -->
-<!-- This block is generated. Update config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
+<!-- This block is generated. Update src/core/config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
 
 ### Newsletter Policy
 
-- Source of truth: `config/newsletter-policy.json`
+- Source of truth: `src/core/config/newsletter-policy.json`
 - Main article count: 1-5
 - One-article policy: a public newsletter may contain a single fully publishable main article.
 - Article count alone does not make a one-article issue degraded or review-only; hard quality gates still apply.

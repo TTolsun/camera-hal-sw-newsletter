@@ -17,7 +17,7 @@ const {
   validateReporter,
   validateTargetedRepairResult,
   writeReviewableRepairFailureArtifacts
-} = require('../../../../scripts/gemini-newsroom-newsletter');
+} = require('../../publish/gemini-newsroom-newsletter');
 const {
   EditorSemanticValidationError
 } = require('../../editor/editor-output-contract');

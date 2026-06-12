@@ -1,11 +1,11 @@
 const {
   sectionMapValidationErrors
-} = require('../../../src/core/collect/news-source-section-resolver');
+} = require('../../collect/news-source-section-resolver');
 const {
   MAIN_ARTICLE_POLICIES,
   SOURCE_ROLES,
   SOURCE_URL_QUALITIES
-} = require('../../../src/core/collect/source-quality-classifier');
+} = require('../../collect/source-quality-classifier');
 
 const REQUIRED_SOURCE_FIELDS = [
   'id',
@@ -311,7 +311,7 @@ function validateSource(errors, source, index, sectionMap, seenIds) {
 }
 
 function validateNewsSourcesConfigText(text, options = {}) {
-  const filePath = options.filePath || 'data/news-sources.json';
+  const filePath = options.filePath || 'src/core/data/news-sources.json';
   const errors = [];
   let registry;
 

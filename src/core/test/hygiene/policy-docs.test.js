@@ -14,7 +14,7 @@ const {
 const {
   policyDocPaths,
   syncPolicyDocs
-} = require('../../../../scripts/newsroom/cli/sync-policy-docs');
+} = require('../../tooling/cli/sync-policy-docs');
 const {
   tempRoot,
   writeText

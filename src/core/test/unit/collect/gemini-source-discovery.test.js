@@ -74,8 +74,8 @@ function registry() {
 
 function tempRoot() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'gemini-source-discovery-'));
-  fs.mkdirSync(path.join(root, 'data'), { recursive: true });
-  fs.writeFileSync(path.join(root, 'data', 'news-sources.json'), JSON.stringify({
+  fs.mkdirSync(path.join(root, 'src', 'core', 'data'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'src', 'core', 'data', 'news-sources.json'), JSON.stringify({
     schemaVersion: 2,
     sources: registry().sources
   }, null, 2), 'utf8');

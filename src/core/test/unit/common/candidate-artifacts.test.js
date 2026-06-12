@@ -51,8 +51,8 @@ const {
 
 function tempRoot() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'candidate-artifacts-'));
-  fs.mkdirSync(path.join(root, 'data'), { recursive: true });
-  fs.writeFileSync(path.join(root, 'data', 'news-sources.json'), '{"sources":[]}\n', 'utf8');
+  fs.mkdirSync(path.join(root, 'src', 'core', 'data'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'src', 'core', 'data', 'news-sources.json'), '{"sources":[]}\n', 'utf8');
   return root;
 }
 
@@ -608,7 +608,7 @@ test('Stage 2 feedback does not flag valid concrete source_extraction bullets', 
 test('Stage 2 disabled mode expands approved seed evidence without Gemini credentials', async () => {
   const root = tempRoot();
   const date = '2026-05-16';
-  writeJson(path.join(root, 'data', 'news-sources.json'), {
+  writeJson(path.join(root, 'src', 'core', 'data', 'news-sources.json'), {
     schemaVersion: 2,
     sources: [{
       id: 'android',
@@ -804,7 +804,7 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   const root = tempRoot();
   const date = '2026-05-16';
   const payload = candidatePayload();
-  writeJson(path.join(root, 'data', 'news-sources.json'), {
+  writeJson(path.join(root, 'src', 'core', 'data', 'news-sources.json'), {
     schemaVersion: 2,
     sources: [{
       id: 'android',

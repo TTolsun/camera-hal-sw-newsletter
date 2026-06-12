@@ -4,8 +4,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const REPO_ROOT = path.resolve(__dirname, '../../..');
-const NEWSROOM_DIR = path.join(REPO_ROOT, 'scripts', 'newsroom');
+// 이 파일은 <repo>/src/core/tooling/cli/report-cleanup-candidates.js 입니다.
+const REPO_ROOT = path.resolve(__dirname, '../../../..');
+// #262 src 재구성 완료 후 구현 코드는 모두 src/ 아래에 있습니다.
+const NEWSROOM_DIR = path.join(REPO_ROOT, 'src');
+// 레거시 scripts/lib shim 계층은 제거되어 더 이상 존재하지 않습니다(빈 스캔으로 처리됨).
 const LIB_DIR = path.join(REPO_ROOT, 'scripts', 'lib');
 const TESTS_DIR = path.join(REPO_ROOT, 'tests');
 const ALLOWLIST_PATH = path.join(__dirname, 'cleanup-candidates-allowlist.json');
@@ -362,7 +365,7 @@ function main() {
   // --- 섹션 1: Dead exports ---
   lines.push('## 1. Dead Exports (export-but-no-caller)');
   lines.push('');
-  lines.push('`scripts/newsroom/**` 파일에 export되었지만 같은 트리 내 caller가 0건인 멤버 목록입니다.');
+  lines.push('`src/**` 파일에 export되었지만 같은 트리 내 caller가 0건인 멤버 목록입니다.');
   lines.push('');
 
   if (deadExports.length === 0) {
@@ -397,9 +400,9 @@ function main() {
   }
 
   // --- 섹션 3: Shim caller-less ---
-  lines.push('## 3. Shim Caller-less (`scripts/lib/*.js`)');
+  lines.push('## 3. Shim Caller-less (legacy `scripts/lib/*.js` — 재구성 후 제거됨)');
   lines.push('');
-  lines.push('`scripts/newsroom/**` 또는 `tests/**` 에서 require하는 caller가 0건인 shim 파일입니다.');
+  lines.push('`src/**` 또는 `tests/**` 에서 require하는 caller가 0건인 shim 파일입니다. (레거시 계층이 제거되어 일반적으로 비어 있습니다.)');
   lines.push('');
 
   if (shimCallerless.length === 0) {

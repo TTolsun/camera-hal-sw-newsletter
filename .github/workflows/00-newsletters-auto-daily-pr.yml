@@ -71,4 +71,4 @@ jobs:
           OUTCOME_EDITOR: ${{ needs.generate.result }}
           NEWSLETTER_DATE: ${{ needs.collect.outputs.date }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: node scripts/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"
+        run: node src/core/tooling/cli/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"

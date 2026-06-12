@@ -119,11 +119,11 @@ Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합�
 - 문체가 구체적이고 기술적인가?
 
 <!-- NEWSLETTER_POLICY:BEGIN -->
-<!-- This block is generated. Update config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
+<!-- This block is generated. Update src/core/config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
 
 ### Newsletter Policy
 
-- Source of truth: `config/newsletter-policy.json`
+- Source of truth: `src/core/config/newsletter-policy.json`
 - Main article count: 1-5
 - One-article policy: a public newsletter may contain a single fully publishable main article.
 - Article count alone does not make a one-article issue degraded or review-only; hard quality gates still apply.

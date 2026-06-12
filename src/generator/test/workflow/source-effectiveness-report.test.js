@@ -270,7 +270,7 @@ test('source effectiveness report builds for candidate shortage review-only with
   const root = tempRoot('source-effectiveness-');
   const date = fixture.date;
 
-  writeJson(path.join(root, 'data', 'news-sources.json'), fixture.sourceRegistry);
+  writeJson(path.join(root, 'src', 'core', 'data', 'news-sources.json'), fixture.sourceRegistry);
   writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), fixture.collectedCandidates);
   writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), fixture.shortlistReport);
 

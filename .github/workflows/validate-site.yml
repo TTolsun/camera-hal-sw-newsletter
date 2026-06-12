@@ -45,4 +45,4 @@ jobs:
       - name: Annotate publication quality and fact-check status
         if: always()
         continue-on-error: true
-        run: node scripts/annotate-publication-quality.js --latest
+        run: node src/generator/publish/annotate-publication-quality.js --latest

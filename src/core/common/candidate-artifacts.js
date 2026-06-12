@@ -456,7 +456,7 @@ function buildRawCandidateManifest({
   root = process.cwd(),
   date,
   candidatePath = manualCandidatesPath(root, date),
-  sourceRegistryPath = path.join(root, 'data', 'news-sources.json'),
+  sourceRegistryPath = path.join(root, 'src', 'core', 'data', 'news-sources.json'),
   sourceCount = null,
   collectionIntent = null,
   generatedAt = new Date().toISOString(),

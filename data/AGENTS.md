@@ -1,6 +1,6 @@
 # data 작업 지침
 
-`data/news-sources.json`은 machine-readable source of truth입니다. 사람이 읽는 설명 문서는 `docs/news-sources.md`와 `docs/config/news-sources-fields.ko.md`를 함께 확인합니다.
+`src/core/data/news-sources.json`은 machine-readable source of truth입니다. 사람이 읽는 설명 문서는 `docs/news-sources.md`와 `docs/config/news-sources-fields.ko.md`를 함께 확인합니다.
 
 ## JSON Rules
 

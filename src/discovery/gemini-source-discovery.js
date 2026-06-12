@@ -596,7 +596,7 @@ async function runGeminiSourceDiscovery({
   root = process.cwd(),
   date,
   manualPayload,
-  sourceRegistryPath = path.join(root, 'data', 'news-sources.json'),
+  sourceRegistryPath = path.join(root, 'src', 'core', 'data', 'news-sources.json'),
   budget,
   proposalPayload = null,
   callLlmJsonBudgetedImpl = null,

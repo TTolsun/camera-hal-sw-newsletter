@@ -1198,7 +1198,7 @@ async function runEnabled({
   // 공식/등록 도메인 링크를 골라 Gemini(sourceDiscovery 단계)가 뉴스레터 가치를 판정하고,
   // 통과한 링크를 origin=gemini_linked_discovery 파생 후보로 만들어 동일 selection 게이트에
   // 흘려보낸다. extract-only, non-failing.
-  const sourceRegistryPath = path.join(root, 'data', 'news-sources.json');
+  const sourceRegistryPath = path.join(root, 'src', 'core', 'data', 'news-sources.json');
   const sourceRegistry = fs.existsSync(sourceRegistryPath)
     ? readJson(sourceRegistryPath)
     : { sources: [] };

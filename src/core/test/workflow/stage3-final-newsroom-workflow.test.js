@@ -65,7 +65,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(summaryStep, /if: always\(\)/);
   assert.match(summaryStep, /continue-on-error:\s*true/);
   assert.match(summaryStep, /SUMMARY_PROFILE: newsroom-final/);
-  assert.match(summaryStep, /run: node scripts\/write-newsroom-workflow-summary\.js/);
+  assert.match(summaryStep, /run: node src\/core\/tooling\/cli\/write-newsroom-workflow-summary\.js/);
   assert.match(workflow, /llm_provider:/);
   assert.match(workflow, /-\s+"openapi"/);
   assert.match(workflow, /llm_model:/);
@@ -116,8 +116,8 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.doesNotMatch(workflowDocs, /NEWSROOM_ALLOW_PRO/);
   assert.doesNotMatch(workflowDocs, /NEWSROOM_PRO_ESCALATION/);
   assert.match(generateStep, /continue-on-error:\s*true/);
-  assert.match(ensurePublicStep, /node scripts\/ensure-public-newsletter-artifacts\.js/);
-  assert.match(resolveMetaStep, /node scripts\/resolve-reviewable-artifacts\.js >> "\$GITHUB_OUTPUT"/);
+  assert.match(ensurePublicStep, /node src\/generator\/publish\/ensure-public-newsletter-artifacts\.js/);
+  assert.match(resolveMetaStep, /node src\/generator\/publish\/resolve-reviewable-artifacts\.js >> "\$GITHUB_OUTPUT"/);
   assert.match(validateGeneratedSiteStep, /if: steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
   assert.match(validateGeneratedSiteStep, /^\s*run: npm run validate:post-generation$/m);
   assert.doesNotMatch(validateGeneratedSiteStep, /npm run validate:quality/);
@@ -144,7 +144,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /github\.rest\.issues\.removeLabel/);
   assert.match(workflow, /- name: Resolve final publish status/);
   assert.match(workflow, /id: final-publish-status/);
-  assert.match(workflow, /node scripts\/write-publish-status-output\.js >> "\$GITHUB_OUTPUT"/);
+  assert.match(workflow, /node src\/generator\/publish\/write-publish-status-output\.js >> "\$GITHUB_OUTPUT"/);
   assert.match(resolveFinalStatusStep, /if: steps\.meta\.outputs\.public_newsletter_ready == 'true'/);
   assert.match(resolveFinalStatusStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(sourceEffectivenessStep, /if: always\(\) && steps\.meta\.outputs\.review_pr_ready == 'true'/);
@@ -185,8 +185,8 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_DESKTOP_COVERAGE: covered/);
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_MOBILE_COVERAGE: covered/);
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION: none/);
-  assert.match(workflow, /node scripts\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
-  assert.match(workflow, /node scripts\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --type newsletter --date "\$\{\{ steps\.meta\.outputs\.date \}\}" --require-publish-status-consistency/);
+  assert.match(workflow, /node src\/generator\/publish\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
+  assert.match(workflow, /node src\/generator\/publish\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --type newsletter --date "\$\{\{ steps\.meta\.outputs\.date \}\}" --require-publish-status-consistency/);
   assert.match(workflow, /cat \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /const hasAiPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.has_ai_publish_ready \}\}' === 'true';/);
   assert.match(workflow, /const diagnosticsOnly = '\$\{\{ steps\.meta\.outputs\.diagnostics_only \}\}' === 'true';/);
@@ -307,7 +307,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage2UploadStep, /seed-evidence-pack\.json/);
   assert.match(stage2UploadStep, /seed-fetch-report\.json/);
   assert.match(stage2UploadStep, /seed-merge-report\.md/);
-  assert.match(stage2, /node scripts\/gemini-source-discovery-boundary\.js --date/);
+  assert.match(stage2, /node src\/discovery\/gemini-source-discovery-boundary\.js --date/);
   assert.doesNotMatch(stage2RunStep, /--preflight-only/);
   assert.match(stage2, /gemini-source-discovery-report\.md/);
   assert.match(stage2, /gemini-source-proposals\.json/);
@@ -446,10 +446,10 @@ test('site validation workflow keeps structural checks blocking and quality anno
   assert.doesNotMatch(structuralStep, /continue-on-error:\s*true/);
   assert.match(annotationStep, /if: always\(\)/);
   assert.match(annotationStep, /continue-on-error:\s*true/);
-  assert.match(annotationStep, /run: node scripts\/annotate-publication-quality\.js --latest/);
-  const annotationCommands = workflowRunCommands(workflow, 'scripts/annotate-publication-quality.js');
+  assert.match(annotationStep, /run: node src\/generator\/publish\/annotate-publication-quality\.js --latest/);
+  const annotationCommands = workflowRunCommands(workflow, 'src/generator/publish/annotate-publication-quality.js');
   assert.ok(annotationCommands.length > 0, 'annotate-publication-quality.js must be invoked');
   for (const command of annotationCommands) {
-    assert.match(command, /\bnode\s+scripts\/annotate-publication-quality\.js\b[^\n]*\s--latest\b/);
+    assert.match(command, /\bnode\s+src\/generator\/publish\/annotate-publication-quality\.js\b[^\n]*\s--latest\b/);
   }
 });

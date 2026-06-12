@@ -936,7 +936,7 @@ function buildSourceEffectivenessReport(options = {}) {
     inputs: {
       collected_candidates: collectedCandidatesRelPath(date),
       shortlisted_candidates: newsroomRelPath(date, 'shortlisted-candidates.json'),
-      source_registry: 'data/news-sources.json',
+      source_registry: 'src/core/data/news-sources.json',
       optional_artifacts: optionalArtifactPaths(date, options)
     },
     summary,
@@ -1197,8 +1197,8 @@ function loadSourceEffectivenessInputs(root, date) {
     },
     sourceRegistry: readRequiredJson(
       resolvedRoot,
-      path.join(resolvedRoot, 'data', 'news-sources.json'),
-      'data/news-sources.json'
+      path.join(resolvedRoot, 'src', 'core', 'data', 'news-sources.json'),
+      'src/core/data/news-sources.json'
     ),
     collectedCandidates: readRequiredJson(
       resolvedRoot,

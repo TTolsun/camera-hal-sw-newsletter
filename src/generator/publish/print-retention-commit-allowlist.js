@@ -1,7 +1,7 @@
 const { retentionCommitAllowlist } = require('../reporter/review-artifact-inventory');
 
 function usage() {
-  console.error('Usage: node scripts/print-retention-commit-allowlist.js --date YYYY-MM-DD [--root /path/to/repo]');
+  console.error('Usage: node src/generator/publish/print-retention-commit-allowlist.js --date YYYY-MM-DD [--root /path/to/repo]');
   process.exit(1);
 }
 

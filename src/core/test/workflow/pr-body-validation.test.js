@@ -8,7 +8,7 @@ const test = require('node:test');
 
 const {
   buildNewsroomPrBody
-} = require('../../../../scripts/build-newsroom-pr-body');
+} = require('../../../generator/publish/build-newsroom-pr-body');
 const {
   qualityGatePolicy
 } = require('../../common/newsletter-policy');
@@ -19,11 +19,11 @@ const {
   resolveBodyKind,
   validatePrBodyFile,
   validatePrBodyText
-} = require('../../../../scripts/validate-pr-body');
+} = require('../../../generator/publish/validate-pr-body');
 const {
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
-} = require('../../../../scripts/resolve-reviewable-artifacts');
+} = require('../../../generator/publish/resolve-reviewable-artifacts');
 const {
   tempRoot: fsTempRoot,
   writeText
@@ -57,7 +57,7 @@ function newsletterTemplateBody(overrides = {}) {
 
 ### Editorial quality
 
-- [ ] 주요 기사 구성이 \`config/newsletter-policy.json\`을 따른다.
+- [ ] 주요 기사 구성이 \`src/core/config/newsletter-policy.json\`을 따른다.
 - [ ] 3줄 브리핑은 정확히 3줄이다.
 - [ ] 각 주요 기사에 \`확인한 사실\`이 있다.
 - [ ] 각 주요 기사에 \`배경지식\`이 있다.
@@ -349,7 +349,7 @@ test('validate-pr-body root wrapper CLI handles type-aware template validation',
   }));
 
   const valid = spawnSync(process.execPath, [
-    path.join(__dirname, '..', '..', '..', '..', 'scripts', 'validate-pr-body.js'),
+    path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'validate-pr-body.js'),
     bodyPath,
     '--type',
     'code-docs'
@@ -361,7 +361,7 @@ test('validate-pr-body root wrapper CLI handles type-aware template validation',
   assert.match(valid.stdout, /Validated PR body/);
 
   const invalid = spawnSync(process.execPath, [
-    path.join(__dirname, '..', '..', '..', '..', 'scripts', 'validate-pr-body.js'),
+    path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'validate-pr-body.js'),
     bodyPath,
     '--type',
     'foo'

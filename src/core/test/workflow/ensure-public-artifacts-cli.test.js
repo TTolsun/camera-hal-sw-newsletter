@@ -9,7 +9,7 @@ const test = require('node:test');
 
 const {
   buildNewsroomPrBody
-} = require('../../../../scripts/build-newsroom-pr-body');
+} = require('../../../generator/publish/build-newsroom-pr-body');
 const {
   articlePolicy,
   headlinePolicy,
@@ -20,14 +20,14 @@ const {
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS,
   requiredPublicFiles
-} = require('../../../../scripts/resolve-reviewable-artifacts');
+} = require('../../../generator/publish/resolve-reviewable-artifacts');
 const {
   ensurePublicNewsletterArtifacts
-} = require('../../../../scripts/ensure-public-newsletter-artifacts');
+} = require('../../../generator/publish/ensure-public-newsletter-artifacts');
 const {
   main: annotatePublicationQualityMain,
   resolveTargetItems
-} = require('../../../../scripts/annotate-publication-quality');
+} = require('../../../generator/publish/annotate-publication-quality');
 const {
   tempRoot: fsTempRoot,
   writeJson,
@@ -56,7 +56,7 @@ test('candidate shortage generator exits before LLM calls when credentials are e
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-11';
   const rawDir = path.join(root, '.tmp', 'gemini-raw');
-  writeJson(path.join(root, 'data', 'news-sources.json'), {
+  writeJson(path.join(root, 'src', 'core', 'data', 'news-sources.json'), {
     schemaVersion: 2,
     sources: []
   });
@@ -176,7 +176,7 @@ test.skip('Workflow 03 enters LLM generation with one publishable candidate and 
       'validate:images': 'node -e "process.exit(0)"'
     }
   });
-  writeJson(path.join(root, 'data', 'news-sources.json'), {
+  writeJson(path.join(root, 'src', 'core', 'data', 'news-sources.json'), {
     schemaVersion: 2,
     sources: []
   });
@@ -948,7 +948,7 @@ test('publication quality annotation help documents target policy', () => {
   });
 
   assert.equal(code, 0);
-  assert.match(stdout, /Usage: node scripts\/annotate-publication-quality\.js \[--date YYYY-MM-DD\] \[--all\] \[--latest\]/);
+  assert.match(stdout, /Usage: node src\/generator\/publish\/annotate-publication-quality\.js \[--date YYYY-MM-DD\] \[--all\] \[--latest\]/);
   assert.match(stdout, /--date YYYY-MM-DD inspects only that public issue/);
   assert.match(stdout, /--all inspects every historical public issue/);
   assert.match(stdout, /Changed public issue dates inspect matching public issue dates, even when --latest is present/);

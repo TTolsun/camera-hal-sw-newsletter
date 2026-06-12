@@ -4,10 +4,10 @@ const {
   normalizeShortlistReport,
   renderCandidateSelectionDiagnostics,
   selectionDiagnosticsFromReports
-} = require('../../../src/generator/select/selection-diagnostics');
+} = require('../../../generator/select/selection-diagnostics');
 const {
   buildNewsletterQualityReport
-} = require('../../../src/generator/quality/newsletter-quality');
+} = require('../../../generator/quality/newsletter-quality');
 
 const date = '2026-05-03';
 
