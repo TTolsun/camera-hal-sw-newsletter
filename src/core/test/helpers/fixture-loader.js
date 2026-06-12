@@ -7,7 +7,7 @@ function resolveFixturePath(relativePath) {
   const resolved = path.resolve(fixturesRoot, relativePath);
   const relative = path.relative(fixturesRoot, resolved);
   if (relative.startsWith('..') || path.isAbsolute(relative)) {
-    throw new Error(`Fixture path escapes tests/fixtures: ${relativePath}`);
+    throw new Error(`Fixture path escapes src/core/test/fixtures: ${relativePath}`);
   }
   return resolved;
 }

@@ -35,7 +35,6 @@ const TEXT_EXTENSIONS = Object.freeze(new Set([
 
 const ALLOWED_PATHS = Object.freeze([
   /^scripts\/newsroom\/llm\//,
-  /^scripts\/newsroom\/adapters\/llm\//,
   /^src\/core\/llm\//,
   /^src\/core\/adapters\/llm\//,
   /^tests\/.*\/llm-response\//,
