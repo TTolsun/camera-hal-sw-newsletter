@@ -23,6 +23,7 @@
 | blocked_candidate | 0.501 | May | https://source.android.com/docs/security/bulletin/2026/2026-05-01 |
 | blocked_candidate | 0.466 | April | https://source.android.com/docs/security/bulletin/2026/2026-04-01 |
 | strong_candidate | 0.902 | Re: [PATCH v3 6/8] media: platform: Add NXP Neoisp Image Signal Processor | https://lore.kernel.org/linux-media/aixdEPsghlc2S7Zl@SMW015318/ |
+| blocked_candidate | 0.764 | Re: [PATCH v2 6/7] arm64: dts: qcom: shikra-cqm-cqs-evk-imx577-camera: Add DT overlay | https://lore.kernel.org/linux-media/83594a83-64ea-4c52-b0b7-fd0070f03f04@oss.qualcomm.com/ |
 | blocked_candidate | 0.74 | Re: [PATCH v2 3/7] arm64: dts: qcom: shikra: Add CAMSS node | https://lore.kernel.org/linux-media/fbb00150-e3bd-45b8-a87a-100ecd235a46@oss.qualcomm.com/ |
 | blocked_candidate | 0.551 | C++26: A User-Friendly assert() macro -- Sandor Dargo | https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo |
 | blocked_candidate | 0.551 | 2026 Annual C++ Developer Survey "Lite" | https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1 |
@@ -38,7 +39,6 @@
 | blocked_candidate | 0.593 | CppCon 2025 Can Standard C++ Replace CUDA for GPU Acceleration? -- Elmar Westphal | https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph |
 | weak_candidate | 0.614 | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more | https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more |
 | blocked_candidate | 0.554 | [PATCH v21 2/4] rust: drm: gem: shmem: Add vmap functions | https://lore.kernel.org/linux-media/20260612194436.585385-3-lyude@redhat.com/ |
-| blocked_candidate | 0.644 | [PATCH v21 0/4] Rust bindings for gem shmem | https://lore.kernel.org/linux-media/20260612194436.585385-1-lyude@redhat.com/ |
 | blocked_candidate | 0.674 | Media3 Release Notes - Media3 1.9.4 | https://developer.android.com/jetpack/androidx/releases/media3#1.9.4 |
 | blocked_candidate | 0.65 | Media3 Release Notes - Media3 1.10.1 | https://developer.android.com/jetpack/androidx/releases/media3#1.10.1 |
 | blocked_candidate | 0.626 | Photo picker &nbsp;\|&nbsp; App data and files &nbsp;\|&nbsp; Android Developers | https://developer.android.com/training/data-storage/shared/photo-picker |
@@ -50,13 +50,10 @@
 | review_candidate | 0.72 | [PATCH v1 3/4] arm64: dts: qcom: sm8250: Add JPEG encoder node - Atanas Filipov | https://lore.kernel.org/linux-media/20260612194417.1737009-4-atanas.filipov@oss.qualcomm.com/ |
 | blocked_candidate | 0.5 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++ | https://isocpp.org//blog/2026/04/gcc-16.1 |
 | blocked_candidate | 0.455 | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more : Standard C++ | https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more |
+| blocked_candidate | 0.492 | Android Developers Blog: Top 3 updates for Android developer productivity | https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html |
 | review_candidate | 0.672 | Build a Compatible Android Device &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility |
-| review_candidate | 0.737 | Android Security Bulletins &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/security/bulletin/asb-overview |
 | weak_candidate | 0.458 | CameraX | https://developer.android.com/media/camera/camerax |
 | weak_candidate | 0.367 | VideoCapture | https://developer.android.com/media/camera/camerax/video-capture |
-| weak_candidate | 0.413 | CameraEffect | https://developer.android.com/reference/androidx/camera/core/CameraEffect |
-| weak_candidate | 0.413 | ImageAnalysis | https://developer.android.com/reference/androidx/camera/core/ImageAnalysis |
-| weak_candidate | 0.367 | HighSpeedVideoSessionConfig | https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig |
 | weak_candidate | 0.413 | Release notes | https://source.android.com/docs/whatsnew/release-notes |
 | weak_candidate | 0.367 | Bulletins | https://source.android.com/docs/security/bulletin |
 

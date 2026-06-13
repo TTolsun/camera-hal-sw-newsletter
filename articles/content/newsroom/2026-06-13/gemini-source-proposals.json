@@ -4,354 +4,216 @@
   "newsletter_date": "2026-06-13",
   "proposals": [
     {
-      "proposal_id": "android-cli-stable-1-0",
-      "topic_gap": "Android CLI is now stable, which could impact developer productivity and tooling for camera-related tasks.",
-      "source_family": "Android Developers Blog",
-      "allowed_domains": [
-        "android-developers.googleblog.com"
-      ],
+      "proposal_id": "android-cli-stable-1.0",
+      "topic_gap": "Android CLI is now stable. This could impact developer productivity and tooling for camera app development.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
       "search_keywords": [
-        "Android CLI camera development",
-        "Android CLI camera testing",
-        "camera tooling Android"
+        "Android CLI",
+        "developer productivity",
+        "camera development tools"
       ],
       "candidate_urls": [
         "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html"
       ],
       "expected_evidence": [
-        "mentions of camera development workflows",
-        "impact on camera HAL testing",
-        "developer productivity improvements for camera-related tasks"
+        "New features",
+        "Developer productivity impact",
+        "Tooling for camera development"
       ],
-      "risk_notes": [
-        "The article might be too generic and not specific enough to camera development.",
-        "The 'finalSelectionEligibility' was 'exclude', indicating it might not be a primary candidate."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "camera-x-1-6-0-release",
-      "topic_gap": "CameraX 1.6.0 release notes, potentially containing updates relevant to camera output and media pipeline.",
-      "source_family": "CameraX Release Notes",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
+      "proposal_id": "camera-its-box-automation",
+      "topic_gap": "New documentation on automating camera image testing with the Camera ITS box.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
       "search_keywords": [
-        "CameraX 1.6.0 release notes",
-        "CameraX new features",
-        "CameraX media pipeline"
-      ],
-      "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
-      ],
-      "expected_evidence": [
-        "changes to camera capture APIs",
-        "updates to image processing or output formats",
-        "improvements in media pipeline integration"
-      ],
-      "risk_notes": [
-        "Release notes can be highly technical and may not always translate to high-level article content.",
-        "The relevance to media/camera-output discovery intent needs to be confirmed by examining the actual release notes."
-      ]
-    },
-    {
-      "proposal_id": "camera-its-box-update",
-      "topic_gap": "Updates to the Camera ITS box for testing camera images using automation, which is crucial for camera HAL and output validation.",
-      "source_family": "AOSP Site Updates",
-      "allowed_domains": [
-        "source.android.com"
-      ],
-      "search_keywords": [
-        "Camera ITS box updates",
-        "Android camera testing automation",
-        "camera HAL validation tools"
+        "Camera ITS",
+        "camera testing",
+        "automation",
+        "CTS"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "details on new testing capabilities for camera output",
-        "impact on camera HAL validation",
-        "improvements in automated camera testing"
+        "Camera ITS",
+        "Test automation",
+        "Camera HAL testing"
       ],
-      "risk_notes": [
-        "This is a documentation link, not a dated article. Its relevance depends on recent updates to the content.",
-        "The 'finalSelectionEligibility' was 'main', suggesting it's a strong candidate if the content is relevant."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "google-io-26-media-pipeline",
-      "topic_gap": "Google I/O '26 session on supercharging the media pipeline with a production-ready toolkit, directly relevant to camera-generated output.",
-      "source_family": "Android Developers Blog",
-      "allowed_domains": [
-        "youtube.com"
-      ],
-      "search_keywords": [
-        "Google I/O 2026 media pipeline",
-        "Android media toolkit",
-        "camera output optimization"
-      ],
-      "candidate_urls": [
-        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
-      ],
-      "expected_evidence": [
-        "details on new media pipeline features",
-        "examples of camera output integration",
-        "discussions on A/V sync or recording improvements"
-      ],
-      "risk_notes": [
-        "This is a YouTube playlist, requiring manual review of individual videos for relevance.",
-        "The title is broad and may not focus specifically on camera output."
-      ]
-    },
-    {
-      "proposal_id": "nxp-isp-patch",
-      "topic_gap": "A kernel patch introducing NXP Neoisp Image Signal Processor, relevant to camera hardware and image processing pipelines.",
-      "source_family": "lore.kernel.org linux-media list",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "nxp-isp-driver-linux-media",
+      "topic_gap": "A patch introducing NXP Neoisp Image Signal Processor driver for Linux media.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
       "search_keywords": [
         "NXP Neoisp",
-        "Linux media ISP",
-        "camera signal processor kernel"
+        "ISP driver",
+        "linux-media",
+        "kernel patch"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/aixdEPsghlc2S7Zl@SMW015318/"
       ],
       "expected_evidence": [
-        "details on ISP capabilities and integration",
-        "impact on camera image quality or processing",
-        "relevance to Android camera HAL"
+        "NXP ISP",
+        "Linux media driver",
+        "Image Signal Processor"
       ],
-      "risk_notes": [
-        "This is a low-level kernel patch, likely requiring deep technical understanding.",
-        "The content might be too specific to a particular hardware vendor."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "qualcomm-jpeg-encoder-patch",
-      "topic_gap": "A kernel patch series adding support for Qualcomm JPEG V4L2 mem2mem encoder, directly impacting camera output encoding.",
-      "source_family": "lore.kernel.org linux-media list",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "qualcomm-jpeg-encoder-v4l2",
+      "topic_gap": "Support for Qualcomm JPEG V4L2 mem2mem encoder added to the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
       "search_keywords": [
-        "Qualcomm JPEG V4L2",
-        "camera encoder kernel",
-        "mem2mem encoder"
+        "Qualcomm JPEG",
+        "V4L2 encoder",
+        "linux-media",
+        "kernel patch"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260612194417.1737009-1-atanas.filipov@oss.qualcomm.com/"
-      ],
-      "expected_evidence": [
-        "details on JPEG encoding performance",
-        "impact on camera output formats and quality",
-        "V4L2 integration for camera capture"
-      ],
-      "risk_notes": [
-        "Kernel patches are technical and may not be suitable for a general audience.",
-        "The focus is on a specific vendor's hardware."
-      ]
-    },
-    {
-      "proposal_id": "qualcomm-sm8550-jpeg-dts",
-      "topic_gap": "A Device Tree Source (DTS) patch for Qualcomm SM8550 adding a JPEG encoder node, relevant to camera hardware and encoding capabilities.",
-      "source_family": "lore.kernel.org linux-media list",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
-      "search_keywords": [
-        "Qualcomm SM8550 JPEG DTS",
-        "camera hardware node",
-        "Android camera SoC"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260612194417.1737009-3-atanas.filipov@oss.qualcomm.com/"
-      ],
-      "expected_evidence": [
-        "details on JPEG encoder hardware integration",
-        "impact on camera output encoding on SM8550 platform",
-        "relevance to Android camera HAL"
-      ],
-      "risk_notes": [
-        "This is a low-level DTS patch, highly specific to hardware configuration.",
-        "May not be directly relevant unless discussing specific SoC camera pipelines."
-      ]
-    },
-    {
-      "proposal_id": "qualcomm-sm8250-jpeg-dts",
-      "topic_gap": "A Device Tree Source (DTS) patch for Qualcomm SM8250 adding a JPEG encoder node, relevant to camera hardware and encoding capabilities.",
-      "source_family": "lore.kernel.org linux-media list",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
-      "search_keywords": [
-        "Qualcomm SM8250 JPEG DTS",
-        "camera hardware node",
-        "Android camera SoC"
-      ],
-      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260612194417.1737009-1-atanas.filipov@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260612194417.1737009-3-atanas.filipov@oss.qualcomm.com/",
         "https://lore.kernel.org/linux-media/20260612194417.1737009-4-atanas.filipov@oss.qualcomm.com/"
       ],
       "expected_evidence": [
-        "details on JPEG encoder hardware integration",
-        "impact on camera output encoding on SM8250 platform",
-        "relevance to Android camera HAL"
+        "Qualcomm JPEG encoder",
+        "V4L2",
+        "mem2mem encoder",
+        "Linux kernel"
       ],
-      "risk_notes": [
-        "This is a low-level DTS patch, highly specific to hardware configuration.",
-        "May not be directly relevant unless discussing specific SoC camera pipelines."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "gcc-16-1-release",
-      "topic_gap": "GCC 16.1 release notes, mentioning C++26 features like reflection and safety hardening, which could indirectly impact camera development tooling or libraries.",
-      "source_family": "ISO C++ Blog",
-      "allowed_domains": [
-        "isocpp.org"
-      ],
+      "proposal_id": "gcc-16.1-cpp26-reflection",
+      "topic_gap": "GCC 16.1 released with C++26 features like reflection and contracts, impacting C++ development for media pipelines.",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
       "search_keywords": [
-        "GCC 16.1 release notes",
-        "C++26 reflection camera",
-        "compiler camera development"
+        "GCC 16.1",
+        "C++26",
+        "reflection",
+        "compiler release"
       ],
       "candidate_urls": [
         "https://isocpp.org//blog/2026/04/gcc-16.1"
       ],
       "expected_evidence": [
-        "mentions of improved compiler support for media processing libraries",
-        "impact of C++26 features on camera HAL development",
-        "new tooling or optimization relevant to camera pipelines"
+        "GCC 16.1",
+        "C++26",
+        "reflection",
+        "contracts"
       ],
-      "risk_notes": [
-        "This is a compiler release note, likely not directly focused on camera output.",
-        "The 'finalSelectionEligibility' was 'short', indicating it might be a secondary candidate."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "glaze-7-2-release",
-      "topic_gap": "Glaze 7.2 release notes, featuring C++26 Reflection and support for various serialization formats, which could be relevant for camera data handling.",
-      "source_family": "ISO C++ Blog",
-      "allowed_domains": [
-        "isocpp.org"
-      ],
+      "proposal_id": "glaze-7.2-cpp26-reflection",
+      "topic_gap": "Glaze 7.2 released, supporting C++26 reflection, which could be relevant for efficient data handling in media processing.",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
       "search_keywords": [
-        "Glaze 7.2 C++26",
-        "C++ reflection camera data",
-        "serialization camera output"
+        "Glaze 7.2",
+        "C++26 reflection",
+        "serialization"
       ],
       "candidate_urls": [
         "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
       ],
       "expected_evidence": [
-        "use cases for C++26 reflection in camera data serialization",
-        "performance improvements for data handling",
-        "integration with camera output processing"
+        "Glaze 7.2",
+        "C++26 reflection",
+        "data serialization"
       ],
-      "risk_notes": [
-        "This is a C++ library release, its direct relevance to camera output needs to be established.",
-        "The 'finalSelectionEligibility' was 'short', suggesting it might be a secondary candidate."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "camera-x-1-6-1-release",
-      "topic_gap": "CameraX 1.6.1 release notes, potentially containing bug fixes or minor updates relevant to camera output and media pipeline.",
-      "source_family": "Android Developers Latest Updates",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
+      "proposal_id": "camera-x-1.6.1-release",
+      "topic_gap": "CameraX 1.6.1 release notes, potentially including updates relevant to camera HAL or media pipeline.",
+      "source_family": "android-developers-latest-updates",
+      "allowed_domains": [],
       "search_keywords": [
-        "CameraX 1.6.1 release notes",
-        "CameraX bug fixes",
-        "CameraX media pipeline updates"
+        "CameraX 1.6.1",
+        "release notes",
+        "androidx.camera"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
       ],
       "expected_evidence": [
-        "bug fixes related to camera capture or recording",
-        "minor improvements in media pipeline stability",
-        "updates affecting camera output consistency"
+        "CameraX release notes",
+        "Camera API updates",
+        "Bug fixes"
       ],
-      "risk_notes": [
-        "Minor release notes might not contain significant news for a newsletter.",
-        "The 'finalSelectionEligibility' was 'short', indicating it might be a secondary candidate."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "android-compatibility-overview",
-      "topic_gap": "Overview of Android Compatibility, which may include requirements or guidelines related to camera HAL and media output.",
-      "source_family": "AOSP Site Updates",
-      "allowed_domains": [
-        "source.android.com"
-      ],
+      "proposal_id": "google-io-2026-media-pipeline",
+      "topic_gap": "Google I/O '26 highlights on building premium Android media experiences with a production-ready toolkit.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
       "search_keywords": [
-        "Android compatibility camera",
-        "Camera HAL requirements",
-        "Android media output standards"
+        "Android media pipeline",
+        "Google I/O 2026",
+        "media toolkit"
       ],
       "candidate_urls": [
-        "https://source.android.com/docs/compatibility"
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "camera HAL requirements",
-        "media output standards",
-        "compatibility testing for camera features"
+        "Android media pipeline",
+        "Media3",
+        "CameraX",
+        "Google I/O"
       ],
-      "risk_notes": [
-        "This is a general documentation page, not a dated article. Its relevance depends on recent updates or specific sections.",
-        "The 'finalSelectionEligibility' was 'short', indicating it might be a secondary candidate."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "android-security-bulletin-overview",
-      "topic_gap": "Overview of Android Security Bulletins, which could contain information on security vulnerabilities or updates affecting camera or media components.",
-      "source_family": "Android Security Bulletin",
-      "allowed_domains": [
-        "source.android.com"
-      ],
+      "proposal_id": "android-developer-productivity-updates-2026-06",
+      "topic_gap": "Top updates for Android developer productivity, potentially including camera-related tooling or performance improvements.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
       "search_keywords": [
-        "Android security bulletin camera",
-        "camera HAL vulnerabilities",
-        "Android media security"
+        "Android developer productivity",
+        "developer tools",
+        "camera development"
       ],
       "candidate_urls": [
-        "https://source.android.com/docs/security/bulletin/asb-overview"
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
       ],
       "expected_evidence": [
-        "security issues related to camera HAL",
-        "vulnerabilities in media frameworks",
-        "vendor security updates impacting camera"
+        "Developer productivity",
+        "Android tools",
+        "Camera development"
       ],
-      "risk_notes": [
-        "This is a documentation page, not a dated article. Its relevance depends on recent updates or specific sections.",
-        "The 'finalSelectionEligibility' was 'watchlist', indicating it might be a lower priority."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "media3-1-10-1-release",
-      "topic_gap": "Media3 1.10.1 release notes, potentially containing updates relevant to camera output and media playback/recording.",
-      "source_family": "Media3 Release Notes",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
+      "proposal_id": "camera-hal-compatibility-testing",
+      "topic_gap": "Information on compatibility testing for camera HAL, including Camera ITS.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
       "search_keywords": [
-        "Media3 1.10.1 release notes",
-        "Media3 camera output",
-        "Media3 A/V sync"
+        "Camera HAL",
+        "compatibility",
+        "testing",
+        "Camera ITS"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
+        "https://source.android.com/docs/compatibility",
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "changes to media recording or playback APIs",
-        "updates affecting A/V sync",
-        "improvements in handling camera-generated output"
+        "Camera HAL",
+        "Compatibility testing",
+        "Camera ITS",
+        "CTS"
       ],
-      "risk_notes": [
-        "Release notes can be technical and may not always translate to high-level article content.",
-        "The 'finalSelectionEligibility' was 'watchlist', indicating it might be a lower priority."
-      ]
+      "risk_notes": []
     }
   ]
 }

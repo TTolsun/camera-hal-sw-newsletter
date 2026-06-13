@@ -382,6 +382,24 @@
       }
     },
     {
+      "candidate_id": "e7622db940e0ca02",
+      "url": "https://lore.kernel.org/linux-media/83594a83-64ea-4c52-b0b7-fd0070f03f04@oss.qualcomm.com/",
+      "title": "Re: [PATCH v2 6/7] arm64: dts: qcom: shikra-cqm-cqs-evk-imx577-camera: Add DT overlay",
+      "source_quality_score": 0.764,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.81,
+        "android_hal_relevance": 0.81,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "e9e024023086ae5a",
       "url": "https://lore.kernel.org/linux-media/fbb00150-e3bd-45b8-a87a-100ecd235a46@oss.qualcomm.com/",
       "title": "Re: [PATCH v2 3/7] arm64: dts: qcom: shikra: Add CAMSS node",
@@ -652,24 +670,6 @@
       }
     },
     {
-      "candidate_id": "d731a3525aebc641",
-      "url": "https://lore.kernel.org/linux-media/20260612194436.585385-1-lyude@redhat.com/",
-      "title": "[PATCH v21 0/4] Rust bindings for gem shmem",
-      "source_quality_score": 0.644,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.51,
-        "android_hal_relevance": 0.51,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "781679b8fb4b611e",
       "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
       "title": "Media3 Release Notes - Media3 1.9.4",
@@ -868,6 +868,24 @@
       }
     },
     {
+      "candidate_id": "gemini-98444c77340368f8",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "gemini-736ba21c4736e96f",
       "url": "https://source.android.com/docs/compatibility",
       "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
@@ -879,24 +897,6 @@
         "android_hal_relevance": 0.7,
         "technical_depth": 0.25,
         "recency_score": 0.15,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-827f3a39ff281180",
-      "url": "https://source.android.com/docs/security/bulletin/asb-overview",
-      "title": "Android Security Bulletins &nbsp;|&nbsp; Android Open Source Project",
-      "source_quality_score": 0.737,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.25,
-        "recency_score": 0.8,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
@@ -925,60 +925,6 @@
       "candidate_id": "gemini-linked-58d9ec89937d9617",
       "url": "https://developer.android.com/media/camera/camerax/video-capture",
       "title": "VideoCapture",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-eb09ee752aa3ba14",
-      "url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
-      "title": "CameraEffect",
-      "source_quality_score": 0.413,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.55,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-520fe52c7e358499",
-      "url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
-      "title": "ImageAnalysis",
-      "source_quality_score": 0.413,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.55,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-f64d4b5cb00fe978",
-      "url": "https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig",
-      "title": "HighSpeedVideoSessionConfig",
       "source_quality_score": 0.367,
       "source_quality_bucket": "weak_candidate",
       "breakdown": {
@@ -1032,8 +978,8 @@
   ],
   "counts": {
     "strong_candidate": 9,
-    "blocked_candidate": 29,
-    "review_candidate": 10,
-    "weak_candidate": 9
+    "blocked_candidate": 30,
+    "review_candidate": 9,
+    "weak_candidate": 6
   }
 }

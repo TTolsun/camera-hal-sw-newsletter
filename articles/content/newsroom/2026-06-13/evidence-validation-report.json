@@ -111,17 +111,17 @@
       "candidate_id": "5293b25a93416b26",
       "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "title": "Top 3 updates for Android developer productivity",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
+      "deep_checked": true,
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
       "source_fetch_error": "",
-      "validation_mode": "skipped",
+      "validation_mode": "source_fetch",
       "unsupported_claims": 0,
-      "supported_claims": 0,
+      "supported_claims": 1,
       "final_selection_blocked": false,
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
+      "evidence_validation_status": "pass",
       "reasons": []
     },
     {
@@ -385,6 +385,25 @@
       "unsupported_claims_excluded": false,
       "evidence_validation_status": "pass",
       "reasons": []
+    },
+    {
+      "candidate_id": "e7622db940e0ca02",
+      "url": "https://lore.kernel.org/linux-media/83594a83-64ea-4c52-b0b7-fd0070f03f04@oss.qualcomm.com/",
+      "title": "Re: [PATCH v2 6/7] arm64: dts: qcom: shikra-cqm-cqs-evk-imx577-camera: Add DT overlay",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "metadata_only",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
     },
     {
       "candidate_id": "e9e024023086ae5a",
@@ -662,25 +681,6 @@
       ]
     },
     {
-      "candidate_id": "d731a3525aebc641",
-      "url": "https://lore.kernel.org/linux-media/20260612194436.585385-1-lyude@redhat.com/",
-      "title": "[PATCH v21 0/4] Rust bindings for gem shmem",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
       "candidate_id": "781679b8fb4b611e",
       "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
       "title": "Media3 Release Notes - Media3 1.9.4",
@@ -880,6 +880,25 @@
       ]
     },
     {
+      "candidate_id": "gemini-98444c77340368f8",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "metadata_only",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
+    },
+    {
       "candidate_id": "gemini-736ba21c4736e96f",
       "url": "https://source.android.com/docs/compatibility",
       "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
@@ -897,23 +916,6 @@
       "reasons": [
         "stale_claim_risk=high"
       ]
-    },
-    {
-      "candidate_id": "gemini-827f3a39ff281180",
-      "url": "https://source.android.com/docs/security/bulletin/asb-overview",
-      "title": "Android Security Bulletins &nbsp;|&nbsp; Android Open Source Project",
-      "deep_checked": true,
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "unsupported_claims": 0,
-      "supported_claims": 1,
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass",
-      "reasons": []
     },
     {
       "candidate_id": "gemini-linked-45111a50490175f2",
@@ -936,57 +938,6 @@
       "candidate_id": "gemini-linked-58d9ec89937d9617",
       "url": "https://developer.android.com/media/camera/camerax/video-capture",
       "title": "VideoCapture",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "skipped",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
-      "reasons": []
-    },
-    {
-      "candidate_id": "gemini-linked-eb09ee752aa3ba14",
-      "url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
-      "title": "CameraEffect",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "skipped",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
-      "reasons": []
-    },
-    {
-      "candidate_id": "gemini-linked-520fe52c7e358499",
-      "url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
-      "title": "ImageAnalysis",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "skipped",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
-      "reasons": []
-    },
-    {
-      "candidate_id": "gemini-linked-f64d4b5cb00fe978",
-      "url": "https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig",
-      "title": "HighSpeedVideoSessionConfig",
       "deep_checked": false,
       "source_fetch_used": false,
       "source_fetch_status": "skipped",
@@ -1036,8 +987,8 @@
     }
   ],
   "counts": {
-    "not_checked": 14,
+    "not_checked": 10,
     "pass": 12,
-    "blocked": 31
+    "blocked": 32
   }
 }
