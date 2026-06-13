@@ -11,7 +11,7 @@
 
 ## 작업 규칙
 
-- `README.md`의 Newsletter Policy block은 generated block입니다. 직접 손으로 고치지 말고 `src/shared/config/newsletter-policy.json`을 수정한 뒤 policy docs sync를 확인합니다.
+- `README.md`의 Newsletter Policy block은 자동 생성(generated) block입니다. 손으로 직접 고치지 마세요. 대신 `src/shared/config/newsletter-policy.json`을 수정한 뒤 policy docs sync(`npm.cmd run sync:policy-docs`)를 확인합니다.
 - quality threshold를 낮추거나 hard blocker를 완화해서 validation을 통과시키지 않습니다.
 - config key와 enum-like 값은 계약 값이므로 번역하지 않습니다.
 - config 변경은 selection, quality gate, PR body, validation 결과에 영향을 줄 수 있으므로 관련 docs와 tests를 함께 확인합니다.

@@ -2,7 +2,7 @@
 
 이 폴더는 generated/review artifact를 둡니다. 일반 리팩토링에서 대량 수정하지 마세요.
 
-## Artifact Roles
+## Artifact 역할 (Artifact Roles)
 
 - `articles/content/collected-news/YYYY-MM-DD/`는 raw candidate evidence입니다.
 - `articles/content/newsroom/YYYY-MM-DD/`는 reporter, editor, fact-check, quality, retry, QA review artifact입니다.
@@ -114,7 +114,7 @@ heavy artifact 전체는 GitHub Actions artifact `newsroom-final-debug-<run_id>`
 
 파이프라인 입력 파일(candidates.json, manual-candidates.json, raw-candidate-manifest.json, merged-candidates.json, merged-candidate-manifest.json, collection-intent.json, seed-candidates.json, seed-evidence-pack.json)은 `review_required_compact` 등급 파일로서, workflow 01 → 02 → 03의 핸드오프 상태입니다. 이 파일들은 `.gitignore`에서 제외되며 Git에 항상 커밋됩니다. 순수 디버그 collected-news 파일(gemini-candidates.json)은 여전히 `.gitignore` 처리됩니다.
 
-## Preservation Rules
+## 보존 규칙 (Preservation Rules)
 
 - Generated artifact를 `src/shared/test/fixtures/**/good` 또는 golden fixture로 그대로 복사하지 마세요.
 - 명시 요청 없이 `articles/content/newsroom/**`, `articles/content/collected-news/**`를 대량 수정하지 마세요.
