@@ -78,7 +78,6 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | [`articles/newsletters/`](articles/newsletters/README.md) | 공개 뉴스레터 Markdown/HTML 출력물입니다. |
 | [`articles/assets/`](articles/assets/README.md) | 사이트 이미지와 기사 fallback 이미지입니다. |
 | [`articles/css/`](articles/css/README.md) | 정적 사이트 스타일입니다. |
-| [`templates/`](templates/README.md) | 뉴스레터 Markdown/HTML 템플릿(template)입니다. |
 
 ## 범위별 AGENTS
 
