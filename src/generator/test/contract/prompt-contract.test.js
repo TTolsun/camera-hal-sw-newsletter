@@ -355,6 +355,32 @@ test('LLM fact-check prompts map findings to schema fields and allow camera deve
   assert.doesNotMatch(source, /Rood Code/);
 });
 
+test('every fact-check stage carries the fake-must-fix scope guardrail', () => {
+  const source = promptHostSource();
+  const factCheckStageAnchors = [
+    '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI fact checker입니다.',
+    '당신은 repaired AOSP Camera / Driver / SoC Platform Newsletter draft의 AI fact checker입니다.',
+    '당신은 completed AOSP Camera / Driver / SoC Platform Newsletter draft의 AI fact checker입니다.'
+  ];
+  for (const anchor of factCheckStageAnchors) {
+    const start = source.indexOf(anchor);
+    assert.notEqual(start, -1, `Missing fact-check stage anchor: ${anchor}`);
+    const end = source.indexOf('schema와 일치하는 JSON만 반환하세요.', start);
+    assert.notEqual(end, -1, `Missing schema anchor after: ${anchor}`);
+    const stagePrompt = source.slice(start, end);
+    assert.match(
+      stagePrompt,
+      /editor schema에 정의된 유효한 필드의 존재 자체를 deprecated\/legacy로 판정하거나 must_fix로 올리지 마세요\./,
+      `fake-must-fix guardrail missing in fact-check stage: ${anchor}`
+    );
+    assert.match(
+      stagePrompt,
+      /must_fix\[\]는 source가 직접 반증하는 factual 오류, 누락\/위조된 출처, 명시된 editorial-policy 위반 전용입니다\./,
+      `must_fix scope clause missing in fact-check stage: ${anchor}`
+    );
+  }
+});
+
 test('public article prompt does not force internal triage fallback prose', () => {
   const source = promptHostSource();
 
