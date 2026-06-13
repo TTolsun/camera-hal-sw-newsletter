@@ -1,15 +1,5 @@
 [
   "src/core/adapters/llm/gemini-newsletter-response-adapter.js -> src/generator/reporter/llm-errors.js",
-  "src/core/common/newsletter-source-dedup-cleanup.js -> src/generator/quality/historical-archive.js",
-  "src/core/common/newsletter-source-dedup-cleanup.js -> src/generator/quality/newsletter-quality.js",
-  "src/core/common/newsletter-source-dedup-cleanup.js -> src/generator/render/newsletter-renderer.js",
-  "src/core/common/newsletter-source-dedup-cleanup.js -> src/generator/reporter/audit-paths.js",
-  "src/core/common/newsletter-source-dedup-cleanup.js -> src/generator/reporter/hal-signal-quality.js",
-  "src/core/common/newsletter-source-dedup-cleanup.js -> src/generator/reporter/public-article-contract.js",
   "src/core/common/section-identity.js -> src/generator/select/newsroom-selection.js",
-  "src/core/domain/newsletter-domain-normalize.js -> src/generator/reporter/newsletter-domain-errors.js",
-  "src/core/domain/newsletter-domain-normalize.js -> src/generator/reporter/newsletter-domain-schema.js",
-  "src/core/domain/newsletter-domain-validate.js -> src/generator/reporter/newsletter-domain-errors.js",
-  "src/core/domain/newsletter-domain-validate.js -> src/generator/reporter/newsletter-domain-schema.js",
   "src/discovery/gemini-client.js -> src/generator/reporter/llm-client.js"
 ]
