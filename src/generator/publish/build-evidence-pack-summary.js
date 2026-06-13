@@ -6,7 +6,7 @@ const {
 } = require('../../core/common/common');
 const {
   writeEvidencePackSummaryArtifacts
-} = require('../render/evidence-pack-summary');
+} = require('../diagnostics/evidence-pack-summary');
 
 function usage() {
   return [

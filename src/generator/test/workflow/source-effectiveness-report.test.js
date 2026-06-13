@@ -7,7 +7,7 @@ const {
   buildSourceEffectivenessReport,
   renderSourceEffectivenessMarkdown,
   writeSourceEffectivenessArtifacts
-} = require('../../render/source-effectiveness-report');
+} = require('../../diagnostics/source-effectiveness-report');
 const {
   tempRoot,
   writeJson

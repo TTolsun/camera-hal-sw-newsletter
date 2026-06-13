@@ -6,7 +6,7 @@ const {
 } = require('../../core/common/common');
 const {
   writeSourceEffectivenessArtifacts
-} = require('../render/source-effectiveness-report');
+} = require('../diagnostics/source-effectiveness-report');
 
 function usage() {
   return [

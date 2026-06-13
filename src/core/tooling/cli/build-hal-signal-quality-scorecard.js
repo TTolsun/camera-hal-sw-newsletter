@@ -4,7 +4,7 @@ const path = require('path');
 const {
   buildHalSignalQualityReport,
   loadHalSignalQualityInputs
-} = require('../../../generator/render/hal-signal-quality-report');
+} = require('../../../generator/diagnostics/hal-signal-quality-report');
 
 function usage() {
   return [

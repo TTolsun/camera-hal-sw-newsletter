@@ -35,11 +35,11 @@ const {
 } = require('../render/newsletter-renderer');
 const {
   DIAGNOSIS_KEYS
-} = require('../render/source-quality-diagnosis');
+} = require('../diagnostics/source-quality-diagnosis');
 const {
   DIAGNOSIS_LABELS_KO,
   RECOMMENDED_ACTION_LABELS_KO
-} = require('../render/source-quality-diagnosis-labels.ko');
+} = require('../diagnostics/source-quality-diagnosis-labels.ko');
 const {
   getChangedRepoVisibleArtifacts,
   requiredPublicFiles,
