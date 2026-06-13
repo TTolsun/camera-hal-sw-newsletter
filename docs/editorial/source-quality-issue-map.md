@@ -5,7 +5,7 @@ Source quality는 source URL/프롬프트 품질 격차를 source 정책을 실�
 ## 범위
 
 - `src/shared/data/news-sources.json`은 실행 가능한 source registry입니다.
-- `docs/news-sources.md`와 `docs/config/news-sources-fields.ko.md`는 사람이 검토하는 surface입니다.
+- `docs/news-sources.md`와 `docs/config/news-sources-fields.md`는 사람이 검토하는 surface입니다.
 - `source_quality`는 신규 artifact의 정식 표현입니다.
 - `source_url_quality`와 `main_article_source_allowed` 같은 flat field는 호환성 mirror에 불과합니다.
 - `main_article_source_allowed`는 source/evidence 정책 전용입니다. `finalSelectionEligibility`, score, final selection 결과, HAL signal 출력에 의존하면 안 됩니다.

@@ -6,8 +6,8 @@
 
 | 경로 | 역할 |
 | --- | --- |
-| `START_HERE.ko.md` | 처음 보는 운영자와 agent를 위한 진입 문서입니다. |
-| `glossary.ko.md` | newsroom, artifact, gate, field 이름의 의미를 설명합니다. |
+| `START_HERE.md` | 처음 보는 운영자와 agent를 위한 진입 문서입니다. |
+| `glossary.md` | newsroom, artifact, gate, field 이름의 의미를 설명합니다. |
 | `newsroom-workflow.md` | 후보 수집부터 PR 생성까지의 운영 흐름입니다. |
 | `config/` | GitHub Actions variable, source registry field, runtime config 설명입니다. |
 | `workflows/` | workflow input, generated artifact, LLM/domain boundary 같은 실행 계약 문서입니다. |

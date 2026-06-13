@@ -9,11 +9,11 @@
 | 문서 | 역할 |
 | --- | --- |
 | [README.md](../README.md) | 짧은 저장소 entry 문서입니다. |
-| [glossary.ko.md](glossary.ko.md) | newsroom과 artifact 용어를 설명합니다. |
+| [glossary.md](glossary.md) | newsroom과 artifact 용어를 설명합니다. |
 | [newsroom-workflow.md](newsroom-workflow.md) | 후보 수집부터 PR 생성까지의 운영 흐름입니다. |
-| [operations/README.ko.md](operations/README.ko.md) | 수동 실행, PR review, release, artifact review 순서입니다. |
-| [config/action-variables.ko.md](config/action-variables.ko.md) | GitHub Actions Secret과 Variable 설명입니다. |
-| [config/news-sources-fields.ko.md](config/news-sources-fields.ko.md) | `src/shared/data/news-sources.json` field 계약입니다. |
+| [operations/README.md](operations/README.md) | 수동 실행, PR review, release, artifact review 순서입니다. |
+| [config/action-variables.md](config/action-variables.md) | GitHub Actions Secret과 Variable 설명입니다. |
+| [config/news-sources-fields.md](config/news-sources-fields.md) | `src/shared/data/news-sources.json` field 계약입니다. |
 | [src/AGENTS.md](../src/AGENTS.md) | #262 재구성 후 `src/` layer 구조와 구현·테스트 규칙을 설명합니다. |
 
 Newsletter Policy의 현재 값은 `src/shared/config/newsletter-policy.json`이 source of truth입니다. 대표 운영 문서의 generated Newsletter Policy block은 스크립트로 갱신되며, 일반 문서에서 article count 숫자를 직접 수정하지 않습니다.
@@ -22,7 +22,7 @@ Newsletter Policy의 현재 값은 `src/shared/config/newsletter-policy.json`이
 
 | 경로 | 역할 |
 | --- | --- |
-| `docs/glossary.ko.md` | 코드 식별자와 artifact 이름의 의미를 설명합니다. |
+| `docs/glossary.md` | 코드 식별자와 artifact 이름의 의미를 설명합니다. |
 | `docs/README.md` | docs 하위 폴더와 현재 운영 문서 기준을 안내합니다. |
 | `docs/newsroom-workflow.md` | newsroom pipeline, quality gate, artifact, GitHub Actions 운영을 설명합니다. |
 | `docs/editorial-policy.md` | newsletter editorial policy와 scope 판단 기준입니다. |
