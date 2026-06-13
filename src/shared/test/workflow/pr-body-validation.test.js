@@ -19,7 +19,7 @@ const {
   resolveBodyKind,
   validatePrBodyFile,
   validatePrBodyText
-} = require('../../../generator/publish/validate-pr-body');
+} = require('../../../generator/validate/validate-pr-body');
 const {
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
@@ -349,7 +349,7 @@ test('validate-pr-body root wrapper CLI handles type-aware template validation',
   }));
 
   const valid = spawnSync(process.execPath, [
-    path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'validate-pr-body.js'),
+    path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'validate', 'validate-pr-body.js'),
     bodyPath,
     '--type',
     'code-docs'
@@ -361,7 +361,7 @@ test('validate-pr-body root wrapper CLI handles type-aware template validation',
   assert.match(valid.stdout, /Validated PR body/);
 
   const invalid = spawnSync(process.execPath, [
-    path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'validate-pr-body.js'),
+    path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'validate', 'validate-pr-body.js'),
     bodyPath,
     '--type',
     'foo'

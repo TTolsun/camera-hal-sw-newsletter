@@ -27,7 +27,7 @@ const {
 const {
   validatePrBodyText,
   extractSections
-} = require('../../../generator/publish/validate-pr-body');
+} = require('../../../generator/validate/validate-pr-body');
 const {
   REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS,
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,

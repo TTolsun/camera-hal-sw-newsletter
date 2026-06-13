@@ -41,15 +41,15 @@ function validateExplicitFiles(args) {
   if (args[0] === '--date') {
     const date = args[1];
     if (!DATE_PATTERN.test(String(date || ''))) {
-      throw new Error('Usage: node src/generator/publish/validate-public-newsletter.js --date YYYY-MM-DD');
+      throw new Error('Usage: node src/generator/validate/validate-public-newsletter.js --date YYYY-MM-DD');
     }
     if (args.length !== 2) {
-      throw new Error('Usage: node src/generator/publish/validate-public-newsletter.js --date YYYY-MM-DD');
+      throw new Error('Usage: node src/generator/validate/validate-public-newsletter.js --date YYYY-MM-DD');
     }
     return validateDateArtifacts(date);
   }
   if (args.length !== 2) {
-    throw new Error('Usage: node src/generator/publish/validate-public-newsletter.js <newsletter.md> <index.html> OR --date YYYY-MM-DD');
+    throw new Error('Usage: node src/generator/validate/validate-public-newsletter.js <newsletter.md> <index.html> OR --date YYYY-MM-DD');
   }
   const markdownPath = repoPath(root, args[0]);
   const htmlPath = repoPath(root, args[1]);

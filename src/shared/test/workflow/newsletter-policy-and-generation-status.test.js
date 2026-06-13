@@ -20,7 +20,7 @@ const {
   blockingIssues: llmPublicationQualityBlockingIssues,
   normalizeReport: normalizeLlmPublicationQualityReport,
   promptFor: llmPublicationQualityPromptFor
-} = require('../../../generator/publish/validate-llm-publication-quality');
+} = require('../../../generator/validate/validate-llm-publication-quality');
 
 test('generation status output falls back when status JSON is missing', () => {
   const status = readStatus('__missing__/newsletter-generation-status.json');

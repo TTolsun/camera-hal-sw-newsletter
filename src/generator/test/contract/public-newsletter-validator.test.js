@@ -6,7 +6,7 @@ const {
 } = require('../../quality/public-newsletter');
 const {
   publicArticlePathIssues
-} = require('../../publish/validate-public-newsletter');
+} = require('../../validate/validate-public-newsletter');
 
 function markdown(overrides = {}) {
   const checkpoints = overrides.checkpoints || [

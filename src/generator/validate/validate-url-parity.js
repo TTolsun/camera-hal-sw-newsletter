@@ -11,7 +11,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const { assembleSite } = require('./assemble-site');
+const { assembleSite } = require('../publish/assemble-site');
 const { SITE_BASE_URL } = require('../render/seo-metadata');
 
 // 이동 전부터 site root에서 서빙되던 알려진 top-level 진입점.
