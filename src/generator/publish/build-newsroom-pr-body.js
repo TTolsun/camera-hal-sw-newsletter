@@ -2384,7 +2384,7 @@ function renderHomepageHeadlineDecision(root, date, status = {}) {
     `- removed_due_to_headline_inclusion_count: ${removedDueToHeadlineInclusion.length}`,
     `- exposure_history_coverage: mode=${valueOrUnknown(coverage.mode)}; coverage_starts_at=${valueOrUnknown(coverage.coverage_starts_at)}; backfill_included=${booleanText(coverage.backfill_included === true)}`,
     '- Artifacts:',
-    `  - \`data/homepage-headline.json\``,
+    `  - \`articles/data/homepage-headline.json\``,
     `  - \`data/article-exposure-history.json\``,
     ''
   ].join('\n');
