@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-13",
+  "generated_at": "2026-06-13T06:32:50.540Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 4,
+    "hit_count": 2,
+    "miss_count": 2,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 2,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 2
+    },
+    {
+      "reason": "content-hash-hit",
+      "count": 2
+    }
+  ],
+  "entries": [
+    {
+      "title": "Re: [PATCH v3 6/8] media: platform: Add NXP Neoisp Image Signal Processor",
+      "url": "https://lore.kernel.org/linux-media/aixdEPsghlc2S7Zl@SMW015318/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-12T19:25:22Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/aixdepsghlc2s7zl@smw015318",
+        "url_hash": "a72bdc87403a51f6867d5134540ecc25e273f28b57b2f9108410ff7c07347973",
+        "published_date": "2026-06-12T19:25:22Z",
+        "content_hash": "bd9a0de5f2b18bff877da751a0affc1297386c0c1213d1c66e77a378b6cb4b19"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v1 0/4] This series adds support for the Qualcomm JPEG V4L2 mem2mem encoder.",
+      "url": "https://lore.kernel.org/linux-media/20260612194417.1737009-1-atanas.filipov@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-12T19:44:21Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260612194417.1737009-1-atanas.filipov@oss.qualcomm.com",
+        "url_hash": "98e51a6d5071fdb9de185cb245cdee649f5db49f508dccfd4ef69aa583e4ed75",
+        "published_date": "2026-06-12T19:44:21Z",
+        "content_hash": "f68276c3dc4096adcdb6bf349c4b89dca44c52b8c340a7c6fd8c62eb63e2a664"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/tools/agents/android-cli",
+        "url_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb"
+      },
+      "hit": true,
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb.json"
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "url_hash": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7"
+      },
+      "hit": true,
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7.json"
+    }
+  ]
+}

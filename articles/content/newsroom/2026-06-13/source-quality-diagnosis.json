@@ -1,0 +1,1521 @@
+{
+  "schema_version": 1,
+  "report_type": "source_quality_diagnosis",
+  "date": "2026-06-13",
+  "input_refs": {
+    "candidate_input": "articles/content/collected-news/2026-06-13/merged-candidates.json",
+    "shortlisted_candidates": "articles/content/newsroom/2026-06-13/shortlisted-candidates.json",
+    "selection_report": "articles/content/newsroom/2026-06-13/selection-report.json",
+    "generation_status": "articles/content/newsroom/2026-06-13/generation-status.json",
+    "source_effectiveness_report": "articles/content/newsroom/2026-06-13/source-effectiveness-report.json",
+    "source_quality_report": "articles/content/newsroom/2026-06-13/source-quality-report.json",
+    "source_discovery_feedback_report": "articles/content/newsroom/2026-06-13/source-discovery-feedback-report.json",
+    "merged_candidate_manifest": "articles/content/collected-news/2026-06-13/merged-candidate-manifest.json",
+    "evidence_pack_summary": null
+  },
+  "evidence_completeness": {
+    "candidate_input": true,
+    "shortlisted_candidates": true,
+    "selection_report": true,
+    "generation_status": true,
+    "source_effectiveness_report": true,
+    "source_quality_report": true,
+    "source_discovery_feedback_report": true,
+    "merged_candidate_manifest": true,
+    "evidence_pack_summary": false
+  },
+  "raw_candidate_count": 40,
+  "eligible_candidate_count": 14,
+  "primary_camera_stack_count": 3,
+  "android_multimedia_camera_output_count": 0,
+  "diagnosis": {
+    "actual_news_shortage": false,
+    "parser_extraction_failure": true,
+    "source_gap_risk": false,
+    "taxonomy_missing": true,
+    "fallback_only_composition": true,
+    "duplicate_or_noop_source_discovery": true
+  },
+  "diagnosis_reasons": {
+    "actual_news_shortage": [],
+    "parser_extraction_failure": [
+      {
+        "reason": "android-compatibility-definition-document has KEEP_AND_FIX_PARSER recommendation.",
+        "source_artifact": "articles/content/newsroom/2026-06-13/source-effectiveness-report.json",
+        "severity": "high",
+        "source_id": "android-compatibility-definition-document"
+      },
+      {
+        "reason": "android-developers-blog has KEEP_AND_FIX_PARSER recommendation.",
+        "source_artifact": "articles/content/newsroom/2026-06-13/source-effectiveness-report.json",
+        "severity": "high",
+        "source_id": "android-developers-blog"
+      },
+      {
+        "reason": "android-developers-latest-updates has KEEP_AND_FIX_PARSER recommendation.",
+        "source_artifact": "articles/content/newsroom/2026-06-13/source-effectiveness-report.json",
+        "severity": "high",
+        "source_id": "android-developers-latest-updates"
+      },
+      {
+        "reason": "android-photo-picker-reference has KEEP_AND_FIX_PARSER recommendation.",
+        "source_artifact": "articles/content/newsroom/2026-06-13/source-effectiveness-report.json",
+        "severity": "high",
+        "source_id": "android-photo-picker-reference"
+      },
+      {
+        "reason": "android-security-bulletin has KEEP_AND_FIX_PARSER recommendation.",
+        "source_artifact": "articles/content/newsroom/2026-06-13/source-effectiveness-report.json",
+        "severity": "high",
+        "source_id": "android-security-bulletin"
+      },
+      {
+        "reason": "source-discovery feedback reports parser_gap_count=2.",
+        "source_artifact": "articles/content/newsroom/2026-06-13/source-discovery-feedback-report.json",
+        "severity": "high"
+      },
+      {
+        "reason": "Gemini discovery parser extraction failures=1.",
+        "source_artifact": "articles/content/newsroom/2026-06-13/source-discovery-feedback-report.json",
+        "severity": "high"
+      }
+    ],
+    "source_gap_risk": [],
+    "taxonomy_missing": [
+      {
+        "reason": "9 camera-relevant candidate(s) were not mapped to a known camera bucket.",
+        "source_artifact": "articles/content/collected-news/2026-06-13/merged-candidates.json",
+        "severity": "medium"
+      }
+    ],
+    "fallback_only_composition": [
+      {
+        "reason": "composition_mode indicates fallback composition: FALLBACK_COMPOSITION.",
+        "source_artifact": "articles/content/newsroom/2026-06-13/generation-status.json",
+        "severity": "medium"
+      }
+    ],
+    "duplicate_or_noop_source_discovery": [
+      {
+        "reason": "Gemini discovery produced 10 candidate(s) but gemini_new_unique_url_count=0.",
+        "source_artifact": "articles/content/collected-news/2026-06-13/merged-candidate-manifest.json",
+        "severity": "medium"
+      },
+      {
+        "reason": "Duplicate discovery signal detected: gemini_manual_duplicate_url_count=10, duplicate_discovery_gap_count=2.",
+        "source_artifact": "articles/content/collected-news/2026-06-13/merged-candidate-manifest.json",
+        "severity": "medium"
+      }
+    ]
+  },
+  "source_breakdown": [
+    {
+      "source_id": "android-compatibility-definition-document",
+      "source_name": "Android Compatibility Definition Document",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 1,
+      "eligible_count": 0,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "finalSelectionEligibility=exclude",
+        "hasDatedEvidence=false",
+        "main_eligible=false",
+        "reference_only=true"
+      ],
+      "parser_failure_signals": [
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
+        "hasDatedEvidence=false"
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
+    },
+    {
+      "source_id": "android-developer-newsletter",
+      "source_name": "Android Developer Newsletter",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-developers-blog",
+      "source_name": "Android Developers Blog",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 8,
+      "eligible_count": 4,
+      "blocked_count": 4,
+      "main_eligible_count": 3,
+      "top_blockers": [
+        "main_eligible=false",
+        "source_gap_risk=true",
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist"
+      ],
+      "parser_failure_signals": [
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
+    },
+    {
+      "source_id": "android-developers-blog-camera",
+      "source_name": "Android Developers Blog - Camera",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-developers-latest-updates",
+      "source_name": "Android Developers Latest Updates",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 2,
+      "eligible_count": 1,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "No RSS item, no published date, no concrete release/API/behavior change detected.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "hasDatedEvidence=false",
+        "main_eligible=false"
+      ],
+      "parser_failure_signals": [
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
+        "No RSS item, no published date, no concrete release/API/behavior change detected.",
+        "hasDatedEvidence=false"
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
+    },
+    {
+      "source_id": "android-mediacodec-reference",
+      "source_name": "MediaCodec Reference",
+      "reliability": "official",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-mediarecorder-reference",
+      "source_name": "MediaRecorder Documentation",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-mediastore-reference",
+      "source_name": "MediaStore Reference",
+      "reliability": "official",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-photo-picker-reference",
+      "source_name": "Photo Picker Documentation",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 1,
+      "eligible_count": 0,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "finalSelectionEligibility=exclude",
+        "hasDatedEvidence=false",
+        "main_eligible=false",
+        "reference_only=true"
+      ],
+      "parser_failure_signals": [
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
+        "hasDatedEvidence=false"
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
+    },
+    {
+      "source_id": "android-security-bulletin",
+      "source_name": "Android Security Bulletin",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 4,
+      "eligible_count": 0,
+      "blocked_count": 4,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "main_eligible=false",
+        "source_gap_risk=true",
+        "finalSelectionEligibility=exclude",
+        "hasDatedEvidence=false"
+      ],
+      "parser_failure_signals": [
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
+        "hasDatedEvidence=false"
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
+    },
+    {
+      "source_id": "android-supported-formats-reference",
+      "source_name": "Android Supported Media Formats",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "android-weekly",
+      "source_name": "Android Weekly",
+      "reliability": "newsletter",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "androidx-media3-release-notes",
+      "source_name": "Media3 Release Notes",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 2,
+      "eligible_count": 0,
+      "blocked_count": 2,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "main_eligible=false",
+        "source_gap_risk=true",
+        "briefing_only=true",
+        "finalSelectionEligibility=exclude"
+      ],
+      "parser_failure_signals": [
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
+    },
+    {
+      "source_id": "anthropic-news",
+      "source_name": "Anthropic News",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "aosp-camera-documentation",
+      "source_name": "AOSP Camera Documentation",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 1,
+      "eligible_count": 0,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "finalSelectionEligibility=exclude",
+        "hasDatedEvidence=false",
+        "main_eligible=false",
+        "reference_only=true"
+      ],
+      "parser_failure_signals": [
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
+        "hasDatedEvidence=false"
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
+    },
+    {
+      "source_id": "aosp-site-updates",
+      "source_name": "AOSP Site Updates",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 2,
+      "eligible_count": 2,
+      "blocked_count": 0,
+      "main_eligible_count": 1,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "aosp-whats-new-release-notes",
+      "source_name": "AOSP What's New / Release Notes",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 1,
+      "eligible_count": 0,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "finalSelectionEligibility=exclude",
+        "hasDatedEvidence=false",
+        "main_eligible=false",
+        "reference_only=true"
+      ],
+      "parser_failure_signals": [
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
+        "hasDatedEvidence=false"
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
+    },
+    {
+      "source_id": "camerax-release-notes",
+      "source_name": "CameraX Release Notes",
+      "reliability": "official",
+      "priority": "high",
+      "raw_count": 1,
+      "eligible_count": 1,
+      "blocked_count": 0,
+      "main_eligible_count": 1,
+      "top_blockers": [],
+      "parser_failure_signals": [],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_MONITOR",
+      "recommended_action_label": "유지하고 추적",
+      "source_effectiveness_recommendation": "KEEP_AND_MONITOR"
+    },
+    {
+      "source_id": "claude-code-changelog",
+      "source_name": "Claude Code Changelog",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "collabora-blog",
+      "source_name": "Collabora Blog",
+      "reliability": "engineering-blog",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "cppcon-news",
+      "source_name": "CppCon News",
+      "reliability": "conference",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "ee-times-embedded",
+      "source_name": "EE Times - Embedded",
+      "reliability": "electronics-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "ee-times-semiconductors",
+      "source_name": "EE Times - Semiconductors",
+      "reliability": "electronics-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "embedded-com",
+      "source_name": "Embedded.com",
+      "reliability": "engineering-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "google-cloud-ai-ml-blog",
+      "source_name": "Google Cloud AI & Machine Learning Blog",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "google-deepmind-blog",
+      "source_name": "Google DeepMind Blog",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "google-open-source-blog",
+      "source_name": "Google Open Source Blog",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "google-research-blog",
+      "source_name": "Google Research Blog",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "hacker-news",
+      "source_name": "Hacker News",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "ieee-spectrum-embedded-ai",
+      "source_name": "IEEE Spectrum - Embedded AI",
+      "reliability": "engineering-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "ieee-spectrum-embedded-systems",
+      "source_name": "IEEE Spectrum - Embedded Systems",
+      "reliability": "engineering-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "infoq",
+      "source_name": "InfoQ",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "iso-cpp-blog",
+      "source_name": "ISO C++ Blog",
+      "reliability": "official-community",
+      "priority": "high",
+      "raw_count": 8,
+      "eligible_count": 2,
+      "blocked_count": 6,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "main_eligible=false",
+        "source_gap_risk=true",
+        "reference_only=true",
+        "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.",
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+      ],
+      "parser_failure_signals": [
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
+    },
+    {
+      "source_id": "kernel-org-releases",
+      "source_name": "kernel.org Linux Releases",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "kernelnewbies-linuxchanges",
+      "source_name": "KernelNewbies LinuxChanges",
+      "reliability": "community-doc",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "libcamera-blog",
+      "source_name": "libcamera Blog",
+      "reliability": "project-official",
+      "priority": "high",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "libcamera-documentation",
+      "source_name": "libcamera Documentation",
+      "reliability": "project-official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "libcamera-release-announcements",
+      "source_name": "libcamera Release Announcements",
+      "reliability": "project-official",
+      "priority": "high",
+      "raw_count": 1,
+      "eligible_count": 0,
+      "blocked_count": 1,
+      "main_eligible_count": 0,
+      "top_blockers": [
+        "No RSS item, no published date, no concrete release/API/behavior change detected.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "hasDatedEvidence=false",
+        "main_eligible=false"
+      ],
+      "parser_failure_signals": [
+        "Official or high-priority source produced camera-relevant candidates, but parser/source-extraction-like rejection reasons blocked eligibility.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
+        "No RSS item, no published date, no concrete release/API/behavior change detected.",
+        "hasDatedEvidence=false"
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR"
+    },
+    {
+      "source_id": "llvm-project-blog",
+      "source_name": "LLVM Project Blog",
+      "reliability": "project-official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "llvm-release-notes",
+      "source_name": "LLVM Release Notes",
+      "reliability": "project-official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "lore-linux-media-list",
+      "source_name": "lore.kernel.org linux-media list",
+      "reliability": "project-official",
+      "priority": "high",
+      "raw_count": 8,
+      "eligible_count": 4,
+      "blocked_count": 4,
+      "main_eligible_count": 1,
+      "top_blockers": [
+        "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+        "briefing_only=true",
+        "finalSelectionEligibility=watchlist",
+        "main_eligible=false",
+        "reference_only=true"
+      ],
+      "parser_failure_signals": [
+        "Generic noise candidates were detected from artifact exclusion metadata.",
+        "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "KEEP_AND_FIX_PARSER",
+      "recommended_action_label": "소스 유지, 파서 수정",
+      "source_effectiveness_recommendation": "KEEP_AND_FIX_PARSER"
+    },
+    {
+      "source_id": "lwn-camera-media-articles",
+      "source_name": "LWN Camera / Media Articles",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "microsoft-cpp-team-blog",
+      "source_name": "Microsoft C++ Team Blog",
+      "reliability": "vendor-blog",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "naver-deview",
+      "source_name": "NAVER DEVIEW",
+      "reliability": "conference",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "openai-news",
+      "source_name": "OpenAI News",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "phoronix-linux-camera-media",
+      "source_name": "Phoronix Linux Camera / Media",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "qualcomm-security-bulletins",
+      "source_name": "Qualcomm Security Bulletins",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "raspberry-pi-blog",
+      "source_name": "Raspberry Pi Blog",
+      "reliability": "engineering-blog",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "reddit-android-camera",
+      "source_name": "Reddit r/Android",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "reddit-androiddev-camera",
+      "source_name": "Reddit r/androiddev",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "reddit-artificial-camera",
+      "source_name": "Reddit r/artificial",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "reddit-camera-community",
+      "source_name": "Reddit r/Camera",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "reddit-cpp-camera",
+      "source_name": "Reddit r/cpp",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "reddit-linux-camera",
+      "source_name": "Reddit r/linux",
+      "reliability": "community",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "samsung-mobile-security-updates",
+      "source_name": "Samsung Mobile Security Updates",
+      "reliability": "official",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "software-engineering-daily",
+      "source_name": "Software Engineering Daily",
+      "reliability": "engineering-media",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "the-new-stack",
+      "source_name": "The New Stack",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "the-register",
+      "source_name": "The Register",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "tldr",
+      "source_name": "TLDR",
+      "reliability": "newsletter",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "venturebeat-ai",
+      "source_name": "VentureBeat AI",
+      "reliability": "tech-media",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "yozm-it",
+      "source_name": "요즘IT",
+      "reliability": "tech-media",
+      "priority": "low",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    },
+    {
+      "source_id": "zdnet-korea",
+      "source_name": "ZDNet Korea",
+      "reliability": "tech-media",
+      "priority": "medium",
+      "raw_count": 0,
+      "eligible_count": 0,
+      "blocked_count": 0,
+      "main_eligible_count": 0,
+      "top_blockers": [],
+      "parser_failure_signals": [
+        "No recent candidates were collected for this source."
+      ],
+      "duplicate_url_count": 0,
+      "source_discovery_new_publishable_count": null,
+      "recommended_action": "NO_ACTION_THIN_WEEK",
+      "recommended_action_label": "기사 부족 주간으로 판단, 조치 없음",
+      "source_effectiveness_recommendation": "NO_RECENT_SIGNAL"
+    }
+  ],
+  "recommended_issues": [
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "iso-cpp-blog",
+      "source_name": "ISO C++ Blog",
+      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official-community",
+      "blocked_count": 6,
+      "raw_count": 8
+    },
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "android-developers-blog",
+      "source_name": "Android Developers Blog",
+      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 4,
+      "raw_count": 8
+    },
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "lore-linux-media-list",
+      "source_name": "lore.kernel.org linux-media list",
+      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "project-official",
+      "blocked_count": 4,
+      "raw_count": 8
+    },
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "android-security-bulletin",
+      "source_name": "Android Security Bulletin",
+      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 4,
+      "raw_count": 4
+    },
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "androidx-media3-release-notes",
+      "source_name": "Media3 Release Notes",
+      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "medium",
+      "source_reliability": "official",
+      "blocked_count": 2,
+      "raw_count": 2
+    },
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "android-developers-latest-updates",
+      "source_name": "Android Developers Latest Updates",
+      "reason": "Official or high-priority source has parser/source-evidence issues but should stay enabled.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 2
+    },
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "android-compatibility-definition-document",
+      "source_name": "Android Compatibility Definition Document",
+      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 1
+    },
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "android-photo-picker-reference",
+      "source_name": "Photo Picker Documentation",
+      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "medium",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 1
+    },
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "aosp-camera-documentation",
+      "source_name": "AOSP Camera Documentation",
+      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 1
+    },
+    {
+      "action": "KEEP_AND_FIX_PARSER",
+      "action_label": "소스 유지, 파서 수정",
+      "source_id": "aosp-whats-new-release-notes",
+      "source_name": "AOSP What's New / Release Notes",
+      "reason": "Generic noise candidates were detected from artifact exclusion metadata.",
+      "severity": "high",
+      "source_artifact": "source-effectiveness-report.json",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "blocked_count": 1,
+      "raw_count": 1
+    }
+  ],
+  "warnings": [
+    {
+      "type": "missing_optional_artifact",
+      "message": "articles/content/newsroom/2026-06-13/evidence-pack-summary.json not found; partial diagnosis will continue.",
+      "source_artifact": "articles/content/newsroom/2026-06-13/evidence-pack-summary.json"
+    }
+  ]
+}

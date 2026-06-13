@@ -134,12 +134,12 @@
           "alt": ""
         }
       ],
-      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
-      "imageSource": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
+      "imageSource": "https://android-developers.googleblog.com/",
       "imageAttribution": "Android Developers Blog",
-      "imageAlt": "Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망",
+      "imageAlt": "Android Developers Blog logo representing developer productivity updates",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "imageUsageDecisionReason": "Official Android Developers Blog social image representing developer productivity updates, relevant to the CameraX migration tool discussion.",
       "sources": [
         {
           "title": "Android CLI Skills Update",
@@ -181,12 +181,12 @@
       "evidence_origin": "article_text",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "resolvedImage": {
-        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
-        "src": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+        "url": "https://developer.android.com/static/images/social/android-developers.png",
+        "src": "https://developer.android.com/static/images/social/android-developers.png",
         "originalUrl": "",
         "originalSrc": "",
         "usedFallback": false,
-        "reason": "selected image candidate"
+        "reason": ""
       },
       "coverage_type": "fresh",
       "imageSelection": {
