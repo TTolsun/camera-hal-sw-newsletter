@@ -20,17 +20,45 @@ function changedFilesFromGit({ root = process.cwd(), env = process.env } = {}) {
 
   for (const range of candidates) {
     try {
-      const output = execFileSync('git', ['diff', '--name-only', range], {
+      // --name-status -M로 rename을 식별한다. 내용이 그대로인 순수 rename(R100)은
+      // 콘텐츠 변경이 아니므로 strict validation target에서 제외한다(#262 articles/ 이동이
+      // 과거 newsletter를 strict target으로 끌어올려 historical placeholder를 hard fail로
+      // 바꾸는 것을 막는다). 내용도 바뀐 rename(R<100>)은 대상 경로를 포함한다.
+      const output = execFileSync('git', ['diff', '--name-status', '-M', range], {
         cwd: root,
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'ignore']
       });
-      return output.split(/\r?\n/).map(item => item.trim()).filter(Boolean);
+      return parseNameStatus(output);
     } catch (_) {
       // Try the next range; local validation may not have origin/main or a parent commit.
     }
   }
   return [];
+}
+
+function parseNameStatus(output) {
+  const files = [];
+  for (const rawLine of String(output || '').split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line) continue;
+    const parts = line.split(/\t/);
+    const status = parts[0] || '';
+    if (status.startsWith('R')) {
+      // R<similarity>\t<old>\t<new>. 100% similarity(R100)는 순수 이동이라 무시한다.
+      const similarity = Number(status.slice(1));
+      if (similarity >= 100) continue;
+      const dest = parts[2] || parts[1];
+      if (dest) files.push(dest.trim());
+    } else if (status.startsWith('C')) {
+      // Copy: 대상 경로만 의미가 있다.
+      const dest = parts[2] || parts[1];
+      if (dest) files.push(dest.trim());
+    } else if (parts[1]) {
+      files.push(parts[1].trim());
+    }
+  }
+  return files;
 }
 
 function readNewsletterDate(newsletterDatePath) {
