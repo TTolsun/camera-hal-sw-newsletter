@@ -1,10 +1,10 @@
 # Newsroom PR Report 읽는 법
 
-이 문서는 newsroom workflow가 만든 PR body를 검토할 때 먼저 볼 순서를 정리합니다. 자세한 gate 계약은 `docs/newsroom-workflow.md`를 기준으로 확인하세요.
+이 문서는 newsroom workflow가 만든 PR body를 검토할 때 어떤 순서로 볼지 정리합니다. 자세한 gate(검증 관문) 계약은 `docs/newsroom-workflow.md`를 기준으로 확인하세요.
 
 ## 먼저 볼 것
 
-모든 newsroom PR은 상단의 `최종 판단`, `이번 PR 요약`, `반드시 확인할 항목`, `주요 결과`를 먼저 봅니다. `상세 report`는 PR body에 원본 로그를 붙이는 영역이 아니라, 필요한 artifact 경로와 최소 원인만 안내하는 영역입니다.
+모든 newsroom PR은 상단의 `최종 판단`, `이번 PR 요약`, `반드시 확인할 항목`, `주요 결과`를 먼저 봅니다. `상세 report`는 원본 로그를 붙이는 칸이 아닙니다. 필요한 artifact 경로와 최소한의 원인만 안내하는 칸입니다.
 
 ## 01 PR 읽는 순서
 
@@ -45,11 +45,11 @@
 - `report-only`: 품질/팩트체크 report 연결용으로만 표시된 항목입니다.
 - `merged`: 같은 source/event cluster로 병합되어 별도 main article로 다루지 않는 후보입니다.
 
-`score`는 편집 판단을 대체하지 않으므로 `편집자 기사 판단 요약` table에는 표시하지 않습니다. 점수와 세부 diagnostics는 PR body에 모두 펼치지 않고 `quality-report`, `evidence-pack-summary.json`, `hal-signal-quality-report` 등 artifact에서 확인합니다.
+`score`는 편집 판단을 대신하지 못합니다. 그래서 `편집자 기사 판단 요약` table에는 표시하지 않습니다. 점수와 세부 diagnostics는 PR body에 전부 펼치지 않고, `quality-report`, `evidence-pack-summary.json`, `hal-signal-quality-report` 같은 artifact에서 확인합니다.
 
 ## 주의할 경고
 
-- `source_gap_risk=true` article은 자동 선택됐더라도 `메인(Main)`으로 보지 않습니다.
-- `fallback/supporting` article이 많으면 Camera HAL newsletter 정체성이 약해질 수 있습니다.
-- selected count mismatch warning은 section마다 다른 artifact count가 보인다는 뜻입니다. 1차 PR에서는 warning이며 hard fail은 아닙니다.
-- `review-only`는 editor review가 필요하다는 신호입니다. `publish-ready` label과 같은 뜻이 아닙니다.
+- `source_gap_risk=true`인 article은 자동 선택됐더라도 `메인(Main)`으로 보지 않습니다.
+- `fallback/supporting` article이 많으면 Camera HAL newsletter다운 정체성이 약해질 수 있습니다.
+- selected count mismatch warning은 section마다 artifact count가 다르게 보인다는 뜻입니다. 1차 PR에서는 경고(warning)일 뿐 hard fail은 아닙니다.
+- `review-only`는 editor review(편집자 검토)가 필요하다는 신호입니다. `publish-ready` label과 같은 뜻이 아닙니다.

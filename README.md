@@ -1,10 +1,21 @@
 # AOSP Camera / Driver / SoC Platform Newsletter
 
-> 기본 뉴스룸(newsroom) 공급자는 Gemini입니다. 기본 실행과 예약 실행(scheduled run)은 코드 기본값(code default)을 따르며, `workflow_dispatch` 수동 실행에서만 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` 재정의(override)가 런타임 환경 변수(runtime env)로 전달됩니다. 토큰은 GitHub Secrets에서만 읽습니다.
+> 뉴스룸(newsroom, 기사 생성 자동화) 기본 공급자는 Gemini입니다. 평소 실행과 예약 실행(scheduled run)은 코드에 박힌 기본값(code default)을 그대로 씁니다. 모델/공급자 재정의(override)인 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS`는 `workflow_dispatch`(수동 실행)에서만 런타임 환경 변수(runtime env)로 전달됩니다. 토큰은 GitHub Secrets에서만 읽습니다.
 
-이 저장소는 AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC platform 소식을 수집해 정적 뉴스레터로 발행합니다. 후보 수집과 Gemini 기반 뉴스룸 자동화는 검토 가능한 리뷰 산출물(review artifact)을 만들고, 발행은 사람이 승인한 PR merge를 통해서만 진행합니다. 비용 절감은 deterministic shortlist(결정론적 숏리스트), compact article capsule(요약된 기사 캡슐), retry scope(재시도 범위) 제한으로 처리하며 quality gate(품질 게이트)를 낮추지 않습니다.
+이 저장소는 AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC platform 소식을 모아 정적 뉴스레터로 발행합니다.
 
-처음 보는 사람은 모든 파일을 뒤지지 말고 아래 문서부터 읽으면 됩니다. README는 긴 운영 매뉴얼이 아니라, 각 세부 문서로 연결하는 짧은 진입점 역할만 합니다.
+동작 방식은 두 단계로 나뉩니다.
+
+- 후보 수집과 Gemini 뉴스룸 자동화는 사람이 검토할 수 있는 리뷰 산출물(review artifact)만 만듭니다.
+- 실제 발행은 사람이 승인한 PR merge로만 일어납니다.
+
+비용은 다음 세 가지로 줄입니다. quality gate(품질 게이트, 발행 안전 기준)는 절대 낮추지 않습니다.
+
+- deterministic shortlist(결정론적 숏리스트): 코드가 후보를 미리 추려냄
+- compact article capsule(요약된 기사 캡슐): LLM에는 핵심만 추려 전달
+- retry scope(재시도 범위) 제한: 다시 시도하는 범위를 좁힘
+
+처음 보는 사람은 모든 파일을 뒤질 필요가 없습니다. 아래 문서부터 읽으세요. 이 README는 긴 운영 매뉴얼이 아니라, 세부 문서로 안내하는 짧은 진입점입니다.
 
 ## 시작 가이드
 
@@ -18,7 +29,7 @@
 | [docs/config/news-sources-fields.md](docs/config/news-sources-fields.md) | `src/shared/data/news-sources.json` field 계약을 설명합니다. |
 | [src/AGENTS.md](src/AGENTS.md) | #262 재구성 후 `src/` layer 구조와 구현·테스트 규칙을 설명합니다. |
 
-뉴스레터 생성은 아래 흐름으로 진행됩니다. 중요한 점은 생성 성공과 발행 가능 상태가 다르다는 것입니다.
+뉴스레터 생성 흐름은 아래와 같습니다. 한 가지만 기억하세요. **생성에 성공했다고 발행 가능한 상태는 아닙니다.**
 
 ## 5분 안에 처음 실행하기
 
@@ -30,7 +41,7 @@ npm.cmd run test
 npm.cmd run validate
 ```
 
-`test`와 `validate`가 모두 통과하면 로컬 환경이 준비된 것입니다. 실제 뉴스룸 파이프라인 실행은 `GEMINI_API_KEY`가 필요하며, 자세한 절차는 [docs/operations/README.md](docs/operations/README.md)를 확인합니다.
+`test`와 `validate`가 모두 통과하면 로컬 환경이 준비된 것입니다. 실제 뉴스룸 파이프라인을 돌리려면 `GEMINI_API_KEY`가 필요합니다. 자세한 절차는 [운영 안내(docs/operations/README.md)](docs/operations/README.md)를 보세요.
 
 ## 현재 운영 모델
 
@@ -43,11 +54,22 @@ candidate collection
   -> GitHub Pages
 ```
 
-`articles/content/collected-news/YYYY-MM-DD/`에는 원시 후보(raw candidate)가, `articles/content/newsroom/YYYY-MM-DD/`에는 리뷰 산출물이, `articles/newsletters/YYYY-MM-DD/`에는 공개 산출물(public artifact)이 저장됩니다. `publish-ready` 상태가 아니면 PR이 만들어져도 발행 가능한 뉴스레터로 보지 않습니다.
+단계별 산출물은 폴더가 다릅니다.
 
-로컬에서 확인할 때는 아래 명령만 기억하면 됩니다. 변경 범위가 넓거나 확신이 없으면 `ci`를 우선 사용합니다.
+- `articles/content/collected-news/YYYY-MM-DD/`: 원시 후보(raw candidate)
+- `articles/content/newsroom/YYYY-MM-DD/`: 리뷰 산출물
+- `articles/newsletters/YYYY-MM-DD/`: 공개 산출물(public artifact)
 
-`publish-ready`는 AI 자동 발행 가능 상태입니다. `needs-fix`라도 공개 산출물이 포함되면 편집장 main merge를 사이트 공개 승인으로 해석합니다. `Validate Site and Images` (`.github/workflows/validate-site.yml`)는 구조 검증(structural validation)은 blocking(차단)으로, quality/fact-check 문제는 non-blocking annotation(비차단 알림)으로 보고합니다.
+PR이 만들어졌더라도 `publish-ready` 상태가 아니면 발행 가능한 뉴스레터로 보지 않습니다.
+
+로컬에서 확인할 때는 아래 명령만 기억하면 됩니다. 변경 범위가 넓거나 확신이 없으면 `ci`를 먼저 쓰세요.
+
+발행 상태는 다음과 같이 읽습니다.
+
+- `publish-ready`: AI가 자동 발행할 수 있는 상태입니다.
+- `needs-fix`라도 공개 산출물이 들어 있으면, 편집장이 `main`에 merge하는 것을 사이트 공개 승인으로 봅니다.
+
+`Validate Site and Images` (`.github/workflows/validate-site.yml`)는 구조 검증(structural validation)은 blocking(차단)으로, quality/fact-check 문제는 non-blocking annotation(차단하지 않는 알림)으로 보고합니다.
 
 ## 주요 명령
 
@@ -61,9 +83,9 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | `npm.cmd run collect` | `src/shared/data/news-sources.json` 기반 후보 수집 | `articles/content/collected-news/YYYY-MM-DD/` |
 | `npm.cmd run generate` | LLM 뉴스룸 파이프라인 (Gemini 공급자 사용 시 `GEMINI_API_KEY` 필요) | `articles/content/newsroom/YYYY-MM-DD/` |
 
-공급자/모델 재정의와 사내 API Secret 설정은 [docs/config/action-variables.md](docs/config/action-variables.md)를 확인합니다.
+공급자/모델 재정의와 사내 API Secret 설정은 [GitHub Actions Secret과 Variable(docs/config/action-variables.md)](docs/config/action-variables.md)를 보세요.
 
-폴더 구조는 목적별로 나뉘어 있습니다. 실제 구현과 tooling은 모두 `src/`에 있고(#262 재구성으로 root `scripts/` wrapper는 제거됨), 검토 산출물과 공개 발행물은 `articles/content/`와 `articles/newsletters/`에 분리됩니다.
+폴더는 목적별로 나뉘어 있습니다. 실제 구현과 tooling은 모두 `src/` 아래에 있습니다(#262 재구성으로 root `scripts/` wrapper는 제거됨). 검토 산출물은 `articles/content/`, 공개 발행물은 `articles/newsletters/`로 분리됩니다.
 
 ## 저장소 구조
 
@@ -81,7 +103,7 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 
 ## 범위별 AGENTS
 
-각 영역에는 안전 규칙이 별도 `AGENTS.md`로 정의되어 있습니다. 해당 영역을 수정할 때 먼저 읽으세요.
+영역마다 안전 규칙이 별도 `AGENTS.md`에 정의되어 있습니다. 해당 영역을 고치기 전에 먼저 읽으세요.
 
 | 영역 | 파일 | 보호 대상 |
 | --- | --- | --- |
@@ -91,7 +113,7 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | state | [state/AGENTS.md](state/AGENTS.md) | 파이프라인 운영 state 계약 |
 | 문서 | [docs/AGENTS.md](docs/AGENTS.md) | 한국어 우선, audit/worklog 금지 |
 
-마지막으로, 아래 규칙은 문서 정리나 리팩토링 중에도 약화하면 안 됩니다.
+마지막으로, 아래 규칙은 문서 정리나 리팩토링 중에도 절대 약화하면 안 됩니다.
 
 ## 약화하면 안 되는 규칙
 
