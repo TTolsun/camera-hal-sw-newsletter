@@ -30,7 +30,7 @@
 | `section_text_fallback` | renderer나 validator가 structured field 대신 section text에서 필요한 정보를 보완해 읽는 fallback 경로입니다. primary 계약을 대체하지 않습니다. |
 | `deterministic shortlist` | Gemini 호출 전에 코드가 source gap, watch/reference page, duplicate URL, relevance score를 기준으로 줄인 후보 목록입니다. |
 | `article capsule` | Gemini에 전달하는 compact article input입니다. title, URL, source, date, component, evidence, risk, score 같은 핵심 정보만 담습니다. |
-| `collection_intent` | 사람이 중요하다고 지정한 seed URL과 keyword hint를 Stage 1에서 기록하는 수집 의도 artifact입니다. 보통 `content/collected-news/YYYY-MM-DD/collection-intent.json` 경로로 다룹니다. |
+| `collection_intent` | 사람이 중요하다고 지정한 seed URL과 keyword hint를 Stage 1에서 기록하는 수집 의도 artifact입니다. 보통 `articles/content/collected-news/YYYY-MM-DD/collection-intent.json` 경로로 다룹니다. |
 | `seed_url` | 사용자가 대표 근거로 지정한 public `https` URL입니다. Stage 2는 이 URL을 deterministic하게 fetch하고, 허용된 linked evidence만 보강 대상으로 봅니다. |
 | `keyword_hints` | seed 수집과 source discovery를 돕는 검색/분류 hint입니다. 기사 fact나 source evidence가 아니므로 claim 근거로 쓰면 안 됩니다. |
 | `compact_evidence` | Gemini prompt에 전달하기 위해 source-backed fact, linked context, do_not_claim, evidence URL을 압축한 candidate-level evidence capsule입니다. 전체 Evidence Pack을 그대로 넣는 대신 기사 작성에 필요한 최소 근거만 전달합니다. |
