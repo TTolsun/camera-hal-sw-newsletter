@@ -10,12 +10,12 @@
 
 | 문서 | 역할 |
 | --- | --- |
-| [docs/START_HERE.ko.md](docs/START_HERE.ko.md) | 처음 보는 운영자와 에이전트(agent)를 위한 진입점입니다. |
-| [docs/glossary.ko.md](docs/glossary.ko.md) | 뉴스룸, 산출물(artifact), 게이트 용어를 설명합니다. |
+| [docs/START_HERE.md](docs/START_HERE.md) | 처음 보는 운영자와 에이전트(agent)를 위한 진입점입니다. |
+| [docs/glossary.md](docs/glossary.md) | 뉴스룸, 산출물(artifact), 게이트 용어를 설명합니다. |
 | [docs/newsroom-workflow.md](docs/newsroom-workflow.md) | 후보 수집부터 PR 생성까지의 워크플로(workflow)를 설명합니다. |
-| [docs/operations/README.ko.md](docs/operations/README.ko.md) | 수동 실행, PR 리뷰, 릴리스, 산출물 리뷰 순서입니다. |
-| [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md) | GitHub Actions Secret과 Variable 기본값을 설명합니다. |
-| [docs/config/news-sources-fields.ko.md](docs/config/news-sources-fields.ko.md) | `src/shared/data/news-sources.json` field 계약을 설명합니다. |
+| [docs/operations/README.md](docs/operations/README.md) | 수동 실행, PR 리뷰, 릴리스, 산출물 리뷰 순서입니다. |
+| [docs/config/action-variables.md](docs/config/action-variables.md) | GitHub Actions Secret과 Variable 기본값을 설명합니다. |
+| [docs/config/news-sources-fields.md](docs/config/news-sources-fields.md) | `src/shared/data/news-sources.json` field 계약을 설명합니다. |
 | [src/AGENTS.md](src/AGENTS.md) | #262 재구성 후 `src/` layer 구조와 구현·테스트 규칙을 설명합니다. |
 
 뉴스레터 생성은 아래 흐름으로 진행됩니다. 중요한 점은 생성 성공과 발행 가능 상태가 다르다는 것입니다.
@@ -30,7 +30,7 @@ npm.cmd run test
 npm.cmd run validate
 ```
 
-`test`와 `validate`가 모두 통과하면 로컬 환경이 준비된 것입니다. 실제 뉴스룸 파이프라인 실행은 `GEMINI_API_KEY`가 필요하며, 자세한 절차는 [docs/operations/README.ko.md](docs/operations/README.ko.md)를 확인합니다.
+`test`와 `validate`가 모두 통과하면 로컬 환경이 준비된 것입니다. 실제 뉴스룸 파이프라인 실행은 `GEMINI_API_KEY`가 필요하며, 자세한 절차는 [docs/operations/README.md](docs/operations/README.md)를 확인합니다.
 
 ## 현재 운영 모델
 
@@ -61,7 +61,7 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | `npm.cmd run collect` | `src/shared/data/news-sources.json` 기반 후보 수집 | `articles/content/collected-news/YYYY-MM-DD/` |
 | `npm.cmd run generate` | LLM 뉴스룸 파이프라인 (Gemini 공급자 사용 시 `GEMINI_API_KEY` 필요) | `articles/content/newsroom/YYYY-MM-DD/` |
 
-공급자/모델 재정의와 사내 API Secret 설정은 [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md)를 확인합니다.
+공급자/모델 재정의와 사내 API Secret 설정은 [docs/config/action-variables.md](docs/config/action-variables.md)를 확인합니다.
 
 폴더 구조는 목적별로 나뉘어 있습니다. 실제 구현과 tooling은 모두 `src/`에 있고(#262 재구성으로 root `scripts/` wrapper는 제거됨), 검토 산출물과 공개 발행물은 `articles/content/`와 `articles/newsletters/`에 분리됩니다.
 

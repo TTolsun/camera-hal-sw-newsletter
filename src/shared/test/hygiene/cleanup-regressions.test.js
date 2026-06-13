@@ -29,7 +29,7 @@ test('active docs reference existing scripts paths', () => {
   const activeDocs = [
     'README.md',
     'docs/newsroom-workflow.md',
-    'docs/glossary.ko.md',
+    'docs/glossary.md',
     'docs/evidence/source-aware-linked-evidence-contract.md'
   ];
   const issues = [];

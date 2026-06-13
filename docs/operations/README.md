@@ -4,7 +4,7 @@
 
 ## Prompt Reference
 
-- Gemini/LLM prompt 위치와 stage별 목적은 [Newsroom LLM Prompt Reference](./newsroom-llm-prompts.ko.md)를 확인합니다.
+- Gemini/LLM prompt 위치와 stage별 목적은 [Newsroom LLM Prompt Reference](./newsroom-llm-prompts.md)를 확인합니다.
 
 ## Manual High-Quality Run
 
@@ -16,7 +16,7 @@
 
 ## PR Review Flow
 
-- PR body의 새 editor-facing 요약은 [Newsroom PR Report 읽는 법](./newsroom-pr-report.ko.md)을 기준으로 확인합니다.
+- PR body의 새 editor-facing 요약은 [Newsroom PR Report 읽는 법](./newsroom-pr-report.md)을 기준으로 확인합니다.
 - `01`, `02`, `03` PR은 모두 상단의 `최종 판단`, `이번 PR 요약`, `반드시 확인할 항목`, `주요 결과`를 먼저 확인합니다. PR body에는 원본 key/value report를 길게 붙이지 않고, `상세 report`에는 artifact pointer와 최소 원인만 남깁니다.
 - `final_publish_ready=false`는 AI 자동 발행 기준 미충족을 뜻합니다. `review_publication_ready=true`이고 `homepage_visible_after_merge=true`인 PR은 편집장 merge로 공개 승인할 수 있습니다.
 - `diagnostics_only=true`인 PR은 public newsletter files가 없으므로 merge해도 홈페이지에 표시되지 않습니다. PR body의 missing public files reason을 먼저 확인합니다.
@@ -71,4 +71,4 @@ PR diff에서 `debug_heavy`/`transient_attempt` 등급 산출물(artifact)이 �
 
 ## 소스 품질 진단
 
-후보 부족 원인을 source/parser/gate/source discovery 관점으로 볼 때는 [소스 품질 진단 리포트](./source-quality-diagnosis.ko.md)를 확인합니다. 이 리포트는 advisory artifact이며 publish/readiness gate를 바꾸지 않습니다.
+후보 부족 원인을 source/parser/gate/source discovery 관점으로 볼 때는 [소스 품질 진단 리포트](./source-quality-diagnosis.md)를 확인합니다. 이 리포트는 advisory artifact이며 publish/readiness gate를 바꾸지 않습니다.
