@@ -206,6 +206,44 @@ const {
   articleQualityVerdictPrompt,
   dateFramingGuardrail
 } = require('./newsletter-prompts');
+const {
+  numberOrDefault,
+  stringOrEmpty,
+  sectionLabel
+} = require('./orchestrator-shared-helpers');
+const {
+  reporterCandidateId,
+  reporterTitleUrlKey,
+  addReporterIndexEntry,
+  buildReporterCandidateIndexes,
+  reporterMergeWarning,
+  uniqueStrings,
+  mergeReporterEvidenceFields,
+  reporterMatchFromIndex,
+  matchReporterOutputCandidate
+} = require('./orchestrator-reporter-match');
+const {
+  sourceCandidateForJudgeSection,
+  publicArticleJudgeInput,
+  normalizePublicArticleJudgeReport,
+  publicArticleJudgeBlockingIssues,
+  publicArticleJudgeError,
+  publicArticleJudgeArtifactScope
+} = require('./orchestrator-judge-helpers');
+const {
+  finalArticleSlotDistribution,
+  deductionRepairPolicy,
+  mergeRepairPolicies,
+  recommendedFixMentionsSection,
+  articleResultMatchesSection,
+  articleResultForSection,
+  buildSectionRepairPlan,
+  buildFullSectionRepairPlan,
+  sectionMatchesRepairItem,
+  sectionsMatchingRepairPlan,
+  sectionsOutsideRepairPlan,
+  hasTooFewMainArticlesDeduction
+} = require('./orchestrator-repair-plan');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -658,14 +696,6 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
   };
 }
 
-function numberOrDefault(value, fallback = 0) {
-  return Number.isFinite(Number(value)) ? Number(value) : fallback;
-}
-
-function stringOrEmpty(value) {
-  return String(value || '').trim();
-}
-
 function booleanFromCandidate(collected, candidate, field, fallback = false) {
   if (typeof collected[field] === 'boolean') return collected[field];
   if (typeof candidate[field] === 'boolean') return candidate[field];
@@ -799,112 +829,6 @@ function isMainSupplementBucket(candidate = {}) {
 
 function candidatePriority(candidate = {}) {
   return BUCKET_PRIORITY[candidate.relevance_bucket] || 99;
-}
-
-function reporterCandidateId(candidate = {}) {
-  const url = candidate.url || candidate.article_url || candidate.articleUrl;
-  return stringOrEmpty(
-    candidate.candidate_id ||
-    candidate.source_candidate_hash ||
-    candidate.url_hash ||
-    (url ? normalizedUrlHash(url) : '')
-  );
-}
-
-function reporterTitleUrlKey(candidate = {}) {
-  const url = normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl);
-  const title = normalizeTitle(candidate.title);
-  return url && title ? `${url}\n${title}` : '';
-}
-
-function addReporterIndexEntry(index, key, candidate) {
-  if (!key) return;
-  if (!index.has(key)) index.set(key, []);
-  index.get(key).push(candidate);
-}
-
-function buildReporterCandidateIndexes(candidates = []) {
-  const byId = new Map();
-  const byUrl = new Map();
-  const byTitleUrl = new Map();
-  for (const candidate of ensureArray(candidates)) {
-    addReporterIndexEntry(byId, reporterCandidateId(candidate), candidate);
-    addReporterIndexEntry(byUrl, normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl), candidate);
-    addReporterIndexEntry(byTitleUrl, reporterTitleUrlKey(candidate), candidate);
-  }
-  return { byId, byUrl, byTitleUrl };
-}
-
-function reporterMergeWarning(candidate, reason, extra = {}) {
-  return {
-    reason,
-    candidate_id: stringOrEmpty(candidate?.candidate_id),
-    title: stringOrEmpty(candidate?.title),
-    url: stringOrEmpty(candidate?.url || candidate?.article_url || candidate?.articleUrl),
-    ...extra
-  };
-}
-
-function uniqueStrings(values = []) {
-  return [...new Set(ensureArray(values).map(stringOrEmpty).filter(Boolean))];
-}
-
-function mergeReporterEvidenceFields(base, llmCandidate = null) {
-  if (!llmCandidate) return { ...base };
-  const merged = { ...base };
-  for (const key of ['version_or_release', 'api_or_component', 'behavior_change', 'cross_check_status', 'relevance_reason']) {
-    const value = stringOrEmpty(llmCandidate[key]);
-    if (value) merged[key] = value;
-  }
-  for (const key of ['evidence_notes', 'impact_areas', 'do_not_overstate']) {
-    const values = uniqueStrings([
-      ...ensureArray(base[key]),
-      ...ensureArray(llmCandidate[key])
-    ]);
-    if (values.length > 0) merged[key] = values;
-  }
-  return merged;
-}
-
-function reporterMatchFromIndex(index, key, warningCandidate, warnings, duplicateReason) {
-  if (!key) return null;
-  const matches = index.get(key) || [];
-  if (matches.length === 1) return matches[0];
-  if (matches.length > 1) {
-    warnings.push(reporterMergeWarning(warningCandidate, duplicateReason, { match_count: matches.length }));
-  }
-  return null;
-}
-
-function matchReporterOutputCandidate(candidate, indexes, warnings) {
-  const candidateId = stringOrEmpty(candidate.candidate_id);
-  if (candidateId) {
-    const idMatches = indexes.byId.get(candidateId) || [];
-    if (idMatches.length === 1) return idMatches[0];
-    if (idMatches.length > 1) {
-      warnings.push(reporterMergeWarning(candidate, 'duplicate_input_candidate_id', { match_count: idMatches.length }));
-      return null;
-    }
-  }
-
-  const url = normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl);
-  const urlMatches = url ? indexes.byUrl.get(url) || [] : [];
-  if (urlMatches.length === 1) return urlMatches[0];
-  if (urlMatches.length > 1) {
-    const titleUrl = reporterMatchFromIndex(
-      indexes.byTitleUrl,
-      reporterTitleUrlKey(candidate),
-      candidate,
-      warnings,
-      'duplicate_input_title_url'
-    );
-    if (titleUrl) return titleUrl;
-    warnings.push(reporterMergeWarning(candidate, 'duplicate_input_url', { match_count: urlMatches.length }));
-    return null;
-  }
-
-  warnings.push(reporterMergeWarning(candidate, 'unmatched_reporter_candidate'));
-  return null;
 }
 
 function validateReporter(value, date, collectedCandidates = []) {
@@ -1911,195 +1835,6 @@ async function repairEditorSemanticWithLlm({
   );
 }
 
-function sourceCandidateForJudgeSection(section = {}, reporter = {}) {
-  const sectionHash = stringOrEmpty(section.source_candidate_hash || section.url_hash || section.normalized_url_hash);
-  const sectionUrlKeys = new Set(sectionUrls(section).map(normalizeUrl).filter(Boolean));
-  return ensureArray(reporter?.candidates).find(candidate => {
-    const candidateHash = stringOrEmpty(candidate.source_candidate_hash || candidate.url_hash || candidate.normalized_url_hash);
-    if (sectionHash && candidateHash && sectionHash === candidateHash) return true;
-    const candidateUrl = normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl);
-    return candidateUrl && sectionUrlKeys.has(candidateUrl);
-  }) || null;
-}
-
-function publicArticleJudgeInput(date, editor = {}, reporter = {}) {
-  return {
-    date,
-    audience: 'AOSP Camera / Camera HAL / Camera Driver / SoC Platform / C++ engineer',
-    instruction: 'Judge semantic quality only. Do not rewrite article prose.',
-    sections: ensureArray(editor.sections).map((section, index) => {
-      const candidate = sourceCandidateForJudgeSection(section, reporter) || {};
-      return {
-        section_index: index + 1,
-        headline: section.headline || section.category || `article ${index + 1}`,
-        relevance_bucket: section.relevance_bucket || candidate.relevance_bucket || '',
-        source_candidate_url: section.source_candidate_url || candidate.url || candidate.article_url || '',
-        source_candidate_hash: section.source_candidate_hash || candidate.source_candidate_hash || candidate.url_hash || '',
-        source_quality_status: section.source_quality_status || candidate.source_quality_status || candidate.source_quality?.source_quality_status || '',
-        source_quality_notes: ensureArray(candidate.source_quality_notes || candidate.source_quality?.source_quality_notes),
-        reporter_evidence: {
-          version_or_release: candidate.version_or_release || '',
-          api_or_component: candidate.api_or_component || '',
-          behavior_change: candidate.behavior_change || '',
-          evidence_notes: ensureArray(candidate.evidence_notes),
-          relevance_reason: candidate.relevance_reason || '',
-          do_not_overstate: ensureArray(candidate.do_not_overstate)
-        },
-        sources: ensureArray(section.sources).map(source => ({
-          title: source?.title || '',
-          url: source?.url || ''
-        })),
-        public_article: section.public_article || {},
-        article_sections: section.article_sections || {},
-        hal_signal_capsule: section.hal_signal_capsule || {},
-        claims: ensureArray(section.claims).map(claim => ({
-          text: claim?.text || '',
-          claim_type: claim?.claim_type || '',
-          impact_level: claim?.impact_level || '',
-          overclaim_risk: claim?.overclaim_risk || ''
-        })),
-        do_not_overstate: ensureArray(section.do_not_overstate),
-        do_not_claim: ensureArray(section.do_not_claim || section.article_sections?.do_not_claim)
-      };
-    })
-  };
-}
-
-function normalizePublicArticleJudgeReport(value = {}, editor = {}, date = '') {
-  const editorSections = ensureArray(editor.sections);
-  const sections = ensureArray(value.sections).map((section, index) => ({
-    section_index: numberOrDefault(section?.section_index, index + 1),
-    headline: stringOrEmpty(section?.headline) || editorSections[index]?.headline || `article ${index + 1}`,
-    public_article_pass: section?.public_article_pass === true,
-    reader_checkpoints_pass: section?.reader_checkpoints_pass === true,
-    source_boundary_pass: section?.source_boundary_pass === true,
-    public_prose_pass: section?.public_prose_pass === true,
-    issues: ensureArray(section?.issues).map(issue => ({
-      section_index: numberOrDefault(issue?.section_index, numberOrDefault(section?.section_index, index + 1)),
-      field: stringOrEmpty(issue?.field) || 'public_article',
-      severity: stringOrEmpty(issue?.severity).toUpperCase() || 'P2',
-      reason: stringOrEmpty(issue?.reason) || 'Public article judge reported an issue without a reason.',
-      suggested_fix: stringOrEmpty(issue?.suggested_fix)
-    }))
-  }));
-  return {
-    date: stringOrEmpty(value.date) || date || editor.date || '',
-    overall_pass: value.overall_pass === true,
-    section_count_expected: editorSections.length,
-    section_count_actual: sections.length,
-    sections
-  };
-}
-
-function publicArticleJudgeBlockingIssues(report = {}) {
-  const issues = [];
-  if (report.section_count_actual !== report.section_count_expected) {
-    issues.push({
-      section_index: 0,
-      field: 'sections',
-      severity: 'P1',
-      reason: `Judge returned ${report.section_count_actual} section verdict(s), expected ${report.section_count_expected}.`,
-      suggested_fix: 'Return one verdict per editor section.'
-    });
-  }
-  const expectedSectionCount = numberOrDefault(report.section_count_expected, 0);
-  if (Number.isInteger(expectedSectionCount) && expectedSectionCount > 0) {
-    const indexCounts = new Map();
-    const invalidIndices = [];
-    for (const section of ensureArray(report.sections)) {
-      const sectionIndex = section?.section_index;
-      if (!Number.isInteger(sectionIndex) || sectionIndex < 1 || sectionIndex > expectedSectionCount) {
-        invalidIndices.push(sectionIndex);
-        continue;
-      }
-      indexCounts.set(sectionIndex, (indexCounts.get(sectionIndex) || 0) + 1);
-    }
-    const missingIndices = [];
-    const duplicateIndices = [];
-    for (let index = 1; index <= expectedSectionCount; index += 1) {
-      const count = indexCounts.get(index) || 0;
-      if (count === 0) missingIndices.push(index);
-      if (count > 1) duplicateIndices.push(index);
-    }
-    if (invalidIndices.length > 0 || missingIndices.length > 0 || duplicateIndices.length > 0) {
-      issues.push({
-        section_index: 0,
-        field: 'sections.section_index',
-        severity: 'P1',
-        reason: [
-          duplicateIndices.length > 0 ? `duplicate section_index: ${duplicateIndices.join(', ')}` : '',
-          missingIndices.length > 0 ? `missing section_index: ${missingIndices.join(', ')}` : '',
-          invalidIndices.length > 0 ? `invalid section_index: ${invalidIndices.join(', ')}` : ''
-        ].filter(Boolean).join('; '),
-        suggested_fix: `Return section_index values 1..${expectedSectionCount} exactly once.`
-      });
-    }
-  }
-  for (const section of ensureArray(report.sections)) {
-    for (const [field, passed] of Object.entries({
-      public_article_pass: section.public_article_pass,
-      reader_checkpoints_pass: section.reader_checkpoints_pass,
-      source_boundary_pass: section.source_boundary_pass,
-      public_prose_pass: section.public_prose_pass
-    })) {
-      if (passed !== true) {
-        issues.push({
-          section_index: section.section_index,
-          headline: section.headline,
-          field,
-          severity: 'P1',
-          reason: `${field} is false.`,
-          suggested_fix: `Repair ${field.replace(/_pass$/, '')} for this section.`
-        });
-      }
-    }
-    issues.push(...ensureArray(section.issues)
-      .filter(issue => /^(P1|P2)$/i.test(issue.severity))
-      .map(issue => ({
-        headline: section.headline,
-        ...issue
-      })));
-  }
-  if (report.overall_pass !== true && issues.length === 0) {
-    issues.push({
-      section_index: 0,
-      field: 'overall_pass',
-      severity: 'P1',
-      reason: 'Judge returned overall_pass=false without a section issue.',
-      suggested_fix: 'Repair the public article fields or return explicit section issues.'
-    });
-  }
-  return issues;
-}
-
-function publicArticleJudgeError(report, stage, attempt, phase = 'attempt') {
-  const issues = publicArticleJudgeBlockingIssues(report);
-  const error = new EditorSemanticValidationError(
-    'Editor output failed public article semantic judge validation.',
-    {
-      field: 'sections.public_article',
-      judge_stage: stage,
-      judge_phase: phase,
-      actualCount: issues.length,
-      sectionCount: report.section_count_actual,
-      expectedSectionCount: report.section_count_expected,
-      issues,
-      judge_report: report
-    }
-  );
-  error.stage = stage;
-  error.attempt = attempt;
-  error.editorPublicArticleJudge = report;
-  return error;
-}
-
-function publicArticleJudgeArtifactScope(stage = '') {
-  const normalized = String(stage || '').toLowerCase();
-  if (/completion/.test(normalized)) return 'completion';
-  if (/editor repair|targeted/.test(normalized)) return 'targeted-repair';
-  return 'editor';
-}
-
 function writePublicArticleJudgeArtifact(newsroomDir, attempt, phase, report, error = null, stage = '') {
   if (!newsroomDir) return;
   const scope = publicArticleJudgeArtifactScope(stage);
@@ -2627,10 +2362,6 @@ function appendUniqueSections(currentSections, candidates) {
   return sections;
 }
 
-function sectionLabel(section) {
-  return section.headline || section.category || 'untitled article';
-}
-
 function sourceGapSections(editor, factCheck) {
   return ensureArray(editor.sections).filter(section => sectionHasSourceGap(section, factCheck));
 }
@@ -2700,290 +2431,6 @@ function pruneResolvedFallbackImageFalsePositives(factCheck, editor) {
     console.warn(`Pruned ${result.removed.length} resolved fallback image fact-check false positive(s).`);
   }
   return result.factCheck;
-}
-
-function finalArticleSlotDistribution(sections) {
-  const distribution = {
-    android_camera_platform_api: 0,
-    camerax_aosp_camera_compatibility: 0,
-    linux_camera_libcamera_v4l2: 0,
-    ai_camera_path_hal_workflow: 0,
-    cpp_toolchain_fallback: 0,
-    other: 0
-  };
-  for (const section of ensureArray(sections)) {
-    const body = [
-      section.category,
-      section.headline,
-      section.evidence_summary,
-      section.article_sections?.hal_driver_impact,
-      section.article_type,
-      ensureArray(section.sources).map(source => `${source.title} ${source.url}`).join(' ')
-    ].join(' ');
-    if (/AI|agent|LLM|NPU|GPU|on-device|inference|model/i.test(body) &&
-      /camera|HAL|stream|buffer|ImageAnalysis|workflow|latency|thermal|power/i.test(body)) {
-      distribution.ai_camera_path_hal_workflow += 1;
-    } else if (/libcamera|V4L2|Linux camera|media controller/i.test(body)) {
-      distribution.linux_camera_libcamera_v4l2 += 1;
-    } else if (/CameraX|AOSP Camera|CDD|CTS|VTS|Camera ITS|compatibility/i.test(body)) {
-      distribution.camerax_aosp_camera_compatibility += 1;
-    } else if (/Android Camera|Camera2|platform API|Camera HAL|request|result|metadata|stream|buffer/i.test(body)) {
-      distribution.android_camera_platform_api += 1;
-    } else if (/C\+\+|LLVM|Clang|NDK|toolchain/i.test(body)) {
-      distribution.cpp_toolchain_fallback += 1;
-    } else {
-      distribution.other += 1;
-    }
-  }
-  return distribution;
-}
-
-function deductionRepairPolicy(deduction = {}) {
-  const category = stringOrEmpty(deduction.category);
-  const reason = stringOrEmpty(deduction.reason);
-  const reasonCode = stringOrEmpty(deduction.reason_code || deduction.reasonCode);
-  const haystack = `${category} ${reason}`;
-  const neverRepairableClaimReasons = new Set([
-    'missing_claims',
-    'missing_fact_claim',
-    'missing_fact_evidence_ids',
-    'missing_source_urls',
-    'unknown_evidence_id',
-    'keyword_hint_is_not_evidence',
-    'gemini_proposal_is_not_evidence',
-    'provenance_id_without_item_evidence',
-    'blocked_or_failed_evidence_id',
-    'source_url_mismatch',
-    'evidence_source_url_mismatch',
-    'source_url_fragment_mismatch',
-    'missing_matching_fact_claim',
-    'fact_claim_not_supported_by_evidence_text',
-    'runtime_claim_without_runtime_evidence',
-    'stream_buffer_metadata_without_stream_buffer_metadata_evidence'
-  ]);
-  const repairableClaimReasons = new Set([
-    'direct_hal_claim_without_direct_evidence',
-    'do_not_overstate_violation',
-    'invalid_impact_level',
-    'do_not_claim_violation'
-  ]);
-  if (neverRepairableClaimReasons.has(reasonCode)) {
-    return {
-      failure_type: reasonCode,
-      action: 'replace-or-demote',
-      allow_rewrite: false,
-      reason: 'claim evidence, source binding, or coverage failure must be demoted or replaced'
-    };
-  }
-  if (repairableClaimReasons.has(reasonCode)) {
-    return {
-      failure_type: reasonCode,
-      action: 'repair-section',
-      allow_rewrite: true,
-      reason: reasonCode === 'do_not_claim_violation'
-        ? 'same-source repair may only remove the unsupported assertion or rewrite it as risk_note/limitation without changing evidence ids or source URLs'
-        : 'same-source claim wording or impact classification repair is allowed once'
-    };
-  }
-  if (/source gap|source_gap|watchlist|watch page|ineligible|main_eligible=false|missing dated evidence|no dated release/i.test(haystack)) {
-    return {
-      failure_type: 'source-gap',
-      action: 'replace-or-demote',
-      allow_rewrite: false,
-      reason: 'source gap or ineligible source must be demoted or replaced'
-    };
-  }
-  if (/duplicate|source URL is used across main sections/i.test(haystack)) {
-    return {
-      failure_type: 'duplicate',
-      action: 'replace-section',
-      allow_rewrite: false,
-      reason: 'duplicate source or article must be replaced'
-    };
-  }
-  if (/scope-relevance|generic_tech_watchlist|expanded AOSP Camera \/ driver \/ SoC \/ native relevance|lacks article-level AOSP Camera/i.test(haystack)) {
-    return {
-      failure_type: 'scope-demotion',
-      action: 'replace-or-demote',
-      allow_rewrite: false,
-      reason: 'structured scope demotion must open replacement or reserve path'
-    };
-  }
-  if (/hal-depth|hal-relevance|weak HAL|Camera HAL perspective|engineering depth/i.test(haystack)) {
-    return {
-      failure_type: 'weak-hal-relevance',
-      action: 'replace-section',
-      allow_rewrite: false,
-      reason: 'weak HAL relevance should use a stronger candidate'
-    };
-  }
-  if (/actionability|action item/i.test(haystack)) {
-    return {
-      failure_type: 'missing-actionability',
-      action: 'repair-section',
-      allow_rewrite: true,
-      reason: 'same-source actionability repair is allowed once'
-    };
-  }
-  if (/required-fields|evidence-specificity/i.test(haystack)) {
-    return {
-      failure_type: category || 'evidence',
-      action: 'repair-section',
-      allow_rewrite: true,
-      reason: 'same-source evidence or required-field repair is allowed once'
-    };
-  }
-  return {
-    failure_type: category || 'unknown',
-    action: 'repair-section',
-    allow_rewrite: true,
-    reason: 'section-scoped repair is allowed'
-  };
-}
-
-function mergeRepairPolicies(policies) {
-  const priority = ['replace-or-demote', 'replace-section', 'repair-section'];
-  const items = ensureArray(policies);
-  return items.sort((a, b) => priority.indexOf(a.action) - priority.indexOf(b.action))[0] || null;
-}
-
-function recommendedFixMentionsSection(item, section) {
-  const haystack = normalizeTitle(item);
-  const labels = [
-    section.headline,
-    section.category,
-    ...ensureArray(section.sources).flatMap(source => [source.title, source.url])
-  ].map(normalizeTitle).filter(Boolean);
-  return labels.some(label => haystack.includes(label) || label.includes(haystack));
-}
-
-function articleResultMatchesSection(result, section) {
-  const resultUrls = new Set(ensureArray(result?.sources).map(source => stringOrEmpty(source?.url)).filter(Boolean));
-  if (ensureArray(section.sources).some(source => resultUrls.has(stringOrEmpty(source.url)))) return true;
-  const resultLabels = [
-    result?.headline,
-    result?.category
-  ].map(normalizeTitle).filter(Boolean);
-  if (resultLabels.length === 0) return false;
-  const sectionLabels = [
-    section.headline,
-    section.category,
-    ...ensureArray(section.sources).flatMap(source => [source.title, source.url])
-  ].map(normalizeTitle).filter(Boolean);
-  return sectionLabels.some(sectionLabel =>
-    resultLabels.some(resultLabel =>
-      resultLabel === sectionLabel ||
-      resultLabel.includes(sectionLabel) ||
-      sectionLabel.includes(resultLabel)
-    )
-  );
-}
-
-function articleResultForSection(section, qualityReport) {
-  return ensureArray(qualityReport?.article_results)
-    .find(result => articleResultMatchesSection(result, section)) || null;
-}
-
-function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings = [], options = {}) {
-  const maxSectionRepairs = Number.isInteger(options.maxSectionRepairs) ? options.maxSectionRepairs : Infinity;
-  const sectionPlans = ensureArray(editor.sections).map(section => {
-    const deductions = ensureArray(qualityReport?.deductions)
-      .filter(deduction => deductionMatchesSection(deduction, section));
-    const recommendedFixes = ensureArray(factCheck?.recommended_fixes)
-      .filter(item => recommendedFixMentionsSection(item, section));
-    const sectionEligibilityFindings = eligibilityFindings.filter(finding => finding.section === section);
-    const hasSourceGap = sectionHasSourceGap(section, factCheck);
-    const hasReporterEligibilityBlock = sectionEligibilityFindings.length > 0;
-    const articleResult = articleResultForSection(section, qualityReport);
-    const policies = [
-      ...deductions.map(deductionRepairPolicy),
-      ...recommendedFixes.map(item => deductionRepairPolicy({ category: 'recommended-fix', reason: item }))
-    ];
-    if (articleResult?.status === 'DEMOTE') {
-      policies.push({
-        failure_type: 'scope-demotion',
-        action: 'replace-or-demote',
-        allow_rewrite: false,
-        reason: `article gate status DEMOTE requires replacement path (${articleResult.repair_action || 'demote-or-replace'})`
-      });
-    } else if (articleResult?.status === 'FAIL') {
-      policies.push({
-        failure_type: 'article-gate-fail',
-        action: 'replace-or-demote',
-        allow_rewrite: false,
-        reason: `article gate status FAIL requires replacement path (${articleResult.repair_action || 'replace-or-demote'})`
-      });
-    }
-    if (hasSourceGap || hasReporterEligibilityBlock) {
-      policies.push({
-        failure_type: 'source-gap',
-        action: 'replace-or-demote',
-        allow_rewrite: false,
-        reason: 'source gap or reporter eligibility violation must be demoted or replaced'
-      });
-    }
-    const policy = mergeRepairPolicies(policies);
-    const action = policy ? policy.action : 'preserve';
-    return {
-      headline: sectionLabel(section),
-      sources: sectionUrls(section),
-      action,
-      failure_type: policy?.failure_type || '',
-      allow_rewrite: policy?.allow_rewrite !== false,
-      policy_reason: policy?.reason || '',
-      source_gap: hasSourceGap,
-      reporter_eligibility_violations: sectionEligibilityFindings.map(finding => ({
-        source_title: finding.source_title,
-        source_url: finding.source_url,
-        candidate_title: finding.candidate_title,
-        reason: finding.reason
-      })),
-      deductions: deductions.map(deduction => ({
-        category: deduction.category,
-        points: deduction.points,
-        reason: deduction.reason,
-        location: deduction.location || ''
-      })),
-      recommended_fixes: recommendedFixes
-    };
-  }).filter(item => item.action !== 'preserve');
-  const priority = { 'replace-or-demote': 0, 'replace-section': 1, 'repair-section': 2 };
-  return sectionPlans
-    .sort((a, b) => (priority[a.action] ?? 9) - (priority[b.action] ?? 9))
-    .slice(0, maxSectionRepairs);
-}
-
-function buildFullSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings = []) {
-  return buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings, {
-    maxSectionRepairs: Infinity
-  });
-}
-
-function sectionMatchesRepairItem(section, item) {
-  if (!section || !item) return false;
-  if (sectionLabel(section) === item.headline) return true;
-  const urls = new Set(sectionUrls(section));
-  return ensureArray(item.sources).some(url => urls.has(url));
-}
-
-function sectionsMatchingRepairPlan(sections, repairPlan) {
-  return ensureArray(sections).filter(section =>
-    ensureArray(repairPlan).some(item => sectionMatchesRepairItem(section, item))
-  );
-}
-
-function sectionsOutsideRepairPlan(sections, repairPlan) {
-  return ensureArray(sections).filter(section =>
-    !ensureArray(repairPlan).some(item => sectionMatchesRepairItem(section, item))
-  );
-}
-
-function hasTooFewMainArticlesDeduction(qualityReport) {
-  return ensureArray(qualityReport?.deductions).some(deduction =>
-    deduction?.category === 'composition' &&
-    /main articles/i.test(String(deduction.reason || '')) &&
-    Number(qualityReport?.metrics?.article_count || 0) < articlePolicy.mainArticleCount.min
-  );
 }
 
 function availableCompletionCandidates(reporter, currentSections, excludedSections = [], rejected = [], options = {}) {
