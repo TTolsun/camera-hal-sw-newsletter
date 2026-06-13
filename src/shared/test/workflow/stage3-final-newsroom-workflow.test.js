@@ -186,7 +186,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_MOBILE_COVERAGE: covered/);
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_IMPLEMENTATION_DEVIATION: none/);
   assert.match(workflow, /node src\/generator\/publish\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
-  assert.match(workflow, /node src\/generator\/publish\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --type newsletter --date "\$\{\{ steps\.meta\.outputs\.date \}\}" --require-publish-status-consistency/);
+  assert.match(workflow, /node src\/generator\/validate\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --type newsletter --date "\$\{\{ steps\.meta\.outputs\.date \}\}" --require-publish-status-consistency/);
   assert.match(workflow, /cat \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /const hasAiPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.has_ai_publish_ready \}\}' === 'true';/);
   assert.match(workflow, /const diagnosticsOnly = '\$\{\{ steps\.meta\.outputs\.diagnostics_only \}\}' === 'true';/);
@@ -406,7 +406,7 @@ test('generation path passes runtime selection window policy into shortlist repo
 });
 
 test('validate-site uses shared rendered issue structural validator', () => {
-  const validateSitePath = path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'validate-site.js');
+  const validateSitePath = path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'validate', 'validate-site.js');
   const validateSite = fs.readFileSync(validateSitePath, 'utf8');
 
   assert.match(validateSite, /validateRenderedIssueStructure/);

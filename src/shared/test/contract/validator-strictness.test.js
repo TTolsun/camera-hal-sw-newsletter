@@ -26,8 +26,8 @@ const {
 } = require('../helpers/fs');
 
 const repoRoot = path.join(__dirname, '..', '..', '..', '..');
-const validateSitePath = path.join(repoRoot, 'src', 'generator', 'publish', 'validate-site.js');
-const validateQualityPath = path.join(repoRoot, 'src', 'generator', 'publish', 'validate-quality.js');
+const validateSitePath = path.join(repoRoot, 'src', 'generator', 'validate', 'validate-site.js');
+const validateQualityPath = path.join(repoRoot, 'src', 'generator', 'validate', 'validate-quality.js');
 
 function runScript(scriptPath, root, env = {}) {
   return spawnSync(process.execPath, [scriptPath], {

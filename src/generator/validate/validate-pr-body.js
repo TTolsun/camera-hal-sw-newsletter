@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {
   resolvePublishStatus
-} = require('./publish-status');
+} = require('../publish/publish-status');
 const {
   EDITORIAL_DECISION_HEADINGS,
   EDITORIAL_DECISION_LABELS,
@@ -1192,7 +1192,7 @@ function validatePrBodyFile(filePath, options = {}) {
 function main() {
   const { filePath, options } = parseArgs(process.argv.slice(2));
   if (!filePath) {
-    console.error('Usage: node src/generator/publish/validate-pr-body.js <pr-body.md> [--type auto|newsletter|code-docs] [--date YYYY-MM-DD] [--root <repo-root>] [--require-publish-status-consistency]');
+    console.error('Usage: node src/generator/validate/validate-pr-body.js <pr-body.md> [--type auto|newsletter|code-docs] [--date YYYY-MM-DD] [--root <repo-root>] [--require-publish-status-consistency]');
     process.exit(1);
   }
   const result = validatePrBodyFile(filePath, options);

@@ -28,7 +28,7 @@ const {
   buildRemediationMessage,
   latestDiagnosticsOnly,
   validateRetentionMetadata
-} = require('./public-state-reconciliation');
+} = require('../publish/public-state-reconciliation');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');

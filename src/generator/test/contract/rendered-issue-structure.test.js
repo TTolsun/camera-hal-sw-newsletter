@@ -20,7 +20,7 @@ const {
 } = require('../../../shared/test/helpers/fs');
 
 const repoRoot = path.join(__dirname, '..', '..', '..', '..');
-const validateSitePath = path.join(repoRoot, 'src', 'generator', 'publish', 'validate-site.js');
+const validateSitePath = path.join(repoRoot, 'src', 'generator', 'validate', 'validate-site.js');
 const LEGACY_SOURCE_LABEL = '\u7570\uc496\ucfc2';
 
 function escapeRegExp(value) {

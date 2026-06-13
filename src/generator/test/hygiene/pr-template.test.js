@@ -78,13 +78,13 @@ test('code docs PR template keeps code safety checklist guardrails', () => {
 });
 
 test('localization validator scans split PR template directory', () => {
-  const text = readTemplate('src', 'generator', 'publish', 'validate-localization.js');
+  const text = readTemplate('src', 'generator', 'validate', 'validate-localization.js');
 
   assert.match(text, /path\.join\('\.github', 'PULL_REQUEST_TEMPLATE'\)/);
 });
 
 test('localization validator scans prompt and latest public newsletter surfaces', () => {
-  const text = readTemplate('src', 'generator', 'publish', 'validate-localization.js');
+  const text = readTemplate('src', 'generator', 'validate', 'validate-localization.js');
 
   assert.match(text, /promptHostFiles/);
   assert.match(text, /checkPromptHosts/);
@@ -113,7 +113,7 @@ test('localization validator reports homepage headline display errors in readabl
   });
 
   const result = spawnSync(process.execPath, [
-    repoPath('src', 'generator', 'publish', 'validate-localization.js')
+    repoPath('src', 'generator', 'validate', 'validate-localization.js')
   ], {
     cwd: root,
     encoding: 'utf8'
@@ -137,7 +137,7 @@ test('localization validator allows canonical English newsletter brand titles', 
   });
 
   const result = spawnSync(process.execPath, [
-    repoPath('src', 'generator', 'publish', 'validate-localization.js')
+    repoPath('src', 'generator', 'validate', 'validate-localization.js')
   ], {
     cwd: root,
     encoding: 'utf8'
