@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "androidx-camerax-release-notes",
-  "updated_at": "2026-06-12T00:00:00.000Z",
+  "updated_at": "2026-06-13T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "androidx-camerax-release-notes:49d58944bd3ca26fc6929250597a6e3a",
@@ -1633,8 +1633,8 @@
         }
       ],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-06-12T00:00:00.000Z",
-      "seen_count": 66,
+      "last_seen_at": "2026-06-13T00:00:00.000Z",
+      "seen_count": 67,
       "status": 200
     }
   ],
