@@ -76,7 +76,7 @@ test('loaded headlinePolicy is normalized from config file', () => {
 test('generated policy docs include headline policy summary', () => {
   const block = renderNewsletterPolicyBlock();
 
-  assert.match(block, /Homepage headline policy: linear decay/);
-  assert.match(block, /minimum headline score 40/);
-  assert.match(block, /history max 50/);
+  assert.match(block, /홈페이지 헤드라인 정책\(homepage headline policy\): linear decay/);
+  assert.match(block, /최소 헤드라인 점수\(minimum headline score\) 40/);
+  assert.match(block, /이력 최대\(history max\) 50/);
 });

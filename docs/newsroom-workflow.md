@@ -334,28 +334,28 @@ PR에서 다음 항목을 확인합니다.
 <!-- NEWSLETTER_POLICY:BEGIN -->
 <!-- This block is generated. Update src/shared/config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
 
-### Newsletter Policy
+### 뉴스레터 정책 (Newsletter Policy)
 
-- Source of truth: `src/shared/config/newsletter-policy.json`
-- Main article count: 1-5
-- One-article policy: a public newsletter may contain a single fully publishable main article.
-- Article count alone does not make a one-article issue degraded or review-only; hard quality gates still apply.
-- Supporting-only policy: a single supporting main bucket article may be public-ready when all hard gates pass.
-- Review gate Primary Camera Stack articles: disabled by one-article policy
-- Publish-ready Primary Camera Stack articles: disabled by one-article policy
-- Publish-ready direct AOSP Camera or driver/image pipeline articles: disabled by one-article policy across `direct_aosp_camera`, `camera_driver_image_pipeline`
-- Publish-ready supporting main articles: at most 1 total across supporting main buckets
-- Primary Camera Stack buckets: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`
-- Supporting main buckets: `android_multimedia_camera_output`, `soc_platform_signal`, `cpp_ai_tooling_fallback`
-- Forbidden main buckets: `generic_tech_watchlist`; never promote these to main articles by candidate count alone
-- Candidate pool preflight: publishable candidates at least 1; reserve candidates diagnostics only; camera stack candidates at least 0
-- Selection windows: primary 7 days; fallback 21 days; reference 90 days
-- Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.
-- Catch-up (지난 소식) lane: when fresh selection is below 3 article(s), open main slots are filled with uncovered releases up to 90 days old from buckets `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`, at most 2 per issue, covered once each; never displaces fresh content.
-- Homepage headline policy: linear decay; decay 2 point(s)/day; replacement margin 5; minimum headline score 40; latest inclusion required true; history max 50
-- Publish gate: PASS requires no source gaps, no fact-check must_fix, no blocking deductions, and every article marked publishable by the fact-checker. There is no numeric quality threshold.
-- Editorial quality: the fact-checker (LLM) judges each article on usefulness to a Camera HAL SW engineer (topic-agnostic — C++, AI, or Linux articles qualify when they help that engineer). Topic/depth heuristics are not used as deterministic publish gates.
-- Hard fail conditions remain blocking: source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article; CameraX source extraction failure; blocked source quality; source quality drift
+- 정본 출처(source of truth): `src/shared/config/newsletter-policy.json`
+- 주요 기사 수: 1-5
+- 단일 기사 정책(one-article policy): 공개 뉴스레터는 완전히 발행 가능한 주요 기사 하나만 담을 수 있습니다.
+- 기사 수만으로 단일 기사 호가 품질 저하 또는 검토 전용으로 분류되지는 않습니다. 단, 하드 품질 게이트는 그대로 적용됩니다.
+- 보조 전용 정책(supporting-only policy): 보조 주요 버킷 기사 하나도 모든 하드 게이트를 통과하면 공개 가능 상태가 될 수 있습니다.
+- 검토 게이트(review gate) Primary Camera Stack 기사: 단일 기사 정책으로 비활성화됨
+- 발행 가능(publish-ready) Primary Camera Stack 기사: 단일 기사 정책으로 비활성화됨
+- 발행 가능(publish-ready) direct AOSP Camera 또는 driver/image pipeline 기사: 단일 기사 정책으로 비활성화됨 (`direct_aosp_camera`, `camera_driver_image_pipeline` 버킷 대상)
+- 발행 가능(publish-ready) 보조 주요 기사: 보조 주요 버킷 전체에서 최대 1개
+- Primary Camera Stack 버킷: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`
+- 보조 주요 버킷: `android_multimedia_camera_output`, `soc_platform_signal`, `cpp_ai_tooling_fallback`
+- 금지 주요 버킷: `generic_tech_watchlist`; 후보 수만으로 이 버킷을 주요 기사로 승격하지 않습니다
+- 후보 풀 사전점검(candidate pool preflight): 발행 가능 후보 최소 1개; 예비 후보는 진단용으로만 사용; camera stack 후보 최소 0개
+- 선정 기간(selection windows): primary 7일; fallback 21일; reference 90일
+- 선정 기간 적용(selection window enforcement): 주요 선정은 강제 적용되며, fallback 기간 후보는 primary 기간 선정이 부족할 때에만 승격됩니다.
+- 지난 소식(Catch-up) 레인: 신규 선정이 3개 미만이면, 비어 있는 주요 슬롯을 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent` 버킷에서 최대 90일 이내의 미게재 릴리스로 채웁니다. 호당 최대 2개이며 각각 한 번씩만 게재하고, 신규 콘텐츠를 밀어내지 않습니다.
+- 홈페이지 헤드라인 정책(homepage headline policy): linear decay; 일별 감쇠 2 point(s)/day; 교체 마진(replacement margin) 5; 최소 헤드라인 점수(minimum headline score) 40; 최신호 포함 필수(latest inclusion required) true; 이력 최대(history max) 50
+- 발행 게이트(publish gate): PASS는 source gap이 없고, fact-check must_fix가 없으며, 차단성 감점(blocking deduction)이 없고, 모든 기사가 fact-checker에 의해 발행 가능으로 표시되어야 합니다. 수치 기반 품질 임계값은 없습니다.
+- 편집 품질(editorial quality): fact-checker(LLM)가 각 기사를 Camera HAL SW 엔지니어에게 유용한지 기준으로 판정합니다(주제 무관 — C++, AI, Linux 기사라도 해당 엔지니어에게 도움이 되면 자격이 있습니다). 주제/깊이 휴리스틱은 결정론적 발행 게이트로 사용하지 않습니다.
+- 하드 실패 조건은 계속 차단됩니다(hard fail conditions remain blocking): source-less main article; source candidate binding failure; missing dated evidence; source_gap_risk; fact-check must_fix; duplicate source URL; stale claim hard failure; undated watch/reference page promoted to main article; CameraX source extraction failure; blocked source quality; source quality drift
 
 <!-- NEWSLETTER_POLICY:END -->
 
