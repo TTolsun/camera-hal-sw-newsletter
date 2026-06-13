@@ -56,7 +56,7 @@ const {
 const {
   articleIdentityKey
 } = require('../../core/common/article-identity');
-const { isPlaylistCollectionUrl } = require('../reporter/playlist-url');
+const { isPlaylistCollectionUrl } = require('../../core/common/playlist-url');
 const {
   annotateArticleExposure,
   everCoveredAsNewsletterArticle,

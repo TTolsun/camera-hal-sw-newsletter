@@ -7,7 +7,7 @@ const {
 } = require('../../core/common/common');
 const {
   readJsonIfExists
-} = require('../reporter/json');
+} = require('../../core/common/json');
 const {
   readStatus,
   renderGithubOutputs

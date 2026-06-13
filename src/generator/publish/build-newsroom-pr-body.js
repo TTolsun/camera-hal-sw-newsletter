@@ -54,14 +54,14 @@ const {
 } = require('../../core/common/editor-pr-summary');
 const {
   formatReasonSummary
-} = require('../reporter/status-format');
+} = require('../../core/common/status-format');
 const {
   sanitizeMarkdownTableCell,
   sanitizeMarkdownLinkUrl,
   markdownTableCell,
   trustedMarkdownTableCell,
   renderMarkdownTable
-} = require('../reporter/markdown');
+} = require('../../core/common/markdown');
 const {
   toLegacyEditorIssue
 } = require('../../core/domain/newsletter-domain-normalize');
