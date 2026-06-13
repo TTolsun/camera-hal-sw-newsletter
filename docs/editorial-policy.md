@@ -1,10 +1,14 @@
 # AOSP Camera / Driver / SoC Platform 뉴스레터 편집 정책
 
+이 문서는 기사를 어떤 기준으로 쓰고 무엇을 발행 가능한 글로 볼지를 정하는 편집 정책입니다.
+
 ## 근거 구체성 요구사항
 
-각 main article은 source가 제공하는 경우 version 또는 release name, release date, API/component, behavior change, explicit source gap 같은 concrete evidence를 포함해야 합니다. "AOSP update를 모니터링한다" 또는 "CameraX change를 review한다" 같은 generic wording은 exact source, version, API, date, behavior를 함께 이름 붙이지 않으면 publishable하지 않습니다.
+각 main article은 출처가 제공한다면 concrete evidence(구체적 근거)를 반드시 포함해야 합니다. 구체적 근거란 version 또는 release name, release date, API/component, behavior change, explicit source gap 같은 것입니다.
 
-AI, C++, Linux, SoC/platform, tooling article은 camera input path, stream/buffer/metadata/request/result behavior, V4L2/libcamera, ISP/image sensor, CTS/VTS/Camera ITS validation, latency, frame drop, thermal, memory, CPU/GPU/NPU/ISP contention, HAL/driver/native team workflow 중 하나로 relevance를 설명해야 합니다.
+"AOSP update를 모니터링한다", "CameraX change를 review한다" 같은 막연한 표현(generic wording)은 그 자체로는 발행할 수 없습니다. exact source, version, API, date, behavior를 함께 이름으로 적어야만 발행 가능합니다.
+
+AI, C++, Linux, SoC/platform, tooling 기사는 다음 중 하나로 카메라와의 관련성을 설명해야 합니다: camera input path, stream/buffer/metadata/request/result behavior, V4L2/libcamera, ISP/image sensor, CTS/VTS/Camera ITS validation, latency, frame drop, thermal, memory, CPU/GPU/NPU/ISP contention, HAL/driver/native team workflow.
 
 ## 목표
 
@@ -40,7 +44,7 @@ AI 편집자는 일반 기술 뉴스 요약가가 아니라 Camera HAL 소프트
 
 ## 발행 모드 (DEEP / CONTEXT / QUIET)
 
-발행 형식은 그날 수집된 카메라 신호량에 따라 결정론적으로 결정됩니다. 판정 임계값은 `src/shared/config/newsletter-policy.json`의 `publishModePolicy`를 따릅니다.
+그날 수집된 카메라 신호량(camera signal)에 따라 발행 형식이 결정론적으로 정해집니다. 판정 임계값은 `src/shared/config/newsletter-policy.json`의 `publishModePolicy`를 따릅니다. 세 가지 모드는 다음과 같습니다.
 
 - DEEP: 카메라 코어(direct_aosp_camera / camera_driver_image_pipeline) 후보가 1건 이상이면 메인 기사 중심으로 깊게 다룹니다.
 - CONTEXT: 코어가 없지만 인접/SoC/도구 신호가 임계 이상이면, 메인 기사를 강요하지 않고 "실무 레이더" 관점의 맥락 브리핑으로 발행합니다.
@@ -76,9 +80,12 @@ CONTEXT/QUIET 모드에서도 근거·출처 규칙은 동일하게 적용됩니
 
 ## SoC / C++ fallback 규칙
 
-SoC/CPU/GPU/NPU/ISP, memory bandwidth, power/thermal/performance 정보는 낮은 우선순위 fallback이지만 배제하지 않습니다. 단, 사내 정보가 아니라 공개 기사 또는 공개 문서 기반이어야 하며, Camera framework, HAL, driver, image pipeline, 성능/전력/발열 검증 관점 중 하나로 설명 가능해야 합니다.
+SoC/CPU/GPU/NPU/ISP, memory bandwidth, power/thermal/performance 정보는 우선순위가 낮은 fallback이지만 배제하지는 않습니다. 단, 두 조건을 지켜야 합니다.
 
-Camera HAL / Android Camera 후보가 부족할 때 C++ 기사를 fallback으로 사용할 수 있습니다. C++ 기사는 concurrency, memory safety, performance, compiler/toolchain, diagnostics처럼 native HAL code 안정성과 직접 연결되어야 합니다. 일반 C++ community news는 제외합니다.
+- 사내 정보가 아니라 공개 기사 또는 공개 문서를 근거로 해야 합니다.
+- Camera framework, HAL, driver, image pipeline, 성능/전력/발열 검증 관점 중 하나로 설명할 수 있어야 합니다.
+
+Camera HAL / Android Camera 후보가 부족할 때는 C++ 기사를 fallback으로 쓸 수 있습니다. 이때 C++ 기사는 concurrency, memory safety, performance, compiler/toolchain, diagnostics처럼 native HAL code의 안정성과 직접 연결되어야 합니다. 일반 C++ community news는 제외합니다.
 
 Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합니다. GCC 또는 일반 C++ 표준 기사를 Android HAL toolchain 전환으로 단정하지 않습니다.
 

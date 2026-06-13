@@ -1,18 +1,42 @@
 # Camera HAL SW 뉴스레터 Newsroom workflow
 
-이 문서는 AOSP Camera / Camera Driver / SoC Platform 뉴스레터를 낮은 수작업 비용으로 매일 생성하기 위한 역할 기반 workflow를 설명합니다.
+이 문서는 AOSP Camera / Camera Driver / SoC Platform 뉴스레터를, 사람의 수작업을 최소화하면서 매일 만들어 내는 역할 기반(role-based) workflow를 설명합니다. 즉 후보 수집부터 LLM 작성, 검증, 검토용 PR 생성까지 각 단계를 어떤 역할이 맡는지 정리합니다.
 
 ## 품질 게이트
 
-newsroom pipeline은 `articles/content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 생성합니다. 발행 준비 상태가 되려면 deterministic score가 `src/shared/config/newsletter-policy.json`의 `qualityGatePolicy.threshold` 이상이어야 합니다. 이 threshold 완화는 LLM 비용과 false negative를 줄이기 위한 운영 튜닝이며, 품질 검증 우회가 아닙니다. source gap, fact-check `must_fix`, 발행에 치명적인 deduction이 있으면 숫자 점수가 threshold 이상이어도 publish-ready로 보지 않습니다.
+newsroom pipeline은 매일 `articles/content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 만듭니다. 어떤 호가 발행 준비(publish-ready) 상태가 되려면, deterministic score(결정론적 점수)가 `src/shared/config/newsletter-policy.json`의 `qualityGatePolicy.threshold` 이상이어야 합니다.
 
-draft가 gate를 통과하지 못하면 generator는 `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도합니다. 기본값은 `1`입니다. 이미 article quality check를 통과한 section은 보존하고, quality retry 한 번에서 repair 또는 replace할 section 수는 `NEWSROOM_MAX_SECTION_REPAIRS=1`로 제한합니다. `retry-history.json`과 `retry-history.md`에는 locked article, failed section, repair policy, skipped repair section을 남깁니다. Gemini API retry max delay 기본값은 `GEMINI_RETRY_MAX_DELAY_MS=300000`이며, 300000ms는 5분입니다.
+이 threshold를 낮춘 것은 LLM 비용과 false negative(잘못된 탈락)를 줄이기 위한 운영 튜닝일 뿐, 품질 검증을 건너뛰는 것이 아닙니다. 점수가 threshold를 넘더라도, source gap(출처 공백), fact-check `must_fix`, 발행에 치명적인 deduction(감점)이 있으면 publish-ready로 보지 않습니다.
 
-quality gate는 AOSP Camera / Camera Driver / SoC Platform relevance, evidence specificity, engineering depth, actionability, source integrity, article composition을 확인합니다. source 없음, source gap, duplicate main article, invalid/broken source URL, underfilled article count, expanded scope 연결이 없는 generic AI/main article은 hard fail로 유지되며 점수가 충분해도 Hard blocker result: NEEDS_FIX 또는 `publish_ready=false`를 강제합니다. actionability, 약한 설명, local fallback image처럼 단독 발행 차단보다는 개선 권고에 가까운 항목은 soft deduction으로 점수와 report에 남깁니다. 이 경우에도 Quality score가 configured threshold 미만이면 통과하지 않습니다. `quality-report.json`의 `article_results`는 article별 `PASS` / `DEMOTE` / `FAIL`, hard fail reason, soft deduction, repair action을 표시합니다. retry 후에도 점수가 낮거나 blocker가 남아 있으면 weekly workflow는 review PR을 만들 수 있고 `needs-fix`로 표시합니다. review 가능한 PR 생성 성공은 발행 가능 품질 통과와 분리되며, `publish-ready` 라벨과 PR body의 `final_publish_ready=true`가 있을 때만 발행 가능한 이슈로 취급합니다.
+draft가 gate를 통과하지 못하면 generator가 재시도합니다.
 
-workflow의 `create-newsroom-pr` job은 후보 수집, LLM 생성, 검증, review PR 생성을 담당합니다. review 가능한 `articles/content/newsroom/YYYY-MM-DD/` artifact와 PR body가 만들어지면 fact-check 또는 quality가 실패해도 job은 성공할 수 있습니다. 반대로 fatal generation error로 review artifact가 없으면 job은 실패합니다. publish/deploy gate는 `final_publish_ready=true`, fact-check `PASS`, quality `PASS`, policy minimum article count, publish 가능한 `composition_mode`, source integrity, stale claim 없음이 모두 만족될 때만 통과합니다.
+- 재시도 횟수는 `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼이며 기본값은 `1`입니다.
+- 이미 article quality check를 통과한 section은 그대로 보존합니다.
+- 재시도 한 번에서 repair(수리) 또는 replace(교체)할 section 수는 `NEWSROOM_MAX_SECTION_REPAIRS=1`로 제한합니다.
+- `retry-history.json`과 `retry-history.md`에 locked article, failed section, repair policy, skipped repair section을 남깁니다.
+- Gemini API의 retry 최대 대기 시간 기본값은 `GEMINI_RETRY_MAX_DELAY_MS=300000`입니다(300000ms = 5분).
 
-PR label은 상태를 분리해서 보여 줍니다. `needs-fix`는 편집장 수리 또는 검토가 필요한 PR, `fallback-composition`은 direct camera/driver 후보가 부족해 SoC/platform/tooling fallback을 사용했지만 `publish-ready`가 아닌 PR에만 붙는 diagnostics label, `thin-week`는 자동 발행 대상이 아닌 얇은 주간 review path, `publish-ready`는 최종 발행 gate를 통과한 PR에만 사용합니다. summary cache는 restore와 save를 분리하고 save를 `if: always()`로 실행해 실패 run 이후 retry 비용을 줄입니다.
+quality gate는 AOSP Camera / Camera Driver / SoC Platform relevance, evidence specificity, engineering depth, actionability, source integrity, article composition을 점검합니다.
+
+판정 결과는 두 종류로 나뉩니다.
+
+- hard fail(즉시 차단): source 없음, source gap, duplicate main article, invalid/broken source URL, underfilled article count, 확장 범위(expanded scope)와의 연결이 없는 generic AI/main article이 여기에 해당합니다. 이 경우 점수가 충분해도 Hard blocker result: NEEDS_FIX 또는 `publish_ready=false`를 강제합니다.
+- soft deduction(감점): actionability 부족, 약한 설명, local fallback image처럼 단독으로 발행을 막기보다는 개선 권고에 가까운 항목입니다. 점수와 report에 남깁니다. 단, 이렇게 감점된 뒤에도 Quality score가 정해진 threshold 미만이면 통과하지 못합니다.
+
+`quality-report.json`의 `article_results`는 기사별로 `PASS` / `DEMOTE` / `FAIL`, hard fail reason, soft deduction, repair action을 표시합니다. 재시도 후에도 점수가 낮거나 blocker가 남으면, weekly workflow는 review PR을 만들고 `needs-fix`로 표시할 수 있습니다. 여기서 중요한 점은, 검토용 PR이 만들어졌다는 사실과 발행 가능 품질을 통과했다는 사실은 별개라는 것입니다. `publish-ready` 라벨과 PR body의 `final_publish_ready=true`가 둘 다 있을 때만 발행 가능한 이슈로 취급합니다.
+
+workflow의 `create-newsroom-pr` job은 후보 수집, LLM 생성, 검증, review PR 생성을 담당합니다. 검토 가능한 `articles/content/newsroom/YYYY-MM-DD/` artifact와 PR body가 만들어지면, fact-check나 quality가 실패하더라도 이 job 자체는 성공할 수 있습니다. 반대로 치명적 생성 오류(fatal generation error)로 review artifact가 아예 없으면 job은 실패합니다.
+
+publish/deploy gate는 다음 조건이 모두 충족될 때만 통과합니다: `final_publish_ready=true`, fact-check `PASS`, quality `PASS`, policy minimum article count(정책상 최소 기사 수), 발행 가능한 `composition_mode`, source integrity, stale claim 없음.
+
+PR label은 상태를 구분해서 보여 줍니다.
+
+- `needs-fix`: 편집장의 수리 또는 검토가 필요한 PR.
+- `fallback-composition`: direct camera/driver 후보가 부족해 SoC/platform/tooling fallback을 썼지만 아직 `publish-ready`는 아닌 PR에만 붙는 진단(diagnostics) label.
+- `thin-week`: 자동 발행 대상이 아닌, 신호가 얇은(thin) 주간 검토 경로.
+- `publish-ready`: 최종 발행 gate를 통과한 PR에만 사용.
+
+summary cache는 restore(복원)와 save(저장)를 분리하고, save를 `if: always()`로 실행합니다. 이렇게 하면 실패한 run 이후 재시도 비용이 줄어듭니다.
 
 ## 목표
 
@@ -32,11 +56,22 @@ source registry
 
 ## LLM provider 운영
 
-기본 provider는 `gemini`이며 scheduled run은 `runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`에 정의된 provider/model/fallback model을 사용합니다. scheduled run은 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` repo variable을 읽지 않습니다.
+기본 provider는 `gemini`입니다. 예약 자동 실행(scheduled run)은 `runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`에 정의된 provider/model/fallback model을 그대로 씁니다. 즉 scheduled run은 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` repo variable을 읽지 않습니다.
 
-`workflow_dispatch` 수동 실행에서만 `llm_provider`, `llm_model`, `llm_fallback_models` input이 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` runtime env로 전달됩니다. Stage 1 source collection은 LLM을 호출하지 않으므로 `llm_provider` selector가 없습니다. Stage 2 source discovery는 `llm_provider`와 `llm_model`을 제공하며, Stage 3 final generation은 `llm_provider`, `llm_model`, `llm_fallback_models`를 모두 제공합니다. 이슈 초안에 나온 `llm_api_provider`는 예시 이름이며, 현재 공개 workflow 계약은 `llm_provider`입니다.
+`llm_provider`, `llm_model`, `llm_fallback_models` input이 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` runtime env로 전달되는 경우는 `workflow_dispatch` 수동 실행뿐입니다. stage별 selector는 다음과 같습니다.
 
-`LLM_PROVIDER=gemini`은 `GEMINI_API_KEY`만 요구합니다. `LLM_PROVIDER=openapi`는 reserved provider enum으로 전용 구현 PR 전에는 `provider_not_implemented`로 fail-fast합니다. token은 GitHub Secrets에서만 읽고 log, artifact, PR body에 출력하지 않습니다.
+- Stage 1 source collection: LLM을 호출하지 않으므로 `llm_provider` selector가 없습니다.
+- Stage 2 source discovery: `llm_provider`와 `llm_model`을 제공합니다.
+- Stage 3 final generation: `llm_provider`, `llm_model`, `llm_fallback_models`를 모두 제공합니다.
+
+이슈 초안에 나오는 `llm_api_provider`는 예시 이름이며, 현재 공개 workflow 계약은 `llm_provider`입니다.
+
+provider별 자격 요건은 다음과 같습니다.
+
+- `LLM_PROVIDER=gemini`: `GEMINI_API_KEY`만 있으면 됩니다.
+- `LLM_PROVIDER=openapi`: 예약된(reserved) provider enum입니다. 전용 구현 PR이 나오기 전까지는 `provider_not_implemented`로 fail-fast합니다.
+
+token은 GitHub Secrets에서만 읽고, log, artifact, PR body 어디에도 출력하지 않습니다.
 
 ## Role 1. Candidate Collector
 
@@ -47,16 +82,32 @@ source registry
 
 ## Role 2. LLM Reporter
 
-LLM 실행 전에 `src/generator/select/newsroom-selection.js`가 `articles/content/collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `articles/content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다. LLM prompt에는 full candidate 대신 `articles/content/newsroom/YYYY-MM-DD/article-capsules.json`의 compact capsule을 전달합니다.
+LLM을 호출하기 전에, `src/generator/select/newsroom-selection.js`가 deterministic(결정론적)으로 후보를 정리합니다. 순서는 다음과 같습니다.
 
-shortlist는 기본 8-12개 수준, hard cap 12개 후보로 제한됩니다. local selector는 LLM reporter/editor prompt가 실행되기 전에 deterministic scoring으로 후보를 줄이고 `src/shared/config/newsletter-policy.json`이 정한 final main article input을 선택합니다. scoring은 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`, `soc_platform_signal`, `cpp_ai_tooling_fallback`, `generic_tech_watchlist` bucket과 구체 evidence, 최신성, 실무 actionability, source reliability를 함께 봅니다. source gap, 날짜 근거 없음, dated evidence 없는 watch page, 구체 API/component 근거 없음은 main article에서 제외되거나 강하게 감점됩니다. SoC/CPU/GPU/NPU/ISP/power/thermal/performance 기사는 configured supporting main bucket일 때만 main article 보강에 사용할 수 있습니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 유지합니다. eligible non-duplicate final input이 configured article count range를 만족하지 못하면 생성은 조기에 실패하고 `articles/content/newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
+1. `articles/content/collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다.
+2. URL과 거의 같은 제목(near-duplicate title)을 dedupe합니다.
+3. 자격을 갖춘(eligible) 후보를 점수화한 뒤 `articles/content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다.
+
+LLM prompt에는 후보 전체가 아니라 `articles/content/newsroom/YYYY-MM-DD/article-capsules.json`의 compact capsule(압축 캡슐)만 전달합니다.
+
+shortlist는 기본 8-12개 수준이고 hard cap(상한)은 12개입니다. 핵심은 **LLM이 아니라 local selector(결정론적 코드)가 main article 후보를 정한다**는 점입니다. selector는 LLM reporter/editor prompt가 돌기 전에 deterministic scoring으로 후보를 줄이고, `src/shared/config/newsletter-policy.json`이 정한 final main article input을 고릅니다.
+
+scoring은 다음을 함께 봅니다: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`, `soc_platform_signal`, `cpp_ai_tooling_fallback`, `generic_tech_watchlist` bucket 분류와 더불어 구체 evidence, 최신성, 실무 actionability, source reliability.
+
+다음은 main article에서 제외되거나 크게 감점됩니다: source gap, 날짜 근거 없음, dated evidence 없는 watch page, 구체 API/component 근거 없음.
+
+추가 규칙:
+
+- SoC/CPU/GPU/NPU/ISP/power/thermal/performance 기사는 정책상 supporting main bucket일 때만 main article 보강에 쓸 수 있습니다.
+- `generic_tech_watchlist`는 main article로 올리지 않고 briefing/watchlist로 둡니다.
+- 자격을 갖춘 비중복(non-duplicate) final input이 정책상 article count range를 못 채우면, 생성은 일찍 실패하고 `articles/content/newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
 
 - 수집 후보 중 AOSP Camera, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, Android platform camera-adjacent, SoC platform, C++, LLVM/Clang/GCC, AI workflow와 관련된 항목을 점수화합니다.
 - source name, source URL, candidateOnly, requiresCrossCheck, imageCandidates를 유지합니다.
 - 출력: `articles/content/newsroom/YYYY-MM-DD/reporter-candidates.json`.
-- `article-capsules.json`은 title, url, source, published_date, topic_type, component, what_changed, why_hal_engineer_cares, evidence, risk, score 중심의 compact prompt 입력입니다. reporter stage에는 top shortlist capsule 8-12개, editor/fact-check/repair/completion stage에는 final-selected 또는 필요한 completion capsule만 전달합니다.
+- `article-capsules.json`은 title, url, source, published_date, topic_type, component, what_changed, why_hal_engineer_cares, evidence, risk, score를 중심으로 한 compact prompt 입력입니다. stage별로 전달하는 capsule이 다릅니다: reporter stage에는 상위 shortlist capsule 8-12개, editor/fact-check/repair/completion stage에는 최종 선택된(final-selected) 또는 필요한 completion capsule만 전달합니다.
 
-LLM reporter는 전체 collected candidate가 아니라 deterministic shortlist만 받습니다. 요약, tag, evidence field를 보강하되 local `selected=true` final article decision을 보존해야 합니다.
+LLM reporter는 수집된 후보 전체가 아니라 deterministic shortlist만 받습니다. 요약, tag, evidence field를 보강할 수는 있지만, local이 정한 `selected=true` final article decision은 반드시 그대로 유지해야 합니다.
 
 ## Role 3. LLM Editor
 
@@ -65,7 +116,12 @@ LLM reporter는 전체 collected candidate가 아니라 deterministic shortlist�
 - 이미지 URL을 새로 만들지 않고 collector가 제공한 `imageCandidates`에서만 선택합니다.
 - 출력: `articles/content/newsroom/YYYY-MM-DD/editor-draft.json`, `articles/content/newsroom/YYYY-MM-DD/editor-draft.md`.
 
-editor는 deterministic final article input과 locked/retry context만 받습니다. retry가 필요하면 통과한 section은 lock하고, repair prompt는 실패한 section만 재생성하도록 요청합니다. source gap 또는 ineligible source는 rewrite하지 않고 demote 또는 replace 대상으로 처리합니다. weak HAL relevance와 duplicate는 replace, missing actionability와 required/evidence 부족은 same-source section repair 대상으로 분리합니다. retry artifact는 `locked_sections`, `failed_sections`, `regenerated_sections`, `repair_plan`, `skipped_repair_plan`, rejected retry output을 기록합니다.
+editor는 deterministic final article input과 locked/retry context만 받습니다. retry가 필요할 때의 처리 방식은 다음과 같습니다.
+
+- 통과한 section은 lock(고정)하고, repair prompt는 실패한 section만 다시 생성하도록 요청합니다.
+- source gap이나 자격 없는 source(ineligible source)는 다시 쓰지(rewrite) 않고 demote(강등) 또는 replace(교체) 대상으로 처리합니다.
+- weak HAL relevance와 duplicate는 replace 대상, missing actionability와 required/evidence 부족은 같은 출처 안에서 고치는 same-source section repair 대상으로 나눕니다.
+- retry artifact에는 `locked_sections`, `failed_sections`, `regenerated_sections`, `repair_plan`, `skipped_repair_plan`, 그리고 거부된 retry output을 기록합니다.
 
 ## Role 4. LLM Fact Checker
 
@@ -88,7 +144,7 @@ editor는 deterministic final article input과 locked/retry context만 받습니
   6. 필요 시 확인
   7. 디버그 근거
   8. 미분류 산출물
-- `artifact-manifest.json`은 `schema_version=3`이며 legacy consumer 호환을 위해 `files[].path`, `files[].size`, `files[].sha256`에는 실제 존재하는 파일만 둡니다. review 순서, missing expected artifact, `review_blocking`, `review_attention_required` 같은 advisory metadata는 `review_artifacts[]`에 둡니다.
+- `artifact-manifest.json`은 `schema_version=3`입니다. legacy consumer 호환을 위해 `files[].path`, `files[].size`, `files[].sha256`에는 실제로 존재하는 파일만 넣습니다. review 순서, 빠진 예상 artifact(missing expected artifact), `review_blocking`, `review_attention_required` 같은 안내성(advisory) metadata는 `files[]`가 아니라 `review_artifacts[]`에 둡니다.
 - `review_blocking`과 `review_attention_required`는 리뷰어 안내용 metadata입니다. 이 값은 deterministic publish gate, quality gate, source gate, public artifact readiness 판단을 변경하지 않습니다.
 - `artifact-manifest.json` 파일은 hash churn 방지를 위해 manifest `files[]` hashing 대상에서 제외합니다. `00-review-guide.md`와 `release-qa-report.md`는 존재하면 `files[]`에 포함될 수 있지만 derived artifact라서 `missingRequired` 판단에는 사용하지 않습니다.
 - Manifest surface는 두 가지입니다.
@@ -97,38 +153,58 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 
 ### 결정론적 이미지 바인딩 repair
 
-editor는 이미지 권리/관련성이 불확실하면 `selectedImage`를 비워 두고, renderer는 local fallback visual을 사용합니다. 생성이 끝나면 workflow가 `npm run newsroom:repair-images -- --date <date>`를 실행해 editor-draft의 valid `imageCandidates` 중 audit 규칙을 통과한 후보를 deterministic하게 binding하고 daily Markdown/HTML을 재생성합니다. local fallback visual은 valid candidate가 정말 없는 기사에만 남습니다.
+editor는 이미지의 권리나 관련성이 불확실하면 `selectedImage`를 비워 두고, renderer는 local fallback visual(로컬 대체 이미지)을 씁니다. 생성이 끝나면 workflow가 `npm run newsroom:repair-images -- --date <date>`를 실행합니다. 이 명령은 editor-draft의 유효한 `imageCandidates` 중 audit 규칙을 통과한 후보를 deterministic하게 binding하고 daily Markdown/HTML을 다시 만듭니다. local fallback visual은 유효한 candidate가 정말로 하나도 없는 기사에만 남습니다.
 
-repair는 같은 ISO week의 weekly 산출물도 함께 동기화합니다. weekly upsert는 같은 identity 기사를 exact duplicate로 거부하므로 재실행으로는 수리된 이미지가 weekly에 반영되지 않습니다. 대신 repair가 identity가 일치하는 weekly section의 image field를 daily editor-draft 상태로 복사해 `articles/newsletters/<weeklyKey>/{index.html,newsletter.md,issue.json}`을 재생성하고, `articles/data/newsletters-weekly.json` entry의 `article_images`를 갱신합니다. weekly artifact가 없으면 no-op이고 재실행해도 결과가 수렴(idempotent)합니다. repairable article이 0인 날짜도 `--date` 실행 시 weekly 동기화는 항상 수행하므로 stale weekly를 재실행으로 복구할 수 있습니다(`--all-repairable`은 repairable 0인 날짜를 방문하지 않습니다). `article_images`는 https 이미지가 하나도 없으면 site-root-relative fallback 경로 1개를 담아 홈페이지 Latest card가 항상 이미지를 갖게 합니다.
+repair는 같은 ISO week의 weekly 산출물도 함께 동기화합니다. 동작은 다음과 같습니다.
+
+- weekly upsert는 identity가 같은 기사를 exact duplicate로 거부합니다. 따라서 단순 재실행만으로는 수리된 이미지가 weekly에 반영되지 않습니다.
+- 그래서 repair는, identity가 일치하는 weekly section의 image field를 daily editor-draft 상태로 직접 복사합니다. 그런 다음 `articles/newsletters/<weeklyKey>/{index.html,newsletter.md,issue.json}`을 다시 만들고 `articles/data/newsletters-weekly.json` entry의 `article_images`를 갱신합니다.
+- weekly artifact가 없으면 아무 일도 하지 않으며(no-op), 여러 번 실행해도 결과가 같습니다(idempotent).
+- 수리 대상(repairable) 기사가 0인 날짜라도 `--date`로 실행하면 weekly 동기화는 항상 수행합니다. 덕분에 오래된(stale) weekly를 재실행으로 복구할 수 있습니다. (반면 `--all-repairable`은 repairable이 0인 날짜는 방문하지 않습니다.)
+- `article_images`에 https 이미지가 하나도 없으면, site-root 기준 상대 경로(fallback) 1개를 넣어 둡니다. 이렇게 해서 홈페이지 Latest card가 항상 이미지를 갖도록 보장합니다.
 
 ## Role 6. Validator
 
-`npm run validate`가 repository-wide safety gate입니다. Stage 3 final workflow의 post-generation gate는 `npm run validate:post-generation`을 사용합니다. 이 chain은 `validate:quality`를 다시 실행하지 않고, final Markdown/HTML public artifact를 `validate:llm-publication-quality`의 LLM API judge로 확인합니다.
+`npm run validate`는 저장소 전체(repository-wide)의 safety gate입니다. Stage 3 final workflow에서 생성 직후에 도는 post-generation gate는 `npm run validate:post-generation`을 씁니다. 이 chain은 `validate:quality`를 다시 돌리지 않고, 대신 final Markdown/HTML public artifact를 `validate:llm-publication-quality`의 LLM API judge로 확인합니다.
 
-- `npm run validate:config`: `src/shared/data/news-sources.json` 구조, 필수 field, source ID, URL, category-to-section mapping, source entry의 중복 `section` 금지, canonical JSON formatting을 확인합니다.
-- `npm run validate:site`: metadata, 파일 존재, TODO leak, duplicate date, required sections, source/reference, HTML class hook, anchor balance를 확인합니다.
-  current/changed/generated validation target에 해당하는 artifact에서 fact-check `must_fix`가 남으면 hard fail입니다. 같은 `must_fix`가 historical artifact outside strict target에서만 발견되면 소급 hard fail 대신 warning-only로 기록하지만, publish-ready로 간주하지 않습니다.
-- `npm run validate:images`: article image URL과 local fallback file 존재를 확인합니다.
-  외부 이미지가 404, timeout, invalid content-type 등으로 실패해도 local fallback이 존재하고 최종 `selectedImage`가 fallback 경로로 정리되면 warning only입니다. 원본 URL은 `originalImage` 또는 `resolvedImage.originalUrl`에 보존하며, fallback 파일 누락이나 깨진 외부 URL이 publish 산출물에 남은 경우에만 fail합니다.
-- `npm run validate:quality`: deterministic quality report를 재계산하고 configured article count range 위반, Primary Camera Stack 필수 조건 미달, forbidden main bucket 포함, main section 간 source URL 중복, source 누락, Camera HAL perspective 누락, action item 부족, source-gap mapped candidate, dated evidence 없는 selected candidate를 차단합니다. AI/C++ 기사는 configured supporting main bucket일 때만 보강 기사로 허용됩니다.
-- `npm run validate:post-generation`: Stage 3 final workflow에서 public newsletter files가 준비된 뒤 실행하는 post-generation gate입니다. `validate:quality`는 포함하지 않고, `validate:llm-publication-quality`가 LLM API로 실제 렌더링된 public artifact를 검사합니다.
-- `npm run validate:localization`: 유지 문서와 표시용 JSON 값이 한국어 규칙을 지키는지 확인합니다.
+주요 validate 단계는 다음과 같습니다.
+
+- `npm run validate:config`: `src/shared/data/news-sources.json`의 구조, 필수 field, source ID, URL, category-to-section mapping, source entry 안의 중복 `section` 금지, canonical JSON formatting을 확인합니다.
+- `npm run validate:site`: metadata, 파일 존재, TODO leak, 중복 날짜(duplicate date), required sections, source/reference, HTML class hook, anchor balance를 확인합니다.
+  - 검증 대상(current/changed/generated)에 해당하는 artifact에 fact-check `must_fix`가 남아 있으면 hard fail입니다.
+  - 같은 `must_fix`가 엄격 대상 밖의 과거(historical) artifact에서만 발견되면, 소급해서 hard fail 처리하지 않고 warning-only로만 기록합니다. 단 그래도 publish-ready로 보지는 않습니다.
+- `npm run validate:images`: article image URL과 local fallback file의 존재를 확인합니다.
+  - 외부 이미지가 404, timeout, invalid content-type 등으로 실패하더라도, local fallback이 있고 최종 `selectedImage`가 fallback 경로로 정리돼 있으면 warning only입니다.
+  - 원본 URL은 `originalImage` 또는 `resolvedImage.originalUrl`에 보존합니다. fallback 파일이 없거나 깨진 외부 URL이 publish 산출물에 그대로 남은 경우에만 fail합니다.
+- `npm run validate:quality`: deterministic quality report를 다시 계산해 다음을 차단합니다: 정책상 article count range 위반, Primary Camera Stack 필수 조건 미달, forbidden main bucket 포함, main section 간 source URL 중복, source 누락, Camera HAL perspective 누락, action item 부족, source-gap에 매핑된 candidate, dated evidence 없는 selected candidate. AI/C++ 기사는 정책상 supporting main bucket일 때만 보강 기사로 허용합니다.
+- `npm run validate:post-generation`: Stage 3 final workflow에서 public newsletter files가 준비된 뒤에 도는 post-generation gate입니다. `validate:quality`는 포함하지 않고, `validate:llm-publication-quality`가 LLM API로 실제 렌더링된 public artifact를 검사합니다.
+- `npm run validate:localization`: 유지 대상 문서와 표시용 JSON 값이 한국어 규칙을 지키는지 확인합니다.
 
 ## 편집자 승인 발행 정책
 
-- `publish-ready`는 AI 자동 발행 가능 상태이며 `has_ai_publish_ready=true`일 때만 사용합니다.
-- `review_publication_ready=true`는 `public_newsletter_ready=true`인 검증된 public issue가 있고, `final_publish_ready=false`라서 편집장 검토 후 merge로만 공개할 수 있음을 뜻합니다. 이 값은 raw file existence가 아니라 `resolve-reviewable-artifacts`의 public newsletter readiness 결과에서만 파생합니다.
-- `diagnostics_only=true`는 `review_pr_ready=true && public_newsletter_ready=false`인 진단 전용 PR입니다. merge해도 Newsletter 홈페이지에 표시되지 않으며 public files 누락 이유가 PR body에 남아야 합니다.
-- `homepage_visible_after_merge=true`는 `articles/data/newsletters.json`의 date/html/md entry가 `articles/newsletters/YYYY-MM-DD/index.html` 및 `newsletter.md`와 일치하는 public issue에만 설정합니다. workflow output의 최종 판단은 `resolve-reviewable-artifacts`가 public files와 index entry를 다시 검증한 결과입니다.
-- `needs-fix`는 편집장 검토 또는 수정이 필요한 상태입니다. 자동 발행 기준을 통과하지 못한 editor review PR에는 broad signal인 `review-only`를 붙이고, public files가 준비된 review publication PR에는 `review-only-publication`, public files가 없는 진단 PR에는 `diagnostics-only`를 함께 붙입니다. 두 세부 label은 동시에 붙지 않아야 합니다.
-- `final_publish_ready=false`는 자동 발행 기준 미충족을 뜻하지만, `review_publication_ready=true`인 PR의 공개 가능성을 혼자 차단하지 않습니다.
-- `Validate Site and Images` (`.github/workflows/validate-site.yml`)는 structural validation을 blocking으로 유지하고 quality/fact-check 문제를 non-blocking annotation으로 보고합니다.
+발행 상태를 나타내는 값들의 의미는 다음과 같습니다.
+
+- `publish-ready`: AI가 자동으로 발행해도 되는 상태입니다. `has_ai_publish_ready=true`일 때만 씁니다.
+- `review_publication_ready=true`: `public_newsletter_ready=true`인 검증된 public issue가 있지만 `final_publish_ready=false`라서, 편집장이 검토한 뒤 merge해야만 공개할 수 있다는 뜻입니다. 이 값은 파일이 존재하는지(raw file existence)가 아니라 `resolve-reviewable-artifacts`의 public newsletter readiness 결과에서만 파생합니다.
+- `diagnostics_only=true`: `review_pr_ready=true && public_newsletter_ready=false`인 진단 전용 PR입니다. merge해도 Newsletter 홈페이지에는 표시되지 않으며, public files가 왜 없는지를 PR body에 남겨야 합니다.
+- `homepage_visible_after_merge=true`: `articles/data/newsletters.json`의 date/html/md entry가 실제 `articles/newsletters/YYYY-MM-DD/index.html` 및 `newsletter.md`와 일치하는 public issue에만 설정합니다. 최종 판단은 `resolve-reviewable-artifacts`가 public files와 index entry를 다시 검증한 결과를 따릅니다.
+- `needs-fix`: 편집장 검토 또는 수정이 필요한 상태입니다. label 부착 규칙은 다음과 같습니다.
+  - 자동 발행 기준을 통과하지 못한 editor review PR에는 넓은 의미의 신호인 `review-only`를 붙입니다.
+  - 그중 public files가 준비된 review publication PR에는 `review-only-publication`을, public files가 없는 진단 PR에는 `diagnostics-only`를 함께 붙입니다.
+  - 이 두 세부 label은 동시에 붙으면 안 됩니다.
+- `final_publish_ready=false`: 자동 발행 기준을 못 채웠다는 뜻입니다. 다만 이 값 하나만으로 `review_publication_ready=true`인 PR의 공개 가능성을 막지는 않습니다.
+- `Validate Site and Images` (`.github/workflows/validate-site.yml`): 구조 검증(structural validation)은 blocking으로 유지하고, quality/fact-check 문제는 발행을 막지 않는(non-blocking) annotation으로 보고합니다.
 
 ## URL Summary Cache
 
-Reporter summary record는 `cache/news-summary/by-url/{sha256(normalized_url)}.json`과 `cache/news-summary/by-content/{content_hash}.json`에 cache됩니다. cache file은 의도적으로 untracked이며 CI에서는 `actions/cache`로 복원합니다.
+Reporter가 만든 summary record는 두 위치에 cache됩니다: `cache/news-summary/by-url/{sha256(normalized_url)}.json`과 `cache/news-summary/by-content/{content_hash}.json`. 이 cache file은 의도적으로 Git에 추적하지 않으며(untracked), CI에서는 `actions/cache`로 복원합니다.
 
-cache hit은 같은 normalized URL을 먼저 확인하고, URL이 달라도 `content_hash`가 같으면 by-content record를 재사용합니다. `content_hash`는 title, summary, version/release, API/component, behavior evidence 중심으로 계산하며 URL, published date, source metadata는 제외합니다. published date나 source label만 바뀐 경우에는 summary를 다시 만들지 않고 freshness와 metadata는 현재 candidate에서 다시 판단합니다. article evidence가 바뀌면 `content-hash-mismatch`로 miss 처리합니다.
+cache hit 판정 순서는 다음과 같습니다.
+
+- 먼저 같은 normalized URL이 있는지 확인합니다.
+- URL이 다르더라도 `content_hash`가 같으면 by-content record를 재사용합니다.
+
+`content_hash`는 title, summary, version/release, API/component, behavior evidence를 중심으로 계산하고 URL, published date, source metadata는 제외합니다. 따라서 published date나 source label만 바뀐 경우에는 summary를 다시 만들지 않고, freshness와 metadata만 현재 candidate를 기준으로 다시 판단합니다. 반대로 article evidence가 바뀌면 `content-hash-mismatch`로 보고 miss 처리합니다.
 
 generator는 `articles/content/newsroom/YYYY-MM-DD/summary-cache-report.json`, `summary-cache-report.md`, `.tmp/summary-cache-report.json`에 cache hit/miss와 miss reason을 남깁니다. 이 report는 비용 분석용 debug artifact이며, generated cache file 자체는 `cache/news-summary/` 아래에 남아 PR diff에 포함되지 않습니다.
 
@@ -138,17 +214,37 @@ generator는 `articles/content/newsroom/YYYY-MM-DD/summary-cache-report.json`, `
 
 Gemini 호출이 성공적으로 응답을 반환하면 generator는 response usage metadata를 stage/model/attempt 단위로 기록합니다. 비용 리포트는 `.tmp/newsroom-cost-report.json`과 `articles/content/newsroom/YYYY-MM-DD/cost-report.md`에 남으며, prompt tokens, output tokens, thinking tokens, cached tokens, total tokens, estimated cost를 포함합니다.
 
-Gemini request에는 stage별 thinking budget과 temperature를 적용합니다. thinking budget 기본값은 reporter `0`, editor/completion `1024`, repair `0`, fact-check `1024`, judge `1024`, scoring `0`입니다. editor/fact-check/judge의 thinking budget 활성화로 일일 약 12K thinking 토큰이 추가되며, Gemini 2.5 가격 기준 수 센트 수준입니다. fact-check 정확도와 publication-ready 판정 신뢰도 향상으로 정당화됩니다. 비용이 예상을 초과하면 `GEMINI_THINKING_BUDGET_JUDGE=0` 같은 env override로 코드 변경 없이 즉시 조정할 수 있습니다.
+Gemini request에는 stage별 thinking budget(추론 예산)과 temperature를 적용합니다. thinking budget 기본값은 stage별로 reporter `0`, editor/completion `1024`, repair `0`, fact-check `1024`, judge `1024`, scoring `0`입니다. editor/fact-check/judge에서 thinking budget을 켜면 하루 약 12K thinking 토큰이 추가되는데, Gemini 2.5 가격 기준으로 수 센트 수준입니다. 이는 fact-check 정확도와 publication-ready 판정의 신뢰도가 올라가는 것으로 정당화됩니다. 비용이 예상을 넘으면 `GEMINI_THINKING_BUDGET_JUDGE=0` 같은 env override로 코드 변경 없이 바로 조정할 수 있습니다.
 
-temperature 기본값은 stage별로 다릅니다. reporter `0.30`, editor `0.55`, fact-check `0.20`, repair `0.25`, judge `0.20`, source discovery `0.45`, 기타(default) `0.35`입니다. `GEMINI_TEMPERATURE_*` 환경변수로 각 stage를 독립적으로 조정할 수 있습니다(범위 0 이상 2 이하).
+temperature 기본값도 stage별로 다릅니다: reporter `0.30`, editor `0.55`, fact-check `0.20`, repair `0.25`, judge `0.20`, source discovery `0.45`, 기타(default) `0.35`. `GEMINI_TEMPERATURE_*` 환경변수로 각 stage를 따로 조정할 수 있습니다(범위 0 이상 2 이하).
 
-`GEMINI_THINKING_BUDGET_*` 및 `GEMINI_TEMPERATURE_*` 환경변수로 조정할 수 있고, cost report의 call row에는 실제 response의 `thinking_tokens`와 함께 `thinking_budget_requested`, `thinking_budget_applied`가 남습니다. thinking 설정은 호출 모델의 패밀리에 맞춰 전달됩니다. Gemini 3.x 단계(editor)는 `thinkingBudget` 대신 `thinkingLevel`을 사용하며 budget을 `<=512` LOW / `<=2048` MEDIUM / `>2048` HIGH로 번역합니다. `gemini-2.5-flash-lite`는 유효 범위(512~24576)로 클램프하고 budget 0이면 thinkingConfig를 생략합니다. `gemini-2.5/2.0-flash`는 `thinkingBudget`을 그대로 사용합니다(0=off).
+thinking budget과 temperature는 `GEMINI_THINKING_BUDGET_*`, `GEMINI_TEMPERATURE_*` 환경변수로 조정합니다. cost report의 call row에는 실제 response의 `thinking_tokens`와 함께 `thinking_budget_requested`, `thinking_budget_applied`가 남습니다.
+
+thinking 설정은 호출하는 모델의 패밀리(family)에 맞춰 다르게 전달됩니다.
+
+- Gemini 3.x 단계(editor): `thinkingBudget` 대신 `thinkingLevel`을 씁니다. budget 값을 `<=512`이면 LOW, `<=2048`이면 MEDIUM, `>2048`이면 HIGH로 번역합니다.
+- `gemini-2.5-flash-lite`: budget을 유효 범위(512~24576)로 클램프(clamp)하고, budget이 0이면 thinkingConfig를 아예 생략합니다.
+- `gemini-2.5/2.0-flash`: `thinkingBudget`을 그대로 사용합니다(0이면 off).
 
 `NEWSROOM_WARN_COST_USD`와 `NEWSROOM_MAX_COST_USD`는 비용 관찰용 기준값입니다. 현재 운영 기준으로 두 값을 넘어도 workflow를 실패시키지 않고 warning만 출력합니다. 이 리포트는 비용 발생 위치를 파악하기 위한 artifact이며, 품질 점수나 publish readiness 판단을 변경하지 않습니다.
 
-Stage별 기본 모델은 reporter/fact-checker가 `gemini-2.5-flash`, editor가 `gemini-3.5-flash`, repair가 `gemini-3.5-flash`(editor와 동일 schema를 재생성하므로 editor 모델로 정렬), public article judge와 source discovery가 `gemini-2.5-flash-lite`이고 기본 fallback은 `gemini-2.5-flash-lite`입니다. source discovery(`02-newsletters-source-discovery-pr.yml`의 Gemini source/linked evidence 발견)는 후보를 새로 작성하지 않고 선별/판정만 하는 단계이므로 비용이 가장 낮은 `gemini-2.5-flash-lite`로 고정합니다. Gemini Pro 계열 모델명은 모든 public model override 경로에서 validation error로 차단합니다. 비용 리포트는 call-level `pro_model` audit marker를 유지하지만 정상 run에서는 항상 `false`여야 하며, report-level 정책은 `Pro policy: disabled`로 고정됩니다.
+Stage별 기본 모델은 다음과 같습니다.
 
-Stage별 model routing은 아래 순서를 따릅니다. `LLM_MODEL` 또는 `GEMINI_MODEL`이 명시되면 모든 stage primary model을 override합니다. 그렇지 않으면 `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `NEWSROOM_FACTCHECK_MODEL`, `NEWSROOM_REPAIR_MODEL`, `NEWSROOM_JUDGE_MODEL`, `NEWSROOM_SOURCEDISCOVERY_MODEL`이 해당 stage만 override하고, 비어 있는 stage는 code default를 사용합니다. `LLM_FALLBACK_MODELS` 또는 `GEMINI_FALLBACK_MODELS`는 모든 stage primary 뒤에 붙는 fallback chain입니다.
+- reporter/fact-checker: `gemini-2.5-flash`
+- editor: `gemini-3.5-flash`
+- repair: `gemini-3.5-flash` (editor와 같은 schema를 재생성하므로 editor 모델에 맞춤)
+- public article judge / source discovery: `gemini-2.5-flash-lite`
+- 기본 fallback: `gemini-2.5-flash-lite`
+
+source discovery(`02-newsletters-source-discovery-pr.yml`의 Gemini source/linked evidence 발견)는 후보를 새로 쓰지 않고 선별/판정만 하는 단계라서, 비용이 가장 낮은 `gemini-2.5-flash-lite`로 고정합니다. Gemini Pro 계열 모델명은 모든 public model override 경로에서 validation error로 차단합니다. 비용 리포트는 call 단위 `pro_model` audit marker를 유지하지만, 정상 run에서는 항상 `false`여야 하고 report 단위 정책은 `Pro policy: disabled`로 고정됩니다.
+
+Stage별 model routing은 아래 우선순위를 따릅니다.
+
+1. `LLM_MODEL` 또는 `GEMINI_MODEL`이 지정되면 모든 stage의 primary model을 한꺼번에 override합니다.
+2. 그렇지 않으면 `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `NEWSROOM_FACTCHECK_MODEL`, `NEWSROOM_REPAIR_MODEL`, `NEWSROOM_JUDGE_MODEL`, `NEWSROOM_SOURCEDISCOVERY_MODEL`이 각자 해당 stage만 override합니다.
+3. 비어 있는 stage는 code default를 씁니다.
+
+`LLM_FALLBACK_MODELS` 또는 `GEMINI_FALLBACK_MODELS`는 모든 stage primary 뒤에 붙는 fallback chain입니다.
 
 | 설정 | reporter | editor | factcheck | repair | judge | sourceDiscovery |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -156,7 +252,14 @@ Stage별 model routing은 아래 순서를 따릅니다. `LLM_MODEL` 또는 `GEM
 | `NEWSROOM_EDITOR_MODEL=gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-3.5-flash` | `gemini-2.5-flash-lite` | `gemini-2.5-flash-lite` |
 | `LLM_FALLBACK_MODELS=gemini-2.5-flash-lite` | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback |
 
-fact-checker는 새 글을 쓰는 stage가 아니라 source gap, unsupported claim, dated evidence 누락, forbidden bucket, 과장된 HAL impact 같은 structured violation을 탐지하는 stage입니다. source binding과 hard blocker의 최종 방어선은 deterministic validator이지만, 품질 판정은 fact-checker(LLM)에 위임하므로 fact-checker 기본값은 `gemini-2.5-flash`로 유지하면서 thinking(추론)을 켜 판정 신뢰성을 높입니다. 문장 작성이 가장 복잡한 editor에는 `gemini-3.5-flash`(thinkingLevel MEDIUM)를 사용하고, 발행 구제(repair)는 editor와 동일한 section 재생성 schema를 다루므로 같은 `gemini-3.5-flash`로 정렬합니다. `gemini-2.5-flash`는 이 복잡한 nested section schema를 serving 단계에서 거부(HTTP 400, "schema produces a constraint that has too many states for serving")하므로 repair에 사용할 수 없습니다. repair의 thinking은 model-family routing에 따라 3.x에서 thinkingBudget 1024가 thinkingLevel MEDIUM으로 번역됩니다.
+fact-checker는 새 글을 쓰는 stage가 아닙니다. source gap, unsupported claim, dated evidence 누락, forbidden bucket, 과장된 HAL impact 같은 구조화된 위반(structured violation)을 탐지하는 stage입니다. source binding과 hard blocker의 최종 방어선은 deterministic validator이지만, 품질 판정 자체는 fact-checker(LLM)에 맡깁니다. 그래서 fact-checker 기본 모델은 `gemini-2.5-flash`로 두면서 thinking(추론)을 켜 판정 신뢰성을 높입니다.
+
+모델 선택의 나머지 이유는 다음과 같습니다.
+
+- 문장 작성이 가장 복잡한 editor에는 `gemini-3.5-flash`(thinkingLevel MEDIUM)를 씁니다.
+- 발행 구제(repair)는 editor와 같은 section 재생성 schema를 다루므로 같은 `gemini-3.5-flash`로 맞춥니다.
+- `gemini-2.5-flash`는 이 복잡한 nested section schema를 serving 단계에서 거부합니다(HTTP 400, "schema produces a constraint that has too many states for serving"). 그래서 repair에는 쓸 수 없습니다.
+- repair의 thinking은 model-family routing에 따라, 3.x에서는 thinkingBudget 1024가 thinkingLevel MEDIUM으로 번역됩니다.
 
 ## Final Cost Reduction Operating Model
 
@@ -179,9 +282,9 @@ fact-checker는 새 글을 쓰는 stage가 아니라 source gap, unsupported cla
 
 ## Safe Scheduled Defaults
 
-현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 결정됩니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter/fact-checker `gemini-2.5-flash`, editor/repair `gemini-3.5-flash`, public article judge·source discovery `gemini-2.5-flash-lite`, fallback `gemini-2.5-flash-lite`입니다. Workflow YAML은 Pro 계열 fallback 모델을 자동 추가하지 않으며, runtime config는 Gemini Pro 계열 모델명을 모든 public model override 경로에서 차단합니다.
+현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 정해집니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter/fact-checker `gemini-2.5-flash`, editor/repair `gemini-3.5-flash`, public article judge·source discovery `gemini-2.5-flash-lite`, fallback `gemini-2.5-flash-lite`입니다. Workflow YAML은 Pro 계열 fallback 모델을 자동으로 추가하지 않으며, runtime config는 Gemini Pro 계열 모델명을 모든 public model override 경로에서 차단합니다.
 
-scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. provider/model은 code default이고, 나머지는 workflow와 runtime config의 기본값을 사용합니다.
+scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. provider/model은 code default를 쓰고, 나머지는 workflow와 runtime config의 기본값을 그대로 씁니다.
 
 ```text
 LOOKBACK_DAYS=90  # 워크플로 명시값. runtime 기본값은 10 (#487)이며 scheduled run은 catch-up 풀(#483)을 위해 90을 유지
@@ -217,13 +320,16 @@ NEWSROOM_WARN_COST_USD=0.15
 NEWSROOM_MAX_COST_USD=0.25
 ```
 
-manual high-quality run(수동 고품질 실행)의 기본 입력은 `llm_model=""`입니다. 이때 workflow는 `LLM_MODEL`을 전달하지 않으므로 code default stage model을 사용합니다. 수동 실행에서도 `llm_model`, `llm_fallback_models`, stage별 model variable에 Gemini Pro 계열 모델명을 넣으면 `doctor:config` 단계에서 실패합니다.
+manual high-quality run(수동 고품질 실행)의 기본 입력은 `llm_model=""`입니다. 이때 workflow는 `LLM_MODEL`을 전달하지 않으므로 code default stage model을 씁니다. 수동 실행에서도 `llm_model`, `llm_fallback_models`, stage별 model variable에 Gemini Pro 계열 모델명을 넣으면 `doctor:config` 단계에서 실패합니다.
 
 ## Seed Evidence Workflow Priority
 
-Seed evidence workflow migration은 newsroom pipeline 안에서 P0-equivalent 작업으로 취급합니다. 우선순위는 `seed evidence workflow migration > legacy compatibility cleanup`이지만, `source/evidence/security/publish safety > seed evidence workflow migration`이 더 높은 절대 기준입니다.
+Seed evidence workflow migration은 newsroom pipeline 안에서 P0급(P0-equivalent) 작업으로 취급합니다. 우선순위 관계는 다음과 같습니다.
 
-Legacy-pattern test failure는 다음 조건을 모두 만족할 때만 blocker에서 분리할 수 있습니다.
+- `seed evidence workflow migration > legacy compatibility cleanup`: seed evidence migration이 레거시 정리보다 우선합니다.
+- `source/evidence/security/publish safety > seed evidence workflow migration`: 그러나 출처/근거/보안/발행 안전성은 seed evidence migration보다도 항상 우선하는 절대 기준입니다.
+
+Legacy-pattern test failure(과거 패턴 때문에 나는 테스트 실패)는 다음 조건을 **모두** 만족할 때만 blocker에서 분리할 수 있습니다.
 
 - Targeted seed evidence tests와 `npm.cmd run validate`가 통과합니다.
 - 실패가 source integrity, URL safety, quality gate, selector gate, publish gate와 무관합니다.
@@ -241,13 +347,16 @@ Legacy-pattern test failure는 다음 조건을 모두 만족할 때만 blocker�
 - manual editorial field override
 - broken evidence id mapping
 
-PR마다 failure classification은 `A. New workflow blocker`, `B. Source / evidence / security blocker`, `C. Legacy-pattern compatibility failure`, `D. Snapshot/report formatting drift`, `E. Follow-up cleanup candidate` 중 하나로 기록합니다. `A/B`는 항상 blocker이고, `C/D/E`만 위 조건을 만족할 때 후속 처리로 분리할 수 있습니다.
+PR마다 failure classification(실패 분류)을 다음 중 하나로 기록합니다: `A. New workflow blocker`, `B. Source / evidence / security blocker`, `C. Legacy-pattern compatibility failure`, `D. Snapshot/report formatting drift`, `E. Follow-up cleanup candidate`. 여기서 `A/B`는 항상 blocker이고, `C/D/E`만 위 조건을 충족할 때 후속 처리로 분리할 수 있습니다.
 
 ## Recovery Artifacts
 
-`articles/content/newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, LLM JSON parsing, fact-check, quality, validation이 retry 후에도 실패할 때 작성됩니다. shortlist, selected input, failed section, quality deduction, fact-check finding, exact rerun command를 포함합니다.
+`articles/content/newsroom/YYYY-MM-DD/recovery-prompt.md`는 deterministic selection, LLM JSON parsing, fact-check, quality, validation이 retry 후에도 끝내 실패할 때 작성됩니다. 이 파일에는 shortlist, selected input, failed section, quality deduction, fact-check finding, 그리고 그대로 다시 돌릴 수 있는 rerun command가 들어 있습니다.
 
-이 파일은 **`debug_heavy`** 등급으로 Git에 커밋하지 않습니다. 실패 run의 recovery-prompt는 GitHub Actions artifact `newsroom-final-debug-<run_id>`에서 다운로드하거나, 해당 날짜의 `artifact-manifest.json` → `retained_heavy_artifacts`에서 path/sha256으로 조회하세요.
+이 파일은 **`debug_heavy`** 등급이라 Git에 커밋하지 않습니다. 실패한 run의 recovery-prompt를 보려면 다음 중 하나를 쓰세요.
+
+- GitHub Actions artifact `newsroom-final-debug-<run_id>`에서 다운로드합니다.
+- 해당 날짜의 `artifact-manifest.json` → `retained_heavy_artifacts`에서 path/sha256으로 찾습니다.
 
 ## GitHub Actions 운영
 
@@ -266,8 +375,8 @@ workflow는 `main`에 직접 push하지 않고 RAW candidate 검토용 PR을 만
 
 현재 schedule entrypoint는 Stage 1 RAW workflow입니다. Final newsletter generation은 승인된 candidate artifact를 입력으로 받는 수동 workflow로만 실행합니다.
 
-- `Newsletters 01 - Source Collection PR` (`.github/workflows/01-newsletters-source-collect-pr.yml`): `collect`만 실행하고 `manual-candidates.json`, compatibility `candidates.json`, `raw-candidate-manifest.json`을 생성합니다. Gemini/API secret을 사용하지 않습니다.
-- `Newsletters 02 - Source Discovery PR` (`.github/workflows/02-newsletters-source-discovery-pr.yml`): source discovery 전용 workflow이므로 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하며 별도 toggle input은 없습니다. LLM credential preflight 뒤 Gemini proposal을 `gemini-source-proposals.json`에 저장하고, deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영합니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`인 credential-free disabled pass-through는 여전히 code-level로 지원되지만 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록하며, `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 파일 존재를 필수 검증하므로 모두 Git에 커밋(`review_required_compact` 등급)해야 합니다:
+- `Newsletters 01 - Source Collection PR` (`.github/workflows/01-newsletters-source-collect-pr.yml`): `collect`만 실행해 `manual-candidates.json`, 호환용 `candidates.json`, `raw-candidate-manifest.json`을 만듭니다. Gemini/API secret은 쓰지 않습니다.
+- `Newsletters 02 - Source Discovery PR` (`.github/workflows/02-newsletters-source-discovery-pr.yml`): source discovery 전용 workflow입니다. 따라서 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하고, 별도 toggle input은 없습니다. 동작 순서는 LLM credential preflight → Gemini proposal을 `gemini-source-proposals.json`에 저장 → deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영, 입니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`로 자격 증명 없이 도는 disabled pass-through는 code 수준에서는 여전히 지원하지만, 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록합니다. `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 이 파일들의 존재를 필수로 검증하므로, 모두 Git에 커밋(`review_required_compact` 등급)해야 합니다:
   - `gemini-usage-report.json` (`usage_report` 필드)
   - `gemini-source-proposals.json` (Gemini 제안 원문)
   - `gemini-source-proposal-validation-report.json` (`proposal_validation_report` 필드)
@@ -310,7 +419,13 @@ NEWSROOM_MAX_COST_USD=0.25
 
 ### 수동 Final Generation 실행
 
-GitHub Actions에서 `Newsletters 03 - Editor PR` (`.github/workflows/03-newsletters-editor-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. `newsletter_date`는 optional이며, 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve됩니다. 특정 날짜를 재생성하려면 `newsletter_date`만 입력하면 되고, candidate artifact path는 더 이상 input으로 받지 않습니다. Stage 3는 `merged-candidates.json` → `manual-candidates.json` → legacy `candidates.json` 순서로 승인된 artifact를 자동 선택합니다. `llm_provider`, `llm_model`, `llm_fallback_models`는 #368 기준상 advanced manual override input으로 유지합니다. 기본 수동 실행은 `llm_model=""`로 동작하며 code default stage model을 primary로 사용합니다. `llm_model` 또는 `llm_fallback_models`에 Gemini Pro 계열 모델명을 넣으면 `doctor:config` 단계에서 실패합니다.
+GitHub Actions에서 `Newsletters 03 - Editor PR` (`.github/workflows/03-newsletters-editor-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. 입력과 동작은 다음과 같습니다.
+
+- `newsletter_date`는 optional입니다. 비워 두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve됩니다.
+- 특정 날짜를 다시 생성하려면 `newsletter_date`만 입력하면 됩니다. candidate artifact path는 더 이상 input으로 받지 않습니다.
+- Stage 3는 승인된 artifact를 `merged-candidates.json` → `manual-candidates.json` → legacy `candidates.json` 순서로 자동 선택합니다.
+- `llm_provider`, `llm_model`, `llm_fallback_models`는 #368 기준으로 advanced manual override input(고급 수동 재정의 입력)으로 남겨 둡니다. 기본 수동 실행은 `llm_model=""`로 동작하며 code default stage model을 primary로 씁니다.
+- `llm_model` 또는 `llm_fallback_models`에 Gemini Pro 계열 모델명을 넣으면 `doctor:config` 단계에서 실패합니다.
 
 ## Editor-in-Chief Review
 
@@ -329,7 +444,7 @@ PR에서 다음 항목을 확인합니다.
 
 ## Quality Gate Drift 계약
 
-`qualityGatePolicy.hardFailConditions`는 `src/shared/config/newsletter-policy.json`에 있는 hard fail inventory의 source of truth입니다. `score`는 숫자 품질 점수일 뿐이며 hard fail blocker를 덮어쓸 수 없습니다. `score >= qualityGatePolicy.threshold`여도 blocking deduction, `source_gap`, fact-check `must_fix`, stale claim hard failure, strict mode의 `quality-report.json` recompute drift가 있으면 해당 이슈는 `publish-ready` / `final_publish_ready`가 아닙니다.
+`qualityGatePolicy.hardFailConditions`는 `src/shared/config/newsletter-policy.json`에 있는 hard fail 목록(inventory)의 source of truth입니다. `score`는 숫자로 된 품질 점수일 뿐이고, hard fail blocker를 덮어쓸 수 없습니다. 즉 `score >= qualityGatePolicy.threshold`이더라도 다음 중 하나라도 있으면 그 이슈는 `publish-ready` / `final_publish_ready`가 아닙니다: blocking deduction, `source_gap`, fact-check `must_fix`, stale claim hard failure, strict mode에서 `quality-report.json`을 다시 계산했을 때의 drift.
 
 <!-- NEWSLETTER_POLICY:BEGIN -->
 <!-- This block is generated. Update src/shared/config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
@@ -361,9 +476,9 @@ PR에서 다음 항목을 확인합니다.
 
 ## Source quality and prompt contract
 
-Source quality(출처 품질)는 수집과 Stage 3 생성 사이에 실행 가능한 정책 계층을 추가합니다.
+Source quality(출처 품질)는 수집 단계와 Stage 3 생성 단계 사이에, 실행 가능한 정책 계층을 한 겹 더 둡니다. 규칙은 다음과 같습니다.
 
-- Candidate 수집은 article capsule 생성 전에 `src/shared/collect/source-quality-classifier.js`를 실행합니다.
+- Candidate 수집은 article capsule을 만들기 전에 `src/shared/collect/source-quality-classifier.js`를 실행합니다.
 - 새 candidate는 canonical `source_quality`를 포함하며, 평면 source quality 필드는 호환성 mirror입니다.
 - `article-capsules.json`에는 `source_quality`, `main_article_readiness`, `do_not_claim[]`이 포함됩니다.
 - `main_article_readiness`는 source readiness, HAL signal readiness, deterministic `selection_input_ready`를 결합합니다. `selection_ready`는 `selection_input_ready`의 deprecated 호환 alias입니다.
@@ -375,13 +490,16 @@ Source quality(출처 품질)는 수집과 Stage 3 생성 사이에 실행 가�
 - Source effectiveness 및 PR body 요약은 source URL quality 분포, 상태 요약, blocker 요약, 선정 main 커버리지, main 자격 커버리지, 조건부 승격/차단 수, 미확인 수, drift 수, 레거시 경고 수를 노출합니다.
 ## Source snapshot / `effective_date`
 
-`state/source-monitor-registry.json`에 등록된 monitored source는 bounded fetch로 관찰하고, 이전 `state/source-snapshots/<source_id>.json`과 비교해 `articles/content/source-events/YYYY-MM-DD/source-change-events.json` 및 `.md`를 만듭니다. 이 경로는 review artifact이며 public newsletter renderer가 직접 읽는 입력이 아닙니다.
+`state/source-monitor-registry.json`에 등록된 monitored source(감시 대상 출처)는 bounded fetch(범위를 제한한 가져오기)로 관찰합니다. 이를 이전 snapshot인 `state/source-snapshots/<source_id>.json`과 비교해 `articles/content/source-events/YYYY-MM-DD/source-change-events.json`과 `.md`를 만듭니다. 이 경로는 검토용 review artifact일 뿐, public newsletter renderer가 직접 읽는 입력이 아닙니다.
 
-`published_date`는 원문 source가 명시한 실제 발행일입니다. `effective_date`는 `Last updated`, structured modified date, sitemap `lastmod`, release row date, 또는 snapshot diff에서 source change event를 판단할 때 쓰는 유효 날짜입니다. `published_date`가 없는 문서는 날짜 없는 정적 문서 자체로 main article에 승격하지 않고, monitored source에서 생성된 source change event가 source binding과 date quality를 통과할 때만 candidate가 될 수 있습니다.
+날짜 관련 field는 서로 의미가 다르므로 구분해야 합니다.
 
-`detected_at`, `first_seen_at`, `last_seen_at`은 pipeline 관찰 시점 또는 snapshot state입니다. detected_at, first_seen_at, last_seen_at은 source의 실제 발행일이나 freshness 근거가 아니다. 이 값들은 freshness/date-source/publish-ready evidence로 사용하지 않습니다.
+- `published_date`: 원문 source가 명시한 실제 발행일입니다.
+- `effective_date`: source change event를 판단할 때 쓰는 유효 날짜입니다. `Last updated`, structured modified date, sitemap `lastmod`, release row date, 또는 snapshot diff에서 얻습니다.
+- `published_date`가 없는 문서는 "날짜 없는 정적 문서"로 보고 그 자체로는 main article로 승격하지 않습니다. 단, monitored source에서 만들어진 source change event가 source binding과 date quality를 통과하면 candidate가 될 수 있습니다.
+- `detected_at`, `first_seen_at`, `last_seen_at`: pipeline이 관찰한 시점 또는 snapshot 상태입니다. 이 값들은 source의 실제 발행일이나 freshness(최신성) 근거가 아닙니다. 따라서 freshness/date-source/publish-ready evidence로 사용하지 않습니다.
 
-`date_source`와 `date_confidence`는 `src/shared/common/date-signals.js`의 allowlist와 baseline을 따릅니다. `date_confidence >= 85`인 source date signal만 source relevance와 source binding이 함께 통과할 때 publish-ready date evidence 후보가 될 수 있습니다. `snapshot_detected_at` 및 `content_hash_changed_without_date`는 editor review 또는 watchlist signal로만 다루며 publish-ready date evidence가 아닙니다.
+`date_source`와 `date_confidence`는 `src/shared/common/date-signals.js`의 allowlist와 baseline을 따릅니다. `date_confidence >= 85`인 source date signal만, source relevance와 source binding이 함께 통과할 때 publish-ready date evidence 후보가 될 수 있습니다. `snapshot_detected_at`과 `content_hash_changed_without_date`는 editor review나 watchlist signal로만 다루며, publish-ready date evidence가 아닙니다.
 
 Source monitor report는 `Source Snapshot Changes`, `Source Change Events`, `Evidence Identity / Duplicate Guard`, `Date Quality` 섹션을 포함합니다. Public newsletter artifact에는 raw snapshot state, previous/current diff payload, `processed_source_event_ids`, `processed_evidence_ids`를 노출하지 않습니다.
 
@@ -396,12 +514,12 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 | Debug Heavy | `debug_heavy` | 미커밋 | GitHub Actions artifact + manifest |
 | Transient Attempt | `transient_attempt` | 미커밋 | GitHub Actions artifact + manifest |
 
-`03-newsletters-editor-pr.yml`의 `peter-evans/create-pull-request` 스텝은 `add-paths` 허용목록으로 `public_source_of_truth`+`review_required_compact` artifact만 커밋합니다. `debug_heavy`+`transient_attempt` artifact는 `newsroom-final-debug-<run_id>` Actions artifact에 full set이 보존되고, `artifact-manifest.json`의 `retained_heavy_artifacts[]`에 path/size/sha256/retention_grade/retention_location이 기록됩니다.
+`03-newsletters-editor-pr.yml`의 `peter-evans/create-pull-request` 스텝은 `add-paths` 허용목록을 써서 `public_source_of_truth`와 `review_required_compact` artifact만 커밋합니다. `debug_heavy`와 `transient_attempt` artifact는 커밋하지 않는 대신, full set을 `newsroom-final-debug-<run_id>` Actions artifact에 보존하고 `artifact-manifest.json`의 `retained_heavy_artifacts[]`에 path/size/sha256/retention_grade/retention_location을 기록합니다.
 
-허용목록은 `src/generator/publish/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 생성합니다. PR diff에 `debug_heavy`/`transient_attempt` 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 참조하세요.
+허용목록은 `src/generator/publish/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 만듭니다. 그래서 PR diff에 `debug_heavy`/`transient_attempt` 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 보세요.
 
-이 정책은 발행 안전성·source binding·image lineage·review-publication state 판정을 약화하지 않습니다. validate:post-generation, resolve-reviewable-artifacts, pr-body 생성은 commit 스텝보다 먼저 in-run working tree에서 실행되므로 add-paths 허용목록의 영향을 받지 않습니다.
+이 정책은 발행 안전성·source binding·image lineage·review-publication state 판정을 약화하지 않습니다. validate:post-generation, resolve-reviewable-artifacts, pr-body 생성은 commit 스텝보다 **먼저** in-run working tree에서 돌기 때문에, add-paths 허용목록의 영향을 받지 않습니다.
 
 `01-newsletters-source-collect-pr.yml`과 `02-newsletters-source-discovery-pr.yml`은 candidate JSON이 리뷰 대상이므로 이 허용목록 제한을 적용하지 않습니다.
 
-`articles/content/collected-news/YYYY-MM-DD/`의 파이프라인 입력 파일(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03의 핸드오프 상태로서 `review_required_compact` 등급 파일입니다. `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 생성하며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋되어야 합니다. 순수 디버그 파일(`gemini-candidates.json`)은 `debug_heavy` 등급으로 `.gitignore` 처리됩니다.
+`articles/content/collected-news/YYYY-MM-DD/`에 있는 파이프라인 입력 파일들(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03 사이를 넘겨주는 핸드오프 상태이므로 `review_required_compact` 등급입니다. 이 중 `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 만들며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋해야 합니다. 순수 디버그 파일인 `gemini-candidates.json`은 `debug_heavy` 등급이라 `.gitignore`로 제외합니다.
