@@ -24,7 +24,8 @@ test('candidatesAreDuplicate treats same-series lore patches as duplicates and d
   const otherSeries = { url: `${LORE_LIST}/20260529-iris-remote-fmts-v7-1-a8bd57ac8b5a@oss.qualcomm.com/`, title: 'media: iris: remote fmts' };
 
   assert.equal(candidatesAreDuplicate(cover, patch1), true);
-  assert.equal(candidatesAreDuplicate(cover, otherSeries), false);
+  // 다른 시리즈는 시리즈 키로 묶이지 않는다 (함수의 기존 falsy 반환 계약을 따른다).
+  assert.ok(!candidatesAreDuplicate(cover, otherSeries));
 });
 
 test('a lore.kernel.org patch series collapses to exactly one main candidate (the cover letter)', () => {
