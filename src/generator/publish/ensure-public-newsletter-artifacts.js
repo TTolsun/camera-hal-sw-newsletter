@@ -87,7 +87,7 @@ function applyHeadlineRenderReconciliation(report, reconciliation) {
 
 function persistHeadlineDiagnosticsReconciliation({ root, date, reconciliation }) {
   if (!reconciliation?.applied) return '';
-  const relPath = `content/newsroom/${date}/selection-diagnostics.md`;
+  const relPath = `articles/content/newsroom/${date}/selection-diagnostics.md`;
   const filePath = path.join(root, ...relPath.split('/'));
   if (!fs.existsSync(filePath)) return '';
   const existing = fs.readFileSync(filePath, 'utf8');
@@ -108,8 +108,8 @@ function persistHeadlineDiagnosticsReconciliation({ root, date, reconciliation }
 
 function persistHomepageHeadlineArtifacts({ root, date, resolved }) {
   if (resolved.publicNewsletterReady !== true) return [];
-  const shortlistPath = path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json');
-  const selectionReportPath = path.join(root, 'content', 'newsroom', date, 'selection-report.json');
+  const shortlistPath = path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json');
+  const selectionReportPath = path.join(root, 'articles', 'content', 'newsroom', date, 'selection-report.json');
   const shortlist = readJsonSafely(shortlistPath);
   const rendered = renderedHeadlineState({
     root,

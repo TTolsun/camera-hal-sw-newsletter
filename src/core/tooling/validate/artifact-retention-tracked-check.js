@@ -7,11 +7,11 @@ const {
 
 const UNKNOWN_GROUP = 'unknown_artifacts';
 
-// content/newsroom 및 content/collected-news 아래 Git 추적 경로 목록을 반환한다.
+// articles/content/newsroom 및 articles/content/collected-news 아래 Git 추적 경로 목록을 반환한다.
 function getTrackedContentPaths(root) {
   const output = execFileSync(
     'git',
-    ['-C', root, 'ls-files', 'content/newsroom', 'content/collected-news'],
+    ['-C', root, 'ls-files', 'articles/content/newsroom', 'articles/content/collected-news'],
     { encoding: 'utf8' }
   );
   return output.split('\n').map(line => line.trim()).filter(Boolean);

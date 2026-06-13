@@ -49,7 +49,7 @@ test('newsletter PR template keeps publication checklist guardrails', () => {
   assert.match(text, /### 작성 원칙/);
   assert.match(text, /PR body는 한글로 작성/);
   assert.match(text, /영어 식별자는 한국어 설명/);
-  assert.match(text, /newsletters\/YYYY-MM-DD\/newsletter\.md/);
+  assert.match(text, /articles\/newsletters\/YYYY-MM-DD\/newsletter\.md/);
   assert.match(text, /fact-check must_fix|must_fix/);
   assert.match(text, /source gap/i);
   assert.match(text, /임시 Markdown, notes\/checkpoint 문서, one-off script가 PR에 남아 있지 않다/);
@@ -94,7 +94,7 @@ test('localization validator scans prompt and latest public newsletter surfaces'
 
 test('localization validator reports homepage headline display errors in readable Korean', () => {
   const root = tempRoot();
-  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date: '2026-05-23',
     title: '카메라 뉴스레터',
     summary: '카메라 뉴스 요약',
@@ -103,7 +103,7 @@ test('localization validator reports homepage headline display errors in readabl
   writeJson(path.join(root, 'src', 'core', 'data', 'news-sources.json'), {
     sources: []
   });
-  writeJson(path.join(root, 'data', 'homepage-headline.json'), {
+  writeJson(path.join(root, 'articles', 'data', 'homepage-headline.json'), {
     schemaVersion: 1,
     current_headline: {
       title: 'Camera headline',
@@ -126,7 +126,7 @@ test('localization validator reports homepage headline display errors in readabl
 
 test('localization validator allows canonical English newsletter brand titles', () => {
   const root = tempRoot();
-  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date: '2026-05-24',
     title: 'Camera HAL / SW Newsletter - 2026-05-24',
     summary: '카메라 뉴스 요약',

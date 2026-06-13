@@ -35,7 +35,7 @@ const NON_CONTENT_CHANGE_EVENT_TYPES = new Set(['no_meaningful_change', 'metadat
 const CANDIDATE_BLOCKED_EVENT_TYPES = new Set(['page_removed']);
 const SOURCE_MONITOR_REGISTRY_REL_PATH = 'data/source-monitor-registry.json';
 const SOURCE_SNAPSHOT_ROOT = path.join('data', 'source-snapshots');
-const SOURCE_EVENTS_ROOT = path.join('content', 'source-events');
+const SOURCE_EVENTS_ROOT = path.join('articles', 'content', 'source-events');
 
 function text(value) {
   return String(value || '').trim();

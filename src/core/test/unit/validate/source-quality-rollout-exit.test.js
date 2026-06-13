@@ -39,7 +39,7 @@ function writeReport(root, date, overrides = {}) {
     summary,
     ...topLevelOverrides
   };
-  const dir = path.join(root, 'content', 'newsroom', date);
+  const dir = path.join(root, 'articles', 'content', 'newsroom', date);
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(
     path.join(dir, 'source-effectiveness-report.json'),
@@ -96,7 +96,7 @@ test('schema_version=2 report missing required field fails', () => {
   const root = tempRoot();
   writeReport(root, '2026-05-17');
   writeReport(root, '2026-05-18');
-  const reportPath = path.join(root, 'content', 'newsroom', '2026-05-18', 'source-effectiveness-report.json');
+  const reportPath = path.join(root, 'articles', 'content', 'newsroom', '2026-05-18', 'source-effectiveness-report.json');
   const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
   delete report.summary.source_quality_field_drift_count;
   fs.writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');

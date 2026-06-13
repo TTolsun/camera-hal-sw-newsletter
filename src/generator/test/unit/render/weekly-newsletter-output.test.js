@@ -53,7 +53,7 @@ function draft(sections, summary = '요약') {
 }
 
 function readIssue(root, weeklyKey) {
-  return JSON.parse(fs.readFileSync(path.join(root, 'newsletters', weeklyKey, 'issue.json'), 'utf8'));
+  return JSON.parse(fs.readFileSync(path.join(root, 'articles', 'newsletters', weeklyKey, 'issue.json'), 'utf8'));
 }
 
 test('a single publish-ready run writes the weekly page, issue.json, and a weekly index entry', async () => {
@@ -62,10 +62,10 @@ test('a single publish-ready run writes the weekly page, issue.json, and a weekl
   const result = await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', url)]), tags: ['Camera HAL'] });
 
   assert.equal(result.weeklyKey, '2026-W23');
-  assert.ok(result.files.includes('newsletters/2026-W23/index.html'));
-  assert.ok(result.files.includes('newsletters/2026-W23/newsletter.md'));
-  assert.ok(result.files.includes('newsletters/2026-W23/issue.json'));
-  assert.ok(result.files.includes('data/newsletters-weekly.json'));
+  assert.ok(result.files.includes('articles/newsletters/2026-W23/index.html'));
+  assert.ok(result.files.includes('articles/newsletters/2026-W23/newsletter.md'));
+  assert.ok(result.files.includes('articles/newsletters/2026-W23/issue.json'));
+  assert.ok(result.files.includes('articles/data/newsletters-weekly.json'));
   assert.equal(readIssue(root, '2026-W23').sections.length, 1);
 });
 
@@ -73,7 +73,7 @@ test('publishing a weekly issue regenerates sitemap.xml with the issue URL', asy
   const root = tempRoot();
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', 'https://example.com/a')]), tags: [] });
 
-  const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
+  const sitemap = fs.readFileSync(path.join(root, 'articles', 'sitemap.xml'), 'utf8');
   assert.ok(sitemap.includes('https://ttolsun.github.io/camera-hal-sw-newsletter/'));
   assert.ok(sitemap.includes('https://ttolsun.github.io/camera-hal-sw-newsletter/archive.html'));
   assert.ok(sitemap.includes('newsletters/2026-W23/index.html'));
@@ -86,7 +86,7 @@ test('multiple runs in the same ISO week accumulate distinct articles into one w
 
   const issue = readIssue(root, '2026-W23');
   assert.equal(issue.sections.length, 2);
-  const index = JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters-weekly.json'), 'utf8'));
+  const index = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), 'utf8'));
   assert.equal(index.length, 1);
   assert.equal(index[0].weeklyKey, '2026-W23');
   assert.equal(index[0].article_count, 2);
@@ -108,7 +108,7 @@ test('a run in a new ISO week creates a separate weekly issue', async () => {
 
   assert.equal(readIssue(root, '2026-W23').sections.length, 1);
   assert.equal(readIssue(root, '2026-W24').sections.length, 1);
-  const index = JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters-weekly.json'), 'utf8'));
+  const index = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), 'utf8'));
   assert.deepEqual(index.map(i => i.weeklyKey), ['2026-W24', '2026-W23']);
 });
 
@@ -159,15 +159,15 @@ function repairedImageSection(id, url, imageUrl) {
 }
 
 function readWeeklyIndexFile(root) {
-  return JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters-weekly.json'), 'utf8'));
+  return JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), 'utf8'));
 }
 
 function weeklyArtifactPaths(root, weeklyKey) {
   return [
-    path.join(root, 'newsletters', weeklyKey, 'index.html'),
-    path.join(root, 'newsletters', weeklyKey, 'newsletter.md'),
-    path.join(root, 'newsletters', weeklyKey, 'issue.json'),
-    path.join(root, 'data', 'newsletters-weekly.json')
+    path.join(root, 'articles', 'newsletters', weeklyKey, 'index.html'),
+    path.join(root, 'articles', 'newsletters', weeklyKey, 'newsletter.md'),
+    path.join(root, 'articles', 'newsletters', weeklyKey, 'issue.json'),
+    path.join(root, 'articles', 'data', 'newsletters-weekly.json')
   ];
 }
 
@@ -204,7 +204,7 @@ test('syncWeeklyArticleImages patches the matching weekly section, rewrites week
   const url = 'https://example.com/camerax-release';
   const imageUrl = 'https://publisher.example.com/images/camera-card.png';
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]), tags: [] });
-  const sitemapBefore = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
+  const sitemapBefore = fs.readFileSync(path.join(root, 'articles', 'sitemap.xml'), 'utf8');
 
   const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repairedImageSection('1.7.0', url, imageUrl)] });
 
@@ -216,11 +216,11 @@ test('syncWeeklyArticleImages patches the matching weekly section, rewrites week
   assert.equal(issue.sections[0].selectedImage, imageUrl);
   assert.equal(issue.sections[0].resolvedImage.usedFallback, false);
   assert.equal(issue.sections[0].imageSelection.reasonCode, 'selected');
-  assert.match(fs.readFileSync(path.join(root, 'newsletters', '2026-W23', 'index.html'), 'utf8'), new RegExp(imageUrl.replace(/[.\/]/g, '\\$&')));
-  assert.match(fs.readFileSync(path.join(root, 'newsletters', '2026-W23', 'newsletter.md'), 'utf8'), new RegExp(imageUrl.replace(/[.\/]/g, '\\$&')));
+  assert.match(fs.readFileSync(path.join(root, 'articles', 'newsletters', '2026-W23', 'index.html'), 'utf8'), new RegExp(imageUrl.replace(/[.\/]/g, '\\$&')));
+  assert.match(fs.readFileSync(path.join(root, 'articles', 'newsletters', '2026-W23', 'newsletter.md'), 'utf8'), new RegExp(imageUrl.replace(/[.\/]/g, '\\$&')));
   assert.deepEqual(readWeeklyIndexFile(root)[0].article_images, [imageUrl]);
   // article_images만 갱신하며 sitemap은 재생성하지 않는다.
-  assert.equal(fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8'), sitemapBefore);
+  assert.equal(fs.readFileSync(path.join(root, 'articles', 'sitemap.xml'), 'utf8'), sitemapBefore);
 });
 
 test('syncWeeklyArticleImages is a no-op when the weekly issue.json is missing', () => {
@@ -235,7 +235,7 @@ test('syncWeeklyArticleImages is a no-op when the weekly issue.json is missing',
   assert.equal(result.synced, false);
   assert.equal(result.reason, 'missing_weekly_issue');
   assert.equal(fs.existsSync(path.join(root, 'newsletters')), false);
-  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters-weekly.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'data', 'newsletters-weekly.json')), false);
 });
 
 test('syncWeeklyArticleImages is a no-op for missing daily sections and non-matching identity', async () => {

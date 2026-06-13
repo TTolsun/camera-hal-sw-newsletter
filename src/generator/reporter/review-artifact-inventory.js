@@ -21,9 +21,7 @@ const {
   toPosix
 } = require('../../core/common/artifact-paths');
 const {
-  weeklyKeyForDate,
-  weeklyNewsletterIndexRoute,
-  weeklyNewsletterMarkdownRoute
+  weeklyKeyForDate
 } = require('./weekly-newsletter');
 
 const REVIEW_ARTIFACT_SCHEMA_VERSION = 3;
@@ -213,7 +211,8 @@ function weeklyPublicOutputEntries(date) {
   }
   return [
     entry({
-      relPath: weeklyNewsletterIndexRoute(weeklyKey),
+      // commit allowlist/디스크 존재 검사용 disk 경로(서빙 URL은 data 인덱스의 html/md 필드에 별도로 저장).
+      relPath: `articles/newsletters/${weeklyKey}/index.html`,
       group: 'public_output',
       role: 'weekly_public_html',
       required: REQUIRED_OPTIONAL,
@@ -222,7 +221,7 @@ function weeklyPublicOutputEntries(date) {
       reviewBlocking: false
     }),
     entry({
-      relPath: weeklyNewsletterMarkdownRoute(weeklyKey),
+      relPath: `articles/newsletters/${weeklyKey}/newsletter.md`,
       group: 'public_output',
       role: 'weekly_public_markdown',
       required: REQUIRED_OPTIONAL,
@@ -231,7 +230,7 @@ function weeklyPublicOutputEntries(date) {
       reviewBlocking: false
     }),
     entry({
-      relPath: `newsletters/${weeklyKey}/issue.json`,
+      relPath: `articles/newsletters/${weeklyKey}/issue.json`,
       group: 'public_output',
       role: 'weekly_public_issue',
       required: REQUIRED_OPTIONAL,
@@ -240,7 +239,7 @@ function weeklyPublicOutputEntries(date) {
       reviewBlocking: false
     }),
     entry({
-      relPath: 'data/newsletters-weekly.json',
+      relPath: 'articles/data/newsletters-weekly.json',
       group: 'public_output',
       role: 'weekly_public_index',
       required: REQUIRED_OPTIONAL,
@@ -251,7 +250,7 @@ function weeklyPublicOutputEntries(date) {
     // #51: sitemap.xml은 주간 발행 목록(newsletters-weekly.json)이 바뀔 때 함께 재생성되므로
     // 같은 public_output 등급으로 commit allowlist에 포함시켜 review PR에 실린다.
     entry({
-      relPath: 'sitemap.xml',
+      relPath: 'articles/sitemap.xml',
       group: 'public_output',
       role: 'sitemap',
       required: REQUIRED_OPTIONAL,
@@ -311,7 +310,7 @@ function exactCatalog(date) {
       reviewBlocking: true
     }),
     entry({
-      relPath: `newsletters/${date}/newsletter.md`,
+      relPath: `articles/newsletters/${date}/newsletter.md`,
       group: 'public_output',
       role: 'public_markdown',
       required: REQUIRED_WHEN_PUBLIC_OUTPUT,
@@ -320,7 +319,7 @@ function exactCatalog(date) {
       reviewBlocking: true
     }),
     entry({
-      relPath: `newsletters/${date}/index.html`,
+      relPath: `articles/newsletters/${date}/index.html`,
       group: 'public_output',
       role: 'public_html',
       required: REQUIRED_WHEN_PUBLIC_OUTPUT,
@@ -329,7 +328,7 @@ function exactCatalog(date) {
       reviewBlocking: true
     }),
     entry({
-      relPath: 'data/newsletters.json',
+      relPath: 'articles/data/newsletters.json',
       group: 'public_output',
       role: 'public_index',
       required: REQUIRED_WHEN_PUBLIC_OUTPUT,
@@ -338,7 +337,7 @@ function exactCatalog(date) {
       reviewBlocking: true
     }),
     entry({
-      relPath: 'data/homepage-headline.json',
+      relPath: 'articles/data/homepage-headline.json',
       group: 'public_output',
       role: 'homepage_state',
       reviewOrder: 33,
@@ -602,8 +601,8 @@ function debugExactCatalog(date) {
     newsroomRelPath(date, 'cost-report.md'),
     newsroomRelPath(date, 'summary-cache-report.md'),
     newsroomRelPath(date, 'summary-cache-report.json'),
-    repoPath('content', 'source-events', date, 'source-change-events.md'),
-    repoPath('content', 'source-events', date, 'source-change-events.json')
+    repoPath('articles', 'content', 'source-events', date, 'source-change-events.md'),
+    repoPath('articles', 'content', 'source-events', date, 'source-change-events.json')
   ];
   return debugFiles.map((relPath, index) => entry({
     relPath,
@@ -617,7 +616,7 @@ function debugExactCatalog(date) {
 }
 
 function dynamicClassification(date, relPath) {
-  const prefix = `content/newsroom/${date}/`;
+  const prefix = `articles/content/newsroom/${date}/`;
   if (!relPath.startsWith(prefix)) return null;
   const filename = relPath.slice(prefix.length);
   const dynamicPatterns = [
@@ -661,15 +660,16 @@ function walkFiles(root, dir, files = []) {
 function scannedReviewPaths(root, date) {
   const paths = [];
   const dirs = [
-    repoPath('content', 'newsroom', date),
-    repoPath('content', 'collected-news', date),
-    repoPath('content', 'source-events', date),
-    repoPath('newsletters', date)
+    repoPath('articles', 'content', 'newsroom', date),
+    repoPath('articles', 'content', 'collected-news', date),
+    repoPath('articles', 'content', 'source-events', date),
+    repoPath('articles', 'newsletters', date)
   ];
   for (const dir of dirs) {
     walkFiles(root, path.join(root, ...dir.split('/')), paths);
   }
-  for (const relPath of ['data/newsletters.json', 'data/homepage-headline.json', 'data/article-exposure-history.json']) {
+  // article-exposure-history.json은 서빙되지 않는 파이프라인 state라 data/에 남는다.
+  for (const relPath of ['articles/data/newsletters.json', 'articles/data/homepage-headline.json', 'data/article-exposure-history.json']) {
     if (fileExists(root, relPath)) paths.push(relPath);
   }
   return [...new Set(paths.map(toPosix))]

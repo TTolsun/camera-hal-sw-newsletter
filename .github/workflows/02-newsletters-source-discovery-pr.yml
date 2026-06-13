@@ -132,7 +132,7 @@ jobs:
         id: pr-body
         if: inputs.auto_mode != true
         run: |
-          REPORT="content/newsroom/${NEWSLETTER_DATE}/gemini-source-discovery-report.md"
+          REPORT="articles/content/newsroom/${NEWSLETTER_DATE}/gemini-source-discovery-report.md"
           {
             echo "body<<EOF"
             cat "$REPORT"
@@ -145,7 +145,7 @@ jobs:
           set -euo pipefail
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git add content/collected-news/ content/newsroom/ || true
+          git add articles/content/collected-news/ articles/content/newsroom/ || true
           if git diff --cached --quiet; then
             echo "Nothing to commit."
           else
@@ -161,27 +161,27 @@ jobs:
         with:
           name: newsroom-source-discovery-debug-${{ github.run_id }}
           path: |
-            content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-candidates.json
-            content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/seed-candidates.json
-            content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/seed-evidence-pack.json
-            content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/merged-candidates.json
-            content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/merged-candidate-manifest.json
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-fetch-report.json
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-fetch-report.md
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-evidence-pack.md
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-merge-report.json
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-merge-report.md
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-proposals.json
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-proposal-validation-report.json
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-usage-report.json
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/extracted-source-facts.json
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-quality-report.json
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-quality-report.md
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-clusters.json
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/evidence-validation-report.json
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-discovery-feedback-report.json
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-discovery-feedback-report.md
-            content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-discovery-report.md
+            articles/content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-candidates.json
+            articles/content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/seed-candidates.json
+            articles/content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/seed-evidence-pack.json
+            articles/content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/merged-candidates.json
+            articles/content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/merged-candidate-manifest.json
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-fetch-report.json
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-fetch-report.md
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-evidence-pack.md
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-merge-report.json
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-merge-report.md
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-proposals.json
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-proposal-validation-report.json
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-usage-report.json
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/extracted-source-facts.json
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-quality-report.json
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-quality-report.md
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-clusters.json
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/evidence-validation-report.json
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-discovery-feedback-report.json
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-discovery-feedback-report.md
+            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-discovery-report.md
           if-no-files-found: warn
           retention-days: 14
 

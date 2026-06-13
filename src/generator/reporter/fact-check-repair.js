@@ -19,7 +19,8 @@ function fallbackPathExists(root, src) {
   if (!root || !src) return true;
   const normalized = normalizePath(src).replace(/^(\.\.\/){2}/, '');
   if (!normalized.startsWith('assets/images/fallback/')) return false;
-  const absPath = path.resolve(root, normalized);
+  // 서빙 URL 기준 assets/는 디스크상 articles/assets/ 아래에 있다(#262 phase 6).
+  const absPath = path.resolve(root, 'articles', normalized);
   const rootPath = path.resolve(root);
   if (absPath !== rootPath && !absPath.startsWith(`${rootPath}${path.sep}`)) return false;
   return fs.existsSync(absPath);

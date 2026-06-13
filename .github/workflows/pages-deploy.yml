@@ -1,0 +1,56 @@
+name: Deploy GitHub Pages
+
+# #262 phase 6: 공개 출력물은 root index.html + articles/ 아래에 위치한다.
+# 이 워크플로는 _site/ = (root index.html) + (articles/* 를 _site 루트로 복사)로 조립해
+# Pages Actions로 배포하므로 서빙 URL(/, /newsletters/..., /css/..., /assets/...,
+# /data/newsletters.json, /sitemap.xml, /robots.txt, /archive.html, /content/...)이 보존된다.
+#
+# NOTE: 이 워크플로는 운영자가 GitHub Pages source를 "GitHub Actions"로 전환한 뒤에만 발행한다.
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "index.html"
+      - "articles/**"
+      - ".github/workflows/pages-deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Assemble static site into _site
+        run: node src/generator/publish/assemble-site.js --out _site
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

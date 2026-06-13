@@ -197,7 +197,7 @@ function candidateShortageSummary(overrides = {}) {
 }
 
 function writeArchiveSyncSurface(root) {
-  writeJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'), []);
+  writeJson(path.join(root, 'articles', 'content', 'audit', 'historical-archive-status.json'), []);
   writeText(path.join(root, AUDIT_LEDGER_PATH), [
     '# Historical Newsletter Provenance Ledger',
     '',
@@ -242,8 +242,8 @@ function writeHalSignalQualityReviewArtifacts(root, date, overrides = {}) {
     },
     main_article_signal_checks: overrides.main_article_signal_checks || []
   };
-  writeJson(path.join(root, 'content', 'newsroom', date, 'hal-signal-quality-report.json'), report);
-  writeText(path.join(root, 'content', 'newsroom', date, 'hal-signal-quality-report.md'), `# HAL Signal Quality Report - ${date}\n`);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'hal-signal-quality-report.json'), report);
+  writeText(path.join(root, 'articles', 'content', 'newsroom', date, 'hal-signal-quality-report.md'), `# HAL Signal Quality Report - ${date}\n`);
   return report;
 }
 
@@ -309,10 +309,10 @@ function writeMinimalPublishArtifacts(root, date, overrides = {}) {
 
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'stale-claim-report.json'), staleClaim);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), shortlist);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), quality);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'stale-claim-report.json'), staleClaim);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), shortlist);
 
   return { status, quality, factCheck, staleClaim, shortlist };
 }
@@ -372,8 +372,8 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
       }
     ]
   };
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), overrides.markdown || buildMarkdown(issue));
-  writeText(path.join(root, 'newsletters', date, 'index.html'), overrides.html || buildHtml(issue));
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), overrides.markdown || buildMarkdown(issue));
+  writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), overrides.html || buildHtml(issue));
   writeText(path.join(root, 'index.html'), overrides.rootIndex || [
     '<!doctype html><html><body>',
     '<div id="latest-card"></div>',
@@ -383,7 +383,7 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
     'loadNewsletters();',
     '</script></body></html>'
   ].join('\n'));
-  writeJson(path.join(root, 'data', 'newsletters.json'), [
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [
     {
       date,
       title: overrides.title || `Camera HAL / SW Newsletter - ${date}`,
@@ -396,7 +396,7 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
 }
 
 function writeNewsletterIndex(root, items) {
-  writeJson(path.join(root, 'data', 'newsletters.json'), items.map(item => ({
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), items.map(item => ({
     date: item.date,
     title: item.title || `Camera HAL / SW Newsletter - ${item.date}`,
     summary: item.summary || 'Public issue summary',
@@ -503,23 +503,23 @@ function writePr39LikeRegressionFixture(root, date = '2026-05-09') {
 
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), editor);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), quality);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
   writeHalSignalQualityReviewArtifacts(root, date, {
     qualityStatus: quality.status,
     status: 'NEEDS_FIX'
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), { message: 'section_count_drift' });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), { date, candidates: [libcamera, camerax, gcc, glaze] });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), status);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'repair-failure.json'), { message: 'section_count_drift' });
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'reporter-candidates.json'), { date, candidates: [libcamera, camerax, gcc, glaze] });
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     selected_articles: [libcamera, camerax, gcc],
     reserve_candidates: [glaze],
     composition_summary: {}
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), { selected_capsules: [libcamera, camerax, gcc], reserve_capsules: [glaze] });
-  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), { candidates: [libcamera, camerax, gcc, glaze] });
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'article-capsules.json'), { selected_capsules: [libcamera, camerax, gcc], reserve_capsules: [glaze] });
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'candidates.json'), { candidates: [libcamera, camerax, gcc, glaze] });
   return { date, editor };
 }
 
@@ -669,30 +669,30 @@ function writeRun25590436113LikeFallbackFixture(root, options = {}) {
 
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft-attempt-1.json'), editor);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), editor);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft-attempt-1.json'), editor);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), quality);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
   writeHalSignalQualityReviewArtifacts(root, date, {
     qualityStatus: quality.status,
     status: 'NEEDS_FIX'
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), status);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'repair-failure.json'), {
     message: 'Targeted repair changed main article count outside completion/replacement mode.',
     details: { reason: 'section_count_drift' }
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), { date, candidates });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'reporter-candidates.json'), { date, candidates });
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     selected_articles: candidates,
     reserve_candidates: safeCandidates,
     composition_summary: {}
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'article-capsules.json'), {
     selected_capsules: candidates,
     reserve_capsules: safeCandidates
   });
-  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), { candidates });
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'candidates.json'), { candidates });
   return { date, camerax14, camerax16, camerax13, libcamera, gcc };
 }
 
@@ -744,13 +744,13 @@ function writeEditorialReviewableArtifacts(root, date, overrides = {}) {
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   if (overrides.writeEditor !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), editor);
   }
   if (overrides.writeFactCheck !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
   }
   if (overrides.writeQuality !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), quality);
   }
   if (overrides.writeHalSignalQuality !== false) {
     writeHalSignalQualityReviewArtifacts(root, date, {
@@ -759,7 +759,7 @@ function writeEditorialReviewableArtifacts(root, date, overrides = {}) {
     });
   }
   if (overrides.writeGenerationStatus !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), generationStatus);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), generationStatus);
   }
 
   return { status, editor, factCheck, quality, generationStatus };
@@ -824,13 +824,13 @@ function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   if (overrides.writeEditor !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), editor);
   }
   if (overrides.writeQuality !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), quality);
   }
   if (overrides.writeFactCheck !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'), factCheck);
   }
   if (overrides.writeHalSignalQuality !== false) {
     writeHalSignalQualityReviewArtifacts(root, date, {
@@ -839,10 +839,10 @@ function writeFailedRepairReviewableArtifacts(root, date, overrides = {}) {
     });
   }
   if (overrides.writeRepairFailure !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), repairFailure);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'repair-failure.json'), repairFailure);
   }
   if (overrides.writeGenerationStatus !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), generationStatus);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), generationStatus);
   }
 
   return { status, editor, quality, factCheck, repairFailure, generationStatus };
@@ -868,7 +868,7 @@ function writeFailedRawArtifactValidationArtifacts(root, date, overrides = {}) {
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   if (overrides.writeGenerationStatus !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), generationStatus);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), generationStatus);
   }
 
   return { status, generationStatus };
@@ -1010,24 +1010,24 @@ function writeCandidateShortageReviewableArtifacts(root, date, overrides = {}) {
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   if (overrides.writeGenerationStatus !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), status);
   }
   if (overrides.writeShortlist !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), shortlist);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), shortlist);
   }
   if (overrides.writeSelectionReport !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), selectionReport);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'selection-report.json'), selectionReport);
   }
   if (overrides.writeSelectionDiagnostics !== false) {
-    writeText(path.join(root, 'content', 'newsroom', date, 'selection-diagnostics.md'), `${diagnosticsMd}\n`);
+    writeText(path.join(root, 'articles', 'content', 'newsroom', date, 'selection-diagnostics.md'), `${diagnosticsMd}\n`);
   }
   if (overrides.writeArticleCapsules !== false) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'article-capsules.json'), {
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'article-capsules.json'), {
       selected_capsules: selected,
       reserve_capsules: []
     });
   }
-  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'candidates.json'), {
     candidates: [
       ...selected,
       {
@@ -1101,8 +1101,8 @@ function writeFallbackOnlyReviewableArtifacts(root, date) {
       selected_article_count: selected.length
     }
   });
-  const newsroom = path.join(root, 'content', 'newsroom', date);
-  const collected = path.join(root, 'content', 'collected-news', date);
+  const newsroom = path.join(root, 'articles', 'content', 'newsroom', date);
+  const collected = path.join(root, 'articles', 'content', 'collected-news', date);
   const shortlist = JSON.parse(fs.readFileSync(path.join(newsroom, 'shortlisted-candidates.json'), 'utf8'));
   shortlist.selected_articles = selected;
   shortlist.primary_selected_articles = selected;
@@ -1159,7 +1159,7 @@ function writeMinimalEvidencePackSummary(root, date, overrides = {}) {
     invalid_artifacts: [],
     ...failureDiagnosticsOverrides
   };
-  writeJson(path.join(root, 'content', 'newsroom', date, 'evidence-pack-summary.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'evidence-pack-summary.json'), {
     schema_version: 1,
     date,
     generated_at: '2026-05-14T00:00:00.000Z',

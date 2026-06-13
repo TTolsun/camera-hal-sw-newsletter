@@ -13,7 +13,7 @@ on:
         default: "90"
         type: string
       manual_source_urls:
-        description: "Optional ';'-separated http/https seed URLs. Empty uses content/collected-news/<date>/collection-intent.json if present."
+        description: "Optional ';'-separated http/https seed URLs. Empty uses articles/content/collected-news/<date>/collection-intent.json if present."
         required: false
         default: ""
         type: string
@@ -108,7 +108,7 @@ jobs:
           DATE="$(cat .tmp/news-candidate-date.txt)"
           echo "date=${DATE}" >> "$GITHUB_OUTPUT"
           echo "branch=newsroom-raw/${DATE}" >> "$GITHUB_OUTPUT"
-          CANDIDATE_COUNT="$(node -e "const fs=require('fs'); const p='content/collected-news/${DATE}/manual-candidates.json'; const v=JSON.parse(fs.readFileSync(p,'utf8')); console.log(Array.isArray(v.candidates)?v.candidates.length:0)")"
+          CANDIDATE_COUNT="$(node -e "const fs=require('fs'); const p='articles/content/collected-news/${DATE}/manual-candidates.json'; const v=JSON.parse(fs.readFileSync(p,'utf8')); console.log(Array.isArray(v.candidates)?v.candidates.length:0)")"
           echo "candidate_count=${CANDIDATE_COUNT}" >> "$GITHUB_OUTPUT"
 
       - name: Generate evidence pack summary
@@ -173,7 +173,7 @@ jobs:
           set -euo pipefail
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git add content/collected-news/ content/source-events/ data/source-snapshots/ || true
+          git add articles/content/collected-news/ articles/content/source-events/ data/source-snapshots/ || true
           if git diff --cached --quiet; then
             echo "Nothing to commit."
           else
@@ -192,13 +192,13 @@ jobs:
           name: newsroom-raw-debug-${{ github.run_id }}
           path: |
             .tmp/news-candidate-date.txt
-            content/collected-news/${{ steps.raw-meta.outputs.date }}/manual-candidates.json
-            content/collected-news/${{ steps.raw-meta.outputs.date }}/candidates.json
-            content/collected-news/${{ steps.raw-meta.outputs.date }}/collection-intent.json
-            content/collected-news/${{ steps.raw-meta.outputs.date }}/raw-candidate-manifest.json
-            content/source-events/${{ steps.raw-meta.outputs.date }}/source-change-events.json
-            content/source-events/${{ steps.raw-meta.outputs.date }}/source-change-events.md
-            content/newsroom/${{ steps.raw-meta.outputs.date }}/news-candidates.md
+            articles/content/collected-news/${{ steps.raw-meta.outputs.date }}/manual-candidates.json
+            articles/content/collected-news/${{ steps.raw-meta.outputs.date }}/candidates.json
+            articles/content/collected-news/${{ steps.raw-meta.outputs.date }}/collection-intent.json
+            articles/content/collected-news/${{ steps.raw-meta.outputs.date }}/raw-candidate-manifest.json
+            articles/content/source-events/${{ steps.raw-meta.outputs.date }}/source-change-events.json
+            articles/content/source-events/${{ steps.raw-meta.outputs.date }}/source-change-events.md
+            articles/content/newsroom/${{ steps.raw-meta.outputs.date }}/news-candidates.md
             data/source-snapshots/**
           if-no-files-found: warn
           retention-days: 14

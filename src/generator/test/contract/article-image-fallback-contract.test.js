@@ -9,11 +9,11 @@ const { buildHtml, buildMarkdown } = require('../../render/newsletter-renderer')
 function tempRoot() {
   fs.mkdirSync(path.join(process.cwd(), '.tmp'), { recursive: true });
   const root = fs.mkdtempSync(path.join(process.cwd(), '.tmp', 'article-image-fallback-'));
-  fs.mkdirSync(path.join(root, 'assets', 'images', 'fallback'), { recursive: true });
-  fs.writeFileSync(path.join(root, 'assets', 'images', 'fallback', 'ai.svg'), '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n');
-  fs.writeFileSync(path.join(root, 'assets', 'images', 'fallback', 'android.svg'), '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n');
-  fs.writeFileSync(path.join(root, 'assets', 'images', 'fallback', 'cpp.svg'), '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n');
-  fs.writeFileSync(path.join(root, 'assets', 'images', 'fallback', 'newsletter-default.svg'), '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n');
+  fs.mkdirSync(path.join(root, 'articles', 'assets', 'images', 'fallback'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'articles', 'assets', 'images', 'fallback', 'ai.svg'), '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n');
+  fs.writeFileSync(path.join(root, 'articles', 'assets', 'images', 'fallback', 'android.svg'), '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n');
+  fs.writeFileSync(path.join(root, 'articles', 'assets', 'images', 'fallback', 'cpp.svg'), '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n');
+  fs.writeFileSync(path.join(root, 'articles', 'assets', 'images', 'fallback', 'newsletter-default.svg'), '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n');
   return root;
 }
 

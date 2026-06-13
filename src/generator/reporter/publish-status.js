@@ -196,7 +196,7 @@ function readPublishStatusInputs(options = {}) {
   const root = options.root || process.cwd();
   const statusInput = resolveStatusInput(root, options);
   const date = resolveDate(options, statusInput.status, root);
-  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
   const editor = readJsonIfExists(path.join(newsroomDir, 'editor-draft.json'));
   const quality = readJsonIfExists(path.join(newsroomDir, 'quality-report.json'));
   const factCheck = readJsonIfExists(path.join(newsroomDir, 'fact-check-report.json'));
@@ -237,7 +237,7 @@ function collectArtifactConsistencyErrors(inputs) {
   };
   for (const [name, artifact] of Object.entries(newsroomArtifactsByName)) {
     if (artifact.error) {
-      errors.push(`Could not read content/newsroom/${inputs.date}/${name}: ${artifact.error.message}`);
+      errors.push(`Could not read articles/content/newsroom/${inputs.date}/${name}: ${artifact.error.message}`);
     }
   }
   return errors;
@@ -257,7 +257,7 @@ function resolveReviewableRepairState(status, inputs) {
   if (failedRepairReviewableStatus) {
     for (const [name, artifact] of Object.entries(repairReviewArtifacts)) {
       if (!artifact.exists) {
-        errors.push(`Missing reviewable repair artifact: content/newsroom/${inputs.date}/${name}`);
+        errors.push(`Missing reviewable repair artifact: articles/content/newsroom/${inputs.date}/${name}`);
       }
     }
   }

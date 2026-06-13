@@ -504,7 +504,7 @@ test('source monitor can write reports without committing processed snapshot ids
   });
 
   assert.equal(fs.existsSync(snapshotPath(root, source.source_id)), false);
-  assert.ok(fs.existsSync(path.join(root, 'content', 'source-events', '2026-05-22', 'source-change-events.json')));
+  assert.ok(fs.existsSync(path.join(root, 'articles', 'content', 'source-events', '2026-05-22', 'source-change-events.json')));
 
   commitSourceSnapshotWrites({ root, snapshotWrites: result.snapshotWrites });
   const committed = JSON.parse(fs.readFileSync(snapshotPath(root, source.source_id), 'utf8'));

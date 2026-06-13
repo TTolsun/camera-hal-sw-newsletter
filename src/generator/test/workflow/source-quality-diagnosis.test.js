@@ -58,7 +58,7 @@ function diagnosisInputs(overrides = {}) {
   return {
     date,
     candidateInput: {
-      relPath: `content/collected-news/${date}/merged-candidates.json`
+      relPath: `articles/content/collected-news/${date}/merged-candidates.json`
     },
     candidatePayload: {
       date,
@@ -249,11 +249,11 @@ test('source quality diagnosis markdown renders Korean labels and recommended ac
 
 test('source quality diagnosis writer produces partial report when optional artifacts are missing', () => {
   const root = tempRoot('source-quality-diagnosis-');
-  writeJson(path.join(root, 'content', 'collected-news', date, 'merged-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'merged-candidates.json'), {
     date,
     candidates: [cameraCandidate()]
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     selected_articles: [cameraCandidate()],
     candidate_shortage_reviewable: false
   });
@@ -262,13 +262,13 @@ test('source quality diagnosis writer produces partial report when optional arti
 
   assert.equal(fs.existsSync(result.jsonPath), true);
   assert.equal(fs.existsSync(result.markdownPath), true);
-  assert.equal(result.report.input_refs.candidate_input, `content/collected-news/${date}/merged-candidates.json`);
+  assert.equal(result.report.input_refs.candidate_input, `articles/content/collected-news/${date}/merged-candidates.json`);
   assert.ok(result.report.warnings.some(warning => warning.type === 'missing_optional_artifact'));
 });
 
 test('source quality diagnosis writer produces partial report when shortlist is missing', () => {
   const root = tempRoot('source-quality-no-shortlist-');
-  writeJson(path.join(root, 'content', 'collected-news', date, 'merged-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'merged-candidates.json'), {
     date,
     candidates: [cameraCandidate()]
   });
@@ -287,10 +287,10 @@ test('source quality diagnosis writer produces partial report when shortlist is 
 
 test('source quality diagnosis writer produces partial report when candidate input JSON is invalid', () => {
   const root = tempRoot('source-quality-invalid-candidate-');
-  const candidatePath = path.join(root, 'content', 'collected-news', date, 'merged-candidates.json');
+  const candidatePath = path.join(root, 'articles', 'content', 'collected-news', date, 'merged-candidates.json');
   fs.mkdirSync(path.dirname(candidatePath), { recursive: true });
   fs.writeFileSync(candidatePath, '{ invalid json', 'utf8');
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     selected_articles: [cameraCandidate()]
   });
 
@@ -298,12 +298,12 @@ test('source quality diagnosis writer produces partial report when candidate inp
 
   assert.equal(fs.existsSync(result.jsonPath), true);
   assert.equal(fs.existsSync(result.markdownPath), true);
-  assert.equal(result.report.input_refs.candidate_input, `content/collected-news/${date}/merged-candidates.json`);
+  assert.equal(result.report.input_refs.candidate_input, `articles/content/collected-news/${date}/merged-candidates.json`);
   assert.equal(result.report.evidence_completeness.candidate_input, false);
   assert.equal(result.report.raw_candidate_count, null);
   assert.ok(result.report.warnings.some(warning =>
     warning.type === 'invalid_preferred_artifact' &&
-    warning.source_artifact === `content/collected-news/${date}/merged-candidates.json`
+    warning.source_artifact === `articles/content/collected-news/${date}/merged-candidates.json`
   ));
   assert.ok(result.report.warnings.some(warning => warning.type === 'partial_diagnosis'));
 });
@@ -311,7 +311,7 @@ test('source quality diagnosis writer produces partial report when candidate inp
 test('newsroom PR body omits source quality diagnosis detail and keeps artifact-only review path', () => {
   const root = tempRoot('source-quality-pr-body-');
   const report = buildSourceQualityDiagnosisReport(diagnosisInputs());
-  writeJson(path.join(root, 'content', 'newsroom', date, 'source-quality-diagnosis.json'), report);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'source-quality-diagnosis.json'), report);
 
   const body = buildNewsroomPrBody({
     publishStatus: {

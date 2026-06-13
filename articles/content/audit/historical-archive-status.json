@@ -243,9 +243,9 @@
     "public_visibility": "listed",
     "rewrite_status": "material_rewrite",
     "material_rewrite_diffs": [
-      "content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md"
+      "articles/content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md"
     ],
-    "material_rewrite_diff": "content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md"
+    "material_rewrite_diff": "articles/content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md"
   },
   {
     "date": "2026-05-10",
@@ -304,10 +304,10 @@
     "public_visibility": "listed",
     "rewrite_status": "material_rewrite",
     "material_rewrite_diffs": [
-      "content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md",
-      "content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-softisp.md"
+      "articles/content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md",
+      "articles/content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-softisp.md"
     ],
-    "material_rewrite_diff": "content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md"
+    "material_rewrite_diff": "articles/content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md"
   },
   {
     "date": "2026-05-05",
@@ -320,12 +320,12 @@
     "historical_cleanup_context": "historical_archive_cleanup",
     "public_visibility": "listed",
     "rewrite_status": "material_rewrite",
-    "material_rewrite_diff": "content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md",
+    "material_rewrite_diff": "articles/content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md",
     "material_rewrite_diffs": [
-      "content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md",
-      "content/audit/historical-rewrite-diff/2026-05-05-claude-code-2-1-128-camera-hal-workflow-review.md",
-      "content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal-debug-build.md",
-      "content/audit/historical-rewrite-diff/2026-05-05-2026-5-android-camera-related-cve.md"
+      "articles/content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md",
+      "articles/content/audit/historical-rewrite-diff/2026-05-05-claude-code-2-1-128-camera-hal-workflow-review.md",
+      "articles/content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal-debug-build.md",
+      "articles/content/audit/historical-rewrite-diff/2026-05-05-2026-5-android-camera-related-cve.md"
     ]
   },
   {

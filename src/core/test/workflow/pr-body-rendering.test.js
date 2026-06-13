@@ -132,7 +132,7 @@ test('editor PR summary renderer keeps stable top-level sections and escapes tab
 test('RAW candidate PR body puts editor-facing summary before detailed compatibility report', () => {
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-16';
-  const dir = path.join(root, 'content', 'collected-news', date);
+  const dir = path.join(root, 'articles', 'content', 'collected-news', date);
   fs.mkdirSync(dir, { recursive: true });
   writeJson(path.join(dir, 'manual-candidates.json'), {
     candidates: [
@@ -193,7 +193,7 @@ test('source discovery PR report normalizes top rejected reasons and handoff sta
       gemini_manual_duplicate_url_count: 0,
       merged_candidate_count: 1
     },
-    mergedCandidateRelPath: `content/collected-news/${date}/merged-candidates.json`
+    mergedCandidateRelPath: `articles/content/collected-news/${date}/merged-candidates.json`
   });
   assert.match(passThrough, /next_step: strengthen_candidates/);
   assert.match(passThrough, /03 진행 가능하나 후보 보강 권장/);
@@ -216,7 +216,7 @@ test('source discovery PR report normalizes top rejected reasons and handoff sta
       seed_publishable_candidate_count: 1,
       merged_candidate_count: 2
     },
-    mergedCandidateRelPath: `content/collected-news/${date}/merged-candidates.json`
+    mergedCandidateRelPath: `articles/content/collected-news/${date}/merged-candidates.json`
   });
   assert.match(seedPublishable, /next_step: run_03/);
   assert.match(seedPublishable, /Seed evidence expansion에서 publishable 후보가 확인되었습니다/);
@@ -237,7 +237,7 @@ test('source discovery PR report normalizes top rejected reasons and handoff sta
       gemini_manual_duplicate_url_count: 2,
       merged_candidate_count: 42
     },
-    mergedCandidateRelPath: `content/collected-news/${date}/merged-candidates.json`,
+    mergedCandidateRelPath: `articles/content/collected-news/${date}/merged-candidates.json`,
     sourceDiscoveryFeedbackReport: {
       status: 'WARNING',
       parser_gap_count: 1,
@@ -295,7 +295,7 @@ test('newsroom PR body treats FAILED_REPAIR_REVIEWABLE as needs-fix review flow'
     date,
     validateOutcome: 'failure',
     changedArtifacts: REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${date}/${file}`)
+      .map(file => `articles/content/newsroom/${date}/${file}`)
   });
 
   assert.match(body, /^## Diagnostics-only Status$/m);
@@ -320,7 +320,7 @@ test('newsroom PR body and validator accept candidate shortage review-only hando
   const date = '2026-05-11';
   writeCandidateShortageReviewableArtifacts(root, date);
   const changedArtifacts = REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS
-    .map(file => `content/newsroom/${date}/${file}`);
+    .map(file => `articles/content/newsroom/${date}/${file}`);
 
   const fallbackBody = buildNewsroomPrBody({
     root,
@@ -342,9 +342,9 @@ test('newsroom PR body and validator accept candidate shortage review-only hando
   assert.match(fallbackBody, /publishable_candidate_shortage/);
   assert.match(fallbackBody, /Source\/parser hints \(preliminary\):/);
   assert.match(fallbackBody, /OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR \/ android-developers-jetpack-release/);
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), false);
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'quality-report.json')), false);
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json')), false);
   const fallbackValidation = validatePrBodyText(fallbackBody, { date });
   assert.equal(fallbackValidation.ok, true, fallbackValidation.errors.join('\n'));
 
@@ -367,7 +367,7 @@ test('newsroom PR body and validator accept candidate shortage review-only hando
   assert.match(mismatchCandidatePoolSection, /preflight_consistency: mismatch/);
   assert.equal(validatePrBodyText(mismatchBody, { date }).ok, true);
 
-  writeJson(path.join(root, 'content', 'newsroom', date, 'source-effectiveness-report.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'source-effectiveness-report.json'), {
     sources: [{
       source_id: 'android-developers-jetpack-release',
       recommendation: 'KEEP_AND_FIX_PARSER',
@@ -392,7 +392,7 @@ test('newsroom PR body and validator accept candidate shortage review-only hando
 test('newsroom PR body renders generated artifacts in review inventory order', () => {
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-12';
-  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
   const status = traceStatus({
     status: 'PASS',
     seed_used: true,
@@ -429,28 +429,28 @@ test('newsroom PR body renders generated artifacts in review inventory order', (
     validateOutcome: 'success',
     status,
     changedArtifacts: [
-      ...files.map(([filename]) => `content/newsroom/${date}/${filename}`),
-      `content/newsroom/${date}/seed-evidence-pack.json`,
-      `newsletters/${date}/newsletter.md`,
-      `newsletters/${date}/index.html`,
-      'data/newsletters.json'
+      ...files.map(([filename]) => `articles/content/newsroom/${date}/${filename}`),
+      `articles/content/newsroom/${date}/seed-evidence-pack.json`,
+      `articles/newsletters/${date}/newsletter.md`,
+      `articles/newsletters/${date}/index.html`,
+      'articles/data/newsletters.json'
     ]
   });
   const generated = extractMarkdownSection(body, '생성 산출물');
 
   assertTextInOrder(generated, [
     '### 필수 확인',
-    `content/newsroom/${date}/00-review-guide.md`,
-    `content/newsroom/${date}/editor-in-chief-brief.md`,
-    `content/newsroom/${date}/seed-evidence-pack.md`,
-    `content/newsroom/${date}/seed-merge-report.md`,
+    `articles/content/newsroom/${date}/00-review-guide.md`,
+    `articles/content/newsroom/${date}/editor-in-chief-brief.md`,
+    `articles/content/newsroom/${date}/seed-evidence-pack.md`,
+    `articles/content/newsroom/${date}/seed-merge-report.md`,
     '### 최종 기사 / 공개 출력',
-    `newsletters/${date}/newsletter.md`,
-    `newsletters/${date}/index.html`,
+    `articles/newsletters/${date}/newsletter.md`,
+    `articles/newsletters/${date}/index.html`,
     '### 사실성 / 품질 / HAL 게이트',
-    `content/newsroom/${date}/fact-check-report.md`,
-    `content/newsroom/${date}/quality-report.md`,
-    `content/newsroom/${date}/hal-signal-quality-report.md`,
+    `articles/content/newsroom/${date}/fact-check-report.md`,
+    `articles/content/newsroom/${date}/quality-report.md`,
+    `articles/content/newsroom/${date}/hal-signal-quality-report.md`,
     '### 디버그 근거',
     `heavy files (debug_heavy/transient_attempt)`,
     `retained_heavy_artifacts`
@@ -465,13 +465,13 @@ test('newsroom PR body marks editorial reviewable handoff as editor-approved pub
   writeEditorialReviewableArtifacts(root, date);
   writePublicNewsletterArtifacts(root, date);
   const changedArtifacts = [
-    `content/newsroom/${date}/editor-draft.json`,
-    `content/newsroom/${date}/fact-check-report.json`,
-    `content/newsroom/${date}/quality-report.json`,
-    `content/newsroom/${date}/generation-status.json`,
-    `newsletters/${date}/newsletter.md`,
-    `newsletters/${date}/index.html`,
-    'data/newsletters.json'
+    `articles/content/newsroom/${date}/editor-draft.json`,
+    `articles/content/newsroom/${date}/fact-check-report.json`,
+    `articles/content/newsroom/${date}/quality-report.json`,
+    `articles/content/newsroom/${date}/generation-status.json`,
+    `articles/newsletters/${date}/newsletter.md`,
+    `articles/newsletters/${date}/index.html`,
+    'articles/data/newsletters.json'
   ];
 
   const body = buildNewsroomPrBody({
@@ -493,16 +493,16 @@ test('newsroom PR body marks editorial reviewable handoff as editor-approved pub
   assert.match(body, /\| 편집자 승인 발행 가능 여부 \| 가능 \|/);
   assert.match(body, /\| Merge 후 홈페이지 표시 여부 \| 표시됨 \|/);
   assert.match(body, /\| publish-ready label \| 붙이지 않음 \|/);
-  assert.match(body, new RegExp(`newsletters/${date}/newsletter\\.md`));
-  assert.match(body, new RegExp(`newsletters/${date}/index\\.html`));
-  assert.match(body, /data\/newsletters\.json/);
+  assert.match(body, new RegExp(`articles/newsletters/${date}/newsletter\\.md`));
+  assert.match(body, new RegExp(`articles/newsletters/${date}/index\\.html`));
+  assert.match(body, /articles\/data\/newsletters\.json/);
   assert.doesNotMatch(body, /not generated|not updated|생성하지 않은 public 산출물/);
   const sections = extractSections(body);
   const generatedArtifactsSection = [...sections.values()]
-    .find(section => section.includes(`newsletters/${date}/newsletter.md`)) || '';
-  assert.match(generatedArtifactsSection, new RegExp(`newsletters/${date}/newsletter\\.md`));
-  assert.match(generatedArtifactsSection, new RegExp(`newsletters/${date}/index\\.html`));
-  assert.match(generatedArtifactsSection, /data\/newsletters\.json/);
+    .find(section => section.includes(`articles/newsletters/${date}/newsletter.md`)) || '';
+  assert.match(generatedArtifactsSection, new RegExp(`articles/newsletters/${date}/newsletter\\.md`));
+  assert.match(generatedArtifactsSection, new RegExp(`articles/newsletters/${date}/index\\.html`));
+  assert.match(generatedArtifactsSection, /articles\/data\/newsletters\.json/);
   const bodyValidation = validatePrBodyText(body);
   assert.equal(bodyValidation.ok, true, JSON.stringify(bodyValidation, null, 2));
 
@@ -512,8 +512,8 @@ test('newsroom PR body marks editorial reviewable handoff as editor-approved pub
   assert.match(result.errors.join('\n'), /public newsletter files were generated/);
 
   const notGeneratedPublicArtifact = body.replace(
-    `- newsletters/${date}/newsletter.md`,
-    `- newsletters/${date}/newsletter.md - not generated`
+    `- articles/newsletters/${date}/newsletter.md`,
+    `- articles/newsletters/${date}/newsletter.md - not generated`
   );
   const notGeneratedResult = validatePrBodyText(notGeneratedPublicArtifact, { date });
   assert.equal(notGeneratedResult.ok, false);
@@ -659,7 +659,7 @@ test('newsroom PR body handles missing evidence pack with shortlist fallback', (
     primary_selected: true,
     source_gap_risk: false
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     selected_articles: [finalCandidate],
     reserve_candidates: []
   });
@@ -752,7 +752,7 @@ test('newsroom PR body loads reporter fallback object array and selected candida
   for (const item of cases) {
     const root = fsTempRoot('newsroom-pr-body-');
     const date = '2026-05-10';
-    writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), item.value);
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'reporter-candidates.json'), item.value);
 
     const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', status: traceStatus() });
     const summary = extractMarkdownSection(body, '편집자 기사 판단 요약');
@@ -778,11 +778,11 @@ test('newsroom PR body keeps editorial summary section order by publication stat
     validateOutcome: 'failure',
     status: traceStatus({ review_publication_ready: true, final_publish_ready: false }),
     changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${reviewDate}/${file}`)
+      .map(file => `articles/content/newsroom/${reviewDate}/${file}`)
       .concat([
-        `newsletters/${reviewDate}/newsletter.md`,
-        `newsletters/${reviewDate}/index.html`,
-        'data/newsletters.json'
+        `articles/newsletters/${reviewDate}/newsletter.md`,
+        `articles/newsletters/${reviewDate}/index.html`,
+        'articles/data/newsletters.json'
       ])
   });
 
@@ -845,7 +845,7 @@ test('diagnostics-only PR body keeps status first and shows insufficient evidenc
     date,
     validateOutcome: 'failure',
     changedArtifacts: REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${date}/${file}`)
+      .map(file => `articles/content/newsroom/${date}/${file}`)
   });
 
   assert.ok(body.indexOf('## 최종 판단') < body.indexOf('## Diagnostics-only Status'));
@@ -925,7 +925,7 @@ test('newsroom PR body omits detailed Evidence Pack summary sections', () => {
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-10';
 
-  writeJson(path.join(root, 'content', 'newsroom', date, 'evidence-pack-summary.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'evidence-pack-summary.json'), {
     schema_version: 1,
     date,
     generated_at: '2026-05-14T00:00:00.000Z',
@@ -1009,8 +1009,8 @@ test('newsroom PR body omits detailed Evidence Pack summary sections', () => {
       repair_failures: ['section_count_drift'],
       candidate_shortage_hints: ['primary camera stack shortage'],
       source_gap_warnings: ['source gap on selected-1'],
-      missing_artifacts: ['content/newsroom/2026-05-10/fact-check-report.json'],
-      invalid_artifacts: [{ path: 'content/newsroom/2026-05-10/quality-report.json', error: 'Unexpected token' }]
+      missing_artifacts: ['articles/content/newsroom/2026-05-10/fact-check-report.json'],
+      invalid_artifacts: [{ path: 'articles/content/newsroom/2026-05-10/quality-report.json', error: 'Unexpected token' }]
     },
     warnings: []
   });
@@ -1045,7 +1045,7 @@ test('newsroom PR body omits Seed Evidence usage detail when seed artifacts exis
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-10';
   writeMinimalEvidencePackSummary(root, date);
-  writeJson(path.join(root, 'content', 'collected-news', date, 'seed-evidence-pack.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'seed-evidence-pack.json'), {
     schema_version: 1,
     report_type: 'seed_evidence_pack',
     newsletter_date: date,
@@ -1054,7 +1054,7 @@ test('newsroom PR body omits Seed Evidence usage detail when seed artifacts exis
       primary_evidence: [{ evidence_id: 'seed-camerax-primary-01' }]
     }]
   });
-  writeJson(path.join(root, 'content', 'collected-news', date, 'merged-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'merged-candidates.json'), {
     schema_version: 5,
     date,
     newsletter_date: date,
@@ -1084,7 +1084,7 @@ test('newsroom PR body omits HAL signal quality detail when report exists', () =
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-10';
   writeMinimalEvidencePackSummary(root, date);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'hal-signal-quality-report.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'hal-signal-quality-report.json'), {
     schema_version: 1,
     report_type: 'hal_signal_quality',
     date,
@@ -1140,7 +1140,7 @@ test('newsroom PR body truncates long HAL hard blocker affected article lists', 
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-10';
   writeMinimalEvidencePackSummary(root, date);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'hal-signal-quality-report.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'hal-signal-quality-report.json'), {
     schema_version: 1,
     report_type: 'hal_signal_quality',
     date,
@@ -1186,7 +1186,7 @@ test('newsroom PR body keeps Evidence Pack fallback when summary artifact is mis
 
   assert.doesNotMatch(body, /^## Evidence Pack 요약$/m);
   assert.doesNotMatch(body, /Evidence Pack summary: unavailable/);
-  assert.doesNotMatch(body, new RegExp(`content/newsroom/${date}/evidence-pack-summary\\.json not found`));
+  assert.doesNotMatch(body, new RegExp(`articles/content/newsroom/${date}/evidence-pack-summary\\.json not found`));
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
@@ -1231,19 +1231,19 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
     deterministic_score: 55
   });
 
-  writeJson(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'reporter-candidates.json'), {
     date,
     candidates: [finalCandidate, reserveCandidate, excludedCandidate]
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     selected_articles: [finalCandidate],
     reserve_candidates: [reserveCandidate],
     excluded_candidates: [excludedCandidate]
   });
-  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'candidates.json'), {
     candidates: [finalCandidate, reserveCandidate, excludedCandidate, reportOnlyCandidate]
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), {
     status: 'NEEDS_FIX',
     deductions: [
       {
@@ -1272,7 +1272,7 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
       }
     ]
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'), {
     status: 'NEEDS_FIX',
     must_fix: [
       {
@@ -1286,7 +1286,7 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
     ],
     source_gap_count: 1
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'event-bundles.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'event-bundles.json'), {
     schema_version: 1,
     date,
     summary: {
@@ -1341,8 +1341,8 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
 test('newsroom PR body candidate traceability tolerates missing and malformed artifacts', () => {
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-10';
-  writeText(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json'), '{ invalid json');
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+  writeText(path.join(root, 'articles', 'content', 'newsroom', date, 'reporter-candidates.json'), '{ invalid json');
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     selected_articles: { title: 'not an array' },
     reserve_candidates: 'not an array'
   });
@@ -1353,8 +1353,8 @@ test('newsroom PR body candidate traceability tolerates missing and malformed ar
   assert.match(body, /읽기\/형식 요약:/);
   assert.match(body, /reporter-candidates\.json: JSON을 읽을 수 없습니다/);
   assert.match(body, /shortlisted-candidates\.json: selected_articles 필드가 배열이 아닙니다/);
-  assert.match(body, new RegExp(`content/newsroom/${date}/reporter-candidates\\.json`));
-  assert.match(body, new RegExp(`content/collected-news/${date}/candidates\\.json`));
+  assert.match(body, new RegExp(`articles/content/newsroom/${date}/reporter-candidates\\.json`));
+  assert.match(body, new RegExp(`articles/content/collected-news/${date}/candidates\\.json`));
   assert.equal(validatePrBodyText(body, { date }).ok, true);
 });
 
@@ -1576,7 +1576,7 @@ test('newsroom PR body keeps one Korean generation status heading', () => {
 test('newsroom PR body strips stale editor brief gate sections', () => {
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-08';
-  writeText(path.join(root, 'content', 'newsroom', date, 'editor-in-chief-brief.md'), [
+  writeText(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-in-chief-brief.md'), [
     '# Brief',
     '',
     '## 이번 주 핵심 메시지',
@@ -1651,7 +1651,7 @@ test('newsroom PR body omits article structure contract detail when editor draft
       }]
     }
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), {
     date,
     title: `Camera HAL / SW Newsletter - ${date}`,
     summary: 'Summary',
@@ -1722,14 +1722,14 @@ test('candidate trace table does not produce broken Markdown links when title co
     reference_only: false,
     relevance_bucket: 'camera_driver_image_pipeline'
   };
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     selected_articles: [],
     primary_selected_articles: [],
     shortlisted_candidates: [],
     reserve_candidates: [],
     excluded_candidates: [bracketedCandidate]
   });
-  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'candidates.json'), {
     candidates: [bracketedCandidate]
   });
 

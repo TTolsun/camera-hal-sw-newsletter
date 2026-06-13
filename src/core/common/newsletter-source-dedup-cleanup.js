@@ -151,11 +151,11 @@ function sourceLinksForSection(section = {}) {
 }
 
 function collectArticleRecords({ root = process.cwd(), indexedDates = new Set() } = {}) {
-  const newsroomDates = listDateDirs(root, path.join('content', 'newsroom'));
+  const newsroomDates = listDateDirs(root, path.join('articles', 'content', 'newsroom'));
   const records = [];
   const parseWarnings = [];
   for (const date of newsroomDates) {
-    const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
+    const editorPath = path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json');
     if (!fs.existsSync(editorPath)) continue;
     const issue = readJson(editorPath);
     ensureArray(issue.sections).forEach((section, index) => {
@@ -215,9 +215,9 @@ function sameDateSet(left = [], right = []) {
 
 function publicArtifactPathsForDate(date) {
   return [
-    `newsletters/${date}`,
-    `content/newsroom/${date}`,
-    `content/collected-news/${date}`
+    `articles/newsletters/${date}`,
+    `articles/content/newsroom/${date}`,
+    `articles/content/collected-news/${date}`
   ];
 }
 
@@ -228,12 +228,12 @@ function removedPathsForDates(root, dates = []) {
       if (fs.existsSync(path.join(root, relPath))) output.push(relPath);
     }
   }
-  const rewriteDir = path.join(root, 'content', 'audit', 'historical-rewrite-diff');
+  const rewriteDir = path.join(root, 'articles', 'content', 'audit', 'historical-rewrite-diff');
   if (fs.existsSync(rewriteDir)) {
     for (const entry of fs.readdirSync(rewriteDir, { withFileTypes: true })) {
       if (!entry.isFile()) continue;
       const date = entry.name.slice(0, 10);
-      if (dates.includes(date)) output.push(`content/audit/historical-rewrite-diff/${entry.name}`);
+      if (dates.includes(date)) output.push(`articles/content/audit/historical-rewrite-diff/${entry.name}`);
     }
   }
   return output.sort();
@@ -243,7 +243,7 @@ function buildCleanupPlan({
   root = process.cwd(),
   expectedExposedDates = DEFAULT_EXPECTED_EXPOSED_DATES
 } = {}) {
-  const newsletterItems = readJson(path.join(root, 'data', 'newsletters.json'));
+  const newsletterItems = readJson(path.join(root, 'articles', 'data', 'newsletters.json'));
   if (!Array.isArray(newsletterItems)) throw new Error('data/newsletters.json must contain an array');
   const indexedDates = new Set(newsletterItems.map(item => String(item?.date || '')).filter(date => DATE_PATTERN.test(date)));
   const { records, parseWarnings } = collectArticleRecords({ root, indexedDates });
@@ -326,9 +326,9 @@ function buildCleanupPlan({
   ));
   const zeroArticleIssues = sortedDates([...indexedDates].filter(date => !finalIndexedDates.includes(date)));
   const allArtifactDates = sortedDates([
-    ...listDateDirs(root, 'newsletters'),
-    ...listDateDirs(root, path.join('content', 'newsroom')),
-    ...listDateDirs(root, path.join('content', 'collected-news'))
+    ...listDateDirs(root, path.join('articles', 'newsletters')),
+    ...listDateDirs(root, path.join('articles', 'content', 'newsroom')),
+    ...listDateDirs(root, path.join('articles', 'content', 'collected-news'))
   ]);
   const removedArtifactDates = sortedDates(allArtifactDates.filter(date => !finalIndexedDates.includes(date)));
   if (!sameDateSet(finalIndexedDates, expectedExposedDates)) {
@@ -638,25 +638,25 @@ function issueIndexEntry(issue) {
 }
 
 function updateQualityReport(root, date, issue) {
-  const factCheck = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'));
+  const factCheck = readJsonIfExists(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'));
   if (!factCheck) return null;
-  const reporter = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'reporter-candidates.json')) || {};
-  const shortlistReport = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json')) || null;
-  const staleClaimReport = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'stale-claim-report.json')) || null;
-  const previous = readJsonIfExists(path.join(root, 'content', 'newsroom', date, 'quality-report.json')) || {};
+  const reporter = readJsonIfExists(path.join(root, 'articles', 'content', 'newsroom', date, 'reporter-candidates.json')) || {};
+  const shortlistReport = readJsonIfExists(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json')) || null;
+  const staleClaimReport = readJsonIfExists(path.join(root, 'articles', 'content', 'newsroom', date, 'stale-claim-report.json')) || null;
+  const previous = readJsonIfExists(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json')) || {};
   const threshold = Number.isFinite(Number(previous.threshold)) ? Number(previous.threshold) : 85;
   const report = buildNewsletterQualityReport(date, issue, reporter, factCheck, {
     threshold,
     shortlistReport,
     staleClaimReport
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), report);
-  writeText(path.join(root, 'content', 'newsroom', date, 'quality-report.md'), buildQualityReportMarkdown(report));
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), report);
+  writeText(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.md'), buildQualityReportMarkdown(report));
   return report;
 }
 
 function updatedIssueForDate(root, date, plan) {
-  const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
+  const editorPath = path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json');
   const original = readJson(editorPath);
   const records = plan.internal.records
     .filter(record => record.date === date && plan.internal.keepRecordIds.has(record.id))
@@ -731,7 +731,7 @@ function safeRemovePath(root, relPath, deletedPaths) {
 }
 
 function updateSidecar(root, removedDates) {
-  const sidecarPath = path.join(root, 'content', 'audit', 'historical-archive-status.json');
+  const sidecarPath = path.join(root, 'articles', 'content', 'audit', 'historical-archive-status.json');
   if (!fs.existsSync(sidecarPath)) return [];
   const entries = readJson(sidecarPath);
   const removed = new Set(removedDates);
@@ -779,7 +779,7 @@ function rewriteDiffSlug(relPath = '') {
 function keptArticleSlugsByDate(root, dates = []) {
   const output = new Map();
   for (const date of dates) {
-    const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
+    const editorPath = path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json');
     if (!fs.existsSync(editorPath)) continue;
     const issue = readJson(editorPath);
     output.set(date, new Set(ensureArray(issue.sections)
@@ -791,8 +791,8 @@ function keptArticleSlugsByDate(root, dates = []) {
 }
 
 function pruneRewriteDiffsForKeptDates(root, finalDates, deletedPaths) {
-  const sidecarPath = path.join(root, 'content', 'audit', 'historical-archive-status.json');
-  const diffDir = path.join(root, 'content', 'audit', 'historical-rewrite-diff');
+  const sidecarPath = path.join(root, 'articles', 'content', 'audit', 'historical-archive-status.json');
+  const diffDir = path.join(root, 'articles', 'content', 'audit', 'historical-rewrite-diff');
   if (!fs.existsSync(sidecarPath) || !fs.existsSync(diffDir)) return;
   const finalDateSet = new Set(finalDates);
   const keptSlugs = keptArticleSlugsByDate(root, finalDates);
@@ -877,13 +877,13 @@ function updateInventory(root, removedDates) {
 }
 
 function removeRewriteDiffs(root, removedDates, deletedPaths) {
-  const dir = path.join(root, 'content', 'audit', 'historical-rewrite-diff');
+  const dir = path.join(root, 'articles', 'content', 'audit', 'historical-rewrite-diff');
   if (!fs.existsSync(dir)) return;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (!entry.isFile()) continue;
     const date = entry.name.slice(0, 10);
     if (!removedDates.includes(date)) continue;
-    safeRemovePath(root, path.join('content', 'audit', 'historical-rewrite-diff', entry.name), deletedPaths);
+    safeRemovePath(root, path.join('articles', 'content', 'audit', 'historical-rewrite-diff', entry.name), deletedPaths);
   }
 }
 
@@ -906,22 +906,22 @@ function applyCleanupPlan({
   const nextIndex = [];
   for (const date of finalDates) {
     const issue = updatedIssueForDate(root, date, plan);
-    const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
+    const editorPath = path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json');
     writeJson(editorPath, issue);
-    writeText(path.join(root, 'content', 'newsroom', date, 'editor-draft.md'), buildMarkdown(issue));
-    writeText(path.join(root, 'newsletters', date, 'newsletter.md'), buildMarkdown(issue));
-    writeText(path.join(root, 'newsletters', date, 'index.html'), buildHtml(issue));
+    writeText(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.md'), buildMarkdown(issue));
+    writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), buildMarkdown(issue));
+    writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), buildHtml(issue));
     updateQualityReport(root, date, issue);
     nextIndex.push(issueIndexEntry(issue));
     changedIssues.push(date);
   }
   nextIndex.sort((left, right) => String(right.date).localeCompare(String(left.date)));
-  writeJson(path.join(root, 'data', 'newsletters.json'), nextIndex);
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), nextIndex);
 
   const deletedPaths = [];
   removeRewriteDiffs(root, plan.removed_artifact_dates, deletedPaths);
   for (const relPath of plan.removed_paths) {
-    if (relPath.startsWith('content/audit/historical-rewrite-diff/')) continue;
+    if (relPath.startsWith('articles/content/audit/historical-rewrite-diff/')) continue;
     safeRemovePath(root, relPath, deletedPaths);
   }
   const sidecarChangedDates = updateSidecar(root, plan.removed_artifact_dates);
@@ -948,20 +948,20 @@ function applyCleanupPlan({
 }
 
 function readDateSetFromIndex(root) {
-  const items = readJson(path.join(root, 'data', 'newsletters.json'));
+  const items = readJson(path.join(root, 'articles', 'data', 'newsletters.json'));
   return sortedDates(ensureArray(items).map(item => item?.date).filter(date => DATE_PATTERN.test(String(date))));
 }
 
 function datesWithPublicArtifacts(root) {
-  return listDateDirs(root, 'newsletters').filter(date =>
-    fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')) &&
-    fs.existsSync(path.join(root, 'newsletters', date, 'index.html'))
+  return listDateDirs(root, path.join('articles', 'newsletters')).filter(date =>
+    fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'newsletter.md')) &&
+    fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'index.html'))
   );
 }
 
 function datesWithEditorDraft(root) {
-  return listDateDirs(root, path.join('content', 'newsroom')).filter(date =>
-    fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'))
+  return listDateDirs(root, path.join('articles', 'content', 'newsroom')).filter(date =>
+    fs.existsSync(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'))
   );
 }
 
@@ -999,7 +999,7 @@ function removedDateReferences(root, removedDates = []) {
 }
 
 function archiveStatusByDate(root) {
-  const sidecarPath = path.join(root, 'content', 'audit', 'historical-archive-status.json');
+  const sidecarPath = path.join(root, 'articles', 'content', 'audit', 'historical-archive-status.json');
   if (!fs.existsSync(sidecarPath)) return new Map();
   return new Map(ensureArray(readJson(sidecarPath)).map(entry => [entry.date, entry]));
 }
@@ -1017,7 +1017,7 @@ function sourceDedupRemovedDatesFromSidecar(root) {
 }
 
 function generatedAuditEntriesByDate(root) {
-  const auditPath = path.join(root, 'content', 'audit', 'historical-newsletter-audit-report.json');
+  const auditPath = path.join(root, 'articles', 'content', 'audit', 'historical-newsletter-audit-report.json');
   if (!fs.existsSync(auditPath)) return new Map();
   return new Map(ensureArray(readJson(auditPath).entries).map(entry => [entry.date, entry]));
 }
@@ -1031,7 +1031,7 @@ function buildPostCleanupReport({
   const indexDates = readDateSetFromIndex(root);
   const publicDates = datesWithPublicArtifacts(root);
   const editorDates = datesWithEditorDraft(root);
-  const collectedDates = listDateDirs(root, path.join('content', 'collected-news'));
+  const collectedDates = listDateDirs(root, path.join('articles', 'content', 'collected-news'));
   const expectedDates = sortedDates(expectedExposedDates);
   const dryRunRemovedDates = sortedDates(dryRunReport?.removed_artifact_dates || []);
   const removedDates = dryRunRemovedDates.length > 0 ? dryRunRemovedDates : sourceDedupRemovedDatesFromSidecar(root);

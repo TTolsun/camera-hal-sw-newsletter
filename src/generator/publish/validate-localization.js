@@ -106,7 +106,7 @@ function readJson(rel) {
 }
 
 function checkNewsletterData() {
-  const items = readJson(path.join('data', 'newsletters.json'));
+  const items = readJson(path.join('articles', 'data', 'newsletters.json'));
   for (const item of items) {
     const title = String(item.title || '');
     const expectedCanonicalTitle = item.date ? `Camera HAL / SW Newsletter - ${item.date}` : '';
@@ -123,7 +123,7 @@ function checkNewsletterData() {
 }
 
 function checkHomepageHeadlineData() {
-  const rel = path.join('data', 'homepage-headline.json');
+  const rel = path.join('articles', 'data', 'homepage-headline.json');
   const filePath = repoPath(rel);
   if (!fs.existsSync(filePath)) return;
   const state = readJson(rel);
@@ -139,7 +139,7 @@ function checkHomepageHeadlineData() {
 }
 
 function checkLatestPublicNewsletterArtifacts() {
-  const items = readJson(path.join('data', 'newsletters.json'));
+  const items = readJson(path.join('articles', 'data', 'newsletters.json'));
   const latest = items[0];
   if (!latest) return;
   for (const rel of [latest.md, latest.html].filter(Boolean)) {

@@ -110,7 +110,7 @@ function readJsonOptional(root, relPath) {
 }
 
 function readNewsletterItems(root) {
-  const relPath = 'data/newsletters.json';
+  const relPath = 'articles/data/newsletters.json';
   const filePath = path.join(root, relPath);
   if (!fs.existsSync(filePath)) {
     throw new Error(`Missing required file: ${relPath}`);
@@ -143,7 +143,7 @@ function resolveTargetItems(root, options = {}) {
     const selected = items.filter(item => explicitDates.has(item.date));
     for (const date of explicitDates) {
       if (!selected.some(item => item.date === date)) {
-        throw new Error(`No data/newsletters.json entry found for target date: ${date}`);
+        throw new Error(`No articles/data/newsletters.json entry found for target date: ${date}`);
       }
     }
     return selected;
@@ -158,7 +158,7 @@ function resolveTargetItems(root, options = {}) {
     const selectedDates = new Set(selected.map(item => item.date));
     const missingDates = [...targetDates].filter(date => !selectedDates.has(date));
     if (missingDates.length > 0) {
-      throw new Error(`No data/newsletters.json entry found for detected target date(s): ${missingDates.join(', ')}`);
+      throw new Error(`No articles/data/newsletters.json entry found for detected target date(s): ${missingDates.join(', ')}`);
     }
     return selected;
   }
@@ -419,7 +419,7 @@ function collectPublicationQualityAnnotations(options = {}) {
 
   for (const item of items) {
     const date = item.date;
-    const relBase = `content/newsroom/${date}`;
+    const relBase = `articles/content/newsroom/${date}`;
     const quality = readJsonOptional(root, `${relBase}/quality-report.json`);
     const factCheck = readJsonOptional(root, `${relBase}/fact-check-report.json`);
     const editor = readJsonOptional(root, `${relBase}/editor-draft.json`);

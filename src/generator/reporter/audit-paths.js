@@ -1,6 +1,6 @@
 const path = require('path');
 
-const AUDIT_DIRECTORY = 'content/audit';
+const AUDIT_DIRECTORY = 'articles/content/audit';
 const LEDGER_FILENAME = 'newsletter-provenance-ledger.md';
 const CLEANUP_REPORT_FILENAME = 'newsletter-quality-cleanup-report.md';
 const INVENTORY_FILENAME = 'newsletter-quality-inventory.md';

@@ -8,10 +8,12 @@ const {
   validatePublicNewsletterArtifacts
 } = require('../quality/public-newsletter');
 
+// 디스크 존재 검사용 경로(articles/ 아래). data/newsletters.json의 html/md 필드에 저장되는
+// 서빙 URL(newsletters/<date>/...)과는 구분된다.
 const REQUIRED_PUBLIC_NEWSLETTER_FILES = [
-  'newsletters/${date}/newsletter.md',
-  'newsletters/${date}/index.html',
-  'data/newsletters.json'
+  'articles/newsletters/${date}/newsletter.md',
+  'articles/newsletters/${date}/index.html',
+  'articles/data/newsletters.json'
 ];
 
 function readTextResult(filePath) {
@@ -42,8 +44,8 @@ function readJsonResult(filePath) {
 
 function publicNewsletterPaths(date) {
   return [
-    `newsletters/${date}/index.html`,
-    `newsletters/${date}/newsletter.md`
+    `articles/newsletters/${date}/index.html`,
+    `articles/newsletters/${date}/newsletter.md`
   ];
 }
 
@@ -52,7 +54,7 @@ function requiredPublicFiles(date) {
 }
 
 function newsletterIndexDateStatus(root, date) {
-  const dataPath = path.join(root, 'data', 'newsletters.json');
+  const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
   const result = readJsonResult(dataPath);
   if (!result.exists) {
     return { exists: false, hasDate: false, entry: null, pathsMatch: false, pathErrors: [], error: null };
@@ -75,10 +77,10 @@ function newsletterIndexDateStatus(root, date) {
   const expectedMd = `newsletters/${date}/newsletter.md`;
   const pathErrors = [];
   if (!entry) {
-    pathErrors.push(`data/newsletters.json missing date entry ${date}`);
+    pathErrors.push(`articles/data/newsletters.json missing date entry ${date}`);
   } else {
-    if (entry.html !== expectedHtml) pathErrors.push(`data/newsletters.json html path mismatch: ${entry.html || 'missing'}`);
-    if (entry.md !== expectedMd) pathErrors.push(`data/newsletters.json md path mismatch: ${entry.md || 'missing'}`);
+    if (entry.html !== expectedHtml) pathErrors.push(`articles/data/newsletters.json html path mismatch: ${entry.html || 'missing'}`);
+    if (entry.md !== expectedMd) pathErrors.push(`articles/data/newsletters.json md path mismatch: ${entry.md || 'missing'}`);
   }
   return {
     exists: true,
@@ -144,7 +146,7 @@ function publicNewsletterStructureStatus(root, date) {
   errors.push(...rootIndexContractErrors(root));
 
   if (newsletterMd?.nonEmpty && newsletterHtml?.nonEmpty) {
-    const editorResult = readJsonResult(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'));
+    const editorResult = readJsonResult(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'));
     const structural = validateRenderedIssueStructure({
       date,
       editor: editorResult.error ? null : editorResult.value,

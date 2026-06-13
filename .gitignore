@@ -19,18 +19,18 @@ npm-debug.log*
 /CLAUDE.md
 
 # DBG (debug_heavy) exact basenames — scoped to newsroom and collected-news
-content/newsroom/**/article-capsules.json
-content/newsroom/**/background-context.json
-content/newsroom/**/editor-draft.json
-content/newsroom/**/editor-draft.md
-content/newsroom/**/event-bundles.json
-content/newsroom/**/linked-evidence-report.json
-content/newsroom/**/recovery-prompt.md
-content/newsroom/**/reporter-candidates.json
-content/newsroom/**/shortlisted-candidates.json
+articles/content/newsroom/**/article-capsules.json
+articles/content/newsroom/**/background-context.json
+articles/content/newsroom/**/editor-draft.json
+articles/content/newsroom/**/editor-draft.md
+articles/content/newsroom/**/event-bundles.json
+articles/content/newsroom/**/linked-evidence-report.json
+articles/content/newsroom/**/recovery-prompt.md
+articles/content/newsroom/**/reporter-candidates.json
+articles/content/newsroom/**/shortlisted-candidates.json
 # collected-news pure-debug files (not pipeline-input handoff state)
-content/collected-news/**/gemini-candidates.json
+articles/content/collected-news/**/gemini-candidates.json
 
 # TRA (transient_attempt) patterns — scoped to newsroom
-content/newsroom/**/*-attempt-*.json
-content/newsroom/**/*-attempt-*.md
+articles/content/newsroom/**/*-attempt-*.json
+articles/content/newsroom/**/*-attempt-*.md

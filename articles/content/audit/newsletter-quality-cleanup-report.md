@@ -59,9 +59,9 @@
 
 | Date | Rewrite count | Diff artifacts |
 | --- | ---: | --- |
-| 2026-05-05 | 4 | `content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md`<br>`content/audit/historical-rewrite-diff/2026-05-05-claude-code-2-1-128-camera-hal-workflow-review.md`<br>`content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal-debug-build.md`<br>`content/audit/historical-rewrite-diff/2026-05-05-2026-5-android-camera-related-cve.md` |
-| 2026-05-07 | 2 | `content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md`<br>`content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-softisp.md` |
-| 2026-05-11 | 1 | `content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md` |
+| 2026-05-05 | 4 | `articles/content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md`<br>`articles/content/audit/historical-rewrite-diff/2026-05-05-claude-code-2-1-128-camera-hal-workflow-review.md`<br>`articles/content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal-debug-build.md`<br>`articles/content/audit/historical-rewrite-diff/2026-05-05-2026-5-android-camera-related-cve.md` |
+| 2026-05-07 | 2 | `articles/content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1.md`<br>`articles/content/audit/historical-rewrite-diff/2026-05-07-libcamera-v0-7-1-softisp.md` |
+| 2026-05-11 | 1 | `articles/content/audit/historical-rewrite-diff/2026-05-11-camerax-1-6-1-android-camera.md` |
 
 ## 검증 현황
 

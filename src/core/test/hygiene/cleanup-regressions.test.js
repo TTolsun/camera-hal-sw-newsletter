@@ -48,9 +48,9 @@ test('active docs reference existing scripts paths', () => {
 
 test('tests/fixtures does not embed generated-artifact YYYY-MM-DD paths', () => {
   const datePatterns = [
-    /content\/newsroom\/\d{4}-\d{2}-\d{2}/g,
-    /content\/collected-news\/\d{4}-\d{2}-\d{2}/g,
-    /newsletters\/\d{4}-\d{2}-\d{2}/g
+    /articles\/content\/newsroom\/\d{4}-\d{2}-\d{2}/g,
+    /articles\/content\/collected-news\/\d{4}-\d{2}-\d{2}/g,
+    /articles\/newsletters\/\d{4}-\d{2}-\d{2}/g
   ];
   const issues = [];
   function walk(dir) {

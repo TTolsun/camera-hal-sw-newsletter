@@ -151,9 +151,9 @@ function getChangedRepoVisibleArtifacts({ root = process.cwd(), date } = {}) {
         '--porcelain',
         '--untracked-files=all',
         '--',
-        `content/newsroom/${date}`,
-        `newsletters/${date}`,
-        'data/newsletters.json'
+        `articles/content/newsroom/${date}`,
+        `articles/newsletters/${date}`,
+        'articles/data/newsletters.json'
       ],
       {
         cwd: root,
@@ -185,13 +185,13 @@ function existingArtifacts(root, date, relativeFiles) {
 function artifactJsonReadResults(root, date, artifactNames) {
   return Object.fromEntries(artifactNames.map(name => [
     name,
-    readJsonIfExists(path.join(root, 'content', 'newsroom', date, name))
+    readJsonIfExists(path.join(root, 'articles', 'content', 'newsroom', date, name))
   ]));
 }
 
 function artifactReadResults(root, date, artifactNames) {
   return Object.fromEntries(artifactNames.map(name => {
-    const filePath = path.join(root, 'content', 'newsroom', date, name);
+    const filePath = path.join(root, 'articles', 'content', 'newsroom', date, name);
     if (name.endsWith('.json')) {
       return [name, readJsonIfExists(filePath)];
     }
@@ -215,9 +215,9 @@ function relevantChangedArtifacts(changedArtifacts, date) {
   return [...new Set((Array.isArray(changedArtifacts) ? changedArtifacts : [])
     .map(toRepoPath)
     .filter(filePath =>
-      filePath.startsWith(`content/newsroom/${date}/`) ||
-      filePath.startsWith(`newsletters/${date}/`) ||
-      filePath === 'data/newsletters.json'
+      filePath.startsWith(`articles/content/newsroom/${date}/`) ||
+      filePath.startsWith(`articles/newsletters/${date}/`) ||
+      filePath === 'articles/data/newsletters.json'
     ))].sort();
 }
 
@@ -226,7 +226,7 @@ function resolveReviewableArtifacts(options = {}) {
   const statusPath = options.statusPath || path.join(root, '.tmp', 'newsletter-generation-status.json');
   const status = options.status || readStatus(statusPath);
   const date = resolveDate({ root, status, explicitDate: options.date });
-  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
   const branch = options.branch || `newsletter/${date}`;
   const canonicalArtifacts = fs.existsSync(newsroomDir)
     ? CANONICAL_REVIEW_ARTIFACTS.filter(file => fs.existsSync(path.join(newsroomDir, file)))

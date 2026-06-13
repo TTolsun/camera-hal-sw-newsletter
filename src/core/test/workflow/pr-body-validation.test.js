@@ -49,9 +49,9 @@ function newsletterTemplateBody(overrides = {}) {
 
 ### Public artifact
 
-- [ ] \`newsletters/2026-05-08/newsletter.md\`를 작성했다.
-- [ ] \`newsletters/2026-05-08/index.html\`을 작성했다.
-- [ ] \`data/newsletters.json\`을 업데이트했다.
+- [ ] \`articles/newsletters/2026-05-08/newsletter.md\`를 작성했다.
+- [ ] \`articles/newsletters/2026-05-08/index.html\`을 작성했다.
+- [ ] \`articles/data/newsletters.json\`을 업데이트했다.
 - [ ] HTML에서 Archive 링크가 동작한다.
 - [ ] HTML에서 Markdown 원본 링크가 동작한다.
 
@@ -617,7 +617,7 @@ test('validate-pr-body accepts diagnostics-only wording and rejects misleading p
     }
   });
   const changedArtifacts = REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
-    .map(file => `content/newsroom/${date}/${file}`);
+    .map(file => `articles/content/newsroom/${date}/${file}`);
   const body = buildNewsroomPrBody({
     root,
     date,
@@ -670,11 +670,11 @@ test('validate-pr-body ignores policy definitions when detecting concrete public
     date: reviewDate,
     validateOutcome: 'failure',
     changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${reviewDate}/${file}`)
+      .map(file => `articles/content/newsroom/${reviewDate}/${file}`)
       .concat([
-        `newsletters/${reviewDate}/newsletter.md`,
-        `newsletters/${reviewDate}/index.html`,
-        'data/newsletters.json'
+        `articles/newsletters/${reviewDate}/newsletter.md`,
+        `articles/newsletters/${reviewDate}/index.html`,
+        'articles/data/newsletters.json'
       ])
   });
 
@@ -691,7 +691,7 @@ test('validate-pr-body ignores policy definitions when detecting concrete public
     date: diagnosticsDate,
     validateOutcome: 'failure',
     changedArtifacts: REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${diagnosticsDate}/${file}`)
+      .map(file => `articles/content/newsroom/${diagnosticsDate}/${file}`)
   });
 
   assert.match(diagnosticsBody, /review_publication_ready: false/);

@@ -5,7 +5,7 @@ const test = require('node:test');
 const vm = require('node:vm');
 
 const root = path.join(__dirname, '..', '..', '..', '..');
-const NewsletterArchive = require('../../../../assets/js/newsletter-archive');
+const NewsletterArchive = require('../../../../articles/assets/js/newsletter-archive');
 
 function extractHomepageScript() {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');

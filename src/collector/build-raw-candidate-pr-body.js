@@ -202,7 +202,7 @@ function buildRawCandidatePrBody({
       ]
     }),
     '- 원본 후보는 위 `RAW candidate artifact`에서 확인하세요.',
-    `- source change event report: content/source-events/${date}/source-change-events.json`,
+    `- source change event report: articles/content/source-events/${date}/source-change-events.json`,
     '- PR body에는 편집장 1차 판단에 필요한 요약만 남깁니다.',
     ''
   ].join('\n');

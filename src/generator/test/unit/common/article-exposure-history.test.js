@@ -30,8 +30,8 @@ test('missing exposure history starts as forward-only coverage', () => {
 
 test('exposure history lightly seeds from latest newsletters metadata only', () => {
   const root = tempRoot();
-  fs.mkdirSync(path.join(root, 'data'), { recursive: true });
-  fs.writeFileSync(path.join(root, 'data', 'newsletters.json'), JSON.stringify([
+  fs.mkdirSync(path.join(root, 'articles', 'data'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'articles', 'data', 'newsletters.json'), JSON.stringify([
     { date: '2026-05-20', title: 'Old', html: 'newsletters/2026-05-20/index.html' },
     { date: '2026-05-23', title: 'Latest', html: 'newsletters/2026-05-23/index.html' }
   ]), 'utf8');

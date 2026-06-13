@@ -83,7 +83,7 @@ function ledgerHeadingPattern(translations = LEDGER_HEADING_TRANSLATIONS) {
 const LEDGER_HEADING_PATTERN = ledgerHeadingPattern();
 
 const RETENTION_SCOPE = 'same_date_diagnostics_only';
-const ARCHIVE_SIDECAR_PATH = 'content/audit/historical-archive-status.json';
+const ARCHIVE_SIDECAR_PATH = 'articles/content/audit/historical-archive-status.json';
 const ARCHIVE_LEDGER_PATH = AUDIT_LEDGER_PATH;
 const ARCHIVE_CURRENT_CONTEXTS = new Set([
   'current_generation_archive_review',
@@ -136,7 +136,7 @@ function publicStructureStatus(root, date) {
   // Public files may remain on disk for forensic/debug purposes.
   // This strict structure status only decides whether they are allowed to be homepage/archive visible.
   const structure = publicNewsletterStructureStatus(root, date);
-  const publicFiles = structure.statuses.filter(status => status.path.startsWith(`newsletters/${date}/`));
+  const publicFiles = structure.statuses.filter(status => status.path.startsWith(`articles/newsletters/${date}/`));
   return {
     ...structure,
     publicFiles,
@@ -145,7 +145,7 @@ function publicStructureStatus(root, date) {
 }
 
 function retentionMetadataPath(root, date) {
-  return path.join(root, 'content', 'newsroom', date, 'public-retention.json');
+  return path.join(root, 'articles', 'content', 'newsroom', date, 'public-retention.json');
 }
 
 function validateRetentionMetadata({ root = process.cwd(), date } = {}) {
@@ -160,7 +160,7 @@ function validateRetentionMetadata({ root = process.cwd(), date } = {}) {
       errors: [],
       error: '',
       expectedArtifacts,
-      path: `content/newsroom/${date}/public-retention.json`
+      path: `articles/content/newsroom/${date}/public-retention.json`
     };
   }
   const errors = [];
@@ -233,7 +233,7 @@ function validateRetentionMetadata({ root = process.cwd(), date } = {}) {
     errors,
     error: errors.join('; '),
     expectedArtifacts,
-    path: `content/newsroom/${date}/public-retention.json`
+    path: `articles/content/newsroom/${date}/public-retention.json`
   };
 }
 
@@ -275,7 +275,7 @@ function runModeForPublicState(publicState) {
 }
 
 function removeNewsletterIndexEntry(root, date) {
-  const dataPath = path.join(root, 'data', 'newsletters.json');
+  const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
   const result = readJsonResult(dataPath);
   if (!result.exists || result.error || !Array.isArray(result.value)) {
     return { changed: false, error: result.error ? result.error.message : 'data/newsletters.json is missing or invalid' };
@@ -596,8 +596,8 @@ function syncArchivePublicationState({ root, date, publicState }) {
 function buildRemediationMessage(date) {
   return [
     `Remediation for ${date}:`,
-    `- Remove the ${date} entry from data/newsletters.json, or`,
-    `- Add valid content/newsroom/${date}/public-retention.json with:`,
+    `- Remove the ${date} entry from articles/data/newsletters.json, or`,
+    `- Add valid articles/content/newsroom/${date}/public-retention.json with:`,
     '  retain_existing_public=true',
     `  date=${date}`,
     `  scope=${RETENTION_SCOPE}`,
@@ -605,8 +605,8 @@ function buildRemediationMessage(date) {
     '  approved_by',
     '  approved_at=YYYY-MM-DD',
     '  retained_public_artifacts=[',
-    `    "newsletters/${date}/index.html",`,
-    `    "newsletters/${date}/newsletter.md"`,
+    `    "articles/newsletters/${date}/index.html",`,
+    `    "articles/newsletters/${date}/newsletter.md"`,
     '  ]'
   ].join('\n');
 }
@@ -694,7 +694,7 @@ function reconcilePublicState(options = {}) {
     const result = removeNewsletterIndexEntry(root, date);
     if (result.error) {
       throw new Error(
-        `Failed to remove ${date} from data/newsletters.json; reconciliation aborted before status write. ${result.error}`
+        `Failed to remove ${date} from articles/data/newsletters.json; reconciliation aborted before status write. ${result.error}`
       );
     }
     dataIndexChanged = result.changed;
@@ -725,13 +725,13 @@ function reconcilePublicState(options = {}) {
   };
 
   const changedArtifacts = uniqueArtifacts(options.changedArtifacts);
-  const repoVisibleStatusPath = `content/newsroom/${date}/generation-status.json`;
+  const repoVisibleStatusPath = `articles/content/newsroom/${date}/generation-status.json`;
   const archiveSync = options.write !== false
     ? syncArchivePublicationState({ root, date, publicState })
     : { changedArtifacts: [] };
   const repoVisibleChangedArtifacts = uniqueArtifacts(changedArtifacts.concat(
     repoVisibleStatusPath,
-    dataIndexChanged ? 'data/newsletters.json' : [],
+    dataIndexChanged ? 'articles/data/newsletters.json' : [],
     archiveSync.changedArtifacts
   ));
 

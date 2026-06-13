@@ -23,13 +23,13 @@ const {
 } = require('../../../core/test/helpers/fs');
 
 function writePublicIssue(root, date, text = '') {
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), [
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), [
     '# Camera HAL / SW Newsletter',
     '',
     text || 'Historical public newsletter body.',
     ''
   ].join('\n'));
-  writeText(path.join(root, 'newsletters', date, 'index.html'), [
+  writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), [
     '<!doctype html>',
     '<html><body>',
     text || 'Historical public newsletter body.',
@@ -38,7 +38,7 @@ function writePublicIssue(root, date, text = '') {
 }
 
 function writeNewsroom(root, date) {
-  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), {
     status: 'PASS',
     score: 90,
     threshold: 85,
@@ -84,7 +84,7 @@ function writeArchiveDocs(root, datesOrOptions) {
 }
 
 function writeNewsletterIndex(root, dates) {
-  writeJson(path.join(root, 'data', 'newsletters.json'), dates.map(date => ({
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), dates.map(date => ({
     date,
     title: `Newsletter ${date}`,
     summary: 'Summary',
@@ -95,7 +95,7 @@ function writeNewsletterIndex(root, dates) {
 }
 
 function writeStatus(root, entries) {
-  writeJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'), entries);
+  writeJson(path.join(root, 'articles', 'content', 'audit', 'historical-archive-status.json'), entries);
 }
 
 function statusEntry(date, overrides = {}) {
@@ -176,7 +176,7 @@ test('historical archive validator rejects unclassified public artifacts', () =>
 
   const result = validateHistoricalArchive({ root });
   assert.equal(result.ok, false);
-  assert.match(result.errors.join('\n'), /Public newsletter artifact 2026-05-06 has no content\/audit\/historical-archive-status\.json status entry/);
+  assert.match(result.errors.join('\n'), /Public newsletter artifact 2026-05-06 has no articles\/content\/audit\/historical-archive-status\.json status entry/);
 });
 
 test('historical archive validator requires sidecar entries to be referenced by the ledger', () => {
@@ -296,8 +296,8 @@ test('historical archive validator rejects removed archives exposed through publ
 
   const result = validateHistoricalArchive({ root });
   assert.equal(result.ok, false);
-  assert.match(result.errors.join('\n'), /Removed archive 2026-05-05 must not remain in data\/newsletters\.json/);
-  assert.match(result.errors.join('\n'), /Removed archive 2026-05-05 still has newsletters\/2026-05-05 artifacts/);
+  assert.match(result.errors.join('\n'), /Removed archive 2026-05-05 must not remain in articles\/data\/newsletters\.json/);
+  assert.match(result.errors.join('\n'), /Removed archive 2026-05-05 still has articles\/newsletters\/2026-05-05 artifacts/);
 });
 
 test('historical archive validator rejects fake seed evidence provenance in pre-185 public articles', () => {
@@ -341,13 +341,13 @@ test('historical archive validator requires material rewrite diff slug to match 
   writePublicIssue(root, date, '## 2. libcamera v0.7.1 release\n\nHistorical article body.');
   writeArchiveDocs(root, [date]);
   writeText(
-    path.join(root, 'content', 'audit', 'historical-rewrite-diff', '2026-05-05-unrelated-article.md'),
+    path.join(root, 'articles', 'content', 'audit', 'historical-rewrite-diff', '2026-05-05-unrelated-article.md'),
     '# Rewrite diff\n'
   );
   writeStatus(root, [
     statusEntry(date, {
       rewrite_status: 'material_rewrite',
-      material_rewrite_diff: 'content/audit/historical-rewrite-diff/2026-05-05-unrelated-article.md'
+      material_rewrite_diff: 'articles/content/audit/historical-rewrite-diff/2026-05-05-unrelated-article.md'
     })
   ]);
 
@@ -360,7 +360,7 @@ test('historical archive validator requires material rewrite diff date to match 
   const root = tempRoot('historical-archive-material-rewrite-date-');
   const rewriteDate = '2026-05-05';
   const wrongEntryDate = '2026-05-19';
-  const diffPath = 'content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md';
+  const diffPath = 'articles/content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md';
   writeNewsletterIndex(root, [rewriteDate, wrongEntryDate]);
   writePublicIssue(root, rewriteDate, '## 2. firebase ai logic camera hal npu gpu\n\nHistorical article body.');
   writePublicIssue(root, wrongEntryDate);
@@ -382,8 +382,8 @@ test('historical archive validator requires material rewrite diff date to match 
 test('historical archive validator accepts material rewrite diff arrays', () => {
   const root = tempRoot('historical-archive-material-rewrite-array-');
   const date = '2026-05-05';
-  const firstDiffPath = 'content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md';
-  const secondDiffPath = 'content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal.md';
+  const firstDiffPath = 'articles/content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md';
+  const secondDiffPath = 'articles/content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal.md';
   writeNewsletterIndex(root, [date]);
   writePublicIssue(root, date, [
     '## 2. firebase ai logic camera hal npu gpu',
@@ -415,8 +415,8 @@ test('historical archive validator accepts material rewrite diff arrays', () => 
 test('historical archive validator requires legacy material rewrite diff to be included in diff arrays', () => {
   const root = tempRoot('historical-archive-material-rewrite-array-legacy-');
   const date = '2026-05-05';
-  const legacyDiffPath = 'content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md';
-  const arrayDiffPath = 'content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal.md';
+  const legacyDiffPath = 'articles/content/audit/historical-rewrite-diff/2026-05-05-firebase-ai-logic-camera-hal-npu-gpu.md';
+  const arrayDiffPath = 'articles/content/audit/historical-rewrite-diff/2026-05-05-c-26-assert-camera-hal.md';
   writeNewsletterIndex(root, [date]);
   writePublicIssue(root, date, [
     '## 2. firebase ai logic camera hal npu gpu',

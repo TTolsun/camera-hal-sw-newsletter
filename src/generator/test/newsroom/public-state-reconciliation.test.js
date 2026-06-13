@@ -85,9 +85,9 @@ function publicIssue(date, overrides = {}) {
 
 function writePublicArtifacts(root, date, overrides = {}) {
   const issue = publicIssue(date, overrides.issue || {});
-  writeText(path.join(root, 'newsletters', date, 'index.html'), overrides.html || buildHtml(issue));
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), overrides.md || buildMarkdown(issue));
-  writeJson(path.join(root, 'data', 'newsletters.json'), overrides.items || [{
+  writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), overrides.html || buildHtml(issue));
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), overrides.md || buildMarkdown(issue));
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), overrides.items || [{
     date,
     title: `Issue ${date}`,
     summary: 'Summary',
@@ -99,12 +99,12 @@ function writePublicArtifacts(root, date, overrides = {}) {
 }
 
 function writeStatus(root, date, status) {
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), { date, ...status });
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), { date, ...status });
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), { date, ...status });
 }
 
 function writeRetention(root, date, overrides = {}) {
-  writeJson(path.join(root, 'content', 'newsroom', date, 'public-retention.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'public-retention.json'), {
     retain_existing_public: true,
     date,
     scope: 'same_date_diagnostics_only',
@@ -112,15 +112,15 @@ function writeRetention(root, date, overrides = {}) {
     approved_by: 'editor',
     approved_at: date,
     retained_public_artifacts: [
-      `newsletters/${date}/index.html`,
-      `newsletters/${date}/newsletter.md`
+      `articles/newsletters/${date}/index.html`,
+      `articles/newsletters/${date}/newsletter.md`
     ],
     ...overrides
   });
 }
 
 function readNewsletters(root) {
-  return readJson(path.join(root, 'data', 'newsletters.json'));
+  return readJson(path.join(root, 'articles', 'data', 'newsletters.json'));
 }
 
 function readFile(root, relativePath) {
@@ -129,7 +129,7 @@ function readFile(root, relativePath) {
 
 function statusPaths(date) {
   return {
-    canonical: `content/newsroom/${date}/generation-status.json`,
+    canonical: `articles/content/newsroom/${date}/generation-status.json`,
     tmp: '.tmp/newsletter-generation-status.json'
   };
 }
@@ -148,7 +148,7 @@ function archiveSidecarEntry(date, context = 'review_only_publication', override
 }
 
 function writeArchiveSidecar(root, entries = []) {
-  writeJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'), entries);
+  writeJson(path.join(root, 'articles', 'content', 'audit', 'historical-archive-status.json'), entries);
 }
 
 function archiveLedgerRow(date, context = 'review_only_publication', overrides = {}) {
@@ -310,10 +310,10 @@ test('review-only public reconciliation syncs archive sidecar and provenance led
 
   const result = reconcilePublicState({ root, date, status, write: true });
 
-  const sidecar = readJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'));
+  const sidecar = readJson(path.join(root, 'articles', 'content', 'audit', 'historical-archive-status.json'));
   assert.deepEqual(sidecar, [archiveSidecarEntry(date)]);
   assert.match(readFile(root, AUDIT_LEDGER_PATH), /review_only_publication/);
-  assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), true);
+  assert.equal(result.changedArtifacts.includes('articles/content/audit/historical-archive-status.json'), true);
   assert.equal(result.changedArtifacts.includes(AUDIT_LEDGER_PATH), true);
 });
 
@@ -332,13 +332,13 @@ test('publish-ready public reconciliation syncs current-generation archive state
 
   const result = reconcilePublicState({ root, date, status, write: true });
 
-  const sidecar = readJson(path.join(root, 'content', 'audit', 'historical-archive-status.json'));
+  const sidecar = readJson(path.join(root, 'articles', 'content', 'audit', 'historical-archive-status.json'));
   assert.deepEqual(sidecar, [archiveSidecarEntry(date, 'current_generation_archive_review')]);
   assert.match(
     readFile(root, AUDIT_LEDGER_PATH),
     /current generated public artifact; no historical provenance backfill required/
   );
-  assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), true);
+  assert.equal(result.changedArtifacts.includes('articles/content/audit/historical-archive-status.json'), true);
   assert.equal(result.changedArtifacts.includes(AUDIT_LEDGER_PATH), true);
 });
 
@@ -355,7 +355,7 @@ test('archive sync changedArtifacts distinguish sidecar-only, ledger-only, and n
       status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
       write: true
     });
-    assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), true);
+    assert.equal(result.changedArtifacts.includes('articles/content/audit/historical-archive-status.json'), true);
     assert.equal(result.changedArtifacts.includes(AUDIT_LEDGER_PATH), false);
   }
 
@@ -370,7 +370,7 @@ test('archive sync changedArtifacts distinguish sidecar-only, ledger-only, and n
       status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
       write: true
     });
-    assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), false);
+    assert.equal(result.changedArtifacts.includes('articles/content/audit/historical-archive-status.json'), false);
     assert.equal(result.changedArtifacts.includes(AUDIT_LEDGER_PATH), true);
   }
 
@@ -385,7 +385,7 @@ test('archive sync changedArtifacts distinguish sidecar-only, ledger-only, and n
       status: { date, final_publish_ready: false, public_newsletter_ready: true, review_publication_ready: true },
       write: true
     });
-    assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), false);
+    assert.equal(result.changedArtifacts.includes('articles/content/audit/historical-archive-status.json'), false);
     assert.equal(result.changedArtifacts.includes(AUDIT_LEDGER_PATH), false);
   }
 });
@@ -399,8 +399,8 @@ test('diagnostics-only reconciliation does not create listed archive sidecar', (
 
   const result = reconcilePublicState({ root, date, status, write: true });
 
-  assert.equal(fs.existsSync(path.join(root, 'content', 'audit', 'historical-archive-status.json')), false);
-  assert.equal(result.changedArtifacts.includes('content/audit/historical-archive-status.json'), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'audit', 'historical-archive-status.json')), false);
+  assert.equal(result.changedArtifacts.includes('articles/content/audit/historical-archive-status.json'), false);
 });
 
 test('archive reconciliation rejects duplicate ledger rows and missing table marker', () => {
@@ -545,19 +545,19 @@ test('diagnostics-only reconciliation removes only data index entry by default',
     root,
     date,
     status,
-    changedArtifacts: [`content/newsroom/${date}/selection-report.json`],
+    changedArtifacts: [`articles/content/newsroom/${date}/selection-report.json`],
     write: true
   });
 
   assert.equal(readNewsletters(root).some(item => item.date === date), false);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'index.html')), true);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'newsletter.md')), true);
   assert.equal(result.outputs.effective_homepage_visible, 'false');
   assert.equal(result.outputs.public_artifact_policy, 'hide_existing_public_artifact_after_latest_diagnostics_only');
-  assert.equal(result.changedArtifacts.includes('data/newsletters.json'), true);
-  assert.equal(result.changedArtifacts.includes(`content/newsroom/${date}/generation-status.json`), true);
+  assert.equal(result.changedArtifacts.includes('articles/data/newsletters.json'), true);
+  assert.equal(result.changedArtifacts.includes(`articles/content/newsroom/${date}/generation-status.json`), true);
 
-  const canonicalStatus = readJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'));
+  const canonicalStatus = readJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'));
   const tmpStatus = readJson(path.join(root, '.tmp', 'newsletter-generation-status.json'));
   assert.deepEqual(canonicalStatus, tmpStatus);
   assert.equal(canonicalStatus.effective_homepage_visible, false);
@@ -590,7 +590,7 @@ test('valid retention with missing file or hash mismatch is not visible', () => 
   const date = '2026-05-18';
   writePublicArtifacts(root, date);
   writeRetention(root, date);
-  fs.rmSync(path.join(root, 'newsletters', date, 'newsletter.md'));
+  fs.rmSync(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'));
 
   let retention = validateRetentionMetadata({ root, date });
   assert.equal(retention.valid, false);
@@ -599,7 +599,7 @@ test('valid retention with missing file or hash mismatch is not visible', () => 
   writePublicArtifacts(root, date);
   writeRetention(root, date, {
     retained_public_artifact_hashes: {
-      [`newsletters/${date}/index.html`]: `sha256:${'0'.repeat(64)}`
+      [`articles/newsletters/${date}/index.html`]: `sha256:${'0'.repeat(64)}`
     }
   });
   retention = validateRetentionMetadata({ root, date });
@@ -615,7 +615,7 @@ test('reconcilePublicState write=false does not mutate public index or status fi
   const status = diagnosticsStatus(date);
   writeStatus(root, date, status);
   const before = {
-    newsletters: readFile(root, 'data/newsletters.json'),
+    newsletters: readFile(root, 'articles/data/newsletters.json'),
     canonicalStatus: readFile(root, paths.canonical),
     tmpStatus: readFile(root, paths.tmp)
   };
@@ -623,7 +623,7 @@ test('reconcilePublicState write=false does not mutate public index or status fi
   const result = reconcilePublicState({ root, date, status, write: false });
 
   assert.equal(result.outputs.effective_homepage_visible, 'false');
-  assert.equal(readFile(root, 'data/newsletters.json'), before.newsletters);
+  assert.equal(readFile(root, 'articles/data/newsletters.json'), before.newsletters);
   assert.equal(readFile(root, paths.canonical), before.canonicalStatus);
   assert.equal(readFile(root, paths.tmp), before.tmpStatus);
 });
@@ -638,7 +638,7 @@ test('reconcilePublicState is idempotent for diagnostics-only index removal', ()
 
   reconcilePublicState({ root, date, status, write: true });
   const afterFirst = {
-    newsletters: readFile(root, 'data/newsletters.json'),
+    newsletters: readFile(root, 'articles/data/newsletters.json'),
     canonicalStatus: readFile(root, paths.canonical),
     tmpStatus: readFile(root, paths.tmp)
   };
@@ -649,7 +649,7 @@ test('reconcilePublicState is idempotent for diagnostics-only index removal', ()
     write: true
   });
 
-  assert.equal(readFile(root, 'data/newsletters.json'), afterFirst.newsletters);
+  assert.equal(readFile(root, 'articles/data/newsletters.json'), afterFirst.newsletters);
   assert.equal(readFile(root, paths.canonical), afterFirst.canonicalStatus);
   assert.equal(readFile(root, paths.tmp), afterFirst.tmpStatus);
   assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json.tmp')), false);
@@ -666,7 +666,7 @@ test('reconciliation overrides stale status visibility fields', () => {
   writeStatus(root, date, status);
 
   const result = reconcilePublicState({ root, date, status, write: true });
-  const canonicalStatus = readJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'));
+  const canonicalStatus = readJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'));
 
   assert.equal(result.outputs.effective_homepage_visible, 'false');
   assert.equal(result.outputs.homepage_visible_after_merge, 'false');
@@ -681,7 +681,7 @@ test('reconcilePublicState throws before status write when data index is missing
   writePublicArtifacts(root, date);
   const status = diagnosticsStatus(date);
   writeStatus(root, date, status);
-  fs.rmSync(path.join(root, 'data', 'newsletters.json'));
+  fs.rmSync(path.join(root, 'articles', 'data', 'newsletters.json'));
   const before = {
     canonicalStatus: readFile(root, paths.canonical),
     tmpStatus: readFile(root, paths.tmp)
@@ -689,15 +689,15 @@ test('reconcilePublicState throws before status write when data index is missing
 
   assert.throws(
     () => reconcilePublicState({ root, date, status, write: true }),
-    /Failed to remove 2026-05-18 from data\/newsletters\.json; reconciliation aborted before status write\./
+    /Failed to remove 2026-05-18 from articles\/data\/newsletters\.json; reconciliation aborted before status write\./
   );
   assert.equal(readFile(root, paths.canonical), before.canonicalStatus);
   assert.equal(readFile(root, paths.tmp), before.tmpStatus);
 
-  writeText(path.join(root, 'data', 'newsletters.json'), '{ invalid json');
+  writeText(path.join(root, 'articles', 'data', 'newsletters.json'), '{ invalid json');
   assert.throws(
     () => reconcilePublicState({ root, date, status, write: true }),
-    /Failed to remove 2026-05-18 from data\/newsletters\.json; reconciliation aborted before status write\./
+    /Failed to remove 2026-05-18 from articles\/data\/newsletters\.json; reconciliation aborted before status write\./
   );
   assert.equal(readFile(root, paths.canonical), before.canonicalStatus);
   assert.equal(readFile(root, paths.tmp), before.tmpStatus);

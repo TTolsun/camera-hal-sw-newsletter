@@ -16,7 +16,7 @@ const {
 } = require('../reporter/validation-targets');
 
 const root = process.cwd();
-const dataPath = path.join(root, 'data', 'newsletters.json');
+const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const generationStatusPath = path.join(root, '.tmp', 'newsletter-generation-status.json');
 const errors = [];

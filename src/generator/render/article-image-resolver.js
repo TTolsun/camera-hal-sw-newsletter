@@ -78,18 +78,19 @@ function fallbackAssetForSection(section = {}) {
   return FALLBACKS[fallbackKindForSection(section)] || FALLBACKS.default;
 }
 
+// 서빙 URL 기준의 assets/ 경로는 디스크상으로 articles/assets/ 아래에 있다(#262 phase 6).
 function repoLocalPath(root, src) {
   const normalized = normalizePath(src);
   const withoutIssuePrefix = normalized.replace(/^(\.\.\/){2}/, '');
   if (!withoutIssuePrefix.startsWith('assets/')) return '';
-  const absPath = path.resolve(root, withoutIssuePrefix);
+  const absPath = path.resolve(root, 'articles', withoutIssuePrefix);
   const rootPath = path.resolve(root);
   if (absPath !== rootPath && !absPath.startsWith(`${rootPath}${path.sep}`)) return '';
   return absPath;
 }
 
 function fallbackExists(root, assetPath) {
-  return fs.existsSync(path.resolve(root, assetPath));
+  return fs.existsSync(path.resolve(root, 'articles', assetPath));
 }
 
 function localImageExists(root, src) {

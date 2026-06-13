@@ -732,7 +732,7 @@ test('targeted repair rejects reordered locked sections around a middle replacem
 
 test('invalid repair output writes reviewable fallback without replacing last valid editor draft', () => {
   const root = tempRoot();
-  const newsroomDir = path.join(root, 'content', 'newsroom', DATE);
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', DATE);
   const sections = [
     policySection('CameraX release', 'https://example.com/camerax'),
     policySection('Driver pipeline update', 'https://example.com/driver', 'camera_driver_image_pipeline'),

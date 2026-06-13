@@ -67,7 +67,7 @@ function weeklyArticleImages(sections = []) {
 }
 
 function loadExistingWeeklyIssue(root, weeklyKey) {
-  const issuePath = path.join(root, 'newsletters', weeklyKey, 'issue.json');
+  const issuePath = path.join(root, 'articles', 'newsletters', weeklyKey, 'issue.json');
   if (!fs.existsSync(issuePath)) return null;
   try {
     return JSON.parse(fs.readFileSync(issuePath, 'utf8'));
@@ -100,8 +100,8 @@ function readWeeklyIndex(dataPath) {
 }
 
 function upsertWeeklyIndex(root, entry) {
-  const relPath = 'data/newsletters-weekly.json';
-  const dataPath = path.join(root, 'data', 'newsletters-weekly.json');
+  const relPath = 'articles/data/newsletters-weekly.json';
+  const dataPath = path.join(root, 'articles', 'data', 'newsletters-weekly.json');
   const updated = readWeeklyIndex(dataPath)
     .filter(item => item && item.weeklyKey !== entry.weeklyKey)
     .concat(entry)
@@ -167,23 +167,28 @@ function syncWeeklyArticleImages({ root = process.cwd(), date, sections } = {}) 
   let currentSections = ensureArray(issue.sections);
   if (result.patchedSectionCount > 0) {
     const page = buildWeeklyNewsletterPage(issue, { weeklyKey });
-    const dir = path.join(root, 'newsletters', weeklyKey);
+    const dir = path.join(root, 'articles', 'newsletters', weeklyKey);
     fs.writeFileSync(path.join(dir, 'index.html'), page.html, 'utf8');
     fs.writeFileSync(path.join(dir, 'newsletter.md'), page.markdown, 'utf8');
     fs.writeFileSync(path.join(dir, 'issue.json'), `${JSON.stringify(page.issue, null, 2)}\n`, 'utf8');
     currentSections = ensureArray(page.issue.sections);
-    result.files.push(page.indexRoute, page.markdownRoute, `newsletters/${weeklyKey}/issue.json`);
+    // result.files는 changedArtifacts에 쓰이는 디스크-상대 경로(articles/ 아래)다.
+    result.files.push(
+      `articles/newsletters/${weeklyKey}/index.html`,
+      `articles/newsletters/${weeklyKey}/newsletter.md`,
+      `articles/newsletters/${weeklyKey}/issue.json`
+    );
   }
 
   const articleImages = weeklyArticleImages(currentSections);
-  const dataPath = path.join(root, 'data', 'newsletters-weekly.json');
+  const dataPath = path.join(root, 'articles', 'data', 'newsletters-weekly.json');
   const index = readWeeklyIndex(dataPath);
   const entry = index.find(item => item && item.weeklyKey === weeklyKey);
   if (entry && JSON.stringify(ensureArray(entry.article_images)) !== JSON.stringify(articleImages)) {
     entry.article_images = articleImages;
     fs.writeFileSync(dataPath, `${JSON.stringify(index, null, 2)}\n`, 'utf8');
     result.articleImagesUpdated = true;
-    result.files.push('data/newsletters-weekly.json');
+    result.files.push('articles/data/newsletters-weekly.json');
   }
 
   result.synced = true;
@@ -219,7 +224,7 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
   const page = buildWeeklyNewsletterPage(mergedDraft, { date });
   page.issue.tags = mergedTags;
 
-  const dir = path.join(root, 'newsletters', weeklyKey);
+  const dir = path.join(root, 'articles', 'newsletters', weeklyKey);
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), page.html, 'utf8');
   fs.writeFileSync(path.join(dir, 'newsletter.md'), page.markdown, 'utf8');
@@ -254,9 +259,10 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
     mergeWarnings: resolved.warnings,
     mergeDecisions: resolved.decisions,
     files: [
-      page.indexRoute,
-      page.markdownRoute,
-      `newsletters/${weeklyKey}/issue.json`,
+      // changedArtifacts에 쓰이는 디스크-상대 경로(articles/ 아래).
+      `articles/newsletters/${weeklyKey}/index.html`,
+      `articles/newsletters/${weeklyKey}/newsletter.md`,
+      `articles/newsletters/${weeklyKey}/issue.json`,
       indexFile
     ]
   };

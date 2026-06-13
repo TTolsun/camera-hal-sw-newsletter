@@ -33,15 +33,15 @@ test('retentionCommitAllowlist includes the weekly artifacts when they are prese
   const root = tempRoot();
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft(), tags: ['Camera HAL'] });
   const allow = retentionCommitAllowlist({ root, date: '2026-06-04', runContext: { publicOutputExpected: true } });
-  assert.ok(allow.includes('newsletters/2026-W23/index.html'), allow.join('\n'));
-  assert.ok(allow.includes('newsletters/2026-W23/newsletter.md'));
-  assert.ok(allow.includes('newsletters/2026-W23/issue.json'));
-  assert.ok(allow.includes('data/newsletters-weekly.json'));
+  assert.ok(allow.includes('articles/newsletters/2026-W23/index.html'), allow.join('\n'));
+  assert.ok(allow.includes('articles/newsletters/2026-W23/newsletter.md'));
+  assert.ok(allow.includes('articles/newsletters/2026-W23/issue.json'));
+  assert.ok(allow.includes('articles/data/newsletters-weekly.json'));
 });
 
 test('retentionCommitAllowlist omits the weekly artifacts when they are absent', async () => {
   const root = tempRoot();
   const allow = retentionCommitAllowlist({ root, date: '2026-06-04', runContext: { publicOutputExpected: true } });
-  assert.ok(!allow.some(p => p.startsWith('newsletters/2026-W23/')), allow.join('\n'));
-  assert.ok(!allow.includes('data/newsletters-weekly.json'));
+  assert.ok(!allow.some(p => p.startsWith('articles/newsletters/2026-W23/')), allow.join('\n'));
+  assert.ok(!allow.includes('articles/data/newsletters-weekly.json'));
 });

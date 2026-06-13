@@ -17,7 +17,7 @@ function tempRoot(prefix) {
 function writeFallbacks(root) {
   const kinds = ['ai', 'android', 'cpp', 'newsletter-default'];
   for (const kind of kinds) {
-    const filePath = path.join(root, 'assets', 'images', 'fallback', `${kind}.svg`);
+    const filePath = path.join(root, 'articles', 'assets', 'images', 'fallback', `${kind}.svg`);
     fs.mkdirSync(path.dirname(filePath), { recursive: true });
     fs.writeFileSync(filePath, `<svg xmlns="http://www.w3.org/2000/svg"><text>${kind}</text></svg>`, 'utf8');
   }

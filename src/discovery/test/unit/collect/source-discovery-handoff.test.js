@@ -8,7 +8,7 @@ const {
   sourceDiscoveryHandoff
 } = require('../../../gemini-source-discovery-boundary');
 
-const MERGED_ARTIFACT = 'content/collected-news/2026-06-03/merged-candidates.json';
+const MERGED_ARTIFACT = 'articles/content/collected-news/2026-06-03/merged-candidates.json';
 
 function makeStats(overrides = {}) {
   return {

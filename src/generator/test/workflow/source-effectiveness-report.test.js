@@ -271,12 +271,12 @@ test('source effectiveness report builds for candidate shortage review-only with
   const date = fixture.date;
 
   writeJson(path.join(root, 'src', 'core', 'data', 'news-sources.json'), fixture.sourceRegistry);
-  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), fixture.collectedCandidates);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), fixture.shortlistReport);
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'candidates.json'), fixture.collectedCandidates);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), fixture.shortlistReport);
 
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), false);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), false);
-  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'newsletter.md')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'index.html')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'data', 'newsletters.json')), false);
 
   const result = writeSourceEffectivenessArtifacts({ root, date });
   assert.equal(fs.existsSync(result.jsonPath), true);
@@ -309,10 +309,10 @@ test('JSON and Markdown report output is deterministic', () => {
   assert.ok(first.summary.source_quality_status_summary.unknown >= 1);
   assert.ok(first.summary.legacy_source_quality_warning_count >= 1);
   assert.deepEqual(first.inputs.optional_artifacts, {
-    reporter_candidates: 'content/newsroom/2026-05-06/reporter-candidates.json',
-    editor_draft: 'content/newsroom/2026-05-06/editor-draft.json',
-    fact_check_report: 'content/newsroom/2026-05-06/fact-check-report.json',
-    quality_report: 'content/newsroom/2026-05-06/quality-report.json'
+    reporter_candidates: 'articles/content/newsroom/2026-05-06/reporter-candidates.json',
+    editor_draft: 'articles/content/newsroom/2026-05-06/editor-draft.json',
+    fact_check_report: 'articles/content/newsroom/2026-05-06/fact-check-report.json',
+    quality_report: 'articles/content/newsroom/2026-05-06/quality-report.json'
   });
   assert.match(firstMarkdown, /- Unregistered candidates: 1/);
   assert.match(firstMarkdown, /## Source Quality Summary/);

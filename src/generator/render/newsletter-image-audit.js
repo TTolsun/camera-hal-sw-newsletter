@@ -705,13 +705,13 @@ function publishTarget(issue = {}, status = {}) {
 }
 
 function reportPaths(root, date) {
-  const dateDir = path.join(root, 'content', 'newsroom', date);
+  const dateDir = path.join(root, 'articles', 'content', 'newsroom', date);
   return {
     dateDir,
     editorPath: path.join(dateDir, 'editor-draft.json'),
     editorMarkdownPath: path.join(dateDir, 'editor-draft.md'),
-    newsletterMarkdownPath: path.join(root, 'newsletters', date, 'newsletter.md'),
-    newsletterHtmlPath: path.join(root, 'newsletters', date, 'index.html'),
+    newsletterMarkdownPath: path.join(root, 'articles', 'newsletters', date, 'newsletter.md'),
+    newsletterHtmlPath: path.join(root, 'articles', 'newsletters', date, 'index.html'),
     generationStatusPath: path.join(dateDir, 'generation-status.json'),
     jsonPath: path.join(dateDir, 'image-audit-report.json'),
     markdownPath: path.join(dateDir, 'image-audit-report.md')
@@ -728,7 +728,7 @@ async function buildNewsletterImageAuditReport(options = {}) {
   const status = readJsonIfExists(paths.generationStatusPath) || {};
   const publicArtifactScope = isRenderedPublicIssueScope(editorIssue || {}, status);
   const issue = editorIssue;
-  const sourceOfTruth = `content/newsroom/${date}/editor-draft.json`;
+  const sourceOfTruth = `articles/content/newsroom/${date}/editor-draft.json`;
   const warnings = [];
   const errors = [];
 
@@ -976,7 +976,7 @@ async function writeNewsletterImageAuditArtifacts(options = {}) {
 }
 
 function listNewsletterDates(root = process.cwd()) {
-  const newsroomRoot = path.join(root, 'content', 'newsroom');
+  const newsroomRoot = path.join(root, 'articles', 'content', 'newsroom');
   if (!fs.existsSync(newsroomRoot)) return [];
   return fs.readdirSync(newsroomRoot, { withFileTypes: true })
     .filter(item => item.isDirectory() && /^\d{4}-\d{2}-\d{2}$/.test(item.name))
@@ -1023,7 +1023,7 @@ function aggregateReports(root, reports) {
       selected_image_not_in_candidates_count: report.summary.selected_image_not_in_candidates_count,
       selected_image_render_mismatch_count: report.summary.selected_image_render_mismatch_count,
       publish_blocking_issue_count: report.summary.publish_blocking_issue_count,
-      report: `content/newsroom/${report.date}/image-audit-report.json`
+      report: `articles/content/newsroom/${report.date}/image-audit-report.json`
     }))
   };
 }
@@ -1062,8 +1062,8 @@ function renderAggregateMarkdown(aggregate) {
 
 function aggregatePaths(root) {
   return {
-    jsonPath: path.join(root, 'content', 'newsroom', 'image-audit-aggregate-report.json'),
-    markdownPath: path.join(root, 'content', 'newsroom', 'image-audit-aggregate-report.md')
+    jsonPath: path.join(root, 'articles', 'content', 'newsroom', 'image-audit-aggregate-report.json'),
+    markdownPath: path.join(root, 'articles', 'content', 'newsroom', 'image-audit-aggregate-report.md')
   };
 }
 

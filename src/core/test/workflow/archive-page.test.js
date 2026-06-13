@@ -4,12 +4,12 @@ const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
 
-const NewsletterArchive = require('../../../../assets/js/newsletter-archive');
+const NewsletterArchive = require('../../../../articles/assets/js/newsletter-archive');
 
 const root = path.join(__dirname, '..', '..', '..', '..');
 
 function extractArchiveScript() {
-  const html = fs.readFileSync(path.join(root, 'archive.html'), 'utf8');
+  const html = fs.readFileSync(path.join(root, 'articles', 'archive.html'), 'utf8');
   const scripts = [...html.matchAll(/<script\b[^>]*>\s*([\s\S]*?)\s*<\/script>/gi)]
     .map(match => match[1])
     .filter(Boolean);
@@ -179,7 +179,7 @@ function archiveCards(html) {
 }
 
 test('archive page uses homepage shell, shared footer, metadata, and stable hooks', () => {
-  const html = fs.readFileSync(path.join(root, 'archive.html'), 'utf8');
+  const html = fs.readFileSync(path.join(root, 'articles', 'archive.html'), 'utf8');
 
   assert.match(html, /<title>Archive \| Camera HAL SW Newsletter<\/title>/);
   assert.match(html, /<meta name="description" content="Camera HAL, Android Camera, Driver, Image Processing, AI 뉴스레터 아카이브"/);

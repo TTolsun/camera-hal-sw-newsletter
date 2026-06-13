@@ -28,7 +28,7 @@ function escapeRegExp(value) {
 }
 
 function writeNewsletterIndex(root, date = '2026-05-09') {
-  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date: '2026-05-08',
     title: 'Existing published issue',
     summary: 'Existing issue entry',
@@ -77,7 +77,7 @@ function validateFixture(overrides = {}) {
 function withImageSection(root, overrides = {}) {
   const selectedImage = overrides.selectedImage || '../../assets/images/fallback/android.svg';
   if (overrides.writeFallback !== false) {
-    writeText(path.join(root, 'assets', 'images', 'fallback', 'android.svg'), '<svg></svg>\n');
+    writeText(path.join(root, 'articles', 'assets', 'images', 'fallback', 'android.svg'), '<svg></svg>\n');
   }
   return validSections(3).map((section, index) => index === 0
     ? {
@@ -184,7 +184,7 @@ test('rendered issue structure rejects selectedImage and newsletter index contra
 
   const root = tempRoot('rendered-issue-structure-');
   const date = writeNewsletterIndex(root);
-  writeText(path.join(root, 'data', 'newsletters.json'), '{ invalid json');
+  writeText(path.join(root, 'articles', 'data', 'newsletters.json'), '{ invalid json');
   const editor = issue({ date });
   const result = validateRenderedIssueStructure({
     root,
@@ -194,7 +194,7 @@ test('rendered issue structure rejects selectedImage and newsletter index contra
     html: buildHtml(editor)
   });
   assert.equal(result.ok, false);
-  assert.match(result.text, /Invalid JSON in data\/newsletters\.json/);
+  assert.match(result.text, /Invalid JSON in articles\/data\/newsletters\.json/);
 });
 
 test('rendered issue structure does not enforce non-structural quality gates', () => {
@@ -223,7 +223,7 @@ test('validate-site and rendered issue structure agree on structural TODO failur
     html: fixture.html
   });
 
-  writeJson(path.join(fixture.root, 'data', 'newsletters.json'), [{
+  writeJson(path.join(fixture.root, 'articles', 'data', 'newsletters.json'), [{
     date: fixture.date,
     title: fixture.editor.title,
     summary: fixture.editor.summary,
@@ -231,9 +231,9 @@ test('validate-site and rendered issue structure agree on structural TODO failur
     md: `newsletters/${fixture.date}/newsletter.md`,
     tags: ['camera-hal']
   }]);
-  writeJson(path.join(fixture.root, 'content', 'newsroom', fixture.date, 'editor-draft.json'), fixture.editor);
-  writeText(path.join(fixture.root, 'newsletters', fixture.date, 'newsletter.md'), markdown);
-  writeText(path.join(fixture.root, 'newsletters', fixture.date, 'index.html'), fixture.html);
+  writeJson(path.join(fixture.root, 'articles', 'content', 'newsroom', fixture.date, 'editor-draft.json'), fixture.editor);
+  writeText(path.join(fixture.root, 'articles', 'newsletters', fixture.date, 'newsletter.md'), markdown);
+  writeText(path.join(fixture.root, 'articles', 'newsletters', fixture.date, 'index.html'), fixture.html);
   writeText(path.join(fixture.root, 'index.html'), '<!doctype html><html><body><a href="newsletters/2026-05-09/">Archive</a></body></html>');
 
   const scriptResult = spawnSync(process.execPath, [validateSitePath], {

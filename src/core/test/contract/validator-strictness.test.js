@@ -196,7 +196,7 @@ function writeSiteFixture(root, {
   statusOverrides = {}
 } = {}) {
   const count = articleCount ?? Math.max(0, articlePolicy.mainArticleCount.min - 1);
-  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date,
     title: 'Camera HAL / SW Newsletter',
     summary: 'Summary',
@@ -204,15 +204,15 @@ function writeSiteFixture(root, {
     md: `newsletters/${date}/newsletter.md`,
     tags: dataTags
   }]);
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), newsletterMarkdown(date, count, { todo }));
-  writeText(path.join(root, 'newsletters', date, 'index.html'), newsletterHtml(date, {
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), newsletterMarkdown(date, count, { todo }));
+  writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), newsletterHtml(date, {
     tags: htmlTags,
     navLabels
   }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
-  writeText(path.join(root, 'archive.html'), rootArchiveHtml());
+  writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml());
   if (factCheckMustFix || sourceGapCount !== null) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'), {
       status: factCheckMustFix ? 'NEEDS_FIX' : 'PASS',
       must_fix: factCheckMustFix ? ['CameraX release has an unresolved source claim.'] : [],
       source_gaps: sourceGapCount > 0 ? ['CameraX release has a source gap.'] : [],
@@ -220,7 +220,7 @@ function writeSiteFixture(root, {
     });
   }
   if (staleClaimHardFailure) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'stale-claim-report.json'), {
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'stale-claim-report.json'), {
       status: 'NEEDS_FIX',
       stale_claim_items_removed: [],
       unsupported_release_claims_removed: [],
@@ -228,7 +228,7 @@ function writeSiteFixture(root, {
     });
   }
   if (editorApprovedException) {
-    writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
       final_publish_ready: false,
       editor_review_required: true,
       public_newsletter_ready: true,
@@ -238,7 +238,7 @@ function writeSiteFixture(root, {
       review_publication_ready_reason: 'Only two independent camera-stack public articles remain.',
       ...statusOverrides
     });
-    writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
+    writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), {
       status: 'NEEDS_FIX',
       review_publication_ready_reason: 'Only two independent camera-stack public articles remain.',
       deductions: qualityDeductions || [{
@@ -296,7 +296,7 @@ function writeFallbackPublicSiteFixture(root, {
   statusOverrides = {}
 } = {}) {
   const articleCount = articlePolicy.mainArticleCount.min;
-  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date,
     title: 'Tooling Watch Edition',
     summary: 'Tooling Watch Edition - Summary',
@@ -309,12 +309,12 @@ function writeFallbackPublicSiteFixture(root, {
     camera_anchor_count: cameraAnchorCount,
     ...(homepageBadge ? { homepage_badge: homepageBadge } : {})
   }]);
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), fallbackNewsletterMarkdown(date, articleCount, { notice }));
-  writeText(path.join(root, 'newsletters', date, 'index.html'), fallbackNewsletterHtml(date, { tags, notice }));
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), fallbackNewsletterMarkdown(date, articleCount, { notice }));
+  writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), fallbackNewsletterHtml(date, { tags, notice }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
-  writeText(path.join(root, 'archive.html'), rootArchiveHtml());
+  writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml());
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
     publication_mode: publicationMode,
     homepage_visibility: homepageVisibility,
     fallback_only: fallbackOnly,
@@ -375,7 +375,7 @@ function homepageHeadlineState({
 }
 
 function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {}) {
-  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date,
     title: 'Camera HAL / SW Newsletter',
     summary: 'Summary',
@@ -393,7 +393,7 @@ function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {})
     ...report,
     score: report.score - 1
   };
-  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
   writeJson(path.join(newsroomDir, 'editor-draft.json'), editor);
   writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
   writeJson(path.join(newsroomDir, 'fact-check-report.json'), factCheck);
@@ -404,7 +404,7 @@ function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {})
 }
 
 function writeMissingClaimsQualityFixture(root, { date = '2026-04-01', strictReport = false } = {}) {
-  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date,
     title: 'Camera HAL / SW Newsletter',
     summary: 'Summary',
@@ -422,7 +422,7 @@ function writeMissingClaimsQualityFixture(root, { date = '2026-04-01', strictRep
   const report = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
     strictClaimValidation: strictReport
   });
-  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
   writeJson(path.join(newsroomDir, 'editor-draft.json'), editor);
   writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
   writeJson(path.join(newsroomDir, 'fact-check-report.json'), factCheck);
@@ -430,7 +430,7 @@ function writeMissingClaimsQualityFixture(root, { date = '2026-04-01', strictRep
 }
 
 function writeReviewOnlyQualityStatus(root, date, overrides = {}) {
-  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date,
     title: 'Camera HAL / SW Newsletter',
     summary: 'Summary',
@@ -442,7 +442,7 @@ function writeReviewOnlyQualityStatus(root, date, overrides = {}) {
     fallback_only: false,
     camera_anchor_count: articlePolicy.mainArticleCount.min
   }]);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
     date,
     publication_mode: 'review_only',
     final_publish_ready: false,
@@ -457,7 +457,7 @@ function writeReviewOnlyQualityStatus(root, date, overrides = {}) {
 }
 
 function writeFallbackPublicQualityStatus(root, date, overrides = {}) {
-  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date,
     title: 'Camera HAL / SW Newsletter',
     summary: 'Tooling Watch Edition',
@@ -470,7 +470,7 @@ function writeFallbackPublicQualityStatus(root, date, overrides = {}) {
     camera_anchor_count: 0,
     homepage_badge: 'Tooling Watch Edition'
   }]);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
     date,
     publication_mode: 'fallback_public',
     homepage_visibility: 'visible_with_fallback_badge',
@@ -489,7 +489,7 @@ function writeFallbackPublicQualityStatus(root, date, overrides = {}) {
 }
 
 function writeDiagnosticsOnlyStatus(root, date, overrides = {}) {
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
     date,
     status: 'UNDERFILLED_NEEDS_FIX',
     public_newsletter_ready: false,
@@ -501,7 +501,7 @@ function writeDiagnosticsOnlyStatus(root, date, overrides = {}) {
 }
 
 function writePublicRetention(root, date, overrides = {}) {
-  writeJson(path.join(root, 'content', 'newsroom', date, 'public-retention.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'public-retention.json'), {
     retain_existing_public: true,
     date,
     scope: 'same_date_diagnostics_only',
@@ -509,8 +509,8 @@ function writePublicRetention(root, date, overrides = {}) {
     approved_by: 'editor',
     approved_at: date,
     retained_public_artifacts: [
-      `newsletters/${date}/index.html`,
-      `newsletters/${date}/newsletter.md`
+      `articles/newsletters/${date}/index.html`,
+      `articles/newsletters/${date}/newsletter.md`
     ],
     ...overrides
   });
@@ -563,7 +563,7 @@ test('strict validate-site HTML issue tag drift remains hard failure', () => {
   const result = runScript(validateSitePath, root);
 
   assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /HTML issue tags \[Camera HAL, Android, AI\] do not match data\/newsletters\.json tags \[Camera HAL, Android\]/);
+  assert.match(result.stderr, /HTML issue tags \[Camera HAL, Android, AI\] do not match articles\/data\/newsletters\.json tags \[Camera HAL, Android\]/);
 });
 
 test('strict validate-site rejects localized issue site nav labels', () => {
@@ -813,8 +813,8 @@ test('validate-site fails when diagnostics-only date remains public without rete
   const result = runScript(validateSitePath, root);
 
   assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /diagnostics-only but data\/newsletters\.json exposes it/);
-  assert.match(result.stderr, /Remove the 2026-05-18 entry from data\/newsletters\.json/);
+  assert.match(result.stderr, /diagnostics-only but articles\/data\/newsletters\.json exposes it/);
+  assert.match(result.stderr, /Remove the 2026-05-18 entry from articles\/data\/newsletters\.json/);
 });
 
 test('validate-site fails invalid public retention with remediation example', () => {
@@ -832,7 +832,7 @@ test('validate-site fails invalid public retention with remediation example', ()
   const result = runScript(validateSitePath, root);
 
   assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Invalid content\/newsroom\/2026-05-18\/public-retention\.json/);
+  assert.match(result.stderr, /Invalid articles\/content\/newsroom\/2026-05-18\/public-retention\.json/);
   assert.match(result.stderr, /approved_at=YYYY-MM-DD/);
   assert.match(result.stderr, /retained_public_artifacts=\[/);
 });
@@ -850,7 +850,7 @@ test('validate-site allows diagnostics-only public index when valid retention ex
   const result = runScript(validateSitePath, root);
 
   assert.equal(result.status, 0, result.stderr);
-  assert.doesNotMatch(result.stderr, /diagnostics-only but data\/newsletters\.json exposes it/);
+  assert.doesNotMatch(result.stderr, /diagnostics-only but articles\/data\/newsletters\.json exposes it/);
 });
 
 test('validate-site fails root homepage stale hardcoded newsletter exposure', () => {
@@ -876,7 +876,7 @@ test('validate-site rejects missing required archive page route', () => {
   writeSiteFixture(root, {
     articleCount: articlePolicy.mainArticleCount.min
   });
-  fs.unlinkSync(path.join(root, 'archive.html'));
+  fs.unlinkSync(path.join(root, 'articles', 'archive.html'));
 
   const result = runScript(validateSitePath, root);
 
@@ -889,7 +889,7 @@ test('validate-site rejects archive page without shared helper reference', () =>
   writeSiteFixture(root, {
     articleCount: articlePolicy.mainArticleCount.min
   });
-  writeText(path.join(root, 'archive.html'), rootArchiveHtml().replace('<script src="assets/js/newsletter-archive.js"></script>', ''));
+  writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml().replace('<script src="assets/js/newsletter-archive.js"></script>', ''));
 
   const result = runScript(validateSitePath, root);
 
@@ -902,7 +902,7 @@ test('validate-site rejects archive page without required hooks', () => {
   writeSiteFixture(root, {
     articleCount: articlePolicy.mainArticleCount.min
   });
-  writeText(path.join(root, 'archive.html'), rootArchiveHtml().replace('data-archive-grid', 'data-archive-list'));
+  writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml().replace('data-archive-grid', 'data-archive-list'));
 
   const result = runScript(validateSitePath, root);
 
@@ -915,7 +915,7 @@ test('validate-site rejects archive page stale hardcoded newsletter exposure', (
   writeSiteFixture(root, {
     articleCount: articlePolicy.mainArticleCount.min
   });
-  writeText(path.join(root, 'archive.html'), rootArchiveHtml('<a href="newsletters/2026-05-18/index.html">stale issue</a>'));
+  writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml('<a href="newsletters/2026-05-18/index.html">stale issue</a>'));
 
   const result = runScript(validateSitePath, root);
 
@@ -929,7 +929,7 @@ test('validate-site stale homepage headline score failure includes refresh remed
   writeSiteFixture(root, {
     articleCount: articlePolicy.mainArticleCount.min
   });
-  writeJson(path.join(root, 'data', 'homepage-headline.json'), {
+  writeJson(path.join(root, 'articles', 'data', 'homepage-headline.json'), {
     schemaVersion: 1,
     updated_at: '2020-01-01T00:00:00+09:00',
     current_headline: {
@@ -979,7 +979,7 @@ test('validate-site rejects homepage headline image without alt text', () => {
     date,
     articleCount: articlePolicy.mainArticleCount.min
   });
-  writeJson(path.join(root, 'data', 'homepage-headline.json'), homepageHeadlineState({
+  writeJson(path.join(root, 'articles', 'data', 'homepage-headline.json'), homepageHeadlineState({
     date,
     overrides: {
       image_url: 'https://example.com/headline.png',
@@ -1000,7 +1000,7 @@ test('validate-site rejects homepage headline non-https external image URL', () 
     date,
     articleCount: articlePolicy.mainArticleCount.min
   });
-  writeJson(path.join(root, 'data', 'homepage-headline.json'), homepageHeadlineState({
+  writeJson(path.join(root, 'articles', 'data', 'homepage-headline.json'), homepageHeadlineState({
     date,
     overrides: {
       image_url: 'http://example.com/headline.png',
@@ -1021,7 +1021,7 @@ test('validate-site rejects homepage headline article URL without repository pat
     date,
     articleCount: articlePolicy.mainArticleCount.min
   });
-  writeJson(path.join(root, 'data', 'homepage-headline.json'), homepageHeadlineState({
+  writeJson(path.join(root, 'articles', 'data', 'homepage-headline.json'), homepageHeadlineState({
     date,
     overrides: {
       newsletter_article_url: '#article-camerax'
@@ -1259,7 +1259,7 @@ test('current canonical generation-status date makes validate-quality strict', (
   const root = tempRoot('validate-quality-current-canonical-generation-');
   const date = '2026-04-01';
   writeMissingClaimsQualityFixture(root, { date });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
     date,
     status: 'STAGE_3_QUALITY',
     run_context: {
