@@ -3,7 +3,7 @@ const test = require('node:test');
 
 const {
   temperatureForStage
-} = require('../../../reporter/providers/gemini-provider');
+} = require('../../../../core/llm/providers/gemini-provider');
 
 const baseConfig = {
   geminiTemperatureDefault: 0.35,

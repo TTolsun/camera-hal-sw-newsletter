@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const test = require('node:test');
 
-const clientPath = path.resolve(__dirname, '..', '..', '..', '..', '..', 'src', 'generator', 'reporter', 'llm-client.js');
+const clientPath = path.resolve(__dirname, '..', '..', '..', '..', '..', 'src', 'core', 'llm', 'llm-client.js');
 const rawDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '.tmp', 'llm-raw');
 const { readRuntimeConfig } = require('../../../common/runtime-config');
 

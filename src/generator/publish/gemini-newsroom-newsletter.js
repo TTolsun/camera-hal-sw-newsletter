@@ -25,7 +25,7 @@ const {
   getLlmDiagnostics,
   getLlmCostCalls,
   getLlmModelUsage
-} = require('../reporter/llm-client');
+} = require('../../core/llm/llm-client');
 const {
   reporterSchema,
   editorSchema,

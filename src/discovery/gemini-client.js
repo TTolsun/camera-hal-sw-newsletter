@@ -1,4 +1,4 @@
-const target = require.resolve('../generator/reporter/llm-client');
+const target = require.resolve('../core/llm/llm-client');
 delete require.cache[target];
 const llmClient = require(target);
 

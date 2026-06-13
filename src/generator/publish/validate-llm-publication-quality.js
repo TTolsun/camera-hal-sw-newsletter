@@ -3,7 +3,7 @@ const path = require('path');
 const {
   callLlmJson,
   getLlmDiagnostics
-} = require('../reporter/llm-client');
+} = require('../../core/llm/llm-client');
 const {
   newsroomDir,
   newsroomRelPath
