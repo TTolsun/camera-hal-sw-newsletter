@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { stampCoverageType } = require('../../../publish/gemini-newsroom-newsletter');
+const { stampCoverageType } = require('../../../publish/fact-check-postprocess');
 
 function editor() {
   return {

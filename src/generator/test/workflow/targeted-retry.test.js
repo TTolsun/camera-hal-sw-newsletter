@@ -9,15 +9,17 @@ const {
   assertEditorRetryOutputContract,
   availableCompletionCandidates,
   buildEditorRetryContract,
-  buildSectionRepairPlan,
   mergeLockedSections,
   recordLastKnownValidEditor,
-  sectionsMatchingRepairPlan,
-  sectionsOutsideRepairPlan,
   validateReporter,
   validateTargetedRepairResult,
   writeReviewableRepairFailureArtifacts
 } = require('../../publish/gemini-newsroom-newsletter');
+const {
+  buildSectionRepairPlan,
+  sectionsMatchingRepairPlan,
+  sectionsOutsideRepairPlan
+} = require('../../publish/orchestrator-repair-plan');
 const {
   EditorSemanticValidationError
 } = require('../../editor/editor-output-contract');
