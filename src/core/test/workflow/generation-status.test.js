@@ -11,7 +11,7 @@ const {
 } = require('../../../generator/publish/gemini-newsroom-newsletter');
 const {
   NewsletterDomainValidationError
-} = require('../../../generator/reporter/newsletter-domain-errors');
+} = require('../../domain/newsletter-domain-errors');
 const { qualityGatePolicy } = require('../../common/newsletter-policy');
 const { backgroundContextSchema } = require('../../../generator/render/newsletter-schema');
 
