@@ -27,7 +27,7 @@ Workflow/Stage: Stage 1 RAW collection
 
 주요 입력: `src/shared/data/news-sources.json`, optional `collection-intent.json`, source registry 설정
 
-출력/schema: `content/collected-news/<date>/manual-candidates.json`, RAW candidate artifact
+출력/schema: `articles/content/collected-news/<date>/manual-candidates.json`, RAW candidate artifact
 
 주요 guardrail: LLM credential을 요구하지 않으며 Gemini prompt를 실행하지 않습니다. Stage 1 결과는 Stage 2/Stage 3의 입력일 뿐 최종 발행물이 아닙니다.
 
@@ -43,7 +43,7 @@ Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
 주요 입력: newsletter date, 최대 40개 manual candidate 요약, enabled source registry 요약
 
-출력/schema: `proposalResponseSchema()`, `content/newsroom/<date>/gemini-source-proposals.json`
+출력/schema: `proposalResponseSchema()`, `articles/content/newsroom/<date>/gemini-source-proposals.json`
 
 주요 guardrail: newsletter article을 작성하지 않습니다. 제공된 registry domain 또는 linked evidence domain의 source URL만 제안합니다. Deterministic fetch, normalize, schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영됩니다.
 
@@ -77,7 +77,7 @@ Workflow/Stage: Stage 3 `background-context`
 
 주요 입력: `commonContext`, selected article capsule context, deterministic static fallback background context
 
-출력/schema: `backgroundContextSchema`, `content/newsroom/<date>/background-context.json`
+출력/schema: `backgroundContextSchema`, `articles/content/newsroom/<date>/background-context.json`
 
 주요 guardrail: Web browsing을 하지 않습니다. Raw source table text, UI fragment, release table dump, source snippet을 background prose로 복사하지 않습니다. `background_basis`에는 external lookup이 아니라 supplied capsule metadata와 model knowledge 기반임을 설명해야 합니다.
 
@@ -93,7 +93,7 @@ Workflow/Stage: Stage 3 `reporter attempt <n>/<total>`
 
 주요 입력: `commonContext`, locked article context, shortlisted article capsule JSON, compact selection context
 
-출력/schema: `reporterSchema`, `content/newsroom/<date>/reporter-candidates.json`
+출력/schema: `reporterSchema`, `articles/content/newsroom/<date>/reporter-candidates.json`
 
 주요 guardrail: 최종 selection decision을 다시 하지 않습니다. Capsule의 eligibility, risk, score, imageCandidates, evidence를 보존합니다. Source text가 생략돼 있는데 있는 것처럼 가정하지 않고, article-level `claims[]`는 만들지 않습니다.
 
@@ -109,7 +109,7 @@ Workflow/Stage: Stage 3 `editor attempt <n>/<total>`
 
 주요 입력: `commonContext`, locked article context, optional editor retry contract, primary selected article capsule JSON, background context JSON
 
-출력/schema: `editorSchema`, `content/newsroom/<date>/editor-draft.json`
+출력/schema: `editorSchema`, `articles/content/newsroom/<date>/editor-draft.json`
 
 주요 guardrail: `docs/editorial-policy.md`와 `docs/newsletter-template.md`를 따릅니다. `final_selected=false`, watchlist/exclude, missing dated evidence, `source_gap_risk=true`, `briefing_only`, `reference_only` candidate를 main article로 만들지 않습니다. Image URL을 만들지 않고 `imageCandidates.url` 중 하나 또는 empty string만 `selectedImage`로 사용합니다.
 
@@ -141,7 +141,7 @@ Workflow/Stage: Stage 3 `fact-checker attempt <n>/<total>`
 
 주요 입력: `commonContext`, selected article capsule JSON, background context JSON, editor draft JSON
 
-출력/schema: `factCheckSchema`, `content/newsroom/<date>/fact-check-report.json`
+출력/schema: `factCheckSchema`, `articles/content/newsroom/<date>/fact-check-report.json`
 
 주요 guardrail: Style rewrite가 아니라 factual error, source problem, editorial-policy violation에 집중합니다. Source 없는 claim과 발행 차단 오류는 `must_fix[]`, dated evidence 또는 cross-check 부족은 `source_gaps[]`, 같은 source 안에서 보강 가능한 표현/구체성/actionability 문제는 `recommended_fixes[]`로 분류합니다.
 

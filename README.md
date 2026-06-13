@@ -55,7 +55,7 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 
 | 명령 | 언제 쓰나 | 결과물 |
 | --- | --- | --- |
-| `npm.cmd run test` | 단위/통합 테스트 회귀 확인 | `tests/` 전수 결과 |
+| `npm.cmd run test` | 단위/통합 테스트 회귀 확인 | `src/<layer>/test/` 전수 결과 |
 | `npm.cmd run validate` | docs·정책·인코딩·site 무결성 검사 | `validate:*` 체인 보고 |
 | `npm.cmd run ci` | test + validate 한꺼번에 | 변경 범위 넓을 때 1차 신뢰도 확인 |
 | `npm.cmd run collect` | `src/shared/data/news-sources.json` 기반 후보 수집 | `articles/content/collected-news/YYYY-MM-DD/` |

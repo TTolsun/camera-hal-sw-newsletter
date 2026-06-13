@@ -45,7 +45,7 @@
 
 `category`는 source entry가 직접 보관하는 machine key이고, 사람이 읽는 newsletter section label은 `sectionMap[category]`에서만 파생합니다. source entry에 `section`을 직접 쓰면 같은 정보를 두 곳에서 관리하게 되므로 schema v2에서는 허용하지 않습니다.
 
-collector는 런타임 normalized source 객체와 `content/collected-news/YYYY-MM-DD/candidates.json`에는 계속 `section`과 `source_section`을 기록합니다. 다만 이 값은 입력 JSON의 중복 필드가 아니라 resolver가 `sectionMap`에서 계산한 값입니다.
+collector는 런타임 normalized source 객체와 `articles/content/collected-news/YYYY-MM-DD/candidates.json`에는 계속 `section`과 `source_section`을 기록합니다. 다만 이 값은 입력 JSON의 중복 필드가 아니라 resolver가 `sectionMap`에서 계산한 값입니다.
 
 ## Source 추가 체크리스트
 
