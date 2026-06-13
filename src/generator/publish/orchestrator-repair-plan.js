@@ -9,13 +9,13 @@
 const {
   normalizeTitle,
   sectionUrls
-} = require('../../core/common/section-identity');
+} = require('../../shared/common/section-identity');
 const { ensureArray } = require('../render/newsletter-renderer');
 const {
   deductionMatchesSection,
   sectionHasSourceGap
 } = require('../quality/newsletter-quality');
-const { articlePolicy } = require('../../core/common/newsletter-policy');
+const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const {
   stringOrEmpty,
   sectionLabel

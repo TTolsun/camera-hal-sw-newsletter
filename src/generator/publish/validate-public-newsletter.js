@@ -4,10 +4,10 @@ const path = require('path');
 const {
   readJson,
   repoPath
-} = require('../../core/common/common');
+} = require('../../shared/common/common');
 const {
   publicAssetPath
-} = require('../../core/common/artifact-paths');
+} = require('../../shared/common/artifact-paths');
 const {
   historicalPolicyWarningReason,
   strictTargetDates

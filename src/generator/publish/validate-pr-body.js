@@ -892,7 +892,7 @@ function validateNewsletterTemplateBodyText(text, options = {}) {
     { label: 'newsletters/YYYY-MM-DD/newsletter.md 또는 실제 날짜 newsletter.md', pattern: /newsletters\/(?:YYYY-MM-DD|\d{4}-\d{2}-\d{2})\/newsletter\.md/ },
     { label: 'newsletters/YYYY-MM-DD/index.html 또는 실제 날짜 index.html', pattern: /newsletters\/(?:YYYY-MM-DD|\d{4}-\d{2}-\d{2})\/index\.html/ },
     { label: 'data/newsletters.json', pattern: /data\/newsletters\.json/ },
-    { label: '기사 품질 정책 src/core/config/newsletter-policy.json', pattern: /src\/core\/config\/newsletter-policy\.json/ },
+    { label: '기사 품질 정책 src/shared/config/newsletter-policy.json', pattern: /src\/shared\/config\/newsletter-policy\.json/ },
     { label: '확인한 사실', pattern: /확인한 사실/ },
     { label: '배경지식', pattern: /배경지식/ },
     { label: 'Camera HAL 관점', pattern: /Camera HAL(?:\s*\/\s*Driver)? 관점|Camera HAL/i },

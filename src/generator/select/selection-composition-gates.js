@@ -1,6 +1,6 @@
 'use strict';
 
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   text,
   number
@@ -16,10 +16,10 @@ const {
 } = require('./selection-policy-constants');
 const {
   BUCKETS
-} = require('../../core/common/aosp-camera-scope');
+} = require('../../shared/common/aosp-camera-scope');
 const {
   candidateGroupKey
-} = require('../../core/common/article-groups');
+} = require('../../shared/common/article-groups');
 const {
   annotateArticleExposure
 } = require('../reporter/article-exposure-history');
@@ -29,7 +29,7 @@ const {
   candidatePoolPreflightPolicy,
   getPublishReadyCompositionPolicy,
   publishGateCriteriaText
-} = require('../../core/common/newsletter-policy');
+} = require('../../shared/common/newsletter-policy');
 
 function resolvePublishReadyCompositionPolicy(policy = getPublishReadyCompositionPolicy()) {
   if (policy?.articlePolicy?.publishReadyComposition) {

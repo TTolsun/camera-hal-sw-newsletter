@@ -1,18 +1,18 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const {
   readJson,
   repoPath
-} = require('../../core/common/common');
+} = require('../../shared/common/common');
 const {
   newsroomDir,
   publicAssetPath
-} = require('../../core/common/artifact-paths');
+} = require('../../shared/common/artifact-paths');
 const {
   articlePolicy,
   articleCountRangeText
-} = require('../../core/common/newsletter-policy');
+} = require('../../shared/common/newsletter-policy');
 const {
   HEADLINE_STATE_REL_PATH,
   validateHomepageHeadlineState

@@ -4,7 +4,7 @@ const test = require('node:test');
 const {
   checkArtifactRetentionTracked,
   mustNotBeTracked
-} = require('../../../core/tooling/validate/artifact-retention-tracked-check');
+} = require('../../../shared/tooling/validate/artifact-retention-tracked-check');
 const {
   DEBUG_HEAVY,
   TRANSIENT_ATTEMPT,

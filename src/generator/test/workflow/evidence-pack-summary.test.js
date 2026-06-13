@@ -15,7 +15,7 @@ const {
   tempRoot,
   writeJson,
   writeText
-} = require('../../../core/test/helpers/fs');
+} = require('../../../shared/test/helpers/fs');
 
 const DATE = '2026-05-14';
 const GENERATED_AT = '2026-05-14T00:00:00.000Z';

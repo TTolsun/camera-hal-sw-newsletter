@@ -16,7 +16,7 @@
 
 ### Editorial quality
 
-- [ ] 주요 기사 구성이 `src/core/config/newsletter-policy.json`을 따른다.
+- [ ] 주요 기사 구성이 `src/shared/config/newsletter-policy.json`을 따른다.
 - [ ] 3줄 브리핑은 정확히 3줄이다.
 - [ ] 각 주요 기사에 `확인한 사실`이 있다.
 - [ ] 각 주요 기사에 `배경지식`이 있다.

@@ -24,7 +24,7 @@ const {
 const {
   reserveReporterCandidate: reporterCandidate,
   retrySection: section
-} = require('../../../core/test/helpers/newsroom-builders');
+} = require('../../../shared/test/helpers/newsroom-builders');
 
 const DATE = '2026-05-08';
 

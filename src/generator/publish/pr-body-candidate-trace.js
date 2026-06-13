@@ -9,7 +9,7 @@ const {
 } = require('./pr-body-artifacts');
 const {
   renderMarkdownTable
-} = require('../../core/common/markdown');
+} = require('../../shared/common/markdown');
 const {
   TRACE_STATUS_RANK,
   normalizeMatchText,

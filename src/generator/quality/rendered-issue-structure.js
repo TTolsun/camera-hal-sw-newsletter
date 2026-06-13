@@ -5,13 +5,13 @@ const {
   htmlAttr,
   readJson,
   repoPath
-} = require('../../core/common/common');
-const { isSafeExternalImageUrl, REJECT_PATH_PATTERN } = require('../../core/render/image-candidates');
+} = require('../../shared/common/common');
+const { isSafeExternalImageUrl, REJECT_PATH_PATTERN } = require('../../shared/render/image-candidates');
 const { repoLocalPath } = require('../render/article-image-resolver');
 const { ensureArray } = require('../render/newsletter-renderer');
 const {
   toLegacyEditorIssue
-} = require('../../core/domain/newsletter-domain-normalize');
+} = require('../../shared/domain/newsletter-domain-normalize');
 
 const REQUIRED_NEWSLETTER_FIELDS = ['date', 'title', 'summary', 'html', 'md', 'tags'];
 const REQUIRED_ISSUE_CLASSES = ['issue-briefing', 'issue-section', 'source-list', 'reference-list'];

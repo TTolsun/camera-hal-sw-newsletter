@@ -9,7 +9,7 @@
   "artifact_hash": "49b55d86a51cf7b4abf8d705a6bf8136a9a757aadca9907d93befae9bddbb19d",
   "candidate_count": 40,
   "source_count": 59,
-  "source_registry_path": "src/core/data/news-sources.json",
+  "source_registry_path": "src/shared/data/news-sources.json",
   "source_registry_hash": "a4e1ee656a91480ea0116eb20d051a26d444f7dd3d40983b9f7f54647fc8e8fe",
   "collection_intent": "",
   "collection_intent_hash": "",

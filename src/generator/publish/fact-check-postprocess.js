@@ -9,8 +9,8 @@
 // All pure transforms (read editor/factCheck/reporter/shortlistReport, return new objects);
 // extracted from the generation orchestrator (gemini-newsroom-newsletter.js).
 
-const { ensureArray } = require('../../core/common/value-coercion');
-const { normalizeUrl } = require('../../core/common/selection-normalizers');
+const { ensureArray } = require('../../shared/common/value-coercion');
+const { normalizeUrl } = require('../../shared/common/selection-normalizers');
 
 function numberOrDefault(value, fallback = 0) {
   const parsed = Number(value);

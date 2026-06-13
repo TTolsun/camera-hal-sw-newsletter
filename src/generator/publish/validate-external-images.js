@@ -3,22 +3,22 @@ const path = require('path');
 const {
   MIN_CONTENT_LENGTH,
   validateImageUrl
-} = require('../../core/render/image-candidates');
+} = require('../../shared/render/image-candidates');
 const { repoLocalPath } = require('../render/article-image-resolver');
 const {
   decodeHtml,
   htmlAttr,
   readJson,
   repoPath
-} = require('../../core/common/common');
+} = require('../../shared/common/common');
 const {
   newsroomDir,
   newsroomRelPath,
   publicAssetPath
-} = require('../../core/common/artifact-paths');
+} = require('../../shared/common/artifact-paths');
 const {
   toLegacyEditorIssue
-} = require('../../core/domain/newsletter-domain-normalize');
+} = require('../../shared/domain/newsletter-domain-normalize');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');

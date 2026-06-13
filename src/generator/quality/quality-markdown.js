@@ -1,11 +1,11 @@
 'use strict';
 
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   articlePolicy,
   articleCountRangeText,
   publishGateCriteriaText
-} = require('../../core/common/newsletter-policy');
+} = require('../../shared/common/newsletter-policy');
 const {
   articleSectionContractRows,
   articleSectionContractRowValues

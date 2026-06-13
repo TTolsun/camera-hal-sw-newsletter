@@ -5,7 +5,7 @@ const test = require('node:test');
 
 const { assembleSite } = require('../../../publish/assemble-site');
 const { validateUrlParity, siteFilePath } = require('../../../publish/validate-url-parity');
-const { tempRoot, writeText, writeJson } = require('../../../../core/test/helpers/fs');
+const { tempRoot, writeText, writeJson } = require('../../../../shared/test/helpers/fs');
 
 const SITE_BASE_URL = 'https://ttolsun.github.io/camera-hal-sw-newsletter/';
 

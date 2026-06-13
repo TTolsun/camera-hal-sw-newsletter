@@ -1,6 +1,6 @@
 'use strict';
 
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   candidateUrls,
   candidateCanonicalUrl
@@ -8,7 +8,7 @@ const {
 const {
   IMPACT_TYPES,
   RECOMMENDED_ARTICLE_TYPES
-} = require('../../core/evidence/impact-classifier');
+} = require('../../shared/evidence/impact-classifier');
 const {
   findFieldHygieneIssues
 } = require('../reporter/article-field-builder');
@@ -19,12 +19,12 @@ const {
   validateDateSource,
   validateEventType,
   dateQualityForCandidate
-} = require('../../core/common/date-signals');
+} = require('../../shared/common/date-signals');
 const {
   SOURCE_QUALITY_FIELD_DRIFT,
   normalizeSourceQuality,
   sourceQualityFieldDrift
-} = require('../../core/collect/source-quality-classifier');
+} = require('../../shared/collect/source-quality-classifier');
 const {
   LINKED_EVIDENCE_UNRESOLVED_STATUSES,
   LINKED_EVIDENCE_RUNTIME_TERMS,
@@ -32,7 +32,7 @@ const {
   LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM,
   LINKED_EVIDENCE_HIGH_IMPACT_CLAIM,
   LINKED_EVIDENCE_LIMITATION_NOTE
-} = require('../../core/common/quality-gate-policy');
+} = require('../../shared/common/quality-gate-policy');
 const { text } = require('./quality-text');
 // claim 이슈 카테고리 매핑은 레지스트리 모듈로 분리했다(OCP). 여기서는 그대로 재노출한다.
 const { claimIssueCategory } = require('./claim-issue-category');

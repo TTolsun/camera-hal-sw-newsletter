@@ -1,11 +1,11 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   normalizeUrl
-} = require('../../core/common/selection-normalizers');
+} = require('../../shared/common/selection-normalizers');
 const {
   isForbiddenMainBucket,
   isPrimaryCameraStackBucket
-} = require('../../core/common/newsletter-policy');
+} = require('../../shared/common/newsletter-policy');
 
 class EditorSemanticValidationError extends Error {
   constructor(message, details = {}) {

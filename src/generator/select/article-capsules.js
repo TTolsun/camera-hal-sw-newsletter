@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const CAPSULE_TOKEN_TARGET = '700-1200';
 const MAX_TEXT = 420;
 const MAX_EVIDENCE_ITEMS = 3;
@@ -16,11 +16,11 @@ const {
   normalizeSourceQuality,
   sourceQualityFieldDrift,
   sourceQualityFlatFields
-} = require('../../core/collect/source-quality-classifier');
+} = require('../../shared/collect/source-quality-classifier');
 const {
   candidateGroupKey,
   compactContextCandidate
-} = require('../../core/common/article-groups');
+} = require('../../shared/common/article-groups');
 const {
   buildArticleSourceFactBundle
 } = require('../reporter/source-fact-bundle');

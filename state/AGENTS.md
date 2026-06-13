@@ -1,6 +1,6 @@
 # state 작업 지침
 
-`state/`는 파이프라인 운영 state(source snapshot monitor, article exposure history)를 둡니다. 읽기 전용 source registry는 `src/core/data/news-sources.json`, 서빙되는 site data는 `articles/data/`로 분리되어 있으므로 혼동하지 마세요. source registry의 사람이 읽는 설명 문서는 `docs/news-sources.md`와 `docs/config/news-sources-fields.ko.md`를 함께 확인합니다.
+`state/`는 파이프라인 운영 state(source snapshot monitor, article exposure history)를 둡니다. 읽기 전용 source registry는 `src/shared/data/news-sources.json`, 서빙되는 site data는 `articles/data/`로 분리되어 있으므로 혼동하지 마세요. source registry의 사람이 읽는 설명 문서는 `docs/news-sources.md`와 `docs/config/news-sources-fields.ko.md`를 함께 확인합니다.
 
 ## JSON Rules
 

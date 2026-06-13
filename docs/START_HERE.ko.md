@@ -13,10 +13,10 @@
 | [newsroom-workflow.md](newsroom-workflow.md) | 후보 수집부터 PR 생성까지의 운영 흐름입니다. |
 | [operations/README.ko.md](operations/README.ko.md) | 수동 실행, PR review, release, artifact review 순서입니다. |
 | [config/action-variables.ko.md](config/action-variables.ko.md) | GitHub Actions Secret과 Variable 설명입니다. |
-| [config/news-sources-fields.ko.md](config/news-sources-fields.ko.md) | `src/core/data/news-sources.json` field 계약입니다. |
+| [config/news-sources-fields.ko.md](config/news-sources-fields.ko.md) | `src/shared/data/news-sources.json` field 계약입니다. |
 | [src/AGENTS.md](../src/AGENTS.md) | #262 재구성 후 `src/` layer 구조와 구현·테스트 규칙을 설명합니다. |
 
-Newsletter Policy의 현재 값은 `src/core/config/newsletter-policy.json`이 source of truth입니다. 대표 운영 문서의 generated Newsletter Policy block은 스크립트로 갱신되며, 일반 문서에서 article count 숫자를 직접 수정하지 않습니다.
+Newsletter Policy의 현재 값은 `src/shared/config/newsletter-policy.json`이 source of truth입니다. 대표 운영 문서의 generated Newsletter Policy block은 스크립트로 갱신되며, 일반 문서에서 article count 숫자를 직접 수정하지 않습니다.
 
 ## 문서 역할
 
@@ -38,9 +38,9 @@ Newsletter Policy의 현재 값은 `src/core/config/newsletter-policy.json`이 s
 | 경로 | 역할 |
 | --- | --- |
 | [`.github/`](../.github/README.md) | 후보 수집, Gemini 생성, 검증, PR 생성, Pages 검증 workflow입니다. |
-| [`config/`](../config/README.md) | budget config입니다. (newsletter policy는 `src/core/config/newsletter-policy.json`로 이동) |
-| [`state/`](../state/README.md) | source snapshot monitor, article exposure history 등 파이프라인 운영 state입니다. (source registry는 `src/core/data/news-sources.json`, 서빙되는 index data는 `articles/data/`) |
-| [`src/`](../src/AGENTS.md) | 실제 collector, generator, renderer, validator, tooling 구현입니다. core/collector/discovery/generator layer로 나뉘며, regression test는 `src/<layer>/test/`에 함께 둡니다. |
+| [`config/`](../config/README.md) | budget config입니다. (newsletter policy는 `src/shared/config/newsletter-policy.json`로 이동) |
+| [`state/`](../state/README.md) | source snapshot monitor, article exposure history 등 파이프라인 운영 state입니다. (source registry는 `src/shared/data/news-sources.json`, 서빙되는 index data는 `articles/data/`) |
+| [`src/`](../src/AGENTS.md) | 실제 collector, generator, renderer, validator, tooling 구현입니다. shared/collector/discovery/generator layer로 나뉘며, regression test는 `src/<layer>/test/`에 함께 둡니다. |
 | [`articles/content/`](../articles/content/README.md) | 날짜별 raw candidate와 newsroom review artifact입니다. |
 | [`articles/newsletters/`](../articles/newsletters/README.md) | 발행될 날짜별 `newsletter.md`와 `index.html`입니다. |
 | [`articles/assets/`](../articles/assets/README.md) | site image와 article-image fallback asset입니다. |

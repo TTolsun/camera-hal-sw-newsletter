@@ -4,10 +4,10 @@ const { execFileSync } = require('child_process');
 
 const {
   kstDate
-} = require('../../core/common/common');
+} = require('../../shared/common/common');
 const {
   readJsonIfExists
-} = require('../../core/common/json');
+} = require('../../shared/common/json');
 const {
   readStatus,
   renderGithubOutputs

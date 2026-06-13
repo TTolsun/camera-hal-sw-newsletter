@@ -14,7 +14,7 @@ const {
 const {
   tempRoot,
   writeJson
-} = require('../../../core/test/helpers/fs');
+} = require('../../../shared/test/helpers/fs');
 
 const date = '2026-05-20';
 

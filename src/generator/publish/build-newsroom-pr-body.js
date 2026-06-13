@@ -19,7 +19,7 @@ const {
   articlePolicy,
   articleCountRangeText,
   publishGateCriteriaText
-} = require('../../core/common/newsletter-policy');
+} = require('../../shared/common/newsletter-policy');
 const {
   renderEditorPublicationPolicyMarkdown
 } = require('../reporter/editor-publication-policy');
@@ -51,20 +51,20 @@ const {
 } = require('./review-artifact-inventory');
 const {
   renderEditorPrSummary
-} = require('../../core/common/editor-pr-summary');
+} = require('../../shared/common/editor-pr-summary');
 const {
   formatReasonSummary
-} = require('../../core/common/status-format');
+} = require('../../shared/common/status-format');
 const {
   sanitizeMarkdownTableCell,
   sanitizeMarkdownLinkUrl,
   markdownTableCell,
   trustedMarkdownTableCell,
   renderMarkdownTable
-} = require('../../core/common/markdown');
+} = require('../../shared/common/markdown');
 const {
   toLegacyEditorIssue
-} = require('../../core/domain/newsletter-domain-normalize');
+} = require('../../shared/domain/newsletter-domain-normalize');
 
 const {
   valueOrUnknown,

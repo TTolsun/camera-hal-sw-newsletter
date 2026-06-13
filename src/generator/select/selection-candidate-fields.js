@@ -2,7 +2,7 @@
 
 const {
   resolveCandidateDateEvidence
-} = require('../../core/common/date-signals');
+} = require('../../shared/common/date-signals');
 
 function text(value) {
   return String(value || '').trim();

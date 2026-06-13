@@ -4,7 +4,7 @@ const path = require('path');
 const {
   readJson,
   writeJson
-} = require('../core/common/common');
+} = require('../shared/common/common');
 
 const DEFAULT_BUDGET_PATH = path.join('config', 'newsroom-budget.json');
 const BUDGET_STATUS = Object.freeze({

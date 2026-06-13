@@ -15,7 +15,7 @@ const {
   editor,
   reporterForClaimTests,
   normalizeSection
-} = require('../../../core/test/helpers/editor-builders');
+} = require('../../../shared/test/helpers/editor-builders');
 
 test('strict editor claim binding requires a fact claim for factual article fields', () => {
   const draft = editor({

@@ -1,6 +1,6 @@
 'use strict';
 
-const { BUCKETS } = require('../../core/common/aosp-camera-scope');
+const { BUCKETS } = require('../../shared/common/aosp-camera-scope');
 
 // 섹션 본문 텍스트 기반 scope fallback 규칙을 우선순위 순서로 둔다(OCP).
 // 새 버킷/패턴을 추가할 때 거대한 if-else를 고치는 대신 이 배열에 항목을 더한다.

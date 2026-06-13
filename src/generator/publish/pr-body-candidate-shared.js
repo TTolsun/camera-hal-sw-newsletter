@@ -5,7 +5,7 @@ const {
   sanitizeMarkdownTableCell,
   sanitizeMarkdownLinkUrl,
   trustedMarkdownTableCell
-} = require('../../core/common/markdown');
+} = require('../../shared/common/markdown');
 
 const TRACE_STATUS_RANK = {
   final_selected: 1,

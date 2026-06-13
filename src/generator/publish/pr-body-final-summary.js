@@ -3,7 +3,7 @@ const {
 } = require('./publish-status');
 const {
   renderEditorPrSummary
-} = require('../../core/common/editor-pr-summary');
+} = require('../../shared/common/editor-pr-summary');
 const {
   valueOrUnknown,
   booleanText

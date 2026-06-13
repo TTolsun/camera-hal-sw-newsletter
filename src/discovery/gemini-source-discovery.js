@@ -6,11 +6,11 @@ const {
   geminiSourceProposalValidationReportRelPath,
   geminiSourceProposalsPath,
   geminiSourceProposalsRelPath
-} = require('../core/common/artifact-paths');
+} = require('../shared/common/artifact-paths');
 const {
   readJson,
   writeJson
-} = require('../core/common/common');
+} = require('../shared/common/common');
 const {
   callGeminiJsonBudgeted,
   getGeminiCostCalls,
@@ -27,15 +27,15 @@ const {
   sourceForUrl,
   stableId,
   text
-} = require('../core/collect/source-intelligence-utils');
+} = require('../shared/collect/source-intelligence-utils');
 const {
   fetchTextWithConfiguredLimit,
   resolveLinkedReleaseNoteEvidenceItems
-} = require('../core/collect/linked-release-note-evidence');
+} = require('../shared/collect/linked-release-note-evidence');
 const {
   hasConcreteVersionedReleaseExtraction,
   parseSourceSpecificItems
-} = require('../core/collect/source-item-parsers');
+} = require('../shared/collect/source-item-parsers');
 
 const PROPOSAL_TYPE = 'gemini_source_discovery';
 
@@ -596,7 +596,7 @@ async function runGeminiSourceDiscovery({
   root = process.cwd(),
   date,
   manualPayload,
-  sourceRegistryPath = path.join(root, 'src', 'core', 'data', 'news-sources.json'),
+  sourceRegistryPath = path.join(root, 'src', 'shared', 'data', 'news-sources.json'),
   budget,
   proposalPayload = null,
   callLlmJsonBudgetedImpl = null,

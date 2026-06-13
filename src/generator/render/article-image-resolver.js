@@ -3,7 +3,7 @@ const path = require('path');
 const {
   MIN_CONTENT_LENGTH,
   validateImageUrl
-} = require('../../core/render/image-candidates');
+} = require('../../shared/render/image-candidates');
 const {
   analyzeImageCandidateFromMetadata
 } = require('./newsletter-image-audit');

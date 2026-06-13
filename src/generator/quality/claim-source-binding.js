@@ -1,10 +1,10 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const crypto = require('crypto');
 
 const {
   normalizeUrl,
   normalizedUrlHash
-} = require('../../core/common/selection-normalizers');
+} = require('../../shared/common/selection-normalizers');
 const {
   normalizeArticleSections
 } = require('../reporter/article-section-contract');

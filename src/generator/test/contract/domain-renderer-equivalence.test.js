@@ -7,7 +7,7 @@ const {
 } = require('../../render/newsletter-renderer');
 const {
   toEditorDraftArtifact
-} = require('../../../core/domain/newsletter-domain-normalize');
+} = require('../../../shared/domain/newsletter-domain-normalize');
 const {
   buildNewsletterQualityReport
 } = require('../../quality/newsletter-quality');

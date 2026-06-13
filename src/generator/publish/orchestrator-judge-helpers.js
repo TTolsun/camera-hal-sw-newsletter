@@ -12,7 +12,7 @@ const {
 } = require('../select/newsroom-selection');
 const {
   sectionUrls
-} = require('../../core/common/section-identity');
+} = require('../../shared/common/section-identity');
 const { ensureArray } = require('../render/newsletter-renderer');
 const {
   EditorSemanticValidationError

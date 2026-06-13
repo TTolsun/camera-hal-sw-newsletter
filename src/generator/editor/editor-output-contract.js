@@ -1,10 +1,10 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const path = require('path');
-const { writeJson } = require('../../core/common/common');
+const { writeJson } = require('../../shared/common/common');
 const {
   articlePolicy,
   articleCountRangeText
-} = require('../../core/common/newsletter-policy');
+} = require('../../shared/common/newsletter-policy');
 const {
   findFieldHygieneIssues,
   inferGuardrailImpactClass
@@ -46,14 +46,14 @@ const {
   HARD_BLOCK_REASON_CODES,
   isNativeToolingWorkflow,
   normalizeUrl: normalizeGroupUrl
-} = require('../../core/common/article-groups');
+} = require('../../shared/common/article-groups');
 const {
   normalizeSourceQuality
-} = require('../../core/collect/source-quality-classifier');
+} = require('../../shared/collect/source-quality-classifier');
 const {
   isDomainDraftArtifact,
   toLegacyEditorIssue
-} = require('../../core/domain/newsletter-domain-normalize');
+} = require('../../shared/domain/newsletter-domain-normalize');
 const {
   EditorSemanticValidationError,
   cloneJson,

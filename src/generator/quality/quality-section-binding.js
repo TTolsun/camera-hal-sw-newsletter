@@ -1,6 +1,6 @@
 'use strict';
 
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   normalizeForMatch,
   normalizedUrlKey,
@@ -9,7 +9,7 @@ const {
 const {
   PRODUCT_VERSION_TOKEN_PATTERN,
   RELEASE_BOILERPLATE_TOKEN_PATTERN
-} = require('../../core/common/quality-gate-policy');
+} = require('../../shared/common/quality-gate-policy');
 const { text } = require('./quality-text');
 
 // Section <-> source-candidate binding and matching helpers. Moved verbatim out of

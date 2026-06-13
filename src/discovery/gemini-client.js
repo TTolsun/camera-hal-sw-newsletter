@@ -1,4 +1,4 @@
-const target = require.resolve('../core/llm/llm-client');
+const target = require.resolve('../shared/llm/llm-client');
 delete require.cache[target];
 const llmClient = require(target);
 
