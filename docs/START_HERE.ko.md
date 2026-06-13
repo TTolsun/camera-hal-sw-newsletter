@@ -14,7 +14,7 @@
 | [operations/README.ko.md](operations/README.ko.md) | 수동 실행, PR review, release, artifact review 순서입니다. |
 | [config/action-variables.ko.md](config/action-variables.ko.md) | GitHub Actions Secret과 Variable 설명입니다. |
 | [config/news-sources-fields.ko.md](config/news-sources-fields.ko.md) | `src/core/data/news-sources.json` field 계약입니다. |
-| [scripts/README.md](../scripts/README.md) | #262 재구성으로 `src/`로 이동한 newsroom 구현 진입점 매핑을 설명합니다. |
+| [src/AGENTS.md](../src/AGENTS.md) | #262 재구성 후 `src/` layer 구조와 구현·테스트 규칙을 설명합니다. |
 
 Newsletter Policy의 현재 값은 `src/core/config/newsletter-policy.json`이 source of truth입니다. 대표 운영 문서의 generated Newsletter Policy block은 스크립트로 갱신되며, 일반 문서에서 article count 숫자를 직접 수정하지 않습니다.
 
@@ -40,8 +40,7 @@ Newsletter Policy의 현재 값은 `src/core/config/newsletter-policy.json`이 s
 | [`.github/`](../.github/README.md) | 후보 수집, Gemini 생성, 검증, PR 생성, Pages 검증 workflow입니다. |
 | [`config/`](../config/README.md) | budget config입니다. (newsletter policy는 `src/core/config/newsletter-policy.json`로 이동) |
 | [`data/`](../data/README.md) | `newsletters.json` 등 public index data입니다. (source registry는 `src/core/data/news-sources.json`로 이동) |
-| [`src/`](../scripts/README.md) | 실제 collector, generator, renderer, validator, tooling 구현입니다. core/collector/discovery/generator layer로 나뉩니다. |
-| `tests/` | Node built-in test runner 기반 regression test입니다. |
+| [`src/`](../src/AGENTS.md) | 실제 collector, generator, renderer, validator, tooling 구현입니다. core/collector/discovery/generator layer로 나뉘며, regression test는 `src/<layer>/test/`에 함께 둡니다. |
 | [`content/`](../content/README.md) | 날짜별 raw candidate와 newsroom review artifact입니다. |
 | [`newsletters/`](../newsletters/README.md) | 발행될 날짜별 `newsletter.md`와 `index.html`입니다. |
 | [`templates/`](../templates/README.md) | newsletter Markdown/HTML template입니다. |

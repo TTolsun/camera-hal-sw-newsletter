@@ -16,7 +16,7 @@
 | [docs/operations/README.ko.md](docs/operations/README.ko.md) | 수동 실행, PR 리뷰, 릴리스, 산출물 리뷰 순서입니다. |
 | [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md) | GitHub Actions Secret과 Variable 기본값을 설명합니다. |
 | [docs/config/news-sources-fields.ko.md](docs/config/news-sources-fields.ko.md) | `src/core/data/news-sources.json` field 계약을 설명합니다. |
-| [scripts/README.md](scripts/README.md) | #262 재구성으로 `src/`로 이동한 구현 진입점 매핑을 설명합니다. |
+| [src/AGENTS.md](src/AGENTS.md) | #262 재구성 후 `src/` layer 구조와 구현·테스트 규칙을 설명합니다. |
 
 뉴스레터 생성은 아래 흐름으로 진행됩니다. 중요한 점은 생성 성공과 발행 가능 상태가 다르다는 것입니다.
 
@@ -73,8 +73,7 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | [`config/`](config/README.md) | newsroom 예산 등 일부 설정입니다. (뉴스레터 정책은 `src/core/config/newsletter-policy.json`로 이동) |
 | [`data/`](data/README.md) | `newsletters.json` 등 public index data입니다. (source 레지스트리는 `src/core/data/news-sources.json`로 이동) |
 | [`docs/`](docs/README.md) | 운영 문서, 용어집, source 안내입니다. |
-| [`src/`](scripts/README.md) | 실제 수집기(collector), 생성기(generator), 렌더러(renderer), 검증기(validator), tooling 구현입니다. core/collector/discovery/generator layer로 나뉩니다. |
-| [`tests/`](tests/README.md) | Node 내장 테스트 러너 기반 회귀 테스트(regression test)입니다. |
+| [`src/`](src/AGENTS.md) | 실제 수집기(collector), 생성기(generator), 렌더러(renderer), 검증기(validator), tooling 구현입니다. core/collector/discovery/generator layer로 나뉘며, 회귀 테스트는 `src/<layer>/test/`에 함께 둡니다. |
 | [`articles/content/`](articles/content/README.md) | 수집 후보와 뉴스룸 리뷰 산출물입니다. |
 | [`articles/newsletters/`](articles/newsletters/README.md) | 공개 뉴스레터 Markdown/HTML 출력물입니다. |
 | [`articles/assets/`](articles/assets/README.md) | 사이트 이미지와 기사 fallback 이미지입니다. |
@@ -88,10 +87,9 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | 영역 | 파일 | 보호 대상 |
 | --- | --- | --- |
 | 저장소 전반 | [AGENTS.md](AGENTS.md) | 인코딩, PR 범위, fixture 신뢰 |
-| 구현 | [scripts/newsroom/AGENTS.md](scripts/newsroom/AGENTS.md) | 리뷰·발행 가드레일, 테스트 요구 |
+| 구현·테스트 | [src/AGENTS.md](src/AGENTS.md) | layer/의존 방향, 리뷰·발행 가드레일, 테스트·fixture 신뢰 정책 |
 | 워크플로 | [.github/workflows/AGENTS.md](.github/workflows/AGENTS.md) | Secret 처리, PR 기반 발행 |
 | 데이터 | [data/AGENTS.md](data/AGENTS.md) | `news-sources.json` 계약 |
-| 테스트 | [tests/AGENTS.md](tests/AGENTS.md) | fixture 신뢰 정책 |
 | 문서 | [docs/AGENTS.md](docs/AGENTS.md) | 한국어 우선, audit/worklog 금지 |
 
 마지막으로, 아래 규칙은 문서 정리나 리팩토링 중에도 약화하면 안 됩니다.

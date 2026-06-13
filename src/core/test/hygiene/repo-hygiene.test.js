@@ -141,38 +141,40 @@ test('findRepoHygieneIssues avoids substring false positives for maintained scri
   assert.deepEqual(issues, []);
 });
 
-test('findRepoHygieneIssues reports root tests even when they are allowlisted', () => {
+test('findRepoHygieneIssues reports stray tests outside src/<layer>/test/ even when allowlisted', () => {
   const issues = findRepoHygieneIssues([
-    'tests/existing.test.js',
-    'tests/new-root.test.js',
-    'tests/unit/new-root.test.js'
+    'src/core/foo.test.js',
+    'bar.test.js',
+    'tests/legacy.test.js',
+    'src/core/test/unit/baz.test.js'
   ], {
-    rootTestAllowlist: ['tests/existing.test.js']
+    rootTestAllowlist: ['src/core/foo.test.js']
   });
 
   assert.deepEqual(issues.map(item => item.path), [
-    'tests/existing.test.js',
-    'tests/existing.test.js',
-    'tests/new-root.test.js'
+    'src/core/foo.test.js',
+    'src/core/foo.test.js',
+    'bar.test.js',
+    'tests/legacy.test.js'
   ]);
   assert.equal(issues.every(item => item.type === 'root_test_structure'), true);
   assert.match(issues[0].detail, /allowlist must remain empty/);
-  assert.match(formatIssue(issues[2]), /^tests\/new-root\.test\.js: root_test_structure: /);
+  assert.match(formatIssue(issues[2]), /^bar\.test\.js: root_test_structure: /);
 });
 
 test('findRepoHygieneIssues reports non-empty root test allowlist entries as migration debt', () => {
-  const issues = findRepoHygieneIssues(['tests/unit/not-root.test.js'], {
+  const issues = findRepoHygieneIssues(['src/core/test/unit/not-root.test.js'], {
     rootTestAllowlist: [
-      'tests/existing.test.js',
-      'tests/missing.test.js',
-      'tests/unit/not-root.test.js'
+      'src/core/foo.test.js',
+      'src/core/test/missing.test.js',
+      'src/core/test/unit/not-root.test.js'
     ]
   });
 
   assert.deepEqual(issues.map(item => item.path), [
-    'tests/existing.test.js',
-    'tests/missing.test.js',
-    'tests/unit/not-root.test.js'
+    'src/core/foo.test.js',
+    'src/core/test/missing.test.js',
+    'src/core/test/unit/not-root.test.js'
   ]);
   assert.equal(issues.every(item => item.type === 'root_test_structure'), true);
   assert.equal(
