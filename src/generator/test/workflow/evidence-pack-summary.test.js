@@ -9,7 +9,7 @@ const {
   MAX_EXCLUDED_CANDIDATES,
   buildEvidencePackSummary,
   writeEvidencePackSummaryArtifacts
-} = require('../../render/evidence-pack-summary');
+} = require('../../diagnostics/evidence-pack-summary');
 const {
   readJson,
   tempRoot,

@@ -6,7 +6,7 @@ const {
 } = require('../../core/common/common');
 const {
   writeHalSignalQualityArtifacts
-} = require('../render/hal-signal-quality-report');
+} = require('../diagnostics/hal-signal-quality-report');
 
 function usage() {
   return [

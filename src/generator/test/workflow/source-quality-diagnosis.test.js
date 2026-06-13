@@ -10,7 +10,7 @@ const {
   buildSourceQualityDiagnosisReport,
   renderSourceQualityDiagnosisMarkdown,
   writeSourceQualityDiagnosisArtifacts
-} = require('../../render/source-quality-diagnosis');
+} = require('../../diagnostics/source-quality-diagnosis');
 const {
   tempRoot,
   writeJson

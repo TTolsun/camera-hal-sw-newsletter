@@ -6,7 +6,7 @@ const {
 } = require('../../core/common/common');
 const {
   writeSourceQualityDiagnosisArtifacts
-} = require('../render/source-quality-diagnosis');
+} = require('../diagnostics/source-quality-diagnosis');
 
 function usage() {
   return [
