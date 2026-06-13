@@ -57,8 +57,8 @@ test('stage 2 and 3 manual workflows resolve empty newsletter dates to KST today
   ]);
 
   assert.match(stage2UploadStep, outputDateExpression);
-  assert.match(stage2UploadStep, /content\/collected-news\/\$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}\/merged-candidates\.json/);
-  assert.match(stage2UploadStep, /content\/newsroom\/\$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}\/gemini-source-discovery-report\.md/);
+  assert.match(stage2UploadStep, /articles\/content\/collected-news\/\$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}\/merged-candidates\.json/);
+  assert.match(stage2UploadStep, /articles\/content\/newsroom\/\$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}\/gemini-source-discovery-report\.md/);
   assert.doesNotMatch(stage2UploadStep, /\$\{\{ env\.NEWSLETTER_DATE \}\}/);
   assert.match(stage2CreatePrStep, /commit-message: "Merge Camera HAL candidate artifacts \$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}"/);
   assert.match(stage2CreatePrStep, /branch: newsroom-source-discovery\/\$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}/);
