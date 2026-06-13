@@ -44,7 +44,7 @@ test('policy docs check reports duplicate and reversed markers', () => {
 });
 
 test('policy docs check reports generated block drift', () => {
-  const drifted = renderNewsletterPolicyBlock().replace('Newsletter Policy', 'Article Composition Policy');
+  const drifted = renderNewsletterPolicyBlock().replace('뉴스레터 정책', '기사 구성 정책');
   const analysis = analyzeNewsletterPolicyBlock(drifted);
 
   assert.equal(analysis.ok, false);
@@ -81,13 +81,13 @@ test('policy block rendering uses the injected policy article count range', () =
   };
   const rendered = renderNewsletterPolicyBlock(customPolicy);
 
-  assert.match(rendered, /Main article count: 11-13/);
-  assert.match(rendered, /Review gate Primary Camera Stack articles: at least 1/);
-  assert.match(rendered, /Publish-ready Primary Camera Stack articles: at least 2/);
-  assert.match(rendered, /Selection windows: primary 7 days; fallback 21 days; reference 90 days/);
-  assert.match(rendered, /main selection enforced/);
-  assert.doesNotMatch(rendered, /One-article policy/);
-  assert.doesNotMatch(rendered, new RegExp(`Main article count: ${articleCountRangeText(defaultPolicy)}`));
+  assert.match(rendered, /주요 기사 수: 11-13/);
+  assert.match(rendered, /검토 게이트\(review gate\) Primary Camera Stack 기사: 최소 1개/);
+  assert.match(rendered, /발행 가능\(publish-ready\) Primary Camera Stack 기사: 최소 2개/);
+  assert.match(rendered, /선정 기간\(selection windows\): primary 7일; fallback 21일; reference 90일/);
+  assert.match(rendered, /주요 선정은 강제 적용/);
+  assert.doesNotMatch(rendered, /단일 기사 정책/);
+  assert.doesNotMatch(rendered, new RegExp(`주요 기사 수: ${articleCountRangeText(defaultPolicy)}`));
 });
 
 test('policy docs sync inserts missing block and rejects malformed markers', () => {

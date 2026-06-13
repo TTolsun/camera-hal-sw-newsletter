@@ -538,40 +538,40 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
   const catchUpPolicy = getCatchUpPolicy(policy);
   const oneArticlePolicyEnabled = articlePolicy.mainArticleCount.min === 1;
   const reserveRequirementText = policy.candidatePoolPreflight.reserveMin === 0
-    ? 'reserve candidates diagnostics only'
-    : `reserve candidates at least ${policy.candidatePoolPreflight.reserveMin}`;
+    ? '예비 후보는 진단용으로만 사용'
+    : `예비 후보 최소 ${policy.candidatePoolPreflight.reserveMin}개`;
   return [
     POLICY_BLOCK_BEGIN,
     '<!-- This block is generated. Update src/shared/config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->',
     '',
-    '### Newsletter Policy',
+    '### 뉴스레터 정책 (Newsletter Policy)',
     '',
-    `- Source of truth: \`${POLICY_REL_PATH.replace(/\\/g, '/')}\``,
-    `- Main article count: ${articleCountRangeText(policy)}`,
+    `- 정본 출처(source of truth): \`${POLICY_REL_PATH.replace(/\\/g, '/')}\``,
+    `- 주요 기사 수: ${articleCountRangeText(policy)}`,
     ...(oneArticlePolicyEnabled
       ? [
-          '- One-article policy: a public newsletter may contain a single fully publishable main article.',
-          '- Article count alone does not make a one-article issue degraded or review-only; hard quality gates still apply.',
-          '- Supporting-only policy: a single supporting main bucket article may be public-ready when all hard gates pass.'
+          '- 단일 기사 정책(one-article policy): 공개 뉴스레터는 완전히 발행 가능한 주요 기사 하나만 담을 수 있습니다.',
+          '- 기사 수만으로 단일 기사 호가 품질 저하 또는 검토 전용으로 분류되지는 않습니다. 단, 하드 품질 게이트는 그대로 적용됩니다.',
+          '- 보조 전용 정책(supporting-only policy): 보조 주요 버킷 기사 하나도 모든 하드 게이트를 통과하면 공개 가능 상태가 될 수 있습니다.'
         ]
       : []),
-    `- Review gate Primary Camera Stack articles: ${articlePolicy.primaryCameraStack.minRequired === 0 ? 'disabled by one-article policy' : `at least ${articlePolicy.primaryCameraStack.minRequired}`}`,
-    `- Publish-ready Primary Camera Stack articles: ${publishPolicy.primaryCameraStackMinRequired === 0 ? 'disabled by one-article policy' : `at least ${publishPolicy.primaryCameraStackMinRequired}`}`,
-    `- Publish-ready direct AOSP Camera or driver/image pipeline articles: ${publishPolicy.directAospCameraOrDriverMinRequired === 0 ? 'disabled by one-article policy' : `at least ${publishPolicy.directAospCameraOrDriverMinRequired}`} across ${DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS.map(bucket => `\`${bucket}\``).join(', ')}`,
-    `- Publish-ready supporting main articles: at most ${publishPolicy.supportingMainMaxAllowed} total across supporting main buckets`,
-    `- Primary Camera Stack buckets: ${articlePolicy.primaryCameraStack.buckets.map(bucket => `\`${bucket}\``).join(', ')}`,
-    `- Supporting main buckets: ${articlePolicy.supportingMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}`,
-    `- Forbidden main buckets: ${articlePolicy.forbiddenMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}; never promote these to main articles by candidate count alone`,
-    `- Candidate pool preflight: publishable candidates at least ${policy.candidatePoolPreflight.publishableCandidateMin}; ${reserveRequirementText}; camera stack candidates at least ${policy.candidatePoolPreflight.cameraStackCandidateMin}`,
-    `- Selection windows: primary ${selectionWindowPolicy.primarySelectionDays} days; fallback ${selectionWindowPolicy.fallbackSelectionDays} days; reference ${selectionWindowPolicy.referenceContextDays} days`,
-    '- Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.',
+    `- 검토 게이트(review gate) Primary Camera Stack 기사: ${articlePolicy.primaryCameraStack.minRequired === 0 ? '단일 기사 정책으로 비활성화됨' : `최소 ${articlePolicy.primaryCameraStack.minRequired}개`}`,
+    `- 발행 가능(publish-ready) Primary Camera Stack 기사: ${publishPolicy.primaryCameraStackMinRequired === 0 ? '단일 기사 정책으로 비활성화됨' : `최소 ${publishPolicy.primaryCameraStackMinRequired}개`}`,
+    `- 발행 가능(publish-ready) direct AOSP Camera 또는 driver/image pipeline 기사: ${publishPolicy.directAospCameraOrDriverMinRequired === 0 ? '단일 기사 정책으로 비활성화됨' : `최소 ${publishPolicy.directAospCameraOrDriverMinRequired}개`} (${DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS.map(bucket => `\`${bucket}\``).join(', ')} 버킷 대상)`,
+    `- 발행 가능(publish-ready) 보조 주요 기사: 보조 주요 버킷 전체에서 최대 ${publishPolicy.supportingMainMaxAllowed}개`,
+    `- Primary Camera Stack 버킷: ${articlePolicy.primaryCameraStack.buckets.map(bucket => `\`${bucket}\``).join(', ')}`,
+    `- 보조 주요 버킷: ${articlePolicy.supportingMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}`,
+    `- 금지 주요 버킷: ${articlePolicy.forbiddenMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}; 후보 수만으로 이 버킷을 주요 기사로 승격하지 않습니다`,
+    `- 후보 풀 사전점검(candidate pool preflight): 발행 가능 후보 최소 ${policy.candidatePoolPreflight.publishableCandidateMin}개; ${reserveRequirementText}; camera stack 후보 최소 ${policy.candidatePoolPreflight.cameraStackCandidateMin}개`,
+    `- 선정 기간(selection windows): primary ${selectionWindowPolicy.primarySelectionDays}일; fallback ${selectionWindowPolicy.fallbackSelectionDays}일; reference ${selectionWindowPolicy.referenceContextDays}일`,
+    '- 선정 기간 적용(selection window enforcement): 주요 선정은 강제 적용되며, fallback 기간 후보는 primary 기간 선정이 부족할 때에만 승격됩니다.',
     catchUpPolicy.enabled
-      ? `- Catch-up (지난 소식) lane: when fresh selection is below ${catchUpPolicy.targetMainArticles} article(s), open main slots are filled with uncovered releases up to ${catchUpPolicy.maxAgeDays} days old from buckets ${catchUpPolicy.eligibleBuckets.map(bucket => `\`${bucket}\``).join(', ')}, at most ${catchUpPolicy.maxCatchUpArticles} per issue, covered once each; never displaces fresh content.`
-      : '- Catch-up (지난 소식) lane: disabled.',
-    `- Homepage headline policy: ${headlinePolicy.decayModel} decay; decay ${headlinePolicy.decayRatePerDay} point(s)/day; replacement margin ${headlinePolicy.replacementMargin}; minimum headline score ${headlinePolicy.minimumHeadlineScore}; latest inclusion required ${headlinePolicy.latestInclusionRequired}; history max ${headlinePolicy.historyMaxEntries}`,
-    '- Publish gate: PASS requires no source gaps, no fact-check must_fix, no blocking deductions, and every article marked publishable by the fact-checker. There is no numeric quality threshold.',
-    '- Editorial quality: the fact-checker (LLM) judges each article on usefulness to a Camera HAL SW engineer (topic-agnostic — C++, AI, or Linux articles qualify when they help that engineer). Topic/depth heuristics are not used as deterministic publish gates.',
-    `- Hard fail conditions remain blocking: ${qualityGatePolicy.hardFailConditions.join('; ')}`,
+      ? `- 지난 소식(Catch-up) 레인: 신규 선정이 ${catchUpPolicy.targetMainArticles}개 미만이면, 비어 있는 주요 슬롯을 ${catchUpPolicy.eligibleBuckets.map(bucket => `\`${bucket}\``).join(', ')} 버킷에서 최대 ${catchUpPolicy.maxAgeDays}일 이내의 미게재 릴리스로 채웁니다. 호당 최대 ${catchUpPolicy.maxCatchUpArticles}개이며 각각 한 번씩만 게재하고, 신규 콘텐츠를 밀어내지 않습니다.`
+      : '- 지난 소식(Catch-up) 레인: 비활성화됨.',
+    `- 홈페이지 헤드라인 정책(homepage headline policy): ${headlinePolicy.decayModel} decay; 일별 감쇠 ${headlinePolicy.decayRatePerDay} point(s)/day; 교체 마진(replacement margin) ${headlinePolicy.replacementMargin}; 최소 헤드라인 점수(minimum headline score) ${headlinePolicy.minimumHeadlineScore}; 최신호 포함 필수(latest inclusion required) ${headlinePolicy.latestInclusionRequired}; 이력 최대(history max) ${headlinePolicy.historyMaxEntries}`,
+    '- 발행 게이트(publish gate): PASS는 source gap이 없고, fact-check must_fix가 없으며, 차단성 감점(blocking deduction)이 없고, 모든 기사가 fact-checker에 의해 발행 가능으로 표시되어야 합니다. 수치 기반 품질 임계값은 없습니다.',
+    '- 편집 품질(editorial quality): fact-checker(LLM)가 각 기사를 Camera HAL SW 엔지니어에게 유용한지 기준으로 판정합니다(주제 무관 — C++, AI, Linux 기사라도 해당 엔지니어에게 도움이 되면 자격이 있습니다). 주제/깊이 휴리스틱은 결정론적 발행 게이트로 사용하지 않습니다.',
+    `- 하드 실패 조건은 계속 차단됩니다(hard fail conditions remain blocking): ${qualityGatePolicy.hardFailConditions.join('; ')}`,
     '',
     POLICY_BLOCK_END
   ].join('\n');
