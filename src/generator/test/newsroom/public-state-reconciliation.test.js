@@ -18,7 +18,7 @@ const {
 } = require('../../publish/public-state-reconciliation');
 const {
   LEDGER_PATH: AUDIT_LEDGER_PATH
-} = require('../../publish/audit-paths');
+} = require('../../../shared/common/audit-paths');
 const {
   readJson,
   tempRoot,

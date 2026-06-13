@@ -3,7 +3,7 @@ const path = require('node:path');
 
 const {
   LEDGER_PATH: AUDIT_LEDGER_PATH
-} = require('../../../generator/publish/audit-paths');
+} = require('../../common/audit-paths');
 const {
   articlePolicy,
   candidatePoolPreflightPolicy,

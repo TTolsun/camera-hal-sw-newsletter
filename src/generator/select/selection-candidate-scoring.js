@@ -25,7 +25,7 @@ const {
 } = require('./selection-policy-constants');
 const {
   cameraReleaseExtractionViolation
-} = require('../reporter/camera-release-notes');
+} = require('./camera-release-notes');
 const {
   BUCKETS,
   classifyAospCameraStackCandidate,
