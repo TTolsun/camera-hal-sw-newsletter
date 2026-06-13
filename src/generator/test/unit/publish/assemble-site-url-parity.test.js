@@ -18,6 +18,10 @@ function writePublicLayout(root, { weeklyKey = '2026-W23' } = {}) {
   writeText(path.join(root, 'articles', 'assets', 'js', 'site-header.js'), '// header');
   writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), []);
   writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), []);
+  // index.html이 fetch하는 진입점들. homepage-headline.json은 articles/data/에서 평탄화되고,
+  // subscription.json은 저장소 config/에서 assemble-site.js의 EXTRA_SERVED_FILES로 복사된다.
+  writeJson(path.join(root, 'articles', 'data', 'homepage-headline.json'), {});
+  writeJson(path.join(root, 'config', 'subscription.json'), {});
   writeText(path.join(root, 'articles', 'newsletters', weeklyKey, 'index.html'), '<!doctype html><html></html>');
   writeText(
     path.join(root, 'articles', 'sitemap.xml'),
@@ -70,6 +74,8 @@ test('validateUrlParity passes when every sitemap and top-level URL has a backin
   assert.ok(result.checkedUrls.includes('/'));
   assert.ok(result.checkedUrls.includes('/archive.html'));
   assert.ok(result.checkedUrls.includes('/data/newsletters.json'));
+  assert.ok(result.checkedUrls.includes('/data/homepage-headline.json'));
+  assert.ok(result.checkedUrls.includes('/config/subscription.json'));
   assert.ok(result.checkedUrls.some(url => url === '/newsletters/2026-W23/index.html'));
 });
 
