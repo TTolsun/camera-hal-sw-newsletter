@@ -1,6 +1,6 @@
 # newsletters
 
-이 폴더는 public newsletter issue output을 날짜별로 둡니다. Merge된 `main`의 이 폴더와 `articles/data/newsletters.json` entry가 GitHub Pages에 표시되는 public state의 기준입니다.
+이 폴더는 public newsletter issue output(발행된 뉴스레터 결과물)을 날짜별로 둡니다. GitHub Pages에 표시되는 public state의 기준은, merge된 `main`의 이 폴더와 `articles/data/newsletters.json` entry입니다.
 
 ## 주요 경로
 

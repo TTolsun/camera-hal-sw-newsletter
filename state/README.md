@@ -1,6 +1,6 @@
 # state
 
-이 폴더는 파이프라인 운영 state를 둡니다. 읽기 전용 source registry(`src/shared/data/`)나 서빙되는 site data(`articles/data/`)와 구분되며, JSON key와 enum-like 값은 machine contract이므로 번역하지 않습니다.
+이 폴더는 파이프라인 운영 state(실행 중에 쌓이는 상태 파일)를 둡니다. 읽기 전용 source registry(`src/shared/data/`)나 서빙되는 site data(`articles/data/`)와는 구분되는 곳입니다. JSON key와 enum-like 값은 machine contract(기계가 읽는 계약 값)이므로 번역하지 않습니다.
 
 ## 주요 파일
 

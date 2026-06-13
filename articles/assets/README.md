@@ -7,7 +7,7 @@
 | 경로 | 역할 |
 | --- | --- |
 | `assets/images/` | homepage, archive, newsletter page에서 사용할 수 있는 image asset입니다. |
-| `assets/images/fallback/` | article image resolver가 외부 image를 사용할 수 없을 때 쓰는 fallback image입니다. |
+| `assets/images/fallback/` | article image resolver가 외부 image를 사용할 수 없을 때 쓰는 fallback(대체) image입니다. |
 
 ## 작업 규칙
 

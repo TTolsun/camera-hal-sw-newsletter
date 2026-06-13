@@ -1,6 +1,6 @@
 # GitHub 설정과 workflow
 
-이 폴더는 issue/PR template와 GitHub Actions workflow를 둡니다. 뉴스레터 발행은 PR 기반이며, workflow가 generated newsletter를 `main`에 직접 발행하거나 자동 merge하지 않습니다.
+이 폴더는 issue/PR template와 GitHub Actions workflow를 둡니다. 뉴스레터 발행은 PR 기반입니다(사람이 PR을 merge할 때만 발행). workflow가 generated newsletter를 `main`에 직접 발행하거나 자동 merge하지 않습니다.
 
 ## 주요 경로
 

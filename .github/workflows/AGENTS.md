@@ -2,7 +2,7 @@
 
 이 폴더는 newsroom PR workflow와 validation workflow를 담습니다. workflow 변경은 발행 안전성과 secret 노출 위험을 먼저 검토하세요.
 
-## Safety Rules
+## 안전 규칙 (Safety Rules)
 
 - `GEMINI_API_KEY`와 `INTERNAL_LLM_API_KEY`는 workflow input으로 받지 말고 GitHub Secrets에서만 읽습니다.
 - scheduled run은 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` repo variable을 읽지 않고 code default를 따라야 합니다.
@@ -17,7 +17,7 @@
 - failed/reviewable run의 artifact upload를 보존합니다.
 - workflow가 사용하는 path를 바꾸면 scripts, docs, tests를 함께 갱신합니다.
 
-## Publication State Labels
+## 발행 상태 label (Publication State Labels)
 
 - `publish-ready`는 AI 자동 발행 기준을 통과한 PR에만 사용합니다.
 - `review-only`는 AI 자동 발행 기준 미달로 editor review가 필요한 넓은 상태 신호입니다.
@@ -26,7 +26,7 @@
 - `review-only-publication`과 `diagnostics-only`는 동시에 붙이면 안 됩니다.
 - GitHub Pages 표시 여부는 PR label이나 `final_publish_ready` 단독 값이 아니라, merge된 `main`의 `articles/newsletters/YYYY-MM-DD/index.html`, `articles/newsletters/YYYY-MM-DD/newsletter.md`, `articles/data/newsletters.json` entry 기준으로 판단합니다.
 
-## Review Checklist
+## 리뷰 체크리스트 (Review Checklist)
 
 - `GEMINI_API_KEY` 값이 출력되지 않는지 확인합니다.
 - failed generation에서도 review 가능한 diagnostics가 보존되는지 확인합니다.

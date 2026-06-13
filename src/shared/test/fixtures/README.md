@@ -1,6 +1,6 @@
 # Fixture 신뢰 정책
 
-`src/shared/test/fixtures`는 사람이 검수한 curated fixture와 generated artifact에서 축약한 bad/regression fixture를 분리합니다.
+`src/shared/test/fixtures`는 두 종류의 fixture를 분리해서 둡니다. 하나는 사람이 검수한 curated fixture(직접 만들거나 골라낸 신뢰 sample)이고, 다른 하나는 generated artifact에서 최소 입력만 축약한 bad/regression fixture입니다.
 
 ## 규칙
 
@@ -62,7 +62,7 @@ Generated regression fixture는 `fixture-ledger.json`에 fixture-local provenanc
 커밋된 fixture 파일 안에 `content/newsroom/YYYY-MM-DD`, `content/collected-news/YYYY-MM-DD`, `newsletters/YYYY-MM-DD` 경로를 포함하지 않습니다.
 `generatedArtifact: true`는 `bad/` 또는 regression 전용 fixture에만 사용합니다. `good/` fixture는 curated non-generated 상태를 유지합니다.
 
-## Layout
+## Layout (디렉터리 배치)
 
 현재 fixture layout은 저장소 계약입니다.
 
@@ -82,7 +82,7 @@ seed-plus-Gemini 같은 merge output contract를 최소 synthetic input으로 �
 domain-first fixture 위치입니다. 이 경로의 ledger entry는 `allowedUse: "workflow-shape"`와
 `relatedRules: ["seed_evidence", "workflow_shape"]`를 포함해야 합니다.
 
-## Seed evidence artifact boundary
+## Seed evidence artifact boundary (seed 근거 artifact 경계)
 
 `collection-intent.json`, `seed-evidence-pack.json`, `seed-candidates.json`, `compact_evidence` 이름은 seed evidence 계약을 보호하는 테스트에서 synthetic 또는 workflow-shape fixture에 등장할 수 있습니다. 이 이름들은 전역적으로 금지되지 않습니다.
 

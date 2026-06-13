@@ -1,6 +1,6 @@
 # content
 
-이 폴더는 수집 후보, newsroom review artifact, 감사 산출물을 둡니다. 대부분 generated 또는 review용 artifact이므로 명시 요청 없이 대량 수정하지 않습니다.
+이 폴더는 수집 후보, newsroom review artifact(리뷰용 산출물), 감사 산출물을 둡니다. 대부분 generated(자동 생성) 또는 review용 artifact이므로 명시 요청 없이 대량 수정하지 않습니다.
 
 ## 주요 경로
 
