@@ -1,6 +1,6 @@
 # 용어집
 
-이 문서는 newsroom 자동화와 발행 artifact에서 반복되는 용어를 설명합니다. code identifiers, JSON keys, enum values, file names, URLs, commands는 원문을 유지합니다.
+이 문서는 newsroom(기사 생성 자동화)과 발행 artifact(산출물)에서 자주 나오는 용어를 설명합니다. code identifier, JSON key, enum 값, 파일명, URL, 명령어는 원문 그대로 둡니다.
 
 | 용어 | 설명 |
 | --- | --- |
@@ -24,7 +24,7 @@
 | `watchlist` | 모니터링은 하되 dated evidence나 article candidate 조건이 부족해 main article로 올리지 않는 후보 tier입니다. |
 | `reference_only` | 참고자료로만 쓰는 후보 또는 source metadata입니다. main article 후보로 직접 승격하지 않습니다. |
 | `candidateOnly` | source registry에서 후보 발굴용 source임을 나타내는 값입니다. 최종 신뢰 source로 쓰기 전에 cross-check가 필요합니다. |
-| `community signal` | Reddit 같은 커뮤니티 source를 candidate discovery용 sensor로만 사용한다는 개념입니다. 후보에 `community_signal`, `community_signal_source`, `reddit_subreddit` marker가 붙으며, 해당 URL은 단독 main article이나 primary evidence로 승격하지 않고 official/project source로 교차 확인합니다. |
+| `community signal` | Reddit 같은 커뮤니티 source를 후보 발굴(candidate discovery)용 감지기로만 쓴다는 개념입니다. 이런 후보에는 `community_signal`, `community_signal_source`, `reddit_subreddit` marker가 붙습니다. 해당 URL은 단독 main article이나 primary evidence로 올리지 않고, official/project source로 교차 확인합니다. |
 | `requiresCrossCheck` | media/community/paywall 등 단독 최종 근거로 쓰기 위험한 source에 교차 확인이 필요함을 나타냅니다. |
 | `finalSelectionEligibility` | 후보의 최종 article 선택 가능성을 나타내는 field입니다. main article에는 `main` 또는 `short` 후보만 사용할 수 있습니다. |
 | `section_text_fallback` | renderer나 validator가 structured field 대신 section text에서 필요한 정보를 보완해 읽는 fallback 경로입니다. primary 계약을 대체하지 않습니다. |
@@ -33,8 +33,8 @@
 | `collection_intent` | 사람이 중요하다고 지정한 seed URL과 keyword hint를 Stage 1에서 기록하는 수집 의도 artifact입니다. 보통 `articles/content/collected-news/YYYY-MM-DD/collection-intent.json` 경로로 다룹니다. |
 | `seed_url` | 사용자가 대표 근거로 지정한 public `https` URL입니다. Stage 2는 이 URL을 deterministic하게 fetch하고, 허용된 linked evidence만 보강 대상으로 봅니다. |
 | `keyword_hints` | seed 수집과 source discovery를 돕는 검색/분류 hint입니다. 기사 fact나 source evidence가 아니므로 claim 근거로 쓰면 안 됩니다. |
-| `compact_evidence` | Gemini prompt에 전달하기 위해 source-backed fact, linked context, do_not_claim, evidence URL을 압축한 candidate-level evidence capsule입니다. 전체 Evidence Pack을 그대로 넣는 대신 기사 작성에 필요한 최소 근거만 전달합니다. |
-| `seed_evidence_pack` | seed URL에서 가져온 원문, linked evidence, 금지 claim, 근거 URL을 묶은 evidence package입니다. Gemini prompt에는 보통 전체 pack이 아니라 필요한 부분만 `compact_evidence`로 압축해 전달합니다. |
+| `compact_evidence` | Gemini prompt에 넣으려고 압축한 후보(candidate) 단위 근거 묶음입니다. source-backed fact, linked context, do_not_claim, evidence URL을 담습니다. 전체 Evidence Pack을 그대로 넣지 않고, 기사 작성에 필요한 최소 근거만 전달합니다. |
+| `seed_evidence_pack` | seed URL에서 가져온 원문, linked evidence, 금지 claim, 근거 URL을 묶은 evidence package입니다. Gemini prompt에는 보통 전체 pack 대신 필요한 부분만 `compact_evidence`로 압축해 전달합니다. |
 | `source_gap_risk` | main article로 발행하기에는 dated evidence, source extraction, source binding이 부족하다는 위험 표시입니다. 이 값이 true인 후보는 quality gate나 selector gate를 우회해서 발행하지 않습니다. |
 | `source_url_quality` | source URL이 dated evidence, 공식성, 기사성, 중복 여부, 접근 가능성 측면에서 main article 근거로 적합한지 평가하는 품질 신호입니다. |
 | `main_article_source_allowed` | 해당 후보 또는 source가 main article 근거로 사용 가능한지 나타내는 정책 판단 값입니다. false이면 fallback/context/reference로만 다룹니다. |
@@ -59,4 +59,4 @@
 | `date_confidence` | `date_source`별 기준 신뢰도 점수입니다. `date_confidence >= 85`만 source relevance와 source binding이 함께 통과할 때 publish-ready date evidence 후보가 될 수 있습니다. |
 | `needs_editor_date_review` | 날짜 근거가 약하거나 content hash 기반 변화라 editor 확인이 필요한 상태입니다. 기본적으로 publish-ready date evidence가 아닙니다. |
 
-detected_at, first_seen_at, last_seen_at은 source의 실제 발행일이나 freshness 근거가 아니다.
+`detected_at`, `first_seen_at`, `last_seen_at`은 source의 실제 발행일이나 최신성(freshness) 근거가 아닙니다.

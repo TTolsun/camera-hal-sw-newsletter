@@ -1,8 +1,8 @@
 # 뉴스룸 LLM Prompt 운영 Reference
 
-이 문서는 Gemini/LLM prompt 위치를 빠르게 찾기 위한 운영 reference입니다. `source of truth`는 코드이며, 이 문서는 prompt 원문을 복사하지 않고 목적과 입출력 계약만 요약합니다. Line number는 쉽게 drift되므로 파일 경로와 함수명을 기준으로 확인하세요.
+이 문서는 Gemini/LLM prompt가 코드 어디에 있는지 빠르게 찾기 위한 운영 reference(참고 문서)입니다. 정본(source of truth)은 코드입니다. 이 문서는 prompt 원문을 옮겨 적지 않고, 각 prompt의 목적과 입출력 계약만 요약합니다. 줄 번호(line number)는 쉽게 어긋나므로(drift), 파일 경로와 함수명을 기준으로 찾으세요.
 
-API key, runtime secret, 전체 prompt 원문, generated artifact 내용은 이 문서에 포함하지 않습니다. Prompt 변경은 quality threshold, validator 계약, publication gate를 약화하지 않아야 합니다.
+API key, runtime secret, prompt 전체 원문, generated artifact 내용은 이 문서에 넣지 않습니다. prompt를 바꿀 때 quality threshold(품질 기준), validator 계약, publication gate를 약화하면 안 됩니다.
 
 ## 기준 위치 링크
 
@@ -29,7 +29,7 @@ Workflow/Stage: Stage 1 RAW collection
 
 출력/schema: `articles/content/collected-news/<date>/manual-candidates.json`, RAW candidate artifact
 
-주요 guardrail: LLM credential을 요구하지 않으며 Gemini prompt를 실행하지 않습니다. Stage 1 결과는 Stage 2/Stage 3의 입력일 뿐 최종 발행물이 아닙니다.
+주요 guardrail: LLM credential이 필요 없고 Gemini prompt도 실행하지 않습니다. Stage 1 결과는 Stage 2/Stage 3의 입력일 뿐, 최종 발행물이 아닙니다.
 
 ### Newsletters 02 - Source Discovery PR
 
@@ -45,7 +45,7 @@ Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
 출력/schema: `proposalResponseSchema()`, `articles/content/newsroom/<date>/gemini-source-proposals.json`
 
-주요 guardrail: newsletter article을 작성하지 않습니다. 제공된 registry domain 또는 linked evidence domain의 source URL만 제안합니다. Deterministic fetch, normalize, schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영됩니다.
+주요 guardrail: newsletter article을 직접 쓰지 않습니다. 제안할 수 있는 source URL은 제공된 registry domain이나 linked evidence domain에 속한 것뿐입니다. 그중에서도 deterministic fetch, normalize, schema validation을 모두 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영됩니다.
 
 ## Newsletters 03 - Editor PR
 
@@ -63,7 +63,7 @@ Workflow/Stage: `Newsletters 03 - Editor PR`, Stage 3 전체
 
 출력/schema: 별도 schema 없음. 각 LLM stage의 user prompt 일부로 결합됩니다.
 
-주요 guardrail: 제공된 candidate JSON, source registry, editorial documents만 사용합니다. Web browsing을 하지 않고, source name과 source URL을 보존하며, reader-facing text는 한국어로 작성합니다.
+주요 guardrail: 제공된 candidate JSON, source registry, editorial documents만 씁니다. web browsing은 하지 않습니다. source name과 source URL은 그대로 보존하고, 독자가 읽는 text(reader-facing text)는 한국어로 작성합니다.
 
 ### Background context
 
@@ -95,7 +95,7 @@ Workflow/Stage: Stage 3 `reporter attempt <n>/<total>`
 
 출력/schema: `reporterSchema`, `articles/content/newsroom/<date>/reporter-candidates.json`
 
-주요 guardrail: 최종 selection decision을 다시 하지 않습니다. Capsule의 eligibility, risk, score, imageCandidates, evidence를 보존합니다. Source text가 생략돼 있는데 있는 것처럼 가정하지 않고, article-level `claims[]`는 만들지 않습니다.
+주요 guardrail: 최종 selection 결정을 다시 내리지 않습니다. capsule의 eligibility, risk, score, imageCandidates, evidence는 그대로 보존합니다. source text가 비어 있으면 있는 것처럼 가정하지 않으며, article 단위 `claims[]`는 만들지 않습니다.
 
 ### Editor draft
 
@@ -111,7 +111,7 @@ Workflow/Stage: Stage 3 `editor attempt <n>/<total>`
 
 출력/schema: `editorSchema`, `articles/content/newsroom/<date>/editor-draft.json`
 
-주요 guardrail: `docs/editorial-policy.md`와 `docs/newsletter-template.md`를 따릅니다. `final_selected=false`, watchlist/exclude, missing dated evidence, `source_gap_risk=true`, `briefing_only`, `reference_only` candidate를 main article로 만들지 않습니다. Image URL을 만들지 않고 `imageCandidates.url` 중 하나 또는 empty string만 `selectedImage`로 사용합니다.
+주요 guardrail: `docs/editorial-policy.md`와 `docs/newsletter-template.md`를 따릅니다. 다음 candidate는 main article로 만들지 않습니다 — `final_selected=false`, watchlist/exclude, missing dated evidence(날짜 근거 없음), `source_gap_risk=true`, `briefing_only`, `reference_only`. image URL은 새로 만들지 않고, `selectedImage`에는 `imageCandidates.url` 중 하나 또는 빈 문자열(empty string)만 씁니다.
 
 ### Editor semantic repair
 
@@ -257,4 +257,11 @@ Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 
 출력/schema: `editorSchema` 또는 `editorCompletionSchema` 내부 `public_article`
 
-주요 guardrail: story v1 output은 top-level `public_contract_version="story-v1"`, `generation_contract_version=1`와 article-level `public_article.story_contract_version=1`을 포함합니다. `public_article`에는 `headline`, `source_subtitle`, `lead`, `body_paragraphs`, `camera_hal_takeaway`, `reader_checkpoints`, `editorial_story`, `source_links`를 포함하고, `decision_metadata`는 LLM이 쓰지 않으며 deterministic builder가 생성하거나 overwrite합니다. `editorial_story.reader_scenario`는 가정형 현업 장면으로 쓰고, `what_happened`에는 source-confirmed fact만 둡니다. `article_sections`와 `hal_signal_capsule`은 reader-facing prose로 render하지 않습니다. Local path, `.tmp` path, GitHub Actions artifact URL, editorial-only source role을 public source link로 쓰지 않습니다.
+주요 guardrail:
+
+- story v1 output은 top-level에 `public_contract_version="story-v1"`, `generation_contract_version=1`을, article 단위에 `public_article.story_contract_version=1`을 포함합니다.
+- `public_article`에는 `headline`, `source_subtitle`, `lead`, `body_paragraphs`, `camera_hal_takeaway`, `reader_checkpoints`, `editorial_story`, `source_links`를 포함합니다.
+- `decision_metadata`는 LLM이 쓰지 않습니다. deterministic builder가 만들거나 덮어씁니다(overwrite).
+- `editorial_story.reader_scenario`는 가정형 현업 장면으로 쓰고, `what_happened`에는 source로 확인된 fact만 둡니다.
+- `article_sections`와 `hal_signal_capsule`은 독자에게 보이는 prose(reader-facing prose)로 render하지 않습니다.
+- public source link로는 local path, `.tmp` path, GitHub Actions artifact URL, editorial 전용(editorial-only) source role을 쓰지 않습니다.

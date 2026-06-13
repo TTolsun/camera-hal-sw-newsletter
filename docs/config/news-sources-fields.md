@@ -1,8 +1,8 @@
 # news-sources.json 필드 안내
 
-`src/shared/data/news-sources.json`은 collector와 newsroom automation이 읽는 기계 판독용 registry입니다. 코드가 읽는 key는 영어 이름 그대로 유지해야 합니다. 한국어 설명을 넣더라도 field name을 번역하거나 임의로 바꾸면 안 됩니다.
+`src/shared/data/news-sources.json`은 collector와 newsroom automation이 읽는 기계 판독용 registry(소스 목록)입니다. 코드가 읽는 key는 영어 이름 그대로 둬야 합니다. 한국어 설명을 덧붙이는 것은 괜찮지만, field name을 번역하거나 마음대로 바꾸면 안 됩니다.
 
-`docs/news-sources.md`는 사람이 검토하기 위한 editorial view입니다. JSON registry가 없을 때 fallback으로도 쓰이지만, 운영 기준 source of truth는 `src/shared/data/news-sources.json`입니다.
+`docs/news-sources.md`는 사람이 검토하기 위한 editorial view(편집용 보기)입니다. JSON registry가 없을 때 fallback으로도 쓰이지만, 운영 기준 정본(source of truth)은 `src/shared/data/news-sources.json`입니다.
 
 ## 최상위 필드
 
@@ -12,7 +12,7 @@
 | `sectionMap` | `category` 값을 newsletter section 이름으로 매핑합니다. | source entry에는 `section`을 쓰지 않습니다. newsletter section label의 단일 source of truth입니다. |
 | `sources` | 개별 source entry 배열입니다. | entry field key는 영어 그대로 유지합니다. |
 
-`sectionMap`에는 예를 들어 아래 매핑이 있습니다. 이것은 전체 category 목록이 아니라 현재 파일에 있는 일부 예시입니다.
+`sectionMap`에는 예를 들어 아래와 같은 매핑이 있습니다. 전체 category 목록이 아니라, 현재 파일에 있는 일부 예시일 뿐입니다.
 
 ```json
 {
@@ -43,9 +43,9 @@
 
 ## category와 sectionMap의 관계
 
-`category`는 source entry가 직접 보관하는 machine key이고, 사람이 읽는 newsletter section label은 `sectionMap[category]`에서만 파생합니다. source entry에 `section`을 직접 쓰면 같은 정보를 두 곳에서 관리하게 되므로 schema v2에서는 허용하지 않습니다.
+`category`는 source entry가 직접 들고 있는 machine key입니다. 사람이 읽는 newsletter section label은 오직 `sectionMap[category]`에서만 만들어집니다. source entry에 `section`을 직접 적으면 같은 정보를 두 곳에서 관리하게 되므로, schema v2에서는 허용하지 않습니다.
 
-collector는 런타임 normalized source 객체와 `articles/content/collected-news/YYYY-MM-DD/candidates.json`에는 계속 `section`과 `source_section`을 기록합니다. 다만 이 값은 입력 JSON의 중복 필드가 아니라 resolver가 `sectionMap`에서 계산한 값입니다.
+collector는 런타임 normalized source 객체와 `articles/content/collected-news/YYYY-MM-DD/candidates.json`에 `section`과 `source_section`을 계속 기록합니다. 다만 이 값은 입력 JSON에 중복으로 적은 필드가 아니라, resolver가 `sectionMap`에서 계산해 넣은 값입니다.
 
 ## Source 추가 체크리스트
 
@@ -55,11 +55,13 @@ collector는 런타임 normalized source 객체와 `articles/content/collected-n
 4. source entry에는 `section`을 넣지 않습니다. section label이 필요하면 `sectionMap`에 있는 category mapping을 수정합니다.
 5. `collectionModeHint`는 collector가 지원하는 경우에만 넣고, unsupported mode를 문서만 보고 invent하지 않습니다.
 6. `priority`, `reliability`, `enabled`, `candidateOnly`, `requiresCrossCheck`는 publication risk 기준으로 보수적으로 정합니다.
-7. `usageHint`와 `keywords`는 AOSP Camera, Camera Driver, SoC Platform, C++, AI/SW engineering 관점의 후보 발굴 의도를 드러내게 작성합니다. 실제 main article 분류는 source keyword만이 아니라 기사 title/summary/API/component/behavior evidence에서 나온 `relevance_bucket`을 우선합니다.
-   - `android-media` category는 Media3, MediaCodec, MediaRecorder, MediaStore, Photo Picker 같은 official Android media 출처를 묶는 discovery grouping입니다. 단독 keyword나 official source 품질만으로 main article 후보가 되지 않습니다.
-8. source 추가 후 `npm run collect`, `npm run test`, `npm run validate`를 실행하고, 생성된 candidates에서 watch/reference 후보가 final main article로 올라가지 않는지 확인합니다.
+7. `usageHint`와 `keywords`는 AOSP Camera, Camera Driver, SoC Platform, C++, AI/SW engineering 관점에서 후보를 발굴하려는 의도가 드러나게 작성합니다. 실제 main article 분류는 source keyword가 아니라, 기사 title/summary/API/component/behavior evidence에서 나온 `relevance_bucket`을 우선합니다.
+   - `android-media` category는 Media3, MediaCodec, MediaRecorder, MediaStore, Photo Picker 같은 official Android media 출처를 묶는 발굴용 그룹(discovery grouping)입니다. keyword 하나만으로, 또는 official source라는 품질만으로 main article 후보가 되지는 않습니다.
+8. source를 추가한 뒤에는 `npm run collect`, `npm run test`, `npm run validate`를 실행합니다. 그리고 생성된 candidates에서 watch/reference 후보가 final main article로 올라가지 않는지 확인합니다.
 
 ## Source quality contract fields
+
+아래 표와 enum 목록은 CI/test가 읽는 계약(contract)이라 영어와 원문 값을 그대로 유지합니다. 각 source의 품질 정책을 정하는 필드 묶음입니다.
 
 `src/shared/data/news-sources.json` is the executable source registry. Source quality docs are review surfaces only; enum values and JSON keys must stay unchanged.
 

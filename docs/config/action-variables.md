@@ -2,7 +2,7 @@
 
 설정 위치는 `GitHub repository -> Settings -> Secrets and variables -> Actions`입니다.
 
-Secret과 Variable은 분리해서 관리합니다. Secret은 로그, commit, PR 본문, GitHub Variables에 넣지 않습니다.
+Secret과 Variable은 따로 관리합니다. Secret은 로그, commit, PR 본문, GitHub Variables 어디에도 넣지 않습니다.
 
 ## Secret
 
@@ -12,13 +12,18 @@ Secret과 Variable은 분리해서 관리합니다. Secret은 로그, commit, PR
 
 ## LLM provider 설정
 
-기본 provider는 `gemini`입니다. current scheduled workflow는 `Newsletters 01 - Source Collection PR` (`.github/workflows/01-newsletters-source-collect-pr.yml`)이며 RAW candidate collection만 수행합니다. 이 Stage 1 workflow는 LLM credentials, provider/model 설정, `npm run generate`를 사용하지 않습니다.
+기본 provider는 `gemini`입니다. 지금 예약 실행되는 workflow는 `Newsletters 01 - Source Collection PR` (`.github/workflows/01-newsletters-source-collect-pr.yml`)뿐이고, RAW candidate collection(원시 후보 수집)만 합니다. 이 Stage 1 workflow는 LLM credential, provider/model 설정, `npm run generate`를 쓰지 않습니다.
 
-LLM provider/model 설정은 LLM 호출 경로가 있는 수동 workflow에서만 적용됩니다. `Newsletters 02 - Source Discovery PR` (`.github/workflows/02-newsletters-source-discovery-pr.yml`)은 optional source discovery가 켜진 경우 provider를 사용하고, `Newsletters 03 - Editor PR` (`.github/workflows/03-newsletters-editor-pr.yml`)은 final generation에서 provider를 사용합니다. Stage 2/3 manual 입력의 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS`가 비어 있으면 `src/shared/common/runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`를 따릅니다. 기본 provider/model을 바꾸려면 code default를 변경합니다.
+LLM provider/model 설정은 LLM을 실제로 호출하는 수동 workflow에서만 적용됩니다.
 
-기존 `GEMINI_MODEL`과 `GEMINI_FALLBACK_MODELS`는 runtime compatibility alias로 유지됩니다. 다만 Stage 3 manual final generation의 provider/model 기본값을 바꾸는 경로는 더 이상 GitHub repo variable이 아니라 code default입니다.
+- `Newsletters 02 - Source Discovery PR` (`.github/workflows/02-newsletters-source-discovery-pr.yml`): optional source discovery가 켜졌을 때 provider를 씁니다.
+- `Newsletters 03 - Editor PR` (`.github/workflows/03-newsletters-editor-pr.yml`): final generation에서 provider를 씁니다.
 
-Stage별 primary model은 `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `NEWSROOM_FACTCHECK_MODEL`, `NEWSROOM_REPAIR_MODEL`, `NEWSROOM_JUDGE_MODEL`로 각각 override할 수 있습니다. `LLM_MODEL` 또는 `GEMINI_MODEL`이 명시되면 stage별 값보다 우선해서 모든 stage primary model을 override합니다. fallback chain은 `LLM_FALLBACK_MODELS` 또는 compatibility alias인 `GEMINI_FALLBACK_MODELS`가 모든 stage primary 뒤에 붙습니다.
+Stage 2/3 manual 입력의 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS`가 비어 있으면 `src/shared/common/runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`를 따릅니다. 기본 provider/model을 바꾸려면 GitHub variable이 아니라 code default를 고쳐야 합니다.
+
+기존 `GEMINI_MODEL`과 `GEMINI_FALLBACK_MODELS`는 runtime 호환용 alias(compatibility alias)로 남아 있습니다. 다만 Stage 3 manual final generation의 provider/model 기본값을 정하는 곳은 이제 GitHub repo variable이 아니라 code default입니다.
+
+stage별 primary model은 각각 따로 override할 수 있습니다 — `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `NEWSROOM_FACTCHECK_MODEL`, `NEWSROOM_REPAIR_MODEL`, `NEWSROOM_JUDGE_MODEL`. 단, `LLM_MODEL` 또는 `GEMINI_MODEL`을 지정하면 그 값이 stage별 설정보다 우선해서 모든 stage의 primary model을 덮어씁니다. fallback chain은 `LLM_FALLBACK_MODELS`(또는 호환 alias `GEMINI_FALLBACK_MODELS`)가 모든 stage primary 뒤에 붙습니다.
 
 token은 workflow input, log, artifact, PR body에 출력하지 않습니다.
 
@@ -28,16 +33,16 @@ token은 workflow input, log, artifact, PR body에 출력하지 않습니다.
 | `llm_model` | 빈 값 | `LLM_MODEL` | 수동 실행에서만 primary model을 override합니다. |
 | `llm_fallback_models` | 빈 값 | `LLM_FALLBACK_MODELS` | 수동 실행에서만 fallback model 목록을 comma-separated string으로 override합니다. |
 
-`LLM_PROVIDER=gemini`가 기본값입니다. `LLM_PROVIDER=openapi`는 전용 구현 PR 전에는 `provider_not_implemented`로 fail-fast합니다.
+기본값은 `LLM_PROVIDER=gemini`입니다. `LLM_PROVIDER=openapi`는 전용 구현 PR이 나오기 전까지 `provider_not_implemented`로 즉시 실패(fail-fast)합니다.
 
-Gemini Pro 계열 모델명은 사용하지 않습니다. `LLM_MODEL`, `GEMINI_MODEL`, `LLM_FALLBACK_MODELS`, `GEMINI_FALLBACK_MODELS`, `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `NEWSROOM_FACTCHECK_MODEL`, `NEWSROOM_REPAIR_MODEL`, `NEWSROOM_JUDGE_MODEL`에 Gemini Pro 계열 모델명이 들어오면 provider와 관계없이 `doctor:config` / runtime validation이 실패합니다.
+Gemini Pro 계열 모델명은 쓰지 않습니다. 다음 변수 중 어디에든 Gemini Pro 계열 모델명이 들어오면 provider와 상관없이 `doctor:config` / runtime validation이 실패합니다 — `LLM_MODEL`, `GEMINI_MODEL`, `LLM_FALLBACK_MODELS`, `GEMINI_FALLBACK_MODELS`, `NEWSROOM_REPORTER_MODEL`, `NEWSROOM_EDITOR_MODEL`, `NEWSROOM_FACTCHECK_MODEL`, `NEWSROOM_REPAIR_MODEL`, `NEWSROOM_JUDGE_MODEL`.
 
 ## Variable
 
-아래 값은 runtime config가 읽는 운영 설정입니다. provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 결정됩니다.
-Stage 1 workflow는 후보 수집 전에 `npm run doctor:config -- --no-llm-credentials`로 secret 없는 preflight를 실행하고, Stage 3 final generation은 LLM 생성 전에 `npm run doctor:config`로 runtime 설정을 검증합니다. 이 명령은 API key 값을 출력하지 않고 설정 여부만 표시합니다.
+아래 값은 runtime config가 읽는 운영 설정입니다. provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 정해집니다.
+Stage 1 workflow는 후보 수집 전에 `npm run doctor:config -- --no-llm-credentials`로 secret 없이 사전 점검(preflight)을 합니다. Stage 3 final generation은 LLM 생성 전에 `npm run doctor:config`로 runtime 설정을 검증합니다. 이 명령은 API key 값을 출력하지 않고, 설정이 됐는지 여부만 보여줍니다.
 
-영어 변수명은 GitHub Actions와 코드가 읽는 계약이므로 바꾸지 않습니다. 대신 의미를 함께 읽어야 합니다. 예를 들어 `fallback model`은 기본 모델 실패 시 쓰는 대체 모델, `quality gate`는 발행 안전 기준, `cost report`는 LLM 비용 리포트, `manual high-quality run`은 사람이 비용 증가를 승인하고 직접 시작하는 수동 고품질 실행을 뜻합니다.
+영어 변수명은 GitHub Actions와 코드가 읽는 계약이라 바꾸지 않습니다. 대신 뜻을 알아두면 됩니다. 예를 들어 `fallback model`은 기본 모델이 실패했을 때 쓰는 대체 모델, `quality gate`는 발행 안전 기준, `cost report`는 LLM 비용 리포트, `manual high-quality run`은 사람이 비용 증가를 승인하고 직접 시작하는 수동 고품질 실행을 뜻합니다.
 
 | 이름 | 필수 | 현재 기본값 | 의미 | 변경해도 되는 상황 | 위험/주의 |
 | --- | --- | --- | --- | --- | --- |
@@ -79,8 +84,8 @@ Stage 1 workflow는 후보 수집 전에 `npm run doctor:config -- --no-llm-cred
 
 ## Tradeoff 검토 기준
 
-- 비용: retry 횟수, fallback 모델 수, thinking budget이 늘수록 Stage 3 manual final generation 비용이 증가할 수 있습니다. Gemini Pro 계열 모델명은 운영 경로에서 validation error로 차단합니다.
-- 품질: 더 강한 모델이나 quality retry는 품질을 올릴 수 있지만, source gap이 있는 후보를 사실로 만들 수는 없습니다.
+- 비용: retry 횟수, fallback 모델 수, thinking budget이 늘수록 Stage 3 manual final generation 비용이 커질 수 있습니다. Gemini Pro 계열 모델명은 운영 경로에서 validation error로 차단됩니다.
+- 품질: 더 강한 모델이나 quality retry는 품질을 올릴 수 있지만, source gap(근거 부족)이 있는 후보를 사실로 만들 수는 없습니다.
 - 시간: retry delay와 retry 횟수가 늘수록 PR 생성 시간이 길어집니다.
 
-검증을 낮춰 통과시키지 마십시오. `npm run validate`는 publication risk를 막는 gate이며, 실패 원인은 artifact를 보고 source, draft, image fallback, workflow 상태를 고쳐야 합니다.
+검증을 낮춰서 통과시키지 마세요. `npm run validate`는 잘못된 발행(publication risk)을 막는 gate입니다. 실패하면 artifact를 보고 원인을 찾아 source, draft, image fallback, workflow 상태를 고쳐야 합니다.

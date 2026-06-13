@@ -1,8 +1,8 @@
 # 처음 보는 사람은 여기부터
 
-이 저장소는 AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC/CPU/GPU/NPU, power/thermal/performance 관련 소식을 수집하고 Gemini 기반 newsroom 자동화로 검토 가능한 정적 뉴스레터를 만드는 프로젝트입니다.
+이 저장소는 AOSP Camera Framework, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, SoC/CPU/GPU/NPU, power/thermal/performance 관련 소식을 모으는 프로젝트입니다. Gemini 기반 newsroom(기사 생성 자동화)이 사람이 검토할 수 있는 정적 뉴스레터를 만듭니다.
 
-발행은 자동으로 `main`에 직접 들어가지 않습니다. 후보 수집, deterministic shortlist, Gemini 생성, 검증, 편집자 검토 PR을 거쳐 사람이 확인한 뒤 merge하면 GitHub Pages가 발행합니다.
+발행이 `main`에 자동으로 들어가는 일은 없습니다. 순서는 이렇습니다. 후보 수집 → deterministic shortlist(코드가 후보를 미리 추림) → Gemini 생성 → 검증 → 편집자 검토 PR. 사람이 확인하고 merge하면 그때 GitHub Pages가 발행합니다.
 
 ## 먼저 읽을 문서
 
@@ -16,7 +16,7 @@
 | [config/news-sources-fields.md](config/news-sources-fields.md) | `src/shared/data/news-sources.json` field 계약입니다. |
 | [src/AGENTS.md](../src/AGENTS.md) | #262 재구성 후 `src/` layer 구조와 구현·테스트 규칙을 설명합니다. |
 
-Newsletter Policy의 현재 값은 `src/shared/config/newsletter-policy.json`이 source of truth입니다. 대표 운영 문서의 generated Newsletter Policy block은 스크립트로 갱신되며, 일반 문서에서 article count 숫자를 직접 수정하지 않습니다.
+Newsletter Policy의 현재 값은 `src/shared/config/newsletter-policy.json`이 정본(source of truth)입니다. 대표 운영 문서에 들어가는 generated Newsletter Policy block은 스크립트가 자동으로 갱신합니다. 일반 문서에서 article count(기사 수) 같은 숫자를 손으로 고치지 마세요.
 
 ## 문서 역할
 
@@ -48,9 +48,9 @@ Newsletter Policy의 현재 값은 `src/shared/config/newsletter-policy.json`이
 
 ## 안전한 수정 순서
 
-1. 관련 scoped `AGENTS.md`를 확인합니다.
-2. PR 하나에는 한 관심사만 담습니다.
+1. 고치려는 영역의 `AGENTS.md`(해당 폴더 전용 규칙)를 먼저 확인합니다.
+2. PR 하나에는 한 가지 주제만 담습니다.
 3. 변경 후 `npm.cmd run test`를 실행합니다.
 4. 변경 후 `npm.cmd run validate`를 실행합니다.
-5. source registry나 문서 변경처럼 범위가 좁은 경우에도 관련 targeted validation을 함께 실행합니다.
-6. generated artifact가 생겼다면 `articles/content/collected-news/`, `articles/content/newsroom/`, `articles/newsletters/`, `articles/data/newsletters.json` 변경을 직접 확인합니다.
+5. source registry나 문서 변경처럼 범위가 좁아도, 관련된 targeted validation(좁은 범위 검증)을 함께 실행합니다.
+6. generated artifact가 새로 생겼다면 `articles/content/collected-news/`, `articles/content/newsroom/`, `articles/newsletters/`, `articles/data/newsletters.json`의 변경 내용을 직접 확인합니다.
