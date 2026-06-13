@@ -17,7 +17,7 @@ const {
   newsletterIndexDateStatus,
   publicNewsletterStructureStatus,
   requiredPublicFiles
-} = require('../reporter/public-structure');
+} = require('./public-structure');
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const STATUS_FAILED_RAW_ARTIFACT_VALIDATION = 'FAILED_RAW_ARTIFACT_VALIDATION';

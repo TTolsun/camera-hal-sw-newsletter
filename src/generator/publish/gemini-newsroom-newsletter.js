@@ -107,7 +107,7 @@ const {
   buildStaleClaimReportMarkdown,
   pruneResolvedStaleFactCheckItems,
   scrubStaleClaims
-} = require('../reporter/stale-claims');
+} = require('../quality/stale-claims');
 const {
   articlePolicy,
   articleCountRangeText,
@@ -125,7 +125,7 @@ const {
   buildDateReviewManifest,
   buildReviewArtifactInventory,
   renderReviewGuideMarkdown
-} = require('../reporter/review-artifact-inventory');
+} = require('./review-artifact-inventory');
 const {
   writeHomepageHeadlineState
 } = require('../reporter/homepage-headline');

@@ -6,7 +6,7 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
-const { retentionCommitAllowlist } = require('../../../reporter/review-artifact-inventory');
+const { retentionCommitAllowlist } = require('../../../publish/review-artifact-inventory');
 const { writeWeeklyNewsletterArtifacts } = require('../../../render/weekly-newsletter-output');
 
 function tempRoot() {

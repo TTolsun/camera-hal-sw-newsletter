@@ -10,7 +10,7 @@ const {
   TRANSIENT_ATTEMPT,
   REVIEW_REQUIRED_COMPACT,
   classifyArtifactPath
-} = require('../../reporter/review-artifact-inventory');
+} = require('../../publish/review-artifact-inventory');
 
 // Pass a fake tracked-paths list via _trackedPaths to avoid real git invocation in tests.
 function makeCheck(trackedPaths) {

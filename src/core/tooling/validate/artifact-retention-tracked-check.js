@@ -3,7 +3,7 @@ const {
   DEBUG_HEAVY,
   TRANSIENT_ATTEMPT,
   classifyArtifactPath
-} = require('../../../generator/reporter/review-artifact-inventory');
+} = require('../../../generator/publish/review-artifact-inventory');
 
 const UNKNOWN_GROUP = 'unknown_artifacts';
 

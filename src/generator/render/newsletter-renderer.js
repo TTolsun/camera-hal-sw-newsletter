@@ -15,7 +15,7 @@ const {
 } = require('../reporter/article-anchor');
 const {
   renderReleaseQaInventorySection
-} = require('../reporter/review-artifact-inventory');
+} = require('../publish/review-artifact-inventory');
 const {
   SITE_BASE_URL,
   DEFAULT_OG_IMAGE

@@ -17,7 +17,7 @@ const {
   CLEANUP_REPORT_PATH: AUDIT_CLEANUP_REPORT_PATH,
   LEDGER_PATH: AUDIT_LEDGER_PATH,
   INVENTORY_PATH: AUDIT_INVENTORY_PATH
-} = require('../reporter/audit-paths');
+} = require('../publish/audit-paths');
 
 const REWRITE_DIFF_PREFIX = 'articles/content/audit/historical-rewrite-diff/';
 

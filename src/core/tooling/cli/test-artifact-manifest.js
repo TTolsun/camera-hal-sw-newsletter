@@ -12,7 +12,7 @@ const {
   REVIEW_REQUIRED_COMPACT,
   DEBUG_HEAVY,
   TRANSIENT_ATTEMPT
-} = require('../../../generator/reporter/review-artifact-inventory');
+} = require('../../../generator/publish/review-artifact-inventory');
 const {
   collectedCandidatesRelPath,
   newsroomRelPath,

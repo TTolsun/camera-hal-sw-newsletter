@@ -4,7 +4,7 @@ const path = require('path');
 const {
   ensureArray,
   resolvePublishStatus
-} = require('../reporter/publish-status');
+} = require('./publish-status');
 const {
   collectedArtifactPath,
   loadCollectedReport,
@@ -48,7 +48,7 @@ const {
 const {
   buildReviewArtifactInventory,
   renderGeneratedArtifactsSummary
-} = require('../reporter/review-artifact-inventory');
+} = require('./review-artifact-inventory');
 const {
   renderEditorPrSummary
 } = require('../../core/common/editor-pr-summary');

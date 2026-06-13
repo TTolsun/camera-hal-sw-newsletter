@@ -1,4 +1,4 @@
-const { retentionCommitAllowlist } = require('../reporter/review-artifact-inventory');
+const { retentionCommitAllowlist } = require('./review-artifact-inventory');
 
 function usage() {
   console.error('Usage: node src/generator/publish/print-retention-commit-allowlist.js --date YYYY-MM-DD [--root /path/to/repo]');
