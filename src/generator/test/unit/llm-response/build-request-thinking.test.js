@@ -42,6 +42,17 @@ test('Gemini 3.x editor — thinkingBudget 대신 thinkingLevel(MEDIUM) 사용',
   assert.equal(result.applied, 1024);
 });
 
+test('Gemini 3.x repair — editor와 동일하게 thinkingLevel(MEDIUM) 사용(raw budget 미전송)', () => {
+  // repair stage가 gemini-3.5-flash로 라우팅되면 editor와 같은 model-family
+  // thinking 경로를 타야 한다. 숫자 budget(1024)를 3.x에 그대로 보내면 400이므로
+  // thinkingLevel로 번역되는지 확인한다.
+  const result = thinkingConfigForStage('editor repair attempt 1/2', baseConfig, 'gemini-3.5-flash');
+  assert.equal(result.mode, 'thinking_level');
+  assert.equal(result.thinkingLevel, 'MEDIUM');
+  assert.equal(result.requested, 1024);
+  assert.equal(result.applied, 1024);
+});
+
 test('flash-lite judge budget 0 — thinkingConfig 생략(mode omit)', () => {
   const config = { ...baseConfig, geminiThinkingBudgetJudge: 0 };
   const result = thinkingConfigForStage('public article judge', config, 'gemini-2.5-flash-lite');
@@ -99,6 +110,10 @@ function thinkingConfigFromRequest(stage, model, config = baseConfig) {
 
 test('buildRequest — 3.x editor는 thinkingLevel만 전송(thinkingBudget 없음)', () => {
   assert.deepEqual(thinkingConfigFromRequest('editor attempt 1/2', 'gemini-3.5-flash'), { thinkingLevel: 'MEDIUM' });
+});
+
+test('buildRequest — 3.x repair는 thinkingLevel만 전송(thinkingBudget 없음)', () => {
+  assert.deepEqual(thinkingConfigFromRequest('editor repair attempt 1/2', 'gemini-3.5-flash'), { thinkingLevel: 'MEDIUM' });
 });
 
 test('buildRequest — flash-lite judge budget 0이면 thinkingConfig 자체 없음', () => {
