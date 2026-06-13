@@ -1,5 +1,4 @@
 [
   "src/core/adapters/llm/gemini-newsletter-response-adapter.js -> src/generator/reporter/llm-errors.js",
-  "src/core/common/section-identity.js -> src/generator/select/newsroom-selection.js",
   "src/discovery/gemini-client.js -> src/generator/reporter/llm-client.js"
 ]
