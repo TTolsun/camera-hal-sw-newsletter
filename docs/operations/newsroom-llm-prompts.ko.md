@@ -6,8 +6,8 @@ API key, runtime secret, 전체 prompt 원문, generated artifact 내용은 이 
 
 ## 기준 위치 링크
 
-- [Stage 3 prompt host](../../scripts/newsroom/cli/gemini-newsroom-newsletter.js)
-- [Stage 2 source discovery prompt host](../../scripts/newsroom/collect/gemini-source-discovery.js)
+- [Stage 3 prompt host](../../src/generator/publish/gemini-newsroom-newsletter.js)
+- [Stage 2 source discovery prompt host](../../src/discovery/gemini-source-discovery.js)
 - [Editorial policy](../editorial-policy.md)
 - [Newsletter template](../newsletter-template.md)
 - [Newsletter policy config](../../config/newsletter-policy.json)
@@ -37,7 +37,7 @@ Workflow/Stage: Stage 1 RAW collection
 
 목적: manual candidate와 source registry를 바탕으로 부족한 source coverage를 보강할 discovery intent를 제안합니다. Gemini output은 후보 진실값이 아니라 proposal입니다.
 
-위치: `scripts/newsroom/collect/gemini-source-discovery.js`의 `buildProposalPrompt()`와 `buildProposalPayload()`
+위치: `src/discovery/gemini-source-discovery.js`의 `buildProposalPrompt()`와 `buildProposalPayload()`
 
 Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
@@ -55,7 +55,7 @@ Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
 목적: Stage 3의 reporter, editor, fact-check, repair, completion prompt에 공통 운영 정책과 작성 기준을 전달합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`의 `commonContext`
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 `commonContext`
 
 Workflow/Stage: `Newsletters 03 - Editor PR`, Stage 3 전체
 
@@ -71,7 +71,7 @@ Workflow/Stage: `Newsletters 03 - Editor PR`, Stage 3 전체
 
 목적: selected article capsule을 바탕으로 editor가 사용할 optional technical background context를 생성합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`의 `buildBackgroundContextReport()`
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 `buildBackgroundContextReport()`
 
 Workflow/Stage: Stage 3 `background-context`
 
@@ -87,7 +87,7 @@ Workflow/Stage: Stage 3 `background-context`
 
 목적: deterministic shortlist가 이미 고른 final article input을 재선정하지 않고, evidence field를 요약, tagging, refinement합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`의 reporter `callLlmJson()` 호출
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 reporter `callLlmJson()` 호출
 
 Workflow/Stage: Stage 3 `reporter attempt <n>/<total>`
 
@@ -103,7 +103,7 @@ Workflow/Stage: Stage 3 `reporter attempt <n>/<total>`
 
 목적: final-selected article capsule을 사용해 한국어 technical newsletter draft를 생성합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`의 editor `callLlmJson()` 호출
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 editor `callLlmJson()` 호출
 
 Workflow/Stage: Stage 3 `editor attempt <n>/<total>`
 
@@ -119,7 +119,7 @@ Workflow/Stage: Stage 3 `editor attempt <n>/<total>`
 
 목적: editor JSON이 schema는 만족했지만 semantic validation에 실패했을 때, 해당 validation error만 고쳐 complete editor JSON으로 복구합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`의 `repairEditorSemanticWithLlm()`
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 `repairEditorSemanticWithLlm()`
 
 Workflow/Stage: Stage 3 `<editorStage> semantic repair`
 
@@ -135,7 +135,7 @@ Workflow/Stage: Stage 3 `<editorStage> semantic repair`
 
 목적: editor draft의 factuality, missing source, exaggerated language, missing date, editorial-policy violation을 검토합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`의 fact-checker `callLlmJson()` 호출
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 fact-checker `callLlmJson()` 호출
 
 Workflow/Stage: Stage 3 `fact-checker attempt <n>/<total>`
 
@@ -151,7 +151,7 @@ Workflow/Stage: Stage 3 `fact-checker attempt <n>/<total>`
 
 목적: quality/fact-check failure가 있는 section만 repair, replace, demote하기 위한 replacement section JSON을 생성합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`의 repair editor `callLlmJson()` 호출
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 repair editor `callLlmJson()` 호출
 
 Workflow/Stage: Stage 3 `editor repair attempt <n>/<total>`
 
@@ -167,7 +167,7 @@ Workflow/Stage: Stage 3 `editor repair attempt <n>/<total>`
 
 목적: repaired editor draft를 다시 fact-check하고 unresolved source gap 또는 editorial-policy violation을 확인합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`의 repair fact-checker `callLlmJson()` 호출
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 repair fact-checker `callLlmJson()` 호출
 
 Workflow/Stage: Stage 3 `fact-checker repair attempt <n>/<total>`
 
@@ -183,7 +183,7 @@ Workflow/Stage: Stage 3 `fact-checker repair attempt <n>/<total>`
 
 목적: quality gate가 article count 부족을 보고하고 eligible candidate가 남아 있을 때, 부족한 main article section만 추가 생성합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`의 completion editor `callLlmJson()` 호출
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 completion editor `callLlmJson()` 호출
 
 Workflow/Stage: Stage 3 `editor completion attempt <n>/<total>`
 
@@ -199,7 +199,7 @@ Workflow/Stage: Stage 3 `editor completion attempt <n>/<total>`
 
 목적: completed editor draft와 추가 section이 eligible candidate만 사용했는지, full draft가 article composition contract를 만족하는지 확인합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`의 completion fact-checker `callLlmJson()` 호출
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 completion fact-checker `callLlmJson()` 호출
 
 Workflow/Stage: Stage 3 `fact-checker completion attempt <n>/<total>`
 
@@ -217,7 +217,7 @@ Workflow/Stage: Stage 3 `fact-checker completion attempt <n>/<total>`
 
 목적: `source_extraction`, `source_quality`, seed evidence, linked evidence, keyword hint를 source-backed fact와 editorial hint로 분리하도록 강제합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`
 
 Workflow/Stage: reporter, editor, fact-check, repair, completion 계열 prompt
 
@@ -233,7 +233,7 @@ Workflow/Stage: reporter, editor, fact-check, repair, completion 계열 prompt
 
 목적: editor, repair, completion output의 main article이 validation/editorial diagnostics용 `article_sections`와 HAL signal metadata를 갖추게 합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`
 
 Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 
@@ -249,7 +249,7 @@ Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 
 목적: reader-facing article prose를 diagnostics fields와 분리하고, public output이 newsletter article 형태를 갖추게 합니다.
 
-위치: `scripts/newsroom/cli/gemini-newsroom-newsletter.js`
+위치: `src/generator/publish/gemini-newsroom-newsletter.js`
 
 Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 

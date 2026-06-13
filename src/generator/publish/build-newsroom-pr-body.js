@@ -1872,7 +1872,7 @@ function loadEditorialDecisionSource(root, date, status = {}) {
   const collectedCandidates = candidatesFromArray(collected?.candidates, 'report_only', 'collected-candidates');
   if (collectedCandidates.length > 0) {
     return {
-      source: 'content/collected-news candidates.json',
+      source: 'articles/content/collected-news candidates.json',
       level: 'collected',
       candidates: collectedCandidates,
       counts: {

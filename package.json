@@ -23,7 +23,7 @@
     "sync:policy-docs": "node src/core/tooling/cli/sync-policy-docs.js",
     "generate:sitemap": "node src/generator/render/generate-sitemap.js",
     "test": "npm run test:unit && npm run test:script",
-    "test:unit": "node src/core/tooling/cli/run-node-tests.js tests src",
+    "test:unit": "node src/core/tooling/cli/run-node-tests.js src",
     "test:source-effectiveness": "node --test src/generator/test/workflow/source-effectiveness-report.test.js",
     "test:script": "node src/core/tooling/cli/test-artifact-manifest.js && node src/core/tooling/cli/test-selection-diagnostics.js",
     "test:artifact": "node src/core/tooling/cli/test-artifact-manifest.js",

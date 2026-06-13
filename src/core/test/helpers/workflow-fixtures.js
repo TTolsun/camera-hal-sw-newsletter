@@ -856,7 +856,7 @@ function writeFailedRawArtifactValidationArtifacts(root, date, overrides = {}) {
     publish_gate_passed: false,
     raw_artifact_validation_error: {
       field: 'merged_candidate_manifest',
-      value: 'content/newsroom/' + date + '/gemini-usage-report.json'
+      value: 'articles/content/newsroom/' + date + '/gemini-usage-report.json'
     },
     ...(overrides.status || {})
   };

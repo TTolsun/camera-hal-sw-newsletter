@@ -4,7 +4,7 @@ const { execFileSync } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const ROOT_TEST_ALLOWLIST_RELATIVE_PATH = 'tests/root-test-allowlist.json';
+const ROOT_TEST_ALLOWLIST_RELATIVE_PATH = 'src/core/test/root-test-allowlist.json';
 const ONE_OFF_SCRIPT_EXTENSIONS = new Set(['.cjs', '.js', '.mjs', '.ps1', '.sh']);
 const ONE_OFF_DIRECTORY_SEGMENTS = new Set([
   'tmp',
@@ -102,8 +102,15 @@ function isOneOffScriptPath(filePath) {
   return splitNameTokens(basename).some(token => ONE_OFF_BASENAME_TOKENS.has(token));
 }
 
-function isRootTestFile(filePath) {
-  return /^tests\/[^/]+\.test\.js$/.test(filePath);
+// 정상 위치: 각 layer 옆 nested test 폴더(src/<layer>/test/.../*.test.js).
+function isProperlyPlacedTestFile(filePath) {
+  return /^src\/[^/]+\/test\/.+\.test\.js$/.test(filePath);
+}
+
+// misplaced: repo root 직속이거나 src/<layer>/test/ 밖에 있는 *.test.js.
+// 예) foo.test.js, tests/foo.test.js, src/generator/foo.test.js.
+function isMisplacedTestFile(filePath) {
+  return /\.test\.js$/.test(filePath) && !isProperlyPlacedTestFile(filePath);
 }
 
 function loadRootTestAllowlist(root) {
@@ -130,11 +137,11 @@ function findRootTestStructureIssues(files, allowlist) {
   }
 
   for (const filePath of normalizedFiles) {
-    if (isRootTestFile(filePath)) {
+    if (isMisplacedTestFile(filePath)) {
       issues.push(issue(
         filePath,
         'root_test_structure',
-        'root tests/*.test.js files must move into nested test folders'
+        'stray *.test.js files must live under src/<layer>/test/ nested folders'
       ));
     }
   }

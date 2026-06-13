@@ -21,8 +21,8 @@ Seed evidence expansion(씨앗 근거 확장)은 이 linked-evidence 경계를 S
 | --- | --- | --- |
 | Source extraction | `src/core/sources/adapters/**`, `src/core/cli/collect-news-candidates.js` | Source page에서 release/version/date/component/source facts를 추출한다. Public article section을 직접 만들지 않는다. |
 | Linked evidence | `src/core/evidence/**` | `outgoing_links[]`를 보존하고 source-aware policy로 role을 분류한다. 필요한 경우 linked evidence를 resolve하고 Event Bundle로 묶는다. |
-| Public article structure | `docs/newsletter-template.md`, `scripts/newsroom/render/**` | 최종 newsletter article section order와 renderer-visible shape의 source of truth다. Linked evidence는 새 public article structure를 정의하지 않는다. |
-| Source and signal quality | `scripts/newsroom/collect/**`, `scripts/newsroom/metrics/**`, `scripts/newsroom/validate/**` | Source quality, prompt quality, HAL-facing signal metric을 정의한다. Linked evidence는 이 metric에 traceable evidence를 제공한다. |
+| Public article structure | `docs/newsletter-template.md`, `src/generator/render/**` | 최종 newsletter article section order와 renderer-visible shape의 source of truth다. Linked evidence는 새 public article structure를 정의하지 않는다. |
+| Source and signal quality | `src/collector/**`, `src/core/collect/**`, `src/generator/quality/**`, `src/generator/validate/**` | Source quality, prompt quality, HAL-facing signal metric을 정의한다. Linked evidence는 이 metric에 traceable evidence를 제공한다. |
 
 ## Data 책임
 

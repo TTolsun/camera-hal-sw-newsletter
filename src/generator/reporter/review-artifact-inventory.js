@@ -1079,7 +1079,7 @@ function committedRetentionGrades() {
 }
 
 // Derive YYYY-MM-DD from a repo-relative path such as
-// "content/newsroom/2026-05-05/foo.json" or "content/collected-news/2026-05-05/bar.json".
+// "articles/content/newsroom/2026-05-05/foo.json" or "articles/content/collected-news/2026-05-05/bar.json".
 function extractDateFromPath(relPath) {
   const match = String(relPath || '').match(/\/(\d{4}-\d{2}-\d{2})\//);
   return match ? match[1] : null;

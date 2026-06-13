@@ -37,12 +37,11 @@ Scoped `AGENTS.md` files inherit this root guidance. They add folder-specific co
 
 | Path | Why scoped guidance exists |
 | --- | --- |
-| `scripts/newsroom/AGENTS.md` | 실제 newsroom 구현, deterministic selection, source binding, quality gate, renderer 계약을 보호합니다. |
-| `tests/AGENTS.md` | fixture 신뢰 정책과 regression test 작성 규칙을 보호합니다. |
+| `src/AGENTS.md` | 실제 구현, layer/의존 방향, deterministic selection, source binding, quality gate, renderer 계약과 test·fixture 신뢰 정책을 보호합니다. |
 | `data/AGENTS.md` | `news-sources.json` source registry 계약을 보호합니다. |
 | `.github/workflows/AGENTS.md` | workflow gate, secret handling, PR-based publishing 정책을 보호합니다. |
 | `docs/AGENTS.md` | 문서 한글화, 현재 운영 문서 기준, 링크 유지 규칙을 보호합니다. |
-| `content/AGENTS.md` | generated/review artifact 보존 기준과 cleanup 금지선을 보호합니다. |
+| `articles/content/AGENTS.md` | generated/review artifact 보존 기준과 cleanup 금지선을 보호합니다. |
 
 Do not add scoped `AGENTS.md` files only for visual symmetry. Add one only when the folder has rules that meaningfully reduce risk or ambiguity.
 
