@@ -55,7 +55,7 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 
 | 명령 | 언제 쓰나 | 결과물 |
 | --- | --- | --- |
-| `npm.cmd run test` | 단위/통합 테스트 회귀 확인 | `tests/` 전수 결과 |
+| `npm.cmd run test` | 단위/통합 테스트 회귀 확인 | `src/<layer>/test/` 전수 결과 |
 | `npm.cmd run validate` | docs·정책·인코딩·site 무결성 검사 | `validate:*` 체인 보고 |
 | `npm.cmd run ci` | test + validate 한꺼번에 | 변경 범위 넓을 때 1차 신뢰도 확인 |
 | `npm.cmd run collect` | `src/shared/data/news-sources.json` 기반 후보 수집 | `articles/content/collected-news/YYYY-MM-DD/` |
@@ -63,7 +63,7 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 
 공급자/모델 재정의와 사내 API Secret 설정은 [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md)를 확인합니다.
 
-폴더 구조는 목적별로 나뉘어 있습니다. 실제 구현과 tooling은 모두 `src/`에 있고(#262 재구성으로 root `scripts/` wrapper는 제거됨), 검토 산출물과 공개 발행물은 `content/`와 `newsletters/`에 분리됩니다.
+폴더 구조는 목적별로 나뉘어 있습니다. 실제 구현과 tooling은 모두 `src/`에 있고(#262 재구성으로 root `scripts/` wrapper는 제거됨), 검토 산출물과 공개 발행물은 `articles/content/`와 `articles/newsletters/`에 분리됩니다.
 
 ## 저장소 구조
 

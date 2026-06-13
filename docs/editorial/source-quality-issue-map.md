@@ -4,7 +4,7 @@ Source quality는 source URL/프롬프트 품질 격차를 source 정책을 실�
 
 ## 범위
 
-- `data/news-sources.json`은 실행 가능한 source registry입니다.
+- `src/shared/data/news-sources.json`은 실행 가능한 source registry입니다.
 - `docs/news-sources.md`와 `docs/config/news-sources-fields.ko.md`는 사람이 검토하는 surface입니다.
 - `source_quality`는 신규 artifact의 정식 표현입니다.
 - `source_url_quality`와 `main_article_source_allowed` 같은 flat field는 호환성 mirror에 불과합니다.
@@ -16,12 +16,12 @@ Source quality는 source URL/프롬프트 품질 격차를 source 정책을 실�
 
 | 필드 | 소유자 | 목적 |
 | --- | --- | --- |
-| `sourceRole` | `data/news-sources.json` | 분류기가 사용하는 source role. |
-| `sourceUrlQualityHint` | `data/news-sources.json` | source 후보의 기본 URL 품질 힌트. |
-| `mainArticlePolicy` | `data/news-sources.json` | 기본 main article source 정책. |
-| `requiresCrossCheckDefault` | `data/news-sources.json` | 기본 cross-check 요구 여부. |
-| `evidenceGranularityHint` | `data/news-sources.json` | 기대하는 evidence 세분화 수준. |
-| `sourceQualityNotes` | `data/news-sources.json` | 사람이 검토하는 노트. |
+| `sourceRole` | `src/shared/data/news-sources.json` | 분류기가 사용하는 source role. |
+| `sourceUrlQualityHint` | `src/shared/data/news-sources.json` | source 후보의 기본 URL 품질 힌트. |
+| `mainArticlePolicy` | `src/shared/data/news-sources.json` | 기본 main article source 정책. |
+| `requiresCrossCheckDefault` | `src/shared/data/news-sources.json` | 기본 cross-check 요구 여부. |
+| `evidenceGranularityHint` | `src/shared/data/news-sources.json` | 기대하는 evidence 세분화 수준. |
+| `sourceQualityNotes` | `src/shared/data/news-sources.json` | 사람이 검토하는 노트. |
 
 ## 정책 매핑
 

@@ -26,7 +26,7 @@
 - `articles/content/collected-news/YYYY-MM-DD/`는 raw candidate output입니다.
 - `articles/content/newsroom/YYYY-MM-DD/`는 reporter, editor, fact-check, quality, retry, QA review artifact입니다.
 - `articles/newsletters/YYYY-MM-DD/`는 public issue output인 `newsletter.md`와 `index.html`입니다.
-- 실제 구현과 tooling은 모두 `src/`에 있습니다. `src/shared/**`(공통 런타임·도메인·tooling·런타임 config/data), `src/collector/**`, `src/discovery/**`, `src/generator/**`(select/reporter/editor/quality/repair/render/publish)로 나뉩니다. #262 재구성으로 root `scripts/*.js` wrapper와 `scripts/lib/`는 제거되었고 `scripts/`에는 더 이상 실행 코드가 없습니다.
+- 실제 구현과 tooling은 모두 `src/`에 있습니다. `src/shared/**`(공통 런타임·도메인·tooling·런타임 config/data), `src/collector/**`, `src/discovery/**`, `src/generator/**`(select/reporter/editor/quality/repair/diagnostics/render/validate/publish)로 나뉩니다. #262 재구성으로 root `scripts/*.js` wrapper와 `scripts/lib/`는 제거되었고 `scripts/`에는 더 이상 실행 코드가 없습니다.
 - `.github/workflows/`는 newsroom PR workflow와 validation workflow입니다.
 
 ## Scoped AGENTS Policy
@@ -67,9 +67,9 @@ npm.cmd run validate
 
 ## Fixture Trust Policy
 
-- `tests/fixtures/**/good`에는 사람이 검수한 curated fixture만 둡니다.
+- `src/shared/test/fixtures/**/good`에는 사람이 검수한 curated fixture만 둡니다.
 - generated artifact는 good/golden fixture로 사용하지 않습니다.
-- generated artifact에서 회귀 가치가 있는 경우 전체 artifact가 아니라 최소 입력만 `tests/fixtures/**/bad` 또는 regression fixture로 보존합니다.
+- generated artifact에서 회귀 가치가 있는 경우 전체 artifact가 아니라 최소 입력만 `src/shared/test/fixtures/**/bad` 또는 regression fixture로 보존합니다.
 - `bad` fixture의 `expected.status`는 `PASS`가 될 수 없습니다.
 - `source_gap_risk=true`, `finalSelectionEligibility=watchlist`, `finalSelectionEligibility=exclude`, `reference_only=true`, `hasDatedEvidence=false` sample은 main article PASS fixture가 될 수 없습니다.
 - generic AI 또는 일반 IT sample이 Camera HAL / Android Camera / camera workflow / frame / stream / buffer / metadata / NPU/GPU/ISP resource management와 구체적으로 연결되지 않으면 main article PASS fixture가 될 수 없습니다.

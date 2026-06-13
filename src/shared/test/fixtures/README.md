@@ -1,6 +1,6 @@
 # Fixture 신뢰 정책
 
-`tests/fixtures`는 사람이 검수한 curated fixture와 generated artifact에서 축약한 bad/regression fixture를 분리합니다.
+`src/shared/test/fixtures`는 사람이 검수한 curated fixture와 generated artifact에서 축약한 bad/regression fixture를 분리합니다.
 
 ## 규칙
 

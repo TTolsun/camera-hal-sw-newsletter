@@ -4,7 +4,7 @@
 
 ## 품질 게이트
 
-newsroom pipeline은 `articles/content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 생성합니다. 발행 준비 상태가 되려면 deterministic score가 `config/newsletter-policy.json`의 `qualityGatePolicy.threshold` 이상이어야 합니다. 이 threshold 완화는 LLM 비용과 false negative를 줄이기 위한 운영 튜닝이며, 품질 검증 우회가 아닙니다. source gap, fact-check `must_fix`, 발행에 치명적인 deduction이 있으면 숫자 점수가 threshold 이상이어도 publish-ready로 보지 않습니다.
+newsroom pipeline은 `articles/content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 생성합니다. 발행 준비 상태가 되려면 deterministic score가 `src/shared/config/newsletter-policy.json`의 `qualityGatePolicy.threshold` 이상이어야 합니다. 이 threshold 완화는 LLM 비용과 false negative를 줄이기 위한 운영 튜닝이며, 품질 검증 우회가 아닙니다. source gap, fact-check `must_fix`, 발행에 치명적인 deduction이 있으면 숫자 점수가 threshold 이상이어도 publish-ready로 보지 않습니다.
 
 draft가 gate를 통과하지 못하면 generator는 `NEWSROOM_MAX_QUALITY_RETRIES` 값만큼 재시도합니다. 기본값은 `1`입니다. 이미 article quality check를 통과한 section은 보존하고, quality retry 한 번에서 repair 또는 replace할 section 수는 `NEWSROOM_MAX_SECTION_REPAIRS=1`로 제한합니다. `retry-history.json`과 `retry-history.md`에는 locked article, failed section, repair policy, skipped repair section을 남깁니다. Gemini API retry max delay 기본값은 `GEMINI_RETRY_MAX_DELAY_MS=300000`이며, 300000ms는 5분입니다.
 
@@ -40,7 +40,7 @@ source registry
 
 ## Role 1. Candidate Collector
 
-- `data/news-sources.json`의 enabled source를 읽습니다.
+- `src/shared/data/news-sources.json`의 enabled source를 읽습니다.
 - JSON registry가 없을 때만 `docs/news-sources.md`의 `- Name: URL` 형식을 fallback으로 사용합니다.
 - RSS 또는 HTML page에서 후보를 수집하고 `articles/content/collected-news/YYYY-MM-DD/candidates.json`을 생성합니다.
 - media/community/candidate-only source는 최종 기사로 올리기 전에 공식 출처 교차 확인이 필요합니다.
@@ -49,7 +49,7 @@ source registry
 
 LLM 실행 전에 `src/generator/select/newsroom-selection.js`가 `articles/content/collected-news/YYYY-MM-DD/candidates.json`을 읽고 source-gap/watch/reference 후보를 제거합니다. URL과 near-duplicate title을 dedupe하고, eligible candidate를 점수화한 뒤 `articles/content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`을 작성합니다. LLM prompt에는 full candidate 대신 `articles/content/newsroom/YYYY-MM-DD/article-capsules.json`의 compact capsule을 전달합니다.
 
-shortlist는 기본 8-12개 수준, hard cap 12개 후보로 제한됩니다. local selector는 LLM reporter/editor prompt가 실행되기 전에 deterministic scoring으로 후보를 줄이고 `config/newsletter-policy.json`이 정한 final main article input을 선택합니다. scoring은 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`, `soc_platform_signal`, `cpp_ai_tooling_fallback`, `generic_tech_watchlist` bucket과 구체 evidence, 최신성, 실무 actionability, source reliability를 함께 봅니다. source gap, 날짜 근거 없음, dated evidence 없는 watch page, 구체 API/component 근거 없음은 main article에서 제외되거나 강하게 감점됩니다. SoC/CPU/GPU/NPU/ISP/power/thermal/performance 기사는 configured supporting main bucket일 때만 main article 보강에 사용할 수 있습니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 유지합니다. eligible non-duplicate final input이 configured article count range를 만족하지 못하면 생성은 조기에 실패하고 `articles/content/newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
+shortlist는 기본 8-12개 수준, hard cap 12개 후보로 제한됩니다. local selector는 LLM reporter/editor prompt가 실행되기 전에 deterministic scoring으로 후보를 줄이고 `src/shared/config/newsletter-policy.json`이 정한 final main article input을 선택합니다. scoring은 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`, `soc_platform_signal`, `cpp_ai_tooling_fallback`, `generic_tech_watchlist` bucket과 구체 evidence, 최신성, 실무 actionability, source reliability를 함께 봅니다. source gap, 날짜 근거 없음, dated evidence 없는 watch page, 구체 API/component 근거 없음은 main article에서 제외되거나 강하게 감점됩니다. SoC/CPU/GPU/NPU/ISP/power/thermal/performance 기사는 configured supporting main bucket일 때만 main article 보강에 사용할 수 있습니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 유지합니다. eligible non-duplicate final input이 configured article count range를 만족하지 못하면 생성은 조기에 실패하고 `articles/content/newsroom/YYYY-MM-DD/recovery-prompt.md`를 남깁니다.
 
 - 수집 후보 중 AOSP Camera, Camera HAL, Camera Driver, V4L2/libcamera, ISP/image sensor, Android platform camera-adjacent, SoC platform, C++, LLVM/Clang/GCC, AI workflow와 관련된 항목을 점수화합니다.
 - source name, source URL, candidateOnly, requiresCrossCheck, imageCandidates를 유지합니다.
@@ -75,9 +75,9 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 
 ## Role 5. Artifact Writer
 
-- `newsletters/YYYY-MM-DD/newsletter.md`를 생성합니다.
-- `newsletters/YYYY-MM-DD/index.html`을 생성합니다.
-- `data/newsletters.json`을 갱신합니다.
+- `articles/newsletters/YYYY-MM-DD/newsletter.md`를 생성합니다.
+- `articles/newsletters/YYYY-MM-DD/index.html`을 생성합니다.
+- `articles/data/newsletters.json`을 갱신합니다.
 - `articles/content/newsroom/YYYY-MM-DD/editor-in-chief-brief.md`, `00-review-guide.md`, `release-qa-report.md`, `artifact-manifest.json`을 생성합니다.
 - `00-review-guide.md`는 아래 순서로 review artifact를 묶습니다.
   1. 편집장 브리프
@@ -99,13 +99,13 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 
 editor는 이미지 권리/관련성이 불확실하면 `selectedImage`를 비워 두고, renderer는 local fallback visual을 사용합니다. 생성이 끝나면 workflow가 `npm run newsroom:repair-images -- --date <date>`를 실행해 editor-draft의 valid `imageCandidates` 중 audit 규칙을 통과한 후보를 deterministic하게 binding하고 daily Markdown/HTML을 재생성합니다. local fallback visual은 valid candidate가 정말 없는 기사에만 남습니다.
 
-repair는 같은 ISO week의 weekly 산출물도 함께 동기화합니다. weekly upsert는 같은 identity 기사를 exact duplicate로 거부하므로 재실행으로는 수리된 이미지가 weekly에 반영되지 않습니다. 대신 repair가 identity가 일치하는 weekly section의 image field를 daily editor-draft 상태로 복사해 `newsletters/<weeklyKey>/{index.html,newsletter.md,issue.json}`을 재생성하고, `data/newsletters-weekly.json` entry의 `article_images`를 갱신합니다. weekly artifact가 없으면 no-op이고 재실행해도 결과가 수렴(idempotent)합니다. repairable article이 0인 날짜도 `--date` 실행 시 weekly 동기화는 항상 수행하므로 stale weekly를 재실행으로 복구할 수 있습니다(`--all-repairable`은 repairable 0인 날짜를 방문하지 않습니다). `article_images`는 https 이미지가 하나도 없으면 site-root-relative fallback 경로 1개를 담아 홈페이지 Latest card가 항상 이미지를 갖게 합니다.
+repair는 같은 ISO week의 weekly 산출물도 함께 동기화합니다. weekly upsert는 같은 identity 기사를 exact duplicate로 거부하므로 재실행으로는 수리된 이미지가 weekly에 반영되지 않습니다. 대신 repair가 identity가 일치하는 weekly section의 image field를 daily editor-draft 상태로 복사해 `articles/newsletters/<weeklyKey>/{index.html,newsletter.md,issue.json}`을 재생성하고, `articles/data/newsletters-weekly.json` entry의 `article_images`를 갱신합니다. weekly artifact가 없으면 no-op이고 재실행해도 결과가 수렴(idempotent)합니다. repairable article이 0인 날짜도 `--date` 실행 시 weekly 동기화는 항상 수행하므로 stale weekly를 재실행으로 복구할 수 있습니다(`--all-repairable`은 repairable 0인 날짜를 방문하지 않습니다). `article_images`는 https 이미지가 하나도 없으면 site-root-relative fallback 경로 1개를 담아 홈페이지 Latest card가 항상 이미지를 갖게 합니다.
 
 ## Role 6. Validator
 
 `npm run validate`가 repository-wide safety gate입니다. Stage 3 final workflow의 post-generation gate는 `npm run validate:post-generation`을 사용합니다. 이 chain은 `validate:quality`를 다시 실행하지 않고, final Markdown/HTML public artifact를 `validate:llm-publication-quality`의 LLM API judge로 확인합니다.
 
-- `npm run validate:config`: `data/news-sources.json` 구조, 필수 field, source ID, URL, category-to-section mapping, source entry의 중복 `section` 금지, canonical JSON formatting을 확인합니다.
+- `npm run validate:config`: `src/shared/data/news-sources.json` 구조, 필수 field, source ID, URL, category-to-section mapping, source entry의 중복 `section` 금지, canonical JSON formatting을 확인합니다.
 - `npm run validate:site`: metadata, 파일 존재, TODO leak, duplicate date, required sections, source/reference, HTML class hook, anchor balance를 확인합니다.
   current/changed/generated validation target에 해당하는 artifact에서 fact-check `must_fix`가 남으면 hard fail입니다. 같은 `must_fix`가 historical artifact outside strict target에서만 발견되면 소급 hard fail 대신 warning-only로 기록하지만, publish-ready로 간주하지 않습니다.
 - `npm run validate:images`: article image URL과 local fallback file 존재를 확인합니다.
@@ -119,7 +119,7 @@ repair는 같은 ISO week의 weekly 산출물도 함께 동기화합니다. week
 - `publish-ready`는 AI 자동 발행 가능 상태이며 `has_ai_publish_ready=true`일 때만 사용합니다.
 - `review_publication_ready=true`는 `public_newsletter_ready=true`인 검증된 public issue가 있고, `final_publish_ready=false`라서 편집장 검토 후 merge로만 공개할 수 있음을 뜻합니다. 이 값은 raw file existence가 아니라 `resolve-reviewable-artifacts`의 public newsletter readiness 결과에서만 파생합니다.
 - `diagnostics_only=true`는 `review_pr_ready=true && public_newsletter_ready=false`인 진단 전용 PR입니다. merge해도 Newsletter 홈페이지에 표시되지 않으며 public files 누락 이유가 PR body에 남아야 합니다.
-- `homepage_visible_after_merge=true`는 `data/newsletters.json`의 date/html/md entry가 `newsletters/YYYY-MM-DD/index.html` 및 `newsletter.md`와 일치하는 public issue에만 설정합니다. workflow output의 최종 판단은 `resolve-reviewable-artifacts`가 public files와 index entry를 다시 검증한 결과입니다.
+- `homepage_visible_after_merge=true`는 `articles/data/newsletters.json`의 date/html/md entry가 `articles/newsletters/YYYY-MM-DD/index.html` 및 `newsletter.md`와 일치하는 public issue에만 설정합니다. workflow output의 최종 판단은 `resolve-reviewable-artifacts`가 public files와 index entry를 다시 검증한 결과입니다.
 - `needs-fix`는 편집장 검토 또는 수정이 필요한 상태입니다. 자동 발행 기준을 통과하지 못한 editor review PR에는 broad signal인 `review-only`를 붙이고, public files가 준비된 review publication PR에는 `review-only-publication`, public files가 없는 진단 PR에는 `diagnostics-only`를 함께 붙입니다. 두 세부 label은 동시에 붙지 않아야 합니다.
 - `final_publish_ready=false`는 자동 발행 기준 미충족을 뜻하지만, `review_publication_ready=true`인 PR의 공개 가능성을 혼자 차단하지 않습니다.
 - `Validate Site and Images` (`.github/workflows/validate-site.yml`)는 structural validation을 blocking으로 유지하고 quality/fact-check 문제를 non-blocking annotation으로 보고합니다.
@@ -329,7 +329,7 @@ PR에서 다음 항목을 확인합니다.
 
 ## Quality Gate Drift 계약
 
-`qualityGatePolicy.hardFailConditions`는 `config/newsletter-policy.json`에 있는 hard fail inventory의 source of truth입니다. `score`는 숫자 품질 점수일 뿐이며 hard fail blocker를 덮어쓸 수 없습니다. `score >= qualityGatePolicy.threshold`여도 blocking deduction, `source_gap`, fact-check `must_fix`, stale claim hard failure, strict mode의 `quality-report.json` recompute drift가 있으면 해당 이슈는 `publish-ready` / `final_publish_ready`가 아닙니다.
+`qualityGatePolicy.hardFailConditions`는 `src/shared/config/newsletter-policy.json`에 있는 hard fail inventory의 source of truth입니다. `score`는 숫자 품질 점수일 뿐이며 hard fail blocker를 덮어쓸 수 없습니다. `score >= qualityGatePolicy.threshold`여도 blocking deduction, `source_gap`, fact-check `must_fix`, stale claim hard failure, strict mode의 `quality-report.json` recompute drift가 있으면 해당 이슈는 `publish-ready` / `final_publish_ready`가 아닙니다.
 
 <!-- NEWSLETTER_POLICY:BEGIN -->
 <!-- This block is generated. Update src/shared/config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->
@@ -402,6 +402,6 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 이 정책은 발행 안전성·source binding·image lineage·review-publication state 판정을 약화하지 않습니다. validate:post-generation, resolve-reviewable-artifacts, pr-body 생성은 commit 스텝보다 먼저 in-run working tree에서 실행되므로 add-paths 허용목록의 영향을 받지 않습니다.
 
-`01-newsroom-raw-candidates.yml`과 `02-newsroom-source-discovery.yml`은 candidate JSON이 리뷰 대상이므로 이 허용목록 제한을 적용하지 않습니다.
+`01-newsletters-source-collect-pr.yml`과 `02-newsletters-source-discovery-pr.yml`은 candidate JSON이 리뷰 대상이므로 이 허용목록 제한을 적용하지 않습니다.
 
 `articles/content/collected-news/YYYY-MM-DD/`의 파이프라인 입력 파일(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03의 핸드오프 상태로서 `review_required_compact` 등급 파일입니다. `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 생성하며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋되어야 합니다. 순수 디버그 파일(`gemini-candidates.json`)은 `debug_heavy` 등급으로 `.gitignore` 처리됩니다.

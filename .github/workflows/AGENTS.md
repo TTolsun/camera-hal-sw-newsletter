@@ -24,7 +24,7 @@
 - `review-only-publication`은 public newsletter files가 준비되어 있고 editor merge 시 GitHub Pages에 표시될 수 있는 PR에만 사용합니다.
 - `diagnostics-only`는 public newsletter files가 없어 merge해도 GitHub Pages에 표시되지 않는 PR에만 사용합니다.
 - `review-only-publication`과 `diagnostics-only`는 동시에 붙이면 안 됩니다.
-- GitHub Pages 표시 여부는 PR label이나 `final_publish_ready` 단독 값이 아니라, merge된 `main`의 `newsletters/YYYY-MM-DD/index.html`, `newsletters/YYYY-MM-DD/newsletter.md`, `data/newsletters.json` entry 기준으로 판단합니다.
+- GitHub Pages 표시 여부는 PR label이나 `final_publish_ready` 단독 값이 아니라, merge된 `main`의 `articles/newsletters/YYYY-MM-DD/index.html`, `articles/newsletters/YYYY-MM-DD/newsletter.md`, `articles/data/newsletters.json` entry 기준으로 판단합니다.
 
 ## Review Checklist
 

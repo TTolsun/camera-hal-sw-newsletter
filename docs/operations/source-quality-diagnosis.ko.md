@@ -23,27 +23,27 @@ npm.cmd run report:source-quality-diagnosis -- --date YYYY-MM-DD
 필수 입력은 `date`입니다. Candidate input artifact는 있으면 다음 순서로 고르고, 없으면 `missing_preferred_artifact`와 `partial_diagnosis` warning을 남긴 뒤 가능한 범위에서 report를 생성합니다.
 
 1. `generation-status.candidate_input.candidate_artifact`
-2. `content/collected-news/YYYY-MM-DD/merged-candidates.json`
-3. `content/collected-news/YYYY-MM-DD/manual-candidates.json`
-4. legacy `content/collected-news/YYYY-MM-DD/candidates.json`
+2. `articles/content/collected-news/YYYY-MM-DD/merged-candidates.json`
+3. `articles/content/collected-news/YYYY-MM-DD/manual-candidates.json`
+4. legacy `articles/content/collected-news/YYYY-MM-DD/candidates.json`
 
-Preferred 입력은 `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`입니다. 이 파일이 없으면 `eligible_candidate_count`처럼 최종 shortlist에 의존하는 count는 `null`로 남기고 Markdown/PR body에서는 `알 수 없음`으로 표시합니다.
+Preferred 입력은 `articles/content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`입니다. 이 파일이 없으면 `eligible_candidate_count`처럼 최종 shortlist에 의존하는 count는 `null`로 남기고 Markdown/PR body에서는 `알 수 없음`으로 표시합니다.
 
 선택 입력은 있으면 사용하고, 없으면 `warnings`에 기록한 뒤 partial report를 생성합니다.
 
-- `content/newsroom/YYYY-MM-DD/selection-report.json`
-- `content/newsroom/YYYY-MM-DD/generation-status.json`
-- `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`
-- `content/newsroom/YYYY-MM-DD/source-effectiveness-report.json`
-- `content/newsroom/YYYY-MM-DD/source-quality-report.json`
-- `content/newsroom/YYYY-MM-DD/source-discovery-feedback-report.json`
-- `content/collected-news/YYYY-MM-DD/merged-candidate-manifest.json`
-- `content/newsroom/YYYY-MM-DD/evidence-pack-summary.json`
+- `articles/content/newsroom/YYYY-MM-DD/selection-report.json`
+- `articles/content/newsroom/YYYY-MM-DD/generation-status.json`
+- `articles/content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`
+- `articles/content/newsroom/YYYY-MM-DD/source-effectiveness-report.json`
+- `articles/content/newsroom/YYYY-MM-DD/source-quality-report.json`
+- `articles/content/newsroom/YYYY-MM-DD/source-discovery-feedback-report.json`
+- `articles/content/collected-news/YYYY-MM-DD/merged-candidate-manifest.json`
+- `articles/content/newsroom/YYYY-MM-DD/evidence-pack-summary.json`
 
 출력은 다음 위치에 생성됩니다.
 
-- `content/newsroom/YYYY-MM-DD/source-quality-diagnosis.json`
-- `content/newsroom/YYYY-MM-DD/source-quality-diagnosis.md`
+- `articles/content/newsroom/YYYY-MM-DD/source-quality-diagnosis.json`
+- `articles/content/newsroom/YYYY-MM-DD/source-quality-diagnosis.md`
 
 ## 해석 기준
 

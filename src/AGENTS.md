@@ -23,7 +23,9 @@
   - `select/`: deterministic selection, article capsule입니다.
   - `reporter/`: LLM client, article building, provider client, validation target입니다.
   - `editor/`, `quality/`, `repair/`: editorial 보강, quality gate, per-article salvage입니다.
+  - `diagnostics/`: source quality 진단 등 advisory diagnostic artifact입니다.
   - `render/`: newsletter schema, Markdown/HTML rendering, image resolution입니다.
+  - `validate/`: site/image/publication validator CLI entrypoint입니다.
   - `publish/`: generation/PR body/status/manifest/validator CLI entrypoint입니다.
 
 테스트는 각 layer 옆 `src/<layer>/test/**`에, fixture는 `src/shared/test/fixtures/**`에 둡니다.
@@ -47,7 +49,7 @@
 
 - PR body, report, validation 구현은 policy 설명 전체를 grep하지 말고 `Diagnostics-only Status`, `발행 상태 요약`, `Public Newsletter Readiness` 같은 concrete state section 기준으로 `diagnostics_only`와 `review_publication_ready`를 판정합니다.
 - `final_publish_ready=false`는 AI 자동 발행 기준 미충족일 뿐입니다. 이 값만 보고 homepage 미표시를 정상 상태로 설명하지 마세요.
-- `review_publication_ready=true`이면 `articles/newsletters/YYYY-MM-DD/index.html`, `articles/newsletters/YYYY-MM-DD/newsletter.md`, `data/newsletters.json` entry가 있어야 하며, `homepage_visible_after_merge=true`는 resolver가 이 public artifact와 index entry를 검증한 결과여야 합니다.
+- `review_publication_ready=true`이면 `articles/newsletters/YYYY-MM-DD/index.html`, `articles/newsletters/YYYY-MM-DD/newsletter.md`, `articles/data/newsletters.json` entry가 있어야 하며, `homepage_visible_after_merge=true`는 resolver가 이 public artifact와 index entry를 검증한 결과여야 합니다.
 - `diagnostics_only=true`이면 public newsletter files가 없는 진단 전용 PR입니다. PR body에는 merge해도 homepage에 표시되지 않음을 명시해야 합니다.
 
 ## Tests & Fixtures

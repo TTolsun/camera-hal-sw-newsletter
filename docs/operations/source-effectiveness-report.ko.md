@@ -11,7 +11,7 @@ npm.cmd run report:source-effectiveness -- --date YYYY-MM-DD
 직접 실행할 수도 있습니다.
 
 ```powershell
-node scripts/build-source-effectiveness-report.js --date YYYY-MM-DD
+node src/generator/publish/build-source-effectiveness-report.js --date YYYY-MM-DD
 ```
 
 날짜는 `--date`, `NEWSLETTER_DATE`, `.tmp/newsletter-date.txt`, 오늘 KST 순서로 결정됩니다.
@@ -20,21 +20,21 @@ node scripts/build-source-effectiveness-report.js --date YYYY-MM-DD
 
 필수 입력은 다음과 같습니다.
 
-- `content/collected-news/YYYY-MM-DD/candidates.json`
-- `content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`
-- `data/news-sources.json`
+- `articles/content/collected-news/YYYY-MM-DD/candidates.json`
+- `articles/content/newsroom/YYYY-MM-DD/shortlisted-candidates.json`
+- `src/shared/data/news-sources.json`
 
 선택 입력은 다음과 같습니다. 누락되어도 report 생성은 계속되고 `warnings`에 기록됩니다.
 
-- `content/newsroom/YYYY-MM-DD/reporter-candidates.json`
-- `content/newsroom/YYYY-MM-DD/editor-draft.json`
-- `content/newsroom/YYYY-MM-DD/fact-check-report.json`
-- `content/newsroom/YYYY-MM-DD/quality-report.json`
+- `articles/content/newsroom/YYYY-MM-DD/reporter-candidates.json`
+- `articles/content/newsroom/YYYY-MM-DD/editor-draft.json`
+- `articles/content/newsroom/YYYY-MM-DD/fact-check-report.json`
+- `articles/content/newsroom/YYYY-MM-DD/quality-report.json`
 
 출력은 다음 위치에 생성됩니다.
 
-- `content/newsroom/YYYY-MM-DD/source-effectiveness-report.json`
-- `content/newsroom/YYYY-MM-DD/source-effectiveness-report.md`
+- `articles/content/newsroom/YYYY-MM-DD/source-effectiveness-report.json`
+- `articles/content/newsroom/YYYY-MM-DD/source-effectiveness-report.md`
 
 ## 해석 기준
 
@@ -62,4 +62,4 @@ node scripts/build-source-effectiveness-report.js --date YYYY-MM-DD
 
 ## 운영 원칙
 
-이 report는 source tuning을 위한 evidence artifact입니다. `enabled`, `candidateOnly`, `priority`, `reliability` 같은 `data/news-sources.json` 계약 값은 이 명령이 자동 변경하지 않습니다. source를 disable하거나 `candidateOnly`로 낮추는 작업은 별도 PR에서 report와 실제 parser 상태를 함께 검토한 뒤 진행합니다.
+이 report는 source tuning을 위한 evidence artifact입니다. `enabled`, `candidateOnly`, `priority`, `reliability` 같은 `src/shared/data/news-sources.json` 계약 값은 이 명령이 자동 변경하지 않습니다. source를 disable하거나 `candidateOnly`로 낮추는 작업은 별도 PR에서 report와 실제 parser 상태를 함께 검토한 뒤 진행합니다.

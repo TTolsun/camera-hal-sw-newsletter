@@ -1,6 +1,6 @@
 # 뉴스 출처 Registry
 
-`data/news-sources.json`은 `scripts/collect-news-candidates.js`가 사용하는 구조화된 registry입니다. 예전 방식의 `docs/news-sources.md`는 사람이 읽는 editorial guidance이며, JSON registry가 없을 때만 fallback으로 사용합니다.
+`src/shared/data/news-sources.json`은 `src/shared/cli/collect-news-candidates.js`가 사용하는 구조화된 registry입니다. 예전 방식의 `docs/news-sources.md`는 사람이 읽는 editorial guidance이며, JSON registry가 없을 때만 fallback으로 사용합니다.
 
 registry를 수정할 때는 canonical JSON formatting을 유지하고 `npm.cmd run validate:config`를 통과해야 합니다.
 
@@ -63,7 +63,7 @@ registry를 수정할 때는 canonical JSON formatting을 유지하고 `npm.cmd 
 - `AI / SW Engineering Trends`
 - `Korean Tech Trends`
 
-collector는 source name, source URL, category, 파생된 section, priority, reliability, usage hint, candidate-only 상태를 `content/collected-news/YYYY-MM-DD/candidates.json`에 보존합니다. Gemini newsroom 단계는 source link를 변경하지 않고, media/community lead를 검증할 때 official 또는 project-official source를 우선합니다.
+collector는 source name, source URL, category, 파생된 section, priority, reliability, usage hint, candidate-only 상태를 `articles/content/collected-news/YYYY-MM-DD/candidates.json`에 보존합니다. Gemini newsroom 단계는 source link를 변경하지 않고, media/community lead를 검증할 때 official 또는 project-official source를 우선합니다.
 
 ## 기사 대표 이미지
 

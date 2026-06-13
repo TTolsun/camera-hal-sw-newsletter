@@ -53,4 +53,4 @@ Newsletter Policy의 현재 값은 `src/shared/config/newsletter-policy.json`이
 3. 변경 후 `npm.cmd run test`를 실행합니다.
 4. 변경 후 `npm.cmd run validate`를 실행합니다.
 5. source registry나 문서 변경처럼 범위가 좁은 경우에도 관련 targeted validation을 함께 실행합니다.
-6. generated artifact가 생겼다면 `content/collected-news/`, `content/newsroom/`, `newsletters/`, `data/newsletters.json` 변경을 직접 확인합니다.
+6. generated artifact가 생겼다면 `articles/content/collected-news/`, `articles/content/newsroom/`, `articles/newsletters/`, `articles/data/newsletters.json` 변경을 직접 확인합니다.
