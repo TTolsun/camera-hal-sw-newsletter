@@ -10,7 +10,7 @@ const {
 
 const {
   LEDGER_PATH: AUDIT_LEDGER_PATH
-} = require('./audit-paths');
+} = require('../../shared/common/audit-paths');
 
 const PUBLIC_STATES = Object.freeze({
   PUBLISH_READY: 'PUBLISH_READY',

@@ -71,7 +71,7 @@ const {
   cameraReleaseVersionRank,
   hasSourceExtractionBullet,
   selectedHasSameCameraReleasePage
-} = require('../reporter/camera-release-notes');
+} = require('./camera-release-notes');
 const {
   BUCKETS
 } = require('../../shared/common/aosp-camera-scope');
