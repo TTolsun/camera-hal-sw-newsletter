@@ -10,7 +10,7 @@
 // extracted from the generation orchestrator (gemini-newsroom-newsletter.js).
 
 const { ensureArray } = require('../../core/common/value-coercion');
-const { normalizeUrl } = require('../select/newsroom-selection');
+const { normalizeUrl } = require('../../core/common/selection-normalizers');
 
 function numberOrDefault(value, fallback = 0) {
   const parsed = Number(value);

@@ -18,7 +18,7 @@ const {
 } = require('../../core/common/artifact-paths');
 const {
   normalizeUrl
-} = require('../select/newsroom-selection');
+} = require('../../core/common/selection-normalizers');
 const {
   DIAGNOSIS_LABELS_KO,
   RECOMMENDED_ACTION_LABELS_KO

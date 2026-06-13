@@ -4,7 +4,7 @@ const { ensureArray } = require('../../core/common/value-coercion');
 const {
   normalizeUrl,
   normalizedUrlHash
-} = require('../select/newsroom-selection');
+} = require('../../core/common/selection-normalizers');
 
 function text(value) {
   if (Array.isArray(value)) return value.map(text).join(' ');

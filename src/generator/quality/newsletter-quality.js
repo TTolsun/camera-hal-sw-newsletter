@@ -4,7 +4,7 @@ const {
 } = require('../select/selection-diagnostics');
 const {
   normalizedUrlHash
-} = require('../select/newsroom-selection');
+} = require('../../core/common/selection-normalizers');
 const {
   normalizeForMatch,
   urlKeys,

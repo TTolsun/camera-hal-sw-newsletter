@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const {
   normalizeUrl,
   normalizedUrlHash
-} = require('../select/newsroom-selection');
+} = require('../../core/common/selection-normalizers');
 const {
   normalizeArticleSections
 } = require('../reporter/article-section-contract');

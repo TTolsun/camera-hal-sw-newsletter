@@ -15,7 +15,7 @@ const {
 } = require('../../core/common/artifact-paths');
 const {
   normalizeUrl
-} = require('../select/newsroom-selection');
+} = require('../../core/common/selection-normalizers');
 const {
   normalizeSourceQuality,
   sourceQualityFieldDrift
