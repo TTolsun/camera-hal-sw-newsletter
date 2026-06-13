@@ -2,7 +2,7 @@ const { ensureArray } = require('../../core/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { normalizeUrl, normalizedUrlHash } = require('../select/newsroom-selection');
+const { normalizeUrl, normalizedUrlHash } = require('../../core/common/selection-normalizers');
 
 const CACHE_SCHEMA_VERSION = 2;
 const DEFAULT_CACHE_DIR = path.join(process.cwd(), 'cache', 'news-summary');

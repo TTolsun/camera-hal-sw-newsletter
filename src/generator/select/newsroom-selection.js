@@ -23,7 +23,7 @@ const {
   normalizedUrlHash,
   normalizeTitle,
   titleSimilarity
-} = require('./selection-normalizers');
+} = require('../../core/common/selection-normalizers');
 const {
   reliabilityScore
 } = require('./selection-scoring');

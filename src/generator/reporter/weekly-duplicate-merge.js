@@ -10,7 +10,7 @@
 
 const { ensureArray } = require('../../core/common/value-coercion');
 const { articleIdentityKey } = require('../../core/common/article-identity');
-const { normalizeTitle, titleSimilarity } = require('../select/selection-normalizers');
+const { normalizeTitle, titleSimilarity } = require('../../core/common/selection-normalizers');
 
 const NEAR_DUPLICATE_TITLE_SIMILARITY = 0.82;
 

@@ -3,7 +3,7 @@ const path = require('path');
 const { writeJson } = require('../../core/common/common');
 const {
   normalizeUrl
-} = require('../select/newsroom-selection');
+} = require('../../core/common/selection-normalizers');
 const {
   articlePolicy,
   articleCountRangeText,
