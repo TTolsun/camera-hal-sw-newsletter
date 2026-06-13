@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-13",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-sw-20260613-01",
+      "topic_gap": "Updates to the Android Camera HAL and related components, focusing on new features, performance improvements, and bug fixes.",
+      "source_family": "Official Android media/camera-output discovery intent",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Camera HAL",
+        "Camera API",
+        "CameraX",
+        "Camera ITS",
+        "ISP driver",
+        "V4L2",
+        "media controller"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "https://source.android.com/docs/compatibility/cts/camera-its-box",
+        "https://lore.kernel.org/linux-media/aixdEPsghlc2S7Zl@SMW015318/",
+        "https://lore.kernel.org/linux-media/20260612194417.1737009-1-atanas.filipov@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260612194417.1737009-4-atanas.filipov@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260612194417.1737009-3-atanas.filipov@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Camera HAL changes",
+        "Camera API updates",
+        "Camera ITS updates",
+        "ISP driver updates",
+        "Camera performance improvements",
+        "New camera features"
+      ],
+      "risk_notes": []
+    }
+  ]
+}
