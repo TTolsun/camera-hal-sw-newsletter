@@ -7,7 +7,7 @@ const {
 } = require('../../core/common/newsletter-policy');
 const {
   readJsonIfExists
-} = require('./json');
+} = require('../../core/common/json');
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const COMPOSITION_MODE_NEEDS_FIX = 'NEEDS_FIX';

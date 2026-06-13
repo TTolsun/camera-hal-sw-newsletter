@@ -14,7 +14,7 @@ const {
 } = require('../../common/newsletter-policy');
 const {
   resolvePublishStatus
-} = require('../../../generator/reporter/publish-status');
+} = require('../../../generator/publish/publish-status');
 const {
   buildHtml,
   buildMarkdown,

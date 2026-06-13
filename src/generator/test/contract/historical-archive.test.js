@@ -14,7 +14,7 @@ const {
   CLEANUP_REPORT_PATH: AUDIT_CLEANUP_REPORT_PATH,
   INVENTORY_PATH: AUDIT_INVENTORY_PATH,
   LEDGER_PATH: AUDIT_LEDGER_PATH
-} = require('../../reporter/audit-paths');
+} = require('../../publish/audit-paths');
 const {
   readJson,
   tempRoot,

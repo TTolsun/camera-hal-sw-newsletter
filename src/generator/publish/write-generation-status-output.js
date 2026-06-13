@@ -7,7 +7,7 @@ const {
 } = require('../select/selection-diagnostics');
 const {
   formatReasonSummary
-} = require('../reporter/status-format');
+} = require('../../core/common/status-format');
 
 const DEFAULT_STATUS = {
   status: 'UNKNOWN',

@@ -12,7 +12,7 @@ const {
   TRANSIENT_ATTEMPT,
   buildReviewArtifactInventory,
   resolveRetentionLocation
-} = require('../reporter/review-artifact-inventory');
+} = require('./review-artifact-inventory');
 
 const SCHEMA_VERSION = REVIEW_ARTIFACT_SCHEMA_VERSION;
 

@@ -1,6 +1,6 @@
 // pure helpers — status/reason formatting
 
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('./value-coercion');
 function formatReasonSummary(items, options = {}) {
   const topN = options.topN ?? 5;
   return ensureArray(items)

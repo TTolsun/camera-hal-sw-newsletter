@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {
   resolvePublishStatus
-} = require('../reporter/publish-status');
+} = require('./publish-status');
 const {
   EDITORIAL_DECISION_HEADINGS,
   EDITORIAL_DECISION_LABELS,

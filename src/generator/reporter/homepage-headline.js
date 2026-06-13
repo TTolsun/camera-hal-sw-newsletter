@@ -11,7 +11,7 @@ const {
   articlePolicy,
   getHeadlinePolicy
 } = require('../../core/common/newsletter-policy');
-const { isPlaylistCollectionUrl } = require('./playlist-url');
+const { isPlaylistCollectionUrl } = require('../../core/common/playlist-url');
 
 const HEADLINE_STATE_REL_PATH = path.join('articles', 'data', 'homepage-headline.json');
 const SCHEMA_VERSION = 1;

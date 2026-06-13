@@ -15,10 +15,10 @@ const {
   classifyLatestPublicState,
   reconcilePublicState,
   validateRetentionMetadata
-} = require('../../reporter/public-state-reconciliation');
+} = require('../../publish/public-state-reconciliation');
 const {
   LEDGER_PATH: AUDIT_LEDGER_PATH
-} = require('../../reporter/audit-paths');
+} = require('../../publish/audit-paths');
 const {
   readJson,
   tempRoot,

@@ -24,7 +24,7 @@ const {
 } = require('../reporter/headline-render-reconciliation');
 const {
   reconcilePublicState
-} = require('../reporter/public-state-reconciliation');
+} = require('./public-state-reconciliation');
 
 // Contract:
 // - This command ensures the workflow has either publishable public newsletter artifacts

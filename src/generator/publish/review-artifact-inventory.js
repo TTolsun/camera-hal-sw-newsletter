@@ -22,7 +22,7 @@ const {
 } = require('../../core/common/artifact-paths');
 const {
   weeklyKeyForDate
-} = require('./weekly-newsletter');
+} = require('../reporter/weekly-newsletter');
 
 const REVIEW_ARTIFACT_SCHEMA_VERSION = 3;
 
