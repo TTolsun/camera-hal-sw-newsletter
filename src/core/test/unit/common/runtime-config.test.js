@@ -202,7 +202,7 @@ test('runtime env overrides are parsed into typed config', () => {
     NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS: '2500',
     NEWSROOM_LINKED_EVIDENCE_MAX_BYTES: '4096',
     NEWSROOM_CANDIDATE_INPUT_MODE: 'artifact',
-    NEWSROOM_CANDIDATE_INPUT_PATH: 'content/collected-news/2026-05-04/manual-candidates.json',
+    NEWSROOM_CANDIDATE_INPUT_PATH: 'articles/content/collected-news/2026-05-04/manual-candidates.json',
     NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true',
     GITHUB_EVENT_NAME: 'workflow_dispatch'
   }, { requireGeminiApiKey: true });
@@ -257,7 +257,7 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.linkedEvidenceTimeoutMs, 2500);
   assert.equal(config.linkedEvidenceMaxBytes, 4096);
   assert.equal(config.newsroomCandidateInputMode, 'artifact');
-  assert.equal(config.newsroomCandidateInputPath, 'content/collected-news/2026-05-04/manual-candidates.json');
+  assert.equal(config.newsroomCandidateInputPath, 'articles/content/collected-news/2026-05-04/manual-candidates.json');
   assert.equal(config.newsroomEnableGeminiSourceDiscovery, true);
   assert.equal(config.githubEventName, 'workflow_dispatch');
   assert.equal(config.geminiApiKeyConfigured, true);
@@ -376,7 +376,7 @@ test('candidate artifact runtime config rejects invalid mode and multiline path'
 
   assert.throws(
     () => readRuntimeConfig({
-      NEWSROOM_CANDIDATE_INPUT_PATH: 'content/collected-news/2026-05-04/manual-candidates.json\nextra'
+      NEWSROOM_CANDIDATE_INPUT_PATH: 'articles/content/collected-news/2026-05-04/manual-candidates.json\nextra'
     }),
     /NEWSROOM_CANDIDATE_INPUT_PATH must be a single-line/
   );

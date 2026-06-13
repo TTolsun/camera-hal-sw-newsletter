@@ -538,8 +538,8 @@ function validateCandidateTraceSection(text, sections, options, errors) {
 
   const datePattern = datePatternForValidation(options.date);
   const requiredPaths = [
-    options.allowMissingReporterCandidates ? '' : `content/newsroom/${datePattern}/reporter-candidates\\.json`,
-    `content/collected-news/${datePattern}/candidates\\.json`
+    options.allowMissingReporterCandidates ? '' : `articles/content/newsroom/${datePattern}/reporter-candidates\\.json`,
+    `articles/content/collected-news/${datePattern}/candidates\\.json`
   ].filter(Boolean);
   for (const requiredPath of requiredPaths) {
     if (!new RegExp(requiredPath).test(traceSection)) {

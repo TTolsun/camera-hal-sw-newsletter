@@ -13,7 +13,7 @@ const {
 } = require('../../core/common/newsletter-policy');
 const { isPlaylistCollectionUrl } = require('./playlist-url');
 
-const HEADLINE_STATE_REL_PATH = path.join('data', 'homepage-headline.json');
+const HEADLINE_STATE_REL_PATH = path.join('articles', 'data', 'homepage-headline.json');
 const SCHEMA_VERSION = 1;
 const DAY_MS = 24 * 60 * 60 * 1000;
 const DECISION_REASONS = Object.freeze({

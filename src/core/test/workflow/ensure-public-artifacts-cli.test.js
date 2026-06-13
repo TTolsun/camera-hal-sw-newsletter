@@ -60,7 +60,7 @@ test('candidate shortage generator exits before LLM calls when credentials are e
     schemaVersion: 2,
     sources: []
   });
-  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'candidates.json'), {
     date,
     candidates: []
   });
@@ -80,7 +80,7 @@ test('candidate shortage generator exits before LLM calls when credentials are e
     }
   });
   const combinedOutput = `${result.stdout || ''}\n${result.stderr || ''}`;
-  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
   const generationStatus = JSON.parse(fs.readFileSync(path.join(newsroomDir, 'generation-status.json'), 'utf8'));
   const rawFiles = fs.existsSync(rawDir) ? fs.readdirSync(rawDir) : [];
 
@@ -180,7 +180,7 @@ test.skip('Workflow 03 enters LLM generation with one publishable candidate and 
     schemaVersion: 2,
     sources: []
   });
-  writeJson(path.join(root, 'data', 'newsletters.json'), [{
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date,
     title: editorDraft.title,
     summary: editorDraft.summary,
@@ -188,8 +188,8 @@ test.skip('Workflow 03 enters LLM generation with one publishable candidate and 
     md: `newsletters/${date}/newsletter.md`,
     tags: ['SoC Platform Signal']
   }]);
-  writeText(path.join(root, 'assets', 'images', 'fallback', 'android.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="#3ddc84"/></svg>\n');
-  writeJson(path.join(root, 'content', 'collected-news', date, 'candidates.json'), {
+  writeText(path.join(root, 'articles', 'assets', 'images', 'fallback', 'android.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="#3ddc84"/></svg>\n');
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'candidates.json'), {
     date,
     candidates: [selectedCandidate]
   });
@@ -219,7 +219,7 @@ test.skip('Workflow 03 enters LLM generation with one publishable candidate and 
   }
 
   const combinedOutput = `${result.stdout || ''}\n${result.stderr || ''}`;
-  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
   const generationStatus = JSON.parse(fs.readFileSync(path.join(newsroomDir, 'generation-status.json'), 'utf8'));
   const qualityReport = JSON.parse(fs.readFileSync(path.join(newsroomDir, 'quality-report.json'), 'utf8'));
 
@@ -233,9 +233,9 @@ test.skip('Workflow 03 enters LLM generation with one publishable candidate and 
   assert.equal(fs.existsSync(path.join(newsroomDir, 'editor-public-article-judge-attempt-1.json')), true);
   assert.equal(fs.existsSync(path.join(newsroomDir, 'fact-check-report.json')), true);
   assert.equal(fs.existsSync(path.join(newsroomDir, 'quality-report.json')), true);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
-  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), true);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'newsletter.md')), true);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'index.html')), true);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'data', 'newsletters.json')), true);
   assert.equal(generationStatus.status, 'PASS');
   assert.equal(generationStatus.publish_ready, true);
   assert.equal(generationStatus.final_publish_ready, true);
@@ -257,19 +257,19 @@ test('ensure CLI keeps zero-candidate shortage diagnostics-only without editor d
   writeRootIndexContract(root);
   writeCandidateShortageReviewableArtifacts(root, date);
 
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json')), false);
 
   assert.throws(
     () => ensurePublicNewsletterArtifacts({ root, date }),
-    /missing required public file: newsletters\/2026-05-11\/newsletter\.md/
+    /missing required public file: articles\/newsletters\/2026-05-11\/newsletter\.md/
   );
-  const status = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
+  const status = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
 
   assert.equal(status.failure_kind, 'candidate_shortage_reviewable');
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), false);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), false);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), false);
-  assert.equal(fs.existsSync(path.join(root, 'data', 'newsletters.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'newsletter.md')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'index.html')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'data', 'newsletters.json')), false);
 });
 
 test('ensure CLI preserves failed repair Gemini draft without synthesizing public prose', () => {
@@ -321,8 +321,8 @@ test('ensure CLI preserves failed repair Gemini draft without synthesizing publi
     }
   });
   const changedArtifacts = REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
-    .map(file => `content/newsroom/${date}/${file}`);
-  const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
+    .map(file => `articles/content/newsroom/${date}/${file}`);
+  const editorPath = path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json');
   const editorBefore = fs.readFileSync(editorPath, 'utf8');
 
   const result = ensurePublicNewsletterArtifacts({ root, date, changedArtifacts });
@@ -389,8 +389,8 @@ test('ensure CLI persists homepage headline artifacts for review-publication pub
   };
 
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), status);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     headline_decision: {
       reason: 'seeded_from_current_issue'
     },
@@ -411,7 +411,7 @@ test('ensure CLI persists homepage headline artifacts for review-publication pub
       }
     }
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'selection-report.json'), {
     headline_decision: {
       reason: 'seeded_from_current_issue'
     }
@@ -422,10 +422,10 @@ test('ensure CLI persists homepage headline artifacts for review-publication pub
     date,
     changedArtifacts: requiredPublicFiles(date)
   });
-  const headlineState = JSON.parse(fs.readFileSync(path.join(root, 'data', 'homepage-headline.json'), 'utf8'));
+  const headlineState = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'homepage-headline.json'), 'utf8'));
   const exposureHistory = JSON.parse(fs.readFileSync(path.join(root, 'data', 'article-exposure-history.json'), 'utf8'));
-  const selectionReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), 'utf8'));
-  const shortlist = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), 'utf8'));
+  const selectionReport = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'selection-report.json'), 'utf8'));
+  const shortlist = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), 'utf8'));
   const headlineExposure = exposureHistory.articles
     .find(item => item.article_identity_key === currentHeadline.article_identity_key);
 
@@ -437,7 +437,7 @@ test('ensure CLI persists homepage headline artifacts for review-publication pub
   assert.equal(shortlist.homepage_headline_state.current_headline.article_identity_key, currentHeadline.article_identity_key);
   assert.equal(selectionReport.headline_public_render_reconciliation, undefined);
   assert.equal(selectionReport.article_exposure_coverage.mode, 'forward_only');
-  assert.match(result.outputs.reconciled_changed_artifacts, /data\/homepage-headline\.json/);
+  assert.match(result.outputs.reconciled_changed_artifacts, /articles\/data\/homepage-headline\.json/);
   assert.match(result.outputs.reconciled_changed_artifacts, /data\/article-exposure-history\.json/);
 });
 
@@ -573,8 +573,8 @@ test('ensure CLI persists a rendered public article when selected headline is no
   };
 
   writeJson(path.join(root, '.tmp', 'newsletter-generation-status.json'), status);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), status);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), status);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     selected_articles: [renderedCandidate],
     headline_decision: {
       reason: 'seeded_from_current_issue'
@@ -592,12 +592,12 @@ test('ensure CLI persists a rendered public article when selected headline is no
       }
     }
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'selection-report.json'), {
     headline_decision: {
       reason: 'seeded_from_current_issue'
     }
   });
-  writeText(path.join(root, 'content', 'newsroom', date, 'selection-diagnostics.md'), [
+  writeText(path.join(root, 'articles', 'content', 'newsroom', date, 'selection-diagnostics.md'), [
     'Homepage Headline:',
     '- decision: seeded_from_current_issue',
     `- replacement_headline_key: ${selectedHeadline.article_identity_key}`,
@@ -609,10 +609,10 @@ test('ensure CLI persists a rendered public article when selected headline is no
     date,
     changedArtifacts: requiredPublicFiles(date)
   });
-  const headlineState = JSON.parse(fs.readFileSync(path.join(root, 'data', 'homepage-headline.json'), 'utf8'));
-  const selectionReport = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'selection-report.json'), 'utf8'));
-  const shortlist = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), 'utf8'));
-  const diagnosticsMarkdown = fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'selection-diagnostics.md'), 'utf8');
+  const headlineState = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'homepage-headline.json'), 'utf8'));
+  const selectionReport = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'selection-report.json'), 'utf8'));
+  const shortlist = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), 'utf8'));
+  const diagnosticsMarkdown = fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'selection-diagnostics.md'), 'utf8');
 
   assert.equal(headlineState.current_headline.article_identity_key, `url:${renderedUrl}`);
   assert.equal(headlineState.current_headline.title, renderedTitle);
@@ -650,23 +650,23 @@ test('ensure CLI reconciles diagnostics-only state into status files and hides s
     date,
     noBuild: true,
     changedArtifacts: REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${date}/${file}`)
+      .map(file => `articles/content/newsroom/${date}/${file}`)
   });
 
-  const newsletters = JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters.json'), 'utf8'));
-  const canonicalStatus = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
+  const newsletters = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'newsletters.json'), 'utf8'));
+  const canonicalStatus = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
   const tmpStatus = JSON.parse(fs.readFileSync(path.join(root, '.tmp', 'newsletter-generation-status.json'), 'utf8'));
 
   assert.equal(newsletters.some(item => item.date === date), false);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'index.html')), true);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', date, 'newsletter.md')), true);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'index.html')), true);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', date, 'newsletter.md')), true);
   assert.deepEqual(canonicalStatus, tmpStatus);
   assert.equal(canonicalStatus.effective_homepage_visible, false);
   assert.equal(canonicalStatus.public_artifact_policy, 'hide_existing_public_artifact_after_latest_diagnostics_only');
   assert.equal(result.outputs.effective_homepage_visible, 'false');
   assert.equal(result.outputs.public_artifact_source, 'none');
-  assert.match(result.outputs.reconciled_changed_artifacts, /data\/newsletters\.json/);
-  assert.match(result.outputs.reconciled_changed_artifacts, new RegExp(`content/newsroom/${date}/generation-status\\.json`));
+  assert.match(result.outputs.reconciled_changed_artifacts, /articles\/data\/newsletters\.json/);
+  assert.match(result.outputs.reconciled_changed_artifacts, new RegExp(`articles/content/newsroom/${date}/generation-status\\.json`));
 });
 
 test('ensure CLI records invalid review publication structure as non-visible', () => {
@@ -688,10 +688,10 @@ test('ensure CLI records invalid review publication structure as non-visible', (
     date,
     noBuild: true,
     changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${date}/${file}`)
+      .map(file => `articles/content/newsroom/${date}/${file}`)
   });
 
-  const status = JSON.parse(fs.readFileSync(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
+  const status = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), 'utf8'));
   assert.equal(result.outputs.public_newsletter_ready, 'false');
   assert.equal(result.outputs.effective_homepage_visible, 'false');
   assert.equal(result.outputs.public_artifact_policy, 'review_publication_invalid_public_structure');
@@ -735,7 +735,7 @@ test('ensure CLI reports missing public artifacts instead of building fallback',
 
   assert.throws(
     () => ensurePublicNewsletterArtifacts({ root, date }),
-    /missing required public file: newsletters\/2026-05-10\/newsletter\.md/
+    /missing required public file: articles\/newsletters\/2026-05-10\/newsletter\.md/
   );
 });
 
@@ -753,7 +753,7 @@ test('ensure CLI keeps a hard-fail editorial draft reviewable when the best-effo
   });
 
   const changedArtifacts = ['editor-draft.json', 'fact-check-report.json', 'quality-report.json', 'generation-status.json']
-    .map(file => `content/newsroom/${date}/${file}`);
+    .map(file => `articles/content/newsroom/${date}/${file}`);
 
   const result = ensurePublicNewsletterArtifacts({ root, date, noBuild: true, changedArtifacts });
 
@@ -766,25 +766,25 @@ test('publication quality annotation reports quality and fact-check issues witho
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-08';
   writePublicNewsletterArtifacts(root, date);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), {
     status: 'NEEDS_FIX',
     score: qualityGatePolicy.threshold - 5,
     threshold: qualityGatePolicy.threshold,
     deductions: [{ reason: 'weak camera relevance' }]
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'), {
     status: 'NEEDS_FIX',
     must_fix: [{ issue: 'unresolved source claim' }],
     source_gaps: [{ issue: 'missing article-level evidence' }],
     source_gap_count: 1
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
     final_publish_ready: false,
     publish_gate_passed: false,
     stale_claim_status: 'PASS',
     stale_claim_hard_failure_count: 0
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), {
     publish_gate_passed: false
   });
 
@@ -798,10 +798,10 @@ test('publication quality annotation reports quality and fact-check issues witho
 
   assert.equal(code, 0);
   assert.equal(stderr, '');
-  assert.match(stdout, /::error file=content\/newsroom\/2026-05-08\/quality-report\.json,title=Quality status not PASS::/);
-  assert.match(stdout, /::warning file=content\/newsroom\/2026-05-08\/quality-report\.json,title=Quality score below threshold::/);
-  assert.match(stdout, /::error file=content\/newsroom\/2026-05-08\/fact-check-report\.json,title=Fact-check must_fix items remain::/);
-  assert.match(stdout, /::error file=content\/newsroom\/2026-05-08\/generation-status\.json,title=AI publish readiness is false::/);
+  assert.match(stdout, /::error file=articles\/content\/newsroom\/2026-05-08\/quality-report\.json,title=Quality status not PASS::/);
+  assert.match(stdout, /::warning file=articles\/content\/newsroom\/2026-05-08\/quality-report\.json,title=Quality score below threshold::/);
+  assert.match(stdout, /::error file=articles\/content\/newsroom\/2026-05-08\/fact-check-report\.json,title=Fact-check must_fix items remain::/);
+  assert.match(stdout, /::error file=articles\/content\/newsroom\/2026-05-08\/generation-status\.json,title=AI publish readiness is false::/);
   assert.match(stdout, /Publication quality annotation completed/);
 });
 
@@ -809,7 +809,7 @@ test('publication quality annotation fails only for CLI or system errors', () =>
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-08';
   writePublicNewsletterArtifacts(root, date);
-  writeText(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), '{ invalid json');
+  writeText(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), '{ invalid json');
 
   let stdout = '';
   let stderr = '';
@@ -821,7 +821,7 @@ test('publication quality annotation fails only for CLI or system errors', () =>
 
   assert.equal(code, 1);
   assert.equal(stdout, '');
-  assert.match(stderr, /Invalid JSON in content\/newsroom\/2026-05-08\/quality-report\.json/);
+  assert.match(stderr, /Invalid JSON in articles\/content\/newsroom\/2026-05-08\/quality-report\.json/);
 });
 
 test('publication quality annotation latest mode targets latest only without changed public issue dates', () => {
@@ -868,7 +868,7 @@ test('publication quality annotation rejects missing detected target dates even 
       targetDates: new Set(['2026-05-07', '2026-05-09', '2026-05-10'])
     }),
     error => {
-      assert.match(error.message, /No data\/newsletters\.json entry found for detected target date\(s\)/);
+      assert.match(error.message, /No articles\/data\/newsletters\.json entry found for detected target date\(s\)/);
       assert.match(error.message, /2026-05-09/);
       assert.match(error.message, /2026-05-10/);
       assert.doesNotMatch(error.message, /2026-05-07/);

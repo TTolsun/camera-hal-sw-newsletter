@@ -43,7 +43,7 @@ candidate collection
   -> GitHub Pages
 ```
 
-`content/collected-news/YYYY-MM-DD/`에는 원시 후보(raw candidate)가, `content/newsroom/YYYY-MM-DD/`에는 리뷰 산출물이, `newsletters/YYYY-MM-DD/`에는 공개 산출물(public artifact)이 저장됩니다. `publish-ready` 상태가 아니면 PR이 만들어져도 발행 가능한 뉴스레터로 보지 않습니다.
+`articles/content/collected-news/YYYY-MM-DD/`에는 원시 후보(raw candidate)가, `articles/content/newsroom/YYYY-MM-DD/`에는 리뷰 산출물이, `articles/newsletters/YYYY-MM-DD/`에는 공개 산출물(public artifact)이 저장됩니다. `publish-ready` 상태가 아니면 PR이 만들어져도 발행 가능한 뉴스레터로 보지 않습니다.
 
 로컬에서 확인할 때는 아래 명령만 기억하면 됩니다. 변경 범위가 넓거나 확신이 없으면 `ci`를 우선 사용합니다.
 
@@ -58,8 +58,8 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | `npm.cmd run test` | 단위/통합 테스트 회귀 확인 | `tests/` 전수 결과 |
 | `npm.cmd run validate` | docs·정책·인코딩·site 무결성 검사 | `validate:*` 체인 보고 |
 | `npm.cmd run ci` | test + validate 한꺼번에 | 변경 범위 넓을 때 1차 신뢰도 확인 |
-| `npm.cmd run collect` | `src/core/data/news-sources.json` 기반 후보 수집 | `content/collected-news/YYYY-MM-DD/` |
-| `npm.cmd run generate` | LLM 뉴스룸 파이프라인 (Gemini 공급자 사용 시 `GEMINI_API_KEY` 필요) | `content/newsroom/YYYY-MM-DD/` |
+| `npm.cmd run collect` | `src/core/data/news-sources.json` 기반 후보 수집 | `articles/content/collected-news/YYYY-MM-DD/` |
+| `npm.cmd run generate` | LLM 뉴스룸 파이프라인 (Gemini 공급자 사용 시 `GEMINI_API_KEY` 필요) | `articles/content/newsroom/YYYY-MM-DD/` |
 
 공급자/모델 재정의와 사내 API Secret 설정은 [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md)를 확인합니다.
 
@@ -75,10 +75,10 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | [`docs/`](docs/README.md) | 운영 문서, 용어집, source 안내입니다. |
 | [`src/`](scripts/README.md) | 실제 수집기(collector), 생성기(generator), 렌더러(renderer), 검증기(validator), tooling 구현입니다. core/collector/discovery/generator layer로 나뉩니다. |
 | [`tests/`](tests/README.md) | Node 내장 테스트 러너 기반 회귀 테스트(regression test)입니다. |
-| [`content/`](content/README.md) | 수집 후보와 뉴스룸 리뷰 산출물입니다. |
-| [`newsletters/`](newsletters/README.md) | 공개 뉴스레터 Markdown/HTML 출력물입니다. |
-| [`assets/`](assets/README.md) | 사이트 이미지와 기사 fallback 이미지입니다. |
-| [`css/`](css/README.md) | 정적 사이트 스타일입니다. |
+| [`articles/content/`](articles/content/README.md) | 수집 후보와 뉴스룸 리뷰 산출물입니다. |
+| [`articles/newsletters/`](articles/newsletters/README.md) | 공개 뉴스레터 Markdown/HTML 출력물입니다. |
+| [`articles/assets/`](articles/assets/README.md) | 사이트 이미지와 기사 fallback 이미지입니다. |
+| [`articles/css/`](articles/css/README.md) | 정적 사이트 스타일입니다. |
 | [`templates/`](templates/README.md) | 뉴스레터 Markdown/HTML 템플릿(template)입니다. |
 
 ## 범위별 AGENTS

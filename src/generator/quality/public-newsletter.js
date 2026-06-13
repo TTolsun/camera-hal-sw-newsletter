@@ -81,8 +81,12 @@ function publicArtifactUrlError(value) {
     normalized.startsWith('/.tmp/') ||
     normalized.startsWith('content/newsroom/') ||
     normalized.startsWith('/content/newsroom/') ||
+    normalized.startsWith('articles/content/newsroom/') ||
+    normalized.startsWith('/articles/content/newsroom/') ||
     normalized.startsWith('content/collected-news/') ||
     normalized.startsWith('/content/collected-news/') ||
+    normalized.startsWith('articles/content/collected-news/') ||
+    normalized.startsWith('/articles/content/collected-news/') ||
     normalized.includes('/.tmp/') ||
     normalized.includes('/content/newsroom/') ||
     normalized.includes('/content/collected-news/')

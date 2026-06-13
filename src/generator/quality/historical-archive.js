@@ -19,10 +19,10 @@ const {
   INVENTORY_PATH: AUDIT_INVENTORY_PATH
 } = require('../reporter/audit-paths');
 
-const REWRITE_DIFF_PREFIX = 'content/audit/historical-rewrite-diff/';
+const REWRITE_DIFF_PREFIX = 'articles/content/audit/historical-rewrite-diff/';
 
-const DEFAULT_SIDECAR_PATH = 'content/audit/historical-archive-status.json';
-const DEFAULT_AUDIT_REPORT_PATH = 'content/audit/historical-newsletter-audit-report.json';
+const DEFAULT_SIDECAR_PATH = 'articles/content/audit/historical-archive-status.json';
+const DEFAULT_AUDIT_REPORT_PATH = 'articles/content/audit/historical-newsletter-audit-report.json';
 const DEFAULT_CLEANUP_REPORT_PATH = AUDIT_CLEANUP_REPORT_PATH;
 const DEFAULT_LEDGER_PATH = AUDIT_LEDGER_PATH;
 const DEFAULT_INVENTORY_PATH = AUDIT_INVENTORY_PATH;
@@ -92,9 +92,9 @@ function listFilesRecursive(root, relDir, extension = '') {
 }
 
 function listPublicDates(root) {
-  return listDateDirs(root, 'newsletters')
+  return listDateDirs(root, path.join('articles', 'newsletters'))
     .filter(date => {
-      const dir = repoPath(root, path.join('newsletters', date));
+      const dir = repoPath(root, path.join('articles', 'newsletters', date));
       return fs.existsSync(path.join(dir, 'newsletter.md')) ||
         fs.existsSync(path.join(dir, 'index.html'));
     });
@@ -114,14 +114,14 @@ function normalizeNewsletterItems(value) {
 }
 
 function collectHistoricalArchiveState({ root = process.cwd() } = {}) {
-  const dataResult = readJsonResult(root, 'data/newsletters.json');
+  const dataResult = readJsonResult(root, 'articles/data/newsletters.json');
   const sidecarResult = readJsonResult(root, DEFAULT_SIDECAR_PATH);
   const newsletterItems = normalizeNewsletterItems(dataResult.value);
   const activeDates = newsletterItems
     .map(item => String(item?.date || ''))
     .filter(date => DATE_PATTERN.test(date));
   const publicDates = listPublicDates(root);
-  const newsroomDates = listDateDirs(root, 'content/newsroom');
+  const newsroomDates = listDateDirs(root, 'articles/content/newsroom');
   const rewriteDiffs = listRewriteDiffs(root);
   const fixtureFiles = listFilesRecursive(root, 'src/core/test/fixtures', '.json');
   const sidecarEntries = Array.isArray(sidecarResult.value) ? sidecarResult.value : [];
@@ -181,8 +181,8 @@ function cleanupReportReferenceExists(state, date) {
 
 function readPublicArticleText(root, date) {
   return [
-    `newsletters/${date}/newsletter.md`,
-    `newsletters/${date}/index.html`
+    `articles/newsletters/${date}/newsletter.md`,
+    `articles/newsletters/${date}/index.html`
   ].map(relPath => readTextIfExists(root, relPath)).join('\n');
 }
 
@@ -303,7 +303,7 @@ function validateSidecarEntry(entry, index, state, errors) {
 
 function parseRewriteDiffPath(relPath) {
   const normalized = toPosix(relPath);
-  const match = normalized.match(/^content\/audit\/historical-rewrite-diff\/(\d{4}-\d{2}-\d{2})-([a-z0-9][a-z0-9-]*)\.md$/);
+  const match = normalized.match(/^articles\/content\/audit\/historical-rewrite-diff\/(\d{4}-\d{2}-\d{2})-([a-z0-9][a-z0-9-]*)\.md$/);
   if (!match) {
     return null;
   }
@@ -395,14 +395,14 @@ function validateHistoricalArchive({ root = process.cwd(), state = null } = {}) 
   for (const date of activeDates) {
     const entry = sidecarByDate.get(date);
     if (!entry) {
-      errors.push(`Active data/newsletters.json entry ${date} has no ${DEFAULT_SIDECAR_PATH} status entry.`);
+      errors.push(`Active articles/data/newsletters.json entry ${date} has no ${DEFAULT_SIDECAR_PATH} status entry.`);
       continue;
     }
     if (entry.public_visibility !== 'listed') {
-      errors.push(`Active data/newsletters.json entry ${date} must use public_visibility=listed.`);
+      errors.push(`Active articles/data/newsletters.json entry ${date} must use public_visibility=listed.`);
     }
     if (entry.archive_status === 'removed') {
-      errors.push(`Removed archive ${date} must not remain in data/newsletters.json.`);
+      errors.push(`Removed archive ${date} must not remain in articles/data/newsletters.json.`);
     }
   }
 
@@ -421,15 +421,15 @@ function validateHistoricalArchive({ root = process.cwd(), state = null } = {}) 
     const date = String(entry?.date || '');
     if (!DATE_PATTERN.test(date)) continue;
     if (entry.archive_status === 'removed') {
-      if (activeDates.has(date)) errors.push(`Removed archive ${date} is still exposed in data/newsletters.json.`);
-      if (publicDates.has(date)) errors.push(`Removed archive ${date} still has newsletters/${date} artifacts.`);
-      if (newsroomDates.has(date)) errors.push(`Removed archive ${date} still has content/newsroom/${date} artifacts.`);
+      if (activeDates.has(date)) errors.push(`Removed archive ${date} is still exposed in articles/data/newsletters.json.`);
+      if (publicDates.has(date)) errors.push(`Removed archive ${date} still has articles/newsletters/${date} artifacts.`);
+      if (newsroomDates.has(date)) errors.push(`Removed archive ${date} still has articles/content/newsroom/${date} artifacts.`);
     }
     if (entry.public_visibility === 'listed' && !activeDates.has(date)) {
       errors.push(`Sidecar entry ${date} is listed but missing from data/newsletters.json.`);
     }
     if (entry.public_visibility === 'unlisted' && activeDates.has(date)) {
-      errors.push(`Sidecar entry ${date} is unlisted but still exposed in data/newsletters.json.`);
+      errors.push(`Sidecar entry ${date} is unlisted but still exposed in articles/data/newsletters.json.`);
     }
     if (!activeDates.has(date) && !publicDates.has(date) && newsroomDates.has(date) && entry.archive_status !== 'removed') {
       errors.push(`Sidecar entry ${date} points to a non-public newsroom artifact; newsroom-only artifacts are audit report only.`);

@@ -25,7 +25,7 @@ function tempRoot() {
 }
 
 function renderedArticleAnchorIds(root, date) {
-  const html = fs.readFileSync(path.join(root, 'newsletters', date, 'index.html'), 'utf8');
+  const html = fs.readFileSync(path.join(root, 'articles', 'newsletters', date, 'index.html'), 'utf8');
   return [...html.matchAll(/\bid="(article-[^"]+)"/g)]
     .map(match => match[1])
     .filter(id => !id.endsWith('-title'));

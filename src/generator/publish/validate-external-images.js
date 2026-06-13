@@ -13,14 +13,15 @@ const {
 } = require('../../core/common/common');
 const {
   newsroomDir,
-  newsroomRelPath
+  newsroomRelPath,
+  publicAssetPath
 } = require('../../core/common/artifact-paths');
 const {
   toLegacyEditorIssue
 } = require('../../core/domain/newsletter-domain-normalize');
 
 const root = process.cwd();
-const dataPath = path.join(root, 'data', 'newsletters.json');
+const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const errors = [];
 const warnings = [];
@@ -191,7 +192,8 @@ async function main() {
     for (const key of ['html', 'md']) {
       if (!item[key]) continue;
       const relPath = item[key];
-      const absPath = repoPath(root, relPath);
+      // item.html/md는 서빙 URL이며 디스크상으로는 articles/ 아래에 있다.
+      const absPath = publicAssetPath(root, relPath);
       if (!absPath) {
         fail(`Newsletter ${item.date} ${key} path escapes repository: ${relPath}`);
         continue;

@@ -148,7 +148,7 @@ function testManifestCreationAndHashes() {
     typeof file.sha256 === 'string'
   ));
   assert.ok(manifest.files.every(file => !file.path.endsWith('artifact-manifest.json')));
-  assert.ok(manifest.missing_critical_files.includes(`newsletters/${date}/newsletter.md`));
+  assert.ok(manifest.missing_critical_files.includes(`articles/newsletters/${date}/newsletter.md`));
 
   // retention fields
   assert.ok(Array.isArray(manifest.retained_heavy_artifacts), 'retained_heavy_artifacts should be an array');
@@ -231,10 +231,10 @@ function testReviewInventoryRequiredStateAndFallbacks() {
     artifact.path === seedMergeReportMarkdownRelPath(date)
   );
   const newsletterMd = inventory.review_artifacts.find(artifact =>
-    artifact.path === `newsletters/${date}/newsletter.md`
+    artifact.path === `articles/newsletters/${date}/newsletter.md`
   );
   const newsletterHtml = inventory.review_artifacts.find(artifact =>
-    artifact.path === `newsletters/${date}/index.html`
+    artifact.path === `articles/newsletters/${date}/index.html`
   );
   const unknown = inventory.review_artifacts.find(artifact => artifact.path === unknownPath);
 
@@ -247,8 +247,8 @@ function testReviewInventoryRequiredStateAndFallbacks() {
   assert.equal(seedMerge.requiredActive, false);
   assert.equal(newsletterMd.requiredActive, true);
   assert.equal(newsletterHtml.requiredActive, true);
-  assert.ok(inventory.missingRequired.some(artifact => artifact.path === `newsletters/${date}/newsletter.md`));
-  assert.ok(inventory.missingRequired.some(artifact => artifact.path === `newsletters/${date}/index.html`));
+  assert.ok(inventory.missingRequired.some(artifact => artifact.path === `articles/newsletters/${date}/newsletter.md`));
+  assert.ok(inventory.missingRequired.some(artifact => artifact.path === `articles/newsletters/${date}/index.html`));
   assert.equal(unknown.group, 'unknown_artifacts');
   assert.equal(unknown.role, 'unclassified');
   assert.equal(unknown.required, 'optional');
@@ -384,7 +384,7 @@ function testRetentionGradeAssignment() {
   seedAgreeingSnapshot(snapshotDir);
 
   // PUBLIC_SOURCE_OF_TRUTH: newsletter.md
-  writeText(path.join(snapshotDir, 'newsletters', date, 'newsletter.md'), '# Newsletter\n');
+  writeText(path.join(snapshotDir, 'articles', 'newsletters', date, 'newsletter.md'), '# Newsletter\n');
   // REVIEW_REQUIRED_COMPACT: selection-report.md
   writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-report.md').split('/')), '# Selection Report\n');
   writeJson(path.join(snapshotDir, ...newsroomRelPath(date, 'selection-report.json').split('/')), { date });
@@ -399,7 +399,7 @@ function testRetentionGradeAssignment() {
     runContext: { seedUsed: false, publicOutputExpected: true, status: 'PASS' }
   });
 
-  const newsletterMd = inventory.review_artifacts.find(a => a.path === `newsletters/${date}/newsletter.md`);
+  const newsletterMd = inventory.review_artifacts.find(a => a.path === `articles/newsletters/${date}/newsletter.md`);
   assert.ok(newsletterMd, 'newsletter.md should be in inventory');
   assert.strictEqual(newsletterMd.retention_grade, PUBLIC_SOURCE_OF_TRUTH);
 

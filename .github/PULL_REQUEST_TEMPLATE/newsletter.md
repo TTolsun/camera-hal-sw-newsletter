@@ -8,9 +8,9 @@
 
 ### Public artifact
 
-- [ ] `newsletters/YYYY-MM-DD/newsletter.md`를 작성했다.
-- [ ] `newsletters/YYYY-MM-DD/index.html`을 작성했다.
-- [ ] `data/newsletters.json`을 업데이트했다.
+- [ ] `articles/newsletters/YYYY-MM-DD/newsletter.md`를 작성했다.
+- [ ] `articles/newsletters/YYYY-MM-DD/index.html`을 작성했다.
+- [ ] `articles/data/newsletters.json`을 업데이트했다.
 - [ ] HTML에서 Archive 링크가 동작한다.
 - [ ] HTML에서 Markdown 원본 링크가 동작한다.
 

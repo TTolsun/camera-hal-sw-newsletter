@@ -21,15 +21,15 @@ const DATE = '2026-05-14';
 const GENERATED_AT = '2026-05-14T00:00:00.000Z';
 
 function newsroomPath(root, filename) {
-  return path.join(root, 'content', 'newsroom', DATE, filename);
+  return path.join(root, 'articles', 'content', 'newsroom', DATE, filename);
 }
 
 function collectedPath(root) {
-  return path.join(root, 'content', 'collected-news', DATE, 'candidates.json');
+  return path.join(root, 'articles', 'content', 'collected-news', DATE, 'candidates.json');
 }
 
 function sourceEventsPath(root) {
-  return path.join(root, 'content', 'source-events', DATE, 'source-change-events.json');
+  return path.join(root, 'articles', 'content', 'source-events', DATE, 'source-change-events.json');
 }
 
 function selectedCandidate(overrides = {}) {
@@ -379,10 +379,10 @@ test('writes default summary when no input artifacts exist', () => {
   assert.equal(fs.existsSync(jsonPath), true);
   assert.equal(report.publish_status.status, 'unknown');
   assert.ok(report.warnings.some(warning => warning.includes('No minimum Evidence Pack input artifact')));
-  assert.ok(report.inputs.missing.includes(`content/newsroom/${DATE}/generation-status.json`));
-  assert.ok(report.inputs.missing.includes(`content/newsroom/${DATE}/selection-report.json`));
-  assert.ok(report.inputs.missing.includes(`content/newsroom/${DATE}/shortlisted-candidates.json`));
-  assert.ok(report.inputs.missing.includes(`content/collected-news/${DATE}/candidates.json`));
+  assert.ok(report.inputs.missing.includes(`articles/content/newsroom/${DATE}/generation-status.json`));
+  assert.ok(report.inputs.missing.includes(`articles/content/newsroom/${DATE}/selection-report.json`));
+  assert.ok(report.inputs.missing.includes(`articles/content/newsroom/${DATE}/shortlisted-candidates.json`));
+  assert.ok(report.inputs.missing.includes(`articles/content/collected-news/${DATE}/candidates.json`));
 });
 
 test('uses shortlist publish_ready as best-effort publish readiness', () => {
@@ -542,8 +542,8 @@ test('candidate shortage review-only run builds a partial summary from minimum a
     'Repair official CameraX parser before publishing.',
     'Add one primary camera stack source.'
   ]);
-  assert.ok(report.inputs.missing.includes(`content/collected-news/${DATE}/candidates.json`));
-  assert.ok(report.failure_diagnostics.missing_artifacts.includes(`content/newsroom/${DATE}/shortlisted-candidates.json`));
+  assert.ok(report.inputs.missing.includes(`articles/content/collected-news/${DATE}/candidates.json`));
+  assert.ok(report.failure_diagnostics.missing_artifacts.includes(`articles/content/newsroom/${DATE}/shortlisted-candidates.json`));
 });
 
 test('missing and invalid artifacts are reported separately without failing summary generation', () => {
@@ -558,10 +558,10 @@ test('missing and invalid artifacts are reported separately without failing summ
   const { report } = writeEvidencePackSummaryArtifacts({ root, date: DATE });
 
   assert.equal(report.publish_status.status, 'unknown');
-  assert.ok(report.inputs.missing.includes(`content/newsroom/${DATE}/shortlisted-candidates.json`));
-  assert.ok(report.failure_diagnostics.missing_artifacts.includes(`content/collected-news/${DATE}/candidates.json`));
+  assert.ok(report.inputs.missing.includes(`articles/content/newsroom/${DATE}/shortlisted-candidates.json`));
+  assert.ok(report.failure_diagnostics.missing_artifacts.includes(`articles/content/collected-news/${DATE}/candidates.json`));
   assert.equal(report.failure_diagnostics.invalid_artifacts.length, 1);
-  assert.equal(report.failure_diagnostics.invalid_artifacts[0].path, `content/newsroom/${DATE}/generation-status.json`);
+  assert.equal(report.failure_diagnostics.invalid_artifacts[0].path, `articles/content/newsroom/${DATE}/generation-status.json`);
   assert.ok(report.warnings.some(warning => warning.includes('Invalid preferred artifact skipped')));
 });
 

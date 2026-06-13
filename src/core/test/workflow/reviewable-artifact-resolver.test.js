@@ -78,7 +78,7 @@ test('FAILED_EDITOR_REVIEWABLE is reviewable from the pre-editor selection artif
   });
 
   const changedArtifacts = ['generation-status.json', 'shortlisted-candidates.json', 'selection-report.json', 'selection-diagnostics.md', 'article-capsules.json']
-    .map(file => `content/newsroom/${date}/${file}`);
+    .map(file => `articles/content/newsroom/${date}/${file}`);
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({ root, changedArtifacts }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'true');
@@ -114,7 +114,7 @@ test('reviewable artifact resolver requires changed artifacts even when canonica
     status: 'NEEDS_FIX',
     final_publish_ready: false
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), {
     date,
     sections: []
   });
@@ -153,7 +153,7 @@ test('reviewable artifact resolver accepts editorial reviewable handoff without 
 
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
-    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `articles/content/newsroom/${date}/${file}`)
   }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'true');
@@ -181,7 +181,7 @@ test('reviewable artifact resolver keeps editorial handoff reviewable without th
 
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
-    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `articles/content/newsroom/${date}/${file}`)
   }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'true');
@@ -201,11 +201,11 @@ test('reviewable artifact resolver accepts editorial reviewable public and data 
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
     changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${date}/${file}`)
+      .map(file => `articles/content/newsroom/${date}/${file}`)
       .concat([
-        `newsletters/${date}/newsletter.md`,
-        `newsletters/${date}/index.html`,
-        'data/newsletters.json'
+        `articles/newsletters/${date}/newsletter.md`,
+        `articles/newsletters/${date}/index.html`,
+        'articles/data/newsletters.json'
       ])
   }));
 
@@ -229,12 +229,12 @@ test('review artifact advisory metadata does not change publish readiness resolv
   const date = '2026-05-09';
   writeEditorialReviewableArtifacts(root, date);
   writePublicNewsletterArtifacts(root, date);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'artifact-manifest.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'artifact-manifest.json'), {
     schema_version: 2,
     date,
     files: [],
     review_artifacts: [{
-      path: `newsletters/${date}/newsletter.md`,
+      path: `articles/newsletters/${date}/newsletter.md`,
       present: false,
       group: 'public_output',
       role: 'public_markdown',
@@ -244,18 +244,18 @@ test('review artifact advisory metadata does not change publish readiness resolv
       review_attention_required: true,
       review_order: 30
     }],
-    missing_required_review_artifacts: [`newsletters/${date}/newsletter.md`]
+    missing_required_review_artifacts: [`articles/newsletters/${date}/newsletter.md`]
   });
 
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
     changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${date}/${file}`)
+      .map(file => `articles/content/newsroom/${date}/${file}`)
       .concat([
-        `content/newsroom/${date}/artifact-manifest.json`,
-        `newsletters/${date}/newsletter.md`,
-        `newsletters/${date}/index.html`,
-        'data/newsletters.json'
+        `articles/content/newsroom/${date}/artifact-manifest.json`,
+        `articles/newsletters/${date}/newsletter.md`,
+        `articles/newsletters/${date}/index.html`,
+        'articles/data/newsletters.json'
       ])
   }));
 
@@ -283,11 +283,11 @@ test('reviewable artifact resolver accepts string booleans for review publicatio
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
     changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${date}/${file}`)
+      .map(file => `articles/content/newsroom/${date}/${file}`)
       .concat([
-        `newsletters/${date}/newsletter.md`,
-        `newsletters/${date}/index.html`,
-        'data/newsletters.json'
+        `articles/newsletters/${date}/newsletter.md`,
+        `articles/newsletters/${date}/index.html`,
+        'articles/data/newsletters.json'
       ])
   }));
 
@@ -307,7 +307,7 @@ test('reviewable artifact resolver rejects editorial reviewable invalid canonica
 
   let outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
-    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `articles/content/newsroom/${date}/${file}`)
   }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'false');
@@ -315,10 +315,10 @@ test('reviewable artifact resolver rejects editorial reviewable invalid canonica
   assert.equal(outputs.review_only, 'false');
   assert.match(outputs.reviewable_artifact_reason, /canonical_failure_kind=wrong_kind/);
 
-  writeText(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), '{ invalid json');
+  writeText(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), '{ invalid json');
   outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
-    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `articles/content/newsroom/${date}/${file}`)
   }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'false');
@@ -331,7 +331,7 @@ test('reviewable artifact resolver rejects editorial reviewable invalid canonica
   writeEditorialReviewableArtifacts(missingRoot, date, { writeQuality: false });
   outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root: missingRoot,
-    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
+    changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS.map(file => `articles/content/newsroom/${date}/${file}`)
   }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'false');
@@ -348,7 +348,7 @@ test('reviewable artifact resolver accepts candidate shortage reviewable handoff
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
     changedArtifacts: REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${date}/${file}`)
+      .map(file => `articles/content/newsroom/${date}/${file}`)
   }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'true');
@@ -363,9 +363,9 @@ test('reviewable artifact resolver accepts candidate shortage reviewable handoff
   assert.equal(outputs.changed_artifact_count, String(REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS.length));
   assert.match(outputs.reviewable_artifact_reason, /failure_kind=candidate_shortage_reviewable/);
   assert.match(outputs.reviewable_artifact_reason, /candidate_shortage_reject=none/);
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'editor-draft.json')), false);
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'quality-report.json')), false);
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'fact-check-report.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json')), false);
 });
 
 test('reviewable artifact resolver reports fallback_public contract conflicts', () => {
@@ -406,7 +406,7 @@ test('reviewable artifact resolver rejects candidate shortage when deterministic
     root,
     changedArtifacts: REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS
       .filter(file => file !== 'article-capsules.json')
-      .map(file => `content/newsroom/${date}/${file}`)
+      .map(file => `articles/content/newsroom/${date}/${file}`)
   }));
 
   assert.equal(outputs.has_reviewable_artifacts, 'false');
@@ -427,13 +427,13 @@ test('reviewable artifact resolver rejects failed repair with repair-failure onl
     final_publish_ready: false,
     publish_gate_passed: false
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'repair-failure.json'), {
     message: 'Editor output must contain 3-5 sections; got 2.'
   });
 
   const resolved = resolveReviewableArtifacts({
     root,
-    changedArtifacts: [`content/newsroom/${date}/repair-failure.json`]
+    changedArtifacts: [`articles/content/newsroom/${date}/repair-failure.json`]
   });
   const outputs = buildReviewableArtifactOutputs(resolved);
 
@@ -472,12 +472,12 @@ test('reviewable artifact resolver accepts complete changed failed repair artifa
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-08';
   writeFailedRepairReviewableArtifacts(root, date);
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), '# draft\n');
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), '# draft\n');
 
   const resolved = resolveReviewableArtifacts({
     root,
-    changedArtifacts: REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS.map(file => `content/newsroom/${date}/${file}`)
-      .concat(`newsletters/${date}/newsletter.md`)
+    changedArtifacts: REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS.map(file => `articles/content/newsroom/${date}/${file}`)
+      .concat(`articles/newsletters/${date}/newsletter.md`)
   });
   const outputs = buildReviewableArtifactOutputs(resolved);
 
@@ -503,7 +503,7 @@ test('reviewable artifact resolver treats legacy quality failures as public-read
     final_publish_ready: false
   });
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), {
     date,
     sections: []
   });
@@ -512,10 +512,10 @@ test('reviewable artifact resolver treats legacy quality failures as public-read
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
     changedArtifacts: [
-      `content/newsroom/${date}/editor-draft.json`,
-      `newsletters/${date}/newsletter.md`,
-      `newsletters/${date}/index.html`,
-      'data/newsletters.json'
+      `articles/content/newsroom/${date}/editor-draft.json`,
+      `articles/newsletters/${date}/newsletter.md`,
+      `articles/newsletters/${date}/index.html`,
+      'articles/data/newsletters.json'
     ]
   }));
 
@@ -542,16 +542,16 @@ test('reviewable artifact resolver does not treat FAILED status as a publish can
     date,
     status: 'FAILED'
   });
-  writeJson(path.join(root, 'content', 'newsroom', date, 'repair-failure.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'repair-failure.json'), {
     message: 'terminal failure'
   });
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), '# stale draft\n');
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), '# stale draft\n');
 
   const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
     root,
     changedArtifacts: [
-      `content/newsroom/${date}/repair-failure.json`,
-      `newsletters/${date}/newsletter.md`
+      `articles/content/newsroom/${date}/repair-failure.json`,
+      `articles/newsletters/${date}/newsletter.md`
     ]
   }));
 
@@ -570,8 +570,8 @@ test('public newsletter readiness requires every public file in changed artifact
     root,
     date,
     changedArtifacts: [
-      `newsletters/${date}/newsletter.md`,
-      'data/newsletters.json'
+      `articles/newsletters/${date}/newsletter.md`,
+      'articles/data/newsletters.json'
     ]
   }));
 
@@ -587,7 +587,7 @@ test('public newsletter readiness requires valid data/newsletters.json entry for
   writePublicNewsletterArtifacts(root, date);
 
   for (const [label, newsletters, expectedReason] of [
-    ['missing date entry', [], /data\/newsletters\.json missing date entry/],
+    ['missing date entry', [], /articles\/data\/newsletters\.json missing date entry/],
     ['path mismatch', [{
       date,
       title: 'Camera HAL / SW Newsletter',
@@ -595,9 +595,9 @@ test('public newsletter readiness requires valid data/newsletters.json entry for
       html: `newsletters/${date}/wrong-index.html`,
       md: `newsletters/${date}/wrong-newsletter.md`,
       tags: ['Camera HAL']
-    }], /data\/newsletters\.json html path mismatch|data\/newsletters\.json md path mismatch/]
+    }], /articles\/data\/newsletters\.json html path mismatch|articles\/data\/newsletters\.json md path mismatch/]
   ]) {
-    writeJson(path.join(root, 'data', 'newsletters.json'), newsletters);
+    writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), newsletters);
 
     const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
       root,
@@ -673,7 +673,7 @@ test('reviewable artifact resolver accepts FAILED_RAW_ARTIFACT_VALIDATION with g
   const resolved = resolveReviewableArtifacts({
     root,
     changedArtifacts: REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS
-      .map(file => `content/newsroom/${date}/${file}`)
+      .map(file => `articles/content/newsroom/${date}/${file}`)
   });
   const outputs = buildReviewableArtifactOutputs(resolved);
 

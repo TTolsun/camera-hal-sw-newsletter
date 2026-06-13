@@ -64,7 +64,7 @@ function deterministicFailureShortlist(date) {
 test('deterministic pre-LLM failure artifacts include date, status, and selection reports', () => {
   const date = '2026-05-06';
   const root = tempRoot('selection-report-artifact-');
-  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
   const shortlistReport = deterministicFailureShortlist(date);
 
   writeNewsletterDate(date, root);

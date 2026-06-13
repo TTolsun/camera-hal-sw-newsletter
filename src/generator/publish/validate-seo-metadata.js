@@ -12,6 +12,9 @@ const {
   missingSeoTags,
   seoTagUrl
 } = require('../render/seo-metadata');
+const {
+  publicAssetPath
+} = require('../../core/common/artifact-paths');
 
 const root = process.cwd();
 const errors = [];
@@ -21,7 +24,8 @@ const ABSOLUTE_URL_TAGS = ['canonical', 'og:image', 'og:url'];
 
 function checkStaticPageMeta() {
   for (const page of STATIC_PAGES) {
-    const filePath = path.join(root, page);
+    // index.html은 루트, archive.html은 articles/ 아래에 있다.
+    const filePath = publicAssetPath(root, page);
     if (!fs.existsSync(filePath)) {
       errors.push(`${page}: 파일이 없어 SEO 메타를 검증할 수 없습니다.`);
       continue;
@@ -44,7 +48,7 @@ function checkStaticPageMeta() {
 // 경로에서 깨지지 않도록). 대신 구조만 검증한다: 유효한 urlset, 안정적인 진입점 포함,
 // 모든 <loc>가 사이트 base 아래의 절대 https URL.
 function checkSitemap() {
-  const file = path.join(root, 'sitemap.xml');
+  const file = path.join(root, 'articles', 'sitemap.xml');
   if (!fs.existsSync(file)) {
     errors.push('sitemap.xml이 없습니다.');
     return;
@@ -66,7 +70,7 @@ function checkSitemap() {
 }
 
 function checkRobots() {
-  const file = path.join(root, 'robots.txt');
+  const file = path.join(root, 'articles', 'robots.txt');
   if (!fs.existsSync(file)) {
     errors.push('robots.txt가 없습니다.');
     return;

@@ -297,7 +297,7 @@ function buildInputFromEnv(args, env) {
     artifact: {
       debug_name: env.DEBUG_ARTIFACT_NAME || '',
       key_paths: [
-        (env.NEWSLETTER_DATE || status.date) ? `content/newsroom/${env.NEWSLETTER_DATE || status.date}/` : '',
+        (env.NEWSLETTER_DATE || status.date) ? `articles/content/newsroom/${env.NEWSLETTER_DATE || status.date}/` : '',
         (env.NEWSLETTER_DATE || status.date) ? `newsletters/${env.NEWSLETTER_DATE || status.date}/` : ''
       ].filter(Boolean)
     }

@@ -70,7 +70,7 @@ function markdownEscape(value) {
 }
 
 function reportPath(root, date) {
-  return path.join(root, 'content', 'newsroom', date, 'source-effectiveness-report.json');
+  return path.join(root, 'articles', 'content', 'newsroom', date, 'source-effectiveness-report.json');
 }
 
 function readJson(filePath) {
@@ -78,7 +78,7 @@ function readJson(filePath) {
 }
 
 function discoverSourceEffectivenessReports(root = process.cwd()) {
-  const newsroomDir = path.join(root, 'content', 'newsroom');
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom');
   if (!fs.existsSync(newsroomDir)) {
     throw new Error(`FAIL: missing newsroom artifact directory: ${path.relative(root, newsroomDir).replace(/\\/g, '/')}`);
   }

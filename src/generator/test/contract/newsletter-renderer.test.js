@@ -8,7 +8,7 @@ const {
 } = require('../../render/newsletter-renderer');
 const {
   siteHeaderHtml
-} = require('../../../../assets/js/site-header');
+} = require('../../../../articles/assets/js/site-header');
 
 function issue(overrides = {}) {
   return {

@@ -6,7 +6,8 @@ const {
   repoPath
 } = require('../../core/common/common');
 const {
-  newsroomDir
+  newsroomDir,
+  publicAssetPath
 } = require('../../core/common/artifact-paths');
 const {
   articlePolicy,
@@ -30,7 +31,7 @@ const {
 } = require('../reporter/public-state-reconciliation');
 
 const root = process.cwd();
-const dataPath = path.join(root, 'data', 'newsletters.json');
+const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 const requiredFields = ['date', 'title', 'summary', 'html', 'md', 'tags'];
@@ -297,7 +298,7 @@ function validateNewsletterHtmlTags(item, html, strictArtifactValidation) {
   const expectedTags = ensureArray(item.tags).map(tag => String(tag));
   const message = actualTags === null
     ? `Newsletter ${item.date} HTML missing issue tag row for data/newsletters.json tags: ${expectedTags.join(', ') || 'none'}.`
-    : `Newsletter ${item.date} HTML issue tags [${actualTags.join(', ') || 'none'}] do not match data/newsletters.json tags [${expectedTags.join(', ') || 'none'}].`;
+    : `Newsletter ${item.date} HTML issue tags [${actualTags.join(', ') || 'none'}] do not match articles/data/newsletters.json tags [${expectedTags.join(', ') || 'none'}].`;
 
   if (actualTags !== null && sameOrderedValues(actualTags, expectedTags)) return;
   if (strictArtifactValidation) {
@@ -594,7 +595,7 @@ function validateRootHomepageContract(newsletters) {
 
 function validateArchivePageContract(newsletters) {
   const relPath = 'archive.html';
-  const archivePath = path.join(root, relPath);
+  const archivePath = publicAssetPath(root, relPath);
   if (!fs.existsSync(archivePath)) {
     fail('Missing required public archive route: archive.html');
     return;
@@ -654,7 +655,7 @@ function validateHomepageHeadlineData() {
   const headline = state.current_headline;
   if (!headline) return;
   if (headline.newsletter_url) {
-    const newsletterPath = repoPath(root, headline.newsletter_url);
+    const newsletterPath = publicAssetPath(root, headline.newsletter_url);
     if (!newsletterPath) {
       fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_url escapes repository.`);
     }
@@ -664,7 +665,7 @@ function validateHomepageHeadlineData() {
     if (!newsletterArticleRelPath) {
       fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_article_url must include a repository-relative HTML path before #anchor.`);
     } else {
-      const newsletterArticlePath = repoPath(root, newsletterArticleRelPath);
+      const newsletterArticlePath = publicAssetPath(root, newsletterArticleRelPath);
       if (!newsletterArticlePath) {
         fail(`${HEADLINE_STATE_REL_PATH}: current_headline.newsletter_article_url escapes repository.`);
       } else if (articleAnchor) {
@@ -679,7 +680,7 @@ function validateHomepageHeadlineData() {
   if (headline.image_url) {
     const imageUrl = String(headline.image_url || '').trim();
     const isHttps = /^https:\/\//i.test(imageUrl);
-    const imagePath = isHttps ? '' : repoPath(root, imageUrl);
+    const imagePath = isHttps ? '' : publicAssetPath(root, imageUrl);
     if (!isHttps && (!imagePath || !fs.existsSync(imagePath))) {
       fail(`${HEADLINE_STATE_REL_PATH}: current_headline.image_url must be https URL or existing repository-relative path.`);
     }
@@ -701,7 +702,7 @@ function validateRetentionForDate(date) {
 }
 
 function validateAllRetentionFiles() {
-  const contentDir = path.join(root, 'content', 'newsroom');
+  const contentDir = path.join(root, 'articles', 'content', 'newsroom');
   if (!fs.existsSync(contentDir)) return;
   for (const entry of fs.readdirSync(contentDir, { withFileTypes: true })) {
     if (!entry.isDirectory() || !datePattern.test(entry.name)) continue;
@@ -717,7 +718,7 @@ function validateLatestPublicState(item) {
   const retention = validateRetentionForDate(item.date);
   if (latestDiagnosticsOnly(status) && !retention.valid) {
     fail([
-      `Newsletter ${item.date} is diagnostics-only but data/newsletters.json exposes it.`,
+      `Newsletter ${item.date} is diagnostics-only but articles/data/newsletters.json exposes it.`,
       `latest status=${status.status || status.generation_status || 'UNKNOWN'}`,
       `public_newsletter_ready=${String(status.public_newsletter_ready)}`,
       `final_publish_ready=${String(status.final_publish_ready)}`,
@@ -778,7 +779,8 @@ for (const [index, item] of newsletters.entries()) {
 
   for (const key of ['html', 'md']) {
     const relPath = item[key];
-    const absPath = repoPath(root, relPath || '');
+    // item.html/md는 서빙 URL(newsletters/<date>/...)이며 디스크상으로는 articles/ 아래에 있다.
+    const absPath = publicAssetPath(root, relPath || '');
     if (!absPath) {
       fail(`Newsletter ${item.date} ${key} path escapes repository: ${relPath}`);
       continue;
@@ -795,7 +797,7 @@ for (const [index, item] of newsletters.entries()) {
   }
 
   if (item.md) {
-    const mdPath = repoPath(root, item.md);
+    const mdPath = publicAssetPath(root, item.md);
     if (mdPath && fs.existsSync(mdPath)) {
       const md = read(mdPath);
       const briefingHeading = getBriefingHeading(md);
@@ -816,7 +818,7 @@ for (const [index, item] of newsletters.entries()) {
       }
 
       const strictArtifactValidation = strictDates.has(item.date);
-      const htmlPath = repoPath(root, item.html || '');
+      const htmlPath = publicAssetPath(root, item.html || '');
       const html = htmlPath && fs.existsSync(htmlPath) ? read(htmlPath) : '';
       const editor = readJsonIfExists(path.join(newsroomDir(root, item.date), 'editor-draft.json'));
       const status = readJsonIfExists(path.join(newsroomDir(root, item.date), 'generation-status.json')) || {};
@@ -846,7 +848,8 @@ for (const item of newsletters) {
 }
 
 for (const relPath of htmlFiles) {
-  const absPath = repoPath(root, relPath);
+  // 서빙 URL(index.html/archive.html/newsletters/<date>/...)을 디스크 위치로 매핑.
+  const absPath = publicAssetPath(root, relPath);
   if (!absPath || !fs.existsSync(absPath)) continue;
   const content = read(absPath);
   const openAnchors = content.match(/<a\b/gi)?.length || 0;

@@ -8,7 +8,7 @@
 
 - Seed evidence workflow 이전 archive entry에는 fake seed evidence provenance를 추가하지 않습니다.
 - `keep` / `minor_edit` 대상은 현재 article structure로 강제 재작성하지 않습니다.
-- Material rewrite는 `content/audit/historical-rewrite-diff/<date>-<slug>.md`를 필요로 합니다.
+- Material rewrite는 `articles/content/audit/historical-rewrite-diff/<date>-<slug>.md`를 필요로 합니다.
 - `removed` entry는 `data/newsletters.json`에 남기지 않습니다.
 
 ## Ledger

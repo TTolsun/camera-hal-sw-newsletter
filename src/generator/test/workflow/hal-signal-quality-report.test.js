@@ -94,17 +94,17 @@ function writeRequiredArtifacts(root, date, overrides = {}) {
       soft_deductions: []
     }]
   };
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), editor);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'shortlisted-candidates.json'), shortlist);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'quality-report.json'), quality);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), editor);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), shortlist);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json'), quality);
   return { editor, shortlist, quality };
 }
 
 function writeOptionalArtifacts(root, date) {
-  writeJson(path.join(root, 'content', 'newsroom', date, 'source-effectiveness-report.json'), {});
-  writeJson(path.join(root, 'content', 'newsroom', date, 'source-quality-report.json'), {});
-  writeJson(path.join(root, 'content', 'newsroom', date, 'evidence-pack-summary.json'), {});
-  writeJson(path.join(root, 'content', 'collected-news', date, 'merged-candidate-manifest.json'), {});
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'source-effectiveness-report.json'), {});
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'source-quality-report.json'), {});
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'evidence-pack-summary.json'), {});
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'merged-candidate-manifest.json'), {});
 }
 
 test('HAL signal quality report writes JSON and Markdown with complete inputs', () => {

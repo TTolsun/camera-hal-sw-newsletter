@@ -1,11 +1,41 @@
 const path = require('path');
 
-const CONTENT_ROOT = 'content';
+// 공개 출력물은 모두 저장소 루트의 articles/ 아래에 위치한다(#262 phase 6).
+// 루트에는 index.html만 남고, articles/ 의 내용은 Pages Actions 배포 시
+// _site/ 루트로 복사되어 서빙 URL(/newsletters/..., /content/..., /data/... 등)이 보존된다.
+const ARTICLES_ROOT = 'articles';
+const CONTENT_ROOT = `${ARTICLES_ROOT}/content`;
 const COLLECTED_NEWS_ROOT = `${CONTENT_ROOT}/collected-news`;
 const NEWSROOM_ROOT = `${CONTENT_ROOT}/newsroom`;
+// newsletters/ 디스크 루트(서빙 URL은 /newsletters/...로 보존됨).
+const NEWSLETTERS_ROOT = `${ARTICLES_ROOT}/newsletters`;
 
 function toPosix(value) {
   return String(value || '').replace(/\\/g, '/');
+}
+
+// 클라이언트(브라우저)가 보는 서빙-상대 경로를 디스크상의 실제 위치로 매핑한다.
+// 서빙 루트(_site/)는 루트 index.html + articles/ 내용으로 조립되므로,
+// index.html은 저장소 루트에, 그 외 모든 공개 자원은 articles/ 아래에 있다.
+// 예: 'newsletters/2026-06-11/index.html' -> <root>/articles/newsletters/2026-06-11/index.html
+//     'data/newsletters.json'             -> <root>/articles/data/newsletters.json
+//     'index.html'                        -> <root>/index.html
+function publicAssetPath(root, servedRelPath) {
+  const normalized = toPosix(servedRelPath).replace(/^\/+/, '');
+  const target = (normalized === '' || normalized === 'index.html')
+    ? path.join(root, 'index.html')
+    : path.join(root, ARTICLES_ROOT, normalized);
+  // repoPath와 동일한 escape 가드: 결과가 root 밖이면 ''을 반환한다.
+  const rootPath = path.resolve(root);
+  const absPath = path.resolve(target);
+  if (absPath !== rootPath && !absPath.startsWith(`${rootPath}${path.sep}`)) {
+    return '';
+  }
+  return target;
+}
+
+function newslettersDir(root, date) {
+  return path.join(root, ARTICLES_ROOT, 'newsletters', date);
 }
 
 function collectedNewsDir(root, date) {
@@ -218,15 +248,19 @@ function newsroomRelPath(date, filename = '') {
 
 function changedArtifactDate(relPath) {
   const normalized = toPosix(relPath);
-  const match = normalized.match(/^(?:newsletters|content\/newsroom|content\/collected-news|content\/source-events)\/(\d{4}-\d{2}-\d{2})(?:\/|$)/);
+  const match = normalized.match(/^articles\/(?:newsletters|content\/newsroom|content\/collected-news|content\/source-events)\/(\d{4}-\d{2}-\d{2})(?:\/|$)/);
   return match ? match[1] : '';
 }
 
 module.exports = {
+  ARTICLES_ROOT,
   COLLECTED_NEWS_ROOT,
   CONTENT_ROOT,
+  NEWSLETTERS_ROOT,
   NEWSROOM_ROOT,
   changedArtifactDate,
+  newslettersDir,
+  publicAssetPath,
   collectedCandidatesPath,
   collectedCandidatesRelPath,
   collectedNewsDir,

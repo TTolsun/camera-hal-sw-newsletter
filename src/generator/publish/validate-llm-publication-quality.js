@@ -97,7 +97,7 @@ function htmlText(value) {
 }
 
 function newsletterEntry(date) {
-  const dataPath = path.join(root, 'data', 'newsletters.json');
+  const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
   const entries = readJsonIfExists(dataPath);
   if (!Array.isArray(entries)) return null;
   return entries.find(item => item?.date === date) || null;
@@ -189,8 +189,8 @@ async function validateLlmPublicationQuality(options = {}) {
     return null;
   }
 
-  const markdownPath = path.join(root, 'newsletters', date, 'newsletter.md');
-  const htmlPath = path.join(root, 'newsletters', date, 'index.html');
+  const markdownPath = path.join(root, 'articles', 'newsletters', date, 'newsletter.md');
+  const htmlPath = path.join(root, 'articles', 'newsletters', date, 'index.html');
   const statusPath = path.join(newsroomDir(root, date), 'generation-status.json');
   const markdown = readTextIfExists(markdownPath);
   const html = readTextIfExists(htmlPath);

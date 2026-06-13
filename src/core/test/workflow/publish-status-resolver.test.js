@@ -417,14 +417,14 @@ test('publish status resolver does not promote FAILED_REPAIR_REVIEWABLE without 
   assert.equal(resolved.status.status, 'FAILED');
   assert.equal(resolved.status.review_gate_passed, false);
   assert.equal(resolved.status.final_publish_ready, false);
-  assert.match(resolved.status.consistency_errors.join('\n'), /Missing reviewable repair artifact: content\/newsroom\/2026-05-08\/editor-draft\.json/);
+  assert.match(resolved.status.consistency_errors.join('\n'), /Missing reviewable repair artifact: articles\/content\/newsroom\/2026-05-08\/editor-draft\.json/);
 });
 
 test('publish status resolver does not promote FAILED_REPAIR_REVIEWABLE with invalid canonical artifacts', () => {
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-08';
   writeFailedRepairReviewableArtifacts(root, date);
-  writeText(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), '{ invalid json');
+  writeText(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), '{ invalid json');
 
   const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
 
@@ -432,7 +432,7 @@ test('publish status resolver does not promote FAILED_REPAIR_REVIEWABLE with inv
   assert.equal(resolved.status.status, 'FAILED');
   assert.equal(resolved.status.review_gate_passed, false);
   assert.equal(resolved.status.final_publish_ready, false);
-  assert.match(resolved.status.consistency_errors.join('\n'), /Could not read content\/newsroom\/2026-05-08\/editor-draft\.json/);
+  assert.match(resolved.status.consistency_errors.join('\n'), /Could not read articles\/content\/newsroom\/2026-05-08\/editor-draft\.json/);
 });
 
 test('publish status resolver does not promote FAILED_RAW_ARTIFACT_VALIDATION to final_publish_ready', () => {

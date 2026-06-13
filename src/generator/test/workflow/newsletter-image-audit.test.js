@@ -71,10 +71,10 @@ function issue(date, sectionOverrides = {}) {
 
 function writeIssue(root, value) {
   const date = value.date;
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), value);
-  writeText(path.join(root, 'content', 'newsroom', date, 'editor-draft.md'), buildMarkdown(value));
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), buildMarkdown(value));
-  writeText(path.join(root, 'newsletters', date, 'index.html'), buildHtml(value));
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), value);
+  writeText(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.md'), buildMarkdown(value));
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), buildMarkdown(value));
+  writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), buildHtml(value));
 }
 
 test('image audit selects valid raster OG image and excludes unsafe candidates without network', async () => {
@@ -119,9 +119,9 @@ test('repair command rewrites editor draft and regenerates public Markdown and H
   const first = await repairNewsletterImages({ root, allRepairable: true });
   assert.equal(first.reduce((sum, item) => sum + item.repairedArticleCount, 0), 1);
 
-  const editorPath = path.join(root, 'content', 'newsroom', date, 'editor-draft.json');
-  const markdownPath = path.join(root, 'newsletters', date, 'newsletter.md');
-  const htmlPath = path.join(root, 'newsletters', date, 'index.html');
+  const editorPath = path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json');
+  const markdownPath = path.join(root, 'articles', 'newsletters', date, 'newsletter.md');
+  const htmlPath = path.join(root, 'articles', 'newsletters', date, 'index.html');
   const editor = JSON.parse(fs.readFileSync(editorPath, 'utf8'));
   assert.equal(editor.sections[0].selectedImage, 'https://publisher.example.com/images/camera-card.png');
   assert.equal(editor.sections[0].imageSelection.reasonCode, 'selected');
@@ -150,11 +150,11 @@ test('repair binds the selected image into the date\'s weekly issue and weekly i
   assert.equal(repairs[0].weeklySync.synced, true);
   assert.equal(repairs[0].weeklySync.patchedSectionCount, 1);
   const weeklyKey = repairs[0].weeklySync.weeklyKey;
-  const weeklyIssue = JSON.parse(fs.readFileSync(path.join(root, 'newsletters', weeklyKey, 'issue.json'), 'utf8'));
+  const weeklyIssue = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'newsletters', weeklyKey, 'issue.json'), 'utf8'));
   assert.equal(weeklyIssue.sections[0].selectedImage, 'https://publisher.example.com/images/camera-card.png');
   assert.equal(weeklyIssue.sections[0].resolvedImage.usedFallback, false);
-  assert.match(fs.readFileSync(path.join(root, 'newsletters', weeklyKey, 'index.html'), 'utf8'), /camera-card\.png/);
-  const weeklyIndex = JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters-weekly.json'), 'utf8'));
+  assert.match(fs.readFileSync(path.join(root, 'articles', 'newsletters', weeklyKey, 'index.html'), 'utf8'), /camera-card\.png/);
+  const weeklyIndex = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), 'utf8'));
   assert.deepEqual(
     weeklyIndex.find(entry => entry.weeklyKey === weeklyKey).article_images,
     ['https://publisher.example.com/images/camera-card.png']
@@ -192,9 +192,9 @@ test('repair with zero repairable articles still converges a stale weekly issue'
   assert.equal(repairs[0].weeklySync.synced, true);
   assert.equal(repairs[0].weeklySync.patchedSectionCount, 1);
   const weeklyKey = repairs[0].weeklySync.weeklyKey;
-  const weeklyIssue = JSON.parse(fs.readFileSync(path.join(root, 'newsletters', weeklyKey, 'issue.json'), 'utf8'));
+  const weeklyIssue = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'newsletters', weeklyKey, 'issue.json'), 'utf8'));
   assert.equal(weeklyIssue.sections[0].selectedImage, selectedImage);
-  const weeklyIndex = JSON.parse(fs.readFileSync(path.join(root, 'data', 'newsletters-weekly.json'), 'utf8'));
+  const weeklyIndex = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), 'utf8'));
   assert.deepEqual(weeklyIndex.find(entry => entry.weeklyKey === weeklyKey).article_images, [selectedImage]);
 });
 
@@ -262,9 +262,9 @@ test('audit keeps publish-target render mismatch blocking for normal public issu
     imageCandidates: [validImage(selectedImage)]
   });
   fixture.publication_mode = 'public';
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), fixture);
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), '# Missing image\n');
-  writeText(path.join(root, 'newsletters', date, 'index.html'), '<html><body>Missing image</body></html>');
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), fixture);
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), '# Missing image\n');
+  writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), '<html><body>Missing image</body></html>');
 
   const report = await buildNewsletterImageAuditReport({ root, date });
 
@@ -292,20 +292,20 @@ test('fallback_public audit uses editor draft as public issue source of truth', 
     fallback_only: true,
     sections: [renderedSection]
   };
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), publicIssue);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'generation-status.json'), {
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), publicIssue);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
     date,
     publication_mode: 'fallback_public',
     run_mode: 'review_only_public',
     public_state: 'REVIEW_ONLY_PUBLIC_CREATED'
   });
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), buildMarkdown(publicIssue));
-  writeText(path.join(root, 'newsletters', date, 'index.html'), buildHtml(publicIssue));
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), buildMarkdown(publicIssue));
+  writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), buildHtml(publicIssue));
 
   const report = await buildNewsletterImageAuditReport({ root, date });
 
   assert.equal(report.render_consistency_scope, 'rendered_public_issue');
-  assert.equal(report.source_of_truth, `content/newsroom/${date}/editor-draft.json`);
+  assert.equal(report.source_of_truth, `articles/content/newsroom/${date}/editor-draft.json`);
   assert.equal(report.summary.article_count, 1);
   assert.equal(report.summary.selected_image_count, 1);
   assert.equal(report.summary.rendered_image_count, 1);
@@ -358,7 +358,7 @@ test('aggregate audit reports repairable dates and Korean Markdown labels', asyn
   assert.equal(result.aggregate.summary.repairableArticleCount, 1);
   assert.equal(result.aggregate.summary.unrepairableNoCandidateCount, 1);
 
-  const markdown = fs.readFileSync(path.join(root, 'content', 'newsroom', '2026-05-31', 'image-audit-report.md'), 'utf8');
+  const markdown = fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', '2026-05-31', 'image-audit-report.md'), 'utf8');
   assert.match(markdown, /대표 이미지 선택됨/);
   assert.match(markdown, /\(`selected`\)|\(selected\)/);
   assert.doesNotMatch(markdown, /Generated from|Artifacts|valid image candidate|selectedImage 수|publish blocking issue|^none$/m);

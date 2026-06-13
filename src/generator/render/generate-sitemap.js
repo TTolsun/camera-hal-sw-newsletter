@@ -7,11 +7,11 @@ const path = require('path');
 const { buildSitemap } = require('./seo-metadata');
 
 function weeklyDataPath(root) {
-  return path.join(root, 'data', 'newsletters-weekly.json');
+  return path.join(root, 'articles', 'data', 'newsletters-weekly.json');
 }
 
 function sitemapPath(root) {
-  return path.join(root, 'sitemap.xml');
+  return path.join(root, 'articles', 'sitemap.xml');
 }
 
 function readWeeklyIssues(root) {

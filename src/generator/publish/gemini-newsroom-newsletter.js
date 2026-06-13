@@ -209,7 +209,7 @@ const {
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
-const dataPath = path.join(root, 'data', 'newsletters.json');
+const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
 const sourceRegistryPath = path.join(root, 'src', 'core', 'data', 'news-sources.json');
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
@@ -3404,7 +3404,7 @@ async function main() {
   const newsletterTemplatePath = path.join(root, 'docs', 'newsletter-template.md');
   const goldenExamplePath = path.join(root, 'docs', 'golden-examples', 'manual-quality-newsletter.md');
   const newsroomDir = artifactNewsroomDir(root, date);
-  const newsletterDir = path.join(root, 'newsletters', date);
+  const newsletterDir = path.join(root, 'articles', 'newsletters', date);
 
   if (!fs.existsSync(sourceRegistryPath) && !fs.existsSync(sourcesPath)) {
     fail('Missing src/core/data/news-sources.json and docs/news-sources.md.');
@@ -4551,9 +4551,10 @@ async function main() {
         finalCompositionMode !== COMPOSITION_MODES.NORMAL;
   const files = shouldWritePublicArtifacts
     ? baseFiles.concat([
-        `newsletters/${date}/newsletter.md`,
-        `newsletters/${date}/index.html`,
-        'data/newsletters.json',
+        // changedArtifacts/review-inventory에 쓰이는 디스크-상대 경로(articles/ 아래).
+        `articles/newsletters/${date}/newsletter.md`,
+        `articles/newsletters/${date}/index.html`,
+        'articles/data/newsletters.json',
         ...headlineArtifactResult.files,
         ...weeklyArtifactFiles
       ])

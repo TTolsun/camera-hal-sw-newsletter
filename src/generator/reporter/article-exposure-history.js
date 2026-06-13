@@ -97,7 +97,7 @@ function exposureRecordFromNewsletter(item = {}) {
 
 function seedExposureHistoryFromNewsletters(root = process.cwd(), date = todayDate()) {
   const history = emptyExposureHistory(date);
-  const newslettersPath = path.join(root, 'data', 'newsletters.json');
+  const newslettersPath = path.join(root, 'articles', 'data', 'newsletters.json');
   const newsletters = readJsonIfExists(newslettersPath);
   if (!Array.isArray(newsletters) || newsletters.length === 0) return history;
   const latest = [...newsletters]

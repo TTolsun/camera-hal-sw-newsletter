@@ -26,11 +26,11 @@ function readJsonObjectIfExists(filePath) {
 }
 
 function newsroomArtifactPath(root, date, name) {
-  return path.join(root, 'content', 'newsroom', date, name);
+  return path.join(root, 'articles', 'content', 'newsroom', date, name);
 }
 
 function collectedArtifactPath(root, date, name) {
-  return path.join(root, 'content', 'collected-news', date, name);
+  return path.join(root, 'articles', 'content', 'collected-news', date, name);
 }
 
 function loadNewsroomJson(root, date, name) {

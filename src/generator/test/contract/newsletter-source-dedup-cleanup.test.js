@@ -69,13 +69,13 @@ function issue(date, sections) {
 
 function writeIssue(root, date, sections) {
   const value = issue(date, sections);
-  writeJson(path.join(root, 'content', 'newsroom', date, 'editor-draft.json'), value);
-  writeText(path.join(root, 'newsletters', date, 'newsletter.md'), `# ${date}\n`);
-  writeText(path.join(root, 'newsletters', date, 'index.html'), '<!doctype html><html></html>');
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), value);
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), `# ${date}\n`);
+  writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), '<!doctype html><html></html>');
 }
 
 function writeIndex(root, dates) {
-  writeJson(path.join(root, 'data', 'newsletters.json'), dates.map(date => ({
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), dates.map(date => ({
     date,
     title: `Newsletter ${date}`,
     summary: `Summary ${date}`,
@@ -273,19 +273,19 @@ test('apply cleanup removes orphan artifacts and post invariants catch drift', (
       }
     })
   ]);
-  writeText(path.join(root, 'content', 'collected-news', '2026-05-01', 'candidates.json'), '[]\n');
+  writeText(path.join(root, 'articles', 'content', 'collected-news', '2026-05-01', 'candidates.json'), '[]\n');
   writeText(path.join(root, 'index.html'), '<div id="archive-list"></div>');
 
   const result = applyCleanupPlan({
     root,
     expectedExposedDates: ['2026-05-02']
   });
-  assert.deepEqual(readJson(path.join(root, 'data', 'newsletters.json')).map(item => item.date), ['2026-05-02']);
-  assert.equal(fs.existsSync(path.join(root, 'newsletters', '2026-05-01')), false);
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', '2026-05-01')), false);
-  assert.equal(fs.existsSync(path.join(root, 'content', 'collected-news', '2026-05-01')), false);
+  assert.deepEqual(readJson(path.join(root, 'articles', 'data', 'newsletters.json')).map(item => item.date), ['2026-05-02']);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', '2026-05-01')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'newsroom', '2026-05-01')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'collected-news', '2026-05-01')), false);
   assert.equal(result.postRunReport.ok, true, result.postRunReport.errors.join('\n'));
-  const issue = readJson(path.join(root, 'content', 'newsroom', '2026-05-02', 'editor-draft.json'));
+  const issue = readJson(path.join(root, 'articles', 'content', 'newsroom', '2026-05-02', 'editor-draft.json'));
   assert.equal(issue.sections[0].public_article.lead, 'Curated New source lead for public readers.');
   assert.equal(issue.sections[1].public_article.lead, 'Curated Sidecar source lead for public readers.');
   assert.equal(issue.briefing[0], 'Curated New source lead for public readers.');
@@ -295,19 +295,19 @@ test('apply cleanup removes orphan artifacts and post invariants catch drift', (
   assert.match(issue.briefing[2], /Curated Sidecar source checkpoint/);
 
   const publicSurfaces = {
-    'data/newsletters.json': JSON.stringify(readJson(path.join(root, 'data', 'newsletters.json'))),
-    'editor-draft.md': fs.readFileSync(path.join(root, 'content', 'newsroom', '2026-05-02', 'editor-draft.md'), 'utf8'),
-    'newsletter.md': fs.readFileSync(path.join(root, 'newsletters', '2026-05-02', 'newsletter.md'), 'utf8'),
-    'index.html': fs.readFileSync(path.join(root, 'newsletters', '2026-05-02', 'index.html'), 'utf8')
+    'data/newsletters.json': JSON.stringify(readJson(path.join(root, 'articles', 'data', 'newsletters.json'))),
+    'editor-draft.md': fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', '2026-05-02', 'editor-draft.md'), 'utf8'),
+    'newsletter.md': fs.readFileSync(path.join(root, 'articles', 'newsletters', '2026-05-02', 'newsletter.md'), 'utf8'),
+    'index.html': fs.readFileSync(path.join(root, 'articles', 'newsletters', '2026-05-02', 'index.html'), 'utf8')
   };
   for (const [label, value] of Object.entries(publicSurfaces)) {
     assertNoPublicCleanupTerms(value, label);
   }
-  const editorJson = JSON.stringify(readJson(path.join(root, 'content', 'newsroom', '2026-05-02', 'editor-draft.json')));
+  const editorJson = JSON.stringify(readJson(path.join(root, 'articles', 'content', 'newsroom', '2026-05-02', 'editor-draft.json')));
   assert.match(editorJson, /source_dedup_merge_provenance/);
 
-  writeText(path.join(root, 'newsletters', '2026-05-01', 'newsletter.md'), '# drift\n');
-  writeText(path.join(root, 'newsletters', '2026-05-01', 'index.html'), '<!doctype html>');
+  writeText(path.join(root, 'articles', 'newsletters', '2026-05-01', 'newsletter.md'), '# drift\n');
+  writeText(path.join(root, 'articles', 'newsletters', '2026-05-01', 'index.html'), '<!doctype html>');
   const post = buildPostCleanupReport({
     root,
     dryRunReport: result.dryRunReport,
@@ -327,7 +327,7 @@ test('apply cleanup marks fallback-only survivor issues with fallback publicatio
       counts_as_fallback_topic: true
     })
   ]);
-  const editorPath = path.join(root, 'content', 'newsroom', '2026-05-01', 'editor-draft.json');
+  const editorPath = path.join(root, 'articles', 'content', 'newsroom', '2026-05-01', 'editor-draft.json');
   const staleIssue = readJson(editorPath);
   staleIssue.publication_notice = ['편집자 검토 후 발행 가능한 Review-only 발행본입니다.'];
   writeJson(editorPath, staleIssue);
@@ -337,14 +337,14 @@ test('apply cleanup marks fallback-only survivor issues with fallback publicatio
     expectedExposedDates: ['2026-05-01']
   });
 
-  const issue = readJson(path.join(root, 'content', 'newsroom', '2026-05-01', 'editor-draft.json'));
+  const issue = readJson(path.join(root, 'articles', 'content', 'newsroom', '2026-05-01', 'editor-draft.json'));
   assert.equal(issue.publication_mode, 'fallback_public');
   assert.equal(issue.homepage_visibility, 'visible_with_fallback_badge');
   assert.equal(issue.fallback_only, true);
   assert.equal(issue.fallback_public_ready, true);
   assert.equal(issue.homepage_badge, 'Tooling Watch Edition');
   assert.match(
-    fs.readFileSync(path.join(root, 'newsletters', '2026-05-01', 'newsletter.md'), 'utf8'),
+    fs.readFileSync(path.join(root, 'articles', 'newsletters', '2026-05-01', 'newsletter.md'), 'utf8'),
     /Tooling Watch Edition/
   );
 });

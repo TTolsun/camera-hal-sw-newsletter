@@ -93,14 +93,14 @@ test('candidate artifact paths expose manual, merged, and manifest contracts', (
   const root = 'repo';
   const date = '2026-05-16';
 
-  assert.equal(manualCandidatesRelPath(date), 'content/collected-news/2026-05-16/manual-candidates.json');
-  assert.equal(collectedCandidatesRelPath(date), 'content/collected-news/2026-05-16/candidates.json');
-  assert.equal(mergedCandidatesRelPath(date), 'content/collected-news/2026-05-16/merged-candidates.json');
-  assert.equal(geminiCandidatesRelPath(date), 'content/collected-news/2026-05-16/gemini-candidates.json');
-  assert.equal(rawCandidateManifestRelPath(date), 'content/collected-news/2026-05-16/raw-candidate-manifest.json');
-  assert.equal(mergedCandidateManifestRelPath(date), 'content/collected-news/2026-05-16/merged-candidate-manifest.json');
-  assert.equal(sourceDiscoveryFeedbackReportRelPath(date), 'content/newsroom/2026-05-16/source-discovery-feedback-report.json');
-  assert.equal(sourceDiscoveryFeedbackReportMarkdownRelPath(date), 'content/newsroom/2026-05-16/source-discovery-feedback-report.md');
+  assert.equal(manualCandidatesRelPath(date), 'articles/content/collected-news/2026-05-16/manual-candidates.json');
+  assert.equal(collectedCandidatesRelPath(date), 'articles/content/collected-news/2026-05-16/candidates.json');
+  assert.equal(mergedCandidatesRelPath(date), 'articles/content/collected-news/2026-05-16/merged-candidates.json');
+  assert.equal(geminiCandidatesRelPath(date), 'articles/content/collected-news/2026-05-16/gemini-candidates.json');
+  assert.equal(rawCandidateManifestRelPath(date), 'articles/content/collected-news/2026-05-16/raw-candidate-manifest.json');
+  assert.equal(mergedCandidateManifestRelPath(date), 'articles/content/collected-news/2026-05-16/merged-candidate-manifest.json');
+  assert.equal(sourceDiscoveryFeedbackReportRelPath(date), 'articles/content/newsroom/2026-05-16/source-discovery-feedback-report.json');
+  assert.equal(sourceDiscoveryFeedbackReportMarkdownRelPath(date), 'articles/content/newsroom/2026-05-16/source-discovery-feedback-report.md');
   assert.equal(path.basename(manualCandidatesPath(root, date)), 'manual-candidates.json');
   assert.equal(path.basename(mergedCandidatesPath(root, date)), 'merged-candidates.json');
   assert.equal(path.basename(geminiCandidatesPath(root, date)), 'gemini-candidates.json');
@@ -151,7 +151,7 @@ test('manual candidate writer builds an approved collection intent from manual_s
     'https://b.example/y'
   ]);
 
-  assert.equal(result.manifest.collection_intent, 'content/collected-news/2026-05-16/collection-intent.json');
+  assert.equal(result.manifest.collection_intent, 'articles/content/collected-news/2026-05-16/collection-intent.json');
   assert.equal(result.manifest.collection_intent_status, 'approved');
   assert.match(result.manifest.collection_intent_hash, /^[0-9a-f]{64}$/);
   assert.equal(result.manifest.seed_url_count, 2);
@@ -169,7 +169,7 @@ test('manual candidate writer rejects combining manual_source_urls with collecti
       payload: candidatePayload(),
       sourceCount: 1,
       manualSourceUrls: 'https://a.example/x',
-      collectionIntentPath: 'content/collected-news/2026-05-16/collection-intent.json'
+      collectionIntentPath: 'articles/content/collected-news/2026-05-16/collection-intent.json'
     }),
     /mutually exclusive/
   );
@@ -299,7 +299,7 @@ test('explicit artifact input accepts only approved canonical artifacts with man
   const payload = candidatePayload();
   writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
   writeMergedCandidateArtifacts({ root, date, payload, geminiPayload: [] });
-  writeJson(path.join(root, 'content', 'collected-news', date, 'other-candidates.json'), payload);
+  writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'other-candidates.json'), payload);
 
   const manual = resolveCandidateInputArtifact({
     root,
@@ -326,8 +326,8 @@ test('explicit artifact input accepts only approved canonical artifacts with man
   for (const rejectedPath of [
     collectedCandidatesRelPath(date),
     geminiCandidatesRelPath(date),
-    `content/collected-news/${date}/other-candidates.json`,
-    `content/collected-news/2026-05-15/manual-candidates.json`
+    `articles/content/collected-news/${date}/other-candidates.json`,
+    `articles/content/collected-news/2026-05-15/manual-candidates.json`
   ]) {
     assert.throws(
       () => resolveCandidateInputArtifact({
@@ -451,8 +451,8 @@ test('Stage 2 disabled pass-through writes merged artifact, manifest, and report
   assert.match(report, /\| Gemini 후보 \| 0 \| 비활성\/pass-through \|/);
   assert.match(report, /\| Gemini 신규 unique 후보 \| 0 \| 없음 \|/);
   assert.match(report, /\| parser gap \| 1 \| 보강 필요 \|/);
-  assert.match(report, /gemini_candidate_artifact: content\/collected-news\/2026-05-16\/gemini-candidates\.json/);
-  assert.match(report, /source_discovery_feedback_report: content\/newsroom\/2026-05-16\/source-discovery-feedback-report\.md/);
+  assert.match(report, /gemini_candidate_artifact: articles\/content\/collected-news\/2026-05-16\/gemini-candidates\.json/);
+  assert.match(report, /source_discovery_feedback_report: articles\/content\/newsroom\/2026-05-16\/source-discovery-feedback-report\.md/);
   assert.doesNotMatch(report, /## Parser\/source feedback/);
   const feedback = readJson(sourceDiscoveryFeedbackReportPath(root, date));
   assert.equal(feedback.status, 'WARNING');
@@ -705,8 +705,8 @@ test('Stage 2 disabled mode expands approved seed evidence without Gemini creden
 
   const report = fs.readFileSync(result.reportPath, 'utf8');
   assert.match(report, /\| merge_mode \| seed_evidence_expansion \|/);
-  assert.match(report, /seed_candidate_artifact: content\/collected-news\/2026-05-16\/seed-candidates\.json/);
-  assert.match(report, /seed_evidence_pack: content\/collected-news\/2026-05-16\/seed-evidence-pack\.json/);
+  assert.match(report, /seed_candidate_artifact: articles\/content\/collected-news\/2026-05-16\/seed-candidates\.json/);
+  assert.match(report, /seed_evidence_pack: articles\/content\/collected-news\/2026-05-16\/seed-evidence-pack\.json/);
   assert.doesNotMatch(report, /Priority Override \/ Legacy Compatibility/);
 });
 
@@ -744,7 +744,7 @@ test('Stage 2 rejects unapproved collection intent in disabled mode', async () =
   const payload = candidatePayload();
   writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
   const manifest = readJson(rawCandidateManifestPath(root, date));
-  manifest.collection_intent = 'content/collected-news/2026-05-16/collection-intent.json';
+  manifest.collection_intent = 'articles/content/collected-news/2026-05-16/collection-intent.json';
   manifest.collection_intent_status = 'approved';
   manifest.collection_intent_hash = 'sha256-mismatch';
   writeJson(rawCandidateManifestPath(root, date), manifest);
@@ -797,7 +797,7 @@ test('Stage 2 enabled without credentials and no seed does not mutate artifacts'
   assert.equal(fs.existsSync(manualCandidatesPath(root, date)), true);
   assert.equal(fs.existsSync(collectedCandidatesPath(root, date)), true);
   assert.equal(fs.existsSync(rawCandidateManifestPath(root, date)), true);
-  assert.equal(fs.existsSync(path.join(root, 'content', 'newsroom', date, 'gemini-source-discovery-report.md')), false);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'newsroom', date, 'gemini-source-discovery-report.md')), false);
 });
 
 test('Stage 2 enabled promotes only validated proposal URLs and writes manifest v2 reports', async () => {
@@ -910,10 +910,10 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   assert.equal(manifest.merged_candidate_count, 2);
   assert.equal(manifest.merged_unique_url_count, 2);
   assert.equal(manifest.gemini_publishable_candidate_count, 1);
-  assert.equal(manifest.usage_report, 'content/newsroom/2026-05-16/gemini-usage-report.json');
-  assert.equal(manifest.proposal_validation_report, 'content/newsroom/2026-05-16/gemini-source-proposal-validation-report.json');
-  assert.equal(manifest.source_discovery_feedback_report, 'content/newsroom/2026-05-16/source-discovery-feedback-report.json');
-  assert.equal(manifest.source_discovery_feedback_report_markdown, 'content/newsroom/2026-05-16/source-discovery-feedback-report.md');
+  assert.equal(manifest.usage_report, 'articles/content/newsroom/2026-05-16/gemini-usage-report.json');
+  assert.equal(manifest.proposal_validation_report, 'articles/content/newsroom/2026-05-16/gemini-source-proposal-validation-report.json');
+  assert.equal(manifest.source_discovery_feedback_report, 'articles/content/newsroom/2026-05-16/source-discovery-feedback-report.json');
+  assert.equal(manifest.source_discovery_feedback_report_markdown, 'articles/content/newsroom/2026-05-16/source-discovery-feedback-report.md');
   const usage = readJson(geminiUsageReportPath(root, date));
   assert.equal(usage.requested_attempt_count, 1);
   assert.equal(usage.successful_response_count, 1);
@@ -939,7 +939,7 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   assert.match(report, /\| Gemini publishable 후보 \| 1 \| 있음 \|/);
   assert.match(report, /\| 중복 후보 \| 0 \| 낮음 \|/);
   assert.match(report, /\| parser gap \| 1 \| 보강 필요 \|/);
-  assert.match(report, /proposal_validation_report: content\/newsroom\/2026-05-16\/gemini-source-proposal-validation-report\.json/);
+  assert.match(report, /proposal_validation_report: articles\/content\/newsroom\/2026-05-16\/gemini-source-proposal-validation-report\.json/);
   assert.doesNotMatch(report, /## Parser\/source feedback/);
   const feedback = readJson(sourceDiscoveryFeedbackReportPath(root, date));
   assert.equal(feedback.status, 'WARNING');

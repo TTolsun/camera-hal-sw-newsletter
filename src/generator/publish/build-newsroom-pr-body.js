@@ -516,7 +516,7 @@ function renderEvidencePackDiagnosticSummary(label, items, maxItems = 5) {
 
 function renderHalSignalQualitySummary(root, date, status = {}) {
   if (!date) return '';
-  const relPath = `content/newsroom/${date}/hal-signal-quality-report.json`;
+  const relPath = `articles/content/newsroom/${date}/hal-signal-quality-report.json`;
   const report = readJsonObjectIfExists(path.join(root, relPath));
   if (!report) {
     return [
@@ -593,7 +593,7 @@ function formatCountSummary(counts) {
 
 function renderSourceQualityGateSummary(root, date) {
   if (!date) return '';
-  const relPath = `content/newsroom/${date}/source-effectiveness-report.json`;
+  const relPath = `articles/content/newsroom/${date}/source-effectiveness-report.json`;
   const report = readJsonObjectIfExists(path.join(root, relPath));
   if (!report) {
     return [
@@ -625,8 +625,8 @@ function renderSourceQualityGateSummary(root, date) {
 
 function renderSourceQualityDiagnosisSummary(root, date) {
   if (!date) return '';
-  const jsonRelPath = `content/newsroom/${date}/source-quality-diagnosis.json`;
-  const markdownRelPath = `content/newsroom/${date}/source-quality-diagnosis.md`;
+  const jsonRelPath = `articles/content/newsroom/${date}/source-quality-diagnosis.json`;
+  const markdownRelPath = `articles/content/newsroom/${date}/source-quality-diagnosis.md`;
   const jsonPath = path.join(root, jsonRelPath);
   const report = readJsonObjectIfExists(jsonPath);
   if (!report) {
@@ -669,9 +669,9 @@ function renderSourceQualityDiagnosisSummary(root, date) {
 
 function renderNewsletterImageAuditSummary(root, date) {
   if (!date) return '';
-  const aggregateRelPath = 'content/newsroom/image-audit-aggregate-report.json';
-  const dateJsonRelPath = `content/newsroom/${date}/image-audit-report.json`;
-  const dateMarkdownRelPath = `content/newsroom/${date}/image-audit-report.md`;
+  const aggregateRelPath = 'articles/content/newsroom/image-audit-aggregate-report.json';
+  const dateJsonRelPath = `articles/content/newsroom/${date}/image-audit-report.json`;
+  const dateMarkdownRelPath = `articles/content/newsroom/${date}/image-audit-report.md`;
   const aggregate = readJsonObjectIfExists(path.join(root, aggregateRelPath));
   const report = readJsonObjectIfExists(path.join(root, dateJsonRelPath));
   if (!report) {
@@ -717,7 +717,7 @@ function renderNewsletterImageAuditSummary(root, date) {
     '',
     ...(aggregate ? [
       `- \`${aggregateRelPath}\``,
-      '- `content/newsroom/image-audit-aggregate-report.md`'
+      '- `articles/content/newsroom/image-audit-aggregate-report.md`'
     ] : []),
     `- \`${dateJsonRelPath}\``,
     `- \`${dateMarkdownRelPath}\``,
@@ -727,7 +727,7 @@ function renderNewsletterImageAuditSummary(root, date) {
 
 function renderEvidencePackSummary(root, date) {
   if (!date) return '';
-  const relPath = `content/newsroom/${date}/evidence-pack-summary.json`;
+  const relPath = `articles/content/newsroom/${date}/evidence-pack-summary.json`;
   const report = readJsonObjectIfExists(path.join(root, relPath));
   if (!report) {
     return [
@@ -832,7 +832,7 @@ function renderEvidencePackSummary(root, date) {
 }
 
 function renderSourceChangeEventsSummary(root, date) {
-  const relPath = `content/source-events/${date}/source-change-events.json`;
+  const relPath = `articles/content/source-events/${date}/source-change-events.json`;
   const report = readJsonObjectIfExists(path.join(root, relPath));
   if (!report) {
     return [
@@ -871,8 +871,8 @@ function renderSourceChangeEventsSummary(root, date) {
 
 function renderSeedEvidenceUsageSummary(root, date) {
   if (!date) return '';
-  const seedPackRelPath = `content/collected-news/${date}/seed-evidence-pack.json`;
-  const mergedRelPath = `content/collected-news/${date}/merged-candidates.json`;
+  const seedPackRelPath = `articles/content/collected-news/${date}/seed-evidence-pack.json`;
+  const mergedRelPath = `articles/content/collected-news/${date}/merged-candidates.json`;
   const seedPack = readJsonObjectIfExists(path.join(root, seedPackRelPath));
   const merged = readJsonObjectIfExists(path.join(root, mergedRelPath));
   const candidates = ensureArray(merged?.candidates)
@@ -1320,11 +1320,11 @@ function renderCandidatePoolPreflight(root, date, status = {}) {
 }
 
 const TRACE_ARTIFACT_DEFS = [
-  { key: 'reporter', path: date => `content/newsroom/${date}/reporter-candidates.json` },
-  { key: 'shortlist', path: date => `content/newsroom/${date}/shortlisted-candidates.json` },
-  { key: 'collected', path: date => `content/collected-news/${date}/candidates.json` },
-  { key: 'quality', path: date => `content/newsroom/${date}/quality-report.json` },
-  { key: 'factCheck', path: date => `content/newsroom/${date}/fact-check-report.json` }
+  { key: 'reporter', path: date => `articles/content/newsroom/${date}/reporter-candidates.json` },
+  { key: 'shortlist', path: date => `articles/content/newsroom/${date}/shortlisted-candidates.json` },
+  { key: 'collected', path: date => `articles/content/collected-news/${date}/candidates.json` },
+  { key: 'quality', path: date => `articles/content/newsroom/${date}/quality-report.json` },
+  { key: 'factCheck', path: date => `articles/content/newsroom/${date}/fact-check-report.json` }
 ];
 
 const TRACE_STATUS_RANK = {
@@ -1793,7 +1793,7 @@ function loadEditorialDecisionSource(root, date, status = {}) {
     };
   }
 
-  const evidencePath = path.join(root, 'content', 'newsroom', date, 'evidence-pack-summary.json');
+  const evidencePath = path.join(root, 'articles', 'content', 'newsroom', date, 'evidence-pack-summary.json');
   const evidence = readJsonObjectIfExists(evidencePath);
   if (evidence) {
     const selected = candidatesFromArray(evidence.selected_main_articles, 'final_selected', 'evidence-pack-summary');
@@ -2166,8 +2166,8 @@ function renderEventBundleTrace(root, date, finalCandidates = []) {
       : '- none',
     '',
     '상세 artifact:',
-    `- \`content/newsroom/${date}/event-bundles.json\``,
-    `- \`content/newsroom/${date}/event-bundle-diagnostics.md\``,
+    `- \`articles/content/newsroom/${date}/event-bundles.json\``,
+    `- \`articles/content/newsroom/${date}/event-bundle-diagnostics.md\``,
     ''
   ].join('\n');
 }
@@ -2325,7 +2325,7 @@ function renderHeavyRetentionNote(date) {
     '',
     `debug_heavy/transient_attempt artifact는 PR diff에 의도적으로 포함되지 않습니다.`,
     `- Actions artifact: \`${artifactName}\` 다운로드`,
-    `- 또는 \`content/newsroom/${date}/artifact-manifest.json\` → \`retained_heavy_artifacts\` 참조`,
+    `- 또는 \`articles/content/newsroom/${date}/artifact-manifest.json\` → \`retained_heavy_artifacts\` 참조`,
     ''
   ].join('\n');
 }

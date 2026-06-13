@@ -42,7 +42,7 @@ function changedNewsletterDatesFromFiles(files = []) {
   const dates = new Set();
   for (const file of files) {
     const normalized = String(file || '').replace(/\\/g, '/');
-    if (/^content\/newsroom\/\d{4}-\d{2}-\d{2}\/image-audit-report\.(?:json|md)$/.test(normalized)) {
+    if (/^articles\/content\/newsroom\/\d{4}-\d{2}-\d{2}\/image-audit-report\.(?:json|md)$/.test(normalized)) {
       continue;
     }
     const date = changedArtifactDate(file);

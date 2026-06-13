@@ -94,7 +94,7 @@ function artifactSpecs(date) {
     source_change_events: {
       key: 'sourceChangeEvents',
       tier: 'optional',
-      relPath: `content/source-events/${date}/source-change-events.json`
+      relPath: `articles/content/source-events/${date}/source-change-events.json`
     },
     repair_failure: {
       key: 'repairFailure',

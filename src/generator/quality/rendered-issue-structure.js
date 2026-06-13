@@ -88,9 +88,9 @@ function hasClassToken(content, className) {
 }
 
 function validateNewsletterIndex(root, errors) {
-  const dataPath = path.join(root, 'data', 'newsletters.json');
+  const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
   if (!fs.existsSync(dataPath)) {
-    errors.push('Missing data/newsletters.json');
+    errors.push('Missing articles/data/newsletters.json');
     return;
   }
 
@@ -98,12 +98,12 @@ function validateNewsletterIndex(root, errors) {
   try {
     newsletters = readJson(dataPath);
   } catch (error) {
-    errors.push(`Invalid JSON in data/newsletters.json: ${error.message}`);
+    errors.push(`Invalid JSON in articles/data/newsletters.json: ${error.message}`);
     return;
   }
 
   if (!Array.isArray(newsletters)) {
-    errors.push('data/newsletters.json must contain an array');
+    errors.push('articles/data/newsletters.json must contain an array');
     return;
   }
 

@@ -6,6 +6,9 @@ const {
   repoPath
 } = require('../../core/common/common');
 const {
+  publicAssetPath
+} = require('../../core/common/artifact-paths');
+const {
   historicalPolicyWarningReason,
   strictTargetDates
 } = require('../reporter/validation-targets');
@@ -26,7 +29,7 @@ function isPlainObject(value) {
 }
 
 function readNewsletterItems() {
-  const dataPath = path.join(root, 'data', 'newsletters.json');
+  const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
   if (!fs.existsSync(dataPath)) throw new Error('Missing data/newsletters.json');
   const items = readJson(dataPath);
   if (!Array.isArray(items)) throw new Error('data/newsletters.json must contain an array');
@@ -122,12 +125,12 @@ function isDiagnosticsOnlyNewsroomJson(filePath) {
 
 function validatePublicJsonFilesForDate(date) {
   const errors = [];
-  const newsroomDir = path.join(root, 'content', 'newsroom', date);
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
   for (const filePath of readJsonFilesInDir(newsroomDir).filter(filePath => !isDiagnosticsOnlyNewsroomJson(filePath))) {
     const rel = path.relative(root, filePath).replace(/\\/g, '/');
     errors.push(...publicArticlePathIssues(readJson(filePath), rel));
   }
-  const newsletterDir = path.join(root, 'newsletters', date);
+  const newsletterDir = path.join(root, 'articles', 'newsletters', date);
   for (const filePath of readJsonFilesInDir(newsletterDir)) {
     const rel = path.relative(root, filePath).replace(/\\/g, '/');
     errors.push(...validatePublicNewsletterArtifacts({
@@ -140,9 +143,9 @@ function validatePublicJsonFilesForDate(date) {
 
 function validateDateArtifacts(date) {
   const item = newsletterItemForDate(date);
-  if (!item) return [`data/newsletters.json is missing date entry: ${date}`];
-  const markdownPath = repoPath(root, item.md || `newsletters/${date}/newsletter.md`);
-  const htmlPath = repoPath(root, item.html || `newsletters/${date}/index.html`);
+  if (!item) return [`articles/data/newsletters.json is missing date entry: ${date}`];
+  const markdownPath = publicAssetPath(root, item.md || `newsletters/${date}/newsletter.md`);
+  const htmlPath = publicAssetPath(root, item.html || `newsletters/${date}/index.html`);
   if (!markdownPath || !htmlPath || !fs.existsSync(markdownPath) || !fs.existsSync(htmlPath)) {
     return [`Public newsletter files are missing for ${date}.`];
   }
@@ -160,8 +163,8 @@ function validateIndexedNewsletters() {
   const strictDates = strictTargetDates({ root, newsletterDatePath });
   const requireAll = process.env.REQUIRE_PUBLIC_NEWSLETTER_CONTRACT === '1';
   for (const item of readNewsletterItems()) {
-    const markdownPath = repoPath(root, item?.md || '');
-    const htmlPath = repoPath(root, item?.html || '');
+    const markdownPath = publicAssetPath(root, item?.md || '');
+    const htmlPath = publicAssetPath(root, item?.html || '');
     if (!markdownPath || !htmlPath || !fs.existsSync(markdownPath) || !fs.existsSync(htmlPath)) continue;
     const result = validatePublicNewsletterFiles(markdownPath, htmlPath, {
       json: item,
