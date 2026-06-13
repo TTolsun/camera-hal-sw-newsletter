@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { pruneCatchUpFramingFactCheckItems } = require('../../../publish/gemini-newsroom-newsletter');
+const { pruneCatchUpFramingFactCheckItems } = require('../../../publish/fact-check-postprocess');
 
 function editor() {
   return {

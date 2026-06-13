@@ -7,12 +7,14 @@ const {
   articleClaimContractPrompt,
   articleSectionContractPrompt,
   claimRepairEvidencePrompt,
-  publicArticleJudgeBlockingIssues,
   publicArticleJudgePrompt,
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
   sourceExtractionPromptGuardrails
-} = require('../../publish/gemini-newsroom-newsletter');
+} = require('../../publish/newsletter-prompts');
+const {
+  publicArticleJudgeBlockingIssues
+} = require('../../publish/orchestrator-judge-helpers');
 const {
   reporterSchema,
   publicArticleJudgeSchema

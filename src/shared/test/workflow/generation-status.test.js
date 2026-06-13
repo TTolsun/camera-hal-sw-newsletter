@@ -4,11 +4,13 @@ const test = require('node:test');
 const {
   backgroundContextStageEnabled,
   buildGenerationStatus,
-  failureClassFromError,
-  failureStageFromError,
   selectionStatusExtra,
   validateCompletionSections
 } = require('../../../generator/publish/gemini-newsroom-newsletter');
+const {
+  failureClassFromError,
+  failureStageFromError
+} = require('../../../generator/publish/generation-failure-classification');
 const {
   NewsletterDomainValidationError
 } = require('../../domain/newsletter-domain-errors');
