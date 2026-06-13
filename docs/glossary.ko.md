@@ -55,7 +55,7 @@
 | `last_seen_at` | snapshot identity 기준 마지막 관찰 시각입니다. freshness/date-source/publish-ready evidence로 쓰지 않습니다. |
 | `source_event_id` | source snapshot diff에서 생성된 변경 이벤트 단위 ID입니다. 같은 event 재처리를 막는 duplicate guard에 사용합니다. |
 | `evidence_id` | candidate 전환에 쓰이는 근거 단위 ID입니다. 같은 URL이라도 release row, version, anchor가 다르면 별도 evidence가 될 수 있습니다. |
-| `date_source` | `effective_date` 또는 `published_date`의 출처를 나타내는 enum 값입니다. allowlist는 `src/core/common/date-signals.js`와 validator가 공유합니다. |
+| `date_source` | `effective_date` 또는 `published_date`의 출처를 나타내는 enum 값입니다. allowlist는 `src/shared/common/date-signals.js`와 validator가 공유합니다. |
 | `date_confidence` | `date_source`별 기준 신뢰도 점수입니다. `date_confidence >= 85`만 source relevance와 source binding이 함께 통과할 때 publish-ready date evidence 후보가 될 수 있습니다. |
 | `needs_editor_date_review` | 날짜 근거가 약하거나 content hash 기반 변화라 editor 확인이 필요한 상태입니다. 기본적으로 publish-ready date evidence가 아닙니다. |
 

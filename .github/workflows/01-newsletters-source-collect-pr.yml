@@ -213,4 +213,4 @@ jobs:
           PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           DEBUG_ARTIFACT_NAME: newsroom-raw-debug-${{ github.run_id }}
-        run: node src/core/tooling/cli/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"
+        run: node src/shared/tooling/cli/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"

@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   renderCandidateSelectionDiagnostics
 } = require('../select/selection-diagnostics');

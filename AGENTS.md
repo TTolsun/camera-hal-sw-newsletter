@@ -22,11 +22,11 @@
 ## Structure
 
 - root `index.html`과 `articles/css/`, `articles/assets/`는 정적 사이트 surface입니다(#262 phase 6: 공개 출력물은 모두 `articles/` 아래에 위치하고, Pages Actions 배포가 `_site/` 루트로 조립해 서빙 URL을 보존합니다).
-- `src/core/data/news-sources.json`은 machine-readable source of truth이고 `docs/news-sources.md`는 사람이 검토하는 editorial view입니다.
+- `src/shared/data/news-sources.json`은 machine-readable source of truth이고 `docs/news-sources.md`는 사람이 검토하는 editorial view입니다.
 - `articles/content/collected-news/YYYY-MM-DD/`는 raw candidate output입니다.
 - `articles/content/newsroom/YYYY-MM-DD/`는 reporter, editor, fact-check, quality, retry, QA review artifact입니다.
 - `articles/newsletters/YYYY-MM-DD/`는 public issue output인 `newsletter.md`와 `index.html`입니다.
-- 실제 구현과 tooling은 모두 `src/`에 있습니다. `src/core/**`(공통 런타임·도메인·tooling·런타임 config/data), `src/collector/**`, `src/discovery/**`, `src/generator/**`(select/reporter/editor/quality/repair/render/publish)로 나뉩니다. #262 재구성으로 root `scripts/*.js` wrapper와 `scripts/lib/`는 제거되었고 `scripts/`에는 더 이상 실행 코드가 없습니다.
+- 실제 구현과 tooling은 모두 `src/`에 있습니다. `src/shared/**`(공통 런타임·도메인·tooling·런타임 config/data), `src/collector/**`, `src/discovery/**`, `src/generator/**`(select/reporter/editor/quality/repair/render/publish)로 나뉩니다. #262 재구성으로 root `scripts/*.js` wrapper와 `scripts/lib/`는 제거되었고 `scripts/`에는 더 이상 실행 코드가 없습니다.
 - `.github/workflows/`는 newsroom PR workflow와 validation workflow입니다.
 
 ## Scoped AGENTS Policy

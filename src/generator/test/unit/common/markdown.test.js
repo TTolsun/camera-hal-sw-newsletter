@@ -6,7 +6,7 @@ const {
   sanitizeMarkdownLinkUrl,
   trustedMarkdownTableCell,
   renderMarkdownTable
-} = require('../../../../core/common/markdown');
+} = require('../../../../shared/common/markdown');
 
 test('sanitizeMarkdownTableCell escapes pipe characters', () => {
   assert.equal(sanitizeMarkdownTableCell('a|b'), 'a\\|b');

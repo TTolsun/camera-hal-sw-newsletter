@@ -12,12 +12,12 @@ const {
 } = require('../../render/newsletter-renderer');
 const {
   validSections
-} = require('../../../core/test/helpers/quality-builders');
+} = require('../../../shared/test/helpers/quality-builders');
 const {
   tempRoot,
   writeJson,
   writeText
-} = require('../../../core/test/helpers/fs');
+} = require('../../../shared/test/helpers/fs');
 
 const repoRoot = path.join(__dirname, '..', '..', '..', '..');
 const validateSitePath = path.join(repoRoot, 'src', 'generator', 'publish', 'validate-site.js');

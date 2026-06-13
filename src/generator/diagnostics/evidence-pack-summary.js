@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -6,19 +6,19 @@ const {
   kstDate,
   readJson,
   writeJson
-} = require('../../core/common/common');
+} = require('../../shared/common/common');
 const {
   collectedCandidatesRelPath,
   newsroomDir,
   newsroomRelPath
-} = require('../../core/common/artifact-paths');
+} = require('../../shared/common/artifact-paths');
 const {
   buildHalSignalQualitySummary,
   buildMainArticleSignalChecks
 } = require('../reporter/hal-signal-quality');
 const {
   dateQualityForCandidate
-} = require('../../core/common/date-signals');
+} = require('../../shared/common/date-signals');
 
 const SCHEMA_VERSION = 1;
 const MAX_EVIDENCE_PER_ARTICLE = 3;

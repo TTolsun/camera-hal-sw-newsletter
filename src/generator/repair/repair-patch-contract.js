@@ -13,10 +13,10 @@
 //
 // Pure transforms only — no IO, no LLM, no shared state.
 
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   stableSectionKey
-} = require('../../core/common/section-identity');
+} = require('../../shared/common/section-identity');
 
 const REPAIR_PATCH_CONTRACT_VIOLATION = 'repair_patch_contract_violation';
 

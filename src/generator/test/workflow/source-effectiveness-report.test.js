@@ -11,9 +11,9 @@ const {
 const {
   tempRoot,
   writeJson
-} = require('../../../core/test/helpers/fs');
+} = require('../../../shared/test/helpers/fs');
 
-const fixture = require('../../../core/test/fixtures/source-effectiveness/basic-source-effectiveness.json');
+const fixture = require('../../../shared/test/fixtures/source-effectiveness/basic-source-effectiveness.json');
 
 function buildReport(overrides = {}) {
   return buildSourceEffectivenessReport({
@@ -270,7 +270,7 @@ test('source effectiveness report builds for candidate shortage review-only with
   const root = tempRoot('source-effectiveness-');
   const date = fixture.date;
 
-  writeJson(path.join(root, 'src', 'core', 'data', 'news-sources.json'), fixture.sourceRegistry);
+  writeJson(path.join(root, 'src', 'shared', 'data', 'news-sources.json'), fixture.sourceRegistry);
   writeJson(path.join(root, 'articles', 'content', 'collected-news', date, 'candidates.json'), fixture.collectedCandidates);
   writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), fixture.shortlistReport);
 

@@ -1,10 +1,10 @@
 module.exports = {
-  ...require('../core/evidence/linked-evidence-types'),
-  ...require('../core/evidence/linked-evidence-schema'),
-  ...require('../core/evidence/linked-evidence-extractor'),
-  ...require('../core/evidence/linked-evidence-link-classifier'),
-  ...require('../core/evidence/linked-evidence-resolver'),
-  ...require('../core/evidence/impact-classifier'),
-  ...require('../core/evidence/event-bundle-builder'),
-  ...require('../core/evidence/linked-evidence-diagnostics')
+  ...require('../shared/evidence/linked-evidence-types'),
+  ...require('../shared/evidence/linked-evidence-schema'),
+  ...require('../shared/evidence/linked-evidence-extractor'),
+  ...require('../shared/evidence/linked-evidence-link-classifier'),
+  ...require('../shared/evidence/linked-evidence-resolver'),
+  ...require('../shared/evidence/impact-classifier'),
+  ...require('../shared/evidence/event-bundle-builder'),
+  ...require('../shared/evidence/linked-evidence-diagnostics')
 };

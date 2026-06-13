@@ -1,6 +1,6 @@
 'use strict';
 
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   text,
   bool,
@@ -30,16 +30,16 @@ const {
   BUCKETS,
   classifyAospCameraStackCandidate,
   normalizeAospCameraScope
-} = require('../../core/common/aosp-camera-scope');
+} = require('../../shared/common/aosp-camera-scope');
 const {
   isNativeToolingWorkflow
-} = require('../../core/common/article-groups');
-const { isPlaylistCollectionUrl } = require('../../core/common/playlist-url');
+} = require('../../shared/common/article-groups');
+const { isPlaylistCollectionUrl } = require('../../shared/common/playlist-url');
 const {
   isForbiddenMainBucket,
   isMainArticleAllowedBucket,
   isPrimaryCameraStackBucket
-} = require('../../core/common/newsletter-policy');
+} = require('../../shared/common/newsletter-policy');
 
 function finalSelectionEligibility(candidate) {
   return text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);

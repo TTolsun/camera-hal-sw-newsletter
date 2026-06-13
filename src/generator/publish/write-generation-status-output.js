@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -7,7 +7,7 @@ const {
 } = require('../select/selection-diagnostics');
 const {
   formatReasonSummary
-} = require('../../core/common/status-format');
+} = require('../../shared/common/status-format');
 
 const DEFAULT_STATUS = {
   status: 'UNKNOWN',

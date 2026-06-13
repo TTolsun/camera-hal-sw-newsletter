@@ -6,13 +6,13 @@ const {
   providerRawFieldNames,
   toEditorDraftArtifact,
   toLegacyEditorIssue
-} = require('../../../../core/domain/newsletter-domain-normalize');
+} = require('../../../../shared/domain/newsletter-domain-normalize');
 const {
   validateNewsletterIssueModel
-} = require('../../../../core/domain/newsletter-domain-validate');
+} = require('../../../../shared/domain/newsletter-domain-validate');
 const {
   section
-} = require('../../../../core/test/helpers/quality-builders');
+} = require('../../../../shared/test/helpers/quality-builders');
 
 function legacyEditor(sectionOverrides = {}, editorOverrides = {}) {
   return {

@@ -6,7 +6,7 @@ const {
   extractLinkedEvidenceFromCandidate,
   extractLinkedEvidenceFromText
 } = require('../../..');
-const { readTextFixture } = require('../../../../core/test/helpers/fixture-loader');
+const { readTextFixture } = require('../../../../shared/test/helpers/fixture-loader');
 
 function evidenceByUrl(items) {
   return new Map(items.map(item => [item.url, item]));

@@ -1,0 +1,702 @@
+const { ensureArray } = require('./value-coercion');
+const fs = require('fs');
+const path = require('path');
+const {
+  BUCKETS
+} = require('./aosp-camera-scope');
+
+const POLICY_REL_PATH = path.join('src', 'shared', 'config', 'newsletter-policy.json');
+const POLICY_BLOCK_BEGIN = '<!-- NEWSLETTER_POLICY:BEGIN -->';
+const POLICY_BLOCK_END = '<!-- NEWSLETTER_POLICY:END -->';
+const REQUIRED_HARD_FAIL_CONDITIONS = [
+  'source-less main article',
+  'source candidate binding failure',
+  'missing dated evidence',
+  'source_gap_risk',
+  'fact-check must_fix',
+  'duplicate source URL',
+  'stale claim hard failure',
+  'undated watch/reference page promoted to main article',
+  'CameraX source extraction failure'
+];
+const DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS = Object.freeze([
+  BUCKETS.DIRECT_AOSP_CAMERA,
+  BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE
+]);
+const repoRoot = path.resolve(__dirname, '..', '..', '..');
+const policyPath = path.join(repoRoot, POLICY_REL_PATH);
+
+function unique(values) {
+  return [...new Set(ensureArray(values))];
+}
+
+function readPolicyConfig(filePath = policyPath) {
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+}
+
+function knownBuckets() {
+  return Object.values(BUCKETS);
+}
+
+function validateInteger(value, field, errors, { min = 0 } = {}) {
+  if (!Number.isInteger(value) || value < min) {
+    errors.push(`${field} must be an integer >= ${min}.`);
+  }
+}
+
+function validateBucketList(value, field, errors) {
+  if (!Array.isArray(value) || value.length === 0) {
+    errors.push(`${field} must be a non-empty array.`);
+    return [];
+  }
+  const allowed = new Set(knownBuckets());
+  const buckets = [];
+  for (const bucket of value) {
+    if (typeof bucket !== 'string' || !bucket.trim()) {
+      errors.push(`${field} contains an empty or non-string bucket.`);
+      continue;
+    }
+    if (!allowed.has(bucket)) {
+      errors.push(`${field} contains unknown bucket: ${bucket}.`);
+    }
+    buckets.push(bucket);
+  }
+  const duplicates = buckets.filter((bucket, index) => buckets.indexOf(bucket) !== index);
+  for (const bucket of unique(duplicates)) {
+    errors.push(`${field} contains duplicate bucket: ${bucket}.`);
+  }
+  return buckets;
+}
+
+function validateSelectionWindowPolicy(value, errors) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('selectionWindowPolicy must be an object.');
+    return;
+  }
+  validateInteger(value.primarySelectionDays, 'selectionWindowPolicy.primarySelectionDays', errors, { min: 1 });
+  validateInteger(value.fallbackSelectionDays, 'selectionWindowPolicy.fallbackSelectionDays', errors, { min: 1 });
+  validateInteger(value.referenceContextDays, 'selectionWindowPolicy.referenceContextDays', errors, { min: 1 });
+  if (
+    Number.isInteger(value.primarySelectionDays) &&
+    Number.isInteger(value.fallbackSelectionDays) &&
+    value.fallbackSelectionDays < value.primarySelectionDays
+  ) {
+    errors.push('selectionWindowPolicy.fallbackSelectionDays must be >= selectionWindowPolicy.primarySelectionDays.');
+  }
+  if (
+    Number.isInteger(value.fallbackSelectionDays) &&
+    Number.isInteger(value.referenceContextDays) &&
+    value.referenceContextDays < value.fallbackSelectionDays
+  ) {
+    errors.push('selectionWindowPolicy.referenceContextDays must be >= selectionWindowPolicy.fallbackSelectionDays.');
+  }
+}
+
+const KNOWN_CATCH_UP_ACTIVATION_MODES = Object.freeze(['fill_open_slots']);
+
+function validateCatchUpPolicy(value, config, errors) {
+  if (value === undefined) return; // optional; normalized to a default when absent
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('catchUpPolicy must be an object.');
+    return;
+  }
+  if (typeof value.enabled !== 'boolean') {
+    errors.push('catchUpPolicy.enabled must be a boolean.');
+  }
+  const mainMin = config?.articlePolicy?.mainArticleCount?.min;
+  const mainMax = config?.articlePolicy?.mainArticleCount?.max;
+  validateInteger(value.maxCatchUpArticles, 'catchUpPolicy.maxCatchUpArticles', errors, { min: 1 });
+  if (Number.isInteger(value.maxCatchUpArticles) && Number.isInteger(mainMax) && value.maxCatchUpArticles > mainMax) {
+    errors.push('catchUpPolicy.maxCatchUpArticles cannot exceed articlePolicy.mainArticleCount.max.');
+  }
+  validateInteger(value.targetMainArticles, 'catchUpPolicy.targetMainArticles', errors, { min: 1 });
+  if (Number.isInteger(value.targetMainArticles) && Number.isInteger(mainMin) && value.targetMainArticles < mainMin) {
+    errors.push('catchUpPolicy.targetMainArticles must be >= articlePolicy.mainArticleCount.min.');
+  }
+  if (Number.isInteger(value.targetMainArticles) && Number.isInteger(mainMax) && value.targetMainArticles > mainMax) {
+    errors.push('catchUpPolicy.targetMainArticles cannot exceed articlePolicy.mainArticleCount.max.');
+  }
+  const fallbackDays = config?.selectionWindowPolicy?.fallbackSelectionDays;
+  const referenceDays = config?.selectionWindowPolicy?.referenceContextDays;
+  validateInteger(value.maxAgeDays, 'catchUpPolicy.maxAgeDays', errors, { min: 1 });
+  if (Number.isInteger(value.maxAgeDays) && Number.isInteger(fallbackDays) && value.maxAgeDays < fallbackDays) {
+    errors.push('catchUpPolicy.maxAgeDays must be >= selectionWindowPolicy.fallbackSelectionDays.');
+  }
+  if (Number.isInteger(value.maxAgeDays) && Number.isInteger(referenceDays) && value.maxAgeDays > referenceDays) {
+    errors.push('catchUpPolicy.maxAgeDays must be <= selectionWindowPolicy.referenceContextDays.');
+  }
+  validateBucketList(value.eligibleBuckets, 'catchUpPolicy.eligibleBuckets', errors);
+  if (!KNOWN_CATCH_UP_ACTIVATION_MODES.includes(value.activationMode)) {
+    errors.push(`catchUpPolicy.activationMode must be one of: ${KNOWN_CATCH_UP_ACTIVATION_MODES.join(', ')}.`);
+  }
+}
+
+function validateHeadlinePolicy(value, errors) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('headlinePolicy must be an object.');
+    return;
+  }
+  if (value.decayModel !== 'linear') {
+    errors.push('headlinePolicy.decayModel must be one of: linear.');
+  }
+  validateInteger(value.decayRatePerDay, 'headlinePolicy.decayRatePerDay', errors, { min: 0 });
+  validateInteger(value.replacementMargin, 'headlinePolicy.replacementMargin', errors, { min: 0 });
+  validateInteger(value.minimumHeadlineScore, 'headlinePolicy.minimumHeadlineScore', errors, { min: 0 });
+  validateInteger(value.historyMaxEntries, 'headlinePolicy.historyMaxEntries', errors, { min: 1 });
+  if (typeof value.latestInclusionRequired !== 'boolean') {
+    errors.push('headlinePolicy.latestInclusionRequired must be a boolean.');
+  }
+}
+
+function validatePublishReadyCompositionPolicy(value, article, errors) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('articlePolicy.publishReadyComposition must be an object.');
+    return;
+  }
+  validateInteger(
+    value.primaryCameraStackMinRequired,
+    'articlePolicy.publishReadyComposition.primaryCameraStackMinRequired',
+    errors,
+    { min: 0 }
+  );
+  validateInteger(
+    value.directAospCameraOrDriverMinRequired,
+    'articlePolicy.publishReadyComposition.directAospCameraOrDriverMinRequired',
+    errors,
+    { min: 0 }
+  );
+  validateInteger(
+    value.supportingMainMaxAllowed,
+    'articlePolicy.publishReadyComposition.supportingMainMaxAllowed',
+    errors,
+    { min: 0 }
+  );
+
+  const max = article.mainArticleCount || {};
+  if (
+    Number.isInteger(value.primaryCameraStackMinRequired) &&
+    Number.isInteger(max.max) &&
+    value.primaryCameraStackMinRequired > max.max
+  ) {
+    errors.push('articlePolicy.publishReadyComposition.primaryCameraStackMinRequired cannot exceed articlePolicy.mainArticleCount.max.');
+  }
+  if (
+    Number.isInteger(value.directAospCameraOrDriverMinRequired) &&
+    Number.isInteger(value.primaryCameraStackMinRequired) &&
+    value.directAospCameraOrDriverMinRequired > value.primaryCameraStackMinRequired
+  ) {
+    errors.push('articlePolicy.publishReadyComposition.directAospCameraOrDriverMinRequired cannot exceed articlePolicy.publishReadyComposition.primaryCameraStackMinRequired.');
+  }
+  if (
+    Number.isInteger(value.supportingMainMaxAllowed) &&
+    Number.isInteger(max.max) &&
+    value.supportingMainMaxAllowed > max.max
+  ) {
+    errors.push('articlePolicy.publishReadyComposition.supportingMainMaxAllowed cannot exceed articlePolicy.mainArticleCount.max.');
+  }
+}
+
+function validateNewsletterPolicyConfig(config) {
+  const errors = [];
+  if (!config || typeof config !== 'object') {
+    return { ok: false, errors: ['Newsletter Policy config must be a JSON object.'] };
+  }
+  validateInteger(config.schemaVersion, 'schemaVersion', errors, { min: 1 });
+  const article = config.articlePolicy || {};
+  const preflight = config.candidatePoolPreflight || {};
+  const quality = config.qualityGatePolicy || {};
+  const count = article.mainArticleCount || {};
+  validateInteger(count.min, 'articlePolicy.mainArticleCount.min', errors, { min: 1 });
+  validateInteger(count.max, 'articlePolicy.mainArticleCount.max', errors, { min: 1 });
+  if (Number.isInteger(count.min) && Number.isInteger(count.max) && count.max < count.min) {
+    errors.push('articlePolicy.mainArticleCount.max must be >= min.');
+  }
+  const primary = article.primaryCameraStack || {};
+  validateInteger(primary.minRequired, 'articlePolicy.primaryCameraStack.minRequired', errors, { min: 0 });
+  validatePublishReadyCompositionPolicy(article.publishReadyComposition, article, errors);
+  const primaryBuckets = validateBucketList(primary.buckets, 'articlePolicy.primaryCameraStack.buckets', errors);
+  const supportingBuckets = validateBucketList(article.supportingMainBuckets, 'articlePolicy.supportingMainBuckets', errors);
+  const forbiddenBuckets = validateBucketList(article.forbiddenMainBuckets, 'articlePolicy.forbiddenMainBuckets', errors);
+  const primarySet = new Set(primaryBuckets);
+  const supportingSet = new Set(supportingBuckets);
+  const forbiddenSet = new Set(forbiddenBuckets);
+  for (const bucket of primarySet) {
+    if (supportingSet.has(bucket)) errors.push(`Bucket cannot be both primary and supporting: ${bucket}.`);
+    if (forbiddenSet.has(bucket)) errors.push(`Bucket cannot be both primary and forbidden: ${bucket}.`);
+  }
+  for (const bucket of supportingSet) {
+    if (forbiddenSet.has(bucket)) errors.push(`Bucket cannot be both supporting and forbidden: ${bucket}.`);
+  }
+  if (Number.isInteger(primary.minRequired) && Number.isInteger(count.max) && primary.minRequired > count.max) {
+    errors.push('articlePolicy.primaryCameraStack.minRequired cannot exceed articlePolicy.mainArticleCount.max.');
+  }
+  validateInteger(preflight.reserveMin, 'candidatePoolPreflight.reserveMin', errors, { min: 0 });
+  validateInteger(preflight.publishableCandidateMin, 'candidatePoolPreflight.publishableCandidateMin', errors, { min: 1 });
+  validateInteger(preflight.primaryCameraStackCandidateMin, 'candidatePoolPreflight.primaryCameraStackCandidateMin', errors, { min: 0 });
+  validateInteger(preflight.cameraStackCandidateMin, 'candidatePoolPreflight.cameraStackCandidateMin', errors, { min: 0 });
+  validateSelectionWindowPolicy(config.selectionWindowPolicy, errors);
+  validateCatchUpPolicy(config.catchUpPolicy, config, errors);
+  validateWeeklyArticlePolicy(config.weeklyArticlePolicy, errors);
+  validateHeadlinePolicy(config.headlinePolicy, errors);
+  if (config.publishModePolicy !== undefined) {
+    validatePublishModePolicy(config.publishModePolicy, errors);
+  }
+  if (
+    Number.isInteger(preflight.publishableCandidateMin) &&
+    Number.isInteger(count.min) &&
+    preflight.publishableCandidateMin < count.min
+  ) {
+    errors.push('candidatePoolPreflight.publishableCandidateMin must be >= articlePolicy.mainArticleCount.min.');
+  }
+  if (
+    Number.isInteger(preflight.publishableCandidateMin) &&
+    Number.isInteger(count.min) &&
+    Number.isInteger(preflight.reserveMin) &&
+    preflight.publishableCandidateMin < count.min + preflight.reserveMin
+  ) {
+    errors.push('candidatePoolPreflight.publishableCandidateMin must be >= articlePolicy.mainArticleCount.min + candidatePoolPreflight.reserveMin.');
+  }
+  if (
+    Number.isInteger(preflight.cameraStackCandidateMin) &&
+    Number.isInteger(preflight.publishableCandidateMin) &&
+    preflight.cameraStackCandidateMin > preflight.publishableCandidateMin
+  ) {
+    errors.push('candidatePoolPreflight.cameraStackCandidateMin must be <= candidatePoolPreflight.publishableCandidateMin.');
+  }
+  const threshold = quality.threshold;
+  if (typeof threshold !== 'number' || !Number.isFinite(threshold) || threshold < 0 || threshold > 100) {
+    errors.push('qualityGatePolicy.threshold must be a number between 0 and 100.');
+  }
+  const hardFailConditions = ensureArray(quality.hardFailConditions);
+  if (hardFailConditions.length === 0 || hardFailConditions.some(item => typeof item !== 'string' || !item.trim())) {
+    errors.push('qualityGatePolicy.hardFailConditions must contain non-empty strings.');
+  }
+  for (const condition of REQUIRED_HARD_FAIL_CONDITIONS) {
+    if (!hardFailConditions.includes(condition)) {
+      errors.push(`qualityGatePolicy.hardFailConditions must include required hard fail condition: ${condition}.`);
+    }
+  }
+  return { ok: errors.length === 0, errors };
+}
+
+function deepFreeze(value) {
+  if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    for (const child of Object.values(value)) {
+      deepFreeze(child);
+    }
+  }
+  return value;
+}
+
+function normalizePublishModePolicy(raw) {
+  if (!raw || typeof raw !== 'object') {
+    return { contextMinSignals: 1 };
+  }
+  return {
+    contextMinSignals: Number.isInteger(raw.contextMinSignals) && raw.contextMinSignals >= 1
+      ? raw.contextMinSignals
+      : 1
+  };
+}
+
+function normalizeCatchUpPolicy(raw) {
+  if (!raw || typeof raw !== 'object') {
+    return { enabled: false, maxCatchUpArticles: 2, maxAgeDays: 90, targetMainArticles: 3, eligibleBuckets: [], activationMode: 'fill_open_slots' };
+  }
+  return {
+    enabled: raw.enabled === true,
+    maxCatchUpArticles: Number.isInteger(raw.maxCatchUpArticles) ? raw.maxCatchUpArticles : 2,
+    maxAgeDays: Number.isInteger(raw.maxAgeDays) ? raw.maxAgeDays : 90,
+    targetMainArticles: Number.isInteger(raw.targetMainArticles) ? raw.targetMainArticles : 3,
+    eligibleBuckets: unique(ensureArray(raw.eligibleBuckets)),
+    activationMode: 'fill_open_slots'
+  };
+}
+
+function validatePublishModePolicy(value, errors) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('publishModePolicy must be an object.');
+    return;
+  }
+  if (!Number.isInteger(value.contextMinSignals) || value.contextMinSignals < 1) {
+    errors.push('publishModePolicy.contextMinSignals must be an integer >= 1.');
+  }
+}
+
+const DEFAULT_WEEKLY_ARTICLE_POLICY = {
+  dailyNewArticleLimit: 3,
+  weeklyArticleLimit: 10,
+  weeklyOverflowPolicy: 'rank_then_drop'
+};
+const KNOWN_WEEKLY_OVERFLOW_POLICIES = ['rank_then_drop'];
+
+function normalizeWeeklyArticlePolicy(raw) {
+  const source = raw && typeof raw === 'object' ? raw : {};
+  const overflow = String(source.weeklyOverflowPolicy || DEFAULT_WEEKLY_ARTICLE_POLICY.weeklyOverflowPolicy);
+  return {
+    dailyNewArticleLimit: Number.isInteger(source.dailyNewArticleLimit)
+      ? source.dailyNewArticleLimit
+      : DEFAULT_WEEKLY_ARTICLE_POLICY.dailyNewArticleLimit,
+    weeklyArticleLimit: Number.isInteger(source.weeklyArticleLimit)
+      ? source.weeklyArticleLimit
+      : DEFAULT_WEEKLY_ARTICLE_POLICY.weeklyArticleLimit,
+    weeklyOverflowPolicy: KNOWN_WEEKLY_OVERFLOW_POLICIES.includes(overflow)
+      ? overflow
+      : DEFAULT_WEEKLY_ARTICLE_POLICY.weeklyOverflowPolicy
+  };
+}
+
+function validateWeeklyArticlePolicy(value, errors) {
+  if (value === undefined) return; // optional; normalized to a default when absent
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('weeklyArticlePolicy must be an object.');
+    return;
+  }
+  validateInteger(value.dailyNewArticleLimit, 'weeklyArticlePolicy.dailyNewArticleLimit', errors, { min: 1 });
+  validateInteger(value.weeklyArticleLimit, 'weeklyArticlePolicy.weeklyArticleLimit', errors, { min: 1 });
+  if (Number.isInteger(value.dailyNewArticleLimit) &&
+    Number.isInteger(value.weeklyArticleLimit) &&
+    value.dailyNewArticleLimit > value.weeklyArticleLimit) {
+    errors.push('weeklyArticlePolicy.dailyNewArticleLimit cannot exceed weeklyArticleLimit.');
+  }
+  if (!KNOWN_WEEKLY_OVERFLOW_POLICIES.includes(String(value.weeklyOverflowPolicy))) {
+    errors.push(`weeklyArticlePolicy.weeklyOverflowPolicy must be one of: ${KNOWN_WEEKLY_OVERFLOW_POLICIES.join(', ')}.`);
+  }
+}
+
+function normalizeNewsletterPolicyConfig(config) {
+  const article = config.articlePolicy;
+  const preflight = config.candidatePoolPreflight;
+  const selectionWindow = config.selectionWindowPolicy;
+  const headline = config.headlinePolicy;
+  const quality = config.qualityGatePolicy;
+  return deepFreeze({
+    schemaVersion: config.schemaVersion,
+    name: config.name || 'Newsletter Policy',
+    publishModePolicy: normalizePublishModePolicy(config.publishModePolicy),
+    articlePolicy: {
+      mainArticleCount: {
+        min: article.mainArticleCount.min,
+        max: article.mainArticleCount.max
+      },
+      primaryCameraStack: {
+        minRequired: article.primaryCameraStack.minRequired,
+        buckets: unique(article.primaryCameraStack.buckets)
+      },
+      publishReadyComposition: {
+        primaryCameraStackMinRequired: article.publishReadyComposition.primaryCameraStackMinRequired,
+        directAospCameraOrDriverMinRequired: article.publishReadyComposition.directAospCameraOrDriverMinRequired,
+        supportingMainMaxAllowed: article.publishReadyComposition.supportingMainMaxAllowed
+      },
+      supportingMainBuckets: unique(article.supportingMainBuckets),
+      forbiddenMainBuckets: unique(article.forbiddenMainBuckets)
+    },
+    candidatePoolPreflight: {
+      reserveMin: preflight.reserveMin,
+      publishableCandidateMin: preflight.publishableCandidateMin,
+      primaryCameraStackCandidateMin: preflight.primaryCameraStackCandidateMin,
+      cameraStackCandidateMin: preflight.cameraStackCandidateMin
+    },
+    selectionWindowPolicy: {
+      primarySelectionDays: selectionWindow.primarySelectionDays,
+      fallbackSelectionDays: selectionWindow.fallbackSelectionDays,
+      referenceContextDays: selectionWindow.referenceContextDays
+    },
+    catchUpPolicy: normalizeCatchUpPolicy(config.catchUpPolicy),
+    weeklyArticlePolicy: normalizeWeeklyArticlePolicy(config.weeklyArticlePolicy),
+    headlinePolicy: {
+      decayModel: headline.decayModel,
+      decayRatePerDay: headline.decayRatePerDay,
+      replacementMargin: headline.replacementMargin,
+      minimumHeadlineScore: headline.minimumHeadlineScore,
+      latestInclusionRequired: headline.latestInclusionRequired,
+      historyMaxEntries: headline.historyMaxEntries
+    },
+    qualityGatePolicy: {
+      threshold: quality.threshold,
+      hardFailConditions: [...quality.hardFailConditions]
+    }
+  });
+}
+
+function loadNewsletterPolicy(filePath = policyPath) {
+  const config = readPolicyConfig(filePath);
+  const validation = validateNewsletterPolicyConfig(config);
+  if (!validation.ok) {
+    const displayPath = path.relative(repoRoot, filePath).replace(/\\/g, '/') || filePath;
+    throw new Error(`Invalid Newsletter Policy config at ${displayPath}:\n- ${validation.errors.join('\n- ')}`);
+  }
+  return normalizeNewsletterPolicyConfig(config);
+}
+
+let defaultPolicyCache = null;
+
+function getDefaultNewsletterPolicy() {
+  if (!defaultPolicyCache) {
+    defaultPolicyCache = loadNewsletterPolicy(policyPath);
+  }
+  return defaultPolicyCache;
+}
+
+function getArticlePolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.articlePolicy;
+}
+
+function getPublishReadyCompositionPolicy(policy = getDefaultNewsletterPolicy()) {
+  return getArticlePolicy(policy).publishReadyComposition;
+}
+
+function getQualityGatePolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.qualityGatePolicy;
+}
+
+function getCandidatePoolPreflightPolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.candidatePoolPreflight;
+}
+
+function getSelectionWindowPolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.selectionWindowPolicy;
+}
+
+function getCatchUpPolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.catchUpPolicy;
+}
+
+function getWeeklyArticlePolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.weeklyArticlePolicy;
+}
+
+function getHeadlinePolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.headlinePolicy;
+}
+
+function getPublishModePolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.publishModePolicy;
+}
+
+function bucketValue(bucket) {
+  return String(bucket || '').trim();
+}
+
+function isPrimaryCameraStackBucket(bucket, policy = getDefaultNewsletterPolicy()) {
+  return getArticlePolicy(policy).primaryCameraStack.buckets.includes(bucketValue(bucket));
+}
+
+function isSupportingMainBucket(bucket, policy = getDefaultNewsletterPolicy()) {
+  return getArticlePolicy(policy).supportingMainBuckets.includes(bucketValue(bucket));
+}
+
+function isForbiddenMainBucket(bucket, policy = getDefaultNewsletterPolicy()) {
+  return getArticlePolicy(policy).forbiddenMainBuckets.includes(bucketValue(bucket));
+}
+
+function isMainArticleAllowedBucket(bucket, policy = getDefaultNewsletterPolicy()) {
+  return isPrimaryCameraStackBucket(bucket, policy) || isSupportingMainBucket(bucket, policy);
+}
+
+function articleCountRangeText(policy = getDefaultNewsletterPolicy()) {
+  const articlePolicy = getArticlePolicy(policy);
+  const { min, max } = articlePolicy.mainArticleCount;
+  return `${min}-${max}`;
+}
+
+function minimumText(value) {
+  return value === 0 ? 'disabled' : String(value);
+}
+
+function publishGateCriteriaText(policy = getDefaultNewsletterPolicy()) {
+  const articlePolicy = getArticlePolicy(policy);
+  const publishPolicy = getPublishReadyCompositionPolicy(policy);
+  const qualityGatePolicy = getQualityGatePolicy(policy);
+  return [
+    `main articles: ${articleCountRangeText(policy)}`,
+    `review gate primary camera stack articles: ${minimumText(articlePolicy.primaryCameraStack.minRequired)}`,
+    `Publish-ready gate primary camera stack articles: ${minimumText(publishPolicy.primaryCameraStackMinRequired)}`,
+    `Publish-ready gate direct AOSP Camera or driver/image pipeline articles: ${minimumText(publishPolicy.directAospCameraOrDriverMinRequired)}`,
+    `Publish-ready gate supporting main articles max: ${publishPolicy.supportingMainMaxAllowed}`,
+    `forbidden main buckets: ${articlePolicy.forbiddenMainBuckets.join(', ') || 'none'}`,
+    `quality threshold: ${qualityGatePolicy.threshold}`
+  ].join('; ');
+}
+
+function selectionWindowPolicyText(policy = getDefaultNewsletterPolicy()) {
+  const selectionWindow = getSelectionWindowPolicy(policy);
+  return [
+    `primary=${selectionWindow.primarySelectionDays}d`,
+    `fallback=${selectionWindow.fallbackSelectionDays}d`,
+    `reference=${selectionWindow.referenceContextDays}d`
+  ].join('; ');
+}
+
+function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
+  const articlePolicy = getArticlePolicy(policy);
+  const publishPolicy = getPublishReadyCompositionPolicy(policy);
+  const selectionWindowPolicy = getSelectionWindowPolicy(policy);
+  const headlinePolicy = getHeadlinePolicy(policy);
+  const qualityGatePolicy = getQualityGatePolicy(policy);
+  const catchUpPolicy = getCatchUpPolicy(policy);
+  const oneArticlePolicyEnabled = articlePolicy.mainArticleCount.min === 1;
+  const reserveRequirementText = policy.candidatePoolPreflight.reserveMin === 0
+    ? 'reserve candidates diagnostics only'
+    : `reserve candidates at least ${policy.candidatePoolPreflight.reserveMin}`;
+  return [
+    POLICY_BLOCK_BEGIN,
+    '<!-- This block is generated. Update src/shared/config/newsletter-policy.json, then run npm.cmd run sync:policy-docs. -->',
+    '',
+    '### Newsletter Policy',
+    '',
+    `- Source of truth: \`${POLICY_REL_PATH.replace(/\\/g, '/')}\``,
+    `- Main article count: ${articleCountRangeText(policy)}`,
+    ...(oneArticlePolicyEnabled
+      ? [
+          '- One-article policy: a public newsletter may contain a single fully publishable main article.',
+          '- Article count alone does not make a one-article issue degraded or review-only; hard quality gates still apply.',
+          '- Supporting-only policy: a single supporting main bucket article may be public-ready when all hard gates pass.'
+        ]
+      : []),
+    `- Review gate Primary Camera Stack articles: ${articlePolicy.primaryCameraStack.minRequired === 0 ? 'disabled by one-article policy' : `at least ${articlePolicy.primaryCameraStack.minRequired}`}`,
+    `- Publish-ready Primary Camera Stack articles: ${publishPolicy.primaryCameraStackMinRequired === 0 ? 'disabled by one-article policy' : `at least ${publishPolicy.primaryCameraStackMinRequired}`}`,
+    `- Publish-ready direct AOSP Camera or driver/image pipeline articles: ${publishPolicy.directAospCameraOrDriverMinRequired === 0 ? 'disabled by one-article policy' : `at least ${publishPolicy.directAospCameraOrDriverMinRequired}`} across ${DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS.map(bucket => `\`${bucket}\``).join(', ')}`,
+    `- Publish-ready supporting main articles: at most ${publishPolicy.supportingMainMaxAllowed} total across supporting main buckets`,
+    `- Primary Camera Stack buckets: ${articlePolicy.primaryCameraStack.buckets.map(bucket => `\`${bucket}\``).join(', ')}`,
+    `- Supporting main buckets: ${articlePolicy.supportingMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}`,
+    `- Forbidden main buckets: ${articlePolicy.forbiddenMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}; never promote these to main articles by candidate count alone`,
+    `- Candidate pool preflight: publishable candidates at least ${policy.candidatePoolPreflight.publishableCandidateMin}; ${reserveRequirementText}; camera stack candidates at least ${policy.candidatePoolPreflight.cameraStackCandidateMin}`,
+    `- Selection windows: primary ${selectionWindowPolicy.primarySelectionDays} days; fallback ${selectionWindowPolicy.fallbackSelectionDays} days; reference ${selectionWindowPolicy.referenceContextDays} days`,
+    '- Selection window enforcement: main selection enforced; fallback window candidates are promoted only when primary window selection is short.',
+    catchUpPolicy.enabled
+      ? `- Catch-up (지난 소식) lane: when fresh selection is below ${catchUpPolicy.targetMainArticles} article(s), open main slots are filled with uncovered releases up to ${catchUpPolicy.maxAgeDays} days old from buckets ${catchUpPolicy.eligibleBuckets.map(bucket => `\`${bucket}\``).join(', ')}, at most ${catchUpPolicy.maxCatchUpArticles} per issue, covered once each; never displaces fresh content.`
+      : '- Catch-up (지난 소식) lane: disabled.',
+    `- Homepage headline policy: ${headlinePolicy.decayModel} decay; decay ${headlinePolicy.decayRatePerDay} point(s)/day; replacement margin ${headlinePolicy.replacementMargin}; minimum headline score ${headlinePolicy.minimumHeadlineScore}; latest inclusion required ${headlinePolicy.latestInclusionRequired}; history max ${headlinePolicy.historyMaxEntries}`,
+    '- Publish gate: PASS requires no source gaps, no fact-check must_fix, no blocking deductions, and every article marked publishable by the fact-checker. There is no numeric quality threshold.',
+    '- Editorial quality: the fact-checker (LLM) judges each article on usefulness to a Camera HAL SW engineer (topic-agnostic — C++, AI, or Linux articles qualify when they help that engineer). Topic/depth heuristics are not used as deterministic publish gates.',
+    `- Hard fail conditions remain blocking: ${qualityGatePolicy.hardFailConditions.join('; ')}`,
+    '',
+    POLICY_BLOCK_END
+  ].join('\n');
+}
+
+function markerPositions(text, marker) {
+  const positions = [];
+  let start = 0;
+  while (start < text.length) {
+    const index = text.indexOf(marker, start);
+    if (index === -1) break;
+    positions.push(index);
+    start = index + marker.length;
+  }
+  return positions;
+}
+
+function analyzeNewsletterPolicyBlock(text, policy = getDefaultNewsletterPolicy()) {
+  const beginPositions = markerPositions(text, POLICY_BLOCK_BEGIN);
+  const endPositions = markerPositions(text, POLICY_BLOCK_END);
+  const errors = [];
+  if (beginPositions.length === 0) errors.push(`missing BEGIN marker ${POLICY_BLOCK_BEGIN}`);
+  if (endPositions.length === 0) errors.push(`missing END marker ${POLICY_BLOCK_END}`);
+  if (beginPositions.length > 1) errors.push(`duplicate BEGIN marker ${POLICY_BLOCK_BEGIN}`);
+  if (endPositions.length > 1) errors.push(`duplicate END marker ${POLICY_BLOCK_END}`);
+  if (beginPositions.length === 1 && endPositions.length === 1 && beginPositions[0] > endPositions[0]) {
+    errors.push('marker order error: BEGIN marker must appear before END marker');
+  }
+
+  const expectedBlock = renderNewsletterPolicyBlock(policy);
+  let actualBlock = '';
+  if (errors.length === 0) {
+    actualBlock = text.slice(beginPositions[0], endPositions[0] + POLICY_BLOCK_END.length);
+    if (actualBlock !== expectedBlock) {
+      errors.push('generated Newsletter Policy block drift');
+    }
+  }
+
+  return {
+    ok: errors.length === 0,
+    errors,
+    expectedBlock,
+    actualBlock,
+    beginCount: beginPositions.length,
+    endCount: endPositions.length
+  };
+}
+
+function replaceNewsletterPolicyBlock(text, { policy = getDefaultNewsletterPolicy() } = {}) {
+  const beginPositions = markerPositions(text, POLICY_BLOCK_BEGIN);
+  const endPositions = markerPositions(text, POLICY_BLOCK_END);
+  const block = renderNewsletterPolicyBlock(policy);
+  if (beginPositions.length === 0 && endPositions.length === 0) {
+    return `${text.replace(/\s*$/, '')}\n\n${block}\n`;
+  }
+
+  const structuralErrors = analyzeNewsletterPolicyBlock(text, policy)
+    .errors
+    .filter(error => error !== 'generated Newsletter Policy block drift');
+  if (structuralErrors.length > 0) {
+    throw new Error(structuralErrors.join('; '));
+  }
+
+  return `${text.slice(0, beginPositions[0])}${block}${text.slice(endPositions[0] + POLICY_BLOCK_END.length)}`;
+}
+
+module.exports = {
+  POLICY_BLOCK_BEGIN,
+  POLICY_BLOCK_END,
+  POLICY_REL_PATH,
+  get articlePolicy() {
+    return getArticlePolicy();
+  },
+  get qualityGatePolicy() {
+    return getQualityGatePolicy();
+  },
+  get candidatePoolPreflightPolicy() {
+    return getCandidatePoolPreflightPolicy();
+  },
+  get publishReadyCompositionPolicy() {
+    return getPublishReadyCompositionPolicy();
+  },
+  get selectionWindowPolicy() {
+    return getSelectionWindowPolicy();
+  },
+  get catchUpPolicy() {
+    return getCatchUpPolicy();
+  },
+  get weeklyArticlePolicy() {
+    return getWeeklyArticlePolicy();
+  },
+  get headlinePolicy() {
+    return getHeadlinePolicy();
+  },
+  // Legacy compatibility exports only. New code should prefer articlePolicy and qualityGatePolicy.
+  get MIN_MAIN_ARTICLES() {
+    return getArticlePolicy().mainArticleCount.min;
+  },
+  get MAX_MAIN_ARTICLES() {
+    return getArticlePolicy().mainArticleCount.max;
+  },
+  get QUALITY_THRESHOLD() {
+    return getQualityGatePolicy().threshold;
+  },
+  analyzeNewsletterPolicyBlock,
+  articleCountRangeText,
+  getCandidatePoolPreflightPolicy,
+  getCatchUpPolicy,
+  getPublishModePolicy,
+  getDefaultNewsletterPolicy,
+  getHeadlinePolicy,
+  getPublishReadyCompositionPolicy,
+  getSelectionWindowPolicy,
+  getWeeklyArticlePolicy,
+  isForbiddenMainBucket,
+  isMainArticleAllowedBucket,
+  isPrimaryCameraStackBucket,
+  isSupportingMainBucket,
+  loadNewsletterPolicy,
+  normalizeNewsletterPolicyConfig,
+  publishGateCriteriaText,
+  readPolicyConfig,
+  renderNewsletterPolicyBlock,
+  replaceNewsletterPolicyBlock,
+  selectionWindowPolicyText,
+  validateHeadlinePolicy,
+  validateNewsletterPolicyConfig
+};

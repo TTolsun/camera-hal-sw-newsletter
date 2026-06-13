@@ -8,7 +8,7 @@ const {
   extractLinkedEvidenceFromCandidate,
   extractLinkedEvidenceFromText
 } = require('../../..');
-const { readTextFixture } = require('../../../../core/test/helpers/fixture-loader');
+const { readTextFixture } = require('../../../../shared/test/helpers/fixture-loader');
 
 const RESOLVER_ONLY_STATUSES = new Set(
   FETCH_STATUS_VALUES.filter(status => status !== FETCH_STATUSES.NOT_FETCHED)

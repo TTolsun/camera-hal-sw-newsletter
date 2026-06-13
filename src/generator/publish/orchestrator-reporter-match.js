@@ -6,7 +6,7 @@
 // no generationRunState, no fs, no module globals — extracted verbatim from
 // the generation orchestrator (gemini-newsroom-newsletter.js).
 
-const { normalizeTitle } = require('../../core/common/section-identity');
+const { normalizeTitle } = require('../../shared/common/section-identity');
 const {
   normalizeUrl,
   normalizedUrlHash

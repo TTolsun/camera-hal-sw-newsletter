@@ -5,7 +5,7 @@ const { execFileSync } = require('child_process');
 const {
   collectedCandidatesRelPath,
   newsroomRelPath
-} = require('../../core/common/artifact-paths');
+} = require('../../shared/common/artifact-paths');
 const {
   REVIEW_ARTIFACT_SCHEMA_VERSION,
   DEBUG_HEAVY,

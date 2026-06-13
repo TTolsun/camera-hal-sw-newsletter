@@ -4,7 +4,7 @@ const path = require('path');
 const {
   kstDate,
   readJson
-} = require('../core/common/common');
+} = require('../shared/common/common');
 const {
   evidenceValidationReportPath,
   evidenceValidationReportRelPath,
@@ -47,24 +47,24 @@ const {
   sourceQualityReportMarkdownRelPath,
   sourceQualityReportPath,
   sourceQualityReportRelPath
-} = require('../core/common/artifact-paths');
+} = require('../shared/common/artifact-paths');
 const {
   sourceDiscoveryCandidateStats,
   sourceDiscoveryStatsSummary,
   writeMergedCandidateArtifacts
-} = require('../core/common/candidate-artifacts');
+} = require('../shared/common/candidate-artifacts');
 const {
   createGeminiUsageBudget
 } = require('./gemini-usage-budget');
 const {
   writeJson
-} = require('../core/common/common');
+} = require('../shared/common/common');
 const {
   readRuntimeConfig
-} = require('../core/common/runtime-config');
+} = require('../shared/common/runtime-config');
 const {
   renderEditorPrSummary
-} = require('../core/common/editor-pr-summary');
+} = require('../shared/common/editor-pr-summary');
 const {
   runGeminiSourceDiscovery
 } = require('./gemini-source-discovery');
@@ -73,7 +73,7 @@ const {
 } = require('./linked-evidence-candidate-expansion');
 const {
   approvedCollectionIntentFromManifest
-} = require('../core/collect/collection-intent');
+} = require('../shared/collect/collection-intent');
 const {
   runSeedEvidenceExpansion
 } = require('./seed-evidence');
@@ -94,7 +94,7 @@ const {
   candidateTitle,
   candidateUrl,
   text
-} = require('../core/collect/source-intelligence-utils');
+} = require('../shared/collect/source-intelligence-utils');
 
 const FAILED_LLM_CREDENTIALS = 'FAILED_LLM_CREDENTIALS';
 const SEED_ONLY_LLM_CREDENTIALS_MISSING = 'SEED_ONLY_LLM_CREDENTIALS_MISSING';
@@ -1198,7 +1198,7 @@ async function runEnabled({
   // 공식/등록 도메인 링크를 골라 Gemini(sourceDiscovery 단계)가 뉴스레터 가치를 판정하고,
   // 통과한 링크를 origin=gemini_linked_discovery 파생 후보로 만들어 동일 selection 게이트에
   // 흘려보낸다. extract-only, non-failing.
-  const sourceRegistryPath = path.join(root, 'src', 'core', 'data', 'news-sources.json');
+  const sourceRegistryPath = path.join(root, 'src', 'shared', 'data', 'news-sources.json');
   const sourceRegistry = fs.existsSync(sourceRegistryPath)
     ? readJson(sourceRegistryPath)
     : { sources: [] };

@@ -1,4 +1,4 @@
-const { ensureArray } = require('../core/common/value-coercion');
+const { ensureArray } = require('../shared/common/value-coercion');
 const dns = require('dns');
 const fs = require('fs');
 const net = require('net');
@@ -19,32 +19,32 @@ const {
   seedMergeReportMarkdownRelPath,
   seedMergeReportPath,
   seedMergeReportRelPath
-} = require('../core/common/artifact-paths');
+} = require('../shared/common/artifact-paths');
 const {
   decodeHtml,
   htmlAttr,
   readJson,
   writeJson
-} = require('../core/common/common');
+} = require('../shared/common/common');
 const {
   classifyOutgoingLinks,
   EVIDENCE_ROLES
 } = require('.');
 const {
   extractOutgoingLinksFromHtml
-} = require('../core/collect/outgoing-links');
+} = require('../shared/collect/outgoing-links');
 const {
   parseSourceSpecificItems
-} = require('../core/collect/source-item-parsers');
+} = require('../shared/collect/source-item-parsers');
 const {
   sourceForUrl,
   stableId,
   text,
   urlHostname
-} = require('../core/collect/source-intelligence-utils');
+} = require('../shared/collect/source-intelligence-utils');
 const {
   CANDIDATE_SCHEMA_VERSION
-} = require('../core/cli/collect-news-candidates');
+} = require('../shared/cli/collect-news-candidates');
 
 const SCHEMA_VERSION = 1;
 const DEFAULT_LIMITS = Object.freeze({
@@ -542,7 +542,7 @@ async function runSeedEvidenceExpansion({
   date,
   manualPayload,
   collectionIntent,
-  sourceRegistryPath = path.join(root, 'src', 'core', 'data', 'news-sources.json'),
+  sourceRegistryPath = path.join(root, 'src', 'shared', 'data', 'news-sources.json'),
   fetchImpl = globalThis.fetch,
   lookupImpl,
   limits = {}

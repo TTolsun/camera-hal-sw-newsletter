@@ -64,13 +64,13 @@ main article은 다음 additive field를 가져야 합니다.
 읽기 전용 baseline:
 
 ```powershell
-node src/core/tooling/cli/build-hal-signal-quality-scorecard.js --dates 2026-05-15,2026-05-16,2026-05-17
+node src/shared/tooling/cli/build-hal-signal-quality-scorecard.js --dates 2026-05-15,2026-05-16,2026-05-17
 ```
 
 로컬/디버그 baseline을 명시적으로 기록:
 
 ```powershell
-node src/core/tooling/cli/build-hal-signal-quality-scorecard.js --dates 2026-05-15,2026-05-16,2026-05-17 --output .tmp/hal-signal-quality-baseline.md
+node src/shared/tooling/cli/build-hal-signal-quality-scorecard.js --dates 2026-05-15,2026-05-16,2026-05-17 --output .tmp/hal-signal-quality-baseline.md
 ```
 
 `--output`이 없으면 파일을 쓰지 않습니다. 수동 baseline은 local debug 자료이며 validation의 source of truth가 아닙니다. 자동 산출 source of truth는 Stage 3의 `hal-signal-quality-report.json/md`입니다.

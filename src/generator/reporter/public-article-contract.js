@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   DECISION_IMPACT_VALUES,
   DECISION_SCOPE_VALUES,
@@ -91,7 +91,7 @@ const PUBLIC_SOURCE_ROLE_ALIASES = Object.freeze({
 
 const {
   normalizeNewsSourceKey
-} = require('../../core/common/source-url-key');
+} = require('../../shared/common/source-url-key');
 
 const NO_IMMEDIATE_ACTION_TEXT = '즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.';
 

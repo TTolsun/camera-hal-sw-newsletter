@@ -7,7 +7,7 @@ const {
   numeric,
   stableId,
   text
-} = require('../core/collect/source-intelligence-utils');
+} = require('../shared/collect/source-intelligence-utils');
 
 function inferClaim(candidate = {}, fetchedText = '') {
   const summary = text(candidate.summary || candidate.behavior_change || candidate.what_changed);

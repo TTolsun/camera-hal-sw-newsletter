@@ -3,7 +3,7 @@ const path = require('path');
 
 const {
   kstDate
-} = require('../../core/common/common');
+} = require('../../shared/common/common');
 const {
   writeHalSignalQualityArtifacts
 } = require('../diagnostics/hal-signal-quality-report');

@@ -4,7 +4,7 @@ const path = require('path');
 const {
   readJson,
   writeJson
-} = require('../../core/common/common');
+} = require('../../shared/common/common');
 const {
   DATE_PATTERN,
   ARCHIVE_STATUSES,
@@ -123,7 +123,7 @@ function collectHistoricalArchiveState({ root = process.cwd() } = {}) {
   const publicDates = listPublicDates(root);
   const newsroomDates = listDateDirs(root, 'articles/content/newsroom');
   const rewriteDiffs = listRewriteDiffs(root);
-  const fixtureFiles = listFilesRecursive(root, 'src/core/test/fixtures', '.json');
+  const fixtureFiles = listFilesRecursive(root, 'src/shared/test/fixtures', '.json');
   const sidecarEntries = Array.isArray(sidecarResult.value) ? sidecarResult.value : [];
   const sidecarDates = sidecarEntries
     .map(entry => String(entry?.date || ''))

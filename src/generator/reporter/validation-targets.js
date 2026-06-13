@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
-const { changedArtifactDate } = require('../../core/common/artifact-paths');
+const { changedArtifactDate } = require('../../shared/common/artifact-paths');
 
 const HISTORICAL_POLICY_WARNING_REASON = 'historical artifact outside current/changed/generated validation target, warning only';
 

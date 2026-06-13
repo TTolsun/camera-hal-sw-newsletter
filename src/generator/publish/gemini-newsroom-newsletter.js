@@ -6,18 +6,18 @@ const {
   readJson,
   readTextIfExists,
   writeJson
-} = require('../../core/common/common');
+} = require('../../shared/common/common');
 const {
   collectedCandidatesRelPath,
   newsroomDir: artifactNewsroomDir,
   newsroomRelPath,
   seedEvidencePackPath
-} = require('../../core/common/artifact-paths');
+} = require('../../shared/common/artifact-paths');
 const {
   CandidateArtifactValidationError,
   resolveCandidateInputArtifact
-} = require('../../core/common/candidate-artifacts');
-const { readRuntimeConfig } = require('../../core/common/runtime-config');
+} = require('../../shared/common/candidate-artifacts');
+const { readRuntimeConfig } = require('../../shared/common/runtime-config');
 const {
   buildCostReport,
   buildCostReportMarkdown,
@@ -25,7 +25,7 @@ const {
   getLlmDiagnostics,
   getLlmCostCalls,
   getLlmModelUsage
-} = require('../../core/llm/llm-client');
+} = require('../../shared/llm/llm-client');
 const {
   reporterSchema,
   editorSchema,
@@ -35,7 +35,7 @@ const {
   publicArticleJudgeSchema,
   backgroundContextSchema
 } = require('../render/newsletter-schema');
-const { isSafeExternalImageUrl } = require('../../core/render/image-candidates');
+const { isSafeExternalImageUrl } = require('../../shared/render/image-candidates');
 const { resolveIssueArticleImages } = require('../render/article-image-resolver');
 const {
   COMPOSITION_MODES,
@@ -64,14 +64,14 @@ const {
   stableSectionKeySet,
   titleSimilarity,
   urlKeys
-} = require('../../core/common/section-identity');
+} = require('../../shared/common/section-identity');
 const {
   pruneCatchUpFramingFactCheckItems,
   sanitizeClaimEvidenceIds,
   stampCoverageType,
   validateFactCheck
 } = require('./fact-check-postprocess');
-const { BUCKETS, BUCKET_PRIORITY } = require('../../core/common/aosp-camera-scope');
+const { BUCKETS, BUCKET_PRIORITY } = require('../../shared/common/aosp-camera-scope');
 const {
   buildArticleCapsuleReport,
   capsuleInputForCandidates,
@@ -102,7 +102,7 @@ const {
   candidateGroupKey,
   explicitDemotedGroups,
   groupCoverageSummary
-} = require('../../core/common/article-groups');
+} = require('../../shared/common/article-groups');
 const {
   buildStaleClaimReportMarkdown,
   pruneResolvedStaleFactCheckItems,
@@ -114,7 +114,7 @@ const {
   qualityGatePolicy,
   publishGateCriteriaText,
   publishReadyCompositionPolicy
-} = require('../../core/common/newsletter-policy');
+} = require('../../shared/common/newsletter-policy');
 const {
   readExposureHistory,
   recordArticleExposure,
@@ -190,7 +190,7 @@ const {
 } = require('../editor/weekly-merge');
 const {
   toEditorDraftArtifact
-} = require('../../core/domain/newsletter-domain-normalize');
+} = require('../../shared/domain/newsletter-domain-normalize');
 const {
   linkedEvidencePromptGuardrails,
   sourceExtractionPromptGuardrails,
@@ -248,7 +248,7 @@ const {
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
-const sourceRegistryPath = path.join(root, 'src', 'core', 'data', 'news-sources.json');
+const sourceRegistryPath = path.join(root, 'src', 'shared', 'data', 'news-sources.json');
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
 const generationRunState = {
@@ -2854,7 +2854,7 @@ async function main() {
   const newsletterDir = path.join(root, 'articles', 'newsletters', date);
 
   if (!fs.existsSync(sourceRegistryPath) && !fs.existsSync(sourcesPath)) {
-    fail('Missing src/core/data/news-sources.json and docs/news-sources.md.');
+    fail('Missing src/shared/data/news-sources.json and docs/news-sources.md.');
   }
 
   const candidates = readJson(candidatePath);
@@ -3004,7 +3004,7 @@ async function main() {
   const commonContext = [
     `Newsletter date: ${date}`,
     'Audience: AOSP Camera / Camera HAL / Camera Driver / SoC Platform / C++ engineer',
-    '수집된 candidate JSON, src/core/data/news-sources.json, docs/news-sources.md, 아래 editorial documents만 사용하세요. web browsing은 하지 마세요.',
+    '수집된 candidate JSON, src/shared/data/news-sources.json, docs/news-sources.md, 아래 editorial documents만 사용하세요. web browsing은 하지 마세요.',
     'source names와 source URLs는 그대로 유지하세요. 확인된 사실과 해석을 분리하세요.',
     '최종 newsletter text는 한국어로 작성하세요. 공식 title, source name, product name, URL, code identifier, JSON key, enum 값은 원문을 유지할 수 있습니다.',
     '',

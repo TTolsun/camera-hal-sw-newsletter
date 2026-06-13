@@ -17,7 +17,7 @@ const {
   stableSectionKeySet,
   titleSimilarity,
   urlKeys
-} = require('../../../../core/common/section-identity');
+} = require('../../../../shared/common/section-identity');
 
 test('sectionSummary builds a 1-based diagnostic summary with urls and source titles', () => {
   const summary = sectionSummary({

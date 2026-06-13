@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const { candidatesAreDuplicate } = require('../../select/newsroom-selection');
-const { buildShortlistReport, policyDriverCandidate } = require('../../../core/test/helpers/selection-builders');
+const { buildShortlistReport, policyDriverCandidate } = require('../../../shared/test/helpers/selection-builders');
 
 const LORE_LIST = 'https://lore.kernel.org/linux-media';
 

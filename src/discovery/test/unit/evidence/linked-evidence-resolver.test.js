@@ -7,7 +7,7 @@ const {
   RAW_EXCERPT_MAX_LENGTH,
   resolveLinkedEvidence
 } = require('../../..');
-const { readTextFixture } = require('../../../../core/test/helpers/fixture-loader');
+const { readTextFixture } = require('../../../../shared/test/helpers/fixture-loader');
 
 function fakeFetch(sequence) {
   const calls = [];

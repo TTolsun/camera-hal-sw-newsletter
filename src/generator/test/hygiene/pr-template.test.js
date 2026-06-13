@@ -100,7 +100,7 @@ test('localization validator reports homepage headline display errors in readabl
     summary: '카메라 뉴스 요약',
     tags: []
   }]);
-  writeJson(path.join(root, 'src', 'core', 'data', 'news-sources.json'), {
+  writeJson(path.join(root, 'src', 'shared', 'data', 'news-sources.json'), {
     sources: []
   });
   writeJson(path.join(root, 'articles', 'data', 'homepage-headline.json'), {
@@ -132,7 +132,7 @@ test('localization validator allows canonical English newsletter brand titles', 
     summary: '카메라 뉴스 요약',
     tags: []
   }]);
-  writeJson(path.join(root, 'src', 'core', 'data', 'news-sources.json'), {
+  writeJson(path.join(root, 'src', 'shared', 'data', 'news-sources.json'), {
     sources: []
   });
 

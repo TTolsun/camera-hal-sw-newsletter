@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -6,20 +6,20 @@ const {
   kstDate,
   readJson,
   writeJson
-} = require('../../core/common/common');
+} = require('../../shared/common/common');
 const {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
   newsroomDir,
   newsroomRelPath
-} = require('../../core/common/artifact-paths');
+} = require('../../shared/common/artifact-paths');
 const {
   normalizeUrl
-} = require('../../core/common/selection-normalizers');
+} = require('../../shared/common/selection-normalizers');
 const {
   normalizeSourceQuality,
   sourceQualityFieldDrift
-} = require('../../core/collect/source-quality-classifier');
+} = require('../../shared/collect/source-quality-classifier');
 
 const SCHEMA_VERSION = 2;
 const MAX_SAMPLE_URLS = 5;
@@ -936,7 +936,7 @@ function buildSourceEffectivenessReport(options = {}) {
     inputs: {
       collected_candidates: collectedCandidatesRelPath(date),
       shortlisted_candidates: newsroomRelPath(date, 'shortlisted-candidates.json'),
-      source_registry: 'src/core/data/news-sources.json',
+      source_registry: 'src/shared/data/news-sources.json',
       optional_artifacts: optionalArtifactPaths(date, options)
     },
     summary,
@@ -1197,8 +1197,8 @@ function loadSourceEffectivenessInputs(root, date) {
     },
     sourceRegistry: readRequiredJson(
       resolvedRoot,
-      path.join(resolvedRoot, 'src', 'core', 'data', 'news-sources.json'),
-      'src/core/data/news-sources.json'
+      path.join(resolvedRoot, 'src', 'shared', 'data', 'news-sources.json'),
+      'src/shared/data/news-sources.json'
     ),
     collectedCandidates: readRequiredJson(
       resolvedRoot,

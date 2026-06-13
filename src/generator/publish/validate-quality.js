@@ -3,13 +3,13 @@ const path = require('path');
 const {
   buildNewsletterQualityReport
 } = require('../quality/newsletter-quality');
-const { qualityGatePolicy } = require('../../core/common/newsletter-policy');
-const { readJson } = require('../../core/common/common');
+const { qualityGatePolicy } = require('../../shared/common/newsletter-policy');
+const { readJson } = require('../../shared/common/common');
 const {
   newsroomDir,
   newsroomRelPath,
   seedEvidencePackPath
-} = require('../../core/common/artifact-paths');
+} = require('../../shared/common/artifact-paths');
 const {
   historicalPolicyWarningReason,
   strictTargetDates

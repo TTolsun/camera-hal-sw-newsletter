@@ -16,7 +16,7 @@ const {
   storyPublicArticle,
   storyEditor,
   normalizeSection
-} = require('../../../core/test/helpers/editor-builders');
+} = require('../../../shared/test/helpers/editor-builders');
 
 const DATE = '2026-05-08';
 

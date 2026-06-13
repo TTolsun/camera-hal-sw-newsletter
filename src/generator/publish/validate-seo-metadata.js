@@ -14,7 +14,7 @@ const {
 } = require('../render/seo-metadata');
 const {
   publicAssetPath
-} = require('../../core/common/artifact-paths');
+} = require('../../shared/common/artifact-paths');
 
 const root = process.cwd();
 const errors = [];

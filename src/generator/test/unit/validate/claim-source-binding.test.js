@@ -9,7 +9,7 @@ const {
   stableSourceExtractionItemId,
   validateArticleClaims
 } = require('../../../quality/claim-source-binding');
-const { readJsonFixture } = require('../../../../core/test/helpers/fixture-loader');
+const { readJsonFixture } = require('../../../../shared/test/helpers/fixture-loader');
 
 function section(overrides = {}) {
   return {

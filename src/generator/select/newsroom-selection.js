@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   normalizeShortlistReport
 } = require('./selection-diagnostics');
@@ -23,7 +23,7 @@ const {
   normalizedUrlHash,
   normalizeTitle,
   titleSimilarity
-} = require('../../core/common/selection-normalizers');
+} = require('../../shared/common/selection-normalizers');
 const {
   text,
   number,
@@ -74,7 +74,7 @@ const {
 } = require('../reporter/camera-release-notes');
 const {
   BUCKETS
-} = require('../../core/common/aosp-camera-scope');
+} = require('../../shared/common/aosp-camera-scope');
 const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
   NATIVE_TOOLING_WORKFLOW_TYPE,
@@ -84,13 +84,13 @@ const {
   isNativeToolingWorkflow,
   loreSeriesKey,
   loreSeriesPatchNumber
-} = require('../../core/common/article-groups');
+} = require('../../shared/common/article-groups');
 const {
   dateQualityForCandidate
-} = require('../../core/common/date-signals');
+} = require('../../shared/common/date-signals');
 const {
   articleIdentityKey
-} = require('../../core/common/article-identity');
+} = require('../../shared/common/article-identity');
 const {
   everCoveredAsNewsletterArticle,
   readExposureHistory
@@ -111,7 +111,7 @@ const {
   getPublishModePolicy,
   getPublishReadyCompositionPolicy,
   getSelectionWindowPolicy
-} = require('../../core/common/newsletter-policy');
+} = require('../../shared/common/newsletter-policy');
 const { resolvePublishMode } = require('./publish-mode');
 
 const publishReadyCompositionPolicy = getPublishReadyCompositionPolicy();

@@ -5,7 +5,7 @@
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 90,
   "generated_at": "2026-06-13T06:32:16.393Z",
-  "sources_path": "src/core/data/news-sources.json",
+  "sources_path": "src/shared/data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
     "android-media": "Android Media / Camera Output",

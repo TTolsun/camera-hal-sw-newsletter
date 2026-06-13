@@ -3,7 +3,7 @@ const {
   candidateUrl,
   stableId,
   text
-} = require('../core/collect/source-intelligence-utils');
+} = require('../shared/collect/source-intelligence-utils');
 
 function finalEligible(candidate = {}) {
   return ['main', 'short'].includes(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);

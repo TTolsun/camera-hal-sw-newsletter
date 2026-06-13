@@ -1,13 +1,13 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
 const {
   qualityGatePolicy
-} = require('../../core/common/newsletter-policy');
+} = require('../../shared/common/newsletter-policy');
 const {
   readJsonIfExists
-} = require('../../core/common/json');
+} = require('../../shared/common/json');
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const COMPOSITION_MODE_NEEDS_FIX = 'NEEDS_FIX';

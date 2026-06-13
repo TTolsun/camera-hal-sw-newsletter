@@ -1,10 +1,10 @@
-const { ensureArray } = require('../../core/common/value-coercion');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   isFinalSelected
 } = require('../select/selection-diagnostics');
 const {
   normalizedUrlHash
-} = require('../../core/common/selection-normalizers');
+} = require('../../shared/common/selection-normalizers');
 const {
   normalizeForMatch,
   urlKeys,
@@ -21,7 +21,7 @@ const {
   BUCKETS,
   BUCKET_PRIORITY,
   classifyAospCameraStackCandidate
-} = require('../../core/common/aosp-camera-scope');
+} = require('../../shared/common/aosp-camera-scope');
 const {
   articlePolicy,
   publishReadyCompositionPolicy,
@@ -31,11 +31,11 @@ const {
   isPrimaryCameraStackBucket,
   isSupportingMainBucket,
   publishGateCriteriaText
-} = require('../../core/common/newsletter-policy');
+} = require('../../shared/common/newsletter-policy');
 const {
   IMPACT_TYPES,
   RECOMMENDED_ARTICLE_TYPES
-} = require('../../core/evidence/impact-classifier');
+} = require('../../shared/evidence/impact-classifier');
 const {
   findFieldHygieneIssues,
   inferGuardrailImpactClass
@@ -60,15 +60,15 @@ const {
   dateQualityForCandidate,
   validateDateSource,
   validateEventType
-} = require('../../core/common/date-signals');
+} = require('../../shared/common/date-signals');
 const {
   candidateGroupKey
-} = require('../../core/common/article-groups');
+} = require('../../shared/common/article-groups');
 const {
   SOURCE_QUALITY_FIELD_DRIFT,
   normalizeSourceQuality,
   sourceQualityFieldDrift
-} = require('../../core/collect/source-quality-classifier');
+} = require('../../shared/collect/source-quality-classifier');
 const {
   summarizeClaimValidation,
   validateArticleClaims
@@ -78,7 +78,7 @@ const {
 } = require('../editor/editor-output-contract');
 const {
   toLegacyEditorIssue
-} = require('../../core/domain/newsletter-domain-normalize');
+} = require('../../shared/domain/newsletter-domain-normalize');
 const {
   EDITORIAL_STORY_KEYS,
   STORY_CONTRACT_VERSION,
@@ -99,7 +99,7 @@ const {
   BRIEFING_WHAT_PATTERN,
   BRIEFING_READER_PATTERN,
   BRIEFING_ACTION_PATTERN
-} = require('../../core/common/quality-gate-policy');
+} = require('../../shared/common/quality-gate-policy');
 
 // Legacy compatibility exports only. New quality code should prefer qualityGatePolicy and articlePolicy.
 const QUALITY_THRESHOLD = qualityGatePolicy.threshold;

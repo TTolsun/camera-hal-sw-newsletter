@@ -5,12 +5,12 @@ const {
   kstDate,
   readJson,
   writeJson
-} = require('../../core/common/common');
+} = require('../../shared/common/common');
 const {
   mergedCandidateManifestRelPath,
   newsroomDir,
   newsroomRelPath
-} = require('../../core/common/artifact-paths');
+} = require('../../shared/common/artifact-paths');
 const {
   HAL_SIGNAL_SCHEMA_VERSION,
   buildHalSignalQualitySummary,
