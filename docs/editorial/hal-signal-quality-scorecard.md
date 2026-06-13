@@ -1,12 +1,12 @@
 # HAL Signal Quality Scorecard
 
-이 문서는 HAL engineer signal quality 기준을 고정합니다. 목표는 새 source/parser를 늘리는 것이 아니라, 이미 생성된 Stage 3 artifact에서 main article이 HAL 독자에게 실제로 검토 가치가 있는지 측정하고 publish gate에 반영하는 것입니다.
+이 문서는 "기사가 HAL 엔지니어에게 실제로 읽을 가치가 있는가"를 어떻게 측정하는지(signal quality 기준)를 고정합니다. 목표는 새 source/parser를 늘리는 것이 아닙니다. 이미 만들어진 Stage 3 artifact를 대상으로, main article이 HAL 독자에게 검토 가치가 있는지를 측정해 publish gate(발행 게이트)에 반영하는 것입니다.
 
 ## 범위
 
-- 적용 대상: 신규 Stage 3 `editor-draft.json`, `quality-report.json`, `hal-signal-quality-report.json/md`.
-- 비대상: 기존 public archive rewrite, 과거 generated artifact golden fixture, source expansion, historical cleanup.
-- 기존 field shape는 유지합니다. `selection_shortage_hints[]`와 `hal_impact_summary.axes`는 기존 소비자를 위해 제거하거나 구조 변경하지 않습니다.
+- 적용 대상: 신규 Stage 3의 `editor-draft.json`, `quality-report.json`, `hal-signal-quality-report.json/md`.
+- 비대상: 기존 public archive rewrite, 과거 generated artifact golden fixture, source expansion, historical cleanup. (즉 과거 산출물은 건드리지 않습니다.)
+- 기존 field shape는 그대로 둡니다. 특히 `selection_shortage_hints[]`와 `hal_impact_summary.axes`는 기존 소비자가 쓰고 있으므로 제거하거나 구조를 바꾸지 않습니다.
 
 ## 필수 기사 필드
 
@@ -31,7 +31,7 @@ main article은 다음 additive field를 가져야 합니다.
 
 ## HAL Signal Capsule
 
-`hal_signal_capsule`은 renderer가 합성하지 않습니다. 누락은 validation에서 잡습니다.
+`hal_signal_capsule`은 editor가 직접 채워야 하며 renderer가 대신 합성하지 않습니다. 따라서 누락되면 validation에서 실패로 잡힙니다.
 
 필수 키:
 
@@ -54,23 +54,27 @@ main article은 다음 additive field를 가져야 합니다.
 
 ## 게이트 경계
 
+이 점수가 발행 판정에 미치는 영향의 경계는 다음과 같습니다.
+
 - Quality validation은 HAL signal 감점과 hard blocker를 기록합니다.
 - 품질 상태가 `PASS`가 아니면 publish gate가 최종 발행을 차단합니다.
-- 리뷰 산출물(artifact), 진단, 디버그 artifact, PR 컨텍스트는 보존됩니다.
-- `hal-signal-quality-report`에서 선택적 report 입력이 누락되면 `input_unavailable`로 기록하고, 선택적 입력만 있는 부분 report는 `status=WARN`과 `input_completeness=partial`을 사용합니다.
+- 리뷰 산출물(artifact), 진단, 디버그 artifact, PR 컨텍스트는 모두 보존됩니다.
+- `hal-signal-quality-report`에서 선택적(optional) report 입력이 누락되면 그 부분을 `input_unavailable`로 기록합니다. 선택적 입력만 있는 부분 report는 `status=WARN`과 `input_completeness=partial`로 표시합니다.
 
 ## Baseline Builder
 
-읽기 전용 baseline:
+기준선(baseline)을 만드는 도구입니다.
+
+읽기 전용 baseline 생성:
 
 ```powershell
 node src/shared/tooling/cli/build-hal-signal-quality-scorecard.js --dates 2026-05-15,2026-05-16,2026-05-17
 ```
 
-로컬/디버그 baseline을 명시적으로 기록:
+로컬/디버그 baseline을 파일로 명시 기록:
 
 ```powershell
 node src/shared/tooling/cli/build-hal-signal-quality-scorecard.js --dates 2026-05-15,2026-05-16,2026-05-17 --output .tmp/hal-signal-quality-baseline.md
 ```
 
-`--output`이 없으면 파일을 쓰지 않습니다. 수동 baseline은 local debug 자료이며 validation의 source of truth가 아닙니다. 자동 산출 source of truth는 Stage 3의 `hal-signal-quality-report.json/md`입니다.
+`--output`을 주지 않으면 파일을 쓰지 않습니다. 수동으로 만든 baseline은 local debug용 자료일 뿐, validation의 source of truth가 아닙니다. validation이 따르는 자동 산출 source of truth는 Stage 3의 `hal-signal-quality-report.json/md`입니다.

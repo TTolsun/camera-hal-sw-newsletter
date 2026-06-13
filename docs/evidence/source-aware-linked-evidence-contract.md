@@ -1,10 +1,16 @@
 # Source-Aware Linked Evidence Contract
 
+이 문서는 source page, RSS article, release note row 안에 들어 있는 linked evidence(연결된 근거 링크)를 어떻게 보존하고 분류할지를 정한 계약입니다. 목표는 evidence traceability(근거 추적성)를 높이되, 발행 안전성과 기존 article structure 계약은 약화하지 않는 것입니다.
+
 ## Seed Evidence Extension
 
-Seed evidence expansion(씨앗 근거 확장)은 이 linked-evidence 경계를 Stage 2에서만 재사용합니다. Stage 1은 `collection-intent.json`을 승인하고, Stage 2는 승인된 seed URL과 허용된 linked evidence를 가져오며, Stage 3은 승인된 candidate artifact와 `compact_evidence`만 소비합니다.
+Seed evidence expansion(씨앗 근거 확장)은 이 linked-evidence 경계를 Stage 2에서만 다시 사용합니다. 단계별 역할은 다음과 같습니다.
 
-추가 seed 전용 규칙:
+- Stage 1: `collection-intent.json`을 승인합니다.
+- Stage 2: 승인된 seed URL과 허용된 linked evidence를 가져옵니다.
+- Stage 3: 승인된 candidate artifact와 `compact_evidence`만 소비합니다.
+
+추가로 seed에만 적용되는 규칙:
 
 - Seed fetch는 공개 `https` URL만 허용하며 redirect 대상도 다시 검증합니다.
 - `keyword_hints`는 발굴 힌트 전용이며 source-backed 사실이 되어서는 안 됩니다.
@@ -13,9 +19,9 @@ Seed evidence expansion(씨앗 근거 확장)은 이 linked-evidence 경계를 S
 - Stage 3은 seed URL을 다시 크롤링하거나 가져오지 않습니다.
 - 전체 `seed-evidence-pack.json`은 검증/디버그 artifact이며, Gemini prompt는 candidate 수준 `compact_evidence`만 전달받습니다.
 
-이 문서는 source page, RSS article, release note row 안의 linked evidence를 보존하고 분류하는 현재 계약을 설명합니다. 목표는 evidence traceability를 높이되, 발행 안전성과 기존 article structure 계약을 약화하지 않는 것입니다.
-
 ## 책임 경계
+
+어떤 일을 어느 모듈이 책임지는지 정리합니다.
 
 | 영역 | 구현 위치 | 계약 |
 | --- | --- | --- |
@@ -35,7 +41,7 @@ Seed evidence expansion(씨앗 근거 확장)은 이 linked-evidence 경계를 S
 
 ## `outgoing_links[]` Contract
 
-보존 단계에서는 evidence 가치 판단 없이 link record만 추가합니다.
+보존(preservation) 단계에서는 링크의 evidence 가치를 판단하지 않고, 발견한 link record만 그대로 기록합니다.
 
 ```json
 {
@@ -56,7 +62,7 @@ Seed evidence expansion(씨앗 근거 확장)은 이 linked-evidence 경계를 S
 
 ## Evidence Role Classification 경계
 
-Classifier는 보존된 links를 입력으로 소비하되 보존 semantics를 바꾸지 않습니다.
+Classifier는 보존된 links를 입력으로 읽기만 하고, 보존 단계의 의미(semantics)는 바꾸지 않습니다.
 
 허용 role:
 
@@ -77,7 +83,7 @@ blocked_or_deferred
 
 ## Resolver 안전 제한
 
-네트워크 resolve는 기본적으로 비활성화입니다.
+링크 내용을 실제로 네트워크로 가져오는 resolve 동작은 기본적으로 꺼져 있습니다. 동작 모드와 한도는 아래 환경변수로 정합니다.
 
 ```text
 NEWSROOM_LINKED_EVIDENCE_MODE=extract_only
@@ -89,7 +95,7 @@ NEWSROOM_LINKED_EVIDENCE_TIMEOUT_MS=5000
 NEWSROOM_LINKED_EVIDENCE_MAX_BYTES=200000
 ```
 
-네트워크 resolve 활성화 전 필수 제한:
+네트워크 resolve를 켜기 전에 반드시 지켜야 할 제한:
 
 - `https` 전용.
 - 링크당 timeout.
@@ -106,8 +112,9 @@ NEWSROOM_LINKED_EVIDENCE_MAX_BYTES=200000
 
 ## Event Bundle 계약
 
-Event Bundle은 linked evidence를 진단과 trace summary로 묶는 optional artifact입니다. selection/scoring 통합과 HAL runtime/API 추론은 별도 보수적 통합이 명시되기 전까지 범위 밖입니다.
-Dedupe fallback order는 다음 순서를 따른다.
+Event Bundle은 linked evidence를 진단(diagnostics)과 trace summary로 묶어 주는 optional artifact입니다. selection/scoring에 반영하거나 HAL runtime/API 동작을 추론하는 일은, 별도의 보수적 통합 방식이 명시되기 전까지는 범위 밖입니다.
+
+같은 event를 중복으로 묶지 않기 위한 Dedupe fallback order(중복 제거 우선순위)는 다음 순서를 따른다. 위에서부터 먼저 일치하는 키를 사용한다.
 
 ```text
 canonical_release_note_url

@@ -1,10 +1,18 @@
 # AOSP Camera / Driver / SoC Platform 뉴스레터 템플릿
 
-## 필수 근거 field
+이 문서는 한 호의 뉴스레터가 어떤 모양이어야 하는지를 보여 주는 템플릿입니다. editor가 기사를 작성할 때 따라야 할 섹션 순서와 각 섹션에 들어갈 내용을 정의합니다.
 
-모든 generated article JSON은 `evidence_summary`, `specificity_checks`, `source_verification_notes`를 포함해야 합니다. 이 field는 기사 근거가 되는 concrete version/release, release date, API/component, behavior change, explicit source gap을 적는 곳입니다.
+## 필수 근거 field (evidence field)
 
-정확한 source, version, API, date, behavior를 함께 이름 붙이지 않는 generic monitoring language는 사용하지 않습니다.
+모든 generated article JSON은 아래 세 field를 반드시 포함해야 합니다.
+
+- `evidence_summary`
+- `specificity_checks`
+- `source_verification_notes`
+
+이 field들은 기사의 근거를 적는 곳입니다. 즉 출처가 실제로 말한 concrete version/release(구체적인 버전·릴리스), release date(릴리스 날짜), API/component(API·구성요소), behavior change(동작 변화), explicit source gap(출처가 다루지 않은 부분)을 기록합니다.
+
+"AOSP를 모니터링한다" 같은 generic monitoring language(막연한 감시 표현)는 쓰지 않습니다. 정확한 source, version, API, date, behavior를 함께 이름으로 적어야 합니다.
 
 # AOSP Camera / Driver / SoC Platform 뉴스레터 - YYYY-MM-DD
 
@@ -67,7 +75,10 @@ HAL interface, stream/buffer, metadata, request/result, performance, compatibili
 
 ---
 
-주요 기사는 같은 구조를 반복합니다. 기사 수, Primary Camera Stack 필수 조건, supporting/forbidden bucket은 `src/shared/config/newsletter-policy.json`과 대표 운영 문서의 generated Newsletter Policy block을 따릅니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 사용합니다.
+주요 기사는 모두 위와 같은 구조를 반복합니다. 다음 기준은 직접 정하지 말고 정책을 따릅니다.
+
+- 기사 수, Primary Camera Stack 필수 조건, supporting/forbidden bucket(보조·금지 버킷): `src/shared/config/newsletter-policy.json`과 운영 문서의 generated Newsletter Policy block을 따릅니다.
+- `generic_tech_watchlist` 버킷 후보는 main article로 쓰지 않고 briefing/watchlist로만 사용합니다.
 
 ## 이번 주 실행 항목
 

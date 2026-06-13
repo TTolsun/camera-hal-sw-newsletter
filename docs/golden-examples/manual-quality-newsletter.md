@@ -1,13 +1,17 @@
 # 수동 품질 뉴스레터 예시
 
-이 파일은 자동 editor가 참고하는 style과 structure 예시입니다. 최신 사실의 source가 아닙니다. 현재 candidate JSON에 같은 근거가 들어 있지 않다면 이 파일의 사실, 날짜, version, source URL, API name, behavior change, action item을 복사하지 않습니다.
+이 파일은 자동 editor가 "좋은 기사는 이렇게 생겼다"를 참고하도록 만든 style·structure 예시입니다. 즉 작성 방식의 본보기일 뿐, 최신 사실의 출처(source)가 아닙니다.
+
+따라서 이 파일에 적힌 사실, 날짜, version, source URL, API name, behavior change, action item은 그대로 복사하면 안 됩니다. 같은 근거가 현재 candidate JSON에 실제로 들어 있을 때만 사용합니다.
 
 ## Main article 예시 구조
+
+아래는 기사 유형별로 어떤 구조와 깊이로 써야 하는지 보여 주는 예시입니다.
 
 ### Android Camera API: API/component 근거를 먼저 제시
 
 - Headline: 이름이 있는 API/component와 release date를 포함한 Android Camera API change
-- What changed: release/version/date를 먼저 쓰고, 바뀐 exact API, framework module, CTS/VTS/ITS 영역, compatibility requirement를 이름 붙입니다.
+- What changed: release/version/date를 먼저 쓰고, 그다음 바뀐 exact API, framework module, CTS/VTS/ITS 영역, compatibility requirement를 하나씩 이름으로 적습니다.
 - Confirmed facts:
   - Release/version: `current candidate only`
   - Release date: `current candidate only`
