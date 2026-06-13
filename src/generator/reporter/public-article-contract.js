@@ -142,7 +142,7 @@ const HARD_PUBLIC_IDENTIFIERS = Object.freeze([
   'processed_evidence_ids',
   'previous_values',
   'current_values',
-  'data/source-snapshots/',
+  'state/source-snapshots/',
   'content/source-events/',
   '자동 정상 발행 기준',
   '자동 발행 기준',
@@ -475,7 +475,7 @@ function publicUrlError(value) {
     urlText.includes('/content/newsroom/') ||
     urlText.includes('/content/collected-news/') ||
     urlText.includes('/content/source-events/') ||
-    urlText.includes('/data/source-snapshots/')
+    urlText.includes('/state/source-snapshots/')
   ) {
     return 'internal_artifact_url';
   }

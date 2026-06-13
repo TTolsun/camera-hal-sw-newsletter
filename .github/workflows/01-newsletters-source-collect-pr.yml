@@ -173,7 +173,7 @@ jobs:
           set -euo pipefail
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git add articles/content/collected-news/ articles/content/source-events/ data/source-snapshots/ || true
+          git add articles/content/collected-news/ articles/content/source-events/ state/source-snapshots/ || true
           if git diff --cached --quiet; then
             echo "Nothing to commit."
           else
@@ -199,7 +199,7 @@ jobs:
             articles/content/source-events/${{ steps.raw-meta.outputs.date }}/source-change-events.json
             articles/content/source-events/${{ steps.raw-meta.outputs.date }}/source-change-events.md
             articles/content/newsroom/${{ steps.raw-meta.outputs.date }}/news-candidates.md
-            data/source-snapshots/**
+            state/source-snapshots/**
           if-no-files-found: warn
           retention-days: 14
 

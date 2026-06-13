@@ -423,7 +423,7 @@ test('ensure CLI persists homepage headline artifacts for review-publication pub
     changedArtifacts: requiredPublicFiles(date)
   });
   const headlineState = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'homepage-headline.json'), 'utf8'));
-  const exposureHistory = JSON.parse(fs.readFileSync(path.join(root, 'data', 'article-exposure-history.json'), 'utf8'));
+  const exposureHistory = JSON.parse(fs.readFileSync(path.join(root, 'state', 'article-exposure-history.json'), 'utf8'));
   const selectionReport = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'selection-report.json'), 'utf8'));
   const shortlist = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'shortlisted-candidates.json'), 'utf8'));
   const headlineExposure = exposureHistory.articles
@@ -438,7 +438,7 @@ test('ensure CLI persists homepage headline artifacts for review-publication pub
   assert.equal(selectionReport.headline_public_render_reconciliation, undefined);
   assert.equal(selectionReport.article_exposure_coverage.mode, 'forward_only');
   assert.match(result.outputs.reconciled_changed_artifacts, /articles\/data\/homepage-headline\.json/);
-  assert.match(result.outputs.reconciled_changed_artifacts, /data\/article-exposure-history\.json/);
+  assert.match(result.outputs.reconciled_changed_artifacts, /state\/article-exposure-history\.json/);
 });
 
 test('ensure CLI persists a rendered public article when selected headline is not rendered', () => {

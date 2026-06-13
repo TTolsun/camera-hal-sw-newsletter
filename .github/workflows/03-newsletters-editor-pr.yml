@@ -305,8 +305,8 @@ jobs:
             copy_if_present "articles/newsletters/${DATE}/index.html"
             copy_if_present "articles/data/newsletters.json"
             copy_if_present "articles/data/homepage-headline.json"
-            copy_if_present "data/article-exposure-history.json"
-            copy_tree_if_present "data/source-snapshots"
+            copy_if_present "state/article-exposure-history.json"
+            copy_tree_if_present "state/source-snapshots"
           else
             echo "No generated date marker found; skipping date-scoped artifact copy."
           fi

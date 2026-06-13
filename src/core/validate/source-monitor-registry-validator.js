@@ -134,7 +134,7 @@ function validateSource(errors, source, index, seenIds) {
 }
 
 function validateSourceMonitorRegistryText(text, options = {}) {
-  const filePath = options.filePath || 'data/source-monitor-registry.json';
+  const filePath = options.filePath || 'state/source-monitor-registry.json';
   const errors = [];
   let registry;
   try {

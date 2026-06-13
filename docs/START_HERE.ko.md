@@ -39,7 +39,7 @@ Newsletter Policy의 현재 값은 `src/core/config/newsletter-policy.json`이 s
 | --- | --- |
 | [`.github/`](../.github/README.md) | 후보 수집, Gemini 생성, 검증, PR 생성, Pages 검증 workflow입니다. |
 | [`config/`](../config/README.md) | budget config입니다. (newsletter policy는 `src/core/config/newsletter-policy.json`로 이동) |
-| [`data/`](../data/README.md) | `newsletters.json` 등 public index data입니다. (source registry는 `src/core/data/news-sources.json`로 이동) |
+| [`state/`](../state/README.md) | source snapshot monitor, article exposure history 등 파이프라인 운영 state입니다. (source registry는 `src/core/data/news-sources.json`, 서빙되는 index data는 `articles/data/`) |
 | [`src/`](../src/AGENTS.md) | 실제 collector, generator, renderer, validator, tooling 구현입니다. core/collector/discovery/generator layer로 나뉘며, regression test는 `src/<layer>/test/`에 함께 둡니다. |
 | [`articles/content/`](../articles/content/README.md) | 날짜별 raw candidate와 newsroom review artifact입니다. |
 | [`articles/newsletters/`](../articles/newsletters/README.md) | 발행될 날짜별 `newsletter.md`와 `index.html`입니다. |

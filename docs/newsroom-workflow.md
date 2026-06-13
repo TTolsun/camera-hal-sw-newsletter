@@ -375,7 +375,7 @@ Source quality(출처 품질)는 수집과 Stage 3 생성 사이에 실행 가�
 - Source effectiveness 및 PR body 요약은 source URL quality 분포, 상태 요약, blocker 요약, 선정 main 커버리지, main 자격 커버리지, 조건부 승격/차단 수, 미확인 수, drift 수, 레거시 경고 수를 노출합니다.
 ## Source snapshot / `effective_date`
 
-`data/source-monitor-registry.json`에 등록된 monitored source는 bounded fetch로 관찰하고, 이전 `data/source-snapshots/<source_id>.json`과 비교해 `articles/content/source-events/YYYY-MM-DD/source-change-events.json` 및 `.md`를 만듭니다. 이 경로는 review artifact이며 public newsletter renderer가 직접 읽는 입력이 아닙니다.
+`state/source-monitor-registry.json`에 등록된 monitored source는 bounded fetch로 관찰하고, 이전 `state/source-snapshots/<source_id>.json`과 비교해 `articles/content/source-events/YYYY-MM-DD/source-change-events.json` 및 `.md`를 만듭니다. 이 경로는 review artifact이며 public newsletter renderer가 직접 읽는 입력이 아닙니다.
 
 `published_date`는 원문 source가 명시한 실제 발행일입니다. `effective_date`는 `Last updated`, structured modified date, sitemap `lastmod`, release row date, 또는 snapshot diff에서 source change event를 판단할 때 쓰는 유효 날짜입니다. `published_date`가 없는 문서는 날짜 없는 정적 문서 자체로 main article에 승격하지 않고, monitored source에서 생성된 source change event가 source binding과 date quality를 통과할 때만 candidate가 될 수 있습니다.
 

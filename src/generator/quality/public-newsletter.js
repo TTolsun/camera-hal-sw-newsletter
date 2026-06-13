@@ -351,7 +351,7 @@ function validatePublicJsonText(json = '', label = 'public.json') {
     'specificity_checks',
     'overclaim_guardrails',
     'main_article_readiness',
-    'data/source-snapshots/',
+    'state/source-snapshots/',
     'content/source-events/'
   ];
   const errors = forbidden

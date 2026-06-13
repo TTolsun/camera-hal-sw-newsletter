@@ -49,7 +49,7 @@ function criticalFiles(date) {
     newsroomRelPath(date, 'retry-history.json'),
     newsroomRelPath(date, 'retry-history.md'),
     'articles/data/homepage-headline.json',
-    'data/article-exposure-history.json',
+    'state/article-exposure-history.json',
     `articles/newsletters/${date}/newsletter.md`,
     `articles/newsletters/${date}/index.html`
   ];

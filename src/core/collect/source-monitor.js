@@ -33,8 +33,8 @@ const CANDIDATE_SCHEMA_VERSION = 6;
 // candidateAllowed 산정에서는 별도로 차단된다(URL 안정성 결여).
 const NON_CONTENT_CHANGE_EVENT_TYPES = new Set(['no_meaningful_change', 'metadata_only_changed']);
 const CANDIDATE_BLOCKED_EVENT_TYPES = new Set(['page_removed']);
-const SOURCE_MONITOR_REGISTRY_REL_PATH = 'data/source-monitor-registry.json';
-const SOURCE_SNAPSHOT_ROOT = path.join('data', 'source-snapshots');
+const SOURCE_MONITOR_REGISTRY_REL_PATH = 'state/source-monitor-registry.json';
+const SOURCE_SNAPSHOT_ROOT = path.join('state', 'source-snapshots');
 const SOURCE_EVENTS_ROOT = path.join('articles', 'content', 'source-events');
 
 function text(value) {

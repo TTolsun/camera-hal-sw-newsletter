@@ -11,7 +11,7 @@ test('public URL contract blocks source monitor internal artifacts', () => {
     'internal_artifact_url'
   );
   assert.equal(
-    publicUrlError('https://example.com/data/source-snapshots/aosp-camera-docs.json'),
+    publicUrlError('https://example.com/state/source-snapshots/aosp-camera-docs.json'),
     'internal_artifact_url'
   );
 });

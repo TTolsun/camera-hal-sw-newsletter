@@ -71,7 +71,7 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | --- | --- |
 | [`.github/`](.github/README.md) | issue/PR 템플릿, 뉴스룸 PR 워크플로, 검증 워크플로입니다. |
 | [`config/`](config/README.md) | newsroom 예산 등 일부 설정입니다. (뉴스레터 정책은 `src/core/config/newsletter-policy.json`로 이동) |
-| [`data/`](data/README.md) | `newsletters.json` 등 public index data입니다. (source 레지스트리는 `src/core/data/news-sources.json`로 이동) |
+| [`state/`](state/README.md) | source snapshot monitor, article exposure history 등 파이프라인 운영 state입니다. (source 레지스트리는 `src/core/data/news-sources.json`, 서빙되는 index data는 `articles/data/`) |
 | [`docs/`](docs/README.md) | 운영 문서, 용어집, source 안내입니다. |
 | [`src/`](src/AGENTS.md) | 실제 수집기(collector), 생성기(generator), 렌더러(renderer), 검증기(validator), tooling 구현입니다. core/collector/discovery/generator layer로 나뉘며, 회귀 테스트는 `src/<layer>/test/`에 함께 둡니다. |
 | [`articles/content/`](articles/content/README.md) | 수집 후보와 뉴스룸 리뷰 산출물입니다. |
@@ -88,7 +88,7 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | 저장소 전반 | [AGENTS.md](AGENTS.md) | 인코딩, PR 범위, fixture 신뢰 |
 | 구현·테스트 | [src/AGENTS.md](src/AGENTS.md) | layer/의존 방향, 리뷰·발행 가드레일, 테스트·fixture 신뢰 정책 |
 | 워크플로 | [.github/workflows/AGENTS.md](.github/workflows/AGENTS.md) | Secret 처리, PR 기반 발행 |
-| 데이터 | [data/AGENTS.md](data/AGENTS.md) | `news-sources.json` 계약 |
+| state | [state/AGENTS.md](state/AGENTS.md) | 파이프라인 운영 state 계약 |
 | 문서 | [docs/AGENTS.md](docs/AGENTS.md) | 한국어 우선, audit/worklog 금지 |
 
 마지막으로, 아래 규칙은 문서 정리나 리팩토링 중에도 약화하면 안 됩니다.
