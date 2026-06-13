@@ -344,7 +344,7 @@ function exactCatalog(date) {
       humanReadable: false
     }),
     entry({
-      relPath: 'data/article-exposure-history.json',
+      relPath: 'state/article-exposure-history.json',
       group: 'public_output',
       role: 'exposure_state',
       reviewOrder: 34,
@@ -668,8 +668,8 @@ function scannedReviewPaths(root, date) {
   for (const dir of dirs) {
     walkFiles(root, path.join(root, ...dir.split('/')), paths);
   }
-  // article-exposure-history.json은 서빙되지 않는 파이프라인 state라 data/에 남는다.
-  for (const relPath of ['articles/data/newsletters.json', 'articles/data/homepage-headline.json', 'data/article-exposure-history.json']) {
+  // article-exposure-history.json은 서빙되지 않는 파이프라인 state라 state/에 남는다.
+  for (const relPath of ['articles/data/newsletters.json', 'articles/data/homepage-headline.json', 'state/article-exposure-history.json']) {
     if (fileExists(root, relPath)) paths.push(relPath);
   }
   return [...new Set(paths.map(toPosix))]

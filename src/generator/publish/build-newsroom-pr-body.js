@@ -2385,7 +2385,7 @@ function renderHomepageHeadlineDecision(root, date, status = {}) {
     `- exposure_history_coverage: mode=${valueOrUnknown(coverage.mode)}; coverage_starts_at=${valueOrUnknown(coverage.coverage_starts_at)}; backfill_included=${booleanText(coverage.backfill_included === true)}`,
     '- Artifacts:',
     `  - \`articles/data/homepage-headline.json\``,
-    `  - \`data/article-exposure-history.json\``,
+    `  - \`state/article-exposure-history.json\``,
     ''
   ].join('\n');
 }

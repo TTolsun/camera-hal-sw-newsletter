@@ -343,14 +343,14 @@ test('public newsletter validator rejects source snapshot state in public JSON',
     json: JSON.stringify({
       processed_source_event_ids: ['source-event-1'],
       previous_values: { normalized_content_hash: 'old' },
-      source: 'data/source-snapshots/aosp-camera-docs.json'
+      source: 'state/source-snapshots/aosp-camera-docs.json'
     }),
     jsonLabel: 'data/newsletters.json'
   });
 
   assert.ok(errors.some(error => /processed_source_event_ids/.test(error)));
   assert.ok(errors.some(error => /previous_values/.test(error)));
-  assert.ok(errors.some(error => /data\/source-snapshots/.test(error)));
+  assert.ok(errors.some(error => /state\/source-snapshots/.test(error)));
 });
 
 test('public newsletter validator checks rendered markdown article 1', () => {

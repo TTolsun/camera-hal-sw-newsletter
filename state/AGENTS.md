@@ -1,6 +1,6 @@
-# data 작업 지침
+# state 작업 지침
 
-`src/core/data/news-sources.json`은 machine-readable source of truth입니다. 사람이 읽는 설명 문서는 `docs/news-sources.md`와 `docs/config/news-sources-fields.ko.md`를 함께 확인합니다.
+`state/`는 파이프라인 운영 state(source snapshot monitor, article exposure history)를 둡니다. 읽기 전용 source registry는 `src/core/data/news-sources.json`, 서빙되는 site data는 `articles/data/`로 분리되어 있으므로 혼동하지 마세요. source registry의 사람이 읽는 설명 문서는 `docs/news-sources.md`와 `docs/config/news-sources-fields.ko.md`를 함께 확인합니다.
 
 ## JSON Rules
 
@@ -28,6 +28,6 @@ npm.cmd run validate
 
 ## Source Monitor Registry
 
-- `data/source-monitor-registry.json`은 source snapshot monitor 계약입니다. `schemaVersion`, `source_id`, `url_patterns`, `date_extractors`, bounded fetch 값, boolean policy flag를 validator와 함께 갱신하세요.
-- `data/source-snapshots/**`는 reviewable generated state이며 public newsletter renderer 입력이 아닙니다.
+- `state/source-monitor-registry.json`은 source snapshot monitor 계약입니다. `schemaVersion`, `source_id`, `url_patterns`, `date_extractors`, bounded fetch 값, boolean policy flag를 validator와 함께 갱신하세요.
+- `state/source-snapshots/**`는 reviewable generated state이며 public newsletter renderer 입력이 아닙니다.
 - `processed_source_event_ids`, `processed_evidence_ids` 같은 내부 state를 public output에 노출하지 않습니다.

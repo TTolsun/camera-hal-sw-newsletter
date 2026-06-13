@@ -7,7 +7,7 @@ const {
   sourceUrl
 } = require('../../core/common/article-identity');
 
-const EXPOSURE_HISTORY_REL_PATH = path.join('data', 'article-exposure-history.json');
+const EXPOSURE_HISTORY_REL_PATH = path.join('state', 'article-exposure-history.json');
 const SCHEMA_VERSION = 1;
 
 function text(value) {

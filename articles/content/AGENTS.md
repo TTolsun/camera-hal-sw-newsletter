@@ -25,7 +25,7 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `newsletters/YYYY-MM-DD/index.html`
 - `data/newsletters.json`
 - `data/homepage-headline.json`
-- `data/article-exposure-history.json`
+- `state/article-exposure-history.json`
 
 ### review_required_compact (커밋)
 

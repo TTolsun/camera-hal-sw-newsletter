@@ -36,7 +36,7 @@ if (process.argv[2]) {
   process.exit(0);
 }
 
-const monitorConfigPath = path.resolve(root, 'data', 'source-monitor-registry.json');
+const monitorConfigPath = path.resolve(root, 'state', 'source-monitor-registry.json');
 const monitorDisplayPath = path.relative(root, monitorConfigPath).replace(/\\/g, '/') || monitorConfigPath;
 if (fs.existsSync(monitorConfigPath)) {
   const monitorText = fs.readFileSync(monitorConfigPath, 'utf8');
