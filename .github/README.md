@@ -20,7 +20,7 @@
 - scheduled run은 기본 code default를 따릅니다. `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` override는 `workflow_dispatch` 수동 실행에서만 runtime env로 전달합니다.
 - workflow gate에서 `npm run test`와 `npm run validate`를 제거하지 않습니다.
 - failed 또는 reviewable run의 artifact upload를 보존합니다.
-- workflow command path를 바꾸면 `package.json`, `scripts/`, `docs/`, `tests/`를 함께 확인합니다.
+- workflow command path를 바꾸면 `package.json`, `src/`, `docs/`를 함께 확인합니다.
 
 ## 검증
 

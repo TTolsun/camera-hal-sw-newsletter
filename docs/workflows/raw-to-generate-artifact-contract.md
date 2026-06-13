@@ -8,13 +8,13 @@
 
 ### Collection Intent Approval Boundary
 
-Stage 1의 `workflow_dispatch` seed input은 `manual_source_urls`입니다. `;`로 구분한 http/https URL list만 받아 first-seen dedupe 후 stable `seed_id`를 부여하고, 승인된 intent는 canonical `content/collected-news/<date>/collection-intent.json`로 normalize됩니다. newline이나 비-http(s) URL은 fail-fast로 거절합니다. `manual_source_urls`가 비어 있으면 기존 canonical `collection-intent.json`이 있을 때만 사용하고, seed input이 없으면 empty intent file을 만들지 않습니다.
+Stage 1의 `workflow_dispatch` seed input은 `manual_source_urls`입니다. `;`로 구분한 http/https URL list만 받아 first-seen dedupe 후 stable `seed_id`를 부여하고, 승인된 intent는 canonical `articles/content/collected-news/<date>/collection-intent.json`로 normalize됩니다. newline이나 비-http(s) URL은 fail-fast로 거절합니다. `manual_source_urls`가 비어 있으면 기존 canonical `collection-intent.json`이 있을 때만 사용하고, seed input이 없으면 empty intent file을 만들지 않습니다.
 
 `raw-candidate-manifest.json`은 승인된 intent가 있을 때만 다음 필드를 기록합니다.
 
 ```json
 {
-  "collection_intent": "content/collected-news/YYYY-MM-DD/collection-intent.json",
+  "collection_intent": "articles/content/collected-news/YYYY-MM-DD/collection-intent.json",
   "collection_intent_hash": "...",
   "collection_intent_status": "approved",
   "seed_url_count": 2,
@@ -24,9 +24,9 @@ Stage 1의 `workflow_dispatch` seed input은 `manual_source_urls`입니다. `;`�
 
 Stage 2는 manifest에 기록된 approved path/hash와 실제 `collection-intent.json` hash가 일치할 때만 seed expansion을 수행합니다. Manifest에 없는 canonical intent file이나 hash mismatch는 unapproved input으로 처리하고 seed expansion을 중단합니다. `keyword_hints`는 discovery hint이며 source-backed fact가 될 수 없습니다.
 
-- canonical candidate artifact: `content/collected-news/<date>/manual-candidates.json`
-- transition compatibility artifact: `content/collected-news/<date>/candidates.json`
-- provenance manifest: `content/collected-news/<date>/raw-candidate-manifest.json`
+- canonical candidate artifact: `articles/content/collected-news/<date>/manual-candidates.json`
+- transition compatibility artifact: `articles/content/collected-news/<date>/candidates.json`
+- provenance manifest: `articles/content/collected-news/<date>/raw-candidate-manifest.json`
 - Stage 1은 `collect`만 실행합니다.
 - Stage 1은 Gemini/API secret을 사용하지 않습니다.
 - Stage 1은 `llm_used=false`를 manifest에 기록합니다.
@@ -42,13 +42,13 @@ Stage 2는 manifest에 기록된 approved path/hash와 실제 `collection-intent
 
 Seed evidence artifacts:
 
-- `content/collected-news/<date>/seed-candidates.json`
-- `content/collected-news/<date>/seed-evidence-pack.json`
-- `content/newsroom/<date>/seed-fetch-report.json`
-- `content/newsroom/<date>/seed-fetch-report.md`
-- `content/newsroom/<date>/seed-evidence-pack.md`
-- `content/newsroom/<date>/seed-merge-report.json`
-- `content/newsroom/<date>/seed-merge-report.md`
+- `articles/content/collected-news/<date>/seed-candidates.json`
+- `articles/content/collected-news/<date>/seed-evidence-pack.json`
+- `articles/content/newsroom/<date>/seed-fetch-report.json`
+- `articles/content/newsroom/<date>/seed-fetch-report.md`
+- `articles/content/newsroom/<date>/seed-evidence-pack.md`
+- `articles/content/newsroom/<date>/seed-merge-report.json`
+- `articles/content/newsroom/<date>/seed-merge-report.md`
 
 `merge_mode` 값은 다음 중 하나입니다.
 
@@ -64,9 +64,9 @@ Stage 2 manifest/report는 seed 사용 시 다음 필드를 기록합니다.
 ```json
 {
   "seed_used": true,
-  "seed_candidate_artifact": "content/collected-news/YYYY-MM-DD/seed-candidates.json",
+  "seed_candidate_artifact": "articles/content/collected-news/YYYY-MM-DD/seed-candidates.json",
   "seed_candidate_artifact_hash": "...",
-  "seed_evidence_pack": "content/collected-news/YYYY-MM-DD/seed-evidence-pack.json",
+  "seed_evidence_pack": "articles/content/collected-news/YYYY-MM-DD/seed-evidence-pack.json",
   "seed_evidence_pack_hash": "...",
   "seed_candidate_count": 1,
   "seed_new_unique_url_count": 1,
@@ -80,12 +80,12 @@ Stage 2 manifest/report는 seed 사용 시 다음 필드를 기록합니다.
 
 Seed fetch는 public `https` URL만 허용합니다. `http`, `file`, `ftp`, embedded credentials, localhost, loopback, private IP range, link-local, metadata endpoint, internal host, redirect-to-private target은 fetch하지 않습니다. Redirect 후 final URL도 같은 public `https` validation을 다시 통과해야 합니다.
 
-Duplicate merge precedence는 field-level로 고정합니다. Manual candidate의 `title`, `headline`, `editor_note`, manual `priority`, `source_id`, user tags, intended bucket은 seed/Gemini가 override하지 않습니다. Seed evidence는 `source_extraction`, `evidence_ids`, `seed_evidence_pack_refs`, `extraction_quality`, `linked_evidence_summary`, `do_not_claim`, missing `publishedAt`, missing `version_or_release`만 보강합니다. 충돌은 `content/newsroom/<date>/seed-merge-report.json`과 `.md`에 기록합니다.
+Duplicate merge precedence는 field-level로 고정합니다. Manual candidate의 `title`, `headline`, `editor_note`, manual `priority`, `source_id`, user tags, intended bucket은 seed/Gemini가 override하지 않습니다. Seed evidence는 `source_extraction`, `evidence_ids`, `seed_evidence_pack_refs`, `extraction_quality`, `linked_evidence_summary`, `do_not_claim`, missing `publishedAt`, missing `version_or_release`만 보강합니다. 충돌은 `articles/content/newsroom/<date>/seed-merge-report.json`과 `.md`에 기록합니다.
 
-- optional output: `content/collected-news/<date>/merged-candidates.json`
-- Gemini discovery delta artifact: `content/collected-news/<date>/gemini-candidates.json`
-- provenance manifest: `content/collected-news/<date>/merged-candidate-manifest.json`
-- report: `content/newsroom/<date>/gemini-source-discovery-report.md`
+- optional output: `articles/content/collected-news/<date>/merged-candidates.json`
+- Gemini discovery delta artifact: `articles/content/collected-news/<date>/gemini-candidates.json`
+- provenance manifest: `articles/content/collected-news/<date>/merged-candidate-manifest.json`
+- report: `articles/content/newsroom/<date>/gemini-source-discovery-report.md`
 
 Stage 2는 v1에서 두 가지 운영 방식을 허용합니다.
 
@@ -100,7 +100,7 @@ Stage 3은 `manual-candidates.json`을 직접 사용합니다. `merged-candidate
 - `disabled_pass_through=true`
 - `llm_used=false`
 - `gemini_candidate_count=0`
-- `gemini_candidate_artifact=content/collected-news/<date>/gemini-candidates.json`
+- `gemini_candidate_artifact=articles/content/collected-news/<date>/gemini-candidates.json`
 - `merge_mode=disabled_pass_through`
 
 비활성 pass-through는 `gemini-candidates.json`을 정확히 빈 배열 `[]`로 씁니다. 이 파일은 Stage 2 boundary artifact이며 Stage 3 generation input이 아닙니다.
@@ -109,7 +109,7 @@ Stage 3은 `manual-candidates.json`을 직접 사용합니다. `merged-candidate
 
 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`이면 Stage 2는 artifact mutation 전에 선택된 LLM provider credential preflight를 수행합니다. Credential preflight가 실패하면 가능한 경우 `gemini-source-discovery-report.md`에 실패 상태를 남기고 candidate artifact는 수정하지 않습니다.
 
-- Gemini response는 `content/newsroom/<date>/gemini-source-proposals.json` proposal artifact로 저장합니다.
+- Gemini response는 `articles/content/newsroom/<date>/gemini-source-proposals.json` proposal artifact로 저장합니다.
 - Proposal은 candidate가 아니며, deterministic fetch / normalize / schema validation을 통과한 URL만 `gemini-candidates.json`으로 승격합니다.
 - `gemini-candidates.json`에는 승격된 candidate만 저장합니다.
 - `merged-candidates.json`은 manual candidates를 보존하고 schema-valid Gemini candidates만 추가합니다.

@@ -82,7 +82,7 @@ Claim binding은 `article_sections.verified_facts`를 fact coverage 대상으로
 
 ## Historical Compatibility
 
-과거 rewrite는 archive cleanup contract에서 처리한다. Article structure contract 구현은 기존 `content/newsroom/**`, `content/collected-news/**`, `newsletters/**` artifact를 재생성하지 않는다.
+과거 rewrite는 archive cleanup contract에서 처리한다. Article structure contract 구현은 기존 `articles/content/newsroom/**`, `articles/content/collected-news/**`, `articles/newsletters/**` artifact를 재생성하지 않는다.
 
 과거 cleanup 규칙:
 

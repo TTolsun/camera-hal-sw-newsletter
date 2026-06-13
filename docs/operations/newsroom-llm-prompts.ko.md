@@ -10,8 +10,8 @@ API key, runtime secret, 전체 prompt 원문, generated artifact 내용은 이 
 - [Stage 2 source discovery prompt host](../../src/discovery/gemini-source-discovery.js)
 - [Editorial policy](../editorial-policy.md)
 - [Newsletter template](../newsletter-template.md)
-- [Newsletter policy config](../../config/newsletter-policy.json)
-- [Prompt contract tests](../../tests/contract/prompt-contract.test.js)
+- [Newsletter policy config](../../src/shared/config/newsletter-policy.json)
+- [Prompt contract tests](../../src/generator/test/contract/prompt-contract.test.js)
 
 ## Workflow 요약
 
@@ -25,7 +25,7 @@ API key, runtime secret, 전체 prompt 원문, generated artifact 내용은 이 
 
 Workflow/Stage: Stage 1 RAW collection
 
-주요 입력: `data/news-sources.json`, optional `collection-intent.json`, source registry 설정
+주요 입력: `src/shared/data/news-sources.json`, optional `collection-intent.json`, source registry 설정
 
 출력/schema: `content/collected-news/<date>/manual-candidates.json`, RAW candidate artifact
 

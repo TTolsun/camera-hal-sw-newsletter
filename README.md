@@ -63,7 +63,7 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 
 공급자/모델 재정의와 사내 API Secret 설정은 [docs/config/action-variables.ko.md](docs/config/action-variables.ko.md)를 확인합니다.
 
-폴더 구조는 목적별로 나뉘어 있습니다. 실제 구현과 tooling은 모두 `src/`에 있고(#262 재구성으로 root `scripts/` wrapper는 제거됨), 검토 산출물과 공개 발행물은 `content/`와 `newsletters/`에 분리됩니다.
+폴더 구조는 목적별로 나뉘어 있습니다. 실제 구현과 tooling은 모두 `src/`에 있고(#262 재구성으로 root `scripts/` wrapper는 제거됨), 검토 산출물과 공개 발행물은 `articles/content/`와 `articles/newsletters/`에 분리됩니다.
 
 ## 저장소 구조
 

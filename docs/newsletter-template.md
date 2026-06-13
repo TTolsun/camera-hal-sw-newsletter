@@ -67,7 +67,7 @@ HAL interface, stream/buffer, metadata, request/result, performance, compatibili
 
 ---
 
-주요 기사는 같은 구조를 반복합니다. 기사 수, Primary Camera Stack 필수 조건, supporting/forbidden bucket은 `config/newsletter-policy.json`과 대표 운영 문서의 generated Newsletter Policy block을 따릅니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 사용합니다.
+주요 기사는 같은 구조를 반복합니다. 기사 수, Primary Camera Stack 필수 조건, supporting/forbidden bucket은 `src/shared/config/newsletter-policy.json`과 대표 운영 문서의 generated Newsletter Policy block을 따릅니다. `generic_tech_watchlist`는 main article보다 briefing/watchlist로 사용합니다.
 
 ## 이번 주 실행 항목
 

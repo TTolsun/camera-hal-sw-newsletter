@@ -32,15 +32,15 @@ AI 편집자는 일반 기술 뉴스 요약가가 아니라 Camera HAL 소프트
 
 ## 기사 구성
 
-- 주요 기사 수, Primary Camera Stack 필수 조건, supporting/forbidden bucket은 아래 generated Newsletter Policy block과 `config/newsletter-policy.json`을 따릅니다.
+- 주요 기사 수, Primary Camera Stack 필수 조건, supporting/forbidden bucket은 아래 generated Newsletter Policy block과 `src/shared/config/newsletter-policy.json`을 따릅니다.
 - briefing은 정확히 3개 bullet로 유지합니다.
 - 각 주요 기사는 확인한 사실, 배경지식, Camera HAL 관점, Action Item, 과장 금지 메모, Sources를 포함합니다.
 - AI 관련 기사는 필수가 아니라 보완 항목입니다. 포함하는 경우 일반 AI 제품 발표만으로는 충분하지 않으며 camera input path, on-device inference, NPU/GPU scheduling, image privacy, agent-assisted HAL workflow 중 하나와 연결되어야 합니다.
-- Primary Camera Stack 기사 필수 조건은 `config/newsletter-policy.json`의 `articlePolicy.primaryCameraStack`을 따릅니다.
+- Primary Camera Stack 기사 필수 조건은 `src/shared/config/newsletter-policy.json`의 `articlePolicy.primaryCameraStack`을 따릅니다.
 
 ## 발행 모드 (DEEP / CONTEXT / QUIET)
 
-발행 형식은 그날 수집된 카메라 신호량에 따라 결정론적으로 결정됩니다. 판정 임계값은 `config/newsletter-policy.json`의 `publishModePolicy`를 따릅니다.
+발행 형식은 그날 수집된 카메라 신호량에 따라 결정론적으로 결정됩니다. 판정 임계값은 `src/shared/config/newsletter-policy.json`의 `publishModePolicy`를 따릅니다.
 
 - DEEP: 카메라 코어(direct_aosp_camera / camera_driver_image_pipeline) 후보가 1건 이상이면 메인 기사 중심으로 깊게 다룹니다.
 - CONTEXT: 코어가 없지만 인접/SoC/도구 신호가 임계 이상이면, 메인 기사를 강요하지 않고 "실무 레이더" 관점의 맥락 브리핑으로 발행합니다.

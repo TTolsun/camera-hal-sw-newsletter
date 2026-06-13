@@ -13,7 +13,7 @@
 
 - 외부 기사 이미지를 임의 URL로 대체하지 않습니다. 기존 image resolver와 fallback 계약을 따릅니다.
 - `selectedImage`는 최종 발행 가능한 image path로 취급합니다.
-- image file을 바꾸면 public HTML, Markdown output, `data/newsletters.json`에서 참조하는 path를 함께 확인합니다.
+- image file을 바꾸면 public HTML, Markdown output, `articles/data/newsletters.json`에서 참조하는 path를 함께 확인합니다.
 - generated newsletter artifact를 image fixture처럼 복사하지 않습니다.
 
 ## 검증

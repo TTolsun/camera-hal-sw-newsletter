@@ -4,9 +4,9 @@
 
 ## Artifact Roles
 
-- `content/collected-news/YYYY-MM-DD/`는 raw candidate evidence입니다.
-- `content/newsroom/YYYY-MM-DD/`는 reporter, editor, fact-check, quality, retry, QA review artifact입니다.
-- Public newsletter output은 `newsletters/YYYY-MM-DD/`에 있습니다.
+- `articles/content/collected-news/YYYY-MM-DD/`는 raw candidate evidence입니다.
+- `articles/content/newsroom/YYYY-MM-DD/`는 reporter, editor, fact-check, quality, retry, QA review artifact입니다.
+- Public newsletter output은 `articles/newsletters/YYYY-MM-DD/`에 있습니다.
 
 ## 보존 등급 (Retention Grade)
 
@@ -21,10 +21,10 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 
 ### public_source_of_truth (커밋)
 
-- `newsletters/YYYY-MM-DD/newsletter.md`
-- `newsletters/YYYY-MM-DD/index.html`
-- `data/newsletters.json`
-- `data/homepage-headline.json`
+- `articles/newsletters/YYYY-MM-DD/newsletter.md`
+- `articles/newsletters/YYYY-MM-DD/index.html`
+- `articles/data/newsletters.json`
+- `articles/data/homepage-headline.json`
 - `state/article-exposure-history.json`
 
 ### review_required_compact (커밋)
@@ -41,21 +41,21 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `summary-cache-report.{json,md}`, `artifact-manifest.json`
 - `news-candidates.md`, seed `*.md`, `source-change-events.md`
 - **collected-news 파이프라인 입력 파일** (워크플로 핸드오프 상태 — workflow 01 → main → workflow 02 → main → workflow 03 순서로 전달되므로 반드시 Git에 커밋해야 합니다):
-  - `content/collected-news/YYYY-MM-DD/candidates.json` (legacy 호환 경로)
-  - `content/collected-news/YYYY-MM-DD/manual-candidates.json`
-  - `content/collected-news/YYYY-MM-DD/raw-candidate-manifest.json`
-  - `content/collected-news/YYYY-MM-DD/merged-candidates.json`
-  - `content/collected-news/YYYY-MM-DD/merged-candidate-manifest.json`
-  - `content/collected-news/YYYY-MM-DD/collection-intent.json` (workflow-01 manual collection intent; 존재할 때만 커밋)
-  - `content/collected-news/YYYY-MM-DD/seed-candidates.json` (seed_used=true 런에서 workflow 02 seed evidence expansion 산출물; `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋)
-  - `content/collected-news/YYYY-MM-DD/seed-evidence-pack.json` (seed_used=true 런에서 workflow 02 seed evidence expansion 산출물; 동일한 hash strict-check 대상)
+  - `articles/content/collected-news/YYYY-MM-DD/candidates.json` (legacy 호환 경로)
+  - `articles/content/collected-news/YYYY-MM-DD/manual-candidates.json`
+  - `articles/content/collected-news/YYYY-MM-DD/raw-candidate-manifest.json`
+  - `articles/content/collected-news/YYYY-MM-DD/merged-candidates.json`
+  - `articles/content/collected-news/YYYY-MM-DD/merged-candidate-manifest.json`
+  - `articles/content/collected-news/YYYY-MM-DD/collection-intent.json` (workflow-01 manual collection intent; 존재할 때만 커밋)
+  - `articles/content/collected-news/YYYY-MM-DD/seed-candidates.json` (seed_used=true 런에서 workflow 02 seed evidence expansion 산출물; `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋)
+  - `articles/content/collected-news/YYYY-MM-DD/seed-evidence-pack.json` (seed_used=true 런에서 workflow 02 seed evidence expansion 산출물; 동일한 hash strict-check 대상)
 - **workflow 02 Gemini source discovery 산출물** (워크플로 핸드오프 상태 — `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'`인 경우 strict-check하므로 반드시 Git에 커밋해야 합니다. workflow 03이 이 파일들을 main에서 읽을 수 있어야 합니다):
-  - `content/newsroom/YYYY-MM-DD/gemini-usage-report.json` (`usage_report` 필드 strict-check 대상)
-  - `content/newsroom/YYYY-MM-DD/gemini-source-proposals.json` (workflow 02 Gemini 제안 원문; manifest 참조 파일)
-  - `content/newsroom/YYYY-MM-DD/source-clusters.json` (`source_clusters` 필드 strict-check 대상)
-  - `content/newsroom/YYYY-MM-DD/evidence-validation-report.json` (`evidence_validation_report` 필드 strict-check 대상)
-  - `content/newsroom/YYYY-MM-DD/gemini-source-proposal-validation-report.json` (`proposal_validation_report` 필드 strict-check 대상)
-  - `content/newsroom/YYYY-MM-DD/extracted-source-facts.json` (workflow 02 소스 사실 추출 결과; manifest 참조 파일)
+  - `articles/content/newsroom/YYYY-MM-DD/gemini-usage-report.json` (`usage_report` 필드 strict-check 대상)
+  - `articles/content/newsroom/YYYY-MM-DD/gemini-source-proposals.json` (workflow 02 Gemini 제안 원문; manifest 참조 파일)
+  - `articles/content/newsroom/YYYY-MM-DD/source-clusters.json` (`source_clusters` 필드 strict-check 대상)
+  - `articles/content/newsroom/YYYY-MM-DD/evidence-validation-report.json` (`evidence_validation_report` 필드 strict-check 대상)
+  - `articles/content/newsroom/YYYY-MM-DD/gemini-source-proposal-validation-report.json` (`proposal_validation_report` 필드 strict-check 대상)
+  - `articles/content/newsroom/YYYY-MM-DD/extracted-source-facts.json` (workflow 02 소스 사실 추출 결과; manifest 참조 파일)
 
 ### debug_heavy (Actions + manifest만, 커밋 제외)
 
@@ -65,7 +65,7 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `seed-fetch-report.json`, `seed-merge-report.json`
 - `source-change-events.json`
 - `recovery-prompt.md` — heavy LLM prompt dump (~10 MB 규모). Git에 커밋하지 않음; GitHub Actions artifact `newsroom-final-debug-<run_id>` + `artifact-manifest.json` → `retained_heavy_artifacts`에서 조회.
-- `content/collected-news/YYYY-MM-DD/` 순수 디버그 파일 (파이프라인 입력 파일 제외):
+- `articles/content/collected-news/YYYY-MM-DD/` 순수 디버그 파일 (파이프라인 입력 파일 제외):
   - `gemini-candidates.json`
 
 ### transient_attempt (Actions + manifest만, 커밋 제외)
@@ -78,7 +78,7 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 
 ```json
 {
-  "path": "content/newsroom/YYYY-MM-DD/shortlisted-candidates.json",
+  "path": "articles/content/newsroom/YYYY-MM-DD/shortlisted-candidates.json",
   "size": 1234567,
   "sha256": "...",
   "retention_grade": "debug_heavy",
@@ -110,12 +110,12 @@ heavy artifact 전체는 GitHub Actions artifact `newsroom-final-debug-<run_id>`
 
 ## RAW/Source-Discovery PR 예외
 
-`01-newsroom-raw-candidates.yml`과 `02-newsroom-source-discovery.yml`은 candidate JSON 자체가 리뷰 대상이므로 candidate JSON을 의도적으로 커밋합니다. 이 워크플로에는 `add-paths` 허용목록 제한을 적용하지 않습니다.
+`01-newsletters-source-collect-pr.yml`과 `02-newsletters-source-discovery-pr.yml`은 candidate JSON 자체가 리뷰 대상이므로 candidate JSON을 의도적으로 커밋합니다. 이 워크플로에는 `add-paths` 허용목록 제한을 적용하지 않습니다.
 
 파이프라인 입력 파일(candidates.json, manual-candidates.json, raw-candidate-manifest.json, merged-candidates.json, merged-candidate-manifest.json, collection-intent.json, seed-candidates.json, seed-evidence-pack.json)은 `review_required_compact` 등급 파일로서, workflow 01 → 02 → 03의 핸드오프 상태입니다. 이 파일들은 `.gitignore`에서 제외되며 Git에 항상 커밋됩니다. 순수 디버그 collected-news 파일(gemini-candidates.json)은 여전히 `.gitignore` 처리됩니다.
 
 ## Preservation Rules
 
-- Generated artifact를 `tests/fixtures/**/good` 또는 golden fixture로 그대로 복사하지 마세요.
-- 명시 요청 없이 `content/newsroom/**`, `content/collected-news/**`를 대량 수정하지 마세요.
-- `content/newsroom/**`, `content/collected-news/**`의 기존 generated artifact는 대량 수정 대상이 아닙니다.
+- Generated artifact를 `src/shared/test/fixtures/**/good` 또는 golden fixture로 그대로 복사하지 마세요.
+- 명시 요청 없이 `articles/content/newsroom/**`, `articles/content/collected-news/**`를 대량 수정하지 마세요.
+- `articles/content/newsroom/**`, `articles/content/collected-news/**`의 기존 generated artifact는 대량 수정 대상이 아닙니다.

@@ -43,22 +43,22 @@
 
 ## Publication Quality Annotation
 
-- `node scripts/annotate-publication-quality.js --date YYYY-MM-DD`는 해당 public issue만 검사합니다.
+- `node src/generator/publish/annotate-publication-quality.js --date YYYY-MM-DD`는 해당 public issue만 검사합니다.
 - changed public issue date가 public issue와 매칭되면 `--latest`가 있어도 해당 date만 검사합니다.
-- changed public issue가 없을 때 latest public issue 1개를 검사하려면 `node scripts/annotate-publication-quality.js --latest`를 명시합니다.
+- changed public issue가 없을 때 latest public issue 1개를 검사하려면 `node src/generator/publish/annotate-publication-quality.js --latest`를 명시합니다.
 - 명시 target이나 changed public issue가 없으면 조용히 latest로 fallback하지 않고 실패합니다.
-- 전체 과거 issue 검사는 `node scripts/annotate-publication-quality.js --all`에서만 수행합니다.
+- 전체 과거 issue 검사는 `node src/generator/publish/annotate-publication-quality.js --all`에서만 수행합니다.
 
 ## Artifact Review Order
 
 1. PR body와 labels
-2. `content/newsroom/YYYY-MM-DD/editor-in-chief-brief.md`
-3. `content/newsroom/YYYY-MM-DD/fact-check-report.md`
-4. `content/newsroom/YYYY-MM-DD/quality-report.md`
-5. `content/newsroom/YYYY-MM-DD/retry-history.md`
-6. `content/newsroom/YYYY-MM-DD/selection-diagnostics.md`
-7. `content/newsroom/YYYY-MM-DD/selection-report.md`
-8. `newsletters/YYYY-MM-DD/newsletter.md`
+2. `articles/content/newsroom/YYYY-MM-DD/editor-in-chief-brief.md`
+3. `articles/content/newsroom/YYYY-MM-DD/fact-check-report.md`
+4. `articles/content/newsroom/YYYY-MM-DD/quality-report.md`
+5. `articles/content/newsroom/YYYY-MM-DD/retry-history.md`
+6. `articles/content/newsroom/YYYY-MM-DD/selection-diagnostics.md`
+7. `articles/content/newsroom/YYYY-MM-DD/selection-report.md`
+8. `articles/newsletters/YYYY-MM-DD/newsletter.md`
 
 `shortlisted-candidates.json`과 `article-capsules.json`은 debug_heavy 등급이므로 PR diff에 포함되지 않습니다. 이 파일들은 GitHub Actions artifact `newsroom-final-debug-<run_id>`에 보존됩니다.
 
@@ -67,7 +67,7 @@
 PR diff에서 `debug_heavy`/`transient_attempt` 등급 산출물(artifact)이 보이지 않는 것은 의도된 동작입니다.
 
 - Actions artifact `newsroom-final-debug-<run_id>`를 다운로드합니다.
-- 또는 `content/newsroom/YYYY-MM-DD/artifact-manifest.json`의 `retained_heavy_artifacts[]`를 확인합니다. 각 항목에 `path`, `size`, `sha256`, `retention_grade`, `retention_location`이 기록되어 있습니다.
+- 또는 `articles/content/newsroom/YYYY-MM-DD/artifact-manifest.json`의 `retained_heavy_artifacts[]`를 확인합니다. 각 항목에 `path`, `size`, `sha256`, `retention_grade`, `retention_location`이 기록되어 있습니다.
 
 ## 소스 품질 진단
 

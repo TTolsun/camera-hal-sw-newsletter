@@ -30,9 +30,10 @@ Workflow YAML은 provider 기본값을 소유하지 않습니다. `default`는 r
 Provider raw response는 아래 경로 안에서만 읽습니다.
 
 ```text
-scripts/newsroom/llm/**
-scripts/newsroom/adapters/llm/**
-tests/**/llm-response/**
+src/shared/llm/**
+src/shared/adapters/llm/**
+src/shared/test/**/llm-response/
+src/generator/test/**/llm-response/
 docs/workflows/llm-provider-domain-boundary.md
 ```
 

@@ -1,15 +1,15 @@
 # 뉴스 출처 목록
 
-`data/news-sources.json`은 `scripts/collect-news-candidates.js`가 사용하는 기계 판독용 출처 registry입니다. 이 문서는 같은 출처 목록을 사람이 검토하기 위한 editorial view입니다. 출처를 추가, 제거, 비활성화, 재분류할 때는 두 파일을 함께 맞춥니다.
+`src/shared/data/news-sources.json`은 `src/shared/cli/collect-news-candidates.js`가 사용하는 기계 판독용 출처 registry입니다. 이 문서는 같은 출처 목록을 사람이 검토하기 위한 editorial view입니다. 출처를 추가, 제거, 비활성화, 재분류할 때는 두 파일을 함께 맞춥니다.
 
-JSON registry가 없을 때 collector는 이 Markdown의 `- Name: URL` 형식을 fallback으로 읽을 수 있습니다. 정상 운영에서는 `data/news-sources.json`을 우선합니다.
+JSON registry가 없을 때 collector는 이 Markdown의 `- Name: URL` 형식을 fallback으로 읽을 수 있습니다. 정상 운영에서는 `src/shared/data/news-sources.json`을 우선합니다.
 
 ## 동기화 규칙
 
-- 새 출처는 먼저 `data/news-sources.json`에 추가합니다.
+- 새 출처는 먼저 `src/shared/data/news-sources.json`에 추가합니다.
 - 활성 editorial source는 이 문서의 같은 섹션 아래에 반영합니다.
 - 비활성 출처와 candidate-only 출처는 명확히 표시합니다.
-- `rssUrl`은 `data/news-sources.json`에서 검증된 경우에만 추가합니다.
+- `rssUrl`은 `src/shared/data/news-sources.json`에서 검증된 경우에만 추가합니다.
 - media, community, newsletter, paywall 가능성이 있는 출처는 lead로 취급하고 최종 발행 전 official/project source로 교차 확인합니다.
 
 ## Collector 분류
@@ -157,7 +157,7 @@ Reddit 출처는 candidate discovery용 **커뮤니티 신호(sensor)**입니다
 
 ## Source quality policy contract
 
-`data/news-sources.json`은 source quality policy의 실행 가능한 registry입니다. 이 문서의 사람이 읽는 출처 목록은 정책을 설명하는 역할이며, 두 번째 source of truth가 되어서는 안 됩니다.
+`src/shared/data/news-sources.json`은 source quality policy의 실행 가능한 registry입니다. 이 문서의 사람이 읽는 출처 목록은 정책을 설명하는 역할이며, 두 번째 source of truth가 되어서는 안 됩니다.
 
 - 활성화된 모든 source는 `sourceRole`, `sourceUrlQualityHint`, `mainArticlePolicy`, `requiresCrossCheckDefault`, `evidenceGranularityHint`, `sourceQualityNotes`를 정의합니다.
 - `main_article_source_allowed`는 source/evidence 정책 전용 값입니다. `finalSelectionEligibility`, score, 최종 선정 결과, HAL signal 출력을 포함하지 않습니다.
