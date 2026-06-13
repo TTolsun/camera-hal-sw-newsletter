@@ -29,6 +29,22 @@ test('loreSeriesKey collapses new-style v1 cover and patches into one key', () =
   assert.equal(loreSeriesKey(patch2), coverKey);
 });
 
+test('loreSeriesKey collapses new-style patches sent without a -vN version token', () => {
+  // b4/git-send-email first-version series sometimes omit the -v<N> token entirely.
+  const cover = loreCandidate('20260529-glymur_camss-0-bee535396d22@oss.qualcomm.com', 'cover letter');
+  const patch1 = loreCandidate('20260529-glymur_camss-1-bee535396d22@oss.qualcomm.com', 'patch 1');
+  const patch2 = loreCandidate('20260529-glymur_camss-2-bee535396d22@oss.qualcomm.com', 'patch 2');
+
+  const coverKey = loreSeriesKey(cover);
+  assert.ok(coverKey, 'no-version cover key should be non-empty');
+  assert.equal(loreSeriesKey(patch1), coverKey);
+  assert.equal(loreSeriesKey(patch2), coverKey);
+
+  // a no-version series is a distinct series from the same slug with an explicit -v1 token.
+  const versioned = loreCandidate('20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com');
+  assert.notEqual(loreSeriesKey(versioned), coverKey);
+});
+
 test('loreSeriesKey collapses old-style datetime.pid patches into one key', () => {
   const patch1 = loreCandidate('20260527170531.383871-1-miguel.vadillo@intel.com', 'patch 1');
   const patch2 = loreCandidate('20260527170531.383871-2-miguel.vadillo@intel.com', 'patch 2');

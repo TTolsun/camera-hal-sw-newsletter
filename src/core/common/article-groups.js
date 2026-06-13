@@ -98,12 +98,16 @@ function isNativeToolingWorkflow(candidate = {}) {
 // 뽑아 patch 번호만 떼어낸 공통 키를 만든다. 실제 데이터에서 관찰된 2가지 형식만 다룬다(YAGNI).
 //   NEW-style: 20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com
 //              => base="...-v1", patch="0", tail="bee535396d22@oss.qualcomm.com"
+//              버전 토큰(-v<N>)은 선택적이다. 첫 버전을 b4/git-send-email로 보낼 때
+//              20260529-glymur_camss-0-bee535396d22@oss.qualcomm.com 처럼 버전 없이 오기도 한다.
 //   OLD-style: 20260527170531.383871-1-miguel.vadillo@intel.com
 //              => base="20260527170531.383871", patch="1", from="miguel.vadillo@intel.com"
 // 시리즈가 아니면(UUID/랜덤 message-id, 리스트 페이지) '' 를 돌려 기존 키 로직을 쓰게 한다.
 const LORE_HOST = 'lore.kernel.org';
-// (앞부분)-v<버전> + '-' + (패치번호) + '-' + (해시@호스트)
-const LORE_NEW_STYLE = /^(.*-v\d+)-(\d+)-(.+)$/;
+// b4/git-send-email date-slug 메시지ID: <YYYYMMDD>-<slug...>[-v<버전>]-<패치번호>-<hex해시>@<호스트>
+// hex 해시@호스트 꼬리로 끝을 고정해, 버전 토큰 유무와 무관하게 시리즈를 묶고
+// old-style(<날짜시각>.<pid>-...)·UUID(8자리 비-숫자 시작) 메시지ID는 매칭하지 않는다.
+const LORE_NEW_STYLE = /^(\d{8}-.+?)-(\d+)-([0-9a-f]{6,}@\S+)$/;
 // (8자리 이상 날짜시각.PID) + '-' + (패치번호) + '-' + (보낸사람)
 const LORE_OLD_STYLE = /^(\d{8,}\.\d+)-(\d+)-(.+)$/;
 const UNKNOWN_PATCH_NUMBER = Number.POSITIVE_INFINITY;
