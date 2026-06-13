@@ -41,11 +41,11 @@ Newsletter Policy의 현재 값은 `src/core/config/newsletter-policy.json`이 s
 | [`config/`](../config/README.md) | budget config입니다. (newsletter policy는 `src/core/config/newsletter-policy.json`로 이동) |
 | [`data/`](../data/README.md) | `newsletters.json` 등 public index data입니다. (source registry는 `src/core/data/news-sources.json`로 이동) |
 | [`src/`](../src/AGENTS.md) | 실제 collector, generator, renderer, validator, tooling 구현입니다. core/collector/discovery/generator layer로 나뉘며, regression test는 `src/<layer>/test/`에 함께 둡니다. |
-| [`content/`](../content/README.md) | 날짜별 raw candidate와 newsroom review artifact입니다. |
-| [`newsletters/`](../newsletters/README.md) | 발행될 날짜별 `newsletter.md`와 `index.html`입니다. |
+| [`articles/content/`](../articles/content/README.md) | 날짜별 raw candidate와 newsroom review artifact입니다. |
+| [`articles/newsletters/`](../articles/newsletters/README.md) | 발행될 날짜별 `newsletter.md`와 `index.html`입니다. |
 | [`templates/`](../templates/README.md) | newsletter Markdown/HTML template입니다. |
-| [`assets/`](../assets/README.md) | site image와 article-image fallback asset입니다. |
-| [`css/`](../css/README.md) | 정적 사이트 공통 스타일입니다. |
+| [`articles/assets/`](../articles/assets/README.md) | site image와 article-image fallback asset입니다. |
+| [`articles/css/`](../articles/css/README.md) | 정적 사이트 공통 스타일입니다. |
 
 ## 안전한 수정 순서
 
