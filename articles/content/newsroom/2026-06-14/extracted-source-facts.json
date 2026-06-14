@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "6ba35243683b5c65",
+      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-7-paulk@sys-base.io/",
+      "title": "[PATCH v10 6/6] ARM: dts: sun8i: v3s: Add support for the ISP",
+      "published_at": "2026-06-13T15:27:58Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "From: Paul Kocialkowski The V3s (and related platforms) come with an instance of the A31 ISP. Even though it is very close to the A31 ISP, it is not exactly register-compatible and a dedicated compatible only is used as a result. Just like most other blocks of the camera pipeline, the ISP uses the common CSI bus, module and ram clock as well as reset. A port connection to the ISP is added to CSI0 for convenience since CSI0 serves for MIPI CSI-2 interface support, which is likely to receive raw d",
+          "evidence_text": "<html><head><title>[PATCH v10 6/6] ARM: dts: sun8i: v3s: Add support for the ISP - Paul Kocialkowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.93,
+      "android_hal_relevance": 0.93,
+      "ai_relevance": 0,
+      "technical_depth": 0.902,
+      "warnings": []
+    },
+    {
+      "id": "b42f0f8cfbaa9f26",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "published_at": "March 25, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.95,
+      "android_hal_relevance": 0.95,
+      "ai_relevance": 0,
+      "technical_depth": 0.873,
+      "warnings": []
+    },
+    {
+      "id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "published_at": "2026-05-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.829,
+      "warnings": []
+    },
+    {
+      "id": "gemini-75ff3fdc9b53104d",
+      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
+      "title": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support - Paul Kocialkowski",
+      "published_at": "2026-06-13",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support - Paul Kocialkowski",
+          "evidence_text": "<html><head><title>[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support - Paul Kocialkowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-co",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-bf543027580fb52b",
+      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-7-paulk@sys-base.io/",
+      "title": "[PATCH v10 6/6] ARM: dts: sun8i: v3s: Add support for the ISP - Paul Kocialkowski",
+      "published_at": "2026-06-13",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v10 6/6] ARM: dts: sun8i: v3s: Add support for the ISP - Paul Kocialkowski",
+          "evidence_text": "<html><head><title>[PATCH v10 6/6] ARM: dts: sun8i: v3s: Add support for the ISP - Paul Kocialkowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-c00fdbe2a9081995",
+      "url": "https://lore.kernel.org/linux-media/20260613-eccentric-statuesque-centipede-5f8d8a@quoll/",
+      "title": "Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder - Krzysztof Kozlowski",
+      "published_at": "2026-06-13",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder - Krzysztof Kozlowski",
+          "evidence_text": "<html><head><title>Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder - Krzysztof Kozlowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sc",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "2591274899cfdc49",
+      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
+      "title": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support",
+      "published_at": "2026-06-13T15:27:12Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This series adds platform support for the V3s/V3/S3 MIPI CSI-2 and ISP units as well the as A83T MIPI CSI-2 unit in the respective device-trees. The corresponding drivers and dt bindings were merged a long time ago but this series was never actually picked up. It seems more than ready to be merged! Changes since v9: - Split clock definitions export; - Added dedicated v3s d-phy compatible; - Added interrupt to v3s d-phy definition; - Removed a83t board overlays that need more work. Changes since",
+          "evidence_text": "<html><head><title>[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support - Paul Kocialkowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-co",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0,
+      "technical_depth": 0.806,
+      "warnings": []
+    },
+    {
+      "id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-05-27",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.783,
+      "warnings": []
+    },
+    {
+      "id": "0a6ff583fc526ddf",
+      "url": "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
+      "title": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup()",
+      "published_at": "2026-06-13T13:23:14Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "If v4l2_async_register_subdev() fails, or if rdacm21_probe() hits any other error after media_entity_pads_init() is called, the media entity is left uncleaned, potentially leaking resources or leaving it in an invalid state. Similarly, the remove path misses the cleanup. Add media_entity_cleanup() to both the error path in rdacm21_probe() and the rdacm21_remove() function to ensure proper resource release. Fixes: a59f853b3b4b (\"media: i2c: Add driver for RDACM21 camera module\") --- drivers/media",
+          "evidence_text": "<html><head><title>[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup() - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\n",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.74,
+      "warnings": []
+    },
+    {
+      "id": "gemini-631065f0503e1cfe",
+      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-6-paulk@sys-base.io/",
+      "title": "[PATCH v10 5/6] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support - Paul Kocialkowski",
+      "published_at": "2026-06-13",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v10 5/6] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support - Paul Kocialkowski",
+          "evidence_text": "<html><head><title>[PATCH v10 5/6] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support - Paul Kocialkowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sc",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-71e8bf52651b9ede",
+      "url": "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
+      "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Krzysztof Kozlowski",
+      "published_at": "2026-06-13",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Krzysztof Kozlowski",
+          "evidence_text": "<html><head><title>Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Krzysztof Kozlowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pr",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-80c4338a0803ff90",
+      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-5-paulk@sys-base.io/",
+      "title": "[PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Paul Kocialkowski",
+      "published_at": "2026-06-13",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Paul Kocialkowski",
+          "evidence_text": "<html><head><title>[PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Paul Kocialkowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    }
+  ]
+}

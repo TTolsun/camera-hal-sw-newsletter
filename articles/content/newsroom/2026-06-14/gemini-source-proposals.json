@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-14",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-sw-001",
+      "topic_gap": "Camera HAL SW improvements and new features in Android",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Camera HAL",
+        "Camera API",
+        "Camera features"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
+      ],
+      "expected_evidence": [
+        "Camera HAL updates",
+        "Camera API changes",
+        "Camera performance improvements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-002",
+      "topic_gap": "CameraX library updates and new capabilities",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX updates",
+        "CameraX new features",
+        "CameraX release notes"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "expected_evidence": [
+        "CameraX release notes",
+        "New CameraX features",
+        "Bug fixes in CameraX"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-003",
+      "topic_gap": "Linux kernel camera and media subsystem developments relevant to Android HAL",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Linux kernel camera",
+        "V4L2 driver",
+        "ISP support",
+        "media controller"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260613152655.212490-7-paulk@sys-base.io/",
+        "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
+        "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
+        "https://lore.kernel.org/linux-media/20260613152655.212490-5-paulk@sys-base.io/",
+        "https://lore.kernel.org/linux-media/20260613152655.212490-6-paulk@sys-base.io/",
+        "https://lore.kernel.org/linux-media/20260613-eccentric-statuesque-centipede-5f8d8a@quoll/"
+      ],
+      "expected_evidence": [
+        "Linux kernel patches for camera drivers",
+        "V4L2 updates",
+        "ISP driver developments",
+        "Media controller changes"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-004",
+      "topic_gap": "Android compatibility requirements and testing for camera hardware",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android CDD camera",
+        "Camera ITS",
+        "Camera HAL compliance"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cdd",
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Android Compatibility Definition Document (CDD) updates",
+        "Camera ITS test case changes",
+        "Camera HAL compliance requirements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-005",
+      "topic_gap": "Advancements in media processing and encoding relevant to camera output",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3 release notes",
+        "Android video encoding",
+        "A/V sync"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
+      ],
+      "expected_evidence": [
+        "Media3 library release notes",
+        "Improvements in video encoding/decoding",
+        "A/V sync enhancements"
+      ],
+      "risk_notes": []
+    }
+  ]
+}
