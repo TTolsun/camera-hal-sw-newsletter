@@ -8,8 +8,8 @@ API key, runtime secret, prompt 전체 원문, generated artifact 내용은 이 
 
 - [Stage 3 prompt host](../../src/generator/publish/gemini-newsroom-newsletter.js)
 - [Stage 2 source discovery prompt host](../../src/discovery/gemini-source-discovery.js)
-- [Editorial policy](../editorial-policy.md)
-- [Newsletter template](../newsletter-template.md)
+- [Editorial policy](../EDITORIAL_POLICY.md)
+- [Newsletter template](../NEWSLETTER_TEMPLATE.md)
 - [Newsletter policy config](../../src/shared/config/newsletter-policy.json)
 - [Prompt contract tests](../../src/generator/test/contract/prompt-contract.test.js)
 
@@ -59,7 +59,7 @@ Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
 Workflow/Stage: `Newsletters 03 - Editor PR`, Stage 3 전체
 
-주요 입력: newsletter date, audience 설명, `docs/editorial-policy.md`, `docs/newsletter-template.md`, `docs/golden-examples/manual-quality-newsletter.md`
+주요 입력: newsletter date, audience 설명, `docs/EDITORIAL_POLICY.md`, `docs/NEWSLETTER_TEMPLATE.md`, `docs/golden-examples/MANUAL_QUALITY_NEWSLETTER.md`
 
 출력/schema: 별도 schema 없음. 각 LLM stage의 user prompt 일부로 결합됩니다.
 
@@ -111,7 +111,7 @@ Workflow/Stage: Stage 3 `editor attempt <n>/<total>`
 
 출력/schema: `editorSchema`, `articles/content/newsroom/<date>/editor-draft.json`
 
-주요 guardrail: `docs/editorial-policy.md`와 `docs/newsletter-template.md`를 따릅니다. 다음 candidate는 main article로 만들지 않습니다 — `final_selected=false`, watchlist/exclude, missing dated evidence(날짜 근거 없음), `source_gap_risk=true`, `briefing_only`, `reference_only`. image URL은 새로 만들지 않고, `selectedImage`에는 `imageCandidates.url` 중 하나 또는 빈 문자열(empty string)만 씁니다.
+주요 guardrail: `docs/EDITORIAL_POLICY.md`와 `docs/NEWSLETTER_TEMPLATE.md`를 따릅니다. 다음 candidate는 main article로 만들지 않습니다 — `final_selected=false`, watchlist/exclude, missing dated evidence(날짜 근거 없음), `source_gap_risk=true`, `briefing_only`, `reference_only`. image URL은 새로 만들지 않고, `selectedImage`에는 `imageCandidates.url` 중 하나 또는 빈 문자열(empty string)만 씁니다.
 
 ### Editor semantic repair
 

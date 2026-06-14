@@ -2,7 +2,7 @@
 
 `src/shared/data/news-sources.json`은 collector와 newsroom automation이 읽는 기계 판독용 registry(소스 목록)입니다. 코드가 읽는 key는 영어 이름 그대로 둬야 합니다. 한국어 설명을 덧붙이는 것은 괜찮지만, field name을 번역하거나 마음대로 바꾸면 안 됩니다.
 
-`docs/news-sources.md`는 사람이 검토하기 위한 editorial view(편집용 보기)입니다. JSON registry가 없을 때 fallback으로도 쓰이지만, 운영 기준 정본(source of truth)은 `src/shared/data/news-sources.json`입니다.
+`docs/NEWS_SOURCES.md`는 사람이 검토하기 위한 editorial view(편집용 보기)입니다. JSON registry가 없을 때 fallback으로도 쓰이지만, 운영 기준 정본(source of truth)은 `src/shared/data/news-sources.json`입니다.
 
 ## 최상위 필드
 

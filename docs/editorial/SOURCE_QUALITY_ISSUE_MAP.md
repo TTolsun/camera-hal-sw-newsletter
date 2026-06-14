@@ -7,7 +7,7 @@ Source quality(출처 품질)는 "출처 URL과 prompt의 품질이 들쭉날쭉
 각 field가 무엇이고 무엇을 책임지는지 정리합니다.
 
 - `src/shared/data/news-sources.json`: 실행 가능한 source registry입니다.
-- `docs/news-sources.md`와 `docs/config/news-sources-fields.md`: 사람이 읽고 검토하는 surface입니다.
+- `docs/NEWS_SOURCES.md`와 `docs/config/NEWS_SOURCES_FIELDS.md`: 사람이 읽고 검토하는 surface입니다.
 - `source_quality`: 신규 artifact가 쓰는 정식 표현입니다.
 - `source_url_quality`, `main_article_source_allowed` 같은 flat field: 호환성을 위한 mirror(거울 값)일 뿐입니다.
 - `main_article_source_allowed`: source/evidence 정책 전용 field입니다. `finalSelectionEligibility`, score, final selection 결과, HAL signal 출력에 의존하면 안 됩니다.

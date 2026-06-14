@@ -2,7 +2,7 @@
 
 이 문서는 뉴스 출처를 어떻게 등록하고 관리하는지 설명합니다.
 
-출처의 정본(source of truth)은 `src/shared/data/news-sources.json`입니다. 이 JSON은 candidate collector(`src/shared/cli/collect-news-candidates.js`)가 읽는 구조화된 registry입니다. 예전 방식인 `docs/news-sources.md`는 사람이 읽는 editorial guidance이며, JSON registry가 없을 때만 fallback으로 쓰입니다.
+출처의 정본(source of truth)은 `src/shared/data/news-sources.json`입니다. 이 JSON은 candidate collector(`src/shared/cli/collect-news-candidates.js`)가 읽는 구조화된 registry입니다. 예전 방식인 `docs/NEWS_SOURCES.md`는 사람이 읽는 editorial guidance이며, JSON registry가 없을 때만 fallback으로 쓰입니다.
 
 registry를 수정한 뒤에는 canonical JSON formatting을 유지하고 `npm.cmd run validate:config`를 통과시켜야 합니다.
 
