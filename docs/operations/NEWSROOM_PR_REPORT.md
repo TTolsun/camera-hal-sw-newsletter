@@ -1,6 +1,6 @@
 # Newsroom PR Report 읽는 법
 
-이 문서는 newsroom workflow가 만든 PR body를 검토할 때 어떤 순서로 볼지 정리합니다. 자세한 gate(검증 관문) 계약은 `docs/newsroom-workflow.md`를 기준으로 확인하세요.
+이 문서는 newsroom workflow가 만든 PR body를 검토할 때 어떤 순서로 볼지 정리합니다. 자세한 gate(검증 관문) 계약은 `docs/NEWSROOM_WORKFLOW.md`를 기준으로 확인하세요.
 
 ## 먼저 볼 것
 

@@ -76,7 +76,7 @@ token은 GitHub Secrets에서만 읽고, log, artifact, PR body 어디에도 출
 ## Role 1. Candidate Collector
 
 - `src/shared/data/news-sources.json`의 enabled source를 읽습니다.
-- JSON registry가 없을 때만 `docs/news-sources.md`의 `- Name: URL` 형식을 fallback으로 사용합니다.
+- JSON registry가 없을 때만 `docs/NEWS_SOURCES.md`의 `- Name: URL` 형식을 fallback으로 사용합니다.
 - RSS 또는 HTML page에서 후보를 수집하고 `articles/content/collected-news/YYYY-MM-DD/candidates.json`을 생성합니다.
 - media/community/candidate-only source는 최종 기사로 올리기 전에 공식 출처 교차 확인이 필요합니다.
 

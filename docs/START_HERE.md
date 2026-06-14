@@ -9,11 +9,11 @@
 | 문서 | 역할 |
 | --- | --- |
 | [README.md](../README.md) | 짧은 저장소 entry 문서입니다. |
-| [glossary.md](glossary.md) | newsroom과 artifact 용어를 설명합니다. |
-| [newsroom-workflow.md](newsroom-workflow.md) | 후보 수집부터 PR 생성까지의 운영 흐름입니다. |
+| [GLOSSARY.md](GLOSSARY.md) | newsroom과 artifact 용어를 설명합니다. |
+| [NEWSROOM_WORKFLOW.md](NEWSROOM_WORKFLOW.md) | 후보 수집부터 PR 생성까지의 운영 흐름입니다. |
 | [operations/README.md](operations/README.md) | 수동 실행, PR review, release, artifact review 순서입니다. |
-| [config/action-variables.md](config/action-variables.md) | GitHub Actions Secret과 Variable 설명입니다. |
-| [config/news-sources-fields.md](config/news-sources-fields.md) | `src/shared/data/news-sources.json` field 계약입니다. |
+| [config/ACTION_VARIABLES.md](config/ACTION_VARIABLES.md) | GitHub Actions Secret과 Variable 설명입니다. |
+| [config/NEWS_SOURCES_FIELDS.md](config/NEWS_SOURCES_FIELDS.md) | `src/shared/data/news-sources.json` field 계약입니다. |
 | [src/AGENTS.md](../src/AGENTS.md) | #262 재구성 후 `src/` layer 구조와 구현·테스트 규칙을 설명합니다. |
 
 Newsletter Policy의 현재 값은 `src/shared/config/newsletter-policy.json`이 정본(source of truth)입니다. 대표 운영 문서에 들어가는 generated Newsletter Policy block은 스크립트가 자동으로 갱신합니다. 일반 문서에서 article count(기사 수) 같은 숫자를 손으로 고치지 마세요.
@@ -22,13 +22,13 @@ Newsletter Policy의 현재 값은 `src/shared/config/newsletter-policy.json`이
 
 | 경로 | 역할 |
 | --- | --- |
-| `docs/glossary.md` | 코드 식별자와 artifact 이름의 의미를 설명합니다. |
+| `docs/GLOSSARY.md` | 코드 식별자와 artifact 이름의 의미를 설명합니다. |
 | `docs/README.md` | docs 하위 폴더와 현재 운영 문서 기준을 안내합니다. |
-| `docs/newsroom-workflow.md` | newsroom pipeline, quality gate, artifact, GitHub Actions 운영을 설명합니다. |
-| `docs/editorial-policy.md` | newsletter editorial policy와 scope 판단 기준입니다. |
-| `docs/news-sources.md` | 사람이 검토하는 source editorial view입니다. |
-| `docs/news-sources-guide.md` | source registry 수정 절차입니다. |
-| `docs/newsletter-template.md` | newsletter 구조와 template 계약입니다. |
+| `docs/NEWSROOM_WORKFLOW.md` | newsroom pipeline, quality gate, artifact, GitHub Actions 운영을 설명합니다. |
+| `docs/EDITORIAL_POLICY.md` | newsletter editorial policy와 scope 판단 기준입니다. |
+| `docs/NEWS_SOURCES.md` | 사람이 검토하는 source editorial view입니다. |
+| `docs/NEWS_SOURCES_GUIDE.md` | source registry 수정 절차입니다. |
+| `docs/NEWSLETTER_TEMPLATE.md` | newsletter 구조와 template 계약입니다. |
 | `docs/config/` | runtime config와 source registry field 설명입니다. |
 | `docs/operations/` | 반복 운영 절차의 짧은 안내입니다. |
 | `docs/AGENTS.md` | docs 폴더의 현재 운영 문서 기준과 링크 유지 규칙입니다. |

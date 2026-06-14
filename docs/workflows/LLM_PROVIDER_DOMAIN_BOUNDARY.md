@@ -36,7 +36,7 @@ src/shared/llm/**
 src/shared/adapters/llm/**
 src/shared/test/**/llm-response/
 src/generator/test/**/llm-response/
-docs/workflows/llm-provider-domain-boundary.md
+docs/workflows/LLM_PROVIDER_DOMAIN_BOUNDARY.md
 ```
 
 즉 renderer, validator, PR body, publication status 코드는 provider raw response shape가 아니라, 정규화된 `NewsletterIssue`만 읽어야 합니다.

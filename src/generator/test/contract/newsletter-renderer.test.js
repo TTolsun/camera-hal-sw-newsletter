@@ -173,10 +173,10 @@ test('shared site header renders consistent root-relative links', () => {
 
   assert.match(homeHeader, /href="index\.html">Home<\/a>/);
   assert.match(homeHeader, /href="archive\.html">Archive<\/a>/);
-  assert.doesNotMatch(homeHeader, /docs\/news-sources\.md/);
+  assert.doesNotMatch(homeHeader, /docs\/NEWS_SOURCES\.md/);
   assert.match(issueHeader, /href="\.\.\/\.\.\/index\.html">Home<\/a>/);
   assert.match(issueHeader, /href="\.\.\/\.\.\/archive\.html">Archive<\/a>/);
-  assert.doesNotMatch(issueHeader, /\.\.\/\.\.\/docs\/news-sources\.md/);
+  assert.doesNotMatch(issueHeader, /\.\.\/\.\.\/docs\/NEWS_SOURCES\.md/);
   assert.deepEqual(siteNavLabels(`<header class="site-header" data-site-header data-site-root="../../"></header><script src="../../assets/js/site-header.js" defer></script>`).slice(0, 3), [
     'Home',
     'Archive',

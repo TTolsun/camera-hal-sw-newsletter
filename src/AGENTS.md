@@ -35,7 +35,7 @@
 - 모듈 간 순환 의존성(circular dependency)을 만들지 마세요. `npm.cmd run check:circular-dependencies`가 `src/**`의 상대경로 require 그래프를 분석해 순환을 검출하며, `validate`와 `validate:post-generation` 체인에 포함됩니다. 현재 baseline은 순환 0개입니다.
 - 이 검사는 그래프 기준이므로 파일을 옮겨서 순환을 숨길 수 없습니다. 순환이 생기면 shared contract를 `src/shared/common/`(또는 적절한 shared 모듈)으로 분리해 한 방향 의존으로 끊으세요.
 - layer 의존은 한 방향입니다: `shared ← collector ← discovery ← generator`. 즉 `shared/`는 다른 layer를 import하지 않고, `collector/`·`discovery/`·`generator/`는 자신보다 하위 layer만 import합니다. `shared/common/`은 도메인 모듈(`collect/`, `llm/`, `evidence/` 등 상위 동작 모듈)을 import하지 않습니다. 실행 흐름은 collect -> generate -> render/llm -> validate 한 방향입니다.
-- provider별 raw response 구조(Gemini/Internal의 원시 응답 shape)는 `src/shared/llm/`과 `src/shared/adapters/llm/`(과 `*/test/**/llm-response/` fixture) 밖에서 참조하지 마세요. 도메인 모듈은 adapter가 정규화한 모델만 다룹니다. `npm.cmd run check:domain-model-boundary`가 이 경계를 강제하며, 허용 경계와 구체 marker 목록은 `docs/workflows/llm-provider-domain-boundary.md`에 있습니다. Internal/Gemini provider의 request/response 차이는 provider client 안에만 가둡니다.
+- provider별 raw response 구조(Gemini/Internal의 원시 응답 shape)는 `src/shared/llm/`과 `src/shared/adapters/llm/`(과 `*/test/**/llm-response/` fixture) 밖에서 참조하지 마세요. 도메인 모듈은 adapter가 정규화한 모델만 다룹니다. `npm.cmd run check:domain-model-boundary`가 이 경계를 강제하며, 허용 경계와 구체 marker 목록은 `docs/workflows/LLM_PROVIDER_DOMAIN_BOUNDARY.md`에 있습니다. Internal/Gemini provider의 request/response 차이는 provider client 안에만 가둡니다.
 
 ## 구현 규칙 (Implementation Rules)
 

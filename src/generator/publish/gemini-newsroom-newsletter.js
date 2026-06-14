@@ -2846,15 +2846,15 @@ async function main() {
   writeGenerationStatus(buildGenerationStatus({ date, status: 'STARTED' }));
 
   const candidatePath = candidateInput.path;
-  const sourcesPath = path.join(root, 'docs', 'news-sources.md');
-  const editorialPolicyPath = path.join(root, 'docs', 'editorial-policy.md');
-  const newsletterTemplatePath = path.join(root, 'docs', 'newsletter-template.md');
-  const goldenExamplePath = path.join(root, 'docs', 'golden-examples', 'manual-quality-newsletter.md');
+  const sourcesPath = path.join(root, 'docs', 'NEWS_SOURCES.md');
+  const editorialPolicyPath = path.join(root, 'docs', 'EDITORIAL_POLICY.md');
+  const newsletterTemplatePath = path.join(root, 'docs', 'NEWSLETTER_TEMPLATE.md');
+  const goldenExamplePath = path.join(root, 'docs', 'golden-examples', 'MANUAL_QUALITY_NEWSLETTER.md');
   const newsroomDir = artifactNewsroomDir(root, date);
   const newsletterDir = path.join(root, 'articles', 'newsletters', date);
 
   if (!fs.existsSync(sourceRegistryPath) && !fs.existsSync(sourcesPath)) {
-    fail('Missing src/shared/data/news-sources.json and docs/news-sources.md.');
+    fail('Missing src/shared/data/news-sources.json and docs/NEWS_SOURCES.md.');
   }
 
   const candidates = readJson(candidatePath);
@@ -3004,17 +3004,17 @@ async function main() {
   const commonContext = [
     `Newsletter date: ${date}`,
     'Audience: AOSP Camera / Camera HAL / Camera Driver / SoC Platform / C++ engineer',
-    '수집된 candidate JSON, src/shared/data/news-sources.json, docs/news-sources.md, 아래 editorial documents만 사용하세요. web browsing은 하지 마세요.',
+    '수집된 candidate JSON, src/shared/data/news-sources.json, docs/NEWS_SOURCES.md, 아래 editorial documents만 사용하세요. web browsing은 하지 마세요.',
     'source names와 source URLs는 그대로 유지하세요. 확인된 사실과 해석을 분리하세요.',
     '최종 newsletter text는 한국어로 작성하세요. 공식 title, source name, product name, URL, code identifier, JSON key, enum 값은 원문을 유지할 수 있습니다.',
     '',
-    'docs/editorial-policy.md:',
+    'docs/EDITORIAL_POLICY.md:',
     editorialPolicy,
     '',
-    'docs/newsletter-template.md:',
+    'docs/NEWSLETTER_TEMPLATE.md:',
     newsletterTemplate,
     '',
-    'docs/golden-examples/manual-quality-newsletter.md:',
+    'docs/golden-examples/MANUAL_QUALITY_NEWSLETTER.md:',
     goldenExample,
     '',
     'golden example은 style과 structure reference로만 사용하세요. 현재 candidate JSON에 없는 facts, dates, versions, API/component names, behavior changes, sources, action items는 복사하지 마세요.'
@@ -3027,7 +3027,7 @@ async function main() {
     'source names, source URLs, title, candidate_id는 echo-only matching key로 그대로 유지하세요.',
     '한국어 evidence note를 작성할 수 있지만, public newsletter prose나 최종 기사 문장은 작성하지 마세요.',
     '',
-    'docs/editorial-policy.md:',
+    'docs/EDITORIAL_POLICY.md:',
     editorialPolicy
   ].join('\n');
 
@@ -3136,7 +3136,7 @@ async function main() {
         '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI editor입니다.',
         'AOSP Camera, Camera HAL, Camera Driver, SoC platform engineer가 10분 안에 읽을 수 있는 한국어 technical newsletter draft를 작성하세요.',
         dateFramingGuardrail(),
-        'docs/editorial-policy.md와 docs/newsletter-template.md를 정확히 따르세요.',
+        'docs/EDITORIAL_POLICY.md와 docs/NEWSLETTER_TEMPLATE.md를 정확히 따르세요.',
         `중복되지 않는 source material이 충분하면 Newsletter Policy range (${articleCountRangeText()}) 안에서 main articles를 작성하세요.`,
         `Final main article count는 ${publishGateCriteriaText()}를 만족해야 합니다.`,
         'final-selected article capsules를 main article inputs로 사용하세요. final_selected=false, finalSelectionEligibility=watchlist/exclude, hasDatedEvidence 없는 isWatchPage=true, main_eligible=false, source_gap_risk=true, briefing_only, reference_only candidate를 main article로 만들지 마세요.',
@@ -3186,7 +3186,7 @@ async function main() {
           '이번 발행은 CONTEXT 모드입니다. 카메라 코어 직접 변경 기사가 없으므로 메인 기사를 억지로 만들지 마세요.',
           '"이번 기간 카메라 코어는 조용했습니다"를 명시하고, SoC/도구/표준 변화가 Camera HAL/driver/검증 워크플로우에 왜·어떻게 닿는지 실무 레이더 관점으로 정리하세요.',
           '근거 없는 단정을 금지합니다. "~한 검증 포인트를 점검할 만하다"처럼 검증 가능한 행동으로 연결하세요.',
-          'editorial-policy.md의 해석 기준(stream/buffer/metadata/request/result, CTS/VTS/Camera ITS, thermal/latency/frame drop/memory/contention)으로 relevance를 설명하세요.'
+          'EDITORIAL_POLICY.md의 해석 기준(stream/buffer/metadata/request/result, CTS/VTS/Camera ITS, thermal/latency/frame drop/memory/contention)으로 relevance를 설명하세요.'
         ].join('\n') : '',
         publishMode === 'QUIET' ? [
           '이번 발행은 QUIET 모드입니다. 발행할 만한 신호가 빈약합니다.',
