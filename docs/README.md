@@ -1,8 +1,14 @@
-# docs
+# 📂 docs
 
-이 폴더에는 지금 운영에 쓰는 문서만 둡니다. 운영 문서, 설정 문서, source guide(소스 안내), evidence contract(근거 계약), prompt input 예시가 여기에 있습니다. 작업 도중에 생긴 중간 산출물은 저장소 문서로 남기지 않습니다.
+> **한 줄 요약** — 지금 운영에 쓰는 문서만 모아둔 폴더입니다. 운영·설정·source·evidence·prompt 문서가 여기에 있습니다.
 
-## 주요 경로
+이 폴더에는 지금 운영에 쓰는 문서만 둡니다. 운영 문서, 설정 문서, source guide(소스 안내), evidence contract(근거 계약), prompt input 예시가 여기에 있습니다.
+
+> ⚠️ 작업 도중에 생긴 중간 산출물은 저장소 문서로 남기지 않습니다.
+
+## 🗂️ 주요 경로
+
+폴더와 대표 문서가 무엇을 다루는지 정리했습니다.
 
 | 경로 | 역할 |
 | --- | --- |
@@ -17,11 +23,13 @@
 | `golden-examples/` | generator prompt에 들어가는 수동 품질 예시입니다. |
 | `AGENTS.md` | docs folder 수정 시 현재 운영 문서 기준과 링크 유지 규칙입니다. |
 
-## 작업 규칙
+## 📝 작업 규칙
 
-문서 한글화, 현재 운영 문서 기준, worklog/audit 금지, 링크 유지 같은 구속력 있는 규칙의 정본은 [docs/AGENTS.md](AGENTS.md)입니다. docs를 수정하기 전에 먼저 읽으세요.
+> 📌 문서 한글화, 현재 운영 문서 기준, worklog/audit 금지, 링크 유지 같은 구속력 있는 규칙의 정본은 [docs/AGENTS.md](AGENTS.md)입니다. docs를 수정하기 전에 먼저 읽으세요.
 
-## 검증
+## 🔍 검증
+
+문서를 고친 뒤에는 아래 검증을 돌립니다.
 
 ```powershell
 npm.cmd run validate:localization
