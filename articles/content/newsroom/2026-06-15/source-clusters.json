@@ -59,8 +59,8 @@
       "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "canonical_title": "CameraX Release Notes - CameraX 1.6.0",
-      "candidate_count": 4,
-      "duplicate_count": 3,
+      "candidate_count": 3,
+      "duplicate_count": 2,
       "candidates": [
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
@@ -71,14 +71,7 @@
         },
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "title": "1.6.1",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "title": "1.3.0-beta02",
+          "title": "CameraX Release Notes - CameraX 1.6.1",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -97,20 +90,13 @@
       "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "canonical_title": "Test camera images using automation",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "title": "Test camera images using automation",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-          "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -121,13 +107,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "canonical_title": "17 Things to know for Android developers at Google I/O",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
           "title": "17 Things to know for Android developers at Google I/O",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+          "title": "Android Developers Blog: 17 Things to know for Android developers at Google I/O",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -138,13 +131,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_title": "Top 3 updates for Android developer productivity",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
           "title": "Top 3 updates for Android developer productivity",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -206,20 +206,13 @@
       "cluster_key": "https://source.android.com/docs/compatibility",
       "canonical_url": "https://source.android.com/docs/compatibility",
       "canonical_title": "Compatibility",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility",
           "title": "Compatibility",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://source.android.com/docs/compatibility",
-          "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -230,13 +223,20 @@
       "cluster_key": "https://source.android.com/docs/core/camera",
       "canonical_url": "https://source.android.com/docs/core/camera",
       "canonical_title": "Camera &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/core/camera",
           "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -247,13 +247,20 @@
       "cluster_key": "https://source.android.com/docs/whatsnew",
       "canonical_url": "https://source.android.com/docs/whatsnew",
       "canonical_title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/whatsnew",
           "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/whatsnew",
+          "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -264,20 +271,13 @@
       "cluster_key": "https://source.android.com/docs/compatibility/cdd",
       "canonical_url": "https://source.android.com/docs/compatibility/cdd",
       "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility/cdd",
           "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://source.android.com/docs/compatibility/cdd",
-          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -352,30 +352,6 @@
       ]
     },
     {
-      "cluster_id": "0104de6c14cd0ee0",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614155609.3107600-6-michael.bommarito@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614155609.3107600-6-michael.bommarito@gmail.com/",
-      "canonical_title": "[PATCH v2 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-6-michael.bommarito@gmail.com/",
-          "title": "[PATCH v2 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-6-michael.bommarito@gmail.com/",
-          "title": "[PATCH v2 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity - Michael Bommarito",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "61c963a289f63e09",
       "cluster_key": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
       "canonical_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
@@ -427,72 +403,17 @@
       ]
     },
     {
-      "cluster_id": "cc548ef1a9ebbaf9",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614155609.3107600-5-michael.bommarito@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614155609.3107600-5-michael.bommarito@gmail.com/",
-      "canonical_title": "[PATCH v2 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-5-michael.bommarito@gmail.com/",
-          "title": "[PATCH v2 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-5-michael.bommarito@gmail.com/",
-          "title": "[PATCH v2 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor - Michael Bommarito",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "04c3e4ee361cc22a",
-      "cluster_key": "https://lore.kernel.org/linux-media/ai6smn4bnbaimxct@collins",
-      "canonical_url": "https://lore.kernel.org/linux-media/ai6smn4BnbAIMXCt@collins/",
-      "canonical_title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/ai6smn4BnbAIMXCt@collins/",
-          "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/ai6smn4BnbAIMXCt@collins/",
-          "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Paul Kocialkowski",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "a7d35653307227c6",
       "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel",
       "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
       "canonical_title": "The libcamera-devel Archives",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
           "title": "The libcamera-devel Archives",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
-          "title": "The libcamera-devel Archives",
-          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -567,71 +488,6 @@
       ]
     },
     {
-      "cluster_id": "ffc06b8ee91fe729",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614155609.3107600-2-michael.bommarito@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614155609.3107600-2-michael.bommarito@gmail.com/",
-      "canonical_title": "[PATCH v2 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-2-michael.bommarito@gmail.com/",
-          "title": "[PATCH v2 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-2-michael.bommarito@gmail.com/",
-          "title": "[PATCH v2 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts - Michael Bommarito",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "56b550e09d60ac84",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614155609.3107600-1-michael.bommarito@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614155609.3107600-1-michael.bommarito@gmail.com/",
-      "canonical_title": "[PATCH v2 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-1-michael.bommarito@gmail.com/",
-          "title": "[PATCH v2 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-1-michael.bommarito@gmail.com/",
-          "title": "[PATCH v2 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts - Michael Bommarito",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "4038dd8dec37c19a",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614145113.84243-2-daniel@quora.org",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614145113.84243-2-daniel@quora.org/",
-      "canonical_title": "[PATCH v2 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614145113.84243-2-daniel@quora.org/",
-          "title": "[PATCH v2 2/2] arm64: dts: qcom: hamoa: Reserve low IOVA range for Iris",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "a8865e6c6b3d243f",
       "cluster_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
@@ -649,16 +505,112 @@
       ]
     },
     {
-      "cluster_id": "1ae8b4a25ecc8173",
-      "cluster_key": "https://lore.kernel.org/linux-media/178144969600.60470.3698645248756209453@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/178144969600.60470.3698645248756209453@gmail.com/",
-      "canonical_title": "[BUG] KASAN: slab-use-after-free in __list_del_entry_valid_or_report from media/go7007",
+      "cluster_id": "d42dad6bd58f5504",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com/",
+          "title": "[PATCH 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com/",
+          "title": "[PATCH 11/22] media: platform: csisp: Add missing media_entity_cleanup() - Biren Pandya",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4d01cec9ed050042",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v2 3/3] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com/",
+          "title": "[PATCH v2 3/3] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com/",
+          "title": "[PATCH v2 3/3] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6100f4ae4745bf9c",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v2 2/3] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com/",
+          "title": "[PATCH v2 2/3] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com/",
+          "title": "[PATCH v2 2/3] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f688966d4697215f",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v2 1/3] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com/",
+          "title": "[PATCH v2 1/3] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com/",
+          "title": "[PATCH v2 1/3] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2ea10d1b83ee8a49",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614182714.7999-5-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614182714.7999-5-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v2 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/178144969600.60470.3698645248756209453@gmail.com/",
-          "title": "[BUG] KASAN: slab-use-after-free in __list_del_entry_valid_or_report from media/go7007",
+          "url": "https://lore.kernel.org/linux-media/20260614182714.7999-5-birenpandya@gmail.com/",
+          "title": "[PATCH v2 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -666,17 +618,72 @@
       ]
     },
     {
-      "cluster_id": "d73fd210166bd7b0",
-      "cluster_key": "https://lore.kernel.org/linux-media/dc00c5d0-124d-45c8-97d2-7f8fafca9795@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/dc00c5d0-124d-45c8-97d2-7f8fafca9795@gmail.com/",
-      "canonical_title": "Re: [BUG] OV02C10 on Dell 16 Premium DA16250 (ARL): INT3472 handshake-derived \"dvdd\" regulator registered but never linked to sensor, sensor probe fails with -EREMOTEIO",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "cluster_id": "bec4665d87d002c4",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v2 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup()",
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/dc00c5d0-124d-45c8-97d2-7f8fafca9795@gmail.com/",
-          "title": "Re: [BUG] OV02C10 on Dell 16 Premium DA16250 (ARL): INT3472 handshake-derived \"dvdd\" regulator registered but never linked to sensor, sensor probe fails with -EREMOTEIO",
+          "url": "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com/",
+          "title": "[PATCH v2 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup()",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com/",
+          "title": "[PATCH v2 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup() - Biren Pandya",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a1811a59b4e1c372",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH 10/22] media: platform: rcar-csi2: Add missing media_entity_cleanup()",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com/",
+          "title": "[PATCH 10/22] media: platform: rcar-csi2: Add missing media_entity_cleanup()",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com/",
+          "title": "[PATCH 10/22] media: platform: rcar-csi2: Add missing media_entity_cleanup() - Biren Pandya",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5fe1f6259e859a52",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v2 21/22] media: usb: dvb-usb-v2: Add missing media_entity_cleanup()",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com/",
+          "title": "[PATCH v2 21/22] media: usb: dvb-usb-v2: Add missing media_entity_cleanup()",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com/",
+          "title": "[PATCH v2 21/22] media: usb: dvb-usb-v2: Add missing media_entity_cleanup() - Biren Pandya",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -700,6 +707,30 @@
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
           "title": "Media3 Release Notes - Media3 1.10.1",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d4a0acfc0ac6ad6e",
+      "cluster_key": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -741,6 +772,91 @@
       ]
     },
     {
+      "cluster_id": "a279bb0df20018e4",
+      "cluster_key": "https://developer.android.com/reference/kotlin/androidx/camera/video/groupablefeatures",
+      "canonical_url": "https://developer.android.com/reference/kotlin/androidx/camera/video/GroupableFeatures",
+      "canonical_title": "GroupableFeatures",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/kotlin/androidx/camera/video/GroupableFeatures",
+          "title": "GroupableFeatures",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "eb09ee752aa3ba14",
+      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/cameraeffect",
+      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
+      "canonical_title": "CameraEffect",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
+          "title": "CameraEffect",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "520fe52c7e358499",
+      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/imageanalysis",
+      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
+      "canonical_title": "ImageAnalysis",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
+          "title": "ImageAnalysis",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f64d4b5cb00fe978",
+      "cluster_key": "https://developer.android.com/reference/androidx/camera/video/highspeedvideosessionconfig",
+      "canonical_url": "https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig",
+      "canonical_title": "HighSpeedVideoSessionConfig",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig",
+          "title": "HighSpeedVideoSessionConfig",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3cfe4e1c81ca8501",
+      "cluster_key": "https://developer.android.com/reference/androidx/camera/extensions/extensionsessionconfig",
+      "canonical_url": "https://developer.android.com/reference/androidx/camera/extensions/ExtensionSessionConfig",
+      "canonical_title": "ExtensionSessionConfig",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/androidx/camera/extensions/ExtensionSessionConfig",
+          "title": "ExtensionSessionConfig",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "83920430c1be5b76",
       "cluster_key": "https://source.android.com/docs/whatsnew/release-notes",
       "canonical_url": "https://source.android.com/docs/whatsnew/release-notes",
@@ -751,6 +867,40 @@
         {
           "url": "https://source.android.com/docs/whatsnew/release-notes",
           "title": "Release notes",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0779844e3674fa79",
+      "cluster_key": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+      "canonical_url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+      "canonical_title": "Latest security bulletins",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+          "title": "Latest security bulletins",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "584a6a0cadfdd7d4",
+      "cluster_key": "https://source.android.com/docs/whatsnew/latest-cdd",
+      "canonical_url": "https://source.android.com/docs/whatsnew/latest-cdd",
+      "canonical_title": "Latest Compatibility Definition Document (CDD)",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/latest-cdd",
+          "title": "Latest Compatibility Definition Document (CDD)",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
