@@ -3,10 +3,13 @@ const test = require('node:test');
 
 const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
+  HARD_BLOCK_REASON_CODES,
   attachRelatedContextToSelected,
   candidateGroupKey,
   compactContextCandidate,
+  explicitHardBlockedGroups,
   groupCoverageSummary,
+  inferReasonCode,
   normalizeCanonicalUrlStripAnchor,
   normalizeSourceUrlPreserveAnchor
 } = require('../../../common/article-groups');
@@ -116,6 +119,38 @@ test('group coverage summary reports missing, overlap, and demotion reason issue
   });
   assert.equal(hardBlockedAndDemoted.ok, false);
   assert.deepEqual(hardBlockedAndDemoted.hard_blocked_demoted_overlap_group_keys, ['group-a']);
+});
+
+test('inferReasonCode coerces blocked-context family codes to a valid hard-block reason', () => {
+  // editor/repair가 blocked_context 오류 type을 reason_code로 그대로 흘려 보낼 때,
+  // 결정론 보정이 유효 hard-block enum으로 정규화해야 group-state 검증이 통과한다.
+  for (const raw of [
+    'blocked_context_url_used_as_article_source',
+    'blocked_context_title_used_as_independent_headline',
+    'parent_roundup_context_only'
+  ]) {
+    const coerced = inferReasonCode(raw);
+    assert.equal(
+      coerced,
+      'blocked_source_quality',
+      `expected ${raw} to coerce to blocked_source_quality, got ${coerced}`
+    );
+    assert.ok(HARD_BLOCK_REASON_CODES.includes(coerced));
+  }
+});
+
+test('explicitHardBlockedGroups normalizes a blocked-context reason code into a valid enum', () => {
+  // PR #614 재현: repair가 android_native_tooling_workflow를 blocked_context 코드로 hard-block.
+  const groups = explicitHardBlockedGroups({
+    hard_blocked_groups: [
+      { article_group_key: 'android_native_tooling_workflow', reason_code: 'blocked_context_url_used_as_article_source' }
+    ]
+  });
+  assert.equal(groups.length, 1);
+  assert.ok(
+    HARD_BLOCK_REASON_CODES.includes(groups[0].reason_code),
+    `expected a valid hard-block reason code, got ${groups[0].reason_code}`
+  );
 });
 
 test('attachRelatedContextToSelected drops the selected article own exact URL but keeps anchor siblings and other URLs', () => {
