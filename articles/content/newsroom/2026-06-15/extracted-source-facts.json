@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "b42f0f8cfbaa9f26",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "published_at": "March 25, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"zh-CN-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develope",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.95,
+      "android_hal_relevance": 0.95,
+      "ai_relevance": 0,
+      "technical_depth": 0.873,
+      "warnings": []
+    },
+    {
+      "id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "published_at": "2026-05-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.829,
+      "warnings": []
+    },
+    {
+      "id": "gemini-23ffe659d2f4943f",
+      "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-2-michael.bommarito@gmail.com/",
+      "title": "[PATCH v2 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts - Michael Bommarito",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v2 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts - Michael Bommarito",
+          "evidence_text": "<html><head><title>[PATCH v2 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-6ecb9a7dec526d88",
+      "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-1-michael.bommarito@gmail.com/",
+      "title": "[PATCH v2 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts - Michael Bommarito",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v2 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts - Michael Bommarito",
+          "evidence_text": "<html><head><title>[PATCH v2 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sc",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-05-27",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.783,
+      "warnings": []
+    },
+    {
+      "id": "fc3ecaa7eecee678",
+      "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-2-michael.bommarito@gmail.com/",
+      "title": "[PATCH v2 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts",
+      "published_at": "2026-06-14T15:56:15Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The stateless HEVC and AV1 controls carry tile counts that several SoC decoder drivers consume as loop bounds when laying out fixed-size hardware descriptor buffers, but std_validate_compound() does not bound them. For V4L2_CTRL_TYPE_HEVC_PPS with tiling enabled, num_tile_columns_minus1 and num_tile_rows_minus1 (u8) drive loops over column_width_minus1[20] and row_height_minus1[22]. For V4L2_CTRL_TYPE_AV1_FRAME, tile_info.tile_cols and tile_rows (u8) bound loops over the mi_*_starts[] / *_in_sbs",
+          "evidence_text": "<html><head><title>[PATCH v2 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "7d27987171c230f4",
+      "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-1-michael.bommarito@gmail.com/",
+      "title": "[PATCH v2 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts",
+      "published_at": "2026-06-14T15:56:14Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The stateless HEVC and AV1 V4L2 controls carry tile counts that several SoC decoder drivers consume as loop bounds when laying out fixed-size hardware descriptor buffers, but std_validate_compound() does not bound them. A process with access to a /dev/videoN stateless decoder (on a typical desktop or SBC, the active-seat local user via the logind/udev uaccess ACL, no extra capability) can set a HEVC PPS or AV1 frame control with a tile count far beyond the array capacity the drivers assume, maki",
+          "evidence_text": "<html><head><title>[PATCH v2 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sc",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "b5186961bf791dd0",
+      "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-6-michael.bommarito@gmail.com/",
+      "title": "[PATCH v2 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity",
+      "published_at": "2026-06-14T15:56:21Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "vdec_av1_slice_setup_tile() copies tile_cols + 1 / tile_rows + 1 start positions into mi_col_starts[] / mi_row_starts[], which hold V4L2_AV1_MAX_TILE_COLS + 1 / V4L2_AV1_MAX_TILE_ROWS + 1 entries. tile_cols and tile_rows come straight from the bitstream; bound the copy to the array capacity so the accesses stay in range. Fixes: 0934d3759615 (\"media: mediatek: vcodec: separate decoder and encoder\") Signed-off-by: Michael Bommarito Assisted-by: Claude:claude-opus-4-8 --- .../mediatek/vcodec/decode",
+          "evidence_text": "<html><head><title>[PATCH v2 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.74,
+      "warnings": []
+    },
+    {
+      "id": "gemini-33d3b12e983cd2e1",
+      "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-5-michael.bommarito@gmail.com/",
+      "title": "[PATCH v2 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor - Michael Bommarito",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v2 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor - Michael Bommarito",
+          "evidence_text": "<html><head><title>[PATCH v2 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen an",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-578eba875ab86bf8",
+      "url": "https://lore.kernel.org/linux-media/ai6smn4BnbAIMXCt@collins/",
+      "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Paul Kocialkowski",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Paul Kocialkowski",
+          "evidence_text": "<html><head><title>Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Paul Kocialkowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pref",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-c2a5fa239e7ca298",
+      "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-6-michael.bommarito@gmail.com/",
+      "title": "[PATCH v2 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity - Michael Bommarito",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v2 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity - Michael Bommarito",
+          "evidence_text": "<html><head><title>[PATCH v2 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "8e2a4051ac992ecc",
+      "url": "https://lore.kernel.org/linux-media/20260614155609.3107600-5-michael.bommarito@gmail.com/",
+      "title": "[PATCH v2 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor",
+      "published_at": "2026-06-14T15:56:20Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "rockchip_vpu981_av1_dec_set_tile_info() divides context_update_tile_id by tile_info->tile_cols and writes one descriptor per tile into the tile_info DMA buffer, sized for AV1_MAX_TILES. tile_cols / tile_rows come straight from the bitstream; reject a zero column or row count and bound the grid to AV1_MAX_TILES so the division is safe and the writes stay in the buffer. Fixes: 727a400686a2 (\"media: verisilicon: Add Rockchip AV1 decoder\") Signed-off-by: Michael Bommarito Assisted-by: Claude:claude-",
+          "evidence_text": "<html><head><title>[PATCH v2 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen an",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.692,
+      "warnings": []
+    }
+  ]
+}
