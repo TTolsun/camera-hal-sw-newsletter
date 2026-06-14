@@ -7,7 +7,7 @@ const test = require('node:test');
 const {
   linkedEvidencePromptGuardrails,
   sourceExtractionPromptGuardrails
-} = require('../../../generator/publish/newsletter-prompts');
+} = require('../../../generator/reporter/newsletter-prompts');
 
 test('LLM prompt guardrails prohibit linked evidence overclaim without exposing payloads', () => {
   const guardrails = linkedEvidencePromptGuardrails();

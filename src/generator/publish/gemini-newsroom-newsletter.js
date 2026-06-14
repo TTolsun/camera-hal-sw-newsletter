@@ -205,7 +205,7 @@ const {
   cameraDeveloperToolingFactCheckPrompt,
   articleQualityVerdictPrompt,
   dateFramingGuardrail
-} = require('./newsletter-prompts');
+} = require('../reporter/newsletter-prompts');
 const {
   numberOrDefault,
   stringOrEmpty,

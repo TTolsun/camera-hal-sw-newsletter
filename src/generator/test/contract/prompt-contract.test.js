@@ -11,7 +11,7 @@ const {
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
   sourceExtractionPromptGuardrails
-} = require('../../publish/newsletter-prompts');
+} = require('../../reporter/newsletter-prompts');
 const {
   publicArticleJudgeBlockingIssues
 } = require('../../publish/orchestrator-judge-helpers');
@@ -26,7 +26,7 @@ function promptHostSource() {
     'utf8'
   );
   const prompts = fs.readFileSync(
-    path.join(__dirname, '..', '..', 'publish', 'newsletter-prompts.js'),
+    path.join(__dirname, '..', '..', 'reporter', 'newsletter-prompts.js'),
     'utf8'
   );
   return `${host}\n${prompts}`;
