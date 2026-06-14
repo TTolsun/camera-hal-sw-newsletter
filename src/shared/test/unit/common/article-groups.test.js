@@ -7,6 +7,7 @@ const {
   attachRelatedContextToSelected,
   candidateGroupKey,
   compactContextCandidate,
+  excludeParentRoundupContainers,
   explicitHardBlockedGroups,
   groupCoverageSummary,
   inferReasonCode,
@@ -119,6 +120,85 @@ test('group coverage summary reports missing, overlap, and demotion reason issue
   });
   assert.equal(hardBlockedAndDemoted.ok, false);
   assert.deepEqual(hardBlockedAndDemoted.hard_blocked_demoted_overlap_group_keys, ['group-a']);
+});
+
+test('excludeParentRoundupContainers drops a selected candidate whose URL is a sibling parent-roundup context', () => {
+  // roundup 컨테이너(자기 URL) + 그 묶음글을 parent_roundup_context_only로 참조하는 개별 후보.
+  const roundup = {
+    url: 'https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html',
+    related_context_candidates: []
+  };
+  const child = {
+    url: 'https://developer.android.com/tools/agents/android-cli#skills-add',
+    related_context_candidates: [
+      {
+        url: 'https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html',
+        context_role: 'parent_roundup_context_only'
+      }
+    ]
+  };
+  const { kept, demoted } = excludeParentRoundupContainers([roundup, child]);
+  assert.equal(demoted.length, 1);
+  assert.equal(demoted[0].url, roundup.url);
+  assert.equal(kept.some(candidate => candidate.url === child.url), true, 'individual article kept');
+  assert.equal(kept.some(candidate => candidate.url === roundup.url), false, 'roundup container dropped from main');
+});
+
+test('excludeParentRoundupContainers keeps an anchored child article of the same roundup page', () => {
+  // 컨테이너 page는 제외하되, 같은 page의 #anchor 자식 기사는 별개 기사이므로 유지해야 한다.
+  const roundup = {
+    url: 'https://blog.example.com/2026/06/io26.html',
+    related_context_candidates: []
+  };
+  const childAnchor = {
+    url: 'https://blog.example.com/2026/06/io26.html#roundup-child-3-build-today',
+    related_context_candidates: [
+      { url: 'https://blog.example.com/2026/06/io26.html', context_role: 'parent_roundup_context_only' }
+    ]
+  };
+  const { kept, demoted } = excludeParentRoundupContainers([roundup, childAnchor]);
+  assert.equal(demoted.length, 1);
+  assert.equal(demoted[0].url, roundup.url, 'container page dropped');
+  assert.equal(kept.some(candidate => candidate.url === childAnchor.url), true, 'anchored child article kept');
+});
+
+test('excludeParentRoundupContainers keeps all candidates when no parent-roundup cross-reference exists', () => {
+  const a = { url: 'https://lore.kernel.org/linux-media/x@y/', related_context_candidates: [] };
+  const b = {
+    url: 'https://developer.android.com/tools/agents/android-cli',
+    related_context_candidates: [
+      // 부모 묶음글이 선택 집합에 컨테이너로 들어있지 않은 경우(자식만 선택) — 아무도 제외되지 않는다.
+      { url: 'https://android-developers.googleblog.com/2026/05/io26.html', context_role: 'parent_roundup_context_only' }
+    ]
+  };
+  const { kept, demoted } = excludeParentRoundupContainers([a, b]);
+  assert.equal(demoted.length, 0);
+  assert.equal(kept.length, 2);
+});
+
+test('candidateGroupKey groups a patch-series reply into its parent series via in_reply_to', () => {
+  // 패치 시리즈 cover letter와, 그 시리즈의 4/6 패치에 대한 답장(자체 message-id는 시리즈와 무관).
+  const cover = {
+    url: 'https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/'
+  };
+  const reply = {
+    url: 'https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/',
+    in_reply_to: 'https://lore.kernel.org/linux-media/20260613152655.212490-5-paulk@sys-base.io/'
+  };
+  const coverKey = candidateGroupKey(cover);
+  assert.ok(coverKey.startsWith('lore-series:'), `cover should map to a lore series key, got ${coverKey}`);
+  assert.equal(
+    candidateGroupKey(reply),
+    coverKey,
+    'reply should join the parent series group via in_reply_to'
+  );
+});
+
+test('candidateGroupKey keeps a standalone reply on its own key when no in_reply_to series exists', () => {
+  const reply = {
+    url: 'https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/'
+  };
+  assert.ok(candidateGroupKey(reply).startsWith('article:'));
 });
 
 test('inferReasonCode coerces blocked-context family codes to a valid hard-block reason', () => {

@@ -112,8 +112,7 @@ const LORE_NEW_STYLE = /^(\d{8}-.+?)-(\d+)-([0-9a-f]{6,}@\S+)$/;
 const LORE_OLD_STYLE = /^(\d{8,}\.\d+)-(\d+)-(.+)$/;
 const UNKNOWN_PATCH_NUMBER = Number.POSITIVE_INFINITY;
 
-function loreMessageId(candidate = {}) {
-  const raw = candidateUrl(candidate);
+function loreMessageIdFromUrl(raw) {
   if (!raw) return '';
   let parsed;
   try {
@@ -128,8 +127,11 @@ function loreMessageId(candidate = {}) {
   return decodeURIComponent(last);
 }
 
-function loreSeriesParts(candidate = {}) {
-  const messageId = loreMessageId(candidate);
+function loreMessageId(candidate = {}) {
+  return loreMessageIdFromUrl(candidateUrl(candidate));
+}
+
+function loreSeriesPartsFromMessageId(messageId) {
   if (!messageId) return null;
   const newStyle = messageId.match(LORE_NEW_STYLE);
   if (newStyle) {
@@ -138,6 +140,22 @@ function loreSeriesParts(candidate = {}) {
   const oldStyle = messageId.match(LORE_OLD_STYLE);
   if (oldStyle) {
     return { key: `lore-series:${oldStyle[1]}-${oldStyle[3]}`, patch: Number(oldStyle[2]) };
+  }
+  return null;
+}
+
+function replyParentUrl(candidate = {}) {
+  return text(candidate.in_reply_to || candidate.inReplyTo || candidate.in_reply_to_url || candidate.inReplyToUrl);
+}
+
+function loreSeriesParts(candidate = {}) {
+  const own = loreSeriesPartsFromMessageId(loreMessageId(candidate));
+  if (own) return own;
+  // 패치 시리즈의 답장(Re:)은 자체 message-id가 시리즈를 인코딩하지 않는다. atom thr:in-reply-to가
+  // 가리키는 부모 패치 URL의 message-id에서 시리즈 키를 끌어와 같은 시리즈 그룹에 묶는다.
+  const parentParts = loreSeriesPartsFromMessageId(loreMessageIdFromUrl(replyParentUrl(candidate)));
+  if (parentParts) {
+    return { key: parentParts.key, patch: UNKNOWN_PATCH_NUMBER };
   }
   return null;
 }
@@ -248,6 +266,38 @@ function parentRoundupContext(candidate = {}) {
     source_quality_status: 'unknown',
     article_group_key: candidateGroupKey(candidate)
   }, { parentRoundup: true });
+}
+
+// parent-roundup 컨테이너 페이지가 standalone main으로 선택되는 것을 막는다. 같은 선택 집합 안에서
+// 어떤 후보의 URL이 다른 후보의 parent_roundup_context_only context(=그 후보의 부모 묶음글)와 같으면,
+// 그 후보는 기사가 아니라 컨테이너다. 컨테이너를 main에서 빼면(reserve로 남음) editor가 묶음글 URL을
+// 기사 source로 쓰다 blocked_context로 막히는 일을 애초에 없앤다. 개별 기사(자식)는 그대로 둔다.
+function excludeParentRoundupContainers(selected = []) {
+  // anchor를 보존해 매칭한다. roundup 컨테이너 URL(보통 anchor 없음)만 잡고, 같은 페이지의
+  // 자식 기사(page#child-... 처럼 anchor가 다름)는 컨테이너로 오인해 제외하지 않기 위함이다.
+  const parentRoundupUrls = new Set();
+  for (const candidate of ensureArray(selected)) {
+    for (const context of ensureArray(candidate.related_context_candidates)) {
+      const role = text(context.context_role || context.context_usage_label);
+      if (role !== CONTEXT_LABELS.PARENT_ROUNDUP_CONTEXT_ONLY) continue;
+      const url = normalizeSourceUrlPreserveAnchor(context.url || context.normalized_url);
+      if (url) parentRoundupUrls.add(url);
+    }
+  }
+  if (parentRoundupUrls.size === 0) {
+    return { kept: ensureArray(selected), demoted: [] };
+  }
+  const kept = [];
+  const demoted = [];
+  for (const candidate of ensureArray(selected)) {
+    const ownUrl = normalizeSourceUrlPreserveAnchor(candidateUrl(candidate));
+    if (ownUrl && parentRoundupUrls.has(ownUrl)) {
+      demoted.push(candidate);
+    } else {
+      kept.push(candidate);
+    }
+  }
+  return { kept, demoted };
 }
 
 function uniqueByUrlAndTitle(items = []) {
@@ -398,6 +448,7 @@ module.exports = {
   HARD_BLOCK_REASON_CODES,
   NATIVE_TOOLING_WORKFLOW_TYPE,
   attachRelatedContextToSelected,
+  excludeParentRoundupContainers,
   candidateContextLabel,
   candidateGroupKey,
   compactContextCandidate,
