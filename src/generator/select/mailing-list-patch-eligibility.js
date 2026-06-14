@@ -1,5 +1,9 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { evidenceStrength, technicalDepth } = require('../../discovery/score-source-candidates');
+const {
+  normalizeSourceQuality,
+  sourceQualityFlatFields
+} = require('../../shared/collect/source-quality-classifier');
 
 // Blockers that strong technical evidence is allowed to satisfy in place of an
 // external primary confirmation. A kernel patch posted to a project mailing list
@@ -40,6 +44,23 @@ function upgradeMailingListPatchEligibility(sourceQuality, candidate, policy) {
   };
 }
 
+// Apply the eligibility upgrade to a candidate, keeping the canonical
+// source_quality object and the flat source-quality fields in sync so the
+// upgrade propagates to every downstream consumer (capsule build, editor
+// hard-block validation, quality gate) without tripping source-quality drift.
+function applyMailingListPatchEligibilityToCandidate(candidate, policy) {
+  if (!candidate || typeof candidate !== 'object') return candidate;
+  const current = normalizeSourceQuality(candidate);
+  const upgraded = upgradeMailingListPatchEligibility(current, candidate, policy);
+  if (upgraded === current) return candidate;
+  return {
+    ...candidate,
+    source_quality: upgraded,
+    ...sourceQualityFlatFields(upgraded)
+  };
+}
+
 module.exports = {
+  applyMailingListPatchEligibilityToCandidate,
   upgradeMailingListPatchEligibility
 };

@@ -109,11 +109,15 @@ const {
   candidatePoolPreflightPolicy,
   getCatchUpPolicy,
   getHeadlinePolicy,
+  getMailingListPatchMainArticlePolicy,
   getPublishModePolicy,
   getPublishReadyCompositionPolicy,
   getSelectionWindowPolicy
 } = require('../../shared/common/newsletter-policy');
 const { resolvePublishMode } = require('./publish-mode');
+const {
+  applyMailingListPatchEligibilityToCandidate
+} = require('./mailing-list-patch-eligibility');
 
 const publishReadyCompositionPolicy = getPublishReadyCompositionPolicy();
 
@@ -216,7 +220,15 @@ function shouldPreferDuplicateCandidate(candidate, existing) {
   return false;
 }
 
-function decorateCandidate(candidate, newsletterDate, options = {}) {
+function decorateCandidate(rawCandidate, newsletterDate, options = {}) {
+  // Upgrade strong-evidence project mailing-list patches to main-article
+  // eligible here, at the single per-candidate decoration point, so the
+  // upgraded source quality flows through the shortlist, reporter input,
+  // editor validation, and the quality gate alike.
+  const candidate = applyMailingListPatchEligibilityToCandidate(
+    rawCandidate,
+    options.mailingListPatchPolicy || getMailingListPatchMainArticlePolicy()
+  );
   const selectionWindowPolicy = options.selectionWindowPolicy || getSelectionWindowPolicy();
   const scope = candidateScope(candidate);
   const score_breakdown = scoreCandidate(candidate, newsletterDate);
@@ -994,6 +1006,7 @@ module.exports = {
   candidatesAreDuplicate,
   compositionMode,
   compositionSummary,
+  decorateCandidate,
   exclusionReasons,
   hasConcreteApiComponent,
   hasFallbackRelevanceHint,

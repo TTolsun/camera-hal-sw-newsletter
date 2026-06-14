@@ -44,10 +44,12 @@
 
 레이어 의존은 단방향: `shared ← collector ← discovery ← generator`. 따라서 `shared/collect`의 `classifySourceQuality`는 discovery의 점수 함수를 import할 수 없다. 반면 **generator/select는 discovery를 import할 수 있다.**
 
-- 새 모듈 [src/generator/select/mailing-list-patch-eligibility.js](../../../src/generator/select/mailing-list-patch-eligibility.js): `evidenceStrength`/`technicalDepth`(discovery에서 export)와 정책 임계값을 읽어, 위 기준을 만족하면 `sourceQuality`를 승격해 반환하는 순수 함수 `upgradeMailingListPatchEligibility(sourceQuality, candidate, policy)`.
-  - 승격 시: `main_article_source_allowed = true`, `source_quality_status = 'allowed'`, `cross_check_status = 'required_satisfied'`, `conditional_evidence_type = 'project_patch_strong_evidence'`, 교차검증 blocker 제거, reason 갱신.
-- [src/generator/select/article-capsules.js](../../../src/generator/select/article-capsules.js) `buildArticleCapsule`에서 `normalizeSourceQuality(fieldCandidate)` 직후 이 함수로 한 번 감싼다. 그래야 `mainArticleReadiness`·`readinessBlockers`·`compactSourceQuality` 등 모든 소비자가 승격된 값을 본다(단일 진실원천).
-- `evidenceStrength`/`technicalDepth`를 score-source-candidates.js의 `module.exports`에 추가한다.
+- 새 모듈 [src/generator/select/mailing-list-patch-eligibility.js](../../../src/generator/select/mailing-list-patch-eligibility.js):
+  - `upgradeMailingListPatchEligibility(sourceQuality, candidate, policy)` — `evidenceStrength`/`technicalDepth`(discovery에서 export)와 정책 임계값을 읽어, 위 기준을 만족하면 source-quality 객체를 승격해 반환하는 순수 함수. 승격 시: `main_article_source_allowed = true`, `source_quality_status = 'allowed'`, `cross_check_status = 'required_satisfied'`, `conditional_evidence_type = 'project_patch_strong_evidence'`, 교차검증 blocker 제거, reason 갱신.
+  - `applyMailingListPatchEligibilityToCandidate(candidate, policy)` — 위 함수를 candidate에 적용하되, canonical `source_quality` 객체와 top-level flat 필드(`sourceQualityFlatFields`)를 함께 갱신해 `SOURCE_QUALITY_FIELD_DRIFT`를 방지한다.
+- 적용 지점은 **선택 단계의 [decorateCandidate](../../../src/generator/select/newsroom-selection.js)** — 모든 후보가 거치는 단일 per-candidate 데코레이션 지점. 여기서 candidate를 승격하면 shortlist → reporter input → editor hard-block 검증(`hardBlockReasonForCandidate`) → quality gate(`candidateSelectionViolation`)가 모두 같은 승격 값을 본다.
+  - 주의: 처음에는 `buildArticleCapsule`에서만 승격했으나, capsule은 `article-capsules.json` 아티팩트에만 반영되고 editor/quality gate는 원본 candidate의 source_quality를 다시 읽어 patch를 계속 blocked 처리한다(적대적 리뷰에서 blocker로 확인). 그래서 candidate 단계(decorateCandidate)로 이동했다.
+- `evidenceStrength`/`technicalDepth`를 score-source-candidates.js의 `module.exports`에 추가한다(generator는 discovery를 import할 수 있다).
 
 ## 설정 (config 기반)
 

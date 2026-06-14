@@ -27,12 +27,6 @@ const {
 const {
   buildAllowedClaimEvidence
 } = require('../quality/claim-source-binding');
-const {
-  upgradeMailingListPatchEligibility
-} = require('./mailing-list-patch-eligibility');
-const {
-  getMailingListPatchMainArticlePolicy
-} = require('../../shared/common/newsletter-policy');
 
 function text(value) {
   return String(value || '').trim();
@@ -375,11 +369,7 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
   const cleanedBehavior = cleanBehaviorChange(candidate);
   const fieldCandidate = { ...candidate };
   const halSignal = normalizeHalSignalFields(fieldCandidate);
-  const sourceQuality = upgradeMailingListPatchEligibility(
-    normalizeSourceQuality(fieldCandidate),
-    fieldCandidate,
-    getMailingListPatchMainArticlePolicy()
-  );
+  const sourceQuality = normalizeSourceQuality(fieldCandidate);
   const sourceQualityDrift = sourceQualityFieldDrift(fieldCandidate);
   const sourceQualityFlat = capsuleSourceQualityFlatFields(sourceQuality);
   const readiness = mainArticleReadiness(fieldCandidate, sourceQuality, halSignal, sourceQualityDrift);
