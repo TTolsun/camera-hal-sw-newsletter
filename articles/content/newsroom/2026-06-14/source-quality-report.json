@@ -382,9 +382,9 @@
       }
     },
     {
-      "candidate_id": "0a6ff583fc526ddf",
-      "url": "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
-      "title": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup()",
+      "candidate_id": "8f0150eb6940c6fc",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-6-michael.bommarito@gmail.com/",
+      "title": "[PATCH 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity",
       "source_quality_score": 0.74,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -436,24 +436,6 @@
       }
     },
     {
-      "candidate_id": "2591274899cfdc49",
-      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
-      "title": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support",
-      "source_quality_score": 0.806,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.69,
-        "android_hal_relevance": 0.69,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "4e231c08cea859ce",
       "url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
       "title": "Power of C++26 Reflection: Strong (opaque) type definitions -- r/cpp",
@@ -465,6 +447,42 @@
         "android_hal_relevance": 0.63,
         "technical_depth": 0.25,
         "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "674b6562107fcb32",
+      "url": "https://lore.kernel.org/linux-media/ai6smn4BnbAIMXCt@collins/",
+      "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
+      "source_quality_score": 0.692,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.63,
+        "android_hal_relevance": 0.63,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c34a9a06e2a23d16",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-5-michael.bommarito@gmail.com/",
+      "title": "[PATCH 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor",
+      "source_quality_score": 0.692,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.63,
+        "android_hal_relevance": 0.63,
+        "technical_depth": 0.85,
+        "recency_score": 1,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
@@ -484,24 +502,6 @@
         "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "dca53f53330333d0",
-      "url": "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
-      "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
-      "source_quality_score": 0.692,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.63,
-        "android_hal_relevance": 0.63,
-        "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -616,16 +616,34 @@
       }
     },
     {
-      "candidate_id": "a2902bcafe336260",
-      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-6-paulk@sys-base.io/",
-      "title": "[PATCH v10 5/6] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support",
-      "source_quality_score": 0.668,
+      "candidate_id": "da27d6374ba2e3a1",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-2-michael.bommarito@gmail.com/",
+      "title": "[PATCH 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts",
+      "source_quality_score": 0.758,
       "source_quality_bucket": "review_candidate",
       "breakdown": {
         "reliability_score": 0.85,
         "camera_relevance": 0.57,
         "android_hal_relevance": 0.57,
-        "technical_depth": 0.25,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "90c6aee825c1e742",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-1-michael.bommarito@gmail.com/",
+      "title": "[PATCH 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts",
+      "source_quality_score": 0.758,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -646,24 +664,6 @@
         "technical_depth": 0.55,
         "recency_score": 0.25,
         "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "032c993eeb26379d",
-      "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
-      "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node",
-      "source_quality_score": 0.62,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -742,9 +742,9 @@
       }
     },
     {
-      "candidate_id": "gemini-9ed3d84b34785977",
-      "url": "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
-      "title": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup() - Biren Pandya",
+      "candidate_id": "gemini-e36b9291fe713e03",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-6-michael.bommarito@gmail.com/",
+      "title": "[PATCH 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity - Michael Bommarito",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
       "breakdown": {
@@ -760,16 +760,16 @@
       }
     },
     {
-      "candidate_id": "gemini-75ff3fdc9b53104d",
-      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
-      "title": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support - Paul Kocialkowski",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
+      "candidate_id": "gemini-f25d4bdb61555f7a",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-5-michael.bommarito@gmail.com/",
+      "title": "[PATCH 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor - Michael Bommarito",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
       "breakdown": {
         "reliability_score": 0.85,
         "camera_relevance": 0.7,
         "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
+        "technical_depth": 0.25,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -778,9 +778,9 @@
       }
     },
     {
-      "candidate_id": "gemini-71e8bf52651b9ede",
-      "url": "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
-      "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Krzysztof Kozlowski",
+      "candidate_id": "gemini-910861410a64edf2",
+      "url": "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org/",
+      "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Bryan O&#39;Donoghue",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
       "breakdown": {
@@ -814,16 +814,16 @@
       }
     },
     {
-      "candidate_id": "gemini-631065f0503e1cfe",
-      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-6-paulk@sys-base.io/",
-      "title": "[PATCH v10 5/6] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support - Paul Kocialkowski",
-      "source_quality_score": 0.72,
-      "source_quality_bucket": "review_candidate",
+      "candidate_id": "gemini-4f3f844df1a6aac6",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-2-michael.bommarito@gmail.com/",
+      "title": "[PATCH 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts - Michael Bommarito",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
       "breakdown": {
         "reliability_score": 0.85,
         "camera_relevance": 0.7,
         "android_hal_relevance": 0.7,
-        "technical_depth": 0.25,
+        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -832,9 +832,9 @@
       }
     },
     {
-      "candidate_id": "gemini-de441671906e255e",
-      "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
-      "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Francesco Dolcini",
+      "candidate_id": "gemini-c5fef7ee6cc66167",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-1-michael.bommarito@gmail.com/",
+      "title": "[PATCH 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts - Michael Bommarito",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "breakdown": {
@@ -868,9 +868,45 @@
       }
     },
     {
-      "candidate_id": "gemini-c4a16da77c597128",
-      "url": "https://source.android.com/docs/compatibility/cts",
-      "title": "The Compatibility Test Suite (CTS) overview &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.783,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-9e95b9aeb5650263",
+      "url": "https://source.android.com/docs/whatsnew",
+      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.672,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 0.15,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-736ba21c4736e96f",
+      "url": "https://source.android.com/docs/compatibility",
+      "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
       "source_quality_score": 0.672,
       "source_quality_bucket": "review_candidate",
       "breakdown": {
@@ -1066,6 +1102,42 @@
       }
     },
     {
+      "candidate_id": "gemini-linked-0779844e3674fa79",
+      "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+      "title": "Latest security bulletins",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-584a6a0cadfdd7d4",
+      "url": "https://source.android.com/docs/whatsnew/latest-cdd",
+      "title": "Latest Compatibility Definition Document (CDD)",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "gemini-linked-7317dd637c497758",
       "url": "https://source.android.com/docs/security/bulletin",
       "title": "Bulletins",
@@ -1085,9 +1157,9 @@
     }
   ],
   "counts": {
-    "strong_candidate": 10,
+    "strong_candidate": 9,
     "blocked_candidate": 25,
-    "review_candidate": 12,
-    "weak_candidate": 13
+    "review_candidate": 15,
+    "weak_candidate": 15
   }
 }

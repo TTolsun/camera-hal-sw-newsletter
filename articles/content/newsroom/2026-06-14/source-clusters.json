@@ -90,13 +90,20 @@
       "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "canonical_title": "Test camera images using automation",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "title": "Test camera images using automation",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -192,13 +199,20 @@
       "cluster_key": "https://source.android.com/docs/compatibility",
       "canonical_url": "https://source.android.com/docs/compatibility",
       "canonical_title": "Compatibility",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility",
           "title": "Compatibility",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility",
+          "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -226,13 +240,20 @@
       "cluster_key": "https://source.android.com/docs/whatsnew",
       "canonical_url": "https://source.android.com/docs/whatsnew",
       "canonical_title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/whatsnew",
           "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/whatsnew",
+          "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -355,23 +376,23 @@
       ]
     },
     {
-      "cluster_id": "971f2f11b2e08fbb",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup()",
+      "cluster_id": "f900a7a505981cb8",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614131003.2524025-6-michael.bommarito@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614131003.2524025-6-michael.bommarito@gmail.com/",
+      "canonical_title": "[PATCH 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity",
       "candidate_count": 2,
       "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
-          "title": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup()",
+          "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-6-michael.bommarito@gmail.com/",
+          "title": "[PATCH 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         },
         {
-          "url": "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
-          "title": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup() - Biren Pandya",
+          "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-6-michael.bommarito@gmail.com/",
+          "title": "[PATCH 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity - Michael Bommarito",
           "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
@@ -413,30 +434,6 @@
       ]
     },
     {
-      "cluster_id": "1898012f1bd0246c",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
-      "canonical_title": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
-          "title": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
-          "title": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support - Paul Kocialkowski",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "44f3597991199849",
       "cluster_key": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
       "canonical_url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
@@ -454,16 +451,16 @@
       ]
     },
     {
-      "cluster_id": "a35e736c4e270728",
-      "cluster_key": "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org",
-      "canonical_url": "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org/",
-      "canonical_title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
+      "cluster_id": "04c3e4ee361cc22a",
+      "cluster_key": "https://lore.kernel.org/linux-media/ai6smn4bnbaimxct@collins",
+      "canonical_url": "https://lore.kernel.org/linux-media/ai6smn4BnbAIMXCt@collins/",
+      "canonical_title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org/",
-          "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
+          "url": "https://lore.kernel.org/linux-media/ai6smn4BnbAIMXCt@collins/",
+          "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -471,23 +468,47 @@
       ]
     },
     {
-      "cluster_id": "3de6415c8c466d2e",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
-      "canonical_title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
+      "cluster_id": "e1618dacdd751f59",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614131003.2524025-5-michael.bommarito@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614131003.2524025-5-michael.bommarito@gmail.com/",
+      "canonical_title": "[PATCH 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor",
       "candidate_count": 2,
       "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
-          "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
+          "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-5-michael.bommarito@gmail.com/",
+          "title": "[PATCH 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         },
         {
-          "url": "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
-          "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Krzysztof Kozlowski",
+          "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-5-michael.bommarito@gmail.com/",
+          "title": "[PATCH 4/6] media: verisilicon: rockchip: bound VPU981 AV1 tile loop and guard divisor - Michael Bommarito",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a35e736c4e270728",
+      "cluster_key": "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org/",
+      "canonical_title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org/",
+          "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org/",
+          "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Bryan O&#39;Donoghue",
           "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
@@ -604,23 +625,47 @@
       ]
     },
     {
-      "cluster_id": "5ca757c66c5f28ea",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260613152655.212490-6-paulk@sys-base.io",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260613152655.212490-6-paulk@sys-base.io/",
-      "canonical_title": "[PATCH v10 5/6] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support",
+      "cluster_id": "c3127bdfc16c06e2",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614131003.2524025-2-michael.bommarito@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614131003.2524025-2-michael.bommarito@gmail.com/",
+      "canonical_title": "[PATCH 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts",
       "candidate_count": 2,
       "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260613152655.212490-6-paulk@sys-base.io/",
-          "title": "[PATCH v10 5/6] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support",
+          "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-2-michael.bommarito@gmail.com/",
+          "title": "[PATCH 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         },
         {
-          "url": "https://lore.kernel.org/linux-media/20260613152655.212490-6-paulk@sys-base.io/",
-          "title": "[PATCH v10 5/6] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support - Paul Kocialkowski",
+          "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-2-michael.bommarito@gmail.com/",
+          "title": "[PATCH 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts - Michael Bommarito",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0065a94e4f3008f7",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614131003.2524025-1-michael.bommarito@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614131003.2524025-1-michael.bommarito@gmail.com/",
+      "canonical_title": "[PATCH 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-1-michael.bommarito@gmail.com/",
+          "title": "[PATCH 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-1-michael.bommarito@gmail.com/",
+          "title": "[PATCH 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts - Michael Bommarito",
           "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
@@ -640,30 +685,6 @@
           "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
           "canonical": true,
           "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "d9696b74de4dfdc1",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614090517.ga7434@francesco-nb",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
-      "canonical_title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
-          "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
-          "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Francesco Dolcini",
-          "canonical": false,
-          "reliability": "project-official",
           "manual_seed": false
         }
       ]
@@ -703,23 +724,6 @@
         {
           "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
           "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "c4a16da77c597128",
-      "cluster_key": "https://source.android.com/docs/compatibility/cts",
-      "canonical_url": "https://source.android.com/docs/compatibility/cts",
-      "canonical_title": "The Compatibility Test Suite (CTS) overview &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://source.android.com/docs/compatibility/cts",
-          "title": "The Compatibility Test Suite (CTS) overview &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -890,6 +894,40 @@
         {
           "url": "https://source.android.com/docs/whatsnew/release-notes",
           "title": "Release notes",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0779844e3674fa79",
+      "cluster_key": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+      "canonical_url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+      "canonical_title": "Latest security bulletins",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+          "title": "Latest security bulletins",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "584a6a0cadfdd7d4",
+      "cluster_key": "https://source.android.com/docs/whatsnew/latest-cdd",
+      "canonical_url": "https://source.android.com/docs/whatsnew/latest-cdd",
+      "canonical_title": "Latest Compatibility Definition Document (CDD)",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/latest-cdd",
+          "title": "Latest Compatibility Definition Document (CDD)",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false

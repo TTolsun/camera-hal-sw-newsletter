@@ -4,103 +4,99 @@
   "newsletter_date": "2026-06-14",
   "proposals": [
     {
-      "proposal_id": "camera-hal-sw-20260614-001",
-      "topic_gap": "Camera HAL SW: New features or significant changes in camera HAL interfaces, drivers, or underlying frameworks that impact camera output processing or camera-generated media pipelines.",
+      "proposal_id": "proposal_1",
+      "topic_gap": "Recent advancements or changes in Android's camera HAL, focusing on image processing, sensor integration, or new hardware capabilities.",
       "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
-        "linux media",
-        "camera driver",
-        "ISP",
-        "V4L2",
-        "kernel patch"
+        "Android camera HAL",
+        "Linux kernel media",
+        "ISP driver",
+        "camera sensor support",
+        "V4L2 driver"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260613152655.212490-7-paulk@sys-base.io/",
-        "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
-        "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
+        "https://lore.kernel.org/linux-media/20260614131003.2524025-6-michael.bommarito@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260614131003.2524025-5-michael.bommarito@gmail.com/",
+        "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org/",
         "https://lore.kernel.org/linux-media/20260613152655.212490-5-paulk@sys-base.io/",
-        "https://lore.kernel.org/linux-media/20260613152655.212490-6-paulk@sys-base.io/",
-        "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/"
+        "https://lore.kernel.org/linux-media/20260614131003.2524025-2-michael.bommarito@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260614131003.2524025-1-michael.bommarito@gmail.com/"
       ],
       "expected_evidence": [
-        "Kernel patches related to camera drivers (ISP, sensor, V4L2)",
-        "Changes in camera HAL interfaces or implementations",
-        "New hardware support impacting camera pipelines"
+        "Camera HAL driver updates",
+        "ISP (Image Signal Processor) integration",
+        "New camera sensor support",
+        "Performance improvements in camera pipeline",
+        "Bug fixes related to camera hardware"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260614-002",
-      "topic_gap": "Camera HAL SW: Updates to CameraX or related AndroidX libraries that introduce new camera features, improve performance, or fix critical bugs affecting camera output.",
+      "proposal_id": "proposal_2",
+      "topic_gap": "Updates to CameraX library, specifically focusing on new features, API changes, or bug fixes relevant to camera output and media pipelines.",
       "source_family": "camera-api",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
         "CameraX release notes",
-        "androidx.camera",
-        "camera library update"
+        "CameraX updates",
+        "Android CameraX API"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
       ],
       "expected_evidence": [
-        "CameraX release notes detailing new features or bug fixes",
-        "Updates to camera-related AndroidX libraries"
+        "CameraX version updates",
+        "New CameraX APIs",
+        "Bug fixes in CameraX",
+        "Changes affecting camera capture or preview"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260614-003",
-      "topic_gap": "Camera HAL SW: Significant changes or new features in Android's core media frameworks (Media3, MediaCodec, MediaRecorder) that directly impact camera-generated media pipelines, A/V sync, or recording capabilities.",
+      "proposal_id": "proposal_3",
+      "topic_gap": "Changes in Media3 library related to camera output, recording, A/V synchronization, or integration with camera-generated content.",
       "source_family": "android-media",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
         "Media3 release notes",
-        "MediaCodec changes",
-        "MediaRecorder updates",
-        "A/V sync"
+        "Media3 A/V sync",
+        "Media3 camera recording"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
         "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
       ],
       "expected_evidence": [
-        "Media3 release notes highlighting changes relevant to camera output or A/V sync",
-        "Updates to MediaCodec or MediaRecorder documentation impacting camera pipelines"
+        "Media3 library version updates",
+        "New features for media playback or recording",
+        "Improvements in A/V sync",
+        "Changes impacting camera recording or playback paths"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260614-004",
-      "topic_gap": "Camera HAL SW: Updates to Android compatibility requirements or testing procedures (CTS, ITS) that specifically address camera hardware, HAL implementation, or camera output quality.",
+      "proposal_id": "proposal_4",
+      "topic_gap": "Android compatibility requirements or testing procedures for camera hardware and software, particularly focusing on the Camera ITS (Instrumentation Test Suite).",
       "source_family": "aosp",
-      "allowed_domains": [
-        "source.android.com"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
-        "Android compatibility",
+        "Android camera compatibility",
         "Camera ITS",
-        "CTS camera",
-        "CDD camera"
+        "CDD camera requirements"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cdd",
-        "https://source.android.com/docs/compatibility/cts",
-        "https://source.android.com/docs/compatibility/camera-its-box"
+        "https://source.android.com/docs/compatibility/cts/camera-its-box",
+        "https://source.android.com/docs/whatsnew",
+        "https://source.android.com/docs/compatibility"
       ],
       "expected_evidence": [
-        "Android Compatibility Definition Document (CDD) updates related to camera",
-        "Changes in Camera Integration Test Suite (ITS) or CTS requirements",
-        "Documentation on camera testing automation"
+        "Camera ITS updates",
+        "Changes to Android Compatibility Definition Document (CDD)",
+        "New testing requirements for camera",
+        "Guidance on camera hardware compatibility"
       ],
       "risk_notes": []
     }

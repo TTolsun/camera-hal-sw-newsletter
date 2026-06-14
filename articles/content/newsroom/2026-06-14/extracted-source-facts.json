@@ -36,7 +36,7 @@
       "claims": [
         {
           "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"hi-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
           "confidence": "medium"
         }
       ],
@@ -47,9 +47,32 @@
       "warnings": []
     },
     {
-      "id": "gemini-de441671906e255e",
-      "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
-      "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Francesco Dolcini",
+      "id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "published_at": "2026-05-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.829,
+      "warnings": []
+    },
+    {
+      "id": "gemini-4f3f844df1a6aac6",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-2-michael.bommarito@gmail.com/",
+      "title": "[PATCH 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts - Michael Bommarito",
       "published_at": "2026-06-14",
       "source_type": "unknown",
       "source_fetch_used": true,
@@ -58,8 +81,8 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Francesco Dolcini",
-          "evidence_text": "<html><head><title>Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Francesco Dolcini</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefer",
+          "claim": "[PATCH 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts - Michael Bommarito",
+          "evidence_text": "<html><head><title>[PATCH 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:d",
           "confidence": "medium"
         }
       ],
@@ -70,10 +93,10 @@
       "warnings": []
     },
     {
-      "id": "gemini-75ff3fdc9b53104d",
-      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
-      "title": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support - Paul Kocialkowski",
-      "published_at": "2026-06-13",
+      "id": "gemini-c5fef7ee6cc66167",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-1-michael.bommarito@gmail.com/",
+      "title": "[PATCH 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts - Michael Bommarito",
+      "published_at": "2026-06-14",
       "source_type": "unknown",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -81,8 +104,8 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support - Paul Kocialkowski",
-          "evidence_text": "<html><head><title>[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support - Paul Kocialkowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-co",
+          "claim": "[PATCH 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts - Michael Bommarito",
+          "evidence_text": "<html><head><title>[PATCH 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
           "confidence": "medium"
         }
       ],
@@ -116,33 +139,33 @@
       "warnings": []
     },
     {
-      "id": "2591274899cfdc49",
-      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
-      "title": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support",
-      "published_at": "2026-06-13T15:27:12Z",
-      "source_type": "rss_item",
+      "id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-05-27",
+      "source_type": "official_blog",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "This series adds platform support for the V3s/V3/S3 MIPI CSI-2 and ISP units as well the as A83T MIPI CSI-2 unit in the respective device-trees. The corresponding drivers and dt bindings were merged a long time ago but this series was never actually picked up. It seems more than ready to be merged! Changes since v9: - Split clock definitions export; - Added dedicated v3s d-phy compatible; - Added interrupt to v3s d-phy definition; - Removed a83t board overlays that need more work. Changes since",
-          "evidence_text": "<html><head><title>[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support - Paul Kocialkowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-co",
+          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.69,
-      "android_hal_relevance": 0.69,
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
       "ai_relevance": 0,
-      "technical_depth": 0.806,
+      "technical_depth": 0.783,
       "warnings": []
     },
     {
-      "id": "0a6ff583fc526ddf",
-      "url": "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
-      "title": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup()",
-      "published_at": "2026-06-13T13:23:14Z",
+      "id": "da27d6374ba2e3a1",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-2-michael.bommarito@gmail.com/",
+      "title": "[PATCH 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts",
+      "published_at": "2026-06-14T13:10:09Z",
       "source_type": "rss_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -150,8 +173,54 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "If v4l2_async_register_subdev() fails, or if rdacm21_probe() hits any other error after media_entity_pads_init() is called, the media entity is left uncleaned, potentially leaking resources or leaving it in an invalid state. Similarly, the remove path misses the cleanup. Add media_entity_cleanup() to both the error path in rdacm21_probe() and the rdacm21_remove() function to ensure proper resource release. Fixes: a59f853b3b4b (\"media: i2c: Add driver for RDACM21 camera module\") --- drivers/media",
-          "evidence_text": "<html><head><title>[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup() - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\n",
+          "claim": "The stateless HEVC and AV1 controls carry tile counts that several SoC decoder drivers consume as loop bounds when laying out fixed-size hardware descriptor buffers, but std_validate_compound() does not bound them. For V4L2_CTRL_TYPE_HEVC_PPS with tiling enabled, num_tile_columns_minus1 and num_tile_rows_minus1 (u8) drive loops over column_width_minus1[20] and row_height_minus1[22]. For V4L2_CTRL_TYPE_AV1_FRAME, tile_info.tile_cols and tile_rows (u8) bound loops over the mi_*_starts[] / *_in_sbs",
+          "evidence_text": "<html><head><title>[PATCH 1/6] media: v4l2-ctrls: validate HEVC and AV1 tile counts - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "90c6aee825c1e742",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-1-michael.bommarito@gmail.com/",
+      "title": "[PATCH 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts",
+      "published_at": "2026-06-14T13:10:08Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The stateless HEVC and AV1 V4L2 controls carry tile counts that several SoC decoder drivers consume as loop bounds and divisors when laying out fixed-size hardware descriptor buffers, but std_validate_compound() does not bound them. A process with access to a /dev/videoN stateless decoder (on a typical desktop or SBC, the active-seat local user via the logind/udev uaccess ACL, no extra capability) can set a HEVC PPS or AV1 frame control with a tile count far beyond the array capacity the drivers",
+          "evidence_text": "<html><head><title>[PATCH 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "8f0150eb6940c6fc",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-6-michael.bommarito@gmail.com/",
+      "title": "[PATCH 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity",
+      "published_at": "2026-06-14T13:10:16Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "vdec_av1_slice_setup_tile() copies tile_cols + 1 / tile_rows + 1 start positions into mi_col_starts[] / mi_row_starts[], which hold V4L2_AV1_MAX_TILE_COLS + 1 / V4L2_AV1_MAX_TILE_ROWS + 1 entries. tile_cols and tile_rows come straight from the bitstream; bound the copy to the array capacity so the accesses stay in range. Fixes: 0934d3759615 (\"media: mediatek: vcodec: separate decoder and encoder\") Signed-off-by: Michael Bommarito Assisted-by: Claude:claude-opus-4-8 --- This is an MT8195-class So",
+          "evidence_text": "<html><head><title>[PATCH 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pr",
           "confidence": "medium"
         }
       ],
@@ -162,10 +231,10 @@
       "warnings": []
     },
     {
-      "id": "gemini-631065f0503e1cfe",
-      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-6-paulk@sys-base.io/",
-      "title": "[PATCH v10 5/6] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support - Paul Kocialkowski",
-      "published_at": "2026-06-13",
+      "id": "gemini-910861410a64edf2",
+      "url": "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org/",
+      "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Bryan O&#39;Donoghue",
+      "published_at": "2026-06-14",
       "source_type": "unknown",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -173,8 +242,8 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "[PATCH v10 5/6] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support - Paul Kocialkowski",
-          "evidence_text": "<html><head><title>[PATCH v10 5/6] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support - Paul Kocialkowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sc",
+          "claim": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Bryan O&#39;Donoghue",
+          "evidence_text": "<html><head><title>Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Bryan O&#39;Donoghue</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sch",
           "confidence": "medium"
         }
       ],
@@ -185,10 +254,10 @@
       "warnings": []
     },
     {
-      "id": "gemini-71e8bf52651b9ede",
-      "url": "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
-      "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Krzysztof Kozlowski",
-      "published_at": "2026-06-13",
+      "id": "gemini-e36b9291fe713e03",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-6-michael.bommarito@gmail.com/",
+      "title": "[PATCH 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity - Michael Bommarito",
+      "published_at": "2026-06-14",
       "source_type": "unknown",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -196,8 +265,8 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Krzysztof Kozlowski",
-          "evidence_text": "<html><head><title>Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Krzysztof Kozlowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pr",
+          "claim": "[PATCH 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity - Michael Bommarito",
+          "evidence_text": "<html><head><title>[PATCH 5/6] media: mediatek: vcodec: bound AV1 tile-start copy to the array capacity - Michael Bommarito</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pr",
           "confidence": "medium"
         }
       ],
@@ -205,75 +274,6 @@
       "android_hal_relevance": 0.7,
       "ai_relevance": 0,
       "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "gemini-80c4338a0803ff90",
-      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-5-paulk@sys-base.io/",
-      "title": "[PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Paul Kocialkowski",
-      "published_at": "2026-06-13",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Paul Kocialkowski",
-          "evidence_text": "<html><head><title>[PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Paul Kocialkowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "gemini-9ed3d84b34785977",
-      "url": "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
-      "title": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup() - Biren Pandya",
-      "published_at": "2026-06-13",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup() - Biren Pandya",
-          "evidence_text": "<html><head><title>[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup() - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\n",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "dca53f53330333d0",
-      "url": "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
-      "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
-      "published_at": "2026-06-13T18:22:06Z",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "On Sat, Jun 13, 2026 at 05:26:53PM +0200, Paul Kocialkowski wrote: > The V3s/V3/S3 comes with a rx-only D-PHY paired with the MIPI CSI-2 > controller. It is compatible with the D-PHY found on the A31. > > Add an entry with a new compatible and the A31 compatible as fallback. > > Signed-off-by: Paul Kocialkowski > --- > .../devicetree/bindings/phy/allwinner,sun6i-a31-mipi-dphy.yaml | 3 +++ > 1 file changed, 3 insertions(+) > > diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31",
-          "evidence_text": "<html><head><title>Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Krzysztof Kozlowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pr",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.63,
-      "android_hal_relevance": 0.63,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.692,
       "warnings": []
     }
   ]
