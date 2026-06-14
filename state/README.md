@@ -11,11 +11,9 @@
 | `article-exposure-history.json` | homepage headline 등 노출 이력을 추적하는 forward-only state입니다. 서빙되지 않습니다. |
 | `AGENTS.md` | state 변경 시 지켜야 하는 JSON 계약과 검증 규칙입니다. |
 
-## 작업 규칙
+## 편집 규칙
 
-- `source-monitor-registry.json`의 계약-bearing 값은 validator와 함께 갱신하고, 번역하지 않습니다.
-- `source-snapshots/**`와 `article-exposure-history.json`은 reviewable generated state이므로 임의로 대량 수정하지 않습니다.
-- `processed_source_event_ids`, `processed_evidence_ids` 같은 내부 state를 public output에 노출하지 않습니다.
+이 README는 폴더 개요만 제공합니다. state 파일을 수정할 때 지켜야 하는 상세 규칙(계약-bearing 값 번역 금지, reviewable generated state 대량 수정 금지, `processed_source_event_ids`·`processed_evidence_ids` 같은 내부 state의 public output 비노출 등)의 정본은 [AGENTS.md](AGENTS.md)입니다.
 
 ## 검증
 
