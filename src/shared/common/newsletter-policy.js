@@ -237,6 +237,7 @@ function validateNewsletterPolicyConfig(config) {
   validateSelectionWindowPolicy(config.selectionWindowPolicy, errors);
   validateCatchUpPolicy(config.catchUpPolicy, config, errors);
   validateWeeklyArticlePolicy(config.weeklyArticlePolicy, errors);
+  validateSourceEligibilityPolicy(config.sourceEligibilityPolicy, errors);
   validateHeadlinePolicy(config.headlinePolicy, errors);
   if (config.publishModePolicy !== undefined) {
     validatePublishModePolicy(config.publishModePolicy, errors);
@@ -365,6 +366,52 @@ function validateWeeklyArticlePolicy(value, errors) {
   }
 }
 
+const DEFAULT_MAILING_LIST_PATCH_MAIN_ARTICLE = {
+  enabled: false,
+  sourceRole: 'project_mailing_list_source',
+  evidenceStrengthMin: 0.5,
+  technicalDepthMin: 0.5
+};
+
+function normalizeSourceEligibilityPolicy(raw) {
+  const source = raw && typeof raw === 'object' ? raw : {};
+  const patch = source.mailingListPatchMainArticle && typeof source.mailingListPatchMainArticle === 'object'
+    ? source.mailingListPatchMainArticle
+    : {};
+  const def = DEFAULT_MAILING_LIST_PATCH_MAIN_ARTICLE;
+  return {
+    mailingListPatchMainArticle: {
+      enabled: patch.enabled === true,
+      sourceRole: typeof patch.sourceRole === 'string' && patch.sourceRole ? patch.sourceRole : def.sourceRole,
+      evidenceStrengthMin: Number.isFinite(patch.evidenceStrengthMin) ? patch.evidenceStrengthMin : def.evidenceStrengthMin,
+      technicalDepthMin: Number.isFinite(patch.technicalDepthMin) ? patch.technicalDepthMin : def.technicalDepthMin
+    }
+  };
+}
+
+function validateSourceEligibilityPolicy(value, errors) {
+  if (value === undefined) return; // optional; normalized to a default when absent
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('sourceEligibilityPolicy must be an object.');
+    return;
+  }
+  const patch = value.mailingListPatchMainArticle;
+  if (patch === undefined) return;
+  if (!patch || typeof patch !== 'object' || Array.isArray(patch)) {
+    errors.push('sourceEligibilityPolicy.mailingListPatchMainArticle must be an object.');
+    return;
+  }
+  for (const field of ['evidenceStrengthMin', 'technicalDepthMin']) {
+    const score = patch[field];
+    if (typeof score !== 'number' || !Number.isFinite(score) || score < 0 || score > 1) {
+      errors.push(`sourceEligibilityPolicy.mailingListPatchMainArticle.${field} must be a number between 0 and 1.`);
+    }
+  }
+  if (patch.sourceRole !== undefined && (typeof patch.sourceRole !== 'string' || !patch.sourceRole.trim())) {
+    errors.push('sourceEligibilityPolicy.mailingListPatchMainArticle.sourceRole must be a non-empty string.');
+  }
+}
+
 function normalizeNewsletterPolicyConfig(config) {
   const article = config.articlePolicy;
   const preflight = config.candidatePoolPreflight;
@@ -416,7 +463,8 @@ function normalizeNewsletterPolicyConfig(config) {
     qualityGatePolicy: {
       threshold: quality.threshold,
       hardFailConditions: [...quality.hardFailConditions]
-    }
+    },
+    sourceEligibilityPolicy: normalizeSourceEligibilityPolicy(config.sourceEligibilityPolicy)
   });
 }
 
@@ -449,6 +497,14 @@ function getPublishReadyCompositionPolicy(policy = getDefaultNewsletterPolicy())
 
 function getQualityGatePolicy(policy = getDefaultNewsletterPolicy()) {
   return policy.qualityGatePolicy;
+}
+
+function getSourceEligibilityPolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.sourceEligibilityPolicy;
+}
+
+function getMailingListPatchMainArticlePolicy(policy = getDefaultNewsletterPolicy()) {
+  return getSourceEligibilityPolicy(policy).mailingListPatchMainArticle;
 }
 
 function getCandidatePoolPreflightPolicy(policy = getDefaultNewsletterPolicy()) {
@@ -648,6 +704,12 @@ module.exports = {
   get qualityGatePolicy() {
     return getQualityGatePolicy();
   },
+  get sourceEligibilityPolicy() {
+    return getSourceEligibilityPolicy();
+  },
+  get mailingListPatchMainArticlePolicy() {
+    return getMailingListPatchMainArticlePolicy();
+  },
   get candidatePoolPreflightPolicy() {
     return getCandidatePoolPreflightPolicy();
   },
@@ -683,8 +745,10 @@ module.exports = {
   getPublishModePolicy,
   getDefaultNewsletterPolicy,
   getHeadlinePolicy,
+  getMailingListPatchMainArticlePolicy,
   getPublishReadyCompositionPolicy,
   getSelectionWindowPolicy,
+  getSourceEligibilityPolicy,
   getWeeklyArticlePolicy,
   isForbiddenMainBucket,
   isMainArticleAllowedBucket,

@@ -138,6 +138,8 @@ function renderSourceQualityMarkdown(report = {}) {
 
 module.exports = {
   calculateSourceQuality,
+  evidenceStrength,
   renderSourceQualityMarkdown,
-  scoreSourceCandidates
+  scoreSourceCandidates,
+  technicalDepth
 };
