@@ -11,13 +11,9 @@
 | `articles/content/audit/` | artifact audit와 historical review 기록입니다. |
 | `articles/content/AGENTS.md` | generated/review artifact 보존 기준과 cleanup 금지선을 설명합니다. |
 
-## 작업 규칙
+## 편집 규칙
 
-- `articles/content/collected-news/**`와 `articles/content/newsroom/**`는 실제 source of truth가 아니라 review evidence와 generated artifact입니다.
-- Final review artifact는 보존합니다. Intermediate attempt markdown만 cleanup 후보가 될 수 있습니다.
-- Attempt JSON은 debug evidence로 보존합니다.
-- Generated artifact를 `src/shared/test/fixtures/**/good` 또는 golden fixture로 그대로 복사하지 않습니다.
-- 기존 날짜별 artifact를 정리할 때는 public output인 `articles/newsletters/**`와 혼동하지 않습니다.
+이 README는 폴더 개요만 제공합니다. artifact 보존 등급(`public_source_of_truth` / `review_required_compact` / `debug_heavy` / `transient_attempt`), cleanup 금지선, generated artifact를 fixture로 복사 금지 같은 상세 규칙의 정본은 [AGENTS.md](AGENTS.md)입니다.
 
 ## 검증
 
