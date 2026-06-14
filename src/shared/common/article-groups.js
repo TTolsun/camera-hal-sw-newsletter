@@ -309,6 +309,8 @@ function inferReasonCode(value = '') {
   if (/source_gap/.test(normalized)) return 'source_gap_risk';
   if (/dated|date/.test(normalized)) return 'missing_dated_evidence';
   if (/source_quality|blocked_source|unknown_source/.test(normalized)) return 'blocked_source_quality';
+  // parent-roundup/blocked-context URL은 메인 기사 출처로 쓸 수 없으므로 source-quality hard-block으로 본다.
+  if (/blocked_context|parent_roundup/.test(normalized)) return 'blocked_source_quality';
   if (/fact_check|must_fix/.test(normalized)) return 'fact_check_must_fix';
   if (/quality|hard_block/.test(normalized)) return 'quality_hard_blocker';
   if (/directness|runtime/.test(normalized)) return 'camera_runtime_directness_insufficient';
