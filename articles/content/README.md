@@ -8,6 +8,7 @@
 | --- | --- |
 | `articles/content/collected-news/YYYY-MM-DD/` | raw candidate, manual candidate, seed intent, merged candidate 같은 수집 단계 산출물입니다. |
 | `articles/content/newsroom/YYYY-MM-DD/` | reporter, editor, fact-check, quality, retry, QA review artifact입니다. |
+| `articles/content/source-events/YYYY-MM-DD/` | source 변경 이벤트(change-event) 산출물입니다. (`articles/content/AGENTS.md` 적용) |
 | `articles/content/audit/` | artifact audit와 historical review 기록입니다. |
 | `articles/content/AGENTS.md` | generated/review artifact 보존 기준과 cleanup 금지선을 설명합니다. |
 

@@ -1,7 +1,5 @@
 # docs 작업 지침
 
-이 폴더에는 지금 운영에 쓰는 문서만 둡니다. 운영 문서, 설정 문서, source guide(소스 안내), evidence contract(근거 계약), prompt input 예시가 여기에 있습니다.
-
 ## 문서 작성 규칙
 
 - 사용자-facing 문서는 한국어로 작성합니다.

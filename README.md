@@ -112,10 +112,13 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | 워크플로 | [.github/workflows/AGENTS.md](.github/workflows/AGENTS.md) | Secret 처리, PR 기반 발행 |
 | state | [state/AGENTS.md](state/AGENTS.md) | 파이프라인 운영 state 계약 |
 | 문서 | [docs/AGENTS.md](docs/AGENTS.md) | 한국어 우선, audit/worklog 금지 |
+| 산출물 보존 | [articles/content/AGENTS.md](articles/content/AGENTS.md) | generated/review artifact 보존 기준, cleanup 금지선 |
 
 마지막으로, 아래 규칙은 문서 정리나 리팩토링 중에도 절대 약화하면 안 됩니다.
 
 ## 약화하면 안 되는 규칙
+
+이 목록은 요약입니다. 규칙의 정본은 [AGENTS.md](AGENTS.md)와 scoped AGENTS.md입니다.
 
 - 뉴스레터 발행은 PR 머지를 통해서만 진행합니다.
 - 생성된 issue를 `main`에 직접 자동 발행하지 않습니다.
