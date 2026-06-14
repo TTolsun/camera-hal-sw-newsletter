@@ -45,6 +45,31 @@
 - generated artifact path를 바꿀 때는 workflow, docs, tests를 함께 갱신해야 합니다.
 - 일시적인 실험, 재현, probe, local 분석용 script는 `src/` 아래에 남기지 않습니다. 영구 script가 필요하면 유지보수 가능한 CLI/tool로 범위와 검증을 명확히 합니다. `npm.cmd run check:repo-hygiene`가 `src/` 아래 one-off script와 misplaced test file을 검출합니다.
 
+## Source Registry 규칙 (news-sources.json)
+
+`src/shared/data/news-sources.json`은 이 layer가 소유하는 machine-readable source registry입니다. registry entry를 수정할 때는 아래 규칙을 지킵니다.
+
+JSON 필드 규칙:
+
+- `usageHint`처럼 사람이 읽는 값은 한국어를 사용할 수 있습니다.
+- `id`, `category`, `priority`, `reliability`, `collectionModeHint`, `schemaVersion` 같은 계약-bearing 값은 번역하지 않습니다.
+- source entry에 `section`을 추가하지 마세요. section은 `sectionMap`에서 파생합니다.
+
+Source 정책 (Source Policy):
+
+- `candidateOnly`, `requiresCrossCheck`, `enabled`, `priority`는 보수적으로 설정합니다.
+- media/community/paywall source를 cross-check 없이 final reliable source로 표시하지 마세요.
+- watch/reference page는 dated evidence와 article-level change가 없으면 main article 후보로 승격하지 않습니다.
+- source registry 변경은 deterministic selection, source binding, quality gate에 영향을 줄 수 있으므로 좁게 검토합니다.
+
+검증: source entry를 추가하거나 바꾼 뒤에는 아래 명령을 실행합니다.
+
+```powershell
+npm.cmd run validate:config
+npm.cmd run test
+npm.cmd run validate
+```
+
 ## Review Publication Guardrail (리뷰 발행 가드레일)
 
 - PR body, report, validation 구현은 policy 설명 전체를 grep하지 말고 `Diagnostics-only Status`, `발행 상태 요약`, `Public Newsletter Readiness` 같은 concrete state section 기준으로 `diagnostics_only`와 `review_publication_ready`를 판정합니다.
