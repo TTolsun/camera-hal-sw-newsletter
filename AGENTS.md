@@ -67,12 +67,8 @@ npm.cmd run validate
 
 ## Fixture Trust Policy (fixture 신뢰 정책)
 
-- `src/shared/test/fixtures/**/good`에는 사람이 검수한 curated fixture만 둡니다.
-- generated artifact는 good/golden fixture로 사용하지 않습니다.
-- generated artifact에서 회귀 가치가 있는 경우 전체 artifact가 아니라 최소 입력만 `src/shared/test/fixtures/**/bad` 또는 regression fixture로 보존합니다.
-- `bad` fixture의 `expected.status`는 `PASS`가 될 수 없습니다.
-- `source_gap_risk=true`, `finalSelectionEligibility=watchlist`, `finalSelectionEligibility=exclude`, `reference_only=true`, `hasDatedEvidence=false` sample은 main article PASS fixture가 될 수 없습니다.
-- generic AI 또는 일반 IT sample이 Camera HAL / Android Camera / camera workflow / frame / stream / buffer / metadata / NPU/GPU/ISP resource management와 구체적으로 연결되지 않으면 main article PASS fixture가 될 수 없습니다.
+- generated artifact를 good/golden fixture로 자동 신뢰하지 않습니다. `src/shared/test/fixtures/**/good`에는 사람이 검수한 curated non-generated PASS sample만 두고, generated artifact에서 회귀 가치가 있는 경우 최소 입력만 `bad`/regression fixture로 보존합니다.
+- 상세 fixture 신뢰 계약(ledger schema, provenance enum, seed-evidence 경계, layout 계약, 전체 exclusion 목록)의 정본은 [src/AGENTS.md](src/AGENTS.md)입니다.
 
 ## PR Scope (PR 범위)
 
