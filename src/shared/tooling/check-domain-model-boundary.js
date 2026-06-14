@@ -38,7 +38,7 @@ const ALLOWED_PATHS = Object.freeze([
   /^src\/shared\/adapters\/llm\//,
   /^src\/shared\/test\/.*\/llm-response\//,
   /^src\/generator\/test\/.*\/llm-response\//,
-  /^docs\/workflows\/llm-provider-domain-boundary\.md$/
+  /^docs\/workflows\/LLM_PROVIDER_DOMAIN_BOUNDARY\.md$/
 ]);
 
 function normalizePath(filePath) {

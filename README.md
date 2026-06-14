@@ -22,11 +22,11 @@
 | 문서 | 역할 |
 | --- | --- |
 | [docs/START_HERE.md](docs/START_HERE.md) | 처음 보는 운영자와 에이전트(agent)를 위한 진입점입니다. |
-| [docs/glossary.md](docs/glossary.md) | 뉴스룸, 산출물(artifact), 게이트 용어를 설명합니다. |
-| [docs/newsroom-workflow.md](docs/newsroom-workflow.md) | 후보 수집부터 PR 생성까지의 워크플로(workflow)를 설명합니다. |
+| [docs/GLOSSARY.md](docs/GLOSSARY.md) | 뉴스룸, 산출물(artifact), 게이트 용어를 설명합니다. |
+| [docs/NEWSROOM_WORKFLOW.md](docs/NEWSROOM_WORKFLOW.md) | 후보 수집부터 PR 생성까지의 워크플로(workflow)를 설명합니다. |
 | [docs/operations/README.md](docs/operations/README.md) | 수동 실행, PR 리뷰, 릴리스, 산출물 리뷰 순서입니다. |
-| [docs/config/action-variables.md](docs/config/action-variables.md) | GitHub Actions Secret과 Variable 기본값을 설명합니다. |
-| [docs/config/news-sources-fields.md](docs/config/news-sources-fields.md) | `src/shared/data/news-sources.json` field 계약을 설명합니다. |
+| [docs/config/ACTION_VARIABLES.md](docs/config/ACTION_VARIABLES.md) | GitHub Actions Secret과 Variable 기본값을 설명합니다. |
+| [docs/config/NEWS_SOURCES_FIELDS.md](docs/config/NEWS_SOURCES_FIELDS.md) | `src/shared/data/news-sources.json` field 계약을 설명합니다. |
 | [src/AGENTS.md](src/AGENTS.md) | #262 재구성 후 `src/` layer 구조와 구현·테스트 규칙을 설명합니다. |
 
 뉴스레터 생성 흐름은 아래와 같습니다. 한 가지만 기억하세요. **생성에 성공했다고 발행 가능한 상태는 아닙니다.**
@@ -83,7 +83,7 @@ Windows PowerShell에서는 `npm.cmd`를 우선 사용합니다.
 | `npm.cmd run collect` | `src/shared/data/news-sources.json` 기반 후보 수집 | `articles/content/collected-news/YYYY-MM-DD/` |
 | `npm.cmd run generate` | LLM 뉴스룸 파이프라인 (Gemini 공급자 사용 시 `GEMINI_API_KEY` 필요) | `articles/content/newsroom/YYYY-MM-DD/` |
 
-공급자/모델 재정의와 사내 API Secret 설정은 [GitHub Actions Secret과 Variable(docs/config/action-variables.md)](docs/config/action-variables.md)를 보세요.
+공급자/모델 재정의와 사내 API Secret 설정은 [GitHub Actions Secret과 Variable(docs/config/ACTION_VARIABLES.md)](docs/config/ACTION_VARIABLES.md)를 보세요.
 
 폴더는 목적별로 나뉘어 있습니다. 실제 구현과 tooling은 모두 `src/` 아래에 있습니다(#262 재구성으로 root `scripts/` wrapper는 제거됨). 검토 산출물은 `articles/content/`, 공개 발행물은 `articles/newsletters/`로 분리됩니다.
 

@@ -74,7 +74,7 @@ const {
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
 const structuredSourcesPath = path.join(root, 'src', 'shared', 'data', 'news-sources.json');
-const legacySourcesPath = path.join(root, 'docs', 'news-sources.md');
+const legacySourcesPath = path.join(root, 'docs', 'NEWS_SOURCES.md');
 const AUDIENCE = 'AOSP Camera / Camera Driver / SoC Platform / C++ engineer';
 
 const CANDIDATE_SCHEMA_VERSION = 6;
@@ -181,7 +181,7 @@ function parseStructuredSources() {
 
 function parseLegacySources() {
   if (!fs.existsSync(legacySourcesPath)) {
-    throw new Error('Missing src/shared/data/news-sources.json and docs/news-sources.md');
+    throw new Error('Missing src/shared/data/news-sources.json and docs/NEWS_SOURCES.md');
   }
 
   const markdown = fs.readFileSync(legacySourcesPath, 'utf8');
@@ -204,7 +204,7 @@ function parseLegacySources() {
     }));
   }
   if (sources.length === 0) {
-    throw new Error('No sources found in docs/news-sources.md');
+    throw new Error('No sources found in docs/NEWS_SOURCES.md');
   }
   activeSourcesPath = legacySourcesPath;
   return sources;
@@ -1273,7 +1273,7 @@ function markdown(date, candidates, failures, lookbackDays, options = {}) {
   lines.push('```text');
   lines.push(`뉴스레터 날짜: ${date}`);
   lines.push(`대상 독자: ${AUDIENCE}`);
-  lines.push('Inputs: content/collected-news/YYYY-MM-DD/manual-candidates.json, content/collected-news/YYYY-MM-DD/candidates.json, src/shared/data/news-sources.json, docs/news-sources.md');
+  lines.push('Inputs: content/collected-news/YYYY-MM-DD/manual-candidates.json, content/collected-news/YYYY-MM-DD/candidates.json, src/shared/data/news-sources.json, docs/NEWS_SOURCES.md');
   lines.push('Outputs: reporter-candidates.json, editor-draft.json, fact-check-report.json, newsletter.md, index.html, editor-in-chief-brief.md, release-qa-report.md');
   lines.push('```');
   lines.push('');
@@ -1416,7 +1416,7 @@ async function main() {
   writeLinkedEvidenceDiagnosticsArtifacts(dateNewsroomDir, linkedEvidenceDiagnostics);
 
   if (candidates.length === 0) {
-    throw new Error('No news candidates collected. Check src/shared/data/news-sources.json, docs/news-sources.md, or network access.');
+    throw new Error('No news candidates collected. Check src/shared/data/news-sources.json, docs/NEWS_SOURCES.md, or network access.');
   }
 
   const generatedAt = new Date().toISOString();

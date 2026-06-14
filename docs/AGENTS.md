@@ -13,7 +13,7 @@
 - 문서를 옮기거나 이름을 바꾸면 `README.md`, `docs/START_HERE.md`, 관련 docs의 링크도 함께 갱신합니다.
 - 작업 중 계획, 설계 초안, 디버그 baseline, 리팩터링 worklog는 저장소 문서로 남기지 않습니다.
 - 영구 문서가 필요하면, 임시 분석 메모를 따로 추가하지 말고 현재 운영 계약을 설명하는 정본 문서에 합칩니다.
-- 코드 동작이나 운영 절차를 설명할 내용은 `docs/newsroom-workflow.md`, `docs/operations/**`, `docs/config/**`, `docs/evidence/**` 같은 정본 문서에 현재형으로 통합합니다.
+- 코드 동작이나 운영 절차를 설명할 내용은 `docs/NEWSROOM_WORKFLOW.md`, `docs/operations/**`, `docs/config/**`, `docs/evidence/**` 같은 정본 문서에 현재형으로 통합합니다.
 
 ## 검증
 

@@ -38,7 +38,7 @@ test('findRepoHygieneIssues allows official docs and nested markdown names', () 
     'README.md',
     'AGENTS.md',
     'docs/operations/manual-run.ko.md',
-    'docs/evidence/source-aware-linked-evidence-contract.md',
+    'docs/evidence/SOURCE_AWARE_LINKED_EVIDENCE_CONTRACT.md',
     'nested/codex-notes.md'
   ]);
 

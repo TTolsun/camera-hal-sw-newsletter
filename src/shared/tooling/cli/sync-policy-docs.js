@@ -7,8 +7,8 @@ const {
 
 const policyDocPaths = [
   'README.md',
-  'docs/editorial-policy.md',
-  'docs/newsroom-workflow.md'
+  'docs/EDITORIAL_POLICY.md',
+  'docs/NEWSROOM_WORKFLOW.md'
 ];
 
 function syncPolicyDocs({ check = false, root = process.cwd() } = {}) {

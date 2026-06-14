@@ -110,7 +110,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /key: news-summary-\$\{\{ runner\.os \}\}-/);
   assert.match(workflow, /uses: actions\/cache\/save@v4/);
   assert.match(workflow, /if: always\(\) && steps\.summary-cache\.outputs\.exists == 'true'/);
-  const workflowDocs = fs.readFileSync(path.join(__dirname, '..', '..', '..', '..', 'docs', 'newsroom-workflow.md'), 'utf8');
+  const workflowDocs = fs.readFileSync(path.join(__dirname, '..', '..', '..', '..', 'docs', 'NEWSROOM_WORKFLOW.md'), 'utf8');
   assert.doesNotMatch(workflowDocs, /^LLM_MODEL=$/m);
   assert.doesNotMatch(workflowDocs, /allow_pro=true/);
   assert.doesNotMatch(workflowDocs, /NEWSROOM_ALLOW_PRO/);

@@ -248,13 +248,13 @@ test('section resolver derives source section from category', () => {
 });
 
 test('source quality enum docs stay in sync with config validator', () => {
-  const docs = fs.readFileSync('docs/config/news-sources-fields.md', 'utf8');
+  const docs = fs.readFileSync('docs/config/NEWS_SOURCES_FIELDS.md', 'utf8');
   for (const value of [
     ...VALID_SOURCE_ROLES,
     ...VALID_SOURCE_URL_QUALITY_HINTS,
     ...VALID_MAIN_ARTICLE_POLICIES
   ]) {
-    assert.ok(docs.includes(`\`${value}\``), `docs/config/news-sources-fields.md must document ${value}`);
+    assert.ok(docs.includes(`\`${value}\``), `docs/config/NEWS_SOURCES_FIELDS.md must document ${value}`);
   }
 });
 

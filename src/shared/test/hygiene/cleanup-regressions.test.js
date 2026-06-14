@@ -28,9 +28,9 @@ test('package.json scripts targets exist', () => {
 test('active docs reference existing scripts paths', () => {
   const activeDocs = [
     'README.md',
-    'docs/newsroom-workflow.md',
-    'docs/glossary.md',
-    'docs/evidence/source-aware-linked-evidence-contract.md'
+    'docs/NEWSROOM_WORKFLOW.md',
+    'docs/GLOSSARY.md',
+    'docs/evidence/SOURCE_AWARE_LINKED_EVIDENCE_CONTRACT.md'
   ];
   const issues = [];
   for (const docPath of activeDocs) {

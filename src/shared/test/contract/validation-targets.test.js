@@ -13,7 +13,7 @@ test('changed artifact date detection covers newsletter and newsroom artifacts',
   assert.equal(changedArtifactDate('articles/content/newsroom/2026-05-07/quality-report.json'), '2026-05-07');
   assert.equal(changedArtifactDate('articles/content/collected-news/2026-05-07/candidates.json'), '2026-05-07');
   assert.equal(changedArtifactDate('articles/content/source-events/2026-05-07/source-change-events.json'), '2026-05-07');
-  assert.equal(changedArtifactDate('docs/newsroom-workflow.md'), '');
+  assert.equal(changedArtifactDate('docs/NEWSROOM_WORKFLOW.md'), '');
 });
 
 test('strict target dates combine changed artifacts and generated date file input', () => {
