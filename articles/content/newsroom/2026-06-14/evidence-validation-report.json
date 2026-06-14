@@ -75,17 +75,17 @@
       "candidate_id": "aa590c05e10ba56b",
       "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "title": "Test camera images using automation",
-      "deep_checked": true,
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
       "source_fetch_error": "",
-      "validation_mode": "source_fetch",
+      "validation_mode": "skipped",
       "unsupported_claims": 0,
-      "supported_claims": 1,
+      "supported_claims": 0,
       "final_selection_blocked": false,
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass",
+      "evidence_validation_status": "not_checked",
       "reasons": []
     },
     {
@@ -502,17 +502,17 @@
       "candidate_id": "dca53f53330333d0",
       "url": "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
       "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
+      "deep_checked": true,
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
       "source_fetch_error": "",
-      "validation_mode": "skipped",
+      "validation_mode": "source_fetch",
       "unsupported_claims": 0,
-      "supported_claims": 0,
+      "supported_claims": 1,
       "final_selection_blocked": false,
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
+      "evidence_validation_status": "pass",
       "reasons": []
     },
     {
@@ -660,9 +660,9 @@
       "reasons": []
     },
     {
-      "candidate_id": "6686fa9e10527145",
-      "url": "https://lore.kernel.org/linux-media/20260613-eccentric-statuesque-centipede-5f8d8a@quoll/",
-      "title": "Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder",
+      "candidate_id": "032c993eeb26379d",
+      "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
+      "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node",
       "deep_checked": false,
       "source_fetch_used": false,
       "source_fetch_status": "skipped",
@@ -736,25 +736,6 @@
       ]
     },
     {
-      "candidate_id": "gemini-98444c77340368f8",
-      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
-      "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
       "candidate_id": "gemini-bf543027580fb52b",
       "url": "https://lore.kernel.org/linux-media/20260613152655.212490-7-paulk@sys-base.io/",
       "title": "[PATCH v10 6/6] ARM: dts: sun8i: v3s: Add support for the ISP - Paul Kocialkowski",
@@ -775,17 +756,17 @@
       "candidate_id": "gemini-9ed3d84b34785977",
       "url": "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
       "title": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup() - Biren Pandya",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
+      "deep_checked": true,
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
       "source_fetch_error": "",
-      "validation_mode": "skipped",
+      "validation_mode": "source_fetch",
       "unsupported_claims": 0,
-      "supported_claims": 0,
+      "supported_claims": 1,
       "final_selection_blocked": false,
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
+      "evidence_validation_status": "pass",
       "reasons": []
     },
     {
@@ -857,9 +838,9 @@
       "reasons": []
     },
     {
-      "candidate_id": "gemini-c00fdbe2a9081995",
-      "url": "https://lore.kernel.org/linux-media/20260613-eccentric-statuesque-centipede-5f8d8a@quoll/",
-      "title": "Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder - Krzysztof Kozlowski",
+      "candidate_id": "gemini-de441671906e255e",
+      "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
+      "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Francesco Dolcini",
       "deep_checked": true,
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -893,20 +874,20 @@
       ]
     },
     {
-      "candidate_id": "gemini-bb0e15b6742fce01",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-      "deep_checked": true,
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
+      "candidate_id": "gemini-c4a16da77c597128",
+      "url": "https://source.android.com/docs/compatibility/cts",
+      "title": "The Compatibility Test Suite (CTS) overview &nbsp;|&nbsp; Android Open Source Project",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
       "source_fetch_error": "",
-      "validation_mode": "source_fetch",
+      "validation_mode": "skipped",
       "unsupported_claims": 0,
-      "supported_claims": 1,
+      "supported_claims": 0,
       "final_selection_blocked": false,
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass",
+      "evidence_validation_status": "not_checked",
       "reasons": []
     },
     {
@@ -1080,40 +1061,6 @@
       "reasons": []
     },
     {
-      "candidate_id": "gemini-linked-0779844e3674fa79",
-      "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "title": "Latest security bulletins",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "skipped",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
-      "reasons": []
-    },
-    {
-      "candidate_id": "gemini-linked-584a6a0cadfdd7d4",
-      "url": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "title": "Latest Compatibility Definition Document (CDD)",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "skipped",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
-      "reasons": []
-    },
-    {
       "candidate_id": "gemini-linked-7317dd637c497758",
       "url": "https://source.android.com/docs/security/bulletin",
       "title": "Bulletins",
@@ -1132,8 +1079,8 @@
     }
   ],
   "counts": {
-    "not_checked": 24,
+    "not_checked": 22,
     "pass": 11,
-    "blocked": 28
+    "blocked": 27
   }
 }

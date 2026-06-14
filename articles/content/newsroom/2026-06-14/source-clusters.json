@@ -90,20 +90,13 @@
       "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "canonical_title": "Test camera images using automation",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "title": "Test camera images using automation",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-          "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -131,20 +124,13 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_title": "Top 3 updates for Android developer productivity",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
           "title": "Top 3 updates for Android developer productivity",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
-          "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -659,23 +645,23 @@
       ]
     },
     {
-      "cluster_id": "e6178306135f4310",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260613-eccentric-statuesque-centipede-5f8d8a@quoll",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260613-eccentric-statuesque-centipede-5f8d8a@quoll/",
-      "canonical_title": "Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder",
+      "cluster_id": "d9696b74de4dfdc1",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614090517.ga7434@francesco-nb",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
+      "canonical_title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node",
       "candidate_count": 2,
       "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260613-eccentric-statuesque-centipede-5f8d8a@quoll/",
-          "title": "Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder",
+          "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
+          "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         },
         {
-          "url": "https://lore.kernel.org/linux-media/20260613-eccentric-statuesque-centipede-5f8d8a@quoll/",
-          "title": "Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder - Krzysztof Kozlowski",
+          "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
+          "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Francesco Dolcini",
           "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
@@ -717,6 +703,23 @@
         {
           "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
           "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c4a16da77c597128",
+      "cluster_key": "https://source.android.com/docs/compatibility/cts",
+      "canonical_url": "https://source.android.com/docs/compatibility/cts",
+      "canonical_title": "The Compatibility Test Suite (CTS) overview &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts",
+          "title": "The Compatibility Test Suite (CTS) overview &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -887,40 +890,6 @@
         {
           "url": "https://source.android.com/docs/whatsnew/release-notes",
           "title": "Release notes",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "0779844e3674fa79",
-      "cluster_key": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "canonical_url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "canonical_title": "Latest security bulletins",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-          "title": "Latest security bulletins",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "584a6a0cadfdd7d4",
-      "cluster_key": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "canonical_url": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "canonical_title": "Latest Compatibility Definition Document (CDD)",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://source.android.com/docs/whatsnew/latest-cdd",
-          "title": "Latest Compatibility Definition Document (CDD)",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false

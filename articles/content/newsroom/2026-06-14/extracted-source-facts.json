@@ -47,26 +47,26 @@
       "warnings": []
     },
     {
-      "id": "aa590c05e10ba56b",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "title": "Test camera images using automation",
-      "published_at": "2026-05-01",
-      "source_type": "release_note_item",
+      "id": "gemini-de441671906e255e",
+      "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
+      "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Francesco Dolcini",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "claim": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Francesco Dolcini",
+          "evidence_text": "<html><head><title>Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Francesco Dolcini</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefer",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.89,
-      "android_hal_relevance": 0.89,
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
       "ai_relevance": 0,
-      "technical_depth": 0.829,
+      "technical_depth": 0.81,
       "warnings": []
     },
     {
@@ -116,29 +116,6 @@
       "warnings": []
     },
     {
-      "id": "gemini-c00fdbe2a9081995",
-      "url": "https://lore.kernel.org/linux-media/20260613-eccentric-statuesque-centipede-5f8d8a@quoll/",
-      "title": "Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder - Krzysztof Kozlowski",
-      "published_at": "2026-06-13",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder - Krzysztof Kozlowski",
-          "evidence_text": "<html><head><title>Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder - Krzysztof Kozlowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sc",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.81,
-      "warnings": []
-    },
-    {
       "id": "2591274899cfdc49",
       "url": "https://lore.kernel.org/linux-media/20260613152655.212490-1-paulk@sys-base.io/",
       "title": "[PATCH v10 0/6] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support",
@@ -159,29 +136,6 @@
       "android_hal_relevance": 0.69,
       "ai_relevance": 0,
       "technical_depth": 0.806,
-      "warnings": []
-    },
-    {
-      "id": "gemini-bb0e15b6742fce01",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-      "published_at": "2026-05-27",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.783,
       "warnings": []
     },
     {
@@ -274,6 +228,52 @@
       "android_hal_relevance": 0.7,
       "ai_relevance": 0,
       "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-9ed3d84b34785977",
+      "url": "https://lore.kernel.org/linux-media/20260613132306.69394-1-birenpandya@gmail.com/",
+      "title": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup() - Biren Pandya",
+      "published_at": "2026-06-13",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup() - Biren Pandya",
+          "evidence_text": "<html><head><title>[PATCH] media: i2c: rdacm21: Fix missing media_entity_cleanup() - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\n",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "dca53f53330333d0",
+      "url": "https://lore.kernel.org/linux-media/20260613-nondescript-sociable-goat-aee13a@quoll/",
+      "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
+      "published_at": "2026-06-13T18:22:06Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "On Sat, Jun 13, 2026 at 05:26:53PM +0200, Paul Kocialkowski wrote: > The V3s/V3/S3 comes with a rx-only D-PHY paired with the MIPI CSI-2 > controller. It is compatible with the D-PHY found on the A31. > > Add an entry with a new compatible and the A31 compatible as fallback. > > Signed-off-by: Paul Kocialkowski > --- > .../devicetree/bindings/phy/allwinner,sun6i-a31-mipi-dphy.yaml | 3 +++ > 1 file changed, 3 insertions(+) > > diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31",
+          "evidence_text": "<html><head><title>Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry - Krzysztof Kozlowski</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pr",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.692,
       "warnings": []
     }
   ]

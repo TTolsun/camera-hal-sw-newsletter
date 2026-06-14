@@ -17,7 +17,7 @@
 | merged candidate artifact | articles/content/collected-news/2026-06-14/merged-candidates.json |
 | source discovery feedback | articles/content/newsroom/2026-06-14/source-discovery-feedback-report.json |
 
-- 다음 단계 안내: 03 진행 가능 — Gemini 신규 URL 없음
+- 다음 단계 안내: 03 진행 가능
 - 다음 단계 사유: Gemini 또는 seed discovery에서 publishable 후보가 확인되었습니다.
 - next_step: run_03
 
@@ -34,18 +34,19 @@
 | 항목 | 값 | 판단 |
 | --- | --- | --- |
 | manual 후보 | 40 | 입력 |
-| Gemini 후보 | 10 | 실행됨 |
-| Gemini 신규 unique 후보 | 0 | 없음 |
+| Gemini 후보 | 9 | 실행됨 |
+| Gemini 신규 unique 후보 | 1 | 있음 |
 | Gemini publishable 후보 | 9 | 있음 |
-| linked evidence 파생 후보 | 13 | 있음 |
+| linked evidence 파생 후보 | 11 | 있음 |
 | linked 파생 publishable 후보 | 0 | 없음 |
 | seed 후보 | 0 | 없음 |
 | seed 신규 unique 후보 | 0 | 없음 |
 | seed publishable 후보 | 0 | 없음 |
-| 중복 후보 | 10 | 확인 필요 |
+| 중복 후보 | 8 | 확인 필요 |
 | parser gap | 2 | 보강 필요 |
-| Gemini parser failure | 4 | 보강 필요 |
-| rejected: parser_gap | 4 | source extraction 보강 필요 |
+| Gemini parser failure | 5 | 보강 필요 |
+| rejected: other | 1 | 기타 확인 필요 |
+| rejected: parser_gap | 5 | source extraction 보강 필요 |
 
 ## 상세 report
 
@@ -61,11 +62,4 @@
 - rejected proposal 원문: proposal_validation_report artifact에서 확인하세요.
 - parser/source feedback 원문: source_discovery_feedback_report artifact에서 확인하세요.
 - PR body에는 편집장 1차 판단에 필요한 요약만 남깁니다.
-
-### ⚠️ Gemini 신규 URL 없음 (Ineffective Discovery)
-
-Gemini discovery가 실행됐지만 manual 후보와 전부 중복입니다 (gemini_new_unique_url_count=0).
-source coverage가 늘지 않았습니다.
-
-**권장 조치:** source family 확장, discovery prompt 재검토, 또는 seed URL 추가를 고려하세요.
 

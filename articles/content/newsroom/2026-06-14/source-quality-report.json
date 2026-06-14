@@ -652,9 +652,9 @@
       }
     },
     {
-      "candidate_id": "6686fa9e10527145",
-      "url": "https://lore.kernel.org/linux-media/20260613-eccentric-statuesque-centipede-5f8d8a@quoll/",
-      "title": "Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder",
+      "candidate_id": "032c993eeb26379d",
+      "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
+      "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node",
       "source_quality_score": 0.62,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -716,24 +716,6 @@
         "camera_relevance": 0.67,
         "android_hal_relevance": 0.67,
         "technical_depth": 0.55,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-98444c77340368f8",
-      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
-      "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -850,9 +832,9 @@
       }
     },
     {
-      "candidate_id": "gemini-c00fdbe2a9081995",
-      "url": "https://lore.kernel.org/linux-media/20260613-eccentric-statuesque-centipede-5f8d8a@quoll/",
-      "title": "Re: [PATCH v1 4/4] media: qcom: jpeg: Add Qualcomm JPEG V4L2 encoder - Krzysztof Kozlowski",
+      "candidate_id": "gemini-de441671906e255e",
+      "url": "https://lore.kernel.org/linux-media/20260614090517.GA7434@francesco-nb/",
+      "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Francesco Dolcini",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "breakdown": {
@@ -886,17 +868,17 @@
       }
     },
     {
-      "candidate_id": "gemini-bb0e15b6742fce01",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-      "source_quality_score": 0.783,
+      "candidate_id": "gemini-c4a16da77c597128",
+      "url": "https://source.android.com/docs/compatibility/cts",
+      "title": "The Compatibility Test Suite (CTS) overview &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.672,
       "source_quality_bucket": "review_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0.7,
         "android_hal_relevance": 0.7,
-        "technical_depth": 0.55,
-        "recency_score": 0.8,
+        "technical_depth": 0.25,
+        "recency_score": 0.15,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
@@ -1084,42 +1066,6 @@
       }
     },
     {
-      "candidate_id": "gemini-linked-0779844e3674fa79",
-      "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "title": "Latest security bulletins",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-584a6a0cadfdd7d4",
-      "url": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "title": "Latest Compatibility Definition Document (CDD)",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-linked-7317dd637c497758",
       "url": "https://source.android.com/docs/security/bulletin",
       "title": "Bulletins",
@@ -1140,8 +1086,8 @@
   ],
   "counts": {
     "strong_candidate": 10,
-    "blocked_candidate": 26,
+    "blocked_candidate": 25,
     "review_candidate": 12,
-    "weak_candidate": 15
+    "weak_candidate": 13
   }
 }
