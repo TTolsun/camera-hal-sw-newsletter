@@ -290,6 +290,11 @@ function rssParentRawItem(block, source) {
   const linkTag = block.match(/<link[^>]*href=["']([^"']+)["'][^>]*>/i);
   const link = tag(block, 'link') || (linkTag ? linkTag[1] : source.url);
   const date = tag(block, 'pubDate') || tag(block, 'updated') || tag(block, 'published');
+  // public-inbox(lore) atom 답장 엔트리는 thr:in-reply-to href에 부모 메시지의 lore URL을 담는다.
+  // 이 부모 URL을 보존해야 답장을 부모 패치 시리즈 그룹에 묶을 수 있다.
+  const inReplyToTag = block.match(/<thr:in-reply-to[^>]*\bhref=["']([^"']+)["']/i) ||
+    block.match(/<in-reply-to[^>]*\bhref=["']([^"']+)["']/i);
+  const inReplyTo = inReplyToTag ? decode(inReplyToTag[1]) : '';
   const summary = tag(block, 'description') || tag(block, 'summary') || tag(block, 'content:encoded') || tag(block, 'content');
   const outgoingLinks = mergeOutgoingLinks(
     extractOutgoingLinksFromHtml(rawTag(block, 'description'), {
@@ -317,6 +322,7 @@ function rssParentRawItem(block, source) {
     summary,
     sourceKind: 'rss_item',
     collectionMode: 'rss-item',
+    in_reply_to: inReplyTo,
     outgoing_links: outgoingLinks,
     imageCandidates: extractImageCandidatesFromRssBlock(block, link, source)
   };
@@ -1015,6 +1021,7 @@ function normalizeCandidate(raw) {
     date_precision: raw.datePrecision || raw.date_precision || '',
     parentUrl: parentUrl || '',
     parent_url: parentUrl || '',
+    in_reply_to: canonicalContentUrl(raw.in_reply_to || raw.inReplyTo || ''),
     parentTitle: raw.parentTitle || raw.parent_title || '',
     parent_title: raw.parentTitle || raw.parent_title || '',
     parentCanonicalUrl: canonicalContentUrl(raw.parentCanonicalUrl || raw.parent_canonical_url || parentUrl || ''),

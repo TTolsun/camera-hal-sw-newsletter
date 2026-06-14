@@ -79,6 +79,7 @@ const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
   NATIVE_TOOLING_WORKFLOW_TYPE,
   attachRelatedContextToSelected,
+  excludeParentRoundupContainers,
   candidateGroupKey,
   groupCoverageSummary,
   isNativeToolingWorkflow,
@@ -681,6 +682,10 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     excluded,
     referenceContextCandidates
   ]);
+  // parent-roundup 컨테이너 페이지는 standalone main에서 제외한다(자식 개별 기사는 유지). 제외된
+  // 컨테이너는 selected에서 빠져 reserve/watch로 남고, editor가 묶음글 URL을 기사 source로 쓰다
+  // blocked_context로 막히는 일을 애초에 없앤다.
+  selected = excludeParentRoundupContainers(selected).kept;
   const headlinePolicy = options.headlinePolicy || getHeadlinePolicy();
   const homepageHeadlineState = options.homepageHeadlineState ||
     readHomepageHeadlineState(options.root || process.cwd(), { date, policy: headlinePolicy });
