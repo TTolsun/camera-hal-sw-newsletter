@@ -1,0 +1,554 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-14",
+  "score": 52,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "NEEDS_FIX",
+  "summary": "Resolve source gaps, fact-check must-fix items, composition blockers, and any article the fact-checker marked not useful to a Camera HAL SW engineer before publishing.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "source-integrity",
+      "points": 8,
+      "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+      "location": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "claim-evidence",
+      "points": 8,
+      "reason": "Claim references unresolved evidence_id: sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0.",
+      "location": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "unknown_evidence_id",
+      "dedupe_key": "1:claim:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:skills-add:unknown_evidence_id"
+    },
+    {
+      "category": "claim-evidence",
+      "points": 8,
+      "reason": "Claim references unresolved evidence_id: sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0.",
+      "location": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "unknown_evidence_id",
+      "dedupe_key": "1:claim:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:blog-announcement:unknown_evidence_id"
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "source-integrity",
+      "points": 15,
+      "reason": "Fact checker returned 6 must_fix item(s).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "source-integrity",
+      "points": 6,
+      "reason": "Fact checker reported 2 source gap(s).",
+      "location": "",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+      "category": "android_platform_camera_adjacent",
+      "status": "FAIL",
+      "repair_action": "replace-or-demote",
+      "sources": [
+        {
+          "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+          "url": "https://developer.android.com/tools/agents/android-cli#skills-add"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+        "source_candidate_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "source_candidate_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "section_text_fallback",
+        "metadata_source": "section_text_fallback",
+        "binding_status": "evidence_mismatch",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "publishable_scope": false,
+        "missing_score_fields": [],
+        "count_reason": "section_text_fallback classified this section as direct_aosp_camera for diagnostics only.",
+        "exclusion_reason_if_not_counted": "Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available."
+      },
+      "guardrail_impact_class": "framework_adjacent",
+      "hal_impact_axes": [
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [
+        "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "Claim references unresolved evidence_id: sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0.",
+        "Fact-check must_fix item mentions this section."
+      ],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "needs_fix",
+    "bound_claims": 0,
+    "total_claims": 3,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "medium",
+    "available_article_count": 1,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+      "claim_id": "claim:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:skills-add",
+      "claim_type": "fact",
+      "status": "needs_fix",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Android CLI 및 GitHub의 Android skills 저장소에 CameraX 마이그레이션, Perfetto SQL 및 Trace Analysis를 포함한 17개 이상의 새로운 스킬이 추가되었습니다.",
+      "evidence_ids": [
+        "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0"
+      ],
+      "resolved_evidence_ids": [],
+      "invalid_evidence_ids": [
+        "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0"
+      ],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [],
+      "source_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": [
+        {
+          "reason_code": "unknown_evidence_id",
+          "message": "Claim references unresolved evidence_id: sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0.",
+          "blocking": true,
+          "severity": "hard"
+        }
+      ]
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+      "claim_id": "claim:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:blog-announcement",
+      "claim_type": "fact",
+      "status": "needs_fix",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "이 업데이트는 2026년 6월 9일 Android Developers Blog를 통해 공식 발표되었습니다.",
+      "evidence_ids": [
+        "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0"
+      ],
+      "resolved_evidence_ids": [],
+      "invalid_evidence_ids": [
+        "sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0"
+      ],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [],
+      "source_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": [
+        {
+          "reason_code": "unknown_evidence_id",
+          "message": "Claim references unresolved evidence_id: sx:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:evidence_blocks:c66a79cc346be0d0.",
+          "blocking": true,
+          "severity": "hard"
+        }
+      ]
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+      "claim_id": "claim:ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee:perfetto-analysis",
+      "claim_type": "inference",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "Perfetto SQL 및 Trace Analysis 스킬은 카메라 파이프라인의 지연 시간 및 프레임 드롭 디버깅에 간접적으로 기여할 수 있습니다.",
+      "evidence_ids": [],
+      "resolved_evidence_ids": [],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [],
+      "source_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 1,
+    "strong_signal_count": 1,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 1,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 1,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "camerax_app_compatibility": 1
+    },
+    "actionability_level_counts": {
+      "measurable_test": 1
+    },
+    "effective_actionability_level_counts": {
+      "measurable_test": 1
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 1
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "hal_impact_axes": [
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "",
+      "fallback_guard_notes": [
+        "이 업데이트가 Android Camera HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과 또는 CTS에 직접적인 영향을 미친다고 주장하지 마십시오."
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 1,
+    "briefing_count": 3,
+    "camera_article_count": 0,
+    "legacy_regex_camera_article_count": 1,
+    "expanded_scope_article_count": 0,
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 0,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 0,
+    "publishable_scope_count": 0,
+    "composition_mode": "NEEDS_FIX",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+        "source_candidate_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "source_candidate_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "section_text_fallback",
+        "metadata_source": "section_text_fallback",
+        "binding_status": "evidence_mismatch",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "publishable_scope": false,
+        "missing_score_fields": [],
+        "count_reason": "section_text_fallback classified this section as direct_aosp_camera for diagnostics only.",
+        "exclusion_reason_if_not_counted": "Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available."
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 0,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 0,
+      "multimedia": 0,
+      "platform": 0,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android_platform_camera_adjacent"
+      ],
+      "multimedia": [
+        "android_multimedia_camera_output"
+      ],
+      "platform": [
+        "soc_platform_signal"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 1,
+    "fact_check_status": "NEEDS_FIX",
+    "must_fix_count": 6,
+    "source_gap_count": 2,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 1,
+    "blocking_deduction_count": 5,
+    "blocking_deduction_categories": [
+      "source-integrity",
+      "claim-evidence"
+    ],
+    "hard_fail_count": 5,
+    "soft_deduction_count": 3,
+    "article_gate_counts": {
+      "PASS": 0,
+      "DEMOTE": 0,
+      "FAIL": 1
+    },
+    "article_section_contract": {
+      "complete_count": 1,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {
+        "do_not_claim": 1
+      },
+      "limitation_visibility_counts": {
+        "guardrail-only": 1
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "needs_fix",
+      "bound_claims": 0,
+      "total_claims": 3,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "medium",
+      "available_article_count": 1,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 1,
+      "strong_signal_count": 1,
+      "usable_signal_count": 0,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 1,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 0,
+      "main_articles_with_concrete_action": 1,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "camerax_app_compatibility": 1
+      },
+      "actionability_level_counts": {
+        "measurable_test": 1
+      },
+      "effective_actionability_level_counts": {
+        "measurable_test": 1
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 1
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "Android CLI 및 GitHub를 통한 CameraX 마이그레이션 및 Perfetto 분석 스킬 추가: 개발자 생산성 도구 업데이트",
+        "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "hal_impact_axes": [
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "",
+        "fallback_guard_notes": [
+          "이 업데이트가 Android Camera HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과 또는 CTS에 직접적인 영향을 미친다고 주장하지 마십시오."
+        ],
+        "soc_signal_type": "accelerator_camera_workload",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "source-integrity",
+        "count": 3
+      },
+      {
+        "category": "claim-evidence",
+        "count": 2
+      },
+      {
+        "category": "editorial-story",
+        "count": 2
+      },
+      {
+        "category": "image-fallback",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

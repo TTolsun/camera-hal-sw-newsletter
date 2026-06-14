@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-14",
+  "generated_at": "2026-06-14T14:26:21.130Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 6,
+    "hit_count": 2,
+    "miss_count": 4,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 2,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 4
+    },
+    {
+      "reason": "content-hash-hit",
+      "count": 2
+    }
+  ],
+  "entries": [
+    {
+      "title": "Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
+      "url": "https://lore.kernel.org/linux-media/ai6smn4BnbAIMXCt@collins/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-14T13:29:16Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/ai6smn4bnbaimxct@collins",
+        "url_hash": "04c3e4ee361cc22a7c3779788582b3ea48ebf7e7105416f2a2b4be0ff32cc9b4",
+        "published_date": "2026-06-14T13:29:16Z",
+        "content_hash": "9073bfb3f43a17b1fe7d45414d1afe583ec8c5e85d40bdea538125c34cbede8c"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts",
+      "url": "https://lore.kernel.org/linux-media/20260614131003.2524025-1-michael.bommarito@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-14T13:10:08Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260614131003.2524025-1-michael.bommarito@gmail.com",
+        "url_hash": "0065a94e4f3008f71b15fa07241126637773376f0617cbdbbe89c0c74d683d8f",
+        "published_date": "2026-06-14T13:10:08Z",
+        "content_hash": "ba3b96c69938711c7ec0624c918087281a4a17f181b1f3b7b5129766bd0a2a69"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry",
+      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-5-paulk@sys-base.io/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-13T15:27:45Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260613152655.212490-5-paulk@sys-base.io",
+        "url_hash": "507da397b23dd068580042737fcbf76ac673c466d965625cf1e76c01c001fbdd",
+        "published_date": "2026-06-13T15:27:45Z",
+        "content_hash": "210f25de820e88354c3a006598a101837ff3e6fffd41d5946af4509a403b4a5b"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/tools/agents/android-cli",
+        "url_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb"
+      },
+      "hit": true,
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb.json"
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "url_hash": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7"
+      },
+      "hit": true,
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7.json"
+    },
+    {
+      "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Bryan O&#39;Donoghue",
+      "url": "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-14",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/f862ff70-c42d-4be5-a7aa-3d0470106aef@kernel.org",
+        "url_hash": "a35e736c4e2707286feda843f1bec9ed309158ba4ff8d69d5ebe1fc24eeba6da",
+        "published_date": "2026-06-14",
+        "content_hash": "27644be742421a3ed9bd2d75e8d45ce51be940538699b0ea389416b03f5ebc5d"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}
