@@ -19,6 +19,6 @@ state JSON 계약이나 표시값을 바꾼 뒤에는 아래 명령을 실행합
 
 ```powershell
 npm.cmd run validate:config
-npm.cmd run test
+npm.cmd run validate:localization
 npm.cmd run validate
 ```
