@@ -59,8 +59,8 @@
       "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "canonical_title": "CameraX Release Notes - CameraX 1.6.0",
-      "candidate_count": 3,
-      "duplicate_count": 2,
+      "candidate_count": 4,
+      "duplicate_count": 3,
       "candidates": [
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
@@ -71,7 +71,14 @@
         },
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "title": "CameraX Release Notes - CameraX 1.6.1",
+          "title": "1.6.1",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "title": "1.3.0-beta02",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -90,13 +97,20 @@
       "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "canonical_title": "Test camera images using automation",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "title": "Test camera images using automation",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -131,20 +145,13 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_title": "Top 3 updates for Android developer productivity",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
           "title": "Top 3 updates for Android developer productivity",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
-          "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -223,20 +230,13 @@
       "cluster_key": "https://source.android.com/docs/core/camera",
       "canonical_url": "https://source.android.com/docs/core/camera",
       "canonical_title": "Camera &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://source.android.com/docs/core/camera",
           "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://source.android.com/docs/core/camera",
-          "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -247,20 +247,13 @@
       "cluster_key": "https://source.android.com/docs/whatsnew",
       "canonical_url": "https://source.android.com/docs/whatsnew",
       "canonical_title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://source.android.com/docs/whatsnew",
           "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://source.android.com/docs/whatsnew",
-          "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -271,13 +264,20 @@
       "cluster_key": "https://source.android.com/docs/compatibility/cdd",
       "canonical_url": "https://source.android.com/docs/compatibility/cdd",
       "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility/cdd",
           "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cdd",
+          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -403,6 +403,30 @@
       ]
     },
     {
+      "cluster_id": "edf9af37641a706e",
+      "cluster_key": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb",
+      "canonical_url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
+      "canonical_title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
+          "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
+          "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Dmitry Baryshkov",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "a7d35653307227c6",
       "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel",
       "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
@@ -505,112 +529,16 @@
       ]
     },
     {
-      "cluster_id": "d42dad6bd58f5504",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com/",
-          "title": "[PATCH 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com/",
-          "title": "[PATCH 11/22] media: platform: csisp: Add missing media_entity_cleanup() - Biren Pandya",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "4d01cec9ed050042",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH v2 3/3] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com/",
-          "title": "[PATCH v2 3/3] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com/",
-          "title": "[PATCH v2 3/3] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "6100f4ae4745bf9c",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH v2 2/3] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com/",
-          "title": "[PATCH v2 2/3] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com/",
-          "title": "[PATCH v2 2/3] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "f688966d4697215f",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH v2 1/3] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com/",
-          "title": "[PATCH v2 1/3] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com/",
-          "title": "[PATCH v2 1/3] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "2ea10d1b83ee8a49",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614182714.7999-5-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614182714.7999-5-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH v2 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
+      "cluster_id": "8ec99b2c3d366029",
+      "cluster_key": "https://lore.kernel.org/linux-media/ai8nwzou08avd7ve@spark.kcore.it",
+      "canonical_url": "https://lore.kernel.org/linux-media/ai8NwzoU08AvD7Ve@spark.kcore.it/",
+      "canonical_title": "Re: [BUG] OV02C10 on Dell 16 Premium DA16250 (ARL): INT3472 handshake-derived \"dvdd\" regulator registered but never linked to sensor, sensor probe fails with -EREMOTEIO",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260614182714.7999-5-birenpandya@gmail.com/",
-          "title": "[PATCH v2 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
+          "url": "https://lore.kernel.org/linux-media/ai8NwzoU08AvD7Ve@spark.kcore.it/",
+          "title": "Re: [BUG] OV02C10 on Dell 16 Premium DA16250 (ARL): INT3472 handshake-derived \"dvdd\" regulator registered but never linked to sensor, sensor probe fails with -EREMOTEIO",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -618,23 +546,40 @@
       ]
     },
     {
-      "cluster_id": "bec4665d87d002c4",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH v2 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup()",
+      "cluster_id": "a2a3dc6785045904",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
+          "title": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b8409ab187f1c3b2",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v3 12/22] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF",
       "candidate_count": 2,
       "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com/",
-          "title": "[PATCH v2 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup()",
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
+          "title": "[PATCH v3 12/22] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         },
         {
-          "url": "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com/",
-          "title": "[PATCH v2 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup() - Biren Pandya",
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
+          "title": "[PATCH v3 12/22] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
           "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
@@ -642,23 +587,23 @@
       ]
     },
     {
-      "cluster_id": "a1811a59b4e1c372",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH 10/22] media: platform: rcar-csi2: Add missing media_entity_cleanup()",
+      "cluster_id": "0bfd1f3636bc364f",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v3 7/22] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF",
       "candidate_count": 2,
       "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com/",
-          "title": "[PATCH 10/22] media: platform: rcar-csi2: Add missing media_entity_cleanup()",
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/",
+          "title": "[PATCH v3 7/22] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         },
         {
-          "url": "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com/",
-          "title": "[PATCH 10/22] media: platform: rcar-csi2: Add missing media_entity_cleanup() - Biren Pandya",
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/",
+          "title": "[PATCH v3 7/22] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
           "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
@@ -666,23 +611,64 @@
       ]
     },
     {
-      "cluster_id": "5fe1f6259e859a52",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH v2 21/22] media: usb: dvb-usb-v2: Add missing media_entity_cleanup()",
+      "cluster_id": "fb4224bd8a93a32e",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-12-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-12-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v3 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-12-birenpandya@gmail.com/",
+          "title": "[PATCH v3 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "33a5646594a306c2",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v3 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup()",
       "candidate_count": 2,
       "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com/",
-          "title": "[PATCH v2 21/22] media: usb: dvb-usb-v2: Add missing media_entity_cleanup()",
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com/",
+          "title": "[PATCH v3 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup()",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         },
         {
-          "url": "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com/",
-          "title": "[PATCH v2 21/22] media: usb: dvb-usb-v2: Add missing media_entity_cleanup() - Biren Pandya",
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com/",
+          "title": "[PATCH v3 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup() - Biren Pandya",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "82959bc25cfe1104",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/",
+          "title": "[PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/",
+          "title": "[PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls - Biren Pandya",
           "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
@@ -707,30 +693,6 @@
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
           "title": "Media3 Release Notes - Media3 1.10.1",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "d4a0acfc0ac6ad6e",
-      "cluster_key": "https://developer.android.com/training/data-storage/shared/photo-picker",
-      "canonical_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-      "canonical_title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -772,91 +734,6 @@
       ]
     },
     {
-      "cluster_id": "a279bb0df20018e4",
-      "cluster_key": "https://developer.android.com/reference/kotlin/androidx/camera/video/groupablefeatures",
-      "canonical_url": "https://developer.android.com/reference/kotlin/androidx/camera/video/GroupableFeatures",
-      "canonical_title": "GroupableFeatures",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/kotlin/androidx/camera/video/GroupableFeatures",
-          "title": "GroupableFeatures",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "eb09ee752aa3ba14",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/cameraeffect",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
-      "canonical_title": "CameraEffect",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
-          "title": "CameraEffect",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "520fe52c7e358499",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/imageanalysis",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
-      "canonical_title": "ImageAnalysis",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
-          "title": "ImageAnalysis",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "f64d4b5cb00fe978",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/video/highspeedvideosessionconfig",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig",
-      "canonical_title": "HighSpeedVideoSessionConfig",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig",
-          "title": "HighSpeedVideoSessionConfig",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "3cfe4e1c81ca8501",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/extensions/extensionsessionconfig",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/extensions/ExtensionSessionConfig",
-      "canonical_title": "ExtensionSessionConfig",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/extensions/ExtensionSessionConfig",
-          "title": "ExtensionSessionConfig",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "83920430c1be5b76",
       "cluster_key": "https://source.android.com/docs/whatsnew/release-notes",
       "canonical_url": "https://source.android.com/docs/whatsnew/release-notes",
@@ -867,40 +744,6 @@
         {
           "url": "https://source.android.com/docs/whatsnew/release-notes",
           "title": "Release notes",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "0779844e3674fa79",
-      "cluster_key": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "canonical_url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "canonical_title": "Latest security bulletins",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-          "title": "Latest security bulletins",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "584a6a0cadfdd7d4",
-      "cluster_key": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "canonical_url": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "canonical_title": "Latest Compatibility Definition Document (CDD)",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://source.android.com/docs/whatsnew/latest-cdd",
-          "title": "Latest Compatibility Definition Document (CDD)",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -920,6 +763,23 @@
           "title": "Bulletins",
           "canonical": true,
           "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0b0026aa4b152e98",
+      "cluster_key": "https://lists.libcamera.org/listinfo/libcamera-devel",
+      "canonical_url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+      "canonical_title": "more information about this list",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "title": "more information about this list",
+          "canonical": true,
+          "reliability": "project-official",
           "manual_seed": false
         }
       ]

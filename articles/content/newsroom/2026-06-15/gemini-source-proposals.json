@@ -4,166 +4,115 @@
   "newsletter_date": "2026-06-15",
   "proposals": [
     {
-      "proposal_id": "android-camera-hal-update-20260615-01",
-      "topic_gap": "Recent updates or changes in the Android Camera HAL, focusing on new features, performance improvements, or bug fixes relevant to camera output and media pipelines.",
-      "source_family": "official",
-      "allowed_domains": [
-        "source.android.com",
-        "developer.android.com"
-      ],
+      "proposal_id": "camera-hal-sw-newsletter-20260615-001",
+      "topic_gap": "New Camera HAL features or improvements in Android 15.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
       "search_keywords": [
-        "Android Camera HAL",
-        "CameraProvider HAL",
-        "Camera2 API",
-        "camera pipeline",
-        "camera capture",
-        "camera metadata"
+        "Android 15 Camera HAL",
+        "new camera features Android",
+        "camera API changes"
       ],
       "candidate_urls": [
-        "https://source.android.com/docs/core/camera",
-        "https://source.android.com/docs/whatsnew",
-        "https://developer.android.com/jetpack/androidx/releases/camera"
-      ],
-      "expected_evidence": [
-        "Camera HAL API changes",
-        "New camera features or capabilities",
-        "Performance optimizations in camera pipeline",
-        "Bug fixes related to camera capture or processing"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "android-media3-camera-integration-20260615-01",
-      "topic_gap": "Integration of camera output with Android's Media3 library, including aspects like A/V sync, recording, and playback paths.",
-      "source_family": "official",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
-      "search_keywords": [
-        "Media3 camera",
-        "Media3 recording",
-        "Media3 A/V sync",
-        "camera output playback",
-        "MediaCodec Media3"
-      ],
-      "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
-        "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4"
-      ],
-      "expected_evidence": [
-        "Media3 release notes mentioning camera integration",
-        "Examples of using Media3 with camera input",
-        "Updates on A/V sync for media playback from camera",
-        "Camera-generated playback paths using Media3"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camerax-updates-20260615-01",
-      "topic_gap": "Latest updates and release notes for CameraX, focusing on new functionalities or improvements relevant to camera development and media capture.",
-      "source_family": "official",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
-      "search_keywords": [
-        "CameraX release notes",
-        "CameraX updates",
-        "CameraX new features",
-        "androidx.camera"
-      ],
-      "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-      ],
-      "expected_evidence": [
-        "CameraX release notes",
-        "New features or APIs in CameraX",
-        "Bug fixes in CameraX affecting camera capture or processing",
-        "CameraX compatibility updates"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "android-developer-productivity-20260615-01",
-      "topic_gap": "Recent developments in Android developer productivity, with a focus on tools or practices that impact camera and media development.",
-      "source_family": "official",
-      "allowed_domains": [
-        "android-developers.googleblog.com"
-      ],
-      "search_keywords": [
-        "Android developer productivity",
-        "Android tools",
-        "Android development workflow",
-        "Google I/O Android"
-      ],
-      "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
         "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html"
       ],
       "expected_evidence": [
-        "New tools or SDK features",
-        "Improved development workflows",
-        "Best practices for camera and media development",
-        "Updates from Google I/O relevant to developers"
+        "Camera HAL changes",
+        "new camera features",
+        "Android 15 camera API"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "linux-media-driver-updates-20260615-01",
-      "topic_gap": "Updates to the Linux kernel's media subsystem, particularly those related to camera drivers, V4L2, and media controller, with potential impact on Android camera HAL implementations.",
-      "source_family": "community",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-sw-newsletter-20260615-002",
+      "topic_gap": "Updates to CameraX library relevant to HAL developers.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
       "search_keywords": [
-        "linux media",
-        "V4L2",
-        "media controller",
-        "camera driver",
-        "kernel patch media",
-        "ISP driver"
+        "CameraX 1.6.0",
+        "CameraX 1.6.1",
+        "CameraX release notes",
+        "CameraX HAL"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com/"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
       ],
       "expected_evidence": [
-        "Kernel patches for media drivers",
-        "V4L2 subsystem updates",
-        "Media controller changes",
-        "Bug fixes in camera drivers",
-        "New camera sensor support"
+        "CameraX release notes",
+        "new CameraX features",
+        "CameraX bug fixes",
+        "HAL interaction"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-photo-picker-updates-20260615-01",
-      "topic_gap": "Updates or best practices related to the Android Photo Picker, focusing on its interaction with camera-generated content and media access.",
-      "source_family": "official",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
+      "proposal_id": "camera-hal-sw-newsletter-20260615-003",
+      "topic_gap": "Linux kernel camera and media subsystem updates impacting Android camera HAL.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
       "search_keywords": [
-        "Android Photo Picker",
-        "media access",
-        "gallery access",
-        "camera output sharing",
-        "MediaStore Photo Picker"
+        "linux-media list",
+        "V4L2 updates",
+        "camera driver changes",
+        "Android HAL kernel"
       ],
       "candidate_urls": [
-        "https://developer.android.com/training/data-storage/shared/photo-picker"
+        "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/",
+        "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/"
       ],
       "expected_evidence": [
-        "Photo Picker API changes",
-        "New features for media selection",
-        "Best practices for accessing camera output",
-        "Impact on gallery and sharing functionalities"
+        "Linux kernel media subsystem changes",
+        "V4L2 driver updates",
+        "camera HAL interface",
+        "ISP driver improvements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-newsletter-20260615-004",
+      "topic_gap": "New features or changes in the Android Media3 library relevant to camera output and A/V sync.",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3 1.10.1",
+        "Media3 release notes",
+        "camera playback",
+        "AV sync Android"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
+      ],
+      "expected_evidence": [
+        "Media3 release notes",
+        "camera output playback",
+        "A/V sync improvements",
+        "MediaCodec integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-newsletter-20260615-005",
+      "topic_gap": "Android compatibility requirements or testing updates for camera HAL.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android CDD camera",
+        "Camera ITS test",
+        "HAL compatibility Android"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cdd",
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Android Compatibility Definition Document (CDD)",
+        "Camera ITS updates",
+        "HAL compliance",
+        "testing requirements"
       ],
       "risk_notes": []
     }

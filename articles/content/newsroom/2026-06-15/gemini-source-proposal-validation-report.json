@@ -4,79 +4,15 @@
   "newsletter_date": "2026-06-15",
   "validations": [
     {
-      "proposal_id": "android-camera-hal-update-20260615-01",
-      "candidate_url": "https://source.android.com/docs/core/camera",
-      "normalized_url": "https://source.android.com/docs/core/camera",
+      "proposal_id": "camera-hal-sw-newsletter-20260615-001",
+      "candidate_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "accepted": true,
       "rejected_reason": "",
-      "source_policy_match": "aosp-camera-documentation"
+      "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "android-camera-hal-update-20260615-01",
-      "candidate_url": "https://source.android.com/docs/whatsnew",
-      "normalized_url": "https://source.android.com/docs/whatsnew",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "aosp-whats-new-release-notes"
-    },
-    {
-      "proposal_id": "android-camera-hal-update-20260615-01",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "camerax-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-jetpack-release",
-      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
-      "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "android-media3-camera-integration-20260615-01",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "androidx-media3-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-media3-release",
-      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
-      "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "android-media3-camera-integration-20260615-01",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "androidx-media3-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-media3-release",
-      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
-      "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "camerax-updates-20260615-01",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "camerax-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-jetpack-release",
-      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
-      "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "camerax-updates-20260615-01",
+      "proposal_id": "camera-hal-sw-newsletter-20260615-002",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "accepted": false,
@@ -90,9 +26,9 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "camerax-updates-20260615-01",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "proposal_id": "camera-hal-sw-newsletter-20260615-002",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
       "accepted": false,
       "rejected_reason": "discovered_not_extractable",
       "source_policy_match": "camerax-release-notes",
@@ -104,88 +40,78 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "android-developer-productivity-20260615-01",
-      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
-      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "android-developers-blog"
-    },
-    {
-      "proposal_id": "android-developer-productivity-20260615-01",
-      "candidate_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
-      "normalized_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "android-developers-blog"
-    },
-    {
-      "proposal_id": "linux-media-driver-updates-20260615-01",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com/",
+      "proposal_id": "camera-hal-sw-newsletter-20260615-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "linux-media-driver-updates-20260615-01",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com/",
+      "proposal_id": "camera-hal-sw-newsletter-20260615-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com/",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "linux-media-driver-updates-20260615-01",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com/",
+      "proposal_id": "camera-hal-sw-newsletter-20260615-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "linux-media-driver-updates-20260615-01",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com/",
+      "proposal_id": "camera-hal-sw-newsletter-20260615-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "linux-media-driver-updates-20260615-01",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com/",
+      "proposal_id": "camera-hal-sw-newsletter-20260615-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
+      "normalized_url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "linux-media-driver-updates-20260615-01",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
+      "proposal_id": "camera-hal-sw-newsletter-20260615-004",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "androidx-media3-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-media3-release",
+      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
+      "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "linux-media-driver-updates-20260615-01",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com/",
+      "proposal_id": "camera-hal-sw-newsletter-20260615-005",
+      "candidate_url": "https://source.android.com/docs/compatibility/cdd",
+      "normalized_url": "https://source.android.com/docs/compatibility/cdd",
       "accepted": true,
       "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
+      "source_policy_match": "android-compatibility-definition-document"
     },
     {
-      "proposal_id": "android-photo-picker-updates-20260615-01",
-      "candidate_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-      "normalized_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "proposal_id": "camera-hal-sw-newsletter-20260615-005",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "accepted": true,
       "rejected_reason": "",
-      "source_policy_match": "android-photo-picker-reference"
+      "source_policy_match": "android-compatibility-definition-document"
     }
   ],
   "counts": {
-    "accepted": 12,
-    "discovered_not_extractable": 6
+    "accepted": 8,
+    "discovered_not_extractable": 3
   }
 }

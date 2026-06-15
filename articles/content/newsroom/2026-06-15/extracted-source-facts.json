@@ -13,7 +13,7 @@
       "claims": [
         {
           "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"es-419-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develop",
           "confidence": "medium"
         }
       ],
@@ -24,171 +24,56 @@
       "warnings": []
     },
     {
-      "id": "gemini-d424182fa34d5ca2",
-      "url": "https://lore.kernel.org/linux-media/20260614165630.3896-12-birenpandya@gmail.com/",
-      "title": "[PATCH 11/22] media: platform: csisp: Add missing media_entity_cleanup() - Biren Pandya",
-      "published_at": "2026-06-14",
-      "source_type": "unknown",
+      "id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "published_at": "2026-05-01",
+      "source_type": "release_note_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "[PATCH 11/22] media: platform: csisp: Add missing media_entity_cleanup() - Biren Pandya",
-          "evidence_text": "<html><head><title>[PATCH 11/22] media: platform: csisp: Add missing media_entity_cleanup() - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"pt-BR-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Sou",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
       "ai_relevance": 0,
-      "technical_depth": 0.81,
+      "technical_depth": 0.829,
       "warnings": []
     },
     {
-      "id": "gemini-11c4942e2a3cfa43",
-      "url": "https://lore.kernel.org/linux-media/20260614175221.6619-1-birenpandya@gmail.com/",
-      "title": "[PATCH v2 1/3] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
-      "published_at": "2026-06-14",
-      "source_type": "unknown",
+      "id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-05-27",
+      "source_type": "official_blog",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "[PATCH v2 1/3] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
-          "evidence_text": "<html><head><title>[PATCH v2 1/3] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pref",
+          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"pt-BR-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Sou",
           "confidence": "medium"
         }
       ],
       "camera_relevance": 0.7,
       "android_hal_relevance": 0.7,
       "ai_relevance": 0,
-      "technical_depth": 0.72,
+      "technical_depth": 0.783,
       "warnings": []
     },
     {
-      "id": "gemini-325c57a023890633",
-      "url": "https://lore.kernel.org/linux-media/20260614182714.7999-9-birenpandya@gmail.com/",
-      "title": "[PATCH v2 21/22] media: usb: dvb-usb-v2: Add missing media_entity_cleanup() - Biren Pandya",
-      "published_at": "2026-06-14",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v2 21/22] media: usb: dvb-usb-v2: Add missing media_entity_cleanup() - Biren Pandya",
-          "evidence_text": "<html><head><title>[PATCH v2 21/22] media: usb: dvb-usb-v2: Add missing media_entity_cleanup() - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sc",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "gemini-5603593f800b687e",
-      "url": "https://lore.kernel.org/linux-media/20260614182714.7999-3-birenpandya@gmail.com/",
-      "title": "[PATCH v2 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup() - Biren Pandya",
-      "published_at": "2026-06-14",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v2 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup() - Biren Pandya",
-          "evidence_text": "<html><head><title>[PATCH v2 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup() - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-co",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "gemini-67706e62f6942953",
-      "url": "https://lore.kernel.org/linux-media/20260614175221.6619-2-birenpandya@gmail.com/",
-      "title": "[PATCH v2 2/3] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
-      "published_at": "2026-06-14",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v2 2/3] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
-          "evidence_text": "<html><head><title>[PATCH v2 2/3] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefe",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "gemini-a27df0e917aef6f4",
-      "url": "https://lore.kernel.org/linux-media/20260614165630.3896-11-birenpandya@gmail.com/",
-      "title": "[PATCH 10/22] media: platform: rcar-csi2: Add missing media_entity_cleanup() - Biren Pandya",
-      "published_at": "2026-06-14",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH 10/22] media: platform: rcar-csi2: Add missing media_entity_cleanup() - Biren Pandya",
-          "evidence_text": "<html><head><title>[PATCH 10/22] media: platform: rcar-csi2: Add missing media_entity_cleanup() - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "gemini-b464eb304fcb80f7",
-      "url": "https://lore.kernel.org/linux-media/20260614175221.6619-3-birenpandya@gmail.com/",
-      "title": "[PATCH v2 3/3] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
-      "published_at": "2026-06-14",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v2 3/3] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
-          "evidence_text": "<html><head><title>[PATCH v2 3/3] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pref",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "5293b25a93416b26",
-      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
-      "title": "Top 3 updates for Android developer productivity",
-      "published_at": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "id": "828c7f96dd8e4baf",
+      "url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
+      "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
+      "published_at": "2026-06-14T21:29:09Z",
       "source_type": "rss_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -196,15 +81,130 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Posted by Simona Milanovic, Developer Relations Engineer Every year, Google I/O brings new announcements and resources across ecosystems and products, including Android development. As development shifts toward AI and agent-assisted tooling, we’ve expanded our offerings to better support you, however you decide to build for Android. To help you stay up to date, here is a summary of the top 3 announcements for Android Developer Productivity at I/O . 1. Android CLI is now stable Android CLI is now",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "claim": "On Fri, Jun 12, 2026 at 10:44:15PM +0300, Atanas Filipov wrote: > Add the missing JPEG encoder hardware node in SM8550 DTS so the > new qcom-jpeg V4L2 encoder driver can bind and operate on this > platform. > > The node wires the resources expected by the binding and driver, > including clocks, power domain, IOMMUs and interconnect paths. > > Signed-off-by: Atanas Filipov > --- > arch/arm64/boot/dts/qcom/sm8550.dtsi | 42 ++++++++++++++++++++++++++++ > 1 file changed, 42 insertions(+) > > diff --",
+          "evidence_text": "<html><head><title>Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Dmitry Baryshkov</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.78,
-      "android_hal_relevance": 0.78,
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
       "ai_relevance": 0.5,
-      "technical_depth": 0.715,
+      "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "gemini-5a7a782bba671b8a",
+      "url": "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/",
+      "title": "[PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls - Biren Pandya",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls - Biren Pandya",
+          "evidence_text": "<html><head><title>[PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sc",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-74bc0cda9c040a5a",
+      "url": "https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com/",
+      "title": "[PATCH v3 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup() - Biren Pandya",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup() - Biren Pandya",
+          "evidence_text": "<html><head><title>[PATCH v3 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup() - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-co",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-7864f379c3db2efb",
+      "url": "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
+      "title": "[PATCH v3 12/22] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 12/22] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+          "evidence_text": "<html><head><title>[PATCH v3 12/22] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pre",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-cdea0429fb4579e1",
+      "url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
+      "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Dmitry Baryshkov",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Dmitry Baryshkov",
+          "evidence_text": "<html><head><title>Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Dmitry Baryshkov</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-fbef4cc4eaf90af8",
+      "url": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/",
+      "title": "[PATCH v3 7/22] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 7/22] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+          "evidence_text": "<html><head><title>[PATCH v3 7/22] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pre",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
       "warnings": []
     },
     {
@@ -220,7 +220,7 @@
       "claims": [
         {
           "claim": "May 16, 2026 Version 1.9.4 contains the following commits .",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"fa-x-mtfrom-en\"\n      dir=\"rtl\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"zh-TW-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develope",
           "confidence": "medium"
         }
       ],
@@ -231,10 +231,10 @@
       "warnings": []
     },
     {
-      "id": "gemini-9e95b9aeb5650263",
-      "url": "https://source.android.com/docs/whatsnew",
-      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
-      "published_at": "2025-01-22",
+      "id": "gemini-b564c567eef7ae59",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2025-05-29",
       "source_type": "official_blog",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -242,7 +242,7 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+          "claim": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
           "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
           "confidence": "medium"
         }
