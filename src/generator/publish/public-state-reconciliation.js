@@ -786,6 +786,7 @@ module.exports = {
   publicNewsletterPaths,
   publicStructureStatus,
   reconcilePublicState,
+  removeNewsletterIndexEntry,
   retentionMetadataPath,
   runModeForPublicState,
   syncArchivePublicationState,

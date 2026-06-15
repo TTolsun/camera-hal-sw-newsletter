@@ -244,6 +244,9 @@ const {
   sectionsOutsideRepairPlan,
   hasTooFewMainArticlesDeduction
 } = require('./orchestrator-repair-plan');
+const {
+  removeNewsletterIndexEntry
+} = require('./public-state-reconciliation');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -3539,7 +3542,12 @@ async function main() {
           attempt,
           stage: repairStage
         });
-        break;
+        // repair 실패는 그 자체로 종착점이다. writeReviewableRepairFailureArtifacts가 이미
+        // FAILED_REPAIR_REVIEWABLE 리뷰 패키지(public 노출 없음)를 기록했으므로 여기서 return해
+        // 발행 가능 경로로 떨어지지 않게 한다. break로 떨어지면 후처리가 품질을 PASS로 다시
+        // 계산해 newsletters.json 노출을 쓰고, 그 뒤 validate:site retention이 깨지며 terminal
+        // FAILED로 리뷰 PR이 사라진다. 형제 catch(editor-validate/completion)도 동일하게 return한다.
+        return;
       }
     }
 
@@ -4103,6 +4111,19 @@ async function main() {
       console.warn(`${failureKind}: review artifacts were written without public newsletter files or data/newsletters.json updates.`);
       return;
     }
+    // 품질/팩트체크는 통과(generationStatus === 'PASS')했지만 결정론적 발행 검증
+    // (이미지 fallback, site retention 등)에 실패한 draft다. 발행 불가이므로, 발행 가능
+    // 경로가 이미 쓴 newsletters.json 노출 항목을 되돌려서 일관된 diagnostics-only 리뷰
+    // PR로 강등한다. 여기서 throw하면 terminal handler가 reviewable이 아닌 FAILED 상태로
+    // 덮어써 리뷰 PR이 아예 안 생긴다.
+    const unexposeResult = removeNewsletterIndexEntry(root, date);
+    // 노출 제거가 실제로 실패하면(파일 손상/쓰기 오류) diagnostics-only로 강등할 수 없다.
+    // 노출된 채 graceful return하면 merge 시 검증 실패한 뉴스레터가 발행되므로, 이 경우엔
+    // 안전하게 fail()로 종료한다(리뷰 PR은 못 만들지만 잘못된 발행보다 낫다). 항목이 이미
+    // 없으면 error는 빈 문자열이라 안전하게 통과한다.
+    if (unexposeResult.error) {
+      fail(`npm run validate failed and the newsletters.json entry could not be un-exposed (${unexposeResult.error}):\n${validateResult.text}`);
+    }
     writeRecoveryPrompt(newsroomDir, { date, stage: 'validation', reason: `npm run validate failed:\n${validateResult.text}`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     writeDateReviewPackage({
       date,
@@ -4114,7 +4135,8 @@ async function main() {
       qualityReport,
       runContext: reviewRunContext
     });
-    fail(`npm run validate failed:\n${validateResult.text}`);
+    console.warn(`npm run validate failed:\n${validateResult.text}\nPublishable draft failed publish validation; un-exposed the newsletters.json entry and downgraded to a diagnostics-only review PR.`);
+    return;
   }
   if (!validateResult.ok && shortlistReport.underfilled) {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'thin-week validation', reason: `Underfilled review-only draft did not pass publication validation:\n${validateResult.text}`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
