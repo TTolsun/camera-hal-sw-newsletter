@@ -1,0 +1,254 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 82,
+    "threshold": 60,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 1,
+    "locked_article_count": 1,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 15,
+        "reason": "Fact checker returned 3 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Android CLI 및 GitHub에 CameraX 마이그레이션 등 17개 이상의 신규 'Android 스킬' 추가"
+    ],
+    "locked_article_headlines": [
+      "Android CLI 및 GitHub에 CameraX 마이그레이션 등 17개 이상의 신규 'Android 스킬' 추가"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Android CLI 및 GitHub에 CameraX 마이그레이션 등 17개 이상의 신규 'Android 스킬' 추가",
+        "category": "android_platform_camera_adjacent",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "urls": [
+          "https://developer.android.com/tools/agents/android-cli#skills-add"
+        ],
+        "source_titles": [
+          "2. Android skills keep growing - Top 3 updates for Android developer productivity"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Android CLI 및 GitHub에 CameraX 마이그레이션 등 17개 이상의 신규 'Android 스킬' 추가",
+        "category": "android_platform_camera_adjacent",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "urls": [
+          "https://developer.android.com/tools/agents/android-cli#skills-add"
+        ],
+        "source_titles": [
+          "2. Android skills keep growing - Top 3 updates for Android developer productivity"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 1,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [
+      {
+        "title": "[BUG] Input: rmi4: KASAN slab-use-after-free in v4l2_release - Shuangpeng Bai",
+        "url": "https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      },
+      {
+        "title": "[PATCH v3 7/22] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+        "url": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      }
+    ],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 3
+  },
+  {
+    "attempt": 2,
+    "model": "repair-fallback",
+    "score": 82,
+    "threshold": 60,
+    "status": "FAILED_REPAIR_REVIEWABLE",
+    "rendered_main_article_count": 1,
+    "locked_article_count": 0,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 15,
+        "reason": "Fact checker returned 3 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Android CLI 및 GitHub에 CameraX 마이그레이션 등 17개 이상의 신규 'Android 스킬' 추가"
+    ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "editor attempt 2/2: fallback-to-last-known-valid-editor"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 1,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 3,
+    "repair_failure": {
+      "name": "EditorSemanticValidationError",
+      "message": "Editor output failed HAL Signal Capsule validation.",
+      "details": {
+        "field": "sections.hal_signal_capsule",
+        "expectedKeys": [
+          "why_now",
+          "reader_owners",
+          "check_within_2_weeks",
+          "impact_axes",
+          "do_not_overstate"
+        ],
+        "actualCount": 1,
+        "sectionCount": 1,
+        "issues": [
+          {
+            "index": 1,
+            "headline": "Android CLI 및 GitHub에 CameraX 마이그레이션 등 17개 이상의 신규 'Android 스킬' 추가",
+            "type": "incomplete_hal_signal_capsule",
+            "keys": [
+              "impact_axes"
+            ]
+          }
+        ]
+      },
+      "field": "sections.hal_signal_capsule",
+      "stage": "editor attempt 2/2",
+      "attempt": 2,
+      "status": "FAILED_REPAIR_REVIEWABLE",
+      "lastKnownValidAttempt": 1,
+      "fallbackEditorSectionCount": 1
+    }
+  }
+]
