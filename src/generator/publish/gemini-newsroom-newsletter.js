@@ -3542,7 +3542,12 @@ async function main() {
           attempt,
           stage: repairStage
         });
-        break;
+        // repair 실패는 그 자체로 종착점이다. writeReviewableRepairFailureArtifacts가 이미
+        // FAILED_REPAIR_REVIEWABLE 리뷰 패키지(public 노출 없음)를 기록했으므로 여기서 return해
+        // 발행 가능 경로로 떨어지지 않게 한다. break로 떨어지면 후처리가 품질을 PASS로 다시
+        // 계산해 newsletters.json 노출을 쓰고, 그 뒤 validate:site retention이 깨지며 terminal
+        // FAILED로 리뷰 PR이 사라진다. 형제 catch(editor-validate/completion)도 동일하게 return한다.
+        return;
       }
     }
 
