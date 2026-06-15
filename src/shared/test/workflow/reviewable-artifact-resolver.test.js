@@ -23,6 +23,9 @@ const {
   resolveReviewableArtifacts
 } = require('../../../generator/publish/resolve-reviewable-artifacts');
 const {
+  removeNewsletterIndexEntry
+} = require('../../../generator/publish/public-state-reconciliation');
+const {
   tempRoot: fsTempRoot,
   writeJson,
   writeText
@@ -706,4 +709,34 @@ test('reviewable artifact resolver rejects FAILED_RAW_ARTIFACT_VALIDATION when g
   assert.match(outputs.reviewable_artifact_reason, /status=FAILED_RAW_ARTIFACT_VALIDATION/);
   assert.match(outputs.reviewable_artifact_reason, /generation-status\.json/);
   assert.match(outputs.reviewable_artifact_reason, /missing_required=/);
+});
+
+test('un-exposing the newsletters.json entry downgrades a structurally-ready run to reviewable-but-not-published', () => {
+  // Guards the generator behaviour: when a publishable draft (quality/fact PASS) fails
+  // deterministic publish validation, the generator removes the newsletters.json entry it
+  // already wrote and downgrades to a diagnostics-only review PR instead of a terminal
+  // failure. The resulting state must still create a review PR but must never publish.
+  const root = fsTempRoot('newsroom-unexpose-');
+  const date = '2026-05-09';
+  writeEditorialReviewableArtifacts(root, date);
+  writePublicNewsletterArtifacts(root, date);
+  const changedArtifacts = REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
+    .map(file => `articles/content/newsroom/${date}/${file}`)
+    .concat([
+      `articles/newsletters/${date}/newsletter.md`,
+      `articles/newsletters/${date}/index.html`,
+      'articles/data/newsletters.json'
+    ]);
+
+  const exposed = buildReviewableArtifactOutputs(resolveReviewableArtifacts({ root, changedArtifacts }));
+  assert.equal(exposed.public_newsletter_ready, 'true');
+  assert.equal(exposed.homepage_visible_after_merge, 'true');
+
+  removeNewsletterIndexEntry(root, date);
+
+  const unexposed = buildReviewableArtifactOutputs(resolveReviewableArtifacts({ root, changedArtifacts }));
+  assert.equal(unexposed.review_pr_ready, 'true', 'un-exposed run still produces a reviewable PR');
+  assert.equal(unexposed.public_newsletter_ready, 'false', 'un-exposed newsletter is not publish-ready');
+  assert.equal(unexposed.homepage_visible_after_merge, 'false', 'merging an un-exposed run must not publish');
+  assert.equal(unexposed.diagnostics_only, 'true');
 });

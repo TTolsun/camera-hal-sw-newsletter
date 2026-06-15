@@ -244,6 +244,9 @@ const {
   sectionsOutsideRepairPlan,
   hasTooFewMainArticlesDeduction
 } = require('./orchestrator-repair-plan');
+const {
+  removeNewsletterIndexEntry
+} = require('./public-state-reconciliation');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -4103,6 +4106,12 @@ async function main() {
       console.warn(`${failureKind}: review artifacts were written without public newsletter files or data/newsletters.json updates.`);
       return;
     }
+    // 품질/팩트체크는 통과(generationStatus === 'PASS')했지만 결정론적 발행 검증
+    // (이미지 fallback, site retention 등)에 실패한 draft다. 발행 불가이므로, 발행 가능
+    // 경로가 이미 쓴 newsletters.json 노출 항목을 되돌려서 일관된 diagnostics-only 리뷰
+    // PR로 강등한다. 여기서 throw하면 terminal handler가 reviewable이 아닌 FAILED 상태로
+    // 덮어써 리뷰 PR이 아예 안 생긴다.
+    removeNewsletterIndexEntry(root, date);
     writeRecoveryPrompt(newsroomDir, { date, stage: 'validation', reason: `npm run validate failed:\n${validateResult.text}`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     writeDateReviewPackage({
       date,
@@ -4114,7 +4123,8 @@ async function main() {
       qualityReport,
       runContext: reviewRunContext
     });
-    fail(`npm run validate failed:\n${validateResult.text}`);
+    console.warn(`npm run validate failed:\n${validateResult.text}\nPublishable draft failed publish validation; un-exposed the newsletters.json entry and downgraded to a diagnostics-only review PR.`);
+    return;
   }
   if (!validateResult.ok && shortlistReport.underfilled) {
     writeRecoveryPrompt(newsroomDir, { date, stage: 'thin-week validation', reason: `Underfilled review-only draft did not pass publication validation:\n${validateResult.text}`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
