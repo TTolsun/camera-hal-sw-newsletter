@@ -59,8 +59,8 @@
       "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "canonical_title": "CameraX Release Notes - CameraX 1.6.0",
-      "candidate_count": 4,
-      "duplicate_count": 3,
+      "candidate_count": 3,
+      "duplicate_count": 2,
       "candidates": [
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
@@ -71,14 +71,7 @@
         },
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "title": "1.6.1",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "title": "1.3.0-beta02",
+          "title": "CameraX Release Notes - CameraX 1.6.1",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -203,13 +196,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
       "canonical_title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
           "title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+          "title": "Android Developers Blog: Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -220,20 +220,13 @@
       "cluster_key": "https://source.android.com/docs/compatibility",
       "canonical_url": "https://source.android.com/docs/compatibility",
       "canonical_title": "Compatibility",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility",
           "title": "Compatibility",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://source.android.com/docs/compatibility",
-          "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -458,6 +451,23 @@
       ]
     },
     {
+      "cluster_id": "465f7b3235f04685",
+      "cluster_key": "https://lore.kernel.org/linux-media/178144969601.60470.6468623939816148386@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/178144969601.60470.6468623939816148386@gmail.com/",
+      "canonical_title": "[BUG] media: siano: WARNING in free_large_kmalloc from smsusb_term_device",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/178144969601.60470.6468623939816148386@gmail.com/",
+          "title": "[BUG] media: siano: WARNING in free_large_kmalloc from smsusb_term_device",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "edf9af37641a706e",
       "cluster_key": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb",
       "canonical_url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
@@ -537,13 +547,20 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
           "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
           "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        },
+        {
+          "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
+          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -571,13 +588,20 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
           "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
           "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        },
+        {
+          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
+          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -673,23 +697,6 @@
       ]
     },
     {
-      "cluster_id": "fb4224bd8a93a32e",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-12-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-12-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH v3 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-12-birenpandya@gmail.com/",
-          "title": "[PATCH v3 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "5e9a33e9fbaae52e",
       "cluster_key": "https://developer.android.com/jetpack/androidx/releases/media3",
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
@@ -708,6 +715,23 @@
           "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
           "title": "Media3 Release Notes - Media3 1.10.1",
           "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d4a0acfc0ac6ad6e",
+      "cluster_key": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
           "reliability": "official",
           "manual_seed": false
         }
@@ -741,6 +765,23 @@
         {
           "url": "https://developer.android.com/media/camera/camerax/video-capture",
           "title": "VideoCapture",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3cf1f4c1be6e9dc5",
+      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/sessionconfig.builder",
+      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig.Builder",
+      "canonical_title": "Feature Group",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig.Builder",
+          "title": "Feature Group",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -877,23 +918,6 @@
         {
           "url": "https://source.android.com/docs/security/bulletin",
           "title": "Bulletins",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "397561f51e89cb3c",
-      "cluster_key": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com",
-      "canonical_url": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com",
-      "canonical_title": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com/",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com",
-          "title": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com/",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false

@@ -182,6 +182,23 @@
       ]
     },
     {
+      "candidate_id": "a008cc09dc1d5ea8",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "CameraX Release Notes - CameraX 1.6.1",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "skipped",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "not_checked",
+      "reasons": []
+    },
+    {
       "candidate_id": "3ca2b58b92a0b76d",
       "url": "https://source.android.com/docs/compatibility",
       "title": "Compatibility",
@@ -204,44 +221,6 @@
       "candidate_id": "2a30fe242da15a49",
       "url": "https://source.android.com/docs/core/camera",
       "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
-      "candidate_id": "473c2de5968532c9",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "title": "1.6.1",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
-      "candidate_id": "f2f7a4ce6187ee89",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-      "title": "1.3.0-beta02",
       "deep_checked": false,
       "source_fetch_used": false,
       "source_fetch_status": "skipped",
@@ -482,6 +461,25 @@
       ]
     },
     {
+      "candidate_id": "3156d14afe9fa388",
+      "url": "https://lore.kernel.org/linux-media/178144969601.60470.6468623939816148386@gmail.com/",
+      "title": "[BUG] media: siano: WARNING in free_large_kmalloc from smsusb_term_device",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "metadata_only",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
+    },
+    {
       "candidate_id": "828c7f96dd8e4baf",
       "url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
       "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
@@ -685,25 +683,6 @@
       ]
     },
     {
-      "candidate_id": "23b317ab9417e181",
-      "url": "https://lore.kernel.org/linux-media/20260614202835.11977-12-birenpandya@gmail.com/",
-      "title": "[PATCH v3 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "metadata_only",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked",
-      "reasons": [
-        "source_gap_risk=true"
-      ]
-    },
-    {
       "candidate_id": "781679b8fb4b611e",
       "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4",
       "title": "Media3 Release Notes - Media3 1.9.4",
@@ -742,9 +721,9 @@
       ]
     },
     {
-      "candidate_id": "gemini-ef27814b2c8c8636",
-      "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
-      "title": "Android Developers Blog: 17 Things to know for Android developers at Google I/O",
+      "candidate_id": "9240e6cb42c0a46f",
+      "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
       "deep_checked": false,
       "source_fetch_used": false,
       "source_fetch_status": "skipped",
@@ -761,9 +740,9 @@
       ]
     },
     {
-      "candidate_id": "gemini-98444c77340368f8",
-      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
-      "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
+      "candidate_id": "gemini-a315e38980974827",
+      "url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
+      "title": "Android Developers Blog: Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
       "deep_checked": false,
       "source_fetch_used": false,
       "source_fetch_status": "skipped",
@@ -814,6 +793,23 @@
       "reasons": []
     },
     {
+      "candidate_id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "deep_checked": true,
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "unsupported_claims": 0,
+      "supported_claims": 1,
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass",
+      "reasons": []
+    },
+    {
       "candidate_id": "gemini-cdea0429fb4579e1",
       "url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
       "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Dmitry Baryshkov",
@@ -831,21 +827,42 @@
       "reasons": []
     },
     {
-      "candidate_id": "gemini-1861be1473bf6479",
-      "url": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
-      "title": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
-      "deep_checked": true,
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
+      "candidate_id": "gemini-8635e5e9a3557c0d",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
       "source_fetch_error": "",
-      "validation_mode": "source_fetch",
+      "validation_mode": "metadata_only",
       "unsupported_claims": 0,
-      "supported_claims": 1,
-      "final_selection_blocked": false,
+      "supported_claims": 0,
+      "final_selection_blocked": true,
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass",
-      "reasons": []
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
+    },
+    {
+      "candidate_id": "gemini-a8865e6c6b3d243f",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "metadata_only",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
+      ]
     },
     {
       "candidate_id": "gemini-7864f379c3db2efb",
@@ -882,9 +899,9 @@
       "reasons": []
     },
     {
-      "candidate_id": "gemini-bb0e15b6742fce01",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_id": "gemini-1861be1473bf6479",
+      "url": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
+      "title": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
       "deep_checked": true,
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -899,14 +916,14 @@
       "reasons": []
     },
     {
-      "candidate_id": "gemini-736ba21c4736e96f",
-      "url": "https://source.android.com/docs/compatibility",
-      "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_id": "gemini-98444c77340368f8",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
       "deep_checked": false,
       "source_fetch_used": false,
       "source_fetch_status": "skipped",
       "source_fetch_error": "",
-      "validation_mode": "skipped",
+      "validation_mode": "metadata_only",
       "unsupported_claims": 0,
       "supported_claims": 0,
       "final_selection_blocked": true,
@@ -914,7 +931,26 @@
       "unsupported_claims_excluded": false,
       "evidence_validation_status": "blocked",
       "reasons": [
-        "stale_claim_risk=high"
+        "source_gap_risk=true"
+      ]
+    },
+    {
+      "candidate_id": "gemini-ef27814b2c8c8636",
+      "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "title": "Android Developers Blog: 17 Things to know for Android developers at Google I/O",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "metadata_only",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked",
+      "reasons": [
+        "source_gap_risk=true"
       ]
     },
     {
@@ -938,6 +974,23 @@
       "candidate_id": "gemini-linked-58d9ec89937d9617",
       "url": "https://developer.android.com/media/camera/camerax/video-capture",
       "title": "VideoCapture",
+      "deep_checked": false,
+      "source_fetch_used": false,
+      "source_fetch_status": "skipped",
+      "source_fetch_error": "",
+      "validation_mode": "skipped",
+      "unsupported_claims": 0,
+      "supported_claims": 0,
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "not_checked",
+      "reasons": []
+    },
+    {
+      "candidate_id": "gemini-linked-3cf1f4c1be6e9dc5",
+      "url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig.Builder",
+      "title": "Feature Group",
       "deep_checked": false,
       "source_fetch_used": false,
       "source_fetch_status": "skipped",
@@ -1086,28 +1139,11 @@
       "unsupported_claims_excluded": false,
       "evidence_validation_status": "not_checked",
       "reasons": []
-    },
-    {
-      "candidate_id": "gemini-linked-397561f51e89cb3c",
-      "url": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com",
-      "title": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com/",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "skipped",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
-      "reasons": []
     }
   ],
   "counts": {
-    "not_checked": 17,
+    "not_checked": 18,
     "pass": 12,
-    "blocked": 32
+    "blocked": 33
   }
 }

@@ -4,105 +4,341 @@
   "newsletter_date": "2026-06-15",
   "proposals": [
     {
-      "proposal_id": "camera-hal-sw-20260615-001",
-      "topic_gap": "Camera HAL SW improvements and new features in Android.",
+      "proposal_id": "camera-hal-android-cli-productivity",
+      "topic_gap": "Android CLI is now stable. Explore how this impacts developer productivity, especially for camera-related tasks and automation.",
       "source_family": "android-developers-blog",
-      "allowed_domains": [
-        "android-developers.googleblog.com"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
-        "Android Camera HAL",
-        "Camera API",
-        "Camera features",
-        "Camera performance"
+        "Android CLI",
+        "developer productivity",
+        "camera automation",
+        "agent development"
       ],
       "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
-        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
+        "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html"
+      ],
+      "expected_evidence": [],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camerax-release-1.6.1-camera-output",
+      "topic_gap": "CameraX 1.6.1 release notes. Investigate any changes or improvements related to camera output, preview, or media pipeline integration.",
+      "source_family": "android-developers-latest-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX 1.6.1",
+        "release notes",
+        "camera output",
+        "media pipeline"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
       ],
       "expected_evidence": [
-        "Camera HAL updates",
-        "Camera API changes",
-        "New camera features",
-        "Performance improvements"
+        "camera output",
+        "preview",
+        "media pipeline"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260615-002",
-      "topic_gap": "Recent updates and bug fixes for CameraX library.",
-      "source_family": "camerax-release-notes",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
-      "search_keywords": [
-        "CameraX release notes",
-        "CameraX bug fixes",
-        "CameraX new features"
-      ],
-      "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-      ],
-      "expected_evidence": [
-        "CameraX release notes",
-        "Bug fixes",
-        "New features",
-        "API changes"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260615-003",
-      "topic_gap": "Linux kernel camera and media subsystem updates relevant to Android.",
+      "proposal_id": "linux-media-kernel-bugs-v4l2-release",
+      "topic_gap": "Recent bug reports in the linux-media list concerning v4l2_release, potentially impacting camera HAL or media pipeline stability.",
       "source_family": "lore-linux-media-list",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
-        "linux kernel camera",
-        "V4L2 updates",
-        "media controller",
-        "ISP driver"
+        "linux-media",
+        "v4l2_release",
+        "slab-use-after-free",
+        "camera driver",
+        "kernel bug"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/178144969601.60470.9256616923389083658@gmail.com/",
-        "https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com/",
-        "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
-        "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/"
+        "https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com/"
       ],
       "expected_evidence": [
-        "V4L2 driver updates",
-        "Media controller changes",
-        "ISP driver improvements",
-        "Bug fixes in camera/media drivers"
+        "v4l2_release",
+        "camera HAL",
+        "media pipeline",
+        "bug fix",
+        "kernel"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260615-004",
-      "topic_gap": "Android compatibility requirements and testing for camera HAL.",
+      "proposal_id": "android-compatibility-camera-its-automation",
+      "topic_gap": "Explore the 'Test camera images using automation' documentation, focusing on its relevance to camera HAL compatibility and testing.",
       "source_family": "aosp-site-updates",
-      "allowed_domains": [
-        "source.android.com"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
-        "Android camera compatibility",
         "Camera ITS",
-        "Camera HAL testing"
+        "automation",
+        "Android compatibility",
+        "camera testing"
       ],
       "candidate_urls": [
-        "https://source.android.com/docs/compatibility/cts/camera-its-box",
-        "https://source.android.com/docs/compatibility"
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "Camera ITS (Image Test Suite)",
-        "CTS (Compatibility Test Suite) for camera",
-        "Camera HAL compatibility requirements"
+        "camera ITS",
+        "automation",
+        "compatibility",
+        "camera HAL"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "google-io-2026-media-pipeline-toolkit",
+      "topic_gap": "Google I/O '26 highlights on building premium Android experiences, specifically focusing on the media pipeline and its toolkit.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Google I/O 2026",
+        "media pipeline",
+        "Android development",
+        "premium experiences"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "media pipeline",
+        "Android experiences",
+        "toolkit",
+        "Google I/O"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-kernel-patch-jpeg-encoder",
+      "topic_gap": "Investigate the kernel patch adding a JPEG encoder node for sm8550, and its implications for camera HAL and media processing.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "JPEG encoder",
+        "sm8550",
+        "linux kernel",
+        "media driver",
+        "camera HAL"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/"
+      ],
+      "expected_evidence": [
+        "JPEG encoder",
+        "sm8550",
+        "camera HAL",
+        "media processing",
+        "kernel patch"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "gcc-16.1-release-cpp26-reflection",
+      "topic_gap": "GCC 16.1 release notes, highlighting C++26 reflection and its potential impact on camera development or related tooling.",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "GCC 16.1",
+        "C++26",
+        "reflection",
+        "compiler release"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1"
+      ],
+      "expected_evidence": [
+        "C++26",
+        "reflection",
+        "compiler",
+        "tooling"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "glaze-7.2-cpp26-reflection-serialization",
+      "topic_gap": "Glaze 7.2 release, featuring C++26 reflection and serialization capabilities, relevant for data handling in camera pipelines.",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Glaze 7.2",
+        "C++26 reflection",
+        "serialization",
+        "camera data"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
+      ],
+      "expected_evidence": [
+        "C++26 reflection",
+        "serialization",
+        "camera pipeline",
+        "data handling"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-kernel-uaf-rcar-vin",
+      "topic_gap": "Investigate User-After-Free (UAF) vulnerability in the rcar-vin media driver and its fix, relevant for camera HAL stability.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "rcar-vin",
+        "UAF",
+        "media driver",
+        "kernel vulnerability",
+        "camera HAL"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/"
+      ],
+      "expected_evidence": [
+        "rcar-vin",
+        "User-After-Free",
+        "UAF",
+        "media driver",
+        "camera HAL",
+        "stability"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-kernel-uaf-sun4i-csi",
+      "topic_gap": "Examine the User-After-Free (UAF) fix in the sun4i_csi media driver, crucial for camera HAL robustness.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "sun4i_csi",
+        "UAF",
+        "media driver",
+        "kernel fix",
+        "camera HAL"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/"
+      ],
+      "expected_evidence": [
+        "sun4i_csi",
+        "User-After-Free",
+        "UAF",
+        "media driver",
+        "camera HAL",
+        "robustness"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-kernel-uaf-rzg2l-cru",
+      "topic_gap": "Analyze the User-After-Free (UAF) fix in the rzg2l-cru media driver, pertinent to camera HAL and media controller operations.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "rzg2l-cru",
+        "UAF",
+        "media driver",
+        "kernel patch",
+        "camera HAL"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/"
+      ],
+      "expected_evidence": [
+        "rzg2l-cru",
+        "User-After-Free",
+        "UAF",
+        "media driver",
+        "camera HAL",
+        "media controller"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developer-productivity-updates-2026-june",
+      "topic_gap": "Top updates for Android developer productivity in June 2026, potentially including camera-related improvements or tools.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android developer productivity",
+        "June 2026",
+        "developer updates",
+        "camera tools"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
+      ],
+      "expected_evidence": [
+        "developer productivity",
+        "Android",
+        "camera tools",
+        "updates"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "google-io-2026-adaptive-apps-compose",
+      "topic_gap": "Explore building seamless Android experiences across devices with Jetpack Compose, as discussed at Google I/O '26, and its potential impact on camera app development.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Google I/O 2026",
+        "Jetpack Compose",
+        "adaptive apps",
+        "camera UI"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Jetpack Compose",
+        "adaptive apps",
+        "cross-device experiences",
+        "camera app development"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-google-io-17-things",
+      "topic_gap": "Key takeaways for Android developers from Google I/O '26, focusing on any camera or media-related advancements.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Google I/O 2026",
+        "Android developers",
+        "camera updates",
+        "media features"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html"
+      ],
+      "expected_evidence": [
+        "Google I/O",
+        "Android developers",
+        "camera",
+        "media"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camerax-release-notes-1.6.0",
+      "topic_gap": "CameraX 1.6.0 release notes, looking for changes impacting camera output, HAL interaction, or media pipeline.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX 1.6.0",
+        "release notes",
+        "camera HAL",
+        "media pipeline"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "expected_evidence": [
+        "CameraX 1.6.0",
+        "release notes",
+        "camera output",
+        "HAL",
+        "media pipeline"
       ],
       "risk_notes": []
     }
