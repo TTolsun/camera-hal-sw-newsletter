@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-06-16",
+  "validations": [
+    {
+      "proposal_id": "camera-x-1.6.0-release",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camera-x-1.6.1-release",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "google-io-26-media-pipeline-toolkit",
+      "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "accepted": false,
+      "rejected_reason": "domain_not_allowed",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "aosp-camera-testing-automation",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "linux-media-kernel-patches-june-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260615140529.52653-1-doruk@0sec.ai/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260615140529.52653-1-doruk@0sec.ai/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "linux-media-kernel-patches-june-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "linux-media-kernel-patches-dts-overlay-june-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260615-shikra-camss-review-v4-6-bcb51081735b@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260615-shikra-camss-review-v4-6-bcb51081735b@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "linux-media-kernel-patches-memory-leak-june-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "linux-media-kernel-patches-kmalloc-replacement-june-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/ajAHitx6a0Sk5pLZ@ashevche-desk.local/",
+      "normalized_url": "https://lore.kernel.org/linux-media/ajAHitx6a0Sk5pLZ@ashevche-desk.local/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "gcc-16.1-release-cpp26-features",
+      "candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "linux-media-atomisp-memory-leak-fix",
+      "candidate_url": "https://lore.kernel.org/linux-media/ai_eGXhKhsV1fhlC@ashevche-desk.local/",
+      "normalized_url": "https://lore.kernel.org/linux-media/ai_eGXhKhsV1fhlC@ashevche-desk.local/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "linux-media-atomisp-pci-probe-memory-leak-fix",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/",
+      "accepted": false,
+      "rejected_reason": "duplicate_proposal_url",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "linux-media-nxp-neoisp-device-tree-node",
+      "candidate_url": "https://lore.kernel.org/linux-media/ajACNM8ZXiYGgRwe@SMW015318/",
+      "normalized_url": "https://lore.kernel.org/linux-media/ajACNM8ZXiYGgRwe@SMW015318/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "libcamera-devel-archive-updates",
+      "candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "normalized_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "libcamera-release-announcements"
+    },
+    {
+      "proposal_id": "media3-1.10.1-release-notes",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "androidx-media3-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-media3-release",
+      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
+      "source_extraction_item_count": 0
+    }
+  ],
+  "counts": {
+    "discovered_not_extractable": 3,
+    "domain_not_allowed": 1,
+    "accepted": 10,
+    "duplicate_proposal_url": 1
+  }
+}

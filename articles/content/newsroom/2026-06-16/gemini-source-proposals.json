@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-16",
+  "proposals": [
+    {
+      "proposal_id": "camera-x-1.6.0-release",
+      "topic_gap": "CameraX 1.6.0 release notes are available, detailing updates and potential impacts on camera pipelines.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX 1.6.0 release",
+        "CameraX updates",
+        "camera pipeline changes"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "expected_evidence": [
+        "CameraX 1.6.0 release notes",
+        "camera pipeline updates",
+        "new features",
+        "bug fixes"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-x-1.6.1-release",
+      "topic_gap": "CameraX 1.6.1 release notes are available, indicating incremental updates to the camera library.",
+      "source_family": "android-developers-latest-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX 1.6.1 release",
+        "CameraX updates"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "expected_evidence": [
+        "CameraX 1.6.1 release notes",
+        "camera library updates",
+        "bug fixes"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "google-io-26-media-pipeline-toolkit",
+      "topic_gap": "Google I/O '26 highlights a premium media pipeline toolkit for Android, relevant to camera-generated media.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Google I/O 2026 media pipeline",
+        "Android media toolkit",
+        "camera output pipeline"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "premium media pipeline toolkit",
+        "Android",
+        "Google I/O '26",
+        "camera-generated media"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "aosp-camera-testing-automation",
+      "topic_gap": "AOSP documentation on automating camera image testing provides insights into HAL and camera pipeline validation.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android camera testing",
+        "camera HAL automation",
+        "camera pipeline CTS"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "camera image testing",
+        "automation",
+        "camera HAL",
+        "camera pipeline validation"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-kernel-patches-june-2026",
+      "topic_gap": "Recent Linux kernel media patches address potential issues in video decoding and codec release paths, relevant to camera pipelines.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel media patches",
+        "video decoder fix",
+        "codec release bug"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260615140529.52653-1-doruk@0sec.ai/",
+        "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai/"
+      ],
+      "expected_evidence": [
+        "Linux kernel media patches",
+        "video decoding",
+        "codec release path",
+        "camera pipeline"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-kernel-patches-dts-overlay-june-2026",
+      "topic_gap": "Linux kernel media patches include device tree overlay updates for camera modules, relevant to hardware integration.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel camera dts",
+        "device tree overlay camera",
+        "camera hardware integration"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260615-shikra-camss-review-v4-6-bcb51081735b@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Linux kernel media patches",
+        "device tree overlay",
+        "camera module",
+        "hardware integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-kernel-patches-memory-leak-june-2026",
+      "topic_gap": "Linux kernel media patches address memory leaks in camera drivers, crucial for stable camera HAL operation.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel camera memory leak",
+        "camera driver fix",
+        "camera HAL stability"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/"
+      ],
+      "expected_evidence": [
+        "Linux kernel media patches",
+        "memory leak",
+        "camera driver",
+        "camera HAL"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-kernel-patches-kmalloc-replacement-june-2026",
+      "topic_gap": "Linux kernel media patches replace kmalloc with kmalloc_array for improved memory management in camera drivers.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel camera kmalloc",
+        "camera driver memory",
+        "kmalloc_array usage"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/ajAHitx6a0Sk5pLZ@ashevche-desk.local/"
+      ],
+      "expected_evidence": [
+        "Linux kernel media patches",
+        "kmalloc_array",
+        "memory management",
+        "camera driver"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "gcc-16.1-release-cpp26-features",
+      "topic_gap": "GCC 16.1 release includes C++26 features like reflection and contracts, potentially impacting C++ camera HAL development.",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "GCC 16.1 C++26",
+        "C++ reflection camera",
+        "C++ contracts HAL"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1"
+      ],
+      "expected_evidence": [
+        "GCC 16.1 release",
+        "C++26 features",
+        "reflection",
+        "contracts",
+        "camera HAL development"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-atomisp-memory-leak-fix",
+      "topic_gap": "A patch addresses a memory leak in the atomisp driver, crucial for camera HAL stability.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "atomisp memory leak",
+        "camera driver fix",
+        "camera HAL stability"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/ai_eGXhKhsV1fhlC@ashevche-desk.local/"
+      ],
+      "expected_evidence": [
+        "atomisp driver patch",
+        "memory leak fix",
+        "camera HAL stability"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-atomisp-pci-probe-memory-leak-fix",
+      "topic_gap": "A patch addresses a memory leak in the atomisp PCI probe function, important for camera HAL initialization.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "atomisp pci probe memory leak",
+        "camera HAL initialization fix"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/"
+      ],
+      "expected_evidence": [
+        "atomisp PCI probe patch",
+        "memory leak fix",
+        "camera HAL initialization"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-nxp-neoisp-device-tree-node",
+      "topic_gap": "Device tree overlay for NXP neoisp camera sensor is added, relevant for hardware camera pipeline integration.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "nxp neoisp device tree",
+        "camera sensor integration",
+        "hardware camera pipeline"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/ajACNM8ZXiYGgRwe@SMW015318/"
+      ],
+      "expected_evidence": [
+        "NXP neoisp device tree",
+        "camera sensor",
+        "hardware camera pipeline"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-devel-archive-updates",
+      "topic_gap": "The libcamera-devel mailing list archives may contain updates relevant to camera pipelines and HAL integration.",
+      "source_family": "libcamera-release-announcements",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera devel mailing list",
+        "camera pipeline updates",
+        "libcamera HAL"
+      ],
+      "candidate_urls": [
+        "https://lists.libcamera.org/pipermail/libcamera-devel/"
+      ],
+      "expected_evidence": [
+        "libcamera updates",
+        "camera pipeline",
+        "HAL integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "media3-1.10.1-release-notes",
+      "topic_gap": "Media3 1.10.1 release notes are available, potentially including updates relevant to camera output and A/V sync.",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3 1.10.1 release",
+        "camera output sync",
+        "Media3 updates"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
+      ],
+      "expected_evidence": [
+        "Media3 1.10.1 release notes",
+        "camera output",
+        "A/V sync"
+      ],
+      "risk_notes": []
+    }
+  ]
+}

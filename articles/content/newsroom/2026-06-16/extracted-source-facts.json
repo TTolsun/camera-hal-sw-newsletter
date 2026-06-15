@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "b42f0f8cfbaa9f26",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "published_at": "March 25, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.95,
+      "android_hal_relevance": 0.95,
+      "ai_relevance": 0,
+      "technical_depth": 0.873,
+      "warnings": []
+    },
+    {
+      "id": "gemini-1988bc8b9061e383",
+      "url": "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/",
+      "title": "Re: [PATCH v2 1/2] media: atomisp: fix memory leak in atomisp_pci_probe() - Dawei Feng",
+      "published_at": "2026-06-15",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v2 1/2] media: atomisp: fix memory leak in atomisp_pci_probe() - Dawei Feng",
+          "evidence_text": "<html><head><title>Re: [PATCH v2 1/2] media: atomisp: fix memory leak in atomisp_pci_probe() - Dawei Feng</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-3a2dd40706104372",
+      "url": "https://lore.kernel.org/linux-media/ajACNM8ZXiYGgRwe@SMW015318/",
+      "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Frank Li",
+      "published_at": "2026-06-15",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Frank Li",
+          "evidence_text": "<html><head><title>Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Frank Li</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-8d79fc8494c95812",
+      "url": "https://lore.kernel.org/linux-media/ajAHitx6a0Sk5pLZ@ashevche-desk.local/",
+      "title": "Re: [PATCH v2] media: atomisp: replace kmalloc() with kmalloc_array() in sh_css.c - Andy Shevchenko",
+      "published_at": "2026-06-15",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v2] media: atomisp: replace kmalloc() with kmalloc_array() in sh_css.c - Andy Shevchenko",
+          "evidence_text": "<html><head><title>Re: [PATCH v2] media: atomisp: replace kmalloc() with kmalloc_array() in sh_css.c - Andy Shevchenko</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-a03f76c197da2a81",
+      "url": "https://lore.kernel.org/linux-media/20260615-shikra-camss-review-v4-6-bcb51081735b@oss.qualcomm.com/",
+      "title": "[PATCH v4 6/6] arm64: dts: qcom: shikra-iqs-evk-imx577-camera: Add DT overlay - Nihal Kumar Gupta",
+      "published_at": "2026-06-15",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v4 6/6] arm64: dts: qcom: shikra-iqs-evk-imx577-camera: Add DT overlay - Nihal Kumar Gupta",
+          "evidence_text": "<html><head><title>[PATCH v4 6/6] arm64: dts: qcom: shikra-iqs-evk-imx577-camera: Add DT overlay - Nihal Kumar Gupta</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-c",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-fc4425ca02aebc71",
+      "url": "https://lore.kernel.org/linux-media/ai_eGXhKhsV1fhlC@ashevche-desk.local/",
+      "title": "Re: [PATCH v2 2/2] media: atomisp: fix memory leak in atomisp_csi2_bridge_parse_firmware() - Andy Shevchenko",
+      "published_at": "2026-06-15",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v2 2/2] media: atomisp: fix memory leak in atomisp_csi2_bridge_parse_firmware() - Andy Shevchenko",
+          "evidence_text": "<html><head><title>Re: [PATCH v2 2/2] media: atomisp: fix memory leak in atomisp_csi2_bridge_parse_firmware() - Andy Shevchenko</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "published_at": "2026-05-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.794,
+      "warnings": []
+    },
+    {
+      "id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-05-27",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.783,
+      "warnings": []
+    },
+    {
+      "id": "7b73f25865d05550",
+      "url": "https://lore.kernel.org/linux-media/ai_eGXhKhsV1fhlC@ashevche-desk.local/",
+      "title": "Re: [PATCH v2 2/2] media: atomisp: fix memory leak in atomisp_csi2_bridge_parse_firmware()",
+      "published_at": "2026-06-15T11:12:31Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "On Mon, Jun 15, 2026 at 03:28:41PM +0800, Dawei Feng wrote: > atomisp_csi2_bridge_parse_firmware() initializes isp->notifier and may > allocate async notifier connections via v4l2_async_nf_add_fwnode_remote(). > However, these resources are currently leaked if a subsequent entity > registration or probe step fails, or when the driver is removed. > > Fix this by introducing dedicated helpers to clean up and unregister the > async notifier state. Call atomisp_notifier_cleanup() to release the > al",
+          "evidence_text": "<html><head><title>Re: [PATCH v2 2/2] media: atomisp: fix memory leak in atomisp_csi2_bridge_parse_firmware() - Andy Shevchenko</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "gemini-508920499b97f882",
+      "url": "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai/",
+      "title": "[PATCH] media: mediatek: vcodec: fix use-after-free in decoder release path - Doruk Tan Ozturk",
+      "published_at": "2026-06-15",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH] media: mediatek: vcodec: fix use-after-free in decoder release path - Doruk Tan Ozturk",
+          "evidence_text": "<html><head><title>[PATCH] media: mediatek: vcodec: fix use-after-free in decoder release path - Doruk Tan Ozturk</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-colo",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "214a4bd6f6ed83c9",
+      "url": "https://lore.kernel.org/linux-media/20260615140529.52653-1-doruk@0sec.ai/",
+      "title": "[PATCH] media: meson: vdec: fix use-after-free of decode work in stop/close path",
+      "published_at": "2026-06-15T14:05:33Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "vdec_close() calls v4l2_m2m_ctx_release() and then kfree(sess) without ever cancelling sess->esparser_queue_work. The worker esparser_queue_all_src() takes sess->lock and walks the source buffers of sess->m2m_ctx, so if it is still pending or running when the session is torn down it dereferences freed memory. The work is (re-)armed from several places, including amvdec_buf_done(), which runs from the decode-completion/IRQ path. That makes the obvious fixes insufficient: - v4l2_m2m_ctx_release()",
+          "evidence_text": "<html><head><title>[PATCH] media: meson: vdec: fix use-after-free of decode work in stop/close path - Doruk Tan Ozturk</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.81,
+      "android_hal_relevance": 0.81,
+      "ai_relevance": 0,
+      "technical_depth": 0.764,
+      "warnings": []
+    },
+    {
+      "id": "0f9260a82a63062d",
+      "url": "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai/",
+      "title": "[PATCH] media: mediatek: vcodec: fix use-after-free in decoder release path",
+      "published_at": "2026-06-15T14:05:31Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "fops_vcodec_release() frees the decoder context with kfree(ctx) but never cancels the per-context decode_work worker first. Although v4l2_m2m_ctx_release() waits for any in-flight m2m job to finish, the workqueue handler (mtk_vdec_worker) may still be running and accessing the context after v4l2_m2m_job_finish() returns. Once kfree(ctx) runs, that worker dereferences freed memory, resulting in a use-after-free. Cancel the pending decode work with cancel_work_sync(&ctx->decode_work) after the con",
+          "evidence_text": "<html><head><title>[PATCH] media: mediatek: vcodec: fix use-after-free in decoder release path - Doruk Tan Ozturk</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-colo",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.74,
+      "warnings": []
+    }
+  ]
+}
