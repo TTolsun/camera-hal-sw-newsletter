@@ -5,107 +5,104 @@
   "proposals": [
     {
       "proposal_id": "camera-hal-sw-20260615-001",
-      "topic_gap": "Recent updates or significant changes in Android's media pipeline, focusing on camera output and A/V synchronization, particularly relevant for developers.",
-      "source_family": "android-media",
-      "allowed_domains": [],
+      "topic_gap": "Camera HAL SW improvements and new features in Android.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [
+        "android-developers.googleblog.com"
+      ],
       "search_keywords": [
-        "Media3",
-        "A/V sync",
-        "camera output",
-        "Android media pipeline"
+        "Android Camera HAL",
+        "Camera API",
+        "Camera features",
+        "Camera performance"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
+        "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
       ],
       "expected_evidence": [
-        "Media3 release notes",
-        "A/V sync improvements",
-        "Camera output handling"
+        "Camera HAL updates",
+        "Camera API changes",
+        "New camera features",
+        "Performance improvements"
       ],
       "risk_notes": []
     },
     {
       "proposal_id": "camera-hal-sw-20260615-002",
-      "topic_gap": "New features or changes in CameraX library that impact camera development on Android.",
-      "source_family": "camera-api",
-      "allowed_domains": [],
+      "topic_gap": "Recent updates and bug fixes for CameraX library.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
       "search_keywords": [
-        "CameraX",
-        "release notes",
-        "Android camera",
-        "camera capture"
+        "CameraX release notes",
+        "CameraX bug fixes",
+        "CameraX new features"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
       ],
       "expected_evidence": [
         "CameraX release notes",
-        "New camera APIs",
-        "Bug fixes related to camera capture"
+        "Bug fixes",
+        "New features",
+        "API changes"
       ],
       "risk_notes": []
     },
     {
       "proposal_id": "camera-hal-sw-20260615-003",
-      "topic_gap": "Updates to Android's camera framework or HAL, including new features, performance improvements, or bug fixes.",
-      "source_family": "linux-camera",
-      "allowed_domains": [],
+      "topic_gap": "Linux kernel camera and media subsystem updates relevant to Android.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
       "search_keywords": [
-        "linux-media",
-        "V4L2",
-        "camera HAL",
-        "kernel driver"
+        "linux kernel camera",
+        "V4L2 updates",
+        "media controller",
+        "ISP driver"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/"
+        "https://lore.kernel.org/linux-media/178144969601.60470.9256616923389083658@gmail.com/",
+        "https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com/",
+        "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
+        "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/"
       ],
       "expected_evidence": [
-        "Kernel patches related to camera drivers",
-        "V4L2 updates",
-        "Media controller changes"
+        "V4L2 driver updates",
+        "Media controller changes",
+        "ISP driver improvements",
+        "Bug fixes in camera/media drivers"
       ],
       "risk_notes": []
     },
     {
       "proposal_id": "camera-hal-sw-20260615-004",
-      "topic_gap": "Recent developments in the libcamera project that could influence Android camera development or integration.",
-      "source_family": "linux-camera",
-      "allowed_domains": [],
+      "topic_gap": "Android compatibility requirements and testing for camera HAL.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [
+        "source.android.com"
+      ],
       "search_keywords": [
-        "libcamera",
-        "devel mailing list",
-        "Android integration",
-        "camera pipeline"
+        "Android camera compatibility",
+        "Camera ITS",
+        "Camera HAL testing"
       ],
       "candidate_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/"
+        "https://source.android.com/docs/compatibility/cts/camera-its-box",
+        "https://source.android.com/docs/compatibility"
       ],
       "expected_evidence": [
-        "libcamera mailing list discussions",
-        "New features or bug fixes in libcamera",
-        "Integration with Android"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260615-005",
-      "topic_gap": "Significant updates or new features in C++ standards or compilers that are relevant to embedded systems and camera development.",
-      "source_family": "cpp",
-      "allowed_domains": [],
-      "search_keywords": [
-        "GCC",
-        "C++26",
-        "reflection",
-        "compiler updates"
-      ],
-      "candidate_urls": [
-        "https://isocpp.org//blog/2026/04/gcc-16.1",
-        "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more"
-      ],
-      "expected_evidence": [
-        "GCC release notes",
-        "C++26 features",
-        "Reflection in C++"
+        "Camera ITS (Image Test Suite)",
+        "CTS (Compatibility Test Suite) for camera",
+        "Camera HAL compatibility requirements"
       ],
       "risk_notes": []
     }

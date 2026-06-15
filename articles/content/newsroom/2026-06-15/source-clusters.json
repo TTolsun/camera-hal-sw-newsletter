@@ -59,8 +59,8 @@
       "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "canonical_title": "CameraX Release Notes - CameraX 1.6.0",
-      "candidate_count": 3,
-      "duplicate_count": 2,
+      "candidate_count": 4,
+      "duplicate_count": 3,
       "candidates": [
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
@@ -71,7 +71,14 @@
         },
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "title": "CameraX Release Notes - CameraX 1.6.1",
+          "title": "1.6.1",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "title": "1.3.0-beta02",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -90,13 +97,20 @@
       "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "canonical_title": "Test camera images using automation",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "title": "Test camera images using automation",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -107,13 +121,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "canonical_title": "17 Things to know for Android developers at Google I/O",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
           "title": "17 Things to know for Android developers at Google I/O",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+          "title": "Android Developers Blog: 17 Things to know for Android developers at Google I/O",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -124,13 +145,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_title": "Top 3 updates for Android developer productivity",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
           "title": "Top 3 updates for Android developer productivity",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -192,13 +220,20 @@
       "cluster_key": "https://source.android.com/docs/compatibility",
       "canonical_url": "https://source.android.com/docs/compatibility",
       "canonical_title": "Compatibility",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility",
           "title": "Compatibility",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility",
+          "title": "Build a Compatible Android Device &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -324,6 +359,54 @@
       ]
     },
     {
+      "cluster_id": "54cf558890b2acdc",
+      "cluster_key": "https://lore.kernel.org/linux-media/178144969601.60470.9256616923389083658@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/178144969601.60470.9256616923389083658@gmail.com/",
+      "canonical_title": "[BUG] Input: sur40: KASAN slab-use-after-free in v4l2_release",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/178144969601.60470.9256616923389083658@gmail.com/",
+          "title": "[BUG] Input: sur40: KASAN slab-use-after-free in v4l2_release",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/178144969601.60470.9256616923389083658@gmail.com/",
+          "title": "[BUG] Input: sur40: KASAN slab-use-after-free in v4l2_release - Shuangpeng Bai",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ef4985106d92438e",
+      "cluster_key": "https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com/",
+      "canonical_title": "[BUG] Input: rmi4: KASAN slab-use-after-free in v4l2_release",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com/",
+          "title": "[BUG] Input: rmi4: KASAN slab-use-after-free in v4l2_release",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com/",
+          "title": "[BUG] Input: rmi4: KASAN slab-use-after-free in v4l2_release - Shuangpeng Bai",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "61c963a289f63e09",
       "cluster_key": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
       "canonical_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
@@ -379,13 +462,20 @@
       "cluster_key": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb",
       "canonical_url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
       "canonical_title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
           "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
+          "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Dmitry Baryshkov",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -396,20 +486,13 @@
       "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel",
       "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
       "canonical_title": "The libcamera-devel Archives",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
           "title": "The libcamera-devel Archives",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
-          "title": "The libcamera-devel Archives",
-          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -454,20 +537,13 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
           "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
           "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        },
-        {
-          "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
-          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -495,20 +571,13 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
           "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
           "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        },
-        {
-          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
-          "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
-          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -536,13 +605,20 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
       "canonical_title": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
           "title": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
+          "title": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -553,13 +629,20 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
       "canonical_title": "[PATCH v3 12/22] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
           "title": "[PATCH v3 12/22] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/",
+          "title": "[PATCH v3 12/22] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -570,13 +653,20 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/",
       "canonical_title": "[PATCH v3 7/22] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/",
           "title": "[PATCH v3 7/22] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/",
+          "title": "[PATCH v3 7/22] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -594,47 +684,6 @@
           "url": "https://lore.kernel.org/linux-media/20260614202835.11977-12-birenpandya@gmail.com/",
           "title": "[PATCH v3 11/22] media: platform: csisp: Add missing media_entity_cleanup()",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "33a5646594a306c2",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH v3 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup()",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com/",
-          "title": "[PATCH v3 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup()",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "82959bc25cfe1104",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/",
-      "canonical_title": "[PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/",
-          "title": "[PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/",
-          "title": "[PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls - Biren Pandya",
-          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -659,23 +708,6 @@
           "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
           "title": "Media3 Release Notes - Media3 1.10.1",
           "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "d4a0acfc0ac6ad6e",
-      "cluster_key": "https://developer.android.com/training/data-storage/shared/photo-picker",
-      "canonical_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-      "canonical_title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
-          "canonical": true,
           "reliability": "official",
           "manual_seed": false
         }
@@ -709,23 +741,6 @@
         {
           "url": "https://developer.android.com/media/camera/camerax/video-capture",
           "title": "VideoCapture",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "3cf1f4c1be6e9dc5",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/sessionconfig.builder",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig.Builder",
-      "canonical_title": "Feature Group",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig.Builder",
-          "title": "Feature Group",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -852,40 +867,6 @@
       ]
     },
     {
-      "cluster_id": "0779844e3674fa79",
-      "cluster_key": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "canonical_url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "canonical_title": "Latest security bulletins",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-          "title": "Latest security bulletins",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "584a6a0cadfdd7d4",
-      "cluster_key": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "canonical_url": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "canonical_title": "Latest Compatibility Definition Document (CDD)",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://source.android.com/docs/whatsnew/latest-cdd",
-          "title": "Latest Compatibility Definition Document (CDD)",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "7317dd637c497758",
       "cluster_key": "https://source.android.com/docs/security/bulletin",
       "canonical_url": "https://source.android.com/docs/security/bulletin",
@@ -903,16 +884,16 @@
       ]
     },
     {
-      "cluster_id": "cdb791e401c6417d",
-      "cluster_key": "https://source.android.com/docs/core/architecture",
-      "canonical_url": "https://source.android.com/docs/core/architecture",
-      "canonical_title": "Architecture",
+      "cluster_id": "397561f51e89cb3c",
+      "cluster_key": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com",
+      "canonical_url": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com",
+      "canonical_title": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com/",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://source.android.com/docs/core/architecture",
-          "title": "Architecture",
+          "url": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com",
+          "title": "https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com/",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
