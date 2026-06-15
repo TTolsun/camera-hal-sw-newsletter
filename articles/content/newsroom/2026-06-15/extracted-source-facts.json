@@ -13,7 +13,7 @@
       "claims": [
         {
           "claim": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"es-419-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develop",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"pl-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
           "confidence": "medium"
         }
       ],
@@ -36,7 +36,7 @@
       "claims": [
         {
           "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"pt-BR-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Sou",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"ru-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
           "confidence": "medium"
         }
       ],
@@ -59,7 +59,7 @@
       "claims": [
         {
           "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"pt-BR-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Sou",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
           "confidence": "medium"
         }
       ],
@@ -90,6 +90,52 @@
       "android_hal_relevance": 0.63,
       "ai_relevance": 0.5,
       "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "gemini-fe78a11c9249189d",
+      "url": "https://lore.kernel.org/linux-media/ai8NwzoU08AvD7Ve@spark.kcore.it/",
+      "title": "Re: [BUG] OV02C10 on Dell 16 Premium DA16250 (ARL): INT3472 handshake-derived &#34;dvdd&#34; regulator registered but never linked to sensor, sensor probe fails with -EREMOTEIO - Marco Nenciarini",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [BUG] OV02C10 on Dell 16 Premium DA16250 (ARL): INT3472 handshake-derived &#34;dvdd&#34; regulator registered but never linked to sensor, sensor probe fails with -EREMOTEIO - Marco Nenciarini",
+          "evidence_text": "<html><head><title>Re: [BUG] OV02C10 on Dell 16 Premium DA16250 (ARL): INT3472 handshake-derived &#34;dvdd&#34; regulator registered but never linked to sensor, sensor probe fails with -EREMOTEIO - Marco Nenciarini</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,pri",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "gemini-1861be1473bf6479",
+      "url": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
+      "title": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+      "published_at": "2026-06-14",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+          "evidence_text": "<html><head><title>[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pr",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
       "warnings": []
     },
     {
@@ -220,7 +266,7 @@
       "claims": [
         {
           "claim": "May 16, 2026 Version 1.9.4 contains the following commits .",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"zh-TW-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develope",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
           "confidence": "medium"
         }
       ],
@@ -228,52 +274,6 @@
       "android_hal_relevance": 0.79,
       "ai_relevance": 0.5,
       "technical_depth": 0.674,
-      "warnings": []
-    },
-    {
-      "id": "gemini-b564c567eef7ae59",
-      "url": "https://source.android.com/docs/compatibility/cdd",
-      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
-      "published_at": "2025-05-29",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.672,
-      "warnings": []
-    },
-    {
-      "id": "499a4a6dab8bbf43",
-      "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
-      "title": "17 Things to know for Android developers at Google I/O",
-      "published_at": "Tue, 19 May 2026 13:00:00 +0000",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Posted by Matthew McCullough, VP, Product Management, Android Developer Today at Google I/O, we announced the many ways we’re powering agentic workflows to increase your productivity and ensure your apps shine across the expanding Android ecosystem. Here’s a recap of 17 of our favorite announcements for Android developers; you can also see what was announced last week in The Android Show: I/O Edition . Stay tuned over the next two days as we dive into all of the topics in more detail! Build High",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.84,
-      "android_hal_relevance": 0.84,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.648,
       "warnings": []
     }
   ]

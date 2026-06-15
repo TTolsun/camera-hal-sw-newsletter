@@ -42,16 +42,25 @@
 | blocked_candidate | 0.572 | [PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls | https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/ |
 | blocked_candidate | 0.674 | Media3 Release Notes - Media3 1.9.4 | https://developer.android.com/jetpack/androidx/releases/media3#1.9.4 |
 | blocked_candidate | 0.65 | Media3 Release Notes - Media3 1.10.1 | https://developer.android.com/jetpack/androidx/releases/media3#1.10.1 |
-| blocked_candidate | 0.492 | Android Developers Blog: 17 Things to know for Android developers at Google I/O | https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html |
-| review_candidate | 0.72 | [PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls - Biren Pandya | https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/ |
-| review_candidate | 0.72 | [PATCH v3 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup() - Biren Pandya | https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com/ |
+| review_candidate | 0.72 | Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Dmitry Baryshkov | https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/ |
+| review_candidate | 0.765 | Re: [BUG] OV02C10 on Dell 16 Premium DA16250 (ARL): INT3472 handshake-derived &#34;dvdd&#34; regulator registered but never linked to sensor, sensor probe fails with -EREMOTEIO - Marco Nenciarini | https://lore.kernel.org/linux-media/ai8NwzoU08AvD7Ve@spark.kcore.it/ |
+| review_candidate | 0.72 | [PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya | https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/ |
 | review_candidate | 0.72 | [PATCH v3 12/22] media: platform: rcar-vin: Add missing media_entity_cleanup() + fix UAF - Biren Pandya | https://lore.kernel.org/linux-media/20260614202835.11977-13-birenpandya@gmail.com/ |
 | review_candidate | 0.72 | [PATCH v3 7/22] media: platform: sun4i_csi: Add missing media_entity_cleanup() + fix UAF - Biren Pandya | https://lore.kernel.org/linux-media/20260614202835.11977-8-birenpandya@gmail.com/ |
-| review_candidate | 0.72 | Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Dmitry Baryshkov | https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/ |
-| review_candidate | 0.672 | Android Compatibility Definition Document &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cdd |
+| review_candidate | 0.72 | [PATCH v3 09/22] media: platform: cdns-csi2tx: Add missing media_entity_cleanup() - Biren Pandya | https://lore.kernel.org/linux-media/20260614202835.11977-10-birenpandya@gmail.com/ |
+| review_candidate | 0.72 | [PATCH v3 00/22] media: tree-wide: Add missing media_entity_cleanup() calls - Biren Pandya | https://lore.kernel.org/linux-media/20260614202835.11977-1-birenpandya@gmail.com/ |
+| blocked_candidate | 0.5 | GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++ | https://isocpp.org//blog/2026/04/gcc-16.1 |
+| blocked_candidate | 0.455 | Glaze 7.2 - C++26 Reflection \| YAML, CBOR, MessagePack, TOML and more : Standard C++ | https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more |
 | review_candidate | 0.783 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
 | weak_candidate | 0.458 | CameraX | https://developer.android.com/media/camera/camerax |
 | weak_candidate | 0.367 | VideoCapture | https://developer.android.com/media/camera/camerax/video-capture |
+| weak_candidate | 0.367 | Feature Group | https://developer.android.com/reference/androidx/camera/core/SessionConfig.Builder |
+| weak_candidate | 0.367 | GroupableFeatures | https://developer.android.com/reference/kotlin/androidx/camera/video/GroupableFeatures |
+| weak_candidate | 0.413 | CameraEffect | https://developer.android.com/reference/androidx/camera/core/CameraEffect |
+| weak_candidate | 0.413 | ImageAnalysis | https://developer.android.com/reference/androidx/camera/core/ImageAnalysis |
+| weak_candidate | 0.367 | SessionConfig | https://developer.android.com/reference/androidx/camera/core/SessionConfig |
+| weak_candidate | 0.367 | HighSpeedVideoSessionConfig | https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig |
+| weak_candidate | 0.367 | ExtensionSessionConfig | https://developer.android.com/reference/androidx/camera/extensions/ExtensionSessionConfig |
 | weak_candidate | 0.413 | Release notes | https://source.android.com/docs/whatsnew/release-notes |
 | weak_candidate | 0.367 | Bulletins | https://source.android.com/docs/security/bulletin |
 | weak_candidate | 0.33 | more information about this list | https://lists.libcamera.org/listinfo/libcamera-devel |

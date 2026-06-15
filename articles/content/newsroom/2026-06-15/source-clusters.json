@@ -121,20 +121,13 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
       "canonical_title": "17 Things to know for Android developers at Google I/O",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
           "title": "17 Things to know for Android developers at Google I/O",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
-          "title": "Android Developers Blog: 17 Things to know for Android developers at Google I/O",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -264,20 +257,13 @@
       "cluster_key": "https://source.android.com/docs/compatibility/cdd",
       "canonical_url": "https://source.android.com/docs/compatibility/cdd",
       "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility/cdd",
           "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://source.android.com/docs/compatibility/cdd",
-          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -482,13 +468,20 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
           "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
           "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        },
+        {
+          "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
+          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -516,13 +509,20 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
       "canonical_title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
           "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
           "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        },
+        {
+          "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more : Standard C++",
+          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -533,13 +533,20 @@
       "cluster_key": "https://lore.kernel.org/linux-media/ai8nwzou08avd7ve@spark.kcore.it",
       "canonical_url": "https://lore.kernel.org/linux-media/ai8NwzoU08AvD7Ve@spark.kcore.it/",
       "canonical_title": "Re: [BUG] OV02C10 on Dell 16 Premium DA16250 (ARL): INT3472 handshake-derived \"dvdd\" regulator registered but never linked to sensor, sensor probe fails with -EREMOTEIO",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/ai8NwzoU08AvD7Ve@spark.kcore.it/",
           "title": "Re: [BUG] OV02C10 on Dell 16 Premium DA16250 (ARL): INT3472 handshake-derived \"dvdd\" regulator registered but never linked to sensor, sensor probe fails with -EREMOTEIO",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/ai8NwzoU08AvD7Ve@spark.kcore.it/",
+          "title": "Re: [BUG] OV02C10 on Dell 16 Premium DA16250 (ARL): INT3472 handshake-derived &#34;dvdd&#34; regulator registered but never linked to sensor, sensor probe fails with -EREMOTEIO - Marco Nenciarini",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -550,13 +557,20 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
       "canonical_title": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
           "title": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260614202835.11977-14-birenpandya@gmail.com/",
+          "title": "[PATCH v3 13/22] media: platform: rzg2l-cru: Add missing media_entity_cleanup() + fix UAF - Biren Pandya",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -727,6 +741,125 @@
         {
           "url": "https://developer.android.com/media/camera/camerax/video-capture",
           "title": "VideoCapture",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3cf1f4c1be6e9dc5",
+      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/sessionconfig.builder",
+      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig.Builder",
+      "canonical_title": "Feature Group",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig.Builder",
+          "title": "Feature Group",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a279bb0df20018e4",
+      "cluster_key": "https://developer.android.com/reference/kotlin/androidx/camera/video/groupablefeatures",
+      "canonical_url": "https://developer.android.com/reference/kotlin/androidx/camera/video/GroupableFeatures",
+      "canonical_title": "GroupableFeatures",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/kotlin/androidx/camera/video/GroupableFeatures",
+          "title": "GroupableFeatures",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "eb09ee752aa3ba14",
+      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/cameraeffect",
+      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
+      "canonical_title": "CameraEffect",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
+          "title": "CameraEffect",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "520fe52c7e358499",
+      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/imageanalysis",
+      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
+      "canonical_title": "ImageAnalysis",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
+          "title": "ImageAnalysis",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d024ea744f6e9986",
+      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/sessionconfig",
+      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig",
+      "canonical_title": "SessionConfig",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig",
+          "title": "SessionConfig",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f64d4b5cb00fe978",
+      "cluster_key": "https://developer.android.com/reference/androidx/camera/video/highspeedvideosessionconfig",
+      "canonical_url": "https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig",
+      "canonical_title": "HighSpeedVideoSessionConfig",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig",
+          "title": "HighSpeedVideoSessionConfig",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3cfe4e1c81ca8501",
+      "cluster_key": "https://developer.android.com/reference/androidx/camera/extensions/extensionsessionconfig",
+      "canonical_url": "https://developer.android.com/reference/androidx/camera/extensions/ExtensionSessionConfig",
+      "canonical_title": "ExtensionSessionConfig",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/reference/androidx/camera/extensions/ExtensionSessionConfig",
+          "title": "ExtensionSessionConfig",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
