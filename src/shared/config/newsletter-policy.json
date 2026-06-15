@@ -83,5 +83,13 @@
       "blocked source quality",
       "source quality drift"
     ]
+  },
+  "sourceEligibilityPolicy": {
+    "mailingListPatchMainArticle": {
+      "enabled": true,
+      "sourceRole": "project_mailing_list_source",
+      "evidenceStrengthMin": 0.5,
+      "technicalDepthMin": 0.5
+    }
   }
 }
