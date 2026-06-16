@@ -34,18 +34,18 @@
 | 항목 | 값 | 판단 |
 | --- | --- | --- |
 | manual 후보 | 40 | 입력 |
-| Gemini 후보 | 11 | 실행됨 |
+| Gemini 후보 | 10 | 실행됨 |
 | Gemini 신규 unique 후보 | 0 | 없음 |
-| Gemini publishable 후보 | 9 | 있음 |
-| linked evidence 파생 후보 | 6 | 있음 |
+| Gemini publishable 후보 | 6 | 있음 |
+| linked evidence 파생 후보 | 4 | 있음 |
 | linked 파생 publishable 후보 | 0 | 없음 |
 | seed 후보 | 0 | 없음 |
 | seed 신규 unique 후보 | 0 | 없음 |
 | seed publishable 후보 | 0 | 없음 |
-| 중복 후보 | 11 | 확인 필요 |
+| 중복 후보 | 10 | 확인 필요 |
 | parser gap | 2 | 보강 필요 |
-| Gemini parser failure | 1 | 보강 필요 |
-| rejected: parser_gap | 1 | source extraction 보강 필요 |
+| Gemini parser failure | 3 | 보강 필요 |
+| rejected: parser_gap | 3 | source extraction 보강 필요 |
 | rejected: taxonomy_gap | 1 | bucket/classifier 또는 허용 domain 보강 필요 |
 
 ## 상세 report

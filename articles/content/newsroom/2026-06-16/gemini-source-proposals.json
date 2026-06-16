@@ -4,135 +4,231 @@
   "newsletter_date": "2026-06-16",
   "proposals": [
     {
-      "proposal_id": "camera-hal-sw-1",
-      "topic_gap": "Camera HAL SW performance improvements and new features.",
-      "source_family": "linux-camera",
+      "proposal_id": "android-media3-1.10.1-release-notes",
+      "topic_gap": "Android Media3 library updates relevant to camera output and A/V sync.",
+      "source_family": "androidx-media3-release-notes",
       "allowed_domains": [],
       "search_keywords": [
-        "camera HAL",
-        "linux media",
-        "V4L2",
-        "Qualcomm",
-        "driver updates"
+        "Media3 1.10.1",
+        "camera output",
+        "A/V sync"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-10-583b42770b6a@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-9-583b42770b6a@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-7-583b42770b6a@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/20260615223055.39953-3-birenpandya@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-2-583b42770b6a@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-14-583b42770b6a@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-13-583b42770b6a@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-12-583b42770b6a@oss.qualcomm.com/"
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
       ],
       "expected_evidence": [
-        "Camera HAL driver updates",
-        "New camera sensor support",
-        "Performance optimizations for camera pipeline",
-        "Bug fixes in camera drivers"
+        "Media3 1.10.1 release notes",
+        "Camera output improvements",
+        "A/V sync enhancements"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camerax-1.6.0-release",
-      "topic_gap": "New features and improvements in CameraX 1.6.0.",
-      "source_family": "camera-api",
+      "proposal_id": "camerax-1.6.0-release-notes",
+      "topic_gap": "CameraX library updates for Android camera development.",
+      "source_family": "camerax-release-notes",
       "allowed_domains": [],
       "search_keywords": [
-        "CameraX",
+        "CameraX 1.6.0",
         "release notes",
-        "1.6.0",
-        "Android Jetpack"
+        "camera capture"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
       ],
       "expected_evidence": [
         "CameraX 1.6.0 release notes",
-        "New APIs or features",
-        "Bug fixes and performance improvements"
+        "Camera API updates",
+        "Bug fixes or new features related to camera capture"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-developer-productivity-2026-06",
-      "topic_gap": "Updates for Android developer productivity.",
-      "source_family": "android",
+      "proposal_id": "camerax-1.6.1-release-notes",
+      "topic_gap": "CameraX library updates for Android camera development.",
+      "source_family": "android-developers-latest-updates",
       "allowed_domains": [],
       "search_keywords": [
-        "Android developer productivity",
-        "developer tools",
-        "Android development"
+        "CameraX 1.6.1",
+        "release notes",
+        "camera capture"
       ],
       "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
       ],
       "expected_evidence": [
-        "New tools or features for developers",
-        "Improvements to the Android development workflow",
-        "Productivity tips and best practices"
+        "CameraX 1.6.1 release notes",
+        "Camera API updates",
+        "Bug fixes or new features related to camera capture"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "google-io-26-media-pipeline",
-      "topic_gap": "Advanced media pipeline development on Android.",
-      "source_family": "android-media",
+      "proposal_id": "google-io-2026-media-pipeline",
+      "topic_gap": "Updates and best practices for building media pipelines on Android, potentially including camera integration.",
+      "source_family": "android-developers-blog",
       "allowed_domains": [],
       "search_keywords": [
-        "Android media pipeline",
         "Google I/O 2026",
-        "premium media experiences",
-        "Media3"
+        "media pipeline",
+        "Android camera"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "Best practices for media pipeline development",
-        "New technologies or APIs for media processing",
-        "Case studies of premium Android media experiences"
+        "Google I/O 2026 sessions on media pipelines",
+        "Camera integration in media workflows",
+        "Production-ready toolkits for media"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-cli-skills-update",
-      "topic_gap": "Enhancements to Android developer productivity tools.",
-      "source_family": "android",
+      "proposal_id": "android-developer-productivity-updates-2026-06",
+      "topic_gap": "General Android developer productivity updates that might include camera or media-related tooling.",
+      "source_family": "android-developers-blog",
       "allowed_domains": [],
       "search_keywords": [
-        "Android CLI",
-        "developer productivity",
-        "Android tools"
+        "Android developer productivity",
+        "June 2026",
+        "camera tools"
       ],
       "candidate_urls": [
-        "https://developer.android.com/tools/agents/android-cli#skills-add"
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
       ],
       "expected_evidence": [
-        "New commands or features for Android CLI",
-        "Improvements to developer workflow automation",
-        "Impact on build times or developer efficiency"
+        "Android developer productivity updates",
+        "Tooling improvements",
+        "Camera or media API enhancements"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-its-automation-testing",
-      "topic_gap": "Automated testing strategies for camera image quality.",
-      "source_family": "aosp",
+      "proposal_id": "atomisp-driver-fixes-2026-06-16",
+      "topic_gap": "Kernel-level fixes for the atomisp camera driver, relevant to camera HAL and media pipeline.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "atomisp",
+        "linux-media",
+        "camera driver",
+        "memory leak"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260616134319.3969928-3-dawei.feng@seu.edu.cn/",
+        "https://lore.kernel.org/linux-media/20260616134319.3969928-2-dawei.feng@seu.edu.cn/",
+        "https://lore.kernel.org/linux-media/20260616134319.3969928-1-dawei.feng@seu.edu.cn/"
+      ],
+      "expected_evidence": [
+        "atomisp driver memory leak fixes",
+        "Camera HAL interaction",
+        "Media pipeline stability"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "mali-c55-driver-updates-2026-06-16",
+      "topic_gap": "Kernel-level updates for the Mali-C55 camera driver, relevant to camera HAL and image processing.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "mali-c55",
+        "linux-media",
+        "camera driver",
+        "RGB Gamma",
+        "CCM"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-2-174fe4fedea3@ideasonboard.com/",
+        "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/"
+      ],
+      "expected_evidence": [
+        "Mali-C55 driver support for RGB Gamma and CCM",
+        "Camera HAL integration",
+        "Image processing pipeline"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "gcc-16-release-notes",
+      "topic_gap": "New features in GCC 16, potentially impacting C++ development for camera HAL or media processing.",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "GCC 16",
+        "C++",
+        "compiler",
+        "error messages"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+      ],
+      "expected_evidence": [
+        "GCC 16 release notes",
+        "Improved error messages",
+        "SARIF output",
+        "C++ development tooling"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-its-box-automation",
+      "topic_gap": "Guidance on automating camera image testing using Camera ITS.",
+      "source_family": "aosp-site-updates",
       "allowed_domains": [],
       "search_keywords": [
         "Camera ITS",
         "automated testing",
-        "camera image quality",
-        "Android compatibility"
+        "camera images",
+        "CTS"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "Camera ITS (Image Test Suite) updates",
-        "Automated testing frameworks for camera",
-        "Methods for ensuring camera image quality"
+        "Camera ITS box setup",
+        "Automated camera image testing",
+        "Camera HAL validation"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-cli-skills-add",
+      "topic_gap": "Updates to Android CLI tools that might be relevant for build or testing processes related to camera/media.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android CLI",
+        "developer productivity",
+        "build tools"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add"
+      ],
+      "expected_evidence": [
+        "Android CLI skills",
+        "Developer productivity tools",
+        "Build system integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "gcc-16.1-release",
+      "topic_gap": "Release of GCC 16.1 with C++26 features, potentially impacting camera HAL or media processing development.",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "GCC 16.1",
+        "C++26",
+        "compiler release"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1"
+      ],
+      "expected_evidence": [
+        "GCC 16.1 release announcement",
+        "C++26 features",
+        "Compiler improvements"
       ],
       "risk_notes": []
     }
