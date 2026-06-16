@@ -3300,7 +3300,7 @@ async function main() {
     let eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);
     factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
     factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
-    editor = sanitizeClaimEvidenceIds(editor, reporter);
+    editor = sanitizeClaimEvidenceIds(editor, reporter, seedEvidencePack);
     editor = stampCoverageType(editor, shortlistReport);
     factCheck = pruneCatchUpFramingFactCheckItems(factCheck, editor);
     generationRunState.factCheck = factCheck;
@@ -3526,7 +3526,7 @@ async function main() {
         });
         factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
         factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
-        editor = sanitizeClaimEvidenceIds(editor, reporter);
+        editor = sanitizeClaimEvidenceIds(editor, reporter, seedEvidencePack);
         editor = stampCoverageType(editor, shortlistReport);
         factCheck = pruneCatchUpFramingFactCheckItems(factCheck, editor);
         generationRunState.factCheck = factCheck;
@@ -3715,7 +3715,7 @@ async function main() {
           });
           factCheck = applyReporterEligibilityFindingsToFactCheck(factCheck, eligibilityFindings);
           factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
-          editor = sanitizeClaimEvidenceIds(editor, reporter);
+          editor = sanitizeClaimEvidenceIds(editor, reporter, seedEvidencePack);
           editor = stampCoverageType(editor, shortlistReport);
           factCheck = pruneCatchUpFramingFactCheckItems(factCheck, editor);
           generationRunState.factCheck = factCheck;
@@ -3844,7 +3844,7 @@ async function main() {
     buildStaleClaimReportMarkdown(staleScrub.report),
     'utf8'
   );
-  editor = sanitizeClaimEvidenceIds(editor, reporter);
+  editor = sanitizeClaimEvidenceIds(editor, reporter, seedEvidencePack);
   editor = stampCoverageType(editor, shortlistReport);
   factCheck = pruneCatchUpFramingFactCheckItems(factCheck, editor);
   generationRunState.factCheck = factCheck;

@@ -11,6 +11,7 @@
 
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { normalizeUrl } = require('../../shared/common/selection-normalizers');
+const { buildAllowedClaimEvidence } = require('../quality/claim-source-binding');
 
 function numberOrDefault(value, fallback = 0) {
   const parsed = Number(value);
@@ -53,9 +54,19 @@ function validateFactCheck(value) {
   return value;
 }
 
-function collectValidEvidenceIds(reporter) {
+function collectValidEvidenceIds(reporter, seedEvidencePack = null) {
   const validIds = new Set();
   for (const candidate of ensureArray(reporter?.candidates)) {
+    // sanitize allowlist를 바인딩 index와 일치시킨다. 바인딩은 후보에서 합성하는 sx:/le:/candidate:
+    // id를 capsule(allowed_claim_evidence)에 노출하고 그걸로 exact-string 매칭하는데, 예전 allowlist는
+    // 그 합성 id를 재구성하지 않아 reconcile가 정당하게 붙인 합성 id를 sanitize가 다시 떼고
+    // fact claim을 미바인딩으로 만들었다. buildAllowedClaimEvidence가 곧 capsule이 LLM에 보여준
+    // 허용 목록이므로, "이 목록에 없는 id만 제거"가 정확한 sanitize 의미가 된다(지어낸 id는 여전히 제거됨).
+    // capsule(article-capsules.js)이 seedEvidencePack과 함께 빌드되므로, 같은 pack을 넘겨 seed-pack
+    // 후보의 id까지 정확히 일치시킨다(안 넘기면 seed-pack 후보에서 같은 미바인딩 버그가 재발).
+    for (const item of buildAllowedClaimEvidence(candidate, {}, { seedEvidencePack })) {
+      if (item && item.evidence_id) validIds.add(String(item.evidence_id));
+    }
     for (const block of ensureArray(candidate?.source_extraction?.evidence_blocks)) {
       const id = String(block.evidence_id || block.id || '');
       if (id) validIds.add(id);
@@ -67,8 +78,8 @@ function collectValidEvidenceIds(reporter) {
   return validIds;
 }
 
-function sanitizeClaimEvidenceIds(editor, reporter) {
-  const validIds = collectValidEvidenceIds(reporter);
+function sanitizeClaimEvidenceIds(editor, reporter, seedEvidencePack = null) {
+  const validIds = collectValidEvidenceIds(reporter, seedEvidencePack);
   const sections = ensureArray(editor?.sections);
   if (sections.length === 0) return editor;
   const sanitized = sections.map(section => {
