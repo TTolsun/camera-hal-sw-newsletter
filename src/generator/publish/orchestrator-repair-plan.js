@@ -305,6 +305,14 @@ function hasTooFewMainArticlesDeduction(qualityReport) {
   );
 }
 
+// #632: 결정론 demote로 줄어든 main article 슬롯을 completion이 reserve로 되채울 목표 수.
+// demote 이전 수로 되돌리되 정책 [min, max] 범위로 클램프한다(얇은 날 reserve가 부족하면
+// completion 내부 가드가 생성을 막아 미달 상태로 발행되며, 그건 발행 차단보다 낫다).
+function completionRefillTargetCount(beforeRepairCount) {
+  const count = Number.isFinite(Number(beforeRepairCount)) ? Number(beforeRepairCount) : 0;
+  return Math.max(articlePolicy.mainArticleCount.min, Math.min(articlePolicy.mainArticleCount.max, count));
+}
+
 module.exports = {
   finalArticleSlotDistribution,
   deductionRepairPolicy,
@@ -317,5 +325,6 @@ module.exports = {
   sectionMatchesRepairItem,
   sectionsMatchingRepairPlan,
   sectionsOutsideRepairPlan,
-  hasTooFewMainArticlesDeduction
+  hasTooFewMainArticlesDeduction,
+  completionRefillTargetCount
 };

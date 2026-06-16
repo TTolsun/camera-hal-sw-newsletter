@@ -18,8 +18,12 @@ const {
 const {
   buildSectionRepairPlan,
   sectionsMatchingRepairPlan,
-  sectionsOutsideRepairPlan
+  sectionsOutsideRepairPlan,
+  completionRefillTargetCount
 } = require('../../publish/orchestrator-repair-plan');
+const {
+  hardBlockedGroupsForDroppedSections
+} = require('../../quality/newsletter-quality');
 const {
   EditorSemanticValidationError
 } = require('../../editor/editor-output-contract');
@@ -889,4 +893,39 @@ test('supporting-only final draft passes targeted validation under one-article p
     allowCountChange: false,
     date: DATE
   }), true);
+});
+
+// #632 Option B: structural repair(replace/demote)를 LLM 전체-재생성 대신 결정론 강등으로 처리한다.
+// 아래는 그 결정론 demote가 쓰는 구성요소(순수 함수)의 단위 검증이다.
+
+test('#632 completionRefillTargetCount clamps the pre-repair count into [min, max]', () => {
+  // 정책: mainArticleCount { min: 1, max: 5 }
+  assert.equal(completionRefillTargetCount(3), 3); // demote 이전 수 보존
+  assert.equal(completionRefillTargetCount(5), 5);
+  assert.equal(completionRefillTargetCount(7), 5); // max로 클램프
+  assert.equal(completionRefillTargetCount(0), 1); // min으로 클램프
+  assert.equal(completionRefillTargetCount(undefined), 1);
+});
+
+test('#632 deterministic demote keeps the complement and records dropped sections as hard-blocked groups', () => {
+  const strongA = policySection('CameraX 1.6.1 release', 'https://example.com/camerax', 'direct_aosp_camera');
+  const strongB = policySection('atomisp driver fix', 'https://example.com/atomisp', 'soc_platform_signal');
+  const weak = policySection('Weak adjacent note', 'https://example.com/weak', 'android_platform_camera_adjacent');
+  const sections = [strongA, strongB, weak];
+
+  // structural repair plan이 약한 1개 섹션만 가리킨다고 가정.
+  const structuralPlan = [{ action: 'replace-or-demote', headline: weak.headline, sources: ['https://example.com/weak'] }];
+
+  const dropped = sectionsMatchingRepairPlan(sections, structuralPlan);
+  const kept = sectionsOutsideRepairPlan(sections, structuralPlan);
+
+  // 강한 카메라 메인 2개는 유지, 약한 1개만 demote.
+  assert.deepEqual(kept.map(s => s.headline), [strongA.headline, strongB.headline]);
+  assert.deepEqual(dropped.map(s => s.headline), [weak.headline]);
+
+  // demote된 섹션은 group-coverage 계약을 위해 hard-blocked group으로 기록되어야 한다.
+  const blocked = hardBlockedGroupsForDroppedSections(dropped);
+  assert.equal(blocked.length, 1);
+  assert.equal(blocked[0].reason_code, 'quality_hard_blocker');
+  assert.ok(blocked[0].article_group_key);
 });

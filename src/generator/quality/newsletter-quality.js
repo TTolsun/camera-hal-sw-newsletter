@@ -946,6 +946,21 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   };
 }
 
+// Dropped/demoted sections must be recorded as hard-blocked groups so the editor "selected group
+// coverage" contract still holds (every selected group is rendered, demoted, or hard-blocked).
+// Shared by thin-week salvage and the #632 deterministic structural demote.
+function hardBlockedGroupsForDroppedSections(sections, reason = 'deterministic demote dropped an unpublishable article') {
+  return ensureArray(sections)
+    .map(section => {
+      const key = text(section?.article_group_key || section?.articleGroupKey) ||
+        candidateGroupKey({ url: ensureArray(section?.sources)[0]?.url, title: section?.headline });
+      return key
+        ? { article_group_key: key, hard_block_reason: reason, reason_code: 'quality_hard_blocker' }
+        : null;
+    })
+    .filter(Boolean);
+}
+
 // Thin-week salvage: when the full lineup is NEEDS_FIX but a clean subset of articles passes,
 // drop the failed/unpublishable articles and publish the clean subset (if it still meets the
 // minimum article count). "Clean" = article gate PASS, fact-checker publishable, and no must_fix
@@ -997,18 +1012,10 @@ function salvagePublishableSubset(date, editor, reporter, factCheck, qualityRepo
   // against kept sections is robust to headline variants on the dropped ones.
   const refsKept = probe => keepIndices.some(index => referencesSection(probe, index, sections[index]));
 
-  // Dropped sections must be recorded as hard-blocked groups so the editor "selected group
-  // coverage" contract still holds (every selected group is rendered, demoted, or hard-blocked).
-  const droppedHardBlockedGroups = droppedIndices
-    .map(index => {
-      const section = sections[index];
-      const key = text(section.article_group_key || section.articleGroupKey) ||
-        candidateGroupKey({ url: ensureArray(section.sources)[0]?.url, title: section.headline });
-      return key
-        ? { article_group_key: key, hard_block_reason: 'thin-week salvage dropped unpublishable article', reason_code: 'quality_hard_blocker' }
-        : null;
-    })
-    .filter(Boolean);
+  const droppedHardBlockedGroups = hardBlockedGroupsForDroppedSections(
+    droppedIndices.map(index => sections[index]),
+    'thin-week salvage dropped unpublishable article'
+  );
 
   const subsetEditor = {
     ...editor,
@@ -1049,6 +1056,7 @@ module.exports = {
   MAX_MAIN_ARTICLES,
   buildNewsletterQualityReport,
   salvagePublishableSubset,
+  hardBlockedGroupsForDroppedSections,
   buildQualityReportMarkdown,
   deductionMatchesSection,
   sectionHasQualityDeductions,
