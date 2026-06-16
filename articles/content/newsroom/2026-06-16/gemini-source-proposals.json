@@ -4,290 +4,135 @@
   "newsletter_date": "2026-06-16",
   "proposals": [
     {
-      "proposal_id": "camera-x-1.6.0-release",
-      "topic_gap": "CameraX 1.6.0 release notes are available, detailing updates and potential impacts on camera pipelines.",
-      "source_family": "camerax-release-notes",
+      "proposal_id": "camera-hal-sw-1",
+      "topic_gap": "Camera HAL SW performance improvements and new features.",
+      "source_family": "linux-camera",
       "allowed_domains": [],
       "search_keywords": [
-        "CameraX 1.6.0 release",
-        "CameraX updates",
-        "camera pipeline changes"
+        "camera HAL",
+        "linux media",
+        "V4L2",
+        "Qualcomm",
+        "driver updates"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-10-583b42770b6a@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-9-583b42770b6a@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-7-583b42770b6a@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260615223055.39953-3-birenpandya@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-2-583b42770b6a@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-14-583b42770b6a@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-13-583b42770b6a@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-12-583b42770b6a@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Camera HAL driver updates",
+        "New camera sensor support",
+        "Performance optimizations for camera pipeline",
+        "Bug fixes in camera drivers"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camerax-1.6.0-release",
+      "topic_gap": "New features and improvements in CameraX 1.6.0.",
+      "source_family": "camera-api",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX",
+        "release notes",
+        "1.6.0",
+        "Android Jetpack"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
       ],
       "expected_evidence": [
         "CameraX 1.6.0 release notes",
-        "camera pipeline updates",
-        "new features",
-        "bug fixes"
+        "New APIs or features",
+        "Bug fixes and performance improvements"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-x-1.6.1-release",
-      "topic_gap": "CameraX 1.6.1 release notes are available, indicating incremental updates to the camera library.",
-      "source_family": "android-developers-latest-updates",
+      "proposal_id": "android-developer-productivity-2026-06",
+      "topic_gap": "Updates for Android developer productivity.",
+      "source_family": "android",
       "allowed_domains": [],
       "search_keywords": [
-        "CameraX 1.6.1 release",
-        "CameraX updates"
+        "Android developer productivity",
+        "developer tools",
+        "Android development"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
       ],
       "expected_evidence": [
-        "CameraX 1.6.1 release notes",
-        "camera library updates",
-        "bug fixes"
+        "New tools or features for developers",
+        "Improvements to the Android development workflow",
+        "Productivity tips and best practices"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "google-io-26-media-pipeline-toolkit",
-      "topic_gap": "Google I/O '26 highlights a premium media pipeline toolkit for Android, relevant to camera-generated media.",
-      "source_family": "android-developers-blog",
+      "proposal_id": "google-io-26-media-pipeline",
+      "topic_gap": "Advanced media pipeline development on Android.",
+      "source_family": "android-media",
       "allowed_domains": [],
       "search_keywords": [
-        "Google I/O 2026 media pipeline",
-        "Android media toolkit",
-        "camera output pipeline"
+        "Android media pipeline",
+        "Google I/O 2026",
+        "premium media experiences",
+        "Media3"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "premium media pipeline toolkit",
-        "Android",
-        "Google I/O '26",
-        "camera-generated media"
+        "Best practices for media pipeline development",
+        "New technologies or APIs for media processing",
+        "Case studies of premium Android media experiences"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "aosp-camera-testing-automation",
-      "topic_gap": "AOSP documentation on automating camera image testing provides insights into HAL and camera pipeline validation.",
-      "source_family": "aosp-site-updates",
+      "proposal_id": "android-cli-skills-update",
+      "topic_gap": "Enhancements to Android developer productivity tools.",
+      "source_family": "android",
       "allowed_domains": [],
       "search_keywords": [
-        "Android camera testing",
-        "camera HAL automation",
-        "camera pipeline CTS"
+        "Android CLI",
+        "developer productivity",
+        "Android tools"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add"
+      ],
+      "expected_evidence": [
+        "New commands or features for Android CLI",
+        "Improvements to developer workflow automation",
+        "Impact on build times or developer efficiency"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-its-automation-testing",
+      "topic_gap": "Automated testing strategies for camera image quality.",
+      "source_family": "aosp",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Camera ITS",
+        "automated testing",
+        "camera image quality",
+        "Android compatibility"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "camera image testing",
-        "automation",
-        "camera HAL",
-        "camera pipeline validation"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "linux-media-kernel-patches-june-2026",
-      "topic_gap": "Recent Linux kernel media patches address potential issues in video decoding and codec release paths, relevant to camera pipelines.",
-      "source_family": "lore-linux-media-list",
-      "allowed_domains": [],
-      "search_keywords": [
-        "linux kernel media patches",
-        "video decoder fix",
-        "codec release bug"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260615140529.52653-1-doruk@0sec.ai/",
-        "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai/"
-      ],
-      "expected_evidence": [
-        "Linux kernel media patches",
-        "video decoding",
-        "codec release path",
-        "camera pipeline"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "linux-media-kernel-patches-dts-overlay-june-2026",
-      "topic_gap": "Linux kernel media patches include device tree overlay updates for camera modules, relevant to hardware integration.",
-      "source_family": "lore-linux-media-list",
-      "allowed_domains": [],
-      "search_keywords": [
-        "linux kernel camera dts",
-        "device tree overlay camera",
-        "camera hardware integration"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260615-shikra-camss-review-v4-6-bcb51081735b@oss.qualcomm.com/"
-      ],
-      "expected_evidence": [
-        "Linux kernel media patches",
-        "device tree overlay",
-        "camera module",
-        "hardware integration"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "linux-media-kernel-patches-memory-leak-june-2026",
-      "topic_gap": "Linux kernel media patches address memory leaks in camera drivers, crucial for stable camera HAL operation.",
-      "source_family": "lore-linux-media-list",
-      "allowed_domains": [],
-      "search_keywords": [
-        "linux kernel camera memory leak",
-        "camera driver fix",
-        "camera HAL stability"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/"
-      ],
-      "expected_evidence": [
-        "Linux kernel media patches",
-        "memory leak",
-        "camera driver",
-        "camera HAL"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "linux-media-kernel-patches-kmalloc-replacement-june-2026",
-      "topic_gap": "Linux kernel media patches replace kmalloc with kmalloc_array for improved memory management in camera drivers.",
-      "source_family": "lore-linux-media-list",
-      "allowed_domains": [],
-      "search_keywords": [
-        "linux kernel camera kmalloc",
-        "camera driver memory",
-        "kmalloc_array usage"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.org/linux-media/ajAHitx6a0Sk5pLZ@ashevche-desk.local/"
-      ],
-      "expected_evidence": [
-        "Linux kernel media patches",
-        "kmalloc_array",
-        "memory management",
-        "camera driver"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "gcc-16.1-release-cpp26-features",
-      "topic_gap": "GCC 16.1 release includes C++26 features like reflection and contracts, potentially impacting C++ camera HAL development.",
-      "source_family": "iso-cpp-blog",
-      "allowed_domains": [],
-      "search_keywords": [
-        "GCC 16.1 C++26",
-        "C++ reflection camera",
-        "C++ contracts HAL"
-      ],
-      "candidate_urls": [
-        "https://isocpp.org//blog/2026/04/gcc-16.1"
-      ],
-      "expected_evidence": [
-        "GCC 16.1 release",
-        "C++26 features",
-        "reflection",
-        "contracts",
-        "camera HAL development"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "linux-media-atomisp-memory-leak-fix",
-      "topic_gap": "A patch addresses a memory leak in the atomisp driver, crucial for camera HAL stability.",
-      "source_family": "lore-linux-media-list",
-      "allowed_domains": [],
-      "search_keywords": [
-        "atomisp memory leak",
-        "camera driver fix",
-        "camera HAL stability"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.org/linux-media/ai_eGXhKhsV1fhlC@ashevche-desk.local/"
-      ],
-      "expected_evidence": [
-        "atomisp driver patch",
-        "memory leak fix",
-        "camera HAL stability"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "linux-media-atomisp-pci-probe-memory-leak-fix",
-      "topic_gap": "A patch addresses a memory leak in the atomisp PCI probe function, important for camera HAL initialization.",
-      "source_family": "lore-linux-media-list",
-      "allowed_domains": [],
-      "search_keywords": [
-        "atomisp pci probe memory leak",
-        "camera HAL initialization fix"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/"
-      ],
-      "expected_evidence": [
-        "atomisp PCI probe patch",
-        "memory leak fix",
-        "camera HAL initialization"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "linux-media-nxp-neoisp-device-tree-node",
-      "topic_gap": "Device tree overlay for NXP neoisp camera sensor is added, relevant for hardware camera pipeline integration.",
-      "source_family": "lore-linux-media-list",
-      "allowed_domains": [],
-      "search_keywords": [
-        "nxp neoisp device tree",
-        "camera sensor integration",
-        "hardware camera pipeline"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.org/linux-media/ajACNM8ZXiYGgRwe@SMW015318/"
-      ],
-      "expected_evidence": [
-        "NXP neoisp device tree",
-        "camera sensor",
-        "hardware camera pipeline"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "libcamera-devel-archive-updates",
-      "topic_gap": "The libcamera-devel mailing list archives may contain updates relevant to camera pipelines and HAL integration.",
-      "source_family": "libcamera-release-announcements",
-      "allowed_domains": [],
-      "search_keywords": [
-        "libcamera devel mailing list",
-        "camera pipeline updates",
-        "libcamera HAL"
-      ],
-      "candidate_urls": [
-        "https://lists.libcamera.org/pipermail/libcamera-devel/"
-      ],
-      "expected_evidence": [
-        "libcamera updates",
-        "camera pipeline",
-        "HAL integration"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "media3-1.10.1-release-notes",
-      "topic_gap": "Media3 1.10.1 release notes are available, potentially including updates relevant to camera output and A/V sync.",
-      "source_family": "androidx-media3-release-notes",
-      "allowed_domains": [],
-      "search_keywords": [
-        "Media3 1.10.1 release",
-        "camera output sync",
-        "Media3 updates"
-      ],
-      "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
-      ],
-      "expected_evidence": [
-        "Media3 1.10.1 release notes",
-        "camera output",
-        "A/V sync"
+        "Camera ITS (Image Test Suite) updates",
+        "Automated testing frameworks for camera",
+        "Methods for ensuring camera image quality"
       ],
       "risk_notes": []
     }

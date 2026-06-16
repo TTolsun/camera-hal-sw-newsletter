@@ -112,6 +112,24 @@
       }
     },
     {
+      "candidate_id": "ae8e44b90ad0c438",
+      "url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "title": "What’s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+      "source_quality_score": 0.625,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.78,
+        "android_hal_relevance": 0.78,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "5293b25a93416b26",
       "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "title": "Top 3 updates for Android developer productivity",
@@ -166,42 +184,6 @@
       }
     },
     {
-      "candidate_id": "2b43719b9f6ba6e5",
-      "url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
-      "title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
-      "source_quality_score": 0.601,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.72,
-        "android_hal_relevance": 0.72,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "a008cc09dc1d5ea8",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "title": "CameraX Release Notes - CameraX 1.6.1",
-      "source_quality_score": 0.78,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.72,
-        "android_hal_relevance": 0.72,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "3ca2b58b92a0b76d",
       "url": "https://source.android.com/docs/compatibility",
       "title": "Compatibility",
@@ -230,6 +212,42 @@
         "camera_relevance": 0.65,
         "android_hal_relevance": 0.65,
         "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "473c2de5968532c9",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "1.6.1",
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "f2f7a4ce6187ee89",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "title": "1.3.0-beta02",
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -364,42 +382,6 @@
       }
     },
     {
-      "candidate_id": "214a4bd6f6ed83c9",
-      "url": "https://lore.kernel.org/linux-media/20260615140529.52653-1-doruk@0sec.ai/",
-      "title": "[PATCH] media: meson: vdec: fix use-after-free of decode work in stop/close path",
-      "source_quality_score": 0.764,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.81,
-        "android_hal_relevance": 0.81,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "0f9260a82a63062d",
-      "url": "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai/",
-      "title": "[PATCH] media: mediatek: vcodec: fix use-after-free in decoder release path",
-      "source_quality_score": 0.74,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.75,
-        "android_hal_relevance": 0.75,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "c56b2068eed9cd86",
       "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
       "title": "C++26: A User-Friendly assert() macro -- Sandor Dargo",
@@ -436,6 +418,24 @@
       }
     },
     {
+      "candidate_id": "3ebcc5a4a587d4cd",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "source_quality_score": 0.707,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.63,
+        "android_hal_relevance": 0.63,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "4e231c08cea859ce",
       "url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
       "title": "Power of C++26 Reflection: Strong (opaque) type definitions -- r/cpp",
@@ -447,42 +447,6 @@
         "android_hal_relevance": 0.63,
         "technical_depth": 0.25,
         "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "7b73f25865d05550",
-      "url": "https://lore.kernel.org/linux-media/ai_eGXhKhsV1fhlC@ashevche-desk.local/",
-      "title": "Re: [PATCH v2 2/2] media: atomisp: fix memory leak in atomisp_csi2_bridge_parse_firmware()",
-      "source_quality_score": 0.782,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.63,
-        "android_hal_relevance": 0.63,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "674b7dc2e8c6bcaf",
-      "url": "https://lore.kernel.org/linux-media/20260615-shikra-camss-review-v4-6-bcb51081735b@oss.qualcomm.com/",
-      "title": "[PATCH v4 6/6] arm64: dts: qcom: shikra-iqs-evk-imx577-camera: Add DT overlay",
-      "source_quality_score": 0.692,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.63,
-        "android_hal_relevance": 0.63,
-        "technical_depth": 0.85,
-        "recency_score": 1,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
@@ -580,17 +544,17 @@
       }
     },
     {
-      "candidate_id": "0ceb6e28d947b48a",
-      "url": "https://isocpp.org//blog/2026/06/trip-report-june-2026-iso-cpp-standards-meeting-brno-czechia-herb-sutter",
-      "title": "Trip report: June 2026 ISO C++ standards meeting (Brno, Czechia) -- Herb Sutter",
-      "source_quality_score": 0.479,
+      "candidate_id": "2d7591754d096321",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-10-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 10/16] media: iris: add minimal GET_PROPERTY implementation",
+      "source_quality_score": 0.644,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 0.85,
         "camera_relevance": 0.51,
         "android_hal_relevance": 0.51,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
+        "technical_depth": 0.85,
+        "recency_score": 1,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
@@ -598,9 +562,9 @@
       }
     },
     {
-      "candidate_id": "66228b987a91de84",
-      "url": "https://lore.kernel.org/linux-media/ajACNM8ZXiYGgRwe@SMW015318/",
-      "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node",
+      "candidate_id": "4efc898996b64e4a",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-9-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 09/16] media: iris: Add framework support for AR50_LITE video core",
       "source_quality_score": 0.62,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -616,15 +580,33 @@
       }
     },
     {
-      "candidate_id": "e1a8f159e0656973",
-      "url": "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/",
-      "title": "Re: [PATCH v2 1/2] media: atomisp: fix memory leak in atomisp_pci_probe()",
-      "source_quality_score": 0.596,
+      "candidate_id": "32488a436d138df1",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-7-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 07/16] media: iris: Add platform flag for instantaneous bandwidth voting",
+      "source_quality_score": 0.53,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 0.85,
-        "camera_relevance": 0.39,
-        "android_hal_relevance": 0.39,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "143517ea7d11d7cc",
+      "url": "https://lore.kernel.org/linux-media/20260615223055.39953-3-birenpandya@gmail.com/",
+      "title": "[PATCH 2/3] media: i2c: imx290: Drop manual fwnode_handle_put() via scope-based cleanup",
+      "source_quality_score": 0.62,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
         "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0,
@@ -634,15 +616,33 @@
       }
     },
     {
-      "candidate_id": "f4476ca009b67716",
-      "url": "https://lore.kernel.org/linux-media/5c61be5e-4355-4c30-b24c-108e0a9fd26b@ixit.cz/",
-      "title": "Re: [PATCH v2 1/1] MAINTAINERS: Camera sensor and Intel IPU driver changes",
-      "source_quality_score": 0.596,
+      "candidate_id": "a81f012c3635a58e",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-2-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 02/16] media: iris: Filter UBWC raw formats based on hardware capabilities",
+      "source_quality_score": 0.506,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 0.85,
         "camera_relevance": 0.39,
         "android_hal_relevance": 0.39,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "ff1afcf86740b12e",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-14-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 14/16] media: iris: add Gen2 firmware support on the Agatti platform",
+      "source_quality_score": 0.572,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.33,
+        "android_hal_relevance": 0.33,
         "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0,
@@ -652,9 +652,27 @@
       }
     },
     {
-      "candidate_id": "639d604379700d03",
-      "url": "https://lore.kernel.org/linux-media/ajAHitx6a0Sk5pLZ@ashevche-desk.local/",
-      "title": "Re: [PATCH v2] media: atomisp: replace kmalloc() with kmalloc_array() in sh_css.c",
+      "candidate_id": "8979a7c696d67a73",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-13-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 13/16] media: iris: Introduce buffer size calculations for AR50LT",
+      "source_quality_score": 0.572,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.33,
+        "android_hal_relevance": 0.33,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "6042096774660d09",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-12-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 12/16] media: iris: implement support for the Agatti platform",
       "source_quality_score": 0.572,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -706,16 +724,178 @@
       }
     },
     {
-      "candidate_id": "9240e6cb42c0a46f",
-      "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-      "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
-      "source_quality_score": 0.626,
+      "candidate_id": "gemini-0abf34ecc086e250",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-10-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 10/16] media: iris: add minimal GET_PROPERTY implementation - Dmitry Baryshkov",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-d821489ca0066ef4",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-9-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 09/16] media: iris: Add framework support for AR50_LITE video core - Dmitry Baryshkov",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-b420127ee2532f52",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-7-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 07/16] media: iris: Add platform flag for instantaneous bandwidth voting - Dmitry Baryshkov",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-6ddfe54c8b6d45a0",
+      "url": "https://lore.kernel.org/linux-media/20260615223055.39953-3-birenpandya@gmail.com/",
+      "title": "[PATCH 2/3] media: i2c: imx290: Drop manual fwnode_handle_put() via scope-based cleanup - Biren Pandya",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-a6de62cff2f76369",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-2-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 02/16] media: iris: Filter UBWC raw formats based on hardware capabilities - Dmitry Baryshkov",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-5cc9f26f0d043979",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-14-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 14/16] media: iris: add Gen2 firmware support on the Agatti platform - Dmitry Baryshkov",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-677e0510f9445c69",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-13-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 13/16] media: iris: Introduce buffer size calculations for AR50LT - Dmitry Baryshkov",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-0ea5a54799ec04cd",
+      "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-12-583b42770b6a@oss.qualcomm.com/",
+      "title": "[PATCH v5 12/16] media: iris: implement support for the Agatti platform - Dmitry Baryshkov",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-98444c77340368f8",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
+      "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.67,
-        "android_hal_relevance": 0.67,
-        "technical_depth": 0.55,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-8eccf001d6d4bbf1",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "title": "Overview of Android CLI &nbsp;|&nbsp; Android Studio &nbsp;|&nbsp; Android Developers",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -736,168 +916,6 @@
         "technical_depth": 0.55,
         "recency_score": 0.8,
         "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-62e508b7a5b91261",
-      "url": "https://lore.kernel.org/linux-media/20260615140529.52653-1-doruk@0sec.ai/",
-      "title": "[PATCH] media: meson: vdec: fix use-after-free of decode work in stop/close path - Doruk Tan Ozturk",
-      "source_quality_score": 0.72,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-508920499b97f882",
-      "url": "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai/",
-      "title": "[PATCH] media: mediatek: vcodec: fix use-after-free in decoder release path - Doruk Tan Ozturk",
-      "source_quality_score": 0.765,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.55,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-a03f76c197da2a81",
-      "url": "https://lore.kernel.org/linux-media/20260615-shikra-camss-review-v4-6-bcb51081735b@oss.qualcomm.com/",
-      "title": "[PATCH v4 6/6] arm64: dts: qcom: shikra-iqs-evk-imx577-camera: Add DT overlay - Nihal Kumar Gupta",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-1988bc8b9061e383",
-      "url": "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/",
-      "title": "Re: [PATCH v2 1/2] media: atomisp: fix memory leak in atomisp_pci_probe() - Dawei Feng",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-8d79fc8494c95812",
-      "url": "https://lore.kernel.org/linux-media/ajAHitx6a0Sk5pLZ@ashevche-desk.local/",
-      "title": "Re: [PATCH v2] media: atomisp: replace kmalloc() with kmalloc_array() in sh_css.c - Andy Shevchenko",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-8635e5e9a3557c0d",
-      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
-      "source_quality_score": 0.5,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.55,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-fc4425ca02aebc71",
-      "url": "https://lore.kernel.org/linux-media/ai_eGXhKhsV1fhlC@ashevche-desk.local/",
-      "title": "Re: [PATCH v2 2/2] media: atomisp: fix memory leak in atomisp_csi2_bridge_parse_firmware() - Andy Shevchenko",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-3a2dd40706104372",
-      "url": "https://lore.kernel.org/linux-media/ajACNM8ZXiYGgRwe@SMW015318/",
-      "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Frank Li",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-fa0d645879e771f0",
-      "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
-      "title": "The libcamera-devel Archives",
-      "source_quality_score": 0.5,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.55,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -940,60 +958,6 @@
       }
     },
     {
-      "candidate_id": "gemini-linked-3cf1f4c1be6e9dc5",
-      "url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig.Builder",
-      "title": "Feature Group",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-a279bb0df20018e4",
-      "url": "https://developer.android.com/reference/kotlin/androidx/camera/video/GroupableFeatures",
-      "title": "GroupableFeatures",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-eb09ee752aa3ba14",
-      "url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
-      "title": "CameraEffect",
-      "source_quality_score": 0.413,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.55,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-linked-520fe52c7e358499",
       "url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
       "title": "ImageAnalysis",
@@ -1004,60 +968,6 @@
         "camera_relevance": 0,
         "android_hal_relevance": 0,
         "technical_depth": 0.55,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-d024ea744f6e9986",
-      "url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig",
-      "title": "SessionConfig",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-f64d4b5cb00fe978",
-      "url": "https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig",
-      "title": "HighSpeedVideoSessionConfig",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-3cfe4e1c81ca8501",
-      "url": "https://developer.android.com/reference/androidx/camera/extensions/ExtensionSessionConfig",
-      "title": "ExtensionSessionConfig",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
         "recency_score": 0.25,
         "evidence_strength": 0.55,
         "duplicate_penalty": 0,
@@ -1084,42 +994,6 @@
       }
     },
     {
-      "candidate_id": "gemini-linked-0779844e3674fa79",
-      "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "title": "Latest security bulletins",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-584a6a0cadfdd7d4",
-      "url": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "title": "Latest Compatibility Definition Document (CDD)",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-linked-7317dd637c497758",
       "url": "https://source.android.com/docs/security/bulletin",
       "title": "Bulletins",
@@ -1136,12 +1010,30 @@
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
       }
+    },
+    {
+      "candidate_id": "gemini-linked-0b0026aa4b152e98",
+      "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+      "title": "more information about this list",
+      "source_quality_score": 0.33,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
     }
   ],
   "counts": {
-    "strong_candidate": 9,
-    "review_candidate": 8,
-    "blocked_candidate": 32,
-    "weak_candidate": 14
+    "strong_candidate": 5,
+    "review_candidate": 12,
+    "blocked_candidate": 33,
+    "weak_candidate": 7
   }
 }

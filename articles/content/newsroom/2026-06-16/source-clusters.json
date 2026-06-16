@@ -8,13 +8,20 @@
       "cluster_key": "https://developer.android.com/tools/agents/android-cli",
       "canonical_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
       "canonical_title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
           "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "title": "Overview of Android CLI &nbsp;|&nbsp; Android Studio &nbsp;|&nbsp; Android Developers",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -59,8 +66,8 @@
       "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
       "canonical_title": "CameraX Release Notes - CameraX 1.6.0",
-      "candidate_count": 3,
-      "duplicate_count": 2,
+      "candidate_count": 4,
+      "duplicate_count": 3,
       "candidates": [
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
@@ -71,7 +78,14 @@
         },
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-          "title": "CameraX Release Notes - CameraX 1.6.1",
+          "title": "1.6.1",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "title": "1.3.0-beta02",
           "canonical": false,
           "reliability": "official",
           "manual_seed": false
@@ -127,17 +141,41 @@
       ]
     },
     {
+      "cluster_id": "5e3f5455fa83d19c",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "canonical_title": "What’s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+          "title": "What’s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "98444c77340368f8",
       "cluster_key": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_title": "Top 3 updates for Android developer productivity",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
           "title": "Top 3 updates for Android developer productivity",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -171,23 +209,6 @@
         {
           "url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
           "title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "a315e38980974827",
-      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
-      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
-      "canonical_title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://android-developers.googleblog.com/2026/05/android-cli-stable-1-0-agent-development.html",
-          "title": "Android CLI Now Stable 1.0: Accelerate developing for Android using any agent",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -331,54 +352,6 @@
       ]
     },
     {
-      "cluster_id": "e15c48d51fea6a02",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260615140529.52653-1-doruk@0sec.ai",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260615140529.52653-1-doruk@0sec.ai/",
-      "canonical_title": "[PATCH] media: meson: vdec: fix use-after-free of decode work in stop/close path",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260615140529.52653-1-doruk@0sec.ai/",
-          "title": "[PATCH] media: meson: vdec: fix use-after-free of decode work in stop/close path",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260615140529.52653-1-doruk@0sec.ai/",
-          "title": "[PATCH] media: meson: vdec: fix use-after-free of decode work in stop/close path - Doruk Tan Ozturk",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "b63337124aa4bc9a",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai/",
-      "canonical_title": "[PATCH] media: mediatek: vcodec: fix use-after-free in decoder release path",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai/",
-          "title": "[PATCH] media: mediatek: vcodec: fix use-after-free in decoder release path",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260615140526.52617-1-doruk@0sec.ai/",
-          "title": "[PATCH] media: mediatek: vcodec: fix use-after-free in decoder release path - Doruk Tan Ozturk",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "61c963a289f63e09",
       "cluster_key": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
       "canonical_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
@@ -413,6 +386,23 @@
       ]
     },
     {
+      "cluster_id": "9f5a63b90e02162f",
+      "cluster_key": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "canonical_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "canonical_title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+          "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "44f3597991199849",
       "cluster_key": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
       "canonical_url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
@@ -430,72 +420,17 @@
       ]
     },
     {
-      "cluster_id": "92fe1b51aaf4d1cc",
-      "cluster_key": "https://lore.kernel.org/linux-media/ai_egxhkhsv1fhlc@ashevche-desk.local",
-      "canonical_url": "https://lore.kernel.org/linux-media/ai_eGXhKhsV1fhlC@ashevche-desk.local/",
-      "canonical_title": "Re: [PATCH v2 2/2] media: atomisp: fix memory leak in atomisp_csi2_bridge_parse_firmware()",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/ai_eGXhKhsV1fhlC@ashevche-desk.local/",
-          "title": "Re: [PATCH v2 2/2] media: atomisp: fix memory leak in atomisp_csi2_bridge_parse_firmware()",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/ai_eGXhKhsV1fhlC@ashevche-desk.local/",
-          "title": "Re: [PATCH v2 2/2] media: atomisp: fix memory leak in atomisp_csi2_bridge_parse_firmware() - Andy Shevchenko",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "d51ee696e4de6375",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260615-shikra-camss-review-v4-6-bcb51081735b@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260615-shikra-camss-review-v4-6-bcb51081735b@oss.qualcomm.com/",
-      "canonical_title": "[PATCH v4 6/6] arm64: dts: qcom: shikra-iqs-evk-imx577-camera: Add DT overlay",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260615-shikra-camss-review-v4-6-bcb51081735b@oss.qualcomm.com/",
-          "title": "[PATCH v4 6/6] arm64: dts: qcom: shikra-iqs-evk-imx577-camera: Add DT overlay",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260615-shikra-camss-review-v4-6-bcb51081735b@oss.qualcomm.com/",
-          "title": "[PATCH v4 6/6] arm64: dts: qcom: shikra-iqs-evk-imx577-camera: Add DT overlay - Nihal Kumar Gupta",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "a7d35653307227c6",
       "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel",
       "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
       "canonical_title": "The libcamera-devel Archives",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
           "title": "The libcamera-devel Archives",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
-          "title": "The libcamera-devel Archives",
-          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -540,20 +475,13 @@
       "cluster_key": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
       "canonical_title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
           "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
           "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        },
-        {
-          "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-          "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more! : Standard C++",
-          "canonical": false,
           "reliability": "official-community",
           "manual_seed": false
         }
@@ -577,40 +505,23 @@
       ]
     },
     {
-      "cluster_id": "abd6e66f3455bf16",
-      "cluster_key": "https://isocpp.org//blog/2026/06/trip-report-june-2026-iso-cpp-standards-meeting-brno-czechia-herb-sutter",
-      "canonical_url": "https://isocpp.org//blog/2026/06/trip-report-june-2026-iso-cpp-standards-meeting-brno-czechia-herb-sutter",
-      "canonical_title": "Trip report: June 2026 ISO C++ standards meeting (Brno, Czechia) -- Herb Sutter",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://isocpp.org//blog/2026/06/trip-report-june-2026-iso-cpp-standards-meeting-brno-czechia-herb-sutter",
-          "title": "Trip report: June 2026 ISO C++ standards meeting (Brno, Czechia) -- Herb Sutter",
-          "canonical": true,
-          "reliability": "official-community",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "28d85b2557d5b97e",
-      "cluster_key": "https://lore.kernel.org/linux-media/ajacnm8zxiyggrwe@smw015318",
-      "canonical_url": "https://lore.kernel.org/linux-media/ajACNM8ZXiYGgRwe@SMW015318/",
-      "canonical_title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node",
+      "cluster_id": "49510eae8548c9bd",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-10-583b42770b6a@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-10-583b42770b6a@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v5 10/16] media: iris: add minimal GET_PROPERTY implementation",
       "candidate_count": 2,
       "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/ajACNM8ZXiYGgRwe@SMW015318/",
-          "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node",
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-10-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 10/16] media: iris: add minimal GET_PROPERTY implementation",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         },
         {
-          "url": "https://lore.kernel.org/linux-media/ajACNM8ZXiYGgRwe@SMW015318/",
-          "title": "Re: [PATCH v3 8/8] arm64: dts: freescale: imx95: Add NXP neoisp device tree node - Frank Li",
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-10-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 10/16] media: iris: add minimal GET_PROPERTY implementation - Dmitry Baryshkov",
           "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
@@ -618,23 +529,23 @@
       ]
     },
     {
-      "cluster_id": "fb40c82b14f8ef3f",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/",
-      "canonical_title": "Re: [PATCH v2 1/2] media: atomisp: fix memory leak in atomisp_pci_probe()",
+      "cluster_id": "0fa356e2ce6e862a",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-9-583b42770b6a@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-9-583b42770b6a@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v5 09/16] media: iris: Add framework support for AR50_LITE video core",
       "candidate_count": 2,
       "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/",
-          "title": "Re: [PATCH v2 1/2] media: atomisp: fix memory leak in atomisp_pci_probe()",
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-9-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 09/16] media: iris: Add framework support for AR50_LITE video core",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         },
         {
-          "url": "https://lore.kernel.org/linux-media/20260615151543.3385190-1-dawei.feng@seu.edu.cn/",
-          "title": "Re: [PATCH v2 1/2] media: atomisp: fix memory leak in atomisp_pci_probe() - Dawei Feng",
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-9-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 09/16] media: iris: Add framework support for AR50_LITE video core - Dmitry Baryshkov",
           "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
@@ -642,40 +553,143 @@
       ]
     },
     {
-      "cluster_id": "df859a1f5be1fb30",
-      "cluster_key": "https://lore.kernel.org/linux-media/5c61be5e-4355-4c30-b24c-108e0a9fd26b@ixit.cz",
-      "canonical_url": "https://lore.kernel.org/linux-media/5c61be5e-4355-4c30-b24c-108e0a9fd26b@ixit.cz/",
-      "canonical_title": "Re: [PATCH v2 1/1] MAINTAINERS: Camera sensor and Intel IPU driver changes",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "cluster_id": "f9538686fa033390",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-7-583b42770b6a@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-7-583b42770b6a@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v5 07/16] media: iris: Add platform flag for instantaneous bandwidth voting",
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/5c61be5e-4355-4c30-b24c-108e0a9fd26b@ixit.cz/",
-          "title": "Re: [PATCH v2 1/1] MAINTAINERS: Camera sensor and Intel IPU driver changes",
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-7-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 07/16] media: iris: Add platform flag for instantaneous bandwidth voting",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-7-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 07/16] media: iris: Add platform flag for instantaneous bandwidth voting - Dmitry Baryshkov",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
       ]
     },
     {
-      "cluster_id": "4ebba01a9b136a94",
-      "cluster_key": "https://lore.kernel.org/linux-media/ajahitx6a0sk5plz@ashevche-desk.local",
-      "canonical_url": "https://lore.kernel.org/linux-media/ajAHitx6a0Sk5pLZ@ashevche-desk.local/",
-      "canonical_title": "Re: [PATCH v2] media: atomisp: replace kmalloc() with kmalloc_array() in sh_css.c",
+      "cluster_id": "ae36090b5e19d88c",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260615223055.39953-3-birenpandya@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260615223055.39953-3-birenpandya@gmail.com/",
+      "canonical_title": "[PATCH 2/3] media: i2c: imx290: Drop manual fwnode_handle_put() via scope-based cleanup",
       "candidate_count": 2,
       "duplicate_count": 1,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/ajAHitx6a0Sk5pLZ@ashevche-desk.local/",
-          "title": "Re: [PATCH v2] media: atomisp: replace kmalloc() with kmalloc_array() in sh_css.c",
+          "url": "https://lore.kernel.org/linux-media/20260615223055.39953-3-birenpandya@gmail.com/",
+          "title": "[PATCH 2/3] media: i2c: imx290: Drop manual fwnode_handle_put() via scope-based cleanup",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         },
         {
-          "url": "https://lore.kernel.org/linux-media/ajAHitx6a0Sk5pLZ@ashevche-desk.local/",
-          "title": "Re: [PATCH v2] media: atomisp: replace kmalloc() with kmalloc_array() in sh_css.c - Andy Shevchenko",
+          "url": "https://lore.kernel.org/linux-media/20260615223055.39953-3-birenpandya@gmail.com/",
+          "title": "[PATCH 2/3] media: i2c: imx290: Drop manual fwnode_handle_put() via scope-based cleanup - Biren Pandya",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "07d2d81b4a8f8a2c",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-2-583b42770b6a@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-2-583b42770b6a@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v5 02/16] media: iris: Filter UBWC raw formats based on hardware capabilities",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-2-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 02/16] media: iris: Filter UBWC raw formats based on hardware capabilities",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-2-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 02/16] media: iris: Filter UBWC raw formats based on hardware capabilities - Dmitry Baryshkov",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e0a24d7c6a5ffeae",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-14-583b42770b6a@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-14-583b42770b6a@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v5 14/16] media: iris: add Gen2 firmware support on the Agatti platform",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-14-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 14/16] media: iris: add Gen2 firmware support on the Agatti platform",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-14-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 14/16] media: iris: add Gen2 firmware support on the Agatti platform - Dmitry Baryshkov",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9ea06310ad89ff26",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-13-583b42770b6a@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-13-583b42770b6a@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v5 13/16] media: iris: Introduce buffer size calculations for AR50LT",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-13-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 13/16] media: iris: Introduce buffer size calculations for AR50LT",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-13-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 13/16] media: iris: Introduce buffer size calculations for AR50LT - Dmitry Baryshkov",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "73b9b83d117fb323",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-12-583b42770b6a@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-12-583b42770b6a@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v5 12/16] media: iris: implement support for the Agatti platform",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-12-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 12/16] media: iris: implement support for the Agatti platform",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260616-iris-ar50lt-v5-12-583b42770b6a@oss.qualcomm.com/",
+          "title": "[PATCH v5 12/16] media: iris: implement support for the Agatti platform - Dmitry Baryshkov",
           "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
@@ -701,23 +715,6 @@
           "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
           "title": "Media3 Release Notes - Media3 1.10.1",
           "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "d4a0acfc0ac6ad6e",
-      "cluster_key": "https://developer.android.com/training/data-storage/shared/photo-picker",
-      "canonical_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-      "canonical_title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
-          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
-          "canonical": true,
           "reliability": "official",
           "manual_seed": false
         }
@@ -758,57 +755,6 @@
       ]
     },
     {
-      "cluster_id": "3cf1f4c1be6e9dc5",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/sessionconfig.builder",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig.Builder",
-      "canonical_title": "Feature Group",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig.Builder",
-          "title": "Feature Group",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "a279bb0df20018e4",
-      "cluster_key": "https://developer.android.com/reference/kotlin/androidx/camera/video/groupablefeatures",
-      "canonical_url": "https://developer.android.com/reference/kotlin/androidx/camera/video/GroupableFeatures",
-      "canonical_title": "GroupableFeatures",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/kotlin/androidx/camera/video/GroupableFeatures",
-          "title": "GroupableFeatures",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "eb09ee752aa3ba14",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/cameraeffect",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
-      "canonical_title": "CameraEffect",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/core/CameraEffect",
-          "title": "CameraEffect",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "520fe52c7e358499",
       "cluster_key": "https://developer.android.com/reference/androidx/camera/core/imageanalysis",
       "canonical_url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
@@ -819,57 +765,6 @@
         {
           "url": "https://developer.android.com/reference/androidx/camera/core/ImageAnalysis",
           "title": "ImageAnalysis",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "d024ea744f6e9986",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/core/sessionconfig",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig",
-      "canonical_title": "SessionConfig",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/core/SessionConfig",
-          "title": "SessionConfig",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "f64d4b5cb00fe978",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/video/highspeedvideosessionconfig",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig",
-      "canonical_title": "HighSpeedVideoSessionConfig",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/video/HighSpeedVideoSessionConfig",
-          "title": "HighSpeedVideoSessionConfig",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "3cfe4e1c81ca8501",
-      "cluster_key": "https://developer.android.com/reference/androidx/camera/extensions/extensionsessionconfig",
-      "canonical_url": "https://developer.android.com/reference/androidx/camera/extensions/ExtensionSessionConfig",
-      "canonical_title": "ExtensionSessionConfig",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/reference/androidx/camera/extensions/ExtensionSessionConfig",
-          "title": "ExtensionSessionConfig",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -894,40 +789,6 @@
       ]
     },
     {
-      "cluster_id": "0779844e3674fa79",
-      "cluster_key": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "canonical_url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "canonical_title": "Latest security bulletins",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-          "title": "Latest security bulletins",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "584a6a0cadfdd7d4",
-      "cluster_key": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "canonical_url": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "canonical_title": "Latest Compatibility Definition Document (CDD)",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://source.android.com/docs/whatsnew/latest-cdd",
-          "title": "Latest Compatibility Definition Document (CDD)",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "7317dd637c497758",
       "cluster_key": "https://source.android.com/docs/security/bulletin",
       "canonical_url": "https://source.android.com/docs/security/bulletin",
@@ -940,6 +801,23 @@
           "title": "Bulletins",
           "canonical": true,
           "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0b0026aa4b152e98",
+      "cluster_key": "https://lists.libcamera.org/listinfo/libcamera-devel",
+      "canonical_url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+      "canonical_title": "more information about this list",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/listinfo/libcamera-devel",
+          "title": "more information about this list",
+          "canonical": true,
+          "reliability": "project-official",
           "manual_seed": false
         }
       ]
