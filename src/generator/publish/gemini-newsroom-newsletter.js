@@ -151,6 +151,7 @@ const {
   buildNewsletterQualityReport,
   buildQualityReportMarkdown,
   deductionMatchesSection,
+  hardBlockedGroupsForDroppedSections,
   salvagePublishableSubset,
   sectionHasSourceGap,
   sectionPassesArticleGate
@@ -242,7 +243,8 @@ const {
   sectionMatchesRepairItem,
   sectionsMatchingRepairPlan,
   sectionsOutsideRepairPlan,
-  hasTooFewMainArticlesDeduction
+  hasTooFewMainArticlesDeduction,
+  completionRefillTargetCount
 } = require('./orchestrator-repair-plan');
 const {
   removeNewsletterIndexEntry
@@ -3309,6 +3311,9 @@ async function main() {
 
     ({ editor, qualityReport } = runQualityGateAndPersist(editor, factCheck, attempt, 'attempt'));
 
+    // #632: 결정론 demote가 줄인 슬롯을 completion이 reserve로 되채워 기사 수를 보존하도록,
+    // repair 패스(demote) 이전의 main article 수를 기억해 둔다.
+    const mainArticleCountBeforeRepair = ensureArray(editor.sections).length;
     let repairActions = [];
     let demotedSections = appendUniqueSections(
       sourceGapSections(editor, factCheck),
@@ -3335,6 +3340,10 @@ async function main() {
         repairPlan.filter(item => item.action === 'replace-or-demote')
       )
     );
+    // repair 패스가 reserve candidate를 쓸 수 있는지. demote된 섹션이 있으면 reserve로 보충 가능하다는
+    // 의미다. 공유 후처리(reporterEligibilityFindings)와 두 repair 분기 모두에서 참조하므로 if/else
+    // 바깥, demote 보강 직후(regen/demote 이전 값)에 선언한다.
+    const repairAllowsReserve = demotedSections.length > 0;
     if (qualityReport.status !== 'PASS' && repairPlan.length > 0) {
       const repairStage = `editor repair attempt ${attempt}/${totalAttempts}`;
       // #628 salvage용 일관 snapshot. repair try 안에서 editor/factCheck/qualityReport는
@@ -3401,72 +3410,27 @@ async function main() {
           }
           editor = validateEditor(patchResult.editor, date, reporter, { strictClaims: true, requireStoryContract: true });
         } else {
-        const repairCandidateRejections = [];
-        const repairAllowsReserve = demotedSections.length > 0;
-        const repairCandidatePool = availableCompletionCandidates(
-          reporter,
-          preservedSections,
-          excludedSections.concat(demotedSections),
-          repairCandidateRejections,
-          { allowReserve: repairAllowsReserve }
-        );
-        if (repairAllowsReserve && repairCandidatePool.some(isReserveCandidate)) {
-          reservePoolOpened = true;
-          reserveOpenReason = reserveOpenReason || 'repair_after_primary_demote_or_source_gap';
-        }
-        candidateRejections = candidateRejections.concat(repairCandidateRejections);
-        const beforeRepairSections = editor.sections;
-        const repairSections = validateCompletionSections(await callLlmJson(
-          repairStage,
-          [
-          '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI repair editor입니다.',
-          dateFramingGuardrail(),
-          'repair plan에 listed failed sections에 대한 regenerated section JSON만 반환하세요. full newsletter draft를 반환하지 마세요.',
-          'repair-section action에서는 같은 source를 사용해 affected section만 복구하세요.',
-          'replace-section action에서는 weak evidence를 다시 쓰지 말고 더 강한 supplied candidate로 section을 교체하세요.',
-          'replace-or-demote action에서는 article을 briefing/watchlist로 강등하거나 교체하세요. source gap을 publishable fact처럼 다시 쓰지 마세요.',
-          'reporter_eligibility_violations는 section을 replace 또는 demote하세요. ineligible source 주변 text만 고쳐서 유지하지 마세요.',
-          'replacement main articles는 locked/excluded가 아닌 primary selected capsules 또는 이 prompt에 제공된 reserve candidate capsules만 사용해야 합니다.',
-          linkedEvidencePromptGuardrails(),
-          sourceExtractionPromptGuardrails(),
-          articleSectionContractPrompt(),
-          publicArticleContractPrompt(),
-          publicationBoundaryPrompt(),
-          articleClaimContractPrompt(),
-          claimRepairEvidencePrompt(),
-          'locked/passing section은 변경하지 말고 locked 또는 excluded article을 중복하지 마세요.',
-          'locked/passing section은 이미 gate를 통과했습니다. repair plan에 명시적으로 포함된 경우가 아니면 source URLs, title/headline, source-date-title 조합을 정확히 보존하세요.',
-          '각 regenerated section에는 release date, version/release, API/component 또는 library/artifact, concrete behavior change, relevance_bucket, AOSP Camera / driver / SoC / native tooling relevance를 명시하세요.',
-          '그 fact를 제공된 candidate/source data에서 확인할 수 없으면 briefing/watchlist로 demote하거나 exclude하세요. 누락된 release evidence를 만들거나 추론하지 마세요.',
-          `repair plan에 있는 ${repairPlan.length}개 section에 대해 각각 1개씩 총 ${repairPlan.length}개의 regenerated section만 반환하세요. repair plan에 없는 추가 section을 생성하지 마세요.`,
-          `Newsletter Policy bucket order를 유지하세요: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. Forbidden buckets는 briefing/watchlist로만 유지하세요: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
-          'golden example은 article structure와 evidence/actionability style 참고로만 사용하세요. 현재 reporter candidates에 없는 facts는 복사하지 마세요.',
-          'schema와 일치하는 JSON만 반환하세요.'
-        ].join('\n'),
-        `${commonContext}\n\n${lockedContext}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nLocked/passing sections JSON:\n${JSON.stringify(preservedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nFailed sections JSON:\n${JSON.stringify(failedSections.map((section, index) => sectionSummary(section, index)), null, 2)}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nReserve candidate capsule pool JSON:\n${JSON.stringify(reporterCandidateCapsules(date, repairCandidatePool, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCandidate rejection diagnostics JSON:\n${JSON.stringify(repairCandidateRejections, null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
-          editorCompletionSchema
-        ), date, reporter);
-        const repairMerged = mergeLockedSections(preservedSections, repairSections, excludedSections.concat(demotedSections));
-        validateTargetedRepairResult({
-          beforeSections: beforeRepairSections,
-          repairSections,
-          afterSections: repairMerged.sections,
-          lockedSections: preservedSections,
-          mode: 'targeted-repair',
-          allowCountChange: true,
-          date,
-          reporter
-        });
-        rejectedGeneratedSections = rejectedGeneratedSections.concat(repairMerged.rejected);
-        rejectedRetryOutputs = repairMerged.rejected;
-        replacedSections = repairMerged.rejected
-          .filter(item => ['duplicate_demoted_url', 'duplicate_source_date_title', 'source_gap_candidate'].includes(item.reason))
-          .map(item => item.title);
-        regeneratedSections = repairSections;
-        reserveCandidatesUsed = reserveCandidatesUsed.concat(reserveUsageForSections(repairMerged.sections, reporter));
+        // #632: replace/demote를 LLM 전체-재생성 대신 결정론 강등으로 처리한다. 실패(structural)
+        // 섹션을 떨어뜨리고 통과 섹션만 남긴다. 이로써 #628의 identity-drift throw와 evidence_id 반복
+        // 루프를 일으키던 regen 호출(callLlmJson + mergeLockedSections + validateTargetedRepairResult)이
+        // 사라진다. 아래 공유 후처리(judge / fact-check 재실행 / 재게이트)가 강등된 draft를 다시 검증하고,
+        // 그 다음 completion 패스가 부족분을 reserve candidate로 채워 기사 수를 보존한다.
+        // 기본 newsroomMaxSectionRepairs=1이라 plan은 1개 섹션(여기선 structural 1개)이다. >1로 설정해
+        // repair-section과 structural이 섞이면 structural만 강등되고 repair-section은 이번 attempt에선
+        // 미수정으로 남는다(재게이트 NEEDS_FIX→재시도/ salvage로 안전 처리; 발행 안전 구멍은 아님).
+        const structuralFailed = sectionsMatchingRepairPlan(editor.sections, structuralRepairPlan);
+        const keptSections = sectionsOutsideRepairPlan(editor.sections, structuralRepairPlan);
+        repairActions = structuralRepairPlan.map(item => `${item.action}(deterministic-demote): ${item.headline}`);
+        demotedSections = appendUniqueSections(demotedSections, structuralFailed);
+        regeneratedSections = [];
+        replacedSections = structuralFailed.map(sectionLabel);
         editor = validateEditor({
           ...editor,
-          sections: repairMerged.sections
+          sections: keptSections,
+          hard_blocked_groups: [
+            ...ensureArray(editor.hard_blocked_groups),
+            ...hardBlockedGroupsForDroppedSections(structuralFailed)
+          ]
         }, date, reporter, { strictClaims: true, requireStoryContract: true });
         }
         editor = await validatePublicArticleJudgeOrRepair({
@@ -3600,8 +3564,17 @@ async function main() {
       }
     }
 
-    if (hasTooFewMainArticlesDeduction(qualityReport)) {
-      const missingArticleCount = articlePolicy.mainArticleCount.min - ensureArray(editor.sections).length;
+    // #632: 결정론 demote로 줄어든 슬롯을 reserve로 되채워 기사 수를 보존한다(min 미만 보충은
+    // 기존 동작 그대로). target = demote 이전 수(단, max 이내, 최소 min). reserve가 없으면 아래
+    // 내부 가드(completionCandidates.length > 0)에서 생성하지 않으므로 얇은 날엔 줄어든 채 발행된다.
+    const completionTargetCount = completionRefillTargetCount(mainArticleCountBeforeRepair);
+    const currentMainArticleCount = ensureArray(editor.sections).length;
+    const belowDemoteTarget = demotedSections.length > 0 && currentMainArticleCount < completionTargetCount;
+    if (hasTooFewMainArticlesDeduction(qualityReport) || belowDemoteTarget) {
+      const missingArticleCount = Math.max(
+        articlePolicy.mainArticleCount.min - currentMainArticleCount,
+        belowDemoteTarget ? completionTargetCount - currentMainArticleCount : 0
+      );
       const completionExcludedSections = appendUniqueSections(
         excludedSections,
         demotedSections.concat(eligibilityFindings.map(finding => finding.section))
