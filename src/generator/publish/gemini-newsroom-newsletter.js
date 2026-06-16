@@ -3337,6 +3337,15 @@ async function main() {
     );
     if (qualityReport.status !== 'PASS' && repairPlan.length > 0) {
       const repairStage = `editor repair attempt ${attempt}/${totalAttempts}`;
+      // #628 salvage용 일관 snapshot. repair try 안에서 editor/factCheck/qualityReport는
+      // 재할당되지만(특히 structural 경로는 mergeLockedSections로 section 순서/구성이 바뀜),
+      // 이 시점의 셋은 직전 runQualityGateAndPersist가 만든 정합 셋이다. salvage는 article_results를
+      // editor.sections 인덱스에 위치 대응시키므로, 재할당된 editor에 stale qualityReport를 쓰면
+      // 인덱스가 어긋난다. 그래서 항상 이 정합 pre-repair snapshot에서만 salvage한다(이 섹션들은
+      // 이미 image/evidence 재조정을 거친 검증된 draft이기도 하다).
+      const preRepairEditor = editor;
+      const preRepairFactCheck = factCheck;
+      const preRepairQualityReport = qualityReport;
       try {
         repairActions = repairPlan.map(item => `${item.action}: ${item.headline}`);
         failedSections = sectionsMatchingRepairPlan(editor.sections, repairPlan);
@@ -3530,24 +3539,64 @@ async function main() {
           sourceGapSections(editor, factCheck).concat(eligibilityFindings.map(finding => finding.section))
         );
       } catch (error) {
-        writeReviewableRepairFailureArtifacts({
-          date,
-          newsroomDir,
-          error,
-          reporter,
-          factCheck,
-          qualityReport,
-          retryHistory,
-          shortlistReport,
-          attempt,
-          stage: repairStage
-        });
-        // repair 실패는 그 자체로 종착점이다. writeReviewableRepairFailureArtifacts가 이미
-        // FAILED_REPAIR_REVIEWABLE 리뷰 패키지(public 노출 없음)를 기록했으므로 여기서 return해
-        // 발행 가능 경로로 떨어지지 않게 한다. break로 떨어지면 후처리가 품질을 PASS로 다시
-        // 계산해 newsletters.json 노출을 쓰고, 그 뒤 validate:site retention이 깨지며 terminal
-        // FAILED로 리뷰 PR이 사라진다. 형제 catch(editor-validate/completion)도 동일하게 return한다.
-        return;
+        // #628: 약한 섹션 하나의 repair 실패가 발행 가능한 강한 카메라 기사 전체를 막지
+        // 않게 한다. 정합 pre-repair snapshot에서 실패 섹션을 demote하고 나머지가 같은 quality
+        // gate를 통과하면 그 subset만 발행한다. salvagePublishableSubset은 subset에 게이트를
+        // 재적용해 PASS일 때만 결과를 반환(아니면 null)하므로 게이트를 약화하지 않는다. 루프 뒤
+        // thin-week salvage(아래)와 같은 메커니즘이며, repair catch가 그 경로에 닿기 전에 return하던
+        // 갭만 메운다. salvage/검증 자체가 throw하면(드문 oracle 불일치) FAILED 경로로 안전하게
+        // 떨어뜨려, 이 catch 밖 terminal FAILED로 새지 않게 한다.
+        let repairSalvage = null;
+        try {
+          const candidate = salvagePublishableSubset(
+            date, preRepairEditor, reporter, preRepairFactCheck, preRepairQualityReport,
+            { threshold: qualityGatePolicy.threshold, shortlistReport, strictClaimValidation: true, seedEvidencePack }
+          );
+          if (candidate) {
+            const salvagedEditor = validateEditor(candidate.editor, date, reporter, { strictClaims: true, requireStoryContract: true });
+            repairSalvage = { ...candidate, editor: salvagedEditor };
+          }
+        } catch (salvageError) {
+          console.warn(`Repair-failure salvage could not produce a valid subset: ${salvageError.message}`);
+          repairSalvage = null;
+        }
+        if (repairSalvage) {
+          const keptKeys = new Set(ensureArray(repairSalvage.editor.sections).map(stableSectionKey).filter(Boolean));
+          const droppedSections = ensureArray(preRepairEditor.sections).filter(before => {
+            const key = stableSectionKey(before);
+            return key ? !keptKeys.has(key) : true;
+          });
+          console.warn(`Repair pass failed for ${repairPlan.length} section(s); salvaging ${repairSalvage.kept_section_count} publishable article(s) and demoting ${droppedSections.length}. (${error.message})`);
+          editor = repairSalvage.editor;
+          factCheck = repairSalvage.factCheck;
+          qualityReport = repairSalvage.qualityReport;
+          generationRunState.factCheck = factCheck;
+          generationRunState.qualityReport = qualityReport;
+          demotedSections = appendUniqueSections(demotedSections, droppedSections);
+          // 발행 가능한 PASS subset을 확보했으므로 return하지 않는다. 이번 attempt의 나머지
+          // (completion은 PASS라 skip, lock/retryHistory 기록)를 정상 통과한 뒤 PASS로 자연
+          // 종료(break)하고 일반 발행 경로로 진행한다. FAILED 아티팩트를 쓰지 않으므로 #627의
+          // "FAILED + public 노출 공존 → validate:site 깨짐" 문제는 발생하지 않는다.
+        } else {
+          writeReviewableRepairFailureArtifacts({
+            date,
+            newsroomDir,
+            error,
+            reporter,
+            factCheck,
+            qualityReport,
+            retryHistory,
+            shortlistReport,
+            attempt,
+            stage: repairStage
+          });
+          // salvage 불가: repair 실패는 그 자체로 종착점이다. writeReviewableRepairFailureArtifacts가
+          // 이미 FAILED_REPAIR_REVIEWABLE 리뷰 패키지(public 노출 없음)를 기록했으므로 여기서 return해
+          // 발행 가능 경로로 떨어지지 않게 한다. break로 떨어지면 후처리가 품질을 PASS로 다시 계산해
+          // newsletters.json 노출을 쓰고, 그 뒤 validate:site retention이 깨지며 terminal FAILED로 리뷰
+          // PR이 사라진다. 형제 catch(editor-validate/completion)도 동일하게 return한다.
+          return;
+        }
       }
     }
 
