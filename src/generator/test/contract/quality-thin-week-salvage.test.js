@@ -125,6 +125,36 @@ test('salvage returns null when no clean subset meets the minimum article count'
   assert.equal(salvage, null);
 });
 
+// #628: editor repair가 약한 섹션 하나에서 실패(stable identity drift 등)해도, repair 이전의
+// 유효 draft에서 그 섹션만 demote하고 강한 카메라 메인은 발행되어야 한다. 실제 사례 형태:
+// CameraX 1.6.1(direct_aosp_camera) + atomisp 드라이버 패치(soc_platform_signal)는 통과,
+// 주변부 productivity 글(android_platform_camera_adjacent)만 비발행. orchestrator의 repair
+// catch가 이 salvagePublishableSubset을 호출하므로 그 메커니즘이 이 형태를 처리해야 한다.
+test('#628: repair-failure 형태 — 강한 카메라 메인 2개는 발행, 약한 섹션만 demote', () => {
+  const strongA = section({ headline: 'CameraX SessionConfig API', url: 'https://example.com/camerax' });
+  const strongB = section({ headline: 'Camera driver memory-leak fix', url: 'https://example.com/driver' });
+  const weak = section({ headline: 'Camera-adjacent productivity note', url: 'https://example.com/adjacent' });
+  const { editor, reporter, factCheck } = buildInputs(
+    [strongA, strongB, weak],
+    [
+      scopedCandidate('https://example.com/camerax', 'direct_aosp_camera'),
+      scopedCandidate('https://example.com/driver', 'soc_platform_signal'),
+      scopedCandidate('https://example.com/adjacent', 'android_platform_camera_adjacent')
+    ],
+    { article_quality: [publishable(0), publishable(1), { section_index: 2, publishable: false, reason: 'Camera-adjacent productivity note; no concrete HAL value.' }] }
+  );
+
+  const report = buildNewsletterQualityReport(DATE, editor, reporter, factCheck, {});
+  assert.equal(report.status, 'NEEDS_FIX');
+
+  const salvage = salvagePublishableSubset(DATE, editor, reporter, factCheck, report, {});
+  assert.ok(salvage, '약한 섹션 하나가 실패해도 강한 카메라 메인 2개는 살아남아야 한다');
+  assert.equal(salvage.kept_section_count, 2);
+  assert.equal(salvage.dropped_section_count, 1);
+  assert.equal(salvage.qualityReport.status, 'PASS');
+  assert.deepEqual(salvage.editor.sections.map(item => item.headline), [strongA.headline, strongB.headline]);
+});
+
 test('salvage returns null when the full lineup already passes (nothing to drop)', () => {
   const cleanA = section({ headline: 'CameraX clean A', url: 'https://example.com/a' });
   const cleanB = section({ headline: 'CameraX clean B', url: 'https://example.com/b' });
