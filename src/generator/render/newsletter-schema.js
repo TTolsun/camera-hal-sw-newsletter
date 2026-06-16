@@ -108,18 +108,6 @@ const imageCandidate = {
   required: ['url', 'sourceUrl', 'articleUrl', 'sourceKind', 'licenseStatus', 'attribution', 'validationStatus']
 };
 
-const resolvedImage = {
-  type: 'OBJECT',
-  properties: {
-    url: string,
-    src: string,
-    originalUrl: string,
-    originalSrc: string,
-    usedFallback: { type: 'BOOLEAN' },
-    reason: string
-  }
-};
-
 const articleSections = {
   type: 'OBJECT',
   properties: {
@@ -194,24 +182,6 @@ const actionabilityUpgradeEvidence = {
   }
 };
 
-const sourceQuality = {
-  type: 'OBJECT',
-  properties: {
-    source_role: string,
-    source_url_quality: string,
-    source_quality_status: string,
-    main_article_source_allowed: { type: 'BOOLEAN' },
-    main_article_source_allowed_reason: string,
-    main_article_source_blockers: stringArray,
-    cross_check_status: string,
-    requires_cross_check: { type: 'BOOLEAN' },
-    requires_conditional_evidence: { type: 'BOOLEAN' },
-    conditional_evidence_type: string,
-    evidence_granularity: string,
-    source_quality_notes: stringArray
-  }
-};
-
 const reporterCandidate = {
   type: 'OBJECT',
   properties: {
@@ -244,6 +214,15 @@ const reporterCandidate = {
   ]
 };
 
+// editor responseSchema의 section은 LLM이 실제로 작성하는 필드만 담는다.
+// selection/reporter capsule이 채우는 메타데이터(source_candidate_*, counts_as_*,
+// relevance_bucket, editorial_priority, evidence_origin, source_hint, tooling_workflow_type,
+// article_group_key)와 image resolver가 덮어쓰는 originalImage/resolvedImage, 그리고
+// section 레벨에서 아무도 채우지 않던 source_quality·fallback_promotion·
+// main_article_source_allowed·signal_quality_status·soc_signal_source_allowed 계열은 제외한다.
+// 코드가 editor 출력 객체에 이 값들을 그대로 채우므로 출력은 보존되며, optional 필드가 줄어
+// Gemini constrained-decoding의 "too many states" 상태 폭발이 사라진다(작은 fallback 모델
+// gemini-2.5-flash / flash-lite 도 editor schema를 수용 — 실측 확인).
 const section = {
   type: 'OBJECT',
   properties: {
@@ -267,39 +246,14 @@ const section = {
     effective_actionability_level: string,
     actionability_upgrade_reason: string,
     actionability_upgrade_evidence: actionabilityUpgradeEvidence,
-    signal_quality_status: string,
     do_not_overstate: stringArray,
-    fallback_promotion_allowed: { type: 'BOOLEAN' },
-    fallback_promotion_reason: string,
-    fallback_guard_notes: stringArray,
     soc_signal_type: string,
-    soc_signal_source_allowed: { type: 'BOOLEAN' },
     camera_pipeline_link: string,
     camera_hal_checks: stringArray,
     action_hints: stringArray,
     action_items: stringArray,
     is_ai_related: { type: 'BOOLEAN' },
     article_type: string,
-    source_candidate_url: string,
-    source_candidate_hash: string,
-    article_group_key: string,
-    tooling_workflow_type: string,
-    source_quality: sourceQuality,
-    source_quality_reason: string,
-    source_role: string,
-    source_url_quality: string,
-    source_quality_status: string,
-    main_article_source_allowed: { type: 'BOOLEAN' },
-    main_article_source_allowed_reason: string,
-    main_article_source_blockers: stringArray,
-    relevance_bucket: string,
-    editorial_priority: { type: 'NUMBER' },
-    counts_as_primary_camera_topic: { type: 'BOOLEAN' },
-    counts_as_driver_topic: { type: 'BOOLEAN' },
-    counts_as_soc_topic: { type: 'BOOLEAN' },
-    counts_as_fallback_topic: { type: 'BOOLEAN' },
-    evidence_origin: string,
-    source_hint: string,
     article_tier: string,
     topic_area: string,
     camera_output_relevance: { type: 'NUMBER' },
@@ -309,8 +263,6 @@ const section = {
       items: imageCandidate
     },
     selectedImage: string,
-    originalImage: string,
-    resolvedImage,
     imageSource: string,
     imageAttribution: string,
     imageAlt: string,
