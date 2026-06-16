@@ -88,8 +88,32 @@ function sectionKeyFromSourceExtraction(group, section = {}, extraction = {}) {
   return parts.length > 0 ? parts.join('-').replace(/[^a-z0-9\uac00-\ud7a3]+/g, '-').replace(/^-|-$/g, '') : prefix;
 }
 
+// evidence_id 축약(#629 후속). LLM은 capsule의 allowed_claim_evidence[].evidence_id를 verbatim
+// 복사해야 하는데, 기존 id는 (a) URL의 sha256 전체 64-hex와 (b) 릴리스 헤딩에서 파생된 긴 슬러그
+// (release-...-bug-fixes-bug-fixes 처럼 토큰이 반복됨)를 담아 130~200자였다. 모델이 이를 베끼다
+// degenerate 반복 루프(출력 한도까지 폭주→4~5분 낭비·invalid JSON)에 빠지거나 한 글자만 어긋나
+// unknown_evidence_id로 미바인딩→섹션 FAIL→repair 트리거되는 일이 있었다. 임베드 해시를 16자로,
+// 슬러그를 짧은 해시로 줄여 반복 토큰을 제거하고 길이를 ~50자로 낮춘다. 바인딩 index와 capsule이
+// 동일한 구성 함수를 쓰므로 짧아져도 exact-string 일치는 그대로 유지된다(원본 source_candidate_hash
+// 필드 자체는 바꾸지 않으며, id에 임베드되는 사본만 줄인다).
+//
+// 충돌 예산: id는 <후보 16hex>:<섹션키 12hex>:<아이템텍스트 16hex>로, 한 후보의 byId Map 안에서만
+// 키가 된다(index는 후보·섹션 단위로 새로 빌드되며 전역 byId가 없다). 한 후보의 섹션은 많아야 수십 개라
+// 섹션키 12hex(48bit)면 birthday 충돌이 사실상 0이고, 같은 섹션 내 아이템은 텍스트 16hex(64bit)로 구별한다.
+// addEvidence는 충돌 시 drop이 아니라 url/text를 merge하므로(조용한 오바인딩이 더 위험), 마진을 넉넉히 둔다.
+const EVIDENCE_ID_HASH_LENGTH = 16;
+const EVIDENCE_ID_SECTION_KEY_LENGTH = 12;
+
+function compactEvidenceCandidateHash(candidate = {}) {
+  return sourceCandidateHash(candidate).slice(0, EVIDENCE_ID_HASH_LENGTH);
+}
+
+function compactEvidenceSectionKey(sectionKey) {
+  return hashText(text(sectionKey) || 'section', EVIDENCE_ID_SECTION_KEY_LENGTH);
+}
+
 function stableSourceExtractionItemId(candidate = {}, sectionKey = 'source-extraction', itemText = '') {
-  return `sx:${sourceCandidateHash(candidate)}:${sectionKey}:${hashText(normalizeText(itemText), 16)}`;
+  return `sx:${compactEvidenceCandidateHash(candidate)}:${compactEvidenceSectionKey(sectionKey)}:${hashText(normalizeText(itemText), 16)}`;
 }
 
 function stableLinkedEvidenceItemId(candidate = {}, item = {}) {
@@ -97,11 +121,11 @@ function stableLinkedEvidenceItemId(candidate = {}, item = {}) {
   const urlKey = canonicalUrlKey(item.url || item.source_url || item.sourceUrl) ||
     normalizeText(item.identifier || item.title || item.source_text || item.sourceText || 'no-url');
   const textKey = normalizeText(item.title || item.source_text || item.sourceText || item.raw_excerpt || item.rawExcerpt || item.identifier || item.type || status);
-  return `le:${sourceCandidateHash(candidate)}:${status}:${hashText(urlKey, 16)}:${hashText(textKey, 16)}`;
+  return `le:${compactEvidenceCandidateHash(candidate)}:${status}:${hashText(urlKey, 16)}:${hashText(textKey, 16)}`;
 }
 
 function stableCandidateSummaryEvidenceId(candidate = {}) {
-  return `candidate:${sourceCandidateHash(candidate)}:source-summary`;
+  return `candidate:${compactEvidenceCandidateHash(candidate)}:source-summary`;
 }
 
 function compactEvidencePromptText(value, max = 360) {

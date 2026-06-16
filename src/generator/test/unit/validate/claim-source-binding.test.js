@@ -111,7 +111,99 @@ test('source extraction item id remains stable when item order changes', () => {
     'Fixed CameraX ListenableFuture compile error.'
   );
   assert.equal(first, second);
-  assert.match(first, /^sx:hash-a:release-bug-fixes:[a-f0-9]{16}$/);
+  // #629 후속: 슬러그(release-bug-fixes)는 verbatim 대신 짧은 해시로 임베드되어 반복 토큰을 없앤다.
+  assert.match(first, /^sx:hash-a:[a-f0-9]{12}:[a-f0-9]{16}$/);
+});
+
+test('#629: two different sections of the same candidate keep DISTINCT ids after slug-hashing', () => {
+  const cand = { source_candidate_hash: 'hash-a' };
+  const itemText = 'Bug fixes.';
+  const a = stableSourceExtractionItemId(cand, 'release-1-6-1-bug-fixes', itemText);
+  const b = stableSourceExtractionItemId(cand, 'release-1-7-0-bug-fixes', itemText);
+  // 같은 후보·같은 아이템 텍스트라도 섹션 슬러그가 다르면 id가 달라야 한다(병합 방지).
+  assert.notEqual(a, b);
+});
+
+test('#629: evidence id is shortened — 64-hex URL hash sliced to 16, verbose repeated-token slug hashed to 8', () => {
+  const longHash = 'a1b2c3d4e5f60718293a4b5c6d7e8f90112233445566778899aabbccddeeff00';
+  const verboseSlug = 'release-camerax-1-6-1-may-06-2026-camerax-androidx-camera-bug-fixes-bug-fixes';
+  const id = stableSourceExtractionItemId(
+    { source_candidate_hash: longHash },
+    verboseSlug,
+    'Fixed a device-specific stream crash.'
+  );
+  assert.match(id, /^sx:[a-f0-9]{16}:[a-f0-9]{12}:[a-f0-9]{16}$/);
+  assert.ok(id.length <= 55, `evidence id should be short, got ${id.length}: ${id}`);
+  // 반복 루프 트리거였던 verbatim 슬러그가 id에 남으면 안 된다.
+  assert.equal(id.includes('bug-fixes'), false);
+  assert.ok(id.startsWith(`sx:${longHash.slice(0, 16)}:`));
+
+  const linked = stableLinkedEvidenceItemId(
+    { source_candidate_hash: longHash },
+    { fetch_status: 'skipped', url: 'https://example.com/x', title: 'note' }
+  );
+  assert.match(linked, /^le:[a-f0-9]{16}:skipped:[a-f0-9]{16}:[a-f0-9]{16}$/);
+});
+
+test('#629: shortened evidence ids still bind — capsule ids are short and resolve in a freshly built index', () => {
+  const cand = {
+    source_candidate_hash: 'fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210',
+    url: 'https://lore.kernel.org/linux-media/atomisp-fix',
+    summary: 'atomisp CSI2 bridge memory leak fix.',
+    source_extraction: {
+      evidence_blocks: [
+        { text: 'atomisp_csi2_bridge_parse_firmware leaks the async notifier on error paths.' }
+      ]
+    }
+  };
+  const sec = {
+    headline: 'atomisp CSI2 bridge fix',
+    sources: [{ title: 'lore', url: 'https://lore.kernel.org/linux-media/atomisp-fix' }]
+  };
+  const allowed = buildAllowedClaimEvidence(cand, sec);
+  const index = buildEvidenceIndex(cand, sec);
+  assert.ok(allowed.length > 0);
+  for (const item of allowed) {
+    assert.ok(item.evidence_id.length <= 60, `capsule evidence id should be short: ${item.evidence_id}`);
+    // capsule이 LLM에 보여준 id를, 검증 시점에 새로 만든 index가 동일 문자열로 해석할 수 있어야 한다.
+    assert.ok(index.byId.has(item.evidence_id), `capsule id must resolve in the binding index: ${item.evidence_id}`);
+  }
+});
+
+test('#629: a claim citing a shortened synthetic source-extraction id binds end-to-end (status=bound)', () => {
+  const url = 'https://lore.kernel.org/linux-media/atomisp-fix';
+  const factText = 'atomisp_csi2_bridge_parse_firmware leaks the async notifier on error paths.';
+  const cand = {
+    title: 'atomisp CSI2 bridge fix',
+    url,
+    source_candidate_hash: 'fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210',
+    source_extraction: { evidence_blocks: [{ text: factText, url }] }
+  };
+  const sec = { headline: 'atomisp CSI2 bridge fix', sources: [{ title: 'lore', url }] };
+  const sxId = buildAllowedClaimEvidence(cand, sec)
+    .map(item => item.evidence_id)
+    .find(id => id.startsWith('sx:'));
+  assert.ok(sxId, 'capsule should expose a shortened sx: id');
+
+  // capsule이 노출한 축약 id를 그대로 인용한 fact claim이 검증 인덱스에서 실제로 bound 되어야 한다
+  // (byId.has 존재 확인이 아니라 end-to-end 바인딩).
+  const result = validateArticleClaims({
+    section: {
+      ...sec,
+      claims: [{
+        claim_id: 'claim-1',
+        text: factText,
+        claim_type: 'fact',
+        evidence_ids: [sxId],
+        source_urls: [url],
+        impact_level: 'app_api_or_framework_adjacent',
+        overclaim_risk: 'low'
+      }]
+    },
+    candidate: cand,
+    strict: true
+  });
+  assert.equal(result.claim_results[0].status, 'bound');
 });
 
 test('source extraction item id distinguishes different Korean-only evidence text', () => {
