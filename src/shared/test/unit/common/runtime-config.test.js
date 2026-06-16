@@ -41,8 +41,8 @@ function doctorConfigEnv(overrides = {}) {
     LLM_PROVIDER: 'gemini',
     LLM_MODEL: 'gemini-2.5-flash',
     GEMINI_MODEL: 'gemini-2.5-flash',
-    LLM_FALLBACK_MODELS: 'gemini-2.5-flash-lite',
-    GEMINI_FALLBACK_MODELS: 'gemini-2.5-flash-lite',
+    LLM_FALLBACK_MODELS: 'gemini-2.5-flash,gemini-2.5-flash-lite',
+    GEMINI_FALLBACK_MODELS: 'gemini-2.5-flash,gemini-2.5-flash-lite',
     GITHUB_EVENT_NAME: 'workflow_dispatch',
     ...overrides
   };
