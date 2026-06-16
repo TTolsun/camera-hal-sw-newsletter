@@ -41,8 +41,8 @@ function doctorConfigEnv(overrides = {}) {
     LLM_PROVIDER: 'gemini',
     LLM_MODEL: 'gemini-2.5-flash',
     GEMINI_MODEL: 'gemini-2.5-flash',
-    LLM_FALLBACK_MODELS: 'gemini-2.5-flash-lite',
-    GEMINI_FALLBACK_MODELS: 'gemini-2.5-flash-lite',
+    LLM_FALLBACK_MODELS: 'gemini-2.5-flash,gemini-2.5-flash-lite',
+    GEMINI_FALLBACK_MODELS: 'gemini-2.5-flash,gemini-2.5-flash-lite',
     GITHUB_EVENT_NAME: 'workflow_dispatch',
     ...overrides
   };
@@ -80,7 +80,7 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.llmModelExplicitlyConfigured, false);
   assert.equal(config.llmGlobalModelExplicitlyConfigured, false);
   assert.equal(config.llmModelSource, 'code_default');
-  assert.deepEqual(config.llmFallbackModels, ['gemini-2.5-flash-lite']);
+  assert.deepEqual(config.llmFallbackModels, ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
   assert.deepEqual(config.llmStageModels, DEFAULT_LLM_STAGE_MODELS);
   assert.deepEqual(config.llmStageModelSources, {
     reporter: 'code_default',
@@ -91,7 +91,7 @@ test('defaults match workflow runtime defaults', () => {
     sourceDiscovery: 'code_default'
   });
   assert.equal(config.geminiModel, 'gemini-2.5-flash');
-  assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash-lite']);
+  assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
   assert.equal(config.geminiMaxRetries, 2);
   assert.deepEqual(config.geminiRetryDelaysMs, [20000, 10000]);
   assert.equal(config.geminiRetryMaxDelayMs, 300000);
@@ -472,11 +472,11 @@ test('stage model env vars independently override code defaults', () => {
     judge: 'NEWSROOM_JUDGE_MODEL',
     sourceDiscovery: 'code_default'
   });
-  assert.deepEqual(configuredModelsForStage(config, 'reporter attempt 1/2'), ['reporter-model', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['editor-model', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'fact-checker attempt 1/2'), ['factcheck-model', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'editor repair attempt 1/2'), ['repair-model', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'public article judge attempt 1/2'), ['judge-model', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'reporter attempt 1/2'), ['reporter-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['editor-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'fact-checker attempt 1/2'), ['factcheck-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'editor repair attempt 1/2'), ['repair-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'public article judge attempt 1/2'), ['judge-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
 });
 
 test('global LLM model overrides stage-specific model env vars', () => {
@@ -501,7 +501,7 @@ test('global LLM model overrides stage-specific model env vars', () => {
     judge: 'LLM_MODEL',
     sourceDiscovery: 'LLM_MODEL'
   });
-  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['global-model', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['global-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
 });
 
 test('stage model normalizer maps known generation stages', () => {
@@ -538,7 +538,7 @@ test('source discovery stage routes to its own group on gemini-2.5-flash-lite', 
   const config = readRuntimeConfig({});
   assert.equal(config.llmStageModels.sourceDiscovery, 'gemini-2.5-flash-lite');
   assert.equal(config.llmStageModelSources.sourceDiscovery, 'code_default');
-  assert.deepEqual(configuredModelsForStage(config, 'sourceDiscovery'), ['gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'sourceDiscovery'), ['gemini-2.5-flash-lite', 'gemini-2.5-flash']);
 });
 
 test('linked evidence discovery is enabled by default and can be disabled via env', () => {
@@ -749,8 +749,8 @@ test('non-Pro model routing remains stage-specific without Pro fallback append',
   });
 
   assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-3.5-flash', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'editor completion attempt 1/2'), ['gemini-3.5-flash', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'public article judge repair'), ['gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'editor completion attempt 1/2'), ['gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForStage(config, 'public article judge repair'), ['gemini-2.5-flash-lite', 'gemini-2.5-flash']);
   assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, false);
 });
 
