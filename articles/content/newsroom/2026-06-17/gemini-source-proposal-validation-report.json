@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-06-17",
+  "validations": [
+    {
+      "proposal_id": "camera-x-1.6.1-release",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260617",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-1-michael.bommarito@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-1-michael.bommarito@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260617",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-3-michael.bommarito@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-3-michael.bommarito@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260617",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-6-michael.bommarito@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-6-michael.bommarito@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260617",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-7-michael.bommarito@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-7-michael.bommarito@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260617",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-9-michael.bommarito@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-9-michael.bommarito@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260617",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-10-michael.bommarito@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-10-michael.bommarito@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260616",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260616-enc_roi_enable-v1-3-fefcc4e76f33@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260616-enc_roi_enable-v1-3-fefcc4e76f33@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260617-v4l2-ctrls",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-3-michael.bommarito@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-3-michael.bommarito@gmail.com/",
+      "accepted": false,
+      "rejected_reason": "duplicate_proposal_url",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260617-v4l2-kunit",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-10-michael.bommarito@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-10-michael.bommarito@gmail.com/",
+      "accepted": false,
+      "rejected_reason": "duplicate_proposal_url",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "camera-hal-patch-dvb-core-use-after-free",
+      "candidate_url": "https://lore.kernel.org/linux-media/83e232f7-9336-454e-9780-08ea1aa44f8d@windriver.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/83e232f7-9336-454e-9780-08ea1aa44f8d@windriver.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-patch-hantro-hevc-tile",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-6-michael.bommarito@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-6-michael.bommarito@gmail.com/",
+      "accepted": false,
+      "rejected_reason": "duplicate_proposal_url",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "camera-hal-patch-verisilicon-av1-divisor",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-7-michael.bommarito@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-7-michael.bommarito@gmail.com/",
+      "accepted": false,
+      "rejected_reason": "duplicate_proposal_url",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "camera-hal-patch-mediatek-av1-tile-copy",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-9-michael.bommarito@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260617021906.2746743-9-michael.bommarito@gmail.com/",
+      "accepted": false,
+      "rejected_reason": "duplicate_proposal_url",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "camera-hal-patch-aosp-site-updates-camera-its",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "camera-hal-patch-aosp-site-updates-compatibility",
+      "candidate_url": "https://source.android.com/docs/compatibility",
+      "normalized_url": "https://source.android.com/docs/compatibility",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "android-developers-blog-productivity-updates-202606",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "android-developers-blog-google-io-26-media",
+      "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "accepted": false,
+      "rejected_reason": "domain_not_allowed",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "camerax-release-notes-1.6.0",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "gcc-16-release-sarif-output",
+      "candidate_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "normalized_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "gcc-16-released-cpp26",
+      "candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    }
+  ],
+  "counts": {
+    "discovered_not_extractable": 2,
+    "accepted": 13,
+    "duplicate_proposal_url": 5,
+    "domain_not_allowed": 1
+  }
+}

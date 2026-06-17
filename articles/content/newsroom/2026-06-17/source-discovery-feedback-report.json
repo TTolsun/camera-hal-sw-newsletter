@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "report_type": "source_discovery_feedback",
+  "date": "2026-06-17",
+  "status": "WARNING",
+  "parser_gap_count": 2,
+  "duplicate_discovery_gap_count": 2,
+  "gemini_parser_failure_count": 2,
+  "gemini_parser_failures": [
+    {
+      "severity": "warning",
+      "action": "GEMINI_PARSER_EXTRACTION_REQUIRED",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source_policy_match": "camerax-release-notes",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "rejected_reason": "discovered_not_extractable",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL."
+    },
+    {
+      "severity": "warning",
+      "action": "GEMINI_PARSER_EXTRACTION_REQUIRED",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "source_policy_match": "camerax-release-notes",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "rejected_reason": "discovered_not_extractable",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL."
+    }
+  ],
+  "items": [
+    {
+      "severity": "warning",
+      "action": "PARSER_REPAIR_REQUIRED",
+      "reason": "missing_source_extraction",
+      "candidate_title": "AOSP Site Updates - May 2026",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "source_id": "aosp-site-updates",
+      "adapter_hint": "aosp-site-updates",
+      "duplicate_discovered_by_gemini": true,
+      "duplicate_match_type": "exact_normalized_url",
+      "source_gap_risk": false,
+      "evidence_validation_status": "pass",
+      "source_quality_bucket": "review_candidate",
+      "final_selection_eligibility": "main",
+      "confidence": "high",
+      "selector_exclusion_reason": "missing source_extraction for official parser-backed candidate",
+      "recommendation": "Check AOSP camera update row extraction."
+    },
+    {
+      "severity": "warning",
+      "action": "PARSER_REPAIR_REQUIRED",
+      "reason": "missing_source_extraction",
+      "candidate_title": "AOSP Site Updates - March 2026",
+      "url": "https://source.android.com/docs/compatibility",
+      "source_id": "aosp-site-updates",
+      "adapter_hint": null,
+      "duplicate_discovered_by_gemini": true,
+      "duplicate_match_type": "exact_normalized_url",
+      "source_gap_risk": false,
+      "evidence_validation_status": "blocked",
+      "source_quality_bucket": "review_candidate",
+      "final_selection_eligibility": "short",
+      "confidence": "high",
+      "selector_exclusion_reason": "missing source_extraction for official parser-backed candidate",
+      "recommendation": "Repair the source parser so the matching official source block preserves concrete source_extraction bullets."
+    }
+  ]
+}

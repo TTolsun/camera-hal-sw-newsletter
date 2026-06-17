@@ -1,0 +1,328 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-17",
+  "proposals": [
+    {
+      "proposal_id": "camera-x-1.6.1-release",
+      "topic_gap": "CameraX has released version 1.6.1. This update might contain important changes for camera developers using CameraX on Android.",
+      "source_family": "android-developers-latest-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX 1.6.1",
+        "Android Jetpack CameraX release"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "expected_evidence": [
+        "CameraX 1.6.1 release notes",
+        "bug fixes",
+        "performance improvements",
+        "new features"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260617",
+      "topic_gap": "A series of patches for the Linux kernel's media subsystem, specifically targeting camera hardware and video codecs, were posted on June 17, 2026. These patches could impact camera HAL implementations and driver development.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel media patches",
+        "v4l2 camera driver",
+        "av1 hevc tile count"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260617021906.2746743-1-michael.bommarito@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260617021906.2746743-3-michael.bommarito@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260617021906.2746743-6-michael.bommarito@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260617021906.2746743-7-michael.bommarito@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260617021906.2746743-9-michael.bommarito@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260617021906.2746743-10-michael.bommarito@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Linux kernel media subsystem updates",
+        "camera driver changes",
+        "video codec improvements",
+        "V4L2",
+        "ISP",
+        "HEVC/AV1 tile counts"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260616",
+      "topic_gap": "A patch related to ROI (Region of Interest) support for the iris video encoder was submitted on June 16, 2026. This could be relevant for advanced camera processing on certain hardware.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel media roi",
+        "iris video encoder patch"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260616-enc_roi_enable-v1-3-fefcc4e76f33@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Linux kernel media driver patch",
+        "ROI support",
+        "video encoder",
+        "iris video encoder"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260617-v4l2-ctrls",
+      "topic_gap": "A patch for v4l2-ctrls to validate AV1 tile counts was posted on June 17, 2026. This addresses potential issues with video stream processing.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "v4l2-ctrls av1 tile count",
+        "linux media validation"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260617021906.2746743-3-michael.bommarito@gmail.com/"
+      ],
+      "expected_evidence": [
+        "v4l2-ctrls patch",
+        "AV1 tile count validation",
+        "Linux kernel media"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-patch-20260617-v4l2-kunit",
+      "topic_gap": "KUnit tests for compound control tile validation in v4l2-ctrls were added on June 17, 2026. This indicates a focus on robust testing for camera controls.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "v4l2-ctrls kunit tests",
+        "camera control validation"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260617021906.2746743-10-michael.bommarito@gmail.com/"
+      ],
+      "expected_evidence": [
+        "v4l2-ctrls KUnit tests",
+        "compound control tile validation",
+        "Linux kernel testing"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-patch-dvb-core-use-after-free",
+      "topic_gap": "A fix for a use-after-free vulnerability in dvb_frontend_open() within the dvb-core module was discussed on the linux-media mailing list. This is a critical security and stability fix for digital video broadcasting components that might interact with camera pipelines.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "dvb-core use-after-free",
+        "linux media security vulnerability"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/83e232f7-9336-454e-9780-08ea1aa44f8d@windriver.com/"
+      ],
+      "expected_evidence": [
+        "dvb-core use-after-free fix",
+        "dvb_frontend_open vulnerability",
+        "Linux kernel security"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-patch-hantro-hevc-tile",
+      "topic_gap": "A patch to bound the G2 HEVC tile loop to the buffer capacity in the hantro driver was posted on June 17, 2026. This is relevant for efficient HEVC encoding in camera hardware.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "hantro driver hevc tile",
+        "linux media buffer capacity"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260617021906.2746743-6-michael.bommarito@gmail.com/"
+      ],
+      "expected_evidence": [
+        "hantro driver patch",
+        "HEVC tile loop bound",
+        "buffer capacity"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-patch-verisilicon-av1-divisor",
+      "topic_gap": "A patch to guard the VPU981 AV1 divisor and tile buffer in the verisilicon driver was posted on June 17, 2026. This addresses potential issues in AV1 decoding/encoding.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "verisilicon driver av1",
+        "vpu981 tile buffer"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260617021906.2746743-7-michael.bommarito@gmail.com/"
+      ],
+      "expected_evidence": [
+        "verisilicon driver patch",
+        "VPU981 AV1 divisor",
+        "tile buffer guard"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-patch-mediatek-av1-tile-copy",
+      "topic_gap": "A patch to bound the stateless HEVC/AV1 tile counts in the mediatek vcodec driver was posted on June 17, 2026. This improves the handling of tile data for video codecs.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "mediatek vcodec av1 tile",
+        "stateless hevc tile count"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260617021906.2746743-9-michael.bommarito@gmail.com/"
+      ],
+      "expected_evidence": [
+        "mediatek vcodec driver patch",
+        "stateless HEVC/AV1 tile counts",
+        "video codec"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-patch-aosp-site-updates-camera-its",
+      "topic_gap": "An update to the AOSP documentation regarding testing camera images using automation. This is crucial for ensuring camera HAL compatibility and quality.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android camera ITS",
+        "camera automation testing"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Camera ITS documentation",
+        "automated camera testing",
+        "Android CTS"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-patch-aosp-site-updates-compatibility",
+      "topic_gap": "An update to the AOSP documentation on compatibility, which may include details relevant to camera hardware and software integration.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "AOSP compatibility",
+        "Android camera compatibility"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility"
+      ],
+      "expected_evidence": [
+        "AOSP compatibility documentation",
+        "Android compatibility requirements",
+        "camera hardware"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-productivity-updates-202606",
+      "topic_gap": "The Android Developers Blog posted an article on June 2026 highlighting top updates for Android developer productivity. This could include improvements relevant to camera app development or media processing.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android developer productivity",
+        "camera app performance"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
+      ],
+      "expected_evidence": [
+        "Android developer productivity updates",
+        "camera app development",
+        "media processing improvements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-google-io-26-media",
+      "topic_gap": "A Google I/O '26 session focused on building premium Android experiences with a complete media toolkit. This is highly relevant to camera output and media pipeline development.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android media toolkit",
+        "Google I/O 2026 camera",
+        "premium media experiences"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "Android media toolkit",
+        "premium Android experiences",
+        "Google I/O 2026",
+        "camera output",
+        "media pipeline"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camerax-release-notes-1.6.0",
+      "topic_gap": "CameraX version 1.6.0 was released. This release might contain significant changes or new features impacting camera development on Android.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX 1.6.0",
+        "AndroidX Camera release"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "expected_evidence": [
+        "CameraX 1.6.0 release notes",
+        "new features",
+        "bug fixes",
+        "camera API changes"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "gcc-16-release-sarif-output",
+      "topic_gap": "GCC 16 introduces improved error messages and SARIF output, which could be beneficial for camera HAL development and debugging by providing better insights into compilation issues.",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "GCC 16 SARIF",
+        "camera HAL debugging"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+      ],
+      "expected_evidence": [
+        "GCC 16 release notes",
+        "improved error messages",
+        "SARIF output",
+        "compiler tooling"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "gcc-16-released-cpp26",
+      "topic_gap": "GCC 16.1 has been released, with support for C++26 features like reflection and contracts. This could influence the C++ standards used in camera HAL and related software development.",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "GCC 16 C++26",
+        "camera software standards"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1"
+      ],
+      "expected_evidence": [
+        "GCC 16.1 release",
+        "C++26 support",
+        "reflection",
+        "contracts"
+      ],
+      "risk_notes": []
+    }
+  ]
+}
