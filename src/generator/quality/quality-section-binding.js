@@ -83,7 +83,10 @@ function dateTokens(value) {
   for (const match of raw.matchAll(/\b(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})\b/g)) {
     tokens.add(`${match[1]}-${String(match[2]).padStart(2, '0')}-${String(match[3]).padStart(2, '0')}`);
   }
-  for (const match of raw.matchAll(/\b(20\d{2})\s*\uB144\s*(\d{1,2})\s*\uC6D4\s*(\d{1,2})\s*\uC77C\b/g)) {
+  // \uD55C\uAE00(\uB144/\uC6D4/\uC77C)\uC740 \w\uAC00 \uC544\uB2C8\uB77C \uC55E\uB4A4 \b\uAC00 \uD55C\uAE00 \uACBD\uACC4\uC5D0\uC11C word-boundary \uC804\uC774\uB97C \uBABB \uB9CC\uB4E4\uC5B4
+  // \uB9E4\uCE6D\uC774 \uD56D\uC0C1 \uC2E4\uD328\uD588\uB2E4(\uD2B9\uD788 '\uC77C' \uB4A4 \uACF5\uBC31/\uBB38\uC7A5\uB05D). \uD55C\uAD6D\uC5B4\uAC00 \uAE30\uBCF8 \uCD9C\uB825 \uC5B8\uC5B4\uB77C \uBAA8\uB4E0 \uD55C\uAE00
+  // section\uC758 \uB0A0\uC9DC \uB9E4\uCE6D\uC744 \uC8FD\uC774\uB358 \uBC84\uADF8 \u2192 \b \uC81C\uAC70. (\uC5F0\uB3C4\uB294 20\d{2} 4\uC790\uB9AC\uB77C \uC624\uB9E4\uCE6D \uC704\uD5D8 \uC5C6\uC74C.)
+  for (const match of raw.matchAll(/(20\d{2})\s*\uB144\s*(\d{1,2})\s*\uC6D4\s*(\d{1,2})\s*\uC77C/g)) {
     tokens.add(`${match[1]}-${String(match[2]).padStart(2, '0')}-${String(match[3]).padStart(2, '0')}`);
   }
   const monthPattern = /\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{1,2}),?\s+(20\d{2})\b/gi;
