@@ -1,0 +1,177 @@
+[
+  {
+    "attempt": 1,
+    "model": "repair-fallback",
+    "score": 71,
+    "threshold": 60,
+    "status": "FAILED_REPAIR_REVIEWABLE",
+    "rendered_main_article_count": 2,
+    "locked_article_count": 0,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 8,
+        "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "location": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "claim-evidence",
+        "points": 8,
+        "reason": "Claim references unresolved evidence_id: candidate:bb0e15b6742fce01:source-summary.",
+        "location": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "unknown_evidence_id",
+        "dedupe_key": "2:its_fact_1:unknown_evidence_id"
+      },
+      {
+        "category": "claim-evidence",
+        "points": 8,
+        "reason": "Claim references unresolved evidence_id: candidate:bb0e15b6742fce01:source-summary.",
+        "location": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "unknown_evidence_id",
+        "dedupe_key": "2:its_fact_2:unknown_evidence_id"
+      }
+    ],
+    "selected_article_headlines": [
+      "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬"
+    ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "editor completion attempt 1/2: fallback-to-last-known-valid-editor"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 2,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 0,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0,
+    "repair_failure": {
+      "name": "EditorSemanticValidationError",
+      "message": "Editor output failed public article contract validation.",
+      "details": {
+        "field": "sections.public_article",
+        "expectedKeys": [
+          "headline",
+          "lead",
+          "body_paragraphs",
+          "camera_hal_takeaway",
+          "reader_checkpoints",
+          "source_links"
+        ],
+        "actualCount": 3,
+        "sectionCount": 3,
+        "issues": [
+          {
+            "index": 1,
+            "headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+            "type": "story_contract_version_mismatch",
+            "marker_count": 1,
+            "has_issue_story_marker": false,
+            "has_generation_marker": false,
+            "has_section_story_marker": true,
+            "has_story_field": true
+          },
+          {
+            "index": 2,
+            "headline": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+            "type": "story_contract_version_mismatch",
+            "marker_count": 1,
+            "has_issue_story_marker": false,
+            "has_generation_marker": false,
+            "has_section_story_marker": true,
+            "has_story_field": true
+          },
+          {
+            "index": 3,
+            "headline": "Android CLI 및 GitHub를 통한 Android Skills 업데이트: CameraX 마이그레이션 및 Perfetto SQL 분석 지원 추가",
+            "type": "story_contract_version_mismatch",
+            "marker_count": 1,
+            "has_issue_story_marker": false,
+            "has_generation_marker": false,
+            "has_section_story_marker": true,
+            "has_story_field": true
+          }
+        ]
+      },
+      "field": "sections.public_article",
+      "stage": "editor completion attempt 1/2",
+      "attempt": 1,
+      "status": "FAILED_REPAIR_REVIEWABLE",
+      "lastKnownValidAttempt": 1,
+      "fallbackEditorSectionCount": 2
+    }
+  }
+]

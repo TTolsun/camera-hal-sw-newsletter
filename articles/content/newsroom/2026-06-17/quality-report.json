@@ -1,0 +1,1044 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-17",
+  "score": 71,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "NEEDS_FIX",
+  "summary": "Resolve source gaps, fact-check must-fix items, composition blockers, and any article the fact-checker marked not useful to a Camera HAL SW engineer before publishing.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "source-integrity",
+      "points": 8,
+      "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+      "location": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "claim-evidence",
+      "points": 8,
+      "reason": "Claim references unresolved evidence_id: candidate:bb0e15b6742fce01:source-summary.",
+      "location": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "unknown_evidence_id",
+      "dedupe_key": "2:its_fact_1:unknown_evidence_id"
+    },
+    {
+      "category": "claim-evidence",
+      "points": 8,
+      "reason": "Claim references unresolved evidence_id: candidate:bb0e15b6742fce01:source-summary.",
+      "location": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "unknown_evidence_id",
+      "dedupe_key": "2:its_fact_2:unknown_evidence_id"
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "category": "direct_aosp_camera",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.6.1",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "source_candidate_hash": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+      "category": "direct_aosp_camera",
+      "status": "FAIL",
+      "repair_action": "replace-or-demote",
+      "sources": [
+        {
+          "title": "Test camera images using automation",
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+        "source_candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+        "source_candidate_hash": "bb0e15b6742fce012e2e0220ecfba35983722daa6e6c21581c9c5d661584a54d",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "section_text_fallback",
+        "metadata_source": "section_text_fallback",
+        "binding_status": "evidence_mismatch",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "publishable_scope": false,
+        "missing_score_fields": [],
+        "count_reason": "section_text_fallback classified this section as direct_aosp_camera for diagnostics only.",
+        "exclusion_reason_if_not_counted": "Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available."
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "cts_vts_its_cdd"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [
+        "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "Claim references unresolved evidence_id: candidate:bb0e15b6742fce01:source-summary."
+      ],
+      "soft_deductions": []
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "needs_fix",
+    "bound_claims": 10,
+    "total_claims": 12,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "medium",
+    "available_article_count": 2,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "claim_id": "camerax_fact_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "CameraX 1.6.0 사용 시 발생하던 'Cannot access class ListenableFuture' 컴파일 오류가 수정되었습니다. (b/497571473)",
+      "evidence_ids": [
+        "sx:54d4017dadc0b266:64b8a8c6ee83:e5a225677b2fcf68"
+      ],
+      "resolved_evidence_ids": [
+        "sx:54d4017dadc0b266:64b8a8c6ee83:e5a225677b2fcf68"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:54d4017dadc0b266:64b8a8c6ee83:e5a225677b2fcf68",
+          "resolved_evidence_id": "sx:54d4017dadc0b266:64b8a8c6ee83:e5a225677b2fcf68",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "claim_id": "camerax_fact_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "low",
+      "text": "Samsung Z Fold 4 기기에서 왜곡 문제를 일으키던 특정 YUV 포맷 출력 크기가 제외되었습니다. (b/460322307)",
+      "evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:4a5794f87519d870"
+      ],
+      "resolved_evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:4a5794f87519d870"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:4a5794f87519d870",
+          "resolved_evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:4a5794f87519d870",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "claim_id": "camerax_fact_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Samsung Galaxy A53 기기에서 VideoCapture 유스케이스가 바인딩된 상태에서 토치(torch) 활성화 시 이미지 캡처가 간헐적으로 실패하던 문제가 수정되었습니다. (b/458197367)",
+      "evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:1973794d82e9b63d"
+      ],
+      "resolved_evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:1973794d82e9b63d"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:1973794d82e9b63d",
+          "resolved_evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "claim_id": "camerax_fact_4",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "일부 기기에서 초광각(ultra-wide) 카메라와 플래시를 함께 사용할 때 이미지가 언더노출(underexposed)되던 현상이 해결되었습니다. (b/444590340)",
+      "evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:a680216575517cb8"
+      ],
+      "resolved_evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:a680216575517cb8"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:a680216575517cb8",
+          "resolved_evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:a680216575517cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "claim_id": "camerax_fact_5",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "ExifInterface 종속성이 업데이트되어 0xFF 패딩이 포함된 JPEG 파싱 오류가 수정되었습니다.",
+      "evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:e54c63883abf623f"
+      ],
+      "resolved_evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:e54c63883abf623f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:e54c63883abf623f",
+          "resolved_evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:e54c63883abf623f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "claim_id": "camerax_fact_6",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "PREVIEW_STABILIZATION이 VideoCapture와 함께 사용될 때 Preview 유스케이스가 활성화되지 않아도 일관된 결과를 제공하도록 기능 그룹 API가 수정되었습니다. (b/449913903)",
+      "evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:643c0e023f82c237"
+      ],
+      "resolved_evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:643c0e023f82c237"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:643c0e023f82c237",
+          "resolved_evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:643c0e023f82c237",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "claim_id": "camerax_fact_7",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "CameraInfo#isFeatureGroupSupported가 SessionConfig에 다른 기능이 이미 설정되어 있을 때 PREVIEW_STABILIZATION에 대해 잘못된 true를 반환하던 오류가 수정되었습니다. (b/437816469)",
+      "evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:1e79b82bd70c61ba"
+      ],
+      "resolved_evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:1e79b82bd70c61ba"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:1e79b82bd70c61ba",
+          "resolved_evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:1e79b82bd70c61ba",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "claim_id": "camerax_fact_8",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Samsung Galaxy S6 기기에서 비디오 결과물이 깨지던(glitchy) 현상이 수정되었습니다. (b/235127608)",
+      "evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:5417ea7050d08cb8"
+      ],
+      "resolved_evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:5417ea7050d08cb8"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:5417ea7050d08cb8",
+          "resolved_evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:5417ea7050d08cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "claim_id": "camerax_fact_9",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "지원되지 않는 선호 기능이 잘못 제공되던 문제를 수정하여 필수 유스케이스가 충족되지 않을 때 기능이 올바르게 필터링되도록 개선했습니다. (b/449532342)",
+      "evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:0aecc02c99ec7a81"
+      ],
+      "resolved_evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:0aecc02c99ec7a81"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:0aecc02c99ec7a81",
+          "resolved_evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:0aecc02c99ec7a81",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "claim_id": "camerax_fact_10",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Android 17 기기에서 알 수 없는 다이내믹 레인지 모드가 추가되어 발생하던 모든 CameraX 앱의 크래시 문제를 해결했습니다.",
+      "evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:914d1acec07b5cbf"
+      ],
+      "resolved_evidence_ids": [
+        "sx:54d4017dadc0b266:fd6f647ac6b9:914d1acec07b5cbf"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:914d1acec07b5cbf",
+          "resolved_evidence_id": "sx:54d4017dadc0b266:fd6f647ac6b9:914d1acec07b5cbf",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+      "claim_id": "its_fact_1",
+      "claim_type": "fact",
+      "status": "needs_fix",
+      "impact_level": "cts_vts_its_cdd",
+      "overclaim_risk": "low",
+      "text": "Honor Pad 20 기기가 Camera ITS 태블릿 허용 목록(tablet allowlist)에 추가되었습니다.",
+      "evidence_ids": [
+        "candidate:bb0e15b6742fce01:source-summary"
+      ],
+      "resolved_evidence_ids": [],
+      "invalid_evidence_ids": [
+        "candidate:bb0e15b6742fce01:source-summary"
+      ],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [],
+      "source_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": [
+        {
+          "reason_code": "unknown_evidence_id",
+          "message": "Claim references unresolved evidence_id: candidate:bb0e15b6742fce01:source-summary.",
+          "blocking": true,
+          "severity": "hard"
+        }
+      ]
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+      "claim_id": "its_fact_2",
+      "claim_type": "fact",
+      "status": "needs_fix",
+      "impact_level": "cts_vts_its_cdd",
+      "overclaim_risk": "low",
+      "text": "개별 ITS 장면(scene) 실행 지침이 재정렬 및 업데이트되었습니다.",
+      "evidence_ids": [
+        "candidate:bb0e15b6742fce01:source-summary"
+      ],
+      "resolved_evidence_ids": [],
+      "invalid_evidence_ids": [
+        "candidate:bb0e15b6742fce01:source-summary"
+      ],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [],
+      "source_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": [
+        {
+          "reason_code": "unknown_evidence_id",
+          "message": "Claim references unresolved evidence_id: candidate:bb0e15b6742fce01:source-summary.",
+          "blocking": true,
+          "severity": "hard"
+        }
+      ]
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 2,
+    "strong_signal_count": 1,
+    "usable_signal_count": 1,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 2,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 2,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "framework_hal_contract": 1,
+      "stream_buffer_metadata": 1,
+      "cts_vts_its_cdd": 1
+    },
+    "actionability_level_counts": {
+      "owner_metric_log": 1,
+      "concrete_check": 1
+    },
+    "effective_actionability_level_counts": {
+      "owner_metric_log": 1,
+      "concrete_check": 1
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 1,
+      "usable_signal": 1
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 72): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+        "Do not use artifact version tables as behavior-change evidence.",
+        "CameraX 1.6.1의 패치가 HAL 단의 근본적인 드라이버 및 센서 타이밍 오동작을 완전히 대체하는 것은 아닙니다."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "cts_vts_its_cdd"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_test_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "",
+      "fallback_guard_notes": [
+        "이번 문서 업데이트가 Camera HAL3 API 자체의 스펙 변경이나 물리적인 통과 기준 수치 변경을 의미하는 것은 아닙니다."
+      ],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 2,
+    "briefing_count": 3,
+    "camera_article_count": 1,
+    "legacy_regex_camera_article_count": 2,
+    "expanded_scope_article_count": 1,
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 0,
+    "android_platform_camera_adjacent_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 1,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 0,
+    "publishable_scope_count": 1,
+    "composition_mode": "NORMAL",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "source_candidate_hash": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+        "source_candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+        "source_candidate_hash": "bb0e15b6742fce012e2e0220ecfba35983722daa6e6c21581c9c5d661584a54d",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "section_text_fallback",
+        "metadata_source": "section_text_fallback",
+        "binding_status": "evidence_mismatch",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+        "publishable_scope": false,
+        "missing_score_fields": [],
+        "count_reason": "section_text_fallback classified this section as direct_aosp_camera for diagnostics only.",
+        "exclusion_reason_if_not_counted": "Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available."
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 1,
+      "camera_driver_image_pipeline": 0,
+      "android_platform_camera_adjacent": 0,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 1,
+      "multimedia": 0,
+      "platform": 0,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android_platform_camera_adjacent"
+      ],
+      "multimedia": [
+        "android_multimedia_camera_output"
+      ],
+      "platform": [
+        "soc_platform_signal"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 0,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "UNKNOWN",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 1,
+    "blocking_deduction_count": 3,
+    "blocking_deduction_categories": [
+      "source-integrity",
+      "claim-evidence"
+    ],
+    "hard_fail_count": 3,
+    "soft_deduction_count": 4,
+    "article_gate_counts": {
+      "PASS": 1,
+      "DEMOTE": 0,
+      "FAIL": 1
+    },
+    "article_section_contract": {
+      "complete_count": 2,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {
+        "do_not_claim": 2
+      },
+      "limitation_visibility_counts": {
+        "guardrail-only": 2
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "needs_fix",
+      "bound_claims": 10,
+      "total_claims": 12,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "medium",
+      "available_article_count": 2,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 2,
+      "strong_signal_count": 1,
+      "usable_signal_count": 1,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 2,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 1,
+      "main_articles_with_concrete_action": 2,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "framework_hal_contract": 1,
+        "stream_buffer_metadata": 1,
+        "cts_vts_its_cdd": 1
+      },
+      "actionability_level_counts": {
+        "owner_metric_log": 1,
+        "concrete_check": 1
+      },
+      "effective_actionability_level_counts": {
+        "owner_metric_log": 1,
+        "concrete_check": 1
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 1,
+        "usable_signal": 1
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "CameraX 1.6.1 릴리스: ListenableFuture 컴파일 에러 수정 및 기기별 카메라 오동작 해결",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 72): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+          "Do not use artifact version tables as behavior-change evidence.",
+          "CameraX 1.6.1의 패치가 HAL 단의 근본적인 드라이버 및 센서 타이밍 오동작을 완전히 대체하는 것은 아닙니다."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "Camera_ITS_문서_업데이트:_Honor_Pad_20_태블릿_허용_목록_추가_및_장면_실행_지침_재정렬",
+        "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "cts_vts_its_cdd"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_test_owner"
+        ],
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "",
+        "fallback_guard_notes": [
+          "이번 문서 업데이트가 Camera HAL3 API 자체의 스펙 변경이나 물리적인 통과 기준 수치 변경을 의미하는 것은 아닙니다."
+        ],
+        "soc_signal_type": "",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "claim-evidence",
+        "count": 2
+      },
+      {
+        "category": "editorial-story",
+        "count": 2
+      },
+      {
+        "category": "image-fallback",
+        "count": 1
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "count": 1
+      },
+      {
+        "category": "source-integrity",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

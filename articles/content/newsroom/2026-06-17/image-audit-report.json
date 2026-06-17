@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-06-17",
+  "source_of_truth": "articles/content/newsroom/2026-06-17/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-06-17/newsletter.md",
+    "html": "newsletters/2026-06-17/index.html"
+  },
+  "mode": "review-or-draft",
+  "render_consistency_scope": "editor_draft",
+  "summary": {
+    "article_count": 2,
+    "rendered_image_count": 2,
+    "markdown_image_count": 2,
+    "fallback_visual_count": 0,
+    "image_candidates_count": 4,
+    "valid_image_candidate_count": 3,
+    "selected_image_count": 2,
+    "empty_selected_with_candidates_count": 0,
+    "selected_image_without_valid_candidate_count": 0,
+    "selected_image_not_in_candidates_count": 0,
+    "repairable_article_count": 0,
+    "selected_by_image_selection_count": 1,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
+    "unrepairable_no_candidate_count": 0,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "CameraX 1.6.1 릴리스 분석: 컴파일 오류 해결 및 삼성 Z Fold 4·A53 등 기기별 HAL 호환성 버그 수정",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 2,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": true,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "selected_candidate_url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 130,
+          "sourceKind": "og",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        },
+        {
+          "candidate_url": "https://www.gstatic.com/devrel-devsite/prod/v20cdb2337f656fc22df509b6d5402b3836a1b55334a8eea3301423a87970c4d5/android/images/lockup.png",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 70,
+          "sourceKind": "article-img",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        },
+        {
+          "candidate_url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "reasonCode": "svg_rejected",
+          "reasonLabel": "SVG 이미지 제외",
+          "reasonText": "SVG 후보는 원문 대표 이미지 조건을 명확히 만족하지 않아 제외했습니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/svg+xml",
+          "validationStatus": "ok",
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Camera ITS 가이드라인 업데이트: Honor Pad 20 태블릿 허용 목록 추가 및 개별 장면 실행 지침 최적화",
+      "selectedImage": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 1,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": true,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "selected_candidate_url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 70,
+          "sourceKind": "article-img",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        }
+      ]
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": [],
+    "selected_image_without_valid_candidate_articles": []
+  },
+  "warnings": [],
+  "errors": []
+}
