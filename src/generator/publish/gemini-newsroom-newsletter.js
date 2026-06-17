@@ -3595,6 +3595,10 @@ async function main() {
       candidateRejections = candidateRejections.concat(completionCandidateRejections);
       if (missingArticleCount > 0 && completionCandidates.length > 0) {
         const completionStage = `editor completion attempt ${attempt}/${totalAttempts}`;
+        // completion(target 채우기) 실패 시 되돌릴, 이미 quality gate를 통과한 pre-completion 스냅샷.
+        const preCompletionEditor = cloneJson(editor);
+        const preCompletionFactCheck = cloneJson(factCheck);
+        const preCompletionQualityReport = cloneJson(qualityReport);
         try {
           const completionFactCheckStage = `fact-checker completion attempt ${attempt}/${totalAttempts}`;
           console.warn(`Quality attempt ${attempt}/${totalAttempts} has only ${editor.sections.length} main article(s); requesting ${missingArticleCount} completion article(s).`);
@@ -3702,19 +3706,36 @@ async function main() {
             sourceGapSections(editor, factCheck).concat(eligibilityFindings.map(finding => finding.section))
           );
         } catch (error) {
-          writeReviewableRepairFailureArtifacts({
-            date,
-            newsroomDir,
-            error,
-            reporter,
-            factCheck,
-            qualityReport,
-            retryHistory,
-            shortlistReport,
-            attempt,
-            stage: completionStage
-          });
-          return;
+          // completion은 target(catchUpPolicy.targetMainArticles) 채우기용 best-effort다. completion
+          // 직전 draft가 이미 quality gate를 PASS(min 충족)했다면, target 보충 실패가 그 발행을 막지
+          // 않게 pre-completion 상태로 되돌려 정상 발행 경로를 진행한다. (#629 salvagePublishableSubset은
+          // '일부 실패 섹션을 drop한 subset' 용도라 전부 PASS인 pre-completion에는 부적합 — 전부 keep
+          // 이면 null을 반환한다. 그래서 여기서는 재검증 없이 이미 PASS인 스냅샷을 그대로 복원한다.)
+          // pre-completion이 PASS가 아니면(completion이 필수 보충이었던 경우) 기존대로
+          // FAILED_REPAIR_REVIEWABLE을 기록하고 return해 발행 경로로 떨어지지 않게 한다.
+          if (preCompletionQualityReport && preCompletionQualityReport.status === 'PASS') {
+            console.warn(`Completion top-up for ${missingArticleCount} article(s) failed; publishing ${ensureArray(preCompletionEditor.sections).length} already-passing main article(s) below target ${completionTargetCount}. (${error.message})`);
+            editor = preCompletionEditor;
+            factCheck = preCompletionFactCheck;
+            qualityReport = preCompletionQualityReport;
+            generationRunState.factCheck = factCheck;
+            generationRunState.qualityReport = qualityReport;
+            underfilledReason = `completion top-up failed; published ${ensureArray(editor.sections).length} passing article(s) below target ${completionTargetCount}`;
+          } else {
+            writeReviewableRepairFailureArtifacts({
+              date,
+              newsroomDir,
+              error,
+              reporter,
+              factCheck,
+              qualityReport,
+              retryHistory,
+              shortlistReport,
+              attempt,
+              stage: completionStage
+            });
+            return;
+          }
         }
       } else {
         underfilledReason = missingArticleCount > 0
