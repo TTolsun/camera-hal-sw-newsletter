@@ -3,6 +3,7 @@
 const { execFileSync } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
+const { trackedFiles } = require('./tracked-files');
 
 const ROOT_TEST_ALLOWLIST_RELATIVE_PATH = 'src/shared/test/root-test-allowlist.json';
 const ONE_OFF_SCRIPT_EXTENSIONS = new Set(['.cjs', '.js', '.mjs', '.ps1', '.sh']);
@@ -37,16 +38,6 @@ function repoRoot(cwd = process.cwd()) {
     cwd,
     encoding: 'utf8'
   }).trim();
-}
-
-function trackedFiles(root) {
-  const output = execFileSync('git', ['-C', root, 'ls-files', '-z'], {
-    encoding: 'buffer'
-  });
-  return output.toString('utf8')
-    .split('\0')
-    .filter(Boolean)
-    .filter(filePath => fs.existsSync(path.join(root, filePath)));
 }
 
 function issue(filePath, type, detail) {
@@ -178,6 +169,11 @@ function findRepoHygieneIssues(files, options = {}) {
       issues.push(issue(filePath, 'tracked_agent_scratch', 'root codex plan markdown files must stay local-only'));
     } else if (/^[^/]+-scratch\.md$/.test(filePath)) {
       issues.push(issue(filePath, 'tracked_agent_scratch', 'root scratch markdown files must stay local-only'));
+    } else if (isProperlyPlacedTestFile(filePath)) {
+      // 정상 위치(src/<layer>/test/.../*.test.js)의 테스트는 유지되는 프로젝트
+      // 테스트이므로, 이름에 local/probe 같은 토큰이 들어가도 one-off 스크립트로
+      // 분류하지 않는다. 잘못 놓인 테스트는 findRootTestStructureIssues가 따로 잡는다.
+      continue;
     } else if (isOneOffScriptPath(filePath)) {
       issues.push(issue(filePath, 'tracked_one_off_script', 'one-off scripts under scripts/ and src/ must stay outside the repo or become maintained project tools'));
     }

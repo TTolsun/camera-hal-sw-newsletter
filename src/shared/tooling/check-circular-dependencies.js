@@ -10,6 +10,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { collectJavascriptFiles, resolveRelativeRequire } = require('./require-graph');
 
 // 이 파일은 <repo>/src/shared/tooling/check-circular-dependencies.js 입니다.
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..');
@@ -34,36 +35,6 @@ function parseRelativeRequires(source) {
     }
   }
   return specifiers;
-}
-
-// 루트 디렉터리 아래의 모든 .js 파일 절대경로를 수집합니다.
-function collectJavascriptFiles(rootDirectory) {
-  const files = [];
-  for (const entry of fs.readdirSync(rootDirectory, { withFileTypes: true })) {
-    const entryPath = path.join(rootDirectory, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...collectJavascriptFiles(entryPath));
-    } else if (entry.name.endsWith('.js')) {
-      files.push(entryPath);
-    }
-  }
-  return files;
-}
-
-// 상대경로 require 지정자를 실제 파일 절대경로로 해석합니다. 없으면 null.
-function resolveRelativeRequire(fromFile, specifier) {
-  const target = path.resolve(path.dirname(fromFile), specifier);
-  const candidates = [target, `${target}.js`, path.join(target, 'index.js')];
-  for (const candidate of candidates) {
-    try {
-      if (fs.statSync(candidate).isFile()) {
-        return candidate;
-      }
-    } catch (error) {
-      // 후보 경로가 없으면 다음 후보를 시도합니다.
-    }
-  }
-  return null;
 }
 
 // 루트 아래 파일들의 require 그래프를 만듭니다.

@@ -6,6 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { newsroomArtifactPath } = require('../../shared/common/artifact-paths');
 
 function readTextIfExists(filePath) {
   return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8').trim() : '';
@@ -23,10 +24,6 @@ function readJsonIfExists(filePath) {
 function readJsonObjectIfExists(filePath) {
   const value = readJsonIfExists(filePath);
   return value && typeof value === 'object' && !Array.isArray(value) ? value : null;
-}
-
-function newsroomArtifactPath(root, date, name) {
-  return path.join(root, 'articles', 'content', 'newsroom', date, name);
 }
 
 function collectedArtifactPath(root, date, name) {
