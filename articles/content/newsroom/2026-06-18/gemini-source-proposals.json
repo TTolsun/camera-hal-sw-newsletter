@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-18",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-sw-20260618-001",
+      "topic_gap": "Android Camera HAL SW: Recent updates and best practices for camera pipeline optimization and performance.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Camera HAL",
+        "camera pipeline",
+        "performance optimization",
+        "Google I/O 2026 camera"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html"
+      ],
+      "expected_evidence": [
+        "camera pipeline optimization",
+        "performance improvements",
+        "new camera features",
+        "HAL updates"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260618-002",
+      "topic_gap": "CameraX: Latest release notes and significant changes impacting camera HAL development.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX 1.6.0",
+        "CameraX release notes",
+        "Android camera development",
+        "Camera HAL updates"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "expected_evidence": [
+        "CameraX release notes",
+        "new features",
+        "bug fixes",
+        "API changes",
+        "camera HAL compatibility"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260618-003",
+      "topic_gap": "Linux kernel camera driver updates and V4L2 subsystem changes relevant to Android camera HAL.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel camera",
+        "V4L2 driver",
+        "media controller",
+        "camera HAL",
+        "kernel camera updates"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/",
+        "https://lore.kernel.org/linux-media/20260618013133.1047270-4-tuhaowen@uniontech.com/"
+      ],
+      "expected_evidence": [
+        "V4L2 driver updates",
+        "camera interface changes",
+        "kernel media subsystem",
+        "camera HAL integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260618-004",
+      "topic_gap": "Android Media3 updates and their impact on camera-generated media playback and A/V synchronization.",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3 release notes",
+        "Android media playback",
+        "A/V sync",
+        "camera pipeline"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.9.4"
+      ],
+      "expected_evidence": [
+        "Media3 release notes",
+        "A/V sync improvements",
+        "camera output playback",
+        "media pipeline"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260618-005",
+      "topic_gap": "Android Compatibility Definition Document (CDD) updates related to camera HAL and device compatibility.",
+      "source_family": "android-compatibility-definition-document",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android CDD camera",
+        "camera HAL compatibility",
+        "Android device requirements"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cdd"
+      ],
+      "expected_evidence": [
+        "CDD updates",
+        "camera HAL requirements",
+        "device compatibility",
+        "CTS/VTS"
+      ],
+      "risk_notes": []
+    }
+  ]
+}
