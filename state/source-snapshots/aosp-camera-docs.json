@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "aosp-camera-docs",
-  "updated_at": "2026-06-17T00:00:00.000Z",
+  "updated_at": "2026-06-18T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "aosp-camera-docs:2e09be47b7d035b1b1509fe59f1caf95",
@@ -13,8 +13,8 @@
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-04-10",
-      "content_hash": "d80e2108cf809e679602dbd00d9913c96dde67258d69bfa13099b2183bb634b6",
+      "http_last_modified": "2026-06-17",
+      "content_hash": "2f2d3e47bfb3384ae2f6c822c580e5edd3f5042d9295dc3eeb859512e249ba7e",
       "normalized_content_hash": "0297e7f5dbe13db891647a87e444b6711649ba95ddf7540b0542880c83e205f7",
       "anchors": [
         "https://source.android.com/docs/core/camera#legacy-hal"
@@ -25,8 +25,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-06-17T00:00:00.000Z",
-      "seen_count": 83,
+      "last_seen_at": "2026-06-18T00:00:00.000Z",
+      "seen_count": 84,
       "status": 200
     }
   ],

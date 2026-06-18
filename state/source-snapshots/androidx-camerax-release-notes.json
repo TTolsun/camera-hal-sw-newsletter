@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "androidx-camerax-release-notes",
-  "updated_at": "2026-06-17T00:00:00.000Z",
+  "updated_at": "2026-06-18T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "androidx-camerax-release-notes:49d58944bd3ca26fc6929250597a6e3a",
@@ -13,9 +13,9 @@
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-05-06",
-      "content_hash": "d81efd32f9de9c0c15342008279f5efe16df3cbf86c26476eab05af646285b31",
-      "normalized_content_hash": "3dec903b8eb351064d176392a81a178783ba63ed382ca601465a4dcecc76a037",
+      "http_last_modified": "2026-06-17",
+      "content_hash": "d67790e1e00d1598e4edc3efea97b7eb51ad2cb73dd54a321d0e7eee3df3eddc",
+      "normalized_content_hash": "464f1d37d462b2a170fafb6683a91bd5ed29b8f8ce382cbc1c748b70009d2d28",
       "anchors": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha01",
@@ -893,7 +893,7 @@
           "version": "1.6.0",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
           "date": "2026-03-25",
-          "hash": "7f7c7a3b5a520b7c08a7921234ddf6fe",
+          "hash": "edb345e0ef80a4518f6086ee6ac02abf",
           "title": "Version 1.6.0"
         },
         {
@@ -1536,8 +1536,8 @@
         {
           "version": "1.0.0-alpha01",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
-          "date": "2026-05-06",
-          "hash": "62eac6cb7fd84adc93fc9d71d52c7d4a",
+          "date": "2026-06-17",
+          "hash": "040d2d1bcb62aec629ce64c53e8440ff",
           "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha01"
         },
         {
@@ -1633,17 +1633,19 @@
         }
       ],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-06-17T00:00:00.000Z",
-      "seen_count": 83,
+      "last_seen_at": "2026-06-18T00:00:00.000Z",
+      "seen_count": 84,
       "status": 200
     }
   ],
   "processed_source_event_ids": [
     "source-event-a593b0187b96e7638fe4af9fb327f9f8",
-    "source-event-3616a9f0c9e81670bcd09140c52b6f04"
+    "source-event-3616a9f0c9e81670bcd09140c52b6f04",
+    "source-event-aafc952ea6e65f65d2cbacbfa9ee38c8"
   ],
   "processed_evidence_ids": [
     "evidence-d134d45807b498f036b07fa3d599ac42",
-    "evidence-ac4c255a57a844d0e96a9da7336ad513"
+    "evidence-ac4c255a57a844d0e96a9da7336ad513",
+    "evidence-64bd9749c37789e74a4690ca8c029bfa"
   ]
 }
