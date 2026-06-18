@@ -3,11 +3,13 @@
   "public_contract_version": "story-v1",
   "generation_contract_version": 1,
   "title": "2026 W25 (06.15 ~ 06.21)",
-  "summary": "이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 3건의 소식을 다룹니다.",
+  "summary": "이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 5건의 소식을 다룹니다.",
   "briefing": [
     "ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개",
     "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
-    "GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선"
+    "GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선",
+    "지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영",
+    "최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치"
   ],
   "sections": [
     {
@@ -693,12 +695,12 @@
           "width": 100
         }
       ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "소스 블로그에 포함된 관련 이미지입니다.",
+      "selectedImage": "https://isocpp.org/files/img/redhatgraphic.png",
+      "imageSource": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "imageAttribution": "ISO C++ Blog",
+      "imageAlt": "redhatgraphic.png",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
       "sources": [
         {
           "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
@@ -752,21 +754,605 @@
       "evidence_origin": "article_text",
       "source_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "resolvedImage": {
-        "url": "../../assets/images/fallback/newsletter-default.svg",
-        "src": "../../assets/images/fallback/newsletter-default.svg",
-        "originalUrl": "https://isocpp.org/files/img/redhatgraphic.png",
-        "originalSrc": "https://isocpp.org/files/img/redhatgraphic.png",
-        "usedFallback": true,
-        "reason": "selected image has no valid provenance candidate; local fallback visual used"
+        "url": "https://isocpp.org/files/img/redhatgraphic.png",
+        "src": "https://isocpp.org/files/img/redhatgraphic.png",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
       },
       "originalImage": "https://isocpp.org/files/img/redhatgraphic.png",
+      "coverage_type": "fresh",
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "attribution": "ISO C++ Blog",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://isocpp.org/files/img/redhatgraphic.png",
+        "exclusionEvidence": []
+      }
+    },
+    {
+      "category": "direct_aosp_camera",
+      "headline": "지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영",
+      "what_changed": "CameraX 1.6.0 릴리스에서는 라이프사이클 바인딩 전에 HDR, 안정화, 특정 해상도, 확장 기능 등의 조합이 기기에서 지원되는지 쿼리할 수 있는 API가 추가되었습니다. 또한 Android 17(API 37) 이상 기기에서 새로운 동적 범위 프로필(STANDARD_SMPTE_2094_50) 노출 시 발생하던 크래시를 해결하고, 삼성 Z Fold 4의 YUV 해상도 왜곡 제외, Galaxy S6 비디오 노이즈 수정 등 다양한 기기별 호환성 패치가 포함되었습니다.",
+      "confirmed_facts": [
+        "2026년 3월 25일 CameraX 1.6.0 버전이 정식 출시되었습니다.",
+        "라이프사이클 바인딩 전 HDR, 안정화, 해상도, 확장 기능 등의 유스케이스 조합 지원 여부를 쿼리할 수 있는 API가 도입되었습니다.",
+        "Android 17(API 37) 이상 기기에서 STANDARD_SMPTE_2094_50(ID 8192)과 같은 미지원 동적 범위 프로필 노출 시 발생하던 NullPointerException/IllegalArgumentException 크래시를 수정했습니다.",
+        "삼성 Z Fold 4 기기에서 이미지 왜곡을 유발하는 특정 YUV 포맷 출력 크기를 지원 대상에서 제외했습니다.",
+        "삼성 A53 기기에서 VideoCapture 유스케이스가 바인딩된 상태에서 토치를 켜고 이미지 캡처를 시도할 때 간헐적으로 실패하던 문제를 해결했습니다.",
+        "일부 기기에서 초광각 카메라와 플래시 동시 사용 시 결과물이 어둡게 나오던(underexposed) 현상을 수정했습니다."
+      ],
+      "evidence_summary": "CameraX 1.6.0 공식 릴리스 노트를 통해 유스케이스 조합 사전 쿼리 API 도입, Android 17 신규 동적 범위 프로필 크래시 방지, 그리고 삼성 Z Fold 4, A53, Galaxy S6 등 특정 타깃 기기들의 카메라 파이프라인 호환성 버그 수정 사실이 확인되었습니다.",
+      "specificity_checks": [
+        "Release Version: CameraX 1.6.0",
+        "Release Date: 2026년 3월 25일",
+        "API/Component: androidx.camera / CameraInfo#isFeatureGroupSupported",
+        "Behavior Change: 유스케이스 조합 사전 검증 지원 및 기기별(삼성 Z Fold 4, A53 등) 오동작 우회 패치 적용"
+      ],
+      "source_verification_notes": [
+        "공식 CameraX 1.6.0 릴리스 노트를 기반으로 작성되었으며, 2026년 3월 25일 발행된 사실을 명시하여 최신성 오해를 방지했습니다.",
+        "삼성 Z Fold 4의 YUV 왜곡 크기 제외(I776bf, b/460322307) 및 A53의 토치 캡처 실패(I0f183, b/458197367) 등 구체적인 Gerrit 변경사항 및 IssueTracker ID를 확인했습니다."
+      ],
+      "public_article": {
+        "headline": "지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영",
+        "lead": "지난 3월 25일 출시된 CameraX 1.6.0에서는 앱 개발자가 카메라 라이프사이클에 바인딩하기 전에 특정 유스케이스와 기능 조합(HDR, 흔들림 보정 등)의 지원 여부를 미리 쿼리할 수 있는 강력한 API가 도입되었습니다. 이와 함께 Android 17 대비 패치 및 삼성 기기군에서 발견된 YUV 왜곡, 플래시 노출 부족 등 다수의 실무 호환성 버그가 해결되었습니다.",
+        "body_paragraphs": [
+          "CameraX 1.6.0은 앱 개발자가 기기의 카메라 하드웨어 제약을 사전에 파악할 수 있도록 돕는 유스케이스 조합 사전 쿼리 API를 도입했습니다. 이를 통해 개발자는 HDR, 프리뷰 안정화, 특정 해상도, CameraX 확장 기능(Extensions) 또는 슬로우 모션 등의 조합이 실제로 기기에서 정상 동작하는지 라이프사이클 바인딩 전에 검증할 수 있어, 런타임 에러를 획기적으로 줄일 수 있습니다.",
+          "또한 이번 릴리스는 차세대 Android 17(API 37) 이상 기기를 위한 선제적 크래시 방지 패치를 포함합니다. 기존 1.5.1 이하 버전에서는 기기가 STANDARD_SMPTE_2094_50(ID 8192)과 같은 새로운 동적 범위 프로필을 노출할 경우 이를 적절히 처리하지 못해 NullPointerException 등이 발생했으나, 이번 버전에서 예외 처리가 보완되었습니다.",
+          "기기별 호환성(Quirks) 영역에서도 중요한 수정이 이루어졌습니다. 삼성 Z Fold 4에서 이미지 왜곡을 일으키던 특정 YUV 포맷 출력 크기를 지원 목록에서 제외(b/460322307)했으며, 삼성 A53에서 VideoCapture 유스케이스가 바인딩된 상태로 토치를 켜고 캡처할 때 간헐적으로 실패하던 현상(b/458197367)도 해결했습니다. 초광각 카메라에서 플래시 사용 시 노출이 부족해지던 문제와 JPEG 인코더가 0xFF 패딩을 추가할 때 ExifInterface 파싱 실패로 캡처가 무산되던 버그도 함께 수정되었습니다."
+        ],
+        "camera_hal_takeaway": "CameraX의 유스케이스 조합 사전 쿼리 API는 결국 하위 Camera HAL의 stream configuration 및 capability 선언에 의존합니다. HAL 개발자는 기기가 지원하지 않는 스트림 조합이나 기능(예: PREVIEW_STABILIZATION + VideoCapture)을 요청받았을 때 프레임워크에 올바른 메타데이터와 에러 코드를 반환해야 합니다. 또한 삼성 Z Fold 4의 YUV 왜곡 사례처럼 HAL 단에서 잘못된 스트림 크기를 노출하지 않도록 캘리브레이션 및 스트림 검증을 철저히 해야 합니다.",
+        "reader_checkpoints": [
+          "CameraInfo#isFeatureGroupSupported API 도입에 대응하여, HAL 단에서 PREVIEW_STABILIZATION 및 VideoCapture 조합 시 올바른 지원 메타데이터를 반환하는지 확인하십시오.",
+          "삼성 Z Fold 4 등 특정 기기에서 제외된 YUV 해상도 왜곡 이슈가 우리 벤더 기기에서도 발생하는지 YUV 스트림 캡처 테스트를 수행하십시오.",
+          "Android 17 대응을 위해 STANDARD_SMPTE_2094_50 등 신규 동적 범위 프로필이 HAL 메타데이터를 통해 정상 전파되는지 검증하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "CameraX Release Notes - CameraX 1.6.0",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "CameraX 1.6.0 릴리스 노트 분석",
+        "editorial_story": {
+          "reader_scenario": "CameraX 기반 앱에서 특정 해상도와 비디오 안정화를 동시에 켰을 때 런타임 크래시가 발생하거나 화면이 왜곡된다는 고객사 리포트를 받고 원인을 분석해야 하는 상황입니다.",
+          "what_happened": "CameraX 1.6.0에서 유스케이스 조합 사전 지원 여부 쿼리 API가 도입되었으며, 삼성 Z Fold 4의 YUV 왜곡 해상도 제외 및 A53의 토치 캡처 실패 등 다수의 기기 호환성 패치가 적용되었습니다.",
+          "why_it_matters": "상위 프레임워크의 호환성 우회 패치(Quirks)는 결국 하위 HAL의 비표준 스트림 동작이나 메타데이터 오동작을 방지하기 위한 임시방편이므로, HAL 엔지니어는 근본적인 스트림 검증을 강화해야 합니다.",
+          "field_scenario": "삼성 Z Fold 4에서 특정 YUV 해상도 출력 시 발생하는 이미지 왜곡 현상을 재현하고, HAL의 스트림 크기 출력 테이블과 비교 검증합니다.",
+          "not_to_overclaim": "CameraX 1.6.0의 패치가 하위 Camera HAL3 API 규격 자체를 변경하는 것은 아니며, 상위 라이브러리 수준의 호환성 필터링 및 우회 로직 추가입니다.",
+          "editor_take": "상위 레이어의 기기별 호환성 패치 내역은 HAL 개발자에게 가장 훌륭한 regression test 케이스가 되므로 반드시 로컬 검증 목록에 추가해야 합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Framework"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 3월 25일 CameraX 1.6.0 버전이 정식 출시되었습니다.",
+          "라이프사이클 바인딩 전 HDR, 안정화, 해상도, 확장 기능 등의 유스케이스 조합 지원 여부를 쿼리할 수 있는 API가 도입되었습니다.",
+          "Android 17(API 37) 이상 기기에서 STANDARD_SMPTE_2094_50(ID 8192)과 같은 미지원 동적 범위 프로필 노출 시 발생하던 NullPointerException/IllegalArgumentException 크래시를 수정했습니다.",
+          "삼성 Z Fold 4 기기에서 이미지 왜곡을 유발하는 특정 YUV 포맷 출력 크기를 지원 대상에서 제외했습니다.",
+          "삼성 A53 기기에서 VideoCapture 유스케이스가 바인딩된 상태에서 토치를 켜고 이미지 캡처를 시도할 때 간헐적으로 실패하던 문제를 해결했습니다.",
+          "일부 기기에서 초광각 카메라와 플래시 동시 사용 시 결과물이 어둡게 나오던(underexposed) 현상을 수정했습니다."
+        ],
+        "background_context": "CameraX는 Android Jetpack 라이브러리의 일부로, 개발자가 Camera2 API를 직접 다루지 않고도 카메라 기능을 쉽게 구현할 수 있도록 추상화된 API를 제공합니다. CameraX는 내부적으로 Camera2 API를 사용하여 HAL(Hardware Abstraction Layer)과 상호작용합니다. 따라서 CameraX의 변경 사항은 HAL 인터페이스 자체를 직접적으로 변경하지는 않지만, CameraX가 HAL에 요청하는 유스케이스, 스트림 구성, 메타데이터 사용 방식에 영향을 줄 수 있습니다. 특히 새로운 기능 지원 쿼리 API는 HAL이 특정 기능 조합을 지원하는지 여부를 CameraX에 정확히 보고해야 하는 중요성을 강조하며, 기기별 버그 수정은 HAL 구현의 특정 동작이 CameraX의 예상과 다를 때 발생할 수 있는 호환성 문제를 나타냅니다. 이는 HAL 개발자가 CameraX의 요구 사항을 이해하고, CameraX 유스케이스에 대한 HAL의 동작을 검증하는 데 중요한 배경이 됩니다.",
+        "hal_driver_impact": "CameraX의 호환성 패치(Quirks)는 HAL 단에서 잘못 노출된 스트림 크기나 불안정한 상태 전이를 상위에서 우회하는 경우가 많습니다. 예를 들어 삼성 Z Fold 4의 YUV 왜곡 크기 제외는 HAL이 지원 가능하다고 보고한 스트림 조합 중 실제로는 왜곡이 발생하는 크기가 존재함을 의미합니다. HAL 개발자는 기기별 스트림 조합 테스트 시 YUV 출력을 직접 덤프하여 기하학적 왜곡이 없는지 검증해야 하며, VideoCapture와 Preview 동시 구동 시 토치 제어 타이밍 버그가 발생하지 않도록 HAL metadata request 처리를 점검해야 합니다.",
+        "action_items": [
+          "우리 벤더 기기에서 VideoCapture + Preview + Torch 동시 구동 시 캡처 실패나 프레임 드롭이 발생하는지 CTS 및 자체 스트림 조합 시나리오 테스트를 수행하십시오.",
+          "삼성 Z Fold 4 사례를 참고하여, HAL이 지원하는 YUV 출력 크기 중 특정 종횡비나 해상도에서 이미지 왜곡(distortion)이 발생하는지 덤프 이미지를 분석하십시오.",
+          "Android 17 대응을 위해 STANDARD_SMPTE_2094_50(ID 8192) 등 신규 동적 범위 프로필을 HAL에서 정상적으로 파싱하고 전파하는지 메타데이터 검증 도구를 통해 확인하십시오."
+        ],
+        "team_share_points": "CameraX 1.6.0의 기기별 호환성 패치 내역은 우리 HAL의 잠재적 버그를 사전 예방할 수 있는 훌륭한 테스트 시나리오입니다. 특히 YUV 왜곡 해상도 및 토치 연동 캡처 실패 시나리오를 로컬 검증 프로세스에 반영합시다."
+      },
+      "claims": [
+        {
+          "claim_id": "camerax_1_6_0_release",
+          "text": "2026년 3월 25일 CameraX 1.6.0 버전이 정식 출시되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:545c1667e2f95862:source-summary"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "camerax_query_api",
+          "text": "라이프사이클 바인딩 전 HDR, 안정화, 해상도, 확장 기능 등의 유스케이스 조합 지원 여부를 쿼리할 수 있는 API가 도입되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:545c1667e2f95862:35319484d22a:688f544125e300f1"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "camerax_android17_crash",
+          "text": "Android 17(API 37) 이상 기기에서 STANDARD_SMPTE_2094_50(ID 8192)과 같은 미지원 동적 범위 프로필 노출 시 발생하던 NullPointerException/IllegalArgumentException 크래시를 수정했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:545c1667e2f95862:f8f4ef9ccfba:09290de1817b0b4a"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "camerax_zfold4_yuv",
+          "text": "삼성 Z Fold 4 기기에서 이미지 왜곡을 유발하는 특정 YUV 포맷 출력 크기를 지원 대상에서 제외했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:545c1667e2f95862:f8f4ef9ccfba:4a5794f87519d870"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "camerax_a53_torch",
+          "text": "삼성 A53 기기에서 VideoCapture 유스케이스가 바인딩된 상태에서 토치를 켜고 이미지 캡처를 시도할 때 간헐적으로 실패하던 문제를 해결했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:545c1667e2f95862:f8f4ef9ccfba:1973794d82e9b63d"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "camerax_ultrawide_flash",
+          "text": "일부 기기에서 초광각 카메라와 플래시 동시 사용 시 결과물이 어둡게 나오던(underexposed) 현상을 수정했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:545c1667e2f95862:f8f4ef9ccfba:a680216575517cb8"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "VideoCapture + Preview + Torch 동시 구동 시 HAL의 metadata request 처리 상태 검증",
+        "YUV 출력 크기별 이미지 왜곡 여부 및 aspect ratio 정합성 검증",
+        "Android 17 신규 동적 범위 프로필(STANDARD_SMPTE_2094_50) 노출 시 프레임워크 크래시 여부 검증"
+      ],
+      "action_hints": [
+        "YUV output size별 distortion 여부 확인",
+        "VideoCapture와 Preview 동시 구동 시 토치 제어 타이밍 점검",
+        "신규 동적 범위 프로필 노출 시 프레임워크 연동 테스트"
+      ],
+      "action_items": [
+        "우리 벤더 기기에서 VideoCapture + Preview + Torch 동시 구동 시 캡처 실패나 프레임 드롭이 발생하는지 CTS 및 자체 스트림 조합 시나리오 테스트를 수행하십시오.",
+        "삼성 Z Fold 4 사례를 참고하여, HAL이 지원하는 YUV 출력 크기 중 특정 종횡비나 해상도에서 이미지 왜곡(distortion)이 발생하는지 덤프 이미지를 분석하십시오.",
+        "Android 17 대응을 위해 STANDARD_SMPTE_2094_50(ID 8192) 등 신규 동적 범위 프로필을 HAL에서 정상적으로 파싱하고 전파하는지 메타데이터 검증 도구를 통해 확인하십시오."
+      ],
+      "is_ai_related": false,
+      "article_type": "main",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v20cdb2337f656fc22df509b6d5402b3836a1b55334a8eea3301423a87970c4d5/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=ar",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        }
+      ],
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+      "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "imageAttribution": "CameraX Release Notes",
+      "imageAlt": "지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.6.0",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "지난 3월 출시된 CameraX 1.6.0의 주요 변경 사항과 기기별 호환성 우회 패치 내역을 분석하여, 우리 벤더 기기의 잠재적 호환성 결함을 사전에 방지하기 위함입니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "VideoCapture + Preview + Torch 구동 시 캡처 실패 여부 및 YUV 해상도별 이미지 왜곡 여부 검증",
+        "impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "CameraX 1.6.0의 패치가 하위 Camera HAL3 API 규격 자체를 강제 변경하는 것은 아닙니다.",
+          "삼성 기기 전용 패치(Quirks)를 모든 Android 기기에 적용되는 공통 HAL 요구사항으로 오해하지 마십시오."
+        ]
+      },
+      "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "source_candidate_hash": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
+      "article_group_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1,
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "CameraX API, compatibility workaround, app-side camera behavior change 확인",
+      "resolvedImage": {
+        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+        "src": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
+      },
+      "coverage_type": "catch_up",
+      "catch_up_age_days": 85,
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "attribution": "CameraX Release Notes",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+        "exclusionEvidence": [
+          {
+            "candidate_url": "https://developer.android.com/_static/images/translated.svg?hl=ar",
+            "reasonCode": "svg_rejected",
+            "reasonLabel": "SVG 이미지 제외",
+            "reasonText": "SVG 후보는 원문 대표 이미지 조건을 명확히 만족하지 않아 제외했습니다.",
+            "sourceKind": "article-img",
+            "contentType": "image/svg+xml",
+            "validationStatus": "ok",
+            "valid": false
+          }
+        ]
+      }
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치",
+      "what_changed": "NXP i.MX8QXP, i.MX8QM, i.MX93 SoC에 탑재된 CPI(Camera Parallel Interface) 컨트롤러를 지원하는 V4L2 서브디바이스 드라이버 v5 패치가 메일링 리스트에 제출되었습니다. 이 드라이버는 병렬 카메라 센서와 연동하여 이미지 데이터를 캡처할 수 있도록 지원합니다.",
+      "confirmed_facts": [
+        "2026년 6월 17일 NXP i.MX8QXP, i.MX8QM, i.MX93 SoC용 CPI 컨트롤러 V4L2 서브디바이스 드라이버 v5 패치가 제출되었습니다.",
+        "해당 드라이버는 병렬 인터페이스를 사용하는 카메라 센서의 이미지 데이터 캡처를 지원합니다."
+      ],
+      "evidence_summary": "Linux 미디어 메일링 리스트에 제출된 패치를 통해 NXP i.MX8 및 i.MX9 계열 SoC의 CPI 컨트롤러를 위한 V4L2 서브디바이스 드라이버 v5가 개발 중임이 확인되었습니다.",
+      "specificity_checks": [
+        "Release/Patch Version: v5",
+        "API/Component: V4L2 sub-device driver, CPI controller",
+        "Behavior Change: NXP i.MX8QXP, i.MX8QM, i.MX93 SoC에서 병렬 카메라 센서 이미지 캡처 지원"
+      ],
+      "source_verification_notes": [
+        "2026년 6월 17일 lore.kernel.org에 제출된 패치 v5를 기반으로 작성되었습니다.",
+        "해당 패치는 아직 메인라인 커널에 병합되지 않은 제안 단계(under review)이므로, 확정된 스펙으로 과장하지 않도록 주의했습니다."
+      ],
+      "public_article": {
+        "headline": "최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치",
+        "lead": "최근 NXP i.MX8QXP, i.MX8QM, i.MX93 SoC에 내장된 CPI(Camera Parallel Interface) 컨트롤러를 지원하기 위한 V4L2 서브디바이스 드라이버 v5 패치가 공개되었습니다. 이 패치는 병렬 인터페이스 기반 카메라 센서의 이미지 데이터 캡처를 가능하게 하여 하위 레벨 이미지 파이프라인 통합의 기반을 제공합니다.",
+        "body_paragraphs": [
+          "NXP는 i.MX8 및 i.MX9 계열 SoC에서 병렬 카메라 센서와의 인터페이스를 제어하는 CPI(Camera Parallel Interface) 컨트롤러용 V4L2 서브디바이스 드라이버의 다섯 번째 패치 버전을 제출했습니다. 이 드라이버는 병렬 카메라 센서로부터 전송되는 이미지 데이터를 효율적으로 캡처하고 상위 미디어 프레임워크로 전달하는 역할을 담당합니다.",
+          "이번 패치는 하드웨어 제어 로직을 V4L2 서브디바이스 표준 규격에 맞게 추상화하여, Linux 커널 미디어 서브시스템과의 호환성을 높였습니다. i.MX8QXP, i.MX8QM, i.MX93 등 다양한 NXP SoC 라인업을 동시에 지원하도록 설계된 것이 특징입니다.",
+          "병렬 인터페이스 카메라는 MIPI CSI-2에 비해 대역폭은 낮지만 산업용 기기나 저가형 임베디드 시스템에서 여전히 널리 사용됩니다. 이번 드라이버 추가를 통해 NXP 플랫폼 기반의 임베디드 Android 기기에서 병렬 센서를 활용한 카메라 파이프라인 구축이 한층 용이해질 전망입니다."
+        ],
+        "camera_hal_takeaway": "이 드라이버 변경은 Android Camera HAL이 V4L2 서브디바이스 노드를 통해 카메라 센서 제어 및 포맷 협상(Format Negotiation)을 수행하는 방식에 영향을 줍니다. HAL 개발자는 CPI 컨트롤러 드라이버가 노출하는 V4L2 subdev 인터페이스가 표준 규격을 준수하는지 확인하고, 병렬 센서 특유의 프레임 타이밍 및 동기화 신호 누락으로 인한 프레임 드롭 여부를 드라이버 레벨에서 모니터링해야 합니다.",
+        "reader_checkpoints": [
+          "NXP i.MX8/i.MX9 플랫폼을 사용하는 경우, 해당 CPI V4L2 드라이버 패치를 커널 소스 트리에 적용하고 subdev 노드가 정상 생성되는지 확인하십시오.",
+          "병렬 인터페이스 카메라 센서 구동 시 프레임 동기화(HSYNC/VSYNC) 및 데이터 래치 타이밍 이슈로 인한 프레임 드롭이 발생하는지 드라이버 로그를 모니터링하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v5 6/8] media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)",
+            "url": "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "NXP CPI V4L2 드라이버 패치 분석",
+        "editorial_story": {
+          "reader_scenario": "NXP i.MX8 기반 보드에서 병렬 카메라 센서를 연동하여 Android Camera HAL을 올리는 작업을 진행 중인데, V4L2 subdev 드라이버가 부재하여 센서 제어에 어려움을 겪는 상황입니다.",
+          "what_happened": "NXP i.MX8QXP, i.MX8QM, i.MX93 SoC의 CPI 컨트롤러를 지원하는 V4L2 서브디바이스 드라이버 v5 패치가 커널 메일링 리스트에 제출되었습니다.",
+          "why_it_matters": "병렬 카메라 센서를 표준 V4L2 subdev 인터페이스로 제어할 수 있게 됨으로써, Android Camera HAL과의 통합 및 포맷 협상 작업이 표준화되고 쉬워집니다.",
+          "field_scenario": "제출된 v5 패치를 로컬 커널 소스에 적용한 후, 미디어 컨트롤러(media-ctl)를 통해 병렬 센서와 CPI 컨트롤러 간의 링크가 정상적으로 구성되는지 검증합니다.",
+          "not_to_overclaim": "이 패치는 현재 검토 중인 단계(v5)이며 메인라인 커널에 완전히 병합된 상태가 아니므로, 프로덕션 적용 시 추가적인 안정성 검증이 필요합니다.",
+          "editor_take": "병렬 인터페이스는 MIPI에 비해 노이즈와 타이밍에 취약하므로, 드라이버 레벨의 프레임 드롭 및 지연 시간(latency) 모니터링이 필수적입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 6월 17일 NXP i.MX8QXP, i.MX8QM, i.MX93 SoC용 CPI 컨트롤러 V4L2 서브디바이스 드라이버 v5 패치가 제출되었습니다.",
+          "해당 드라이버는 병렬 인터페이스를 사용하는 카메라 센서의 이미지 데이터 캡처를 지원합니다."
+        ],
+        "background_context": "Linux 커널의 V4L2(Video4Linux2) 서브디바이스 드라이버는 카메라 센서와 ISP(Image Signal Processor) 같은 하드웨어 구성 요소를 추상화하여 상위 계층에 표준화된 인터페이스를 제공합니다. CPI(Camera Parallel Interface) 컨트롤러용 드라이버는 병렬 인터페이스를 사용하는 카메라 센서의 이미지 데이터 캡처를 가능하게 합니다. 이러한 하위 레벨 드라이버 변경은 Android Camera HAL에서 V4L2를 통해 카메라 센서에 접근하는 방식, 지원되는 해상도 및 프레임 속도, 이미지 처리 파이프라인의 초기 단계에 영향을 미칠 수 있습니다. 특히 SoC(System on Chip)에 내장된 이미지 처리 하드웨어와 연동하여 이미지 데이터 흐름 및 성능에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "이 드라이버 패치는 Android Camera HAL의 하부 V4L2 미디어 컨트롤러 파이프라인 구성에 영향을 미칩니다. CPI 컨트롤러가 V4L2 subdev로 노출됨에 따라, HAL은 표준 V4L2 API를 통해 병렬 센서의 포맷, 해상도, 프레임 레이트를 제어할 수 있게 됩니다. 다만 병렬 인터페이스 특성상 고해상도 전송 시 타이밍 마진 부족으로 인한 데이터 왜곡이나 프레임 드롭이 발생할 수 있으므로, 드라이버 레벨의 인터럽트 처리 지연 및 DMA 버퍼 할당 상태를 면밀히 점검해야 합니다.",
+        "action_items": [
+          "NXP i.MX8/i.MX9 플랫폼을 사용하는 경우, 해당 CPI V4L2 드라이버 패치를 커널 소스 트리에 적용하고 subdev 노드가 정상 생성되는지 확인하십시오.",
+          "병렬 인터페이스 카메라 센서 구동 시 프레임 동기화(HSYNC/VSYNC) 및 데이터 래치 타이밍 이슈로 인한 프레임 드롭이 발생하는지 드라이버 로그를 모니터링하십시오."
+        ],
+        "team_share_points": "NXP i.MX8/i.MX9 SoC 기반 프로젝트에서 병렬 센서를 사용해야 하는 경우, 이번에 제안된 v5 드라이버 패치를 선제적으로 검토하여 드라이버 자체 개발 공수를 줄일 수 있습니다."
+      },
+      "claims": [
+        {
+          "claim_id": "nxp_cpi_patch_v5",
+          "text": "2026년 6월 17일 NXP i.MX8QXP, i.MX8QM, i.MX93 SoC용 CPI 컨트롤러 V4L2 서브디바이스 드라이버 v5 패치가 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:9cb17f96faa20dda:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "nxp_cpi_parallel_sensor",
+          "text": "해당 드라이버는 병렬 인터페이스를 사용하는 카메라 센서의 이미지 데이터 캡처를 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:9cb17f96faa20dda:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "V4L2 subdev 드라이버 로드 후 /dev/v4l-subdev* 노드 생성 여부 확인",
+        "media-ctl 도구를 이용한 병렬 센서와 CPI 컨트롤러 간 미디어 링크 설정 검증",
+        "병렬 센서 구동 시 프레임 동기화 신호(HSYNC/VSYNC) 정합성 및 프레임 드롭 여부 검증"
+      ],
+      "action_hints": [
+        "CPI V4L2 드라이버 패치 적용 및 subdev 노드 확인",
+        "HSYNC/VSYNC 타이밍 마진 및 프레임 드롭 모니터링"
+      ],
+      "action_items": [
+        "NXP i.MX8/i.MX9 플랫폼을 사용하는 경우, 해당 CPI V4L2 드라이버 패치를 커널 소스 트리에 적용하고 subdev 노드가 정상 생성되는지 확인하십시오.",
+        "병렬 인터페이스 카메라 센서 구동 시 프레임 동기화(HSYNC/VSYNC) 및 데이터 래치 타이밍 이슈로 인한 프레임 드롭이 발생하는지 드라이버 로그를 모니터링하십시오."
+      ],
+      "is_ai_related": false,
+      "article_type": "main",
+      "imageCandidates": [
+        {
+          "url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "sourceUrl": "https://isocpp.org/blog",
+          "articleUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "redhatgraphic.png",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "ISO C++ Blog",
+          "validationStatus": "ok",
+          "contentLength": 308207
+        },
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v20cdb2337f656fc22df509b6d5402b3836a1b55334a8eea3301423a87970c4d5/android/images/lockup.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/s4097/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1807162
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/w1200-h630-p-k-no-nu/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 320599
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No suitable image available in candidates.",
+      "sources": [
+        {
+          "title": "[PATCH v5 6/8] media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)",
+          "url": "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "NXP i.MX8/i.MX9 기반 임베디드 카메라 시스템 개발 시 병렬 인터페이스 센서 지원을 위한 드라이버 스택의 최신 변경 사항을 파악하기 위함입니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "camera_hal_owner",
+          "soc_platform_owner"
+        ],
+        "check_within_2_weeks": "CPI V4L2 subdev 드라이버 패치 적용 및 미디어 파이프라인 구성 검증",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "stream_buffer_metadata"
+        ],
+        "do_not_overstate": [
+          "이 패치는 현재 메일링 리스트에 제안된 단계(v5)이며, 메인라인 커널이나 특정 Android BSP에 공식 통합된 상태가 아닙니다.",
+          "병렬 인터페이스의 물리적 한계(노이즈, 대역폭 등)로 인한 하드웨어적 제약을 드라이버 소프트웨어만으로 완전히 해결할 수는 없습니다."
+        ]
+      },
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/",
+      "source_candidate_hash": "9cb17f96faa20dda84b4b69f2af8e8b0298dc170045fe64b2c5549c223c42213",
+      "article_group_key": "lore-series:20260617-imx8qxp_pcam-v5-7fa6c8e7fba7@nxp.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
       "coverage_type": "fresh"
     }
   ],
   "action_items": [
-    "Mali-C55 기반 플랫폼에서 제안된 CCM 기능이 이미지 품질(색상 정확도, 화이트 밸런스 등)에 미치는 영향을 평가하기 위한 테스트 시나리오를 정의하고 PoC를 수행합니다.",
-    "CameraX 마이그레이션 스킬의 내용을 검토하여 CameraX의 새로운 권장 사용 패턴과 API 호출 시퀀스를 파악하고, 주요 앱 시나리오에서 HAL의 성능 및 안정성을 재검증합니다.",
-    "현재 Camera HAL 및 드라이버 빌드에 사용되는 Clang/LLVM 툴체인의 오류 메시지 및 진단 기능을 GCC 16의 개선 사항과 비교 분석하고, SARIF 출력을 활용한 정적 분석 도구 통합 가능성을 탐색합니다."
+    "CameraX 1.6.0의 유스케이스 조합 사전 쿼리 API 도입에 대응하여, HAL 단에서 PREVIEW_STABILIZATION 및 VideoCapture 조합 시 올바른 지원 메타데이터를 반환하는지 검증하십시오.",
+    "삼성 Z Fold 4의 YUV 왜곡 사례를 참고하여, 우리 벤더 기기가 지원하는 YUV 출력 해상도 중 특정 크기에서 이미지 왜곡이 발생하는지 덤프 이미지를 분석하십시오.",
+    "NXP i.MX8/i.MX9 플랫폼을 사용하는 경우, 최근 공개된 CPI V4L2 드라이버 패치 v5를 로컬 커널 소스 트리에 적용하고 subdev 노드가 정상 생성되는지 확인하십시오.",
+    "커널 드라이버 빌드 환경에서 GCC 16의 SARIF 출력을 활용하여 정적 분석 경고를 CI 시스템에 자동 통합하는 워크플로우 도입을 검토하십시오."
   ],
   "references": [
     {
@@ -780,33 +1366,36 @@
     {
       "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
       "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+    },
+    {
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+    },
+    {
+      "title": "[PATCH v5 6/8] media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)",
+      "url": "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/"
     }
   ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [],
   "selected_group_count": 3,
   "rendered_group_count": 3,
   "explicitly_demoted_group_count": 0,
   "hard_blocked_group_count": 0,
   "selected_representative_group_keys": [
-    "lore-series:20260616-mali-c55-ccm-gamma-v1-174fe4fedea3@ideasonboard.com",
-    "article:https://developer.android.com/tools/agents/android-cli#skills-add",
-    "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+    "lore-series:20260617-imx8qxp_pcam-v5-7fa6c8e7fba7@nxp.com",
+    "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
   ],
   "rendered_group_keys": [
-    "lore-series:20260616-mali-c55-ccm-gamma-v1-174fe4fedea3@ideasonboard.com",
-    "article:https://developer.android.com/tools/agents/android-cli#skills-add",
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+    "lore-series:20260617-imx8qxp_pcam-v5-7fa6c8e7fba7@nxp.com",
     "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
   ],
   "explicitly_demoted_group_keys": [],
   "hard_blocked_group_keys": [],
   "publish_mode": "DEEP",
   "reference_articles": [
-    {
-      "title": "CameraX Release Notes - CameraX 1.6.1",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "source": "Android Developers Latest Updates",
-      "published_date": "May 06, 2026",
-      "note": "AOSP Camera 프레임워크 관련 참고"
-    },
     {
       "title": "Test camera images using automation",
       "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",

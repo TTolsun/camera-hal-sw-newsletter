@@ -1,0 +1,266 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 95,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 3,
+    "locked_article_count": 3,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "최근 공개된 GCC 16: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원으로 네이티브 개발 생산성 향상",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영",
+      "최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치",
+      "최근 공개된 GCC 16: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원으로 네이티브 개발 생산성 향상"
+    ],
+    "locked_article_headlines": [
+      "지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영",
+      "최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치",
+      "최근 공개된 GCC 16: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원으로 네이티브 개발 생산성 향상"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+        ],
+        "source_titles": [
+          "CameraX Release Notes - CameraX 1.6.0"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/"
+        ],
+        "source_titles": [
+          "[PATCH v5 6/8] media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "최근 공개된 GCC 16: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원으로 네이티브 개발 생산성 향상",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        ],
+        "source_titles": [
+          "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영",
+        "sources": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "최근 공개된 GCC 16: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원으로 네이티브 개발 생산성 향상",
+        "sources": [
+          "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "최근 공개된 GCC 16: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원으로 네이티브 개발 생산성 향상"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+        ],
+        "source_titles": [
+          "CameraX Release Notes - CameraX 1.6.0"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/"
+        ],
+        "source_titles": [
+          "[PATCH v5 6/8] media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "최근 공개된 GCC 16: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원으로 네이티브 개발 생산성 향상",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        ],
+        "source_titles": [
+          "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 3,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [
+      {
+        "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+        "url": "https://source.android.com/docs/compatibility/cdd",
+        "source": "Android Compatibility Definition Document",
+        "reason": "evidence_score=0 < 6"
+      },
+      {
+        "title": "[PATCH v3 3/3] media: uvcvideo: skip streaming restart after hibernation snapshot - Haowen Tu",
+        "url": "https://lore.kernel.org/linux-media/20260618013133.1047270-4-tuhaowen@uniontech.com/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      }
+    ],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

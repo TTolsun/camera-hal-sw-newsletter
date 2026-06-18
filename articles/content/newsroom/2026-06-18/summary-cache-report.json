@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-18",
+  "generated_at": "2026-06-18T02:39:23.637Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 7,
+    "hit_count": 2,
+    "miss_count": 5,
+    "by_url_hit_count": 2,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 3
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 2
+    },
+    {
+      "reason": "url-hit",
+      "count": 2
+    }
+  ],
+  "entries": [
+    {
+      "title": "[PATCH v5 6/8] media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)",
+      "url": "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-17T19:51:03Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com",
+        "url_hash": "9cb17f96faa20dda84b4b69f2af8e8b0298dc170045fe64b2c5549c223c42213",
+        "published_date": "2026-06-17T19:51:03Z",
+        "content_hash": "13f9853e3a6bba2efb7022e416fa0a555c611b11bef01053aa571c6d1e3dac4e"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 15 Jun 2026 22:22:24 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "url_hash": "9f5a63b90e02162f19dabc76ee29ef71d86aa3a0fb00e872378d73f32ffbee7e",
+        "published_date": "Mon, 15 Jun 2026 22:22:24 +0000",
+        "content_hash": "45efa4a6b0593184fc9702888cdeb5e8b0a7381fa6d28ae9c5c9fd5a40f904e8"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "source": "Android Compatibility Definition Document",
+      "published_date": "2026-06-17",
+      "cache_key": {
+        "normalized_url": "https://source.android.com/docs/compatibility/cdd",
+        "url_hash": "b564c567eef7ae5977d361d9a12b799d681cb5a470b50ac7f67887452ef3478b",
+        "published_date": "2026-06-17",
+        "content_hash": "85ab31552c2694d566bea81dcfff3ac9eab2f454736b38513eaf15cd91ab2553"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v3 3/3] media: uvcvideo: skip streaming restart after hibernation snapshot - Haowen Tu",
+      "url": "https://lore.kernel.org/linux-media/20260618013133.1047270-4-tuhaowen@uniontech.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-18",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260618013133.1047270-4-tuhaowen@uniontech.com",
+        "url_hash": "9ed690bd79eb679d4ae7670cc1d50411863bfc79885fc9a6166c911163a8e46c",
+        "published_date": "2026-06-18",
+        "content_hash": "cd77b92b1e5aabfd69e11437e25013287c41edfe275f55cf64689dd5b41e136f"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/tools/agents/android-cli",
+        "url_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee.json"
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "url_hash": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe.json"
+    },
+    {
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "source": "CameraX Release Notes",
+      "published_date": "March 25, 2026",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "url_hash": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
+        "published_date": "March 25, 2026",
+        "content_hash": "d6998b60b8eb0658abab184c58c32b4a2cbc531707ec93990cbfcc0fb825ffa9"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

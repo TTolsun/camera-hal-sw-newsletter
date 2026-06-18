@@ -1,6 +1,6 @@
 # 2026 W25 (06.15 ~ 06.21)
 
-이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 3건의 소식을 다룹니다.
+이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 5건의 소식을 다룹니다.
 
 
 
@@ -9,6 +9,8 @@
 - ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개
 - Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가
 - GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선
+- 지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영
+- 최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치
 
 ## 2. ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개
 
@@ -69,9 +71,9 @@ CameraX는 Android Camera2 API를 기반으로 구축된 Jetpack 라이브러리
 ## 4. GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선
 
 
-![GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선 image](../../assets/images/fallback/newsletter-default.svg)
+![redhatgraphic.png](https://isocpp.org/files/img/redhatgraphic.png)
 
-_이미지: [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)_
+_이미지: [ISO C++ Blog](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)_
 
 
 _C++ 개발 워크플로우의 코드 품질 분석 및 디버깅 효율성 향상 기대_
@@ -92,10 +94,67 @@ GCC 16의 개선된 오류 메시지와 SARIF 출력 기능은 직접적으로 A
 
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)
 
+---
+
+## 5. 최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치
+
+
+![최근 공개된 NXP i.MX8/i.MX9 SoC용 CPI 병렬 카메라 인터페이스 V4L2 서브디바이스 드라이버 v5 패치 image](../../assets/images/fallback/newsletter-default.svg)
+
+_이미지: [[PATCH v5 6/8] media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)](https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/)_
+
+
+_NXP CPI V4L2 드라이버 패치 분석_
+
+최근 NXP i.MX8QXP, i.MX8QM, i.MX93 SoC에 내장된 CPI(Camera Parallel Interface) 컨트롤러를 지원하기 위한 V4L2 서브디바이스 드라이버 v5 패치가 공개되었습니다. 이 패치는 병렬 인터페이스 기반 카메라 센서의 이미지 데이터 캡처를 가능하게 하여 하위 레벨 이미지 파이프라인 통합의 기반을 제공합니다.
+
+NXP는 i.MX8 및 i.MX9 계열 SoC에서 병렬 카메라 센서와의 인터페이스를 제어하는 CPI(Camera Parallel Interface) 컨트롤러용 V4L2 서브디바이스 드라이버의 다섯 번째 패치 버전을 제출했습니다. 이 드라이버는 병렬 카메라 센서로부터 전송되는 이미지 데이터를 효율적으로 캡처하고 상위 미디어 프레임워크로 전달하는 역할을 담당합니다.
+
+이번 패치는 하드웨어 제어 로직을 V4L2 서브디바이스 표준 규격에 맞게 추상화하여, Linux 커널 미디어 서브시스템과의 호환성을 높였습니다. i.MX8QXP, i.MX8QM, i.MX93 등 다양한 NXP SoC 라인업을 동시에 지원하도록 설계된 것이 특징입니다.
+
+병렬 인터페이스 카메라는 MIPI CSI-2에 비해 대역폭은 낮지만 산업용 기기나 저가형 임베디드 시스템에서 여전히 널리 사용됩니다. 이번 드라이버 추가를 통해 NXP 플랫폼 기반의 임베디드 Android 기기에서 병렬 센서를 활용한 카메라 파이프라인 구축이 한층 용이해질 전망입니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+이 드라이버 변경은 Android Camera HAL이 V4L2 서브디바이스 노드를 통해 카메라 센서 제어 및 포맷 협상(Format Negotiation)을 수행하는 방식에 영향을 줍니다. HAL 개발자는 CPI 컨트롤러 드라이버가 노출하는 V4L2 subdev 인터페이스가 표준 규격을 준수하는지 확인하고, 병렬 센서 특유의 프레임 타이밍 및 동기화 신호 누락으로 인한 프레임 드롭 여부를 드라이버 레벨에서 모니터링해야 합니다.
+
+**출처**
+
+- [[PATCH v5 6/8] media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)](https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/)
+
+---
+
+## 지난 소식 (Catch-up)
+
+## 6. 지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영 (12주 전 릴리스)
+
+
+![지난 3월 출시된 CameraX 1.6.0: 사전 유스케이스 조합 쿼리 API 도입 및 삼성 기기 호환성 패치 대거 반영](https://developer.android.com/static/images/social/android-developers.png?hl=ar)
+
+_이미지: [CameraX Release Notes](https://developer.android.com/jetpack/androidx/releases/camera#1.6.0)_
+
+
+_CameraX 1.6.0 릴리스 노트 분석_
+
+지난 3월 25일 출시된 CameraX 1.6.0에서는 앱 개발자가 카메라 라이프사이클에 바인딩하기 전에 특정 유스케이스와 기능 조합(HDR, 흔들림 보정 등)의 지원 여부를 미리 쿼리할 수 있는 강력한 API가 도입되었습니다. 이와 함께 Android 17 대비 패치 및 삼성 기기군에서 발견된 YUV 왜곡, 플래시 노출 부족 등 다수의 실무 호환성 버그가 해결되었습니다.
+
+CameraX 1.6.0은 앱 개발자가 기기의 카메라 하드웨어 제약을 사전에 파악할 수 있도록 돕는 유스케이스 조합 사전 쿼리 API를 도입했습니다. 이를 통해 개발자는 HDR, 프리뷰 안정화, 특정 해상도, CameraX 확장 기능(Extensions) 또는 슬로우 모션 등의 조합이 실제로 기기에서 정상 동작하는지 라이프사이클 바인딩 전에 검증할 수 있어, 런타임 에러를 획기적으로 줄일 수 있습니다.
+
+또한 이번 릴리스는 차세대 Android 17(API 37) 이상 기기를 위한 선제적 크래시 방지 패치를 포함합니다. 기존 1.5.1 이하 버전에서는 기기가 STANDARD_SMPTE_2094_50(ID 8192)과 같은 새로운 동적 범위 프로필을 노출할 경우 이를 적절히 처리하지 못해 NullPointerException 등이 발생했으나, 이번 버전에서 예외 처리가 보완되었습니다.
+
+기기별 호환성(Quirks) 영역에서도 중요한 수정이 이루어졌습니다. 삼성 Z Fold 4에서 이미지 왜곡을 일으키던 특정 YUV 포맷 출력 크기를 지원 목록에서 제외(b/460322307)했으며, 삼성 A53에서 VideoCapture 유스케이스가 바인딩된 상태로 토치를 켜고 캡처할 때 간헐적으로 실패하던 현상(b/458197367)도 해결했습니다. 초광각 카메라에서 플래시 사용 시 노출이 부족해지던 문제와 JPEG 인코더가 0xFF 패딩을 추가할 때 ExifInterface 파싱 실패로 캡처가 무산되던 버그도 함께 수정되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+CameraX의 유스케이스 조합 사전 쿼리 API는 결국 하위 Camera HAL의 stream configuration 및 capability 선언에 의존합니다. HAL 개발자는 기기가 지원하지 않는 스트림 조합이나 기능(예: PREVIEW_STABILIZATION + VideoCapture)을 요청받았을 때 프레임워크에 올바른 메타데이터와 에러 코드를 반환해야 합니다. 또한 삼성 Z Fold 4의 YUV 왜곡 사례처럼 HAL 단에서 잘못된 스트림 크기를 노출하지 않도록 캘리브레이션 및 스트림 검증을 철저히 해야 합니다.
+
+**출처**
+
+- [CameraX Release Notes - CameraX 1.6.0](https://developer.android.com/jetpack/androidx/releases/camera#1.6.0)
+
 
 ## 참고 / 더 읽을거리
 
-- [CameraX Release Notes - CameraX 1.6.1](<https://developer.android.com/jetpack/androidx/releases/camera#1.6.1>) — Android Developers Latest Updates (May 06, 2026) · AOSP Camera 프레임워크 관련 참고
 - [Test camera images using automation](<https://source.android.com/docs/compatibility/cts/camera-its-box>) — AOSP Site Updates (2026-05-01) · AOSP Camera 프레임워크 관련 참고
 - [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](<https://goo.gle/AdaptiveApps_IO26>) — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
 - [GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!](<https://isocpp.org//blog/2026/04/gcc-16.1>) — ISO C++ Blog (Thu, 30 Apr 2026 22:36:23 +0000) · C++ / AI 네이티브 툴링 참고
@@ -105,3 +164,5 @@ GCC 16의 개선된 오류 메시지와 SARIF 출력 기능은 직접적으로 A
 - [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/)
 - [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)
+- [CameraX Release Notes - CameraX 1.6.0](https://developer.android.com/jetpack/androidx/releases/camera#1.6.0)
+- [[PATCH v5 6/8] media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)](https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/)

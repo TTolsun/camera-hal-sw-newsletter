@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-06-18",
+    "title": "AOSP Camera / Driver / SoC Platform 기술 뉴스레터 (2026-06-18)",
+    "summary": "이번 주 뉴스레터에서는 NXP i.MX8/i.MX9 SoC의 CPI 병렬 카메라 인터페이스용 신규 V4L2 서브디바이스 드라이버 패치와 지난 3월 릴리스된 CameraX 1.6.0의 주요 변경 사항 및 기기별 호환성 패치를 다룹니다. 또한 C++ 개발 생산성 향상을 위한 GCC 16의 오류 메시지 개선 및 SARIF 지원 소식을 전합니다. 이 변화들은 Camera HAL, 드라이버 통합 및 네이티브 빌드 워크플로우를 최적화하는 데 중요한 이정표가 될 것입니다.",
+    "html": "newsletters/2026-06-18/index.html",
+    "md": "newsletters/2026-06-18/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-06-16",
     "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-06-16",
     "summary": "이번 주 뉴스레터에서는 Linux 커널의 ARM Mali-C55 ISP 드라이버에 CCM(Color Correction Matrix) 지원이 추가되는 패치 소식을 다룹니다. 또한 Android 개발자 생산성 향상을 위한 Android Skills 저장소 확장 소식과 함께 CameraX 마이그레이션 스킬 추가 내용을 살펴봅니다. 마지막으로 GCC 16의 개선된 오류 메시지 및 SARIF 출력 기능이 C++ 개발 워크플로우에 미칠 영향에 대해서도 알아봅니다. 이 변경사항들은 카메라 이미지 처리 파이프라인, 앱 호환성 및 네이티브 개발 환경에 중요한 영향을 줄 수 있습니다.",
