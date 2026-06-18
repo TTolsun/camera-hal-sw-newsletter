@@ -141,6 +141,27 @@ test('findRepoHygieneIssues avoids substring false positives for maintained scri
   assert.deepEqual(issues, []);
 });
 
+test('findRepoHygieneIssues does not flag properly-placed test files whose names contain one-off tokens', () => {
+  const issues = findRepoHygieneIssues([
+    'src/generator/test/unit/validate/resolve-local-image.test.js',
+    'src/shared/test/unit/probe-source-quality.test.js',
+    'src/generator/test/unit/experiment-ranking.test.js'
+  ]);
+
+  assert.deepEqual(issues, []);
+});
+
+test('findRepoHygieneIssues still flags one-off-named test files placed outside src/<layer>/test/', () => {
+  const issues = findRepoHygieneIssues([
+    'src/local/resolve-local-image.test.js'
+  ]);
+
+  assert.deepEqual(issues.map(item => item.path), [
+    'src/local/resolve-local-image.test.js'
+  ]);
+  assert.equal(issues[0].type, 'tracked_one_off_script');
+});
+
 test('findRepoHygieneIssues reports stray tests outside src/<layer>/test/ even when allowlisted', () => {
   const issues = findRepoHygieneIssues([
     'src/shared/foo.test.js',

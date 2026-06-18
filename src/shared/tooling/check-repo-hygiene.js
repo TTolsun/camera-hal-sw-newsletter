@@ -178,6 +178,11 @@ function findRepoHygieneIssues(files, options = {}) {
       issues.push(issue(filePath, 'tracked_agent_scratch', 'root codex plan markdown files must stay local-only'));
     } else if (/^[^/]+-scratch\.md$/.test(filePath)) {
       issues.push(issue(filePath, 'tracked_agent_scratch', 'root scratch markdown files must stay local-only'));
+    } else if (isProperlyPlacedTestFile(filePath)) {
+      // 정상 위치(src/<layer>/test/.../*.test.js)의 테스트는 유지되는 프로젝트
+      // 테스트이므로, 이름에 local/probe 같은 토큰이 들어가도 one-off 스크립트로
+      // 분류하지 않는다. 잘못 놓인 테스트는 findRootTestStructureIssues가 따로 잡는다.
+      continue;
     } else if (isOneOffScriptPath(filePath)) {
       issues.push(issue(filePath, 'tracked_one_off_script', 'one-off scripts under scripts/ and src/ must stay outside the repo or become maintained project tools'));
     }
