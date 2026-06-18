@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-06-16",
+    "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-06-16",
+    "summary": "이번 주 뉴스레터에서는 Linux 커널의 ARM Mali-C55 ISP 드라이버에 CCM(Color Correction Matrix) 지원이 추가되는 패치 소식을 다룹니다. 또한 Android 개발자 생산성 향상을 위한 Android Skills 저장소 확장 소식과 함께 CameraX 마이그레이션 스킬 추가 내용을 살펴봅니다. 마지막으로 GCC 16의 개선된 오류 메시지 및 SARIF 출력 기능이 C++ 개발 워크플로우에 미칠 영향에 대해서도 알아봅니다. 이 변경사항들은 카메라 이미지 처리 파이프라인, 앱 호환성 및 네이티브 개발 환경에 중요한 영향을 줄 수 있습니다.",
+    "html": "newsletters/2026-06-16/index.html",
+    "md": "newsletters/2026-06-16/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-06-11",
     "title": "Camera HAL / SW Newsletter - 2026-06-11",
     "summary": "이번 주에는 Android 개발자 생산성 도구에 CameraX 마이그레이션 스킬이 추가되어 상위 프레임워크 계층의 CameraX 채택이 가속화될 전망입니다. 또한, Linux 커널 미디어 드라이버 메일링 리스트를 통해 Qualcomm CAMSS의 MIPI CSI-2 C-PHY 초기화 및 링크 주파수 계산 로직 개선, Sony IMX471 센서 드라이버의 전원 관리 제안 등 하위 드라이버 및 이미지 파이프라인의 안정성을 높이기 위한 다양한 패치 논의가 진행되었습니다.",

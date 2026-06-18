@@ -1,0 +1,1162 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-16",
+  "score": 96,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "PASS",
+  "summary": "Safety checks passed and the fact-checker found every article useful to a Camera HAL SW engineer. Editor review is ready.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH 1/2] media: arm: mali-c55: Add support for CCM",
+          "url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/",
+        "source_candidate_hash": "03329b52d178cd005fa1c264d494167d145a5ba04cf229cb52872a7a33aa89da",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "soc_resource_contention"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+      "category": "android_platform_camera_adjacent",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+          "url": "https://developer.android.com/tools/agents/android-cli#skills-add"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+        "source_candidate_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "source_candidate_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "editorial_priority": 3,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "framework_adjacent",
+      "hal_impact_axes": [
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "hard_fail_reasons": [],
+      "soft_deductions": []
+    },
+    {
+      "index": 3,
+      "headline": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+      "category": "cpp_ai_tooling_fallback",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+          "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+        "source_candidate_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "source_candidate_hash": "9f5a63b90e02162f19dabc76ee29ef71d86aa3a0fb00e872378d73f32ffbee7e",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 6,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "tooling_support",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      },
+      "guardrail_impact_class": "tooling_support",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 12,
+    "total_claims": 12,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 3,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+      "claim_id": "claim_0",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 6월 16일, ARM Mali-C55 ISP 드라이버에 CCM(Color Correction Matrix) 지원을 추가하는 패치가 Linux 미디어 메일링 리스트에 제안되었습니다.",
+      "evidence_ids": [
+        "candidate:03329b52d178cd00:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:03329b52d178cd00:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:03329b52d178cd00:source-summary",
+          "resolved_evidence_id": "candidate:03329b52d178cd00:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+      "claim_id": "claim_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 패치는 확장 가능한 v4l2-isp 형식을 사용하여 uAPI에 새로운 블록을 정의합니다.",
+      "evidence_ids": [
+        "candidate:03329b52d178cd00:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:03329b52d178cd00:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:03329b52d178cd00:source-summary",
+          "resolved_evidence_id": "candidate:03329b52d178cd00:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+      "claim_id": "claim_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "Mali-C55 ISP 드라이버에서 CCM 파라미터 구성을 지원합니다.",
+      "evidence_ids": [
+        "candidate:03329b52d178cd00:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:03329b52d178cd00:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:03329b52d178cd00:source-summary",
+          "resolved_evidence_id": "candidate:03329b52d178cd00:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+      "claim_id": "claim_0",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "2026년 6월 9일, Android CLI 및 GitHub를 통해 제공되는 Android skills 저장소가 확장되었습니다.",
+      "evidence_ids": [
+        "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0"
+      ],
+      "resolved_evidence_ids": [
+        "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0",
+          "resolved_evidence_id": "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "https://github.com/android/skills",
+        "https://developer.android.com/tools/agents/android-skills"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+      "claim_id": "claim_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "확장된 저장소에는 Adaptive UI Display Glasses 및 Jetpack Compose Glimmer for XR 지원이 포함됩니다.",
+      "evidence_ids": [
+        "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0"
+      ],
+      "resolved_evidence_ids": [
+        "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0",
+          "resolved_evidence_id": "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "https://github.com/android/skills",
+        "https://developer.android.com/tools/agents/android-skills"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+      "claim_id": "claim_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "CameraX로의 마이그레이션 스킬이 새로 추가되었습니다.",
+      "evidence_ids": [
+        "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0"
+      ],
+      "resolved_evidence_ids": [
+        "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0",
+          "resolved_evidence_id": "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "https://github.com/android/skills",
+        "https://developer.android.com/tools/agents/android-skills"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+      "claim_id": "claim_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Perfetto SQL 및 Trace Analysis 관련 스킬도 포함됩니다.",
+      "evidence_ids": [
+        "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0"
+      ],
+      "resolved_evidence_ids": [
+        "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0",
+          "resolved_evidence_id": "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "https://github.com/android/skills",
+        "https://developer.android.com/tools/agents/android-skills"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+      "claim_id": "claim_4",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "총 17개 이상의 새로운 스킬이 제공됩니다.",
+      "evidence_ids": [
+        "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0"
+      ],
+      "resolved_evidence_ids": [
+        "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0",
+          "resolved_evidence_id": "sx:ab2b8e420e165e84:aefb44a94b3e:c66a79cc346be0d0",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "https://github.com/android/skills",
+        "https://developer.android.com/tools/agents/android-skills"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+      "claim_id": "claim_0",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "2026년 6월 15일, ISO C++ 블로그를 통해 GCC 16의 새로운 기능이 소개되었습니다.",
+      "evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "resolved_evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+      "claim_id": "claim_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "GCC 16은 개선된 오류 메시지를 제공할 예정입니다.",
+      "evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "resolved_evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+      "claim_id": "claim_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "GCC 16은 SARIF(Static Analysis Results Interchange Format) 출력을 지원할 예정입니다.",
+      "evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "resolved_evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+      "claim_id": "claim_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "GCC 16은 곧 출시될 예정입니다.",
+      "evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "resolved_evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 3,
+    "strong_signal_count": 0,
+    "usable_signal_count": 3,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 3,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 3,
+    "fallback_main_article_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 1,
+      "soc_resource_contention": 1,
+      "camerax_app_compatibility": 1,
+      "native_tooling_workflow": 1
+    },
+    "actionability_level_counts": {
+      "none": 3
+    },
+    "effective_actionability_level_counts": {
+      "concrete_check": 3
+    },
+    "signal_quality_status_counts": {
+      "usable_signal": 3
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+      "url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "soc_resource_contention"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "soc_platform_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "Contains source-bound API behavior action evidence: test,api.",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 57): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "HAL API, metadata contract, stream, buffer, request/result, CTS에 대한 직접적인 변경으로 과장하지 마세요.",
+        "이것은 제안된 패치이며, 아직 Linux 커널에 병합되지 않았습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "isp_image_pipeline",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "hal_impact_axes": [
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "Contains source-bound frame timing metric action evidence: log,metric,api,stream_buffer_metadata.",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 4 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "HAL API, metadata contract, stream, buffer, request/result, CTS에 대한 직접적인 변경으로 과장하지 마세요.",
+        "이것은 CameraX 및 상위 계층 API에 대한 변경사항이며, HAL 계약에 직접적인 영향을 미 미치지 않을 수 있습니다."
+      ],
+      "soc_signal_type": "none",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "camerax_app_compatibility",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "reader_owners": [
+        "native_tooling_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "Contains source-bound API behavior action evidence: test,api.",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 63): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "HAL API, metadata contract, stream, buffer, request/result, CTS에 대한 직접적인 변경으로 과장하지 마세요.",
+        "이것은 일반적인 C++ 컴파일러 업데이트이며, Android HAL 툴체인 마이그레이션을 의미하지 않습니다."
+      ],
+      "soc_signal_type": "none",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "native_tooling_workflow",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 3,
+    "briefing_count": 3,
+    "camera_article_count": 2,
+    "legacy_regex_camera_article_count": 3,
+    "expanded_scope_article_count": 3,
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 1,
+    "android_platform_camera_adjacent_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 2,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 1,
+    "publishable_scope_count": 3,
+    "composition_mode": "FALLBACK_COMPOSITION",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/",
+        "source_candidate_hash": "03329b52d178cd005fa1c264d494167d145a5ba04cf229cb52872a7a33aa89da",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+        "source_candidate_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "source_candidate_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "editorial_priority": 3,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "android_platform_camera_adjacent counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 3,
+        "headline": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+        "source_candidate_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "source_candidate_hash": "9f5a63b90e02162f19dabc76ee29ef71d86aa3a0fb00e872378d73f32ffbee7e",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 6,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "tooling_support",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 1,
+      "android_platform_camera_adjacent": 1,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 2,
+      "multimedia": 0,
+      "platform": 0,
+      "fallback": 1,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android_platform_camera_adjacent"
+      ],
+      "multimedia": [
+        "android_multimedia_camera_output"
+      ],
+      "platform": [
+        "soc_platform_signal"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 1,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 0,
+    "blocking_deduction_categories": [],
+    "hard_fail_count": 0,
+    "soft_deduction_count": 4,
+    "article_gate_counts": {
+      "PASS": 3,
+      "DEMOTE": 0,
+      "FAIL": 0
+    },
+    "article_section_contract": {
+      "complete_count": 3,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {
+        "do_not_claim": 3
+      },
+      "limitation_visibility_counts": {
+        "guardrail-only": 3
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 12,
+      "total_claims": 12,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 3,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 3,
+      "strong_signal_count": 0,
+      "usable_signal_count": 3,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 3,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 0,
+      "main_articles_with_concrete_action": 3,
+      "fallback_main_article_count": 1,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "driver_image_pipeline": 1,
+        "soc_resource_contention": 1,
+        "camerax_app_compatibility": 1,
+        "native_tooling_workflow": 1
+      },
+      "actionability_level_counts": {
+        "none": 3
+      },
+      "effective_actionability_level_counts": {
+        "concrete_check": 3
+      },
+      "signal_quality_status_counts": {
+        "usable_signal": 3
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+        "url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "soc_resource_contention"
+        ],
+        "reader_owners": [
+          "camera_driver_owner",
+          "soc_platform_owner"
+        ],
+        "actionability_level": "none",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "Contains source-bound API behavior action evidence: test,api.",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 57): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "HAL API, metadata contract, stream, buffer, request/result, CTS에 대한 직접적인 변경으로 과장하지 마세요.",
+          "이것은 제안된 패치이며, 아직 Linux 커널에 병합되지 않았습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "isp_image_pipeline",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+        "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "hal_impact_axes": [
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "none",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "Contains source-bound frame timing metric action evidence: log,metric,api,stream_buffer_metadata.",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 4 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "HAL API, metadata contract, stream, buffer, request/result, CTS에 대한 직접적인 변경으로 과장하지 마세요.",
+          "이것은 CameraX 및 상위 계층 API에 대한 변경사항이며, HAL 계약에 직접적인 영향을 미 미치지 않을 수 있습니다."
+        ],
+        "soc_signal_type": "none",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "camerax_app_compatibility",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+        "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "hal_impact_axes": [
+          "native_tooling_workflow"
+        ],
+        "reader_owners": [
+          "native_tooling_owner"
+        ],
+        "actionability_level": "none",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "Contains source-bound API behavior action evidence: test,api.",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 63): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "HAL API, metadata contract, stream, buffer, request/result, CTS에 대한 직접적인 변경으로 과장하지 마세요.",
+          "이것은 일반적인 C++ 컴파일러 업데이트이며, Android HAL 툴체인 마이그레이션을 의미하지 않습니다."
+        ],
+        "soc_signal_type": "none",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "native_tooling_workflow",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "editorial-story",
+        "count": 2
+      },
+      {
+        "category": "image-fallback",
+        "count": 2
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

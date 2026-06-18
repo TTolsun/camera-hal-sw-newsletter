@@ -1,0 +1,229 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-2.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 96,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 3,
+    "locked_article_count": 3,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+      "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+      "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상"
+    ],
+    "locked_article_headlines": [
+      "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+      "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+      "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/"
+        ],
+        "source_titles": [
+          "[PATCH 1/2] media: arm: mali-c55: Add support for CCM"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+        "category": "android_platform_camera_adjacent",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "urls": [
+          "https://developer.android.com/tools/agents/android-cli#skills-add"
+        ],
+        "source_titles": [
+          "2. Android skills keep growing - Top 3 updates for Android developer productivity"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        ],
+        "source_titles": [
+          "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+        "sources": [
+          "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "ARM Mali-C55 ISP 드라이버, CCM(Color Correction Matrix) 지원 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/"
+        ],
+        "source_titles": [
+          "[PATCH 1/2] media: arm: mali-c55: Add support for CCM"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+        "category": "android_platform_camera_adjacent",
+        "relevance_bucket": "android_platform_camera_adjacent",
+        "urls": [
+          "https://developer.android.com/tools/agents/android-cli#skills-add"
+        ],
+        "source_titles": [
+          "2. Android skills keep growing - Top 3 updates for Android developer productivity"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능으로 C++ 개발 효율 향상",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        ],
+        "source_titles": [
+          "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 3,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [
+      {
+        "title": "[PATCH v3 0/2] media: atomisp: fix probe memory leaks - Dawei Feng",
+        "url": "https://lore.kernel.org/linux-media/20260616134319.3969928-1-dawei.feng@seu.edu.cn/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      }
+    ],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "name": "EditorSemanticValidationError",
+  "message": "Editor output failed public article contract validation.",
+  "details": {
+    "field": "sections.public_article",
+    "expectedKeys": [
+      "headline",
+      "lead",
+      "body_paragraphs",
+      "camera_hal_takeaway",
+      "reader_checkpoints",
+      "source_links"
+    ],
+    "actualCount": 3,
+    "sectionCount": 3,
+    "issues": [
+      {
+        "index": 1,
+        "headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+        "type": "story_contract_version_mismatch",
+        "marker_count": 1,
+        "has_issue_story_marker": false,
+        "has_generation_marker": false,
+        "has_section_story_marker": true,
+        "has_story_field": true
+      },
+      {
+        "index": 2,
+        "headline": "GCC 16, 개선된 오류 메시지 및 SARIF 출력 기능 포함 예정",
+        "type": "story_contract_version_mismatch",
+        "marker_count": 1,
+        "has_issue_story_marker": false,
+        "has_generation_marker": false,
+        "has_section_story_marker": true,
+        "has_story_field": true
+      },
+      {
+        "index": 3,
+        "headline": "Android 개발자 생산성 업데이트: AI 및 에이전트 지원 도구 확장",
+        "type": "story_contract_version_mismatch",
+        "marker_count": 1,
+        "has_issue_story_marker": false,
+        "has_generation_marker": false,
+        "has_section_story_marker": true,
+        "has_story_field": true
+      }
+    ]
+  },
+  "field": "sections.public_article",
+  "stage": "editor completion attempt 1/2",
+  "attempt": 1,
+  "status": "FAILED_REPAIR_REVIEWABLE",
+  "lastKnownValidAttempt": 1,
+  "fallbackEditorSectionCount": 2
+}
