@@ -7,6 +7,23 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com",
+      "title": "ARM Mali-C55 ISP, CCM 지원 패치 제안으로 이미지 색상 처리 강화",
+      "source_url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/",
+      "newsletter_date": "2026-06-16",
+      "newsletter_url": "newsletters/2026-06-16/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-06-16",
+      "first_exposed_at": "2026-06-16",
+      "last_exposed_at": "2026-06-16",
+      "exposure_count": 1,
+      "exposure_types": [
+        "homepage_headline"
+      ]
+    },
+    {
       "article_identity_key": "url:https://developer.android.com/tools/agents/android-cli",
       "title": "Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망",
       "source_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
@@ -61,16 +78,16 @@
       "article_identity_key": "content:2dca6397f6798483d79ea9e0",
       "title": "",
       "source_url": "",
-      "newsletter_date": "2026-06-11",
-      "newsletter_url": "newsletters/2026-06-11/index.html",
+      "newsletter_date": "2026-06-16",
+      "newsletter_url": "newsletters/2026-06-16/index.html",
       "exposure_type": "newsletter_article",
       "headline_score": null,
       "reuse_reason": "",
-      "exposed_at": "2026-06-11",
-      "cooldown_until": "2026-07-02",
+      "exposed_at": "2026-06-16",
+      "cooldown_until": "2026-07-07",
       "first_exposed_at": "2026-06-03",
-      "last_exposed_at": "2026-06-11",
-      "exposure_count": 3,
+      "last_exposed_at": "2026-06-16",
+      "exposure_count": 4,
       "exposure_types": [
         "newsletter_article"
       ]

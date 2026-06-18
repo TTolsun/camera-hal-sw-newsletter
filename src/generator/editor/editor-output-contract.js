@@ -30,6 +30,8 @@ const {
 } = require('../reporter/public-article-contract');
 const {
   buildAllowedClaimEvidence,
+  buildEvidenceIndex,
+  factCoveredByClaim,
   validateArticleClaims
 } = require('../quality/claim-source-binding');
 const {
@@ -532,6 +534,46 @@ function reconcileFactClaimEvidence(value, options = {}) {
 
 // 빈 evidence_ids만 다루던 기존 이름은 호환을 위해 reconcile의 별칭으로 유지한다.
 const bindMissingFactClaimEvidence = reconcileFactClaimEvidence;
+
+// evidence를 보지 않고 claim 텍스트만으로 fact↔claim cover를 따지는 빈 evidence index.
+// dropVerifiedFactsClassifiedAsNonFact는 claim_type 불일치만 정리하므로 evidence 매칭은 불필요하다.
+const EMPTY_EVIDENCE_INDEX = buildEvidenceIndex({}, {});
+
+// editor가 같은 문장을 verified_facts(canonical source-backed 사실 목록)에 넣으면서 그 문장의
+// claim은 비-fact(inference/recommendation)로 분류하면, claim 바인딩은 claim_type=fact claim으로만
+// verified_facts를 cover하므로 그 사실은 어떤 fact claim으로도 cover되지 못해
+// missing_matching_fact_claim이 발생하고 섹션 전체가 replace-or-demote된다(editor 출력의 자가당착).
+// editor 자신의 비-fact 분류를 신뢰해 해당 문장을 사실 목록에서만 제거한다(비-fact claim 자체는
+// 그대로 둔다). 추론을 사실로 발행하지 않으므로 이는 verified_facts 계약을 강제하는 것이지 claim
+// binding을 약화하는 것이 아니다.
+//   - cover 판정은 gate(claim binding)와 동일한 factCoveredByClaim(substring + token/char 유사도)을
+//     써서, exact 텍스트 일치만 보던 데서 paraphrase된 fact claim이 cover하는 사실을 잘못 버리는 일을
+//     막는다.
+//   - 비-fact로 분류된 문장이라도 fact claim이 (fuzzy로라도) cover하면(이중 분류) 사실로 인정해 둔다.
+//   - 제거 결과 verified_facts가 통째로 비면 결정을 미뤄 원본을 유지한다. 빈 verified_facts는 required
+//     article-section 계약이 별도로(정당하게) 처리하므로, 여기서 비우면 blocker만 바뀔 뿐이다.
+function dropVerifiedFactsClassifiedAsNonFact(section) {
+  const claims = ensureArray(section?.claims);
+  if (claims.length === 0) return section;
+  const claimType = claim => String(claim?.claim_type || claim?.claimType || '').trim().toLowerCase();
+  const factClaims = claims.filter(claim => claimType(claim) === 'fact');
+  const nonFactClaims = claims.filter(claim => {
+    const type = claimType(claim);
+    return type && type !== 'fact';
+  });
+  if (nonFactClaims.length === 0) return section;
+  const articleSections = section.article_sections;
+  if (!articleSections || typeof articleSections !== 'object' || Array.isArray(articleSections)) return section;
+  const verifiedFacts = ensureArray(articleSections.verified_facts);
+  const coveredBy = (factText, claim) => factCoveredByClaim(factText, claim, EMPTY_EVIDENCE_INDEX).covered;
+  const kept = verifiedFacts.filter(fact => {
+    if (!text(fact)) return true;
+    if (!nonFactClaims.some(claim => coveredBy(fact, claim))) return true;
+    return factClaims.some(claim => coveredBy(fact, claim));
+  });
+  if (kept.length === verifiedFacts.length || kept.length === 0) return section;
+  return { ...section, article_sections: { ...articleSections, verified_facts: kept } };
+}
 
 function validateArticleSectionContract(value) {
   const issues = [];
@@ -1337,6 +1379,7 @@ module.exports = {
   EditorSemanticValidationError,
   assertSectionsAndSourcesPreserved,
   bindMissingFactClaimEvidence,
+  dropVerifiedFactsClassifiedAsNonFact,
   reconcileFactClaimEvidence,
   repairEditorOutputContract,
   serializeEditorValidationError,

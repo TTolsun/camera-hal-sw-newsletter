@@ -641,6 +641,33 @@ test('release-date evidence cannot support stream buffer runtime fact claims', (
   ));
 });
 
+test('SARIF "Results" does not trigger a stream_buffer false positive (word boundary, not substring)', () => {
+  // 회귀: STREAM_BUFFER_TERMS의 'result'가 "SARIF (Static Analysis Results Interchange Format)"의
+  // "results"에 부분 문자열로 걸려, 카메라/HAL과 무관한 정적 분석 도구(GCC) 기사를 stream/buffer
+  // overclaim으로 오탐하던 false positive. 단어 경계 매칭으로 'result' 단독 단어만 잡아야 한다.
+  const result = validateArticleClaims({
+    section: section({
+      article_sections: {
+        ...section().article_sections,
+        verified_facts: ['GCC 16 adds SARIF (Static Analysis Results Interchange Format) output.']
+      },
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'GCC 16 adds SARIF (Static Analysis Results Interchange Format) output.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-camerax-primary-01'],
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+        impact_level: 'native_tooling_workflow',
+        overclaim_risk: 'low'
+      }]
+    }),
+    candidate: candidate(),
+    strict: true
+  });
+  const reasons = result.claim_results[0].issues.map(item => item.reason_code);
+  assert.equal(reasons.includes('stream_buffer_metadata_without_stream_buffer_metadata_evidence'), false);
+});
+
 test('safe risk_note and recommendation wording may mention non-allowed evidence without hard failure', () => {
   for (const claimType of ['risk_note', 'recommendation']) {
     const result = validateArticleClaims({

@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-16",
+  "generated_at": "2026-06-18T01:10:01.517Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 5,
+    "hit_count": 1,
+    "miss_count": 4,
+    "by_url_hit_count": 1,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 4
+    },
+    {
+      "reason": "url-hit",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "[PATCH 1/2] media: arm: mali-c55: Add support for CCM",
+      "url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-16T13:01:46Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com",
+        "url_hash": "03329b52d178cd005fa1c264d494167d145a5ba04cf229cb52872a7a33aa89da",
+        "published_date": "2026-06-16T13:01:46Z",
+        "content_hash": "b5bc8c8e4713403b71d0df1b4a5a5f15c82d82305216a907eee743d2d6a57b56"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/tools/agents/android-cli",
+        "url_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "url_hash": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe.json"
+    },
+    {
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 15 Jun 2026 22:22:24 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "url_hash": "9f5a63b90e02162f19dabc76ee29ef71d86aa3a0fb00e872378d73f32ffbee7e",
+        "published_date": "Mon, 15 Jun 2026 22:22:24 +0000",
+        "content_hash": "45efa4a6b0593184fc9702888cdeb5e8b0a7381fa6d28ae9c5c9fd5a40f904e8"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v3 0/2] media: atomisp: fix probe memory leaks - Dawei Feng",
+      "url": "https://lore.kernel.org/linux-media/20260616134319.3969928-1-dawei.feng@seu.edu.cn/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-16",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260616134319.3969928-1-dawei.feng@seu.edu.cn",
+        "url_hash": "eca3a1f1c3d3dbdf185b07c7c2680c2fb80b1538ed95443ecd0f5aabd4d7598b",
+        "published_date": "2026-06-16",
+        "content_hash": "230df6e3f24e1b22d590bb3149804da577ecf212fdf1332888084426e4ed5b07"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

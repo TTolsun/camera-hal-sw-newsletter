@@ -191,6 +191,9 @@ test('linked evidence adjustment does not change threshold eligibility', () => {
       behavior_change: 'Behavior changed.',
       published_date: '2026-05-01',
       reliability: '',
+      // 비-primaryCameraStack 버킷이라야 cameraHalDirectnessScore가 directness를 미세하게 반영한다
+      // (강한 카메라 스택 버킷은 directness를 5로 보장하므로 base가 threshold 경계로 합성되지 않는다).
+      relevance_bucket: 'soc_platform_signal',
       aosp_camera_directness: directness,
       camera_hal_relevance_score: 0,
       evidence_score: 2

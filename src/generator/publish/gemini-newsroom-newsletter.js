@@ -158,6 +158,7 @@ const {
 } = require('../quality/newsletter-quality');
 const {
   assertSectionsAndSourcesPreserved,
+  dropVerifiedFactsClassifiedAsNonFact,
   EditorSemanticValidationError,
   reconcileFactClaimEvidence,
   repairEditorOutputContract,
@@ -1161,6 +1162,10 @@ function sourceCandidateMetadataForSection(section, reporter) {
 }
 
 function normalizeEditorSection(section, index, reporter) {
+  // editor가 사실(verified_facts)에 넣은 문장을 같은 문장의 claim에서는 비-fact(inference 등)로
+  // 분류한 자가당착을 검증 전에 결정론적으로 정리한다(추론은 사실 목록에서 제거). 이렇게 해야
+  // missing_matching_fact_claim으로 멀쩡한 기사가 통째로 demote되지 않는다.
+  section = dropVerifiedFactsClassifiedAsNonFact(section);
   const actionItems = ensureArray(section.action_items);
   const actionHints = ensureArray(section.action_hints);
   const normalized = {
@@ -1976,6 +1981,13 @@ async function validateOrRepairEditor(value, {
   seedEvidencePack = null,
   publishMode = currentPublishMode()
 }) {
+  // editor LLM이 일부 fact claim에 capsule이 제공한 evidence_id/source_urls를 빠뜨려도(부분 누락),
+  // 그 정보는 candidate의 allowed_claim_evidence에 있으므로 claim binding 검증 전에 결정론적으로
+  // 재바인딩한다. 그러지 않으면 reconcile가 검증 이후(#502 지점)에 돌아, 복구 가능한 evidence_id
+  // 누락이 editor 단계에서 먼저 hard-fail해 발행 가능한 draft가 통째로 막힌다. reconcile는 strict
+  // 오라클이 evidence가 claim을 실제 뒷받침한다고 확인할 때만 채우므로(없던 근거를 만들지 않음)
+  // 게이트 약화가 아니다.
+  value = reconcileFactClaimEvidence(value, { reporter, seedEvidencePack });
   const result = await repairEditorOutputContract({
     value,
     date,
