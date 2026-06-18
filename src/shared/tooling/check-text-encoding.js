@@ -2,7 +2,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
-const { execFileSync } = require('node:child_process');
+const { trackedFiles } = require('./tracked-files');
 
 const TEXT_FILE_EXTENSIONS = new Set([
   '.css',
@@ -90,17 +90,6 @@ function detectTextEncodingIssues(buffer, filePath = '') {
   }
 
   return issues;
-}
-
-function trackedFiles(root = process.cwd()) {
-  const output = execFileSync('git', ['ls-files', '-z'], {
-    cwd: root,
-    encoding: 'buffer'
-  });
-  return output.toString('utf8')
-    .split('\0')
-    .filter(Boolean)
-    .filter(filePath => fs.existsSync(path.join(root, filePath)));
 }
 
 function checkTrackedTextFiles(root = process.cwd()) {

@@ -3,6 +3,7 @@
 const { execFileSync } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
+const { trackedFiles } = require('./tracked-files');
 
 const ROOT_TEST_ALLOWLIST_RELATIVE_PATH = 'src/shared/test/root-test-allowlist.json';
 const ONE_OFF_SCRIPT_EXTENSIONS = new Set(['.cjs', '.js', '.mjs', '.ps1', '.sh']);
@@ -37,16 +38,6 @@ function repoRoot(cwd = process.cwd()) {
     cwd,
     encoding: 'utf8'
   }).trim();
-}
-
-function trackedFiles(root) {
-  const output = execFileSync('git', ['-C', root, 'ls-files', '-z'], {
-    encoding: 'buffer'
-  });
-  return output.toString('utf8')
-    .split('\0')
-    .filter(Boolean)
-    .filter(filePath => fs.existsSync(path.join(root, filePath)));
 }
 
 function issue(filePath, type, detail) {
