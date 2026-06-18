@@ -102,7 +102,8 @@ function resolveLocalImage(relPath, src) {
   // root/assets/로 잘못 풀리고, 실제로 articles/assets/에 존재하는 fallback 이미지를 missing으로
   // 오판해 발행을 막았다(콘텐츠는 publishable인데 fallback 경로 버그로 차단). publicAssetPath로
   // articles/ 기준 해석해 위 newsletter.md/html 경로 해석(publicAssetPath)과 동일 base를 쓴다.
-  const fromFile = publicAssetPath(root, relPath) || path.resolve(root, relPath);
+  const fromFile = publicAssetPath(root, relPath);
+  if (!fromFile) return null;
   const absPath = path.resolve(path.dirname(fromFile), src);
   const rootPath = path.resolve(root);
   if (absPath === rootPath || absPath.startsWith(`${rootPath}${path.sep}`)) return absPath;

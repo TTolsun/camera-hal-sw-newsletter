@@ -14,15 +14,15 @@ const { resolveLocalImage } = require('../../../validate/validate-external-image
 test('resolveLocalImage resolves a served-URL newsletter.md relPath under articles/, not repo root', () => {
   const resolved = resolveLocalImage('newsletters/2026-06-16/newsletter.md', '../../assets/images/fallback/newsletter-default.svg');
   assert.ok(
-    resolved && resolved.includes(path.join('articles', 'assets', 'images', 'fallback')),
-    `expected an articles/assets path, got ${resolved}`
+    resolved && resolved.endsWith(path.join('articles', 'assets', 'images', 'fallback', 'newsletter-default.svg')),
+    `expected the articles/assets fallback path, got ${resolved}`
   );
 });
 
 test('resolveLocalImage resolves the same fallback for an index.html served URL', () => {
   const resolved = resolveLocalImage('newsletters/2026-06-16/index.html', '../../assets/images/fallback/newsletter-default.svg');
   assert.ok(
-    resolved && resolved.includes(path.join('articles', 'assets', 'images', 'fallback')),
-    `expected an articles/assets path, got ${resolved}`
+    resolved && resolved.endsWith(path.join('articles', 'assets', 'images', 'fallback', 'newsletter-default.svg')),
+    `expected the articles/assets fallback path, got ${resolved}`
   );
 });

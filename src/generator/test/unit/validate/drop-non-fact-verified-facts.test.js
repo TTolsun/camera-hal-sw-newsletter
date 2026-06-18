@@ -63,3 +63,31 @@ test('Mali regression: Korean inference sentence duplicated into verified_facts 
   const result = dropVerifiedFactsClassifiedAsNonFact(section);
   assert.deepEqual(result.article_sections.verified_facts, [factSentence]);
 });
+
+// 회귀: 전부 제거되면 missing_matching_fact_claim을 empty_article_sections(required-key 누락) blocker로
+// 바꿀 뿐이므로, verified_facts가 통째로 비게 되는 경우에는 원본을 유지한다(floor).
+test('no-op when dropping would empty verified_facts entirely (floor)', () => {
+  const section = {
+    claims: [{ claim_type: 'inference', text: 'Only an inference sentence here.', evidence_ids: [] }],
+    article_sections: { verified_facts: ['Only an inference sentence here.'] }
+  };
+  const result = dropVerifiedFactsClassifiedAsNonFact(section);
+  assert.deepEqual(result.article_sections.verified_facts, ['Only an inference sentence here.']);
+});
+
+// 회귀: exact 텍스트 일치만 보면 paraphrase된 fact claim이 cover하는 사실을 잘못 strip한다.
+// gate(claim binding)와 동일한 fuzzy 매칭으로 fact claim이 cover하면 유지해야 한다.
+test('keeps a verified_fact a fact claim covers only fuzzily (paraphrase), not just exact text', () => {
+  const fuzzyFact = 'Mali-C55 ISP gains CCM support in this patch.';
+  const plainFact = 'The patch was proposed on the Linux media mailing list.';
+  const section = {
+    claims: [
+      { claim_type: 'fact', text: 'Mali-C55 ISP gains CCM support in the patch.', evidence_ids: ['e1'] },
+      { claim_type: 'fact', text: plainFact, evidence_ids: ['e1'] },
+      { claim_type: 'inference', text: fuzzyFact, evidence_ids: ['e1'] }
+    ],
+    article_sections: { verified_facts: [fuzzyFact, plainFact] }
+  };
+  const result = dropVerifiedFactsClassifiedAsNonFact(section);
+  assert.deepEqual(result.article_sections.verified_facts, [fuzzyFact, plainFact]);
+});
