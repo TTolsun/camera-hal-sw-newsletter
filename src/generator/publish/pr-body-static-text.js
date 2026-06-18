@@ -1,7 +1,7 @@
 // PR body의 정적/고정 안내 텍스트 section을 담당한다.
-// editor brief section 추출, 발행 정책 안내, 우선순위 override 정책,
-// heavy evidence 보존 안내, 편집자 조치 가이드처럼 입력 artifact를 거의
-//읽지 않고 고정 문구를 만들어 내는 render 함수만 모은 단일 책임 모듈이다.
+// editor brief section 추출, 발행 정책 안내, heavy evidence 보존 안내처럼
+// 입력 artifact를 거의 읽지 않고 고정 문구를 만들어 내는 render 함수만 모은
+// 단일 책임 모듈이다.
 
 const {
   renderEditorPublicationPolicyMarkdown
