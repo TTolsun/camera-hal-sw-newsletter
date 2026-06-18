@@ -953,12 +953,25 @@ function evidenceTextForItems(items = []) {
   return ensureArray(items).flatMap(item => ensureArray(item?.texts)).join(' ');
 }
 
+function containsWholeWord(haystack, needle) {
+  if (!needle) return false;
+  const escaped = needle.replace(/[.*+?^${}()|[\]\\#/-]/g, '\\$&');
+  // 영숫자로 이어 붙은 부분 문자열은 제외하고(예: SARIF "Results"의 "results"가 'result'에 걸리는
+  // false positive), 한글/공백/구두점 경계는 단어로 인정한다. \b는 한글 경계에서 동작하지 않으므로
+  // 명시적 영숫자 경계를 쓴다.
+  return new RegExp(`(?:^|[^a-z0-9])${escaped}(?:[^a-z0-9]|$)`).test(haystack);
+}
+
 function missingTermsFromEvidence(terms, claimText, evidenceText) {
   const claim = normalizeText(claimText);
   const evidence = normalizeText(evidenceText);
   return terms.filter(term => {
     const normalized = normalizeText(term);
-    return claim.includes(normalized) && !evidence.includes(normalized);
+    // claim 쪽은 단어 경계로 엄격히 검사해 SARIF "Results"가 'result'에 걸리는 false positive를
+    // 막고, evidence 쪽은 부분 문자열로 관대하게 인정해 "CaptureResult"/"buffers" 같은
+    // 복수형·camelCase 근거가 'missing'으로 잘못 플래그되어 정당한 기사를 막는 false negative를
+    // 막는다. evidence 쪽 과대 인식은 차단 완화(fail-open) 방향이라 발행 차단 회귀가 없다.
+    return containsWholeWord(claim, normalized) && !evidence.includes(normalized);
   });
 }
 
@@ -1461,6 +1474,7 @@ module.exports = {
   normalizeSeedEvidencePack,
   normalizeSeedPackEvidenceItem,
   normalizeSeedPackStatus: normalizeEvidenceStatus,
+  normalizeText,
   stableLinkedEvidenceItemId,
   stableSourceExtractionItemId,
   summarizeClaimValidation,

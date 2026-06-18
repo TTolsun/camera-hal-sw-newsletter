@@ -30,6 +30,7 @@ const {
 } = require('../reporter/public-article-contract');
 const {
   buildAllowedClaimEvidence,
+  normalizeText: normalizeClaimText,
   validateArticleClaims
 } = require('../quality/claim-source-binding');
 const {
@@ -532,6 +533,42 @@ function reconcileFactClaimEvidence(value, options = {}) {
 
 // 빈 evidence_ids만 다루던 기존 이름은 호환을 위해 reconcile의 별칭으로 유지한다.
 const bindMissingFactClaimEvidence = reconcileFactClaimEvidence;
+
+// editor가 같은 문장을 verified_facts(canonical source-backed 사실 목록)에 넣으면서 그 문장의
+// claim은 비-fact(inference/recommendation)로 분류하면, claim 바인딩은 claim_type=fact claim으로만
+// verified_facts를 cover하므로 그 사실은 어떤 fact claim으로도 cover되지 못해
+// missing_matching_fact_claim이 발생하고 섹션 전체가 replace-or-demote된다(editor 출력의 자가당착).
+// editor 자신의 비-fact 분류를 신뢰해 해당 문장을 사실 목록에서만 제거한다(비-fact claim 자체는
+// 그대로 둔다). 추론을 사실로 발행하지 않으므로 이는 verified_facts 계약을 강제하는 것이지 claim
+// binding을 약화하는 것이 아니다. 같은 텍스트에 fact claim도 있으면(이중 분류) 사실로 인정해 둔다.
+function dropVerifiedFactsClassifiedAsNonFact(section) {
+  const claims = ensureArray(section?.claims);
+  if (claims.length === 0) return section;
+  const claimType = claim => String(claim?.claim_type || claim?.claimType || '').trim().toLowerCase();
+  const factClaimTexts = new Set(
+    claims.filter(claim => claimType(claim) === 'fact')
+      .map(claim => normalizeClaimText(claim?.text || claim?.claim))
+      .filter(Boolean)
+  );
+  const nonFactClaimTexts = new Set(
+    claims.filter(claim => {
+      const type = claimType(claim);
+      return type && type !== 'fact';
+    })
+      .map(claim => normalizeClaimText(claim?.text || claim?.claim))
+      .filter(Boolean)
+  );
+  if (nonFactClaimTexts.size === 0) return section;
+  const articleSections = section.article_sections;
+  if (!articleSections || typeof articleSections !== 'object' || Array.isArray(articleSections)) return section;
+  const verifiedFacts = ensureArray(articleSections.verified_facts);
+  const kept = verifiedFacts.filter(fact => {
+    const normalized = normalizeClaimText(fact);
+    return !(normalized && nonFactClaimTexts.has(normalized) && !factClaimTexts.has(normalized));
+  });
+  if (kept.length === verifiedFacts.length) return section;
+  return { ...section, article_sections: { ...articleSections, verified_facts: kept } };
+}
 
 function validateArticleSectionContract(value) {
   const issues = [];
@@ -1337,6 +1374,7 @@ module.exports = {
   EditorSemanticValidationError,
   assertSectionsAndSourcesPreserved,
   bindMissingFactClaimEvidence,
+  dropVerifiedFactsClassifiedAsNonFact,
   reconcileFactClaimEvidence,
   repairEditorOutputContract,
   serializeEditorValidationError,

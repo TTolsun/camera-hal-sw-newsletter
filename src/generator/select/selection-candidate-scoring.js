@@ -268,6 +268,16 @@ function cameraHalDirectnessScore(candidate) {
   if (/Android Camera|AOSP Camera|CameraX|Camera2|Camera ITS/i.test(body)) score = Math.max(score, 4);
   if (/metadata|capture request|capture result|stream|buffer|CTS|VTS|CDD|libcamera|V4L2/i.test(body)) score = Math.max(score, 3);
   if (/\bcamera\b/i.test(body)) score = Math.max(score, 1);
+  // 카메라 본질은 키워드보다 분류된 relevance_bucket이 정확하다. 강한 카메라 스택 버킷
+  // (direct_aosp_camera / camera_driver_image_pipeline / android_platform_camera_adjacent)은
+  // 키워드 누락으로 과소평가되지 않게 directness를 보장하고, 비-카메라스택(C++ 도구 등)은 본문의
+  // 부수적 'HAL'/'camera' 언급만으로 최고점을 받지 않게 cap한다. 이래야 진짜 카메라 드라이버/ISP
+  // 기사가 비-카메라 도구 기사에 밀려 main에서 탈락하지 않는다.
+  if (isPrimaryCameraStackBucket(scope.relevance_bucket)) {
+    score = Math.max(score, 5);
+  } else {
+    score = Math.min(score, 3);
+  }
   return clamp(rounded(score), 0, 5);
 }
 

@@ -97,7 +97,12 @@ function isLocalImageSrc(value) {
 }
 
 function resolveLocalImage(relPath, src) {
-  const fromFile = path.resolve(root, relPath);
+  // relPath는 서빙 URL(newsletters/<date>/...)이며 디스크상으로는 articles/ 아래에 있다.
+  // path.resolve(root, relPath)는 articles/ prefix를 빠뜨려 ../../assets/ fallback 경로가
+  // root/assets/로 잘못 풀리고, 실제로 articles/assets/에 존재하는 fallback 이미지를 missing으로
+  // 오판해 발행을 막았다(콘텐츠는 publishable인데 fallback 경로 버그로 차단). publicAssetPath로
+  // articles/ 기준 해석해 위 newsletter.md/html 경로 해석(publicAssetPath)과 동일 base를 쓴다.
+  const fromFile = publicAssetPath(root, relPath) || path.resolve(root, relPath);
   const absPath = path.resolve(path.dirname(fromFile), src);
   const rootPath = path.resolve(root);
   if (absPath === rootPath || absPath.startsWith(`${rootPath}${path.sep}`)) return absPath;
@@ -267,7 +272,11 @@ async function main() {
   console.log(`Validated ${images.length} article images.`);
 }
 
-main().catch(error => {
-  console.error(error);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch(error => {
+    console.error(error);
+    process.exit(1);
+  });
+}
+
+module.exports = { resolveLocalImage };

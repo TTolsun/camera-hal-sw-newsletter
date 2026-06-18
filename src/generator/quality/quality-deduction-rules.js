@@ -425,7 +425,11 @@ function requiredFieldDeductions(section, sectionContract, location) {
       out.push({ category: 'required-fields', points: 3, reason: `Missing required article field: ${field}.`, location });
     }
   }
-  for (const field of ['specificity_checks', 'source_verification_notes', 'camera_hal_checks', 'sources']) {
+  // camera_hal_checks는 editor MAIN 프롬프트가 지시하지 않는 레거시 별칭(editor-section-builders가
+  // action_items로 병합)이라 모든 main draft가 빈 배열로 들어와 100% 하드 페일하던 게이트-프롬프트
+  // 드리프트였다. actionability는 action_items로 별도 강제되므로 required-list에서 제외한다(게이트
+  // 약화가 아니라 정렬). action_items가 actionability의 canonical 소스다.
+  for (const field of ['specificity_checks', 'source_verification_notes', 'sources']) {
     if (ensureArray(section[field]).length === 0) {
       out.push({ category: 'required-fields', points: 4, reason: `Missing required article list: ${field}.`, location });
     }
