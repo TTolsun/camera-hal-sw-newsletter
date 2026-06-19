@@ -2,7 +2,7 @@ name: Newsletters 00 - Auto Daily PR
 
 on:
   schedule:
-    - cron: "0 0 * * *" # KST daily 09:00
+    - cron: "0 0 * * 1" # KST weekly Mon 09:00
   workflow_dispatch:
     inputs:
       newsletter_date:
