@@ -119,7 +119,7 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.linkedEvidenceMaxBytes, 200000);
   assert.equal(config.newsroomCandidateInputMode, 'default');
   assert.equal(config.newsroomCandidateInputPath, '');
-  assert.equal(config.newsroomEnableGeminiSourceDiscovery, false);
+  assert.equal(config.newsroomEnableGeminiSourceDiscovery, true);
   assert.equal(config.newsroomEnableLinkedEvidenceDiscovery, true);
   assert.equal(config.geminiApiKeyConfigured, false);
 });
@@ -685,7 +685,7 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.linkedEvidenceMaxBytes, 200000);
   assert.equal(sanitized.newsroomCandidateInputMode, 'default');
   assert.equal(sanitized.newsroomCandidateInputPath, '');
-  assert.equal(sanitized.newsroomEnableGeminiSourceDiscovery, false);
+  assert.equal(sanitized.newsroomEnableGeminiSourceDiscovery, true);
   assert.equal(sanitized.newsroomEnableLinkedEvidenceDiscovery, true);
   assert.equal(sanitized.proPolicy, 'disabled');
   assert.equal(sanitized.proModelConfigured, false);

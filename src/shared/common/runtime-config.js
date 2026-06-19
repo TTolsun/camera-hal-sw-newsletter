@@ -99,7 +99,7 @@ const DEFAULT_RUNTIME_CONFIG = {
   linkedEvidenceMaxBytes: 200000,
   newsroomCandidateInputMode: 'default',
   newsroomCandidateInputPath: '',
-  newsroomEnableGeminiSourceDiscovery: false,
+  newsroomEnableGeminiSourceDiscovery: true,
   // #429 linked evidence expansion은 Gemini source discovery가 켜진 run 안에서만 동작하고
   // non-failing이므로 기본 켜되, 문제 시 source discovery 전체를 끄지 않고 이 단계만 끌 수 있게 한다.
   newsroomEnableLinkedEvidenceDiscovery: true,
