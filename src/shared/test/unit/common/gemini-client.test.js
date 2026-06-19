@@ -288,11 +288,11 @@ test('stage-specific thinking budgets are applied to Gemini request config', asy
   assert.deepEqual(
     FakeGoogleGenAI.requests.map(request => request.config.thinkingConfig),
     [
-      { thinkingBudget: 0 },
+      { thinkingBudget: 512 },
       { thinkingBudget: 1024 },
       { thinkingBudget: 1024 },
       { thinkingBudget: 2048 },
-      { thinkingBudget: 512 },
+      { thinkingBudget: 1024 },
       { thinkingBudget: 0 }
     ]
   );
