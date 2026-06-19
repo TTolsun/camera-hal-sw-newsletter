@@ -8,7 +8,7 @@ const {
 const POLICY_REL_PATH = path.join('src', 'shared', 'config', 'newsletter-policy.json');
 const POLICY_BLOCK_BEGIN = '<!-- NEWSLETTER_POLICY:BEGIN -->';
 const POLICY_BLOCK_END = '<!-- NEWSLETTER_POLICY:END -->';
-const REQUIRED_HARD_FAIL_CONDITIONS = [
+const REQUIRED_HARD_FAIL_CONDITIONS = Object.freeze([
   'source-less main article',
   'source candidate binding failure',
   'missing dated evidence',
@@ -17,8 +17,10 @@ const REQUIRED_HARD_FAIL_CONDITIONS = [
   'duplicate source URL',
   'stale claim hard failure',
   'undated watch/reference page promoted to main article',
-  'CameraX source extraction failure'
-];
+  'CameraX source extraction failure',
+  'blocked source quality',
+  'source quality drift'
+]);
 const DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS = Object.freeze([
   BUCKETS.DIRECT_AOSP_CAMERA,
   BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE
@@ -698,6 +700,7 @@ module.exports = {
   POLICY_BLOCK_BEGIN,
   POLICY_BLOCK_END,
   POLICY_REL_PATH,
+  REQUIRED_HARD_FAIL_CONDITIONS,
   get articlePolicy() {
     return getArticlePolicy();
   },

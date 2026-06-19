@@ -4,7 +4,10 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
-  qualityGatePolicy
+  qualityGatePolicy,
+  validateNewsletterPolicyConfig,
+  readPolicyConfig,
+  REQUIRED_HARD_FAIL_CONDITIONS
 } = require('../../common/newsletter-policy');
 const {
   hardFailRegressionCases
@@ -19,6 +22,37 @@ const {
 const {
   determineQualityStatus
 } = require('../../../generator/quality/newsletter-quality');
+
+test('REQUIRED_HARD_FAIL_CONDITIONS floor matches the enforced qualityGatePolicy.hardFailConditions set', () => {
+  const floor = new Set(REQUIRED_HARD_FAIL_CONDITIONS);
+  const configured = new Set(qualityGatePolicy.hardFailConditions);
+  for (const condition of configured) {
+    assert.ok(
+      floor.has(condition),
+      `Enforced hard fail condition is missing from REQUIRED_HARD_FAIL_CONDITIONS floor: ${condition}`
+    );
+  }
+  for (const condition of floor) {
+    assert.ok(
+      configured.has(condition),
+      `REQUIRED_HARD_FAIL_CONDITIONS floor condition is not enforced in qualityGatePolicy.hardFailConditions: ${condition}`
+    );
+  }
+});
+
+for (const condition of ['blocked source quality', 'source quality drift']) {
+  test(`validateNewsletterPolicyConfig rejects config dropping required hard fail condition: ${condition}`, () => {
+    const config = readPolicyConfig();
+    config.qualityGatePolicy.hardFailConditions = config.qualityGatePolicy.hardFailConditions
+      .filter(item => item !== condition);
+    const result = validateNewsletterPolicyConfig(config);
+    assert.equal(result.ok, false);
+    assert.ok(
+      result.errors.some(error => error.includes(condition)),
+      `Expected a validation error naming the dropped condition: ${condition}`
+    );
+  });
+}
 
 test('qualityGatePolicy.hardFailConditions have config-driven regression test coverage', () => {
   const configuredConditions = new Set(qualityGatePolicy.hardFailConditions);
