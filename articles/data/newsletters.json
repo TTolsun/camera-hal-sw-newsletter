@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-06-19",
+    "title": "Camera HAL / SW Newsletter - 2026-06-19",
+    "summary": "이번 호에서는 지난 3월 25일 출시된 CameraX 1.6.0의 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 패치 분석을 중심으로, 최근 제안된 Linux v7.2 미디어 서브시스템의 V4L2 core 및 vb2 버퍼 관리 개선 사항, 그리고 GCC 16의 C++ 디버깅 및 SARIF 정적 분석 표준 도입 소식을 다룹니다. 상위 프레임워크부터 하위 드라이버 및 빌드 툴체인까지 네이티브 카메라 시스템 엔지니어가 주목해야 할 실무 관점의 변화를 짚어봅니다.",
+    "html": "newsletters/2026-06-19/index.html",
+    "md": "newsletters/2026-06-19/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-06-16",
     "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-06-16",
     "summary": "이번 주 뉴스레터에서는 Linux 커널의 ARM Mali-C55 ISP 드라이버에 CCM(Color Correction Matrix) 지원이 추가되는 패치 소식을 다룹니다. 또한 Android 개발자 생산성 향상을 위한 Android Skills 저장소 확장 소식과 함께 CameraX 마이그레이션 스킬 추가 내용을 살펴봅니다. 마지막으로 GCC 16의 개선된 오류 메시지 및 SARIF 출력 기능이 C++ 개발 워크플로우에 미칠 영향에 대해서도 알아봅니다. 이 변경사항들은 카메라 이미지 처리 파이프라인, 앱 호환성 및 네이티브 개발 환경에 중요한 영향을 줄 수 있습니다.",

@@ -4,17 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>2026 W25 Camera SW Newsletter</title>
-  <meta name="description" content="이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 3건의 소식을 다룹니다." />
+  <meta name="description" content="이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 5건의 소식을 다룹니다." />
   <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W25/index.html" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Camera SW Newsletter" />
   <meta property="og:title" content="2026 W25 Camera SW Newsletter" />
-  <meta property="og:description" content="이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 3건의 소식을 다룹니다." />
+  <meta property="og:description" content="이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 5건의 소식을 다룹니다." />
   <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W25/index.html" />
   <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="2026 W25 Camera SW Newsletter" />
-  <meta name="twitter:description" content="이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 3건의 소식을 다룹니다." />
+  <meta name="twitter:description" content="이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 5건의 소식을 다룹니다." />
   <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <link rel="stylesheet" href="../../css/styles.css" />
 </head>
@@ -42,7 +42,7 @@
             <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
           </div>
           <h1 class="issue-title"><span>2026 W25 Camera SW</span><span>Newsletter</span></h1>
-          <p class="subtitle">이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 3건의 소식을 다룹니다.</p>
+          <p class="subtitle">이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 5건의 소식을 다룹니다.</p>
         </div>
         <figure class="issue-hero-mascot" aria-label="HALley mascot">
           <img
@@ -62,7 +62,7 @@
             <span class="section-icon section-icon-list" aria-hidden="true"></span>
             <h2 id="issue-briefing-title">이번 주 기사</h2>
           </div>
-          <ul><li>ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개</li><li>Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가</li><li>GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선</li></ul>
+          <ul><li>ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개</li><li>Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가</li><li>GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선</li><li>CameraX 1.6.0 릴리스 분석: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 패치</li><li>Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 vb2 버퍼 관리 개선</li></ul>
         </div>
       </section>
 
@@ -84,7 +84,7 @@
             </div>
           </div>
           <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이 패치는 Mali C55 ISP의 저수준 이미지 처리 기능을 강화하는 것으로, Camera HAL 구현 시 드라이버와의 연동을 통해 색상 보정 및 감마 처리 로직을 최적화할 기회를 제공합니다. HAL은 이러한 ISP 기능을 활용하여 최종 이미지 품질을 개선하고, 특정 색상 프로파일 또는 HDR 시나리오에서 더 나은 결과를 얻을 수 있는지 검토해야 합니다.</p></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/">[PATCH 1/2] media: arm: mali-c55: Add support for CCM</a></li></ul></div>
+          <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/">[PATCH 1/2] media: arm: mali-c55: Add support for CCM</a> — <a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t">전체 패치 시리즈</a></li></ul></div>
         </article>
       </section>
 
@@ -115,8 +115,8 @@
         <article class="card issue-section article-card story-article has-image main">
           <div class="article-feature-row">
             <figure class="article-media">
-            <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선 image" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">이미지: <a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">New features in GCC 16: Improved error messages and SARIF output -- David Malcolm</a></figcaption>
+            <img class="article-image" src="https://isocpp.org/files/img/redhatgraphic.png" alt="redhatgraphic.png" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">이미지: <a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">ISO C++ Blog</a></figcaption>
             </figure>
             <div class="article-copy">
               <h2 id="article-gcc-16-sarif-title" class="article-title">GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선</h2>
@@ -132,18 +132,64 @@
         </article>
       </section>
 
+      <section class="section issue-story" id="article-linux-v7-2-v4l2-core-vb2" aria-labelledby="article-linux-v7-2-v4l2-core-vb2-title">
+        <span class="issue-story-number" aria-label="Article 4">4</span>
+        <article class="card issue-section article-card story-article has-image camera_driver_image_pipeline">
+          <div class="article-feature-row">
+            <figure class="article-media">
+            <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 vb2 버퍼 관리 개선 image" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">이미지: <a href="https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/">[GIT PULL for v7.2] media updates</a></figcaption>
+            </figure>
+            <div class="article-copy">
+              <h2 id="article-linux-v7-2-v4l2-core-vb2-title" class="article-title">Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 vb2 버퍼 관리 개선</h2>
+              <p class="article-source-subtitle">Linux 커널 미디어 서브시스템 메일링 리스트 분석</p>
+              <p class="article-lead">최근 Linux 커널 v7.2를 겨냥한 미디어 서브시스템 업데이트 GIT PULL 요청이 공개되었습니다. 이번 제안에는 V4L2 core의 subdev 센서 소유권 관리 수정, videobuf2(vb2)의 반환 타입 개선, 그리고 비디오 인코딩 및 다중 스트림 경로 제어의 안정성을 높이기 위한 다양한 드라이버 계층 변경 사항이 포함되어 있습니다.</p>
+              <p>이번에 제안된 Linux v7.2 미디어 서브시스템 업데이트는 카메라 드라이버와 하드웨어 인터페이스의 안정성을 높이는 데 초점을 맞추고 있습니다. 특히 v4l2 core 내에서 subdev 센서의 소유권(ownership) 관리 방식을 수정하여, 여러 프로세스나 드라이버 컴포넌트가 센서 제어권을 두고 경쟁할 때 발생할 수 있는 오동작을 방지하도록 개선했습니다.</p>
+              <p>또한 다중 스트림 환경을 지원하는 STREAMS 클라이언트 기능에서 경로 접근(routing access)을 허용하는 패치가 포함되었습니다. 이는 고성능 ISP 및 멀티 카메라 시스템에서 개별 데이터 스트림의 경로를 더욱 유연하고 안전하게 제어할 수 있도록 돕습니다. 비디오 인코딩 파이프라인과 관련해서는 HEVC 활성 참조 카운트 및 배경 감지 제어에 대한 유효성 검사 로직이 추가되어 인코딩 안정성을 보장합니다.</p>
+              <p>드라이버 버퍼 관리의 핵심인 videobuf2(vb2) 영역에서도 중요한 변화가 있습니다. vb2_read() 및 vb2_write() 함수의 반환 유형이 기존 형식에서 ssize_t로 변경되어, 대용량 버퍼 전송 시의 크기 표현 정밀도를 높이고 음수 에러 코드 반환을 더욱 명확하게 처리할 수 있게 되었습니다. 이와 함께 새로운 YUV24 포맷 형식이 추가되어 지원 가능한 픽셀 포맷 범위가 확장되었습니다.</p>
+            </div>
+          </div>
+          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이 업데이트는 Linux 커널 드라이버 수준의 변경 사항으로, Android Camera HAL API 계약에 직접적인 영향을 주지는 않습니다. 그러나 하위 드라이버의 vb2 버퍼 관리 방식이나 센서 소유권 제어의 변화는 HAL의 버퍼 큐잉 및 스트림 시작/중지 타이밍 안정성에 긍정적인 영향을 미칠 수 있으므로, 드라이버 엔지니어와의 긴밀한 협력이 필요합니다.</p></div>
+          <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/">[GIT PULL for v7.2] media updates</a></li></ul></div>
+        </article>
+      </section>
+
+      <h2 class="catch-up-divider">지난 소식 (Catch-up)</h2>
+      <section class="section issue-story" id="article-camerax-1-6-0-api" aria-labelledby="article-camerax-1-6-0-api-title">
+        <span class="issue-story-number" aria-label="Article 5">5</span>
+        <article class="card issue-section article-card story-article has-image direct_aosp_camera">
+          <div class="article-feature-row">
+            <figure class="article-media">
+            <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=es-419" alt="CameraX 1.6.0 릴리스 분석: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 패치" loading="lazy" decoding="async">
+            <figcaption class="article-image-caption">이미지: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.0">CameraX Release Notes</a></figcaption>
+            </figure>
+            <div class="article-copy">
+              <h2 id="article-camerax-1-6-0-api-title" class="article-title">CameraX 1.6.0 릴리스 분석: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 패치</h2>
+              <p class="article-source-subtitle">Jetpack CameraX 공식 릴리스 노트 분석</p>
+              <p class="article-lead">지난 3월 25일 공식 릴리스된 CameraX 1.6.0 버전에서는 앱 개발자가 라이프사이클 바인딩 전에 HDR, 안정화, 해상도 등 다양한 기능 조합의 지원 여부를 미리 확인할 수 있는 API가 도입되었으며, 여러 실무 기기에서 보고된 호환성 이슈가 대거 수정되었습니다.</p>
+              <p>이번 CameraX 1.6.0 릴리스의 가장 큰 변화는 개발자가 HDR, 비디오 안정화, 특정 해상도, CameraX 확장 기능(Extensions), 슬로우 모션 등의 기능 조합이 현재 기기에서 지원되는지 여부를 라이프사이클 바인딩 전에 미리 쿼리할 수 있는 신규 API의 도입입니다. 이를 통해 앱 레이어에서 지원되지 않는 기능 조합을 요청하여 발생할 수 있는 런타임 예외를 사전에 방지할 수 있게 되었습니다.</p>
+              <p>또한, 차세대 Android 17 (API 37) 이상 기기를 겨냥한 선제적인 크래시 방지 패치도 포함되었습니다. 일부 기기가 STANDARD_SMPTE_2094_50(ID 8192)과 같은 새로운 동적 범위 프로필을 노출할 때, 이전 버전의 CameraX 라이브러리가 이를 인식하지 못해 발생하던 NullPointerException 또는 IllegalArgumentException 오류를 수정하여 프레임워크 호환성을 높였습니다.</p>
+              <p>기기별 특화 패치로는 Samsung Z Fold 4에서 특정 YUV 포맷 출력 크기를 사용할 때 발생하는 이미지 왜곡 문제를 해결하기 위해 해당 해상도를 제외 처리한 항목이 눈에 띕니다. Samsung A53 기기에서 VideoCapture 사용 시 토치(Torch) 활성화 상태의 이미지 캡처가 간헐적으로 실패하던 이슈와 초광각 카메라에서 플래시 사용 시 저노출이 발생하던 문제도 함께 해결되었습니다.</p>
+              <p>마지막으로 PREVIEW_STABILIZATION을 VideoCapture와 함께 사용할 때 Preview 스트림이 활성화되어 있지 않으면 일관성 없는 결과가 나오던 버그가 수정되었습니다. 또한 JPEG 인코더가 마커 앞에 0xFF 패딩 바이트를 추가하는 기기에서 ExifInterface가 이를 정상적으로 파싱하지 못해 캡처에 실패하던 현상도 수정되어 이미지 캡처 파이프라인의 안정성이 한층 강화되었습니다.</p>
+            </div>
+          </div>
+          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이 변경은 Camera HAL API를 직접 수정하지는 않지만, 상위 앱이 기능 조합을 사전에 쿼리하므로 HAL이 지원 가능한 스트림 및 기능 조합 메타데이터를 정확히 선언해야 함을 뜻합니다. 또한 YUV 왜곡이나 토치 제어 실패 같은 기기별 이슈는 HAL/드라이버 수준의 타이밍 및 포맷 검증이 미흡할 때 상위 레이어에서 우회 처리되는 대표적 사례이므로, 신규 플랫폼 개발 시 철저한 사전 검증이 요구됩니다.</p></div>
+          <div class="source-list"><strong>출처</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.0">CameraX Release Notes - CameraX 1.6.0</a></li></ul></div>
+        </article>
+      </section>
+
       <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
         <div class="card issue-reference-articles-card">
           <div class="issue-section-heading">
             <h2 id="issue-reference-articles-title">참고 / 더 읽을거리</h2>
           </div>
-          <ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">CameraX Release Notes - CameraX 1.6.1</a> — Android Developers Latest Updates (May 06, 2026) · AOSP Camera 프레임워크 관련 참고</li><li><a href="https://source.android.com/docs/compatibility/cts/camera-its-box">Test camera images using automation</a> — AOSP Site Updates (2026-05-01) · AOSP Camera 프레임워크 관련 참고</li><li><a href="https://goo.gle/AdaptiveApps_IO26">8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O</a> — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고</li><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a> — ISO C++ Blog (Thu, 30 Apr 2026 22:36:23 +0000) · C++ / AI 네이티브 툴링 참고</li></ul>
+          <ul><li><a href="https://source.android.com/docs/compatibility/cts/camera-its-box">Test camera images using automation</a> — AOSP Site Updates (2026-05-01) · AOSP Camera 프레임워크 관련 참고</li><li><a href="https://goo.gle/AdaptiveApps_IO26">8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O</a> — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고</li><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a> — ISO C++ Blog (Thu, 30 Apr 2026 22:36:23 +0000) · C++ / AI 네이티브 툴링 참고</li></ul>
         </div>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">참고자료</h2>
-        <div class="card reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/">[PATCH 1/2] media: arm: mali-c55: Add support for CCM</a></li><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing - Top 3 updates for Android developer productivity</a></li><li><a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">New features in GCC 16: Improved error messages and SARIF output -- David Malcolm</a></li></ul></div>
+        <div class="card reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/">[PATCH 1/2] media: arm: mali-c55: Add support for CCM</a> — <a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t">전체 패치 시리즈</a></li><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing - Top 3 updates for Android developer productivity</a></li><li><a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">New features in GCC 16: Improved error messages and SARIF output -- David Malcolm</a></li><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.0">CameraX Release Notes - CameraX 1.6.0</a></li><li><a href="https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/">[GIT PULL for v7.2] media updates</a></li></ul></div>
       </section>
 
     </article>

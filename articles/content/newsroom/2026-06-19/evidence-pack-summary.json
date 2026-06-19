@@ -1,0 +1,621 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-19",
+  "generated_at": "2026-06-19T03:00:06.448Z",
+  "inputs": {
+    "required": [],
+    "preferred": [
+      "articles/content/newsroom/2026-06-19/generation-status.json",
+      "articles/content/newsroom/2026-06-19/selection-report.json",
+      "articles/content/newsroom/2026-06-19/shortlisted-candidates.json",
+      "articles/content/collected-news/2026-06-19/candidates.json"
+    ],
+    "optional": [
+      "articles/content/newsroom/2026-06-19/article-capsules.json",
+      "articles/content/newsroom/2026-06-19/reporter-candidates.json",
+      "articles/content/newsroom/2026-06-19/quality-report.json",
+      "articles/content/newsroom/2026-06-19/fact-check-report.json",
+      "articles/content/newsroom/2026-06-19/source-effectiveness-report.json",
+      "articles/content/source-events/2026-06-19/source-change-events.json",
+      "articles/content/newsroom/2026-06-19/repair-failure.json",
+      "articles/content/newsroom/2026-06-19/stale-claim-report.json"
+    ],
+    "missing": [
+      "articles/content/newsroom/2026-06-19/repair-failure.json"
+    ],
+    "used": [
+      "articles/content/newsroom/2026-06-19/generation-status.json",
+      "articles/content/newsroom/2026-06-19/selection-report.json",
+      "articles/content/newsroom/2026-06-19/shortlisted-candidates.json",
+      "articles/content/collected-news/2026-06-19/candidates.json",
+      "articles/content/newsroom/2026-06-19/article-capsules.json",
+      "articles/content/newsroom/2026-06-19/reporter-candidates.json",
+      "articles/content/newsroom/2026-06-19/quality-report.json",
+      "articles/content/newsroom/2026-06-19/fact-check-report.json",
+      "articles/content/newsroom/2026-06-19/source-effectiveness-report.json",
+      "articles/content/source-events/2026-06-19/source-change-events.json",
+      "articles/content/newsroom/2026-06-19/stale-claim-report.json"
+    ]
+  },
+  "publish_status": {
+    "status": "publish-ready",
+    "run_mode": "publish_ready",
+    "quality_score": 96,
+    "quality_threshold": 60,
+    "fact_check_status": "PASS",
+    "final_publish_ready": true,
+    "public_newsletter_ready": true,
+    "review_pr_ready": true
+  },
+  "selection_summary": {
+    "raw_candidate_count": 80,
+    "eligible_candidate_count": 12,
+    "selected_main_article_count": 3,
+    "reserve_candidate_count": 2,
+    "excluded_candidate_count": 67,
+    "primary_camera_stack_count": 2,
+    "android_multimedia_camera_output_count": 0,
+    "supporting_bucket_count": 1,
+    "fallback_window_used": false,
+    "fallback_window_consulted": false,
+    "fallback_window_reason": "",
+    "fallback_candidates_promoted_count": 0,
+    "fallback_bucket_used": true,
+    "candidate_shortage_hints": [
+      "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
+      "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.",
+      "Keep forbidden buckets out of main article selection: generic_tech_watchlist."
+    ]
+  },
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 17,
+    "total_claims": 17,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 3,
+    "not_available_article_count": 0
+  },
+  "hal_impact_summary": {
+    "axes": [
+      "\\bV4L2\\b",
+      "\\bGCC\\b",
+      "\\bCameraX\\b"
+    ],
+    "article_count_with_axes": 3,
+    "article_count_without_axes": 0
+  },
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 3,
+    "strong_signal_count": 0,
+    "usable_signal_count": 0,
+    "weak_signal_count": 3,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 0,
+    "article_count_without_hal_signal_capsule": 3,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 0,
+    "fallback_main_article_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 3,
+    "hal_signal_hard_blocker_count": 3,
+    "hard_blocker_reason_code_counts": {
+      "hal_actionability_none": 3,
+      "hal_signal_capsule_missing": 3,
+      "fallback_promotion_not_allowed": 1
+    },
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 1,
+      "native_tooling_workflow": 1,
+      "framework_hal_contract": 1,
+      "camerax_app_compatibility": 1
+    },
+    "actionability_level_counts": {
+      "none": 3
+    },
+    "effective_actionability_level_counts": {
+      "none": 3
+    },
+    "signal_quality_status_counts": {
+      "weak_signal": 3
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "[GIT PULL for v7.2] media updates",
+      "url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "weak_signal",
+      "concrete_action_signal_count": 0,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 57): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": false,
+      "hal_signal_capsule_complete": false,
+      "hal_signal_capsule_missing_keys": [
+        "why_now",
+        "reader_owners",
+        "check_within_2_weeks",
+        "impact_axes",
+        "do_not_overstate"
+      ],
+      "hard_blockers": [
+        "actionability_none"
+      ],
+      "hard_blocker_reason_codes": [
+        "hal_actionability_none",
+        "hal_signal_capsule_missing"
+      ]
+    },
+    {
+      "index": 2,
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "reader_owners": [
+        "native_tooling_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "weak_signal",
+      "concrete_action_signal_count": 0,
+      "fallback_promotion_allowed": false,
+      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 63): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": false,
+      "hal_signal_capsule_complete": false,
+      "hal_signal_capsule_missing_keys": [
+        "why_now",
+        "reader_owners",
+        "check_within_2_weeks",
+        "impact_axes",
+        "do_not_overstate"
+      ],
+      "hard_blockers": [
+        "actionability_none",
+        "fallback_promotion_missing_reason"
+      ],
+      "hard_blocker_reason_codes": [
+        "hal_actionability_none",
+        "fallback_promotion_not_allowed",
+        "hal_signal_capsule_missing"
+      ]
+    },
+    {
+      "index": 3,
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "weak_signal",
+      "concrete_action_signal_count": 1,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "CameraX Release Notes (official, high, score 95): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": false,
+      "hal_signal_capsule_complete": false,
+      "hal_signal_capsule_missing_keys": [
+        "why_now",
+        "reader_owners",
+        "check_within_2_weeks",
+        "impact_axes",
+        "do_not_overstate"
+      ],
+      "hard_blockers": [
+        "actionability_none"
+      ],
+      "hard_blocker_reason_codes": [
+        "hal_actionability_none",
+        "hal_signal_capsule_missing"
+      ]
+    }
+  ],
+  "selected_main_articles": [
+    {
+      "candidate_id": "cdc5de0ad6a81ba2b42fe5783296d96704547f3781febd9e55b799df483931c3",
+      "title": "[GIT PULL for v7.2] media updates",
+      "url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+      "source": "lore.kernel.org linux-media list",
+      "source_tier": "high",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "source_reliability": "project-official",
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "article_group_key": "article:https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan",
+      "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [],
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bV4L2\\b"
+      ],
+      "key_evidence": [
+        "version_or_release: v7.2",
+        "api_or_component: v4l2 core, v4l2-subdev, v4l2-ctrls, vb2, v4l2-common",
+        "behavior_change: v4l2 core에서 subdev 센서 소유권 수정, STREAMS 클라이언트 기능으로 경로 접근 허용, HEVC 활성 참조 카운트 및 배경 감지 제어 유효성 검사 추가, vb2_read() 및 vb2_write() 반환 유형을 ssize_t로 변경, Y..."
+      ],
+      "selection_reason": "lore.kernel.org linux-media list (project-official, high, score 57): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "available",
+        "bound_claims": 8,
+        "total_claims": 8,
+        "overclaim_risk": "low"
+      }
+    },
+    {
+      "candidate_id": "9f5a63b90e02162f19dabc76ee29ef71d86aa3a0fb00e872378d73f32ffbee7e",
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "source": "ISO C++ Blog",
+      "source_tier": "high",
+      "source_role": "engineering_blog_source",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "source_reliability": "official-community",
+      "freshness_window": "primary",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "article_group_key": "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [],
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bGCC\\b"
+      ],
+      "key_evidence": [
+        "version_or_release: GCC 16",
+        "api_or_component: GCC 컴파일러, SARIF 출력",
+        "behavior_change: GCC 16에서 개선된 오류 메시지와 SARIF(Static Analysis Results Interchange Format) 출력이 추가되었습니다. 이는 C++ 개발자의 디버깅 및 코드 분석 워크플로우를 개선하는 데 도움이 됩니다."
+      ],
+      "selection_reason": "ISO C++ Blog (official-community, high, score 63): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "available",
+        "bound_claims": 6,
+        "total_claims": 6,
+        "overclaim_risk": "low"
+      }
+    },
+    {
+      "candidate_id": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "source": "CameraX Release Notes",
+      "source_tier": "high",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_release_note_anchor",
+      "source_reliability": "official",
+      "freshness_window": "fallback",
+      "relevance_bucket": "direct_aosp_camera",
+      "article_group_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [],
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 8,
+      "hal_impact_axes": [
+        "\\bCameraX\\b"
+      ],
+      "key_evidence": [
+        "version_or_release: CameraX 1.6.0 (2026년 3월 25일)",
+        "api_or_component: CameraX / androidx.camera",
+        "behavior_change: CameraX 1.6.0에서는 새로운 API가 도입되어 개발자가 HDR, 안정화, 특정 해상도, CameraX 확장 또는 슬로우 모션과 같은 특정 사용 사례 및 기능 조합이 기기에서 지원되는지 여부를 라이프사이클에 바인딩하기 전에 쿼리할 수 있습니다. 또..."
+      ],
+      "selection_reason": "CameraX Release Notes (official, high, score 95): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "available",
+        "bound_claims": 3,
+        "total_claims": 3,
+        "overclaim_risk": "low"
+      }
+    }
+  ],
+  "reserve_candidates": [
+    {
+      "candidate_id": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "source_tier": "high",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "source_reliability": "official",
+      "freshness_window": "fallback",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "article_group_key": "article:https://developer.android.com/tools/agents/android-cli#skills-add",
+      "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [],
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bJetpack\\s+Compose\\b",
+        "\\b(?:adaptive|large[-\\s]?screen|foldable|tablet|multi[-\\s]?window|device experience)\\b[^.\\n]{0,120}\\b(?:Compose|Jetpack|Android)\\b",
+        "\\bcamera\\b",
+        "\\bCameraX\\b"
+      ],
+      "key_evidence": [],
+      "selection_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 4 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
+      }
+    },
+    {
+      "candidate_id": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "source_tier": "high",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "source_reliability": "official",
+      "freshness_window": "fallback",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "article_group_key": "android_native_tooling_workflow",
+      "tooling_workflow_type": "native_tooling_workflow",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [],
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bAndroid\\s+CLI\\b",
+        "\\bAndroid\\b[^.\\n]{0,140}\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b",
+        "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b",
+        "\\bAndroid\\s+CLI\\b[^.\\n]{0,140}\\b(?:agent|build|test|debug|workflow|app)\\b"
+      ],
+      "key_evidence": [],
+      "selection_reason": "Android Developers Blog (official, high, score 78): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
+      }
+    }
+  ],
+  "excluded_candidates_top": [
+    {
+      "candidate_id": "43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35",
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "source": "Android Developers Blog",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "fallback",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "playlist/collection URL is not a dated main article"
+    },
+    {
+      "candidate_id": "ef27814b2c8c86363075af75d0f3b6c0cccbc6a74d8cf31284075b004b924c42",
+      "title": "17 Things to know for Android developers at Google I/O",
+      "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "source": "Android Developers Blog",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
+      "candidate_id": "5e3f5455fa83d19cf95cf629c00674cc950a2c4df1716ab4057e0d45a4f8eb15",
+      "title": "What’s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+      "url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "source": "Android Developers Blog",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
+      "candidate_id": "1bd949b88ac6a7781290446f3f9a908f9c2e6f378992bbcbfe38fc616acdd43c",
+      "title": "Android UI Development is Compose First",
+      "url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "source": "Android Developers Blog",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
+      "candidate_id": "b59408fc88377647433fed755cd8a6432b356e22f1531a3b249b24dc8464ed57",
+      "title": "Android developer verification: Building a safer ecosystem together",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "source": "Android Developers Blog",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
+      "candidate_id": "736ba21c4736e96ff3d832f64dc22ee8cf9497ae10459c2f3b562288793d95cf",
+      "title": "Compatibility",
+      "url": "https://source.android.com/docs/compatibility",
+      "source": "AOSP Site Updates",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_site_update_row",
+      "freshness_window": "stale",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "final_selection_blocked=true"
+    },
+    {
+      "candidate_id": "2e09be47b7d035b1b1509fe59f1caf95edd44bab9f4919926cd7de56c0bd6f6a",
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/core/camera",
+      "source": "AOSP Camera Documentation",
+      "source_role": "official_documentation_reference",
+      "source_url_quality": "undated_reference_page",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "missing dated evidence"
+    },
+    {
+      "candidate_id": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
+      "title": "1.6.1",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "source": "Android Developers Latest Updates",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_site_update_row",
+      "freshness_window": "reference",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "missing dated evidence"
+    },
+    {
+      "candidate_id": "d116a623b5025f895f131151e5af0dff5221d24c9ef56d17ef871245dce222ca",
+      "title": "1.3.0-beta02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "source": "Android Developers Latest Updates",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_site_update_row",
+      "freshness_window": "reference",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "missing dated evidence"
+    },
+    {
+      "candidate_id": "e39c6ec8c268df92b7c83df1556b487d6a65ef236cf66e68dd04b3f6ae7a00c9",
+      "title": "1.4.0-alpha07",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "source": "Android Developers Latest Updates",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_site_update_row",
+      "freshness_window": "reference",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "missing dated evidence"
+    }
+  ],
+  "excluded_candidates_truncated": true,
+  "failure_diagnostics": {
+    "quality_hard_failures": [],
+    "fact_check_must_fix": [],
+    "repair_failures": [],
+    "candidate_shortage_hints": [
+      "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
+      "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.",
+      "Keep forbidden buckets out of main article selection: generic_tech_watchlist."
+    ],
+    "source_gap_warnings": [],
+    "missing_artifacts": [
+      "articles/content/newsroom/2026-06-19/repair-failure.json"
+    ],
+    "invalid_artifacts": []
+  },
+  "warnings": [
+    "Missing optional artifact: articles/content/newsroom/2026-06-19/repair-failure.json",
+    "Fallback claim_validation.status=not_available for selected article: [GIT PULL for v7.2] media updates",
+    "Fallback claim_validation.status=not_available for selected article: New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+    "Fallback claim_validation.status=not_available for selected article: CameraX Release Notes - CameraX 1.6.0"
+  ]
+}

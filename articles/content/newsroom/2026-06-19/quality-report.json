@@ -1,0 +1,1359 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-19",
+  "score": 96,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "PASS",
+  "summary": "Safety checks passed and the fact-checker found every article useful to a Camera HAL SW engineer. Editor review is ready.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "GCC 16 신규 기능 공개: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+      "category": "direct_aosp_camera",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.6.0",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "source_candidate_hash": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[GIT PULL for v7.2] media updates",
+          "url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+        "source_candidate_hash": "cdc5de0ad6a81ba2b42fe5783296d96704547f3781febd9e55b799df483931c3",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "GCC 16 신규 기능 공개: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+      "category": "cpp_ai_tooling_fallback",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+          "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "GCC 16 신규 기능 공개: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+        "source_candidate_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "source_candidate_hash": "9f5a63b90e02162f19dabc76ee29ef71d86aa3a0fb00e872378d73f32ffbee7e",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 6,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "tooling_support",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      },
+      "guardrail_impact_class": "tooling_support",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 17,
+    "total_claims": 17,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 3,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+      "claim_id": "claim_1_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "CameraX 1.6.0 버전이 2026년 3월 25일에 출시됨.",
+      "evidence_ids": [
+        "candidate:545c1667e2f95862:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:545c1667e2f95862:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:545c1667e2f95862:source-summary",
+          "resolved_evidence_id": "candidate:545c1667e2f95862:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+      "claim_id": "claim_1_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "라이프사이클 바인딩 전 특정 기능 조합(HDR, 안정화, 해상도, 확장, 슬로우 모션) 지원 여부를 쿼리하는 API 도입.",
+      "evidence_ids": [
+        "sx:545c1667e2f95862:35319484d22a:688f544125e300f1"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f95862:35319484d22a:688f544125e300f1"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f95862:35319484d22a:688f544125e300f1",
+          "resolved_evidence_id": "sx:545c1667e2f95862:35319484d22a:688f544125e300f1",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+      "claim_id": "claim_1_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Android 17(API 37) 이상 기기에서 새로운 동적 범위 프로필(STANDARD_SMPTE_2094_50) 노출 시 발생하던 크래시(NullPointerException 또는 IllegalArgumentException) 수정.",
+      "evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:09290de1817b0b4a"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:09290de1817b0b4a"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:09290de1817b0b4a",
+          "resolved_evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:09290de1817b0b4a",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+      "claim_id": "claim_1_4",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "PREVIEW_STABILIZATION과 VideoCapture를 함께 사용할 때 Preview가 활성화되지 않은 경우 발생하던 일관성 없는 결과 수정.",
+      "evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:643c0e023f82c237"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:643c0e023f82c237"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:643c0e023f82c237",
+          "resolved_evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:643c0e023f82c237",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+      "claim_id": "claim_1_5",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "low",
+      "text": "Samsung Z Fold 4 기기에서 왜곡이 발생하는 특정 YUV 포맷 출력 크기를 제외 처리함.",
+      "evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:4a5794f87519d870"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:4a5794f87519d870"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:4a5794f87519d870",
+          "resolved_evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:4a5794f87519d870",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+      "claim_id": "claim_1_6",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Samsung A53 기기에서 VideoCapture 바인딩 시 토치 활성화 이미지 캡처가 실패하던 이슈 수정.",
+      "evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:1973794d82e9b63d"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:1973794d82e9b63d"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:1973794d82e9b63d",
+          "resolved_evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+      "claim_id": "claim_1_7",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "초광각 카메라에서 플래시 사용 시 일부 기기에서 이미지가 저노출되는 문제 수정.",
+      "evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:a680216575517cb8"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:a680216575517cb8"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:a680216575517cb8",
+          "resolved_evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:a680216575517cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+      "claim_id": "claim_1_8",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "JPEG 인코더가 마커 앞에 채우기 바이트를 추가하는 기기에서 이미지 캡처 실패를 해결하기 위해 ExifInterface 의존성 업데이트.",
+      "evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:e54c63883abf623f"
+      ],
+      "resolved_evidence_ids": [
+        "sx:545c1667e2f95862:f8f4ef9ccfba:e54c63883abf623f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:e54c63883abf623f",
+          "resolved_evidence_id": "sx:545c1667e2f95862:f8f4ef9ccfba:e54c63883abf623f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+      "claim_id": "claim_2_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 6월 18일, Linux 커널 v7.2 미디어 서브시스템 업데이트를 위한 GIT PULL 요청이 lore.kernel.org 메일링 리스트에 제출됨.",
+      "evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "resolved_evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+      "claim_id": "claim_2_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "v4l2 core에서 subdev 센서 소유권(ownership) 수정 사항 포함.",
+      "evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "resolved_evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+      "claim_id": "claim_2_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "STREAMS 클라이언트 기능으로 경로 접근(routing access) 허용.",
+      "evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "resolved_evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+      "claim_id": "claim_2_4",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "HEVC 활성 참조 카운트(active reference count) 및 배경 감지 제어(background detection control) 유효성 검사 추가.",
+      "evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "resolved_evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+      "claim_id": "claim_2_5",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "videobuf2(vb2)의 vb2_read() 및 vb2_write() 함수 반환 유형을 ssize_t로 변경.",
+      "evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "resolved_evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+      "claim_id": "claim_2_6",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "새로운 YUV24 포맷 형식 추가.",
+      "evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:cdc5de0ad6a81ba2:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "resolved_evidence_id": "candidate:cdc5de0ad6a81ba2:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "GCC 16 신규 기능 공개: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+      "claim_id": "claim_3_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "2026년 6월 15일, GCC 16의 신규 기능(오류 메시지 개선 및 SARIF 출력 지원)을 소개하는 블로그 포스트가 ISO C++ Blog에 게시됨.",
+      "evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "resolved_evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "GCC 16 신규 기능 공개: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+      "claim_id": "claim_3_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "GCC 16에서 컴파일러 오류 메시지의 가독성 및 진단 기능 개선.",
+      "evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "resolved_evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "GCC 16 신규 기능 공개: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+      "claim_id": "claim_3_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "정적 분석 결과를 표준화된 포맷으로 교환하기 위한 SARIF(Static Analysis Results Interchange Format) 출력 기능 추가.",
+      "evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9f5a63b90e02162f:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "resolved_evidence_id": "candidate:9f5a63b90e02162f:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 3,
+    "strong_signal_count": 2,
+    "usable_signal_count": 0,
+    "weak_signal_count": 1,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 3,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 2,
+    "fallback_main_article_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 1,
+    "hal_signal_hard_blocker_count": 1,
+    "hard_blocker_reason_code_counts": {
+      "hal_actionability_none": 1,
+      "fallback_promotion_not_allowed": 1
+    },
+    "hal_impact_axis_counts": {
+      "framework_hal_contract": 1,
+      "stream_buffer_metadata": 1,
+      "camerax_app_compatibility": 1,
+      "driver_image_pipeline": 1,
+      "native_tooling_workflow": 1
+    },
+    "actionability_level_counts": {
+      "owner_metric_log": 1,
+      "measurable_test": 1,
+      "none": 1
+    },
+    "effective_actionability_level_counts": {
+      "owner_metric_log": 1,
+      "measurable_test": 1,
+      "none": 1
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 2,
+      "weak_signal": 1
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "CameraX Release Notes (official, high, score 95): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+        "Do not use artifact version tables as behavior-change evidence.",
+        "이 릴리스 노트는 CameraX 라이브러리의 변경 사항을 설명하며, Camera HAL API 또는 벤더 HAL 계약의 직접적인 변경을 의미하지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+      "url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 57): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 변경 사항이 Android Camera HAL API 계약에 직접적인 영향을 미친다고 단정하지 마세요. 드라이버 수준의 변경 사항입니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "GCC 16 신규 기능 공개: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "reader_owners": [
+        "native_tooling_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "weak_signal",
+      "concrete_action_signal_count": 1,
+      "fallback_promotion_allowed": false,
+      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 63): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 GCC 업데이트가 Android HAL 툴체인 마이그레이션을 의미한다고 단정하지 마세요. Android는 주로 Clang/LLVM을 사용합니다."
+      ],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [
+        "actionability_none",
+        "fallback_promotion_missing_reason"
+      ],
+      "hard_blocker_reason_codes": [
+        "hal_actionability_none",
+        "fallback_promotion_not_allowed"
+      ]
+    }
+  ],
+  "metrics": {
+    "article_count": 3,
+    "briefing_count": 3,
+    "camera_article_count": 2,
+    "legacy_regex_camera_article_count": 3,
+    "expanded_scope_article_count": 3,
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 1,
+    "android_platform_camera_adjacent_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 2,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 1,
+    "publishable_scope_count": 3,
+    "composition_mode": "FALLBACK_COMPOSITION",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "source_candidate_hash": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+        "source_candidate_hash": "cdc5de0ad6a81ba2b42fe5783296d96704547f3781febd9e55b799df483931c3",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 3,
+        "headline": "GCC 16 신규 기능 공개: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+        "source_candidate_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "source_candidate_hash": "9f5a63b90e02162f19dabc76ee29ef71d86aa3a0fb00e872378d73f32ffbee7e",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 6,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": true,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "tooling_support",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 1,
+      "camera_driver_image_pipeline": 1,
+      "android_platform_camera_adjacent": 0,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 2,
+      "multimedia": 0,
+      "platform": 0,
+      "fallback": 1,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android_platform_camera_adjacent"
+      ],
+      "multimedia": [
+        "android_multimedia_camera_output"
+      ],
+      "platform": [
+        "soc_platform_signal"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 0,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 0,
+    "blocking_deduction_categories": [],
+    "hard_fail_count": 0,
+    "soft_deduction_count": 4,
+    "article_gate_counts": {
+      "PASS": 3,
+      "DEMOTE": 0,
+      "FAIL": 0
+    },
+    "article_section_contract": {
+      "complete_count": 3,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {
+        "do_not_claim": 3
+      },
+      "limitation_visibility_counts": {
+        "guardrail-only": 3
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 17,
+      "total_claims": 17,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 3,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 3,
+      "strong_signal_count": 2,
+      "usable_signal_count": 0,
+      "weak_signal_count": 1,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 3,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 1,
+      "main_articles_with_concrete_action": 2,
+      "fallback_main_article_count": 1,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 1,
+      "hal_signal_hard_blocker_count": 1,
+      "hard_blocker_reason_code_counts": {
+        "hal_actionability_none": 1,
+        "fallback_promotion_not_allowed": 1
+      },
+      "hal_impact_axis_counts": {
+        "framework_hal_contract": 1,
+        "stream_buffer_metadata": 1,
+        "camerax_app_compatibility": 1,
+        "driver_image_pipeline": 1,
+        "native_tooling_workflow": 1
+      },
+      "actionability_level_counts": {
+        "owner_metric_log": 1,
+        "measurable_test": 1,
+        "none": 1
+      },
+      "effective_actionability_level_counts": {
+        "owner_metric_log": 1,
+        "measurable_test": 1,
+        "none": 1
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 2,
+        "weak_signal": 1
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "CameraX 1.6.0 릴리스: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 이슈 해결",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "CameraX Release Notes (official, high, score 95): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+          "Do not use artifact version tables as behavior-change evidence.",
+          "이 릴리스 노트는 CameraX 라이브러리의 변경 사항을 설명하며, Camera HAL API 또는 벤더 HAL 계약의 직접적인 변경을 의미하지 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "Linux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 subdev 센서 소유권 수정 포함",
+        "url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 57): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 변경 사항이 Android Camera HAL API 계약에 직접적인 영향을 미친다고 단정하지 마세요. 드라이버 수준의 변경 사항입니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "GCC 16 신규 기능 공개: 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+        "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "hal_impact_axes": [
+          "native_tooling_workflow"
+        ],
+        "reader_owners": [
+          "native_tooling_owner"
+        ],
+        "actionability_level": "none",
+        "effective_actionability_level": "none",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "weak_signal",
+        "concrete_action_signal_count": 1,
+        "fallback_promotion_allowed": false,
+        "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 63): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 GCC 업데이트가 Android HAL 툴체인 마이그레이션을 의미한다고 단정하지 마세요. Android는 주로 Clang/LLVM을 사용합니다."
+        ],
+        "soc_signal_type": "",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [
+          "actionability_none",
+          "fallback_promotion_missing_reason"
+        ],
+        "hard_blocker_reason_codes": [
+          "hal_actionability_none",
+          "fallback_promotion_not_allowed"
+        ]
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "image-fallback",
+        "count": 3
+      },
+      {
+        "category": "editorial-story",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

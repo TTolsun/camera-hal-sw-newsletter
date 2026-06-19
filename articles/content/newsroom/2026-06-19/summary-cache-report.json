@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-19",
+  "generated_at": "2026-06-19T02:55:51.170Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 12,
+    "hit_count": 2,
+    "miss_count": 10,
+    "by_url_hit_count": 2,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 7
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 3
+    },
+    {
+      "reason": "url-hit",
+      "count": 2
+    }
+  ],
+  "entries": [
+    {
+      "title": "[GIT PULL for v7.2] media updates",
+      "url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-18T21:38:31Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan",
+        "url_hash": "cdc5de0ad6a81ba2b42fe5783296d96704547f3781febd9e55b799df483931c3",
+        "published_date": "2026-06-18T21:38:31Z",
+        "content_hash": "155b6ef694c1e5ab0b0b04d779e68bf1e51b750313dec70d1023cbf144a4edd9"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH 2/2] media: i2c: og0va1b: Add OmniVision OG0VA1B camera sensor - Uwe Kleine-K&#246;nig",
+      "url": "https://lore.kernel.org/linux-media/ajQqRj4lX10M5dQj@monoceros/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-18",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/ajqqrj4lx10m5dqj@monoceros",
+        "url_hash": "ccef678caac2bfb11672e57aa89c719452b94b4223b1d8d82087be9bc3f929ac",
+        "published_date": "2026-06-18",
+        "content_hash": "99a4f32d3285f5628f552d98122b13e61e756187edc6455311f5e8bf5070e916"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 15 Jun 2026 22:22:24 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "url_hash": "9f5a63b90e02162f19dabc76ee29ef71d86aa3a0fb00e872378d73f32ffbee7e",
+        "published_date": "Mon, 15 Jun 2026 22:22:24 +0000",
+        "content_hash": "45efa4a6b0593184fc9702888cdeb5e8b0a7381fa6d28ae9c5c9fd5a40f904e8"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH v3 4/4] MAINTAINERS: Add entry for Rust dma-buf - Sumit Semwal",
+      "url": "https://lore.kernel.org/linux-media/CAO_48GGKOGMr5bexkW3+d9AsF=RYkZeaU6+nWgnaJxzXVLft2Q@mail.gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-18",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/cao_48ggkogmr5bexkw3+d9asf=rykzeau6+nwgnajxzxvlft2q@mail.gmail.com",
+        "url_hash": "e784484c594f529bb3d3aee5ef2f30fb5bf3dc0ed5776719f3ce1b7e45fc1867",
+        "published_date": "2026-06-18",
+        "content_hash": "a779d3ebb0138b05030e61b3b1ef682ba994d4da3bfe1120d371ffd93d71461a"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "KASAN: slab-use-after-free Read in v4l2_fh_open - sanan.hasanou",
+      "url": "https://lore.kernel.org/linux-media/6a3470b3.01a98498.2c3fd5.dec7@mx.google.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-18",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/6a3470b3.01a98498.2c3fd5.dec7@mx.google.com",
+        "url_hash": "faf536a9ee16e96e828a415c44e7863ae6371b20710162d7c092cce3c515d2f0",
+        "published_date": "2026-06-18",
+        "content_hash": "9ea19127aa307c7fa9446de1af8703781a027dad4d79ffc8c8bd7495816bf72c"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "source": "Android Compatibility Definition Document",
+      "published_date": "2026-06-17",
+      "cache_key": {
+        "normalized_url": "https://source.android.com/docs/compatibility/cdd",
+        "url_hash": "b564c567eef7ae5977d361d9a12b799d681cb5a470b50ac7f67887452ef3478b",
+        "published_date": "2026-06-17",
+        "content_hash": "85ab31552c2694d566bea81dcfff3ac9eab2f454736b38513eaf15cd91ab2553"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2] media: mali-c55: Fix scaler factor overflow for large crop sizes - David Carlier",
+      "url": "https://lore.kernel.org/linux-media/20260618195254.139712-1-devnexen@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-18",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260618195254.139712-1-devnexen@gmail.com",
+        "url_hash": "a927a2c80d194563a1d68121fb03002eb2c09b58bbbbdb6fef40ad13ecbe957f",
+        "published_date": "2026-06-18",
+        "content_hash": "f6ed46c649884075fac518caca90d0f1d389c13f3c47f4ad1c5f9e78a99efc65"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2 3/3] staging: media: atomisp: remove dead platform_support.h header file - Igor Putko",
+      "url": "https://lore.kernel.org/linux-media/20260618151246.6678-4-igorpetindev@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-18",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260618151246.6678-4-igorpetindev@gmail.com",
+        "url_hash": "9ebad54a1f1e82c13d11092561c69858a3ed6d9f3e3cc8089a012c047d317817",
+        "published_date": "2026-06-18",
+        "content_hash": "c967837c3a12416d5bdb87637fbaf91c2df50f50ea3b64c19db206fa6de5c1df"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH v10 3/4] dt-bindings: clock: imx95-blk-ctl: Define formatter child node schema - Frank Li",
+      "url": "https://lore.kernel.org/linux-media/ajQ8yfriJSOtvkEH@SMW015318/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-18",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/ajq8yfrijsotvkeh@smw015318",
+        "url_hash": "90be8ad66b63d66a8c4cfbec0fb38ed1e69f3c704472313c00e4d0276cd0d0fc",
+        "published_date": "2026-06-18",
+        "content_hash": "d5ffee5993e77392c3cfd9f401762af792b62120ae79062f24cfe786f926b9ac"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/tools/agents/android-cli",
+        "url_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee.json"
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "url_hash": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe.json"
+    },
+    {
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "source": "CameraX Release Notes",
+      "published_date": "March 25, 2026",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+        "url_hash": "545c1667e2f958629af66480105e1554b1726272a4979f69145d1b61229f62e7",
+        "published_date": "March 25, 2026",
+        "content_hash": "d6998b60b8eb0658abab184c58c32b4a2cbc531707ec93990cbfcc0fb825ffa9"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

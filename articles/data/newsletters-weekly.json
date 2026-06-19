@@ -5,16 +5,18 @@
     "weekEndDate": "2026-06-21",
     "date": "2026-06-15",
     "title": "2026 W25",
-    "summary": "ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개\nAndroid 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가\nGCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선",
+    "summary": "ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개\nAndroid 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가\nGCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선\nCameraX 1.6.0 릴리스 분석: 기능 조합 사전 쿼리 API 도입 및 기기별 호환성 패치\nLinux v7.2 미디어 서브시스템 업데이트 제안: V4L2 Core 및 vb2 버퍼 관리 개선",
     "html": "newsletters/2026-W25/index.html",
     "md": "newsletters/2026-W25/newsletter.md",
     "tags": [
       "Camera HAL",
       "Android"
     ],
-    "article_count": 3,
+    "article_count": 5,
     "article_images": [
-      "https://developer.android.com/static/images/social/android-developers.png?hl=tr"
+      "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
+      "https://isocpp.org/files/img/redhatgraphic.png",
+      "https://developer.android.com/static/images/social/android-developers.png?hl=es-419"
     ]
   },
   {
