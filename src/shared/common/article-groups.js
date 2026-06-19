@@ -160,6 +160,16 @@ function loreSeriesParts(candidate = {}) {
   return null;
 }
 
+// lore 패치 시리즈 조각 URL을 thread view(.../T/#t) URL로 바꾼다. thread view는 cover letter(0/N)부터
+// 시리즈 전체(개별 패치 포함)를 보여주므로, 기사 source(개별 패치)는 그대로 두고 독자에게 전체 시리즈
+// 맥락을 주는 보조 링크로 쓴다. lore 시리즈 조각이 아니면 ''을 반환한다(보조 링크 미표시).
+function loreThreadUrl(url) {
+  const messageUrl = text(url);
+  if (!messageUrl) return '';
+  if (!loreSeriesPartsFromMessageId(loreMessageIdFromUrl(messageUrl))) return '';
+  return `${messageUrl.replace(/\/+$/, '')}/T/#t`;
+}
+
 function loreSeriesKey(candidate = {}) {
   const parts = loreSeriesParts(candidate);
   return parts ? parts.key : '';
@@ -459,6 +469,7 @@ module.exports = {
   inferReasonCode,
   isNativeToolingWorkflow,
   loreSeriesKey,
+  loreThreadUrl,
   loreSeriesPatchNumber,
   normalizeCanonicalUrlStripAnchor,
   normalizeSourceUrlPreserveAnchor,

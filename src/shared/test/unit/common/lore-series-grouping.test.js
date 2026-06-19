@@ -6,7 +6,8 @@ const test = require('node:test');
 const {
   fallbackGroupKey,
   loreSeriesKey,
-  loreSeriesPatchNumber
+  loreSeriesPatchNumber,
+  loreThreadUrl
 } = require('../../../common/article-groups');
 
 const LORE_LIST = 'https://lore.kernel.org/linux-media';
@@ -99,4 +100,19 @@ test('fallbackGroupKey collapses a patch series and keeps non-series lore messag
   const standalone = loreCandidate('051b9597-873c-44ca-b7a5-29efa795406f@oss.qualcomm.com', 'standalone fix');
   assert.ok(fallbackGroupKey(standalone).startsWith('article:'));
   assert.notEqual(fallbackGroupKey(standalone), groupKey);
+});
+
+test('loreThreadUrl maps a series patch URL to its thread view and ignores non-series', () => {
+  const patch1 = loreCandidate('20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com');
+  assert.equal(
+    loreThreadUrl(patch1.url),
+    `${LORE_LIST}/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/T/#t`
+  );
+  // cover letter(patch 0)도 같은 시리즈라 thread view로 변환된다.
+  const cover = loreCandidate('20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com');
+  assert.ok(loreThreadUrl(cover.url).endsWith('/T/#t'));
+  // 비-시리즈 lore message-id, 비-lore URL, 빈 값은 보조 링크를 만들지 않는다.
+  assert.equal(loreThreadUrl(`${LORE_LIST}/051b9597-873c-44ca-b7a5-29efa795406f@oss.qualcomm.com/`), '');
+  assert.equal(loreThreadUrl('https://example.com/some/path/article'), '');
+  assert.equal(loreThreadUrl(''), '');
 });

@@ -1,4 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { loreThreadUrl } = require('../../shared/common/article-groups');
 const {
   renderCandidateSelectionDiagnostics
 } = require('../select/selection-diagnostics');
@@ -32,7 +33,9 @@ function escapeHtml(value) {
 
 function markdownLink(source) {
   const title = source.title || source.url || '출처';
-  return `- [${title}](${source.url})`;
+  const thread = loreThreadUrl(source.url);
+  const suffix = thread ? ` — [전체 패치 시리즈](${thread})` : '';
+  return `- [${title}](${source.url})${suffix}`;
 }
 
 function sourceListMarkdown(sources) {
@@ -42,7 +45,11 @@ function sourceListMarkdown(sources) {
 function sourceListHtml(sources) {
   return ensureArray(sources)
     .filter(source => source && source.url)
-    .map(source => `<li><a href="${escapeHtml(source.url)}">${escapeHtml(source.title || source.url)}</a></li>`)
+    .map(source => {
+      const thread = loreThreadUrl(source.url);
+      const suffix = thread ? ` — <a href="${escapeHtml(thread)}">전체 패치 시리즈</a>` : '';
+      return `<li><a href="${escapeHtml(source.url)}">${escapeHtml(source.title || source.url)}</a>${suffix}</li>`;
+    })
     .join('');
 }
 
