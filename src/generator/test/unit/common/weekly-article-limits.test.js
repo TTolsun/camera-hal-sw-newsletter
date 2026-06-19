@@ -14,7 +14,7 @@ function article(id, score) {
 
 test('getWeeklyArticlePolicy exposes the configured weekly limits', () => {
   const policy = getWeeklyArticlePolicy();
-  assert.equal(policy.dailyNewArticleLimit, 3);
+  assert.equal(policy.dailyNewArticleLimit, 5);
   assert.equal(policy.weeklyArticleLimit, 10);
   assert.equal(policy.weeklyOverflowPolicy, 'rank_then_drop');
 });

@@ -114,10 +114,10 @@ test('a run in a new ISO week creates a separate weekly issue', async () => {
 
 test('a single run cannot add more than the daily intake limit of new articles', async () => {
   const root = tempRoot();
-  const sections = [1, 2, 3, 4, 5].map(n => section(`v${n}`, `https://example.com/${n}`, n));
+  const sections = [1, 2, 3, 4, 5, 6, 7].map(n => section(`v${n}`, `https://example.com/${n}`, n));
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft(sections), tags: [] });
-  // dailyNewArticleLimit default is 3
-  assert.equal(readIssue(root, '2026-W23').sections.length, 3);
+  // dailyNewArticleLimit default is 5
+  assert.equal(readIssue(root, '2026-W23').sections.length, 5);
 });
 
 // 로컬 fallback visual 상태의 섹션 (renderer가 fallback SVG로 해석한 daily 결과 그대로).
