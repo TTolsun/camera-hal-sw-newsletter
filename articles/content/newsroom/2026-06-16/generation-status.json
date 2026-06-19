@@ -571,5 +571,20 @@
       "count": 11
     }
   ],
-  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
+  "public_newsletter_ready": true,
+  "review_publication_ready": true,
+  "diagnostics_only": false,
+  "homepage_visible_after_merge": true,
+  "public_state": "PUBLISH_READY",
+  "run_mode": "publish_ready",
+  "effective_homepage_visible": true,
+  "existing_public_artifact_detected": true,
+  "retention_valid": false,
+  "retention_error": "",
+  "public_artifact_policy": "latest_public_ready",
+  "public_artifact_source": "latest_run",
+  "reconciliation_required": false,
+  "reconciliation_action": "none_latest_public_ready",
+  "reconciliation_reason": "latest run is final publish-ready and public structure is valid"
 }

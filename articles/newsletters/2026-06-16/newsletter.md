@@ -34,7 +34,7 @@ _Linux 미디어 메일링 리스트에서 Mali-C55 ISP 드라이버의 색상 �
 
 **출처**
 
-- [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/)
+- [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t)
 
 ---
 
@@ -102,6 +102,6 @@ GCC(GNU Compiler Collection)의 다음 주요 버전인 GCC 16이 개발자들�
 
 ## 참고자료
 
-- [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/)
+- [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t)
 - [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)

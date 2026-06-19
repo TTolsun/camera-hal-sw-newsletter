@@ -34,7 +34,7 @@ CCM은 카메라 센서의 색상 응답 특성을 보정하여 실제 색상과
 
 **출처**
 
-- [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/)
+- [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t)
 
 ---
 
@@ -102,6 +102,6 @@ GCC 16의 개선된 오류 메시지와 SARIF 출력 기능은 직접적으로 A
 
 ## 참고자료
 
-- [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/)
+- [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t)
 - [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)
