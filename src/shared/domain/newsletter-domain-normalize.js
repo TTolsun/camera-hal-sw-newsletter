@@ -217,6 +217,11 @@ function normalizeNewsletterIssue(input = {}, options = {}) {
     references: ensureArray(source.references || input.references).map(normalizeSourceRef),
     metadata: {
       ...(source.metadata || {}),
+      // story/generation 계약 버전은 라이브 editor의 top-level에만 존재한다. 정규화가 이를 버리면
+      // 영속화된 editor-draft.json에서 사라져 품질 재계산이 story 구조 검사를 건너뛰어 점수가 부풀려진다.
+      // metadata에 보존해 toLegacyEditorIssue의 fallback이 round-trip에서 값을 복원하게 한다.
+      public_contract_version: source.public_contract_version || source.metadata?.public_contract_version || null,
+      generation_contract_version: source.generation_contract_version ?? source.metadata?.generation_contract_version ?? null,
       legacy,
       artifactSchemaVersion: input.schemaVersion || input.schema_version || null,
       model: input.model || null,
