@@ -267,6 +267,25 @@ test('newsletter renderer does not synthesize public prose for legacy sections',
   assert.doesNotMatch(markdown, /Publication 전에 source URL/);
 });
 
+test('newsletter renderer adds a series thread link for lore patch-series sources', () => {
+  const draft = issue();
+  draft.sections[0].public_article.source_links = [{
+    title: 'PATCH 1/2 media: arm: mali-c55',
+    url: 'https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/',
+    source_role: 'primary'
+  }];
+  const markdown = buildMarkdown(draft);
+  const html = buildHtml(draft);
+  assert.match(markdown, /전체 패치 시리즈\]\(https:\/\/lore\.kernel\.org\/linux-media\/[^)]*\/T\/#t\)/);
+  assert.match(html, /전체 패치 시리즈<\/a>/);
+  // 보조 링크를 더해도 원래 patch source 링크(claim binding)는 그대로 남는다.
+  assert.match(markdown, /\]\(https:\/\/lore\.kernel\.org\/linux-media\/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard\.com\/\)/);
+
+  const nonSeries = issue();
+  nonSeries.sections[0].public_article.source_links = [{ title: 'Android', url: 'https://developer.android.com/x', source_role: 'primary' }];
+  assert.doesNotMatch(buildMarkdown(nonSeries), /전체 패치 시리즈/);
+});
+
 test('newsletter renderer renders story v1 as natural prose without public story labels', () => {
   const markdown = buildMarkdown(storyIssue());
   const html = buildHtml(storyIssue());

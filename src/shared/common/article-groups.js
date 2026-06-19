@@ -160,6 +160,25 @@ function loreSeriesParts(candidate = {}) {
   return null;
 }
 
+// lore 패치 시리즈 조각 URL을 thread view(.../T/#t) URL로 바꾼다. thread view는 cover letter(0/N)부터
+// 시리즈 전체(개별 패치 포함)를 보여주므로, 기사 source(개별 패치)는 그대로 두고 독자에게 전체 시리즈
+// 맥락을 주는 보조 링크로 쓴다. lore 시리즈 조각이 아니면 ''을 반환한다(보조 링크 미표시).
+function loreThreadUrl(url) {
+  const messageUrl = text(url);
+  if (!messageUrl) return '';
+  if (!loreSeriesPartsFromMessageId(loreMessageIdFromUrl(messageUrl))) return '';
+  // raw 문자열에 '/T/#t'를 붙이면 URL의 query(?…)나 fragment(#related 등)가 있을 때 thread 경로가
+  // 그 안으로 들어가 thread view가 아닌 같은 패치로 풀린다(실데이터에 #related 프래그먼트 존재).
+  // parsed origin+pathname(query·fragment 제거)에 붙여 정규 thread URL을 만든다.
+  let parsed;
+  try {
+    parsed = new URL(messageUrl);
+  } catch (_) {
+    return '';
+  }
+  return `${parsed.origin}${parsed.pathname.replace(/\/+$/, '')}/T/#t`;
+}
+
 function loreSeriesKey(candidate = {}) {
   const parts = loreSeriesParts(candidate);
   return parts ? parts.key : '';
@@ -459,6 +478,7 @@ module.exports = {
   inferReasonCode,
   isNativeToolingWorkflow,
   loreSeriesKey,
+  loreThreadUrl,
   loreSeriesPatchNumber,
   normalizeCanonicalUrlStripAnchor,
   normalizeSourceUrlPreserveAnchor,
