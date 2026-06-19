@@ -1,0 +1,704 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-19",
+  "proposals": [
+    {
+      "proposal_id": "android-cli-skills-add",
+      "topic_gap": "Android CLI tools for developer productivity",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android CLI",
+        "developer productivity",
+        "tools"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add"
+      ],
+      "expected_evidence": [
+        "Android CLI",
+        "developer productivity",
+        "tools"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "media3-1.10.1-release",
+      "topic_gap": "Media3 library updates and camera-related features",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3",
+        "release notes",
+        "camera",
+        "recording",
+        "playback"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1"
+      ],
+      "expected_evidence": [
+        "Media3",
+        "release notes",
+        "camera output",
+        "recording",
+        "preview",
+        "A/V sync"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camerax-1.6.0-release",
+      "topic_gap": "CameraX library updates and camera features",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX",
+        "release notes",
+        "camera features",
+        "camera API"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0"
+      ],
+      "expected_evidence": [
+        "CameraX",
+        "release notes",
+        "camera features",
+        "camera API"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "google-io-26-media-pipeline",
+      "topic_gap": "Advanced media pipeline development for Android",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android media pipeline",
+        "Google I/O",
+        "developer toolkit",
+        "premium experiences"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "media pipeline",
+        "Android development",
+        "Google I/O",
+        "toolkit"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "google-io-26-adaptive-apps",
+      "topic_gap": "Building seamless Android experiences across devices",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android development",
+        "Jetpack Compose",
+        "cross-device",
+        "Google I/O"
+      ],
+      "candidate_urls": [
+        "https://goo.gle/AdaptiveApps_IO26"
+      ],
+      "expected_evidence": [
+        "Android development",
+        "Jetpack Compose",
+        "cross-device experiences",
+        "Google I/O"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developer-productivity-updates-june-2026",
+      "topic_gap": "Recent updates for Android developer productivity",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android developer productivity",
+        "updates",
+        "tools"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
+      ],
+      "expected_evidence": [
+        "Android developer productivity",
+        "updates",
+        "tools"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "gcc-16-features-sarif-output",
+      "topic_gap": "New features in GCC 16, focusing on error messages and SARIF output",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "GCC 16",
+        "error messages",
+        "SARIF",
+        "compiler"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+      ],
+      "expected_evidence": [
+        "GCC 16",
+        "error messages",
+        "SARIF output",
+        "compiler"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "gcc-16-1-release-cpp26-features",
+      "topic_gap": "GCC 16.1 release highlights, including C++26 features",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "GCC 16.1",
+        "C++26",
+        "reflection",
+        "compiler"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/gcc-16.1"
+      ],
+      "expected_evidence": [
+        "GCC 16.1",
+        "C++26",
+        "reflection",
+        "contracts",
+        "compiler"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-updates-june-2026",
+      "topic_gap": "Recent media subsystem updates in the Linux kernel",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Linux kernel",
+        "media",
+        "V4L2",
+        "drivers/media",
+        "updates"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/"
+      ],
+      "expected_evidence": [
+        "Linux kernel",
+        "media subsystem",
+        "V4L2",
+        "drivers/media"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developer-verification-june-2026",
+      "topic_gap": "Updates on Android developer verification for a safer ecosystem",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android developer verification",
+        "ecosystem safety",
+        "security"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/android-developer-verification.html"
+      ],
+      "expected_evidence": [
+        "Android developer verification",
+        "ecosystem safety",
+        "security"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-xr-updates-june-2026",
+      "topic_gap": "What's new in Android XR, including tooling and engine support",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android XR",
+        "tooling",
+        "engine support",
+        "ecosystem updates"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html"
+      ],
+      "expected_evidence": [
+        "Android XR",
+        "tooling",
+        "engine support",
+        "ecosystem updates"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-ui-compose-first-may-2026",
+      "topic_gap": "Shift towards Compose-First for Android UI Development",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android UI",
+        "Jetpack Compose",
+        "developer productivity"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html"
+      ],
+      "expected_evidence": [
+        "Android UI development",
+        "Jetpack Compose",
+        "developer productivity"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-its-box-automation",
+      "topic_gap": "Automated testing of camera images using Camera ITS",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Camera ITS",
+        "automated testing",
+        "camera images",
+        "compatibility"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Camera ITS",
+        "automated testing",
+        "camera images",
+        "compatibility"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-devel-updates",
+      "topic_gap": "Recent developments and discussions in the libcamera project",
+      "source_family": "libcamera-release-announcements",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "V4L2",
+        "camera pipeline",
+        "image sensor"
+      ],
+      "candidate_urls": [
+        "https://lists.libcamera.org/pipermail/libcamera-devel/"
+      ],
+      "expected_evidence": [
+        "libcamera",
+        "V4L2",
+        "camera pipeline",
+        "image sensor"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-driver-updates-v7.2",
+      "topic_gap": "Media driver updates for Linux kernel v7.2",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Linux kernel",
+        "media drivers",
+        "V4L2",
+        "camera"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/"
+      ],
+      "expected_evidence": [
+        "Linux kernel",
+        "media drivers",
+        "V4L2",
+        "camera"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "mali-c55-updates",
+      "topic_gap": "Updates related to Mali-C55 camera processing, including scaler overflow fixes",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Mali-C55",
+        "camera processing",
+        "scaler",
+        "ISP"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260618195254.139712-1-devnexen@gmail.com/",
+        "https://lore.kernel.org/linux-media/ajQG0BTLxiJ7PKIh@zed/"
+      ],
+      "expected_evidence": [
+        "Mali-C55",
+        "camera processing",
+        "scaler",
+        "ISP"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "atomisp-staging-cleanup",
+      "topic_gap": "Cleanup of dead code in the atomisp staging driver",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "atomisp",
+        "staging",
+        "driver",
+        "kernel"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260618151246.6678-4-igorpetindev@gmail.com/"
+      ],
+      "expected_evidence": [
+        "atomisp",
+        "staging",
+        "driver",
+        "kernel"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "og0va1b-camera-sensor-support",
+      "topic_gap": "Addition of OmniVision OG0VA1B camera sensor support in the kernel",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "OmniVision OG0VA1B",
+        "camera sensor",
+        "driver",
+        "media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/ajQqRj4lX10M5dQj@monoceros/"
+      ],
+      "expected_evidence": [
+        "OmniVision OG0VA1B",
+        "camera sensor",
+        "driver",
+        "media"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "rust-dma-buf-maintainers-update",
+      "topic_gap": "Update to MAINTAINERS file for Rust dma-buf support",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Rust",
+        "dma-buf",
+        "MAINTAINERS",
+        "kernel"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/CAO_48GGKOGMr5bexkW3+d9AsF=RYkZeaU6+nWgnaJxzXVLft2Q@mail.gmail.com/"
+      ],
+      "expected_evidence": [
+        "Rust",
+        "dma-buf",
+        "MAINTAINERS",
+        "kernel"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "imx95-blk-ctl-formatter-schema",
+      "topic_gap": "Device tree bindings for IMX95 block control formatter schema",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "dt-bindings",
+        "IMX95",
+        "formatter",
+        "schema"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/ajQ8yfriJSOtvkEH@SMW015318/"
+      ],
+      "expected_evidence": [
+        "dt-bindings",
+        "clock",
+        "IMX95",
+        "formatter",
+        "schema"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "v4l2-fh-open-kasan-fix",
+      "topic_gap": "KASAN slab-use-after-free fix in v4l2_fh_open",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "KASAN",
+        "v4l2_fh_open",
+        "use-after-free",
+        "kernel bug"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/6a3470b3.01a98498.2c3fd5.dec7@mx.google.com/"
+      ],
+      "expected_evidence": [
+        "KASAN",
+        "slab-use-after-free",
+        "v4l2_fh_open",
+        "kernel bug"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "og0va1b-camera-sensor-addition",
+      "topic_gap": "Addition of OmniVision OG0VA1B camera sensor support",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "OG0VA1B",
+        "camera sensor",
+        "driver",
+        "media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/ajQqRj4lX10M5dQj@monoceros/"
+      ],
+      "expected_evidence": [
+        "media: i2c",
+        "OG0VA1B",
+        "camera sensor",
+        "driver"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "cpp26-assert-macro",
+      "topic_gap": "User-friendly assert() macro in C++26",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "C++26",
+        "assert macro",
+        "standard library"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+      ],
+      "expected_evidence": [
+        "C++26",
+        "assert()",
+        "macro",
+        "standard library"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "cpp26-reflection-type-definitions",
+      "topic_gap": "Power of C++26 Reflection for strong (opaque) type definitions",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "C++26",
+        "Reflection",
+        "type definitions"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp"
+      ],
+      "expected_evidence": [
+        "C++26",
+        "Reflection",
+        "type definitions",
+        "strong types"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "cppcon-2025-cuda-gpu-acceleration",
+      "topic_gap": "Exploring standard C++ as an alternative to CUDA for GPU acceleration",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "C++",
+        "CUDA",
+        "GPU acceleration",
+        "CppCon"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph"
+      ],
+      "expected_evidence": [
+        "C++",
+        "CUDA",
+        "GPU acceleration",
+        "CppCon"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "cpp-documentary-trailer",
+      "topic_gap": "Trailer for 'C++: The Documentary'",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "C++ documentary",
+        "trailer"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer"
+      ],
+      "expected_evidence": [
+        "C++",
+        "documentary",
+        "history",
+        "community"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "cpp-developer-survey-2026-lite",
+      "topic_gap": "Results from the 2026 Annual C++ Developer Survey (Lite version)",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "C++ developer survey",
+        "trends",
+        "community"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1"
+      ],
+      "expected_evidence": [
+        "C++",
+        "developer survey",
+        "trends",
+        "community"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "ref-qualifiers-deducing-this",
+      "topic_gap": "Understanding 'deducing this' through C++ ref-qualifiers",
+      "source_family": "iso-cpp-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "C++",
+        "ref-qualifiers",
+        "deducing this"
+      ],
+      "candidate_urls": [
+        "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this"
+      ],
+      "expected_evidence": [
+        "C++",
+        "ref-qualifiers",
+        "deducing this",
+        "member functions"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-compatibility-definition-document",
+      "topic_gap": "Overview of the Android Compatibility Definition Document (CDD)",
+      "source_family": "android-compatibility-definition-document",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android CDD",
+        "compatibility",
+        "requirements"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cdd"
+      ],
+      "expected_evidence": [
+        "Android Compatibility Definition Document",
+        "CDD",
+        "compatibility",
+        "requirements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "aosp-camera-documentation",
+      "topic_gap": "Core documentation for the Android Camera HAL and framework",
+      "source_family": "aosp-camera-documentation",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Camera HAL",
+        "provider HAL",
+        "camera framework"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/core/camera"
+      ],
+      "expected_evidence": [
+        "Camera HAL",
+        "Android Camera",
+        "provider HAL",
+        "stream",
+        "request",
+        "result",
+        "metadata"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "aosp-whats-new-release-notes",
+      "topic_gap": "AOSP What's New and Release Notes for tracking changes",
+      "source_family": "aosp-whats-new-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "AOSP",
+        "What's New",
+        "Release Notes"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/whatsnew"
+      ],
+      "expected_evidence": [
+        "AOSP",
+        "What's New",
+        "Release Notes",
+        "Android releases"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-security-bulletin-overview",
+      "topic_gap": "Overview of the Android Security Bulletin and its structure",
+      "source_family": "android-security-bulletin",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Security Bulletin",
+        "security updates",
+        "vulnerabilities"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/security/bulletin/asb-overview"
+      ],
+      "expected_evidence": [
+        "Android Security Bulletin",
+        "security updates",
+        "vulnerabilities",
+        "framework",
+        "vendor"
+      ],
+      "risk_notes": []
+    }
+  ]
+}

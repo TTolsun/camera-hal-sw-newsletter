@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-06-19",
+  "validations": [
+    {
+      "proposal_id": "android-cli-skills-add",
+      "candidate_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "normalized_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developer-newsletter"
+    },
+    {
+      "proposal_id": "media3-1.10.1-release",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.10.1",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "androidx-media3-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-media3-release",
+      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camerax-1.6.0-release",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "google-io-26-media-pipeline",
+      "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "accepted": false,
+      "rejected_reason": "domain_not_allowed",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "google-io-26-adaptive-apps",
+      "candidate_url": "https://goo.gle/AdaptiveApps_IO26",
+      "normalized_url": "https://goo.gle/AdaptiveApps_IO26",
+      "accepted": false,
+      "rejected_reason": "domain_not_allowed",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "android-developer-productivity-updates-june-2026",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "gcc-16-features-sarif-output",
+      "candidate_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "normalized_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "gcc-16-1-release-cpp26-features",
+      "candidate_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "normalized_url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "linux-media-updates-june-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "android-developer-verification-june-2026",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "android-xr-updates-june-2026",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "android-ui-compose-first-may-2026",
+      "candidate_url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-its-box-automation",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "libcamera-devel-updates",
+      "candidate_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "normalized_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "libcamera-release-announcements"
+    },
+    {
+      "proposal_id": "linux-media-driver-updates-v7.2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+      "accepted": false,
+      "rejected_reason": "duplicate_proposal_url",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "mali-c55-updates",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260618195254.139712-1-devnexen@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260618195254.139712-1-devnexen@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "mali-c55-updates",
+      "candidate_url": "https://lore.kernel.org/linux-media/ajQG0BTLxiJ7PKIh@zed/",
+      "normalized_url": "https://lore.kernel.org/linux-media/ajQG0BTLxiJ7PKIh@zed/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "atomisp-staging-cleanup",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260618151246.6678-4-igorpetindev@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260618151246.6678-4-igorpetindev@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "og0va1b-camera-sensor-support",
+      "candidate_url": "https://lore.kernel.org/linux-media/ajQqRj4lX10M5dQj@monoceros/",
+      "normalized_url": "https://lore.kernel.org/linux-media/ajQqRj4lX10M5dQj@monoceros/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "rust-dma-buf-maintainers-update",
+      "candidate_url": "https://lore.kernel.org/linux-media/CAO_48GGKOGMr5bexkW3+d9AsF=RYkZeaU6+nWgnaJxzXVLft2Q@mail.gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/CAO_48GGKOGMr5bexkW3+d9AsF=RYkZeaU6+nWgnaJxzXVLft2Q@mail.gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "imx95-blk-ctl-formatter-schema",
+      "candidate_url": "https://lore.kernel.org/linux-media/ajQ8yfriJSOtvkEH@SMW015318/",
+      "normalized_url": "https://lore.kernel.org/linux-media/ajQ8yfriJSOtvkEH@SMW015318/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "v4l2-fh-open-kasan-fix",
+      "candidate_url": "https://lore.kernel.org/linux-media/6a3470b3.01a98498.2c3fd5.dec7@mx.google.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/6a3470b3.01a98498.2c3fd5.dec7@mx.google.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "og0va1b-camera-sensor-addition",
+      "candidate_url": "https://lore.kernel.org/linux-media/ajQqRj4lX10M5dQj@monoceros/",
+      "normalized_url": "https://lore.kernel.org/linux-media/ajQqRj4lX10M5dQj@monoceros/",
+      "accepted": false,
+      "rejected_reason": "duplicate_proposal_url",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "cpp26-assert-macro",
+      "candidate_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "normalized_url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "cpp26-reflection-type-definitions",
+      "candidate_url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
+      "normalized_url": "https://isocpp.org//blog/2026/04/power-of-cpp26-reflection-strong-opaque-type-definitions-r-cpp",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "cppcon-2025-cuda-gpu-acceleration",
+      "candidate_url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "normalized_url": "https://isocpp.org//blog/2026/04/cppcon-2025-can-standard-cpp-replace-cuda-for-gpu-acceleration-elmar-westph",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "cpp-documentary-trailer",
+      "candidate_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "normalized_url": "https://isocpp.org//blog/2026/05/cpp-the-documentary-trailer",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "cpp-developer-survey-2026-lite",
+      "candidate_url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "normalized_url": "https://isocpp.org//blog/2026/04/2026-annual-cpp-developer-survey-lite1",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "ref-qualifiers-deducing-this",
+      "candidate_url": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+      "normalized_url": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "iso-cpp-blog"
+    },
+    {
+      "proposal_id": "android-compatibility-definition-document",
+      "candidate_url": "https://source.android.com/docs/compatibility/cdd",
+      "normalized_url": "https://source.android.com/docs/compatibility/cdd",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "aosp-camera-documentation",
+      "candidate_url": "https://source.android.com/docs/core/camera",
+      "normalized_url": "https://source.android.com/docs/core/camera",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "aosp-camera-documentation"
+    },
+    {
+      "proposal_id": "aosp-whats-new-release-notes",
+      "candidate_url": "https://source.android.com/docs/whatsnew",
+      "normalized_url": "https://source.android.com/docs/whatsnew",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "aosp-whats-new-release-notes"
+    },
+    {
+      "proposal_id": "android-security-bulletin-overview",
+      "candidate_url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "normalized_url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-security-bulletin"
+    }
+  ],
+  "counts": {
+    "accepted": 27,
+    "discovered_not_extractable": 2,
+    "domain_not_allowed": 2,
+    "duplicate_proposal_url": 2
+  }
+}
