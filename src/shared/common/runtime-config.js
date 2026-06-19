@@ -48,11 +48,10 @@ const DEFAULT_SELECTION_WINDOW_POLICY = getSelectionWindowPolicy();
 
 const DEFAULT_RUNTIME_CONFIG = {
   newsletterDate: '',
-  // #487: default source collection lookback is 10 days. The daily collect
-  // workflow (01-newsletters-source-collect-pr.yml) still passes an explicit
-  // LOOKBACK_DAYS=90 to feed the catch-up pool until the weekly upsert model
-  // (#488) lands; this default applies to runs that do not set LOOKBACK_DAYS.
-  lookbackDays: 10,
+  // #574: 주 1회 전환에 맞춰 source collection lookback 기본값을 35일로 둔다(메인 21일 +
+  // reference 백스톱 35일). 01-newsletters-source-collect-pr.yml 도 동일하게 LOOKBACK_DAYS=35를
+  // 명시 전달한다. 이 기본값은 LOOKBACK_DAYS를 설정하지 않은 run에 적용된다.
+  lookbackDays: 35,
   selectionWindowPolicy: {
     primarySelectionDays: DEFAULT_SELECTION_WINDOW_POLICY.primarySelectionDays,
     fallbackSelectionDays: DEFAULT_SELECTION_WINDOW_POLICY.fallbackSelectionDays,

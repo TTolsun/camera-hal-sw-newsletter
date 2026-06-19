@@ -50,8 +50,9 @@ test('freshness window metadata maps candidate age without changing freshness sc
     ['2026-05-03', 'primary', 7],
     ['2026-04-26', 'fallback', 14],
     ['2026-04-19', 'fallback', 21],
-    ['2026-03-11', 'reference', 60],
-    ['2026-02-09', 'reference', 90],
+    ['2026-04-12', 'reference', 28],
+    ['2026-04-05', 'reference', 35],
+    ['2026-03-11', 'stale', 60],
     ['2026-01-10', 'stale', 120]
   ];
 
@@ -350,7 +351,7 @@ test('selection window enforcement excludes reference stale and unknown candidat
       ...candidateBase,
       title: 'Reference medium deterministic source',
       url: 'https://example.com/metadata-reference-medium',
-      published_date: '2026-03-11',
+      published_date: '2026-04-12',
       camera_hal_relevance_score: 80
     }),
     policyPrimaryCandidate(3, {
@@ -552,7 +553,7 @@ test('#124 acceptance: reference window remains context-only', () => {
     policyPrimaryCandidate(1, {
       title: 'Reference window high score source',
       url: 'https://example.com/124-reference-context',
-      published_date: '2026-03-11',
+      published_date: '2026-04-12',
       camera_hal_relevance_score: 100
     })
   ], { minArticles: 1, catchUpPolicy: { enabled: false } });

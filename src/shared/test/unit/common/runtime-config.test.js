@@ -69,11 +69,11 @@ test('defaults match workflow runtime defaults', () => {
   const config = readRuntimeConfig({});
 
   assert.equal(config.newsletterDate, DEFAULT_RUNTIME_CONFIG.newsletterDate);
-  assert.equal(config.lookbackDays, 10);
+  assert.equal(config.lookbackDays, 35);
   assert.deepEqual(config.selectionWindowPolicy, {
     primarySelectionDays: 7,
     fallbackSelectionDays: 21,
-    referenceContextDays: 90
+    referenceContextDays: 35
   });
   assert.equal(config.llmProvider, 'gemini');
   assert.equal(config.llmModel, 'gemini-2.5-flash');
@@ -267,7 +267,7 @@ test('selection window runtime config keeps policy shape and validates ordering'
   assert.deepEqual(readRuntimeConfig({}).selectionWindowPolicy, {
     primarySelectionDays: 7,
     fallbackSelectionDays: 21,
-    referenceContextDays: 90
+    referenceContextDays: 35
   });
   assert.deepEqual(readRuntimeConfig({
     PRIMARY_SELECTION_DAYS: '7',
@@ -671,7 +671,7 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.deepEqual(sanitized.selectionWindowPolicy, {
     primarySelectionDays: 7,
     fallbackSelectionDays: 21,
-    referenceContextDays: 90
+    referenceContextDays: 35
   });
   assert.equal(sanitized.newsroomWarnCostUsd, 0.2);
   assert.equal(sanitized.newsroomMaxCostUsd, 0.35);

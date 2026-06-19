@@ -84,7 +84,7 @@ test('policy block rendering uses the injected policy article count range', () =
   assert.match(rendered, /주요 기사 수: 11-13/);
   assert.match(rendered, /검토 게이트\(review gate\) Primary Camera Stack 기사: 최소 1개/);
   assert.match(rendered, /발행 가능\(publish-ready\) Primary Camera Stack 기사: 최소 2개/);
-  assert.match(rendered, /선정 기간\(selection windows\): primary 7일; fallback 21일; reference 90일/);
+  assert.match(rendered, /선정 기간\(selection windows\): primary 7일; fallback 21일; reference 35일/);
   assert.match(rendered, /주요 선정은 강제 적용/);
   assert.doesNotMatch(rendered, /단일 기사 정책/);
   assert.doesNotMatch(rendered, new RegExp(`주요 기사 수: ${articleCountRangeText(defaultPolicy)}`));
