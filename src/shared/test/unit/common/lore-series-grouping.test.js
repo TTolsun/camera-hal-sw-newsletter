@@ -111,6 +111,12 @@ test('loreThreadUrl maps a series patch URL to its thread view and ignores non-s
   // cover letter(patch 0)도 같은 시리즈라 thread view로 변환된다.
   const cover = loreCandidate('20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com');
   assert.ok(loreThreadUrl(cover.url).endsWith('/T/#t'));
+  // fragment(#related, 실데이터에 존재)·query·이미 #t로 끝나는 URL은 thread 경로가 그 안으로 들어가면
+  // 안 되므로 origin+pathname만 남기고 정규 thread URL로 변환한다(raw 문자열 append 회귀 방지).
+  const canonical = `${LORE_LIST}/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/T/#t`;
+  assert.equal(loreThreadUrl(`${LORE_LIST}/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/#related`), canonical);
+  assert.equal(loreThreadUrl(`${LORE_LIST}/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/?b=master`), canonical);
+  assert.equal(loreThreadUrl(`${LORE_LIST}/20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com/#t`), canonical);
   // 비-시리즈 lore message-id, 비-lore URL, 빈 값은 보조 링크를 만들지 않는다.
   assert.equal(loreThreadUrl(`${LORE_LIST}/051b9597-873c-44ca-b7a5-29efa795406f@oss.qualcomm.com/`), '');
   assert.equal(loreThreadUrl('https://example.com/some/path/article'), '');

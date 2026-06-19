@@ -278,6 +278,8 @@ test('newsletter renderer adds a series thread link for lore patch-series source
   const html = buildHtml(draft);
   assert.match(markdown, /전체 패치 시리즈\]\(https:\/\/lore\.kernel\.org\/linux-media\/[^)]*\/T\/#t\)/);
   assert.match(html, /전체 패치 시리즈<\/a>/);
+  // 보조 링크를 더해도 원래 patch source 링크(claim binding)는 그대로 남는다.
+  assert.match(markdown, /\]\(https:\/\/lore\.kernel\.org\/linux-media\/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard\.com\/\)/);
 
   const nonSeries = issue();
   nonSeries.sections[0].public_article.source_links = [{ title: 'Android', url: 'https://developer.android.com/x', source_role: 'primary' }];

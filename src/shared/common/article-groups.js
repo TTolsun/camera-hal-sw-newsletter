@@ -167,7 +167,16 @@ function loreThreadUrl(url) {
   const messageUrl = text(url);
   if (!messageUrl) return '';
   if (!loreSeriesPartsFromMessageId(loreMessageIdFromUrl(messageUrl))) return '';
-  return `${messageUrl.replace(/\/+$/, '')}/T/#t`;
+  // raw 문자열에 '/T/#t'를 붙이면 URL의 query(?…)나 fragment(#related 등)가 있을 때 thread 경로가
+  // 그 안으로 들어가 thread view가 아닌 같은 패치로 풀린다(실데이터에 #related 프래그먼트 존재).
+  // parsed origin+pathname(query·fragment 제거)에 붙여 정규 thread URL을 만든다.
+  let parsed;
+  try {
+    parsed = new URL(messageUrl);
+  } catch (_) {
+    return '';
+  }
+  return `${parsed.origin}${parsed.pathname.replace(/\/+$/, '')}/T/#t`;
 }
 
 function loreSeriesKey(candidate = {}) {
