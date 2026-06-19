@@ -7,6 +7,7 @@ const {
   toEditorDraftArtifact,
   toLegacyEditorIssue
 } = require('../../../../shared/domain/newsletter-domain-normalize');
+const { buildNewsletterQualityReport } = require('../../../quality/newsletter-quality');
 const {
   validateNewsletterIssueModel
 } = require('../../../../shared/domain/newsletter-domain-validate');
@@ -176,4 +177,92 @@ test('valid domain issues without legacy renderer fields stay valid with compati
     item.code === 'legacy_renderer_field_missing' &&
     item.severity === 'warning'
   ));
+});
+
+test('normalizeNewsletterIssue preserves top-level contract versions into issue.metadata', () => {
+  const issue = normalizeNewsletterIssue(legacyEditor({}, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  }));
+
+  assert.equal(issue.metadata.public_contract_version, 'story-v1');
+  assert.equal(issue.metadata.generation_contract_version, 1);
+});
+
+test('editor draft artifact preserves contract versions through normalize and legacy round-trip', () => {
+  const editor = legacyEditor({}, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+  const draft = toEditorDraftArtifact(editor, {
+    date: '2026-05-03',
+    provider: 'gemini',
+    providerModel: 'gemini-3.5-flash'
+  });
+
+  assert.equal(draft.public_contract_version, 'story-v1');
+  assert.equal(draft.generation_contract_version, 1);
+  assert.equal(draft.issue.metadata.public_contract_version, 'story-v1');
+  assert.equal(draft.issue.metadata.generation_contract_version, 1);
+
+  const legacy = toLegacyEditorIssue(draft);
+  assert.equal(legacy.public_contract_version, 'story-v1');
+  assert.equal(legacy.generation_contract_version, 1);
+});
+
+test('editor-draft.json JSON round-trip retains story contract markers', () => {
+  const editor = legacyEditor({}, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1
+  });
+  const onDisk = JSON.parse(JSON.stringify(toEditorDraftArtifact(editor, {
+    date: '2026-05-03',
+    provider: 'gemini',
+    providerModel: 'gemini-3.5-flash'
+  })));
+
+  assert.equal(onDisk.public_contract_version, 'story-v1');
+  assert.equal(onDisk.issue.metadata.public_contract_version, 'story-v1');
+});
+
+// story-structure deduction(reason에 'story structure' 포함)을 센다. 이 fixture에서는 전체 score도
+// 동등하므로(fix가 없으면 draft가 story 구조 검사를 건너뛰어 점수가 부풀려진다) 아래 케이스는 deduction
+// 개수와 전체 score를 모두 단언해 회귀 가드를 넓힌다.
+function storyStructureDeductionCount(report) {
+  return (report.deductions || []).filter(item => /story structure/i.test(item.reason || '')).length;
+}
+
+test('quality recompute over editor-draft yields same story-structure deductions as live editor', () => {
+  const editor = legacyEditor({}, {
+    public_contract_version: 'story-v1',
+    generation_contract_version: 1,
+    briefing: ['xxxx', 'yyyy', 'zzzz']
+  });
+  const onDisk = JSON.parse(JSON.stringify(toEditorDraftArtifact(editor, {
+    date: '2026-05-03',
+    provider: 'gemini',
+    providerModel: 'gemini-3.5-flash'
+  })));
+
+  const liveReport = buildNewsletterQualityReport('2026-05-03', editor, {}, {});
+  const draftReport = buildNewsletterQualityReport('2026-05-03', onDisk, {}, {});
+
+  assert.equal(storyStructureDeductionCount(liveReport), 3);
+  assert.equal(storyStructureDeductionCount(draftReport), storyStructureDeductionCount(liveReport));
+  assert.equal(draftReport.score, liveReport.score);
+});
+
+test('non-story editor stays non-story through editor-draft round-trip', () => {
+  const editor = legacyEditor({}, { briefing: ['xxxx', 'yyyy', 'zzzz'] });
+  const onDisk = JSON.parse(JSON.stringify(toEditorDraftArtifact(editor, {
+    date: '2026-05-03',
+    provider: 'gemini',
+    providerModel: 'gemini-3.5-flash'
+  })));
+
+  const liveReport = buildNewsletterQualityReport('2026-05-03', editor, {}, {});
+  const draftReport = buildNewsletterQualityReport('2026-05-03', onDisk, {}, {});
+
+  assert.equal(storyStructureDeductionCount(liveReport), 0);
+  assert.equal(storyStructureDeductionCount(draftReport), 0);
 });
