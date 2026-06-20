@@ -796,96 +796,6 @@
       }
     },
     {
-      "candidate_id": "gemini-b4e03ebc4b6448ea",
-      "url": "https://lore.kernel.org/linux-media/3ca4718b-ee62-4c55-b593-4d6ba543d5b0@oss.qualcomm.com/",
-      "title": "Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: gaokun3: describe rear camera module information as musch as possible - Konrad Dybcio",
-      "source_quality_score": 0.765,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.55,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-28839643a7893eb7",
-      "url": "https://lore.kernel.org/linux-media/6e760884-87b1-4ec8-9ae1-e53901451b65@oss.qualcomm.com/",
-      "title": "Re: [PATCH v4 4/6] arm64: dts: qcom: shikra: Add pin configuration for mclks - Konrad Dybcio",
-      "source_quality_score": 0.72,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-97a1bc416c326ae6",
-      "url": "https://lore.kernel.org/linux-media/45a4b138-0fbd-4c55-bccd-83858d95df5d@linaro.org/",
-      "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node - Vladimir Zapolskiy",
-      "source_quality_score": 0.72,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-98444c77340368f8",
-      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
-      "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-8eccf001d6d4bbf1",
-      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
-      "title": "Overview of Android CLI &nbsp;|&nbsp; Android Studio &nbsp;|&nbsp; Android Developers",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-bb0e15b6742fce01",
       "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
       "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
@@ -904,16 +814,16 @@
       }
     },
     {
-      "candidate_id": "gemini-linked-83920430c1be5b76",
-      "url": "https://source.android.com/docs/whatsnew/release-notes",
-      "title": "Release notes",
-      "source_quality_score": 0.413,
+      "candidate_id": "gemini-linked-7019ea3564afa8d3",
+      "url": "https://lore.kernel.org/r/20260128-hm1246-v9-0-f9c996486a95@emfend.at",
+      "title": "https://lore.kernel.org/r/20260128-hm1246-v9-0-f9c996486a95@emfend.at",
+      "source_quality_score": 0.458,
       "source_quality_bucket": "weak_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0,
         "android_hal_relevance": 0,
-        "technical_depth": 0.55,
+        "technical_depth": 0.85,
         "recency_score": 0.25,
         "evidence_strength": 0.55,
         "duplicate_penalty": 0,
@@ -922,16 +832,16 @@
       }
     },
     {
-      "candidate_id": "gemini-linked-0779844e3674fa79",
-      "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
-      "title": "Latest security bulletins",
-      "source_quality_score": 0.367,
+      "candidate_id": "gemini-linked-876e00deb462da7c",
+      "url": "https://lore.kernel.org/r/20260113-hm1246-v8-0-ea93947b192e@emfend.at",
+      "title": "https://lore.kernel.org/r/20260113-hm1246-v8-0-ea93947b192e@emfend.at",
+      "source_quality_score": 0.458,
       "source_quality_bucket": "weak_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0,
         "android_hal_relevance": 0,
-        "technical_depth": 0.25,
+        "technical_depth": 0.85,
         "recency_score": 0.25,
         "evidence_strength": 0.55,
         "duplicate_penalty": 0,
@@ -940,16 +850,16 @@
       }
     },
     {
-      "candidate_id": "gemini-linked-584a6a0cadfdd7d4",
-      "url": "https://source.android.com/docs/whatsnew/latest-cdd",
-      "title": "Latest Compatibility Definition Document (CDD)",
-      "source_quality_score": 0.367,
+      "candidate_id": "gemini-linked-da8635b97a42c9bd",
+      "url": "https://lore.kernel.org/r/20260112-hm1246-v7-0-fee8587f2808@emfend.at",
+      "title": "https://lore.kernel.org/r/20260112-hm1246-v7-0-fee8587f2808@emfend.at",
+      "source_quality_score": 0.458,
       "source_quality_bucket": "weak_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0,
         "android_hal_relevance": 0,
-        "technical_depth": 0.25,
+        "technical_depth": 0.85,
         "recency_score": 0.25,
         "evidence_strength": 0.55,
         "duplicate_penalty": 0,
@@ -958,16 +868,106 @@
       }
     },
     {
-      "candidate_id": "gemini-linked-7317dd637c497758",
-      "url": "https://source.android.com/docs/security/bulletin",
-      "title": "Bulletins",
-      "source_quality_score": 0.367,
+      "candidate_id": "gemini-linked-008a257c0d515871",
+      "url": "https://lore.kernel.org/r/20251202-hm1246-v6-0-3e96ed6b3ffa@emfend.at",
+      "title": "https://lore.kernel.org/r/20251202-hm1246-v6-0-3e96ed6b3ffa@emfend.at",
+      "source_quality_score": 0.458,
       "source_quality_bucket": "weak_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0,
         "android_hal_relevance": 0,
-        "technical_depth": 0.25,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-8210b021c0736164",
+      "url": "https://lore.kernel.org/r/20251104-hm1246-v5-0-97c8f25b5419@emfend.at",
+      "title": "https://lore.kernel.org/r/20251104-hm1246-v5-0-97c8f25b5419@emfend.at",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-10ef254363b4a532",
+      "url": "https://lore.kernel.org/r/20251017-hm1246-v4-0-e3388ea2f08c@emfend.at",
+      "title": "https://lore.kernel.org/r/20251017-hm1246-v4-0-e3388ea2f08c@emfend.at",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-aac46b48b2a1c3c9",
+      "url": "https://lore.kernel.org/r/20250912-hm1246-v3-0-3b89f47dfa43@emfend.at",
+      "title": "https://lore.kernel.org/r/20250912-hm1246-v3-0-3b89f47dfa43@emfend.at",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-4e18ab8e651a3568",
+      "url": "https://lore.kernel.org/r/20250526-hm1246-v2-0-6b882827a3a5@emfend.at",
+      "title": "https://lore.kernel.org/r/20250526-hm1246-v2-0-6b882827a3a5@emfend.at",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-53131a0a2666e707",
+      "url": "https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com",
+      "title": "https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com/",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
         "recency_score": 0.25,
         "evidence_strength": 0.55,
         "duplicate_penalty": 0,
@@ -978,8 +978,8 @@
   ],
   "counts": {
     "strong_candidate": 10,
-    "review_candidate": 8,
-    "blocked_candidate": 32,
-    "weak_candidate": 4
+    "review_candidate": 5,
+    "blocked_candidate": 30,
+    "weak_candidate": 9
   }
 }
