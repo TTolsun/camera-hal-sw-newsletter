@@ -76,8 +76,10 @@ const DEFAULT_RUNTIME_CONFIG = {
   geminiRetryMaxDelayMs: 300000,
   // Wall-clock ceiling for a single LLM call. A hanging model is abandoned after
   // this many ms so the retry/fallback machinery can progress instead of stalling
-  // the whole run (see #649; 2026-06-18 editor hang ran 24+ minutes). 0 disables.
-  geminiCallTimeoutMs: 240000,
+  // the whole run (see #649; 2026-06-18 editor hang ran 24+ minutes). 480000ms is
+  // 8 minutes: conservative headroom over a legitimately slow editor/factcheck
+  // call while still bounding a hang far below the old unbounded behaviour. 0 disables.
+  geminiCallTimeoutMs: 480000,
   newsroomMaxQualityRetries: 1,
   newsroomMaxSectionRepairs: 1,
   newsroomWarnCostUsd: 0.2,

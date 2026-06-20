@@ -623,7 +623,7 @@ test('validator returns structured errors for malformed fallback model input', (
     geminiMaxRetries: 2,
     geminiRetryDelaysMs: [20000],
     geminiRetryMaxDelayMs: 300000,
-    geminiCallTimeoutMs: 240000,
+    geminiCallTimeoutMs: 480000,
     newsroomMaxQualityRetries: 1,
     newsroomMaxSectionRepairs: 1,
     newsroomWarnCostUsd: 0.15,
