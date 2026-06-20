@@ -765,6 +765,79 @@ test('missing seed evidence pack preserves candidate-local validation behavior',
   assert.equal(result.issues.some(item => /^seed_evidence_pack_/.test(item.reason_code)), false);
 });
 
+test('#651: a stray unresolved evidence_id is salvaged when the claim keeps valid supporting evidence', () => {
+  const result = validateArticleClaims({
+    section: section({
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'CameraX 1.6.1 release date: 2026-05-06.',
+        claim_type: 'fact',
+        // One valid supporting id + one stray hallucinated/mis-copied id.
+        evidence_ids: ['seed-camerax-primary-01', 'hallucinated-evidence-id-xyz'],
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+        impact_level: 'app_api_or_framework_adjacent',
+        overclaim_risk: 'low'
+      }]
+    }),
+    candidate: candidate(),
+    strict: true
+  });
+  // The claim is still genuinely source-bound by the valid id, so a single stray id
+  // must NOT drop the whole article. The unknown_evidence_id is demoted to advisory.
+  assert.notEqual(result.claim_results[0].status, 'needs_fix');
+  const unknownIssue = result.claim_results[0].issues.find(item => item.reason_code === 'unknown_evidence_id');
+  assert.ok(unknownIssue, 'the stray id is still reported for transparency');
+  assert.equal(unknownIssue.blocking, false);
+  assert.equal(unknownIssue.salvaged_redundant_evidence_id, true);
+  assert.ok(result.claim_results[0].invalid_evidence_ids.includes('hallucinated-evidence-id-xyz'));
+});
+
+test('#651: an unknown evidence_id still fails closed when the claim has no other valid support', () => {
+  const result = validateArticleClaims({
+    section: section({
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'CameraX 1.6.1 release date: 2026-05-06.',
+        claim_type: 'fact',
+        evidence_ids: ['hallucinated-evidence-id-xyz'],
+        source_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+        impact_level: 'app_api_or_framework_adjacent',
+        overclaim_risk: 'low'
+      }]
+    }),
+    candidate: candidate(),
+    strict: true
+  });
+  assert.equal(result.claim_results[0].status, 'needs_fix');
+  const unknownIssue = result.claim_results[0].issues.find(item => item.reason_code === 'unknown_evidence_id');
+  assert.ok(unknownIssue);
+  assert.equal(unknownIssue.blocking, true);
+});
+
+test('#651: salvage does NOT apply when another blocking issue (source mismatch) is present', () => {
+  const result = validateArticleClaims({
+    section: section({
+      claims: [{
+        claim_id: 'claim-1',
+        text: 'CameraX 1.6.1 release date: 2026-05-06.',
+        claim_type: 'fact',
+        evidence_ids: ['seed-camerax-primary-01', 'hallucinated-evidence-id-xyz'],
+        // Wrong source URL for the valid evidence id -> source mismatch (a separate blocker).
+        source_urls: ['https://example.com/wrong-source#1.6.1'],
+        impact_level: 'app_api_or_framework_adjacent',
+        overclaim_risk: 'low'
+      }]
+    }),
+    candidate: candidate(),
+    strict: true
+  });
+  // A real binding problem remains, so the article must still fail closed.
+  assert.equal(result.claim_results[0].status, 'needs_fix');
+  const unknownIssue = result.claim_results[0].issues.find(item => item.reason_code === 'unknown_evidence_id');
+  assert.ok(unknownIssue);
+  assert.equal(unknownIssue.blocking, true);
+});
+
 test('missing evidence id mapping fixture remains unresolved', () => {
   const fixture = readJsonFixture('seed-evidence/bad/missing-evidence-id-mapping.json');
   const missingEvidenceId = fixture.section.claims[0].evidence_ids[0];
