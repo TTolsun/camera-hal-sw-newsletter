@@ -60,6 +60,7 @@ function errorStatus(error, retryableStatuses = new Set()) {
 }
 
 function lastStatus(error, retryableStatuses = new Set()) {
+  if (error instanceof LlmCallTimeoutError) return 'timeout';
   const directStatus = errorStatus(error, retryableStatuses);
   if (directStatus) return directStatus;
 

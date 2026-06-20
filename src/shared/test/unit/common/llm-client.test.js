@@ -119,6 +119,8 @@ test('callLlmJson throws after every fallback model times out', async () => {
   const provider = fakeProvider(() => new Promise(() => {}));
   await assert.rejects(
     () => client.callLlmJson('unit stage', 'system', 'prompt', {}, { provider }),
-    /Fake API failed for all configured models/
+    error => /Fake API failed for all configured models/.test(error.message) &&
+      // The failure summary distinguishes a timeout from a generic 'unknown' status.
+      /status timeout/.test(error.message)
   );
 });
