@@ -37,15 +37,14 @@
 | Gemini 후보 | 5 | 실행됨 |
 | Gemini 신규 unique 후보 | 0 | 없음 |
 | Gemini publishable 후보 | 5 | 있음 |
-| linked evidence 파생 후보 | 5 | 있음 |
+| linked evidence 파생 후보 | 4 | 있음 |
 | linked 파생 publishable 후보 | 0 | 없음 |
 | seed 후보 | 0 | 없음 |
 | seed 신규 unique 후보 | 0 | 없음 |
 | seed publishable 후보 | 0 | 없음 |
 | 중복 후보 | 5 | 확인 필요 |
 | parser gap | 1 | 보강 필요 |
-| Gemini parser failure | 1 | 보강 필요 |
-| rejected: parser_gap | 1 | source extraction 보강 필요 |
+| Gemini parser failure | 0 | 없음 |
 | rejected: taxonomy_gap | 1 | bucket/classifier 또는 허용 domain 보강 필요 |
 
 ## 상세 report

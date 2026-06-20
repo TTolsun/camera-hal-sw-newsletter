@@ -719,23 +719,6 @@
       ]
     },
     {
-      "cluster_id": "45111a50490175f2",
-      "cluster_key": "https://developer.android.com/media/camera/camerax",
-      "canonical_url": "https://developer.android.com/media/camera/camerax",
-      "canonical_title": "CameraX",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/media/camera/camerax",
-          "title": "CameraX",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "83920430c1be5b76",
       "cluster_key": "https://source.android.com/docs/whatsnew/release-notes",
       "canonical_url": "https://source.android.com/docs/whatsnew/release-notes",

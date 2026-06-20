@@ -5,21 +5,8 @@
   "status": "WARNING",
   "parser_gap_count": 1,
   "duplicate_discovery_gap_count": 1,
-  "gemini_parser_failure_count": 1,
-  "gemini_parser_failures": [
-    {
-      "severity": "warning",
-      "action": "GEMINI_PARSER_EXTRACTION_REQUIRED",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3",
-      "source_policy_match": "androidx-media3-release-notes",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-media3-release",
-      "rejected_reason": "discovered_not_extractable",
-      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL."
-    }
-  ],
+  "gemini_parser_failure_count": 0,
+  "gemini_parser_failures": [],
   "items": [
     {
       "severity": "warning",

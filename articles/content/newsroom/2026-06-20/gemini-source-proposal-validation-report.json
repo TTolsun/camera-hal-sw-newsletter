@@ -4,21 +4,7 @@
   "newsletter_date": "2026-06-20",
   "validations": [
     {
-      "proposal_id": "android-media3-release-notes-20260620",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "androidx-media3-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-media3-release",
-      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
-      "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "android-camera-hal-driver-updates-20260620",
+      "proposal_id": "android-camera-hal-updates-20260620",
       "candidate_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at/",
       "accepted": true,
@@ -26,7 +12,7 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "android-camera-hal-driver-updates-20260620",
+      "proposal_id": "android-camera-hal-updates-20260620",
       "candidate_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
       "accepted": true,
@@ -34,7 +20,7 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "android-camera-hal-driver-updates-20260620",
+      "proposal_id": "android-camera-hal-updates-20260620",
       "candidate_url": "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/",
       "accepted": true,
@@ -42,7 +28,7 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "android-camera-hal-driver-updates-20260620",
+      "proposal_id": "android-camera-hal-updates-20260620",
       "candidate_url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/",
       "accepted": true,
@@ -50,24 +36,23 @@
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "android-camera-its-box-updates-20260620",
-      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "android-compatibility-definition-document"
-    },
-    {
-      "proposal_id": "google-io-2026-media-pipeline-20260620",
+      "proposal_id": "android-media-pipeline-google-io-2026",
       "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
       "accepted": false,
       "rejected_reason": "domain_not_allowed",
       "source_policy_match": ""
+    },
+    {
+      "proposal_id": "android-camera-testing-automation-20260620",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
     }
   ],
   "counts": {
-    "discovered_not_extractable": 1,
     "accepted": 5,
     "domain_not_allowed": 1
   }

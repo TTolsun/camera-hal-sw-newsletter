@@ -4,35 +4,16 @@
   "newsletter_date": "2026-06-20",
   "proposals": [
     {
-      "proposal_id": "android-media3-release-notes-20260620",
-      "topic_gap": "Android Media3 has new features for camera output and A/V sync, but no recent release notes are available.",
-      "source_family": "androidx-media3-release-notes",
+      "proposal_id": "android-camera-hal-updates-20260620",
+      "topic_gap": "Recent updates and discussions on Android Camera HAL, including new sensor drivers and related kernel-level changes, are crucial for understanding the evolving camera hardware support on Android.",
+      "source_family": "linux-camera",
       "allowed_domains": [],
       "search_keywords": [
-        "Media3 release notes",
-        "camera output",
-        "A/V sync"
-      ],
-      "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/media3"
-      ],
-      "expected_evidence": [
-        "Media3 release notes",
-        "camera output",
-        "A/V sync"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "android-camera-hal-driver-updates-20260620",
-      "topic_gap": "New camera sensor drivers are being added to the Linux kernel, which could impact Android camera HAL implementations. Need to track these driver updates.",
-      "source_family": "lore-linux-media-list",
-      "allowed_domains": [],
-      "search_keywords": [
-        "camera driver",
-        "image sensor",
-        "linux media",
-        "HAL"
+        "Android Camera HAL",
+        "kernel media driver",
+        "image sensor driver",
+        "V4L2",
+        "camera hardware support"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at/",
@@ -41,50 +22,55 @@
         "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/"
       ],
       "expected_evidence": [
-        "camera sensor driver",
-        "image sensor",
-        "HAL"
+        "New image sensor drivers (e.g., Himax HM1246, imx576)",
+        "Kernel-level changes related to camera hardware",
+        "Device Tree (DTS) updates for camera modules"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-its-box-updates-20260620",
-      "topic_gap": "The Android Compatibility Test Suite (CTS) for cameras has updates, but the specific changes and their impact on camera HAL implementations are not detailed.",
-      "source_family": "aosp-site-updates",
-      "allowed_domains": [],
-      "search_keywords": [
-        "Camera ITS",
-        "CTS camera",
-        "automated testing"
-      ],
-      "candidate_urls": [
-        "https://source.android.com/docs/compatibility/cts/camera-its-box"
-      ],
-      "expected_evidence": [
-        "Camera ITS",
-        "automation",
-        "testing"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "google-io-2026-media-pipeline-20260620",
-      "topic_gap": "Google I/O '26 had a session on building premium Android experiences with a media pipeline toolkit, but the specific details and camera-related aspects are not fully captured.",
+      "proposal_id": "android-media-pipeline-google-io-2026",
+      "topic_gap": "Google I/O '26 likely featured updates on Android's media pipeline, crucial for camera output processing, A/V sync, and premium media experiences.",
       "source_family": "android-developers-blog",
       "allowed_domains": [],
       "search_keywords": [
-        "Google I/O 2026",
         "Android media pipeline",
-        "camera toolkit"
+        "Media3",
+        "MediaCodec",
+        "MediaRecorder",
+        "Google I/O 2026",
+        "camera output",
+        "AV sync"
       ],
       "candidate_urls": [
         "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
       ],
       "expected_evidence": [
-        "media pipeline",
-        "toolkit",
-        "camera output",
-        "Android experiences"
+        "Updates on Media3, MediaCodec, MediaRecorder",
+        "Best practices for camera-generated media pipelines",
+        "A/V sync improvements",
+        "New features for premium media experiences on Android"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-camera-testing-automation-20260620",
+      "topic_gap": "Automated testing for camera images is essential for ensuring camera HAL quality and compatibility. Updates on this topic are valuable.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android camera testing",
+        "camera ITS",
+        "automated camera validation",
+        "camera HAL compatibility"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Methods for automating camera image testing",
+        "Tools and frameworks for camera integration tests (ITS)",
+        "Best practices for camera HAL validation"
       ],
       "risk_notes": []
     }

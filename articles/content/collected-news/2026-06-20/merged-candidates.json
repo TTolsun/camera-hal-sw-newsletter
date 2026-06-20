@@ -4,7 +4,7 @@
   "newsletter_date": "2026-06-20",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 35,
-  "generated_at": "2026-06-20T01:51:59.635Z",
+  "generated_at": "2026-06-20T02:04:48.659Z",
   "sources_path": "src/shared/data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -1436,7 +1436,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fr",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -1450,7 +1450,7 @@
           "contentLength": 1760
         },
         {
-          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=fr",
+          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -1480,7 +1480,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fr",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -1494,7 +1494,7 @@
           "contentLength": 1760
         },
         {
-          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=fr",
+          "url": "https://source.android.com/static/compatibility/cts/images/modular_rig_and_extension.png?hl=pt-br",
           "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",
           "articleUrl": "https://source.android.com/docs/compatibility/cts/camera-its-box",
           "sourceKind": "article-img",
@@ -13350,6 +13350,20 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin",
+          "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Security Bulletin",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -13366,6 +13380,20 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=pt-br",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin",
+          "articleUrl": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Security Bulletin",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -33233,18 +33261,19 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "New camera sensor drivers are being added to the Linux kernel, which could impact Android camera HAL implementations. Need to track these driver updates."
+        "Recent updates and discussions on Android Camera HAL, including new sensor drivers and related kernel-level changes, are crucial for understanding the evolving camera hardware support on Android."
       ],
       "keywords": [
-        "camera driver",
-        "image sensor",
-        "linux media",
-        "HAL"
+        "Android Camera HAL",
+        "kernel media driver",
+        "image sensor driver",
+        "V4L2",
+        "camera hardware support"
       ],
       "evidence": [
-        "camera sensor driver",
-        "image sensor",
-        "HAL"
+        "New image sensor drivers (e.g., Himax HM1246, imx576)",
+        "Kernel-level changes related to camera hardware",
+        "Device Tree (DTS) updates for camera modules"
       ],
       "warnings": [],
       "publishedAt": "2026-06-19",
@@ -33262,10 +33291,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-hal-driver-updates-20260620",
-      "proposal_trace_id": "android-camera-hal-driver-updates-20260620",
-      "discovery_topic_gap": "New camera sensor drivers are being added to the Linux kernel, which could impact Android camera HAL implementations. Need to track these driver updates.",
-      "discovery_source_family": "lore-linux-media-list",
+      "proposal_id": "android-camera-hal-updates-20260620",
+      "proposal_trace_id": "android-camera-hal-updates-20260620",
+      "discovery_topic_gap": "Recent updates and discussions on Android Camera HAL, including new sensor drivers and related kernel-level changes, are crucial for understanding the evolving camera hardware support on Android.",
+      "discovery_source_family": "linux-camera",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "source_quality_report_ref": "gemini-673b13b06fbc64fc",
@@ -33309,18 +33338,19 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "New camera sensor drivers are being added to the Linux kernel, which could impact Android camera HAL implementations. Need to track these driver updates."
+        "Recent updates and discussions on Android Camera HAL, including new sensor drivers and related kernel-level changes, are crucial for understanding the evolving camera hardware support on Android."
       ],
       "keywords": [
-        "camera driver",
-        "image sensor",
-        "linux media",
-        "HAL"
+        "Android Camera HAL",
+        "kernel media driver",
+        "image sensor driver",
+        "V4L2",
+        "camera hardware support"
       ],
       "evidence": [
-        "camera sensor driver",
-        "image sensor",
-        "HAL"
+        "New image sensor drivers (e.g., Himax HM1246, imx576)",
+        "Kernel-level changes related to camera hardware",
+        "Device Tree (DTS) updates for camera modules"
       ],
       "warnings": [],
       "publishedAt": "2026-06-19",
@@ -33338,10 +33368,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-hal-driver-updates-20260620",
-      "proposal_trace_id": "android-camera-hal-driver-updates-20260620",
-      "discovery_topic_gap": "New camera sensor drivers are being added to the Linux kernel, which could impact Android camera HAL implementations. Need to track these driver updates.",
-      "discovery_source_family": "lore-linux-media-list",
+      "proposal_id": "android-camera-hal-updates-20260620",
+      "proposal_trace_id": "android-camera-hal-updates-20260620",
+      "discovery_topic_gap": "Recent updates and discussions on Android Camera HAL, including new sensor drivers and related kernel-level changes, are crucial for understanding the evolving camera hardware support on Android.",
+      "discovery_source_family": "linux-camera",
       "source_quality_score": 0.765,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-feaaaab11d0b1101",
@@ -33385,18 +33415,19 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "New camera sensor drivers are being added to the Linux kernel, which could impact Android camera HAL implementations. Need to track these driver updates."
+        "Recent updates and discussions on Android Camera HAL, including new sensor drivers and related kernel-level changes, are crucial for understanding the evolving camera hardware support on Android."
       ],
       "keywords": [
-        "camera driver",
-        "image sensor",
-        "linux media",
-        "HAL"
+        "Android Camera HAL",
+        "kernel media driver",
+        "image sensor driver",
+        "V4L2",
+        "camera hardware support"
       ],
       "evidence": [
-        "camera sensor driver",
-        "image sensor",
-        "HAL"
+        "New image sensor drivers (e.g., Himax HM1246, imx576)",
+        "Kernel-level changes related to camera hardware",
+        "Device Tree (DTS) updates for camera modules"
       ],
       "warnings": [],
       "publishedAt": "2026-06-19",
@@ -33414,10 +33445,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-hal-driver-updates-20260620",
-      "proposal_trace_id": "android-camera-hal-driver-updates-20260620",
-      "discovery_topic_gap": "New camera sensor drivers are being added to the Linux kernel, which could impact Android camera HAL implementations. Need to track these driver updates.",
-      "discovery_source_family": "lore-linux-media-list",
+      "proposal_id": "android-camera-hal-updates-20260620",
+      "proposal_trace_id": "android-camera-hal-updates-20260620",
+      "discovery_topic_gap": "Recent updates and discussions on Android Camera HAL, including new sensor drivers and related kernel-level changes, are crucial for understanding the evolving camera hardware support on Android.",
+      "discovery_source_family": "linux-camera",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "source_quality_report_ref": "gemini-3ad0ab2f02b596de",
@@ -33461,18 +33492,19 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "New camera sensor drivers are being added to the Linux kernel, which could impact Android camera HAL implementations. Need to track these driver updates."
+        "Recent updates and discussions on Android Camera HAL, including new sensor drivers and related kernel-level changes, are crucial for understanding the evolving camera hardware support on Android."
       ],
       "keywords": [
-        "camera driver",
-        "image sensor",
-        "linux media",
-        "HAL"
+        "Android Camera HAL",
+        "kernel media driver",
+        "image sensor driver",
+        "V4L2",
+        "camera hardware support"
       ],
       "evidence": [
-        "camera sensor driver",
-        "image sensor",
-        "HAL"
+        "New image sensor drivers (e.g., Himax HM1246, imx576)",
+        "Kernel-level changes related to camera hardware",
+        "Device Tree (DTS) updates for camera modules"
       ],
       "warnings": [],
       "publishedAt": "2026-06-19",
@@ -33490,10 +33522,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-hal-driver-updates-20260620",
-      "proposal_trace_id": "android-camera-hal-driver-updates-20260620",
-      "discovery_topic_gap": "New camera sensor drivers are being added to the Linux kernel, which could impact Android camera HAL implementations. Need to track these driver updates.",
-      "discovery_source_family": "lore-linux-media-list",
+      "proposal_id": "android-camera-hal-updates-20260620",
+      "proposal_trace_id": "android-camera-hal-updates-20260620",
+      "discovery_topic_gap": "Recent updates and discussions on Android Camera HAL, including new sensor drivers and related kernel-level changes, are crucial for understanding the evolving camera hardware support on Android.",
+      "discovery_source_family": "linux-camera",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "source_quality_report_ref": "gemini-0edf26e287a58526",
@@ -33537,17 +33569,18 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "The Android Compatibility Test Suite (CTS) for cameras has updates, but the specific changes and their impact on camera HAL implementations are not detailed."
+        "Automated testing for camera images is essential for ensuring camera HAL quality and compatibility. Updates on this topic are valuable."
       ],
       "keywords": [
-        "Camera ITS",
-        "CTS camera",
-        "automated testing"
+        "Android camera testing",
+        "camera ITS",
+        "automated camera validation",
+        "camera HAL compatibility"
       ],
       "evidence": [
-        "Camera ITS",
-        "automation",
-        "testing"
+        "Methods for automating camera image testing",
+        "Tools and frameworks for camera integration tests (ITS)",
+        "Best practices for camera HAL validation"
       ],
       "warnings": [],
       "publishedAt": "2026-06-17",
@@ -33565,9 +33598,9 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-its-box-updates-20260620",
-      "proposal_trace_id": "android-camera-its-box-updates-20260620",
-      "discovery_topic_gap": "The Android Compatibility Test Suite (CTS) for cameras has updates, but the specific changes and their impact on camera HAL implementations are not detailed.",
+      "proposal_id": "android-camera-testing-automation-20260620",
+      "proposal_trace_id": "android-camera-testing-automation-20260620",
+      "discovery_topic_gap": "Automated testing for camera images is essential for ensuring camera HAL quality and compatibility. Updates on this topic are valuable.",
       "discovery_source_family": "aosp-site-updates",
       "source_quality_score": 0.802,
       "source_quality_bucket": "strong_candidate",
@@ -33578,69 +33611,6 @@
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
       "evidence_validation_status": "pass"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-linked-45111a50490175f2",
-      "source_candidate_id": "gemini-linked-45111a50490175f2",
-      "title": "CameraX",
-      "url": "https://developer.android.com/media/camera/camerax",
-      "articleUrl": "https://developer.android.com/media/camera/camerax",
-      "article_url": "https://developer.android.com/media/camera/camerax",
-      "source": "Android Developer Newsletter",
-      "source_name": "Android Developer Newsletter",
-      "sourceName": "Android Developer Newsletter",
-      "sourceUrl": "https://developer.android.com/newsletter",
-      "source_url": "https://developer.android.com/newsletter",
-      "source_id": "android-developer-newsletter",
-      "category": "android",
-      "source_category": "android",
-      "section": "android",
-      "source_section": "android",
-      "priority": "medium",
-      "reliability": "official",
-      "source_reliability": "official",
-      "origin": "gemini_linked_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "derived_from_url": "https://goo.gle/AdaptiveApps_IO26",
-      "parent_candidate_id": "",
-      "parentUrl": "https://goo.gle/AdaptiveApps_IO26",
-      "parent_url": "https://goo.gle/AdaptiveApps_IO26",
-      "parentTitle": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-      "parent_title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
-      "anchorText": "CameraX",
-      "anchor_text": "CameraX",
-      "link_context": "CameraX",
-      "evidence_role": "secondary_context",
-      "suggested_article_type": "Library Update",
-      "outgoing_links": [],
-      "source_extraction": {
-        "mode": "gemini_linked_discovery",
-        "parent_candidate_id": "",
-        "parent_url": "https://goo.gle/AdaptiveApps_IO26",
-        "anchor_text": "CameraX",
-        "evidence_role": "secondary_context",
-        "selection_reason": "CameraX is a key library for Android camera development, and updates or discussions around it are relevant.",
-        "links": [
-          {
-            "url": "https://developer.android.com/media/camera/camerax",
-            "text": "CameraX",
-            "role": "derived_candidate"
-          }
-        ]
-      },
-      "source_quality_score": 0.458,
-      "source_quality_bucket": "weak_candidate",
-      "source_quality_report_ref": "gemini-linked-45111a50490175f2",
-      "duplicate_of_selected_source": false,
-      "stale_claim_risk": "",
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked"
     },
     {
       "schema_version": 5,
@@ -33678,7 +33648,7 @@
       "anchor_text": "Release notes",
       "link_context": "Release notes",
       "evidence_role": "primary_evidence",
-      "suggested_article_type": "Release Notes",
+      "suggested_article_type": "Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -33686,7 +33656,7 @@
         "parent_url": "https://source.android.com/docs/core/camera",
         "anchor_text": "Release notes",
         "evidence_role": "primary_evidence",
-        "selection_reason": "Release notes often contain important changes and new features related to camera.",
+        "selection_reason": "This URL points to Android release notes, which are highly relevant for updates and changes in Camera HAL and related components.",
         "links": [
           {
             "url": "https://source.android.com/docs/whatsnew/release-notes",
@@ -33749,7 +33719,7 @@
         "parent_url": "https://source.android.com/docs/core/camera",
         "anchor_text": "Latest security bulletins",
         "evidence_role": "primary_evidence",
-        "selection_reason": "Security bulletins can include camera-related vulnerabilities or fixes.",
+        "selection_reason": "Security bulletins often contain information about vulnerabilities or fixes related to camera components, making them newsworthy.",
         "links": [
           {
             "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
@@ -33804,7 +33774,7 @@
       "anchor_text": "Latest Compatibility Definition Document (CDD)",
       "link_context": "Latest Compatibility Definition Document (CDD)",
       "evidence_role": "primary_evidence",
-      "suggested_article_type": "CDD Update",
+      "suggested_article_type": "Compatibility Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -33812,7 +33782,7 @@
         "parent_url": "https://source.android.com/docs/core/camera",
         "anchor_text": "Latest Compatibility Definition Document (CDD)",
         "evidence_role": "primary_evidence",
-        "selection_reason": "The Compatibility Definition Document (CDD) dictates hardware and software requirements, including camera.",
+        "selection_reason": "Updates to the Compatibility Definition Document (CDD) can impact camera HAL and driver requirements, making them relevant.",
         "links": [
           {
             "url": "https://source.android.com/docs/whatsnew/latest-cdd",
@@ -33875,7 +33845,7 @@
         "parent_url": "https://source.android.com/docs/compatibility/cdd",
         "anchor_text": "Bulletins",
         "evidence_role": "primary_evidence",
-        "selection_reason": "Direct link to security bulletins, which may contain camera-related information.",
+        "selection_reason": "This URL is a direct link to security bulletins, which are crucial for understanding security-related changes affecting camera systems.",
         "links": [
           {
             "url": "https://source.android.com/docs/security/bulletin",
@@ -33906,10 +33876,6 @@
     },
     {
       "source": "OpenAI News",
-      "message": "403 Forbidden"
-    },
-    {
-      "source": "요즘IT",
       "message": "403 Forbidden"
     },
     {

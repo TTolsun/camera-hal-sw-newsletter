@@ -829,23 +829,6 @@
       "reasons": []
     },
     {
-      "candidate_id": "gemini-linked-45111a50490175f2",
-      "url": "https://developer.android.com/media/camera/camerax",
-      "title": "CameraX",
-      "deep_checked": false,
-      "source_fetch_used": false,
-      "source_fetch_status": "skipped",
-      "source_fetch_error": "",
-      "validation_mode": "skipped",
-      "unsupported_claims": 0,
-      "supported_claims": 0,
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked",
-      "reasons": []
-    },
-    {
       "candidate_id": "gemini-linked-83920430c1be5b76",
       "url": "https://source.android.com/docs/whatsnew/release-notes",
       "title": "Release notes",
@@ -916,7 +899,7 @@
   ],
   "counts": {
     "pass": 12,
-    "not_checked": 8,
+    "not_checked": 7,
     "blocked": 30
   }
 }
