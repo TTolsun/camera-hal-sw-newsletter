@@ -1,0 +1,686 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-20",
+  "generated_at": "2026-06-20T02:14:28.352Z",
+  "inputs": {
+    "required": [],
+    "preferred": [
+      "articles/content/newsroom/2026-06-20/generation-status.json",
+      "articles/content/newsroom/2026-06-20/selection-report.json",
+      "articles/content/newsroom/2026-06-20/shortlisted-candidates.json",
+      "articles/content/collected-news/2026-06-20/candidates.json"
+    ],
+    "optional": [
+      "articles/content/newsroom/2026-06-20/article-capsules.json",
+      "articles/content/newsroom/2026-06-20/reporter-candidates.json",
+      "articles/content/newsroom/2026-06-20/quality-report.json",
+      "articles/content/newsroom/2026-06-20/fact-check-report.json",
+      "articles/content/newsroom/2026-06-20/source-effectiveness-report.json",
+      "articles/content/source-events/2026-06-20/source-change-events.json",
+      "articles/content/newsroom/2026-06-20/repair-failure.json",
+      "articles/content/newsroom/2026-06-20/stale-claim-report.json"
+    ],
+    "missing": [
+      "articles/content/newsroom/2026-06-20/repair-failure.json"
+    ],
+    "used": [
+      "articles/content/newsroom/2026-06-20/generation-status.json",
+      "articles/content/newsroom/2026-06-20/selection-report.json",
+      "articles/content/newsroom/2026-06-20/shortlisted-candidates.json",
+      "articles/content/collected-news/2026-06-20/candidates.json",
+      "articles/content/newsroom/2026-06-20/article-capsules.json",
+      "articles/content/newsroom/2026-06-20/reporter-candidates.json",
+      "articles/content/newsroom/2026-06-20/quality-report.json",
+      "articles/content/newsroom/2026-06-20/fact-check-report.json",
+      "articles/content/newsroom/2026-06-20/source-effectiveness-report.json",
+      "articles/content/source-events/2026-06-20/source-change-events.json",
+      "articles/content/newsroom/2026-06-20/stale-claim-report.json"
+    ]
+  },
+  "publish_status": {
+    "status": "publish-ready",
+    "run_mode": "publish_ready",
+    "quality_score": 96,
+    "quality_threshold": 60,
+    "fact_check_status": "PASS",
+    "final_publish_ready": true,
+    "public_newsletter_ready": true,
+    "review_pr_ready": true
+  },
+  "selection_summary": {
+    "raw_candidate_count": 49,
+    "eligible_candidate_count": 5,
+    "selected_main_article_count": 3,
+    "reserve_candidate_count": 2,
+    "excluded_candidate_count": 45,
+    "primary_camera_stack_count": 2,
+    "android_multimedia_camera_output_count": 0,
+    "supporting_bucket_count": 1,
+    "fallback_window_used": false,
+    "fallback_window_consulted": false,
+    "fallback_window_reason": "",
+    "fallback_candidates_promoted_count": 0,
+    "fallback_bucket_used": true,
+    "candidate_shortage_hints": [
+      "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
+      "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    ]
+  },
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 4,
+    "total_claims": 6,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 2,
+    "not_available_article_count": 0
+  },
+  "hal_impact_summary": {
+    "axes": [
+      "\\bV4L2\\b",
+      "\\bcamera sensor\\b",
+      "\\bimage sensor\\b",
+      "\\bGCC\\b"
+    ],
+    "article_count_with_axes": 3,
+    "article_count_without_axes": 0
+  },
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 3,
+    "strong_signal_count": 0,
+    "usable_signal_count": 0,
+    "weak_signal_count": 3,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 0,
+    "article_count_without_hal_signal_capsule": 3,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 0,
+    "fallback_main_article_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 3,
+    "hal_signal_hard_blocker_count": 3,
+    "hard_blocker_reason_code_counts": {
+      "hal_actionability_none": 3,
+      "hal_signal_capsule_missing": 3,
+      "fallback_promotion_not_allowed": 1
+    },
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 2,
+      "native_tooling_workflow": 1
+    },
+    "actionability_level_counts": {
+      "none": 3
+    },
+    "effective_actionability_level_counts": {
+      "none": 3
+    },
+    "signal_quality_status_counts": {
+      "weak_signal": 3
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "[PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "weak_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 81): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": false,
+      "hal_signal_capsule_complete": false,
+      "hal_signal_capsule_missing_keys": [
+        "why_now",
+        "reader_owners",
+        "check_within_2_weeks",
+        "impact_axes",
+        "do_not_overstate"
+      ],
+      "hard_blockers": [
+        "actionability_none"
+      ],
+      "hard_blocker_reason_codes": [
+        "hal_actionability_none",
+        "hal_signal_capsule_missing"
+      ]
+    },
+    {
+      "index": 2,
+      "title": "[PATCH v10 0/2] media: add Himax HM1246 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "weak_signal",
+      "concrete_action_signal_count": 1,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": false,
+      "hal_signal_capsule_complete": false,
+      "hal_signal_capsule_missing_keys": [
+        "why_now",
+        "reader_owners",
+        "check_within_2_weeks",
+        "impact_axes",
+        "do_not_overstate"
+      ],
+      "hard_blockers": [
+        "actionability_none"
+      ],
+      "hard_blocker_reason_codes": [
+        "hal_actionability_none",
+        "hal_signal_capsule_missing"
+      ]
+    },
+    {
+      "index": 3,
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "reader_owners": [
+        "native_tooling_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "none",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "weak_signal",
+      "concrete_action_signal_count": 0,
+      "fallback_promotion_allowed": false,
+      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 63): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": false,
+      "hal_signal_capsule_complete": false,
+      "hal_signal_capsule_missing_keys": [
+        "why_now",
+        "reader_owners",
+        "check_within_2_weeks",
+        "impact_axes",
+        "do_not_overstate"
+      ],
+      "hard_blockers": [
+        "actionability_none",
+        "fallback_promotion_missing_reason"
+      ],
+      "hard_blocker_reason_codes": [
+        "hal_actionability_none",
+        "fallback_promotion_not_allowed",
+        "hal_signal_capsule_missing"
+      ]
+    }
+  ],
+  "selected_main_articles": [
+    {
+      "candidate_id": "b22e3f5470b11f9260d934139938418775e8a768557752a8a59cb98587b67273",
+      "title": "[PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/",
+      "source": "lore.kernel.org linux-media list",
+      "source_tier": "high",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "source_reliability": "project-official",
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "article_group_key": "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io",
+      "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [
+        {
+          "title": "[PATCH v2 2/3] media: i2c: add imx576 image sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/",
+          "normalized_url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io",
+          "canonical_url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io",
+          "source": "lore.kernel.org linux-media list",
+          "published_date": "2026-06-19T12:55:25Z",
+          "relevance_bucket": "camera_driver_image_pipeline",
+          "finalSelectionEligibility": "short",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "blocked",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "source_quality_blocked",
+          "article_group_key": "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io"
+        },
+        {
+          "title": "[PATCH v2 2/3] media: i2c: add imx576 image sensor driver - Himanshu Bhavani",
+          "url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/",
+          "normalized_url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io",
+          "canonical_url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io",
+          "source": "lore.kernel.org linux-media list",
+          "published_date": "2026-06-19",
+          "relevance_bucket": "",
+          "finalSelectionEligibility": "short",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "source_quality_unknown",
+          "article_group_key": "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io"
+        }
+      ],
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 8,
+      "hal_impact_axes": [
+        "\\bV4L2\\b",
+        "\\bcamera sensor\\b"
+      ],
+      "key_evidence": [
+        "version_or_release: v2 (patch series)",
+        "api_or_component: v4l2, imx576 camera sensor driver",
+        "behavior_change: imx576 카메라 센서 드라이버 추가. 수동 노출 및 게인 제어, vblank/hblank 제어, 2880 x 2156 30fps (SRGGB10) 해상도 지원."
+      ],
+      "selection_reason": "lore.kernel.org linux-media list (project-official, high, score 81): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "available",
+        "bound_claims": 2,
+        "total_claims": 3,
+        "overclaim_risk": "medium"
+      }
+    },
+    {
+      "candidate_id": "52b356a7e3f545a6e2935dc454a09ba363c42d8300a76ebd9a924104e0d53b09",
+      "title": "[PATCH v10 0/2] media: add Himax HM1246 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
+      "source": "lore.kernel.org linux-media list",
+      "source_tier": "high",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "source_reliability": "project-official",
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "article_group_key": "lore-series:20260619-hm1246-v10-d88e431a6c11@emfend.at",
+      "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [
+        {
+          "title": "[PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at/",
+          "normalized_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at",
+          "canonical_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at",
+          "source": "lore.kernel.org linux-media list",
+          "published_date": "2026-06-19T12:29:34Z",
+          "relevance_bucket": "camera_driver_image_pipeline",
+          "finalSelectionEligibility": "main",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "blocked",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "source_quality_blocked",
+          "article_group_key": "lore-series:20260619-hm1246-v10-d88e431a6c11@emfend.at"
+        },
+        {
+          "title": "[PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver - Matthias Fend",
+          "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at/",
+          "normalized_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at",
+          "canonical_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at",
+          "source": "lore.kernel.org linux-media list",
+          "published_date": "2026-06-19",
+          "relevance_bucket": "",
+          "finalSelectionEligibility": "short",
+          "context_role": "blocked_context_reference",
+          "context_usage_label": "blocked_context_reference",
+          "source_quality_status": "unknown",
+          "context_usage_allowed": false,
+          "can_create_independent_article": false,
+          "blocked_from_independent_main_reason": "source_quality_unknown",
+          "article_group_key": "lore-series:20260619-hm1246-v10-d88e431a6c11@emfend.at"
+        }
+      ],
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bimage sensor\\b"
+      ],
+      "key_evidence": [
+        "version_or_release: v10 (patch series)",
+        "api_or_component: image sensor, Himax HM1246",
+        "behavior_change: Himax HM1246 이미지 센서 지원 추가. 현재 Native RAW 모드만 지원하며, 다른 모드와 내부 ISP 파이프라인은 지원되지 않습니다."
+      ],
+      "selection_reason": "lore.kernel.org linux-media list (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "available",
+        "bound_claims": 2,
+        "total_claims": 3,
+        "overclaim_risk": "low"
+      }
+    },
+    {
+      "candidate_id": "9f5a63b90e02162f19dabc76ee29ef71d86aa3a0fb00e872378d73f32ffbee7e",
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "source": "ISO C++ Blog",
+      "source_tier": "high",
+      "source_role": "engineering_blog_source",
+      "source_url_quality": "engineering_blog_with_camera_evidence",
+      "source_reliability": "official-community",
+      "freshness_window": "primary",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "article_group_key": "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [],
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bGCC\\b"
+      ],
+      "key_evidence": [
+        "version_or_release: GCC 16",
+        "api_or_component: GCC 컴파일러, SARIF 출력, 오류 메시지",
+        "behavior_change: GCC 16에서 개선된 오류 메시지와 SARIF(Static Analysis Results Interchange Format) 출력 기능이 추가됩니다."
+      ],
+      "selection_reason": "ISO C++ Blog (official-community, high, score 63): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
+      }
+    }
+  ],
+  "reserve_candidates": [
+    {
+      "candidate_id": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "source_tier": "high",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "source_reliability": "official",
+      "freshness_window": "fallback",
+      "relevance_bucket": "android_platform_camera_adjacent",
+      "article_group_key": "article:https://developer.android.com/tools/agents/android-cli#skills-add",
+      "tooling_workflow_type": "",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [],
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bJetpack\\s+Compose\\b",
+        "\\b(?:adaptive|large[-\\s]?screen|foldable|tablet|multi[-\\s]?window|device experience)\\b[^.\\n]{0,120}\\b(?:Compose|Jetpack|Android)\\b",
+        "\\bcamera\\b",
+        "\\bCameraX\\b"
+      ],
+      "key_evidence": [],
+      "selection_reason": "Android Developers Blog (official, high, score 100): android_platform_camera_adjacent (Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 4 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
+      }
+    },
+    {
+      "candidate_id": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "source_tier": "high",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "source_reliability": "official",
+      "freshness_window": "fallback",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "article_group_key": "android_native_tooling_workflow",
+      "tooling_workflow_type": "native_tooling_workflow",
+      "source_event_id": "",
+      "evidence_id": "",
+      "event_type": "",
+      "effective_date": "",
+      "date_quality": {
+        "effective_date": "",
+        "published_date_present": true,
+        "date_source": "visible_date",
+        "date_confidence": 100,
+        "needs_editor_date_review": false,
+        "main_article_date_eligible": true,
+        "date_field": "published_date"
+      },
+      "related_context_candidates": [],
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "has_dated_evidence": true,
+      "evidence_score": 6,
+      "hal_impact_axes": [
+        "\\bAndroid\\s+CLI\\b",
+        "\\bAndroid\\b[^.\\n]{0,140}\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b",
+        "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b",
+        "\\bAndroid\\s+CLI\\b[^.\\n]{0,140}\\b(?:agent|build|test|debug|workflow|app)\\b"
+      ],
+      "key_evidence": [],
+      "selection_reason": "Android Developers Blog (official, high, score 78): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 4 article-level signal(s) from article_text.)",
+      "claim_validation": {
+        "status": "not_available",
+        "bound_claims": null,
+        "total_claims": null,
+        "overclaim_risk": "unknown"
+      }
+    }
+  ],
+  "excluded_candidates_top": [
+    {
+      "candidate_id": "43d1b942a84263ab2c88b894f619a244ae8cf13262b41eb4c1427e73e73e3a35",
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "source": "Android Developers Blog",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "fallback",
+      "relevance_bucket": "direct_aosp_camera",
+      "exclusion_reason": "playlist/collection URL is not a dated main article"
+    },
+    {
+      "candidate_id": "ef27814b2c8c86363075af75d0f3b6c0cccbc6a74d8cf31284075b004b924c42",
+      "title": "17 Things to know for Android developers at Google I/O",
+      "url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
+      "source": "Android Developers Blog",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
+      "candidate_id": "5e3f5455fa83d19cf95cf629c00674cc950a2c4df1716ab4057e0d45a4f8eb15",
+      "title": "What’s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+      "url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "source": "Android Developers Blog",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
+      "candidate_id": "1bd949b88ac6a7781290446f3f9a908f9c2e6f378992bbcbfe38fc616acdd43c",
+      "title": "Android UI Development is Compose First",
+      "url": "https://android-developers.googleblog.com/2026/05/android-ui-development-is-compose-first.html",
+      "source": "Android Developers Blog",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
+      "candidate_id": "b59408fc88377647433fed755cd8a6432b356e22f1531a3b249b24dc8464ed57",
+      "title": "Android developer verification: Building a safer ecosystem together",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "source": "Android Developers Blog",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
+      "candidate_id": "2e09be47b7d035b1b1509fe59f1caf95edd44bab9f4919926cd7de56c0bd6f6a",
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/core/camera",
+      "source": "AOSP Camera Documentation",
+      "source_role": "official_documentation_reference",
+      "source_url_quality": "undated_reference_page",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "missing dated evidence"
+    },
+    {
+      "candidate_id": "9e95b9aeb56502637e3c44214863e13f906682940bfc35890d2dd5869dc615c9",
+      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/whatsnew",
+      "source": "AOSP What's New / Release Notes",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_site_update_row",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "missing dated evidence"
+    },
+    {
+      "candidate_id": "b564c567eef7ae5977d361d9a12b799d681cb5a470b50ac7f67887452ef3478b",
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "source": "Android Compatibility Definition Document",
+      "source_role": "official_documentation_reference",
+      "source_url_quality": "undated_reference_page",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "missing dated evidence"
+    },
+    {
+      "candidate_id": "827f3a39ff2811801dcadf811725f8ed7f6f974e696a41e8790d5572f6445bdb",
+      "title": "Overview",
+      "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "source": "Android Security Bulletin",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "fallback",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "finalSelectionEligibility=watchlist"
+    },
+    {
+      "candidate_id": "e6ebde2c2d5411c27162946bd0e83736ca56c006a57602ea0b104855c665dc79",
+      "title": "June",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+      "source": "Android Security Bulletin",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "fallback",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "missing dated evidence"
+    }
+  ],
+  "excluded_candidates_truncated": true,
+  "failure_diagnostics": {
+    "quality_hard_failures": [],
+    "fact_check_must_fix": [],
+    "repair_failures": [],
+    "candidate_shortage_hints": [
+      "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.",
+      "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    ],
+    "source_gap_warnings": [],
+    "missing_artifacts": [
+      "articles/content/newsroom/2026-06-20/repair-failure.json"
+    ],
+    "invalid_artifacts": []
+  },
+  "warnings": [
+    "Missing optional artifact: articles/content/newsroom/2026-06-20/repair-failure.json",
+    "Fallback claim_validation.status=not_available for selected article: [PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver",
+    "Fallback claim_validation.status=not_available for selected article: [PATCH v10 0/2] media: add Himax HM1246 image sensor",
+    "Fallback claim_validation.status=not_available for selected article: New features in GCC 16: Improved error messages and SARIF output -- David Malcolm"
+  ]
+}

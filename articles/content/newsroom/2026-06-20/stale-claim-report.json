@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-20",
+  "status": "PASS",
+  "removed_sections": [
+    {
+      "index": 1,
+      "headline": "Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안",
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/"
+      ],
+      "source_titles": [
+        "[PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver"
+      ],
+      "version_or_release": "",
+      "api_or_component": "",
+      "behavior_change": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2
+    }
+  ],
+  "final_section_sources": [
+    {
+      "title": "[PATCH v10 0/2] media: add Himax HM1246 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/"
+    },
+    {
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}
