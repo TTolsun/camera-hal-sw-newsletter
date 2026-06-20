@@ -59,8 +59,21 @@ function errorStatus(error, retryableStatuses = new Set()) {
   return match ? Number(match[1]) : null;
 }
 
+// Gemini rejects an over-complex constrained-decoding response schema with a 400
+// "too many states" error. Unlike a transient 429/503, this is permanent: the
+// schema outgrew the model's state limit, so retrying the same schema (on this or
+// a weaker fallback model) fails again. Detect it distinctly so the failure is
+// reported as schema drift rather than a generic capacity/quality issue (#652).
+const SCHEMA_COMPLEXITY_PATTERN =
+  /too many (?:possible )?states|maximum number of states|(?:response )?schema is too (?:complex|large)/i;
+
+function isSchemaComplexityError(error) {
+  return Boolean(error) && SCHEMA_COMPLEXITY_PATTERN.test(errorText(error));
+}
+
 function lastStatus(error, retryableStatuses = new Set()) {
   if (error instanceof LlmCallTimeoutError) return 'timeout';
+  if (isSchemaComplexityError(error)) return 'schema_incompatible';
   const directStatus = errorStatus(error, retryableStatuses);
   if (directStatus) return directStatus;
 
@@ -166,6 +179,7 @@ module.exports = {
   isFreeTierQuotaExhausted,
   isQuotaError,
   isRetryableError,
+  isSchemaComplexityError,
   lastStatus,
   parseDurationToMs,
   parseRetryDelayMs

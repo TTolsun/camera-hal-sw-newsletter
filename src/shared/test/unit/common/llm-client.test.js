@@ -124,3 +124,25 @@ test('callLlmJson throws after every fallback model times out', async () => {
       /status timeout/.test(error.message)
   );
 });
+
+test('callLlmJson reports a schema-too-complex rejection as a schema-drift error', async () => {
+  const client = loadLlmClient();
+  let attempts = 0;
+  // The model rejects an over-complex constrained-decoding schema with a 400.
+  const provider = fakeProvider(() => {
+    attempts += 1;
+    return Promise.reject(Object.assign(
+      new Error('400 INVALID_ARGUMENT: the response schema has too many states for a constrained decoding request'),
+      { status: 400 }
+    ));
+  });
+  await assert.rejects(
+    () => client.callLlmJson('editor attempt 1/3', 'system', 'prompt', {}, { provider }),
+    // Distinctive schema-drift diagnosis, not the generic "API failed" message.
+    error => /rejected the response schema as too complex/i.test(error.message) &&
+      /state limit/i.test(error.message)
+  );
+  // Fail fast on the first schema rejection: do NOT burn the weaker fallback model,
+  // which has equal-or-lower schema capacity and would reject the same schema.
+  assert.equal(attempts, 1);
+});
