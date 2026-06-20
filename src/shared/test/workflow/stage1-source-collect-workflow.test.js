@@ -16,13 +16,13 @@ test('schedule cutover leaves only the daily auto PR workflow on the newsroom sc
   const scheduledWorkflowFiles = fs
     .readdirSync(workflowDir)
     .filter((file) => file.endsWith('.yml'))
-    .filter((file) => fs.readFileSync(path.join(workflowDir, file), 'utf8').includes('cron: "0 0 * * *"'));
+    .filter((file) => fs.readFileSync(path.join(workflowDir, file), 'utf8').includes('cron: "0 0 * * 1"'));
 
   assert.equal(fs.existsSync(legacyWeeklyPath), false);
   assert.deepEqual(scheduledWorkflowFiles, ['00-newsletters-auto-daily-pr.yml']);
   assert.doesNotMatch(stage1, /^\s*schedule:/m);
   assert.match(dailyAuto, /^\s*schedule:/m);
-  assert.match(dailyAuto, /cron: "0 0 \* \* \*"/);
+  assert.match(dailyAuto, /cron: "0 0 \* \* 1"/);
   assert.doesNotMatch(stage2, /^\s*schedule:/m);
   assert.doesNotMatch(stage3, /^\s*schedule:/m);
   assert.doesNotMatch(stage3, /npm run collect/);

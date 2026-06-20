@@ -16,9 +16,9 @@ const EMPTY_HEADLINE_STATE = {
 
 // Reference-window-eligible candidate: a fully-classified strong CameraX release that
 // clears main_article_score_eligible (scope_relevance >= 2 via aosp_camera_directness),
-// but is 70/84 days old → reference window. Catch-up only promotes candidates that clear
-// the deterministic selection floor, so these fixtures carry the scope signal a real
-// classified candidate would.
+// but is 24/29 days old → reference window (fallback 21d < age ≤ reference 35d). Catch-up
+// only promotes candidates that clear the deterministic selection floor, so these fixtures
+// carry the scope signal a real classified candidate would.
 function refRelease(overrides = {}) {
   return {
     relevance_bucket: 'direct_aosp_camera',
@@ -32,18 +32,18 @@ function refRelease(overrides = {}) {
 }
 
 // A thin-week collection: no fresh in-window candidate; only two reference-window
-// (70d / 84d old) releases from DIFFERENT source pages. primary+fallback select 0 →
+// (24d / 29d old) releases from DIFFERENT source pages. primary+fallback select 0 →
 // thin week → catch-up. Distinct pages keep this fixture focused on slot-filling and the
 // maxCatchUpArticles cap; same-release-note-page dedup is covered in release-page-dedup.test.js.
 function collected() {
   return { candidates: [
     refRelease({
       title: 'CameraX 1.6.0', url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0',
-      published_date: '2026-03-25', version_or_release: '1.6.0', behavior_change: 'CameraPipe migration'
+      published_date: '2026-05-10', version_or_release: '1.6.0', behavior_change: 'CameraPipe migration'
     }),
     refRelease({
       title: 'Camera HAL AIDL v3 interface update', url: 'https://source.android.com/docs/core/camera/aidl-v3',
-      published_date: '2026-03-11', version_or_release: 'AIDL v3', behavior_change: 'ICameraDevice interface change'
+      published_date: '2026-05-05', version_or_release: 'AIDL v3', behavior_change: 'ICameraDevice interface change'
     })
   ] };
 }

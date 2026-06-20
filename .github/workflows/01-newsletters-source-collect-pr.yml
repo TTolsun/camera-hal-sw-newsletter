@@ -10,7 +10,7 @@ on:
       lookback_days:
         description: "How many days to look back when collecting news candidates."
         required: false
-        default: "90"
+        default: "35"
         type: string
       manual_source_urls:
         description: "Optional ';'-separated http/https seed URLs. Empty uses articles/content/collected-news/<date>/collection-intent.json if present."
@@ -28,7 +28,7 @@ on:
         description: "How many days to look back when collecting news candidates."
         required: false
         type: string
-        default: "90"
+        default: "35"
       auto_mode:
         description: "Set to true when called from the daily auto workflow (commit artifacts instead of creating PR)."
         required: false
@@ -57,11 +57,10 @@ jobs:
 
     env:
       NEWSLETTER_DATE: ${{ inputs.newsletter_date || github.event.inputs.newsletter_date || '' }}
-      # Runtime default lookback is 10 days (#487). This workflow keeps an explicit
-      # 90-day window so 22-90 day candidates still feed the catch-up pool: with the
-      # 10-day window thin days can leave the editor too few candidates to produce a
-      # reviewable draft, and the weekly upsert only accumulates publish-ready runs.
-      LOOKBACK_DAYS: ${{ inputs.lookback_days || github.event.inputs.lookback_days || '90' }}
+      # #574 주 1회 전환: lookback 윈도우를 35일로 단축한다(메인 21일 + reference 백스톱 35일).
+      # 22-35일 후보는 catch-up 풀로 들어가 빈약주에도 본문을 채운다. runtime 기본값
+      # (runtime-config.js)도 35일이며, 여기서 동일 값을 명시 전달한다.
+      LOOKBACK_DAYS: ${{ inputs.lookback_days || github.event.inputs.lookback_days || '35' }}
       NEWSROOM_MANUAL_SOURCE_URLS: ${{ github.event.inputs.manual_source_urls }}
 
     steps:

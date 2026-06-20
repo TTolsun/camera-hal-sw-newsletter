@@ -17,7 +17,7 @@ test('default policy exposes a normalized catchUpPolicy', () => {
   const policy = getCatchUpPolicy();
   assert.equal(policy.enabled, true);
   assert.equal(policy.maxCatchUpArticles, 2);
-  assert.equal(policy.maxAgeDays, 90);
+  assert.equal(policy.maxAgeDays, 35);
   assert.equal(policy.targetMainArticles, 3);
   assert.equal(policy.activationMode, 'fill_open_slots');
   assert.ok(Array.isArray(policy.eligibleBuckets) && policy.eligibleBuckets.length > 0);

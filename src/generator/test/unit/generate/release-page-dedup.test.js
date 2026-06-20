@@ -61,7 +61,9 @@ test('catch-up does not promote a second main article from an already-selected C
     strongRelease({
       title: 'CameraX VideoCapture concurrent recording',
       url: `${CAMERA_RELEASE_PAGE}#1.6.0`,
-      published_date: '2026-03-25', version_or_release: '1.6.0', behavior_change: 'VideoCapture concurrent recording'
+      // 28일 전(ref 2026-06-03) → reference 윈도우(21<28≤35). catch-up 레인으로 들어가
+      // 같은 릴리스 페이지 dedup이 실제로 동작하는지 검증한다(#574 reference 35일 단축 후에도).
+      published_date: '2026-05-06', version_or_release: '1.6.0', behavior_change: 'VideoCapture concurrent recording'
     })
   ]);
   assert.equal(result.catch_up_used_count, 0, 'same release-note page must not be promoted twice via catch-up');
@@ -79,7 +81,7 @@ test('catch-up still promotes a strong release from a different source page', ()
     strongRelease({
       title: 'Camera HAL AIDL v3 interface update',
       url: 'https://source.android.com/docs/core/camera/aidl-v3',
-      published_date: '2026-03-25', version_or_release: 'AIDL v3', behavior_change: 'ICameraDevice interface change'
+      published_date: '2026-05-10', version_or_release: 'AIDL v3', behavior_change: 'ICameraDevice interface change'
     })
   ]);
   assert.equal(result.catch_up_used_count, 1, 'a different-page strong release must still be promoted');

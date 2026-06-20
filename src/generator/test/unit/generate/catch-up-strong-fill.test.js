@@ -80,7 +80,7 @@ test('strong reference catch-up candidate is still promoted alongside a fresh ar
     strongRelease({
       title: 'Camera HAL AIDL v3 interface update',
       url: 'https://source.android.com/docs/core/camera/aidl-v3',
-      published_date: '2026-03-25', version_or_release: 'AIDL v3', behavior_change: 'ICameraDevice interface change'
+      published_date: '2026-05-10', version_or_release: 'AIDL v3', behavior_change: 'ICameraDevice interface change'
     })
   ]);
   assert.equal(result.catch_up_used_count, 1, 'strong reference catch-up must still be promoted');

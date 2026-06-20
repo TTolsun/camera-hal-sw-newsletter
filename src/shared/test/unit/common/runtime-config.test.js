@@ -57,11 +57,11 @@ test('빈 문자열 thinking budget env는 코드 기본값으로 해석된다 (
     GEMINI_THINKING_BUDGET_JUDGE: '',
     GEMINI_THINKING_BUDGET_SCORING: ''
   });
-  assert.equal(config.geminiThinkingBudgetReporter, 0);
+  assert.equal(config.geminiThinkingBudgetReporter, 512);
   assert.equal(config.geminiThinkingBudgetEditor, 1024);
   assert.equal(config.geminiThinkingBudgetRepair, 1024);
   assert.equal(config.geminiThinkingBudgetFactcheck, 2048);
-  assert.equal(config.geminiThinkingBudgetJudge, 512);
+  assert.equal(config.geminiThinkingBudgetJudge, 1024);
   assert.equal(config.geminiThinkingBudgetScoring, 0);
 });
 
@@ -69,11 +69,11 @@ test('defaults match workflow runtime defaults', () => {
   const config = readRuntimeConfig({});
 
   assert.equal(config.newsletterDate, DEFAULT_RUNTIME_CONFIG.newsletterDate);
-  assert.equal(config.lookbackDays, 10);
+  assert.equal(config.lookbackDays, 35);
   assert.deepEqual(config.selectionWindowPolicy, {
     primarySelectionDays: 7,
     fallbackSelectionDays: 21,
-    referenceContextDays: 90
+    referenceContextDays: 35
   });
   assert.equal(config.llmProvider, 'gemini');
   assert.equal(config.llmModel, 'gemini-2.5-flash');
@@ -97,13 +97,13 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.geminiRetryMaxDelayMs, 300000);
   assert.equal(config.newsroomMaxQualityRetries, 1);
   assert.equal(config.newsroomMaxSectionRepairs, 1);
-  assert.equal(config.newsroomWarnCostUsd, 0.15);
-  assert.equal(config.newsroomMaxCostUsd, 0.25);
-  assert.equal(config.geminiThinkingBudgetReporter, 0);
+  assert.equal(config.newsroomWarnCostUsd, 0.2);
+  assert.equal(config.newsroomMaxCostUsd, 0.35);
+  assert.equal(config.geminiThinkingBudgetReporter, 512);
   assert.equal(config.geminiThinkingBudgetEditor, 1024);
   assert.equal(config.geminiThinkingBudgetRepair, 1024);
   assert.equal(config.geminiThinkingBudgetFactcheck, 2048);
-  assert.equal(config.geminiThinkingBudgetJudge, 512);
+  assert.equal(config.geminiThinkingBudgetJudge, 1024);
   assert.equal(config.geminiThinkingBudgetScoring, 0);
   assert.equal(config.geminiTemperatureDefault, 0.35);
   assert.equal(config.geminiTemperatureSourceDiscovery, 0.45);
@@ -119,7 +119,7 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.linkedEvidenceMaxBytes, 200000);
   assert.equal(config.newsroomCandidateInputMode, 'default');
   assert.equal(config.newsroomCandidateInputPath, '');
-  assert.equal(config.newsroomEnableGeminiSourceDiscovery, false);
+  assert.equal(config.newsroomEnableGeminiSourceDiscovery, true);
   assert.equal(config.newsroomEnableLinkedEvidenceDiscovery, true);
   assert.equal(config.geminiApiKeyConfigured, false);
 });
@@ -249,7 +249,7 @@ test('runtime env overrides are parsed into typed config', () => {
   assert.equal(config.geminiThinkingBudgetEditor, 1024);
   assert.equal(config.geminiThinkingBudgetRepair, 0);
   assert.equal(config.geminiThinkingBudgetFactcheck, 0);
-  assert.equal(config.geminiThinkingBudgetJudge, 512);
+  assert.equal(config.geminiThinkingBudgetJudge, 1024);
   assert.equal(config.geminiThinkingBudgetScoring, 0);
   assert.equal(config.linkedEvidenceMode, 'resolve_allowed_official_links');
   assert.equal(config.linkedEvidenceMaxLinksPerCandidate, 4);
@@ -267,7 +267,7 @@ test('selection window runtime config keeps policy shape and validates ordering'
   assert.deepEqual(readRuntimeConfig({}).selectionWindowPolicy, {
     primarySelectionDays: 7,
     fallbackSelectionDays: 21,
-    referenceContextDays: 90
+    referenceContextDays: 35
   });
   assert.deepEqual(readRuntimeConfig({
     PRIMARY_SELECTION_DAYS: '7',
@@ -671,13 +671,13 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.deepEqual(sanitized.selectionWindowPolicy, {
     primarySelectionDays: 7,
     fallbackSelectionDays: 21,
-    referenceContextDays: 90
+    referenceContextDays: 35
   });
-  assert.equal(sanitized.newsroomWarnCostUsd, 0.15);
-  assert.equal(sanitized.newsroomMaxCostUsd, 0.25);
+  assert.equal(sanitized.newsroomWarnCostUsd, 0.2);
+  assert.equal(sanitized.newsroomMaxCostUsd, 0.35);
   assert.equal(sanitized.newsroomMaxSectionRepairs, 1);
   assert.equal(sanitized.geminiThinkingBudgetEditor, 1024);
-  assert.equal(sanitized.geminiThinkingBudgetJudge, 512);
+  assert.equal(sanitized.geminiThinkingBudgetJudge, 1024);
   assert.equal(sanitized.linkedEvidenceMode, 'extract_only');
   assert.equal(sanitized.linkedEvidenceMaxLinksPerCandidate, 8);
   assert.equal(sanitized.linkedEvidenceMaxLinksPerRun, 40);
@@ -685,7 +685,7 @@ test('sanitized diagnostics never include the raw API key', () => {
   assert.equal(sanitized.linkedEvidenceMaxBytes, 200000);
   assert.equal(sanitized.newsroomCandidateInputMode, 'default');
   assert.equal(sanitized.newsroomCandidateInputPath, '');
-  assert.equal(sanitized.newsroomEnableGeminiSourceDiscovery, false);
+  assert.equal(sanitized.newsroomEnableGeminiSourceDiscovery, true);
   assert.equal(sanitized.newsroomEnableLinkedEvidenceDiscovery, true);
   assert.equal(sanitized.proPolicy, 'disabled');
   assert.equal(sanitized.proModelConfigured, false);

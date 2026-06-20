@@ -1,10 +1,10 @@
 # Camera HAL SW 뉴스레터 Newsroom workflow
 
-이 문서는 AOSP Camera / Camera Driver / SoC Platform 뉴스레터를, 사람의 수작업을 최소화하면서 매일 만들어 내는 역할 기반(role-based) workflow를 설명합니다. 즉 후보 수집부터 LLM 작성, 검증, 검토용 PR 생성까지 각 단계를 어떤 역할이 맡는지 정리합니다.
+이 문서는 AOSP Camera / Camera Driver / SoC Platform 뉴스레터를, 사람의 수작업을 최소화하면서 주 1회(월요일) 만들어 내는 역할 기반(role-based) workflow를 설명합니다. 즉 후보 수집부터 LLM 작성, 검증, 검토용 PR 생성까지 각 단계를 어떤 역할이 맡는지 정리합니다.
 
 ## 품질 게이트
 
-newsroom pipeline은 매일 `articles/content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 만듭니다. 어떤 호가 발행 준비(publish-ready) 상태가 되려면, deterministic score(결정론적 점수)가 `src/shared/config/newsletter-policy.json`의 `qualityGatePolicy.threshold` 이상이어야 합니다.
+newsroom pipeline은 실행마다 `articles/content/newsroom/YYYY-MM-DD/quality-report.json`과 `quality-report.md`를 만듭니다. 어떤 호가 발행 준비(publish-ready) 상태가 되려면, deterministic score(결정론적 점수)가 `src/shared/config/newsletter-policy.json`의 `qualityGatePolicy.threshold` 이상이어야 합니다.
 
 이 threshold를 낮춘 것은 LLM 비용과 false negative(잘못된 탈락)를 줄이기 위한 운영 튜닝일 뿐, 품질 검증을 건너뛰는 것이 아닙니다. 점수가 threshold를 넘더라도, source gap(출처 공백), fact-check `must_fix`, 발행에 치명적인 deduction(감점)이 있으면 publish-ready로 보지 않습니다.
 
@@ -287,7 +287,7 @@ fact-checker는 새 글을 쓰는 stage가 아닙니다. source gap, unsupported
 scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. provider/model은 code default를 쓰고, 나머지는 workflow와 runtime config의 기본값을 그대로 씁니다.
 
 ```text
-LOOKBACK_DAYS=90  # 워크플로 명시값. runtime 기본값은 10 (#487)이며 scheduled run은 catch-up 풀(#483)을 위해 90을 유지
+LOOKBACK_DAYS=35  # 워크플로 명시값. runtime 기본값도 35 (#574, 주 1회 전환)이며 scheduled run은 catch-up 풀(#483)을 위해 35일 윈도우를 사용
 LLM_PROVIDER=gemini
 LLM_MODEL unset
 GEMINI_MODEL unset
@@ -362,10 +362,10 @@ PR마다 failure classification(실패 분류)을 다음 중 하나로 기록합
 
 ### 일일 RAW 후보 PR
 
-`Newsletters 01 - Source Collection PR` (`.github/workflows/01-newsletters-source-collect-pr.yml`) workflow는 매일 09:00 KST에 실행됩니다.
+`Newsletters 01 - Source Collection PR` (`.github/workflows/01-newsletters-source-collect-pr.yml`) workflow는 주 1회 월요일 09:00 KST에 실행됩니다.
 
 ```text
-KST daily 09:00 = UTC daily 00:00
+KST Mon 09:00 = UTC Mon 00:00
 branch: newsroom-raw/YYYY-MM-DD
 ```
 
@@ -464,9 +464,9 @@ PR에서 다음 항목을 확인합니다.
 - 보조 주요 버킷: `android_multimedia_camera_output`, `soc_platform_signal`, `cpp_ai_tooling_fallback`
 - 금지 주요 버킷: `generic_tech_watchlist`; 후보 수만으로 이 버킷을 주요 기사로 승격하지 않습니다
 - 후보 풀 사전점검(candidate pool preflight): 발행 가능 후보 최소 1개; 예비 후보는 진단용으로만 사용; camera stack 후보 최소 0개
-- 선정 기간(selection windows): primary 7일; fallback 21일; reference 90일
+- 선정 기간(selection windows): primary 7일; fallback 21일; reference 35일
 - 선정 기간 적용(selection window enforcement): 주요 선정은 강제 적용되며, fallback 기간 후보는 primary 기간 선정이 부족할 때에만 승격됩니다.
-- 지난 소식(Catch-up) 레인: 신규 선정이 3개 미만이면, 비어 있는 주요 슬롯을 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent` 버킷에서 최대 90일 이내의 미게재 릴리스로 채웁니다. 호당 최대 2개이며 각각 한 번씩만 게재하고, 신규 콘텐츠를 밀어내지 않습니다.
+- 지난 소식(Catch-up) 레인: 신규 선정이 3개 미만이면, 비어 있는 주요 슬롯을 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent` 버킷에서 최대 35일 이내의 미게재 릴리스로 채웁니다. 호당 최대 2개이며 각각 한 번씩만 게재하고, 신규 콘텐츠를 밀어내지 않습니다.
 - 홈페이지 헤드라인 정책(homepage headline policy): linear decay; 일별 감쇠 2 point(s)/day; 교체 마진(replacement margin) 5; 최소 헤드라인 점수(minimum headline score) 40; 최신호 포함 필수(latest inclusion required) true; 이력 최대(history max) 50
 - 발행 게이트(publish gate): PASS는 source gap이 없고, fact-check must_fix가 없으며, 차단성 감점(blocking deduction)이 없고, 모든 기사가 fact-checker에 의해 발행 가능으로 표시되어야 합니다. 수치 기반 품질 임계값은 없습니다.
 - 편집 품질(editorial quality): fact-checker(LLM)가 각 기사를 Camera HAL SW 엔지니어에게 유용한지 기준으로 판정합니다(주제 무관 — C++, AI, Linux 기사라도 해당 엔지니어에게 도움이 되면 자격이 있습니다). 주제/깊이 휴리스틱은 결정론적 발행 게이트로 사용하지 않습니다.

@@ -48,11 +48,10 @@ const DEFAULT_SELECTION_WINDOW_POLICY = getSelectionWindowPolicy();
 
 const DEFAULT_RUNTIME_CONFIG = {
   newsletterDate: '',
-  // #487: default source collection lookback is 10 days. The daily collect
-  // workflow (01-newsletters-source-collect-pr.yml) still passes an explicit
-  // LOOKBACK_DAYS=90 to feed the catch-up pool until the weekly upsert model
-  // (#488) lands; this default applies to runs that do not set LOOKBACK_DAYS.
-  lookbackDays: 10,
+  // #574: 주 1회 전환에 맞춰 source collection lookback 기본값을 35일로 둔다(메인 21일 +
+  // reference 백스톱 35일). 01-newsletters-source-collect-pr.yml 도 동일하게 LOOKBACK_DAYS=35를
+  // 명시 전달한다. 이 기본값은 LOOKBACK_DAYS를 설정하지 않은 run에 적용된다.
+  lookbackDays: 35,
   selectionWindowPolicy: {
     primarySelectionDays: DEFAULT_SELECTION_WINDOW_POLICY.primarySelectionDays,
     fallbackSelectionDays: DEFAULT_SELECTION_WINDOW_POLICY.fallbackSelectionDays,
@@ -77,13 +76,13 @@ const DEFAULT_RUNTIME_CONFIG = {
   geminiRetryMaxDelayMs: 300000,
   newsroomMaxQualityRetries: 1,
   newsroomMaxSectionRepairs: 1,
-  newsroomWarnCostUsd: 0.15,
-  newsroomMaxCostUsd: 0.25,
-  geminiThinkingBudgetReporter: 0,
+  newsroomWarnCostUsd: 0.2,
+  newsroomMaxCostUsd: 0.35,
+  geminiThinkingBudgetReporter: 512,
   geminiThinkingBudgetEditor: 1024,
   geminiThinkingBudgetRepair: 1024,
   geminiThinkingBudgetFactcheck: 2048,
-  geminiThinkingBudgetJudge: 512,
+  geminiThinkingBudgetJudge: 1024,
   geminiThinkingBudgetScoring: 0,
   geminiTemperatureDefault: 0.35,
   geminiTemperatureSourceDiscovery: 0.45,
@@ -99,7 +98,7 @@ const DEFAULT_RUNTIME_CONFIG = {
   linkedEvidenceMaxBytes: 200000,
   newsroomCandidateInputMode: 'default',
   newsroomCandidateInputPath: '',
-  newsroomEnableGeminiSourceDiscovery: false,
+  newsroomEnableGeminiSourceDiscovery: true,
   // #429 linked evidence expansion은 Gemini source discovery가 켜진 run 안에서만 동작하고
   // non-failing이므로 기본 켜되, 문제 시 source discovery 전체를 끄지 않고 이 단계만 끌 수 있게 한다.
   newsroomEnableLinkedEvidenceDiscovery: true,
