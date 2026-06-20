@@ -2355,6 +2355,201 @@
         "engineering blog with frequent non-camera posts; filter by camera-related keywords",
         "main promotion requires libcamera or kernel primary-source confirmation"
       ]
+    },
+    {
+      "id": "microisp-neural-isp",
+      "name": "MicroISP — On-Device Neural ISP (RAW to RGB)",
+      "sourceUrl": "https://github.com/aiff22/MicroISP",
+      "rssUrl": null,
+      "collectionModeHint": "homepage-watch",
+      "category": "embedded-ai",
+      "priority": "low",
+      "reliability": "project-official",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "경량 on-device neural ISP(RAW Bayer→RGB, NPU/DSP/GPU, TFLite, RAM·지연 메트릭) 연구 아티팩트를 seed로 추적; camera HAL/ISP 파이프라인 연결이 확인될 때에만 후보",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "github.com",
+          "arxiv.org",
+          "ai-benchmark.com",
+          "aiff22.github.io",
+          "people.ee.ethz.ch"
+        ],
+        "importantAnchorKeywords": [
+          "paper",
+          "arxiv",
+          "dataset",
+          "pretrained",
+          "model",
+          "source code",
+          "project page",
+          "results",
+          "benchmark"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
+      "keywords": [
+        "neural ISP",
+        "Tiny ISP",
+        "RAW",
+        "ISP",
+        "on-device",
+        "NPU",
+        "TFLite",
+        "camera pipeline"
+      ],
+      "sourceRole": "project_release_source",
+      "sourceUrlQualityHint": "project_release",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "research-origin neural ISP source; must not imply production adoption without device/camera evidence",
+        "main promotion requires source-specific confirmation or explicit HAL/ISP pipeline evidence"
+      ]
+    },
+    {
+      "id": "pynet-learned-isp",
+      "name": "PyNET — Replacing Mobile Camera ISP with a Deep Learning Model",
+      "sourceUrl": "https://github.com/aiff22/PyNET",
+      "rssUrl": null,
+      "collectionModeHint": "homepage-watch",
+      "category": "embedded-ai",
+      "priority": "low",
+      "reliability": "project-official",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "단일 딥러닝 모델로 모바일 카메라 ISP(RAW→RGB, demosaic/denoise)를 대체하는 연구 아티팩트 seed(Zurich RAW-to-RGB 데이터셋); 카메라 파이프라인 연결 시에만 후보",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "github.com",
+          "arxiv.org",
+          "ai-benchmark.com",
+          "aiff22.github.io",
+          "people.ee.ethz.ch"
+        ],
+        "importantAnchorKeywords": [
+          "paper",
+          "arxiv",
+          "dataset",
+          "pretrained",
+          "model",
+          "source code",
+          "project page",
+          "results",
+          "benchmark"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
+      "keywords": [
+        "neural ISP",
+        "RAW to RGB",
+        "demosaic",
+        "denoise",
+        "ISP",
+        "camera pipeline",
+        "on-device"
+      ],
+      "sourceRole": "project_release_source",
+      "sourceUrlQualityHint": "project_release",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "research-origin neural ISP source; must not imply production adoption without device/camera evidence",
+        "main promotion requires source-specific confirmation or explicit HAL/ISP pipeline evidence"
+      ]
+    },
+    {
+      "id": "mobile-ai-learned-isp-challenge",
+      "name": "Mobile AI (MAI) Workshop — Learned Smartphone ISP",
+      "sourceUrl": "https://ai-benchmark.com/workshops/mai/2025/",
+      "rssUrl": null,
+      "collectionModeHint": "documentation-watch",
+      "category": "embedded-ai",
+      "priority": "low",
+      "reliability": "conference",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "Learned Smartphone ISP / on-device denoise·SR 챌린지(Snapdragon/Adreno, Dimensity/Mali 런타임 메트릭) seed; 디바이스 벤치마크 evidence가 있을 때에만 후보",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "ai-benchmark.com",
+          "arxiv.org",
+          "github.com",
+          "aiff22.github.io"
+        ],
+        "importantAnchorKeywords": [
+          "paper",
+          "arxiv",
+          "dataset",
+          "pretrained",
+          "model",
+          "source code",
+          "project page",
+          "results",
+          "benchmark"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
+      "keywords": [
+        "Learned ISP",
+        "Mobile AI",
+        "on-device",
+        "benchmark",
+        "NPU",
+        "camera pipeline",
+        "RAW"
+      ],
+      "sourceRole": "engineering_blog_source",
+      "sourceUrlQualityHint": "engineering_blog_with_camera_evidence",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "research/benchmark venue; must not imply production adoption without device/camera evidence",
+        "main promotion requires source-specific confirmation or explicit HAL/ISP pipeline evidence"
+      ]
     }
   ]
 }
