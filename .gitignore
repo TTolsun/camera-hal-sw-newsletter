@@ -3,6 +3,10 @@ node_modules/
 cache/news-summary/
 npm-debug.log*
 .vscode/
+.obsidian/
+
+# Local MCP server config (project-local, not shared)
+.mcp.json
 
 # understand-anything knowledge graph artifacts
 /.understand-anything/
