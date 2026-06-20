@@ -47,13 +47,9 @@
 | strong_candidate | 0.81 | [PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani | https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/ |
 | strong_candidate | 0.81 | [PATCH v2 2/3] media: i2c: add imx576 image sensor driver - Himanshu Bhavani | https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/ |
 | strong_candidate | 0.802 | Test camera images using automation &nbsp;\|&nbsp; Android Open Source Project | https://source.android.com/docs/compatibility/cts/camera-its-box |
-| weak_candidate | 0.458 | https://lore.kernel.org/r/20260128-hm1246-v9-0-f9c996486a95@emfend.at | https://lore.kernel.org/r/20260128-hm1246-v9-0-f9c996486a95@emfend.at |
-| weak_candidate | 0.458 | https://lore.kernel.org/r/20260113-hm1246-v8-0-ea93947b192e@emfend.at | https://lore.kernel.org/r/20260113-hm1246-v8-0-ea93947b192e@emfend.at |
-| weak_candidate | 0.458 | https://lore.kernel.org/r/20260112-hm1246-v7-0-fee8587f2808@emfend.at | https://lore.kernel.org/r/20260112-hm1246-v7-0-fee8587f2808@emfend.at |
-| weak_candidate | 0.458 | https://lore.kernel.org/r/20251202-hm1246-v6-0-3e96ed6b3ffa@emfend.at | https://lore.kernel.org/r/20251202-hm1246-v6-0-3e96ed6b3ffa@emfend.at |
-| weak_candidate | 0.458 | https://lore.kernel.org/r/20251104-hm1246-v5-0-97c8f25b5419@emfend.at | https://lore.kernel.org/r/20251104-hm1246-v5-0-97c8f25b5419@emfend.at |
-| weak_candidate | 0.458 | https://lore.kernel.org/r/20251017-hm1246-v4-0-e3388ea2f08c@emfend.at | https://lore.kernel.org/r/20251017-hm1246-v4-0-e3388ea2f08c@emfend.at |
-| weak_candidate | 0.458 | https://lore.kernel.org/r/20250912-hm1246-v3-0-3b89f47dfa43@emfend.at | https://lore.kernel.org/r/20250912-hm1246-v3-0-3b89f47dfa43@emfend.at |
-| weak_candidate | 0.458 | https://lore.kernel.org/r/20250526-hm1246-v2-0-6b882827a3a5@emfend.at | https://lore.kernel.org/r/20250526-hm1246-v2-0-6b882827a3a5@emfend.at |
-| weak_candidate | 0.458 | https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com/ | https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com |
+| weak_candidate | 0.458 | CameraX | https://developer.android.com/media/camera/camerax |
+| weak_candidate | 0.413 | Release notes | https://source.android.com/docs/whatsnew/release-notes |
+| weak_candidate | 0.367 | Latest security bulletins | https://source.android.com/docs/whatsnew/latest-security-bulletins |
+| weak_candidate | 0.367 | Latest Compatibility Definition Document (CDD) | https://source.android.com/docs/whatsnew/latest-cdd |
+| weak_candidate | 0.367 | Bulletins | https://source.android.com/docs/security/bulletin |
 

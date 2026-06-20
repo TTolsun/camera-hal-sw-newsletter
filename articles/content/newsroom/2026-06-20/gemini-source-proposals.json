@@ -4,16 +4,35 @@
   "newsletter_date": "2026-06-20",
   "proposals": [
     {
-      "proposal_id": "proposal_1",
-      "topic_gap": "Updates on Android camera HAL and image sensor drivers, focusing on new sensor support and kernel-level changes.",
-      "source_family": "linux-camera",
+      "proposal_id": "android-media3-release-notes-20260620",
+      "topic_gap": "Android Media3 has new features for camera output and A/V sync, but no recent release notes are available.",
+      "source_family": "androidx-media3-release-notes",
       "allowed_domains": [],
       "search_keywords": [
-        "Android camera HAL",
-        "image sensor driver",
-        "linux-media",
-        "kernel patch",
-        "V4L2"
+        "Media3 release notes",
+        "camera output",
+        "A/V sync"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3"
+      ],
+      "expected_evidence": [
+        "Media3 release notes",
+        "camera output",
+        "A/V sync"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-camera-hal-driver-updates-20260620",
+      "topic_gap": "New camera sensor drivers are being added to the Linux kernel, which could impact Android camera HAL implementations. Need to track these driver updates.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "camera driver",
+        "image sensor",
+        "linux media",
+        "HAL"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at/",
@@ -22,53 +41,50 @@
         "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/"
       ],
       "expected_evidence": [
-        "New image sensor driver support (e.g., Himax HM1246, imx576)",
-        "Kernel-level changes related to camera hardware",
-        "Patch descriptions detailing sensor integration"
+        "camera sensor driver",
+        "image sensor",
+        "HAL"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "proposal_2",
-      "topic_gap": "Recent advancements and best practices in building premium media experiences on Android, with a focus on the media pipeline.",
-      "source_family": "android-media",
+      "proposal_id": "android-camera-its-box-updates-20260620",
+      "topic_gap": "The Android Compatibility Test Suite (CTS) for cameras has updates, but the specific changes and their impact on camera HAL implementations are not detailed.",
+      "source_family": "aosp-site-updates",
       "allowed_domains": [],
       "search_keywords": [
-        "Android media pipeline",
-        "premium media experiences",
-        "Google I/O 2026",
-        "MediaCodec",
-        "MediaRecorder"
-      ],
-      "candidate_urls": [
-        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
-      ],
-      "expected_evidence": [
-        "Details on production-ready media toolkits",
-        "Best practices for building premium Android media experiences",
-        "Information on Google I/O '26 sessions related to media"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "proposal_3",
-      "topic_gap": "Automated testing strategies for camera images on Android, specifically using the Camera ITS.",
-      "source_family": "aosp",
-      "allowed_domains": [],
-      "search_keywords": [
-        "Android camera testing",
         "Camera ITS",
-        "automated camera images",
-        "AOSP",
-        "CTS"
+        "CTS camera",
+        "automated testing"
       ],
       "candidate_urls": [
         "https://source.android.com/docs/compatibility/cts/camera-its-box"
       ],
       "expected_evidence": [
-        "Methods for automating camera image testing",
-        "Details on the Camera ITS (Image Test Suite)",
-        "Information on setting up the camera ITS test environment"
+        "Camera ITS",
+        "automation",
+        "testing"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "google-io-2026-media-pipeline-20260620",
+      "topic_gap": "Google I/O '26 had a session on building premium Android experiences with a media pipeline toolkit, but the specific details and camera-related aspects are not fully captured.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Google I/O 2026",
+        "Android media pipeline",
+        "camera toolkit"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "media pipeline",
+        "toolkit",
+        "camera output",
+        "Android experiences"
       ],
       "risk_notes": []
     }
