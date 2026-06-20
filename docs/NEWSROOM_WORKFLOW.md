@@ -397,6 +397,8 @@ Repository Settings > Secrets and variables > Actions:
 GEMINI_API_KEY
 ```
 
+`NEWSROOM_PR_TOKEN` (선택, 권장): newsletter PR(`03-newsletters-editor-pr.yml`)의 검증 workflow(`validate-site`)가 자동 실행되게 하려면 필요합니다. GitHub은 기본 `GITHUB_TOKEN`으로 만든 PR에는 `on: pull_request` workflow를 실행하지 않으므로(재귀 방지), 이 secret이 없으면 검증이 `action_required` 상태로 멈추고 사람이 Actions 탭에서 "Approve and run"을 눌러야 검증이 실행됩니다. fine-grained PAT(이 repository 대상, Contents read/write + Pull requests read/write) 또는 GitHub App token을 권장합니다. secret이 없으면 workflow는 기존 `GITHUB_TOKEN` 동작으로 폴백하므로 파이프라인이 깨지지는 않습니다. 이 토큰은 PR 생성에만 쓰며 자동 merge나 `main` 직접 push에는 쓰지 않습니다(PR 기반 발행 모델 유지).
+
 선택 변수:
 
 ```text
