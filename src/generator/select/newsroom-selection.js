@@ -74,7 +74,7 @@ const {
 } = require('./camera-release-notes');
 const {
   BUCKETS
-} = require('../../shared/common/aosp-camera-scope');
+} = require('../../shared/domain/aosp-camera-scope');
 const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
   NATIVE_TOOLING_WORKFLOW_TYPE,

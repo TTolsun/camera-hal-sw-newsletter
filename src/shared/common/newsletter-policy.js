@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const {
   BUCKETS
-} = require('./aosp-camera-scope');
+} = require('../domain/aosp-camera-scope');
 
 const POLICY_REL_PATH = path.join('src', 'shared', 'config', 'newsletter-policy.json');
 const POLICY_BLOCK_BEGIN = '<!-- NEWSLETTER_POLICY:BEGIN -->';

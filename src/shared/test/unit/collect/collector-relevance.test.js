@@ -3,7 +3,7 @@ const test = require('node:test');
 
 const {
   BUCKETS
-} = require('../../../common/aosp-camera-scope');
+} = require('../../../domain/aosp-camera-scope');
 const {
   extractRoundupChildTopics
 } = require('../../../collect/roundup-child-topic-extractor');

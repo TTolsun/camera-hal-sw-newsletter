@@ -30,7 +30,7 @@ const {
   BUCKETS,
   classifyAospCameraStackCandidate,
   normalizeAospCameraScope
-} = require('../../shared/common/aosp-camera-scope');
+} = require('../../shared/domain/aosp-camera-scope');
 const {
   isNativeToolingWorkflow
 } = require('../../shared/common/article-groups');
