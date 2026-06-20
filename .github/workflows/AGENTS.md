@@ -5,6 +5,7 @@
 ## 안전 규칙 (Safety Rules)
 
 - `GEMINI_API_KEY`와 `INTERNAL_LLM_API_KEY`는 workflow input으로 받지 말고 GitHub Secrets에서만 읽습니다.
+- `NEWSROOM_PR_TOKEN`(있을 경우)도 GitHub Secrets에서만 읽고 log, artifact, PR body에 노출하지 않습니다. 이 토큰은 newsletter PR 생성용이며(기본 `GITHUB_TOKEN`으로 만든 PR은 검증 workflow가 자동 실행되지 않으므로 보완하는 용도), 자동 merge나 `main` 직접 push에는 쓰지 않습니다. secret이 없으면 `GITHUB_TOKEN`으로 폴백해야 합니다.
 - scheduled run은 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` repo variable을 읽지 않고 code default를 따라야 합니다.
 - `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS`는 `workflow_dispatch` 수동 실행에서만 runtime env로 전달합니다.
 

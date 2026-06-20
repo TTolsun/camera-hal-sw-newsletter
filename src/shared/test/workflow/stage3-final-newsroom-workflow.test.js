@@ -180,6 +180,10 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(ensureLabelsStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(createPrStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(createPrStep, /base: main/);
+  // Bot-authored PRs created with the default GITHUB_TOKEN do not trigger on: pull_request
+  // workflows (validate-site), so the newsletter PR must be created with NEWSROOM_PR_TOKEN
+  // (falling back to GITHUB_TOKEN when the secret is absent). Lock the token in to prevent regression.
+  assert.match(createPrStep, /token: \$\{\{ secrets\.NEWSROOM_PR_TOKEN \|\| github\.token \}\}/);
   assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_FIGMA_URL: https:\/\/www\.figma\.com\/design\/EWJMa8vjfZLjdn9a7s3Kzs/);
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_DESKTOP_COVERAGE: covered/);

@@ -390,6 +390,13 @@ jobs:
         if: steps.meta.outputs.review_pr_ready == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
+          # 기본 GITHUB_TOKEN으로 만든 PR에는 GitHub이 validate-site 같은
+          # on: pull_request 워크플로를 자동 실행하지 않는다(재귀 방지). 그래서
+          # 검증 게이트가 매주 action_required 상태로 멈춘다. 별도 자격증명
+          # NEWSROOM_PR_TOKEN(fine-grained PAT 또는 GitHub App token)이 있으면
+          # 그것으로 PR을 만들어 검증이 자동 실행되게 한다. secret이 없으면
+          # 기존 동작(GITHUB_TOKEN)으로 안전하게 폴백한다.
+          token: ${{ secrets.NEWSROOM_PR_TOKEN || github.token }}
           commit-message: "Generate Camera HAL newsletter ${{ steps.meta.outputs.date }}"
           branch: newsroom-final/${{ steps.meta.outputs.date }}
           base: main
