@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "aosp-camera-docs",
-  "updated_at": "2026-06-19T00:00:00.000Z",
+  "updated_at": "2026-06-20T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "aosp-camera-docs:2e09be47b7d035b1b1509fe59f1caf95",
@@ -25,8 +25,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-06-19T00:00:00.000Z",
-      "seen_count": 85,
+      "last_seen_at": "2026-06-20T00:00:00.000Z",
+      "seen_count": 86,
       "status": 200
     }
   ],
