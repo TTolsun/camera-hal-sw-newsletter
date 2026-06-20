@@ -180,9 +180,9 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(ensureLabelsStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(createPrStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true'/);
   assert.match(createPrStep, /base: main/);
-  // Bot-authored PRs created with the default GITHUB_TOKEN do not trigger on: pull_request
-  // workflows (validate-site), so the newsletter PR must be created with NEWSROOM_PR_TOKEN
-  // (falling back to GITHUB_TOKEN when the secret is absent). Lock the token in to prevent regression.
+  // 기본 GITHUB_TOKEN으로 만든 PR은 on: pull_request 워크플로(validate-site)를 자동 실행하지
+  // 않으므로, newsletter PR은 NEWSROOM_PR_TOKEN으로 만들어야 한다(secret이 없으면 GITHUB_TOKEN으로
+  // 폴백). 회귀를 막기 위해 token 라인을 테스트로 고정한다.
   assert.match(createPrStep, /token: \$\{\{ secrets\.NEWSROOM_PR_TOKEN \|\| github\.token \}\}/);
   assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_FIGMA_URL: https:\/\/www\.figma\.com\/design\/EWJMa8vjfZLjdn9a7s3Kzs/);
