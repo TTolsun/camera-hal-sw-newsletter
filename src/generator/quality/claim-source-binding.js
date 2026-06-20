@@ -1265,6 +1265,30 @@ function validateClaimEvidence(claim, evidenceIndex, candidate, strict) {
       'direct_hal_contract claim lacks direct HAL source evidence.'
     ));
   }
+  // #651 claim-level salvage: a single unresolved evidence_id must not drop an otherwise
+  // validly source-bound claim (and therefore the whole article). When the claim still has
+  // at least one resolved, allowed supporting evidence item AND the unresolved reference is
+  // its ONLY blocking problem, the stray id is a redundant (typically hallucinated or
+  // mis-copied) pointer: demote it to advisory. Fail-closed is preserved — a claim with no
+  // allowed support, or any other blocking issue (source mismatch, blocked evidence,
+  // unsupported fact, overclaim), keeps blocking. This narrows brittleness; it does not
+  // weaken the source-binding contract: the salvaged claim is still bound and fact-supported
+  // by its remaining allowed evidence, held to the exact same fact-support bar as any claim.
+  const blockingIssues = issues.filter(item => item.blocking !== false);
+  const hasAllowedSupport = resolvedEvidenceItems.some(item => item?.status === 'allowed');
+  if (
+    hasAllowedSupport &&
+    blockingIssues.length > 0 &&
+    blockingIssues.every(item => item.reason_code === 'unknown_evidence_id')
+  ) {
+    for (const item of issues) {
+      if (item.reason_code === 'unknown_evidence_id' && item.blocking !== false) {
+        item.blocking = false;
+        item.severity = 'soft';
+        item.salvaged_redundant_evidence_id = true;
+      }
+    }
+  }
   return {
     issues,
     resolvedEvidenceIds,
