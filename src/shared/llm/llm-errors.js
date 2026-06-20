@@ -7,6 +7,20 @@ class LlmJsonParseError extends Error {
   }
 }
 
+// A single provider call exceeded its wall-clock ceiling and was abandoned.
+// This is distinct from API/quota/parse errors: the model is hanging, so the
+// caller should stop waiting on it, skip same-model retries, and fall through
+// to the next configured fallback model instead of hard-failing.
+class LlmCallTimeoutError extends Error {
+  constructor(stage, modelName, timeoutMs) {
+    super(`[${stage}] LLM call to model ${modelName} exceeded ${timeoutMs}ms wall-clock timeout.`);
+    this.name = 'LlmCallTimeoutError';
+    this.stage = stage;
+    this.modelName = modelName;
+    this.timeoutMs = timeoutMs;
+  }
+}
+
 function errorText(error) {
   return [
     error?.message,
@@ -46,6 +60,7 @@ function errorStatus(error, retryableStatuses = new Set()) {
 }
 
 function lastStatus(error, retryableStatuses = new Set()) {
+  if (error instanceof LlmCallTimeoutError) return 'timeout';
   const directStatus = errorStatus(error, retryableStatuses);
   if (directStatus) return directStatus;
 
@@ -143,6 +158,7 @@ function extractJson(text, stage, providerLabel = 'LLM') {
 }
 
 module.exports = {
+  LlmCallTimeoutError,
   LlmJsonParseError,
   errorStatus,
   errorText,

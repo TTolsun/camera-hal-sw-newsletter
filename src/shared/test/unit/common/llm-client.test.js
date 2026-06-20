@@ -12,6 +12,7 @@ function clearLlmEnv() {
     'GEMINI_API_KEY', 'LLM_PROVIDER', 'LLM_MODEL', 'LLM_FALLBACK_MODELS',
     'LLM_RAW_OUTPUT_DIR', 'GEMINI_MODEL', 'GEMINI_FALLBACK_MODELS',
     'GEMINI_MAX_RETRIES', 'GEMINI_RETRY_DELAYS_MS', 'GEMINI_RETRY_MAX_DELAY_MS',
+    'GEMINI_CALL_TIMEOUT_MS',
     'NEWSROOM_REPORTER_MODEL', 'NEWSROOM_EDITOR_MODEL', 'NEWSROOM_FACTCHECK_MODEL',
     'NEWSROOM_REPAIR_MODEL', 'NEWSROOM_JUDGE_MODEL'
   ]) {
@@ -57,5 +58,69 @@ test('openapi reserved provider fails fast without HTTP request', async () => {
   await assert.rejects(
     () => client.callLlmJson('reserved provider', 'system', 'prompt', {}),
     /provider_not_implemented/
+  );
+});
+
+// A provider stub that lets each test decide how execute() behaves per model.
+function fakeProvider(execute) {
+  return {
+    id: 'fake',
+    displayName: 'Fake',
+    missingCredentialMessage: 'no key',
+    getApiKey: () => 'key',
+    configuredModels: () => ['hang-model', 'ok-model'],
+    createModelContext: ({ modelName }) => ({ modelName }),
+    describeModelContext: () => '',
+    buildRequest: ({ model }) => ({ request: { model }, thinkingBudget: null }),
+    execute,
+    textFromResponse: response => response.text,
+    usageMetadataFromResponse: () => ({ usage_metadata_present: false }),
+    estimateCallCost: () => ({
+      prompt_tokens: 0, output_tokens: 0, thinking_tokens: 0, cached_tokens: 0,
+      total_tokens: 0, billable_input_tokens: 0, billable_output_tokens: 0,
+      estimated_cost_usd: 0, pricing_usd_per_million: 0, pricing_source: '', pricing_warning: ''
+    }),
+    isProModel: () => false
+  };
+}
+
+const okResponse = { text: JSON.stringify({ result: 'ok' }) };
+
+test('callWithTimeout rejects with LlmCallTimeoutError when the call hangs', async () => {
+  const client = loadLlmClient();
+  await assert.rejects(
+    () => client.callWithTimeout(new Promise(() => {}), 30, 'unit', 'hang-model'),
+    error => error instanceof client.LlmCallTimeoutError &&
+      error.timeoutMs === 30 && error.modelName === 'hang-model'
+  );
+});
+
+test('callWithTimeout resolves with the value when the call finishes first', async () => {
+  const client = loadLlmClient();
+  assert.equal(await client.callWithTimeout(Promise.resolve('done'), 1000, 'unit', 'm'), 'done');
+});
+
+test('callWithTimeout with timeoutMs<=0 disables the ceiling (passthrough)', () => {
+  const client = loadLlmClient();
+  const promise = Promise.resolve('raw');
+  assert.equal(client.callWithTimeout(promise, 0, 'unit', 'm'), promise);
+});
+
+test('callLlmJson abandons a hanging model and falls through to the next fallback', async () => {
+  const client = loadLlmClient({ GEMINI_CALL_TIMEOUT_MS: '40' });
+  const provider = fakeProvider(({ modelName }) =>
+    modelName === 'hang-model' ? new Promise(() => {}) : Promise.resolve(okResponse));
+  const result = await client.callLlmJson('unit stage', 'system', 'prompt', {}, { provider });
+  assert.deepEqual(result, { result: 'ok' });
+});
+
+test('callLlmJson throws after every fallback model times out', async () => {
+  const client = loadLlmClient({ GEMINI_CALL_TIMEOUT_MS: '40' });
+  const provider = fakeProvider(() => new Promise(() => {}));
+  await assert.rejects(
+    () => client.callLlmJson('unit stage', 'system', 'prompt', {}, { provider }),
+    error => /Fake API failed for all configured models/.test(error.message) &&
+      // The failure summary distinguishes a timeout from a generic 'unknown' status.
+      /status timeout/.test(error.message)
   );
 });

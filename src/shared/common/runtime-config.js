@@ -74,6 +74,12 @@ const DEFAULT_RUNTIME_CONFIG = {
   geminiMaxRetries: 2,
   geminiRetryDelaysMs: [20000, 10000],
   geminiRetryMaxDelayMs: 300000,
+  // Wall-clock ceiling for a single LLM call. A hanging model is abandoned after
+  // this many ms so the retry/fallback machinery can progress instead of stalling
+  // the whole run (see #649; 2026-06-18 editor hang ran 24+ minutes). 480000ms is
+  // 8 minutes: conservative headroom over a legitimately slow editor/factcheck
+  // call while still bounding a hang far below the old unbounded behaviour. 0 disables.
+  geminiCallTimeoutMs: 480000,
   newsroomMaxQualityRetries: 1,
   newsroomMaxSectionRepairs: 1,
   newsroomWarnCostUsd: 0.2,
@@ -292,6 +298,11 @@ function readRuntimeConfig(env = process.env, options = {}) {
     geminiRetryMaxDelayMs: parseInteger(
       envValue(env, 'GEMINI_RETRY_MAX_DELAY_MS', DEFAULT_RUNTIME_CONFIG.geminiRetryMaxDelayMs),
       'GEMINI_RETRY_MAX_DELAY_MS',
+      { min: 0 }
+    ),
+    geminiCallTimeoutMs: parseInteger(
+      envValue(env, 'GEMINI_CALL_TIMEOUT_MS', DEFAULT_RUNTIME_CONFIG.geminiCallTimeoutMs),
+      'GEMINI_CALL_TIMEOUT_MS',
       { min: 0 }
     ),
     newsroomMaxQualityRetries: parseInteger(
@@ -523,6 +534,9 @@ function validateRuntimeConfig(config, options = {}) {
   if (!Number.isInteger(config.geminiRetryMaxDelayMs) || config.geminiRetryMaxDelayMs < 0) {
     errors.push('GEMINI_RETRY_MAX_DELAY_MS must be an integer >= 0.');
   }
+  if (!Number.isInteger(config.geminiCallTimeoutMs) || config.geminiCallTimeoutMs < 0) {
+    errors.push('GEMINI_CALL_TIMEOUT_MS must be an integer >= 0.');
+  }
   if (!Number.isInteger(config.newsroomMaxQualityRetries) || config.newsroomMaxQualityRetries < 0) {
     errors.push('NEWSROOM_MAX_QUALITY_RETRIES must be an integer >= 0.');
   }
@@ -659,6 +673,7 @@ function sanitizeRuntimeConfig(config) {
     geminiMaxRetries: config.geminiMaxRetries,
     geminiRetryDelaysMs: config.geminiRetryDelaysMs,
     geminiRetryMaxDelayMs: config.geminiRetryMaxDelayMs,
+    geminiCallTimeoutMs: config.geminiCallTimeoutMs,
     newsroomMaxQualityRetries: config.newsroomMaxQualityRetries,
     newsroomMaxSectionRepairs: config.newsroomMaxSectionRepairs,
     newsroomWarnCostUsd: config.newsroomWarnCostUsd,
