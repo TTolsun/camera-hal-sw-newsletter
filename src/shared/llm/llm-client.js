@@ -7,6 +7,7 @@ const {
   buildCostReportMarkdown
 } = require('./llm-cost');
 const {
+  LlmCallTimeoutError,
   LlmJsonParseError,
   errorStatus,
   extractJson,
@@ -38,6 +39,22 @@ function fail(message) {
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Put a wall-clock ceiling on a single provider call. Node cannot cancel the
+// underlying SDK request, so we stop awaiting it (Promise.race) and swallow any
+// late settlement to avoid an unhandled rejection. timeoutMs <= 0 disables the
+// ceiling entirely, preserving the original behaviour for offline/fixture runs.
+function callWithTimeout(execPromise, timeoutMs, stage, modelName) {
+  if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) return execPromise;
+  let timer = null;
+  const timeoutPromise = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new LlmCallTimeoutError(stage, modelName, timeoutMs)), timeoutMs);
+  });
+  execPromise.catch(() => {});
+  return Promise.race([execPromise, timeoutPromise]).finally(() => {
+    if (timer) clearTimeout(timer);
+  });
 }
 
 function safeFilenamePart(value) {
@@ -121,7 +138,12 @@ async function generateContentJsonWithRetry(stage, provider, context, requestSta
     try {
       diagnostics.recordRequest(stage, modelName);
       console.log(`[${stage}] ${provider.displayName} request attempt ${attempt}/${maxRetries + 1} using model ${modelName}.`);
-      const response = await provider.execute({ context, request: requestState.request, modelName, stage });
+      const response = await callWithTimeout(
+        provider.execute({ context, request: requestState.request, modelName, stage }),
+        runtimeConfig.geminiCallTimeoutMs,
+        stage,
+        modelName
+      );
       recordUsageMetadata(stage, provider, modelName, attempt, response, requestState, routing);
       const text = provider.textFromResponse(response);
       const json = extractJson(text, stage, provider.displayName);
@@ -129,6 +151,14 @@ async function generateContentJsonWithRetry(stage, provider, context, requestSta
       return json;
     } catch (error) {
       lastError = error;
+
+      if (error instanceof LlmCallTimeoutError) {
+        // The model is hanging; retrying the same model would likely hang again.
+        // Abandon it and let the outer loop fall through to the next fallback.
+        diagnostics.recordApiError(stage, modelName);
+        console.warn(`${error.message} Abandoning model ${modelName} and trying the next fallback if configured.`);
+        break;
+      }
 
       if (error instanceof LlmJsonParseError) {
         diagnostics.recordInvalidJson(stage, modelName);
@@ -242,7 +272,11 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
         message: error.message
       });
 
-      if (!(error instanceof LlmJsonParseError) && !isRetryableError(error, retryableStatuses)) {
+      if (
+        !(error instanceof LlmJsonParseError) &&
+        !(error instanceof LlmCallTimeoutError) &&
+        !isRetryableError(error, retryableStatuses)
+      ) {
         if (error?.code === 'provider_not_implemented') {
           fail(`[${stage}] ${provider.displayName} provider_not_implemented: ${error.message}`);
         }
@@ -296,11 +330,13 @@ function resetLlmDiagnostics() {
 }
 
 module.exports = {
+  LlmCallTimeoutError,
   LlmJsonParseError,
   buildCostReport,
   buildCostReportMarkdown,
   callLlmJson,
   callLlmJsonBudgeted,
+  callWithTimeout,
   estimateCallCost: geminiProvider.estimateCallCost,
   extractJson,
   findPricing: geminiProvider.findPricing,
