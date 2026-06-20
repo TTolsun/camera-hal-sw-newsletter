@@ -1,0 +1,267 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 96,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 2,
+    "locked_article_count": 2,
+    "demoted_article_count": 1,
+    "reserve_pool_opened": true,
+    "reserve_open_reason": "completion_missing_1_article_after_demote_or_remove",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [
+      {
+        "title": "[PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver",
+        "url": "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/",
+        "source": "lore.kernel.org linux-media list",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "reason": "duplicate_demoted_url"
+      },
+      {
+        "title": "[PATCH v10 0/2] media: add Himax HM1246 image sensor",
+        "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
+        "source": "lore.kernel.org linux-media list",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+        "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "source": "ISO C++ Blog",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 6,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "underfilled_reason": "completion top-up failed; published 2 passing article(s) below target 3",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Linux 커널에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 제안",
+      "GCC 16 컴파일러 릴리스 예정: 개선된 오류 메시지 및 SARIF 출력 기능 추가"
+    ],
+    "locked_article_headlines": [
+      "Linux 커널에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 제안",
+      "GCC 16 컴파일러 릴리스 예정: 개선된 오류 메시지 및 SARIF 출력 기능 추가"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [
+      "Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안"
+    ],
+    "replaced_sections": [
+      "Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안"
+    ],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/"
+        ],
+        "source_titles": [
+          "[PATCH v10 0/2] media: add Himax HM1246 image sensor"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "GCC 16 컴파일러 릴리스 예정: 개선된 오류 메시지 및 SARIF 출력 기능 추가",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        ],
+        "source_titles": [
+          "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm"
+        ]
+      }
+    ],
+    "failed_sections": [
+      {
+        "index": 1,
+        "headline": "Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/"
+        ],
+        "source_titles": [
+          "[PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver"
+        ]
+      }
+    ],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "replace-or-demote(deterministic-demote): Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/"
+        ],
+        "action": "replace-or-demote",
+        "failure_type": "unknown_evidence_id",
+        "allow_rewrite": false,
+        "policy_reason": "claim evidence, source binding, or coverage failure must be demoted or replaced",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "source-integrity",
+            "points": 8,
+            "reason": "Article evidence conflicts with bound candidate metadata: version_or_release mismatch.",
+            "location": "Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: candidate:b22e3f5470b11f92:source-summary.",
+            "location": "Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: candidate:b22e3f5470b11f92:source-summary.",
+            "location": "Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: candidate:b22e3f5470b11f92:source-summary.",
+            "location": "Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: candidate:b22e3f5470b11f92:source-summary.",
+            "location": "Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Linux 커널에 imx576 카메라 센서 드라이버 추가를 위한 v2 패치 시리즈 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/"
+        ],
+        "action": "replace-or-demote",
+        "failure_type": "article-gate-fail",
+        "allow_rewrite": false,
+        "policy_reason": "article gate status FAIL requires replacement path (replace-or-demote)",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/"
+        ],
+        "source_titles": [
+          "[PATCH v10 0/2] media: add Himax HM1246 image sensor"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "GCC 16 컴파일러 릴리스 예정: 개선된 오류 메시지 및 SARIF 출력 기능 추가",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        ],
+        "source_titles": [
+          "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 1,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 1,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

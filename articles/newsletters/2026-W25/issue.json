@@ -3,11 +3,12 @@
   "public_contract_version": "story-v1",
   "generation_contract_version": 1,
   "title": "2026 W25 (06.15 ~ 06.21)",
-  "summary": "이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 3건의 소식을 다룹니다.",
+  "summary": "이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 4건의 소식을 다룹니다.",
   "briefing": [
     "ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개",
     "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
-    "GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선"
+    "GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선",
+    "Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안"
   ],
   "sections": [
     {
@@ -693,12 +694,12 @@
           "width": 100
         }
       ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "소스 블로그에 포함된 관련 이미지입니다.",
+      "selectedImage": "https://isocpp.org/files/img/redhatgraphic.png",
+      "imageSource": "https://isocpp.org/blog",
+      "imageAttribution": "ISO C++ Blog",
+      "imageAlt": "Red Hat graphic shown on ISO C++ Blog",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "Selected the only available image candidate from the source article.",
       "sources": [
         {
           "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
@@ -752,21 +753,299 @@
       "evidence_origin": "article_text",
       "source_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "resolvedImage": {
-        "url": "../../assets/images/fallback/newsletter-default.svg",
-        "src": "../../assets/images/fallback/newsletter-default.svg",
-        "originalUrl": "https://isocpp.org/files/img/redhatgraphic.png",
-        "originalSrc": "https://isocpp.org/files/img/redhatgraphic.png",
-        "usedFallback": true,
-        "reason": "selected image has no valid provenance candidate; local fallback visual used"
+        "url": "https://isocpp.org/files/img/redhatgraphic.png",
+        "src": "https://isocpp.org/files/img/redhatgraphic.png",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": ""
       },
       "originalImage": "https://isocpp.org/files/img/redhatgraphic.png",
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 제안",
+      "what_changed": "Linux 커널 미디어 하위 시스템에 Himax HM1246 이미지 센서 드라이버를 추가하는 패치 시리즈(v10)가 제안되었습니다. 현재 이 드라이버는 Native RAW 모드만 지원하며, 다른 모드와 내부 ISP 파이프라인은 지원되지 않습니다.",
+      "confirmed_facts": [
+        "2026년 6월 19일, Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 시리즈가 제출되었습니다.",
+        "현재 드라이버는 Native RAW 모드만 지원하며, 센서 내부의 ISP 파이프라인 및 기타 출력 모드는 지원하지 않습니다."
+      ],
+      "evidence_summary": "Linux 커널 미디어 메일링 리스트에 제출된 [PATCH v10 0/2] 패치 시리즈를 통해 Himax HM1246 이미지 센서 드라이버 추가 및 Native RAW 모드 전용 지원 제약 사항이 확인되었습니다.",
+      "specificity_checks": [
+        "Version: v10 (patch series)",
+        "Release Date: 2026-06-19",
+        "API/Component: image sensor, Himax HM1246",
+        "Behavior Change: Himax HM1246 이미지 센서 지원 추가 (Native RAW 모드 전용, 내부 ISP 미지원)"
+      ],
+      "source_verification_notes": [
+        "출처: lore.kernel.org linux-media list",
+        "v10까지 검토가 진행된 패치 시리즈로, 현재 Native RAW 모드만 지원하는 제약이 명시되어 있습니다."
+      ],
+      "public_article": {
+        "headline": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안",
+        "lead": "최근 Himax HM1246 이미지 센서를 지원하기 위한 v10 패치 시리즈가 Linux 커널 미디어 서브시스템에 제안되었습니다. 이번 드라이버는 Native RAW 모드만을 우선 지원하며, 센서 내부 ISP 파이프라인은 활성화되지 않은 상태로 검토 중입니다.",
+        "body_paragraphs": [
+          "2026년 6월 19일, Linux 커널 미디어 메일링 리스트를 통해 Himax HM1246 이미지 센서 드라이버 추가를 위한 열 번째 패치 시리즈가 공개되었습니다. 이 드라이버는 하드웨어 제어 및 V4L2 프레임 캡처 인터페이스를 제공합니다.",
+          "현재 제안된 드라이버의 핵심 제약 사항은 Native RAW 모드만 지원한다는 점입니다. 센서 내부의 ISP 파이프라인이나 기타 가공된 출력 모드는 지원 대상에서 제외되어 있어, 센서가 출력하는 순수 RAW 데이터를 외부 ISP나 AP 수준에서 처리해야 합니다.",
+          "v10까지 검토가 진행된 만큼 드라이버의 구조적 완성도는 높을 것으로 예상되나, 여전히 검토 중인 패치 단계입니다. 따라서 실제 제품 개발 시에는 Native RAW 모드 전용 지원이라는 제약 조건을 고려하여 파이프라인 설계를 진행해야 합니다."
+        ],
+        "camera_hal_takeaway": "Himax HM1246 드라이버는 Native RAW 모드만 지원하므로, Android Camera HAL 수준에서 YUV나 JPEG 스트림을 생성하기 위해서는 AP의 하드웨어 ISP 또는 소프트웨어 이미지 처리 파이프라인과의 연동이 필수적입니다. 센서 내부 ISP를 활용한 간편한 YUV 출력이 불가능하다는 점을 아키텍처 설계 시 반영해야 합니다.",
+        "reader_checkpoints": [
+          "Himax HM1246 센서 도입 시, 외부 ISP 파이프라인이 RAW 데이터를 처리하여 HAL3가 요구하는 YUV/JPEG 스트림을 생성할 수 있는지 리소스 할당을 검토합니다.",
+          "Native RAW 모드 외에 추가적인 센서 출력 모드가 필요한 경우, 드라이버 확장 가능성을 분석합니다."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v10 0/2] media: add Himax HM1246 image sensor",
+            "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media list (2026-06-19)",
+        "editorial_story": {
+          "reader_scenario": "Himax HM1246 센서를 사용한 저전력 카메라 모듈 개발 중, 드라이버 지원 범위와 HAL 스트림 구성 방식을 검토하는 상황을 가정합니다.",
+          "what_happened": "Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 시리즈가 제안되었습니다.",
+          "why_it_matters": "Native RAW 모드만 지원하고 내부 ISP가 지원되지 않는 제약 사항은 Android Camera HAL이 YUV/JPEG 스트림을 처리하기 위해 플랫폼 ISP 리소스를 추가로 소모해야 함을 의미합니다.",
+          "field_scenario": "V4L2 서브시스템에서 RAW 포맷 스트림만 활성화되는지 확인하고, 플랫폼 ISP와의 데이터 경로 연동을 테스트합니다.",
+          "not_to_overclaim": "이 패치는 검토 중인 제안이며, Linux 커널에 최종 병합되기 전까지는 상용 Android 기기나 AOSP 프레임워크에 직접적인 변경을 일으키지 않습니다.",
+          "editor_take": "Native RAW 전용 지원은 플랫폼 ISP의 부하를 가중시킬 수 있으므로, 저전력 기기 설계 시 전력 및 대역폭 마진을 신중히 계산해야 합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 6월 19일, Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 시리즈가 제출되었습니다.",
+          "현재 드라이버는 Native RAW 모드만 지원하며, 센서 내부의 ISP 파이프라인 및 기타 출력 모드는 지원하지 않습니다."
+        ],
+        "background_context": "Linux 커널에 새로운 이미지 센서 드라이버가 추가되면 V4L2를 통해 Android Camera HAL에 새로운 하드웨어 지원을 제공할 수 있습니다. 이는 새로운 장치 통합 및 이미지 파이프라인 테스트에 영향을 미칩니다. 드라이버, 센서, ISP, libcamera, V4L2 변경은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "Himax HM1246 드라이버는 Native RAW 모드만 지원하므로, Android Camera HAL 수준에서 YUV나 JPEG 스트림을 생성하기 위해서는 AP의 하드웨어 ISP 또는 소프트웨어 이미지 처리 파이프라인과의 연동이 필수적입니다. 센서 내부 ISP를 활용한 간편한 YUV 출력이 불가능하다는 점을 아키텍처 설계 시 반영해야 합니다.",
+        "action_items": [
+          "Himax HM1246 센서 도입 시, 외부 ISP 파이프라인이 RAW 데이터를 처리하여 HAL3가 요구하는 YUV/JPEG 스트림을 생성할 수 있는지 리소스 할당을 검토합니다.",
+          "Native RAW 모드 외에 추가적인 센서 출력 모드가 필요한 경우, 드라이버 확장 가능성을 분석합니다."
+        ],
+        "team_share_points": "Himax HM1246 센서용 v10 드라이버 패치가 제안되었으나, Native RAW 모드만 지원하고 내부 ISP는 미지원하므로 외부 ISP 연동 설계가 필요합니다.",
+        "do_not_claim": [
+          "이 패치 시리즈는 현재 검토 중인 제안이며, Linux 커널에 최종 병합될 때까지 HAL API 또는 Android 프레임워크에 직접적인 변경 사항을 의미하지 않습니다.",
+          "HAL 계약, 메타데이터, 스트림 또는 버퍼 동작에 대한 직접적인 변경은 출처에 명시되어 있지 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:hm1246-patch-v10",
+          "text": "2026년 6월 19일, Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 시리즈가 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:52b356a7e3f545a6:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:hm1246-raw-only",
+          "text": "현재 드라이버는 Native RAW 모드만 지원하며, 센서 내부의 ISP 파이프라인 및 기타 출력 모드는 지원하지 않습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:52b356a7e3f545a6:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:hm1246-hal-inference",
+          "text": "내부 ISP 미지원으로 인해 Android Camera HAL에서 YUV/JPEG 스트림을 처리하기 위해 플랫폼 ISP 리소스 연동이 필수적입니다.",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "candidate:52b356a7e3f545a6:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "medium"
+        }
+      ],
+      "camera_hal_checks": [
+        "V4L2 캡처 인터페이스에서 RAW 포맷 스트림만 정상 노출되는지 확인",
+        "플랫폼 ISP 파이프라인과의 RAW 데이터 전송 및 동기화 동작 검증"
+      ],
+      "action_hints": [
+        "드라이버 소스 코드의 format negotiation 로직 분석",
+        "외부 ISP 드라이버와의 연동 인터페이스 검토"
+      ],
+      "action_items": [
+        "Himax HM1246 센서 도입 시, 외부 ISP 파이프라인이 RAW 데이터를 처리하여 HAL3가 요구하는 YUV/JPEG 스트림을 생성할 수 있는지 리소스 할당을 검토합니다.",
+        "Native RAW 모드 외에 추가적인 센서 출력 모드가 필요한 경우, 드라이버 확장 가능성을 분석합니다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "sourceUrl": "https://isocpp.org/blog",
+          "articleUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "redhatgraphic.png",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "ISO C++ Blog",
+          "validationStatus": "ok",
+          "contentLength": 308207
+        },
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v5c6c2ba835e8720a8eaa6bc4810fa5cab5cbf351b6cee9f9510467b6e0c34519/android/images/lockup.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/s4097/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1807162
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/w1200-h630-p-k-no-nu/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 320599
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available.",
+      "sources": [
+        {
+          "title": "[PATCH v10 0/2] media: add Himax HM1246 image sensor",
+          "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "2026년 6월 19일 Linux 커널 미디어 서브시스템에 Himax HM1246 드라이버 v10 패치가 제안되어 하드웨어 지원 범위가 구체화되었습니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "Native RAW 전용 지원 제약 사항을 바탕으로 플랫폼 ISP 연동 구조 및 추가 전력 소모 마진을 검토합니다.",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "해당 패치는 검토 중인 제안이며, Linux 커널에 최종 병합되기 전까지는 상용 Android 기기나 AOSP 프레임워크에 직접적인 변경을 일으키지 않습니다."
+        ]
+      },
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
+      "source_candidate_hash": "52b356a7e3f545a6e2935dc454a09ba363c42d8300a76ebd9a924104e0d53b09",
+      "article_group_key": "lore-series:20260619-hm1246-v10-d88e431a6c11@emfend.at",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
       "coverage_type": "fresh"
     }
   ],
   "action_items": [
-    "Mali-C55 기반 플랫폼에서 제안된 CCM 기능이 이미지 품질(색상 정확도, 화이트 밸런스 등)에 미치는 영향을 평가하기 위한 테스트 시나리오를 정의하고 PoC를 수행합니다.",
-    "CameraX 마이그레이션 스킬의 내용을 검토하여 CameraX의 새로운 권장 사용 패턴과 API 호출 시퀀스를 파악하고, 주요 앱 시나리오에서 HAL의 성능 및 안정성을 재검증합니다.",
-    "현재 Camera HAL 및 드라이버 빌드에 사용되는 Clang/LLVM 툴체인의 오류 메시지 및 진단 기능을 GCC 16의 개선 사항과 비교 분석하고, SARIF 출력을 활용한 정적 분석 도구 통합 가능성을 탐색합니다."
+    "해당 센서 도입 계획이 있는 경우, 제안된 v2 패치 드라이버의 V4L2 컨트롤 구현(수동 노출, 게인)이 Android Camera HAL3 요구사항과 호환되는지 분석합니다.",
+    "2880x2156 30fps SRGGB10 해상도의 프레임 타이밍 및 vblank/hblank 제어가 센서 데이터시트 사양과 일치하는지 검토합니다.",
+    "Himax HM1246 센서 도입 시, 외부 ISP 파이프라인이 RAW 데이터를 처리하여 HAL3가 요구하는 YUV/JPEG 스트림을 생성할 수 있는지 리소스 할당을 검토합니다.",
+    "Himax HM1246의 Native RAW 모드 외에 추가적인 센서 출력 모드가 필요한 경우, 드라이버 확장 가능성을 분석합니다.",
+    "자사 빌드 환경 중 GCC를 사용하는 레거시 모듈이나 독자 Linux 빌드 시스템이 있는지 확인합니다.",
+    "SARIF 포맷 출력을 지원하는 정적 분석 도구(예: SonarQube, GitHub Actions 등)와의 연동 시나리오를 검토합니다."
   ],
   "references": [
     {
@@ -780,53 +1059,45 @@
     {
       "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
       "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+    },
+    {
+      "title": "[PATCH v10 0/2] media: add Himax HM1246 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [
+    {
+      "article_group_key": "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io",
+      "hard_block_reason": "deterministic demote dropped an unpublishable article",
+      "reason_code": "quality_hard_blocker"
     }
   ],
   "selected_group_count": 3,
-  "rendered_group_count": 3,
+  "rendered_group_count": 2,
   "explicitly_demoted_group_count": 0,
-  "hard_blocked_group_count": 0,
+  "hard_blocked_group_count": 1,
   "selected_representative_group_keys": [
-    "lore-series:20260616-mali-c55-ccm-gamma-v1-174fe4fedea3@ideasonboard.com",
-    "article:https://developer.android.com/tools/agents/android-cli#skills-add",
+    "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io",
+    "lore-series:20260619-hm1246-v10-d88e431a6c11@emfend.at",
     "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
   ],
   "rendered_group_keys": [
-    "lore-series:20260616-mali-c55-ccm-gamma-v1-174fe4fedea3@ideasonboard.com",
-    "article:https://developer.android.com/tools/agents/android-cli#skills-add",
+    "lore-series:20260619-hm1246-v10-d88e431a6c11@emfend.at",
     "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
   ],
   "explicitly_demoted_group_keys": [],
-  "hard_blocked_group_keys": [],
+  "hard_blocked_group_keys": [
+    "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io"
+  ],
   "publish_mode": "DEEP",
   "reference_articles": [
-    {
-      "title": "CameraX Release Notes - CameraX 1.6.1",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
-      "source": "Android Developers Latest Updates",
-      "published_date": "May 06, 2026",
-      "note": "AOSP Camera 프레임워크 관련 참고"
-    },
-    {
-      "title": "Test camera images using automation",
-      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
-      "source": "AOSP Site Updates",
-      "published_date": "2026-05-01",
-      "note": "AOSP Camera 프레임워크 관련 참고"
-    },
     {
       "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 13:00:00 +0000",
       "note": "Android 플랫폼 · 카메라 인접 주제 참고"
-    },
-    {
-      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
-      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
-      "source": "ISO C++ Blog",
-      "published_date": "Thu, 30 Apr 2026 22:36:23 +0000",
-      "note": "C++ / AI 네이티브 툴링 참고"
     }
   ],
   "weekly_key": "2026-W25",

@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-06-16T00:00:00+09:00",
+  "updated_at": "2026-06-20T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com",
-    "title": "ARM Mali-C55 ISP, CCM 지원 패치 제안으로 이미지 색상 처리 강화",
-    "summary": "2026년 6월 16일, Linux 커널 미디어 메일링 리스트에 ARM Mali-C55 ISP 드라이버에 CCM(Color Correction Matrix) 지원을 추가하는 패치가 제안되었습니다. 이 변경은 이미지 처리 파이프라인의 색상 보정 기능을 확장하고, V4L2-ISP UAPI를 통해 CCM 파라미터 구성을 지원하도록 설계되었습니다.",
-    "source_url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/",
-    "newsletter_date": "2026-06-16",
-    "newsletter_url": "newsletters/2026-06-16/index.html",
-    "selected_at": "2026-06-16",
+    "article_identity_key": "url:https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at",
+    "title": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안",
+    "summary": "최근 Himax HM1246 이미지 센서를 지원하기 위한 v10 패치 시리즈가 Linux 커널 미디어 서브시스템에 제안되었습니다. 이번 드라이버는 Native RAW 모드만을 우선 지원하며, 센서 내부 ISP 파이프라인은 활성화되지 않은 상태로 검토 중입니다.",
+    "source_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
+    "newsletter_date": "2026-06-20",
+    "newsletter_url": "newsletters/2026-06-20/index.html",
+    "selected_at": "2026-06-20",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-06-16",
+    "last_scored_at": "2026-06-20",
     "date_evidence": {
-      "date": "2026-06-16T13:01:46Z",
+      "date": "2026-06-19T12:29:32Z",
       "date_field": "published_date",
       "evidence_level": "watch",
       "publish_ready_date_evidence": true
@@ -38,13 +38,58 @@
     },
     "snapshot": {
       "category": "camera_driver_image_pipeline",
-      "source_name": "[PATCH 1/2] media: arm: mali-c55: Add support for CCM"
+      "source_name": "[PATCH v10 0/2] media: add Himax HM1246 image sensor"
     },
-    "newsletter_article_url": "newsletters/2026-06-16/index.html#article-arm-mali-c55-isp-ccm",
+    "newsletter_article_url": "newsletters/2026-06-20/index.html#article-linux-himax-hm1246-v10",
     "image_url": "assets/images/fallback/newsletter-default.svg",
-    "image_alt": "ARM Mali-C55 ISP, CCM 지원 패치 제안으로 이미지 색상 처리 강화 image"
+    "image_alt": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안 image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com",
+      "title": "ARM Mali-C55 ISP, CCM 지원 패치 제안으로 이미지 색상 처리 강화",
+      "summary": "2026년 6월 16일, Linux 커널 미디어 메일링 리스트에 ARM Mali-C55 ISP 드라이버에 CCM(Color Correction Matrix) 지원을 추가하는 패치가 제안되었습니다. 이 변경은 이미지 처리 파이프라인의 색상 보정 기능을 확장하고, V4L2-ISP UAPI를 통해 CCM 파라미터 구성을 지원하도록 설계되었습니다.",
+      "source_url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/",
+      "newsletter_date": "2026-06-16",
+      "newsletter_url": "newsletters/2026-06-16/index.html",
+      "selected_at": "2026-06-16",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-06-16",
+      "date_evidence": {
+        "date": "2026-06-16T13:01:46Z",
+        "date_field": "published_date",
+        "evidence_level": "watch",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 3,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "camera_driver_image_pipeline",
+        "source_name": "[PATCH 1/2] media: arm: mali-c55: Add support for CCM"
+      },
+      "newsletter_article_url": "newsletters/2026-06-16/index.html#article-arm-mali-c55-isp-ccm",
+      "image_url": "assets/images/fallback/newsletter-default.svg",
+      "image_alt": "ARM Mali-C55 ISP, CCM 지원 패치 제안으로 이미지 색상 처리 강화 image",
+      "replaced_at": "2026-06-20",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://developer.android.com/tools/agents/android-cli",
       "title": "Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망",

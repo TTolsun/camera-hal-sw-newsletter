@@ -1,6 +1,6 @@
 # 2026 W25 (06.15 ~ 06.21)
 
-이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 3건의 소식을 다룹니다.
+이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 4건의 소식을 다룹니다.
 
 
 
@@ -9,6 +9,7 @@
 - ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개
 - Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가
 - GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선
+- Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안
 
 ## 2. ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개
 
@@ -69,9 +70,9 @@ CameraX는 Android Camera2 API를 기반으로 구축된 Jetpack 라이브러리
 ## 4. GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선
 
 
-![GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선 image](../../assets/images/fallback/newsletter-default.svg)
+![Red Hat graphic shown on ISO C++ Blog](https://isocpp.org/files/img/redhatgraphic.png)
 
-_이미지: [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)_
+_이미지: [ISO C++ Blog](https://isocpp.org/blog)_
 
 
 _C++ 개발 워크플로우의 코드 품질 분석 및 디버깅 효율성 향상 기대_
@@ -92,16 +93,42 @@ GCC 16의 개선된 오류 메시지와 SARIF 출력 기능은 직접적으로 A
 
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)
 
+---
+
+## 5. Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안
+
+
+![Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
+
+_이미지: [[PATCH v10 0/2] media: add Himax HM1246 image sensor](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/)_
+
+
+_lore.kernel.org linux-media list (2026-06-19)_
+
+최근 Himax HM1246 이미지 센서를 지원하기 위한 v10 패치 시리즈가 Linux 커널 미디어 서브시스템에 제안되었습니다. 이번 드라이버는 Native RAW 모드만을 우선 지원하며, 센서 내부 ISP 파이프라인은 활성화되지 않은 상태로 검토 중입니다.
+
+2026년 6월 19일, Linux 커널 미디어 메일링 리스트를 통해 Himax HM1246 이미지 센서 드라이버 추가를 위한 열 번째 패치 시리즈가 공개되었습니다. 이 드라이버는 하드웨어 제어 및 V4L2 프레임 캡처 인터페이스를 제공합니다.
+
+현재 제안된 드라이버의 핵심 제약 사항은 Native RAW 모드만 지원한다는 점입니다. 센서 내부의 ISP 파이프라인이나 기타 가공된 출력 모드는 지원 대상에서 제외되어 있어, 센서가 출력하는 순수 RAW 데이터를 외부 ISP나 AP 수준에서 처리해야 합니다.
+
+v10까지 검토가 진행된 만큼 드라이버의 구조적 완성도는 높을 것으로 예상되나, 여전히 검토 중인 패치 단계입니다. 따라서 실제 제품 개발 시에는 Native RAW 모드 전용 지원이라는 제약 조건을 고려하여 파이프라인 설계를 진행해야 합니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Himax HM1246 드라이버는 Native RAW 모드만 지원하므로, Android Camera HAL 수준에서 YUV나 JPEG 스트림을 생성하기 위해서는 AP의 하드웨어 ISP 또는 소프트웨어 이미지 처리 파이프라인과의 연동이 필수적입니다. 센서 내부 ISP를 활용한 간편한 YUV 출력이 불가능하다는 점을 아키텍처 설계 시 반영해야 합니다.
+
+**출처**
+
+- [[PATCH v10 0/2] media: add Himax HM1246 image sensor](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/T/#t)
+
 
 ## 참고 / 더 읽을거리
 
-- [CameraX Release Notes - CameraX 1.6.1](<https://developer.android.com/jetpack/androidx/releases/camera#1.6.1>) — Android Developers Latest Updates (May 06, 2026) · AOSP Camera 프레임워크 관련 참고
-- [Test camera images using automation](<https://source.android.com/docs/compatibility/cts/camera-its-box>) — AOSP Site Updates (2026-05-01) · AOSP Camera 프레임워크 관련 참고
 - [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](<https://goo.gle/AdaptiveApps_IO26>) — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
-- [GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!](<https://isocpp.org//blog/2026/04/gcc-16.1>) — ISO C++ Blog (Thu, 30 Apr 2026 22:36:23 +0000) · C++ / AI 네이티브 툴링 참고
 
 ## 참고자료
 
 - [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t)
 - [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)
+- [[PATCH v10 0/2] media: add Himax HM1246 image sensor](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/T/#t)

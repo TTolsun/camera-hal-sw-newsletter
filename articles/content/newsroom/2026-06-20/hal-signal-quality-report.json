@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "report_type": "hal_signal_quality",
+  "date": "2026-06-20",
+  "generated_at": "2026-06-20T02:14:18.786Z",
+  "status": "WARN",
+  "input_completeness": "partial",
+  "input_statuses": {
+    "shortlisted_candidates": "loaded",
+    "editor_draft": "loaded",
+    "quality_report": "loaded",
+    "source_effectiveness_report": "input_unavailable",
+    "source_quality_report": "loaded",
+    "evidence_pack_summary": "input_unavailable",
+    "merged_candidate_manifest": "loaded"
+  },
+  "inputs": {
+    "required": {
+      "shortlisted_candidates": {
+        "path": "articles/content/newsroom/2026-06-20/shortlisted-candidates.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "editor_draft": {
+        "path": "articles/content/newsroom/2026-06-20/editor-draft.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "quality_report": {
+        "path": "articles/content/newsroom/2026-06-20/quality-report.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "optional": {
+      "source_effectiveness_report": {
+        "path": "articles/content/newsroom/2026-06-20/source-effectiveness-report.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "source_quality_report": {
+        "path": "articles/content/newsroom/2026-06-20/source-quality-report.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "evidence_pack_summary": {
+        "path": "articles/content/newsroom/2026-06-20/evidence-pack-summary.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "merged_candidate_manifest": {
+        "path": "articles/content/collected-news/2026-06-20/merged-candidate-manifest.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "missing_required": [],
+    "unavailable_optional": [
+      "source_effectiveness_report",
+      "evidence_pack_summary"
+    ]
+  },
+  "quality_status": "PASS",
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 2,
+    "strong_signal_count": 0,
+    "usable_signal_count": 2,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 2,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 2,
+    "fallback_main_article_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 1,
+      "native_tooling_workflow": 1
+    },
+    "actionability_level_counts": {
+      "concrete_check": 1,
+      "none": 1
+    },
+    "effective_actionability_level_counts": {
+      "concrete_check": 2
+    },
+    "signal_quality_status_counts": {
+      "usable_signal": 2
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 제안",
+      "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 93): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치 시리즈는 현재 검토 중인 제안이며, Linux 커널에 최종 병합될 때까지 HAL API 또는 Android 프레임워크에 직접적인 변경 사항을 의미하지 않습니다.",
+        "HAL 계약, 메타데이터, 스트림 또는 버퍼 동작에 대한 직접적인 변경은 출처에 명시되어 있지 않습니다.",
+        "해당 패치는 검토 중인 제안이며, Linux 커널에 최종 병합되기 전까지는 상용 Android 기기나 AOSP 프레임워크에 직접적인 변경을 일으키지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "GCC 16 컴파일러 릴리스 예정: 개선된 오류 메시지 및 SARIF 출력 기능 추가",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "reader_owners": [
+        "native_tooling_owner"
+      ],
+      "actionability_level": "none",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "Contains source-bound API behavior action evidence: api.",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 1,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "ISO C++ Blog (official-community, high, score 63): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Android HAL 개발은 주로 Clang/LLVM을 사용하므로, GCC의 직접적인 변경 사항이 Android HAL 툴체인 마이그레이션을 의미한다고 단정할 수 없습니다.",
+        "이 변경 사항은 HAL 런타임 동작, 스트림, 버퍼 또는 메타데이터 계약에 직접적인 영향을 미치지 않습니다. 개발 워크플로우 개선에 초점을 둡니다.",
+        "Android Camera HAL 개발은 주로 Clang/LLVM을 사용하므로, GCC의 직접적인 변경 사항이 Android HAL 툴체인 마이그레이션을 의미한다고 단정할 수 없습니다."
+      ],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "selection_shortage_hint_details": [
+    {
+      "bucket": "direct_aosp_camera",
+      "severity": "medium",
+      "reason_code": "camerax_release_note_parser_missing_version_or_anchor",
+      "affected_sources": [],
+      "recommended_fix": "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "gate_boundary": {
+    "quality_validation_records_hal_signal_deductions": true,
+    "publish_gate_blocks_hal_signal_hard_blockers": true,
+    "review_artifacts_preserved": true,
+    "optional_input_unavailable_is_not_pass": true
+  },
+  "close_criteria": {
+    "report_generated": true,
+    "main_article_capsule_validation": true,
+    "actionability_hard_blocker_reflected": true,
+    "generic_fallback_soc_overpromotion_tests_required": true,
+    "source_expansion_followups": [
+      "#55",
+      "#57"
+    ],
+    "historical_rewrite_followup": "#108"
+  },
+  "warnings": [
+    "Optional input_unavailable: source_effectiveness_report",
+    "Optional input_unavailable: evidence_pack_summary"
+  ]
+}
