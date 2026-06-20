@@ -1,6 +1,6 @@
 const {
   BUCKETS
-} = require('./aosp-camera-scope');
+} = require('../domain/aosp-camera-scope');
 
 const PRODUCT_VERSION_TOKEN_PATTERN = /^(?:android|aosp|camera|camerax|camera2|libcamera|gemini|ndk|sdk|gcc|clang|llvm|v?\d+(?:\.\d+){1,4}.*|c\+\+\d{2})$/i;
 const RELEASE_BOILERPLATE_TOKEN_PATTERN = /^(?:released|release|announced|adds?|support|update|updates?|version|new)$/i;

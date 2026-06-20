@@ -71,7 +71,7 @@ const {
   stampCoverageType,
   validateFactCheck
 } = require('./fact-check-postprocess');
-const { BUCKETS, BUCKET_PRIORITY } = require('../../shared/common/aosp-camera-scope');
+const { BUCKETS, BUCKET_PRIORITY } = require('../../shared/domain/aosp-camera-scope');
 const {
   buildArticleCapsuleReport,
   capsuleInputForCandidates,

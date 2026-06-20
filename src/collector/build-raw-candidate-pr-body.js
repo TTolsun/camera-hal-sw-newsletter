@@ -14,7 +14,7 @@ const {
 } = require('../shared/common/artifact-paths');
 const {
   BUCKETS
-} = require('../shared/common/aosp-camera-scope');
+} = require('../shared/domain/aosp-camera-scope');
 const {
   readRuntimeConfig
 } = require('../shared/common/runtime-config');

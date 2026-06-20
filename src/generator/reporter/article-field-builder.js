@@ -2,7 +2,7 @@ const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   BUCKETS,
   classifyAospCameraStackCandidate
-} = require('../../shared/common/aosp-camera-scope');
+} = require('../../shared/domain/aosp-camera-scope');
 const { normalizeArticleSections } = require('./article-section-contract');
 
 const GUARDRAIL_IMPACT_CLASSES = Object.freeze({

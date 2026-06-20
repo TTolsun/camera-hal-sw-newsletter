@@ -16,7 +16,7 @@ const {
 } = require('./selection-policy-constants');
 const {
   BUCKETS
-} = require('../../shared/common/aosp-camera-scope');
+} = require('../../shared/domain/aosp-camera-scope');
 const {
   candidateGroupKey
 } = require('../../shared/common/article-groups');

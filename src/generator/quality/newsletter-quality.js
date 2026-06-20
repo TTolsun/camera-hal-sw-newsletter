@@ -21,7 +21,7 @@ const {
   BUCKETS,
   BUCKET_PRIORITY,
   classifyAospCameraStackCandidate
-} = require('../../shared/common/aosp-camera-scope');
+} = require('../../shared/domain/aosp-camera-scope');
 const {
   articlePolicy,
   publishReadyCompositionPolicy,

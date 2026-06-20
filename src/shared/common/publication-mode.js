@@ -1,7 +1,7 @@
 const { ensureArray } = require('./value-coercion');
 const {
   BUCKETS
-} = require('./aosp-camera-scope');
+} = require('../domain/aosp-camera-scope');
 
 const PUBLICATION_MODES = Object.freeze({
   NORMAL_PUBLIC: 'normal_public',
