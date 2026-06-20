@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-20",
+  "proposals": [
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-01",
+      "topic_gap": "New image sensor driver for Himax HM1246 and imx576 camera sensors, indicating hardware advancements and potential performance improvements for Android devices.",
+      "source_family": "lore.kernel.org linux-media list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Himax HM1246 driver",
+        "imx576 driver",
+        "linux media sensor",
+        "camera HAL driver"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at/",
+        "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
+        "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/",
+        "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/"
+      ],
+      "expected_evidence": [
+        "New sensor driver",
+        "Himax HM1246",
+        "imx576",
+        "camera sensor",
+        "Linux kernel media subsystem"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-02",
+      "topic_gap": "Updates to Qualcomm SoC device tree configurations for camera modules, suggesting improvements in camera hardware integration and performance on specific Android chipsets.",
+      "source_family": "lore.kernel.org linux-media list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Qualcomm camera DTS",
+        "sc8280xp camera",
+        "shikra camera",
+        "sm8550 JPEG encoder",
+        "camera HAL Qualcomm"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/3ca4718b-ee62-4c55-b593-4d6ba543d5b0@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/6e760884-87b1-4ec8-9ae1-e53901451b65@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/45a4b138-0fbd-4c55-bccd-83858d95df5d@linaro.org/"
+      ],
+      "expected_evidence": [
+        "Qualcomm SoC device tree",
+        "camera module configuration",
+        "JPEG encoder node",
+        "pin configuration",
+        "Android camera hardware"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-03",
+      "topic_gap": "Advancements in Android developer productivity tools, specifically related to Android CLI skills and potentially impacting camera app development workflows.",
+      "source_family": "Android Developers Blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android CLI productivity",
+        "camera app development tools",
+        "Android developer productivity"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "https://developer.android.com/tools/agents/android-cli#skills-add"
+      ],
+      "expected_evidence": [
+        "Android CLI tools",
+        "developer productivity",
+        "camera development workflow",
+        "new features"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-04",
+      "topic_gap": "Google I/O 2026 highlights on building premium media experiences, likely covering advancements in Android's media pipeline relevant to camera output and playback.",
+      "source_family": "Android Developers Blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android media pipeline Google I/O",
+        "camera output premium experiences",
+        "Android media toolkit"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "Media pipeline",
+        "premium Android experiences",
+        "Google I/O 2026",
+        "camera output",
+        "playback"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-05",
+      "topic_gap": "Updates to Android compatibility testing, specifically for camera image automation, which is crucial for ensuring camera HAL and app quality on diverse devices.",
+      "source_family": "AOSP Site Updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android camera ITS automation",
+        "CTS camera testing",
+        "camera HAL compatibility"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Camera image automation",
+        "CTS",
+        "ITS",
+        "camera HAL testing",
+        "Android compatibility"
+      ],
+      "risk_notes": []
+    }
+  ]
+}

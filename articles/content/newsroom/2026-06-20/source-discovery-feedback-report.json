@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "report_type": "source_discovery_feedback",
+  "date": "2026-06-20",
+  "status": "WARNING",
+  "parser_gap_count": 1,
+  "duplicate_discovery_gap_count": 1,
+  "gemini_parser_failure_count": 0,
+  "gemini_parser_failures": [],
+  "items": [
+    {
+      "severity": "warning",
+      "action": "PARSER_REPAIR_REQUIRED",
+      "reason": "missing_source_extraction",
+      "candidate_title": "AOSP Site Updates - May 2026",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "source_id": "aosp-site-updates",
+      "adapter_hint": "aosp-site-updates",
+      "duplicate_discovered_by_gemini": true,
+      "duplicate_match_type": "exact_normalized_url",
+      "source_gap_risk": false,
+      "evidence_validation_status": "pass",
+      "source_quality_bucket": "review_candidate",
+      "final_selection_eligibility": "main",
+      "confidence": "high",
+      "selector_exclusion_reason": "missing source_extraction for official parser-backed candidate",
+      "recommendation": "Check AOSP camera update row extraction."
+    }
+  ]
+}

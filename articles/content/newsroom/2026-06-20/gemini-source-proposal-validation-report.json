@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-06-20",
+  "validations": [
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-01",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-01",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-01",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-01",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-02",
+      "candidate_url": "https://lore.kernel.org/linux-media/3ca4718b-ee62-4c55-b593-4d6ba543d5b0@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/3ca4718b-ee62-4c55-b593-4d6ba543d5b0@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-02",
+      "candidate_url": "https://lore.kernel.org/linux-media/6e760884-87b1-4ec8-9ae1-e53901451b65@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/6e760884-87b1-4ec8-9ae1-e53901451b65@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-02",
+      "candidate_url": "https://lore.kernel.org/linux-media/45a4b138-0fbd-4c55-bccd-83858d95df5d@linaro.org/",
+      "normalized_url": "https://lore.kernel.org/linux-media/45a4b138-0fbd-4c55-bccd-83858d95df5d@linaro.org/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-03",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-03",
+      "candidate_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "normalized_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developer-newsletter"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-04",
+      "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "accepted": false,
+      "rejected_reason": "domain_not_allowed",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-19-05",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    }
+  ],
+  "counts": {
+    "accepted": 10,
+    "domain_not_allowed": 1
+  }
+}

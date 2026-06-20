@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "93df247f0de77e70",
+      "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at/",
+      "title": "[PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver",
+      "published_at": "2026-06-19T12:29:34Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add a V4L2 sub-device driver for Himax HM1246 image sensor. The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an active array size of 1296 x 976. It is programmable through an I2C interface and connected via parallel bus. The sensor has an internal ISP with a complete image processing pipeline including control loops. However, this driver uses the sensor in raw mode and the entire ISP is bypassed. Reviewed-by: Andy Shevchenko Signed-off-by: Matthias Fend --- MAINTAINERS | 1 + drive",
+          "evidence_text": "<html><head><title>[PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver - Matthias Fend</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.99,
+      "android_hal_relevance": 0.99,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.926,
+      "warnings": []
+    },
+    {
+      "id": "1dbe1c628b26e5d5",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "published_at": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "source_type": "roundup_child",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "We’ve shipped a fresh new batch of skills, with now more than 17 skills for areas such as: Adaptive UI Display Glasses and Jetpack Compose Glimmer for XR Migration to CameraX Perfetto SQL and Trace Analysis Jetpack Compose Styles API AppFunctions Verified email retrieval with Android Credential Manager Engage SDK integration Testing setup Wear OS Jetpack Compose Material3 Android skills keep growing You can browse skills and install using the Android CLI commands: android skills list android ski",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"de-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
+      "warnings": []
+    },
+    {
+      "id": "91297ed4a38c2fd5",
+      "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
+      "title": "[PATCH v10 0/2] media: add Himax HM1246 image sensor",
+      "published_at": "2026-06-19T12:29:32Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hello, this series adds support for the Himax HM1246 image sensor. The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an active array size of 1296 x 976. Currently, only the native RAW mode is supported. Other modes and the internal image signal processing pipeline are not currently supported. The data sheet is available on the manufacturer's website [1]. Tested on i.MX8MP hardware. A Toshiba TC358746 bridge was used to convert the sensor's parallel video output into MIPI signals fo",
+          "evidence_text": "<html><head><title>[PATCH v10 0/2] media: add Himax HM1246 image sensor - Matthias Fend</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../21",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.93,
+      "android_hal_relevance": 0.93,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.857,
+      "warnings": []
+    },
+    {
+      "id": "c7baa299c1fafc04",
+      "url": "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/",
+      "title": "[PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver",
+      "published_at": "2026-06-19T12:55:07Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The following features are supported: - Manual exposure an gain control support. - vblank/hblank control support. - Supported resolution: 2880 x 2156 30fps (SRGGB10) This series depends on the SM6350 CAMSS support series https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com/ The driver has been tested on the mainline v7.0-rc6 kernel on the Fairphone 4 running postmarketOS. fairphone-fp4:~$ v4l2-compliance -d /dev/v4l-subdev21 v4l2-compliance 1.32.0, 64 bits,",
+          "evidence_text": "<html><head><title>[PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nh",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.81,
+      "android_hal_relevance": 0.81,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.854,
+      "warnings": []
+    },
+    {
+      "id": "gemini-0edf26e287a58526",
+      "url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/",
+      "title": "[PATCH v2 2/3] media: i2c: add imx576 image sensor driver - Himanshu Bhavani",
+      "published_at": "2026-06-19",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v2 2/3] media: i2c: add imx576 image sensor driver - Himanshu Bhavani",
+          "evidence_text": "<html><head><title>[PATCH v2 2/3] media: i2c: add imx576 image sensor driver - Himanshu Bhavani</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhr",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-3ad0ab2f02b596de",
+      "url": "https://lore.kernel.org/linux-media/20260619125439.55311-1-himanshu.bhavani@siliconsignals.io/",
+      "title": "[PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani",
+      "published_at": "2026-06-19",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani",
+          "evidence_text": "<html><head><title>[PATCH v2 0/3] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nh",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-673b13b06fbc64fc",
+      "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-2-d88e431a6c11@emfend.at/",
+      "title": "[PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver - Matthias Fend",
+      "published_at": "2026-06-19",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver - Matthias Fend",
+          "evidence_text": "<html><head><title>[PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver - Matthias Fend</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-06-17",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"es-419-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open So",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.802,
+      "warnings": []
+    },
+    {
+      "id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "published_at": "2026-05-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.794,
+      "warnings": []
+    },
+    {
+      "id": "0ebdb0b90c90d8b0",
+      "url": "https://lore.kernel.org/linux-media/20260619125439.55311-3-himanshu.bhavani@siliconsignals.io/",
+      "title": "[PATCH v2 2/3] media: i2c: add imx576 image sensor driver",
+      "published_at": "2026-06-19T12:55:25Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add a v4l2 subdevice driver for the Sony imx576 sensor. The Sony IMX576 image sensor with an active array size of 5760 x 4312 The following features are supported: - Manual exposure an gain control support - vblank/hblank control support - Supported resolution: 2880 x 2156 30fps (SRGGB10) Signed-off-by: Himanshu Bhavani --- MAINTAINERS | 1 + drivers/media/i2c/Kconfig | 10 + drivers/media/i2c/Makefile | 1 + drivers/media/i2c/imx576.c | 1034 ++++++++++++++++++++++++++++++++++++ 4 files changed , 1",
+          "evidence_text": "<html><head><title>[PATCH v2 2/3] media: i2c: add imx576 image sensor driver - Himanshu Bhavani</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhr",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "gemini-b4e03ebc4b6448ea",
+      "url": "https://lore.kernel.org/linux-media/3ca4718b-ee62-4c55-b593-4d6ba543d5b0@oss.qualcomm.com/",
+      "title": "Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: gaokun3: describe rear camera module information as musch as possible - Konrad Dybcio",
+      "published_at": "2026-06-19",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: gaokun3: describe rear camera module information as musch as possible - Konrad Dybcio",
+          "evidence_text": "<html><head><title>Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: gaokun3: describe rear camera module information as musch as possible - Konrad Dybcio</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesh",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "gemini-feaaaab11d0b1101",
+      "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
+      "title": "[PATCH v10 0/2] media: add Himax HM1246 image sensor - Matthias Fend",
+      "published_at": "2026-06-19",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v10 0/2] media: add Himax HM1246 image sensor - Matthias Fend",
+          "evidence_text": "<html><head><title>[PATCH v10 0/2] media: add Himax HM1246 image sensor - Matthias Fend</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../21",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    }
+  ]
+}
