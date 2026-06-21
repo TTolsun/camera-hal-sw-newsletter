@@ -260,6 +260,10 @@ const {
   normalizeEditorSection
 } = require('./orchestrator-reporter-normalize');
 const {
+  classifyGenerationStatus,
+  isEditorialReviewableStatus
+} = require('./orchestrator-generation-status');
+const {
   removeNewsletterIndexEntry
 } = require('./public-state-reconciliation');
 
@@ -1641,10 +1645,6 @@ function assertTerminalPublicationContracts({
     });
   }
   fail(`Terminal structural validation failed:\n${result.text}`);
-}
-
-function isEditorialReviewableStatus(status) {
-  return status === 'NEEDS_FIX' || status === 'QUALITY_NEEDS_FIX';
 }
 
 function runNpmScript(scriptName) {
@@ -3202,14 +3202,12 @@ async function main() {
   const emptySourceSections = [];
   const todoFound = false;
   const mustFixCount = ensureArray(factCheck.must_fix).length;
-  let generationStatus = 'PASS';
-  if (shortlistReport.underfilled) {
-    generationStatus = 'UNDERFILLED_NEEDS_FIX';
-  } else if (factCheck.status === 'NEEDS_FIX' && mustFixCount > 0) {
-    generationStatus = 'NEEDS_FIX';
-  } else if (qualityReport.status !== 'PASS') {
-    generationStatus = 'QUALITY_NEEDS_FIX';
-  }
+  const generationStatus = classifyGenerationStatus({
+    underfilled: shortlistReport.underfilled,
+    factCheckStatus: factCheck.status,
+    mustFixCount,
+    qualityStatus: qualityReport.status
+  });
   const editorialReviewable = isEditorialReviewableStatus(generationStatus);
   const failureKind = editorialReviewable ? FAILURE_KIND_EDITORIAL_REVIEWABLE : '';
   const newsletterMd = path.join(newsletterDir, 'newsletter.md');
