@@ -200,7 +200,9 @@ const {
 } = require('../reporter/newsletter-prompts');
 const {
   numberOrDefault,
-  sectionLabel
+  sectionLabel,
+  cloneJson,
+  fail
 } = require('./orchestrator-shared-helpers');
 const {
   reporterCandidateId,
@@ -343,15 +345,6 @@ function editorDraftArtifact(editor, date, options = {}) {
 
 function writeEditorDraftJson(filePath, editor, date, options = {}) {
   writeJson(filePath, editorDraftArtifact(editor, date, options));
-}
-
-function fail(message) {
-  throw new Error(message);
-}
-
-function cloneJson(value) {
-  if (value === undefined) return undefined;
-  return JSON.parse(JSON.stringify(value));
 }
 
 function writeNewsletterDate(date, rootDir = root) {
