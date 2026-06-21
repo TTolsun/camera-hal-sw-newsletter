@@ -2917,6 +2917,9 @@ async function main() {
     let reserveOpenReason = '';
     let candidateRejections = [];
     let underfilledReason = '';
+    // completion(target 채우기)이 실패했지만 직전 pre-completion draft가 이미 PASS라 그 상태로
+    // 되돌려 발행한 경우(자동 복구)를 정상 thin-week underfill과 구분하기 위한 구조 플래그.
+    let completionFallbackToPrepass = false;
     const fullRepairPlan = buildFullSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings);
     const repairPlan = buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings, {
       maxSectionRepairs: runtimeConfig.newsroomMaxSectionRepairs
@@ -3309,6 +3312,7 @@ async function main() {
             qualityReport = preCompletionQualityReport;
             generationRunState.factCheck = factCheck;
             generationRunState.qualityReport = qualityReport;
+            completionFallbackToPrepass = true;
             underfilledReason = `completion top-up failed; published ${ensureArray(editor.sections).length} passing article(s) below target ${completionTargetCount}`;
           } else {
             writeReviewableRepairFailureArtifacts({
@@ -3358,6 +3362,7 @@ async function main() {
       reserve_candidates_used: reserveCandidatesUsed,
       candidate_rejections: candidateRejections.concat(rejectedDuplicateHeadlines),
       underfilled_reason: underfilledReason,
+      completion_fallback_to_prepass: completionFallbackToPrepass,
       deductions: ensureArray(qualityReport.deductions),
       selected_article_headlines: lockedArticleHeadlines(editor.sections),
       locked_article_headlines: lockedArticleHeadlines(lockedSections),
@@ -3675,6 +3680,7 @@ async function main() {
         ensureArray(staleScrub.report?.unsupported_release_claims_removed).length +
         ensureArray(staleScrub.report?.unused_references_removed).length,
       stale_claim_hard_failure_count: ensureArray(staleScrub.report?.hard_failures).length,
+      completion_fallback_to_prepass: retryHistory.some(item => item.completion_fallback_to_prepass === true),
       ...editorSemanticStatusExtra(),
       ...selectionStatusExtra(shortlistReport, {
         renderedMainArticleCount: ensureArray(editor.sections).length,

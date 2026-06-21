@@ -237,6 +237,7 @@ function validateNewsletterPolicyConfig(config) {
   validateInteger(preflight.primaryCameraStackCandidateMin, 'candidatePoolPreflight.primaryCameraStackCandidateMin', errors, { min: 0 });
   validateInteger(preflight.cameraStackCandidateMin, 'candidatePoolPreflight.cameraStackCandidateMin', errors, { min: 0 });
   validateSelectionWindowPolicy(config.selectionWindowPolicy, errors);
+  validateSelectionScoringPolicy(config.selectionScoringPolicy, errors);
   validateCatchUpPolicy(config.catchUpPolicy, config, errors);
   validateWeeklyArticlePolicy(config.weeklyArticlePolicy, errors);
   validateSourceEligibilityPolicy(config.sourceEligibilityPolicy, errors);
@@ -368,6 +369,31 @@ function validateWeeklyArticlePolicy(value, errors) {
   }
 }
 
+const DEFAULT_SELECTION_SCORING_POLICY = {
+  mainArticleScoreThreshold: 42
+};
+
+function normalizeSelectionScoringPolicy(raw) {
+  const source = raw && typeof raw === 'object' ? raw : {};
+  return {
+    mainArticleScoreThreshold: Number.isFinite(source.mainArticleScoreThreshold)
+      ? source.mainArticleScoreThreshold
+      : DEFAULT_SELECTION_SCORING_POLICY.mainArticleScoreThreshold
+  };
+}
+
+function validateSelectionScoringPolicy(value, errors) {
+  if (value === undefined) return; // optional; normalized to a default when absent
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('selectionScoringPolicy must be an object.');
+    return;
+  }
+  const threshold = value.mainArticleScoreThreshold;
+  if (typeof threshold !== 'number' || !Number.isFinite(threshold) || threshold < 0) {
+    errors.push('selectionScoringPolicy.mainArticleScoreThreshold must be a number >= 0.');
+  }
+}
+
 const DEFAULT_MAILING_LIST_PATCH_MAIN_ARTICLE = {
   enabled: false,
   sourceRole: 'project_mailing_list_source',
@@ -452,6 +478,7 @@ function normalizeNewsletterPolicyConfig(config) {
       fallbackSelectionDays: selectionWindow.fallbackSelectionDays,
       referenceContextDays: selectionWindow.referenceContextDays
     },
+    selectionScoringPolicy: normalizeSelectionScoringPolicy(config.selectionScoringPolicy),
     catchUpPolicy: normalizeCatchUpPolicy(config.catchUpPolicy),
     weeklyArticlePolicy: normalizeWeeklyArticlePolicy(config.weeklyArticlePolicy),
     headlinePolicy: {
@@ -515,6 +542,10 @@ function getCandidatePoolPreflightPolicy(policy = getDefaultNewsletterPolicy()) 
 
 function getSelectionWindowPolicy(policy = getDefaultNewsletterPolicy()) {
   return policy.selectionWindowPolicy;
+}
+
+function getSelectionScoringPolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.selectionScoringPolicy;
 }
 
 function getCatchUpPolicy(policy = getDefaultNewsletterPolicy()) {
@@ -722,6 +753,9 @@ module.exports = {
   get selectionWindowPolicy() {
     return getSelectionWindowPolicy();
   },
+  get selectionScoringPolicy() {
+    return getSelectionScoringPolicy();
+  },
   get catchUpPolicy() {
     return getCatchUpPolicy();
   },
@@ -750,6 +784,7 @@ module.exports = {
   getHeadlinePolicy,
   getMailingListPatchMainArticlePolicy,
   getPublishReadyCompositionPolicy,
+  getSelectionScoringPolicy,
   getSelectionWindowPolicy,
   getSourceEligibilityPolicy,
   getWeeklyArticlePolicy,
