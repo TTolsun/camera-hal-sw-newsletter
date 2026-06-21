@@ -29,6 +29,11 @@ const {
   latestDiagnosticsOnly,
   validateRetentionMetadata
 } = require('../publish/public-state-reconciliation');
+const {
+  PUBLICATION_MODES,
+  HOMEPAGE_VISIBILITY,
+  FALLBACK_HOMEPAGE_BADGE
+} = require('../../shared/common/publication-mode');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
@@ -307,23 +312,23 @@ function validateNewsletterHtmlTags(item, html, strictArtifactValidation) {
 }
 
 function isFallbackPublicIssue(item, status = {}) {
-  return item?.publication_mode === 'fallback_public' || status?.publication_mode === 'fallback_public';
+  return item?.publication_mode === PUBLICATION_MODES.FALLBACK_PUBLIC || status?.publication_mode === PUBLICATION_MODES.FALLBACK_PUBLIC;
 }
 
 function validatePublicationModeInvariants(item, status = {}) {
   const publicationMode = item.publication_mode || status.publication_mode || '';
-  const homepageVisibility = item.homepage_visibility || status.homepage_visibility || 'normal';
+  const homepageVisibility = item.homepage_visibility || status.homepage_visibility || HOMEPAGE_VISIBILITY.NORMAL;
   const cameraAnchorCount = finiteNumber(item.camera_anchor_count ?? status.camera_anchor_count);
-  if (cameraAnchorCount === 0 && homepageVisibility !== 'hidden') {
-    if (publicationMode !== 'fallback_public') {
+  if (cameraAnchorCount === 0 && homepageVisibility !== HOMEPAGE_VISIBILITY.HIDDEN) {
+    if (publicationMode !== PUBLICATION_MODES.FALLBACK_PUBLIC) {
       fail(`Newsletter ${item.date} with camera_anchor_count=0 must use publication_mode=fallback_public or be hidden.`);
     }
-    if (homepageVisibility !== 'visible_with_fallback_badge') {
+    if (homepageVisibility !== HOMEPAGE_VISIBILITY.VISIBLE_WITH_FALLBACK_BADGE) {
       fail(`Newsletter ${item.date} fallback-only public issue must use homepage_visibility=visible_with_fallback_badge.`);
     }
   }
-  if (publicationMode !== 'fallback_public') return;
-  if (homepageVisibility !== 'visible_with_fallback_badge') {
+  if (publicationMode !== PUBLICATION_MODES.FALLBACK_PUBLIC) return;
+  if (homepageVisibility !== HOMEPAGE_VISIBILITY.VISIBLE_WITH_FALLBACK_BADGE) {
     fail(`Newsletter ${item.date} fallback_public issue must use homepage_visibility=visible_with_fallback_badge.`);
   }
   if (!isTruthy(item.fallback_only ?? status.fallback_only)) {
@@ -332,7 +337,7 @@ function validatePublicationModeInvariants(item, status = {}) {
   if (cameraAnchorCount !== 0) {
     fail(`Newsletter ${item.date} fallback_public issue must expose camera_anchor_count=0.`);
   }
-  if (status.publication_mode === 'fallback_public' && !isTruthy(status.fallback_public_ready)) {
+  if (status.publication_mode === PUBLICATION_MODES.FALLBACK_PUBLIC && !isTruthy(status.fallback_public_ready)) {
     fail(`Newsletter ${item.date} fallback_public generation status must expose fallback_public_ready=true.`);
   }
 }
@@ -341,13 +346,13 @@ function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
   if (!isFallbackPublicIssue(item, status)) return;
   const tags = ensureArray(item.tags).map(String);
   const cameraAnchorCount = finiteNumber(item.camera_anchor_count ?? status.camera_anchor_count);
-  if (item.homepage_badge !== 'Tooling Watch Edition') {
+  if (item.homepage_badge !== FALLBACK_HOMEPAGE_BADGE) {
     fail(`Newsletter ${item.date} fallback_public entry must expose homepage_badge=Tooling Watch Edition.`);
   }
-  if (item.homepage_visibility !== 'visible_with_fallback_badge') {
+  if (item.homepage_visibility !== HOMEPAGE_VISIBILITY.VISIBLE_WITH_FALLBACK_BADGE) {
     fail(`Newsletter ${item.date} fallback_public entry must use homepage_visibility=visible_with_fallback_badge.`);
   }
-  if (!tags.includes('Tooling Watch Edition')) {
+  if (!tags.includes(FALLBACK_HOMEPAGE_BADGE)) {
     fail(`Newsletter ${item.date} fallback_public tags must include Tooling Watch Edition.`);
   }
   if (!tags.includes('Tooling Watch')) {
