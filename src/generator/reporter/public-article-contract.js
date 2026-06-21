@@ -1,4 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { PUBLICATION_MODES } = require('../../shared/common/publication-mode');
 const {
   DECISION_IMPACT_VALUES,
   DECISION_SCOPE_VALUES,
@@ -414,8 +415,8 @@ function isFallbackOnly(section = {}, issue = {}) {
   // cpp_fallback 메인 승격 기능은 비활성화됨 (publishModePolicy로 대체 예정) — 항상 fallback 취급
   return issue.fallback_only === true ||
     section.fallback_only === true ||
-    issue.publication_mode === 'fallback_public' ||
-    section.publication_mode === 'fallback_public' ||
+    issue.publication_mode === PUBLICATION_MODES.FALLBACK_PUBLIC ||
+    section.publication_mode === PUBLICATION_MODES.FALLBACK_PUBLIC ||
     bucket === 'cpp_ai_tooling_fallback';
 }
 
