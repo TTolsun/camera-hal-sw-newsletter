@@ -59,6 +59,20 @@ test('fact-check NEEDS_FIX여도 must-fix가 0이면 NEEDS_FIX가 아니다', ()
   );
 });
 
+test('fact-check가 NEEDS_FIX가 아니면 must-fix가 있어도 NEEDS_FIX가 아니다', () => {
+  // `factCheckStatus === 'NEEDS_FIX'` 절을 고정한다. 누가 이 절을 빼면
+  // must-fix만 보고 NEEDS_FIX로 오분류되는데, 그 회귀를 이 케이스가 잡는다.
+  assert.equal(
+    classifyGenerationStatus({
+      underfilled: false,
+      factCheckStatus: 'PASS',
+      mustFixCount: 3,
+      qualityStatus: 'PASS'
+    }),
+    GENERATION_STATUSES.PASS
+  );
+});
+
 test('must-fix가 0이고 quality가 미통과면 QUALITY_NEEDS_FIX', () => {
   assert.equal(
     classifyGenerationStatus({
