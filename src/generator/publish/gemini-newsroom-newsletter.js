@@ -46,7 +46,6 @@ const {
 } = require('../select/newsroom-selection');
 const {
   candidateDuplicatesSections,
-  duplicateReasonForSections,
   normalizeTitle,
   protectedRepairFieldsMatch,
   protectedRepairSignature,
@@ -55,7 +54,6 @@ const {
   sectionLabelKey,
   sectionRepairSignature,
   sectionSummary,
-  sectionUrls,
   sectionsAreDuplicate,
   signaturesMatch,
   sourceDateTitle,
@@ -152,9 +150,7 @@ const {
   buildQualityReportMarkdown,
   deductionMatchesSection,
   hardBlockedGroupsForDroppedSections,
-  salvagePublishableSubset,
-  sectionHasSourceGap,
-  sectionPassesArticleGate
+  salvagePublishableSubset
 } = require('../quality/newsletter-quality');
 const {
   assertSectionsAndSourcesPreserved,
@@ -253,7 +249,6 @@ const {
   imageCandidatesForReporterCandidate,
   collectedCandidateFor,
   reporterCandidateRejectionReason,
-  reporterCandidateMainArticleBlockReason,
   isReserveCandidate,
   isMainSupplementBucket,
   candidatePriority,
@@ -268,8 +263,6 @@ const {
   isHttpsUrl,
   firstHttpsUrl,
   normalizeSectionImageFields,
-  reporterCandidateUrlMap,
-  candidateForSourceUrl,
   sourceCandidateMetadataForSection,
   normalizeEditorSection
 } = require('./orchestrator-reporter-normalize');
@@ -1795,13 +1788,11 @@ const {
   sectionLockRecord,
   buildLockedArticleContext,
   lockedArticleHeadlines,
-  issueLevelLockBlockers,
   selectLockedArticles,
   appendUniqueLockedArticles,
   appendUniqueSections,
   sourceGapSections,
   reporterEligibilityFindings,
-  eligibilitySourceGapMessage,
   applyReporterEligibilityFindingsToFactCheck
 } = require('./orchestrator-section-locking');
 
