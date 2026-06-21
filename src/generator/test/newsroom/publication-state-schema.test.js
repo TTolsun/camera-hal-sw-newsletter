@@ -8,10 +8,14 @@ const {
   PUBLIC_ARTIFACT_SOURCES,
   RECONCILIATION_ACTIONS,
   DIAGNOSTICS_STATUSES,
+  STATE_OUTPUT_CONTRACT,
+  PublicationStateContractError,
   isTrue,
   latestDiagnosticsOnly,
   classifyPublicState,
   resolvePublicStateFields,
+  assertPublicStateOutput,
+  assertPublicationStateSchemaComplete,
   runModeForPublicState,
   requiresEditorReview,
   archiveSyncEnabled
@@ -208,4 +212,93 @@ test('latestDiagnosticsOnly: requires DIAGNOSTICS_STATUSES membership when no re
   assert.equal(latestDiagnosticsOnly({ status: 'PASS' }), false);
   // generation_status 폴백도 인식
   assert.equal(latestDiagnosticsOnly({ generation_status: 'QUALITY_NEEDS_FIX' }), true);
+});
+
+// 12. 출력 계약 자기검증: 4개 상태 모두 정의/계약/run mode 완비 (#650)
+test('assertPublicationStateSchemaComplete: current schema is complete', () => {
+  assert.equal(assertPublicationStateSchemaComplete(), true);
+  // 모든 PUBLIC_STATES가 출력 계약을 가진다
+  for (const state of Object.values(PUBLIC_STATES)) {
+    assert.ok(STATE_OUTPUT_CONTRACT[state], `missing output contract for ${state}`);
+  }
+});
+
+// 13. 특성화: resolvePublicStateFields의 모든 분기 출력이 출력 계약을 만족한다.
+// (이 케이스들이 통과한다는 것은 계약 추가가 현재 동작을 바꾸지 않는다는 증명이다.)
+test('assertPublicStateOutput: every resolve branch satisfies the output contract', () => {
+  const cases = [
+    resolvePublicStateFields({ publicState: PUBLIC_STATES.PUBLISH_READY, status: {}, retention: NO_RETENTION, publicStructure: OK_STRUCTURE }),
+    resolvePublicStateFields({ publicState: PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED, status: {}, retention: NO_RETENTION, publicStructure: OK_STRUCTURE }),
+    resolvePublicStateFields({ publicState: PUBLIC_STATES.DIAGNOSTICS_ONLY_BUT_KEEP_EXISTING_PUBLIC, status: {}, retention: VALID_RETENTION, publicStructure: OK_STRUCTURE })
+  ].map((fields, index) => ({
+    publicState: [
+      PUBLIC_STATES.PUBLISH_READY,
+      PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED,
+      PUBLIC_STATES.DIAGNOSTICS_ONLY_BUT_KEEP_EXISTING_PUBLIC
+    ][index],
+    fields
+  }));
+  // DIAGNOSTICS_ONLY의 세 분기(retention 무효 / review 구조 깨짐 / 일반 숨김)
+  const diagnosticsBranches = [
+    resolvePublicStateFields({ publicState: PUBLIC_STATES.DIAGNOSTICS_ONLY, status: {}, retention: INVALID_RETENTION, publicStructure: OK_STRUCTURE }),
+    resolvePublicStateFields({ publicState: PUBLIC_STATES.DIAGNOSTICS_ONLY, status: { review_publication_ready: true }, retention: NO_RETENTION, publicStructure: BROKEN_STRUCTURE }),
+    resolvePublicStateFields({ publicState: PUBLIC_STATES.DIAGNOSTICS_ONLY, status: {}, retention: NO_RETENTION, publicStructure: OK_STRUCTURE, existingPublicArtifactDetected: true })
+  ].map(fields => ({ publicState: PUBLIC_STATES.DIAGNOSTICS_ONLY, fields }));
+
+  for (const { publicState, fields } of cases.concat(diagnosticsBranches)) {
+    assert.equal(
+      assertPublicStateOutput({
+        publicState,
+        effectiveHomepageVisible: fields.effectiveHomepageVisible,
+        publicArtifactPolicy: fields.publicArtifactPolicy,
+        action: fields.action
+      }),
+      true,
+      `expected ${publicState} output to satisfy the contract`
+    );
+  }
+});
+
+// 14. 드리프트 차단: 계약을 벗어난 출력은 PublicationStateContractError로 throw
+test('assertPublicStateOutput: out-of-contract output throws (drift guard)', () => {
+  // PUBLISH_READY인데 홈페이지 비노출 -> 위반
+  assert.throws(
+    () => assertPublicStateOutput({
+      publicState: PUBLIC_STATES.PUBLISH_READY,
+      effectiveHomepageVisible: false,
+      publicArtifactPolicy: PUBLIC_ARTIFACT_POLICIES.LATEST_PUBLIC_READY,
+      action: RECONCILIATION_ACTIONS.NONE_LATEST_PUBLIC_READY
+    }),
+    PublicationStateContractError
+  );
+  // PUBLISH_READY인데 diagnostics 숨김 action -> 위반
+  assert.throws(
+    () => assertPublicStateOutput({
+      publicState: PUBLIC_STATES.PUBLISH_READY,
+      effectiveHomepageVisible: true,
+      publicArtifactPolicy: PUBLIC_ARTIFACT_POLICIES.LATEST_PUBLIC_READY,
+      action: RECONCILIATION_ACTIONS.REMOVED_NEWSLETTERS_INDEX_ENTRY
+    }),
+    PublicationStateContractError
+  );
+  // DIAGNOSTICS_ONLY인데 publish-ready policy -> 위반
+  assert.throws(
+    () => assertPublicStateOutput({
+      publicState: PUBLIC_STATES.DIAGNOSTICS_ONLY,
+      effectiveHomepageVisible: false,
+      publicArtifactPolicy: PUBLIC_ARTIFACT_POLICIES.LATEST_PUBLIC_READY,
+      action: RECONCILIATION_ACTIONS.REMOVED_NEWSLETTERS_INDEX_ENTRY
+    }),
+    PublicationStateContractError
+  );
+  // 알 수 없는 상태 -> 위반
+  assert.throws(
+    () => assertPublicStateOutput({
+      publicState: 'SOMETHING_NEW',
+      effectiveHomepageVisible: true,
+      publicArtifactPolicy: PUBLIC_ARTIFACT_POLICIES.LATEST_PUBLIC_READY,
+      action: RECONCILIATION_ACTIONS.NONE_LATEST_PUBLIC_READY
+    }),
+    PublicationStateContractError
+  );
 });
