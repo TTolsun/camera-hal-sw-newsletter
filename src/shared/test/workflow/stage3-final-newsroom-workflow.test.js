@@ -350,12 +350,13 @@ test('generation path guards public artifacts for editorial reviewable failures'
   const generator = fs.readFileSync(generatorPath, 'utf8');
   const renderedMarkdownIndex = generator.indexOf('newsletterMarkdown = buildMarkdown(editor);');
   const structuralGuardIndex = generator.indexOf('assertTerminalPublicationContracts({', renderedMarkdownIndex);
-  const generationStatusIndex = generator.indexOf("let generationStatus = 'PASS';");
-  const factCheckNeedsFixIndex = generator.indexOf("factCheck.status === 'NEEDS_FIX' && mustFixCount > 0", generationStatusIndex);
-  const qualityNeedsFixIndex = generator.indexOf("qualityReport.status !== 'PASS'", generationStatusIndex);
+  // 등급 결정 분기(underfill/fact-check/quality)는 orchestrator-generation-status.js로
+  // 추출됐고, main()에는 그 순수 분류기 호출만 남는다(#655). 발행 안전 순서 불변
+  // (결정 → editorialReviewable → public artifact 쓰기 가드)은 여기서 그대로 검증한다.
+  const generationStatusIndex = generator.indexOf('const generationStatus = classifyGenerationStatus({');
   const editorialReviewableIndex = generator.indexOf(
     'const editorialReviewable = isEditorialReviewableStatus(generationStatus);',
-    qualityNeedsFixIndex
+    generationStatusIndex
   );
   const shouldWriteIndex = generator.indexOf('const shouldWritePublicArtifacts = !editorialReviewable;', editorialReviewableIndex);
   const writeGuardIndex = generator.indexOf('if (shouldWritePublicArtifacts) {', shouldWriteIndex);
@@ -368,8 +369,6 @@ test('generation path guards public artifacts for editorial reviewable failures'
   assert.notEqual(generationStatusIndex, -1);
   assert.notEqual(renderedMarkdownIndex, -1);
   assert.notEqual(structuralGuardIndex, -1);
-  assert.notEqual(factCheckNeedsFixIndex, -1);
-  assert.notEqual(qualityNeedsFixIndex, -1);
   assert.notEqual(editorialReviewableIndex, -1);
   assert.notEqual(shouldWriteIndex, -1);
   assert.notEqual(writeGuardIndex, -1);
@@ -380,9 +379,7 @@ test('generation path guards public artifacts for editorial reviewable failures'
   assert.notEqual(finalPublishReadyIndex, -1);
   assert.ok(renderedMarkdownIndex < structuralGuardIndex);
   assert.ok(structuralGuardIndex < generationStatusIndex);
-  assert.ok(generationStatusIndex < factCheckNeedsFixIndex);
-  assert.ok(factCheckNeedsFixIndex < qualityNeedsFixIndex);
-  assert.ok(qualityNeedsFixIndex < editorialReviewableIndex);
+  assert.ok(generationStatusIndex < editorialReviewableIndex);
   assert.ok(editorialReviewableIndex < shouldWriteIndex);
   assert.ok(shouldWriteIndex < writeGuardIndex);
   assert.ok(writeGuardIndex < markdownWriteIndex);
