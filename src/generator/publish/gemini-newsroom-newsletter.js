@@ -180,9 +180,6 @@ const {
   buildWeeklyMergeResolver
 } = require('../editor/weekly-merge');
 const {
-  toEditorDraftArtifact
-} = require('../../shared/domain/newsletter-domain-normalize');
-const {
   linkedEvidencePromptGuardrails,
   sourceExtractionPromptGuardrails,
   articleSectionContractPrompt,
