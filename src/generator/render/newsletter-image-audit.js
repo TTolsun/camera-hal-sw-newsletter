@@ -18,6 +18,13 @@ const {
 const {
   syncWeeklyArticleImages
 } = require('./weekly-newsletter-output');
+const {
+  PUBLICATION_MODES
+} = require('../../shared/common/publication-mode');
+const {
+  RUN_MODES,
+  PUBLIC_STATES
+} = require('../publish/publication-state-schema');
 
 const DIRECT_EXTRACTION_SOURCE_KINDS = new Set([
   'og',
@@ -568,10 +575,10 @@ function isRenderedPublicIssueScope(issue = {}, status = {}) {
   const publicationMode = String(issue.publication_mode || status.publication_mode || '').trim();
   const runMode = String(status.run_mode || '').trim();
   const publicState = String(status.public_state || '').trim();
-  return publicationMode === 'fallback_public' ||
-    publicationMode === 'review_only' ||
-    runMode === 'review_only_public' ||
-    publicState === 'REVIEW_ONLY_PUBLIC_CREATED';
+  return publicationMode === PUBLICATION_MODES.FALLBACK_PUBLIC ||
+    publicationMode === PUBLICATION_MODES.REVIEW_ONLY ||
+    runMode === RUN_MODES.REVIEW_ONLY_PUBLIC ||
+    publicState === PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED;
 }
 
 function renderConsistency(issue, markdown, html, options = {}) {
