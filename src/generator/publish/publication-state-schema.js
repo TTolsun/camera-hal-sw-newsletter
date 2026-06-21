@@ -84,48 +84,6 @@ const STATE_DEFINITIONS = Object.freeze({
   })
 });
 
-// 분류된 발행 상태가 reconcile에서 산출해도 되는 출력 조합의 화이트리스트.
-// resolvePublicStateFields의 각 분기가 내놓는 (홈페이지 노출, artifact policy,
-// reconciliation action)이 여기서 벗어나면 분류와 출력 정책이 어긋난 것(드리프트)
-// 이다. STATE_DEFINITIONS가 "상태→고정 속성"을 모은다면, 이 표는 "상태→허용 출력
-// 전이"를 모은다. 상태를 디스크/홈페이지에 반영하기 전에 이 계약으로 검증한다.
-const STATE_OUTPUT_CONTRACT = Object.freeze({
-  [PUBLIC_STATES.PUBLISH_READY]: Object.freeze({
-    homepageVisible: true,
-    publicArtifactPolicies: Object.freeze([PUBLIC_ARTIFACT_POLICIES.LATEST_PUBLIC_READY]),
-    actions: Object.freeze([RECONCILIATION_ACTIONS.NONE_LATEST_PUBLIC_READY])
-  }),
-  [PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED]: Object.freeze({
-    homepageVisible: true,
-    publicArtifactPolicies: Object.freeze([PUBLIC_ARTIFACT_POLICIES.LATEST_REVIEW_PUBLICATION_READY]),
-    actions: Object.freeze([RECONCILIATION_ACTIONS.UPSERTED_LATEST_PUBLIC_ENTRY])
-  }),
-  [PUBLIC_STATES.DIAGNOSTICS_ONLY_BUT_KEEP_EXISTING_PUBLIC]: Object.freeze({
-    homepageVisible: true,
-    publicArtifactPolicies: Object.freeze([PUBLIC_ARTIFACT_POLICIES.RETAIN_EXISTING_EDITOR_APPROVED_PUBLIC]),
-    actions: Object.freeze([RECONCILIATION_ACTIONS.RETAINED_EXISTING_PUBLIC_WITH_METADATA])
-  }),
-  [PUBLIC_STATES.DIAGNOSTICS_ONLY]: Object.freeze({
-    homepageVisible: false,
-    publicArtifactPolicies: Object.freeze([
-      PUBLIC_ARTIFACT_POLICIES.INVALID_RETENTION_IGNORED,
-      PUBLIC_ARTIFACT_POLICIES.REVIEW_PUBLICATION_INVALID_PUBLIC_STRUCTURE,
-      PUBLIC_ARTIFACT_POLICIES.HIDE_EXISTING_PUBLIC_ARTIFACT_AFTER_LATEST_DIAGNOSTICS_ONLY
-    ]),
-    actions: Object.freeze([
-      RECONCILIATION_ACTIONS.INVALID_RETENTION_IGNORED_AND_REMOVED_INDEX_ENTRY,
-      RECONCILIATION_ACTIONS.REMOVED_NEWSLETTERS_INDEX_ENTRY
-    ])
-  })
-});
-
-class PublicationStateContractError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'PublicationStateContractError';
-  }
-}
-
 function stateDefinition(publicState) {
   return STATE_DEFINITIONS[publicState] || STATE_DEFINITIONS[PUBLIC_STATES.DIAGNOSTICS_ONLY];
 }
@@ -236,56 +194,6 @@ function resolvePublicStateFields({
   };
 }
 
-// 분류된 상태와 그 상태로 산출된 출력 필드가 STATE_OUTPUT_CONTRACT를 만족하는지
-// 검증한다. 상태를 디스크/홈페이지에 반영하기 직전 호출해, 분류 로직과 출력 로직이
-// 어긋난 채로 잘못된 발행/숨김 결정이 나가는 것을 fail-closed로 막는다.
-// 현재 resolvePublicStateFields의 모든 분기는 이 계약을 만족하므로 평시엔 발동하지
-// 않고, 미래에 한쪽만 바뀌어 드리프트가 생길 때만 throw한다.
-function assertPublicStateOutput({ publicState, effectiveHomepageVisible, publicArtifactPolicy, action } = {}) {
-  const contract = STATE_OUTPUT_CONTRACT[publicState];
-  if (!contract) {
-    throw new PublicationStateContractError(
-      `Unknown publication state has no output contract: ${String(publicState)}`
-    );
-  }
-  if (effectiveHomepageVisible !== contract.homepageVisible) {
-    throw new PublicationStateContractError(
-      `Publication state ${publicState} requires effectiveHomepageVisible=${contract.homepageVisible} but resolved ${effectiveHomepageVisible}`
-    );
-  }
-  if (!contract.publicArtifactPolicies.includes(publicArtifactPolicy)) {
-    throw new PublicationStateContractError(
-      `Publication state ${publicState} resolved an out-of-contract artifact policy: ${String(publicArtifactPolicy)}`
-    );
-  }
-  if (!contract.actions.includes(action)) {
-    throw new PublicationStateContractError(
-      `Publication state ${publicState} resolved an out-of-contract reconciliation action: ${String(action)}`
-    );
-  }
-  return true;
-}
-
-// 스키마 자기검증: PUBLIC_STATES의 모든 상태가 STATE_DEFINITIONS와
-// STATE_OUTPUT_CONTRACT 항목을 갖추고, run mode가 알려진 RUN_MODE인지 확인한다.
-// 새 상태를 추가하면서 정의/계약을 빠뜨리면 여기서 잡는다.
-function assertPublicationStateSchemaComplete() {
-  for (const state of Object.values(PUBLIC_STATES)) {
-    if (!STATE_DEFINITIONS[state]) {
-      throw new PublicationStateContractError(`Missing STATE_DEFINITIONS entry for ${state}`);
-    }
-    if (!STATE_OUTPUT_CONTRACT[state]) {
-      throw new PublicationStateContractError(`Missing STATE_OUTPUT_CONTRACT entry for ${state}`);
-    }
-    if (!Object.values(RUN_MODES).includes(STATE_DEFINITIONS[state].runMode)) {
-      throw new PublicationStateContractError(
-        `STATE_DEFINITIONS[${state}].runMode is not a known RUN_MODE: ${String(STATE_DEFINITIONS[state].runMode)}`
-      );
-    }
-  }
-  return true;
-}
-
 module.exports = {
   PUBLIC_STATES,
   RUN_MODES,
@@ -294,14 +202,10 @@ module.exports = {
   RECONCILIATION_ACTIONS,
   DIAGNOSTICS_STATUSES,
   STATE_DEFINITIONS,
-  STATE_OUTPUT_CONTRACT,
-  PublicationStateContractError,
   isTrue,
   latestDiagnosticsOnly,
   classifyPublicState,
   resolvePublicStateFields,
-  assertPublicStateOutput,
-  assertPublicationStateSchemaComplete,
   runModeForPublicState,
   requiresEditorReview,
   archiveSyncEnabled
