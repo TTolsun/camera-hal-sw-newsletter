@@ -288,6 +288,11 @@ const {
   fallbackFactCheckForRepairFailure,
   validateCompletionSections
 } = targetedRepairModule;
+const {
+  writeEditorDraftJson,
+  writeCanonicalReviewArtifacts,
+  writeReporterArtifactsForAttempt
+} = require('./orchestrator-artifact-writers');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -331,27 +336,6 @@ async function callLlmJson(stage, ...args) {
     generationRunState.stageTracker.fail(role, attempt, stage, error && error.message);
     throw error;
   }
-}
-
-function editorDraftArtifact(editor, date, options = {}) {
-  return toEditorDraftArtifact(editor, {
-    date,
-    provider: runtimeConfig.llmProvider,
-    providerModel:
-      options.providerModel ||
-      getLlmModelUsage(options.stage || 'editor') ||
-      runtimeConfig.llmStageModels?.editor ||
-      runtimeConfig.llmModel ||
-      'unknown',
-    warnings: options.warnings,
-    repairedFields: options.repairedFields,
-    droppedFields: options.droppedFields,
-    rawResponseStored: options.rawResponseStored
-  });
-}
-
-function writeEditorDraftJson(filePath, editor, date, options = {}) {
-  writeJson(filePath, editorDraftArtifact(editor, date, options));
 }
 
 function writeNewsletterDate(date, rootDir = root) {
@@ -803,41 +787,6 @@ function recordLastKnownValidEditor(editor, {
   return validated;
 }
 
-
-function writeCanonicalReviewArtifacts({
-  date,
-  newsroomDir,
-  reporter = null,
-  editor = null,
-  factCheck = null,
-  qualityReport = null
-}) {
-  fs.mkdirSync(newsroomDir, { recursive: true });
-  if (reporter) {
-    writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
-  }
-  if (editor) {
-    writeEditorDraftJson(path.join(newsroomDir, 'editor-draft.json'), editor, date);
-    fs.writeFileSync(path.join(newsroomDir, 'editor-draft.md'), buildMarkdown(editor), 'utf8');
-  }
-  if (factCheck) {
-    writeJson(path.join(newsroomDir, 'fact-check-report.json'), factCheck);
-    fs.writeFileSync(path.join(newsroomDir, 'fact-check-report.md'), buildFactCheckMarkdown(date, factCheck), 'utf8');
-  }
-  if (qualityReport) {
-    writeJson(path.join(newsroomDir, 'quality-report.json'), qualityReport);
-    fs.writeFileSync(path.join(newsroomDir, 'quality-report.md'), buildQualityReportMarkdown(qualityReport), 'utf8');
-  }
-}
-
-function writeReporterArtifactsForAttempt(newsroomDir, reporter, attempt = null) {
-  if (!reporter) return;
-  fs.mkdirSync(newsroomDir, { recursive: true });
-  writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
-  if (Number.isInteger(attempt) && attempt > 0) {
-    writeJson(path.join(newsroomDir, `reporter-candidates-attempt-${attempt}.json`), reporter);
-  }
-}
 
 function writeReviewableRepairFailureArtifacts({
   date,
