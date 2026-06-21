@@ -1,21 +1,19 @@
-// 발행 검토용 artifact writer (Tier-A) — root에 무관하게 newsroom 디렉터리에 editor draft·
-// canonical 검토 산출물·reporter 후보를 기록한다(#655 god-file 분할). 본문은 추출 전과 동일하다.
+// 발행 검토용 artifact writer — newsroom 디렉터리와 .tmp에 editor draft·canonical 검토 산출물·
+// reporter 후보·generation status·cost/cache report를 기록한다(#655 god-file 분할). 본문은 추출 전과 동일하다.
 
 const fs = require('fs');
 const path = require('path');
 const { writeJson } = require('../../shared/common/common');
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');
-const { getLlmModelUsage } = require('../../shared/llm/llm-client');
+const { getLlmModelUsage, buildCostReport, buildCostReportMarkdown, getLlmCostCalls } = require('../../shared/llm/llm-client');
 const { toEditorDraftArtifact } = require('../../shared/domain/newsletter-domain-normalize');
 const { buildMarkdown, buildFactCheckMarkdown } = require('../render/newsletter-renderer');
 const { buildQualityReportMarkdown } = require('../quality/newsletter-quality');
-
-const root = process.cwd();
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { newsroomDir: artifactNewsroomDir } = require('../../shared/common/artifact-paths');
-const { buildCostReport, buildCostReportMarkdown, getLlmCostCalls } = require('../../shared/llm/llm-client');
 const { buildSummaryCacheReport, buildSummaryCacheReportMarkdown } = require('../reporter/news-summary-cache');
 
+const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
 
 function editorDraftArtifact(editor, date, options = {}) {
@@ -120,7 +118,7 @@ function writeCostReport(date, rootDir = root) {
   for (const warning of ensureArray(report.warnings)) {
     console.warn(`[cost] ${warning}`);
   }
-  console.log(`[cost] Estimated LLM API cost: ${Number(report.totals.estimated_cost_usd || 0).toFixed(6)} USD across ${report.totals.request_count || 0} request(s).`);
+  console.log(`[cost] Estimated LLM API cost: $${Number(report.totals.estimated_cost_usd || 0).toFixed(6)} USD across ${report.totals.request_count || 0} request(s).`);
   return report;
 }
 
