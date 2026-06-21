@@ -12,52 +12,18 @@ const {
   LEDGER_PATH: AUDIT_LEDGER_PATH
 } = require('../../shared/common/audit-paths');
 
-const PUBLIC_STATES = Object.freeze({
-  PUBLISH_READY: 'PUBLISH_READY',
-  REVIEW_ONLY_PUBLIC_CREATED: 'REVIEW_ONLY_PUBLIC_CREATED',
-  DIAGNOSTICS_ONLY: 'DIAGNOSTICS_ONLY',
-  DIAGNOSTICS_ONLY_BUT_KEEP_EXISTING_PUBLIC: 'DIAGNOSTICS_ONLY_BUT_KEEP_EXISTING_PUBLIC'
-});
-
-const RUN_MODES = Object.freeze({
-  PUBLISH_READY: 'publish_ready',
-  REVIEW_ONLY_PUBLIC: 'review_only_public',
-  DIAGNOSTICS_ONLY: 'diagnostics_only',
-  DIAGNOSTICS_ONLY_RETAINED_PUBLIC: 'diagnostics_only_retained_public'
-});
-
-const PUBLIC_ARTIFACT_POLICIES = Object.freeze({
-  LATEST_PUBLIC_READY: 'latest_public_ready',
-  LATEST_REVIEW_PUBLICATION_READY: 'latest_review_publication_ready',
-  REVIEW_PUBLICATION_INVALID_PUBLIC_STRUCTURE: 'review_publication_invalid_public_structure',
-  HIDE_EXISTING_PUBLIC_ARTIFACT_AFTER_LATEST_DIAGNOSTICS_ONLY:
-    'hide_existing_public_artifact_after_latest_diagnostics_only',
-  RETAIN_EXISTING_EDITOR_APPROVED_PUBLIC: 'retain_existing_editor_approved_public',
-  INVALID_RETENTION_IGNORED: 'invalid_retention_ignored'
-});
-
-const RECONCILIATION_ACTIONS = Object.freeze({
-  NONE_LATEST_PUBLIC_READY: 'none_latest_public_ready',
-  UPSERTED_LATEST_PUBLIC_ENTRY: 'upserted_latest_public_entry',
-  REMOVED_NEWSLETTERS_INDEX_ENTRY: 'removed_newsletters_index_entry',
-  RETAINED_EXISTING_PUBLIC_WITH_METADATA: 'retained_existing_public_with_metadata',
-  INVALID_RETENTION_IGNORED_AND_REMOVED_INDEX_ENTRY:
-    'invalid_retention_ignored_and_removed_index_entry'
-});
-
-const PUBLIC_ARTIFACT_SOURCES = Object.freeze({
-  LATEST_RUN: 'latest_run',
-  PREVIOUS_RUN: 'previous_run',
-  NONE: 'none'
-});
-
-const DIAGNOSTICS_STATUSES = new Set([
-  'NEEDS_FIX',
-  'QUALITY_NEEDS_FIX',
-  'UNDERFILLED_NEEDS_FIX',
-  'FAILED_REPAIR_REVIEWABLE',
-  'FAILED_RAW_ARTIFACT_VALIDATION'
-]);
+const {
+  PUBLIC_STATES,
+  RUN_MODES,
+  PUBLIC_ARTIFACT_POLICIES,
+  PUBLIC_ARTIFACT_SOURCES,
+  RECONCILIATION_ACTIONS,
+  latestDiagnosticsOnly,
+  classifyPublicState,
+  resolvePublicStateFields,
+  runModeForPublicState,
+  archiveSyncEnabled
+} = require('./publication-state-schema');
 
 // 추가 locale은 LEDGER_HEADING_TRANSLATIONS에 추가
 const LEDGER_HEADING_TRANSLATIONS = Object.freeze(['Ledger', '원장']);
@@ -96,10 +62,6 @@ const PUBLISH_READY_LEDGER_ISSUE =
 
 function toRepoPath(value) {
   return String(value || '').replace(/\\/g, '/').replace(/^\.\//, '');
-}
-
-function isTrue(value) {
-  return value === true || value === 'true';
 }
 
 function scalarBoolean(value) {
@@ -237,41 +199,12 @@ function validateRetentionMetadata({ root = process.cwd(), date } = {}) {
   };
 }
 
-function latestDiagnosticsOnly(status = {}) {
-  if (isTrue(status.diagnostics_only)) return true;
-  return !isTrue(status.public_newsletter_ready) &&
-    !isTrue(status.final_publish_ready) &&
-    !isTrue(status.review_publication_ready) &&
-    DIAGNOSTICS_STATUSES.has(String(status.status || status.generation_status || ''));
-}
-
+// 발행 후 reconcile 전용 wrapper: 디스크 구조·retention을 해석해(I/O)
+// 순수 분류기(publication-state-schema)에 넘긴다. 분류 규칙 자체는 schema가 정본.
 function classifyLatestPublicState({ root = process.cwd(), date, status = {}, publicStructure, retention } = {}) {
   const structure = publicStructure || publicStructureStatus(root, date || status.date);
   const retentionState = retention || validateRetentionMetadata({ root, date: date || status.date });
-  if (isTrue(status.final_publish_ready) && isTrue(status.public_newsletter_ready) && structure.ok) {
-    return PUBLIC_STATES.PUBLISH_READY;
-  }
-  if (
-    !isTrue(status.final_publish_ready) &&
-    isTrue(status.review_publication_ready) &&
-    isTrue(status.public_newsletter_ready) &&
-    structure.ok
-  ) {
-    return PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED;
-  }
-  if (latestDiagnosticsOnly(status) && retentionState.valid && structure.ok) {
-    return PUBLIC_STATES.DIAGNOSTICS_ONLY_BUT_KEEP_EXISTING_PUBLIC;
-  }
-  return PUBLIC_STATES.DIAGNOSTICS_ONLY;
-}
-
-function runModeForPublicState(publicState) {
-  if (publicState === PUBLIC_STATES.PUBLISH_READY) return RUN_MODES.PUBLISH_READY;
-  if (publicState === PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED) return RUN_MODES.REVIEW_ONLY_PUBLIC;
-  if (publicState === PUBLIC_STATES.DIAGNOSTICS_ONLY_BUT_KEEP_EXISTING_PUBLIC) {
-    return RUN_MODES.DIAGNOSTICS_ONLY_RETAINED_PUBLIC;
-  }
-  return RUN_MODES.DIAGNOSTICS_ONLY;
+  return classifyPublicState({ status, publicStructure: structure, retention: retentionState });
 }
 
 function removeNewsletterIndexEntry(root, date) {
@@ -578,7 +511,7 @@ function upsertArchiveLedger({ root, date, publicState, write = true }) {
 }
 
 function syncArchivePublicationState({ root, date, publicState }) {
-  if (![PUBLIC_STATES.PUBLISH_READY, PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED].includes(publicState)) {
+  if (!archiveSyncEnabled(publicState)) {
     return { changedArtifacts: [] };
   }
   const sidecar = upsertArchiveSidecar({ root, date, publicState, write: false });
@@ -611,63 +544,6 @@ function buildRemediationMessage(date) {
   ].join('\n');
 }
 
-function reconciliationFieldsFor({ publicState, status, retention, publicStructure, existingPublicArtifactDetected }) {
-  if (publicState === PUBLIC_STATES.PUBLISH_READY) {
-    return {
-      effectiveHomepageVisible: true,
-      publicArtifactPolicy: PUBLIC_ARTIFACT_POLICIES.LATEST_PUBLIC_READY,
-      publicArtifactSource: PUBLIC_ARTIFACT_SOURCES.LATEST_RUN,
-      action: RECONCILIATION_ACTIONS.NONE_LATEST_PUBLIC_READY,
-      reason: 'latest run is final publish-ready and public structure is valid'
-    };
-  }
-  if (publicState === PUBLIC_STATES.REVIEW_ONLY_PUBLIC_CREATED) {
-    return {
-      effectiveHomepageVisible: true,
-      publicArtifactPolicy: PUBLIC_ARTIFACT_POLICIES.LATEST_REVIEW_PUBLICATION_READY,
-      publicArtifactSource: PUBLIC_ARTIFACT_SOURCES.LATEST_RUN,
-      action: RECONCILIATION_ACTIONS.UPSERTED_LATEST_PUBLIC_ENTRY,
-      reason: 'latest run created a structurally valid review-only public issue'
-    };
-  }
-  if (publicState === PUBLIC_STATES.DIAGNOSTICS_ONLY_BUT_KEEP_EXISTING_PUBLIC) {
-    return {
-      effectiveHomepageVisible: true,
-      publicArtifactPolicy: PUBLIC_ARTIFACT_POLICIES.RETAIN_EXISTING_EDITOR_APPROVED_PUBLIC,
-      publicArtifactSource: PUBLIC_ARTIFACT_SOURCES.PREVIOUS_RUN,
-      action: RECONCILIATION_ACTIONS.RETAINED_EXISTING_PUBLIC_WITH_METADATA,
-      reason: 'valid public-retention.json allows previous public issue to remain visible'
-    };
-  }
-  if (retention.exists && !retention.valid) {
-    return {
-      effectiveHomepageVisible: false,
-      publicArtifactPolicy: PUBLIC_ARTIFACT_POLICIES.INVALID_RETENTION_IGNORED,
-      publicArtifactSource: PUBLIC_ARTIFACT_SOURCES.NONE,
-      action: RECONCILIATION_ACTIONS.INVALID_RETENTION_IGNORED_AND_REMOVED_INDEX_ENTRY,
-      reason: `invalid public-retention.json ignored: ${retention.error || 'unknown retention error'}`
-    };
-  }
-  if (isTrue(status.review_publication_ready) && !publicStructure.ok) {
-    return {
-      effectiveHomepageVisible: false,
-      publicArtifactPolicy: PUBLIC_ARTIFACT_POLICIES.REVIEW_PUBLICATION_INVALID_PUBLIC_STRUCTURE,
-      publicArtifactSource: PUBLIC_ARTIFACT_SOURCES.NONE,
-      action: RECONCILIATION_ACTIONS.REMOVED_NEWSLETTERS_INDEX_ENTRY,
-      reason: `review_publication_ready was true but public structure was invalid: ${publicStructure.errors.join('; ') || 'unknown'}`
-    };
-  }
-  return {
-    effectiveHomepageVisible: false,
-    publicArtifactPolicy: PUBLIC_ARTIFACT_POLICIES.HIDE_EXISTING_PUBLIC_ARTIFACT_AFTER_LATEST_DIAGNOSTICS_ONLY,
-    publicArtifactSource: PUBLIC_ARTIFACT_SOURCES.NONE,
-    action: RECONCILIATION_ACTIONS.REMOVED_NEWSLETTERS_INDEX_ENTRY,
-    reason: existingPublicArtifactDetected
-      ? 'latest diagnostics-only run is not public-ready and no valid retention metadata exists'
-      : 'latest diagnostics-only run has no effective public artifacts'
-  };
-}
-
 function reconcilePublicState(options = {}) {
   const root = options.root || process.cwd();
   const status = options.status || {};
@@ -678,7 +554,7 @@ function reconcilePublicState(options = {}) {
   const retention = validateRetentionMetadata({ root, date });
   const publicState = classifyLatestPublicState({ root, date, status, publicStructure, retention });
   const existingPublicArtifactDetected = publicStructure.publicFilesExist || publicStructure.dataIndex.hasDate;
-  const fields = reconciliationFieldsFor({
+  const fields = resolvePublicStateFields({
     publicState,
     status,
     retention,
