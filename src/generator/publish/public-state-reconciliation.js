@@ -21,6 +21,7 @@ const {
   latestDiagnosticsOnly,
   classifyPublicState,
   resolvePublicStateFields,
+  assertPublicStateOutput,
   runModeForPublicState,
   archiveSyncEnabled
 } = require('./publication-state-schema');
@@ -560,6 +561,14 @@ function reconcilePublicState(options = {}) {
     retention,
     publicStructure,
     existingPublicArtifactDetected
+  });
+  // 상태를 newsletters.json/generation-status에 반영하기 전, 분류된 상태와
+  // 산출 필드가 schema 출력 계약에 부합하는지 검증한다(드리프트 시 fail-closed).
+  assertPublicStateOutput({
+    publicState,
+    effectiveHomepageVisible: fields.effectiveHomepageVisible,
+    publicArtifactPolicy: fields.publicArtifactPolicy,
+    action: fields.action
   });
 
   let dataIndexChanged = false;
