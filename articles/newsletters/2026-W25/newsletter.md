@@ -1,6 +1,6 @@
 # 2026 W25 (06.15 ~ 06.21)
 
-이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 4건의 소식을 다룹니다.
+이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 6건의 소식을 다룹니다.
 
 
 
@@ -10,6 +10,8 @@
 - Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가
 - GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선
 - Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안
+- Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개
+- Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개
 
 ## 2. ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개
 
@@ -70,7 +72,7 @@ CameraX는 Android Camera2 API를 기반으로 구축된 Jetpack 라이브러리
 ## 4. GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선
 
 
-![Red Hat graphic shown on ISO C++ Blog](https://isocpp.org/files/img/redhatgraphic.png)
+![Red Hat graphic on ISO C++ Blog representing GCC 16 compiler updates](https://isocpp.org/files/img/redhatgraphic.png)
 
 _이미지: [ISO C++ Blog](https://isocpp.org/blog)_
 
@@ -121,6 +123,62 @@ Himax HM1246 드라이버는 Native RAW 모드만 지원하므로, Android Camer
 
 - [[PATCH v10 0/2] media: add Himax HM1246 image sensor](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/T/#t)
 
+---
+
+## 6. Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개
+
+
+![Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개 image](../../assets/images/fallback/newsletter-default.svg)
+
+_이미지: [Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver](https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/)_
+
+
+_lore.kernel.org linux-media list_
+
+최근 Linux 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 시리즈가 제출되었습니다. 이 센서는 I2C 인터페이스와 병렬 버스를 지원하며 내부 ISP를 내장하고 있어, 향후 임베디드 및 Android 기기의 하위 이미지 파이프라인 통합에 기여할 것으로 기대됩니다.
+
+이번에 공개된 v10 패치 시리즈는 Himax HM1246 이미지 센서를 제어하기 위한 V4L2 하위 장치(sub-device) 드라이버를 Linux 커널에 추가하는 것을 목표로 합니다. 이 센서는 I2C 인터페이스를 통해 레지스터 설정 및 제어가 가능하며, 물리적으로는 병렬 버스 인터페이스를 통해 호스트 프로세서와 연결됩니다.
+
+특히 이 센서는 내부에 자체 ISP(Image Signal Processor)를 포함하고 있어, 센서 단에서 기본적인 이미지 처리 및 포맷 변환을 수행할 수 있는 특징을 가집니다. 드라이버는 V4L2 프레임워크 표준에 맞춰 작성되어 리눅스 미디어 컨트롤러 아키텍처와의 호환성을 제공합니다.
+
+다만 본 패치는 현재 메일링 리스트에서 리뷰 중인 제안 단계로, 최종 커널 메인라인 병합 여부와 상세 사양은 추가 피드백에 따라 변경될 수 있습니다. Android 기기에 탑재될 경우, V4L2 드라이버 계층을 거쳐 Camera HAL의 이미지 입력 파이프라인과 통합되는 경로를 밟게 됩니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+본 패치는 아직 제안 단계이므로 Android Camera HAL API나 메타데이터 계약에 직접적인 영향은 없습니다. 그러나 내부 ISP를 내장한 병렬 버스 기반 센서이므로, 향후 HAL 통합 시 프레임 타이밍 및 V4L2 하위 장치 포맷 협상(format negotiation) 단에서의 호환성 검증이 필요할 수 있습니다.
+
+**출처**
+
+- [Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver](https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/)
+
+---
+
+## 7. Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개
+
+
+![Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개 image](../../assets/images/fallback/newsletter-default.svg)
+
+_이미지: [Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver](https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/)_
+
+
+_lore.kernel.org linux-media list_
+
+최근 Linux 미디어 메일링 리스트에 Sony IMX576 이미지 센서 지원을 위한 v2 패치 시리즈가 제출되었습니다. 이 드라이버는 고해상도 활성 어레이 지원과 함께 수동 노출, 게인, 블랭킹 제어 기능을 포함하고 있어 향후 고성능 카메라 파이프라인 통합의 기반이 될 것입니다.
+
+이번에 제출된 v2 패치 시리즈는 Sony IMX576 이미지 센서용 V4L2 하위 장치 드라이버를 신규 추가하는 내용을 담고 있습니다. IMX576 센서는 5760 x 4312 크기의 거대한 활성 픽셀 어레이(active array)를 특징으로 하며, 고해상도 이미지 캡처에 적합한 하드웨어입니다.
+
+제안된 드라이버는 센서의 성능을 활용할 수 있도록 수동 노출 제어(manual exposure control), 아날로그/디지털 게인 제어, 그리고 수직/수평 블랭킹(vblank/hblank) 제어 기능을 구현하고 있습니다. 또한 풀 해상도 외에도 2880 x 2156 해상도 출력을 지원하여 다양한 스트림 조합에 대응할 수 있도록 설계되었습니다.
+
+이 드라이버 역시 현재 업스트림 리뷰 단계에 있으며, 실제 상용 기기에 적용하기 위해서는 V4L2 프레임워크 표준 인터페이스를 통한 제어 신뢰성 검증과 호스트 ISP 파이프라인과의 정밀한 타이밍 튜닝이 선행되어야 합니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Sony IMX576 센서의 고해상도(5760 x 4312) 및 수동 제어 기능(노출, 게인, 블랭킹)은 Android Camera HAL3의 수동 제어 기능(Manual Camera capabilities)과 직접 매핑됩니다. 드라이버가 안정화되면 HAL 단에서 3A 엔진 및 수동 메타데이터 제어의 신뢰성을 확보하는 데 기여할 것입니다.
+
+**출처**
+
+- [Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver](https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/)
+
 
 ## 참고 / 더 읽을거리
 
@@ -132,3 +190,5 @@ Himax HM1246 드라이버는 Native RAW 모드만 지원하므로, Android Camer
 - [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)
 - [[PATCH v10 0/2] media: add Himax HM1246 image sensor](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/T/#t)
+- [Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver](https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/)
+- [Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver](https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/)

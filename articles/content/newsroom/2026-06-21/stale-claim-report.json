@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-21",
+  "status": "PASS",
+  "removed_sections": [],
+  "final_section_sources": [
+    {
+      "title": "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver",
+      "url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/"
+    },
+    {
+      "title": "Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/"
+    },
+    {
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}

@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-21",
+  "generated_at": "2026-06-21T01:58:48.967Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 7,
+    "hit_count": 2,
+    "miss_count": 5,
+    "by_url_hit_count": 2,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 4
+    },
+    {
+      "reason": "url-hit",
+      "count": 2
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver",
+      "url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-20T09:24:37Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/ajzcts5motmfbmmz@kekkonen.localdomain",
+        "url_hash": "de11a4c4de5375443d77272463a7797708c8b643f269fc429296eb5eb3879ae1",
+        "published_date": "2026-06-20T09:24:37Z",
+        "content_hash": "448b85bca6c69b4e3528794ecc1b9e9d006e94e69e3490539d576dd8ec0f0e69"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-20T13:27:59Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260620132749.ge3552167@killaraus.ideasonboard.com",
+        "url_hash": "0c13dad1c0c2ddcd175c150f94fc1bc42a3cb3e3dd5e00042348c07093de0e12",
+        "published_date": "2026-06-20T13:27:59Z",
+        "content_hash": "f101cf6ae21c2796f09264923aac9a4c19139ecea429320c8a2d7ff0d2a8b6ba"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 15 Jun 2026 22:22:24 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "url_hash": "9f5a63b90e02162f19dabc76ee29ef71d86aa3a0fb00e872378d73f32ffbee7e",
+        "published_date": "Mon, 15 Jun 2026 22:22:24 +0000",
+        "content_hash": "45efa4a6b0593184fc9702888cdeb5e8b0a7381fa6d28ae9c5c9fd5a40f904e8"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "The Linux Kernel Archives",
+      "url": "https://www.kernel.org/",
+      "source": "kernel.org Linux Releases",
+      "published_date": "2026-06-14",
+      "cache_key": {
+        "normalized_url": "https://www.kernel.org",
+        "url_hash": "ba676d0843ee09ad4fbb839505fbec3c3e58b93a11e3116c5ea9ad91803af2a1",
+        "published_date": "2026-06-14",
+        "content_hash": "f4f2139740e558b18d4036eb5e943880d52477383ec027479afd9f9979752aa7"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "linux-media.vger.kernel.org archive mirror",
+      "url": "https://lore.kernel.org/linux-media/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-20",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media",
+        "url_hash": "0a43f6998b6c0d9c95a78a40bef8b201687e015fa6a8e033a82671ed27bc920d",
+        "published_date": "2026-06-20",
+        "content_hash": "86f4b3f4305174afd1587271973632c5c48a0d3471a7d5303c7ed7df24fd28da"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/tools/agents/android-cli",
+        "url_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee.json"
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "url_hash": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe.json"
+    }
+  ]
+}
