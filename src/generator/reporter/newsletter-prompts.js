@@ -184,7 +184,43 @@ function dateFramingGuardrail() {
   ].join('\n');
 }
 
+// reporter/editor/fact-check 등 LLM stage가 공유하는 공통 context와 reporter 전용 context를
+// editorial 문서 입력으로부터 조립한다. 순수 문자열 빌더(#655 god-file 분할, 동작 불변).
+function buildPromptContexts({ date, editorialPolicy, newsletterTemplate, goldenExample }) {
+  const commonContext = [
+    `Newsletter date: ${date}`,
+    'Audience: AOSP Camera / Camera HAL / Camera Driver / SoC Platform / C++ engineer',
+    '수집된 candidate JSON, src/shared/data/news-sources.json, docs/NEWS_SOURCES.md, 아래 editorial documents만 사용하세요. web browsing은 하지 마세요.',
+    'source names와 source URLs는 그대로 유지하세요. 확인된 사실과 해석을 분리하세요.',
+    '최종 newsletter text는 한국어로 작성하세요. 공식 title, source name, product name, URL, code identifier, JSON key, enum 값은 원문을 유지할 수 있습니다.',
+    '',
+    'docs/EDITORIAL_POLICY.md:',
+    editorialPolicy,
+    '',
+    'docs/NEWSLETTER_TEMPLATE.md:',
+    newsletterTemplate,
+    '',
+    'docs/golden-examples/MANUAL_QUALITY_NEWSLETTER.md:',
+    goldenExample,
+    '',
+    'golden example은 style과 structure reference로만 사용하세요. 현재 candidate JSON에 없는 facts, dates, versions, API/component names, behavior changes, sources, action items는 복사하지 마세요.'
+  ].join('\n');
+  const reporterContext = [
+    `Newsletter date: ${date}`,
+    'Audience: AOSP Camera / Camera HAL / Camera Driver / SoC Platform / C++ engineer',
+    '수집된 article capsule JSON과 deterministic selection context만 사용하세요. web browsing은 하지 마세요.',
+    'Reporter stage는 deterministic 후보의 source-backed evidence fields만 보강합니다.',
+    'source names, source URLs, title, candidate_id는 echo-only matching key로 그대로 유지하세요.',
+    '한국어 evidence note를 작성할 수 있지만, public newsletter prose나 최종 기사 문장은 작성하지 마세요.',
+    '',
+    'docs/EDITORIAL_POLICY.md:',
+    editorialPolicy
+  ].join('\n');
+  return { commonContext, reporterContext };
+}
+
 module.exports = {
+  buildPromptContexts,
   linkedEvidencePromptGuardrails,
   sourceExtractionPromptGuardrails,
   articleSectionContractPrompt,
