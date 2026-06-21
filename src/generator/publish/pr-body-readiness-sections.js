@@ -8,6 +8,9 @@ const {
   resolveReviewableArtifacts
 } = require('./resolve-reviewable-artifacts');
 const {
+  PUBLICATION_MODES
+} = require('../../shared/common/publication-mode');
+const {
   loadNewsroomReport
 } = require('./pr-body-artifacts');
 const {
@@ -119,7 +122,7 @@ function renderPublicNewsletterNotice(status = {}, handoff = null) {
     ].join('\n');
   }
   if (handoff?.reviewPublicationReady) {
-    if (handoff.publicationMode === 'fallback_public') {
+    if (handoff.publicationMode === PUBLICATION_MODES.FALLBACK_PUBLIC) {
       return [
         '## Public Newsletter 안내',
         '',
