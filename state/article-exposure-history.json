@@ -7,6 +7,23 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com",
+      "title": "Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개",
+      "source_url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/",
+      "newsletter_date": "2026-06-21",
+      "newsletter_url": "newsletters/2026-06-21/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-06-21",
+      "first_exposed_at": "2026-06-21",
+      "last_exposed_at": "2026-06-21",
+      "exposure_count": 1,
+      "exposure_types": [
+        "homepage_headline"
+      ]
+    },
+    {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at",
       "title": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안",
       "source_url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/",
@@ -95,16 +112,16 @@
       "article_identity_key": "content:2dca6397f6798483d79ea9e0",
       "title": "",
       "source_url": "",
-      "newsletter_date": "2026-06-20",
-      "newsletter_url": "newsletters/2026-06-20/index.html",
+      "newsletter_date": "2026-06-21",
+      "newsletter_url": "newsletters/2026-06-21/index.html",
       "exposure_type": "newsletter_article",
       "headline_score": null,
       "reuse_reason": "",
-      "exposed_at": "2026-06-20",
-      "cooldown_until": "2026-07-11",
+      "exposed_at": "2026-06-21",
+      "cooldown_until": "2026-07-12",
       "first_exposed_at": "2026-06-03",
-      "last_exposed_at": "2026-06-20",
-      "exposure_count": 5,
+      "last_exposed_at": "2026-06-21",
+      "exposure_count": 6,
       "exposure_types": [
         "newsletter_article"
       ]

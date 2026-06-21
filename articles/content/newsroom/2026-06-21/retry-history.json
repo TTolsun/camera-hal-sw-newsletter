@@ -1,0 +1,235 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 96,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 3,
+    "locked_article_count": 3,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가 패치 v10 제출",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Sony IMX576 이미지 센서용 V4L2 드라이버 추가 패치 v2 제출",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가 패치 v10 제출",
+      "Sony IMX576 이미지 센서용 V4L2 드라이버 추가 패치 v2 제출",
+      "GCC 16 신규 기능 공개: 템플릿 오류 메시지 개선 및 SARIF 표준 출력 지원"
+    ],
+    "locked_article_headlines": [
+      "Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가 패치 v10 제출",
+      "Sony IMX576 이미지 센서용 V4L2 드라이버 추가 패치 v2 제출",
+      "GCC 16 신규 기능 공개: 템플릿 오류 메시지 개선 및 SARIF 표준 출력 지원"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가 패치 v10 제출",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Sony IMX576 이미지 센서용 V4L2 드라이버 추가 패치 v2 제출",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "GCC 16 신규 기능 공개: 템플릿 오류 메시지 개선 및 SARIF 표준 출력 지원",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        ],
+        "source_titles": [
+          "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가 패치 v10 제출",
+        "sources": [
+          "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가 패치 v10 제출"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Sony IMX576 이미지 센서용 V4L2 드라이버 추가 패치 v2 제출",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Sony IMX576 이미지 센서용 V4L2 드라이버 추가 패치 v2 제출"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가 패치 v10 제출",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Sony IMX576 이미지 센서용 V4L2 드라이버 추가 패치 v2 제출",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "GCC 16 신규 기능 공개: 템플릿 오류 메시지 개선 및 SARIF 표준 출력 지원",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+        ],
+        "source_titles": [
+          "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 3,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [
+      {
+        "title": "The Linux Kernel Archives",
+        "url": "https://www.kernel.org/",
+        "source": "kernel.org Linux Releases",
+        "reason": "evidence_score=0 < 6"
+      },
+      {
+        "title": "linux-media.vger.kernel.org archive mirror",
+        "url": "https://lore.kernel.org/linux-media/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      }
+    ],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

@@ -3,12 +3,14 @@
   "public_contract_version": "story-v1",
   "generation_contract_version": 1,
   "title": "2026 W25 (06.15 ~ 06.21)",
-  "summary": "이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 4건의 소식을 다룹니다.",
+  "summary": "이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 6건의 소식을 다룹니다.",
   "briefing": [
     "ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개",
     "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
     "GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선",
-    "Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안"
+    "Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안",
+    "Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개",
+    "Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개"
   ],
   "sections": [
     {
@@ -697,9 +699,9 @@
       "selectedImage": "https://isocpp.org/files/img/redhatgraphic.png",
       "imageSource": "https://isocpp.org/blog",
       "imageAttribution": "ISO C++ Blog",
-      "imageAlt": "Red Hat graphic shown on ISO C++ Blog",
+      "imageAlt": "Red Hat graphic on ISO C++ Blog representing GCC 16 compiler updates",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "Selected the only available image candidate from the source article.",
+      "imageUsageDecisionReason": "Selected the only available image candidate from the source article representing the GCC compiler update post.",
       "sources": [
         {
           "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
@@ -1037,15 +1039,564 @@
         "reason": "no selected image; local fallback visual used"
       },
       "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가 패치 v10 제출",
+      "what_changed": "Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 추가 제안. 이 센서는 I2C 인터페이스를 통해 프로그래밍 가능하며 병렬 버스로 연결됩니다. 내부 ISP를 포함합니다.",
+      "confirmed_facts": [
+        "Linux 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 패치 v10이 제출되었습니다.",
+        "Himax HM1246 센서는 I2C 인터페이스를 통해 프로그래밍 가능하며 병렬 버스로 연결됩니다.",
+        "해당 센서는 내부 ISP(Image Signal Processor)를 포함하고 있습니다."
+      ],
+      "evidence_summary": "Linux media mailing list에 Himax HM1246 이미지 센서 드라이버 추가를 위한 패치 v10이 제출되었습니다.",
+      "specificity_checks": [
+        "Version: v10 patch series",
+        "Component: Himax HM1246 image sensor driver (V4L2 sub-device)",
+        "Release Date: 2026-06-20"
+      ],
+      "source_verification_notes": [
+        "이 패치는 아직 Linux 커널 메인라인에 병합되지 않은 제안 단계입니다."
+      ],
+      "public_article": {
+        "headline": "Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개",
+        "lead": "최근 Linux 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 시리즈가 제출되었습니다. 이 센서는 I2C 인터페이스와 병렬 버스를 지원하며 내부 ISP를 내장하고 있어, 향후 임베디드 및 Android 기기의 하위 이미지 파이프라인 통합에 기여할 것으로 기대됩니다.",
+        "body_paragraphs": [
+          "이번에 공개된 v10 패치 시리즈는 Himax HM1246 이미지 센서를 제어하기 위한 V4L2 하위 장치(sub-device) 드라이버를 Linux 커널에 추가하는 것을 목표로 합니다. 이 센서는 I2C 인터페이스를 통해 레지스터 설정 및 제어가 가능하며, 물리적으로는 병렬 버스 인터페이스를 통해 호스트 프로세서와 연결됩니다.",
+          "특히 이 센서는 내부에 자체 ISP(Image Signal Processor)를 포함하고 있어, 센서 단에서 기본적인 이미지 처리 및 포맷 변환을 수행할 수 있는 특징을 가집니다. 드라이버는 V4L2 프레임워크 표준에 맞춰 작성되어 리눅스 미디어 컨트롤러 아키텍처와의 호환성을 제공합니다.",
+          "다만 본 패치는 현재 메일링 리스트에서 리뷰 중인 제안 단계로, 최종 커널 메인라인 병합 여부와 상세 사양은 추가 피드백에 따라 변경될 수 있습니다. Android 기기에 탑재될 경우, V4L2 드라이버 계층을 거쳐 Camera HAL의 이미지 입력 파이프라인과 통합되는 경로를 밟게 됩니다."
+        ],
+        "camera_hal_takeaway": "본 패치는 아직 제안 단계이므로 Android Camera HAL API나 메타데이터 계약에 직접적인 영향은 없습니다. 그러나 내부 ISP를 내장한 병렬 버스 기반 센서이므로, 향후 HAL 통합 시 프레임 타이밍 및 V4L2 하위 장치 포맷 협상(format negotiation) 단에서의 호환성 검증이 필요할 수 있습니다.",
+        "reader_checkpoints": [
+          "Himax HM1246 센서 드라이버의 V4L2 하위 장치 등록 상태 및 I2C 통신 정상 여부를 확인합니다.",
+          "내부 ISP의 출력 포맷과 Camera HAL이 요구하는 스트림 구성 간의 포맷 협상(format negotiation) 경로를 검토합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver",
+            "url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media list",
+        "editorial_story": {
+          "reader_scenario": "새로운 저전력 임베디드 하드웨어 플랫폼에 Himax HM1246 센서를 탑재하고 Android Camera HAL3 스택을 올리려는 상황을 가정합니다.",
+          "what_happened": "Linux 미디어 메일링 리스트에 Himax HM1246 이미지 센서용 V4L2 드라이버를 추가하는 v10 패치가 제출되었습니다.",
+          "why_it_matters": "내부 ISP를 내장한 센서의 경우, 호스트 ISP와의 연동 및 V4L2 sub-device 단에서의 제어 방식이 달라지므로 드라이버 수준의 조기 확보가 중요합니다.",
+          "field_scenario": "V4L2 sub-device 드라이버를 통해 센서 제어 노출 상태를 확인하고, 병렬 버스 인터페이스의 프레임 캡처 타이밍을 오실로스코프 및 커널 로그로 분석합니다.",
+          "not_to_overclaim": "이 패치는 제안 단계이며 아직 Linux 커널 메인라인에 병합되지 않았으므로, Android Camera HAL 계약이나 CTS 검증 항목에 즉각적인 변화를 주지 않습니다.",
+          "editor_take": "V4L2 드라이버 수준의 신규 센서 지원은 하드웨어 추상화 계층의 토대를 마련하는 중요한 첫걸음입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "High"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "Linux 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 패치 v10이 제출되었습니다.",
+          "Himax HM1246 센서는 I2C 인터페이스를 통해 프로그래밍 가능하며 병렬 버스로 연결됩니다.",
+          "해당 센서는 내부 ISP(Image Signal Processor)를 포함하고 있습니다."
+        ],
+        "background_context": "Linux 커널의 드라이버, 센서, ISP, libcamera, V4L2 변경은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다. Android Camera HAL은 V4L2를 통해 하위 계층의 드라이버와 상호작용하므로, 이러한 변경 사항은 새로운 하드웨어 지원 및 이미지 파이프라인 통합에 중요합니다.",
+        "hal_driver_impact": "이 변경은 제안 단계의 드라이버 패치이므로 Camera HAL 런타임이나 API 계약에 직접적인 영향은 없습니다. 다만, 병렬 버스 인터페이스와 내부 ISP를 사용하는 센서 특성상, HAL 통합 시 프레임 드롭이나 타이밍 미스매치를 방지하기 위해 V4L2 sub-device 단의 포맷 협상 및 프레임 레이트 제어 메커니즘을 면밀히 검증해야 합니다.",
+        "action_items": [
+          "Himax HM1246 센서 도입 검토 시, v10 패치 소스 코드를 기반으로 로컬 커널 소스 트리에 드라이버를 적용하고 빌드 호환성을 테스트합니다.",
+          "V4L2 하위 장치 제어 도구(v4l2-ctl)를 사용하여 I2C 제어 인터페이스 및 내부 ISP 레지스터 설정이 정상 동작하는지 검증합니다."
+        ],
+        "team_share_points": "Himax HM1246 센서용 V4L2 드라이버 v10 패치가 제출되었습니다. 내부 ISP를 내장한 병렬 버스 센서 지원을 준비 중인 팀은 해당 드라이버 구조를 참고하시기 바랍니다.",
+        "do_not_claim": [
+          "이 패치는 아직 Linux 커널에 병합되지 않은 제안입니다. HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과 또는 CTS에 대한 직접적인 변경으로 과장하지 마세요.",
+          "이 변경이 Android HAL 계약에 미치는 직접적인 영향을 단정하지 마세요. 드라이버, 센서, ISP, 이미지 파이프라인, 프레임 타이밍 및 통합 검증을 위한 카메라 스택 입력으로 검토해야 합니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:de11a4c4de537544:patch-v10-submitted",
+          "text": "Linux 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 패치 v10이 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:de11a4c4de537544:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:de11a4c4de537544:hm1246-i2c-parallel",
+          "text": "Himax HM1246 센서는 I2C 인터페이스를 통해 프로그래밍 가능하며 병렬 버스로 연결됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:de11a4c4de537544:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:de11a4c4de537544:hm1246-internal-isp",
+          "text": "해당 센서는 내부 ISP(Image Signal Processor)를 포함하고 있습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:de11a4c4de537544:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "V4L2 sub-device 포맷 협상 경로 검증",
+        "병렬 버스 인터페이스의 프레임 타이밍 정합성 확인"
+      ],
+      "action_hints": [
+        "v10 패치 드라이버 소스 리뷰",
+        "V4L2 sub-device 제어 인터페이스 검증"
+      ],
+      "action_items": [
+        "Himax HM1246 센서 도입 검토 시, v10 패치 소스 코드를 기반으로 로컬 커널 소스 트리에 드라이버를 적용하고 빌드 호환성을 테스트합니다.",
+        "V4L2 하위 장치 제어 도구(v4l2-ctl)를 사용하여 I2C 제어 인터페이스 및 내부 ISP 레지스터 설정이 정상 동작하는지 검증합니다."
+      ],
+      "is_ai_related": false,
+      "article_type": "driver",
+      "imageCandidates": [
+        {
+          "url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "sourceUrl": "https://isocpp.org/blog",
+          "articleUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "redhatgraphic.png",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "ISO C++ Blog",
+          "validationStatus": "ok",
+          "contentLength": 308207
+        },
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v5c6c2ba835e8720a8eaa6bc4810fa5cab5cbf351b6cee9f9510467b6e0c34519/android/images/lockup.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/s4097/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1807162
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/w1200-h630-p-k-no-nu/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 320599
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available.",
+      "sources": [
+        {
+          "title": "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver",
+          "url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "Himax HM1246 이미지 센서용 V4L2 드라이버의 v10 패치가 제출되어 커널 업스트림 리뷰가 진행 중입니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "soc_platform_owner"
+        ],
+        "check_within_2_weeks": "로컬 커널 트리 빌드 호환성 및 V4L2 sub-device 제어 인터페이스 정상 동작 여부 검증",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "soc_resource_contention"
+        ],
+        "do_not_overstate": [
+          "이 패치는 제안 단계이며 아직 Linux 커널 메인라인에 병합되지 않았으므로 Android Camera HAL 계약이나 CTS 검증 항목에 직접적인 변화를 주지 않습니다."
+        ]
+      },
+      "source_candidate_url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/",
+      "source_candidate_hash": "de11a4c4de5375443d77272463a7797708c8b643f269fc429296eb5eb3879ae1",
+      "article_group_key": "lore-series:20260619-hm1246-v10-d88e431a6c11@emfend.at",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 5,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "Sony IMX576 이미지 센서용 V4L2 드라이버 추가 패치 v2 제출",
+      "what_changed": "Sony IMX576 센서용 V4L2 하위 장치 드라이버 추가 제안. 이 센서는 5760 x 4312 활성 어레이 크기를 가지며 수동 노출 및 게인 제어, vblank/hblank 제어, 2880 x 2156 해상도를 지원합니다.",
+      "confirmed_facts": [
+        "Linux 미디어 메일링 리스트에 Sony IMX576 이미지 센서 드라이버 추가를 위한 패치 v2가 제출되었습니다.",
+        "Sony IMX576 센서는 5760 x 4312의 활성 픽셀 어레이 크기를 가집니다.",
+        "해당 드라이버는 수동 노출 및 게인 제어, vblank/hblank 제어, 그리고 2880 x 2156 해상도 출력을 지원합니다."
+      ],
+      "evidence_summary": "Linux media mailing list에 Sony IMX576 이미지 센서 드라이버 추가를 위한 패치 v2가 제출되었습니다.",
+      "specificity_checks": [
+        "Version: v2 patch series",
+        "Component: Sony IMX576 image sensor driver (V4L2 sub-device)",
+        "Release Date: 2026-06-20"
+      ],
+      "source_verification_notes": [
+        "이 패치는 아직 Linux 커널 메인라인에 병합되지 않은 제안 단계입니다."
+      ],
+      "public_article": {
+        "headline": "Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개",
+        "lead": "최근 Linux 미디어 메일링 리스트에 Sony IMX576 이미지 센서 지원을 위한 v2 패치 시리즈가 제출되었습니다. 이 드라이버는 고해상도 활성 어레이 지원과 함께 수동 노출, 게인, 블랭킹 제어 기능을 포함하고 있어 향후 고성능 카메라 파이프라인 통합의 기반이 될 것입니다.",
+        "body_paragraphs": [
+          "이번에 제출된 v2 패치 시리즈는 Sony IMX576 이미지 센서용 V4L2 하위 장치 드라이버를 신규 추가하는 내용을 담고 있습니다. IMX576 센서는 5760 x 4312 크기의 거대한 활성 픽셀 어레이(active array)를 특징으로 하며, 고해상도 이미지 캡처에 적합한 하드웨어입니다.",
+          "제안된 드라이버는 센서의 성능을 활용할 수 있도록 수동 노출 제어(manual exposure control), 아날로그/디지털 게인 제어, 그리고 수직/수평 블랭킹(vblank/hblank) 제어 기능을 구현하고 있습니다. 또한 풀 해상도 외에도 2880 x 2156 해상도 출력을 지원하여 다양한 스트림 조합에 대응할 수 있도록 설계되었습니다.",
+          "이 드라이버 역시 현재 업스트림 리뷰 단계에 있으며, 실제 상용 기기에 적용하기 위해서는 V4L2 프레임워크 표준 인터페이스를 통한 제어 신뢰성 검증과 호스트 ISP 파이프라인과의 정밀한 타이밍 튜닝이 선행되어야 합니다."
+        ],
+        "camera_hal_takeaway": "Sony IMX576 센서의 고해상도(5760 x 4312) 및 수동 제어 기능(노출, 게인, 블랭킹)은 Android Camera HAL3의 수동 제어 기능(Manual Camera capabilities)과 직접 매핑됩니다. 드라이버가 안정화되면 HAL 단에서 3A 엔진 및 수동 메타데이터 제어의 신뢰성을 확보하는 데 기여할 것입니다.",
+        "reader_checkpoints": [
+          "Sony IMX576 센서 드라이버의 vblank/hblank 제어가 프레임 레이트 및 노출 시간 설정에 미치는 영향을 검증합니다.",
+          "5760 x 4312 및 2880 x 2156 해상도 전환 시 V4L2 sub-device의 스트림 시작/중지 타이밍을 측정합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver",
+            "url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media list",
+        "editorial_story": {
+          "reader_scenario": "고해상도 Sony IMX576 센서를 탑재한 차세대 기기에서 Android Camera2 수동 제어 API(Manual Sensor Control)의 호환성을 확보해야 하는 상황입니다.",
+          "what_happened": "Linux 미디어 메일링 리스트에 Sony IMX576 이미지 센서용 V4L2 드라이버를 추가하는 v2 패치가 제출되었습니다.",
+          "why_it_matters": "수동 노출, 게인, 블랭킹 제어 기능이 드라이버 수준에서 올바르게 노출되어야 Camera HAL3가 상위 프레임워크에 정확한 센서 메타데이터를 전달할 수 있습니다.",
+          "field_scenario": "V4L2 컨트롤 인터페이스를 통해 수동 게인 및 노출 값을 가변하면서, 센서 출력이 의도한 프레임 타이밍(vblank 제어 연동)에 맞춰 변경되는지 분석합니다.",
+          "not_to_overclaim": "이 패치는 제안 단계이며 아직 커널에 병합되지 않았으므로, Android Camera HAL의 직접적인 API 계약이나 CTS 검증 결과에 즉각적인 영향을 미치지 않습니다.",
+          "editor_take": "고해상도 센서의 수동 제어 드라이버 지원은 Android Manual Camera 기능 구현을 위한 필수적인 하부 구조입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "Linux 미디어 메일링 리스트에 Sony IMX576 이미지 센서 드라이버 추가를 위한 패치 v2가 제출되었습니다.",
+          "Sony IMX576 센서는 5760 x 4312의 활성 픽셀 어레이 크기를 가집니다.",
+          "해당 드라이버는 수동 노출 및 게인 제어, vblank/hblank 제어, 그리고 2880 x 2156 해상도 출력을 지원합니다."
+        ],
+        "background_context": "Linux 커널의 드라이버, 센서, ISP, libcamera, V4L2 변경은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다. Android Camera HAL은 V4L2를 통해 하위 계층의 드라이버와 상호작용하므로, 이러한 변경 사항은 새로운 하드웨어 지원 및 이미지 파이프라인 통합에 중요합니다.",
+        "hal_driver_impact": "Sony IMX576 센서의 고해상도 지원 및 수동 제어 기능(노출, 게인, 블랭킹)은 Android Camera HAL3의 수동 제어 사양과 밀접하게 연관됩니다. 드라이버 수준에서 이러한 컨트롤이 안정적으로 구현되어야 HAL 단에서 프레임별 메타데이터 제어(per-frame control)를 오차 없이 수행할 수 있습니다.",
+        "action_items": [
+          "Sony IMX576 센서 드라이버 v2 패치 코드를 기반으로 로컬 커널 소스 트리에 통합하고 빌드 호환성을 테스트합니다.",
+          "v4l2-ctl 도구를 사용하여 수동 노출, 게인 및 vblank/hblank 제어 파라미터가 드라이버 수준에서 정상적으로 설정되고 센서 레지스터에 반영되는지 검증합니다."
+        ],
+        "team_share_points": "Sony IMX576 고해상도 센서용 V4L2 드라이버 v2 패치가 제출되었습니다. 수동 제어 및 고해상도 센서 파이프라인 설계를 담당하는 팀은 참고하시기 바랍니다.",
+        "do_not_claim": [
+          "이 패치는 아직 Linux 커널에 병합되지 않은 제안입니다. HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과 또는 CTS에 대한 직접적인 변경으로 과장하지 마세요.",
+          "이 변경이 Android HAL 계약에 미치는 직접적인 영향을 단정하지 마세요. 드라이버, 센서, ISP, 이미지 파이프라인, 프레임 타이밍 및 통합 검증을 위한 카메라 스택 입력으로 검토해야 합니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:0c13dad1c0c2ddcd:patch-v2-submitted",
+          "text": "Linux 미디어 메일링 리스트에 Sony IMX576 이미지 센서 드라이버 추가를 위한 패치 v2가 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:0c13dad1c0c2ddcd:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:0c13dad1c0c2ddcd:imx576-active-array",
+          "text": "Sony IMX576 센서는 5760 x 4312의 활성 픽셀 어레이 크기를 가집니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:0c13dad1c0c2ddcd:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:0c13dad1c0c2ddcd:imx576-driver-features",
+          "text": "해당 드라이버는 수동 노출 및 게인 제어, vblank/hblank 제어, 그리고 2880 x 2156 해상도 출력을 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:0c13dad1c0c2ddcd:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "V4L2 수동 제어 인터페이스(노출, 게인, 블랭킹) 정상 동작 검증",
+        "5760 x 4312 및 2880 x 2156 해상도 전환 시 스트림 안정성 확인"
+      ],
+      "action_hints": [
+        "v2 패치 드라이버 소스 리뷰",
+        "수동 제어 파라미터 레지스터 매핑 검증"
+      ],
+      "action_items": [
+        "Sony IMX576 센서 드라이버 v2 패치 코드를 기반으로 로컬 커널 소스 트리에 통합하고 빌드 호환성을 테스트합니다.",
+        "v4l2-ctl 도구를 사용하여 수동 노출, 게인 및 vblank/hblank 제어 파라미터가 드라이버 수준에서 정상적으로 설정되고 센서 레지스터에 반영되는지 검증합니다."
+      ],
+      "is_ai_related": false,
+      "article_type": "driver",
+      "imageCandidates": [
+        {
+          "url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "sourceUrl": "https://isocpp.org/blog",
+          "articleUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "redhatgraphic.png",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "ISO C++ Blog",
+          "validationStatus": "ok",
+          "contentLength": 308207
+        },
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v5c6c2ba835e8720a8eaa6bc4810fa5cab5cbf351b6cee9f9510467b6e0c34519/android/images/lockup.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/s4097/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1807162
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/w1200-h630-p-k-no-nu/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 320599
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available.",
+      "sources": [
+        {
+          "title": "Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "Sony IMX576 이미지 센서용 V4L2 드라이버의 v2 패치가 제출되어 업스트림 리뷰가 진행 중입니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "수동 노출, 게인 및 블랭킹 제어 기능의 드라이버 수준 동작 및 레지스터 매핑 검증",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "이 패치는 제안 단계이며 아직 커널에 병합되지 않았으므로, Android Camera HAL의 직접적인 API 계약이나 CTS 검증 결과에 즉각적인 영향을 미치지 않습니다."
+        ]
+      },
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/",
+      "source_candidate_hash": "0c13dad1c0c2ddcd175c150f94fc1bc42a3cb3e3dd5e00042348c07093de0e12",
+      "article_group_key": "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
     }
   ],
   "action_items": [
-    "해당 센서 도입 계획이 있는 경우, 제안된 v2 패치 드라이버의 V4L2 컨트롤 구현(수동 노출, 게인)이 Android Camera HAL3 요구사항과 호환되는지 분석합니다.",
-    "2880x2156 30fps SRGGB10 해상도의 프레임 타이밍 및 vblank/hblank 제어가 센서 데이터시트 사양과 일치하는지 검토합니다.",
-    "Himax HM1246 센서 도입 시, 외부 ISP 파이프라인이 RAW 데이터를 처리하여 HAL3가 요구하는 YUV/JPEG 스트림을 생성할 수 있는지 리소스 할당을 검토합니다.",
-    "Himax HM1246의 Native RAW 모드 외에 추가적인 센서 출력 모드가 필요한 경우, 드라이버 확장 가능성을 분석합니다.",
-    "자사 빌드 환경 중 GCC를 사용하는 레거시 모듈이나 독자 Linux 빌드 시스템이 있는지 확인합니다.",
-    "SARIF 포맷 출력을 지원하는 정적 분석 도구(예: SonarQube, GitHub Actions 등)와의 연동 시나리오를 검토합니다."
+    "Himax HM1246 센서 도입 검토 시 v10 패치 소스를 기반으로 로컬 커널 소스 트리에 드라이버를 적용하고 빌드 호환성을 테스트합니다.",
+    "Sony IMX576 센서 드라이버 v2 패치를 로컬 커널 트리에 통합하고, v4l2-ctl 도구를 사용해 수동 노출, 게인 및 블랭킹 제어 파라미터가 센서 레지스터에 정상 반영되는지 검증합니다.",
+    "크로스 플랫폼 네이티브 카메라 라이브러리 빌드 환경에서 GCC 16 컴파일러를 시범 적용하여 템플릿 오류 메시지 가독성 개선 효과를 평가하고, SARIF 포맷 출력을 활용한 정적 분석 자동화 연동을 검토합니다."
   ],
   "references": [
     {
@@ -1063,33 +1614,34 @@
     {
       "title": "[PATCH v10 0/2] media: add Himax HM1246 image sensor",
       "url": "https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/"
+    },
+    {
+      "title": "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver",
+      "url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/"
+    },
+    {
+      "title": "Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/"
     }
   ],
   "explicitly_demoted_groups": [],
-  "hard_blocked_groups": [
-    {
-      "article_group_key": "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io",
-      "hard_block_reason": "deterministic demote dropped an unpublishable article",
-      "reason_code": "quality_hard_blocker"
-    }
-  ],
+  "hard_blocked_groups": [],
   "selected_group_count": 3,
-  "rendered_group_count": 2,
+  "rendered_group_count": 3,
   "explicitly_demoted_group_count": 0,
-  "hard_blocked_group_count": 1,
+  "hard_blocked_group_count": 0,
   "selected_representative_group_keys": [
-    "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io",
     "lore-series:20260619-hm1246-v10-d88e431a6c11@emfend.at",
+    "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io",
     "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
   ],
   "rendered_group_keys": [
     "lore-series:20260619-hm1246-v10-d88e431a6c11@emfend.at",
+    "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io",
     "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
   ],
   "explicitly_demoted_group_keys": [],
-  "hard_blocked_group_keys": [
-    "lore-series:20260619125439.55311-himanshu.bhavani@siliconsignals.io"
-  ],
+  "hard_blocked_group_keys": [],
   "publish_mode": "DEEP",
   "reference_articles": [
     {
