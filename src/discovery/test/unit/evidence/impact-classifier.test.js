@@ -1,14 +1,14 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
+const { FETCH_STATUSES } = require('../../../../shared/evidence/linked-evidence-types');
 const {
-  FETCH_STATUSES,
   IMPACT_TYPES,
   IMPACT_TYPE_VALUES,
   RECOMMENDED_ARTICLE_TYPES,
   classifyLinkedEvidenceImpact,
   defaultImpactClassification
-} = require('../../..');
+} = require('../../../../shared/evidence/impact-classifier');
 
 function evidence(overrides = {}) {
   return {

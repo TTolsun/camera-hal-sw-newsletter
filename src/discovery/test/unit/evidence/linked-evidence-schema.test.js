@@ -6,11 +6,13 @@ const {
   FETCH_STATUS_VALUES,
   LINKED_EVIDENCE_TYPES,
   MAX_LINKED_EVIDENCE_PER_CANDIDATE,
-  RAW_EXCERPT_MAX_LENGTH,
+  RAW_EXCERPT_MAX_LENGTH
+} = require('../../../../shared/evidence/linked-evidence-types');
+const {
   normalizeLinkedEvidence,
   normalizeLinkedEvidenceList,
   truncateRawExcerpt
-} = require('../../..');
+} = require('../../../../shared/evidence/linked-evidence-schema');
 
 test('normalizer preserves every valid fetch_status enum value', () => {
   for (const fetchStatus of FETCH_STATUS_VALUES) {

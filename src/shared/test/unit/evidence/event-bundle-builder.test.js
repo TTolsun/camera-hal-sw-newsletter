@@ -2,12 +2,14 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  FETCH_STATUSES,
+  LINKED_EVIDENCE_TYPES
+} = require('../../../../shared/evidence/linked-evidence-types');
+const {
   EVENT_BUNDLE_DEDUPE_REASONS,
   EVENT_TYPES,
-  FETCH_STATUSES,
-  LINKED_EVIDENCE_TYPES,
   buildEventBundles
-} = require('../../../../discovery');
+} = require('../../../../shared/evidence/event-bundle-builder');
 const { buildShortlistReport } = require('../../../../generator/select/newsroom-selection');
 const { candidate } = require('../../helpers/newsroom-builders');
 

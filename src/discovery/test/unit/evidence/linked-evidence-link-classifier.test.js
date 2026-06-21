@@ -5,7 +5,7 @@ const {
   EVIDENCE_ROLES,
   classifyOutgoingLink,
   classifyOutgoingLinks
-} = require('../../..');
+} = require('../../../../shared/evidence/linked-evidence-link-classifier');
 
 const androidPolicy = {
   enabled: true,

@@ -4,9 +4,11 @@ const test = require('node:test');
 const {
   FETCH_STATUSES,
   LINKED_EVIDENCE_TYPES,
-  RAW_EXCERPT_MAX_LENGTH,
+  RAW_EXCERPT_MAX_LENGTH
+} = require('../../../../shared/evidence/linked-evidence-types');
+const {
   resolveLinkedEvidence
-} = require('../../..');
+} = require('../../../../shared/evidence/linked-evidence-resolver');
 const { readTextFixture } = require('../../../../shared/test/helpers/fixture-loader');
 
 function fakeFetch(sequence) {
