@@ -18,8 +18,19 @@ function sectionLabel(section) {
   return section.headline || section.category || 'untitled article';
 }
 
+function cloneJson(value) {
+  if (value === undefined) return undefined;
+  return JSON.parse(JSON.stringify(value));
+}
+
+function fail(message) {
+  throw new Error(message);
+}
+
 module.exports = {
   numberOrDefault,
   stringOrEmpty,
-  sectionLabel
+  sectionLabel,
+  cloneJson,
+  fail
 };
