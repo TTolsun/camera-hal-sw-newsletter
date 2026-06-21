@@ -278,76 +278,100 @@ async function validationEvidence(candidate, options = {}) {
   };
 }
 
-async function analyzeImageCandidate(candidate = {}, section = {}, options = {}) {
+// Shared deterministic guards for an image candidate, up to (but not
+// including) the validation step. Returns { ok: false, result } with the
+// excluded analyzer result, or { ok: true, context } carrying the fields both
+// the live-validation and metadata-only analyzers need to score the candidate.
+function imageCandidateBaseEvidence(candidate, section) {
   const url = urlOrEmpty(candidate.url);
-  if (!url) return { valid: false, exclusion: exclusion('unsafe_url', candidate) };
-  if (!isHttpsUrl(url)) return { valid: false, exclusion: exclusion('non_https_url', candidate) };
+  if (!url) return { ok: false, result: { valid: false, exclusion: exclusion('unsafe_url', candidate) } };
+  if (!isHttpsUrl(url)) return { ok: false, result: { valid: false, exclusion: exclusion('non_https_url', candidate) } };
 
   const extraction = extractionEvidence({ ...candidate, url }, section);
   if (!extraction.ok) {
-    return {
-      valid: false,
-      exclusion: exclusion('missing_extraction_source', { ...candidate, url }, extraction)
-    };
+    return { ok: false, result: { valid: false, exclusion: exclusion('missing_extraction_source', { ...candidate, url }, extraction) } };
   }
 
   const contentType = candidateContentType(candidate);
   if (contentType && !IMAGE_CONTENT_TYPE_PATTERN.test(contentType)) {
-    return {
-      valid: false,
-      exclusion: exclusion(contentType.includes('html') ? 'html_response' : 'unsupported_content_type', { ...candidate, url })
-    };
+    return { ok: false, result: { valid: false, exclusion: exclusion(contentType.includes('html') ? 'html_response' : 'unsupported_content_type', { ...candidate, url }) } };
   }
   if (!contentType) {
-    return {
-      valid: false,
-      exclusion: exclusion('missing_candidate_metadata', { ...candidate, url })
-    };
+    return { ok: false, result: { valid: false, exclusion: exclusion('missing_candidate_metadata', { ...candidate, url }) } };
   }
 
   const { width, height } = candidateDimensions(candidate);
   if ((width && width < MIN_IMAGE_SIDE) || (height && height < MIN_IMAGE_SIDE)) {
-    return {
-      valid: false,
-      exclusion: exclusion('too_small', { ...candidate, url }, { width, height })
-    };
+    return { ok: false, result: { valid: false, exclusion: exclusion('too_small', { ...candidate, url }, { width, height }) } };
   }
 
   if (candidateUrlLooksTracking(url)) {
-    return {
-      valid: false,
-      exclusion: exclusion('generic_or_unrelated_image', { ...candidate, url })
-    };
+    return { ok: false, result: { valid: false, exclusion: exclusion('generic_or_unrelated_image', { ...candidate, url }) } };
   }
   if (candidateUrlLooksLikeLogo(url)) {
-    return {
-      valid: false,
-      exclusion: exclusion('logo_only', { ...candidate, url })
-    };
+    return { ok: false, result: { valid: false, exclusion: exclusion('logo_only', { ...candidate, url }) } };
   }
 
   const sourceKind = extraction.sourceKind;
   const isSvg = SVG_CONTENT_TYPE_PATTERN.test(contentType) || /\.svg(?:$|[?#])/i.test(url);
   if (isSvg && !['og', 'og:image', 'twitter', 'twitter:image', 'twitter:image:src'].includes(sourceKind)) {
-    return {
-      valid: false,
-      exclusion: exclusion('svg_rejected', { ...candidate, url })
-    };
+    return { ok: false, result: { valid: false, exclusion: exclusion('svg_rejected', { ...candidate, url }) } };
   }
 
   const attribution = candidateAttribution(candidate, section);
   const sourceUrl = extraction.sourceUrl;
   const licenseStatus = candidateLicenseStatus(candidate);
   if (!attribution || !sourceUrl || !licenseStatus) {
-    return {
-      valid: false,
-      exclusion: exclusion('missing_attribution', { ...candidate, url }, {
-        hasAttribution: Boolean(attribution),
-        hasSourceUrl: Boolean(sourceUrl),
-        hasLicenseStatus: Boolean(licenseStatus)
-      })
-    };
+    return { ok: false, result: { valid: false, exclusion: exclusion('missing_attribution', { ...candidate, url }, {
+      hasAttribution: Boolean(attribution),
+      hasSourceUrl: Boolean(sourceUrl),
+      hasLicenseStatus: Boolean(licenseStatus)
+    }) } };
   }
+
+  return { ok: true, context: { url, contentType, width, height, sourceKind, attribution, sourceUrl, licenseStatus } };
+}
+
+// Shared scoring + accepted-candidate shape. validationFields carries exactly
+// the validationStatus/validationSource/validationResult keys each analyzer
+// records, so the live and metadata paths keep their distinct field sets.
+function acceptedImageCandidate(candidate, context, validationFields) {
+  const { url, contentType, width, height, sourceKind, attribution, sourceUrl, licenseStatus } = context;
+  const rasterBonus = RASTER_CONTENT_TYPE_PATTERN.test(contentType) ? 30 : 0;
+  const sourceKindScore = {
+    og: 100,
+    'og:image': 100,
+    twitter: 90,
+    'twitter:image': 90,
+    'twitter:image:src': 90,
+    'rss-media': 80,
+    'rss-enclosure': 80,
+    'json-ld': 70,
+    'article-img': 40
+  }[sourceKind] || 10;
+  const area = width && height ? Math.min(width * height, 1000000) / 100000 : 0;
+  return {
+    valid: true,
+    candidate: {
+      ...candidate,
+      url,
+      sourceKind,
+      contentType,
+      attribution,
+      sourceUrl,
+      licenseStatus,
+      width,
+      height,
+      ...validationFields,
+      score: sourceKindScore + rasterBonus + area
+    }
+  };
+}
+
+async function analyzeImageCandidate(candidate = {}, section = {}, options = {}) {
+  const base = imageCandidateBaseEvidence(candidate, section);
+  if (!base.ok) return base.result;
+  const { url } = base.context;
 
   const validation = await validationEvidence({ ...candidate, url }, options);
   if (!validation.ok) {
@@ -361,110 +385,17 @@ async function analyzeImageCandidate(candidate = {}, section = {}, options = {})
     };
   }
 
-  const rasterBonus = RASTER_CONTENT_TYPE_PATTERN.test(contentType) ? 30 : 0;
-  const sourceKindScore = {
-    og: 100,
-    'og:image': 100,
-    twitter: 90,
-    'twitter:image': 90,
-    'twitter:image:src': 90,
-    'rss-media': 80,
-    'rss-enclosure': 80,
-    'json-ld': 70,
-    'article-img': 40
-  }[sourceKind] || 10;
-  const area = width && height ? Math.min(width * height, 1000000) / 100000 : 0;
-
-  return {
-    valid: true,
-    candidate: {
-      ...candidate,
-      url,
-      sourceKind,
-      contentType,
-      attribution,
-      sourceUrl,
-      licenseStatus,
-      width,
-      height,
-      validationStatus: validation.validationStatus,
-      validationSource: validation.validationSource,
-      validationResult: validation.raw,
-      score: sourceKindScore + rasterBonus + area
-    }
-  };
+  return acceptedImageCandidate(candidate, base.context, {
+    validationStatus: validation.validationStatus,
+    validationSource: validation.validationSource,
+    validationResult: validation.raw
+  });
 }
 
 function analyzeImageCandidateFromMetadata(candidate = {}, section = {}) {
-  const url = urlOrEmpty(candidate.url);
-  if (!url) return { valid: false, exclusion: exclusion('unsafe_url', candidate) };
-  if (!isHttpsUrl(url)) return { valid: false, exclusion: exclusion('non_https_url', candidate) };
-
-  const extraction = extractionEvidence({ ...candidate, url }, section);
-  if (!extraction.ok) {
-    return {
-      valid: false,
-      exclusion: exclusion('missing_extraction_source', { ...candidate, url }, extraction)
-    };
-  }
-
-  const contentType = candidateContentType(candidate);
-  if (contentType && !IMAGE_CONTENT_TYPE_PATTERN.test(contentType)) {
-    return {
-      valid: false,
-      exclusion: exclusion(contentType.includes('html') ? 'html_response' : 'unsupported_content_type', { ...candidate, url })
-    };
-  }
-  if (!contentType) {
-    return {
-      valid: false,
-      exclusion: exclusion('missing_candidate_metadata', { ...candidate, url })
-    };
-  }
-
-  const { width, height } = candidateDimensions(candidate);
-  if ((width && width < MIN_IMAGE_SIDE) || (height && height < MIN_IMAGE_SIDE)) {
-    return {
-      valid: false,
-      exclusion: exclusion('too_small', { ...candidate, url }, { width, height })
-    };
-  }
-
-  if (candidateUrlLooksTracking(url)) {
-    return {
-      valid: false,
-      exclusion: exclusion('generic_or_unrelated_image', { ...candidate, url })
-    };
-  }
-  if (candidateUrlLooksLikeLogo(url)) {
-    return {
-      valid: false,
-      exclusion: exclusion('logo_only', { ...candidate, url })
-    };
-  }
-
-  const sourceKind = extraction.sourceKind;
-  const isSvg = SVG_CONTENT_TYPE_PATTERN.test(contentType) || /\.svg(?:$|[?#])/i.test(url);
-  if (isSvg && !['og', 'og:image', 'twitter', 'twitter:image', 'twitter:image:src'].includes(sourceKind)) {
-    return {
-      valid: false,
-      exclusion: exclusion('svg_rejected', { ...candidate, url })
-    };
-  }
-
-  const attribution = candidateAttribution(candidate, section);
-  const sourceUrl = extraction.sourceUrl;
-  const licenseStatus = candidateLicenseStatus(candidate);
-  if (!attribution || !sourceUrl || !licenseStatus) {
-    return {
-      valid: false,
-      exclusion: exclusion('missing_attribution', { ...candidate, url }, {
-        hasAttribution: Boolean(attribution),
-        hasSourceUrl: Boolean(sourceUrl),
-        hasLicenseStatus: Boolean(licenseStatus)
-      })
-    };
-  }
+  const base = imageCandidateBaseEvidence(candidate, section);
+  if (!base.ok) return base.result;
+  const { url } = base.context;
 
   const validationStatus = String(candidate.validationStatus || candidate.validation_status || '').trim().toLowerCase();
   if (validationStatus !== 'ok') {
@@ -477,36 +408,10 @@ function analyzeImageCandidateFromMetadata(candidate = {}, section = {}) {
     };
   }
 
-  const rasterBonus = RASTER_CONTENT_TYPE_PATTERN.test(contentType) ? 30 : 0;
-  const sourceKindScore = {
-    og: 100,
-    'og:image': 100,
-    twitter: 90,
-    'twitter:image': 90,
-    'twitter:image:src': 90,
-    'rss-media': 80,
-    'rss-enclosure': 80,
-    'json-ld': 70,
-    'article-img': 40
-  }[sourceKind] || 10;
-  const area = width && height ? Math.min(width * height, 1000000) / 100000 : 0;
-  return {
-    valid: true,
-    candidate: {
-      ...candidate,
-      url,
-      sourceKind,
-      contentType,
-      attribution,
-      sourceUrl,
-      licenseStatus,
-      width,
-      height,
-      validationStatus: 'ok',
-      validationSource: 'candidate_metadata',
-      score: sourceKindScore + rasterBonus + area
-    }
-  };
+  return acceptedImageCandidate(candidate, base.context, {
+    validationStatus: 'ok',
+    validationSource: 'candidate_metadata'
+  });
 }
 
 function selectImageForSectionFromMetadata(section = {}, index = 0) {
