@@ -201,6 +201,8 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
   };
 }
 
+// #490: LLM이 병합한 weekly 기사를 기존 public-article 계약 검증기로 확인한 뒤에만 교체를 허용한다.
+// 검증 이슈나 오류가 있으면 기존 기사를 보존한다(fail closed).
 function validateMergedWeeklyArticle(mergedArticle) {
   try {
     const issues = validatePublicArticle(mergedArticle, 0, {});

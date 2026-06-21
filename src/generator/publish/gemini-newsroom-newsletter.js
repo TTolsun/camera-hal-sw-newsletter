@@ -40,7 +40,6 @@ const { resolveIssueArticleImages } = require('../render/article-image-resolver'
 const {
   COMPOSITION_MODES,
   buildShortlistReport,
-  normalizeUrl,
   normalizedUrlHash,
   reporterInputFromShortlist
 } = require('../select/newsroom-selection');
@@ -97,7 +96,6 @@ const {
 } = require('../select/stage-status-tracker');
 const {
   candidateGroupKey,
-  explicitDemotedGroups,
   groupCoverageSummary
 } = require('../../shared/common/article-groups');
 const {
@@ -138,8 +136,7 @@ const {
   failureClassFromError
 } = require('./generation-failure-classification');
 const {
-  mergePublicArticleFromLlm,
-  validatePublicArticle
+  mergePublicArticleFromLlm
 } = require('../reporter/public-article-contract');
 const {
   buildNewsletterQualityReport,
@@ -202,7 +199,6 @@ const {
 } = require('../reporter/newsletter-prompts');
 const {
   numberOrDefault,
-  stringOrEmpty,
   sectionLabel
 } = require('./orchestrator-shared-helpers');
 const {
@@ -1879,8 +1875,6 @@ function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = genera
   return filePath;
 }
 
-// #490: LLM이 병합한 weekly 기사를 기존 public-article 계약 검증기로 확인한 뒤에만 교체를 허용한다.
-// 검증 이슈나 오류가 있으면 기존 기사를 보존한다(fail closed).
 async function main() {
   const date = runtimeConfig.newsletterDate || kstDate();
   generationRunState.date = date;
