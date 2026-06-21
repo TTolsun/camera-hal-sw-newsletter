@@ -273,6 +273,11 @@ const {
 const {
   removeNewsletterIndexEntry
 } = require('./public-state-reconciliation');
+const {
+  maybeHandleSelectionShortage,
+  warnSelectionUnderfill,
+  maybeFailOnSelectionErrors
+} = require('./orchestrator-selection-preflight');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -1926,120 +1931,17 @@ async function main() {
     seedEvidencePack
   });
   writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
-  if (shortlistReport.candidate_shortage_reviewable === true) {
-    const failureReason = ensureArray(shortlistReport.shortage_reason_codes).join('; ') ||
-      ensureArray(shortlistReport.selection_errors).join('; ') ||
-      'Not enough publishable candidates before LLM generation.';
-    const generationStatus = buildGenerationStatus({
-      date,
-      status: 'UNDERFILLED_NEEDS_FIX',
-      extra: {
-        ...selectionStatusExtra(shortlistReport),
-        failure_kind: 'candidate_shortage_reviewable',
-        failure_stage: 'candidate_pool_preflight',
-        failure_reason: failureReason,
-        public_output_expected: false,
-        publish_ready: false,
-        selection_publish_ready: false,
-        final_publish_ready: false,
-        publish_gate_passed: false,
-        review_gate_passed: true,
-        composition_mode: COMPOSITION_MODES.NEEDS_FIX,
-        editor_review_required: true
-      }
-    });
-    writeGenerationStatus(generationStatus);
-    writeDateReviewPackage({
-      date,
-      files: [
-        newsroomRelPath(date, 'shortlisted-candidates.json'),
-        newsroomRelPath(date, 'selection-diagnostics.md'),
-        newsroomRelPath(date, 'selection-report.json'),
-        newsroomRelPath(date, 'selection-report.md'),
-        newsroomRelPath(date, 'article-capsules.json'),
-        newsroomRelPath(date, 'generation-status.json')
-      ],
-      validateText: 'candidate_shortage_reviewable: LLM editor generation was skipped because candidate pool preflight is review-only.',
-      runContext: {
-        status: generationStatus.status,
-        seedUsed: generationStatus.seed_used ?? generationStatus.candidate_input?.seed_used,
-        publicOutputExpected: false
-      }
-    });
-    console.warn(`Candidate pool preflight is review-only: ${failureReason}`);
-    return;
-  }
-  if (shortlistReport.selection_warnings.length > 0) {
-    writeGenerationStatus(buildGenerationStatus({
-      date,
-      status: 'UNDERFILLED_NEEDS_FIX',
-      extra: {
-        failure_stage: 'deterministic selection',
-        failure_reason: shortlistReport.selection_warnings.join('; '),
-        ...selectionStatusExtra(shortlistReport)
-      }
-    }));
-    writeRecoveryPrompt(newsroomDir, {
-      date,
-      stage: 'deterministic selection',
-      reason: shortlistReport.selection_warnings.join('; '),
-      shortlistReport,
-      selectedInputs: shortlistReport.selected_articles
-    });
-    console.warn(`Deterministic selection is underfilled: ${shortlistReport.selection_warnings.join('; ')}`);
-  }
-  if (shortlistReport.selection_errors.length > 0) {
-    const failureReason = shortlistReport.selection_errors.join('; ');
-    const generationStatus = buildGenerationStatus({
-      date,
-      status: 'FAILED',
-      failureStage: 'deterministic selection',
-      failureReason,
-      extra: {
-        failure_stage: 'deterministic selection',
-        failure_reason: failureReason,
-        public_output_expected: false,
-        publish_ready: false,
-        selection_publish_ready: false,
-        final_publish_ready: false,
-        publish_gate_passed: false,
-        review_gate_passed: false,
-        composition_mode: COMPOSITION_MODES.NEEDS_FIX,
-        editor_review_required: true,
-        ...selectionStatusExtra(shortlistReport)
-      }
-    });
-    writeRecoveryPrompt(newsroomDir, {
-      date,
-      stage: 'deterministic selection',
-      reason: failureReason,
-      shortlistReport,
-      selectedInputs: shortlistReport.selected_articles
-    });
-    writeGenerationStatus(generationStatus);
-    writeDateReviewPackage({
-      date,
-      files: [
-        newsroomRelPath(date, 'shortlisted-candidates.json'),
-        newsroomRelPath(date, 'selection-diagnostics.md'),
-        newsroomRelPath(date, 'selection-report.json'),
-        newsroomRelPath(date, 'selection-report.md'),
-        newsroomRelPath(date, 'article-capsules.json'),
-        newsroomRelPath(date, 'recovery-prompt.md'),
-        newsroomRelPath(date, 'generation-status.json'),
-        newsroomRelPath(date, '00-review-guide.md'),
-        newsroomRelPath(date, 'release-qa-report.md'),
-        newsroomRelPath(date, 'artifact-manifest.json')
-      ],
-      validateText: `deterministic selection failed: ${failureReason}`,
-      runContext: {
-        status: generationStatus.status,
-        seedUsed: generationStatus.seed_used ?? generationStatus.candidate_input?.seed_used,
-        publicOutputExpected: false
-      }
-    });
-    fail(`[deterministic selection] ${failureReason}`);
-  }
+  const selectionPreflightIo = {
+    buildGenerationStatus,
+    writeGenerationStatus,
+    writeDateReviewPackage,
+    writeRecoveryPrompt,
+    selectionStatusExtra,
+    fail
+  };
+  if (maybeHandleSelectionShortage({ date, shortlistReport, io: selectionPreflightIo })) return;
+  warnSelectionUnderfill({ date, newsroomDir, shortlistReport, io: selectionPreflightIo });
+  maybeFailOnSelectionErrors({ date, newsroomDir, shortlistReport, io: selectionPreflightIo });
 
   let backgroundContextReport = buildStaticBackgroundContextReport(date, articleCapsuleReport);
   writeJson(path.join(newsroomDir, 'background-context.json'), backgroundContextReport);
