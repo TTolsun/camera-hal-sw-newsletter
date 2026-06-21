@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-21",
+  "proposals": [
+    {
+      "proposal_id": "android-media3-release-notes-202606",
+      "topic_gap": "Android Media3 release notes for June 2026, focusing on camera-related features, A/V sync improvements, or new camera output capabilities.",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3 release notes camera",
+        "Media3 A/V sync",
+        "Media3 recording features"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3"
+      ],
+      "expected_evidence": [
+        "Media3 release notes",
+        "camera output",
+        "A/V sync",
+        "recording",
+        "preview"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-camera-updates-202606",
+      "topic_gap": "Recent updates or announcements on the Android Developers Blog related to camera functionalities, CameraX, or camera HAL improvements in June 2026.",
+      "source_family": "android-developers-blog-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android camera blog June 2026",
+        "CameraX updates 2026",
+        "Android camera HAL news"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/search?q=CameraX"
+      ],
+      "expected_evidence": [
+        "CameraX updates",
+        "Camera2 API changes",
+        "camera HAL improvements",
+        "new camera features"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "aosp-camera-hal-updates-202606",
+      "topic_gap": "Significant changes or new features in the Android Camera HAL or related AOSP documentation released in June 2026.",
+      "source_family": "aosp-camera-documentation",
+      "allowed_domains": [],
+      "search_keywords": [
+        "AOSP camera HAL June 2026",
+        "Android camera documentation updates",
+        "camera provider HAL changes"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/core/camera"
+      ],
+      "expected_evidence": [
+        "Camera HAL changes",
+        "new camera features",
+        "stream configuration",
+        "request/result metadata"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-kernel-patches-202606",
+      "topic_gap": "Recent patches or discussions on the linux-media mailing list in June 2026 related to image sensor drivers, ISP improvements, or V4L2 framework updates impacting camera pipelines.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux-media patch June 2026",
+        "V4L2 driver updates",
+        "ISP kernel changes"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/"
+      ],
+      "expected_evidence": [
+        "image sensor driver updates",
+        "ISP driver changes",
+        "V4L2 framework enhancements",
+        "media controller updates",
+        "camera pipeline improvements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "kernel-org-linux-media-updates-202606",
+      "topic_gap": "New kernel versions or significant changes in the drivers/media subsystem in June 2026, particularly those affecting camera hardware support.",
+      "source_family": "kernel-org-releases",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Linux kernel media June 2026",
+        "V4L2 kernel changes",
+        "drivers/media updates"
+      ],
+      "candidate_urls": [
+        "https://www.kernel.org/"
+      ],
+      "expected_evidence": [
+        "Linux kernel release notes",
+        "drivers/media changes",
+        "V4L2 driver updates",
+        "camera hardware support"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-productivity-updates-202606",
+      "topic_gap": "Developer productivity updates from the Android Developers Blog in June 2026, potentially including tools or techniques relevant to camera app development.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android developer productivity June 2026",
+        "Android tools updates"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
+      ],
+      "expected_evidence": [
+        "developer productivity tools",
+        "new development techniques",
+        "camera app development"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "google-io-2026-media-pipeline",
+      "topic_gap": "Details or summaries from Google I/O '26 related to the media pipeline and building premium Android experiences, which may include camera output or processing.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Google I/O 2026 media pipeline",
+        "Android premium experiences camera"
+      ],
+      "candidate_urls": [
+        "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY"
+      ],
+      "expected_evidence": [
+        "media pipeline",
+        "Android experiences",
+        "camera output",
+        "premium features"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "aosp-site-updates-camera-its-202606",
+      "topic_gap": "Updates to the AOSP site in June 2026 concerning camera testing, specifically Camera ITS (Image Test Suite) and automation, which could impact camera HAL development.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "AOSP Camera ITS updates June 2026",
+        "Android camera testing automation"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Camera ITS",
+        "automation testing",
+        "camera HAL testing",
+        "compatibility"
+      ],
+      "risk_notes": []
+    }
+  ]
+}

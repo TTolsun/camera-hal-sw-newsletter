@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-06-21",
+  "validations": [
+    {
+      "proposal_id": "android-media3-release-notes-202606",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "androidx-media3-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-media3-release",
+      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "android-developers-blog-camera-updates-202606",
+      "candidate_url": "https://android-developers.googleblog.com/search?q=CameraX",
+      "normalized_url": "https://android-developers.googleblog.com/search?q=CameraX",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog-camera"
+    },
+    {
+      "proposal_id": "aosp-camera-hal-updates-202606",
+      "candidate_url": "https://source.android.com/docs/core/camera",
+      "normalized_url": "https://source.android.com/docs/core/camera",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "aosp-camera-documentation"
+    },
+    {
+      "proposal_id": "linux-media-kernel-patches-202606",
+      "candidate_url": "https://lore.kernel.org/linux-media/",
+      "normalized_url": "https://lore.kernel.org/linux-media/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "kernel-org-linux-media-updates-202606",
+      "candidate_url": "https://www.kernel.org/",
+      "normalized_url": "https://www.kernel.org/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "kernel-org-releases"
+    },
+    {
+      "proposal_id": "android-developers-blog-productivity-updates-202606",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "google-io-2026-media-pipeline",
+      "candidate_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "normalized_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "accepted": false,
+      "rejected_reason": "domain_not_allowed",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "aosp-site-updates-camera-its-202606",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    }
+  ],
+  "counts": {
+    "discovered_not_extractable": 1,
+    "accepted": 6,
+    "domain_not_allowed": 1
+  }
+}
