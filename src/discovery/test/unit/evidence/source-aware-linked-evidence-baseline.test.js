@@ -2,10 +2,12 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
-  LINKED_EVIDENCE_TYPES,
+  LINKED_EVIDENCE_TYPES
+} = require('../../../../shared/evidence/linked-evidence-types');
+const {
   extractLinkedEvidenceFromCandidate,
   extractLinkedEvidenceFromText
-} = require('../../..');
+} = require('../../../../shared/evidence/linked-evidence-extractor');
 const { readTextFixture } = require('../../../../shared/test/helpers/fixture-loader');
 
 function evidenceByUrl(items) {

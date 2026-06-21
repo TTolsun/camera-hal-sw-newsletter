@@ -552,20 +552,15 @@ function sourceIdentitySlug(candidate = {}) {
   return sourceIdentityHaystack(candidate).replace(/[^a-z0-9]+/g, '-');
 }
 
-function officialCameraSource(candidate = {}) {
-  const parts = urlParts(candidateUrl(candidate));
-  const identity = sourceIdentitySlug(candidate);
+function officialCameraReleaseUrl(parts) {
   if (parts.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/camera\b/.test(parts.pathname)) return true;
   if (parts.hostname === 'source.android.com' && /\bcamera\b/.test(parts.pathname)) return true;
-  return /\b(?:android-developers-latest-updates|camerax-release-notes|aosp-site-updates)\b/.test(identity);
+  return false;
 }
 
-function parserBackedCameraSource(candidate = {}) {
-  const parts = urlParts(candidateUrl(candidate));
-  const identity = sourceIdentitySlug(candidate);
-  if (parts.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/camera\b/.test(parts.pathname)) return true;
-  if (parts.hostname === 'source.android.com' && /\bcamera\b/.test(parts.pathname)) return true;
-  return /\b(?:android-developers-latest-updates|camerax-release-notes|aosp-site-updates)\b/.test(identity);
+function officialCameraSource(candidate = {}) {
+  if (officialCameraReleaseUrl(urlParts(candidateUrl(candidate)))) return true;
+  return /\b(?:android-developers-latest-updates|camerax-release-notes|aosp-site-updates)\b/.test(sourceIdentitySlug(candidate));
 }
 
 function parserGapEligible(candidate = {}) {
@@ -577,10 +572,7 @@ function parserGapEligible(candidate = {}) {
 }
 
 function officialKnownParserBackedUrl(candidate = {}) {
-  const parts = urlParts(candidateUrl(candidate));
-  if (parts.hostname === 'developer.android.com' && /\/jetpack\/androidx\/releases\/camera\b/.test(parts.pathname)) return true;
-  if (parts.hostname === 'source.android.com' && /\bcamera\b/.test(parts.pathname)) return true;
-  return false;
+  return officialCameraReleaseUrl(urlParts(candidateUrl(candidate)));
 }
 
 function sourceValidationStatusAllowsParserGap(candidate = {}) {
@@ -633,7 +625,6 @@ function parserGapReason(candidate = {}) {
 
 function parserGapCandidate(candidate = {}) {
   return officialCameraSource(candidate) &&
-    parserBackedCameraSource(candidate) &&
     parserGapEligible(candidate) &&
     sourceValidationAllowsParserGap(candidate) &&
     Boolean(parserGapReason(candidate));

@@ -6,11 +6,13 @@ const test = require('node:test');
 
 const {
   FETCH_STATUSES,
-  IMPACT_TYPES,
-  RAW_EXCERPT_MAX_LENGTH,
+  RAW_EXCERPT_MAX_LENGTH
+} = require('../../../../shared/evidence/linked-evidence-types');
+const { IMPACT_TYPES } = require('../../../../shared/evidence/impact-classifier');
+const {
   analyzeLinkedEvidenceForCandidates,
   writeLinkedEvidenceDiagnosticsArtifacts
-} = require('../../../../discovery');
+} = require('../../../../shared/evidence/linked-evidence-diagnostics');
 const { buildShortlistReport } = require('../../../../generator/select/newsroom-selection');
 const { candidate } = require('../../helpers/newsroom-builders');
 const { readTextFixture } = require('../../helpers/fixture-loader');

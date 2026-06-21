@@ -1,4 +1,16 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
+const {
+  text,
+  objectValue,
+  lower,
+  sourceObject,
+  finalSelectionEligibility,
+  hasDatedEvidence,
+  isEligibleCandidate,
+  cameraRelevantRawSignal,
+  markdownEscape,
+  markdownTable
+} = require('./diagnostics-helpers');
 const fs = require('fs');
 const path = require('path');
 
@@ -69,26 +81,12 @@ const PARSER_REPAIR_RECOMMENDATIONS = new Set([
   'KEEP_AND_FIX_PARSER'
 ]);
 
-function objectValue(value) {
-  return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
-}
-
 function hasObjectEvidence(value) {
   return value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length > 0;
 }
 
 function availabilityFlag(value, fallback) {
   return typeof value === 'boolean' ? value : fallback;
-}
-
-function text(value) {
-  if (value === null || value === undefined) return '';
-  if (typeof value === 'object') return '';
-  return String(value).trim();
-}
-
-function lower(value) {
-  return text(value).toLowerCase();
 }
 
 function firstText(...values) {
@@ -162,10 +160,6 @@ function candidateUrl(candidate = {}) {
   );
 }
 
-function sourceObject(candidate = {}) {
-  return objectValue(candidate.source);
-}
-
 function sourceIdForCandidate(candidate = {}) {
   const nested = sourceObject(candidate);
   return firstText(
@@ -190,25 +184,6 @@ function sourceNameForCandidate(candidate = {}) {
     candidate.sourceId,
     'Unknown source'
   );
-}
-
-function finalSelectionEligibility(candidate = {}) {
-  return lower(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
-}
-
-function hasDatedEvidence(candidate = {}) {
-  if (candidate.hasDatedEvidence === false) return false;
-  if (candidate.has_dated_evidence === false) return false;
-  return true;
-}
-
-function isEligibleCandidate(candidate = {}) {
-  const eligibility = finalSelectionEligibility(candidate);
-  return candidate.main_eligible !== false &&
-    candidate.source_gap_risk !== true &&
-    candidate.reference_only !== true &&
-    hasDatedEvidence(candidate) &&
-    ['main', 'short'].includes(eligibility);
 }
 
 function relevanceBucket(candidate = {}) {
@@ -236,23 +211,6 @@ function isFallbackCompositionMode(value) {
     'fallback_only',
     'fallback_composition'
   ].includes(normalizeCompositionMode(value));
-}
-
-function cameraRelevantRawSignal(candidate = {}) {
-  const haystack = [
-    candidate.title,
-    candidate.summary,
-    candidate.description,
-    candidate.category,
-    candidate.relevance_bucket,
-    candidate.source_name,
-    candidate.api_or_component,
-    candidate.version_or_release,
-    candidate.behavior_change,
-    candidate.source_extraction,
-    candidate.derived_editorial_hints
-  ].map(value => typeof value === 'object' ? JSON.stringify(value) : text(value)).join(' ');
-  return /\b(?:camera|camerax|camera2|androidx\.camera|hal|stream|buffer|metadata|image\s+pipeline|isp|v4l2|libcamera)\b/i.test(haystack);
 }
 
 function candidateBlockers(candidate = {}) {
@@ -1025,22 +983,6 @@ function loadSourceQualityDiagnosisInputs(root, date) {
     }[key]] = Boolean(out[key]);
   }
   return out;
-}
-
-function markdownEscape(value) {
-  return text(value).replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
-}
-
-function markdownTable(headers, rows) {
-  if (rows.length === 0) return '_없음_\n';
-  const lines = [
-    `| ${headers.join(' | ')} |`,
-    `| ${headers.map(() => '---').join(' | ')} |`
-  ];
-  for (const row of rows) {
-    lines.push(`| ${row.map(markdownEscape).join(' | ')} |`);
-  }
-  return `${lines.join('\n')}\n`;
 }
 
 function statusText(value) {

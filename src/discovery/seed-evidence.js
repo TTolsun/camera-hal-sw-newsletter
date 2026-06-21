@@ -29,7 +29,7 @@ const {
 const {
   classifyOutgoingLinks,
   EVIDENCE_ROLES
-} = require('.');
+} = require('../shared/evidence/linked-evidence-link-classifier');
 const {
   extractOutgoingLinksFromHtml
 } = require('../shared/collect/outgoing-links');
