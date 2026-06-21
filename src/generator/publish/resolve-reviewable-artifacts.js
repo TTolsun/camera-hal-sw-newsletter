@@ -18,6 +18,11 @@ const {
   publicNewsletterStructureStatus,
   requiredPublicFiles
 } = require('./public-structure');
+const {
+  PUBLICATION_MODES,
+  HOMEPAGE_VISIBILITY,
+  FALLBACK_HOMEPAGE_BADGE
+} = require('../../shared/common/publication-mode');
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const STATUS_FAILED_RAW_ARTIFACT_VALIDATION = 'FAILED_RAW_ARTIFACT_VALIDATION';
@@ -373,27 +378,27 @@ function resolveReviewableArtifacts(options = {}) {
   const cameraAnchorCount = numberOrNull(status.camera_anchor_count);
   const publicationMode = status.publication_mode ||
     (diagnosticsOnly
-      ? 'diagnostics_only'
+      ? PUBLICATION_MODES.DIAGNOSTICS_ONLY
       : fallbackPublicReady
-        ? 'fallback_public'
+        ? PUBLICATION_MODES.FALLBACK_PUBLIC
         : hasAiPublishReady
-          ? 'normal_public'
-          : 'review_only');
+          ? PUBLICATION_MODES.NORMAL_PUBLIC
+          : PUBLICATION_MODES.REVIEW_ONLY);
   const homepageVisibility = status.homepage_visibility ||
     (diagnosticsOnly
-      ? 'hidden'
-      : publicationMode === 'fallback_public'
-        ? 'visible_with_fallback_badge'
+      ? HOMEPAGE_VISIBILITY.HIDDEN
+      : publicationMode === PUBLICATION_MODES.FALLBACK_PUBLIC
+        ? HOMEPAGE_VISIBILITY.VISIBLE_WITH_FALLBACK_BADGE
         : homepageVisibleAfterMerge
-          ? 'normal'
-          : 'hidden');
+          ? HOMEPAGE_VISIBILITY.NORMAL
+          : HOMEPAGE_VISIBILITY.HIDDEN);
   const normalPublicReady = isTrue(status.normal_public_ready) || (hasAiPublishReady && publicNewsletterReady);
   const automaticPublishReady = isTrue(status.automatic_publish_ready) || normalPublicReady;
   const publicArtifactReady = isTrue(status.public_artifact_ready) || publicNewsletterReady;
-  const homepageBadge = status.homepage_badge || (publicationMode === 'fallback_public' ? 'Tooling Watch Edition' : '');
+  const homepageBadge = status.homepage_badge || (publicationMode === PUBLICATION_MODES.FALLBACK_PUBLIC ? FALLBACK_HOMEPAGE_BADGE : '');
   const publicationContractErrors = [];
-  if (publicationMode === 'fallback_public') {
-    if (homepageVisibility !== 'visible_with_fallback_badge') {
+  if (publicationMode === PUBLICATION_MODES.FALLBACK_PUBLIC) {
+    if (homepageVisibility !== HOMEPAGE_VISIBILITY.VISIBLE_WITH_FALLBACK_BADGE) {
       publicationContractErrors.push('fallback_public requires homepage_visibility=visible_with_fallback_badge');
     }
     if (fallbackOnly !== true) {
@@ -408,8 +413,8 @@ function resolveReviewableArtifacts(options = {}) {
   }
   if (
     cameraAnchorCount === 0 &&
-    homepageVisibility !== 'hidden' &&
-    publicationMode !== 'fallback_public'
+    homepageVisibility !== HOMEPAGE_VISIBILITY.HIDDEN &&
+    publicationMode !== PUBLICATION_MODES.FALLBACK_PUBLIC
   ) {
     publicationContractErrors.push('homepage-visible camera_anchor_count=0 requires publication_mode=fallback_public');
   }
