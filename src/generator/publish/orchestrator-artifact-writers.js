@@ -10,6 +10,12 @@ const { toEditorDraftArtifact } = require('../../shared/domain/newsletter-domain
 const { buildMarkdown, buildFactCheckMarkdown } = require('../render/newsletter-renderer');
 const { buildQualityReportMarkdown } = require('../quality/newsletter-quality');
 
+const root = process.cwd();
+const { ensureArray } = require('../../shared/common/value-coercion');
+const { newsroomDir: artifactNewsroomDir } = require('../../shared/common/artifact-paths');
+const { buildCostReport, buildCostReportMarkdown, getLlmCostCalls } = require('../../shared/llm/llm-client');
+const { buildSummaryCacheReport, buildSummaryCacheReportMarkdown } = require('../reporter/news-summary-cache');
+
 const runtimeConfig = readRuntimeConfig(process.env);
 
 function editorDraftArtifact(editor, date, options = {}) {
@@ -68,9 +74,91 @@ function writeReporterArtifactsForAttempt(newsroomDir, reporter, attempt = null)
   }
 }
 
+function writeNewsletterDate(date, rootDir = root) {
+  const tmpDir = path.join(rootDir, '.tmp');
+  fs.mkdirSync(tmpDir, { recursive: true });
+  fs.writeFileSync(path.join(tmpDir, 'newsletter-date.txt'), date, 'utf8');
+}
+
+function writeGenerationStatus(value, rootDir = root) {
+  const tmpDir = path.join(rootDir, '.tmp');
+  fs.mkdirSync(tmpDir, { recursive: true });
+  const content = `${JSON.stringify(value, null, 2)}\n`;
+  fs.writeFileSync(path.join(tmpDir, 'newsletter-generation-status.json'), content, 'utf8');
+  if (value?.date) {
+    const targetNewsroomDir = artifactNewsroomDir(rootDir, value.date);
+    if (fs.existsSync(targetNewsroomDir)) {
+      fs.writeFileSync(path.join(targetNewsroomDir, 'generation-status.json'), content, 'utf8');
+    }
+  }
+}
+
+function writeCostReport(date, rootDir = root) {
+  const report = buildCostReport({
+    date,
+    calls: getLlmCostCalls(),
+    warnCostUsd: runtimeConfig.newsroomWarnCostUsd,
+    maxCostUsd: runtimeConfig.newsroomMaxCostUsd
+  });
+  const tmpDir = path.join(rootDir, '.tmp');
+  fs.mkdirSync(tmpDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(tmpDir, 'newsroom-cost-report.json'),
+    `${JSON.stringify(report, null, 2)}\n`,
+    'utf8'
+  );
+
+  const targetNewsroomDir = artifactNewsroomDir(rootDir, date);
+  if (fs.existsSync(targetNewsroomDir)) {
+    fs.writeFileSync(
+      path.join(targetNewsroomDir, 'cost-report.md'),
+      buildCostReportMarkdown(report),
+      'utf8'
+    );
+  }
+
+  for (const warning of ensureArray(report.warnings)) {
+    console.warn(`[cost] ${warning}`);
+  }
+  console.log(`[cost] Estimated LLM API cost: ${Number(report.totals.estimated_cost_usd || 0).toFixed(6)} USD across ${report.totals.request_count || 0} request(s).`);
+  return report;
+}
+
+function writeSummaryCacheReport(date, diagnostics) {
+  const report = buildSummaryCacheReport(date, diagnostics);
+  const tmpDir = path.join(root, '.tmp');
+  fs.mkdirSync(tmpDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(tmpDir, 'summary-cache-report.json'),
+    `${JSON.stringify(report, null, 2)}\n`,
+    'utf8'
+  );
+
+  const targetNewsroomDir = artifactNewsroomDir(root, date);
+  if (fs.existsSync(targetNewsroomDir)) {
+    fs.writeFileSync(
+      path.join(targetNewsroomDir, 'summary-cache-report.json'),
+      `${JSON.stringify(report, null, 2)}\n`,
+      'utf8'
+    );
+    fs.writeFileSync(
+      path.join(targetNewsroomDir, 'summary-cache-report.md'),
+      buildSummaryCacheReportMarkdown(report),
+      'utf8'
+    );
+  }
+
+  console.log(`[cache] Summary cache hits: ${report.totals.hit_count}/${report.totals.candidate_count}; misses: ${report.totals.miss_count}.`);
+  return report;
+}
+
 module.exports = {
   editorDraftArtifact,
   writeEditorDraftJson,
   writeCanonicalReviewArtifacts,
-  writeReporterArtifactsForAttempt
+  writeReporterArtifactsForAttempt,
+  writeNewsletterDate,
+  writeGenerationStatus,
+  writeCostReport,
+  writeSummaryCacheReport
 };
