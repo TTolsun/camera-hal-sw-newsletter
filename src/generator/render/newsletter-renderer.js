@@ -1,6 +1,11 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { loreThreadUrl } = require('../../shared/common/article-groups');
 const {
+  PUBLICATION_MODES,
+  FALLBACK_TAGS,
+  fallbackEditionNoticeLines
+} = require('../../shared/common/publication-mode');
+const {
   renderCandidateSelectionDiagnostics
 } = require('../select/selection-diagnostics');
 const {
@@ -167,13 +172,13 @@ function articlePerspectiveHeading(issue, section) {
 
 function issueTags(issue) {
   const tags = ensureArray(issue.tags).length > 0 ? issue.tags : ['Camera HAL', 'Android'];
-  if (issue?.publication_mode !== 'fallback_public' && issue?.fallback_only !== true) return tags;
+  if (issue?.publication_mode !== PUBLICATION_MODES.FALLBACK_PUBLIC && issue?.fallback_only !== true) return tags;
   const cameraAnchorCount = issueCameraAnchorCount(issue);
   const cleaned = tags
     .map(String)
     .filter(Boolean)
     .filter(tag => !(cameraAnchorCount === 0 && String(tag).trim().toLowerCase() === 'camera hal'));
-  return [...new Set(['Tooling Watch Edition', 'Tooling Watch', ...cleaned])];
+  return [...new Set([...FALLBACK_TAGS, ...cleaned])];
 }
 
 function reviewPublicationNoticeLines() {
@@ -184,18 +189,14 @@ function reviewPublicationNoticeLines() {
 }
 
 function publicationNoticeLines(issue) {
-  const fallbackNotice = issue?.publication_mode === 'fallback_public' || issue?.fallback_only === true;
+  const fallbackNotice = issue?.publication_mode === PUBLICATION_MODES.FALLBACK_PUBLIC || issue?.fallback_only === true;
   if (fallbackNotice) {
     if (Array.isArray(issue.publication_notice) && issue.publication_notice.length > 0) {
       return issue.publication_notice.map(String).filter(Boolean);
     }
-    return [
-      'Tooling Watch Edition',
-      '이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 Android native tooling / build/test/debug workflow 중심의 참고 issue로 발행되었습니다.',
-      'Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다.'
-    ];
+    return fallbackEditionNoticeLines();
   }
-  if (issue?.review_publication_ready === true || issue?.publication_mode === 'review_only') {
+  if (issue?.review_publication_ready === true || issue?.publication_mode === PUBLICATION_MODES.REVIEW_ONLY) {
     return reviewPublicationNoticeLines();
   }
   return [];
