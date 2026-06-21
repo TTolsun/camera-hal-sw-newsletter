@@ -44,6 +44,9 @@
     "fallbackSelectionDays": 21,
     "referenceContextDays": 35
   },
+  "selectionScoringPolicy": {
+    "mainArticleScoreThreshold": 42
+  },
   "catchUpPolicy": {
     "enabled": true,
     "maxCatchUpArticles": 2,

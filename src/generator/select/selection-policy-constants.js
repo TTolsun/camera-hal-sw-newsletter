@@ -5,7 +5,8 @@ const {
 } = require('../../shared/domain/aosp-camera-scope');
 const {
   articlePolicy,
-  getPublishReadyCompositionPolicy
+  getPublishReadyCompositionPolicy,
+  selectionScoringPolicy
 } = require('../../shared/common/newsletter-policy');
 
 const SHORTLIST_CAP = 12;
@@ -24,7 +25,7 @@ const DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS = Object.freeze([
   BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE
 ]);
 
-const MAIN_ARTICLE_SCORE_THRESHOLD = 42;
+const MAIN_ARTICLE_SCORE_THRESHOLD = selectionScoringPolicy.mainArticleScoreThreshold;
 const MIN_CAMERA_HAL_DIRECTNESS = 2;
 const MIN_SCOPE_RELEVANCE = 2;
 const LINKED_EVIDENCE_RUNTIME_BONUS = 2;
