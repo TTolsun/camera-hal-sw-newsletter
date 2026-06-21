@@ -86,7 +86,6 @@ const {
   writeCacheRecord
 } = require('../reporter/news-summary-cache');
 const {
-  isFinalSelected,
   normalizeReporterReport,
   normalizeShortlistReport,
   renderCandidateSelectionDiagnostics,
@@ -245,10 +244,7 @@ const {
   booleanFromCandidate,
   imageCandidatesForReporterCandidate,
   collectedCandidateFor,
-  reporterCandidateRejectionReason,
   isReserveCandidate,
-  isMainSupplementBucket,
-  candidatePriority,
   validateReporter,
   enforceDeterministicReporterSelection,
   selectedReporterCapsules,
@@ -1718,53 +1714,10 @@ function pruneResolvedFallbackImageFalsePositives(factCheck, editor) {
   return result.factCheck;
 }
 
-function availableCompletionCandidates(reporter, currentSections, excludedSections = [], rejected = [], options = {}) {
-  const allCandidates = ensureArray(reporter?.candidates).filter(candidate =>
-    isFinalSelected(candidate) || (options.allowReserve === true && isReserveCandidate(candidate))
-  );
-  const hasStrongerReserve = allCandidates.some(candidate =>
-    isReserveCandidate(candidate) &&
-    isMainSupplementBucket(candidate) &&
-    !reporterCandidateRejectionReason(candidate) &&
-    !candidateDuplicateReason(candidate, currentSections, 'locked') &&
-    !candidateDuplicateReason(candidate, excludedSections, 'demoted')
-  );
-  const accepted = [];
-  for (const candidate of allCandidates) {
-    let reason = '';
-    const eligibilityReason = reporterCandidateRejectionReason(candidate);
-    if (eligibilityReason) {
-      reason = /source_gap_risk=true|watch page|missing dated evidence|evidence_score=/i.test(eligibilityReason)
-        ? 'source_gap_candidate'
-        : eligibilityReason;
-    } else if (!isMainSupplementBucket(candidate)) {
-      reason = hasStrongerReserve ? 'weaker_priority_than_available_reserve' : 'ineligible_bucket';
-    } else {
-      reason =
-        candidateDuplicateReason(candidate, currentSections, 'locked') ||
-        candidateDuplicateReason(candidate, excludedSections, 'demoted');
-    }
-    if (reason) {
-      rejected.push(retryRejectionRecord(candidate, reason));
-      continue;
-    }
-    accepted.push(candidate);
-  }
-  return accepted.sort((a, b) =>
-    candidatePriority(a) - candidatePriority(b) ||
-    Number(b.deterministic_score || 0) - Number(a.deterministic_score || 0) ||
-    String(a.title || '').localeCompare(String(b.title || ''))
-  );
-}
-
-function buildCompletionExclusionContext(lockedSections, duplicateSections, sourceGapOrIneligibleSections) {
-  const context = {
-    locked_sections: lockedSections.map((section, index) => sectionSummary(section, index)),
-    duplicate_or_rejected_sections: duplicateSections.map((section, index) => sectionSummary(section, index)),
-    source_gap_or_ineligible_sections: sourceGapOrIneligibleSections.map((section, index) => sectionSummary(section, index))
-  };
-  return JSON.stringify(context, null, 2);
-}
+const {
+  availableCompletionCandidates,
+  buildCompletionExclusionContext
+} = require('./orchestrator-completion');
 
 function validateCompletionSections(value, date, reporter) {
   const sections = ensureArray(value?.sections);
