@@ -20,8 +20,10 @@ test('LLM prompt guardrails prohibit linked evidence overclaim without exposing 
   assert.match(guardrails, /build_dependency_fix, test_only_change, documentation_only/);
   assert.match(guardrails, /stream, buffer, metadata, request, result, ImageCapture, VideoCapture, Surface, CameraPipe/);
 
+  // 단계별 시스템 프롬프트는 orchestrator-stage-prompts.js의 빌더로 분리되어 있다(#655).
   const cliPath = require.resolve('../../../generator/publish/gemini-newsroom-newsletter');
-  const source = fs.readFileSync(cliPath, 'utf8');
+  const stagePromptsPath = require.resolve('../../../generator/publish/orchestrator-stage-prompts');
+  const source = fs.readFileSync(cliPath, 'utf8') + '\n' + fs.readFileSync(stagePromptsPath, 'utf8');
   const promptUsageCount = (source.match(/linkedEvidencePromptGuardrails\(\),/g) || []).length;
   assert.ok(promptUsageCount >= 7);
 });
