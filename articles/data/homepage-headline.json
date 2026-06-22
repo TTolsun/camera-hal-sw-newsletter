@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-06-21T00:00:00+09:00",
+  "updated_at": "2026-06-22T00:00:00+09:00",
   "current_headline": {
     "article_identity_key": "url:https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com",
-    "title": "Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개",
-    "summary": "최근 Linux 미디어 메일링 리스트에 Sony IMX576 이미지 센서 지원을 위한 v2 패치 시리즈가 제출되었습니다. 이 드라이버는 고해상도 활성 어레이 지원과 함께 수동 노출, 게인, 블랭킹 제어 기능을 포함하고 있어 향후 고성능 카메라 파이프라인 통합의 기반이 될 것입니다.",
+    "title": "Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안",
+    "summary": "Sony IMX576 고해상도 이미지 센서를 지원하기 위한 V4L2 서브디바이스 드라이버 패치 v2가 제안되었습니다. 수동 노출 및 게인 제어와 함께 2880x2156 30fps 출력을 지원하여 고화질 카메라 파이프라인 구성의 토대를 마련합니다.",
     "source_url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/",
-    "newsletter_date": "2026-06-21",
-    "newsletter_url": "newsletters/2026-06-21/index.html",
-    "selected_at": "2026-06-21",
+    "newsletter_date": "2026-06-22",
+    "newsletter_url": "newsletters/2026-06-22/index.html",
+    "selected_at": "2026-06-22",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-06-21",
+    "last_scored_at": "2026-06-22",
     "date_evidence": {
       "date": "2026-06-20T13:27:59Z",
       "date_field": "published_date",
@@ -40,9 +40,9 @@
       "category": "camera_driver_image_pipeline",
       "source_name": "Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver"
     },
-    "newsletter_article_url": "newsletters/2026-06-21/index.html#article-sony-imx576-v4l2-v2",
+    "newsletter_article_url": "newsletters/2026-06-22/index.html#article-sony-imx576-v4l2-v2",
     "image_url": "assets/images/fallback/newsletter-default.svg",
-    "image_alt": "Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개 image"
+    "image_alt": "Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안 image"
   },
   "headline_history": [
     {
