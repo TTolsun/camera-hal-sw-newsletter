@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [
+    "첫 번째 기사(Himax HM1246)의 public_article.headline에 '2026년 6월 20일'과 같은 구체적인 날짜를 포함하여 최신성을 강조하는 것을 고려하십시오.",
+    "두 번째 기사(Sony IMX576)의 public_article.headline에 '2026년 6월 20일'과 같은 구체적인 날짜를 포함하여 최신성을 강조하는 것을 고려하십시오.",
+    "세 번째 기사(GCC 16)의 public_article.headline에 '2026년 6월 15일'과 같은 구체적인 날짜를 포함하여 최신성을 강조하는 것을 고려하십시오."
+  ],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안",
+      "publishable": true,
+      "reason": "Himax HM1246 이미지 센서 드라이버 패치 제안은 V4L2 서브디바이스 표준 제어 방식과 내부 ISP 통합에 대한 구체적인 정보를 제공하여, 하위 이미지 파이프라인 검증 및 드라이버 안정성 확보에 실질적인 가치를 제공합니다."
+    },
+    {
+      "section_index": 1,
+      "headline": "Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안",
+      "publishable": true,
+      "reason": "Sony IMX576 이미지 센서 드라이버 패치 제안은 고해상도 스트림 지원 및 수동 노출/게인 제어에 대한 구체적인 정보를 제공하여, HAL3 수동 제어 기능 구현 및 고해상도 스트림 검증에 실질적인 가치를 제공합니다."
+    },
+    {
+      "section_index": 2,
+      "headline": "GCC 16 릴리스 예정: 템플릿 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+      "publishable": true,
+      "reason": "GCC 16의 템플릿 오류 메시지 개선 및 SARIF 출력 지원은 리눅스 커널 드라이버 빌드 환경이나 독립형 C++ 테스트 도구 체인을 사용하는 네이티브 개발자의 디버깅 생산성 및 정적 분석 워크플로우 개선에 실질적인 가치를 제공합니다."
+    }
+  ],
+  "final_comment": "제공된 드래프트는 사실 확인, 출처 명시, 과장 금지, 날짜 근거 측면에서 모두 양호합니다. 모든 기사는 Camera HAL SW 엔지니어에게 유용한 구체적인 정보를 제공하며, 실행 가능한 Action Item을 포함하고 있습니다. 다만, public_article.headline에 구체적인 날짜를 포함하여 최신성을 더욱 강조하는 것을 권장합니다."
+}
