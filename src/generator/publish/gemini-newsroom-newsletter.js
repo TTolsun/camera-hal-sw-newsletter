@@ -20,7 +20,6 @@ const {
 } = require('../../shared/llm/llm-client');
 const {
   reporterSchema,
-  editorSchema,
   editorCompletionSchema,
   editorRepairPatchSchema,
   factCheckSchema
@@ -90,7 +89,6 @@ const {
 } = require('../quality/newsletter-quality');
 const {
   dropVerifiedFactsClassifiedAsNonFact,
-  EditorSemanticValidationError,
   reconcileFactClaimEvidence
 } = require('../editor/editor-output-contract');
 const {
@@ -182,7 +180,6 @@ const {
 } = targetedRepairModule;
 const {
   writeEditorDraftJson,
-  writeCanonicalReviewArtifacts,
   writeReporterArtifactsForAttempt,
   writeNewsletterDate,
   writeGenerationStatus,
@@ -196,7 +193,6 @@ const {
 } = require('./orchestrator-public-article-judge');
 const {
   reporterSystemPrompt,
-  editorSystemPrompt,
   factCheckSystemPrompt,
   editorRepairPatchSystemPrompt,
   factCheckRepairSystemPrompt,
@@ -247,7 +243,8 @@ const {
 // validateOrRepairEditor)와 publicArticleJudgeDeps는 orchestrator-editor-validation.js로 분리했다(#655).
 // 모두 publish-mode(generationRunState)에 결합된 editor 검증 seam이라 같은 이름으로 import해
 // main()의 모든 호출처와 module.exports를 그대로 유지한다. publicArticleJudgeDeps도 거기서 만들어
-// main()의 두 validatePublicArticleJudgeOrRepair 호출처에 그대로 주입한다.
+// main()의 두 validatePublicArticleJudgeOrRepair 호출처에 그대로 주입한다. validateOrRepairEditor는
+// editor 단계(orchestrator-editor-stage.js)로 옮겨가 거기서 직접 import하므로 여기선 더 이상 받지 않는다.
 const {
   buildBackgroundContextReport,
   currentPublishMode,
@@ -255,7 +252,6 @@ const {
   validateTargetedRepairResult,
   applyRepairPatchesAndValidate,
   recordLastKnownValidEditor,
-  validateOrRepairEditor,
   publicArticleJudgeDeps
 } = require('./orchestrator-editor-validation');
 
@@ -338,6 +334,17 @@ const {
 const {
   finalizeDraftAfterAttempts
 } = require('./orchestrator-finalize');
+
+// attempt loop 안의 editor 단계(생성→검증/repair→결정론적 후처리)는 orchestrator-editor-stage.js로
+// 분리했다(#655). 이 블록은 reviewable repair-failure로 main()을 early return 하던 유일한 지점을
+// 포함하므로, plain 함수로는 그 return을 재현할 수 없다. 정상 경로는 reassign된 loop local
+// (editor / attemptedSections / rejectedGeneratedSections)을, reviewable 경로는
+// { reviewableReturn: true }를 반환해 호출처가 `if (reviewableReturn) return;`으로 원래 동작을
+// 그대로 재현한다. 협력자는 모두 이미 분리된 sibling/shared 모듈에서 직접 import하는 clean
+// importer라 god-file-local 주입이 없다.
+const {
+  runEditorStage
+} = require('./orchestrator-editor-stage');
 
 // render/headline 기록 직후, terminal recovery routing 직전의 결정론적 발행 가부 결정 +
 // generation-status 기록 블록은 orchestrator-publish-decision.js로 분리했다(#655). 협력자는 모두
@@ -487,66 +494,38 @@ async function main() {
       })
       : null;
     const publishMode = currentPublishMode();
-    const editorDraft = await callLlmJson(
+    // editor 단계(생성→검증/repair→결정론적 후처리)는 orchestrator-editor-stage.js로 분리했다(#655).
+    // 이 블록만 reviewable repair-failure로 main()을 early return 하던 지점을 품고 있어, plain
+    // 함수로는 그 return을 재현할 수 없다. 그래서 정상 경로는 reassign된 loop local
+    // (editor / attemptedSections / rejectedGeneratedSections)을 반환하고, reviewable 경로는
+    // { reviewableReturn: true }를 반환한다. 아래 `if (editorStageResult.reviewableReturn) return;`는
+    // 원래 catch 안의 `return;`(값 없이 main() 종료, 이후 코드 미실행)과 동일하다.
+    let rejectedGeneratedSections;
+    const editorStageResult = await runEditorStage({
+      date,
+      reporter,
+      attempt,
       editorStage,
-      editorSystemPrompt({ editorRetryContract, publishMode, hasLockedSections: lockedSections.length > 0, hasCatchUpCoverage: ensureArray(shortlistReport?.selected_articles).some(item => item.coverage_type === 'catch_up') }),
-      [
-        commonContext,
-        lockedContext,
-        editorRetryContract ? `Editor retry output contract JSON:\n${JSON.stringify(editorRetryContract, null, 2)}` : '',
-        `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}`,
-        `Background context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}`
-      ].filter(Boolean).join('\n\n'),
-      editorSchema
-    );
-    try {
-      editor = await validateOrRepairEditor(editorDraft, {
-        date,
-        reporter,
-        attempt,
-        editorStage,
-        commonContext,
-        lockedContext,
-        newsroomDir,
-        articleCapsuleReport,
-        seedEvidencePack,
-        publishMode: currentPublishMode()
-      });
-      assertEditorRetryOutputContract(editor, editorRetryContract, reporter);
-    } catch (error) {
-      if (error instanceof EditorSemanticValidationError && generationRunState.lastKnownValidEditor) {
-        writeReviewableRepairFailureArtifacts({
-          date,
-          newsroomDir,
-          error,
-          reporter,
-          factCheck,
-          qualityReport,
-          retryHistory,
-          shortlistReport,
-          attempt,
-          stage: editorStage
-        });
-        return;
-      }
-      throw error;
-    }
-    attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
-
-    const merged = mergeLockedSections(lockedSections, editor.sections, excludedSections);
-    let rejectedGeneratedSections = [...merged.rejected];
-    editor.sections = merged.sections;
-    attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
-    await resolveIssueArticleImages(editor, { root });
-    warnResolvedImageFallbacks(editor);
-    // #502: editor draft 확정 직후, fact-check/quality/render 이전에 미해결 evidence_id를 한 번
-    // 결정론적으로 재바인딩한다(strict 오라클 통과 시에만; 미지원이면 unbound 유지). 이렇게 해야
-    // fact-check / quality 점수 / render 산출물 / publish 판정이 동일한 reconciled draft를 본다.
-    editor = reconcileFactClaimEvidence(editor, { reporter, seedEvidencePack });
-    editor = recordLastKnownValidEditor(editor, { date, reporter, attempt, requireStoryContract: true, seedEvidencePack });
-    writeCanonicalReviewArtifacts({ date, newsroomDir, reporter, editor });
-    writeJson(path.join(newsroomDir, `editor-draft-attempt-${attempt}.json`), editor);
-    fs.writeFileSync(path.join(newsroomDir, `editor-draft-attempt-${attempt}.md`), buildMarkdown(editor), 'utf8');
+      editorRetryContract,
+      publishMode,
+      commonContext,
+      lockedContext,
+      lockedSections,
+      excludedSections,
+      newsroomDir,
+      articleCapsuleReport,
+      backgroundContextReport,
+      shortlistReport,
+      seedEvidencePack,
+      editor,
+      attemptedSections,
+      factCheck,
+      qualityReport,
+      retryHistory,
+      root
+    });
+    if (editorStageResult.reviewableReturn) return;
+    ({ editor, attemptedSections, rejectedGeneratedSections } = editorStageResult);
 
     factCheck = validateFactCheck(await callLlmJson(
       factCheckStage,
