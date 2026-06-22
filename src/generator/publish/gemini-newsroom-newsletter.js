@@ -20,7 +20,6 @@ const {
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');
 const {
   callLlmJson: callLlmJsonRaw,
-  getLlmDiagnostics,
   getLlmModelUsage
 } = require('../../shared/llm/llm-client');
 const {
@@ -81,16 +80,11 @@ const {
 const {
   normalizeReporterReport,
   normalizeShortlistReport,
-  renderCandidateSelectionDiagnostics,
-  selectionDiagnosticsFromReports
+  renderCandidateSelectionDiagnostics
 } = require('../select/selection-diagnostics');
 const {
   roleFromStageLabel
 } = require('../select/stage-status-tracker');
-const {
-  candidateGroupKey,
-  groupCoverageSummary
-} = require('../../shared/common/article-groups');
 const {
   buildStaleClaimReportMarkdown,
   pruneResolvedStaleFactCheckItems,
@@ -99,8 +93,7 @@ const {
 const {
   articlePolicy,
   qualityGatePolicy,
-  publishGateCriteriaText,
-  publishReadyCompositionPolicy
+  publishGateCriteriaText
 } = require('../../shared/common/newsletter-policy');
 const {
   readExposureHistory,
@@ -231,7 +224,6 @@ const {
 } = require('./orchestrator-generation-status');
 const {
   reviewPackageFactCheck,
-  buildRunContext,
   backgroundContextStageEnabled,
   normalizeBackgroundContextReport,
   editorRenderedGroupKeys,
@@ -363,229 +355,16 @@ function readSeedEvidencePackForDate(date, rootDir = root) {
   return fs.existsSync(filePath) ? readJson(filePath) : null;
 }
 
-function buildGenerationStatus({
-  date,
-  status,
-  failureStage = '',
-  failureReason = '',
-  failureClass = '',
-  retryHistory = [],
-  qualityReport = null,
-  factCheck = null,
-  extra = {}
-}) {
-  const diagnostics = getLlmDiagnostics();
-  const mustFixCount = ensureArray(factCheck?.must_fix).length;
-  const { run_context: extraRunContext, ...restExtra } = extra || {};
-  return {
-    date,
-    status,
-    failure_stage: failureStage,
-    failure_reason: failureReason,
-    failure_class: failureClass,
-    fact_check_status: factCheck?.status || 'UNKNOWN',
-    must_fix_count: mustFixCount,
-    quality_status: qualityReport?.status || 'UNKNOWN',
-    quality_attempt_count: retryHistory.length,
-    quality_score: qualityReport?.score ?? null,
-    quality_threshold: qualityReport?.threshold ?? qualityGatePolicy.threshold,
-    quality_deduction_count: ensureArray(qualityReport?.deductions).length,
-    stage_status_log: generationRunState.stageTracker.toLog(),
-    quota_error_count: diagnostics.quota_error_count,
-    invalid_json_count: diagnostics.invalid_json_count,
-    model_usage: diagnostics.model_usage,
-    model_routing: diagnostics.model_routing || {},
-    candidate_input: restExtra.candidate_input || generationRunState.candidateInput || null,
-    run_context: {
-      ...buildRunContext(),
-      ...(extraRunContext || {})
-    },
-    ...restExtra
-  };
-}
-
-function recordEditorSemanticStatus(status = {}) {
-  if (status.editor_semantic_validation != null) {
-    generationRunState.editorSemanticValidation = status.editor_semantic_validation;
-  }
-  if (status.editor_public_article_judge != null) {
-    generationRunState.editorPublicArticleJudge = status.editor_public_article_judge;
-  }
-  if ('repairAttempted' in status) {
-    generationRunState.repairAttempted =
-      generationRunState.repairAttempted || Boolean(status.repairAttempted);
-  }
-  if ('repairSucceeded' in status) {
-    generationRunState.repairSucceeded =
-      generationRunState.repairSucceeded || Boolean(status.repairSucceeded);
-  }
-}
-
-function editorSemanticStatusExtra(error = null) {
-  const editorSemanticValidation =
-    error?.editorSemanticValidation ||
-    generationRunState.editorSemanticValidation ||
-    null;
-  const repairAttempted =
-    generationRunState.repairAttempted || Boolean(error?.repairAttempted);
-  const repairSucceeded =
-    generationRunState.repairSucceeded || Boolean(error?.repairSucceeded);
-  return {
-    editor_semantic_validation: editorSemanticValidation,
-    editor_public_article_judge:
-      error?.editorPublicArticleJudge ||
-      generationRunState.editorPublicArticleJudge ||
-      null,
-    repairAttempted: Boolean(repairAttempted),
-    repairSucceeded: Boolean(repairSucceeded)
-  };
-}
-
-function selectionStatusExtra(shortlistReport = generationRunState.shortlistReport, options = {}) {
-  const report = shortlistReport || {};
-  const diagnostics = selectionDiagnosticsFromReports(report, null);
-  const qualityArticleCount = generationRunState.qualityReport?.metrics?.article_count ?? null;
-  const renderedMainArticleCount = options.renderedMainArticleCount ?? qualityArticleCount;
-  const finalPublishReady = options.finalPublishReady ?? null;
-  const selectionCompositionMode = report.selection_composition_mode || report.composition_mode || diagnostics.selection_composition_mode || diagnostics.composition_mode || null;
-  const compositionMode = options.compositionMode || selectionCompositionMode;
-  const editorReviewRequired = options.editorReviewRequired ?? report.editor_review_required ?? diagnostics.editor_review_required ?? compositionMode !== COMPOSITION_MODES.NORMAL;
-  const compositionSummary = report.composition_summary || diagnostics.composition_summary || {};
-  const eligibleCompositionSummary = report.eligible_composition_summary || {};
-  const selectedArticleCount = report.selected_article_count ?? diagnostics.final_selected_article_count ?? null;
-  const nonFallbackReviewableCount = compositionSummary.non_fallback_reviewable_article_count ?? null;
-  const primaryCameraStackTopicCount = compositionSummary.primary_camera_stack_topic_count ?? null;
-  const supportingMainArticleCount = compositionSummary.supporting_main_article_count ?? null;
-  const forbiddenMainArticleCount = compositionSummary.forbidden_main_article_count ?? null;
-  const directAospCameraOrDriverCount = Number(compositionSummary.direct_aosp_camera_count ?? 0) +
-    Number(compositionSummary.camera_driver_image_pipeline_count ?? 0);
-  const selectionPolicy = report.selection_policy || {};
-  const minFinalArticles = report.min_final_articles ?? selectionPolicy.min_final_articles ?? articlePolicy.mainArticleCount.min;
-  const maxFinalArticles = selectionPolicy.max_final_articles ?? articlePolicy.mainArticleCount.max;
-  const absoluteMinReviewable = report.absolute_min_reviewable_articles ??
-    selectionPolicy.absolute_min_reviewable_articles ??
-    articlePolicy.primaryCameraStack.minRequired;
-  const minNonFallbackPublishReady = report.min_non_fallback_publish_ready_articles ??
-    selectionPolicy.min_non_fallback_publish_ready_articles ??
-    articlePolicy.primaryCameraStack.minRequired;
-  const reviewGatePassed = report.review_gate_passed ?? (
-    Number(selectedArticleCount) >= minFinalArticles &&
-    Number(selectedArticleCount) <= maxFinalArticles &&
-    Number(primaryCameraStackTopicCount) >= articlePolicy.primaryCameraStack.minRequired &&
-    Number(forbiddenMainArticleCount) === 0
-  );
-  const selectionPublishGatePassed = report.publish_gate_passed ?? (
-    Number(selectedArticleCount) >= minFinalArticles &&
-    Number(selectedArticleCount) <= maxFinalArticles &&
-    Number(primaryCameraStackTopicCount) >= publishReadyCompositionPolicy.primaryCameraStackMinRequired &&
-    Number(directAospCameraOrDriverCount) >= publishReadyCompositionPolicy.directAospCameraOrDriverMinRequired &&
-    Number(supportingMainArticleCount) <= publishReadyCompositionPolicy.supportingMainMaxAllowed &&
-    Number(forbiddenMainArticleCount) === 0 &&
-    Number(primaryCameraStackTopicCount) + Number(supportingMainArticleCount) === Number(selectedArticleCount)
-  );
-  const publishGatePassed = options.publishGatePassed ?? selectionPublishGatePassed;
-  const selectedGroupKeys = ensureArray(options.selectedGroupKeys).length > 0
-    ? ensureArray(options.selectedGroupKeys)
-    : ensureArray(report.selected_representative_group_keys).length > 0
-      ? ensureArray(report.selected_representative_group_keys)
-      : ensureArray(report.selected_articles).map(candidateGroupKey).filter(Boolean);
-  const renderedGroupKeys = ensureArray(options.renderedGroupKeys).length > 0
-    ? ensureArray(options.renderedGroupKeys)
-    : ensureArray(report.rendered_group_keys);
-  const hasRenderedGroupObservation = options.renderedGroupKeys !== undefined ||
-    ensureArray(report.rendered_group_keys).length > 0;
-  const explicitlyDemotedGroups = ensureArray(options.explicitlyDemotedGroups).length > 0
-    ? ensureArray(options.explicitlyDemotedGroups)
-    : ensureArray(report.explicitly_demoted_group_keys).map(key => ({ article_group_key: key, demotion_reason: 'status' }));
-  const hardBlockedGroups = ensureArray(options.hardBlockedGroups).length > 0
-    ? ensureArray(options.hardBlockedGroups)
-    : ensureArray(report.hard_blocked_group_keys).map(key => ({ article_group_key: key, hard_block_reason: 'status' }));
-  const groupCoverage = groupCoverageSummary({
-    selectedGroupKeys,
-    renderedGroupKeys,
-    demotedGroups: explicitlyDemotedGroups,
-    hardBlockedGroups
-  });
-  return {
-    input_candidate_count: report.input_candidate_count ?? null,
-    eligible_candidate_count: report.eligible_candidate_count ?? null,
-    selected_article_count: selectedArticleCount,
-    deterministic_selected_count: diagnostics.deterministic_selected_count ?? report.deterministic_selected_count ?? report.selected_article_count ?? null,
-    rendered_main_article_count: renderedMainArticleCount,
-    selected_group_count: groupCoverage.selected_group_count,
-    rendered_group_count: hasRenderedGroupObservation ? groupCoverage.rendered_group_count : report.rendered_group_count ?? null,
-    explicitly_demoted_group_count: groupCoverage.explicitly_demoted_group_count,
-    hard_blocked_group_count: groupCoverage.hard_blocked_group_count,
-    selected_representative_group_keys: groupCoverage.selected_representative_group_keys,
-    rendered_group_keys: groupCoverage.rendered_group_keys,
-    explicitly_demoted_group_keys: groupCoverage.explicitly_demoted_group_keys,
-    hard_blocked_group_keys: groupCoverage.hard_blocked_group_keys,
-    group_coverage_ok: hasRenderedGroupObservation ? groupCoverage.ok : null,
-    reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,
-    demoted_article_count: options.demotedArticleCount ?? diagnostics.demoted_candidate_count ?? report.demoted_candidate_count ?? null,
-    locked_article_count: options.lockedArticleCount ?? null,
-    fallback_topic_count: compositionSummary.fallback_topic_count ?? ensureArray(report.selected_articles).filter(candidate =>
-      ['soc_platform_signal', 'cpp_ai_tooling_fallback'].includes(candidate.relevance_bucket)
-    ).length,
-    reporter_candidate_count: diagnostics.reporter_candidate_count,
-    reporter_selected_count: diagnostics.reporter_selected_count,
-    final_input_candidate_count: diagnostics.final_input_candidate_count,
-    final_eligible_candidate_count: diagnostics.final_eligible_candidate_count,
-    final_selected_article_count: diagnostics.final_selected_article_count,
-    reporter_selected_but_final_excluded_count: diagnostics.reporter_selected_but_final_excluded_count,
-    ai_selected_article_count: report.ai_selected_article_count ?? null,
-    underfilled: Boolean(report.underfilled),
-    publish_ready: report.publish_ready !== undefined ? Boolean(report.publish_ready) : null,
-    selection_publish_ready: report.publish_ready !== undefined ? Boolean(report.publish_ready) : null,
-    final_publish_ready: finalPublishReady,
-    review_gate_passed: Boolean(reviewGatePassed),
-    publish_gate_passed: Boolean(publishGatePassed),
-    min_final_articles: minFinalArticles,
-    max_final_articles: maxFinalArticles,
-    absolute_min_reviewable_articles: absoluteMinReviewable,
-    min_non_fallback_publish_ready_articles: minNonFallbackPublishReady,
-    composition_mode: compositionMode,
-    publish_mode: report.publish_mode ?? diagnostics.publish_mode ?? null,
-    publish_mode_detail: report.publish_mode_detail ?? diagnostics.publish_mode_detail ?? null,
-    selection_composition_mode: selectionCompositionMode,
-    composition_reason: options.compositionReason || report.composition_reason || diagnostics.composition_reason || '',
-    composition_summary: compositionSummary,
-    eligible_composition_summary: eligibleCompositionSummary,
-    candidate_pool_preflight_passed: report.candidate_pool_preflight_passed !== false,
-    candidate_shortage_reviewable: report.candidate_shortage_reviewable === true,
-    candidate_shortage_summary: report.candidate_shortage_summary || null,
-    shortage_reason_codes: ensureArray(report.shortage_reason_codes),
-    publish_gate_reason_codes: ensureArray(report.publish_gate_reason_codes),
-    publish_gate_reason_summary: ensureArray(report.publish_gate_reason_summary),
-    publish_ready_composition_policy: report.publish_ready_composition_policy || report.selection_policy?.publish_ready_composition || null,
-    source_parser_hints: ensureArray(report.source_parser_hints),
-    editor_review_required: Boolean(editorReviewRequired),
-    non_fallback_reviewable_article_count: compositionSummary.non_fallback_reviewable_article_count ?? null,
-    eligible_non_fallback_reviewable_article_count: eligibleCompositionSummary.non_fallback_reviewable_article_count ?? null,
-    primary_camera_stack_topic_count: primaryCameraStackTopicCount,
-    supporting_main_article_count: supportingMainArticleCount,
-    forbidden_main_article_count: forbiddenMainArticleCount,
-    direct_aosp_camera_count: compositionSummary.direct_aosp_camera_count ?? null,
-    camera_driver_image_pipeline_count: compositionSummary.camera_driver_image_pipeline_count ?? null,
-    android_platform_camera_adjacent_count: compositionSummary.android_platform_camera_adjacent_count ?? null,
-    android_multimedia_camera_output_count: compositionSummary.android_multimedia_camera_output_count ?? null,
-    soc_platform_signal_count: compositionSummary.soc_platform_signal_count ?? ensureArray(report.selected_articles).filter(candidate =>
-      candidate.relevance_bucket === 'soc_platform_signal'
-    ).length,
-    cpp_ai_tooling_fallback_count: compositionSummary.cpp_ai_tooling_fallback_count ?? null,
-    generic_tech_watchlist_count: compositionSummary.generic_tech_watchlist_count ?? null,
-    selection_warnings: ensureArray(report.selection_warnings),
-    selection_errors: ensureArray(report.selection_errors),
-    selection_shortage_hints: ensureArray(report.selection_shortage_hints),
-    headline_decision: report.headline_decision || diagnostics.headline_decision || null,
-    headline_latest_inclusion: report.headline_latest_inclusion || diagnostics.headline_latest_inclusion || null,
-    removed_due_to_headline_inclusion: ensureArray(report.removed_due_to_headline_inclusion || diagnostics.removed_due_to_headline_inclusion),
-    article_exposure_coverage: report.article_exposure_coverage || diagnostics.article_exposure_coverage || null,
-    exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10),
-    final_exclusion_reason_summary: ensureArray(diagnostics.final_exclusion_reason_summary).slice(0, 10),
-    candidate_selection_note: diagnostics.note
-  };
-}
+// generation-status artifact 본체와 editor-semantic/selection extra builder는
+// orchestrator-status-builders.js로 분리했다(#655). 네 함수의 의존성은 모두 module-level
+// import 또는 generationRunState라 god-file-local 주입이 필요 없고, 같은 이름으로 재노출해
+// 호출처와 module.exports를 그대로 유지한다.
+const {
+  buildGenerationStatus,
+  recordEditorSemanticStatus,
+  editorSemanticStatusExtra,
+  selectionStatusExtra
+} = require('./orchestrator-status-builders');
 
 async function buildBackgroundContextReport({ date, articleCapsuleReport, commonContext, stage }) {
   const fallbackReport = buildStaticBackgroundContextReport(date, articleCapsuleReport);
