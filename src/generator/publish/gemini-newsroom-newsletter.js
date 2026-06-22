@@ -43,7 +43,6 @@ const {
   sectionLabelKey,
   sectionRepairSignature,
   sectionSummary,
-  sectionsAreDuplicate,
   signaturesMatch,
   sourceDateTitle,
   sourceUrlSignature,
@@ -77,11 +76,6 @@ const {
   normalizeShortlistReport
 } = require('../select/selection-diagnostics');
 const {
-  buildStaleClaimReportMarkdown,
-  pruneResolvedStaleFactCheckItems,
-  scrubStaleClaims
-} = require('../quality/stale-claims');
-const {
   articlePolicy,
   qualityGatePolicy
 } = require('../../shared/common/newsletter-policy');
@@ -90,7 +84,6 @@ const {
   mergePublicArticleFromLlm
 } = require('../reporter/public-article-contract');
 const {
-  buildNewsletterQualityReport,
   buildQualityReportMarkdown,
   deductionMatchesSection,
   hardBlockedGroupsForDroppedSections,
@@ -330,7 +323,6 @@ const {
   candidateDuplicateReason,
   retryRejectionRecord,
   reserveUsageForSections,
-  candidatesForSections,
   removeDisallowedSelections,
   mergeLockedSections,
   sectionLockRecord,
@@ -356,6 +348,14 @@ const {
   writeRecoveryPrompt,
   writeSelectionDiagnosticsArtifact
 } = require('./orchestrator-recovery-writers');
+
+// attempt loop 종료 후 한 번만 실행되는 결정론적 finalize 블록(runtime-demoted shortlist 반영 +
+// stale-claim scrub/산출물 + thin-week salvage)은 orchestrator-finalize.js로 분리했다(#655).
+// 협력자는 모두 이미 분리된 sibling/shared 모듈에서 직접 import하는 clean importer라
+// god-file-local 주입이 없고, main()의 loop local을 reads로 받아 reassign된 상태를 반환한다.
+const {
+  finalizeDraftAfterAttempts
+} = require('./orchestrator-finalize');
 
 async function main() {
   const date = runtimeConfig.newsletterDate || kstDate();
@@ -1008,74 +1008,23 @@ async function main() {
     }
   }
 
-  const runtimeDemotedCandidates = candidatesForSections(excludedSections, reporter);
-  if (runtimeDemotedCandidates.length > 0) {
-    shortlistReport = normalizeShortlistReport({
-      ...shortlistReport,
-      demoted_candidates: runtimeDemotedCandidates,
-      demoted_candidate_count: runtimeDemotedCandidates.length
-    }, reporter);
-    generationRunState.shortlistReport = shortlistReport;
-    writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
-    writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
-  }
-
-  const removedSections = appendUniqueSections(
-    attemptedSections.filter(section => !ensureArray(editor.sections).some(finalSection => sectionsAreDuplicate(section, finalSection))),
-    excludedSections
-  );
-  const staleScrub = scrubStaleClaims(editor, {
+  // attempt loop 종료 후 한 번만 실행되는 결정론적 finalize 블록(runtime-demoted
+  // shortlist 반영 + stale-claim scrub/산출물 + thin-week salvage)은 orchestrator-finalize.js로
+  // 분리했다(#655). loop local을 그대로 넘기고 reassign된 editor/factCheck/qualityReport/
+  // shortlistReport와 이후 main()에서 쓰이는 staleScrub을 받아 같은 값으로 되묶는다.
+  let staleScrub;
+  ({ editor, factCheck, qualityReport, shortlistReport, staleScrub } = finalizeDraftAfterAttempts({
     date,
-    removedSections,
-    reporter
-  });
-  editor = validateEditor(staleScrub.editor, date, reporter, { strictClaims: true, requireStoryContract: true });
-  factCheck = pruneResolvedStaleFactCheckItems(factCheck, staleScrub.report);
-  factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
-  generationRunState.factCheck = factCheck;
-  writeJson(path.join(newsroomDir, 'stale-claim-report.json'), staleScrub.report);
-  fs.writeFileSync(
-    path.join(newsroomDir, 'stale-claim-report.md'),
-    buildStaleClaimReportMarkdown(staleScrub.report),
-    'utf8'
-  );
-  editor = sanitizeClaimEvidenceIds(editor, reporter, seedEvidencePack);
-  editor = stampCoverageType(editor, shortlistReport);
-  factCheck = pruneCatchUpFramingFactCheckItems(factCheck, editor);
-  generationRunState.factCheck = factCheck;
-  qualityReport = buildNewsletterQualityReport(date, editor, reporter, factCheck, {
-    threshold: qualityGatePolicy.threshold,
+    editor,
+    factCheck,
+    qualityReport,
+    reporter,
     shortlistReport,
-    staleClaimReport: staleScrub.report,
-    strictClaimValidation: true,
-    seedEvidencePack
-  });
-  generationRunState.qualityReport = qualityReport;
-
-  // Per-article 발행 회복력(thin-week salvage). 전체 draft가 일부 기사의
-  // per-article binding 실패(예: 한 소스의 claim-binding 분산) 때문에만 NEEDS_FIX이고,
-  // mainArticleCount.min 이상의 기사가 깨끗이 통과하면, 전체를 실패시키지 않고
-  // 통과한 subset만 발행한다. salvagePublishableSubset은 subset에 quality gate를
-  // 다시 적용해 PASS일 때만 결과를 반환(아니면 null)하므로, bound 안 된 콘텐츠를
-  // 발행하지 않고 이번 실행에서 바인딩 실패한 기사만 drop한다. attempt loop 종료
-  // 후(맨 끝)에 연결해 retry/lock 제어 흐름에 영향을 주지 않는다.
-  if (qualityReport.status !== 'PASS') {
-    const salvage = salvagePublishableSubset(date, editor, reporter, factCheck, qualityReport, {
-      threshold: qualityGatePolicy.threshold,
-      shortlistReport,
-      staleClaimReport: staleScrub.report,
-      strictClaimValidation: true,
-      seedEvidencePack
-    });
-    if (salvage) {
-      console.warn(`Thin-week salvage: dropped ${salvage.dropped_section_count} unpublishable article(s); publishing ${salvage.kept_section_count}.`);
-      editor = validateEditor(salvage.editor, date, reporter, { strictClaims: true, requireStoryContract: true });
-      factCheck = salvage.factCheck;
-      qualityReport = salvage.qualityReport;
-      generationRunState.factCheck = factCheck;
-      generationRunState.qualityReport = qualityReport;
-    }
-  }
+    newsroomDir,
+    seedEvidencePack,
+    excludedSections,
+    attemptedSections
+  }));
 
   writeJson(path.join(newsroomDir, 'reporter-candidates.json'), reporter);
   writeEditorDraftJson(path.join(newsroomDir, 'editor-draft.json'), editor, date);
