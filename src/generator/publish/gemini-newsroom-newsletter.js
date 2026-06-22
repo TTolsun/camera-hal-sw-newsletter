@@ -28,7 +28,6 @@ const {
 const { isSafeExternalImageUrl } = require('../../shared/render/image-candidates');
 const { resolveIssueArticleImages } = require('../render/article-image-resolver');
 const {
-  COMPOSITION_MODES,
   buildShortlistReport,
   normalizedUrlHash,
   reporterInputFromShortlist
@@ -103,18 +102,11 @@ const {
   buildHtml,
   buildFactCheckMarkdown,
   buildEditorChiefBrief,
-  issueTags,
   ensureArray
 } = require('../render/newsletter-renderer');
 const {
   buildReferenceArticles
 } = require('../render/reference-articles');
-const {
-  writeWeeklyNewsletterArtifacts
-} = require('../render/weekly-newsletter-output');
-const {
-  buildWeeklyMergeResolver
-} = require('../editor/weekly-merge');
 const {
   buildPromptContexts
 } = require('../reporter/newsletter-prompts');
@@ -171,15 +163,8 @@ const {
   normalizeEditorSection
 } = require('./orchestrator-reporter-normalize');
 const {
-  classifyGenerationStatus,
-  isEditorialReviewableStatus
-} = require('./orchestrator-generation-status');
-const {
   backgroundContextStageEnabled,
-  editorRenderedGroupKeys,
-  editorExplicitlyDemotedGroups,
-  buildRetryHistoryMarkdown,
-  validateMergedWeeklyArticle
+  buildRetryHistoryMarkdown
 } = require('./orchestrator-report-builders');
 const {
   removeNewsletterIndexEntry
@@ -224,7 +209,6 @@ const runtimeConfig = readRuntimeConfig(process.env);
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
 const sourceRegistryPath = path.join(root, 'src', 'shared', 'data', 'news-sources.json');
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
-const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
 
 // callLlmJson 계측 래퍼(#398)는 orchestrator-llm-instrumentation.js로 분리했다(#655).
 // 모든 LLM 단계가 이 한 지점을 통과하는 핵심 seam이라 같은 이름으로 import해 모든 호출처와
@@ -232,8 +216,7 @@ const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
 // readSeedEvidencePackForDate process·IO 헬퍼는 orchestrator-validate-runner.js로 분리했다.
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');
 const {
-  readSeedEvidencePackForDate,
-  runValidate
+  readSeedEvidencePackForDate
 } = require('./orchestrator-validate-runner');
 
 // generation-status artifact 본체와 editor-semantic/selection extra builder는
@@ -296,15 +279,14 @@ const {
   writeTerminalFailureStatus
 } = require('./orchestrator-terminal-failure');
 
-// publish-ready 종착점에서 공개 산출물을 쓰고 그 계약을 단언하는 terminal publication 헬퍼
-// (updateNewsletterData / persistHeadlineStateArtifacts / assertJsonArtifactsReadable /
-// assertTerminalPublicationContracts)는 orchestrator-terminal-contracts.js로 분리했다(#655).
-// 협력자는 모두 이미 분리된 sibling/shared 모듈에서 직접 import되는 clean importer라
-// god-file-local 주입이 없고, 같은 이름으로 재노출해 main()의 호출처와 module.exports를 그대로
-// 유지한다. root/dataPath는 거기서 process.cwd() 기준으로 동일하게 재파생한다.
+// publish-ready 종착점에서 공개 산출물 계약을 단언하는 terminal publication 헬퍼
+// (assertJsonArtifactsReadable / assertTerminalPublicationContracts)는
+// orchestrator-terminal-contracts.js로 분리했다(#655). 협력자는 모두 이미 분리된 sibling/shared
+// 모듈에서 직접 import되는 clean importer라 god-file-local 주입이 없고, 같은 이름으로 재노출해
+// main()의 호출처를 그대로 유지한다. root/dataPath는 거기서 process.cwd() 기준으로 동일하게
+// 재파생한다. 공개 산출물 기록(updateNewsletterData / persistHeadlineStateArtifacts)은
+// orchestrator-publish-decision.js가 직접 import해 발행 가부 결정 블록 안에서 호출한다.
 const {
-  updateNewsletterData,
-  persistHeadlineStateArtifacts,
   assertJsonArtifactsReadable,
   assertTerminalPublicationContracts
 } = require('./orchestrator-terminal-contracts');
@@ -356,6 +338,15 @@ const {
 const {
   finalizeDraftAfterAttempts
 } = require('./orchestrator-finalize');
+
+// render/headline 기록 직후, terminal recovery routing 직전의 결정론적 발행 가부 결정 +
+// generation-status 기록 블록은 orchestrator-publish-decision.js로 분리했다(#655). 협력자는 모두
+// 이미 분리된 sibling/shared 모듈에서 직접 import하는 clean importer라 god-file-local 주입이 없고,
+// main()의 reads를 받아 이후 terminal routing이 쓰는 값만 반환한다. 공개 산출물 기록과 npm validate
+// 실행(side effect)은 거기서 그대로 수행한다.
+const {
+  decidePublishReadinessAndWriteStatus
+} = require('./orchestrator-publish-decision');
 
 async function main() {
   const date = runtimeConfig.newsletterDate || kstDate();
@@ -1114,142 +1105,31 @@ async function main() {
   const emptySourceSections = [];
   const todoFound = false;
   const mustFixCount = ensureArray(factCheck.must_fix).length;
-  const generationStatus = classifyGenerationStatus({
-    underfilled: shortlistReport.underfilled,
-    factCheckStatus: factCheck.status,
-    mustFixCount,
-    qualityStatus: qualityReport.status
-  });
-  const editorialReviewable = isEditorialReviewableStatus(generationStatus);
-  const failureKind = editorialReviewable ? FAILURE_KIND_EDITORIAL_REVIEWABLE : '';
-  const newsletterMd = path.join(newsletterDir, 'newsletter.md');
-  const newsletterHtml = path.join(newsletterDir, 'index.html');
-  const shouldWritePublicArtifacts = !editorialReviewable;
-  let weeklyArtifactFiles = [];
-  if (shouldWritePublicArtifacts) {
-    fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');
-    fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');
-    updateNewsletterData(date, editor);
-    // 추가 weekly 출력(#486~#490): publish-ready일 때만 weekly 디렉터리 페이지/별도 인덱스를 생성하고,
-    // 같은 주 안의 중복 기사는 LLM이 append/merge/reject로 결정하며 merge는 검증 통과 시에만 교체한다.
-    // 데일리 산출물은 위에서 이미 기록했으므로, weekly 실패가 데일리 실행을 깨지 않도록 try/catch로 감싼다.
-    try {
-      const weeklyMerge = buildWeeklyMergeResolver({
-        callLlmJson,
-        validateMergedArticle: validateMergedWeeklyArticle
-      });
-      const weeklyResult = await writeWeeklyNewsletterArtifacts({
-        root, date, editor, tags: issueTags(editor), ...weeklyMerge
-      });
-      weeklyArtifactFiles = weeklyResult.files;
-      if (ensureArray(weeklyResult.mergeWarnings).length > 0 ||
-        ensureArray(weeklyResult.mergeDecisions).some(decision => /merge/.test(decision.decision))) {
-        writeJson(path.join(newsroomDir, 'weekly-merge-report.json'), {
-          schema_version: 1,
-          date,
-          weekly_key: weeklyResult.weeklyKey,
-          decisions: weeklyResult.mergeDecisions,
-          warnings: weeklyResult.mergeWarnings
-        });
-      }
-    } catch (error) {
-      console.error(`weekly newsletter output skipped: ${error.message}`);
-    }
-  }
-  const headlineArtifactResult = persistHeadlineStateArtifacts({
-    date,
-    shortlistReport,
+  const {
+    editorialReviewable,
     shouldWritePublicArtifacts,
-    editor
-  });
-  if (headlineArtifactResult.exposureCoverage) {
-    shortlistReport.article_exposure_coverage = headlineArtifactResult.exposureCoverage;
-    writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
-    writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
-  }
-  const validateResult = editorialReviewable
-    ? {
-        ok: false,
-        text: `${FAILURE_KIND_EDITORIAL_REVIEWABLE}: skipped public validation because this review PR is not publishable.`
-      }
-    : runValidate();
-  const finalPublishReady =
-    !editorialReviewable &&
-    shortlistReport.publish_ready === true &&
-    ensureArray(editor.sections).length >= articlePolicy.mainArticleCount.min &&
-    ensureArray(editor.sections).length <= articlePolicy.mainArticleCount.max &&
-    generationStatus === 'PASS' &&
-    qualityReport.status === 'PASS' &&
-    validateResult.ok &&
-    !todoFound &&
-    emptySourceSections.length === 0 &&
-    mustFixCount === 0;
-  const finalCompositionMode = finalPublishReady
-    ? shortlistReport.composition_mode
-    : generationStatus === 'UNDERFILLED_NEEDS_FIX'
-      ? COMPOSITION_MODES.THIN_WEEK_REVIEW
-      : COMPOSITION_MODES.NEEDS_FIX;
-  const finalEditorReviewRequired =
-    finalPublishReady === true
-      ? false
-      : editorialReviewable ||
-        shortlistReport.editor_review_required === true ||
-        finalCompositionMode !== COMPOSITION_MODES.NORMAL;
-  const files = shouldWritePublicArtifacts
-    ? baseFiles.concat([
-        // changedArtifacts/review-inventory에 쓰이는 디스크-상대 경로(articles/ 아래).
-        `articles/newsletters/${date}/newsletter.md`,
-        `articles/newsletters/${date}/index.html`,
-        'articles/data/newsletters.json',
-        ...headlineArtifactResult.files,
-        ...weeklyArtifactFiles
-      ])
-    : baseFiles;
-  const generationStatusArtifact = buildGenerationStatus({
+    failureKind,
+    validateResult,
+    generationStatus,
+    files,
+    generationStatusArtifact
+  } = await decidePublishReadinessAndWriteStatus({
     date,
-    status: generationStatus,
-    retryHistory,
-    qualityReport,
+    editor,
     factCheck,
-    extra: {
-      failure_stage: '',
-      failure_reason: '',
-      quality_status: qualityReport.status,
-      quality_score: qualityReport.score,
-      quality_threshold: qualityReport.threshold,
-      quality_deduction_count: ensureArray(qualityReport.deductions).length,
-      locked_article_count: retryHistory.at(-1)?.locked_article_headlines.length || 0,
-      repaired_section_count: retryHistory.reduce((sum, item) => sum + ensureArray(item.regenerated_sections).length, 0),
-      failed_section_count: retryHistory.at(-1)?.failed_sections.length || 0,
-      skipped_repair_section_count: retryHistory.reduce((sum, item) => sum + ensureArray(item.skipped_repair_sections).length, 0),
-      rejected_duplicate_article_count: retryHistory.reduce((sum, item) => sum + item.rejected_duplicate_headlines.length, 0),
-      validate_ok: validateResult.ok,
-      failure_kind: failureKind,
-      public_output_expected: shouldWritePublicArtifacts,
-      todo_found: todoFound,
-      empty_source_sections: emptySourceSections,
-      source_gap_count: factCheck.source_gap_count,
-      stale_claim_status: staleScrub.report?.status || 'UNKNOWN',
-      stale_claim_removed_count: ensureArray(staleScrub.report?.stale_claim_items_removed).length +
-        ensureArray(staleScrub.report?.unsupported_release_claims_removed).length +
-        ensureArray(staleScrub.report?.unused_references_removed).length,
-      stale_claim_hard_failure_count: ensureArray(staleScrub.report?.hard_failures).length,
-      completion_fallback_to_prepass: retryHistory.some(item => item.completion_fallback_to_prepass === true),
-      ...editorSemanticStatusExtra(),
-      ...selectionStatusExtra(shortlistReport, {
-        renderedMainArticleCount: ensureArray(editor.sections).length,
-        renderedGroupKeys: editorRenderedGroupKeys(editor),
-        explicitlyDemotedGroups: editorExplicitlyDemotedGroups(editor),
-        lockedArticleCount: retryHistory.at(-1)?.locked_article_headlines.length || 0,
-        demotedArticleCount: retryHistory.at(-1)?.demoted_article_count ?? retryHistory.at(-1)?.demoted_sections?.length ?? 0,
-        finalPublishReady,
-        publishGatePassed: finalPublishReady,
-        compositionMode: finalCompositionMode,
-        editorReviewRequired: finalEditorReviewRequired
-      })
-    }
+    qualityReport,
+    shortlistReport,
+    retryHistory,
+    staleScrub,
+    newsroomDir,
+    newsletterDir,
+    newsletterMarkdown,
+    newsletterHtmlContent,
+    mustFixCount,
+    todoFound,
+    emptySourceSections,
+    baseFiles
   });
-  writeGenerationStatus(generationStatusArtifact);
   const reviewRunContext = {
     status: generationStatusArtifact.status,
     seedUsed: generationStatusArtifact.seed_used ?? generationStatusArtifact.candidate_input?.seed_used,

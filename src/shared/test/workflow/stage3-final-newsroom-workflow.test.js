@@ -348,27 +348,39 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
 test('generation path guards public artifacts for editorial reviewable failures', () => {
   const generatorPath = path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'gemini-newsroom-newsletter.js');
   const generator = fs.readFileSync(generatorPath, 'utf8');
+  // render → structural guard 순서는 main()에 그대로 남는다.
   const renderedMarkdownIndex = generator.indexOf('newsletterMarkdown = buildMarkdown(editor);');
   const structuralGuardIndex = generator.indexOf('assertTerminalPublicationContracts({', renderedMarkdownIndex);
-  // 등급 결정 분기(underfill/fact-check/quality)는 orchestrator-generation-status.js로
-  // 추출됐고, main()에는 그 순수 분류기 호출만 남는다(#655). 발행 안전 순서 불변
-  // (결정 → editorialReviewable → public artifact 쓰기 가드)은 여기서 그대로 검증한다.
-  const generationStatusIndex = generator.indexOf('const generationStatus = classifyGenerationStatus({');
-  const editorialReviewableIndex = generator.indexOf(
+  // 그 직후 main()은 발행 가부 결정 + generation-status 기록 블록을
+  // decidePublishReadinessAndWriteStatus(orchestrator-publish-decision.js)로 위임한다(#655).
+  const decideCallIndex = generator.indexOf('decidePublishReadinessAndWriteStatus({', structuralGuardIndex);
+
+  assert.notEqual(renderedMarkdownIndex, -1);
+  assert.notEqual(structuralGuardIndex, -1);
+  assert.notEqual(decideCallIndex, -1);
+  assert.ok(renderedMarkdownIndex < structuralGuardIndex);
+  assert.ok(structuralGuardIndex < decideCallIndex);
+
+  // 발행 안전 순서 불변(결정 → editorialReviewable → public artifact 쓰기 가드 → 공개 산출물
+  // 쓰기 → validate → finalPublishReady)은 추출된 모듈 안에서 그대로 유지된다(#655). 등급 결정
+  // 분기(underfill/fact-check/quality)는 orchestrator-generation-status.js로 추출됐고, 추출된
+  // 결정 블록에는 그 순수 분류기 호출만 남는다.
+  const decisionPath = path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'orchestrator-publish-decision.js');
+  const decision = fs.readFileSync(decisionPath, 'utf8');
+  const generationStatusIndex = decision.indexOf('const generationStatus = classifyGenerationStatus({');
+  const editorialReviewableIndex = decision.indexOf(
     'const editorialReviewable = isEditorialReviewableStatus(generationStatus);',
     generationStatusIndex
   );
-  const shouldWriteIndex = generator.indexOf('const shouldWritePublicArtifacts = !editorialReviewable;', editorialReviewableIndex);
-  const writeGuardIndex = generator.indexOf('if (shouldWritePublicArtifacts) {', shouldWriteIndex);
-  const markdownWriteIndex = generator.indexOf("fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');", writeGuardIndex);
-  const htmlWriteIndex = generator.indexOf("fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');", writeGuardIndex);
-  const dataWriteIndex = generator.indexOf('updateNewsletterData(date, editor);', writeGuardIndex);
-  const validateResultIndex = generator.indexOf('const validateResult = editorialReviewable', dataWriteIndex);
-  const finalPublishReadyIndex = generator.indexOf('const finalPublishReady =', validateResultIndex);
+  const shouldWriteIndex = decision.indexOf('const shouldWritePublicArtifacts = !editorialReviewable;', editorialReviewableIndex);
+  const writeGuardIndex = decision.indexOf('if (shouldWritePublicArtifacts) {', shouldWriteIndex);
+  const markdownWriteIndex = decision.indexOf("fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');", writeGuardIndex);
+  const htmlWriteIndex = decision.indexOf("fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');", writeGuardIndex);
+  const dataWriteIndex = decision.indexOf('updateNewsletterData(date, editor);', writeGuardIndex);
+  const validateResultIndex = decision.indexOf('const validateResult = editorialReviewable', dataWriteIndex);
+  const finalPublishReadyIndex = decision.indexOf('const finalPublishReady =', validateResultIndex);
 
   assert.notEqual(generationStatusIndex, -1);
-  assert.notEqual(renderedMarkdownIndex, -1);
-  assert.notEqual(structuralGuardIndex, -1);
   assert.notEqual(editorialReviewableIndex, -1);
   assert.notEqual(shouldWriteIndex, -1);
   assert.notEqual(writeGuardIndex, -1);
@@ -377,8 +389,6 @@ test('generation path guards public artifacts for editorial reviewable failures'
   assert.notEqual(dataWriteIndex, -1);
   assert.notEqual(validateResultIndex, -1);
   assert.notEqual(finalPublishReadyIndex, -1);
-  assert.ok(renderedMarkdownIndex < structuralGuardIndex);
-  assert.ok(structuralGuardIndex < generationStatusIndex);
   assert.ok(generationStatusIndex < editorialReviewableIndex);
   assert.ok(editorialReviewableIndex < shouldWriteIndex);
   assert.ok(shouldWriteIndex < writeGuardIndex);
