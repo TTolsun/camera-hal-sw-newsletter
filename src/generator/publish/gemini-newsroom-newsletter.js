@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const { execFileSync } = require('child_process');
 const {
   kstDate,
   readJson,
@@ -10,8 +9,7 @@ const {
 const {
   collectedCandidatesRelPath,
   newsroomDir: artifactNewsroomDir,
-  newsroomRelPath,
-  seedEvidencePackPath
+  newsroomRelPath
 } = require('../../shared/common/artifact-paths');
 const {
   CandidateArtifactValidationError,
@@ -19,7 +17,6 @@ const {
 } = require('../../shared/common/candidate-artifacts');
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');
 const {
-  callLlmJson: callLlmJsonRaw,
   getLlmModelUsage
 } = require('../../shared/llm/llm-client');
 const {
@@ -81,9 +78,6 @@ const {
   normalizeReporterReport,
   normalizeShortlistReport
 } = require('../select/selection-diagnostics');
-const {
-  roleFromStageLabel
-} = require('../select/stage-status-tracker');
 const {
   buildStaleClaimReportMarkdown,
   pruneResolvedStaleFactCheckItems,
@@ -269,27 +263,15 @@ const sourceRegistryPath = path.join(root, 'src', 'shared', 'data', 'news-source
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
 
-// callLlmJson 계측 래퍼 (#398). 모든 LLM 단계(reporter/editor/repair/factcheck/
-// background-context/judge)가 이 한 지점을 통과하므로, 여기서 start/pass/fail만
-// 기록하면 내부 시퀀스 전체가 잡힌다. 기록 전용이라 결과나 게이트 판정에 영향 없다.
-async function callLlmJson(stage, ...args) {
-  const role = roleFromStageLabel(stage);
-  const attempt = generationRunState.currentQualityAttempt;
-  generationRunState.stageTracker.start(role, attempt, stage);
-  try {
-    const result = await callLlmJsonRaw(stage, ...args);
-    generationRunState.stageTracker.pass(role, attempt, stage);
-    return result;
-  } catch (error) {
-    generationRunState.stageTracker.fail(role, attempt, stage, error && error.message);
-    throw error;
-  }
-}
-
-function readSeedEvidencePackForDate(date, rootDir = root) {
-  const filePath = seedEvidencePackPath(rootDir, date);
-  return fs.existsSync(filePath) ? readJson(filePath) : null;
-}
+// callLlmJson 계측 래퍼(#398)는 orchestrator-llm-instrumentation.js로 분리했다(#655).
+// 모든 LLM 단계가 이 한 지점을 통과하는 핵심 seam이라 같은 이름으로 import해 모든 호출처와
+// publicArticleJudgeDeps 주입을 그대로 유지한다. runNpmScript/runValidate/containsTodo/
+// readSeedEvidencePackForDate process·IO 헬퍼는 orchestrator-validate-runner.js로 분리했다.
+const { callLlmJson } = require('./orchestrator-llm-instrumentation');
+const {
+  readSeedEvidencePackForDate,
+  runValidate
+} = require('./orchestrator-validate-runner');
 
 // generation-status artifact 본체와 editor-semantic/selection extra builder는
 // orchestrator-status-builders.js로 분리했다(#655). 네 함수의 의존성은 모두 module-level
@@ -667,10 +649,6 @@ async function validateOrRepairEditor(value, {
   }, publicArticleJudgeDeps);
 }
 
-function containsTodo(files) {
-  return files.some(file => fs.existsSync(file) && /\bTODO\b/.test(fs.readFileSync(file, 'utf8')));
-}
-
 function updateNewsletterData(date, issue) {
   const entry = {
     date,
@@ -774,32 +752,6 @@ function assertTerminalPublicationContracts({
     });
   }
   fail(`Terminal structural validation failed:\n${result.text}`);
-}
-
-function runNpmScript(scriptName) {
-  const options = {
-    cwd: root,
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe']
-  };
-  if (process.platform === 'win32') {
-    return execFileSync('cmd.exe', ['/d', '/s', '/c', `npm.cmd run ${scriptName}`], options);
-  }
-  return execFileSync('npm', ['run', scriptName], options);
-}
-
-function runValidate() {
-  try {
-    const siteOutput = runNpmScript('validate:site');
-    const imageOutput = runNpmScript('validate:images');
-    const output = [siteOutput, imageOutput].join('\n').trim();
-    return { ok: true, text: output || 'npm run validate:site and validate:images passed.' };
-  } catch (error) {
-    return {
-      ok: false,
-      text: [error.stdout, error.stderr].filter(Boolean).join('\n').trim() || error.message
-    };
-  }
 }
 
 function warnResolvedImageFallbacks(issue) {
