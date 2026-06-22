@@ -29,7 +29,12 @@ function promptHostSource() {
     path.join(__dirname, '..', '..', 'reporter', 'newsletter-prompts.js'),
     'utf8'
   );
-  return `${host}\n${prompts}`;
+  // 단계별 시스템 프롬프트는 orchestrator-stage-prompts.js의 빌더로 분리되어 있다(#655).
+  const stagePrompts = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'publish', 'orchestrator-stage-prompts.js'),
+    'utf8'
+  );
+  return `${host}\n${prompts}\n${stagePrompts}`;
 }
 
 function assertStagePromptUsesFactCheckHelpers(source, stageAnchor) {
@@ -288,13 +293,17 @@ test('LLM reporter, editor, repair, completion, and fact-check prompts include s
 });
 
 test('LLM reporter prompt stays evidence-only and avoids editor/public bloat', () => {
-  const source = promptHostSource();
-  const start = source.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI reporter입니다.');
+  // reporter 시스템 프롬프트는 orchestrator-stage-prompts.js의 빌더에 있고,
+  // 호출부(user context arg)는 god-file에 남는다(#655).
+  const stagePrompts = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'publish', 'orchestrator-stage-prompts.js'),
+    'utf8'
+  );
+  const start = stagePrompts.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI reporter입니다.');
   assert.notEqual(start, -1);
-  const end = source.indexOf('schema와 일치하는 JSON만 반환하세요.', start);
+  const end = stagePrompts.indexOf('schema와 일치하는 JSON만 반환하세요.', start);
   assert.notEqual(end, -1);
-  const reporterPrompt = source.slice(start, end);
-  const reporterCall = source.slice(start, source.indexOf('reporterSchema', end));
+  const reporterPrompt = stagePrompts.slice(start, end);
 
   assert.match(reporterPrompt, /sourceExtractionPromptGuardrails\(\),/);
   assert.match(reporterPrompt, /evidence-backed candidate facts/);
@@ -305,6 +314,14 @@ test('LLM reporter prompt stays evidence-only and avoids editor/public bloat', (
   assert.doesNotMatch(reporterPrompt, /camera_hal_relevance_score: 0-5/);
   assert.doesNotMatch(reporterPrompt, /image URL을 만들거나/);
   assert.doesNotMatch(reporterPrompt, /selected는 reporter-stage judgment/);
+
+  const host = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'publish', 'gemini-newsroom-newsletter.js'),
+    'utf8'
+  );
+  const callStart = host.indexOf('reporterSystemPrompt(');
+  assert.notEqual(callStart, -1);
+  const reporterCall = host.slice(callStart, host.indexOf('reporterSchema', callStart));
   assert.match(reporterCall, /\$\{reporterContext\}/);
   assert.doesNotMatch(reporterCall, /\$\{commonContext\}/);
 });
