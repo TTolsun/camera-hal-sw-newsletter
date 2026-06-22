@@ -350,6 +350,24 @@ function exactCatalog(date) {
       reviewOrder: 34,
       humanReadable: false
     }),
+    // #697: syncArchivePublicationState가 발행 시 디스크에 기록하는 archive 발행상태
+    // sidecar/ledger. 날짜별이 아니라 repo-root에 누적되는 커밋된 진실 공급원이라
+    // present-only·non-blocking으로 카탈로그에 두어 생성 PR이 함께 커밋하게 한다(없으면
+    // 제외, 변경 없으면 add-paths no-op). 이게 빠져 매번 수동 reconcile이 필요했다.
+    entry({
+      relPath: 'articles/content/audit/historical-archive-status.json',
+      group: 'public_output',
+      role: 'archive_status',
+      reviewOrder: 35,
+      humanReadable: false
+    }),
+    entry({
+      relPath: 'articles/content/audit/newsletter-provenance-ledger.md',
+      group: 'public_output',
+      role: 'archive_provenance',
+      reviewOrder: 36,
+      humanReadable: true
+    }),
     entry({
       relPath: newsroomRelPath(date, 'fact-check-report.md'),
       group: 'gate_reports',
