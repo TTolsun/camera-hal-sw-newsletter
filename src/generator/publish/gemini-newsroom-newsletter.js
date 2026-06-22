@@ -12,7 +12,6 @@ const {
   newsroomRelPath
 } = require('../../shared/common/artifact-paths');
 const {
-  CandidateArtifactValidationError,
   resolveCandidateInputArtifact
 } = require('../../shared/common/candidate-artifacts');
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');
@@ -86,26 +85,7 @@ const {
   articlePolicy,
   qualityGatePolicy
 } = require('../../shared/common/newsletter-policy');
-const {
-  readExposureHistory,
-  recordArticleExposure,
-  recordNewsletterArticles,
-  writeExposureHistory
-} = require('../reporter/article-exposure-history');
-const {
-  writeHomepageHeadlineState
-} = require('../reporter/homepage-headline');
-const {
-  renderedHeadlineState
-} = require('../reporter/headline-render-reconciliation');
-const {
-  pruneResolvedFallbackImageFactCheckItems
-} = require('../reporter/fact-check-repair');
 const { classifyHalImpact } = require('../reporter/hal-impact-classifier');
-const {
-  failureStageFromError,
-  failureClassFromError
-} = require('./generation-failure-classification');
 const {
   mergePublicArticleFromLlm
 } = require('../reporter/public-article-contract');
@@ -121,9 +101,6 @@ const {
   EditorSemanticValidationError,
   reconcileFactClaimEvidence
 } = require('../editor/editor-output-contract');
-const {
-  validateRenderedIssueStructure
-} = require('../quality/rendered-issue-structure');
 const {
   applyRepairPatches,
   REPAIR_PATCH_CONTRACT_VIOLATION
@@ -315,125 +292,39 @@ const {
   writeReviewableRepairFailureArtifacts
 } = require('./orchestrator-repair-failure-artifacts');
 
-function updateNewsletterData(date, issue) {
-  const entry = {
-    date,
-    title: issue.title,
-    summary: issue.summary,
-    html: `newsletters/${date}/index.html`,
-    md: `newsletters/${date}/newsletter.md`,
-    tags: issueTags(issue)
-  };
+// main()이 던진 어떤 실패든 받아 reviewable diagnostics PR로 라우팅하는 terminal failure 집계기
+// writeTerminalFailureStatus는 orchestrator-terminal-failure.js로 분리했다(#655). 협력자(실패 분류,
+// reviewable repair 묶음, recovery/selection-diagnostics writer, status builder/extra,
+// generation-status/cost-report writer, generationRunState)는 모두 이미 분리된 sibling/shared
+// 모듈에서 직접 import되는 clean importer라 god-file-local 주입이 없고, 같은 이름으로 재노출해
+// require.main bootstrap catch의 호출처를 그대로 유지한다. root/runtimeConfig는 거기서
+// process.cwd()/readRuntimeConfig로 동일하게 재파생한다.
+const {
+  writeTerminalFailureStatus
+} = require('./orchestrator-terminal-failure');
 
-  const newsletters = fs.existsSync(dataPath) ? readJson(dataPath) : [];
-  const updated = newsletters
-    .filter(item => item.date !== date)
-    .concat(entry)
-    .sort((a, b) => b.date.localeCompare(a.date));
-  writeJson(dataPath, updated);
-}
+// publish-ready 종착점에서 공개 산출물을 쓰고 그 계약을 단언하는 terminal publication 헬퍼
+// (updateNewsletterData / persistHeadlineStateArtifacts / assertJsonArtifactsReadable /
+// assertTerminalPublicationContracts)는 orchestrator-terminal-contracts.js로 분리했다(#655).
+// 협력자는 모두 이미 분리된 sibling/shared 모듈에서 직접 import되는 clean importer라
+// god-file-local 주입이 없고, 같은 이름으로 재노출해 main()의 호출처와 module.exports를 그대로
+// 유지한다. root/dataPath는 거기서 process.cwd() 기준으로 동일하게 재파생한다.
+const {
+  updateNewsletterData,
+  persistHeadlineStateArtifacts,
+  assertJsonArtifactsReadable,
+  assertTerminalPublicationContracts
+} = require('./orchestrator-terminal-contracts');
 
-function persistHeadlineStateArtifacts({ date, shortlistReport, shouldWritePublicArtifacts, editor }) {
-  if (!shouldWritePublicArtifacts || !shortlistReport?.homepage_headline_state) {
-    return { files: [], exposureCoverage: shortlistReport?.article_exposure_coverage || null };
-  }
-  const files = [];
-  // persist/validate 전에 헤드라인을 방금 렌더된 공개 이슈에 맞춰 reconcile한다.
-  // article anchor는 실행마다 달라지는 영문 헤드라인에서 파생되므로, retained 헤드라인의
-  // newsletter_article_url anchor가 이번 render에 없을 수 있고 validate:site는 그 anchor를 요구한다.
-  // ensure-public-newsletter-artifacts가 이후 동일하게 reconcile(멱등)하지만,
-  // generate가 먼저 해야 자체 validate:site가 일관된 상태를 본다.
-  const reconciled = renderedHeadlineState({
-    root,
-    date,
-    state: shortlistReport.homepage_headline_state,
-    shortlist: shortlistReport
-  });
-  const state = reconciled.state;
-  shortlistReport.homepage_headline_state = state;
-  if (reconciled.reconciliation?.applied) {
-    shortlistReport.headline_public_render_reconciliation = reconciled.reconciliation;
-    shortlistReport.headline_decision = {
-      ...(shortlistReport.headline_decision || {}),
-      public_rendered_headline_key: reconciled.reconciliation.rendered_headline_key,
-      public_render_reconciled: true,
-      public_render_reconciliation_reason: reconciled.reconciliation.reason
-    };
-  }
-  const headlinePath = writeHomepageHeadlineState(root, state);
-  files.push(path.relative(root, headlinePath).replace(/\\/g, '/'));
-
-  let history = readExposureHistory(root, date);
-  if (state.current_headline) {
-    history = recordArticleExposure(history, state.current_headline, {
-      date,
-      type: 'homepage_headline',
-      score: state.current_headline.current_score,
-      reuseReason: shortlistReport.headline_decision?.reason || shortlistReport.headline_decision?.decision || '',
-      newsletterUrl: state.current_headline.newsletter_url
-    });
-  }
-  const sections = ensureArray(editor?.sections);
-  if (sections.length > 0) {
-    history = recordNewsletterArticles(history, sections, {
-      date,
-      newsletterUrl: `newsletters/${date}/index.html`,
-      cooldownDays: 21
-    });
-  }
-  const historyPath = writeExposureHistory(root, history);
-  files.push(path.relative(root, historyPath).replace(/\\/g, '/'));
-  shortlistReport.article_exposure_coverage = history.coverage;
-  return { files, exposureCoverage: history.coverage };
-}
-
-function assertJsonArtifactsReadable(filePaths) {
-  for (const filePath of filePaths) {
-    readJson(filePath);
-  }
-}
-
-function assertTerminalPublicationContracts({
-  date,
-  editor,
-  markdown,
-  html,
-  newsroomDir,
-  shortlistReport,
-  qualityReport,
-  factCheck
-}) {
-  const result = validateRenderedIssueStructure({ date, editor, markdown, html, root });
-  if (result.ok) return;
-
-  if (newsroomDir) {
-    writeRecoveryPrompt(newsroomDir, {
-      date,
-      stage: 'structural validation',
-      reason: `Terminal structural validation failed:\n${result.text}`,
-      shortlistReport,
-      selectedInputs: ensureArray(shortlistReport?.selected_articles),
-      qualityReport,
-      factCheck
-    });
-  }
-  fail(`Terminal structural validation failed:\n${result.text}`);
-}
-
-function warnResolvedImageFallbacks(issue) {
-  for (const section of ensureArray(issue.sections)) {
-    const resolved = section.resolvedImage || {};
-    if (!resolved.usedFallback) continue;
-    console.warn([
-      'Warning: article image fallback applied',
-      `  section: ${section.category || 'unknown section'}`,
-      `  article: ${section.headline || 'unknown article'}`,
-      `  original: ${resolved.originalUrl || resolved.originalSrc || section.originalImage || 'n/a'}`,
-      `  fallback: ${resolved.url || resolved.src}`,
-      `  reason: ${resolved.reason || 'unknown'}`
-    ].join('\n'));
-  }
-}
+// 이미지 fallback 경고/오탐 정리(warnResolvedImageFallbacks /
+// pruneResolvedFallbackImageFalsePositives)는 orchestrator-image-warnings.js로 분리했다(#655).
+// 의존성은 ensureArray와 pruneResolvedFallbackImageFactCheckItems(+root)뿐인 clean importer라
+// god-file-local 주입이 없고, 같은 이름으로 재노출해 main()의 호출처와 module.exports를 그대로
+// 유지한다.
+const {
+  warnResolvedImageFallbacks,
+  pruneResolvedFallbackImageFalsePositives
+} = require('./orchestrator-image-warnings');
 
 const {
   candidateDuplicateReason,
@@ -452,14 +343,6 @@ const {
   reporterEligibilityFindings,
   applyReporterEligibilityFindingsToFactCheck
 } = require('./orchestrator-section-locking');
-
-function pruneResolvedFallbackImageFalsePositives(factCheck, editor) {
-  const result = pruneResolvedFallbackImageFactCheckItems(factCheck, editor, { root });
-  if (result.removed.length > 0) {
-    console.warn(`Pruned ${result.removed.length} resolved fallback image fact-check false positive(s).`);
-  }
-  return result.factCheck;
-}
 
 const {
   availableCompletionCandidates,
@@ -1523,78 +1406,6 @@ async function main() {
   });
 
   console.log(`LLM newsroom newsletter generated for ${date}`);
-}
-
-function writeTerminalFailureStatus(error) {
-  const date = generationRunState.date || runtimeConfig.newsletterDate || kstDate();
-  const newsroomDir = artifactNewsroomDir(root, date);
-  const failedRawArtifactValidation = error instanceof CandidateArtifactValidationError;
-  if (error instanceof EditorSemanticValidationError && generationRunState.lastKnownValidEditor) {
-    try {
-      writeReviewableRepairFailureArtifacts({
-        date,
-        newsroomDir,
-        error,
-        reporter: generationRunState.lastKnownValidReporter,
-        factCheck: generationRunState.factCheck || generationRunState.lastKnownValidFactCheck,
-        qualityReport: generationRunState.qualityReport || generationRunState.lastKnownValidQualityReport,
-        retryHistory: generationRunState.retryHistory,
-        shortlistReport: generationRunState.shortlistReport,
-        attempt: generationRunState.currentQualityAttempt || generationRunState.lastKnownValidAttempt,
-        stage: failureStageFromError(error)
-      });
-      return;
-    } catch (fallbackError) {
-      console.error(`Failed to preserve reviewable repair artifacts: ${fallbackError.message}`);
-    }
-  }
-  try {
-    writeRecoveryPrompt(newsroomDir, {
-      date,
-      stage: failureStageFromError(error),
-      reason: String(error?.message || error || 'Unknown generation failure.'),
-      shortlistReport: generationRunState.shortlistReport,
-      selectedInputs: generationRunState.selectedInputs,
-      qualityReport: generationRunState.qualityReport,
-      factCheck: generationRunState.factCheck
-    });
-    writeSelectionDiagnosticsArtifact(newsroomDir, generationRunState.shortlistReport);
-  } catch (_) {
-    // The status file below is the minimum required failure artifact.
-  }
-  // editor가 유효 draft 없이 총체적으로 실패해도 결정론적 selection 아티팩트는 남아 있으므로, job을
-  // 죽이는 FAILED 대신 reviewable diagnostics PR로 라우팅한다(#503 정신).
-  const failedEditorReviewable = error instanceof EditorSemanticValidationError &&
-    !failedRawArtifactValidation &&
-    Boolean(generationRunState.shortlistReport);
-  writeGenerationStatus(buildGenerationStatus({
-    date,
-    status: failedRawArtifactValidation
-      ? 'FAILED_RAW_ARTIFACT_VALIDATION'
-      : failedEditorReviewable
-        ? 'FAILED_EDITOR_REVIEWABLE'
-        : 'FAILED',
-    failureStage: failureStageFromError(error),
-    failureReason: String(error?.message || error || 'Unknown generation failure.'),
-    failureClass: failureClassFromError(error),
-    retryHistory: generationRunState.retryHistory,
-    qualityReport: generationRunState.qualityReport,
-    factCheck: generationRunState.factCheck,
-    extra: {
-      quality_attempt_count: Math.max(
-        generationRunState.retryHistory.length,
-        generationRunState.currentQualityAttempt
-      ),
-      raw_artifact_validation_error: failedRawArtifactValidation ? error.details : null,
-      failure_kind: failedEditorReviewable ? 'editor_failed_reviewable' : '',
-      review_gate_passed: failedEditorReviewable ? true : undefined,
-      editor_review_required: failedEditorReviewable ? true : undefined,
-      public_output_expected: failedEditorReviewable ? false : undefined,
-      ...editorSemanticStatusExtra(error),
-      ...selectionStatusExtra(generationRunState.shortlistReport)
-    }
-  }));
-  writeCostReport(date);
 }
 
 if (require.main === module) {
