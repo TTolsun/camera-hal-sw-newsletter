@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-06-22",
+  "validations": [
+    {
+      "proposal_id": "proposal-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/",
+      "normalized_url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-6",
+      "candidate_url": "https://github.com/aiff22/MicroISP",
+      "normalized_url": "https://github.com/aiff22/MicroISP",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "microisp-neural-isp"
+    },
+    {
+      "proposal_id": "proposal-7",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    }
+  ],
+  "counts": {
+    "accepted": 5
+  }
+}

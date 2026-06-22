@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "584a5af80d040a06",
+      "url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/",
+      "title": "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver",
+      "published_at": "2026-06-20T09:24:37Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hi Matthias, On Fri, Jun 19, 2026 at 02:28:55PM +0200, Matthias Fend wrote: > Add a V4L2 sub-device driver for Himax HM1246 image sensor. > > The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an active > array size of 1296 x 976. It is programmable through an I2C interface and > connected via parallel bus. > > The sensor has an internal ISP with a complete image processing pipeline > including control loops. However, this driver uses the sensor in raw mode > and the entire ISP is b",
+          "evidence_text": "<html><head><title>Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver - Sakari Ailus</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.93,
+      "android_hal_relevance": 0.93,
+      "ai_relevance": 0,
+      "technical_depth": 0.902,
+      "warnings": []
+    },
+    {
+      "id": "182ffe3e2c099865",
+      "url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/",
+      "title": "Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver",
+      "published_at": "2026-06-20T13:27:59Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "On Fri, Jun 19, 2026 at 06:24:32PM +0530, Himanshu Bhavani wrote: > Add a v4l2 subdevice driver for the Sony imx576 sensor. > > The Sony IMX576 image sensor with an active > array size of 5760 x 4312 > > The following features are supported: > - Manual exposure an gain control support > - vblank/hblank control support > - Supported resolution: 2880 x 2156 30fps (SRGGB10) You've been asked in v1 to make this driver dynamically compute registers instead of hardcoding modes. Please do so in v3. Nac",
+          "evidence_text": "<html><head><title>Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver - Laurent Pinchart</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.83,
+      "warnings": []
+    },
+    {
+      "id": "gemini-d7973b975aca4d2c",
+      "url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/",
+      "title": "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver - Sakari Ailus",
+      "published_at": "2026-06-20",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver - Sakari Ailus",
+          "evidence_text": "<html><head><title>Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver - Sakari Ailus</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-e86387f30d3b62ea",
+      "url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/",
+      "title": "Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver - Laurent Pinchart",
+      "published_at": "2026-06-20",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver - Laurent Pinchart",
+          "evidence_text": "<html><head><title>Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver - Laurent Pinchart</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-06-17",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.802,
+      "warnings": []
+    },
+    {
+      "id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "published_at": "2026-05-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"de-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.794,
+      "warnings": []
+    },
+    {
+      "id": "5293b25a93416b26",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "title": "Top 3 updates for Android developer productivity",
+      "published_at": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Simona Milanovic, Developer Relations Engineer Every year, Google I/O brings new announcements and resources across ecosystems and products, including Android development. As development shifts toward AI and agent-assisted tooling, we’ve expanded our offerings to better support you, however you decide to build for Android. To help you stay up to date, here is a summary of the top 3 announcements for Android Developer Productivity at I/O . 1. Android CLI is now stable Android CLI is now",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.78,
+      "android_hal_relevance": 0.78,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.715,
+      "warnings": []
+    },
+    {
+      "id": "gemini-98444c77340368f8",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Developers Blog: Top 3 updates for Android developer productivity",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.492,
+      "warnings": []
+    },
+    {
+      "id": "8edd18929c9fbdd9",
+      "url": "https://goo.gle/AdaptiveApps_IO26",
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "published_at": "Tue, 19 May 2026 13:00:00 +0000",
+      "source_type": "roundup_child",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Jetpack Compose is the definitive engine for this transition, offering core tools like our latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, enhanced non-touch input support, and CameraX for correct camera previews across any window size.",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
+      "warnings": []
+    },
+    {
+      "id": "1dbe1c628b26e5d5",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "published_at": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "source_type": "roundup_child",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "We’ve shipped a fresh new batch of skills, with now more than 17 skills for areas such as: Adaptive UI Display Glasses and Jetpack Compose Glimmer for XR Migration to CameraX Perfetto SQL and Trace Analysis Jetpack Compose Styles API AppFunctions Verified email retrieval with Android Credential Manager Engage SDK integration Testing setup Wear OS Jetpack Compose Material3 Android skills keep growing You can browse skills and install using the Android CLI commands: android skills list android ski",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
+      "warnings": []
+    },
+    {
+      "id": "9b460337b26c1fbb",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "published_at": "Tue, 02 Jun 2026 17:00:00 +0000",
+      "source_type": "roundup_child",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "By leveraging Jetpack CameraX and Media3, you can build professional-grade experiences that feel native across the entire ecosystem.&nbsp; It starts with high-fidelity capture using the CameraXViewfinder Composable, which ensures your preview remains perfectly scaled and responsive on any form factor, including foldables and tablets.",
+          "evidence_text": "<!DOCTYPE html><html style=\"font-size: 62.5%;font-family: Roboto, Arial, sans-serif;\" lang=\"en\" darker-dark-theme darker-dark-theme-deprecate system-icons color-version=\"v2_0\" typography typography-spacing><head><script data-id=\"_gd\" nonce=\"iir3p2K4KnbJ3kRQV8HoOg\">window.WIZ_global_data = {\"AfY8Hf\":false,\"FL1an\":false,\"HiPsbb\":0,\"MUE6Ne\":\"youtube_web\",\"MuJWjd\":false,\"UUFaWc\":\"%.@.null,1000,2]\",\"cfb2h\":\"youtube.web-front-end-critical_20260615.09_p1\",\"fPDxwd\":[],\"hsFLT\":\"%.@.null,10,3]\",\"iCzhFc\":f",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
+      "warnings": []
+    },
+    {
+      "id": "3ebcc5a4a587d4cd",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "published_at": "Mon, 15 Jun 2026 22:22:24 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "GCC 16 is about to be released, so I'm sharing some of the new features I worked on this year. Some changes are visible to users, while others improve the system more subtly. New features in GCC 16: Improved error messages and SARIF output by David Malcolm From the article: A well-known challenge for C++ developers is the readability of template-related error messages. C++ compilers tend to either provide too little information or spew screenfuls of text at you. Either way, the errors can be dif",
+          "evidence_text": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <title>\n              \n          New features in GCC 16: Improved error messages and SARIF output -- David Malcolm :\n        \n            Standard C++\n    </title>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"/favicon.ico\" rel=\"shortcut icon\">\n    <link rel=\"apple-touch-icon\" href=\"apple-touch-icon-57.png\">\n    <",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0,
+      "technical_depth": 0.707,
+      "warnings": []
+    }
+  ]
+}

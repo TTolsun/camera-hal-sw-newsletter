@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-22",
+  "proposals": [
+    {
+      "proposal_id": "proposal-1",
+      "topic_gap": "Recent updates to Android's camera pipeline, focusing on HAL improvements, new features, and performance optimizations.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android camera HAL",
+        "camera pipeline",
+        "camera performance"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
+      ],
+      "expected_evidence": [
+        "Camera HAL updates",
+        "Camera pipeline improvements",
+        "Performance optimizations for camera"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-2",
+      "topic_gap": "New developments in Linux kernel's media subsystem, specifically V4L2 and related drivers impacting camera functionality.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel media subsystem",
+        "V4L2 driver",
+        "camera sensor driver",
+        "linux-media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/",
+        "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/"
+      ],
+      "expected_evidence": [
+        "New camera sensor drivers",
+        "V4L2 subsystem updates",
+        "Media controller changes",
+        "Image sensor driver improvements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-3",
+      "topic_gap": "Updates to Android's media framework, including Media3, MediaCodec, and MediaRecorder, relevant to camera output and A/V synchronization.",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Media3 release notes",
+        "MediaCodec updates",
+        "MediaRecorder changes",
+        "AV sync camera"
+      ],
+      "candidate_urls": [],
+      "expected_evidence": [
+        "Media3 release notes",
+        "MediaCodec updates",
+        "MediaRecorder enhancements",
+        "A/V sync improvements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-4",
+      "topic_gap": "Changes and new features in the Android Compatibility Definition Document (CDD) related to camera and media.",
+      "source_family": "android-compatibility-definition-document",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android CDD camera",
+        "Android compatibility media"
+      ],
+      "candidate_urls": [],
+      "expected_evidence": [
+        "CDD updates",
+        "Camera requirements",
+        "Media framework compliance"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-5",
+      "topic_gap": "New capabilities or changes in Android's Photo Picker and MediaStore that affect how camera-generated content is accessed and managed.",
+      "source_family": "android-photo-picker-reference",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Photo Picker",
+        "MediaStore changes",
+        "camera content access"
+      ],
+      "candidate_urls": [],
+      "expected_evidence": [
+        "Photo Picker updates",
+        "MediaStore API changes",
+        "Gallery access improvements",
+        "Sharing functionality"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-6",
+      "topic_gap": "Recent advancements or discussions on using AI and machine learning for image processing pipelines, particularly on-device or embedded systems.",
+      "source_family": "microisp-neural-isp",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Neural ISP",
+        "on-device AI camera",
+        "embedded AI image processing"
+      ],
+      "candidate_urls": [
+        "https://github.com/aiff22/MicroISP"
+      ],
+      "expected_evidence": [
+        "Neural ISP implementations",
+        "On-device image processing",
+        "AI for camera pipelines",
+        "RAW to RGB conversion"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-7",
+      "topic_gap": "Updates related to camera testing and automation within the Android ecosystem, including ITS (Integrated Test Suite).",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android camera ITS",
+        "camera automation testing"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Camera ITS updates",
+        "Automated camera testing",
+        "Test box configurations"
+      ],
+      "risk_notes": []
+    }
+  ]
+}
