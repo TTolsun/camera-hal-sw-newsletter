@@ -86,8 +86,7 @@ const {
   selectionDiagnosticsFromReports
 } = require('../select/selection-diagnostics');
 const {
-  roleFromStageLabel,
-  createStageStatusTracker
+  roleFromStageLabel
 } = require('../select/stage-status-tracker');
 const {
   candidateGroupKey,
@@ -289,6 +288,7 @@ const {
   writeCostReport,
   writeSummaryCacheReport
 } = require('./orchestrator-artifact-writers');
+const { generationRunState } = require('./orchestrator-run-state');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -296,26 +296,6 @@ const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
 const sourceRegistryPath = path.join(root, 'src', 'shared', 'data', 'news-sources.json');
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
-const generationRunState = {
-  date: '',
-  retryHistory: [],
-  currentQualityAttempt: 0,
-  qualityReport: null,
-  factCheck: null,
-  shortlistReport: null,
-  selectedInputs: [],
-  lastKnownValidEditor: null,
-  lastKnownValidReporter: null,
-  lastKnownValidFactCheck: null,
-  lastKnownValidQualityReport: null,
-  lastKnownValidAttempt: 0,
-  editorSemanticValidation: null,
-  editorPublicArticleJudge: null,
-  repairAttempted: false,
-  repairSucceeded: false,
-  candidateInput: null,
-  stageTracker: createStageStatusTracker()
-};
 
 // callLlmJson 계측 래퍼 (#398). 모든 LLM 단계(reporter/editor/repair/factcheck/
 // background-context/judge)가 이 한 지점을 통과하므로, 여기서 start/pass/fail만
