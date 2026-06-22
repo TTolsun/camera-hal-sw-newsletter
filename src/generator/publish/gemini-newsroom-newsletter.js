@@ -79,8 +79,7 @@ const {
 } = require('../reporter/news-summary-cache');
 const {
   normalizeReporterReport,
-  normalizeShortlistReport,
-  renderCandidateSelectionDiagnostics
+  normalizeShortlistReport
 } = require('../select/selection-diagnostics');
 const {
   roleFromStageLabel
@@ -92,8 +91,7 @@ const {
 } = require('../quality/stale-claims');
 const {
   articlePolicy,
-  qualityGatePolicy,
-  publishGateCriteriaText
+  qualityGatePolicy
 } = require('../../shared/common/newsletter-policy');
 const {
   readExposureHistory,
@@ -101,11 +99,6 @@ const {
   recordNewsletterArticles,
   writeExposureHistory
 } = require('../reporter/article-exposure-history');
-const {
-  buildDateReviewManifest,
-  buildReviewArtifactInventory,
-  renderReviewGuideMarkdown
-} = require('./review-artifact-inventory');
 const {
   writeHomepageHeadlineState
 } = require('../reporter/homepage-headline');
@@ -150,7 +143,6 @@ const {
   buildHtml,
   buildFactCheckMarkdown,
   buildEditorChiefBrief,
-  buildReleaseQaReport,
   issueTags,
   ensureArray
 } = require('../render/newsletter-renderer');
@@ -223,13 +215,11 @@ const {
   isEditorialReviewableStatus
 } = require('./orchestrator-generation-status');
 const {
-  reviewPackageFactCheck,
   backgroundContextStageEnabled,
   normalizeBackgroundContextReport,
   editorRenderedGroupKeys,
   editorExplicitlyDemotedGroups,
   buildRetryHistoryMarkdown,
-  buildSelectionReport,
   validateMergedWeeklyArticle
 } = require('./orchestrator-report-builders');
 const {
@@ -296,60 +286,6 @@ async function callLlmJson(stage, ...args) {
   }
 }
 
-function writeDateReviewPackage({
-  rootDir = root,
-  date,
-  files = [],
-  validateText = '',
-  factCheck = null,
-  todoFound = false,
-  emptySourceSections = [],
-  qualityReport = null,
-  runContext = {}
-}) {
-  const newsroomDir = artifactNewsroomDir(rootDir, date);
-  fs.mkdirSync(newsroomDir, { recursive: true });
-  const changedArtifacts = [...new Set([
-    ...files.filter(Boolean),
-    newsroomRelPath(date, '00-review-guide.md'),
-    newsroomRelPath(date, 'release-qa-report.md'),
-    newsroomRelPath(date, 'artifact-manifest.json')
-  ])];
-  const reviewGuidePath = path.join(newsroomDir, '00-review-guide.md');
-  const releaseQaPath = path.join(newsroomDir, 'release-qa-report.md');
-  const writeReviewGuide = inventory => {
-    fs.writeFileSync(reviewGuidePath, renderReviewGuideMarkdown(inventory), 'utf8');
-  };
-  const writeReleaseQa = inventory => {
-    fs.writeFileSync(releaseQaPath, buildReleaseQaReport(
-      date,
-      files,
-      validateText,
-      reviewPackageFactCheck(factCheck),
-      todoFound,
-      emptySourceSections,
-      qualityReport,
-      inventory
-    ), 'utf8');
-  };
-
-  let inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
-  writeReviewGuide(inventory);
-  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
-  writeReleaseQa(inventory);
-  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
-  writeReviewGuide(inventory);
-  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
-  writeReleaseQa(inventory);
-  const manifestPath = path.join(newsroomDir, 'artifact-manifest.json');
-  writeJson(manifestPath, buildDateReviewManifest({ root: rootDir, date, changedArtifacts, runContext }));
-  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
-  writeReviewGuide(inventory);
-  inventory = buildReviewArtifactInventory({ root: rootDir, date, changedArtifacts, runContext });
-  writeReleaseQa(inventory);
-  writeJson(manifestPath, buildDateReviewManifest({ root: rootDir, date, changedArtifacts, runContext }));
-}
-
 function readSeedEvidencePackForDate(date, rootDir = root) {
   const filePath = seedEvidencePackPath(rootDir, date);
   return fs.existsSync(filePath) ? readJson(filePath) : null;
@@ -365,6 +301,13 @@ const {
   editorSemanticStatusExtra,
   selectionStatusExtra
 } = require('./orchestrator-status-builders');
+
+// 00-review-guide.md / release-qa-report.md / artifact-manifest.json을 한 묶음으로 쓰는
+// near-pure writer는 orchestrator-review-package-writer.js로 분리했다(#655). 같은 이름으로
+// 재노출해 호출처와 io 주입을 그대로 유지한다.
+const {
+  writeDateReviewPackage
+} = require('./orchestrator-review-package-writer');
 
 async function buildBackgroundContextReport({ date, articleCapsuleReport, commonContext, stage }) {
   const fallbackReport = buildStaticBackgroundContextReport(date, articleCapsuleReport);
@@ -905,208 +848,13 @@ const {
   buildCompletionExclusionContext
 } = require('./orchestrator-completion');
 
-function writeRecoveryPrompt(newsroomDir, context = {}) {
-  fs.mkdirSync(newsroomDir, { recursive: true });
-  const date = context.date || generationRunState.date || runtimeConfig.newsletterDate || kstDate();
-  const shortlist = context.shortlistReport || generationRunState.shortlistReport || null;
-  const selectionDiagnostics = selectionStatusExtra(shortlist);
-  const selectionDiagnosticsMarkdown = renderCandidateSelectionDiagnostics(selectionDiagnostics);
-  const lines = [
-    `# 복구 프롬프트 - ${date}`,
-    '',
-    'newsroom automation이 publication readiness 전에 멈췄습니다. 아래 artifact를 사용해 diagnostics를 잃지 않고 수정하거나 다시 실행합니다.',
-    '',
-    '## 실패',
-    '',
-    `- 단계: ${context.stage || 'generation'}`,
-    `- 사유: ${context.reason || 'Unknown failure.'}`,
-    '',
-    selectionDiagnosticsMarkdown,
-    '',
-    '## Deterministic Final Selection 상태',
-    '',
-    `- Final input candidate: ${selectionDiagnostics.final_input_candidate_count ?? selectionDiagnostics.input_candidate_count ?? 'unknown'}`,
-    `- Final eligible candidate: ${selectionDiagnostics.final_eligible_candidate_count ?? selectionDiagnostics.eligible_candidate_count ?? 'unknown'}`,
-    `- Final selected article: ${selectionDiagnostics.final_selected_article_count ?? selectionDiagnostics.selected_article_count ?? 'unknown'}`,
-    `- Deterministic primary article: ${selectionDiagnostics.deterministic_selected_count ?? 'unknown'}`,
-    `- Reserve candidate: ${selectionDiagnostics.reserve_candidate_count ?? 'unknown'}`,
-    `- Demoted candidate: ${selectionDiagnostics.demoted_article_count ?? selectionDiagnostics.demoted_candidate_count ?? 'unknown'}`,
-    `- AI selected input: ${selectionDiagnostics.ai_selected_article_count ?? 'unknown'}`,
-    `- Publish ready: ${selectionDiagnostics.publish_ready ?? 'unknown'}`,
-    `- Underfilled: ${selectionDiagnostics.underfilled}`,
-    `- Selection warning: ${selectionDiagnostics.selection_warnings.join('; ') || '없음'}`,
-    `- Selection error: ${selectionDiagnostics.selection_errors.join('; ') || '없음'}`,
-    `- direct_aosp_camera: ${selectionDiagnostics.direct_aosp_camera_count ?? 'unknown'}`,
-    `- android_platform_camera_adjacent: ${selectionDiagnostics.android_platform_camera_adjacent_count ?? 'unknown'}`,
-    `- camera_driver_image_pipeline: ${selectionDiagnostics.camera_driver_image_pipeline_count ?? 'unknown'}`,
-    `- android_multimedia_camera_output: ${selectionDiagnostics.android_multimedia_camera_output_count ?? 'unknown'}`,
-    `- soc_platform_signal: ${selectionDiagnostics.soc_platform_signal_count ?? 'unknown'}`,
-    `- cpp_ai_tooling_fallback: ${selectionDiagnostics.cpp_ai_tooling_fallback_count ?? 'unknown'}`,
-    `- Non-fallback reviewable: ${selectionDiagnostics.non_fallback_reviewable_article_count ?? 'unknown'}`,
-    `- Source/parser hint: ${selectionDiagnostics.selection_shortage_hints.join('; ') || 'none'}`,
-    `- 주요 final exclusion reason: ${selectionDiagnostics.final_exclusion_reason_summary.map(item => `${item.reason} (${item.count})`).join('; ') || '없음'}`,
-    '',
-    '## 다시 실행',
-    '',
-    '```powershell',
-    `$env:NEWSLETTER_DATE="${date}"`,
-    'npm.cmd run generate',
-    'npm.cmd run validate',
-    '```',
-    '',
-    '## Shortlist',
-    '',
-    '```json',
-    JSON.stringify(shortlist, null, 2),
-    '```',
-    '',
-    '## Selected Input',
-    '',
-    '```json',
-    JSON.stringify(context.selectedInputs || generationRunState.selectedInputs || [], null, 2),
-    '```',
-    '',
-    '## 실패 Section',
-    '',
-    '```json',
-    JSON.stringify(context.failedSections || [], null, 2),
-    '```',
-    '',
-    '## 품질 감점',
-    '',
-    '```json',
-    JSON.stringify(ensureArray((context.qualityReport || generationRunState.qualityReport)?.deductions), null, 2),
-    '```',
-    '',
-    '## Fact-check 결과',
-    '',
-    '```json',
-    JSON.stringify(context.factCheck || generationRunState.factCheck || null, null, 2),
-    '```',
-    '',
-    '## Artifact 체크리스트',
-    '',
-    `- ${newsroomRelPath(date, 'shortlisted-candidates.json')}`,
-    `- ${newsroomRelPath(date, 'article-capsules.json')}`,
-    `- ${newsroomRelPath(date, 'background-context.json')}`,
-    `- ${newsroomRelPath(date, 'reporter-candidates.json')}`,
-    `- ${newsroomRelPath(date, 'editor-draft.json')}`,
-    `- ${newsroomRelPath(date, 'fact-check-report.json')}`,
-    `- ${newsroomRelPath(date, 'quality-report.json')}`,
-    `- ${newsroomRelPath(date, 'retry-history.json')}`,
-    '- .tmp/newsletter-generation-status.json',
-    '- .tmp/gemini-raw/**'
-  ];
-  const filePath = path.join(newsroomDir, 'recovery-prompt.md');
-  fs.writeFileSync(filePath, `${lines.join('\n')}\n`, 'utf8');
-  return filePath;
-}
-
-function writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport = generationRunState.shortlistReport) {
-  fs.mkdirSync(newsroomDir, { recursive: true });
-  const date = shortlistReport?.date || generationRunState.date || runtimeConfig.newsletterDate || kstDate();
-  const selectionDiagnostics = selectionStatusExtra(shortlistReport);
-  const selectionReport = buildSelectionReport(date, shortlistReport, selectionDiagnostics);
-  const lines = [
-    `# Candidate Selection Diagnostics - ${date}`,
-    '',
-    renderCandidateSelectionDiagnostics(selectionDiagnostics),
-    '',
-    '## Gate Summary',
-    '',
-    `- Review Gate: ${selectionDiagnostics.review_gate_passed ? 'PASS' : 'FAIL'} (Newsletter Policy selection checks)`,
-    `- Publish Gate: ${selectionDiagnostics.publish_gate_passed ? 'PASS' : 'FAIL'} (${publishGateCriteriaText()})`,
-    `- selection_publish_ready: ${selectionDiagnostics.selection_publish_ready}`,
-    `- final_publish_ready: ${selectionDiagnostics.final_publish_ready}`,
-    `- selection_errors: ${selectionDiagnostics.selection_errors.length}`,
-    `- selection_shortage_hints: ${selectionDiagnostics.selection_shortage_hints.length}`,
-    ''
-  ];
-  const filePath = path.join(newsroomDir, 'selection-diagnostics.md');
-  fs.writeFileSync(filePath, `${lines.join('\n')}\n`, 'utf8');
-  writeJson(path.join(newsroomDir, 'selection-report.json'), selectionReport);
-  const reportLines = [
-    `# Selection Report - ${date}`,
-    '',
-    `- status: ${selectionReport.status}`,
-    `- failure_stage: ${selectionReport.failure_stage || 'n/a'}`,
-    `- failure_reason: ${selectionReport.failure_reason || 'n/a'}`,
-    `- review_gate_passed: ${selectionReport.review_gate_passed}`,
-    `- publish_gate_passed: ${selectionReport.publish_gate_passed}`,
-    '',
-    '## Selection Errors',
-    '',
-    ...(
-      selectionReport.selection_errors.length > 0
-        ? selectionReport.selection_errors.map(error => `- ${error}`)
-        : ['- none']
-    ),
-    '',
-    '## Shortage Hints',
-    '',
-    ...(
-      selectionReport.selection_shortage_hints.length > 0
-        ? selectionReport.selection_shortage_hints.map(hint => `- ${hint}`)
-        : ['- none']
-    ),
-    '',
-    '## Candidate Pool Preflight',
-    '',
-    `- candidate_shortage_reviewable: ${selectionReport.candidate_shortage_reviewable}`,
-    `- candidate_pool_preflight_passed: ${selectionReport.candidate_pool_preflight_passed}`,
-    `- shortage_reason_codes: ${selectionReport.shortage_reason_codes.join('; ') || 'none'}`,
-    `- publishable_candidate_count: ${selectionReport.candidate_shortage_summary.publishable_candidate_count ?? 'unknown'}`,
-    `- required_publishable_candidate_count: ${selectionReport.candidate_shortage_summary.required_publishable_candidate_count ?? 'unknown'}`,
-    `- reserve_candidate_count: ${selectionReport.candidate_shortage_summary.reserve_candidate_count ?? 'unknown'}`,
-    `- required_reserve_candidate_count: ${selectionReport.candidate_shortage_summary.required_reserve_candidate_count ?? 'unknown'}`,
-    `- Reserve requirement: ${Number(selectionReport.candidate_shortage_summary.required_reserve_candidate_count) === 0 ? 'diagnostics only' : 'blocking preflight requirement'}`,
-    '',
-    '## Homepage Headline',
-    '',
-    `- decision: ${selectionReport.headline_decision?.reason || selectionReport.headline_decision?.decision || 'unknown'}`,
-    `- current_headline_key: ${selectionReport.headline_decision?.current_headline_key || 'unknown'}`,
-    `- replacement_headline_key: ${selectionReport.headline_decision?.replacement_headline_key || 'unknown'}`,
-    `- public_render_reconciled: ${selectionReport.headline_decision?.public_render_reconciled === true || selectionReport.headline_public_render_reconciliation?.applied === true}`,
-    `- public_rendered_headline_key: ${selectionReport.headline_decision?.public_rendered_headline_key || selectionReport.headline_public_render_reconciliation?.rendered_headline_key || 'unknown'}`,
-    `- public_render_reconciliation_reason: ${selectionReport.headline_decision?.public_render_reconciliation_reason || selectionReport.headline_public_render_reconciliation?.reason || 'unknown'}`,
-    `- previous_stored_current_score: ${selectionReport.headline_decision?.previous_stored_current_score ?? 'unknown'}`,
-    `- runtime_decayed_score: ${selectionReport.headline_decision?.runtime_decayed_score ?? 'unknown'}`,
-    `- last_scored_at: ${selectionReport.headline_decision?.last_scored_at || 'unknown'}`,
-    `- scored_at: ${selectionReport.headline_decision?.scored_at || 'unknown'}`,
-    `- latest_inclusion_mode: ${selectionReport.headline_latest_inclusion?.mode || 'none'}`,
-    `- injected_from_snapshot: ${selectionReport.headline_latest_inclusion?.injected_from_snapshot === true}`,
-    `- removed_due_to_headline_inclusion_count: ${selectionReport.removed_due_to_headline_inclusion.length}`,
-    ...(
-      selectionReport.removed_due_to_headline_inclusion.length > 0
-        ? selectionReport.removed_due_to_headline_inclusion.slice(0, 5).map(item =>
-          `  - ${item.title || 'unknown'} (${item.article_identity_key || 'unknown'}): ${item.reason || 'unknown'}`
-        )
-        : []
-    ),
-    `- exposure_history_coverage: ${selectionReport.article_exposure_coverage?.mode || 'unknown'} since ${selectionReport.article_exposure_coverage?.coverage_starts_at || 'unknown'}`,
-    '',
-    '## Source Parser Hints',
-    '',
-    ...(
-      selectionReport.source_parser_hints.length > 0
-        ? selectionReport.source_parser_hints.map(hint => `- ${hint.code || 'UNKNOWN'}: ${hint.reason || 'unknown'}`)
-        : ['- none']
-    ),
-    '',
-    '## Gate Summary',
-    '',
-    `- non_fallback_reviewable_article_count: ${selectionReport.gate_summary.non_fallback_reviewable_article_count ?? 'unknown'}`,
-    `- primary_camera_stack_topic_count: ${selectionReport.gate_summary.primary_camera_stack_topic_count ?? 'unknown'}`,
-    `- supporting_main_article_count: ${selectionReport.gate_summary.supporting_main_article_count ?? 'unknown'}`,
-    `- forbidden_main_article_count: ${selectionReport.gate_summary.forbidden_main_article_count ?? 'unknown'}`,
-    `- Minimum publishable article count: ${selectionReport.gate_summary.min_final_articles ?? 'unknown'}`,
-    `- Primary camera stack requirement: ${Number(selectionReport.gate_summary.absolute_min_reviewable_articles) === 0 ? 'disabled by one-article policy' : selectionReport.gate_summary.absolute_min_reviewable_articles ?? 'unknown'}`,
-    `- min_final_articles: ${selectionReport.gate_summary.min_final_articles ?? 'unknown'}`,
-    `- max_final_articles: ${selectionReport.gate_summary.max_final_articles ?? 'unknown'}`
-  ];
-  fs.writeFileSync(path.join(newsroomDir, 'selection-report.md'), `${reportLines.join('\n')}\n`, 'utf8');
-  return filePath;
-}
+// recovery-prompt.md / selection-diagnostics.md(+ selection-report) writer는
+// orchestrator-recovery-writers.js로 분리했다(#655). 같은 이름으로 재노출해 호출처와
+// module.exports를 그대로 유지한다.
+const {
+  writeRecoveryPrompt,
+  writeSelectionDiagnosticsArtifact
+} = require('./orchestrator-recovery-writers');
 
 async function main() {
   const date = runtimeConfig.newsletterDate || kstDate();
