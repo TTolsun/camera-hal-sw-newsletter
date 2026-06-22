@@ -4,8 +4,8 @@
 // article semantic judge stage — building judge input, normalizing the judge
 // report, deriving blocking issues, and constructing the judge error. Pure on
 // their arguments only — no generationRunState, no fs, no module globals — and
-// no LLM calls (the async runPublicArticleJudge / repair flow stays in the
-// orchestrator). Extracted verbatim from gemini-newsroom-newsletter.js.
+// no LLM calls (the async runPublicArticleJudge / repair flow lives in
+// orchestrator-public-article-judge.js). Extracted verbatim from gemini-newsroom-newsletter.js.
 
 const {
   normalizeUrl
