@@ -56,7 +56,7 @@ function reporterSystemPrompt({ hasLockedSections = false } = {}) {
   ].filter(Boolean).join('\n');
 }
 
-function editorSystemPrompt({ editorRetryContract = null, publishMode, hasLockedSections = false, hasCatchUpCoverage = false } = {}) {
+function editorSystemPrompt({ editorRetryContract = null, publishMode, hasLockedSections = false, hasCatchUpCoverage = false, hasEditorialPlan = false } = {}) {
   return [
     '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI editor입니다.',
     'AOSP Camera, Camera HAL, Camera Driver, SoC platform engineer가 10분 안에 읽을 수 있는 한국어 technical newsletter draft를 작성하세요.',
@@ -73,7 +73,7 @@ function editorSystemPrompt({ editorRetryContract = null, publishMode, hasLocked
     sourceExtractionPromptGuardrails(),
     articleSectionContractPrompt(),
     publicArticleContractPrompt(),
-    cameraHalEditorialVoicePrompt(),
+    cameraHalEditorialVoicePrompt({ hasEditorialPlan }),
     publicationBoundaryPrompt(),
     articleClaimContractPrompt(),
     '초기 editor draft는 primary selected article capsule만 사용해야 합니다. reserve candidate는 repair 또는 completion 중 primary article이 demote/remove된 뒤에만 사용할 수 있습니다.',

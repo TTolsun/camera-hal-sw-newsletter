@@ -10,7 +10,8 @@ const test = require('node:test');
 const {
   editorialPlanStageEnabled,
   normalizeEditorialPlanReport,
-  buildEditorialPlanReport
+  buildEditorialPlanReport,
+  editorFacingEditorialPlan
 } = require('../../publish/orchestrator-editorial-plan-stage');
 const { editorialPlanSchema } = require('../../render/newsletter-schema');
 const { editorialPlanPrompt } = require('../../reporter/newsletter-prompts');
@@ -72,6 +73,36 @@ test('normalizeEditorialPlanReport는 식별자를 보존하고 타입을 강제
   assert.equal(item.direct_hal_impact, false); // 'true' 문자열은 boolean true가 아니므로 false
   assert.deepEqual(item.misunderstanding_risks, ['이미지 센서로 오해']); // 빈 문자열 제거
   assert.deepEqual(item.source_limitations, ['특정 보드 한정']);
+});
+
+test('editorFacingEditorialPlan은 coverage 권한 신호를 제거하고 framing은 유지하며 원본은 안 바꾼다', () => {
+  const report = {
+    date: '2026-05-08',
+    editorial_plans: [{
+      title: 'T', url: 'U', source_candidate_hash: 'H',
+      coverage_decision: 'main_article', impact_level: 'Direct Impact',
+      direct_hal_impact: false, target_description: 'TD', editorial_angle: 'EA',
+      why_it_matters: 'W', reader_takeaway: 'R', misunderstanding_risks: ['m'], source_limitations: ['s']
+    }]
+  };
+  const item = editorFacingEditorialPlan(report).editorial_plans[0];
+  // coverage 권한 신호는 제거된다.
+  assert.equal('coverage_decision' in item, false);
+  assert.equal('impact_level' in item, false);
+  // framing 필드는 유지된다.
+  assert.equal(item.target_description, 'TD');
+  assert.equal(item.editorial_angle, 'EA');
+  assert.equal(item.direct_hal_impact, false);
+  assert.deepEqual(item.misunderstanding_risks, ['m']);
+  assert.deepEqual(item.source_limitations, ['s']);
+  assert.equal(item.title, 'T');
+  // 원본 report(artifact용)는 coverage_decision을 그대로 유지한다.
+  assert.equal(report.editorial_plans[0].coverage_decision, 'main_article');
+});
+
+test('editorFacingEditorialPlan은 null/비배열을 안전하게 통과한다', () => {
+  assert.equal(editorFacingEditorialPlan(null), null);
+  assert.deepEqual(editorFacingEditorialPlan({ x: 1 }), { x: 1 });
 });
 
 test('editorialPlanSchema는 plan 식별자와 핵심 추론 필드를 required로 둔다', () => {
@@ -192,6 +223,8 @@ test('editorialPlanReport가 있으면 editor user prompt에 plan 블록이 들�
     assert.equal(state.userPrompts.length, 1);
     assert.match(state.userPrompts[0], /Internal editorial plan JSON/);
     assert.match(state.userPrompts[0], /lower-stack ISP 참고/);
-    assert.match(state.userPrompts[0], /본문에 노출하지 말고/);
+    assert.match(state.userPrompts[0], /선택된 기사를 모두 작성하고/);
+    // coverage 권한 신호(coverage_decision)는 editor-facing plan에서 제거된다(strip 검증).
+    assert.doesNotMatch(state.userPrompts[0], /coverage_decision/);
   });
 });
