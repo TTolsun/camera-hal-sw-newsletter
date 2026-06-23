@@ -17,6 +17,7 @@ const {
 const {
   PUBLICATION_MODES
 } = require('../../shared/common/publication-mode');
+const { isTrue, isFalse } = require('../../shared/common/value-coercion');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
@@ -74,14 +75,6 @@ function readJsonIfExists(filePath) {
     fail(`Invalid JSON in ${path.relative(root, filePath)}: ${error.message}`);
     return null;
   }
-}
-
-function isTrue(value) {
-  return value === true || value === 'true';
-}
-
-function isFalse(value) {
-  return value === false || value === 'false';
 }
 
 function reviewPublicationExceptionReason(item = {}, report = {}, status = {}) {

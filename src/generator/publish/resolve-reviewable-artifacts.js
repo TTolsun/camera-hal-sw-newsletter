@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
+const { isTrue, isFalse } = require('../../shared/common/value-coercion');
 const {
   kstDate
 } = require('../../shared/common/common');
@@ -117,14 +118,6 @@ function readTextResult(filePath) {
 
 function toRepoPath(filePath) {
   return String(filePath || '').replace(/\\/g, '/').replace(/^\.\//, '');
-}
-
-function isTrue(value) {
-  return value === true || value === 'true';
-}
-
-function isFalse(value) {
-  return value === false || value === 'false';
 }
 
 function numberOrNull(value) {
