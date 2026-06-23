@@ -471,8 +471,9 @@ async function main() {
       stage: `background-context attempt ${attempt}/${totalAttempts}`
     });
     writeJson(path.join(newsroomDir, 'background-context.json'), backgroundContextReport);
-    // #700: best-effort editorial plan(전용 LLM 호출, 기본 OFF). 활성·성공 시에만 artifact를
-    // 기록하고 editor 작성을 안내한다. null이면 editor 입력은 byte-불변(현재 발행 경로 보존).
+    // #700: best-effort editorial plan(전용 LLM 호출, 기본 ON; NEWSROOM_EDITORIAL_PLAN_STAGE=off로
+    // 끌 수 있음). 활성·성공 시에만 artifact를 기록하고 editor 작성을 안내한다. null이면(off/실패)
+    // editor 입력은 byte-불변(현재 발행 경로 보존).
     const editorialPlanReport = await buildEditorialPlanReport({
       date,
       articleCapsuleReport,
