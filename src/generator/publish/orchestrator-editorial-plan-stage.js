@@ -6,9 +6,11 @@
 // deterministic validation layer가 그대로 담당하므로, 이 단계는 그 안전 봉투 안에서 편집 판단만
 // 더한다.
 //
-// 안전: best-effort 단계다. config flag(NEWSROOM_EDITORIAL_PLAN_STAGE)로 gate하며 기본은 OFF다.
+// 안전: best-effort 단계다. config flag(NEWSROOM_EDITORIAL_PLAN_STAGE)로 gate하며, #700에서
+// "LLM 주도 편집 뉴스룸"을 실제 동작 모드로 만들기 위해 기본을 ON으로 둔다(background-context
+// 단계와 동일하게 코드 기본값 'gemini'). NEWSROOM_EDITORIAL_PLAN_STAGE=off로 끌 수 있다.
 // 비활성/실패 시 null을 돌려 main()이 artifact 기록·editor 주입을 건너뛰게 한다(발행 무차단,
-// 현재 발행 경로 byte-불변). buildBackgroundContextReport와 동일한 graceful-degradation 패턴.
+// off 경로는 현재 발행 경로 byte-불변). buildBackgroundContextReport와 동일한 graceful-degradation 패턴.
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { stringOrEmpty } = require('./orchestrator-shared-helpers');
 const { capsuleInputFromReport } = require('../select/article-capsules');
@@ -17,8 +19,9 @@ const { editorialPlanSystemPrompt } = require('./orchestrator-stage-prompts');
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');
 
 function editorialPlanStageEnabled(env = process.env) {
-  const value = String(env.NEWSROOM_EDITORIAL_PLAN_STAGE ?? '').trim();
-  if (!value) return false;
+  const value = String(env.NEWSROOM_EDITORIAL_PLAN_STAGE ?? 'gemini').trim();
+  if (!value) return true;
+  if (/^(0|false|off|disabled?)$/i.test(value)) return false;
   return /^(1|true|on|gemini|enabled?)$/i.test(value);
 }
 

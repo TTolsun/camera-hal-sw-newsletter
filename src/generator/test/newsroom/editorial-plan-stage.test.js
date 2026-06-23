@@ -17,19 +17,23 @@ const { editorialPlanSchema } = require('../../render/newsletter-schema');
 const { editorialPlanPrompt } = require('../../reporter/newsletter-prompts');
 const { editorialPlanSystemPrompt } = require('../../publish/orchestrator-stage-prompts');
 
-test('editorialPlanStageEnabled는 기본 OFF이며 명시적 enable 값에만 켜진다', () => {
-  assert.equal(editorialPlanStageEnabled({}), false);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: '' }), false);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: '0' }), false);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'off' }), false);
+test('editorialPlanStageEnabled는 기본 ON이며 명시적 off 값에만 꺼진다(#700)', () => {
+  // #700: "LLM 주도 편집 뉴스룸"을 실제 동작 모드로 만들기 위해 background-context와 동일하게
+  // 기본 ON이다. env 미설정/빈 값은 ON, off 계열만 OFF.
+  assert.equal(editorialPlanStageEnabled({}), true);
+  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: '' }), true);
+  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'gemini' }), true);
   assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: '1' }), true);
   assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'true' }), true);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'gemini' }), true);
+  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: '0' }), false);
+  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'off' }), false);
+  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'false' }), false);
+  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'disabled' }), false);
 });
 
-test('buildEditorialPlanReport는 비활성(기본)일 때 LLM을 부르지 않고 null을 돌린다', async () => {
+test('buildEditorialPlanReport는 명시적 off일 때 LLM을 부르지 않고 null을 돌린다', async () => {
   const saved = process.env.NEWSROOM_EDITORIAL_PLAN_STAGE;
-  delete process.env.NEWSROOM_EDITORIAL_PLAN_STAGE;
+  process.env.NEWSROOM_EDITORIAL_PLAN_STAGE = 'off';
   try {
     const result = await buildEditorialPlanReport({
       date: '2026-05-08',
@@ -227,4 +231,53 @@ test('editorialPlanReport가 있으면 editor user prompt에 plan 블록이 들�
     // coverage 권한 신호(coverage_decision)는 editor-facing plan에서 제거된다(strip 검증).
     assert.doesNotMatch(state.userPrompts[0], /coverage_decision/);
   });
+});
+
+// #700: 기본 ON 경로가 실제로 LLM stage를 호출하고 plan을 만든다(off-path가 아닌 동작 모드 검증).
+// callLlmJson을 캡처 스텁으로 바꿔, env 미설정(default ON)일 때 stage가 호출되는지와 정규화 결과를 본다.
+test('buildEditorialPlanReport는 기본(ON)일 때 LLM을 호출하고 정규화된 plan을 돌린다', async () => {
+  const instrKey = require.resolve('../../publish/orchestrator-llm-instrumentation');
+  const stageKey = require.resolve('../../publish/orchestrator-editorial-plan-stage');
+  const savedInstr = require.cache[instrKey];
+  const savedEnv = process.env.NEWSROOM_EDITORIAL_PLAN_STAGE;
+  let calls = 0;
+  require.cache[instrKey] = {
+    id: instrKey, filename: instrKey, loaded: true,
+    exports: {
+      callLlmJson: async () => {
+        calls += 1;
+        return {
+          editorial_plans: [{
+            title: 'T', url: 'https://example.com/a', source_candidate_hash: 'abc123',
+            coverage_decision: 'short_mention', impact_level: 'Design Reference',
+            direct_hal_impact: false, target_description: 'TD', editorial_angle: 'EA',
+            why_it_matters: 'W', reader_takeaway: 'R',
+            misunderstanding_risks: ['m'], source_limitations: ['s']
+          }]
+        };
+      }
+    }
+  };
+  delete require.cache[stageKey];
+  delete process.env.NEWSROOM_EDITORIAL_PLAN_STAGE; // 미설정 = 기본 ON
+  try {
+    const { buildEditorialPlanReport } = require('../../publish/orchestrator-editorial-plan-stage');
+    const report = await buildEditorialPlanReport({
+      date: '2026-05-08',
+      articleCapsuleReport: { selected_capsules: [{ source_candidate_hash: 'abc123', title: 'T', url: 'https://example.com/a' }] },
+      commonContext: 'common',
+      stage: 'editorial-plan attempt 1/1'
+    });
+    assert.equal(calls, 1);
+    assert.ok(report);
+    assert.equal(report.date, '2026-05-08');
+    assert.equal(report.editorial_plans.length, 1);
+    assert.equal(report.editorial_plans[0].coverage_decision, 'short_mention');
+  } finally {
+    delete require.cache[stageKey];
+    if (savedInstr) require.cache[instrKey] = savedInstr; else delete require.cache[instrKey];
+    delete require.cache[stageKey];
+    if (savedEnv === undefined) delete process.env.NEWSROOM_EDITORIAL_PLAN_STAGE;
+    else process.env.NEWSROOM_EDITORIAL_PLAN_STAGE = savedEnv;
+  }
 });
