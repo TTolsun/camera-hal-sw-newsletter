@@ -452,6 +452,11 @@ test('site validation workflow keeps structural checks blocking and quality anno
   assert.match(structuralStep, /npm run validate:site/);
   assert.match(structuralStep, /npm run validate:images/);
   assert.match(structuralStep, /npm run validate:localization/);
+  // #712 — 발행상태 드리프트(archive sidecar / 공개상태 / URL parity)를 PR CI에서 차단.
+  // 셋 다 committed site state만 보고 blocking 검증한다(생성 newsroom artifact·secret 불요).
+  assert.match(structuralStep, /npm run validate:archive/);
+  assert.match(structuralStep, /npm run validate:public/);
+  assert.match(structuralStep, /npm run validate:url-parity/);
   assert.doesNotMatch(structuralStep, /npm run validate:quality/);
   assert.doesNotMatch(structuralStep, /^\s*npm run validate$/m);
   assert.doesNotMatch(structuralStep, /continue-on-error:\s*true/);
