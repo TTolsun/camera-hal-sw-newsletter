@@ -88,8 +88,12 @@ function makeStubs(state) {
     }),
     '../../quality/newsletter-quality': (s) => ({
       hardBlockedGroupsForDroppedSections: () => [],
-      // repair try가 throw하면 catch에서 호출. s.salvage가 있으면 그 후보를, 없으면 null을 돌려준다.
-      salvagePublishableSubset: () => s.salvage
+      // repair try가 throw하면 catch에서 호출. s.salvageThrows면 oracle 불일치를 모사해 throw하고,
+      // 아니면 s.salvage(후보 또는 null)를 돌려준다.
+      salvagePublishableSubset: () => {
+        if (s.salvageThrows) { throw new Error('salvage oracle mismatch'); }
+        return s.salvage;
+      }
     }),
     '../../publish/fact-check-postprocess': () => ({
       pruneCatchUpFramingFactCheckItems: (factCheck) => factCheck,
@@ -110,6 +114,7 @@ function withStubbed(setup, run) {
   const state = {
     repairPlan: setup.repairPlan,
     salvage: setup.salvage,
+    salvageThrows: setup.salvageThrows || false,
     llmThrows: setup.llmThrows || false,
     throwOnStageIncludes: setup.throwOnStageIncludes || '',
     completionCandidates: setup.completionCandidates || [],
@@ -291,6 +296,21 @@ test('#628 repair-failure salvage 성공 경로: repair가 throw해도 salvage�
     assert.ok(result.demotedSections.some(s => s.headline === 'HAL change B'));
     // salvage 성공이므로 reviewable repair-failure 산출물은 쓰지 않는다.
     assert.equal(state.repairFailureCalls.length, 0);
+  });
+});
+
+test('#628 salvage 자체가 throw하면 null로 떨어져 terminal로 새지 않고 reviewableReturn=true로 fail-closed한다', async () => {
+  // attemptRepairFailureSalvage의 catch 경로: salvagePublishableSubset/검증이 throw해도
+  // 예외가 위로 새지 않고 null이 되어 reviewable repair-failure로 안전하게 떨어진다.
+  const repairPlan = [{ action: 'repair-section', headline: 'CameraX release A' }];
+  await withStubbed({ repairPlan, salvage: null, salvageThrows: true, llmThrows: true }, async (runRepairAndCompletionPasses, state) => {
+    const newsroomDir = tempRoot('repair-completion-');
+    const result = await runRepairAndCompletionPasses(baseArgs({ newsroomDir, root: newsroomDir }));
+
+    assert.equal(result.reviewableReturn, true);
+    assert.equal(result.editor, undefined);
+    assert.equal(state.repairFailureCalls.length, 1);
+    assert.equal(state.repairFailureCalls[0].stage, 'editor repair attempt 1/1');
   });
 });
 
