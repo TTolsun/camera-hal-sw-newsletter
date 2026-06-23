@@ -66,7 +66,6 @@ function publicArticleContractPrompt() {
     'editorial_story fields: reader_scenario, what_happened, why_it_matters, field_scenario, not_to_overclaim, editor_take.',
     'body_paragraphs는 기사 본문입니다. 모든 기사에 같은 작성 기준을 적용하고, fallback_public 또는 relevance_bucket 때문에 본문을 짧은 generic 문장이나 Camera HAL 관련성 설명으로 축약하지 마세요.',
     'body_paragraphs는 원문이 말한 발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획을 3-5개 자연스러운 문단으로 충실하게 설명하세요. source_fact_bundle.facts, source_extraction evidence_blocks, behavior_change, summary에 있는 구체 명사와 source-confirmed detail을 보존하세요.',
-    '기사 선택, source eligibility, main/supporting 승격 같은 발행 판단은 deterministic metadata와 validation layer가 담당합니다. Gemini는 source-bound public article writer이며, 본문에서는 원문 기사 내용 자체를 먼저 설명하세요.',
     '공개 기사에는 "현업 장면", "확인된 변화", "왜 봐야 하나", "디버깅/리뷰 시나리오", "편집자 판단", "과장 금지" 같은 라벨 문구를 쓰지 마세요. 공개 렌더링은 "Camera HAL/Driver 관점에서의 의미" 섹션만 따로 둡니다.',
     'reader_scenario는 source-confirmed incident가 아니라 독자가 마주칠 수 있는 가정형 현업 장면을 자연스러운 문장으로 쓰세요. "상황을 가정합니다"처럼 편집 메모처럼 쓰지 말고, 실제 발생 사실처럼 단정하지도 마세요.',
     'what_happened에는 source-confirmed fact만 쓰고, HAL 해석이나 권고는 why_it_matters, field_scenario, editor_take로 분리하세요. 다만 body_paragraphs에는 이 내용을 독자-facing 기사 문장으로 자연스럽게 합쳐 쓰세요.',
@@ -89,6 +88,20 @@ function publicationBoundaryPrompt() {
     '기사 선택, source eligibility, main/supporting 승격 같은 발행 판단은 deterministic metadata와 validation layer가 담당합니다.',
     'Gemini는 decision_metadata를 생성하지 마세요. publication scope/action/overclaim_risk는 deterministic builder가 public output 직전에 생성하거나 overwrite합니다.',
     'Gemini는 deterministic publication judgment를 바꿀 수 없습니다: source eligibility, source_gap_risk, main/supporting 승격, source link, do_not_claim.'
+  ].join('\n');
+}
+
+// #693/#670: 공개 기사가 schema-driven 범용 요약이 아니라 Camera HAL / lower camera stack 관점의
+// 자연스러운 한국어 뉴스레터가 되도록 하는 에디토리얼 보이스. 작성(editor/completion) 단계에서만
+// 조립하고 fact-check/judge에는 넣지 않는다 — 검증 LLM의 must_fix 요구는 그대로 두고, 톤·서사 가이드만
+// 더한다(과도한 must_fix 회귀 방지). source-binding/claim/quality 계약은 별도 조각이 그대로 담당한다.
+function cameraHalEditorialVoicePrompt() {
+  return [
+    '에디토리얼 보이스: 원문을 일반 IT 뉴스처럼 요약하지 말고, 원문에서 확인되는 변경을 Camera HAL / lower camera stack(Android native, Linux media, V4L2, driver, ISP/sensor, build/test/debug) 개발자 관점으로 재해석하세요. 이 재해석은 코드가 주입하는 것이 아니라 source evidence에 근거해 작성합니다.',
+    'body_paragraphs는 (1) 원문에서 실제로 일어난 일을 먼저 설명하고, (2) 그 기술의 정체·적용 대상·현재 상태와 Camera HAL과의 거리감(직접 변경인지, lower-stack 참고 흐름인지)을 자연스러운 문장으로 풀고, (3) 직접 변경 / 참고할 흐름 / 추적할 리스크 중 무엇인지 현실적인 takeaway로 정리하는 흐름으로 쓰세요. Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고 중요도 판단 기준으로만 쓰세요.',
+    '하드웨어·디바이스 기사에서는 이미지 센서 제조사, SoC/platform vendor, ISP IP 제공자, 패치 작성자, 테스트에 쓰인 보드, 실제 적용 디바이스를 혼동하지 마세요. 예: ISP IP를 이미지 센서로, 특정 보드에서의 테스트를 양산 적용으로 단정하지 마세요.',
+    'source가 명시하지 않으면 Samsung, S.LSI, Exynos, 특정 상용 제품, 양산 적용, 직접적인 성능 개선, 카메라 화질 개선으로 확대 해석하지 마세요. Linux/V4L2/media/sensor 기사는 Android Camera HAL API 변경처럼 쓰지 말고 sensor bring-up, mode table, exposure/gain/frame timing, MIPI CSI topology, media graph, HAL metadata와 lower driver control 사이의 mapping, upstream review 리스크 관점으로 설명하세요.',
+    '원문이 밝힌 제한 사항(review NACK, RAW-only/limited mode, 특정 board/kernel/library version 한정, ISP bypass, release 전 상태 등)은 생략하지 말고 본문에 자연스럽게 반영하세요.'
   ].join('\n');
 }
 
@@ -226,6 +239,7 @@ module.exports = {
   articleSectionContractPrompt,
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
+  cameraHalEditorialVoicePrompt,
   publicArticleJudgePrompt,
   articleClaimContractPrompt,
   claimRepairEvidencePrompt,
