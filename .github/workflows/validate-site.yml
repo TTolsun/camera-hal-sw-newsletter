@@ -41,6 +41,9 @@ jobs:
           npm run validate:images
           npm run validate:localization
           npm run validate:seo
+          npm run validate:archive
+          npm run validate:public
+          npm run validate:url-parity
 
       - name: Annotate publication quality and fact-check status
         if: always()
