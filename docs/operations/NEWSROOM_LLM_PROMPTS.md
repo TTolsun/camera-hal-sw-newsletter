@@ -81,6 +81,28 @@ Workflow/Stage: Stage 3 `background-context`
 
 주요 guardrail: Web browsing을 하지 않습니다. Raw source table text, UI fragment, release table dump, source snippet을 background prose로 복사하지 않습니다. `background_basis`에는 external lookup이 아니라 supplied capsule metadata와 model knowledge 기반임을 설명해야 합니다.
 
+### Editorial assessment & planning
+
+이름: Editorial plan prompt (`editorialPlanSystemPrompt()` / `editorialPlanPrompt()`)
+
+목적: selected article capsule마다 작성을 안내할 내부 editorial plan(coverage_decision, impact_level, target_description, editorial_angle, why_it_matters, reader_takeaway, misunderstanding_risks, source_limitations)을 생성합니다(#700). 발행 hard blocker(source-binding/evidence/freshness/hard-fail)는 deterministic validation layer가 그대로 담당하며, 이 단계는 그 안전 봉투 안에서 편집 판단만 더합니다.
+
+위치: `src/generator/publish/orchestrator-editorial-plan-stage.js`의 `buildEditorialPlanReport()`, 프롬프트는 `src/generator/publish/orchestrator-stage-prompts.js`/`src/generator/reporter/newsletter-prompts.js`
+
+Workflow/Stage: Stage 3 `editorial-plan attempt <n>/<total>`
+
+주요 입력: `commonContext`, selected article capsule JSON
+
+출력/schema: `editorialPlanSchema`, `articles/content/newsroom/<date>/editorial-plan.json`
+
+주요 guardrail:
+
+- best-effort 단계입니다. config flag `NEWSROOM_EDITORIAL_PLAN_STAGE`로 gate하며 기본은 OFF입니다. 비활성/실패 시 plan 없이 진행하고 발행을 막지 않습니다(현재 발행 경로 byte-불변).
+- plan은 작성을 안내할 internal scaffolding입니다. `coverage_decision`/`impact_level` 같은 값은 public 본문에 라벨로 노출하지 않습니다.
+- `direct_hal_impact`는 source가 직접 HAL/runtime 변경을 뒷받침할 때만 true입니다. source 근거 없는 Samsung/S.LSI/Exynos/양산/성능·화질 확대 판단을 금지합니다.
+- 이미지 센서 제조사, SoC/platform vendor, ISP IP 제공자, 패치 작성자, 테스트 보드, 적용 디바이스를 혼동하지 않습니다.
+- 현재 슬라이스에서 plan은 작성 안내(advisory)로만 쓰입니다. plan이 렌더 set(coverage 권한)을 바꾸는 wiring은 후속 슬라이스입니다.
+
 ### Reporter
 
 이름: Reporter prompt

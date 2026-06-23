@@ -59,6 +59,7 @@ async function runEditorStage({
   newsroomDir,
   articleCapsuleReport,
   backgroundContextReport,
+  editorialPlanReport,
   shortlistReport,
   seedEvidencePack,
   editor,
@@ -76,7 +77,12 @@ async function runEditorStage({
       lockedContext,
       editorRetryContract ? `Editor retry output contract JSON:\n${JSON.stringify(editorRetryContract, null, 2)}` : '',
       `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}`,
-      `Background context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}`
+      `Background context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}`,
+      // #700: editorial plan이 있으면(stage 활성·성공) 작성 안내로 넣는다. 내부 자료이므로 본문에
+      // 라벨로 노출하지 않는다. 없으면 빈 문자열이 filter(Boolean)로 제거되어 editor 입력 byte-불변.
+      editorialPlanReport
+        ? `Internal editorial plan JSON (작성 안내용 내부 자료입니다. coverage_decision/impact_level 등은 라벨로 본문에 노출하지 말고, editorial_angle/target_description/why_it_matters/reader_takeaway/source_limitations를 자연스러운 한국어 prose로 반영하세요):\n${JSON.stringify(editorialPlanReport, null, 2)}`
+        : ''
     ].filter(Boolean).join('\n\n'),
     editorSchema
   );

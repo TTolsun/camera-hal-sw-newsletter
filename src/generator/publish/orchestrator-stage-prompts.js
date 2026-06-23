@@ -16,6 +16,7 @@ const {
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
   cameraHalEditorialVoicePrompt,
+  editorialPlanPrompt,
   articleClaimContractPrompt,
   factCheckSeverityPrompt,
   cameraDeveloperToolingFactCheckPrompt,
@@ -23,6 +24,16 @@ const {
   editorRepairPatchPrompt,
   claimRepairEvidencePrompt
 } = require('../reporter/newsletter-prompts');
+
+function editorialPlanSystemPrompt() {
+  return [
+    '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI editorial assessor입니다.',
+    'local deterministic selector가 이미 article inputs를 filtering, ranking, choosing했습니다. selection을 다시 하지 말고, 선택된 capsule마다 작성을 안내할 내부 editorial plan만 생성하세요.',
+    linkedEvidencePromptGuardrails(),
+    sourceExtractionPromptGuardrails(),
+    editorialPlanPrompt()
+  ].join('\n');
+}
 
 function reporterSystemPrompt({ hasLockedSections = false } = {}) {
   return [
@@ -237,6 +248,7 @@ function factCheckCompletionSystemPrompt() {
 }
 
 module.exports = {
+  editorialPlanSystemPrompt,
   reporterSystemPrompt,
   editorSystemPrompt,
   factCheckSystemPrompt,
