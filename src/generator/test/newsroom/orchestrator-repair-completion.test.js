@@ -19,8 +19,12 @@ function passReport() {
 function makeStubs(state) {
   return {
     '../../publish/orchestrator-llm-instrumentation': (s) => ({
-      callLlmJson: async () => {
+      callLlmJson: async (stage) => {
         if (s.llmThrows) { throw new Error('repair LLM failed'); }
+        // 특정 단계(repair/completion)에서만 throw시켜 한 패스의 실패 경로만 고립한다.
+        if (s.throwOnStageIncludes && String(stage).includes(s.throwOnStageIncludes)) {
+          throw new Error(`LLM failed at ${stage}`);
+        }
         return { patches: [] };
       }
     }),
@@ -42,8 +46,9 @@ function makeStubs(state) {
       buildSectionRepairPlan: () => s.repairPlan,
       sectionsMatchingRepairPlan: () => [],
       sectionsOutsideRepairPlan: (sections) => sections,
-      // completion 패스를 타지 않도록 false 고정(이 테스트는 repair 경로만 고정한다).
-      hasTooFewMainArticlesDeduction: () => false,
+      // 기본은 completion 패스를 타지 않도록 false 고정(repair 경로만 보는 테스트).
+      // completion 경로를 보는 테스트는 belowDemoteTarget(demote seed + target)로 진입한다.
+      hasTooFewMainArticlesDeduction: () => s.tooFew || false,
       completionRefillTargetCount: (n) => n
     }),
     '../../publish/orchestrator-reporter-normalize': () => ({
@@ -71,8 +76,8 @@ function makeStubs(state) {
       reporterEligibilityFindings: () => [],
       applyReporterEligibilityFindingsToFactCheck: (factCheck) => factCheck
     }),
-    '../../publish/orchestrator-completion': () => ({
-      availableCompletionCandidates: () => [],
+    '../../publish/orchestrator-completion': (s) => ({
+      availableCompletionCandidates: () => s.completionCandidates || [],
       buildCompletionExclusionContext: () => '[]'
     }),
     '../../render/article-image-resolver': () => ({
@@ -106,6 +111,9 @@ function withStubbed(setup, run) {
     repairPlan: setup.repairPlan,
     salvage: setup.salvage,
     llmThrows: setup.llmThrows || false,
+    throwOnStageIncludes: setup.throwOnStageIncludes || '',
+    completionCandidates: setup.completionCandidates || [],
+    tooFew: setup.tooFew || false,
     repairFailureCalls: []
   };
   const stubs = makeStubs(state);
@@ -237,5 +245,106 @@ test('repair-failure 경로: repair가 throw하고 salvage가 null이면 reviewa
     // reviewable repair-failure writer가 정확히 한 번, repair 단계명으로 호출된다.
     assert.equal(state.repairFailureCalls.length, 1);
     assert.equal(state.repairFailureCalls[0].stage, 'editor repair attempt 1/1');
+  });
+});
+
+// #656: 아래 세 케이스는 리팩토링 전에 보존해야 하는 "발행 회복력" 동작이다 — repair 실패 시
+// publishable subset salvage(#628), completion 실패 시 pre-completion PASS 스냅샷으로 revert(#629),
+// 그리고 pre-completion이 비-PASS면 reviewable로 fail-closed. 결과 기반 흐름으로 바꾸기 전에 고정한다.
+
+function sectionWithUrl(headline, url) {
+  return {
+    category: 'Android Camera',
+    headline,
+    public_article: { headline },
+    sources: [{ title: 'Source', url }]
+  };
+}
+
+test('#628 repair-failure salvage 성공 경로: repair가 throw해도 salvage가 PASS subset을 돌려주면 reviewableReturn=false로 복구하고 dropped 섹션을 demote한다', async () => {
+  // pre-repair editor는 두 섹션(A,B). salvage는 A만 남긴 publishable subset을 돌려준다 → B는 demote.
+  const sectionA = sectionWithUrl('CameraX release A', 'https://example.com/a');
+  const sectionB = sectionWithUrl('HAL change B', 'https://example.com/b');
+  const repairPlan = [{ action: 'repair-section', headline: 'CameraX release A' }];
+  const salvage = {
+    editor: { sections: [sectionA] },
+    factCheck: { items: [], salvaged: true },
+    qualityReport: passReport(),
+    kept_section_count: 1
+  };
+  await withStubbed({ repairPlan, salvage, llmThrows: true }, async (runRepairAndCompletionPasses, state) => {
+    const newsroomDir = tempRoot('repair-completion-');
+    const result = await runRepairAndCompletionPasses(baseArgs({
+      newsroomDir,
+      root: newsroomDir,
+      editor: { sections: [sectionA, sectionB] },
+      mainArticleCountBeforeRepair: 1
+    }));
+
+    // salvage로 발행 가능한 subset을 확보 → early return 아님(정상 발행 경로로 진행).
+    assert.equal(result.reviewableReturn, false);
+    // editor는 salvage subset(A만)으로 재바인딩된다.
+    assert.deepEqual(result.editor.sections.map(s => s.headline), ['CameraX release A']);
+    assert.equal(result.qualityReport.status, 'PASS');
+    assert.equal(result.factCheck.salvaged, true);
+    // drop된 B는 demotedSections에 들어간다.
+    assert.ok(result.demotedSections.some(s => s.headline === 'HAL change B'));
+    // salvage 성공이므로 reviewable repair-failure 산출물은 쓰지 않는다.
+    assert.equal(state.repairFailureCalls.length, 0);
+  });
+});
+
+test('#629 completion-failure revert 경로: completion이 throw해도 pre-completion이 PASS면 그 스냅샷으로 되돌려 reviewableReturn=false로 발행한다', async () => {
+  // repair는 건너뛰고(PASS + 빈 plan) completion만 태운다. demote seed로 belowDemoteTarget 진입.
+  const seed = sectionWithUrl('seed demote', 'https://example.com/seed');
+  await withStubbed({
+    repairPlan: [],
+    salvage: null,
+    completionCandidates: [{ id: 'reserve-1' }],
+    throwOnStageIncludes: 'completion'
+  }, async (runRepairAndCompletionPasses, state) => {
+    const newsroomDir = tempRoot('repair-completion-');
+    const result = await runRepairAndCompletionPasses(baseArgs({
+      newsroomDir,
+      root: newsroomDir,
+      qualityReport: passReport(),
+      eligibilityFindings: [{ section: seed }],
+      mainArticleCountBeforeRepair: 2
+    }));
+
+    // pre-completion이 이미 PASS → top-up 실패가 발행을 막지 않는다.
+    assert.equal(result.reviewableReturn, false);
+    assert.equal(result.completionFallbackToPrepass, true);
+    assert.ok(result.underfilledReason.includes('completion top-up failed'));
+    assert.equal(result.qualityReport.status, 'PASS');
+    // 자동 복구이므로 reviewable repair-failure 산출물은 쓰지 않는다.
+    assert.equal(state.repairFailureCalls.length, 0);
+  });
+});
+
+test('#629 completion-failure reviewable 경로: completion이 throw하고 pre-completion이 비-PASS면 reviewableReturn=true로 fail-closed하고 completion 단계명으로 산출물을 쓴다', async () => {
+  // repair는 건너뛰지만(빈 plan) 들어온 qualityReport가 NEEDS_FIX → pre-completion이 비-PASS.
+  const seed = sectionWithUrl('seed demote', 'https://example.com/seed');
+  await withStubbed({
+    repairPlan: [],
+    salvage: null,
+    completionCandidates: [{ id: 'reserve-1' }],
+    throwOnStageIncludes: 'completion'
+  }, async (runRepairAndCompletionPasses, state) => {
+    const newsroomDir = tempRoot('repair-completion-');
+    const result = await runRepairAndCompletionPasses(baseArgs({
+      newsroomDir,
+      root: newsroomDir,
+      qualityReport: { status: 'NEEDS_FIX', score: 40, threshold: 60, deductions: [], metrics: {} },
+      eligibilityFindings: [{ section: seed }],
+      mainArticleCountBeforeRepair: 2
+    }));
+
+    // pre-completion이 PASS가 아니라 completion이 필수 보충이었으므로 reviewable로 떨어진다.
+    assert.equal(result.reviewableReturn, true);
+    assert.equal(result.editor, undefined);
+    // reviewable repair-failure writer가 completion 단계명으로 정확히 한 번 호출된다.
+    assert.equal(state.repairFailureCalls.length, 1);
+    assert.equal(state.repairFailureCalls[0].stage, 'editor completion attempt 1/1');
   });
 });
