@@ -113,6 +113,34 @@ const { generationRunState } = require('./orchestrator-run-state');
 
 const runtimeConfig = readRuntimeConfig(process.env);
 
+// #628 repair-failure salvage: 약한 섹션 하나의 repair 실패가 발행 가능한 강한 카메라 기사 전체를
+// 막지 않게, 정합 pre-repair snapshot에서 발행 가능한 subset을 뽑아 같은 quality gate로 재검증한다.
+// salvagePublishableSubset은 subset에 게이트를 재적용해 PASS일 때만 후보를 돌려주므로(아니면 null)
+// 게이트를 약화하지 않는다. salvage/검증 자체가 throw하면(드문 oracle 불일치) null을 돌려, 호출처가
+// FAILED 경로로 안전하게 떨어지게 한다. 결과는 검증된 salvage 번들 또는 null이다(예외를 던지지 않음).
+function attemptRepairFailureSalvage({
+  date,
+  preRepairEditor,
+  reporter,
+  preRepairFactCheck,
+  preRepairQualityReport,
+  shortlistReport,
+  seedEvidencePack
+}) {
+  try {
+    const candidate = salvagePublishableSubset(
+      date, preRepairEditor, reporter, preRepairFactCheck, preRepairQualityReport,
+      { threshold: qualityGatePolicy.threshold, shortlistReport, strictClaimValidation: true, seedEvidencePack }
+    );
+    if (!candidate) return null;
+    const salvagedEditor = validateEditor(candidate.editor, date, reporter, { strictClaims: true, requireStoryContract: true });
+    return { ...candidate, editor: salvagedEditor };
+  } catch (salvageError) {
+    console.warn(`Repair-failure salvage could not produce a valid subset: ${salvageError.message}`);
+    return null;
+  }
+}
+
 async function runRepairAndCompletionPasses({
   date,
   reporter,
@@ -299,27 +327,19 @@ async function runRepairAndCompletionPasses({
         sourceGapSections(editor, factCheck).concat(eligibilityFindings.map(finding => finding.section))
       );
     } catch (error) {
-      // #628: 약한 섹션 하나의 repair 실패가 발행 가능한 강한 카메라 기사 전체를 막지
-      // 않게 한다. 정합 pre-repair snapshot에서 실패 섹션을 demote하고 나머지가 같은 quality
-      // gate를 통과하면 그 subset만 발행한다. salvagePublishableSubset은 subset에 게이트를
-      // 재적용해 PASS일 때만 결과를 반환(아니면 null)하므로 게이트를 약화하지 않는다. 루프 뒤
-      // thin-week salvage(아래)와 같은 메커니즘이며, repair catch가 그 경로에 닿기 전에 return하던
-      // 갭만 메운다. salvage/검증 자체가 throw하면(드문 oracle 불일치) FAILED 경로로 안전하게
-      // 떨어뜨려, 이 catch 밖 terminal FAILED로 새지 않게 한다.
-      let repairSalvage = null;
-      try {
-        const candidate = salvagePublishableSubset(
-          date, preRepairEditor, reporter, preRepairFactCheck, preRepairQualityReport,
-          { threshold: qualityGatePolicy.threshold, shortlistReport, strictClaimValidation: true, seedEvidencePack }
-        );
-        if (candidate) {
-          const salvagedEditor = validateEditor(candidate.editor, date, reporter, { strictClaims: true, requireStoryContract: true });
-          repairSalvage = { ...candidate, editor: salvagedEditor };
-        }
-      } catch (salvageError) {
-        console.warn(`Repair-failure salvage could not produce a valid subset: ${salvageError.message}`);
-        repairSalvage = null;
-      }
+      // #628 salvage: 정합 pre-repair snapshot에서 발행 가능한 subset을 뽑아 같은 quality gate로
+      // 재검증한다(메커니즘은 attemptRepairFailureSalvage 참고). 루프 뒤 thin-week salvage와 같은
+      // 메커니즘이며, repair catch가 그 경로에 닿기 전에 return하던 갭만 메운다. salvage가 null이면
+      // (subset 없음 또는 oracle 불일치 throw) 아래 else에서 reviewable로 안전하게 떨어진다.
+      const repairSalvage = attemptRepairFailureSalvage({
+        date,
+        preRepairEditor,
+        reporter,
+        preRepairFactCheck,
+        preRepairQualityReport,
+        shortlistReport,
+        seedEvidencePack
+      });
       if (repairSalvage) {
         const keptKeys = new Set(ensureArray(repairSalvage.editor.sections).map(stableSectionKey).filter(Boolean));
         const droppedSections = ensureArray(preRepairEditor.sections).filter(before => {
