@@ -141,6 +141,31 @@ function attemptRepairFailureSalvage({
   }
 }
 
+// #629 completion-failure 복구: completion(target 채우기)은 best-effort다. completion 직전 draft가
+// 이미 quality gate를 PASS(min 충족)했다면, target 보충 실패가 그 발행을 막지 않게 pre-completion
+// 스냅샷으로 되돌릴 복구 번들을 돌려준다(재검증 없음 — 이미 PASS인 스냅샷). pre-completion이 PASS가
+// 아니면(completion이 필수 보충이었던 경우) null을 돌려, 호출처가 FAILED_REPAIR_REVIEWABLE로
+// fail-closed하게 한다. (salvagePublishableSubset은 '일부 실패 섹션 drop' 용도라 전부 PASS인
+// pre-completion에는 부적합 — 전부 keep이면 null을 반환한다. 그래서 여기선 스냅샷을 그대로 복원한다.)
+function recoverCompletionTopUpFailure({
+  error,
+  missingArticleCount,
+  preCompletionEditor,
+  preCompletionFactCheck,
+  preCompletionQualityReport,
+  completionTargetCount
+}) {
+  if (!(preCompletionQualityReport && preCompletionQualityReport.status === 'PASS')) return null;
+  const publishedCount = ensureArray(preCompletionEditor.sections).length;
+  console.warn(`Completion top-up for ${missingArticleCount} article(s) failed; publishing ${publishedCount} already-passing main article(s) below target ${completionTargetCount}. (${error.message})`);
+  return {
+    editor: preCompletionEditor,
+    factCheck: preCompletionFactCheck,
+    qualityReport: preCompletionQualityReport,
+    underfilledReason: `completion top-up failed; published ${publishedCount} passing article(s) below target ${completionTargetCount}`
+  };
+}
+
 async function runRepairAndCompletionPasses({
   date,
   reporter,
@@ -485,22 +510,25 @@ async function runRepairAndCompletionPasses({
           sourceGapSections(editor, factCheck).concat(eligibilityFindings.map(finding => finding.section))
         );
       } catch (error) {
-        // completion은 target(catchUpPolicy.targetMainArticles) 채우기용 best-effort다. completion
-        // 직전 draft가 이미 quality gate를 PASS(min 충족)했다면, target 보충 실패가 그 발행을 막지
-        // 않게 pre-completion 상태로 되돌려 정상 발행 경로를 진행한다. (#629 salvagePublishableSubset은
-        // '일부 실패 섹션을 drop한 subset' 용도라 전부 PASS인 pre-completion에는 부적합 — 전부 keep
-        // 이면 null을 반환한다. 그래서 여기서는 재검증 없이 이미 PASS인 스냅샷을 그대로 복원한다.)
-        // pre-completion이 PASS가 아니면(completion이 필수 보충이었던 경우) 기존대로
-        // FAILED_REPAIR_REVIEWABLE을 기록하고 return해 발행 경로로 떨어지지 않게 한다.
-        if (preCompletionQualityReport && preCompletionQualityReport.status === 'PASS') {
-          console.warn(`Completion top-up for ${missingArticleCount} article(s) failed; publishing ${ensureArray(preCompletionEditor.sections).length} already-passing main article(s) below target ${completionTargetCount}. (${error.message})`);
-          editor = preCompletionEditor;
-          factCheck = preCompletionFactCheck;
-          qualityReport = preCompletionQualityReport;
+        // #629 복구: pre-completion이 PASS면 그 스냅샷으로 되돌려 발행을 진행하고(메커니즘은
+        // recoverCompletionTopUpFailure 참고), null이면(필수 보충이 실패) FAILED_REPAIR_REVIEWABLE을
+        // 기록하고 return해 발행 경로로 떨어지지 않게 한다(repair catch와 같은 구조).
+        const completionRecovery = recoverCompletionTopUpFailure({
+          error,
+          missingArticleCount,
+          preCompletionEditor,
+          preCompletionFactCheck,
+          preCompletionQualityReport,
+          completionTargetCount
+        });
+        if (completionRecovery) {
+          editor = completionRecovery.editor;
+          factCheck = completionRecovery.factCheck;
+          qualityReport = completionRecovery.qualityReport;
           generationRunState.factCheck = factCheck;
           generationRunState.qualityReport = qualityReport;
           completionFallbackToPrepass = true;
-          underfilledReason = `completion top-up failed; published ${ensureArray(editor.sections).length} passing article(s) below target ${completionTargetCount}`;
+          underfilledReason = completionRecovery.underfilledReason;
         } else {
           writeReviewableRepairFailureArtifacts({
             date,
