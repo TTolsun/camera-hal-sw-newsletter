@@ -188,26 +188,50 @@ test('camera HAL editorial voice prompt carries the #693 narrative arc and overc
 });
 
 test('editorial voice prompt is writer-only: editor and completion compose it, fact-check and reporter do not', () => {
-  const source = promptHostSource();
-  const usageCount = (source.match(/cameraHalEditorialVoicePrompt\(\),/g) || []).length;
+  // 호출부(인자 유무 무관)만 세려고 stage-prompts 파일만 본다. 정의는 newsletter-prompts.js에 있어
+  // 여기엔 import(괄호 없음)와 두 호출(editor: 인자 있음, completion: 인자 없음)만 있다.
+  const stagePrompts = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'publish', 'orchestrator-stage-prompts.js'),
+    'utf8'
+  );
+  const usageCount = (stagePrompts.match(/cameraHalEditorialVoicePrompt\(/g) || []).length;
   assert.equal(usageCount, 2, `editorial voice should be composed exactly in editor + completion, got ${usageCount}`);
 
-  const editorStart = source.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI editor입니다.');
-  const editorEnd = source.indexOf('schema와 일치하는 JSON만 반환하세요.', editorStart);
-  assert.match(source.slice(editorStart, editorEnd), /cameraHalEditorialVoicePrompt\(\),/);
+  const editorStart = stagePrompts.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI editor입니다.');
+  const editorEnd = stagePrompts.indexOf('schema와 일치하는 JSON만 반환하세요.', editorStart);
+  assert.match(stagePrompts.slice(editorStart, editorEnd), /cameraHalEditorialVoicePrompt\(/);
 
-  const completionStart = source.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI completion editor입니다.');
-  const completionEnd = source.indexOf('schema와 일치하는 JSON만 반환하세요.', completionStart);
-  assert.match(source.slice(completionStart, completionEnd), /cameraHalEditorialVoicePrompt\(\),/);
+  const completionStart = stagePrompts.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI completion editor입니다.');
+  const completionEnd = stagePrompts.indexOf('schema와 일치하는 JSON만 반환하세요.', completionStart);
+  assert.match(stagePrompts.slice(completionStart, completionEnd), /cameraHalEditorialVoicePrompt\(/);
 
-  // 검증 LLM(fact-checker)·patch-only repair·reporter에는 톤 조각을 넣지 않는다 — must_fix 요구는 불변.
-  const factCheckStart = source.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI fact checker입니다.');
-  const factCheckEnd = source.indexOf('schema와 일치하는 JSON만 반환하세요.', factCheckStart);
-  assert.doesNotMatch(source.slice(factCheckStart, factCheckEnd), /cameraHalEditorialVoicePrompt\(\),/);
+  // 검증 LLM(fact-checker)·patch-only repair에는 톤 조각을 넣지 않는다 — must_fix 요구는 불변.
+  const factCheckStart = stagePrompts.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI fact checker입니다.');
+  const factCheckEnd = stagePrompts.indexOf('schema와 일치하는 JSON만 반환하세요.', factCheckStart);
+  assert.doesNotMatch(stagePrompts.slice(factCheckStart, factCheckEnd), /cameraHalEditorialVoicePrompt\(/);
 
-  const repairStart = source.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI repair editor입니다.');
-  const repairEnd = source.indexOf('schema와 일치하는 {patches:[...]} JSON만 반환하세요.', repairStart);
-  assert.doesNotMatch(source.slice(repairStart, repairEnd), /cameraHalEditorialVoicePrompt\(\),/);
+  const repairStart = stagePrompts.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI repair editor입니다.');
+  const repairEnd = stagePrompts.indexOf('schema와 일치하는 {patches:[...]} JSON만 반환하세요.', repairStart);
+  assert.doesNotMatch(stagePrompts.slice(repairStart, repairEnd), /cameraHalEditorialVoicePrompt\(/);
+});
+
+test('editorial voice prompt slims generic guardrails when an editorial plan is present (#700)', () => {
+  const full = cameraHalEditorialVoicePrompt();
+  const slim = cameraHalEditorialVoicePrompt({ hasEditorialPlan: true });
+
+  // 서사 아크와 내부 라벨 비노출은 plan 유무와 무관하게 항상 유지된다.
+  for (const prompt of [full, slim]) {
+    assert.match(prompt, /원문에서 실제로 일어난 일을 먼저 설명/);
+    assert.match(prompt, /Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고/);
+  }
+  // plan이 있으면 generic 가드레일 verbose 줄을 빼고 "plan을 따르라"로 대체한다(중복 축소).
+  assert.match(full, /Samsung, S\.LSI, Exynos, 특정 상용 제품, 양산 적용, 직접적인 성능 개선, 카메라 화질 개선으로 확대 해석하지 마세요/);
+  assert.doesNotMatch(slim, /Samsung, S\.LSI, Exynos, 특정 상용 제품, 양산 적용, 직접적인 성능 개선, 카메라 화질 개선으로 확대 해석하지 마세요/);
+  assert.match(slim, /제공된 internal editorial plan이 각 기사의/);
+  assert.match(slim, /어떤 기사를 main article로 낼지·기사 개수·기사 식별은 바꾸지 마세요/);
+  // plan이 대체해도 안전 개념(혼동·제한)은 slim에도 짧게 남아 안전망을 유지한다.
+  assert.match(slim, /misunderstanding_risks/);
+  assert.match(slim, /source_limitations/);
 });
 
 test('publication boundary prompt isolates deterministic publication judgment', () => {

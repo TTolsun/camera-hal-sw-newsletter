@@ -61,8 +61,24 @@ async function buildEditorialPlanReport({ date, articleCapsuleReport, commonCont
   return null;
 }
 
+// #700: editor에게 넘기는 plan에서 coverage 권한 신호(coverage_decision/impact_level)를 뺀다.
+// 현재 슬라이스에서 "어떤 기사를 main으로 낼지"는 deterministic selection이 정하고 editor는 선택된
+// 기사를 모두 렌더해야 한다(editor group-coverage 계약). plan의 coverage_decision을 editor가 보면
+// 선택된 기사를 demote/병합하도록 유도해 그 계약과 충돌하므로, editor에는 framing 필드(target/
+// angle/why/takeaway/misunderstanding_risks/source_limitations + direct_hal_impact)만 전달한다.
+// coverage_decision/impact_level은 artifact(editorial-plan.json)에 그대로 남겨 review·후속
+// coverage-authority 슬라이스에서 쓴다.
+function editorFacingEditorialPlan(report) {
+  if (!report || !Array.isArray(report.editorial_plans)) return report;
+  return {
+    ...report,
+    editorial_plans: report.editorial_plans.map(({ coverage_decision, impact_level, ...framing }) => framing)
+  };
+}
+
 module.exports = {
   editorialPlanStageEnabled,
   normalizeEditorialPlanReport,
-  buildEditorialPlanReport
+  buildEditorialPlanReport,
+  editorFacingEditorialPlan
 };

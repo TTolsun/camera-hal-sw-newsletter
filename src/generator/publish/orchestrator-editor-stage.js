@@ -44,6 +44,7 @@ const {
 const { warnResolvedImageFallbacks } = require('./orchestrator-image-warnings');
 const { writeCanonicalReviewArtifacts } = require('./orchestrator-artifact-writers');
 const { generationRunState } = require('./orchestrator-run-state');
+const { editorFacingEditorialPlan } = require('./orchestrator-editorial-plan-stage');
 
 async function runEditorStage({
   date,
@@ -71,17 +72,19 @@ async function runEditorStage({
 }) {
   const editorDraft = await callLlmJson(
     editorStage,
-    editorSystemPrompt({ editorRetryContract, publishMode, hasLockedSections: lockedSections.length > 0, hasCatchUpCoverage: ensureArray(shortlistReport?.selected_articles).some(item => item.coverage_type === 'catch_up') }),
+    editorSystemPrompt({ editorRetryContract, publishMode, hasLockedSections: lockedSections.length > 0, hasCatchUpCoverage: ensureArray(shortlistReport?.selected_articles).some(item => item.coverage_type === 'catch_up'), hasEditorialPlan: Boolean(editorialPlanReport) }),
     [
       commonContext,
       lockedContext,
       editorRetryContract ? `Editor retry output contract JSON:\n${JSON.stringify(editorRetryContract, null, 2)}` : '',
       `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}`,
       `Background context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}`,
-      // #700: editorial plan이 있으면(stage 활성·성공) 작성 안내로 넣는다. 내부 자료이므로 본문에
-      // 라벨로 노출하지 않는다. 없으면 빈 문자열이 filter(Boolean)로 제거되어 editor 입력 byte-불변.
+      // #700: editorial plan이 있으면(stage 활성·성공) framing 안내로 넣는다. coverage 권한 신호
+      // (coverage_decision/impact_level)는 editorFacingEditorialPlan이 빼므로 editor가 선택된 기사를
+      // demote/병합하도록 유도하지 않는다(어떤 기사를 main으로 낼지는 selection이 결정). 없으면 빈
+      // 문자열이 filter(Boolean)로 제거되어 editor 입력 byte-불변.
       editorialPlanReport
-        ? `Internal editorial plan JSON (작성 안내용 내부 자료입니다. coverage_decision/impact_level 등은 라벨로 본문에 노출하지 말고, editorial_angle/target_description/why_it_matters/reader_takeaway/source_limitations를 자연스러운 한국어 prose로 반영하세요):\n${JSON.stringify(editorialPlanReport, null, 2)}`
+        ? `Internal editorial plan JSON (작성 안내용 내부 자료입니다. 어떤 기사를 main article로 낼지는 selection이 이미 정했으니 선택된 기사를 모두 작성하고, 각 기사의 target_description/editorial_angle/why_it_matters/reader_takeaway/misunderstanding_risks/source_limitations를 자연스러운 한국어 prose로 반영하세요):\n${JSON.stringify(editorFacingEditorialPlan(editorialPlanReport), null, 2)}`
         : ''
     ].filter(Boolean).join('\n\n'),
     editorSchema

@@ -22,6 +22,9 @@ const DEFAULT_LLM_STAGE_MODELS = Object.freeze({
   factcheck: 'gemini-2.5-flash',
   repair: 'gemini-3.5-flash',
   judge: 'gemini-2.5-flash-lite',
+  // #700 editorial-plan은 분류·판단 stage라 flash-lite보다 분류 정확도가 좋은 gemini-2.5-flash를
+  // 기본으로 둔다(editor의 비싼 gemini-3.5-flash는 불필요). 자체 노브로 독립 튜닝·비용 관측한다.
+  editorialPlan: 'gemini-2.5-flash',
   sourceDiscovery: 'gemini-2.5-flash-lite'
 });
 const LLM_STAGE_MODEL_ENV_KEYS = Object.freeze({
@@ -30,6 +33,7 @@ const LLM_STAGE_MODEL_ENV_KEYS = Object.freeze({
   factcheck: 'NEWSROOM_FACTCHECK_MODEL',
   repair: 'NEWSROOM_REPAIR_MODEL',
   judge: 'NEWSROOM_JUDGE_MODEL',
+  editorialPlan: 'NEWSROOM_EDITORIALPLAN_MODEL',
   sourceDiscovery: 'NEWSROOM_SOURCEDISCOVERY_MODEL'
 });
 const PRO_DISABLED_ENV_KEYS = Object.freeze([
@@ -67,6 +71,7 @@ const DEFAULT_RUNTIME_CONFIG = {
     factcheck: 'code_default',
     repair: 'code_default',
     judge: 'code_default',
+    editorialPlan: 'code_default',
     sourceDiscovery: 'code_default'
   },
   geminiModel: DEFAULT_LLM_MODEL,
