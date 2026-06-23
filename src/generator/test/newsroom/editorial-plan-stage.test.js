@@ -9,7 +9,6 @@ const test = require('node:test');
 
 const {
   editorialPlanStageEnabled,
-  buildStaticEditorialPlanReport,
   normalizeEditorialPlanReport,
   buildEditorialPlanReport
 } = require('../../publish/orchestrator-editorial-plan-stage');
@@ -42,13 +41,6 @@ test('buildEditorialPlanReport는 비활성(기본)일 때 LLM을 부르지 않�
     if (saved === undefined) delete process.env.NEWSROOM_EDITORIAL_PLAN_STAGE;
     else process.env.NEWSROOM_EDITORIAL_PLAN_STAGE = saved;
   }
-});
-
-test('buildStaticEditorialPlanReport는 빈 plan을 가진 fallback 보고서다', () => {
-  const report = buildStaticEditorialPlanReport('2026-05-08');
-  assert.equal(report.date, '2026-05-08');
-  assert.equal(report.stage, 'static-fallback');
-  assert.deepEqual(report.editorial_plans, []);
 });
 
 test('normalizeEditorialPlanReport는 식별자를 보존하고 타입을 강제하며 식별자 없는 항목을 거른다', () => {

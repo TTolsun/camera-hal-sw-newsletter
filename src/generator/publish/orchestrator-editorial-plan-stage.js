@@ -22,10 +22,6 @@ function editorialPlanStageEnabled(env = process.env) {
   return /^(1|true|on|gemini|enabled?)$/i.test(value);
 }
 
-function buildStaticEditorialPlanReport(date) {
-  return { schema_version: 1, date, stage: 'static-fallback', editorial_plans: [] };
-}
-
 function normalizeEditorialPlanReport(value, date) {
   return {
     schema_version: Number(value?.schema_version || 1),
@@ -67,7 +63,6 @@ async function buildEditorialPlanReport({ date, articleCapsuleReport, commonCont
 
 module.exports = {
   editorialPlanStageEnabled,
-  buildStaticEditorialPlanReport,
   normalizeEditorialPlanReport,
   buildEditorialPlanReport
 };
