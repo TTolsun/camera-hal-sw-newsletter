@@ -105,6 +105,23 @@ function cameraHalEditorialVoicePrompt() {
   ].join('\n');
 }
 
+// #700: LLM editorial assessment & planning 단계의 지시. selected article capsule마다 내부
+// editorial plan(coverage/impact/추론/limitations)을 생성한다. 이 plan은 작성을 안내하는 internal
+// scaffolding이며 public article에 라벨로 render하지 않는다. 발행 hard blocker(source-binding/evidence/
+// freshness/hard-fail)는 결정론 코드가 그대로 담당하므로 plan은 그 안전 봉투 안에서 편집 판단만 한다.
+function editorialPlanPrompt() {
+  return [
+    'Editorial plan contract: 제공된 selected article capsule마다 editorial_plans[] item을 하나씩 생성하세요. 이것은 public article prose가 아니라 작성을 안내할 내부 editorial plan입니다.',
+    'title, url, source_candidate_hash는 capsule에서 정확히 echo하세요(매칭용 식별자). 새 값을 만들지 마세요.',
+    'coverage_decision은 main_article, short_mention, reference_only, exclude 중 하나입니다. impact_level은 Direct Impact, Design Reference, Trend Watch, Exclude 중 하나입니다. 이 값은 내부 추론 결과이며 public 본문에 라벨로 노출하지 않습니다.',
+    '판단은 다음 추론 차원으로 하되 코드가 정한 고정 카테고리로 취급하지 마세요: 직접 Android Camera HAL 영향 / Android framework·API 관련 / Linux media·V4L2·kernel lower-stack 참고 / sensor·ISP driver 참고 / native C++·toolchain·CI 관련 / 산업·제품 trend / 약한 관련성.',
+    'direct_hal_impact는 source가 직접 HAL/runtime 변경을 뒷받침할 때만 true이고 기본은 false입니다. source 근거가 없으면 Samsung, S.LSI, Exynos, 상용 제품, 양산, 성능·화질 개선으로 확대 판단하지 마세요.',
+    'target_description은 이 소식의 실제 대상 기술(driver, sensor, ISP, API, framework, tool)을 한 문장으로, editorial_angle은 Camera HAL / lower camera stack 독자 관점의 편집 각도를, why_it_matters와 reader_takeaway는 왜 중요하고 무엇을 해야 하는지를 한국어로 채우세요.',
+    '이미지 센서 제조사, SoC/platform vendor, ISP IP 제공자, 패치 작성자, 테스트 보드, 적용 디바이스를 혼동하지 마세요. misunderstanding_risks에 독자가 오해할 수 있는 지점을, source_limitations에 원문이 밝힌 제한(review NACK, RAW-only/limited mode, 특정 board/kernel/version 한정, ISP bypass, release 전 상태 등)을 적으세요.',
+    'main/supporting 승격, source eligibility, source link 같은 발행 안전 판단의 최종 강제는 deterministic validation layer가 담당합니다. plan은 그 범위 안에서 편집 판단만 제공하세요. schema와 일치하는 JSON만 반환하세요.'
+  ].join('\n');
+}
+
 function publicArticleJudgePrompt() {
   return [
     '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 public article semantic judge입니다.',
@@ -240,6 +257,7 @@ module.exports = {
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
   cameraHalEditorialVoicePrompt,
+  editorialPlanPrompt,
   publicArticleJudgePrompt,
   articleClaimContractPrompt,
   claimRepairEvidencePrompt,

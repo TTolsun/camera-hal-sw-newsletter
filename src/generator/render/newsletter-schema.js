@@ -529,6 +529,52 @@ const backgroundContextSchema = {
   required: ['date', 'background_contexts']
 };
 
+// #700: LLM editorial assessment & planning 단계가 selected article capsule마다 생성하는 내부
+// editorial plan. coverage_decision/impact_level은 LLM 편집 추론용 internal scaffolding이며 public
+// article에 라벨로 render하지 않는다. title/url/source_candidate_hash는 capsule과 매칭하기 위한
+// echo-only 식별자다.
+const editorialPlanItem = {
+  type: 'OBJECT',
+  properties: {
+    title: string,
+    url: string,
+    source_candidate_hash: string,
+    coverage_decision: string,
+    impact_level: string,
+    direct_hal_impact: { type: 'BOOLEAN' },
+    target_description: string,
+    editorial_angle: string,
+    why_it_matters: string,
+    reader_takeaway: string,
+    misunderstanding_risks: stringArray,
+    source_limitations: stringArray
+  },
+  required: [
+    'title',
+    'url',
+    'source_candidate_hash',
+    'coverage_decision',
+    'impact_level',
+    'direct_hal_impact',
+    'target_description',
+    'editorial_angle',
+    'why_it_matters',
+    'reader_takeaway'
+  ]
+};
+
+const editorialPlanSchema = {
+  type: 'OBJECT',
+  properties: {
+    date: string,
+    editorial_plans: {
+      type: 'ARRAY',
+      items: editorialPlanItem
+    }
+  },
+  required: ['date', 'editorial_plans']
+};
+
 module.exports = {
   reporterSchema,
   editorSchema,
@@ -536,5 +582,6 @@ module.exports = {
   editorRepairPatchSchema,
   factCheckSchema,
   publicArticleJudgeSchema,
-  backgroundContextSchema
+  backgroundContextSchema,
+  editorialPlanSchema
 };

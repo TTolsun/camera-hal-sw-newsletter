@@ -320,6 +320,9 @@ const {
 const {
   runEditorStage
 } = require('./orchestrator-editor-stage');
+const {
+  buildEditorialPlanReport
+} = require('./orchestrator-editorial-plan-stage');
 
 // attempt loop 안의 repair 패스 + completion 패스(editor + fact-check 단계 직후)는
 // orchestrator-repair-completion.js로 분리했다(#655). 두 패스는 main()을 reviewable
@@ -468,6 +471,17 @@ async function main() {
       stage: `background-context attempt ${attempt}/${totalAttempts}`
     });
     writeJson(path.join(newsroomDir, 'background-context.json'), backgroundContextReport);
+    // #700: best-effort editorial plan(전용 LLM 호출, 기본 OFF). 활성·성공 시에만 artifact를
+    // 기록하고 editor 작성을 안내한다. null이면 editor 입력은 byte-불변(현재 발행 경로 보존).
+    const editorialPlanReport = await buildEditorialPlanReport({
+      date,
+      articleCapsuleReport,
+      commonContext,
+      stage: `editorial-plan attempt ${attempt}/${totalAttempts}`
+    });
+    if (editorialPlanReport) {
+      writeJson(path.join(newsroomDir, 'editorial-plan.json'), editorialPlanReport);
+    }
     for (const candidate of ensureArray(reporter.candidates)) {
       writeCacheRecord(candidate, cacheDir, { stage: reporterStage, model: getLlmModelUsage(reporterStage) || 'unknown' });
     }
@@ -503,6 +517,7 @@ async function main() {
       newsroomDir,
       articleCapsuleReport,
       backgroundContextReport,
+      editorialPlanReport,
       shortlistReport,
       seedEvidencePack,
       editor,
