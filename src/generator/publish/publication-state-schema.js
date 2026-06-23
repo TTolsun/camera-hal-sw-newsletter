@@ -6,6 +6,8 @@
 // 어떤 출력(홈페이지 노출/index 동작/artifact 정책/편집자 검토 필요/archive
 // 동기화)을 의미하는지는 오직 이 모듈에서 정의한다.
 
+const { isTrue } = require('../../shared/common/value-coercion');
+
 const PUBLIC_STATES = Object.freeze({
   PUBLISH_READY: 'PUBLISH_READY',
   REVIEW_ONLY_PUBLIC_CREATED: 'REVIEW_ONLY_PUBLIC_CREATED',
@@ -52,10 +54,6 @@ const DIAGNOSTICS_STATUSES = new Set([
   'FAILED_REPAIR_REVIEWABLE',
   'FAILED_RAW_ARTIFACT_VALIDATION'
 ]);
-
-function isTrue(value) {
-  return value === true || value === 'true';
-}
 
 // 분류된 발행 상태별로 고정된 속성을 한 곳에 모은 선언 테이블.
 // runMode·requiresEditorReview·archiveSync는 상태만으로 결정된다.

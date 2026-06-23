@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../shared/common/value-coercion');
+const { ensureArray, isTrue } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -160,10 +160,6 @@ function resolveReviewableArtifactsForEnsure(baseOptions, changedArtifacts) {
     options.changedArtifacts = changedArtifacts;
   }
   return resolveReviewableArtifacts(options);
-}
-
-function isTrue(value) {
-  return value === true || value === 'true';
 }
 
 function buildEnsureOutputs(resolved, reconciliation) {
