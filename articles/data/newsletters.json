@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-06-24",
+    "title": "Camera HAL / SW Newsletter - 2026-06-24",
+    "summary": "이번 기간 카메라 코어는 조용했습니다. 대신 Android 개발자 생산성 도구의 CameraX 마이그레이션 지원과 GCC 16 컴파일러의 정적 분석 개선 소식을 전해드립니다. Camera HAL 및 드라이버 엔지니어 관점에서 이러한 플랫폼 인접 기술과 도구의 변화가 검증 워크플로우와 빌드 시스템에 미치는 영향을 짚어봅니다.",
+    "html": "newsletters/2026-06-24/index.html",
+    "md": "newsletters/2026-06-24/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-06-22",
     "title": "Camera HAL / SW Newsletter - 2026-06-22",
     "summary": "이번 주 뉴스레터에서는 Linux 커널 미디어 서브시스템에 제안된 Himax HM1246 및 Sony IMX576 이미지 센서용 V4L2 드라이버 패치와, 네이티브 C++ 개발 환경의 빌드 및 디버깅 워크플로우를 개선할 GCC 16의 주요 변경 사항을 다룹니다. 하위 드라이버 스택의 변화와 컴파일러 도구 체인의 발전은 Camera HAL 및 드라이버 엔지니어의 개발 생산성과 이미지 파이프라인 검증에 중요한 기초가 됩니다.",

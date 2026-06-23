@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-06-24",
+  "source_of_truth": "articles/content/newsroom/2026-06-24/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-06-24/newsletter.md",
+    "html": "newsletters/2026-06-24/index.html"
+  },
+  "mode": "publish-target",
+  "render_consistency_scope": "editor_draft",
+  "summary": {
+    "article_count": 2,
+    "rendered_image_count": 2,
+    "markdown_image_count": 2,
+    "fallback_visual_count": 0,
+    "image_candidates_count": 4,
+    "valid_image_candidate_count": 3,
+    "selected_image_count": 2,
+    "empty_selected_with_candidates_count": 0,
+    "selected_image_without_valid_candidate_count": 0,
+    "selected_image_not_in_candidates_count": 0,
+    "repairable_article_count": 0,
+    "selected_by_image_selection_count": 2,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
+    "unrepairable_no_candidate_count": 0,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=th",
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 2,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": true,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "selected_candidate_url": "https://developer.android.com/static/images/social/android-developers.png?hl=th",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://developer.android.com/static/images/social/android-developers.png?hl=th",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 130,
+          "sourceKind": "og",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        },
+        {
+          "candidate_url": "https://www.gstatic.com/devrel-devsite/prod/v5c6c2ba835e8720a8eaa6bc4810fa5cab5cbf351b6cee9f9510467b6e0c34519/android/images/lockup.png",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 70,
+          "sourceKind": "article-img",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        },
+        {
+          "candidate_url": "https://developer.android.com/_static/images/translated.svg?hl=th",
+          "reasonCode": "svg_rejected",
+          "reasonLabel": "SVG 이미지 제외",
+          "reasonText": "SVG 후보는 원문 대표 이미지 조건을 명확히 만족하지 않아 제외했습니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/svg+xml",
+          "validationStatus": "ok",
+          "valid": false
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "GCC 16 컴파일러, 개선된 오류 메시지와 SARIF 정적 분석 기능 공개",
+      "selectedImage": "https://isocpp.org/files/img/redhatgraphic.png",
+      "image_candidate_count": 1,
+      "valid_image_candidate_count": 1,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": true,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "selected_candidate_url": "https://isocpp.org/files/img/redhatgraphic.png",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 70,
+          "sourceKind": "article-img",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        }
+      ]
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": [],
+    "selected_image_without_valid_candidate_articles": []
+  },
+  "warnings": [],
+  "errors": []
+}
