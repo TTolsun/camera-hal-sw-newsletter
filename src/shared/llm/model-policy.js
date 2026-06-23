@@ -4,6 +4,7 @@ const LLM_STAGE_GROUPS = Object.freeze({
   FACTCHECK: 'factcheck',
   REPAIR: 'repair',
   JUDGE: 'judge',
+  EDITORIAL_PLAN: 'editorialPlan',
   SOURCE_DISCOVERY: 'sourceDiscovery'
 });
 const LLM_STAGE_GROUP_VALUES = Object.freeze(Object.values(LLM_STAGE_GROUPS));
@@ -36,6 +37,13 @@ function modelGroupInfoForStage(stage) {
   }
   if (/public[-\s]?article[-\s]?judge|\bjudge\b/.test(normalized)) {
     return { group: LLM_STAGE_GROUPS.JUDGE, known: true, warning: '' };
+  }
+  // #700 editorial-plan은 prose 생성이 아니라 assessment/classification stage다. 자체 모델 노브
+  // (NEWSROOM_EDITORIALPLAN_MODEL, 기본 gemini-2.5-flash)를 갖는 전용 그룹으로 두어 비용 관측을
+  // 분리한다. 단계명이 "editorial"이라 아래 /editor/ 분기에 substring으로 오매칭되므로 반드시 그
+  // 앞에서 가로챈다. (temperature/thinking budget은 gemini-provider에서 judge 수준을 재사용.)
+  if (/editorial[-\s]?plan/.test(normalized)) {
+    return { group: LLM_STAGE_GROUPS.EDITORIAL_PLAN, known: true, warning: '' };
   }
   if (/background-context|reporter/.test(normalized)) {
     return { group: LLM_STAGE_GROUPS.REPORTER, known: true, warning: '' };

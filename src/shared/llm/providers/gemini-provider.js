@@ -130,6 +130,9 @@ function estimateCallCost(model, usage) {
 
 function temperatureForStage(stage, config) {
   const normalized = String(stage || '').toLowerCase();
+  // #700 editorial-plan은 assessment stage라 judge와 같은 낮은 temperature(일관된 분류, run-to-run
+  // flip-flop 억제)를 쓴다. /editor/ substring 오매칭을 피하려고 editor 분기보다 먼저 둔다.
+  if (/editorial[-\s]?plan/.test(normalized)) return config.geminiTemperatureJudge;
   if (/public[-\s]?article[-\s]?judge|\bjudge\b/.test(normalized)) return config.geminiTemperatureJudge;
   if (/fact[-\s]?check|factchecker/.test(normalized)) return config.geminiTemperatureFactcheck;
   if (/\brepair\b/.test(normalized)) return config.geminiTemperatureRepair;
@@ -142,6 +145,9 @@ function temperatureForStage(stage, config) {
 
 function thinkingBudgetForStage(stage, config) {
   const normalized = String(stage || '').toLowerCase();
+  // #700 editorial-plan은 assessment stage라 judge와 같은 thinking budget을 쓴다(분류·HAL 거리감
+  // 판단에 적당한 추론). /editor/ substring 오매칭을 피하려고 editor 분기보다 먼저 둔다.
+  if (/editorial[-\s]?plan/.test(normalized)) return config.geminiThinkingBudgetJudge;
   if (/public[-\s]?article[-\s]?judge|\bjudge\b/.test(normalized)) return config.geminiThinkingBudgetJudge;
   if (/fact[-\s]?check|factchecker/.test(normalized)) return config.geminiThinkingBudgetFactcheck;
   if (/\brepair\b/.test(normalized)) return config.geminiThinkingBudgetRepair;
