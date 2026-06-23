@@ -74,6 +74,9 @@ jobs:
       NEWSROOM_WARN_COST_USD: ${{ vars.NEWSROOM_WARN_COST_USD || '0.15' }}
       NEWSROOM_MAX_COST_USD: ${{ vars.NEWSROOM_MAX_COST_USD || '0.25' }}
       NEWSROOM_BACKGROUND_CONTEXT_STAGE: ${{ vars.NEWSROOM_BACKGROUND_CONTEXT_STAGE || 'gemini' }}
+      # #700: LLM 주도 편집 뉴스룸. editorial-plan stage(assess+plan)를 기본 활성화한다.
+      # best-effort라 실패 시 plan 없이 진행하고 발행을 막지 않는다. off로 끄려면 repo var를 'off'로.
+      NEWSROOM_EDITORIAL_PLAN_STAGE: ${{ vars.NEWSROOM_EDITORIAL_PLAN_STAGE || 'gemini' }}
       NEWSROOM_LINKED_EVIDENCE_MODE: ${{ vars.NEWSROOM_LINKED_EVIDENCE_MODE || 'extract_only' }}
       NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE: ${{ vars.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE || '8' }}
       NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN: ${{ vars.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN || '40' }}

@@ -97,7 +97,7 @@ Workflow/Stage: Stage 3 `editorial-plan attempt <n>/<total>`
 
 주요 guardrail:
 
-- best-effort 단계입니다. config flag `NEWSROOM_EDITORIAL_PLAN_STAGE`로 gate하며 기본은 OFF입니다. 비활성/실패 시 plan 없이 진행하고 발행을 막지 않습니다(현재 발행 경로 byte-불변).
+- best-effort 단계입니다. config flag `NEWSROOM_EDITORIAL_PLAN_STAGE`로 gate하며, #700에서 "LLM 주도 편집 뉴스룸"을 실제 동작 모드로 만들기 위해 background-context와 동일하게 기본 ON입니다(코드 기본값 `gemini`, `off`로 끌 수 있음). 비활성/실패 시 plan 없이 진행하고 발행을 막지 않습니다(off 경로는 현재 발행 경로 byte-불변).
 - plan은 작성을 안내할 internal scaffolding입니다. `coverage_decision`/`impact_level` 같은 값은 public 본문에 라벨로 노출하지 않습니다.
 - `direct_hal_impact`는 source가 직접 HAL/runtime 변경을 뒷받침할 때만 true입니다. source 근거 없는 Samsung/S.LSI/Exynos/양산/성능·화질 확대 판단을 금지합니다.
 - 이미지 센서 제조사, SoC/platform vendor, ISP IP 제공자, 패치 작성자, 테스트 보드, 적용 디바이스를 혼동하지 않습니다.
