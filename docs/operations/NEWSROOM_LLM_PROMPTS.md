@@ -217,7 +217,7 @@ Workflow/Stage: Stage 3 `fact-checker completion attempt <n>/<total>`
 
 목적: `source_extraction`, `source_quality`, seed evidence, linked evidence, keyword hint를 source-backed fact와 editorial hint로 분리하도록 강제합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`
+위치: `src/generator/reporter/newsletter-prompts.js`
 
 Workflow/Stage: reporter, editor, fact-check, repair, completion 계열 prompt
 
@@ -233,7 +233,7 @@ Workflow/Stage: reporter, editor, fact-check, repair, completion 계열 prompt
 
 목적: editor, repair, completion output의 main article이 validation/editorial diagnostics용 `article_sections`와 HAL signal metadata를 갖추게 합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`
+위치: `src/generator/reporter/newsletter-prompts.js`
 
 Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 
@@ -249,7 +249,7 @@ Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 
 목적: reader-facing article prose를 diagnostics fields와 분리하고, public output이 newsletter article 형태를 갖추게 합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`
+위치: `src/generator/reporter/newsletter-prompts.js`
 
 Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 
@@ -265,3 +265,26 @@ Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 - `editorial_story.reader_scenario`는 가정형 현업 장면으로 쓰고, `what_happened`에는 source로 확인된 fact만 둡니다.
 - `article_sections`와 `hal_signal_capsule`은 독자에게 보이는 prose(reader-facing prose)로 render하지 않습니다.
 - public source link로는 local path, `.tmp` path, GitHub Actions artifact URL, editorial 전용(editorial-only) source role을 쓰지 않습니다.
+
+### Camera HAL editorial voice
+
+이름: `cameraHalEditorialVoicePrompt()`
+
+목적: 공개 기사가 schema-driven 범용 요약이 아니라 Camera HAL / lower camera stack 관점의 자연스러운 한국어 뉴스레터 prose가 되도록, 작성 단계에 에디토리얼 톤·서사 가이드를 제공합니다(#693, #670).
+
+위치: `src/generator/reporter/newsletter-prompts.js`
+
+Workflow/Stage: editor draft, completion editor prompt에만 조립합니다. fact-check, repair, reporter prompt에는 넣지 않습니다.
+
+주요 입력: 별도 입력을 추가하지 않습니다. 기존 작성 단계 prompt에 톤·서사 가이드 문자열만 결합합니다.
+
+출력/schema: 별도 schema 없음. `editorSchema`/`editorCompletionSchema`의 `public_article.body_paragraphs` 등 reader-facing prose 작성 방식을 안내합니다.
+
+주요 guardrail:
+
+- `body_paragraphs`는 (1) 원문에서 확인된 사실 → (2) 기술 정체·적용 대상·상태·Camera HAL과의 거리감 → (3) 직접 변경 / 참고 흐름 / 추적 리스크 takeaway 흐름으로 씁니다.
+- `Impact`, `Layer`, `Scope`, `HAL Relevance` 같은 라벨 제목은 본문에 노출하지 않고 내부 판단 기준으로만 씁니다.
+- 이미지 센서 제조사, SoC/platform vendor, ISP IP 제공자, 패치 작성자, 테스트 보드, 적용 디바이스를 혼동하지 않습니다.
+- source 근거가 없으면 Samsung, S.LSI, Exynos, 양산, 성능/화질 개선으로 확대 해석하지 않습니다.
+- 원문 제한 사항(review NACK, RAW-only, board/kernel/library version 한정, ISP bypass, release 전 상태)을 보존합니다.
+- 검증 단계(fact-check)와 judge prompt에는 포함하지 않습니다. 톤 가이드가 검증 LLM의 `must_fix` 판정에 발행 차단 압력을 더하지 않게 합니다.
