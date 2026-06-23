@@ -10,6 +10,7 @@ const {
   publicArticleJudgePrompt,
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
+  cameraHalEditorialVoicePrompt,
   sourceExtractionPromptGuardrails
 } = require('../../reporter/newsletter-prompts');
 const {
@@ -168,6 +169,45 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /compatibility test scenario/);
   assert.match(prompt, /vendor pipeline, stream, metadata, buffer/);
   assert.doesNotMatch(prompt, /즉시 조치할 항목은 없습니다\. 참고 동향으로만 공유합니다\./);
+});
+
+test('camera HAL editorial voice prompt carries the #693 narrative arc and overclaim guards', () => {
+  const prompt = cameraHalEditorialVoicePrompt();
+
+  assert.match(prompt, /에디토리얼 보이스/);
+  assert.match(prompt, /일반 IT 뉴스처럼 요약하지 말고/);
+  assert.match(prompt, /lower camera stack/);
+  assert.match(prompt, /원문에서 실제로 일어난 일을 먼저 설명/);
+  assert.match(prompt, /Camera HAL과의 거리감/);
+  assert.match(prompt, /직접 변경 \/ 참고할 흐름 \/ 추적할 리스크/);
+  assert.match(prompt, /Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고/);
+  assert.match(prompt, /이미지 센서 제조사, SoC\/platform vendor, ISP IP 제공자, 패치 작성자, 테스트에 쓰인 보드, 실제 적용 디바이스를 혼동하지 마세요/);
+  assert.match(prompt, /Samsung, S\.LSI, Exynos, 특정 상용 제품, 양산 적용, 직접적인 성능 개선, 카메라 화질 개선으로 확대 해석하지 마세요/);
+  assert.match(prompt, /sensor bring-up, mode table, exposure\/gain\/frame timing, MIPI CSI topology, media graph/);
+  assert.match(prompt, /review NACK, RAW-only\/limited mode/);
+});
+
+test('editorial voice prompt is writer-only: editor and completion compose it, fact-check and reporter do not', () => {
+  const source = promptHostSource();
+  const usageCount = (source.match(/cameraHalEditorialVoicePrompt\(\),/g) || []).length;
+  assert.equal(usageCount, 2, `editorial voice should be composed exactly in editor + completion, got ${usageCount}`);
+
+  const editorStart = source.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI editor입니다.');
+  const editorEnd = source.indexOf('schema와 일치하는 JSON만 반환하세요.', editorStart);
+  assert.match(source.slice(editorStart, editorEnd), /cameraHalEditorialVoicePrompt\(\),/);
+
+  const completionStart = source.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI completion editor입니다.');
+  const completionEnd = source.indexOf('schema와 일치하는 JSON만 반환하세요.', completionStart);
+  assert.match(source.slice(completionStart, completionEnd), /cameraHalEditorialVoicePrompt\(\),/);
+
+  // 검증 LLM(fact-checker)·patch-only repair·reporter에는 톤 조각을 넣지 않는다 — must_fix 요구는 불변.
+  const factCheckStart = source.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI fact checker입니다.');
+  const factCheckEnd = source.indexOf('schema와 일치하는 JSON만 반환하세요.', factCheckStart);
+  assert.doesNotMatch(source.slice(factCheckStart, factCheckEnd), /cameraHalEditorialVoicePrompt\(\),/);
+
+  const repairStart = source.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI repair editor입니다.');
+  const repairEnd = source.indexOf('schema와 일치하는 {patches:[...]} JSON만 반환하세요.', repairStart);
+  assert.doesNotMatch(source.slice(repairStart, repairEnd), /cameraHalEditorialVoicePrompt\(\),/);
 });
 
 test('publication boundary prompt isolates deterministic publication judgment', () => {
