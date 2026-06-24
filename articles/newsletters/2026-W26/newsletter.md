@@ -1,6 +1,6 @@
 # 2026 W26 (06.22 ~ 06.28)
 
-이번 주에는 ‘Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안’, ‘Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안’ 등 3건의 소식을 다룹니다.
+이번 주에는 ‘Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안’, ‘Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안’ 등 4건의 소식을 다룹니다.
 
 
 
@@ -9,6 +9,9 @@
 - Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안
 - Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안
 - GCC 16 릴리스 예정: 템플릿 오류 메시지 개선 및 SARIF 정적 분석 출력 지원
+- Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장
+
+이번 기간 카메라 코어 직접 변경은 없었습니다. 아래는 실무 레이더 관점의 맥락입니다.
 
 ## 2. Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안
 
@@ -69,9 +72,9 @@ Sony IMX576 고해상도 이미지 센서를 지원하기 위한 V4L2 서브디�
 ## 4. GCC 16 릴리스 예정: 템플릿 오류 메시지 개선 및 SARIF 정적 분석 출력 지원
 
 
-![Red Hat Graphic on ISO C++ Blog](https://isocpp.org/files/img/redhatgraphic.png)
+![redhatgraphic.png](https://isocpp.org/files/img/redhatgraphic.png)
 
-_이미지: [ISO C++ Blog](https://isocpp.org/blog)_
+_이미지: [ISO C++ Blog](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)_
 
 
 _ISO C++ Blog Release Preview_
@@ -92,13 +95,38 @@ Android Camera HAL 네이티브 코드는 Clang/LLVM 기반으로 빌드되므�
 
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)
 
+---
 
-## 참고 / 더 읽을거리
+## 5. Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](<https://goo.gle/AdaptiveApps_IO26>) — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
+
+![Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장](https://developer.android.com/static/images/social/android-developers.png?hl=th)
+
+_이미지: [Android Developers Blog](https://developer.android.com/tools/agents/android-cli#skills-add)_
+
+
+_Android Developers Blog (2026-06-09)_
+
+최근 구글이 Android CLI 및 GitHub를 통해 제공되는 Android skills 저장소를 확장하고, CameraX 마이그레이션을 위한 신규 스킬을 추가했습니다. 이는 Camera HAL 직접 변경은 아니지만, 상위 앱 계층의 카메라 API 전환을 가속화하여 HAL 호환성 검증의 중요성을 높입니다.
+
+구글은 개발자 생산성 향상을 위해 Android CLI 및 GitHub에서 제공되는 Android skills 저장소를 대폭 확장했습니다. 이번 업데이트를 통해 CameraX 마이그레이션 스킬을 포함하여 총 17개 이상의 새로운 스킬이 추가되었습니다. 이 스킬들은 거대언어모델(LLM)이 구글의 베스트 프랙티스를 따르는 특정 개발 패턴과 전문적인 워크플로우를 학습하도록 돕는 역할을 합니다.
+
+CameraX는 Android Camera2 API를 기반으로 구축된 Jetpack 라이브러리로, 카메라 앱 개발을 간소화하고 기기 간 호환성을 높여줍니다. 많은 레거시 앱들이 Camera2나 구형 API에서 CameraX로 마이그레이션하는 추세 속에서, 이번 도구 지원은 앱 개발자들의 CameraX 전환을 한층 더 가속화할 것으로 예상됩니다.
+
+Camera HAL 엔지니어 관점에서 이는 상위 프레임워크 및 앱 계층의 카메라 사용 패턴 변화를 의미합니다. CameraX의 미리 보기(Preview), 이미지 캡처(ImageCapture), 비디오 캡처(VideoCapture) 등의 사용 사례가 기기에서 구동될 때, HAL 계층의 스트림 구성(stream configuration) 및 버퍼 라이프사이클(buffer lifecycle)과 어떻게 상호작용하는지 선제적으로 검증하는 것이 중요해집니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Camera HAL에 직접적인 API나 메타데이터 변경을 가져오지는 않으나, 상위 앱의 CameraX 마이그레이션이 활발해짐에 따라 CameraX 호환성 테스트(CTS/VTS 및 실제 시나리오 검증)를 강화하여 잠재적인 스트림 구성 및 버퍼 관리 오류를 예방해야 합니다.
+
+**출처**
+
+- [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
+
 
 ## 참고자료
 
 - [Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver](https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/)
 - [Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver](https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/)
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)
+- [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
