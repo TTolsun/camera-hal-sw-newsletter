@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "f1296389adabddbe",
+      "url": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/",
+      "title": "Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "published_at": "2026-06-25T14:04:01Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "On 6/25/2026 4:55 PM, Krzysztof Kozlowski wrote: > On 25/06/2026 15:38, Atanas Filipov wrote: >> Add device-tree binding for the Qualcomm JPEG encoder hardware block >> present in SM8250 (Kona) SoCs. >> >> The JPEG encoder is a standalone hardware IP within the camera subsystem >> that performs JPEG compression in memory-to-memory fashion. It is >> separate from the CAMSS ISP pipeline and has its own register space, >> interrupt, clocks, power domain, IOMMU streams, and interconnect paths. >> >>",
+          "evidence_text": "<html><head><title>Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding - Atanas Filipov</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "46e1ef972bb12027",
+      "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-2-atanas.filipov@oss.qualcomm.com/",
+      "title": "[PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "published_at": "2026-06-25T13:38:59Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add device-tree binding for the Qualcomm JPEG encoder hardware block present in SM8250 (Kona) SoCs. The JPEG encoder is a standalone hardware IP within the camera subsystem that performs JPEG compression in memory-to-memory fashion. It is separate from the CAMSS ISP pipeline and has its own register space, interrupt, clocks, power domain, IOMMU streams, and interconnect paths. Properties documented: - compatible: qcom,sm8250-jenc - reg / reg-names: single MMIO region named \"jpeg\" - interrupts: s",
+          "evidence_text": "<html><head><title>[PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding - Atanas Filipov</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dar",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "7f185e2b14380522",
+      "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-3-atanas.filipov@oss.qualcomm.com/",
+      "title": "[PATCH v2 2/3] arm64: dts: qcom: sm8250: Add JPEG encoder node",
+      "published_at": "2026-06-25T13:39:00Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add the JPEG encoder hardware node to the SM8250 device tree so the qcom-jpeg V4L2 encoder driver can bind and operate on this platform. The node wires the resources expected by the qcom,jpeg-encoder binding: - reg: MMIO region at 0xac53000, size 0x1000 - interrupts: SPI 474, edge-triggered - power-domains: TITAN_TOP_GDSC (camera top-level power domain) - clocks: GCC HF/SF AXI clocks and CAM_CC core/AHB/CPAS/CAMNOC clocks - iommus: two SMMU stream IDs for JPEG pixel and JPEG DMA processing - int",
+          "evidence_text": "<html><head><title>[PATCH v2 2/3] arm64: dts: qcom: sm8250: Add JPEG encoder node - Atanas Filipov</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.93,
+      "android_hal_relevance": 0.93,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.902,
+      "warnings": []
+    },
+    {
+      "id": "9d2793a3604543dc",
+      "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/",
+      "title": "[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250",
+      "published_at": "2026-06-25T13:38:57Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This series adds support for the Qualcomm JPEG V4L2 mem2mem encoder on SM8250. The goal is to upstream a standards-based JPEG encode path using the V4L2 M2M framework, with DT-described hardware resources and SoC DTS integration. Patch layout: - 1/3: dt-bindings: media: qcom,jpeg-encoder: add binding - 2/3: arm64: dts: qcom: sm8250: add JPEG encoder node - 3/3: media: qcom: jpeg: add Qualcomm JPEG V4L2 encoder Supported compatibles: - qcom,sm8250-jenc Driver scope and design choices: - uses the",
+          "evidence_text": "<html><head><title>[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250 - Atanas Filipov</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.81,
+      "android_hal_relevance": 0.81,
+      "ai_relevance": 0,
+      "technical_depth": 0.854,
+      "warnings": []
+    },
+    {
+      "id": "gemini-abce1950be55a8ab",
+      "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/",
+      "title": "[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250 - Atanas Filipov",
+      "published_at": "2026-06-25",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250 - Atanas Filipov",
+          "evidence_text": "<html><head><title>[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250 - Atanas Filipov</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "published_at": "2026-05-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.794,
+      "warnings": []
+    },
+    {
+      "id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-06-17",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"fr-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.783,
+      "warnings": []
+    },
+    {
+      "id": "2edabd0beb200984",
+      "url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+      "title": "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns",
+      "published_at": "2026-06-25T17:47:32Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hi Sakari, Thank you for the patch. Quoting Sakari Ailus (2026-04-10 01:43:40) > Add V4L2_CID_CFA_PATTERN to tell the camera sensor's native Color Filter > Array (CFA) pattern. > > Signed-off-by: Sakari Ailus > Reviewed-by: Jacopo Mondi > Reviewed-by: Mirela Rabulea > --- > .../media/v4l/ext-ctrls-image-source.rst | 43 +++++++++++++++++++ > .../media/v4l/subdev-formats.rst | 2 + > drivers/media/v4l2-core/v4l2-ctrls-defs.c | 1 + > include/uapi/linux/v4l2-controls.h | 6 +++ > 4 files changed, 52 i",
+          "evidence_text": "<html><head><title>Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns - Jai Luthra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pref",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "955711ab4ec440a5",
+      "url": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/",
+      "title": "[PATCH] media: imx219: fix test pattern ordering and add patterns",
+      "published_at": "2026-06-25T16:02:47Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The test pattern menu currently maps 0 to color bars and 1 to a solid color, whereas the imx219 datasheet specifies the reverse layout. fix the ordering to align with the hardware specification. Additionally, add 5 missing test patterns to complete the available hardware test patterns. The changes were validated on a raspberry pi 5 with an imx219 sensor using v4l2-ctl and rpicam-still. Signed-off-by: Tharit Tangkijwanichakul --- drivers/media/i2c/imx219.c | 31 +++++++++++++++++++++++-------- 1 f",
+          "evidence_text": "<html><head><title>[PATCH] media: imx219: fix test pattern ordering and add patterns - Tharit Tangkijwanichakul</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "381aefc9ec4b638b",
+      "url": "https://lore.kernel.org/linux-media/20260625151756.221096-1-y-abhilashchandra@ti.com/",
+      "title": "[PATCH 0/2] Support RAW12 bayer formats",
+      "published_at": "2026-06-25T15:18:20Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hi, This small series adds support for RAW12 bayer formats in the j721e-csi2rx and cdns-csi2rx. Testing details: Tested on j722s-evm with v3link + IMX390 downstream driver Test logs: https://gist.github.com/Yemike-Abhilash-Chandra/805ec4662b60ad925e979d55a9515f89 Testing Branch: https://github.com/Yemike-Abhilash-Chandra/linux/tree/RAW12 Jai Luthra (2): media: ti: j721e-csi2rx: Support RAW12 bayer formats media: cadence: csi2rx: Support RAW12 bayer formats drivers/media/platform/cadence/cdns-csi",
+          "evidence_text": "<html><head><title>[PATCH 0/2] Support RAW12 bayer formats - Yemike Abhilash Chandra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.74,
+      "warnings": []
+    },
+    {
+      "id": "05e1315fc0252ad1",
+      "url": "https://lore.kernel.org/linux-media/20260625-fw_scoped-v3-0-ffd0868e498d@nxp.com/",
+      "title": "[PATCH v3 0/4] media: add and use fwnode_graph_for_each_endpoint_scoped()",
+      "published_at": "2026-06-25T14:17:38Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add new helper macro fwnode_graph_for_each_endpoint_scoped() and use it simplify media code. Typical example should qualcomm's driver (camss.c), the v4l2_mc.c and rkisp1-dev.c only silience improvement. Anyways, *_for_each_*_scoped() already use widely and make code clean. Build test only. Sakari Ailus: when I try to improve the patch \"Add common helper library for 1-to-1 subdev registration\", I found need camss.c pattern, so I create this small improvement firstly. Signed-off-by: Frank Li --- C",
+          "evidence_text": "<html><head><title>[PATCH v3 0/4] media: add and use fwnode_graph_for_each_endpoint_scoped() - Frank.Li</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.74,
+      "warnings": []
+    },
+    {
+      "id": "gemini-bf0c65ddb415e7bb",
+      "url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+      "title": "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns - Jai Luthra",
+      "published_at": "2026-04-10",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns - Jai Luthra",
+          "evidence_text": "<html><head><title>Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns - Jai Luthra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pref",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.725,
+      "warnings": []
+    }
+  ]
+}

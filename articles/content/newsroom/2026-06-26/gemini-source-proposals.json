@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-26",
+  "proposals": [
+    {
+      "proposal_id": "proposal-1",
+      "topic_gap": "Android Camera HAL SW developers need to know about new features and improvements in the Android camera pipeline, including low-level driver and hardware support. This includes updates to image processing, sensor integration, and performance optimizations.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android camera HAL updates",
+        "camera pipeline improvements",
+        "new camera features Android",
+        "camera driver development Android"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+        "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+        "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+        "https://android-developers.googleblog.com/2026/06/Android-17.html"
+      ],
+      "expected_evidence": [
+        "New camera features or APIs",
+        "Performance improvements in camera pipeline",
+        "Updates to camera HAL or driver interactions",
+        "Integration of new camera hardware capabilities"
+      ],
+      "risk_notes": [
+        "Some of these articles may focus on higher-level developer productivity or AI, and may not have direct camera HAL relevance.",
+        "The 'What's New in Android XR' article might be too niche unless it specifically mentions camera integration."
+      ]
+    },
+    {
+      "proposal_id": "proposal-2",
+      "topic_gap": "Information on low-level camera driver development and integration within the Linux kernel is crucial for Camera HAL SW developers. This includes updates to V4L2, media controller, and specific hardware support.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Linux kernel camera driver",
+        "V4L2 updates",
+        "media controller patches",
+        "Qualcomm JPEG encoder kernel",
+        "RAW12 format kernel"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260625133828.3221781-2-atanas.filipov@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260625133828.3221781-3-atanas.filipov@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260625151756.221096-1-y-abhilashchandra@ti.com/",
+        "https://lore.kernel.org/linux-media/20260625-fw_scoped-v3-0-ffd0868e498d@nxp.com/",
+        "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+        "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/"
+      ],
+      "expected_evidence": [
+        "New V4L2 driver bindings or features",
+        "Updates to camera sensor drivers",
+        "Improvements in media controller framework",
+        "Support for new camera hardware or image processing blocks (e.g., JPEG encoder)"
+      ],
+      "risk_notes": [
+        "These are patch emails and may require significant technical expertise to extract actionable information.",
+        "The relevance to Android Camera HAL might be indirect, focusing on the upstream Linux kernel."
+      ]
+    },
+    {
+      "proposal_id": "proposal-3",
+      "topic_gap": "Developers need to stay informed about the latest changes and best practices in Android's media frameworks, particularly those related to camera output and processing, such as Media3, MediaCodec, and MediaRecorder.",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3 release notes camera",
+        "MediaCodec updates",
+        "MediaRecorder changes",
+        "Android A/V sync improvements"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3"
+      ],
+      "expected_evidence": [
+        "New features or bug fixes in Media3 related to video encoding/decoding",
+        "Updates to MediaCodec or MediaRecorder APIs affecting camera output",
+        "Improvements in A/V sync for recorded media",
+        "Changes impacting camera preview or recording paths"
+      ],
+      "risk_notes": [
+        "Release notes might be very technical and focus on API changes rather than conceptual explanations.",
+        "The scope might be broader than just camera output, covering general media playback."
+      ]
+    },
+    {
+      "proposal_id": "proposal-4",
+      "topic_gap": "Understanding the testing and compatibility requirements for Android cameras is essential for HAL developers. This includes information on Camera ITS and related testing methodologies.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Camera ITS",
+        "camera compatibility testing",
+        "camera HAL testing",
+        "Android camera validation"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Updates to Camera ITS (Instrumentation Test Suite)",
+        "New test cases or requirements for camera functionality",
+        "Information on setting up camera testing environments",
+        "Guidance on camera HAL compliance"
+      ],
+      "risk_notes": [
+        "This article focuses on testing, not direct development of new features, but is crucial for compliance.",
+        "The content might be highly specific to the ITS box setup."
+      ]
+    }
+  ]
+}

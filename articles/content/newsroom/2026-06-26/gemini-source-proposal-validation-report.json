@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-06-26",
+  "validations": [
+    {
+      "proposal_id": "proposal-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "proposal-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "proposal-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "proposal-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "proposal-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "proposal-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260625133828.3221781-2-atanas.filipov@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260625133828.3221781-2-atanas.filipov@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260625133828.3221781-3-atanas.filipov@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260625133828.3221781-3-atanas.filipov@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260625151756.221096-1-y-abhilashchandra@ti.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260625151756.221096-1-y-abhilashchandra@ti.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260625-fw_scoped-v3-0-ffd0868e498d@nxp.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260625-fw_scoped-v3-0-ffd0868e498d@nxp.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+      "normalized_url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "proposal-3",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "androidx-media3-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-media3-release",
+      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "proposal-4",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    }
+  ],
+  "counts": {
+    "accepted": 15,
+    "discovered_not_extractable": 1
+  }
+}

@@ -1,0 +1,996 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-06-26",
+  "clusters": [
+    {
+      "cluster_id": "ab2b8e420e165e84",
+      "cluster_key": "https://developer.android.com/tools/agents/android-cli",
+      "canonical_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "canonical_title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "43d1b942a84263ab",
+      "cluster_key": "https://youtube.com/playlist",
+      "canonical_url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "canonical_title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+          "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bb0e15b6742fce01",
+      "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "canonical_title": "Test camera images using automation",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "title": "Test camera images using automation",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+          "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5e3f5455fa83d19c",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "canonical_title": "What’s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+          "title": "What’s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+          "title": "Android Developers Blog: What&#8217;s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "98444c77340368f8",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "canonical_title": "Top 3 updates for Android developer productivity",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "title": "Top 3 updates for Android developer productivity",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b59408fc88377647",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "canonical_title": "Android developer verification: Building a safer ecosystem together",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+          "title": "Android developer verification: Building a safer ecosystem together",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+          "title": "Android Developers Blog: Android developer verification: Building a safer ecosystem together",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "652f5c50bcb656fe",
+      "cluster_key": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "canonical_title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+          "title": "Top AI on Android updates for building intelligent experiences from Google I/O ‘26",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+          "title": "Android Developers Blog: Top AI on Android updates for building intelligent experiences from Google I/O &#8216;26",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2e09be47b7d035b1",
+      "cluster_key": "https://source.android.com/docs/core/camera",
+      "canonical_url": "https://source.android.com/docs/core/camera",
+      "canonical_title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ead5dbe355c7c1d9",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+      "canonical_title": "Building a Mixed-Reality Tour Guide with Android XR, the Geospatial API, and Gemini",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+          "title": "Building a Mixed-Reality Tour Guide with Android XR, the Geospatial API, and Gemini",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+          "title": "Android Developers Blog: Building a Mixed-Reality Tour Guide with Android XR, the Geospatial API, and Gemini",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ae53265d4caf5293",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/android-17.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+      "canonical_title": "Android 17 is here",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+          "title": "Android 17 is here",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+          "title": "Android Developers Blog: Android 17 is here",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9e95b9aeb5650263",
+      "cluster_key": "https://source.android.com/docs/whatsnew",
+      "canonical_url": "https://source.android.com/docs/whatsnew",
+      "canonical_title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew",
+          "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b564c567eef7ae59",
+      "cluster_key": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_url": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cdd",
+          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "827f3a39ff281180",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "canonical_title": "Overview",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "title": "Overview",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e6ebde2c2d5411c2",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+      "canonical_title": "June",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-06-01",
+          "title": "June",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2f45e42ce070b38f",
+      "cluster_key": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/",
+      "canonical_title": "Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/",
+          "title": "Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/",
+          "title": "Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding - Atanas Filipov",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4c023f2a9c8796a0",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260625133828.3221781-2-atanas.filipov@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260625133828.3221781-2-atanas.filipov@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-2-atanas.filipov@oss.qualcomm.com/",
+          "title": "[PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-2-atanas.filipov@oss.qualcomm.com/",
+          "title": "[PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding - Atanas Filipov",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3e3a1830964a7278",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260625133828.3221781-3-atanas.filipov@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260625133828.3221781-3-atanas.filipov@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v2 2/3] arm64: dts: qcom: sm8250: Add JPEG encoder node",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-3-atanas.filipov@oss.qualcomm.com/",
+          "title": "[PATCH v2 2/3] arm64: dts: qcom: sm8250: Add JPEG encoder node",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-3-atanas.filipov@oss.qualcomm.com/",
+          "title": "[PATCH v2 2/3] arm64: dts: qcom: sm8250: Add JPEG encoder node - Atanas Filipov",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "53d0f3ea349cc742",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/",
+          "title": "[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/",
+          "title": "[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250 - Atanas Filipov",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "11daac931a81530a",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260625151756.221096-1-y-abhilashchandra@ti.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260625151756.221096-1-y-abhilashchandra@ti.com/",
+      "canonical_title": "[PATCH 0/2] Support RAW12 bayer formats",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625151756.221096-1-y-abhilashchandra@ti.com/",
+          "title": "[PATCH 0/2] Support RAW12 bayer formats",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625151756.221096-1-y-abhilashchandra@ti.com/",
+          "title": "[PATCH 0/2] Support RAW12 bayer formats - Yemike Abhilash Chandra",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d7764e09af9ded1e",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260625-fw_scoped-v3-0-ffd0868e498d@nxp.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260625-fw_scoped-v3-0-ffd0868e498d@nxp.com/",
+      "canonical_title": "[PATCH v3 0/4] media: add and use fwnode_graph_for_each_endpoint_scoped()",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625-fw_scoped-v3-0-ffd0868e498d@nxp.com/",
+          "title": "[PATCH v3 0/4] media: add and use fwnode_graph_for_each_endpoint_scoped()",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625-fw_scoped-v3-0-ffd0868e498d@nxp.com/",
+          "title": "[PATCH v3 0/4] media: add and use fwnode_graph_for_each_endpoint_scoped() - Frank.Li",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9f5a63b90e02162f",
+      "cluster_key": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "canonical_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "canonical_title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+          "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7163e2a29b7eda2e",
+      "cluster_key": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya",
+      "canonical_url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+      "canonical_title": "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+          "title": "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+          "title": "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns - Jai Luthra",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a7d35653307227c6",
+      "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel",
+      "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+      "canonical_title": "The libcamera-devel Archives",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/",
+          "title": "The libcamera-devel Archives",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a45552daf0aa1b74",
+      "cluster_key": "https://isocpp.org//blog/2026/06/a-first-look-at-the-program-of-meeting-cpp-2026",
+      "canonical_url": "https://isocpp.org//blog/2026/06/a-first-look-at-the-program-of-meeting-cpp-2026",
+      "canonical_title": "A first look at the program of Meeting C++ 2026",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/06/a-first-look-at-the-program-of-meeting-cpp-2026",
+          "title": "A first look at the program of Meeting C++ 2026",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "823f7e7641e8931c",
+      "cluster_key": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+      "canonical_url": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+      "canonical_title": "How ref qualifiers led to deducing this",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/05/how-ref-qualifiers-led-to-deducing-this",
+          "title": "How ref qualifiers led to deducing this",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a4f38b10cb61d4b7",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/",
+      "canonical_title": "[PATCH] media: imx219: fix test pattern ordering and add patterns",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/",
+          "title": "[PATCH] media: imx219: fix test pattern ordering and add patterns",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/",
+          "title": "[PATCH] media: imx219: fix test pattern ordering and add patterns - Tharit Tangkijwanichakul",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bb3839f075d0e2ea",
+      "cluster_key": "https://isocpp.org//blog/2026/06/cpp26-string-and-string-view-improvements-sandor-dargo",
+      "canonical_url": "https://isocpp.org//blog/2026/06/cpp26-string-and-string-view-improvements-sandor-dargo",
+      "canonical_title": "C++26: string and string_view improvements -- Sandor Dargo",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/06/cpp26-string-and-string-view-improvements-sandor-dargo",
+          "title": "C++26: string and string_view improvements -- Sandor Dargo",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "abd6e66f3455bf16",
+      "cluster_key": "https://isocpp.org//blog/2026/06/trip-report-june-2026-iso-cpp-standards-meeting-brno-czechia-herb-sutter",
+      "canonical_url": "https://isocpp.org//blog/2026/06/trip-report-june-2026-iso-cpp-standards-meeting-brno-czechia-herb-sutter",
+      "canonical_title": "Trip report: June 2026 ISO C++ standards meeting (Brno, Czechia) -- Herb Sutter",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/06/trip-report-june-2026-iso-cpp-standards-meeting-brno-czechia-herb-sutter",
+          "title": "Trip report: June 2026 ISO C++ standards meeting (Brno, Czechia) -- Herb Sutter",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0f093f9dcf064a17",
+      "cluster_key": "https://isocpp.org//blog/2026/06/cppcons-first-ever-keynote-panel-stroustrup-van-rossum-and-torgersen-togeth",
+      "canonical_url": "https://isocpp.org//blog/2026/06/cppcons-first-ever-keynote-panel-stroustrup-van-rossum-and-torgersen-togeth",
+      "canonical_title": "CppCon&apos;s first-ever keynote panel: Stroustrup, van Rossum, and Torgersen, together at CppCon 2026",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/06/cppcons-first-ever-keynote-panel-stroustrup-van-rossum-and-torgersen-togeth",
+          "title": "CppCon&apos;s first-ever keynote panel: Stroustrup, van Rossum, and Torgersen, together at CppCon 2026",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "30192c47e1404ff5",
+      "cluster_key": "https://isocpp.org//blog/2026/06/the-voting-on-the-talks-for-meeting-cpp-2026-has-begun",
+      "canonical_url": "https://isocpp.org//blog/2026/06/the-voting-on-the-talks-for-meeting-cpp-2026-has-begun",
+      "canonical_title": "The voting on the talks for Meeting C++ 2026 has begun!",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/06/the-voting-on-the-talks-for-meeting-cpp-2026-has-begun",
+          "title": "The voting on the talks for Meeting C++ 2026 has begun!",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8940859ad85fe27c",
+      "cluster_key": "https://isocpp.org//blog/2026/06/cppcon-2025-cutting-down-on-unnecessary-objects-prithvi-okade-kathleen-bake",
+      "canonical_url": "https://isocpp.org//blog/2026/06/cppcon-2025-cutting-down-on-unnecessary-objects-prithvi-okade-kathleen-bake",
+      "canonical_title": "CppCon 2025 Cutting Down on Unnecessary Objects -- Prithvi Okade & Kathleen Baker",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://isocpp.org//blog/2026/06/cppcon-2025-cutting-down-on-unnecessary-objects-prithvi-okade-kathleen-bake",
+          "title": "CppCon 2025 Cutting Down on Unnecessary Objects -- Prithvi Okade & Kathleen Baker",
+          "canonical": true,
+          "reliability": "official-community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d4a0acfc0ac6ad6e",
+      "cluster_key": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f8d1cacd47b7c58b",
+      "cluster_key": "https://developer.android.com/media/platform/mediarecorder",
+      "canonical_url": "https://developer.android.com/media/platform/mediarecorder",
+      "canonical_title": "MediaRecorder overview &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/media/platform/mediarecorder",
+          "title": "MediaRecorder overview &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ae9e55f7b032d076",
+      "cluster_key": "https://developer.android.com/media/platform/supported-formats",
+      "canonical_url": "https://developer.android.com/media/platform/supported-formats",
+      "canonical_title": "Supported media formats &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/media/platform/supported-formats",
+          "title": "Supported media formats &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "049447beb348daf0",
+      "cluster_key": "https://security.samsungmobile.com/securityupdate.smsb",
+      "canonical_url": "https://security.samsungmobile.com/securityUpdate.smsb",
+      "canonical_title": "Samsung Mobile Security",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://security.samsungmobile.com/securityUpdate.smsb",
+          "title": "Samsung Mobile Security",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3accfe248397b72f",
+      "cluster_key": "https://docs.qualcomm.com/product/publicresources/securitybulletin",
+      "canonical_url": "https://docs.qualcomm.com/product/publicresources/securitybulletin",
+      "canonical_title": "Qualcomm Documentation",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://docs.qualcomm.com/product/publicresources/securitybulletin",
+          "title": "Qualcomm Documentation",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0dd63da9c4f049b5",
+      "cluster_key": "https://developer.android.com/newsletter",
+      "canonical_url": "https://developer.android.com/newsletter",
+      "canonical_title": "Android Developer Newsletters &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/newsletter",
+          "title": "Android Developer Newsletters &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2207a7330a3d8881",
+      "cluster_key": "https://research.google/blog",
+      "canonical_url": "https://research.google/blog/",
+      "canonical_title": "Latest News from Google Research Blog - Google Research",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://research.google/blog/",
+          "title": "Latest News from Google Research Blog - Google Research",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3d68ad8e1324eb33",
+      "cluster_key": "https://code.claude.com/docs/en/changelog",
+      "canonical_url": "https://code.claude.com/docs/en/changelog",
+      "canonical_title": "Claude Code changelog - Claude Code Docs",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://code.claude.com/docs/en/changelog",
+          "title": "Claude Code changelog - Claude Code Docs",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ba676d0843ee09ad",
+      "cluster_key": "https://www.kernel.org",
+      "canonical_url": "https://www.kernel.org/",
+      "canonical_title": "7.1: mainline",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.kernel.org/",
+          "title": "7.1: mainline",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "83920430c1be5b76",
+      "cluster_key": "https://source.android.com/docs/whatsnew/release-notes",
+      "canonical_url": "https://source.android.com/docs/whatsnew/release-notes",
+      "canonical_title": "Release notes",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/release-notes",
+          "title": "Release notes",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0779844e3674fa79",
+      "cluster_key": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+      "canonical_url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+      "canonical_title": "Latest security bulletins",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+          "title": "Latest security bulletins",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "584a6a0cadfdd7d4",
+      "cluster_key": "https://source.android.com/docs/whatsnew/latest-cdd",
+      "canonical_url": "https://source.android.com/docs/whatsnew/latest-cdd",
+      "canonical_title": "Latest Compatibility Definition Document (CDD)",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/latest-cdd",
+          "title": "Latest Compatibility Definition Document (CDD)",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c859401d27d636a0",
+      "cluster_key": "https://source.android.com/docs/whatsnew/site-updates",
+      "canonical_url": "https://source.android.com/docs/whatsnew/site-updates",
+      "canonical_title": "Site updates",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/site-updates",
+          "title": "Site updates",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7317dd637c497758",
+      "cluster_key": "https://source.android.com/docs/security/bulletin",
+      "canonical_url": "https://source.android.com/docs/security/bulletin",
+      "canonical_title": "Bulletins",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin",
+          "title": "Bulletins",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c1f0cd13513840ba",
+      "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-june/thread.html",
+      "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-June/thread.html",
+      "canonical_title": "[ Thread ]",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-June/thread.html",
+          "title": "[ Thread ]",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "05f2a24a46c60227",
+      "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-june/subject.html",
+      "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-June/subject.html",
+      "canonical_title": "[ Subject ]",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-June/subject.html",
+          "title": "[ Subject ]",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b88088f263c65925",
+      "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-june/author.html",
+      "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-June/author.html",
+      "canonical_title": "[ Author ]",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-June/author.html",
+          "title": "[ Author ]",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "954d60713b5d9ea0",
+      "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-june/date.html",
+      "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-June/date.html",
+      "canonical_title": "[ Date ]",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-June/date.html",
+          "title": "[ Date ]",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9645d2cd8b294ea0",
+      "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-june.txt.gz",
+      "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-June.txt.gz",
+      "canonical_title": "[ Gzip'd Text 1 MB ]",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-June.txt.gz",
+          "title": "[ Gzip'd Text 1 MB ]",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "432856ba03a56509",
+      "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-may/thread.html",
+      "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/thread.html",
+      "canonical_title": "[ Thread ]",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/thread.html",
+          "title": "[ Thread ]",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f02262f5d827c992",
+      "cluster_key": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-may/subject.html",
+      "canonical_url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/subject.html",
+      "canonical_title": "[ Subject ]",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/subject.html",
+          "title": "[ Subject ]",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}
