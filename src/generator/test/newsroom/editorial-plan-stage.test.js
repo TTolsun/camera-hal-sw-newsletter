@@ -2,13 +2,13 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 // #700 LLM editorial assessment & planning 단계의 계약을 고정한다.
-// - 순수 단위(enabled flag·static fallback·normalizer·schema·prompt)는 직접 호출로 검증한다.
-// - best-effort 안전: 비활성/실패 시 null을 돌려 발행을 막지 않는다.
-// - editor 주입: plan이 있으면 editor user prompt에 들어가고, 없으면(off/실패) editor 입력은
-//   byte-불변이다(현재 발행 경로 보존). 이건 callLlmJson 캡처 스텁으로 확인한다.
+// - 순수 단위(normalizer·schema·prompt)는 직접 호출로 검증한다.
+// - editorial-plan은 항상 실행되는 필수 단계다. LLM 호출 실패 또는 빈 결과면 throw해서
+//   파이프라인을 멈춘다(뒤 단계 비용 차단). 그래서 editor 단계는 항상 plan을 받는다.
+// - editor 주입: plan이 editor user prompt에 들어가고 coverage 권한 신호는 strip된다.
+//   이건 callLlmJson 캡처 스텁으로 확인한다.
 
 const {
-  editorialPlanStageEnabled,
   normalizeEditorialPlanReport,
   buildEditorialPlanReport,
   editorFacingEditorialPlan
@@ -17,34 +17,59 @@ const { editorialPlanSchema } = require('../../render/newsletter-schema');
 const { editorialPlanPrompt } = require('../../reporter/newsletter-prompts');
 const { editorialPlanSystemPrompt } = require('../../publish/orchestrator-stage-prompts');
 
-test('editorialPlanStageEnabled는 기본 ON이며 명시적 off 값에만 꺼진다(#700)', () => {
-  // #700: "LLM 주도 편집 뉴스룸"을 실제 동작 모드로 만들기 위해 background-context와 동일하게
-  // 기본 ON이다. env 미설정/빈 값은 ON, off 계열만 OFF.
-  assert.equal(editorialPlanStageEnabled({}), true);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: '' }), true);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'gemini' }), true);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: '1' }), true);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'true' }), true);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: '0' }), false);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'off' }), false);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'false' }), false);
-  assert.equal(editorialPlanStageEnabled({ NEWSROOM_EDITORIAL_PLAN_STAGE: 'disabled' }), false);
+test('buildEditorialPlanReport는 LLM 호출이 실패하면 throw해서 파이프라인을 멈춘다', async () => {
+  // fail-fast: editorial-plan이 실패하면 editor/fact-check/quality 같은 뒤 단계를 돌리지 않고
+  // 즉시 멈춰 비용을 막는다(best-effort null 폐기). callLlmJson 스텁이 던지면 그대로 전파한다.
+  const instrKey = require.resolve('../../publish/orchestrator-llm-instrumentation');
+  const stageKey = require.resolve('../../publish/orchestrator-editorial-plan-stage');
+  const savedInstr = require.cache[instrKey];
+  require.cache[instrKey] = {
+    id: instrKey, filename: instrKey, loaded: true,
+    exports: { callLlmJson: async () => { throw new Error('Gemini 503'); } }
+  };
+  delete require.cache[stageKey];
+  try {
+    const { buildEditorialPlanReport } = require('../../publish/orchestrator-editorial-plan-stage');
+    await assert.rejects(
+      buildEditorialPlanReport({
+        date: '2026-05-08',
+        articleCapsuleReport: { selected_capsules: [{ source_candidate_hash: 'h', title: 'T', url: 'https://example.com/a' }] },
+        commonContext: 'common',
+        stage: 'editorial-plan attempt 1/1'
+      }),
+      /Gemini 503/
+    );
+  } finally {
+    delete require.cache[stageKey];
+    if (savedInstr) require.cache[instrKey] = savedInstr; else delete require.cache[instrKey];
+    delete require.cache[stageKey];
+  }
 });
 
-test('buildEditorialPlanReport는 명시적 off일 때 LLM을 부르지 않고 null을 돌린다', async () => {
-  const saved = process.env.NEWSROOM_EDITORIAL_PLAN_STAGE;
-  process.env.NEWSROOM_EDITORIAL_PLAN_STAGE = 'off';
+test('buildEditorialPlanReport는 plan이 비면 throw한다(빈 결과로 발행하지 않음)', async () => {
+  const instrKey = require.resolve('../../publish/orchestrator-llm-instrumentation');
+  const stageKey = require.resolve('../../publish/orchestrator-editorial-plan-stage');
+  const savedInstr = require.cache[instrKey];
+  require.cache[instrKey] = {
+    id: instrKey, filename: instrKey, loaded: true,
+    exports: { callLlmJson: async () => ({ editorial_plans: [] }) }
+  };
+  delete require.cache[stageKey];
   try {
-    const result = await buildEditorialPlanReport({
-      date: '2026-05-08',
-      articleCapsuleReport: { capsules: [] },
-      commonContext: 'common',
-      stage: 'editorial-plan attempt 1/1'
-    });
-    assert.equal(result, null);
+    const { buildEditorialPlanReport } = require('../../publish/orchestrator-editorial-plan-stage');
+    await assert.rejects(
+      buildEditorialPlanReport({
+        date: '2026-05-08',
+        articleCapsuleReport: { selected_capsules: [] },
+        commonContext: 'common',
+        stage: 'editorial-plan attempt 1/1'
+      }),
+      /editorial plan/i
+    );
   } finally {
-    if (saved === undefined) delete process.env.NEWSROOM_EDITORIAL_PLAN_STAGE;
-    else process.env.NEWSROOM_EDITORIAL_PLAN_STAGE = saved;
+    delete require.cache[stageKey];
+    if (savedInstr) require.cache[instrKey] = savedInstr; else delete require.cache[instrKey];
+    delete require.cache[stageKey];
   }
 });
 
@@ -139,7 +164,7 @@ test('editorialPlanSystemPrompt는 assessor 페르소나와 plan 계약을 조�
   assert.match(prompt, /Editorial plan contract/);
 });
 
-// --- editor 주입(byte-불변) 확인: callLlmJson 캡처 스텁으로 runEditorStage의 user prompt를 본다 ---
+// --- editor 주입(plan injection + coverage-strip) 확인: callLlmJson 캡처 스텁으로 runEditorStage의 user prompt를 본다 ---
 
 const STAGE_MODULE = '../../publish/orchestrator-editor-stage';
 function baseEditor() {
@@ -209,14 +234,6 @@ function baseArgs(state, overrides = {}) {
   };
 }
 
-test('editorialPlanReport가 없으면 editor user prompt에 plan 블록이 없다(off-path byte-불변)', async () => {
-  await withCapturingStage(async (runEditorStage, state) => {
-    await runEditorStage(baseArgs(state)); // editorialPlanReport 미전달(undefined)
-    assert.equal(state.userPrompts.length, 1);
-    assert.doesNotMatch(state.userPrompts[0], /Internal editorial plan JSON/);
-  });
-});
-
 test('editorialPlanReport가 있으면 editor user prompt에 plan 블록이 들어간다', async () => {
   await withCapturingStage(async (runEditorStage, state) => {
     const editorialPlanReport = {
@@ -233,13 +250,12 @@ test('editorialPlanReport가 있으면 editor user prompt에 plan 블록이 들�
   });
 });
 
-// #700: 기본 ON 경로가 실제로 LLM stage를 호출하고 plan을 만든다(off-path가 아닌 동작 모드 검증).
-// callLlmJson을 캡처 스텁으로 바꿔, env 미설정(default ON)일 때 stage가 호출되는지와 정규화 결과를 본다.
-test('buildEditorialPlanReport는 기본(ON)일 때 LLM을 호출하고 정규화된 plan을 돌린다', async () => {
+// #700: editorial-plan은 항상 실행되는 필수 단계다. callLlmJson을 캡처 스텁으로 바꿔,
+// 항상 stage가 호출되는지와 정규화 결과를 본다(flag·off-path 없음).
+test('buildEditorialPlanReport는 항상 LLM을 호출하고 정규화된 plan을 돌린다', async () => {
   const instrKey = require.resolve('../../publish/orchestrator-llm-instrumentation');
   const stageKey = require.resolve('../../publish/orchestrator-editorial-plan-stage');
   const savedInstr = require.cache[instrKey];
-  const savedEnv = process.env.NEWSROOM_EDITORIAL_PLAN_STAGE;
   let calls = 0;
   require.cache[instrKey] = {
     id: instrKey, filename: instrKey, loaded: true,
@@ -259,7 +275,6 @@ test('buildEditorialPlanReport는 기본(ON)일 때 LLM을 호출하고 정규�
     }
   };
   delete require.cache[stageKey];
-  delete process.env.NEWSROOM_EDITORIAL_PLAN_STAGE; // 미설정 = 기본 ON
   try {
     const { buildEditorialPlanReport } = require('../../publish/orchestrator-editorial-plan-stage');
     const report = await buildEditorialPlanReport({
@@ -277,7 +292,5 @@ test('buildEditorialPlanReport는 기본(ON)일 때 LLM을 호출하고 정규�
     delete require.cache[stageKey];
     if (savedInstr) require.cache[instrKey] = savedInstr; else delete require.cache[instrKey];
     delete require.cache[stageKey];
-    if (savedEnv === undefined) delete process.env.NEWSROOM_EDITORIAL_PLAN_STAGE;
-    else process.env.NEWSROOM_EDITORIAL_PLAN_STAGE = savedEnv;
   }
 });

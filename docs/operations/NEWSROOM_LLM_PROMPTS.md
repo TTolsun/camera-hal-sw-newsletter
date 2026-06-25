@@ -97,7 +97,7 @@ Workflow/Stage: Stage 3 `editorial-plan attempt <n>/<total>`
 
 주요 guardrail:
 
-- best-effort 단계입니다. config flag `NEWSROOM_EDITORIAL_PLAN_STAGE`로 gate하며, #700에서 "LLM 주도 편집 뉴스룸"을 실제 동작 모드로 만들기 위해 background-context와 동일하게 기본 ON입니다(코드 기본값 `gemini`, `off`로 끌 수 있음). 비활성/실패 시 plan 없이 진행하고 발행을 막지 않습니다(off 경로는 현재 발행 경로 byte-불변).
+- 항상 실행되는 필수 단계입니다(#700, toggle 없음). LLM 호출이 실패하거나 사용할 plan이 하나도 없으면 throw해서 editor 등 뒤 단계 비용을 들이기 전에 파이프라인을 멈춥니다(best-effort graceful-degradation 폐기 — 비용 우선).
 - plan은 작성을 안내할 internal scaffolding입니다. `coverage_decision`/`impact_level` 같은 값은 public 본문에 라벨로 노출하지 않습니다.
 - `direct_hal_impact`는 source가 직접 HAL/runtime 변경을 뒷받침할 때만 true입니다. source 근거 없는 Samsung/S.LSI/Exynos/양산/성능·화질 확대 판단을 금지합니다.
 - 이미지 센서 제조사, SoC/platform vendor, ISP IP 제공자, 패치 작성자, 테스트 보드, 적용 디바이스를 혼동하지 않습니다.
@@ -290,13 +290,13 @@ Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 
 ### Camera HAL editorial voice
 
-이름: `cameraHalEditorialVoicePrompt()`
+이름: `cameraHalEditorialVoicePrompt()`(full 가드레일), `cameraHalEditorialVoiceWithPlanPrompt()`(plan 전제 slim). 공통 서사 아크는 `cameraHalEditorialVoiceBaseLines()`로 공유합니다.
 
 목적: 공개 기사가 schema-driven 범용 요약이 아니라 Camera HAL / lower camera stack 관점의 자연스러운 한국어 뉴스레터 prose가 되도록, 작성 단계에 에디토리얼 톤·서사 가이드를 제공합니다(#693, #670).
 
 위치: `src/generator/reporter/newsletter-prompts.js`
 
-Workflow/Stage: editor draft, completion editor prompt에만 조립합니다. fact-check, repair, reporter prompt에는 넣지 않습니다.
+Workflow/Stage: editor draft와 completion editor prompt에만 조립합니다(fact-check, repair, reporter prompt에는 넣지 않습니다). editor 단계는 editorial plan을 항상 받으므로 `cameraHalEditorialVoiceWithPlanPrompt()`(generic 가드레일 세 줄을 "plan을 따르라"로 슬림화)를 쓰고, plan을 받지 않는 completion 단계만 `cameraHalEditorialVoicePrompt()`(full generic 가드레일)를 씁니다(#700).
 
 주요 입력: 별도 입력을 추가하지 않습니다. 기존 작성 단계 prompt에 톤·서사 가이드 문자열만 결합합니다.
 

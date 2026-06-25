@@ -96,25 +96,29 @@ function publicationBoundaryPrompt() {
 // 조립하고 fact-check/judge에는 넣지 않는다 — 검증 LLM의 must_fix 요구는 그대로 두고, 톤·서사 가이드만
 // 더한다(과도한 must_fix 회귀 방지). source-binding/claim/quality 계약은 별도 조각이 그대로 담당한다.
 //
-// #700: editorial plan이 함께 제공될 때(hasEditorialPlan)는 plan이 기사별로 target/angle/why/takeaway/
-// misunderstanding_risks/source_limitations를 이미 정리했으므로, generic 가드레일(주체 혼동·과대해석·
-// 제한 보존) 세 줄을 "plan을 따르라" 한 줄로 슬림화해 중복을 줄인다(#700 prompt duplication 축소).
-// plan이 없으면(기본) 기존 full 가드레일을 그대로 둔다(byte-불변). 서사 아크와 내부 라벨 비노출은
-// plan 유무와 무관한 작성 형식이라 항상 유지한다.
-function cameraHalEditorialVoicePrompt({ hasEditorialPlan = false } = {}) {
+// #700: editorial plan은 필수 단계라 editor는 항상 plan을 받는다. 그래서 단계별로 voice를 둘로 나눈다.
+// - cameraHalEditorialVoiceWithPlanPrompt(): editor용. plan이 기사별 가드레일(주체 혼동·과대해석·제한
+//   보존)을 이미 정리했으므로 generic 가드레일 세 줄을 "plan을 따르라" 한 줄로 대체한다(중복 축소).
+// - cameraHalEditorialVoicePrompt(): plan 없이 작성하는 completion용. full generic 가드레일을 유지한다.
+// 서사 아크와 내부 라벨 비노출은 두 단계 공통 작성 형식이라 baseLines로 공유한다.
+function cameraHalEditorialVoiceBaseLines() {
   const voice = '에디토리얼 보이스: 원문을 일반 IT 뉴스처럼 요약하지 말고, 원문에서 확인되는 변경을 Camera HAL / lower camera stack(Android native, Linux media, V4L2, driver, ISP/sensor, build/test/debug) 개발자 관점으로 재해석하세요. 이 재해석은 코드가 주입하는 것이 아니라 source evidence에 근거해 작성합니다.';
   const narrativeArc = 'body_paragraphs는 (1) 원문에서 실제로 일어난 일을 먼저 설명하고, (2) 그 기술의 정체·적용 대상·현재 상태와 Camera HAL과의 거리감(직접 변경인지, lower-stack 참고 흐름인지)을 자연스러운 문장으로 풀고, (3) 직접 변경 / 참고할 흐름 / 추적할 리스크 중 무엇인지 현실적인 takeaway로 정리하는 흐름으로 쓰세요. Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고 중요도 판단 기준으로만 쓰세요.';
+  return [voice, narrativeArc];
+}
+
+function cameraHalEditorialVoicePrompt() {
   const subjectConfusionGuard = '하드웨어·디바이스 기사에서는 이미지 센서 제조사, SoC/platform vendor, ISP IP 제공자, 패치 작성자, 테스트에 쓰인 보드, 실제 적용 디바이스를 혼동하지 마세요. 예: ISP IP를 이미지 센서로, 특정 보드에서의 테스트를 양산 적용으로 단정하지 마세요.';
   const overclaimGuard = 'source가 명시하지 않으면 Samsung, S.LSI, Exynos, 특정 상용 제품, 양산 적용, 직접적인 성능 개선, 카메라 화질 개선으로 확대 해석하지 마세요. Linux/V4L2/media/sensor 기사는 Android Camera HAL API 변경처럼 쓰지 말고 sensor bring-up, mode table, exposure/gain/frame timing, MIPI CSI topology, media graph, HAL metadata와 lower driver control 사이의 mapping, upstream review 리스크 관점으로 설명하세요.';
   const sourceLimitationGuard = '원문이 밝힌 제한 사항(review NACK, RAW-only/limited mode, 특정 board/kernel/library version 한정, ISP bypass, release 전 상태 등)은 생략하지 말고 본문에 자연스럽게 반영하세요.';
-  if (hasEditorialPlan) {
-    return [
-      voice,
-      narrativeArc,
-      '제공된 internal editorial plan이 각 기사의 target_description, editorial_angle, why_it_matters, reader_takeaway, misunderstanding_risks, source_limitations를 이미 정리했습니다. 그 plan을 따라 자연스러운 prose로 작성하고, plan이 명시한 misunderstanding_risks(센서 제조사/SoC vendor/ISP IP/패치 작성자/보드/디바이스 혼동, 과대해석 등)와 source_limitations(review·RAW-only·버전 한정·release 전 상태 등)를 본문에서 빠뜨리지 마세요. plan은 작성 framing 참고용이며, 어떤 기사를 main article로 낼지·기사 개수·기사 식별은 바꾸지 마세요(selection이 결정).'
-    ].join('\n');
-  }
-  return [voice, narrativeArc, subjectConfusionGuard, overclaimGuard, sourceLimitationGuard].join('\n');
+  return [...cameraHalEditorialVoiceBaseLines(), subjectConfusionGuard, overclaimGuard, sourceLimitationGuard].join('\n');
+}
+
+function cameraHalEditorialVoiceWithPlanPrompt() {
+  return [
+    ...cameraHalEditorialVoiceBaseLines(),
+    '제공된 internal editorial plan이 각 기사의 target_description, editorial_angle, why_it_matters, reader_takeaway, misunderstanding_risks, source_limitations를 이미 정리했습니다. 그 plan을 따라 자연스러운 prose로 작성하고, plan이 명시한 misunderstanding_risks(센서 제조사/SoC vendor/ISP IP/패치 작성자/보드/디바이스 혼동, 과대해석 등)와 source_limitations(review·RAW-only·버전 한정·release 전 상태 등)를 본문에서 빠뜨리지 마세요. plan은 작성 framing 참고용이며, 어떤 기사를 main article로 낼지·기사 개수·기사 식별은 바꾸지 마세요(selection이 결정).'
+  ].join('\n');
 }
 
 // #700: LLM editorial assessment & planning 단계의 지시. selected article capsule마다 내부
@@ -269,6 +273,7 @@ module.exports = {
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
   cameraHalEditorialVoicePrompt,
+  cameraHalEditorialVoiceWithPlanPrompt,
   editorialPlanPrompt,
   publicArticleJudgePrompt,
   articleClaimContractPrompt,
