@@ -54,15 +54,12 @@ test('editorSystemPrompt는 hasCatchUpCoverage로 catch-up 줄을 토글한다',
   assert.match(editorSystemPrompt({ publishMode: 'NORMAL', hasCatchUpCoverage: true }), /coverage_type=catch_up/);
 });
 
-test('editorSystemPrompt는 hasEditorialPlan으로 voice generic 가드레일을 슬림화한다', () => {
-  const withoutPlan = editorSystemPrompt({ publishMode: 'NORMAL', hasEditorialPlan: false });
-  const withPlan = editorSystemPrompt({ publishMode: 'NORMAL', hasEditorialPlan: true });
-  // 기본(plan 없음)은 full generic 가드레일을 유지한다.
-  assert.match(withoutPlan, /Samsung, S\.LSI, Exynos/);
-  // plan이 있으면 verbose 가드레일을 빼고 plan-따르기로 대체한다.
-  assert.doesNotMatch(withPlan, /Samsung, S\.LSI, Exynos/);
-  assert.match(withPlan, /제공된 internal editorial plan이 각 기사의/);
-  // completion은 plan을 받지 않으므로 voice는 항상 full(기본)이다.
+test('editorSystemPrompt는 항상 plan 전제 voice(slim)를 쓰고, completion은 full voice를 쓴다', () => {
+  // editorial-plan은 필수 단계이므로 editor는 항상 plan을 받는다 → voice는 plan-따르기(slim).
+  const editor = editorSystemPrompt({ publishMode: 'NORMAL' });
+  assert.doesNotMatch(editor, /Samsung, S\.LSI, Exynos/);
+  assert.match(editor, /제공된 internal editorial plan이 각 기사의/);
+  // completion은 plan을 받지 않으므로 voice는 full generic 가드레일이다.
   assert.match(editorCompletionSystemPrompt({ missingArticleCount: 1 }), /Samsung, S\.LSI, Exynos/);
 });
 

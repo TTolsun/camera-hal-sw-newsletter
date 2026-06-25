@@ -11,6 +11,7 @@ const {
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
   cameraHalEditorialVoicePrompt,
+  cameraHalEditorialVoiceWithPlanPrompt,
   sourceExtractionPromptGuardrails
 } = require('../../reporter/newsletter-prompts');
 const {
@@ -194,32 +195,35 @@ test('editorial voice prompt is writer-only: editor and completion compose it, f
     path.join(__dirname, '..', '..', 'publish', 'orchestrator-stage-prompts.js'),
     'utf8'
   );
-  const usageCount = (stagePrompts.match(/cameraHalEditorialVoicePrompt\(/g) || []).length;
+  // editor는 plan 전제 slim(WithPlan), completion은 full을 쓴다 → 두 voice 함수 합쳐 정확히 2회.
+  const usageCount = (stagePrompts.match(/cameraHalEditorialVoice(WithPlan)?Prompt\(/g) || []).length;
   assert.equal(usageCount, 2, `editorial voice should be composed exactly in editor + completion, got ${usageCount}`);
 
   const editorStart = stagePrompts.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI editor입니다.');
   const editorEnd = stagePrompts.indexOf('schema와 일치하는 JSON만 반환하세요.', editorStart);
-  assert.match(stagePrompts.slice(editorStart, editorEnd), /cameraHalEditorialVoicePrompt\(/);
+  // editor는 plan을 항상 받으므로 plan 전제 voice(WithPlan)를 쓴다.
+  assert.match(stagePrompts.slice(editorStart, editorEnd), /cameraHalEditorialVoiceWithPlanPrompt\(/);
 
   const completionStart = stagePrompts.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI completion editor입니다.');
   const completionEnd = stagePrompts.indexOf('schema와 일치하는 JSON만 반환하세요.', completionStart);
+  // completion은 plan을 받지 않으므로 full voice를 쓴다.
   assert.match(stagePrompts.slice(completionStart, completionEnd), /cameraHalEditorialVoicePrompt\(/);
 
   // 검증 LLM(fact-checker)·patch-only repair에는 톤 조각을 넣지 않는다 — must_fix 요구는 불변.
   const factCheckStart = stagePrompts.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI fact checker입니다.');
   const factCheckEnd = stagePrompts.indexOf('schema와 일치하는 JSON만 반환하세요.', factCheckStart);
-  assert.doesNotMatch(stagePrompts.slice(factCheckStart, factCheckEnd), /cameraHalEditorialVoicePrompt\(/);
+  assert.doesNotMatch(stagePrompts.slice(factCheckStart, factCheckEnd), /cameraHalEditorialVoice(WithPlan)?Prompt\(/);
 
   const repairStart = stagePrompts.indexOf('당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI repair editor입니다.');
   const repairEnd = stagePrompts.indexOf('schema와 일치하는 {patches:[...]} JSON만 반환하세요.', repairStart);
-  assert.doesNotMatch(stagePrompts.slice(repairStart, repairEnd), /cameraHalEditorialVoicePrompt\(/);
+  assert.doesNotMatch(stagePrompts.slice(repairStart, repairEnd), /cameraHalEditorialVoice(WithPlan)?Prompt\(/);
 });
 
 test('editorial voice prompt slims generic guardrails when an editorial plan is present (#700)', () => {
   const full = cameraHalEditorialVoicePrompt();
-  const slim = cameraHalEditorialVoicePrompt({ hasEditorialPlan: true });
+  const slim = cameraHalEditorialVoiceWithPlanPrompt();
 
-  // 서사 아크와 내부 라벨 비노출은 plan 유무와 무관하게 항상 유지된다.
+  // 서사 아크와 내부 라벨 비노출은 두 버전 모두 항상 유지된다.
   for (const prompt of [full, slim]) {
     assert.match(prompt, /원문에서 실제로 일어난 일을 먼저 설명/);
     assert.match(prompt, /Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고/);
