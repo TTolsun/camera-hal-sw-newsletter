@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-06-24T00:00:00+09:00",
+  "updated_at": "2026-06-26T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://developer.android.com/tools/agents/android-cli",
-    "title": "Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장",
-    "summary": "최근 구글이 Android CLI 및 GitHub를 통해 제공되는 Android skills 저장소를 확장하고, CameraX 마이그레이션을 위한 신규 스킬을 추가했습니다. 이는 Camera HAL 직접 변경은 아니지만, 상위 앱 계층의 카메라 API 전환을 가속화하여 HAL 호환성 검증의 중요성을 높입니다.",
-    "source_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
-    "newsletter_date": "2026-06-24",
-    "newsletter_url": "newsletters/2026-06-24/index.html",
-    "selected_at": "2026-06-24",
+    "article_identity_key": "url:https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya",
+    "title": "V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가",
+    "summary": "카메라 센서의 고유 Color Filter Array (CFA) 패턴을 설명하기 위한 V4L2_CID_CFA_PATTERN 컨트롤이 V4L2 UAPI에 추가되는 패치가 제안되었습니다.",
+    "source_url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+    "newsletter_date": "2026-06-26",
+    "newsletter_url": "newsletters/2026-06-26/index.html",
+    "selected_at": "2026-06-26",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-06-24",
+    "last_scored_at": "2026-06-26",
     "date_evidence": {
-      "date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "date": "2026-06-25T17:47:32Z",
       "date_field": "published_date",
-      "evidence_level": "primary",
+      "evidence_level": "watch",
       "publish_ready_date_evidence": true
     },
     "quality_flags": {
@@ -28,7 +28,7 @@
       "base_score": 100,
       "official_source_bonus": 8,
       "camera_bucket_bonus": 6,
-      "driver_or_soc_bonus": 0,
+      "driver_or_soc_bonus": 3,
       "fallback_penalty": 0,
       "generic_topic_penalty": 0,
       "source_gap_penalty": 0,
@@ -37,14 +37,59 @@
       "total": 100
     },
     "snapshot": {
-      "category": "android_platform_camera_adjacent",
-      "source_name": "Android Developers Blog"
+      "category": "camera_driver_image_pipeline",
+      "source_name": "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns"
     },
-    "newsletter_article_url": "newsletters/2026-06-24/index.html#article-android-cli-camerax",
-    "image_url": "https://developer.android.com/static/images/social/android-developers.png?hl=th",
-    "image_alt": "Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장"
+    "newsletter_article_url": "newsletters/2026-06-26/index.html#article-v4l2-uapi-cfa-v4l2-cid-cfa-pattern",
+    "image_url": "assets/images/fallback/newsletter-default.svg",
+    "image_alt": "V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가 image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://developer.android.com/tools/agents/android-cli",
+      "title": "Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장",
+      "summary": "최근 구글이 Android CLI 및 GitHub를 통해 제공되는 Android skills 저장소를 확장하고, CameraX 마이그레이션을 위한 신규 스킬을 추가했습니다. 이는 Camera HAL 직접 변경은 아니지만, 상위 앱 계층의 카메라 API 전환을 가속화하여 HAL 호환성 검증의 중요성을 높입니다.",
+      "source_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "newsletter_date": "2026-06-24",
+      "newsletter_url": "newsletters/2026-06-24/index.html",
+      "selected_at": "2026-06-24",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-06-24",
+      "date_evidence": {
+        "date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "date_field": "published_date",
+        "evidence_level": "primary",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "android_platform_camera_adjacent",
+        "source_name": "Android Developers Blog"
+      },
+      "newsletter_article_url": "newsletters/2026-06-24/index.html#article-android-cli-camerax",
+      "image_url": "https://developer.android.com/static/images/social/android-developers.png?hl=th",
+      "image_alt": "Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장",
+      "replaced_at": "2026-06-26",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at",
       "title": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안",

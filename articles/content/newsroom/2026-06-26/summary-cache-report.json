@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-26",
+  "generated_at": "2026-06-25T19:05:40.143Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 9,
+    "hit_count": 2,
+    "miss_count": 7,
+    "by_url_hit_count": 1,
+    "by_content_hit_count": 1,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 6
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 1
+    },
+    {
+      "reason": "content-hash-hit",
+      "count": 1
+    },
+    {
+      "reason": "url-hit",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "[PATCH] media: imx219: fix test pattern ordering and add patterns",
+      "url": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-25T16:02:47Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com",
+        "url_hash": "a4f38b10cb61d4b7c7b2a0b265424598add16e2ebb1d3c466b7430b13814de79",
+        "published_date": "2026-06-25T16:02:47Z",
+        "content_hash": "337502141d70aefeac240d9bb61727a40364238e18dfc3e678f869620c25254d"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "url": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-25T14:04:01Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com",
+        "url_hash": "2f45e42ce070b38f25778f2c2ab1db6b204c7cecc3c1b6ae659f8f80b8805ff2",
+        "published_date": "2026-06-25T14:04:01Z",
+        "content_hash": "88e60c8498e48dbbb4d17b73ee09abd07ab834eb3d970c78d50756379b934162"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250",
+      "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-25T13:38:57Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com",
+        "url_hash": "53d0f3ea349cc7426d84ce638463b706c476d24e4dbf5c22595ad6c1d346235f",
+        "published_date": "2026-06-25T13:38:57Z",
+        "content_hash": "505cc64b7161f5ebe480983d9dee95989fb4f53aa7f668d6456717e4fbcb3975"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns",
+      "url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-25T17:47:32Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya",
+        "url_hash": "7163e2a29b7eda2ef2a02e7dc4d70a3fed503226f6b2561fd16bd3369ce633ea",
+        "published_date": "2026-06-25T17:47:32Z",
+        "content_hash": "8d0a0ed2d5dc06d659b5c9c2275a7719b77e0413d4bceab5601ccc0f230bf736"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/2] Support RAW12 bayer formats - Yemike Abhilash Chandra",
+      "url": "https://lore.kernel.org/linux-media/20260625151756.221096-1-y-abhilashchandra@ti.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-25",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260625151756.221096-1-y-abhilashchandra@ti.com",
+        "url_hash": "11daac931a81530af1a7b168a05e37c3c7341a9b7494c700aa1c582b4c1255e6",
+        "published_date": "2026-06-25",
+        "content_hash": "be9afcfeefcf950ab60beac59289a7638c3e67ec2a48890418a038838fa64a87"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v3 0/4] media: add and use fwnode_graph_for_each_endpoint_scoped() - Frank.Li",
+      "url": "https://lore.kernel.org/linux-media/20260625-fw_scoped-v3-0-ffd0868e498d@nxp.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-25",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260625-fw_scoped-v3-0-ffd0868e498d@nxp.com",
+        "url_hash": "d7764e09af9ded1e5f8f99eb9ee4d1f79063f1a5dd4b58e7a4de73680c91b586",
+        "published_date": "2026-06-25",
+        "content_hash": "8831a26c7e7521b17a4762dc3f8860dea4fa077024f8b50d3cc6181bb22d682c"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/tools/agents/android-cli",
+        "url_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb"
+      },
+      "hit": true,
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb.json"
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "url_hash": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe.json"
+    },
+    {
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "source": "ISO C++ Blog",
+      "published_date": "Mon, 15 Jun 2026 22:22:24 +0000",
+      "cache_key": {
+        "normalized_url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+        "url_hash": "9f5a63b90e02162f19dabc76ee29ef71d86aa3a0fb00e872378d73f32ffbee7e",
+        "published_date": "Mon, 15 Jun 2026 22:22:24 +0000",
+        "content_hash": "45efa4a6b0593184fc9702888cdeb5e8b0a7381fa6d28ae9c5c9fd5a40f904e8"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

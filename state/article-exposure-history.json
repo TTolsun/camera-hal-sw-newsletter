@@ -7,6 +7,23 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya",
+      "title": "V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가",
+      "source_url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+      "newsletter_date": "2026-06-26",
+      "newsletter_url": "newsletters/2026-06-26/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-06-26",
+      "first_exposed_at": "2026-06-26",
+      "last_exposed_at": "2026-06-26",
+      "exposure_count": 1,
+      "exposure_types": [
+        "homepage_headline"
+      ]
+    },
+    {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com",
       "title": "Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안",
       "source_url": "https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/",
@@ -112,16 +129,16 @@
       "article_identity_key": "content:2dca6397f6798483d79ea9e0",
       "title": "",
       "source_url": "",
-      "newsletter_date": "2026-06-24",
-      "newsletter_url": "newsletters/2026-06-24/index.html",
+      "newsletter_date": "2026-06-26",
+      "newsletter_url": "newsletters/2026-06-26/index.html",
       "exposure_type": "newsletter_article",
       "headline_score": null,
       "reuse_reason": "",
-      "exposed_at": "2026-06-24",
-      "cooldown_until": "2026-07-15",
+      "exposed_at": "2026-06-26",
+      "cooldown_until": "2026-07-17",
       "first_exposed_at": "2026-06-03",
-      "last_exposed_at": "2026-06-24",
-      "exposure_count": 8,
+      "last_exposed_at": "2026-06-26",
+      "exposure_count": 9,
       "exposure_types": [
         "newsletter_article"
       ]

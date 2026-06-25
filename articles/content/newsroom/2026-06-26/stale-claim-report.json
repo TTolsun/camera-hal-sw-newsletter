@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-26",
+  "status": "PASS",
+  "removed_sections": [],
+  "final_section_sources": [
+    {
+      "title": "[PATCH] media: imx219: fix test pattern ordering and add patterns",
+      "url": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/"
+    },
+    {
+      "title": "Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "url": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/"
+    },
+    {
+      "title": "[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250",
+      "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/"
+    },
+    {
+      "title": "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns",
+      "url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}

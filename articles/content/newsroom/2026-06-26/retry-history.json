@@ -1,0 +1,337 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash, fact-checker=gemini-2.5-flash",
+    "score": 93,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 4,
+    "locked_article_count": 4,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "IMX219 센서 드라이버 테스트 패턴 정합성 개선 및 신규 패턴 추가 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Qualcomm SM8250 SoC 하드웨어 JPEG 인코더를 위한 Device Tree 바인딩 추가",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Qualcomm SM8250 SoC 대상 V4L2 mem2mem JPEG 인코더 드라이버 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "IMX219 센서 드라이버 테스트 패턴 정합성 개선 및 신규 패턴 추가 패치 제안",
+      "Qualcomm SM8250 SoC 하드웨어 JPEG 인코더를 위한 Device Tree 바인딩 추가",
+      "Qualcomm SM8250 SoC 대상 V4L2 mem2mem JPEG 인코더 드라이버 패치 제안",
+      "V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가"
+    ],
+    "locked_article_headlines": [
+      "IMX219 센서 드라이버 테스트 패턴 정합성 개선 및 신규 패턴 추가 패치 제안",
+      "Qualcomm SM8250 SoC 하드웨어 JPEG 인코더를 위한 Device Tree 바인딩 추가",
+      "Qualcomm SM8250 SoC 대상 V4L2 mem2mem JPEG 인코더 드라이버 패치 제안",
+      "V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "IMX219 센서 드라이버 테스트 패턴 정합성 개선 및 신규 패턴 추가 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH] media: imx219: fix test pattern ordering and add patterns"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Qualcomm SM8250 SoC 하드웨어 JPEG 인코더를 위한 Device Tree 바인딩 추가",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "Qualcomm SM8250 SoC 대상 V4L2 mem2mem JPEG 인코더 드라이버 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/"
+        ],
+        "source_titles": [
+          "[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250"
+        ]
+      },
+      {
+        "index": 4,
+        "headline": "V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "IMX219 센서 드라이버 테스트 패턴 정합성 개선 및 신규 패턴 추가 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "IMX219 센서 드라이버 테스트 패턴 정합성 개선 및 신규 패턴 추가 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Qualcomm SM8250 SoC 하드웨어 JPEG 인코더를 위한 Device Tree 바인딩 추가",
+        "sources": [
+          "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Qualcomm SM8250 SoC 하드웨어 JPEG 인코더를 위한 Device Tree 바인딩 추가"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "Qualcomm SM8250 SoC 대상 V4L2 mem2mem JPEG 인코더 드라이버 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Qualcomm SM8250 SoC 대상 V4L2 mem2mem JPEG 인코더 드라이버 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가",
+        "sources": [
+          "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "IMX219 센서 드라이버 테스트 패턴 정합성 개선 및 신규 패턴 추가 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH] media: imx219: fix test pattern ordering and add patterns"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Qualcomm SM8250 SoC 하드웨어 JPEG 인코더를 위한 Device Tree 바인딩 추가",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "Qualcomm SM8250 SoC 대상 V4L2 mem2mem JPEG 인코더 드라이버 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/"
+        ],
+        "source_titles": [
+          "[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 4,
+        "headline": "V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 4,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [
+      {
+        "title": "[PATCH 0/2] Support RAW12 bayer formats - Yemike Abhilash Chandra",
+        "url": "https://lore.kernel.org/linux-media/20260625151756.221096-1-y-abhilashchandra@ti.com/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      },
+      {
+        "title": "[PATCH v3 0/4] media: add and use fwnode_graph_for_each_endpoint_scoped() - Frank.Li",
+        "url": "https://lore.kernel.org/linux-media/20260625-fw_scoped-v3-0-ffd0868e498d@nxp.com/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      }
+    ],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

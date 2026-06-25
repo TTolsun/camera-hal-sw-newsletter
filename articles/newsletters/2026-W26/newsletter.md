@@ -1,6 +1,6 @@
 # 2026 W26 (06.22 ~ 06.28)
 
-이번 주에는 ‘Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안’, ‘Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안’ 등 4건의 소식을 다룹니다.
+이번 주에는 ‘Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안’, ‘Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안’ 등 8건의 소식을 다룹니다.
 
 
 
@@ -10,8 +10,10 @@
 - Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안
 - GCC 16 릴리스 예정: 템플릿 오류 메시지 개선 및 SARIF 정적 분석 출력 지원
 - Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장
-
-이번 기간 카메라 코어 직접 변경은 없었습니다. 아래는 실무 레이더 관점의 맥락입니다.
+- IMX219 센서 드라이버 테스트 패턴 정합성 개선 및 신규 패턴 추가 패치 제안
+- Qualcomm SM8250 SoC 하드웨어 JPEG 인코더를 위한 Device Tree 바인딩 추가
+- Qualcomm SM8250 SoC 대상 V4L2 mem2mem JPEG 인코더 드라이버 패치 제안
+- V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가
 
 ## 2. Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안
 
@@ -123,6 +125,118 @@ Camera HAL에 직접적인 API나 메타데이터 변경을 가져오지는 않�
 
 - [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
 
+---
+
+## 6. IMX219 센서 드라이버 테스트 패턴 정합성 개선 및 신규 패턴 추가 패치 제안
+
+
+![IMX219 센서 드라이버 테스트 패턴 정합성 개선 및 신규 패턴 추가 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
+
+_이미지: [[PATCH] media: imx219: fix test pattern ordering and add patterns](https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/)_
+
+
+_Linux Media Mailing List Patch_
+
+IMX219 센서 드라이버의 테스트 패턴 메뉴 순서가 데이터시트와 일치하도록 수정되고, 누락된 5개의 테스트 패턴이 추가되는 패치가 제안되었습니다.
+
+이번 주 Linux 미디어 메일링 리스트를 통해 제안된 패치에 따르면, 널리 사용되는 IMX219 카메라 센서 드라이버의 테스트 패턴 설정이 대폭 개선될 예정입니다. 기존 드라이버에 구현되어 있던 테스트 패턴 메뉴의 순서가 실제 하드웨어 데이터시트의 규격과 일치하지 않아 디버깅 과정에서 발생하던 혼선이 이번 패치를 통해 해소됩니다.
+
+또한 기존 드라이버에서 누락되었던 5개의 테스트 패턴이 새롭게 추가되어 센서 자체의 동작 검증 및 이미지 파이프라인 정합성 테스트 범위가 넓어졌습니다. 이는 하드웨어 디버깅 및 공정 검증 단계에서 센서 출력의 신뢰성을 확보하는 데 크게 기여할 것입니다.
+
+본 패치는 아직 제안 단계로, 커널 메인라인에 완전히 통합되기 전까지는 개별 드라이버 소스 트리에 수동 적용하여 검증해야 합니다. Camera HAL 및 드라이버 엔지니어는 이를 활용해 이미지 파이프라인의 데이터 정합성을 보다 정밀하게 검증할 수 있습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+직접적인 Android Camera HAL API 변경은 없으나, 센서 드라이버 레벨에서 신뢰할 수 있는 테스트 패턴을 제공함으로써 HAL의 RAW 스트림 검증 및 ISP 튜닝 파이프라인 디버깅 시 오탐을 줄일 수 있습니다.
+
+**출처**
+
+- [[PATCH] media: imx219: fix test pattern ordering and add patterns](https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/T/#t)
+
+---
+
+## 7. Qualcomm SM8250 SoC 하드웨어 JPEG 인코더를 위한 Device Tree 바인딩 추가
+
+
+![Qualcomm SM8250 SoC 하드웨어 JPEG 인코더를 위한 Device Tree 바인딩 추가 image](../../assets/images/fallback/newsletter-default.svg)
+
+_이미지: [Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding](https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/)_
+
+
+_Qualcomm OSS Mailing List Patch_
+
+Qualcomm SM8250 (Kona) SoC에 탑재된 JPEG 인코더 하드웨어 블록에 대한 Device Tree 바인딩이 추가되는 패치가 제안되었습니다.
+
+이번 주 Qualcomm SM8250 (Kona) SoC의 하드웨어 JPEG 인코더 블록을 지원하기 위한 Device Tree 바인딩 추가 패치(v2)가 제안되었습니다. 하드웨어 JPEG 인코더는 CPU 개입을 최소화하면서 고해상도 이미지를 빠르게 압축하는 데 필수적인 IP 블록입니다.
+
+Device Tree 바인딩은 리눅스 커널이 해당 하드웨어 블록의 레지스터 맵, 인터럽트 라인, 클럭 및 전원 도메인을 올바르게 인식하고 제어할 수 있도록 하는 첫 단계입니다. 이번 바인딩 추가를 통해 업스트림 커널 환경에서 SM8250의 JPEG 하드웨어 가속을 활용할 수 있는 기반이 마련되었습니다.
+
+이 패치는 제안 단계로, 향후 SM8250 기반 플랫폼에서 V4L2 기반 이미지 파이프라인의 JPEG 압축 성능 및 효율성을 향상시키는 데 기여할 것입니다. HAL 팀은 하드웨어 가속 JPEG 인코더의 가용성 및 리소스 사용량을 고려하여 시스템 설계를 검토해야 합니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Android Camera HAL에서 JPEG 캡처 요청 처리 시, 소프트웨어 인코딩 대신 하드웨어 가속 JPEG 인코더를 활용할 수 있는 기반이 마련됩니다. 이는 캡처 레이턴시와 전력 소모를 줄이는 데 기여할 수 있습니다.
+
+**출처**
+
+- [Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding](https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/)
+
+---
+
+## 8. Qualcomm SM8250 SoC 대상 V4L2 mem2mem JPEG 인코더 드라이버 패치 제안
+
+
+![Qualcomm SM8250 SoC 대상 V4L2 mem2mem JPEG 인코더 드라이버 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
+
+_이미지: [[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250](https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/)_
+
+
+_Qualcomm OSS Mailing List Patch_
+
+Qualcomm SM8250 SoC에 JPEG V4L2 mem2mem 인코더 지원을 추가하는 패치 시리즈가 제안되었습니다.
+
+이번 주 Qualcomm SM8250 SoC를 위한 V4L2 mem2mem (m2m) JPEG 인코더 드라이버 패치 시리즈(v2)가 제안되었습니다. 이 패치는 리눅스 표준 V4L2 M2M 프레임워크를 사용하여 하드웨어 가속 JPEG 인코딩 경로를 업스트림하는 것을 목표로 합니다.
+
+V4L2 mem2mem 프레임워크는 입력 버퍼의 데이터를 처리하여 출력 버퍼로 전달하는 하드웨어 가속기에 적합한 표준 인터페이스입니다. 이를 통해 독자적인 벤더 API 대신 표준 V4L2 인터페이스로 JPEG 인코딩을 수행할 수 있어, 드라이버 및 미들웨어의 유지보수성이 크게 향상됩니다.
+
+하드웨어 가속 JPEG 인코딩은 이미지 파이프라인의 성능과 효율성을 크게 향상시켜, 고해상도 이미지 처리 및 연속 촬영 시나리오에서 중요한 이점을 제공합니다. HAL 팀은 Android Camera HAL이 이 하드웨어 가속 기능을 어떻게 활용할 수 있는지 검토해야 합니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Android Camera HAL의 ImageCapture 경로에서 V4L2 M2M 인터페이스를 통해 하드웨어 가속 JPEG 인코딩을 수행할 수 있게 됩니다. 이는 HAL 내부의 버퍼 라이프사이클 관리 및 스트림 동기화 로직에 영향을 미칩니다.
+
+**출처**
+
+- [[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250](https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/T/#t)
+
+---
+
+## 9. V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가
+
+
+![V4L2 UAPI 내 카메라 센서 CFA 패턴 묘사를 위한 V4L2_CID_CFA_PATTERN 컨트롤 추가 image](../../assets/images/fallback/newsletter-default.svg)
+
+_이미지: [Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns](https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/)_
+
+
+_Linux Media Mailing List Patch_
+
+카메라 센서의 고유 Color Filter Array (CFA) 패턴을 설명하기 위한 V4L2_CID_CFA_PATTERN 컨트롤이 V4L2 UAPI에 추가되는 패치가 제안되었습니다.
+
+이번 주 카메라 센서의 고유 Color Filter Array (CFA) 패턴을 명시적으로 설명하기 위한 V4L2_CID_CFA_PATTERN 컨트롤을 V4L2 UAPI에 추가하는 패치(v12)가 제안되었습니다. 다양한 이미지 센서가 고유의 CFA 패턴(Bayer, Quad Bayer 등)을 사용함에 따라, 드라이버와 ISP 간에 이를 명시적으로 전달할 표준 제어 컨트롤이 필요했습니다.
+
+새로운 V4L2_CID_CFA_PATTERN 컨트롤은 센서 드라이버가 출력하는 RAW 데이터의 CFA 레이아웃을 표준화된 방식으로 상위 레이어에 보고할 수 있도록 지원합니다. 이를 통해 ISP 파이프라인 및 디모자이킹(Demosaicing) 처리부에서 센서 특성에 맞춘 최적의 이미지 처리가 가능해집니다.
+
+이 패치는 제안 단계로, 향후 RAW 스트림을 처리하는 카메라 드라이버 및 ISP 개발자는 V4L2_CID_CFA_PATTERN의 도입이 RAW 데이터 처리 로직 및 ISP 튜닝 파라미터에 미치는 영향을 검토해야 합니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+V4L2 UAPI에 CFA 패턴 제어 컨트롤이 추가되면, Camera HAL이 센서 드라이버로부터 RAW 스트림의 정확한 CFA 레이아웃 정보를 쿼리할 수 있게 됩니다. 이는 Android Camera HAL of RAW 스트림 처리 및 ISP 디모자이킹 튜닝 파라미터 정합성을 확보하는 데 기여합니다.
+
+**출처**
+
+- [Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns](https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/)
+
 
 ## 참고자료
 
@@ -130,3 +244,7 @@ Camera HAL에 직접적인 API나 메타데이터 변경을 가져오지는 않�
 - [Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver](https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/)
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)
 - [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
+- [[PATCH] media: imx219: fix test pattern ordering and add patterns](https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/T/#t)
+- [Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding](https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/)
+- [[PATCH v2 0/3] Add Qualcomm JPEG V4L2 encoder for SM8250](https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260625133828.3221781-1-atanas.filipov@oss.qualcomm.com/T/#t)
+- [Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns](https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/)

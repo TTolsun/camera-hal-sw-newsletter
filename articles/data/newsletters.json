@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-06-26",
+    "title": "AOSP Camera & Driver Platform 기술 뉴스레터 (2026-06-26)",
+    "summary": "이번 주 Linux 미디어 메일링 리스트에서는 Qualcomm SM8250 SoC를 위한 하드웨어 가속 JPEG 인코더 드라이버 지원 및 V4L2 UAPI의 새로운 CFA 패턴 컨트롤 추가 등 카메라 드라이버 및 이미지 파이프라인의 효율성을 높이기 위한 주요 패치들이 제안되었습니다. 또한 IMX219 센서 드라이버의 테스트 패턴 정합성 개선 패치도 공유되어, 하부 드라이버 스택에서의 디버깅 편의성이 한층 강화될 것으로 기대됩니다.",
+    "html": "newsletters/2026-06-26/index.html",
+    "md": "newsletters/2026-06-26/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-06-24",
     "title": "Camera HAL / SW Newsletter - 2026-06-24",
     "summary": "이번 기간 카메라 코어는 조용했습니다. 대신 Android 개발자 생산성 도구의 CameraX 마이그레이션 지원과 GCC 16 컴파일러의 정적 분석 개선 소식을 전해드립니다. Camera HAL 및 드라이버 엔지니어 관점에서 이러한 플랫폼 인접 기술과 도구의 변화가 검증 워크플로우와 빌드 시스템에 미치는 영향을 짚어봅니다.",
