@@ -349,16 +349,17 @@ test('keeps compiler CPU and GPU benchmark coverage in native tooling fallback w
 });
 
 test('classifies security-bulletin camera RAW/DNG and image-codec CVEs as multimedia camera output', () => {
+  // buildCveItem은 컴포넌트를 References href의 AOSP 경로(external/dng_sdk)로 채운다.
   const dng = classifyAospCameraStackCandidate({
-    title: 'June 2026 Android Security Bulletin: CVE-2026-0008 — dng_sdk',
-    api_or_component: 'Android Security Bulletin / dng_sdk',
-    behavior_change: 'Security vulnerability (Critical severity) in dng_sdk; security fix shipped in the June 2026 Android Security Bulletin (CVE-2026-0008).',
+    title: 'June 2026 Android Security Bulletin: CVE-2026-0008 — external/dng_sdk',
+    api_or_component: 'Android Security Bulletin / external/dng_sdk',
+    behavior_change: 'Security vulnerability (Critical severity) in external/dng_sdk; security fix shipped in the June 2026 Android Security Bulletin (CVE-2026-0008).',
     relevanceBucketHint: 'android_multimedia_camera_output'
   });
   const png = classifyAospCameraStackCandidate({
-    title: 'June 2026 Android Security Bulletin: CVE-2026-0009 — libpng',
-    api_or_component: 'Android Security Bulletin / libpng',
-    behavior_change: 'Security vulnerability (Critical severity) in libpng; security fix shipped in the June 2026 Android Security Bulletin (CVE-2026-0009).',
+    title: 'June 2026 Android Security Bulletin: CVE-2026-0009 — external/libpng',
+    api_or_component: 'Android Security Bulletin / external/libpng',
+    behavior_change: 'Security vulnerability (Critical severity) in external/libpng; security fix shipped in the June 2026 Android Security Bulletin (CVE-2026-0009).',
     relevanceBucketHint: 'android_multimedia_camera_output'
   });
 
@@ -367,5 +368,22 @@ test('classifies security-bulletin camera RAW/DNG and image-codec CVEs as multim
     assert.notEqual(item.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
     assert.equal(item.counts_as_primary_camera_topic, false);
     assert.ok(item.multimedia_camera_output_relevance >= 3);
+  }
+});
+
+test('keeps generic image-codec releases without an AOSP source path out of the camera output bucket', () => {
+  // libpng/libjpeg는 범용 코덱이라, external/ AOSP 경로 컨텍스트 없이 라이브러리명만 언급된
+  // 일반 릴리스/CVE 기사는 카메라 출력으로 승격되면 안 된다(over-broad 회귀 방지).
+  const png = classifyAospCameraStackCandidate({
+    title: 'libpng 1.6.44 released with a security fix',
+    summary: 'The libpng library fixes a heap buffer overflow in PNG decoding used by browsers and document viewers.'
+  });
+  const jpeg = classifyAospCameraStackCandidate({
+    title: 'libjpeg-turbo update patches a vulnerability',
+    summary: 'A libjpeg-turbo release fixes a buffer overflow in server-side image processing.'
+  });
+
+  for (const item of [png, jpeg]) {
+    assert.notEqual(item.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
   }
 });

@@ -14,9 +14,10 @@ const SEVERITY_RANK = { critical: 4, high: 3, moderate: 2, medium: 2, low: 1 };
 // 미디어+카메라 핵심: Media framework, Camera service/HAL, V4L2/media 커널, 벤더 camera/ISP.
 // 실제 게시판의 벤더/커널 섹션은 카메라 신호를 코드네임(camss/camx/csiphy 등)으로만 표기하므로 함께 본다.
 // dng_sdk/libpng/libjpeg/RAW는 촬영한 RAW를 DNG로 저장하거나 썸네일/EXIF 이미지를 디코딩하는
-// 카메라 출력 처리 라이브러리라 함께 본다(dng_sdk는 dng보다 먼저 둬야 통째로 매칭된다).
+// 카메라 출력 처리 라이브러리라 함께 본다. (bare "dng"는 무관 텍스트 오탐이 커서 제외하고
+// 라이브러리명 dng_sdk/libdng로 한정한다.)
 const CAMERA_MEDIA_PATTERN =
-  /\b(?:camera|camera2|cameraserver|camera\s*hal|isp|image\s*sensor|v4l2|video4linux|camss|camx|csiphy|csid|cam[_-]\w+|drivers\/media|media\s*framework|libstagefright|stagefright|mediacodec|mediaprovider|mediaserver|media\s*codec|dng_sdk|libdng|dng|libpng|libjpeg(?:-turbo)?|camera\s*raw|raw\s+image)\b/i;
+  /\b(?:camera|camera2|cameraserver|camera\s*hal|isp|image\s*sensor|v4l2|video4linux|camss|camx|csiphy|csid|cam[_-]\w+|drivers\/media|media\s*framework|libstagefright|stagefright|mediacodec|mediaprovider|mediaserver|media\s*codec|dng_sdk|libdng|libpng|libjpeg(?:-turbo)?|camera\s*raw|raw\s+image)\b/i;
 
 const CVE_PATTERN = /CVE-\d{4}-\d{4,}/i;
 
@@ -85,7 +86,7 @@ function rowReferenceHrefs(rowHtml) {
 // References href에서 AOSP 표준 모듈 경로(external/dng_sdk, frameworks/av, drivers/media 등)를 뽑아
 // Subcomponent 컬럼이 없는 표에서도 컴포넌트 표기/분류에 쓴다.
 function referencePathFromHrefs(hrefText) {
-  const match = /\/(?:platform|kernel)\/((?:external|frameworks|hardware|system|packages|vendor|drivers|av|media)\/[^/?#+]+)/i
+  const match = /\/(?:platform|kernel)\/((?:external|frameworks|hardware|system|packages|vendor|drivers)\/[^/?#+]+)/i
     .exec(String(hrefText || ''));
   return match ? match[1] : '';
 }
@@ -155,7 +156,7 @@ function bucketHint(row) {
   const text = `${row.section} ${row.component}`.toLowerCase();
   // dng_sdk/libpng/libjpeg/RAW는 촬영 이미지의 저장·디코딩을 담당하는 userspace 출력 라이브러리다.
   // 커널 드라이버가 아니므로 driver 분기보다 먼저 잡아 카메라 출력(multimedia) 신호로 본다.
-  if (/dng_sdk|libdng|\bdng\b|libpng|libjpeg|raw\s*image|camera\s*raw/.test(text)) {
+  if (/dng_sdk|libdng|libpng|libjpeg|raw\s+image|camera\s*raw/.test(text)) {
     return 'android_multimedia_camera_output';
   }
   // 벤더(Qualcomm/MediaTek 등)·커널·드라이버 카메라 CVE는 직접 AOSP Camera 프레임워크가 아니라
