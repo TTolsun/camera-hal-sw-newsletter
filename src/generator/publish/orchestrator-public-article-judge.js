@@ -19,7 +19,9 @@ const {
   publicArticleJudgeInput,
   normalizePublicArticleJudgeReport,
   publicArticleJudgeBlockingIssues,
+  deskAdvisoryIssues,
   publicArticleJudgeError,
+  judgeRepairError,
   publicArticleJudgeArtifactScope
 } = require('./orchestrator-judge-helpers');
 const { selectedReporterCapsules } = require('./orchestrator-reporter-normalize');
@@ -90,14 +92,15 @@ async function runPublicArticleJudge({ date, editor, reporter, stage, attempt, n
   );
   const report = normalizePublicArticleJudgeReport(rawReport, editor, date);
   const blockingIssues = publicArticleJudgeBlockingIssues(report);
+  const deskAdvisory = deskAdvisoryIssues(report);
   if (blockingIssues.length === 0) {
     writePublicArticleJudgeArtifact(newsroomDir, attempt, phase, report, null, stage);
     recordEditorSemanticStatus({ editor_public_article_judge: report });
-    return { ok: true, report };
+    return { ok: true, report, deskAdvisory };
   }
   const error = publicArticleJudgeError(report, stage, attempt, phase);
   writePublicArticleJudgeArtifact(newsroomDir, attempt, phase, report, error, stage);
-  return { ok: false, report, error };
+  return { ok: false, report, error, deskAdvisory };
 }
 
 async function validatePublicArticleJudgeOrRepair({
@@ -121,14 +124,25 @@ async function validatePublicArticleJudgeOrRepair({
     newsroomDir,
     phase: 'attempt'
   }, deps);
-  if (initialJudge.ok) return editor;
+  const initialDeskAdvisory = ensureArray(initialJudge.deskAdvisory);
 
-  const initialDetails = serializeEditorValidationError(initialJudge.error, {
-    stage: judgeStage,
-    attempt,
-    repairAttempted: false,
-    repairSucceeded: false
-  });
+  // 차단도 desk advisory(#725)도 없으면 그대로 통과한다.
+  if (initialJudge.ok && initialDeskAdvisory.length === 0) return editor;
+
+  // 차단 없이 desk advisory만으로 repair에 들어온 경우(desk-only). 이때는 repair가 실패해도
+  // 편집 품질 때문에 발행을 막지 않는다(desk 축은 advisory).
+  const deskOnly = initialJudge.ok;
+
+  // repair에는 차단 issue와 desk advisory issue를 함께 넘긴다.
+  const initialDetails = serializeEditorValidationError(
+    judgeRepairError(initialJudge.report, judgeStage, attempt),
+    {
+      stage: judgeStage,
+      attempt,
+      repairAttempted: false,
+      repairSucceeded: false
+    }
+  );
   let repairedRaw;
   try {
     repairedRaw = await repairEditorSemanticWithLlm({
@@ -153,10 +167,12 @@ async function validatePublicArticleJudgeOrRepair({
       newsroomDir,
       phase: 'repair'
     }, deps);
+    const residualDeskAdvisory = ensureArray(repairedJudge.deskAdvisory);
     if (repairedJudge.ok) {
       recordEditorSemanticStatus({
         editor_semantic_validation: initialDetails,
         editor_public_article_judge: repairedJudge.report,
+        ...(residualDeskAdvisory.length > 0 ? { editor_desk_advisory: residualDeskAdvisory } : {}),
         repairAttempted: true,
         repairSucceeded: true
       });
@@ -164,6 +180,16 @@ async function validatePublicArticleJudgeOrRepair({
     }
     throw repairedJudge.error;
   } catch (repairError) {
+    // desk-only 트리거에서 repair가 실패하면 발행을 막지 않고 원본 editor를 반환한다(#725).
+    if (deskOnly) {
+      recordEditorSemanticStatus({
+        editor_public_article_judge: initialJudge.report,
+        editor_desk_advisory: initialDeskAdvisory,
+        repairAttempted: true,
+        repairSucceeded: false
+      });
+      return editor;
+    }
     const semanticRepairError = repairError instanceof EditorSemanticValidationError
       ? repairError
       : new EditorSemanticValidationError(`Public article judge repair failed: ${repairError.message}`, {

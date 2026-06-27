@@ -206,8 +206,7 @@ function publicArticleJudgeBlockingIssues(report = {}) {
   return issues;
 }
 
-function publicArticleJudgeError(report, stage, attempt, phase = 'attempt') {
-  const issues = publicArticleJudgeBlockingIssues(report);
+function buildJudgeError(report, stage, attempt, phase, issues) {
   const error = new EditorSemanticValidationError(
     'Editor output failed public article semantic judge validation.',
     {
@@ -227,6 +226,20 @@ function publicArticleJudgeError(report, stage, attempt, phase = 'attempt') {
   return error;
 }
 
+function publicArticleJudgeError(report, stage, attempt, phase = 'attempt') {
+  return buildJudgeError(report, stage, attempt, phase, publicArticleJudgeBlockingIssues(report));
+}
+
+// #725: repair에 넘길 error는 차단 issue와 desk advisory issue를 함께 담는다. repair가 둘 다
+// 한 번에 고치게 하면서, desk 단독(차단 없음) 트리거에서도 고칠 목록을 제공한다.
+function judgeRepairError(report, stage, attempt, phase = 'attempt') {
+  const issues = [
+    ...publicArticleJudgeBlockingIssues(report),
+    ...deskAdvisoryIssues(report)
+  ];
+  return buildJudgeError(report, stage, attempt, phase, issues);
+}
+
 function publicArticleJudgeArtifactScope(stage = '') {
   const normalized = String(stage || '').toLowerCase();
   if (/completion/.test(normalized)) return 'completion';
@@ -242,5 +255,6 @@ module.exports = {
   normalizePublicArticleJudgeReport,
   publicArticleJudgeBlockingIssues,
   publicArticleJudgeError,
+  judgeRepairError,
   publicArticleJudgeArtifactScope
 };
