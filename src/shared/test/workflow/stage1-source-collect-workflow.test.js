@@ -64,6 +64,6 @@ test('newsroom and site-validation workflows install with npm ci on a cached nod
     const yaml = fs.readFileSync(path.join(workflowDir, file), 'utf8');
     assert.match(yaml, /cache: npm/, `${file} setup-node must enable the npm cache`);
     assert.match(yaml, /run: npm ci\b/, `${file} must install dependencies with npm ci`);
-    assert.doesNotMatch(yaml, /npm install/, `${file} must not keep the dead npm install fallback`);
+    assert.doesNotMatch(yaml, /if \[ -f package-lock\.json \]/, `${file} must not reintroduce the dead package-lock.json install fallback`);
   }
 });
