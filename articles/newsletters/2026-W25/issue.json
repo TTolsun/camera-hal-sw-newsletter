@@ -759,8 +759,8 @@
         "src": "../../assets/images/fallback/newsletter-default.svg",
         "originalUrl": "",
         "originalSrc": "",
-        "usedFallback": false,
-        "reason": ""
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
       },
       "originalImage": "../../assets/images/fallback/newsletter-default.svg",
       "coverage_type": "fresh"

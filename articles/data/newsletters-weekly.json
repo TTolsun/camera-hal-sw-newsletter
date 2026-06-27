@@ -14,7 +14,7 @@
     ],
     "article_count": 4,
     "article_images": [
-      "https://isocpp.org/files/img/redhatgraphic.png",
+      "assets/images/fallback/newsletter-default.svg",
       "https://developer.android.com/static/images/social/android-developers.png?hl=th"
     ]
   },
@@ -34,7 +34,7 @@
     "article_count": 6,
     "article_images": [
       "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
-      "https://isocpp.org/files/img/redhatgraphic.png"
+      "assets/images/fallback/newsletter-default.svg"
     ]
   },
   {
@@ -154,7 +154,7 @@
     "article_images": [
       "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
-      "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG"
+      "assets/images/fallback/newsletter-default.svg"
     ]
   }
 ]
