@@ -53,7 +53,7 @@ const DEFAULT_SELECTION_WINDOW_POLICY = getSelectionWindowPolicy();
 const DEFAULT_RUNTIME_CONFIG = {
   newsletterDate: '',
   // #574: 주 1회 전환에 맞춰 source collection lookback 기본값을 35일로 둔다(메인 21일 +
-  // reference 백스톱 35일). 01-newsletters-source-collect-pr.yml 도 동일하게 LOOKBACK_DAYS=35를
+  // reference 백스톱 35일). newsletters-01-source-collect-pr.yml 도 동일하게 LOOKBACK_DAYS=35를
   // 명시 전달한다. 이 기본값은 LOOKBACK_DAYS를 설정하지 않은 run에 적용된다.
   lookbackDays: 35,
   selectionWindowPolicy: {

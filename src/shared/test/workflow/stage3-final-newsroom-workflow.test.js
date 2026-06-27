@@ -15,7 +15,7 @@ const {
 } = require('../../common/newsletter-policy');
 
 test('final newsroom workflow separates review PR success from publish-ready gate', () => {
-  const workflowPath = path.join(__dirname, '..', '..', '..', '..', '.github', 'workflows', '03-newsletters-editor-pr.yml');
+  const workflowPath = path.join(__dirname, '..', '..', '..', '..', '.github', 'workflows', 'newsletters-03-editor-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const validatePolicyStep = workflowStep(workflow, 'Validate newsletter policy');
   const checkPolicyDocsStep = workflowStep(workflow, 'Check policy docs');
@@ -215,7 +215,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
 });
 
 test('final newsroom workflow labels review publication and diagnostics-only mutually exclusively', () => {
-  const workflowPath = path.join(__dirname, '..', '..', '..', '..', '.github', 'workflows', '03-newsletters-editor-pr.yml');
+  const workflowPath = path.join(__dirname, '..', '..', '..', '..', '.github', 'workflows', 'newsletters-03-editor-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const labelStep = workflowStep(workflow, 'Add pull request labels');
   const reviewPublicationStart = labelStep.indexOf('} else if (reviewPublicationReady) {');
@@ -240,9 +240,9 @@ test('final newsroom workflow labels review publication and diagnostics-only mut
 // Cross-stage contract. Reads all three workflow YAMLs.
 test('split newsroom workflows preserve #88 stage boundaries', () => {
   const workflowDir = path.join(__dirname, '..', '..', '..', '..', '.github', 'workflows');
-  const stage1 = fs.readFileSync(path.join(workflowDir, '01-newsletters-source-collect-pr.yml'), 'utf8');
-  const stage2 = fs.readFileSync(path.join(workflowDir, '02-newsletters-source-discovery-pr.yml'), 'utf8');
-  const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsletters-editor-pr.yml'), 'utf8');
+  const stage1 = fs.readFileSync(path.join(workflowDir, 'newsletters-01-source-collect-pr.yml'), 'utf8');
+  const stage2 = fs.readFileSync(path.join(workflowDir, 'newsletters-02-source-discovery-pr.yml'), 'utf8');
+  const stage3 = fs.readFileSync(path.join(workflowDir, 'newsletters-03-editor-pr.yml'), 'utf8');
   const stage2RunStep = workflowStep(stage2, 'Run Gemini source discovery');
   const stage2PrepareBodyStep = workflowStep(stage2, 'Prepare source discovery pull request body');
   const stage2CreatePrStep = workflowStep(stage2, 'Create source discovery pull request');
@@ -425,12 +425,12 @@ test('validate-site uses shared rendered issue structural validator', () => {
 });
 
 test('site validation workflow keeps structural checks blocking and quality annotations non-blocking', () => {
-  const workflowPath = path.join(__dirname, '..', '..', '..', '..', '.github', 'workflows', 'validate-site.yml');
+  const workflowPath = path.join(__dirname, '..', '..', '..', '..', '.github', 'workflows', 'site-01-validate.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const structuralStep = workflowStep(workflow, 'Validate structural publication artifacts');
   const annotationStep = workflowStep(workflow, 'Annotate publication quality and fact-check status');
 
-  assert.match(workflow, /^name: Validate Site and Images$/m);
+  assert.match(workflow, /^name: Site 01 - Validate Site and Images$/m);
   assert.match(workflow, /^  push:\n    branches: \["main"\]$/m);
   assert.match(workflow, /^  pull_request:\n    branches: \["main"\]$/m);
   assert.match(workflow, /^  workflow_dispatch:$/m);

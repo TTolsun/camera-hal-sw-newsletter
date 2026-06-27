@@ -1,4 +1,4 @@
-name: Newsletters 00 - Auto Daily PR
+name: Newsletters 00 - Weekly Orchestrator
 
 on:
   schedule:
@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   collect:
-    uses: ./.github/workflows/01-newsletters-source-collect-pr.yml
+    uses: ./.github/workflows/newsletters-01-source-collect-pr.yml
     with:
       newsletter_date: ${{ github.event.inputs.newsletter_date || '' }}
       auto_mode: true
@@ -30,7 +30,7 @@ jobs:
 
   discover:
     needs: collect
-    uses: ./.github/workflows/02-newsletters-source-discovery-pr.yml
+    uses: ./.github/workflows/newsletters-02-source-discovery-pr.yml
     with:
       newsletter_date: ${{ needs.collect.outputs.date }}
       auto_mode: true
@@ -44,7 +44,7 @@ jobs:
     # collect's committed candidates in artifact mode and degrades gracefully when
     # discover's merged candidates are absent.
     if: ${{ always() && needs.collect.result == 'success' }}
-    uses: ./.github/workflows/03-newsletters-editor-pr.yml
+    uses: ./.github/workflows/newsletters-03-editor-pr.yml
     with:
       newsletter_date: ${{ needs.collect.outputs.date }}
     secrets: inherit

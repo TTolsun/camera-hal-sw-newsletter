@@ -84,4 +84,4 @@ contract/unit 테스트(합성 candidate 사용 — 생성 산출물 복사 금�
 
 ## 검증 (사용자 요청)
 
-`00-newsletters-auto-daily-pr` GitHub 워크플로우를 실행해 기사가 정상 생성되는지(파이프라인 미회귀, 강한 패치가 있으면 main 승격) 확인한다.
+`newsletters-00-orchestrator` GitHub 워크플로우를 실행해 기사가 정상 생성되는지(파이프라인 미회귀, 강한 패치가 있으면 main 승격) 확인한다.
