@@ -45,7 +45,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: newsroom-raw-${{ github.event.inputs.newsletter_date || github.run_id }}
+  group: newsroom-raw-${{ inputs.newsletter_date || github.event.inputs.newsletter_date || 'auto-kst-today' }}
   cancel-in-progress: false
 
 jobs:
@@ -77,12 +77,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+        run: npm ci
 
       - name: Doctor runtime config
         run: npm run doctor:config -- --no-llm-credentials
