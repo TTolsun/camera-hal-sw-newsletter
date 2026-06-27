@@ -22,6 +22,29 @@ const {
   stringOrEmpty
 } = require('./orchestrator-shared-helpers');
 
+// #725: desk-review 4축. 위반은 P3 advisory issue로만 표현되어 절대 hard-block 하지 않는다
+// (publicArticleJudgeBlockingIssues는 P1/P2만 본다). field는 free string이라 schema 변경 불필요.
+const DESK_ADVISORY_FIELDS = new Set([
+  'desk_target_explanation',
+  'desk_layer_distinction',
+  'desk_source_limitations',
+  'desk_subject_attribution'
+]);
+
+function deskAdvisoryIssues(report = {}) {
+  const issues = [];
+  for (const section of ensureArray(report.sections)) {
+    for (const issue of ensureArray(section.issues)) {
+      const field = stringOrEmpty(issue.field);
+      const severity = stringOrEmpty(issue.severity).toUpperCase();
+      if (severity === 'P3' && DESK_ADVISORY_FIELDS.has(field)) {
+        issues.push({ headline: section.headline, ...issue });
+      }
+    }
+  }
+  return issues;
+}
+
 function sourceCandidateForJudgeSection(section = {}, reporter = {}) {
   const sectionHash = stringOrEmpty(section.source_candidate_hash || section.url_hash || section.normalized_url_hash);
   const sectionUrlKeys = new Set(sectionUrls(section).map(normalizeUrl).filter(Boolean));
@@ -212,6 +235,8 @@ function publicArticleJudgeArtifactScope(stage = '') {
 }
 
 module.exports = {
+  DESK_ADVISORY_FIELDS,
+  deskAdvisoryIssues,
   sourceCandidateForJudgeSection,
   publicArticleJudgeInput,
   normalizePublicArticleJudgeReport,
