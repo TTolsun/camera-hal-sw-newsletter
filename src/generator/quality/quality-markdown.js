@@ -122,6 +122,13 @@ function buildQualityReportMarkdown(report) {
   };
   const hardDeductionLines = hardItems.map(deductionLine).join('\n') || '- none';
   const softDeductionLines = softItems.map(deductionLine).join('\n') || '- none';
+  // #654: surface each article the fact-checker marked not publishable, with the verdict's
+  // confidence, so the human reviewer can see when a block is low-confidence (borderline,
+  // run-to-run flip-prone) and decide whether to override it. confidence is already
+  // canonicalized to high/medium/low/unspecified by the gate (normalizeVerdictConfidence).
+  const unpublishableArticleLines = ensureArray(report.unpublishable_articles)
+    .map(item => `- #${item.section_index} [confidence: ${markdownTableCell(item.confidence)}] ${markdownTableCell(item.headline)}: ${markdownTableCell(item.reason)}`)
+    .join('\n') || '- none';
 
   return `# 뉴스레터 품질 리포트 - ${report.date}
 
@@ -242,6 +249,10 @@ ${hardDeductionLines}
 ## Soft Deductions
 
 ${softDeductionLines}
+
+## Unpublishable Articles
+
+${unpublishableArticleLines}
 
 ## Top Deduction Categories
 

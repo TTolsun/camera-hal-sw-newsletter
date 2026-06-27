@@ -40,6 +40,25 @@ test('validateFactCheck keeps a genuine factual must_fix and stays NEEDS_FIX', (
   assert.equal(result.status, 'NEEDS_FIX');
 });
 
+// #654: validateFactCheck reshapes each article_quality item before the quality gate runs.
+// It must preserve the fact-checker's `confidence`, otherwise the gate always sees undefined
+// and the confidence surfacing is inert in the real pipeline (the gate's own unit test bypasses
+// this step, so this regression has to be pinned here).
+test('validateFactCheck preserves the article_quality confidence through its reshape', () => {
+  const result = validateFactCheck({
+    status: 'PASS',
+    must_fix: [],
+    recommended_fixes: [],
+    source_gaps: [],
+    article_quality: [
+      { section_index: 0, headline: 'A', publishable: true, reason: 'useful', confidence: 'high' },
+      { section_index: 1, headline: 'B', publishable: false, reason: 'borderline', confidence: 'low' }
+    ]
+  });
+  assert.equal(result.article_quality[0].confidence, 'high');
+  assert.equal(result.article_quality[1].confidence, 'low');
+});
+
 test('collectValidEvidenceIds gathers evidence_blocks ids and primary_evidence_ids', () => {
   const ids = collectValidEvidenceIds({ candidates: [
     { source_extraction: { evidence_blocks: [{ evidence_id: 'sx:1' }, { id: 'sx:2' }] }, primary_evidence_ids: ['p1'] }

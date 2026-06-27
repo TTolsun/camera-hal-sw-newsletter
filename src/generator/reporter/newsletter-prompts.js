@@ -215,7 +215,8 @@ function cameraDeveloperToolingFactCheckPrompt() {
 
 function articleQualityVerdictPrompt() {
   return [
-    'article_quality[]: 각 main section마다 하나씩, 그 기사가 발행할 만한 품질인지 판정하세요. section_index(0-based), headline, publishable(boolean), reason을 채우세요.',
+    'article_quality[]: 각 main section마다 하나씩, 그 기사가 발행할 만한 품질인지 판정하세요. section_index(0-based), headline, publishable(boolean), confidence, reason을 채우세요.',
+    'confidence: 그 publishable 판정에 얼마나 확신하는지 high/medium/low 중 하나로 적으세요. 근거가 분명해 같은 기사를 다시 봐도 같은 결론이 나올 정도면 high, 판단이 갈릴 수 있는 borderline(애매)한 기사면 low로 적으세요. 이 값은 사람 리뷰어가 보는 참고 신호일 뿐 발행 여부를 자동으로 바꾸지 않으니, 확신을 부풀리지 말고 솔직하게 적으세요.',
     '품질 기준은 "Camera HAL 관련 주제인가"가 아니라 "Camera HAL SW 엔지니어에게 실제로 도움이 되는 기사인가"입니다. 주제가 C++, AI/LLM, Linux, 빌드/디버그/성능 도구여도 HAL SW 엔지니어 업무에 도움이 되면 publishable=true로 판정하세요. 반대로 Camera HAL 주제라도 구체성·깊이·실행가능성이 없어 엔지니어에게 쓸모가 없으면 publishable=false로 판정하세요.',
     'publishable=false면 reason에 "왜 HAL SW 엔지니어에게 도움이 안 되는지"를 구체적으로 적으세요(예: 버전/날짜/API/동작 변화 같은 구체 정보 없음, 일반론뿐, 후속 행동이 불명확). publishable=true면 reason에 그 기사가 엔지니어에게 주는 실질적 가치를 한 줄로 적으세요.',
     '이 판정은 must_fix/source_gaps(사실·출처 검증)와 독립적입니다. 사실은 맞지만 품질이 부족하면 must_fix가 아니라 article_quality의 publishable=false로 표현하세요.'

@@ -413,12 +413,17 @@ const editorRepairPatchSchema = {
 // topic" but "how useful is this article to a Camera HAL SW engineer" — a C++, AI, or
 // Linux article qualifies if it helps that engineer's work. The deterministic gate reads
 // `publishable` as a boolean; `reason` is for the review artifact.
+// `confidence` (#654) is the fact-checker's own self-assessment of how sure the verdict is
+// (high/medium/low). It is surfaced to the human reviewer so a low-confidence block is
+// visible; it is NOT a deterministic gate and does not change what publishes. It stays
+// optional so the model is not forced and pre-#654 artifacts remain schema-valid.
 const articleQualityVerdict = {
   type: 'OBJECT',
   properties: {
     section_index: number,
     headline: string,
     publishable: { type: 'BOOLEAN' },
+    confidence: string,
     reason: string
   },
   required: ['section_index', 'publishable', 'reason']
