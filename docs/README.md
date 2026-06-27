@@ -20,6 +20,7 @@
 | `operations/` | 수동 실행, PR review, release, artifact review 절차입니다. |
 | `evidence/` | linked evidence와 source-aware artifact contract 설명입니다. |
 | `editorial/` | article structure, HAL signal quality, source quality 계약 문서(3개)입니다. |
+| `article-quality-checklist.md` | editorial-plan 분류·framing 과대해석을 리뷰어가 계층별로 점검하는 체크리스트입니다(정책 정본은 `EDITORIAL_POLICY.md`). |
 | `golden-examples/` | generator prompt에 들어가는 수동 품질 예시입니다. |
 | `AGENTS.md` | docs folder 수정 시 현재 운영 문서 기준과 링크 유지 규칙입니다. |
 
