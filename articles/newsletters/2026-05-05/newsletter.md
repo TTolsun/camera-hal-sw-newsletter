@@ -102,7 +102,7 @@ Firebase AI Logic은 HAL 변경 근거가 아니라 camera-frame AI 기능이 �
 ## 5. C++26 assert(): Camera HAL debug-build 검토 범위
 
 
-![Sandor Dargo](https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG)
+![Sandor Dargo](../../assets/images/fallback/newsletter-default.svg)
 
 _이미지: [ISO C++ Blog](https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo)_
 

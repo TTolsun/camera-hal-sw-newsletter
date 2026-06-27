@@ -72,7 +72,7 @@ CameraX는 Android Camera2 API를 기반으로 구축된 Jetpack 라이브러리
 ## 4. GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선
 
 
-![Red Hat graphic on ISO C++ Blog representing GCC 16 compiler updates](https://isocpp.org/files/img/redhatgraphic.png)
+![Red Hat graphic on ISO C++ Blog representing GCC 16 compiler updates](../../assets/images/fallback/newsletter-default.svg)
 
 _이미지: [ISO C++ Blog](https://isocpp.org/blog)_
 

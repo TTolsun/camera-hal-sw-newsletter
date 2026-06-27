@@ -683,7 +683,7 @@
       "article_type": "main",
       "imageCandidates": [
         {
-          "url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "url": "../../assets/images/fallback/newsletter-default.svg",
           "sourceUrl": "https://isocpp.org/blog",
           "articleUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
           "sourceKind": "article-img",
@@ -696,7 +696,7 @@
           "width": 100
         }
       ],
-      "selectedImage": "https://isocpp.org/files/img/redhatgraphic.png",
+      "selectedImage": "../../assets/images/fallback/newsletter-default.svg",
       "imageSource": "https://isocpp.org/blog",
       "imageAttribution": "ISO C++ Blog",
       "imageAlt": "Red Hat graphic on ISO C++ Blog representing GCC 16 compiler updates",
@@ -755,14 +755,14 @@
       "evidence_origin": "article_text",
       "source_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "resolvedImage": {
-        "url": "https://isocpp.org/files/img/redhatgraphic.png",
-        "src": "https://isocpp.org/files/img/redhatgraphic.png",
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
         "originalUrl": "",
         "originalSrc": "",
-        "usedFallback": false,
-        "reason": ""
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
       },
-      "originalImage": "https://isocpp.org/files/img/redhatgraphic.png",
+      "originalImage": "../../assets/images/fallback/newsletter-default.svg",
       "coverage_type": "fresh"
     },
     {
@@ -901,7 +901,7 @@
       "article_type": "camera_driver_image_pipeline",
       "imageCandidates": [
         {
-          "url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "url": "../../assets/images/fallback/newsletter-default.svg",
           "sourceUrl": "https://isocpp.org/blog",
           "articleUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
           "sourceKind": "article-img",
@@ -1176,7 +1176,7 @@
       "article_type": "driver",
       "imageCandidates": [
         {
-          "url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "url": "../../assets/images/fallback/newsletter-default.svg",
           "sourceUrl": "https://isocpp.org/blog",
           "articleUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
           "sourceKind": "article-img",
@@ -1453,7 +1453,7 @@
       "article_type": "driver",
       "imageCandidates": [
         {
-          "url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "url": "../../assets/images/fallback/newsletter-default.svg",
           "sourceUrl": "https://isocpp.org/blog",
           "articleUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
           "sourceKind": "article-img",

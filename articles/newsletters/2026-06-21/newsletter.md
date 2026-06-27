@@ -69,7 +69,7 @@ Sony IMX576 센서의 고해상도(5760 x 4312) 및 수동 제어 기능(노출,
 ## 4. GCC 16 신규 기능 발표: C++ 오류 메시지 가독성 향상 및 SARIF 출력 지원
 
 
-![Red Hat graphic on ISO C++ Blog representing GCC 16 compiler updates](https://isocpp.org/files/img/redhatgraphic.png)
+![Red Hat graphic on ISO C++ Blog representing GCC 16 compiler updates](../../assets/images/fallback/newsletter-default.svg)
 
 _이미지: [ISO C++ Blog](https://isocpp.org/blog)_
 

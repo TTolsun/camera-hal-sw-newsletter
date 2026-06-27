@@ -41,7 +41,7 @@ Camera HAL에 직접적인 API나 메타데이터 변경을 가져오지는 않�
 ## 3. GCC 16 컴파일러, 개선된 오류 메시지와 SARIF 정적 분석 기능 공개
 
 
-![redhatgraphic.png](https://isocpp.org/files/img/redhatgraphic.png)
+![redhatgraphic.png](../../assets/images/fallback/newsletter-default.svg)
 
 _이미지: [ISO C++ Blog](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)_
 
