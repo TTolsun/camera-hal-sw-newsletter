@@ -29,6 +29,7 @@ test('초기 generationRunState는 추출 전과 동일한 초기값을 가진�
   assert.equal(state.lastKnownValidAttempt, 0);
   assert.equal(state.editorSemanticValidation, null);
   assert.equal(state.editorPublicArticleJudge, null);
+  assert.deepEqual(state.editorDeskAdvisory, []);
   assert.equal(state.repairAttempted, false);
   assert.equal(state.repairSucceeded, false);
   assert.equal(state.candidateInput, null);
@@ -40,6 +41,7 @@ test('정확히 이 키들만 가진다(필드 누락/추가 방지)', () => {
     'candidateInput',
     'currentQualityAttempt',
     'date',
+    'editorDeskAdvisory',
     'editorPublicArticleJudge',
     'editorSemanticValidation',
     'factCheck',

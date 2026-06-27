@@ -19,6 +19,7 @@ const { articlePolicy } = require('../../../shared/common/newsletter-policy');
 function resetEditorSemanticState() {
   generationRunState.editorSemanticValidation = null;
   generationRunState.editorPublicArticleJudge = null;
+  generationRunState.editorDeskAdvisory = [];
   generationRunState.repairAttempted = false;
   generationRunState.repairSucceeded = false;
 }
@@ -113,6 +114,26 @@ test('recordEditorSemanticStatus는 repair 플래그를 단조 증가(OR)로만 
   recordEditorSemanticStatus({ repairSucceeded: true });
   recordEditorSemanticStatus({ repairSucceeded: false });
   assert.equal(generationRunState.repairSucceeded, true);
+  resetEditorSemanticState();
+});
+
+test('recordEditorSemanticStatus는 editor_desk_advisory를 누적하고 editorSemanticStatusExtra가 노출한다(#725)', () => {
+  resetEditorSemanticState();
+  recordEditorSemanticStatus({ editor_desk_advisory: [{ field: 'desk_target_explanation', section_index: 1 }] });
+  recordEditorSemanticStatus({ editor_desk_advisory: [{ field: 'desk_source_limitations', section_index: 2 }] });
+
+  const extra = editorSemanticStatusExtra();
+  assert.equal(extra.editor_desk_advisory.length, 2);
+  assert.deepEqual(
+    extra.editor_desk_advisory.map(issue => issue.field),
+    ['desk_target_explanation', 'desk_source_limitations']
+  );
+  resetEditorSemanticState();
+});
+
+test('editorSemanticStatusExtra는 desk advisory가 없으면 빈 배열을 노출한다(#725)', () => {
+  resetEditorSemanticState();
+  assert.deepEqual(editorSemanticStatusExtra().editor_desk_advisory, []);
   resetEditorSemanticState();
 });
 

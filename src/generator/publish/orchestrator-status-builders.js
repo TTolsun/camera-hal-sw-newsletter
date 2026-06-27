@@ -73,6 +73,14 @@ function recordEditorSemanticStatus(status = {}) {
     generationRunState.repairSucceeded =
       generationRunState.repairSucceeded || Boolean(status.repairSucceeded);
   }
+  // #725: 발행된 기사에 남은 desk-review advisory를 run 전체에 걸쳐 누적해 둔다(차단은 아님,
+  // 리뷰어가 편집 약점을 보도록 generation-status에 노출하기 위한 관측용).
+  if (Array.isArray(status.editor_desk_advisory)) {
+    generationRunState.editorDeskAdvisory = [
+      ...generationRunState.editorDeskAdvisory,
+      ...status.editor_desk_advisory
+    ];
+  }
 }
 
 function editorSemanticStatusExtra(error = null) {
@@ -90,6 +98,10 @@ function editorSemanticStatusExtra(error = null) {
       error?.editorPublicArticleJudge ||
       generationRunState.editorPublicArticleJudge ||
       null,
+    editor_desk_advisory:
+      error?.editorDeskAdvisory ||
+      generationRunState.editorDeskAdvisory ||
+      [],
     repairAttempted: Boolean(repairAttempted),
     repairSucceeded: Boolean(repairSucceeded)
   };

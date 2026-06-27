@@ -37,7 +37,7 @@ test('DESK_ADVISORY_FIELDS는 desk 4축을 노출한다', () => {
   ]);
 });
 
-test('deskAdvisoryIssues는 desk_* 필드의 P3 issue만 모은다', () => {
+test('deskAdvisoryIssues는 desk_* field issue를 모으고 비-desk advisory는 제외한다', () => {
   const report = reportWith([
     { section_index: 1, field: 'desk_target_explanation', severity: 'P3', reason: 'no target' },
     { section_index: 1, field: 'desk_source_limitations', severity: 'P3', reason: 'dropped limit' },
@@ -54,11 +54,14 @@ test('deskAdvisoryIssues는 desk_* 필드의 P3 issue만 모은다', () => {
   assert.equal(desk[0].headline, 'h1');
 });
 
-test('deskAdvisoryIssues는 desk_* 이지만 P1/P2인 issue는 제외한다(차단은 기존 경로가 처리)', () => {
+test('desk_* 는 severity가 P1/P2여도 차단되지 않고 advisory로 모인다(코드 강제 비차단)', () => {
   const report = reportWith([
-    { section_index: 1, field: 'desk_layer_distinction', severity: 'P1', reason: 'escalated' }
+    { section_index: 1, field: 'desk_layer_distinction', severity: 'P1', reason: 'mislabeled severity' }
   ]);
-  assert.equal(deskAdvisoryIssues(report).length, 0);
+  // field 이름이 advisory 여부를 결정한다 — severity가 P1이어도 차단 목록엔 들어가지 않는다.
+  assert.equal(publicArticleJudgeBlockingIssues(report).length, 0);
+  // 그리고 advisory로 모인다(silent drop 방지).
+  assert.equal(deskAdvisoryIssues(report).length, 1);
 });
 
 test('publicArticleJudgeBlockingIssues는 desk P3를 차단 목록에 넣지 않는다(non-blocking 보증)', () => {
