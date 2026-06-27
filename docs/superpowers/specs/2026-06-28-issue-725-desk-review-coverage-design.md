@@ -19,9 +19,11 @@
 3. **source 한계 보존** — source가 명시한 한계(RAW-only, ISP bypass, 제한된 모드, review 상태 등)를 prose가 보존했는가.
 4. **주체 attribution** — 센서 제조사 / 패치 작성자 / 플랫폼 벤더 / 테스트 보드 / 실제 기기를 혼동하지 않았는가.
 
-### 핵심 발견: 원재료는 이미 존재한다
+### 핵심 발견: judge는 이미 충분한 입력을 받는다
 
-`#700` editorial-plan stage(`editorialPlanItem` schema)가 selected article마다 `target_description`·`source_limitations`·`misunderstanding_risks`·`reader_takeaway` 등을 **이미 생성**하고 editor에게 "prose로 반영하라"고 넘긴다(`orchestrator-editor-stage.js`). 그러나 **작성된 prose가 그걸 실제로 반영했는지 검증하는 desk 단계가 없다.** 이 plan 필드들이 desk 검사의 **reference(정답지)** 가 된다.
+`publicArticleJudgeInput`(`orchestrator-judge-helpers.js`)이 section마다 넘기는 입력에는 이미 **prose(`public_article`), `reporter_evidence`(`api_or_component`/`behavior_change`/`evidence_notes`/`do_not_overstate`), section `do_not_overstate`·`do_not_claim`, `claims`(overclaim_risk 포함), `relevance_bucket`** 가 들어 있다. 이것이 desk 4축 판정의 **충분한 근거**다 — 대상 기술(api_or_component/behavior_change), 과장 경계(do_not_overstate/do_not_claim/overclaim_risk), 레이어/주체(relevance_bucket + 근거)를 모두 담는다.
+
+따라서 desk 검사를 위해 editorial-plan을 judge에 새로 thread할 필요가 없다(불필요한 plumbing 회피 = 정책 심플). plan의 `target_description`/`source_limitations`는 더 정밀한 정답지가 될 수 있으나, 3개 호출부를 통과하는 배선 비용 대비 이득이 낮아 본 슬라이스에서는 채택하지 않는다(필요 시 후속).
 
 ### 중복 없음
 
@@ -46,6 +48,7 @@
 
 - **새 hard-fail 조건 0개.** 데스크 4축은 `publicArticleJudgeBlockingIssues`에 절대 들어가지 않는다.
 - **새 config threshold / policy JSON 키 0개.** 기존 `severity: P3` = advisory 관례를 그대로 쓴다.
+- **schema 변경 0개 / 새 judge-input plumbing 0개.** desk issue는 기존 `issues[]`(free string `field`/`severity`)로 표현하고, 판정은 기존 judge 입력으로 한다.
 - **새 stage / 새 LLM 호출 타입 0개.** 기존 judge 호출과 기존 repair 호출에 흡수한다. 단 결정 ④에 따라 편집 issue가 repair를 트리거하므로, blocking 없이 편집 issue만 있던 기사는 repair를 1회 더 탈 수 있다(비용 수용됨, 4.3 참조).
 - 기존 repair 안전제약("source fact 만들지 마라", prose 보존)을 그대로 재사용한다.
 
@@ -53,27 +56,17 @@
 
 세 군데만 변경한다.
 
-### 4.1 Judge 입력 — `publicArticleJudgeInput` (`orchestrator-judge-helpers.js`)
+### 4.1 Judge 입력 — 변경 없음
 
-editorial-plan report를 인자로 받아, 각 editor section을 plan item과 `source_candidate_hash`(없으면 normalized `url`)로 매칭한다(기존 `sourceCandidateForJudgeSection`과 동일한 매칭 패턴). 매칭된 plan의 다음 필드를 section마다 `editorial_plan_reference`로 첨부한다:
-
-```
-editorial_plan_reference: {
-  target_description: string,
-  source_limitations: string[],
-  misunderstanding_risks: string[]
-}
-```
-
-plan이 없거나 매칭 실패 시 `editorial_plan_reference`는 빈 객체 → 해당 section의 데스크 검사는 prose 자체만으로 판정(reference 없음은 fail 사유가 아님, 아래 4.2).
+`publicArticleJudgeInput`은 그대로 둔다. desk 4축은 이미 전달되는 입력(`public_article` prose, `reporter_evidence`, `do_not_overstate`, `do_not_claim`, `claims`, `relevance_bucket`)으로 판정한다. **새 입력 plumbing 0, schema 변경 0.**
 
 ### 4.2 Judge 프롬프트 — `publicArticleJudgePrompt` (`newsletter-prompts.js`)
 
-기존 프롬프트에 데스크 4축 평가 지침을 추가한다. judge는 **여전히 "판정만, rewrite 금지"** 다.
+기존 프롬프트에 데스크 4축 평가 지침을 추가한다. judge는 **여전히 "판정만, rewrite 금지"** 다. 기존 입력(prose + reporter_evidence + do_not_overstate/do_not_claim + claims + relevance_bucket)을 근거로 본다.
 
 - 4축: `desk_target_explanation` / `desk_layer_distinction` / `desk_source_limitations` / `desk_subject_attribution`.
-- 위반 시 `issues[]`에 **`severity: "P3"`**, `field`는 위 4개 중 하나, `reason`/`suggested_fix` 작성.
-- `editorial_plan_reference`가 제공되면 그것을 정답지로 삼아 prose 반영 여부를 본다. reference가 비어 있으면 prose 내부 일관성만으로 보수적으로 판정한다(reference 부재 자체는 위반이 아니다).
+- 위반 시 `issues[]`에 **`severity: "P3"`**, `field`는 위 4개 중 하나, `reason`/`suggested_fix` 작성. (`publicArticleJudgeIssue.field`/`severity`는 free string이라 schema 변경 불필요.)
+- 근거가 부족하면(예: source가 대상 설명을 안 줌) 위반으로 단정하지 말고 보수적으로 통과시킨다(자기합성 유도 금지).
 - 단어 매칭 금지(기존 의미 기반 판정 원칙 유지).
 
 ### 4.3 흐름 — `orchestrator-public-article-judge.js` + `orchestrator-judge-helpers.js`
@@ -109,7 +102,6 @@ plan이 없거나 매칭 실패 시 `editorial_plan_reference`는 빈 객체 →
 - **contract/unit**
   - `publicArticleJudgePrompt`가 4축 지침을 포함한다.
   - `deskAdvisoryIssues`가 데스크 P3만 advisory로 분류하고, `publicArticleJudgeBlockingIssues`는 데스크 P3를 **포함하지 않는다**(non-blocking 보증).
-  - `publicArticleJudgeInput`이 plan을 section에 매칭해 `editorial_plan_reference`를 첨부한다(hash·url 매칭, 미매칭 시 빈 객체).
   - 흐름: desk-only issue가 repair를 트리거한다 / 잔여 desk advisory가 `throw`하지 않고 editor를 반환한다 / 잔여 blocking은 기존대로 throw한다.
 - **회귀 fixture(#700 회귀 케이스 기반)**
   - Linux media sensor patch: source 한계(RAW-only 등) 미보존 prose → `desk_source_limitations` P3.
