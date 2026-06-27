@@ -55,7 +55,8 @@ async function repairEditorSemanticWithLlm({
       'validation error JSON의 details.issues[].uncovered_facts[](article_index/field/text)와 deterministic_repair_failure_reason_codes를 먼저 읽고, 그 verified_fact에만 정확히 대응하는 claim_type=fact claim을 추가하세요. 목록에 없는 fact나 section은 건드리지 말고, 새 fact·evidence_id·source URL은 만들지 마세요.',
       'Claim repair에는 허용된 claim_type과 impact_level 값만 사용하세요. 직접 HAL contract를 뒷받침하는 근거가 없으면 CameraX/adaptive UI impact는 app_api_or_framework_adjacent로 매핑하세요.',
       'briefing failure는 briefing을 정확히 3개 item으로 고치고 draft의 나머지는 보존하세요.',
-      'Source fact 또는 source material을 만들지 마세요.',
+      'desk_target_explanation / desk_layer_distinction / desk_source_limitations / desk_subject_attribution issue가 있으면, 해당 section의 한국어 prose를 source와 reporter_evidence 범위 안에서 수정하세요: 대상 기술을 설명하고, 레이어(HAL/framework/kernel/V4L2/sensor/ISP/toolchain/trend)를 구분하고, source 한계를 보존하고, 주체(제조사/작성자/vendor/board/device) 혼동을 바로잡으세요. section 수·순서·headline·source·claims는 바꾸지 마세요.',
+      'Source fact 또는 source material을 만들지 마세요. 근거에 없는 대상 설명이나 한계를 지어내지 말고, 그런 경우 prose를 과장 없이 두세요.',
       'Schema-compliant JSON만 반환하세요.'
     ].join('\n'),
     [

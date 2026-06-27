@@ -150,6 +150,11 @@ function publicArticleJudgePrompt() {
     '제공된 evidence boundary 안에서만 해석하면 PASS입니다. 직접 근거 없는 HAL/driver/vendor pipeline 영향을 주장하면 FAIL입니다.',
     'public_prose_pass는 public_article에 workflow/debug/schema/validator/publish gate 같은 내부 운영 언어가 없고 독자-facing 한국어 technical prose이면 PASS입니다.',
     '문제가 있으면 issues[]에 field, severity(P1/P2/P3), reason, suggested_fix를 짧게 작성하세요. 문제가 없으면 issues는 빈 배열입니다.',
+    '추가로 아래 4개 desk-review 축을 점검하세요. 위반이 있을 때만 issues[]에 severity를 반드시 "P3"으로, field를 지정된 이름으로 적으세요(P3는 advisory라 발행을 막지 않습니다). 제공된 근거(reporter_evidence, do_not_overstate, do_not_claim, claims, relevance_bucket, prose)로만 판정하고, 근거가 부족하면 위반으로 단정하지 말고 보수적으로 통과시키세요. 없는 설명을 지어내도록 유도하지 마세요.',
+    'desk_target_explanation: prose가 대상 기술(driver/sensor/ISP/API/tool 등)이 무엇인지 reporter_evidence(api_or_component, behavior_change) 범위에서 설명했는가. 설명 없이 사건만 나열하면 위반입니다.',
+    'desk_layer_distinction: 항목이 Android HAL / Android framework·API / Linux kernel / V4L2 / sensor driver / ISP driver / toolchain / product trend 중 어디에 속하는지 relevance_bucket과 근거에 맞게 구분했는가. 레이어를 뭉뚱그리거나 잘못 귀속하면 위반입니다.',
+    'desk_source_limitations: source가 명시한 한계(RAW-only, ISP bypass, 제한된 모드, review 상태 등)와 do_not_overstate/do_not_claim 경계를 prose가 보존했는가. 한계를 빠뜨리고 일반화하면 위반입니다.',
+    'desk_subject_attribution: 센서 제조사 / 패치 작성자 / 플랫폼 vendor / 테스트 board / 실제 device를 혼동하지 않고 정확히 귀속했는가. 주체를 섞으면 위반입니다.',
     'JSON만 반환하세요. article text를 재작성하지 마세요.'
   ].join('\n');
 }

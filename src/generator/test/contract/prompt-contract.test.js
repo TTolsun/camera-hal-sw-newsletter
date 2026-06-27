@@ -285,6 +285,12 @@ test('public article judge prompt is semantic and does not require keyword vocab
   assert.match(prompt, /raw source 재검증이 아니라/);
   assert.match(prompt, /provided evidence boundary|제공된 evidence boundary/);
   assert.match(prompt, /public_prose_pass/);
+  // #725 desk-review 4축: 위반은 P3 advisory issue로만 표현(절대 hard-block 아님).
+  assert.match(prompt, /desk_target_explanation/);
+  assert.match(prompt, /desk_layer_distinction/);
+  assert.match(prompt, /desk_source_limitations/);
+  assert.match(prompt, /desk_subject_attribution/);
+  assert.match(prompt, /P3/);
   assert.match(prompt, /JSON만 반환하세요/);
   assert.doesNotMatch(prompt, /ACTION_VERB_PATTERN|NON_GENERIC_ACTION_TARGET_PATTERN|regex/i);
 });

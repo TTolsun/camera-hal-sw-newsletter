@@ -198,6 +198,28 @@ test('desk-only 트리거에서 repair가 실패해도 발행을 막지 않고 �
   assert.ok(last.editor_desk_advisory);
 });
 
+test('repair 프롬프트에 desk 교정 지침이 포함된다', async () => {
+  const editor = editorWithOneSection();
+  const prompts = [];
+  let judgeCall = 0;
+  const deps = {
+    callLlmJson: async (stage, prompt) => {
+      prompts.push({ stage, prompt });
+      if (/semantic repair$/.test(stage)) return editorWithOneSection();
+      judgeCall += 1;
+      return judgeCall === 1 ? deskAdvisoryReport() : cleanJudgeReport();
+    },
+    recordEditorSemanticStatus: () => {},
+    validateEditor: (value) => value
+  };
+
+  await validatePublicArticleJudgeOrRepair({ ...baseArgs, editor }, deps);
+
+  const repairPrompt = prompts.find(entry => /semantic repair$/.test(entry.stage));
+  assert.ok(repairPrompt, 'semantic repair가 호출되어야 한다');
+  assert.match(repairPrompt.prompt, /desk_target_explanation/);
+});
+
 test('차단도 desk advisory도 없으면 repair 없이 editor를 반환한다', async () => {
   const editor = editorWithOneSection();
   const calls = [];
