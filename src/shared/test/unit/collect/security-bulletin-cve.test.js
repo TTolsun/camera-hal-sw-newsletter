@@ -50,16 +50,40 @@ test('emits one candidate per camera/media-relevant CVE with concrete evidence',
   });
 
   const ids = items.map(item => item.cve_id).sort();
-  assert.deepEqual(ids, ['CVE-2026-0002', 'CVE-2026-0004', 'CVE-2026-0006', 'CVE-2026-0007']);
+  assert.deepEqual(ids, [
+    'CVE-2026-0002', 'CVE-2026-0004', 'CVE-2026-0006', 'CVE-2026-0007',
+    'CVE-2026-0008', 'CVE-2026-0009', 'CVE-2026-0010'
+  ]);
 
   for (const item of items) {
     assertParsedItemContract(item);
     assert.equal(item.publishedAt, '2026-06-01');
-    assert.match(item.title, /CVE-2026-000[2467]/);
+    assert.match(item.title, /CVE-2026-00(0[2467]|08|09|10)/);
     assert.match(item.url, /^https:\/\/source\.android\.com\/docs\/security\/bulletin\//);
     assert.match(item.api_or_component, /Android Security Bulletin/);
     assert.match(item.behavior_change, /vulnerability|security|fix|CVE/i);
   }
+});
+
+test('emits camera RAW/DNG and image-codec System CVEs as camera-output candidates', async () => {
+  const items = await resolveSecurityBulletinCveItems(indexItems(), source(), {
+    fetchTextImpl: monthlyFetch()
+  });
+
+  const dng = items.find(item => item.cve_id === 'CVE-2026-0008');
+  assert.ok(dng, 'dng_sdk RAW/DNG CVE must be emitted');
+  assert.match(dng.api_or_component, /dng_sdk/);
+  assert.equal(dng.severity, 'Critical');
+  assert.equal(dng.relevanceBucketHint, 'android_multimedia_camera_output');
+
+  const png = items.find(item => item.cve_id === 'CVE-2026-0009');
+  assert.ok(png, 'libpng image-decoding CVE must be emitted');
+  assert.match(png.api_or_component, /libpng/);
+  assert.equal(png.relevanceBucketHint, 'android_multimedia_camera_output');
+
+  const jpeg = items.find(item => item.cve_id === 'CVE-2026-0010');
+  assert.ok(jpeg, 'libjpeg image-decoding CVE must be emitted');
+  assert.equal(jpeg.relevanceBucketHint, 'android_multimedia_camera_output');
 });
 
 test('classifies component and severity from the bulletin section', async () => {

@@ -147,7 +147,14 @@ const MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS = [
   /\bcaptured\s+image\s*\/\s*video\s+output\b/i,
   /\bcaptured\s+image\s+and\s+video\s+output\b/i,
   /\bcaptured\s+(?:image|video)\s+output\b/i,
-  /\bcamera\s+output\s+result\b/i
+  /\bcamera\s+output\s+result\b/i,
+  // 보안 게시판의 카메라 RAW/DNG·이미지 코덱 CVE(dng_sdk/libpng/libjpeg): 취약 모듈이
+  // AOSP source path(external/dng_sdk 등)나 명시적 카메라 RAW 표현으로 표기될 때만 카메라 출력으로
+  // 본다. 이 패턴 배열은 모든 후보 분류에 쓰이므로, 범용 코덱 기사("libpng 1.6.44 released")가
+  // 카메라로 새지 않도록 external/ 경로 컨텍스트를 요구한다.
+  /\bexternal\/(?:dng_sdk|libdng|libpng|libjpeg(?:-turbo)?)\b/i,
+  /\bcamera\s+raw\b/i,
+  /\bRAW\s*\/\s*DNG\b/i
 ];
 
 const MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS = [
