@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 const path = require('path');
 
-const { resolveLocalImage } = require('../../../validate/validate-external-images');
+const { resolveLocalImage, shouldLiveValidate } = require('../../../validate/validate-external-images');
 
 // 회귀: resolveLocalImage가 서빙 URL relPath(newsletters/<date>/...)를 repo root 기준으로 풀어
 // ../../assets/ fallback 경로가 root/assets/(존재하지 않음)로 잘못 풀리고, 실제로 articles/assets/에
@@ -25,4 +25,17 @@ test('resolveLocalImage resolves the same fallback for an index.html served URL'
     resolved && resolved.endsWith(path.join('articles', 'assets', 'images', 'fallback', 'newsletter-default.svg')),
     `expected the articles/assets fallback path, got ${resolved}`
   );
+});
+
+// 회귀: 외부 이미지 link rot(외부 호스트 403/소멸)이 무관한 PR의 CI를 막던 근본 원인은
+// validate-external-images만 validation-targets 스코핑을 빠뜨려 과거 발행물 전부를 매 run live
+// 검증해 hard-fail시킨 것. 외부 이미지 live 검증을 발행/변경 대상(strict target)으로만 한정한다.
+test('shouldLiveValidate live-validates the strict target newsletter (current/changed/generated)', () => {
+  assert.equal(shouldLiveValidate('2026-06-24', new Set(['2026-06-24'])), true);
+});
+
+test('shouldLiveValidate skips a historical newsletter so link rot cannot block or slow unrelated PRs', () => {
+  assert.equal(shouldLiveValidate('2026-05-05', new Set(['2026-06-24'])), false);
+  // strict target이 비어 있으면(예: 이미지/발행물과 무관한 PR) 모든 과거 발행물의 외부 이미지를 건너뛴다.
+  assert.equal(shouldLiveValidate('2026-05-05', new Set()), false);
 });

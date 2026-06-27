@@ -19,6 +19,7 @@ const {
 const {
   toLegacyEditorIssue
 } = require('../../shared/domain/newsletter-domain-normalize');
+const { strictTargetDates } = require('../reporter/validation-targets');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
@@ -32,6 +33,15 @@ function fail(message) {
 
 function warn(message) {
   warnings.push(message);
+}
+
+// 외부 이미지의 live 네트워크 검증은 "지금 발행/변경되는 newsletter"(strict target)에만 적용한다.
+// 외부 호스트의 link rot(소멸·hotlink 403)은 시간이 지나면 필연이라, 불변의 과거 발행물을 매 run
+// 다시 live fetch하면 무관한 PR의 CI가 외부 사정으로 막히거나 느려진다. 그래서 과거 발행물의 외부
+// 이미지는 live 검증을 건너뛴다(발행 시점에 이미 검증됨). 결정론적 local 검사(파일 존재·URL scheme)는
+// repo 무결성 문제라 date와 무관하게 그대로 차단한다. 형제 validator와 동일한 validation-targets 스코핑.
+function shouldLiveValidate(date, strictDates) {
+  return strictDates.has(date);
 }
 
 function read(filePath) {
@@ -191,6 +201,7 @@ function fallbackWarningsFromEditor(date, editor) {
 }
 
 async function main() {
+  const strictDates = strictTargetDates({ root, newsletterDatePath });
   const images = [];
   for (const item of newsletterItems()) {
     fallbackWarningsFromEditor(item.date, readEditor(item.date));
@@ -209,7 +220,9 @@ async function main() {
         continue;
       }
       const content = read(absPath);
-      images.push(...(key === 'html' ? articleImages(relPath, content) : markdownImages(relPath, content)));
+      const built = key === 'html' ? articleImages(relPath, content) : markdownImages(relPath, content);
+      for (const image of built) image.date = item.date;
+      images.push(...built);
     }
   }
 
@@ -236,6 +249,10 @@ async function main() {
       ].join('\n'));
       continue;
     }
+
+    // 과거 발행물(strict target 아님)의 외부 이미지는 live 검증을 건너뛴다. 발행/변경되는 newsletter의
+    // 외부 이미지만 live fetch해, 외부 호스트 link rot이 무관한 PR을 막거나 느리게 하지 않게 한다.
+    if (!shouldLiveValidate(image.date, strictDates)) continue;
 
     const result = await validateImageUrl(image.src, {
       timeoutMs: 8000,
@@ -280,4 +297,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { resolveLocalImage };
+module.exports = { resolveLocalImage, shouldLiveValidate };
