@@ -25,8 +25,8 @@ editorial-plan은 두 개의 별개 vocabulary를 씁니다. 혼동하지 마세
 | --- | --- | --- | --- |
 | 이미지 센서 / lower-stack (`camera_driver_image_pipeline`) | Linux media·V4L2·센서 드라이버 패치 | "센서 패치 = Android HAL 변경"으로 단정 | source가 HAL 변경을 직접 말하지 않으면 `direct_hal_impact=false`인가? RAW-only·review NACK 같은 한계가 `source_limitations`에 남았나? URL/제목의 `sensor` 키워드만으로 분류하지 않았나? |
 | ISP / IP (`camera_driver_image_pipeline`) | ISP 드라이버·파이프라인 제어 패치 | "ISP IP 제공자 = device vendor 양산"으로 단정 | source 근거 없이 Samsung/S.LSI/Exynos 양산을 단정하지 않았나? ISP IP 제공자와 적용 디바이스를 구분했나? |
-| Camera HAL (`direct_aosp_camera`) | Camera HAL3/AIDL, CameraService, stream/metadata | (정상 직접 영향) | 실제 HAL interface·metadata·buffer 영향이 source로 뒷받침되나? |
-| Android framework / app (`android_platform_camera_adjacent`) | Camera2/CameraX, CTS/VTS/ITS | "app/API 영향 = vendor HAL contract 변경"으로 단정 | app·framework 계층 영향과 vendor HAL contract 영향을 구분했나? |
+| Camera HAL core (`direct_aosp_camera`) | Camera HAL3/AIDL, CameraService, stream/metadata | (정상 직접 영향) | 실제 HAL interface·metadata·buffer 영향이 source로 뒷받침되나? |
+| Android Camera API / framework (`direct_aosp_camera`) | Camera2/CameraX, camera CTS/VTS/ITS | "app/API 동작 변화 = vendor HAL contract 변경"으로 단정 | app·framework 동작 영향과 vendor HAL contract 영향을 구분했나? (Camera2/CameraX·CTS/VTS/ITS도 우선순위 1 `direct_aosp_camera`이며, 위 HAL core 행과 같은 bucket의 app-facing facet이다.) |
 | 컴파일러 / 툴체인 / CI (`cpp_ai_tooling_fallback`) | Clang/LLVM, static analysis, build/test | "툴체인 변경 = 카메라 런타임 성능 향상"으로 단정 | code 품질·빌드 안정성으로 framing했나? 근거 없는 runtime 성능·화질 개선 주장이 없나? Android native는 Clang/LLVM/libc++ 중심으로 봤나? |
 | 제품 / 산업 (`generic_tech_watchlist`) | 제품 출시·산업 트렌드 | 구체 연결 없이 "Camera HAL 관련"으로 승격 | 구체적 HAL 인접 trend를 설명하나? 못 하면 `short_mention`/`reference_only`/`exclude`로 강등했나? |
 
@@ -36,7 +36,7 @@ editorial-plan은 두 개의 별개 vocabulary를 씁니다. 혼동하지 마세
 
 | 항목 | 보장 주체 | 내용 |
 | --- | --- | --- |
-| 가드 문구 보존 | 코드 (`editorial-plan-classification.test.js`) | prompt가 계층 taxonomy와 계층별 과대해석 경계 문구를 그대로 담고 있음 |
+| 가드 문구 보존 | 코드 (`editorial-plan-classification.test.js`) | prompt가 계층 taxonomy와 과대해석 경계 문구(기본 false 원칙·확대 금지 예시·source_limitations)를 그대로 담고 있음 |
 | 후처리 안전망 | 코드 (`editorial-plan-stage.test.js`) | `direct_hal_impact` boolean 강제, coverage 권한 strip, 식별자 없는 항목 제거, 빈 plan fail-fast |
 | **분류의 의미적 정확성** | **사람 (이 체크리스트)** | 실제 모델이 이 기사를 올바른 계층·강도로 분류했는지 |
 
