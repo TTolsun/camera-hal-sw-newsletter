@@ -15,9 +15,9 @@ function read(file) {
 
 // #398: every newsroom workflow emits a visual run summary via the shared CLI.
 const STEP_PROFILES = [
-  ['01-newsletters-source-collect-pr.yml', 'source-collect'],
-  ['02-newsletters-source-discovery-pr.yml', 'source-discovery'],
-  ['03-newsletters-editor-pr.yml', 'newsroom-final']
+  ['newsletters-01-source-collect-pr.yml', 'source-collect'],
+  ['newsletters-02-source-discovery-pr.yml', 'source-discovery'],
+  ['newsletters-03-editor-pr.yml', 'newsroom-final']
 ];
 
 for (const [file, profile] of STEP_PROFILES) {
@@ -31,7 +31,7 @@ for (const [file, profile] of STEP_PROFILES) {
 }
 
 test('00 auto-daily adds an always-run summary job over the child workflows', () => {
-  const coordinator = read('00-newsletters-auto-daily-pr.yml');
+  const coordinator = read('newsletters-00-orchestrator.yml');
   assert.match(coordinator, /summary:\s*\n\s*needs: \[collect, discover, generate\]\s*\n\s*if: always\(\)/);
   assert.match(coordinator, /SUMMARY_PROFILE: auto-daily/);
   assert.match(coordinator, /OUTCOME_COLLECT: \$\{\{ needs\.collect\.result \}\}/);

@@ -21,7 +21,7 @@ API key, runtime secret, prompt 전체 원문, generated artifact 내용은 이 
 
 목적: RAW 후보를 수집하고 review 가능한 `manual-candidates.json` 계열 artifact를 생성합니다.
 
-위치: `.github/workflows/01-newsletters-source-collect-pr.yml`, `npm run collect`
+위치: `.github/workflows/newsletters-01-source-collect-pr.yml`, `npm run collect`
 
 Workflow/Stage: Stage 1 RAW collection
 

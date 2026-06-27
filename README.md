@@ -76,7 +76,7 @@ candidate collection
 - `publish-ready`: AI가 자동 발행할 수 있는 상태입니다.
 - `needs-fix`라도 공개 산출물이 들어 있으면, 편집장이 `main`에 merge하는 것을 사이트 공개 승인으로 봅니다.
 
-> 📌 `Validate Site and Images` (`.github/workflows/validate-site.yml`)는 구조 검증(structural validation)은 blocking(차단)으로, quality/fact-check 문제는 non-blocking annotation(차단하지 않는 알림)으로 보고합니다.
+> 📌 `Site 01 - Validate Site and Images` (`.github/workflows/site-01-validate.yml`)는 구조 검증(structural validation)은 blocking(차단)으로, quality/fact-check 문제는 non-blocking annotation(차단하지 않는 알림)으로 보고합니다.
 
 ## ⌨️ 주요 명령
 

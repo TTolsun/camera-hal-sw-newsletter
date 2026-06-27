@@ -1,4 +1,4 @@
-name: Deploy GitHub Pages
+name: Site 02 - Build & Deploy (GitHub Pages)
 
 # #262 phase 6: 공개 출력물은 root index.html + articles/ 아래에 위치한다.
 # 이 워크플로는 _site/ = (root index.html) + (articles/* 를 _site 루트로 복사)로 조립해
@@ -13,7 +13,7 @@ on:
     paths:
       - "index.html"
       - "articles/**"
-      - ".github/workflows/pages-deploy.yml"
+      - ".github/workflows/site-02-deploy.yml"
   workflow_dispatch:
 
 permissions:

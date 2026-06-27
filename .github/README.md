@@ -6,12 +6,12 @@
 
 | 경로 | 역할 |
 | --- | --- |
-| `.github/workflows/00-newsletters-auto-daily-pr.yml` | 매일 예약 실행되는 1~3단계 orchestrator(전체 자동 실행) workflow입니다. |
-| `.github/workflows/01-newsletters-source-collect-pr.yml` | 사람이 지정한 seed URL, keyword hint, 기본 후보 수집을 처리하는 1단계 workflow입니다. |
-| `.github/workflows/02-newsletters-source-discovery-pr.yml` | seed evidence 확장과 source discovery 후보 보강을 처리하는 2단계 workflow입니다. |
-| `.github/workflows/03-newsletters-editor-pr.yml` | 승인된 후보와 evidence 기반으로 최종 newsletter PR을 만드는 3단계 workflow입니다. |
-| `.github/workflows/validate-site.yml` | GitHub Pages site structure와 image validation을 확인하는 workflow입니다. |
-| `.github/workflows/pages-deploy.yml` | `_site/`를 조립해 GitHub Pages에 배포하는 workflow입니다. |
+| `.github/workflows/newsletters-00-orchestrator.yml` | 매주 예약 실행되는 1~3단계 orchestrator(전체 자동 실행) workflow입니다. |
+| `.github/workflows/newsletters-01-source-collect-pr.yml` | 사람이 지정한 seed URL, keyword hint, 기본 후보 수집을 처리하는 1단계 workflow입니다. |
+| `.github/workflows/newsletters-02-source-discovery-pr.yml` | seed evidence 확장과 source discovery 후보 보강을 처리하는 2단계 workflow입니다. |
+| `.github/workflows/newsletters-03-editor-pr.yml` | 승인된 후보와 evidence 기반으로 최종 newsletter PR을 만드는 3단계 workflow입니다. |
+| `.github/workflows/site-01-validate.yml` | GitHub Pages site structure와 image validation을 확인하는 workflow입니다. |
+| `.github/workflows/site-02-deploy.yml` | `_site/`를 조립해 GitHub Pages에 배포하는 workflow입니다. |
 | `.github/workflows/AGENTS.md` | workflow 수정 시 따라야 하는 secret, gate, label, artifact 보존 규칙입니다. |
 | `.github/pull_request_template.md` | 기본 PR template입니다. |
 | `.github/PULL_REQUEST_TEMPLATE/` | 목적별 PR template입니다. |

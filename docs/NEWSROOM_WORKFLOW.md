@@ -193,7 +193,7 @@ repair는 같은 ISO week의 weekly 산출물도 함께 동기화합니다. 동�
   - 그중 public files가 준비된 review publication PR에는 `review-only-publication`을, public files가 없는 진단 PR에는 `diagnostics-only`를 함께 붙입니다.
   - 이 두 세부 label은 동시에 붙으면 안 됩니다.
 - `final_publish_ready=false`: 자동 발행 기준을 못 채웠다는 뜻입니다. 다만 이 값 하나만으로 `review_publication_ready=true`인 PR의 공개 가능성을 막지는 않습니다.
-- `Validate Site and Images` (`.github/workflows/validate-site.yml`): 구조 검증(structural validation)은 blocking으로 유지하고, quality/fact-check 문제는 발행을 막지 않는(non-blocking) annotation으로 보고합니다.
+- `Site 01 - Validate Site and Images` (`.github/workflows/site-01-validate.yml`): 구조 검증(structural validation)은 blocking으로 유지하고, quality/fact-check 문제는 발행을 막지 않는(non-blocking) annotation으로 보고합니다.
 
 ## URL Summary Cache
 
@@ -236,7 +236,7 @@ Stage별 기본 모델은 다음과 같습니다.
 - public article judge / source discovery: `gemini-2.5-flash-lite`
 - 기본 fallback: `gemini-2.5-flash-lite`
 
-source discovery(`02-newsletters-source-discovery-pr.yml`의 Gemini source/linked evidence 발견)는 후보를 새로 쓰지 않고 선별/판정만 하는 단계라서, 비용이 가장 낮은 `gemini-2.5-flash-lite`로 고정합니다. Gemini Pro 계열 모델명은 모든 public model override 경로에서 validation error로 차단합니다. 비용 리포트는 call 단위 `pro_model` audit marker를 유지하지만, 정상 run에서는 항상 `false`여야 하고 report 단위 정책은 `Pro policy: disabled`로 고정됩니다.
+source discovery(`newsletters-02-source-discovery-pr.yml`의 Gemini source/linked evidence 발견)는 후보를 새로 쓰지 않고 선별/판정만 하는 단계라서, 비용이 가장 낮은 `gemini-2.5-flash-lite`로 고정합니다. Gemini Pro 계열 모델명은 모든 public model override 경로에서 validation error로 차단합니다. 비용 리포트는 call 단위 `pro_model` audit marker를 유지하지만, 정상 run에서는 항상 `false`여야 하고 report 단위 정책은 `Pro policy: disabled`로 고정됩니다.
 
 Stage별 model routing은 아래 우선순위를 따릅니다.
 
@@ -362,7 +362,7 @@ PR마다 failure classification(실패 분류)을 다음 중 하나로 기록합
 
 ### 일일 RAW 후보 PR
 
-`Newsletters 01 - Source Collection PR` (`.github/workflows/01-newsletters-source-collect-pr.yml`) workflow는 주 1회 월요일 09:00 KST에 실행됩니다.
+`Newsletters 01 - Source Collection PR` (`.github/workflows/newsletters-01-source-collect-pr.yml`) workflow는 주 1회 월요일 09:00 KST에 실행됩니다.
 
 ```text
 KST Mon 09:00 = UTC Mon 00:00
@@ -375,15 +375,15 @@ workflow는 `main`에 직접 push하지 않고 RAW candidate 검토용 PR을 만
 
 현재 schedule entrypoint는 Stage 1 RAW workflow입니다. Final newsletter generation은 승인된 candidate artifact를 입력으로 받는 수동 workflow로만 실행합니다.
 
-- `Newsletters 01 - Source Collection PR` (`.github/workflows/01-newsletters-source-collect-pr.yml`): `collect`만 실행해 `manual-candidates.json`, 호환용 `candidates.json`, `raw-candidate-manifest.json`을 만듭니다. Gemini/API secret은 쓰지 않습니다.
-- `Newsletters 02 - Source Discovery PR` (`.github/workflows/02-newsletters-source-discovery-pr.yml`): source discovery 전용 workflow입니다. 따라서 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하고, 별도 toggle input은 없습니다. 동작 순서는 LLM credential preflight → Gemini proposal을 `gemini-source-proposals.json`에 저장 → deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영, 입니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`로 자격 증명 없이 도는 disabled pass-through는 code 수준에서는 여전히 지원하지만, 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록합니다. `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 이 파일들의 존재를 필수로 검증하므로, 모두 Git에 커밋(`review_required_compact` 등급)해야 합니다:
+- `Newsletters 01 - Source Collection PR` (`.github/workflows/newsletters-01-source-collect-pr.yml`): `collect`만 실행해 `manual-candidates.json`, 호환용 `candidates.json`, `raw-candidate-manifest.json`을 만듭니다. Gemini/API secret은 쓰지 않습니다.
+- `Newsletters 02 - Source Discovery PR` (`.github/workflows/newsletters-02-source-discovery-pr.yml`): source discovery 전용 workflow입니다. 따라서 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하고, 별도 toggle input은 없습니다. 동작 순서는 LLM credential preflight → Gemini proposal을 `gemini-source-proposals.json`에 저장 → deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영, 입니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`로 자격 증명 없이 도는 disabled pass-through는 code 수준에서는 여전히 지원하지만, 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록합니다. `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 이 파일들의 존재를 필수로 검증하므로, 모두 Git에 커밋(`review_required_compact` 등급)해야 합니다:
   - `gemini-usage-report.json` (`usage_report` 필드)
   - `gemini-source-proposals.json` (Gemini 제안 원문)
   - `gemini-source-proposal-validation-report.json` (`proposal_validation_report` 필드)
   - `source-clusters.json` (`source_clusters` 필드)
   - `evidence-validation-report.json` (`evidence_validation_report` 필드)
   - `extracted-source-facts.json` (소스 사실 추출 결과)
-- `Newsletters 03 - Editor PR` (`.github/workflows/03-newsletters-editor-pr.yml`): `NEWSROOM_CANDIDATE_INPUT_MODE=artifact`로 approved candidate artifact만 읽고 `collect`를 재실행하지 않습니다.
+- `Newsletters 03 - Editor PR` (`.github/workflows/newsletters-03-editor-pr.yml`): `NEWSROOM_CANDIDATE_INPUT_MODE=artifact`로 approved candidate artifact만 읽고 `collect`를 재실행하지 않습니다.
 
 Stage 2/3 manual run의 `newsletter_date`는 optional입니다. 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve되며, resolved date는 workflow log에 출력됩니다.
 
@@ -397,7 +397,7 @@ Repository Settings > Secrets and variables > Actions:
 GEMINI_API_KEY
 ```
 
-`NEWSROOM_PR_TOKEN` (선택, 권장): newsletter PR(`03-newsletters-editor-pr.yml`)의 검증 workflow(`validate-site`)가 자동 실행되게 하려면 필요합니다. GitHub은 기본 `GITHUB_TOKEN`으로 만든 PR에는 `on: pull_request` workflow를 실행하지 않으므로(재귀 방지), 이 secret이 없으면 검증이 `action_required` 상태로 멈추고 사람이 Actions 탭에서 "Approve and run"을 눌러야 검증이 실행됩니다. fine-grained PAT(이 repository 대상, Contents read/write + Pull requests read/write) 또는 GitHub App token을 권장합니다. secret이 없으면 workflow는 기존 `GITHUB_TOKEN` 동작으로 폴백하므로 파이프라인이 깨지지는 않습니다. 이 토큰은 PR 생성에만 쓰며 자동 merge나 `main` 직접 push에는 쓰지 않습니다(PR 기반 발행 모델 유지).
+`NEWSROOM_PR_TOKEN` (선택, 권장): newsletter PR(`newsletters-03-editor-pr.yml`)의 검증 workflow(`site-01-validate`)가 자동 실행되게 하려면 필요합니다. GitHub은 기본 `GITHUB_TOKEN`으로 만든 PR에는 `on: pull_request` workflow를 실행하지 않으므로(재귀 방지), 이 secret이 없으면 검증이 `action_required` 상태로 멈추고 사람이 Actions 탭에서 "Approve and run"을 눌러야 검증이 실행됩니다. fine-grained PAT(이 repository 대상, Contents read/write + Pull requests read/write) 또는 GitHub App token을 권장합니다. secret이 없으면 workflow는 기존 `GITHUB_TOKEN` 동작으로 폴백하므로 파이프라인이 깨지지는 않습니다. 이 토큰은 PR 생성에만 쓰며 자동 merge나 `main` 직접 push에는 쓰지 않습니다(PR 기반 발행 모델 유지).
 
 선택 변수:
 
@@ -421,7 +421,7 @@ NEWSROOM_MAX_COST_USD=0.25
 
 ### 수동 Final Generation 실행
 
-GitHub Actions에서 `Newsletters 03 - Editor PR` (`.github/workflows/03-newsletters-editor-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. 입력과 동작은 다음과 같습니다.
+GitHub Actions에서 `Newsletters 03 - Editor PR` (`.github/workflows/newsletters-03-editor-pr.yml`)을 선택하고 `Run workflow`를 누릅니다. 입력과 동작은 다음과 같습니다.
 
 - `newsletter_date`는 optional입니다. 비워 두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve됩니다.
 - 특정 날짜를 다시 생성하려면 `newsletter_date`만 입력하면 됩니다. candidate artifact path는 더 이상 input으로 받지 않습니다.
@@ -516,12 +516,12 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 | Debug Heavy | `debug_heavy` | 미커밋 | GitHub Actions artifact + manifest |
 | Transient Attempt | `transient_attempt` | 미커밋 | GitHub Actions artifact + manifest |
 
-`03-newsletters-editor-pr.yml`의 `peter-evans/create-pull-request` 스텝은 `add-paths` 허용목록을 써서 `public_source_of_truth`와 `review_required_compact` artifact만 커밋합니다. `debug_heavy`와 `transient_attempt` artifact는 커밋하지 않는 대신, full set을 `newsroom-final-debug-<run_id>` Actions artifact에 보존하고 `artifact-manifest.json`의 `retained_heavy_artifacts[]`에 path/size/sha256/retention_grade/retention_location을 기록합니다.
+`newsletters-03-editor-pr.yml`의 `peter-evans/create-pull-request` 스텝은 `add-paths` 허용목록을 써서 `public_source_of_truth`와 `review_required_compact` artifact만 커밋합니다. `debug_heavy`와 `transient_attempt` artifact는 커밋하지 않는 대신, full set을 `newsroom-final-debug-<run_id>` Actions artifact에 보존하고 `artifact-manifest.json`의 `retained_heavy_artifacts[]`에 path/size/sha256/retention_grade/retention_location을 기록합니다.
 
 허용목록은 `src/generator/publish/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 만듭니다. 그래서 PR diff에 `debug_heavy`/`transient_attempt` 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 보세요.
 
 이 정책은 발행 안전성·source binding·image lineage·review-publication state 판정을 약화하지 않습니다. validate:post-generation, resolve-reviewable-artifacts, pr-body 생성은 commit 스텝보다 **먼저** in-run working tree에서 돌기 때문에, add-paths 허용목록의 영향을 받지 않습니다.
 
-`01-newsletters-source-collect-pr.yml`과 `02-newsletters-source-discovery-pr.yml`은 candidate JSON이 리뷰 대상이므로 이 허용목록 제한을 적용하지 않습니다.
+`newsletters-01-source-collect-pr.yml`과 `newsletters-02-source-discovery-pr.yml`은 candidate JSON이 리뷰 대상이므로 이 허용목록 제한을 적용하지 않습니다.
 
 `articles/content/collected-news/YYYY-MM-DD/`에 있는 파이프라인 입력 파일들(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03 사이를 넘겨주는 핸드오프 상태이므로 `review_required_compact` 등급입니다. 이 중 `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 만들며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋해야 합니다. 순수 디버그 파일인 `gemini-candidates.json`은 `debug_heavy` 등급이라 `.gitignore`로 제외합니다.

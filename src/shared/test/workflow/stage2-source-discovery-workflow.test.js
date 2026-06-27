@@ -12,8 +12,8 @@ const {
 
 test('stage 2 and 3 manual workflows resolve empty newsletter dates to KST today', () => {
   const workflowDir = path.join(__dirname, '..', '..', '..', '..', '.github', 'workflows');
-  const stage2 = fs.readFileSync(path.join(workflowDir, '02-newsletters-source-discovery-pr.yml'), 'utf8');
-  const stage3 = fs.readFileSync(path.join(workflowDir, '03-newsletters-editor-pr.yml'), 'utf8');
+  const stage2 = fs.readFileSync(path.join(workflowDir, 'newsletters-02-source-discovery-pr.yml'), 'utf8');
+  const stage3 = fs.readFileSync(path.join(workflowDir, 'newsletters-03-editor-pr.yml'), 'utf8');
   const stage2ResolveStep = workflowStep(stage2, 'Resolve newsletter date');
   const stage3ResolveStep = workflowStep(stage3, 'Resolve newsletter date');
   const stage2UploadStep = workflowStep(stage2, 'Upload source discovery debug artifacts');

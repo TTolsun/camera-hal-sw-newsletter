@@ -21,9 +21,9 @@ Workflow dispatch input의 이름은 기존 공개 계약대로 `llm_provider`�
 
 어느 stage가 `llm_provider` selector를 갖는지 정리합니다.
 
-- Stage 1 `01-newsletters-source-collect-pr.yml`: source collection만 하므로 `llm_provider` selector가 없습니다.
-- Stage 2 `02-newsletters-source-discovery-pr.yml`: optional LLM source discovery path가 있으므로 selector를 둡니다.
-- Stage 3 `03-newsletters-editor-pr.yml`: final generation path가 있으므로 selector를 둡니다.
+- Stage 1 `newsletters-01-source-collect-pr.yml`: source collection만 하므로 `llm_provider` selector가 없습니다.
+- Stage 2 `newsletters-02-source-discovery-pr.yml`: optional LLM source discovery path가 있으므로 selector를 둡니다.
+- Stage 3 `newsletters-03-editor-pr.yml`: final generation path가 있으므로 selector를 둡니다.
 
 Workflow YAML은 provider 기본값을 직접 정하지 않습니다. `default` 값은 runtime config의 code default로 normalize(정규화)됩니다.
 

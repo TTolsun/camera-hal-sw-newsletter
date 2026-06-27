@@ -110,7 +110,7 @@ heavy artifact 전체는 GitHub Actions artifact `newsroom-final-debug-<run_id>`
 
 ## RAW/Source-Discovery PR 예외
 
-`01-newsletters-source-collect-pr.yml`과 `02-newsletters-source-discovery-pr.yml`은 candidate JSON 자체가 리뷰 대상이므로 candidate JSON을 의도적으로 커밋합니다. 이 워크플로에는 `add-paths` 허용목록 제한을 적용하지 않습니다.
+`newsletters-01-source-collect-pr.yml`과 `newsletters-02-source-discovery-pr.yml`은 candidate JSON 자체가 리뷰 대상이므로 candidate JSON을 의도적으로 커밋합니다. 이 워크플로에는 `add-paths` 허용목록 제한을 적용하지 않습니다.
 
 파이프라인 입력 파일(candidates.json, manual-candidates.json, raw-candidate-manifest.json, merged-candidates.json, merged-candidate-manifest.json, collection-intent.json, seed-candidates.json, seed-evidence-pack.json)은 `review_required_compact` 등급 파일로서, workflow 01 → 02 → 03의 핸드오프 상태입니다. 이 파일들은 `.gitignore`에서 제외되며 Git에 항상 커밋됩니다. 순수 디버그 collected-news 파일(gemini-candidates.json)은 여전히 `.gitignore` 처리됩니다.
 
