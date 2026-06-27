@@ -347,3 +347,25 @@ test('keeps compiler CPU and GPU benchmark coverage in native tooling fallback w
   assert.equal(gcc.counts_as_soc_topic, false);
   assert.equal(gcc.counts_as_fallback_topic, true);
 });
+
+test('classifies security-bulletin camera RAW/DNG and image-codec CVEs as multimedia camera output', () => {
+  const dng = classifyAospCameraStackCandidate({
+    title: 'June 2026 Android Security Bulletin: CVE-2026-0008 — dng_sdk',
+    api_or_component: 'Android Security Bulletin / dng_sdk',
+    behavior_change: 'Security vulnerability (Critical severity) in dng_sdk; security fix shipped in the June 2026 Android Security Bulletin (CVE-2026-0008).',
+    relevanceBucketHint: 'android_multimedia_camera_output'
+  });
+  const png = classifyAospCameraStackCandidate({
+    title: 'June 2026 Android Security Bulletin: CVE-2026-0009 — libpng',
+    api_or_component: 'Android Security Bulletin / libpng',
+    behavior_change: 'Security vulnerability (Critical severity) in libpng; security fix shipped in the June 2026 Android Security Bulletin (CVE-2026-0009).',
+    relevanceBucketHint: 'android_multimedia_camera_output'
+  });
+
+  for (const item of [dng, png]) {
+    assert.equal(item.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+    assert.notEqual(item.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
+    assert.equal(item.counts_as_primary_camera_topic, false);
+    assert.ok(item.multimedia_camera_output_relevance >= 3);
+  }
+});

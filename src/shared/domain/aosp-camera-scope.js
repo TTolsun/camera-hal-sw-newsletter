@@ -147,7 +147,15 @@ const MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS = [
   /\bcaptured\s+image\s*\/\s*video\s+output\b/i,
   /\bcaptured\s+image\s+and\s+video\s+output\b/i,
   /\bcaptured\s+(?:image|video)\s+output\b/i,
-  /\bcamera\s+output\s+result\b/i
+  /\bcamera\s+output\s+result\b/i,
+  // 보안 게시판의 카메라 RAW/DNG·이미지 코덱 CVE(dng_sdk/libpng/libjpeg): 촬영 이미지의
+  // 저장·디코딩을 담당하는 출력 라이브러리라 카메라 출력(multimedia) 신호로 분류한다.
+  /\bdng_sdk\b/i,
+  /\blibdng\b/i,
+  /\blibpng\b/i,
+  /\blibjpeg(?:-turbo)?\b/i,
+  /\bcamera\s+raw\b/i,
+  /\bRAW\s*\/\s*DNG\b/i
 ];
 
 const MULTIMEDIA_CAMERA_OUTPUT_CONTEXT_REQUIRED_PATTERNS = [
