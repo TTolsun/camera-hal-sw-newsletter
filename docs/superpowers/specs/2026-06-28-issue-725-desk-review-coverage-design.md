@@ -46,7 +46,7 @@
 
 ### 정책 심플 원칙 (비협상)
 
-- **새 hard-fail 조건 0개.** 데스크 4축은 `publicArticleJudgeBlockingIssues`에 절대 들어가지 않는다.
+- **새 hard-fail 조건 0개.** 데스크 4축은 `publicArticleJudgeBlockingIssues`에 절대 들어가지 않는다. 이 비차단은 **코드 불변식**이다(프롬프트의 "P3" 라벨에 의존하지 않음): issue의 `field`가 desk_* 이면 severity와 무관하게 차단에서 제외하고 advisory로만 모은다. LLM이 severity를 잘못 라벨해도 hard-block 되지 않는다.
 - **새 config threshold / policy JSON 키 0개.** 기존 `severity: P3` = advisory 관례를 그대로 쓴다.
 - **schema 변경 0개 / 새 judge-input plumbing 0개.** desk issue는 기존 `issues[]`(free string `field`/`severity`)로 표현하고, 판정은 기존 judge 입력으로 한다.
 - **새 stage / 새 LLM 호출 타입 0개.** 기존 judge 호출과 기존 repair 호출에 흡수한다. 단 결정 ④에 따라 편집 issue가 repair를 트리거하므로, blocking 없이 편집 issue만 있던 기사는 repair를 1회 더 탈 수 있다(비용 수용됨, 4.3 참조).
