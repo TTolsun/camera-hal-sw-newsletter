@@ -152,7 +152,7 @@
       "article_type": "camera_driver_image_pipeline",
       "imageCandidates": [
         {
-          "url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "url": "../../assets/images/fallback/newsletter-default.svg",
           "sourceUrl": "https://isocpp.org/blog",
           "articleUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
           "sourceKind": "article-img",
@@ -434,7 +434,7 @@
       "article_type": "camera_driver_image_pipeline",
       "imageCandidates": [
         {
-          "url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "url": "../../assets/images/fallback/newsletter-default.svg",
           "sourceUrl": "https://isocpp.org/blog",
           "articleUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
           "sourceKind": "article-img",
@@ -712,7 +712,7 @@
       "article_type": "cpp_ai_tooling_fallback",
       "imageCandidates": [
         {
-          "url": "https://isocpp.org/files/img/redhatgraphic.png",
+          "url": "../../assets/images/fallback/newsletter-default.svg",
           "sourceUrl": "https://isocpp.org/blog",
           "articleUrl": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
           "sourceKind": "article-img",
@@ -725,7 +725,7 @@
           "alt": "redhatgraphic.png"
         }
       ],
-      "selectedImage": "https://isocpp.org/files/img/redhatgraphic.png",
+      "selectedImage": "../../assets/images/fallback/newsletter-default.svg",
       "imageSource": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
       "imageAttribution": "ISO C++ Blog",
       "imageAlt": "redhatgraphic.png",
@@ -772,8 +772,8 @@
       "evidence_origin": "article_text",
       "source_hint": "C++ standard, C++26/C++29, committee, compiler support 감시",
       "resolvedImage": {
-        "url": "https://isocpp.org/files/img/redhatgraphic.png",
-        "src": "https://isocpp.org/files/img/redhatgraphic.png",
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
         "originalUrl": "",
         "originalSrc": "",
         "usedFallback": false,
@@ -788,7 +788,7 @@
         "licenseStatus": "unknown",
         "validationStatus": "ok",
         "validationSource": "candidate_metadata",
-        "candidateUrl": "https://isocpp.org/files/img/redhatgraphic.png",
+        "candidateUrl": "../../assets/images/fallback/newsletter-default.svg",
         "exclusionEvidence": []
       }
     },

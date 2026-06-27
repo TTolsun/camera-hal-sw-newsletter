@@ -69,7 +69,7 @@ Sony IMX576 고해상도 이미지 센서를 지원하기 위한 V4L2 서브디�
 ## 4. GCC 16 릴리스 예정: 템플릿 오류 메시지 개선 및 SARIF 정적 분석 출력 지원
 
 
-![Red Hat Graphic on ISO C++ Blog](https://isocpp.org/files/img/redhatgraphic.png)
+![Red Hat Graphic on ISO C++ Blog](../../assets/images/fallback/newsletter-default.svg)
 
 _이미지: [ISO C++ Blog](https://isocpp.org/blog)_
 

@@ -220,7 +220,7 @@
             "source_role": "primary"
           }
         ],
-        "image": "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG"
+        "image": "../../assets/images/fallback/newsletter-default.svg"
       },
       "sources": [
         {
@@ -228,7 +228,7 @@
           "url": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
         }
       ],
-      "selectedImage": "https://isocpp.org/files/img/SANDOR_DARGO_ROUND.JPG",
+      "selectedImage": "../../assets/images/fallback/newsletter-default.svg",
       "imageAttribution": "ISO C++ Blog",
       "imageSource": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
     }

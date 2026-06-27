@@ -41,7 +41,7 @@ Himax HM1246 드라이버는 Native RAW 모드만 지원하므로, Android Camer
 ## 3. GCC 16 컴파일러, 개선된 오류 메시지와 SARIF 출력 기능 도입 예정
 
 
-![Red Hat graphic shown on ISO C++ Blog](https://isocpp.org/files/img/redhatgraphic.png)
+![Red Hat graphic shown on ISO C++ Blog](../../assets/images/fallback/newsletter-default.svg)
 
 _이미지: [ISO C++ Blog](https://isocpp.org/blog)_
 
