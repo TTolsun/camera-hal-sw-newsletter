@@ -21,6 +21,7 @@ const generationRunState = {
   lastKnownValidAttempt: 0,
   editorSemanticValidation: null,
   editorPublicArticleJudge: null,
+  editorDeskAdvisory: [],
   repairAttempted: false,
   repairSucceeded: false,
   candidateInput: null,

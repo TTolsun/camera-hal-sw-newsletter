@@ -22,6 +22,33 @@ const {
   stringOrEmpty
 } = require('./orchestrator-shared-helpers');
 
+// #725: desk-review 4축. issue의 field가 desk_* 이면 advisory로 다룬다 — severity 라벨과
+// 무관하다. 비차단 보증은 LLM 규율(프롬프트의 "P3")이 아니라 코드 불변식이다:
+// publicArticleJudgeBlockingIssues가 desk_* field를 차단 목록에서 제외하고, deskAdvisoryIssues가
+// 그것들을 advisory로 모은다. field는 free string이라 schema 변경은 불필요.
+const DESK_ADVISORY_FIELDS = new Set([
+  'desk_target_explanation',
+  'desk_layer_distinction',
+  'desk_source_limitations',
+  'desk_subject_attribution'
+]);
+
+function isDeskAdvisoryField(field) {
+  return DESK_ADVISORY_FIELDS.has(stringOrEmpty(field));
+}
+
+function deskAdvisoryIssues(report = {}) {
+  const issues = [];
+  for (const section of ensureArray(report.sections)) {
+    for (const issue of ensureArray(section.issues)) {
+      if (isDeskAdvisoryField(issue.field)) {
+        issues.push({ headline: section.headline, ...issue });
+      }
+    }
+  }
+  return issues;
+}
+
 function sourceCandidateForJudgeSection(section = {}, reporter = {}) {
   const sectionHash = stringOrEmpty(section.source_candidate_hash || section.url_hash || section.normalized_url_hash);
   const sectionUrlKeys = new Set(sectionUrls(section).map(normalizeUrl).filter(Boolean));
@@ -165,7 +192,8 @@ function publicArticleJudgeBlockingIssues(report = {}) {
       }
     }
     issues.push(...ensureArray(section.issues)
-      .filter(issue => /^(P1|P2)$/i.test(issue.severity))
+      // desk-review 축(#725)은 advisory라 severity 라벨과 무관하게 차단에서 제외한다.
+      .filter(issue => /^(P1|P2)$/i.test(issue.severity) && !isDeskAdvisoryField(issue.field))
       .map(issue => ({
         headline: section.headline,
         ...issue
@@ -183,8 +211,7 @@ function publicArticleJudgeBlockingIssues(report = {}) {
   return issues;
 }
 
-function publicArticleJudgeError(report, stage, attempt, phase = 'attempt') {
-  const issues = publicArticleJudgeBlockingIssues(report);
+function buildJudgeError(report, stage, attempt, phase, issues) {
   const error = new EditorSemanticValidationError(
     'Editor output failed public article semantic judge validation.',
     {
@@ -204,6 +231,20 @@ function publicArticleJudgeError(report, stage, attempt, phase = 'attempt') {
   return error;
 }
 
+function publicArticleJudgeError(report, stage, attempt, phase = 'attempt') {
+  return buildJudgeError(report, stage, attempt, phase, publicArticleJudgeBlockingIssues(report));
+}
+
+// #725: repair에 넘길 error는 차단 issue와 desk advisory issue를 함께 담는다. repair가 둘 다
+// 한 번에 고치게 하면서, desk 단독(차단 없음) 트리거에서도 고칠 목록을 제공한다.
+function judgeRepairError(report, stage, attempt, phase = 'attempt') {
+  const issues = [
+    ...publicArticleJudgeBlockingIssues(report),
+    ...deskAdvisoryIssues(report)
+  ];
+  return buildJudgeError(report, stage, attempt, phase, issues);
+}
+
 function publicArticleJudgeArtifactScope(stage = '') {
   const normalized = String(stage || '').toLowerCase();
   if (/completion/.test(normalized)) return 'completion';
@@ -212,10 +253,13 @@ function publicArticleJudgeArtifactScope(stage = '') {
 }
 
 module.exports = {
+  DESK_ADVISORY_FIELDS,
+  deskAdvisoryIssues,
   sourceCandidateForJudgeSection,
   publicArticleJudgeInput,
   normalizePublicArticleJudgeReport,
   publicArticleJudgeBlockingIssues,
   publicArticleJudgeError,
+  judgeRepairError,
   publicArticleJudgeArtifactScope
 };
