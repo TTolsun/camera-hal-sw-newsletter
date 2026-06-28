@@ -43,6 +43,11 @@ function validateFactCheck(value) {
     section_index: numberOrDefault(item?.section_index, -1),
     headline: String(item?.headline || ''),
     publishable: item?.publishable !== false,
+    // #654: preserve the fact-checker's confidence self-assessment through this reshape so the
+    // quality gate can surface it. We pass the raw string here; canonicalization to
+    // high/medium/low/unspecified stays in newsletter-quality's normalizeVerdictConfidence so
+    // there is a single source of truth for the level.
+    confidence: String(item?.confidence || ''),
     reason: String(item?.reason || '')
   }));
   value.final_comment = value.final_comment || '';

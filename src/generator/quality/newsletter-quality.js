@@ -566,6 +566,15 @@ function summarizeArticleSectionContracts(sections) {
   };
 }
 
+// #654: the fact-checker's per-article confidence is its own high/medium/low self-assessment.
+// We only accept those three values and otherwise report 'unspecified' rather than inventing a
+// level — the field is advisory (surfaced for the human reviewer), never a deterministic gate.
+const VERDICT_CONFIDENCE_LEVELS = new Set(['high', 'medium', 'low']);
+function normalizeVerdictConfidence(value) {
+  const level = text(value).toLowerCase();
+  return VERDICT_CONFIDENCE_LEVELS.has(level) ? level : 'unspecified';
+}
+
 // Publish gate: a simple boolean AND of objective safety checks plus the fact-checker's
 // per-article usefulness verdict. There is no numeric quality threshold — editorial quality
 // is the fact-checker's call (factCheck.article_quality), not a deterministic score.
@@ -844,11 +853,15 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   // Editorial-quality verdict: the fact-checker LLM judges each article on usefulness to a
   // Camera HAL SW engineer (topic-agnostic). An explicit publishable=false blocks the gate;
   // deterministic code only reads the boolean and surfaces the reason for review.
+  // #654: carry the fact-checker's `confidence` self-assessment onto each blocked article so
+  // a low-confidence (borderline, run-to-run flip-prone) block is visible to the human
+  // reviewer. confidence stays advisory — it never changes whether the article blocks.
   const unpublishableArticles = ensureArray(factCheck.article_quality)
     .filter(item => item && item.publishable === false)
     .map(item => ({
       section_index: Number(item.section_index),
       headline: text(item.headline) || text(sections[Number(item.section_index)]?.headline),
+      confidence: normalizeVerdictConfidence(item.confidence),
       reason: text(item.reason)
     }));
 
