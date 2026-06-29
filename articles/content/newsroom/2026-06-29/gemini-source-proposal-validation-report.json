@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-06-29",
+  "validations": [
+    {
+      "proposal_id": "android-developers-blog-2026-06-29-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-29-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-29-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-29-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-29-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "android-developers-blog-2026-06-29-1",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "aosp-site-updates-2026-06-29-1",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "lore-kernel-org-linux-media-2026-06-29-1",
+      "candidate_url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "lore-kernel-org-linux-media-2026-06-29-1",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260629031346.3875683-1-shoubaineng@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260629031346.3875683-1-shoubaineng@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "lore-kernel-org-linux-media-2026-06-29-1",
+      "candidate_url": "https://lore.kernel.org/linux-media/CE05A9E5-BE2C-4180-B14E-74794C1286DF@iscas.ac.cn/",
+      "normalized_url": "https://lore.kernel.org/linux-media/CE05A9E5-BE2C-4180-B14E-74794C1286DF@iscas.ac.cn/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "lore-kernel-org-linux-media-2026-06-29-1",
+      "candidate_url": "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/",
+      "normalized_url": "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "kernel-org-releases-2026-06-29-1",
+      "candidate_url": "https://www.kernel.org/",
+      "normalized_url": "https://www.kernel.org/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "kernel-org-releases"
+    },
+    {
+      "proposal_id": "phoronix-linux-camera-media-2026-06-29-1",
+      "candidate_url": "https://www.phoronix.com/news/Intel-ISPC-1.31-Released",
+      "normalized_url": "https://www.phoronix.com/news/Intel-ISPC-1.31-Released",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "phoronix-linux-camera-media"
+    },
+    {
+      "proposal_id": "phoronix-linux-camera-media-2026-06-29-1",
+      "candidate_url": "https://www.phoronix.com/news/Linux-7.2-rc1-Released",
+      "normalized_url": "https://www.phoronix.com/news/Linux-7.2-rc1-Released",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "phoronix-linux-camera-media"
+    },
+    {
+      "proposal_id": "phoronix-linux-camera-media-2026-06-29-1",
+      "candidate_url": "https://www.phoronix.com/news/Intel-HDR-Over-DP-MST",
+      "normalized_url": "https://www.phoronix.com/news/Intel-HDR-Over-DP-MST",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "phoronix-linux-camera-media"
+    }
+  ],
+  "counts": {
+    "accepted": 15
+  }
+}

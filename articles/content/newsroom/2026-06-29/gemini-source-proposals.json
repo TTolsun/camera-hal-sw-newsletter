@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-06-29",
+  "proposals": [
+    {
+      "proposal_id": "android-developers-blog-2026-06-29-1",
+      "topic_gap": "Recent updates to Android's media pipeline and camera output handling, focusing on Media3, MediaCodec, MediaRecorder, and MediaStore.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android media pipeline",
+        "camera output",
+        "Media3",
+        "MediaCodec",
+        "MediaRecorder",
+        "MediaStore",
+        "Photo Picker",
+        "A/V sync"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+        "https://android-developers.googleblog.com/2026/05/android-ai-intelligence-system.html",
+        "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+        "https://android-developers.googleblog.com/2026/06/Android-17.html"
+      ],
+      "expected_evidence": [
+        "Media3 release notes",
+        "MediaCodec updates",
+        "MediaRecorder improvements",
+        "MediaStore API changes",
+        "Photo Picker functionality",
+        "camera-generated playback paths",
+        "A/V sync improvements"
+      ],
+      "risk_notes": [
+        "The provided URLs are general blog posts and may not contain specific camera/media pipeline details. Further filtering will be required."
+      ]
+    },
+    {
+      "proposal_id": "aosp-site-updates-2026-06-29-1",
+      "topic_gap": "Updates on camera testing automation and compatibility, specifically Camera ITS.",
+      "source_family": "aosp-site-updates",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Camera ITS",
+        "automated camera testing",
+        "Android compatibility"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/camera-its-box"
+      ],
+      "expected_evidence": [
+        "Camera ITS changes",
+        "automated camera testing"
+      ],
+      "risk_notes": [
+        "This is a documentation page, not a release note. It might not have dated evidence of changes."
+      ]
+    },
+    {
+      "proposal_id": "lore-kernel-org-linux-media-2026-06-29-1",
+      "topic_gap": "Recent low-level camera and media driver changes in the Linux kernel, relevant to Android's media pipeline.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media",
+        "V4L2",
+        "camera driver",
+        "ISP",
+        "dma-fence",
+        "media controller"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/",
+        "https://lore.kernel.org/linux-media/20260629031346.3875683-1-shoubaineng@gmail.com/",
+        "https://lore.kernel.org/linux-media/CE05A9E5-BE2C-4180-B14E-74794C1286DF@iscas.ac.cn/",
+        "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/"
+      ],
+      "expected_evidence": [
+        "V4L2 driver updates",
+        "media controller changes",
+        "ISP driver modifications",
+        "DMA-fence improvements",
+        "subdev API changes"
+      ],
+      "risk_notes": [
+        "These are kernel mailing list patches and may be highly technical and not directly related to Android's user-facing media features without further analysis."
+      ]
+    },
+    {
+      "proposal_id": "kernel-org-releases-2026-06-29-1",
+      "topic_gap": "Latest Linux kernel release, potentially including camera and media subsystem updates relevant to Android.",
+      "source_family": "kernel-org-releases",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Linux kernel release",
+        "drivers/media",
+        "V4L2",
+        "camera subsystem"
+      ],
+      "candidate_urls": [
+        "https://www.kernel.org/"
+      ],
+      "expected_evidence": [
+        "Linux kernel release notes",
+        "drivers/media changes"
+      ],
+      "risk_notes": [
+        "This is a general release page. Specific camera/media changes will need to be identified within the release notes."
+      ]
+    },
+    {
+      "proposal_id": "phoronix-linux-camera-media-2026-06-29-1",
+      "topic_gap": "News and updates on Linux camera and media drivers, potentially impacting Android's camera HAL.",
+      "source_family": "phoronix-linux-camera-media",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Linux camera",
+        "media driver",
+        "ISP",
+        "V4L2",
+        "HDR"
+      ],
+      "candidate_urls": [
+        "https://www.phoronix.com/news/Intel-ISPC-1.31-Released",
+        "https://www.phoronix.com/news/Linux-7.2-rc1-Released",
+        "https://www.phoronix.com/news/Intel-HDR-Over-DP-MST"
+      ],
+      "expected_evidence": [
+        "Linux camera driver updates",
+        "media subsystem enhancements",
+        "ISP driver news",
+        "HDR support"
+      ],
+      "risk_notes": [
+        "Phoronix often covers low-level details that may not directly translate to Android-specific camera features."
+      ]
+    }
+  ]
+}

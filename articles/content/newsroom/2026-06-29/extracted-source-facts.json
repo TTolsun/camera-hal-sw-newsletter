@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "gemini-46ba6ee5935bd715",
+      "url": "https://www.kernel.org/",
+      "title": "The Linux Kernel Archives",
+      "published_at": "2026-06-28",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The Linux Kernel Archives",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n        <title>The Linux Kernel Archives</title>\n        <meta charset=\"utf-8\" />\n\t<link rel=\"icon\" type=\"image/png\" href=\"https://www.kernel.org/theme/images/logos/favicon.png\" />\n        <link rel=\"stylesheet\" href=\"https://www.kernel.org/theme/css/main.css\" type=\"text/css\" />\n        <link href=\"https://www.kernel.org/feeds/all.atom.xml\" type=\"application/atom+xml\" rel=\"alternate\" title=\"The Linux Kernel Archives Atom Feed\" />\n\n        <link href=\"https",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.847,
+      "warnings": []
+    },
+    {
+      "id": "gemini-67bc900fd27d6ba7",
+      "url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/",
+      "title": "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter &#39;ci&#39; not described in &#39;cvs_csi_set_fmt&#39; - kernel test robot",
+      "published_at": "2026-06-29",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter &#39;ci&#39; not described in &#39;cvs_csi_set_fmt&#39; - kernel test robot",
+          "evidence_text": "<html><head><title>[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter &#39;ci&#39; not described in &#39;cvs_csi_set_fmt&#39; - kernel test robot</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-b770fa92c65b287a",
+      "url": "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/",
+      "title": "Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops - Sakari Ailus",
+      "published_at": "2026-06-28",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops - Sakari Ailus",
+          "evidence_text": "<html><head><title>Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops - Sakari Ailus</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen an",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "8a80cbeb03048cd0",
+      "url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/",
+      "title": "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'",
+      "published_at": "2026-06-29T02:11:57Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "tree: git://linuxtv.org/sailus/media_tree.git metadata-pre head: 66c090febbc3c412ced4e71cb69f47b05eea0331 commit: 66c090febbc3c412ced4e71cb69f47b05eea0331 [17/17] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops config: x86_64-allmodconfig ( https://download.01.org/0day-ci/archive/20260629/202606291022.4ZXe8Dz4-lkp@intel.com/config ) compiler: clang version 22.1.3 ( https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211) reproduce (this is a W=1 bu",
+          "evidence_text": "<html><head><title>[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter &#39;ci&#39; not described in &#39;cvs_csi_set_fmt&#39; - kernel test robot</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.806,
+      "warnings": []
+    },
+    {
+      "id": "aa590c05e10ba56b",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "published_at": "2026-05-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "May 2026 Test camera images using automation Updated Test camera images using automation to add Honor Pad 20 to the tablet allowlist, and to reorder and update instructions for running individual ITS scenes.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"ar-x-mtfrom-en\"\n      dir=\"rtl\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.794,
+      "warnings": []
+    },
+    {
+      "id": "gemini-bb0e15b6742fce01",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-06-17",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Test camera images using automation &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.783,
+      "warnings": []
+    },
+    {
+      "id": "2bdd7d4c65b62467",
+      "url": "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/",
+      "title": "Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops",
+      "published_at": "2026-06-28T14:20:25Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hi Laurent, Thanks for the review. On Mon, Jun 08, 2026 at 01:16:52PM +0300, Laurent Pinchart wrote: > Hi Sakari, > > Thank you for the patch. > > CC'ing Bryan, Vladimir and Loic for the camss driver (please see below > for a dedicated comment). > > On Mon, Jun 08, 2026 at 12:53:56AM +0300, Sakari Ailus wrote: > > Add a pointer to const struct v4l2_subdev_client_info to the set_fmt, > > get_selection and set_selection sub-device pad ops. The client info struct > > will soon be used to differenti",
+          "evidence_text": "<html><head><title>Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops - Sakari Ailus</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen an",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.51,
+      "android_hal_relevance": 0.51,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.734,
+      "warnings": []
+    },
+    {
+      "id": "gemini-d0aed83c81ec75a1",
+      "url": "https://lore.kernel.org/linux-media/20260629031346.3875683-1-shoubaineng@gmail.com/",
+      "title": "[PATCH] dma-fence: Make dma_fence_dedup_array() robust against 0-count input - Baineng Shou",
+      "published_at": "2026-06-29",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH] dma-fence: Make dma_fence_dedup_array() robust against 0-count input - Baineng Shou",
+          "evidence_text": "<html><head><title>[PATCH] dma-fence: Make dma_fence_dedup_array() robust against 0-count input - Baineng Shou</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "gemini-ca3b443f0f4a0c90",
+      "url": "https://lore.kernel.org/linux-media/CE05A9E5-BE2C-4180-B14E-74794C1286DF@iscas.ac.cn/",
+      "title": "Re: [PATCH] fix: dma-buf: fence_chains_init: error unwind path leaks enable_sw_signaling reference - WenTao Liang",
+      "published_at": "2026-06-28",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH] fix: dma-buf: fence_chains_init: error unwind path leaks enable_sw_signaling reference - WenTao Liang",
+          "evidence_text": "<html><head><title>Re: [PATCH] fix: dma-buf: fence_chains_init: error unwind path leaks  enable_sw_signaling reference - WenTao Liang</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"scre",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "5293b25a93416b26",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "title": "Top 3 updates for Android developer productivity",
+      "published_at": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Simona Milanovic, Developer Relations Engineer Every year, Google I/O brings new announcements and resources across ecosystems and products, including Android development. As development shifts toward AI and agent-assisted tooling, we’ve expanded our offerings to better support you, however you decide to build for Android. To help you stay up to date, here is a summary of the top 3 announcements for Android Developer Productivity at I/O . 1. Android CLI is now stable Android CLI is now",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.78,
+      "android_hal_relevance": 0.78,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.715,
+      "warnings": []
+    },
+    {
+      "id": "7d4a267a3a9895b5",
+      "url": "https://lore.kernel.org/linux-media/20260629031346.3875683-1-shoubaineng@gmail.com/",
+      "title": "[PATCH] dma-fence: Make dma_fence_dedup_array() robust against 0-count input",
+      "published_at": "2026-06-29T03:13:58Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "dma_fence_dedup_array() returns 1 when called with num_fences == 0: the for-loop body never executes, j stays at 0, and the final `return ++j` yields 1. This contradicts both the kernel-doc (\"Return: Number of unique fences remaining in the array\") and the natural expectation that 0 input gives 0 output. All in-tree callers currently filter num_fences == 0 before invoking this helper (__dma_fence_unwrap_merge() bails out via the `if (count == 0 || count == 1)` fast path; amdgpu_userq_wait_*() ca",
+          "evidence_text": "<html><head><title>[PATCH] dma-fence: Make dma_fence_dedup_array() robust against 0-count input - Baineng Shou</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.692,
+      "warnings": []
+    },
+    {
+      "id": "61cc1e1a8f3d5812",
+      "url": "https://lore.kernel.org/linux-media/CE05A9E5-BE2C-4180-B14E-74794C1286DF@iscas.ac.cn/",
+      "title": "Re: [PATCH] fix: dma-buf: fence_chains_init: error unwind path leaks enable_sw_signaling reference",
+      "published_at": "2026-06-28T03:53:51Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "> 2026年6月26日 20:18，WenTao Liang 写道： > > dma_fence_enable_sw_signaling acquires an extra reference on each chain > fence. The error unwind loop calls dma_fence_put only once per > chain/fence without first signaling the fence to trigger the callback > that releases the signaling reference. This prevents the chain fence kref > from reaching 0, permanently leaking the chain and its contained fence. > > Cc: stable@vger.kernel.org > Fixes: dc2f7e67a28a (\"dma-buf: Exercise dma-fence-chain under selfte",
+          "evidence_text": "<html><head><title>Re: [PATCH] fix: dma-buf: fence_chains_init: error unwind path leaks  enable_sw_signaling reference - WenTao Liang</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"scre",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.692,
+      "warnings": []
+    }
+  ]
+}
