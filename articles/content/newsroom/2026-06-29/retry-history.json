@@ -1,0 +1,229 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 94,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 2,
+    "locked_article_count": 2,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Linux V4L2 서브디바이스 패드 작업에 v4l2_subdev_client_info 포인터 추가 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "sailus-media-tree 개발 브랜치에서 cvs_csi_set_fmt 함수 파라미터 설명 누락 경고 발생",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "sailus-media-tree 개발 브랜치에서 cvs_csi_set_fmt 함수 파라미터 설명 누락 경고 발생",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Linux V4L2 서브디바이스 패드 작업에 v4l2_subdev_client_info 포인터 추가 제안",
+      "sailus-media-tree 개발 브랜치에서 cvs_csi_set_fmt 함수 파라미터 설명 누락 경고 발생"
+    ],
+    "locked_article_headlines": [
+      "Linux V4L2 서브디바이스 패드 작업에 v4l2_subdev_client_info 포인터 추가 제안",
+      "sailus-media-tree 개발 브랜치에서 cvs_csi_set_fmt 함수 파라미터 설명 누락 경고 발생"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Linux V4L2 서브디바이스 패드 작업에 v4l2_subdev_client_info 포인터 추가 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "sailus-media-tree 개발 브랜치에서 cvs_csi_set_fmt 함수 파라미터 설명 누락 경고 발생",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/"
+        ],
+        "source_titles": [
+          "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Linux V4L2 서브디바이스 패드 작업에 v4l2_subdev_client_info 포인터 추가 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Linux V4L2 서브디바이스 패드 작업에 v4l2_subdev_client_info 포인터 추가 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "sailus-media-tree 개발 브랜치에서 cvs_csi_set_fmt 함수 파라미터 설명 누락 경고 발생",
+        "sources": [
+          "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "location": "sailus-media-tree 개발 브랜치에서 cvs_csi_set_fmt 함수 파라미터 설명 누락 경고 발생"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "sailus-media-tree 개발 브랜치에서 cvs_csi_set_fmt 함수 파라미터 설명 누락 경고 발생"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Linux V4L2 서브디바이스 패드 작업에 v4l2_subdev_client_info 포인터 추가 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "sailus-media-tree 개발 브랜치에서 cvs_csi_set_fmt 함수 파라미터 설명 누락 경고 발생",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/"
+        ],
+        "source_titles": [
+          "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [
+      {
+        "title": "Re: [PATCH] fix: dma-buf: fence_chains_init: error unwind path leaks enable_sw_signaling reference - WenTao Liang",
+        "url": "https://lore.kernel.org/linux-media/CE05A9E5-BE2C-4180-B14E-74794C1286DF@iscas.ac.cn/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      },
+      {
+        "title": "[PATCH] dma-fence: Make dma_fence_dedup_array() robust against 0-count input - Baineng Shou",
+        "url": "https://lore.kernel.org/linux-media/20260629031346.3875683-1-shoubaineng@gmail.com/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      },
+      {
+        "title": "The Linux Kernel Archives",
+        "url": "https://www.kernel.org/",
+        "source": "kernel.org Linux Releases",
+        "reason": "evidence_score=0 < 6"
+      }
+    ],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

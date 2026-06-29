@@ -1,5 +1,23 @@
 [
   {
+    "weeklyKey": "2026-W27",
+    "weekStartDate": "2026-06-29",
+    "weekEndDate": "2026-07-05",
+    "date": "2026-06-29",
+    "title": "2026 W27",
+    "summary": "V4L2 서브디바이스 패드 작업의 새로운 변화: v4l2_subdev_client_info 포인터 도입 제안\nV4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락",
+    "html": "newsletters/2026-W27/index.html",
+    "md": "newsletters/2026-W27/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ],
+    "article_count": 2,
+    "article_images": [
+      "assets/images/fallback/newsletter-default.svg"
+    ]
+  },
+  {
     "weeklyKey": "2026-W26",
     "weekStartDate": "2026-06-22",
     "weekEndDate": "2026-06-28",

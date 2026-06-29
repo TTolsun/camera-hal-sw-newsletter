@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-29",
+  "generated_at": "2026-06-29T04:22:24.465Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 7,
+    "hit_count": 2,
+    "miss_count": 5,
+    "by_url_hit_count": 2,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 5
+    },
+    {
+      "reason": "url-hit",
+      "count": 2
+    }
+  ],
+  "entries": [
+    {
+      "title": "Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops",
+      "url": "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-28T14:20:25Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/aketov7zdedape15@kekkonen.localdomain",
+        "url_hash": "dd37e4f8525ca7da0e992e5b90bb74ce00fdf9b3561c177da65ceeb9d4427946",
+        "published_date": "2026-06-28T14:20:25Z",
+        "content_hash": "b313276ad94c1e6c4ba61533010b4618169da60f5b5ddbbd7d145f384eb38668"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'",
+      "url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-29T02:11:57Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/202606291022.4zxe8dz4-lkp@intel.com",
+        "url_hash": "fd5092f5d5cca47f810333d2a709821cd7b9231a2554864413258b86c9744cc3",
+        "published_date": "2026-06-29T02:11:57Z",
+        "content_hash": "5ac29e88d9275815bf9cf065ab0a5fa0381acf18b5a337bffa074958b169ecde"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH] fix: dma-buf: fence_chains_init: error unwind path leaks enable_sw_signaling reference - WenTao Liang",
+      "url": "https://lore.kernel.org/linux-media/CE05A9E5-BE2C-4180-B14E-74794C1286DF@iscas.ac.cn/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-28",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/ce05a9e5-be2c-4180-b14e-74794c1286df@iscas.ac.cn",
+        "url_hash": "693585e9b17405d3cfa0148c4212cef96e0cd704b8bde8cc9277b11ac75cfdcf",
+        "published_date": "2026-06-28",
+        "content_hash": "db4c2c68c4e7589b1f3e57d34453fae48165f8a2bfbfaa52d4821e9a799f9baf"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH] dma-fence: Make dma_fence_dedup_array() robust against 0-count input - Baineng Shou",
+      "url": "https://lore.kernel.org/linux-media/20260629031346.3875683-1-shoubaineng@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-06-29",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260629031346.3875683-1-shoubaineng@gmail.com",
+        "url_hash": "fb026c4d33f100e1926d169470548ccfa610e45b8341c10715b13f11ecaee2c2",
+        "published_date": "2026-06-29",
+        "content_hash": "becda9148cf9f28babaf37414e7199abe1828d47fff4acccb366bb72d2ec504f"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "The Linux Kernel Archives",
+      "url": "https://www.kernel.org/",
+      "source": "kernel.org Linux Releases",
+      "published_date": "2026-06-28",
+      "cache_key": {
+        "normalized_url": "https://www.kernel.org",
+        "url_hash": "ba676d0843ee09ad4fbb839505fbec3c3e58b93a11e3116c5ea9ad91803af2a1",
+        "published_date": "2026-06-28",
+        "content_hash": "f4f2139740e558b18d4036eb5e943880d52477383ec027479afd9f9979752aa7"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/tools/agents/android-cli",
+        "url_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "558ab54bf608e5c1783dcaaec33927cadb0d804d90905747ed6463b1365cc2bb"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee.json"
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+        "url_hash": "98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe",
+        "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+        "content_hash": "a8d893b07fc1b9dad2926343a94344f3888e925a488d6ff276c3a4f0301d87c7"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/98444c77340368f833867051d767c86931f5e44c2c3c682e173856e442b24cfe.json"
+    }
+  ]
+}
