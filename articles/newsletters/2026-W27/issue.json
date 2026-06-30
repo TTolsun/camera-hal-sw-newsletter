@@ -1,0 +1,607 @@
+{
+  "date": "2026-06-29",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "2026 W27 (06.29 ~ 07.05)",
+  "summary": "이번 주에는 ‘V4L2 서브디바이스 패드 작업의 새로운 변화: v4l2_subdev_client_info 포인터 도입 제안’, ‘V4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락’ 두 건의 소식을 다룹니다.",
+  "briefing": [
+    "V4L2 서브디바이스 패드 작업의 새로운 변화: v4l2_subdev_client_info 포인터 도입 제안",
+    "V4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락"
+  ],
+  "sections": [
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "Linux V4L2 서브디바이스 패드 작업에 v4l2_subdev_client_info 포인터 추가 제안",
+      "what_changed": "v4l2-subdev pad ops(set_fmt, get_selection, set_selection)에 const struct v4l2_subdev_client_info 포인터를 추가하는 v5 10/10 패치 시리즈가 제안되었습니다.",
+      "confirmed_facts": [
+        "v4l2-subdev pad ops에 const struct v4l2_subdev_client_info 포인터 추가가 제안되었습니다.",
+        "이 변경은 set_fmt, get_selection, set_selection 함수에 영향을 줍니다.",
+        "해당 제안은 v5 10/10 패치 시리즈 형식으로 lore.kernel.org linux-media 메일링 리스트에 2026년 6월 28일 공개되었습니다."
+      ],
+      "evidence_summary": "V4L2 서브디바이스 API 및 패드 작업(pad ops) 변경 제안 (v5 10/10 패치 시리즈)",
+      "specificity_checks": [
+        "Version/Release: v5 10/10 patch series",
+        "Release Date: 2026-06-28",
+        "API/Component: v4l2-subdev pad ops (set_fmt, get_selection, set_selection)",
+        "Behavior Change: v4l2-subdev pad ops에 const struct v4l2_subdev_client_info 포인터 추가 제안"
+      ],
+      "source_verification_notes": [
+        "lore.kernel.org linux-media 메일링 리스트의 패치 제안 메일을 통해 확인된 사실입니다."
+      ],
+      "public_article": {
+        "headline": "V4L2 서브디바이스 패드 작업의 새로운 변화: v4l2_subdev_client_info 포인터 도입 제안",
+        "lead": "Linux 커널의 V4L2 서브디바이스 프레임워크에서 패드 작업(pad ops)의 정보 교환 방식을 개선하기 위해 v4l2_subdev_client_info 포인터를 추가하는 패치 제안이 공개되었습니다.",
+        "body_paragraphs": [
+          "Linux 커널의 V4L2(Video for Linux Two) 서브디바이스는 카메라 센서, ISP(Image Signal Processor) 등 미디어 파이프라인의 개별 구성 요소를 추상화하는 핵심 프레임워크입니다. 이번에 제안된 v5 10/10 패치 시리즈는 서브디바이스 간의 데이터 흐름 및 속성 협상을 정의하는 패드 작업(pad ops)에 const struct v4l2_subdev_client_info 포인터를 도입하는 것을 골자로 합니다.",
+          "이 변경 사항은 주로 set_fmt, get_selection, set_selection 함수에 영향을 미치며, 드라이버 레벨에서 서브디바이스 간의 정보 교환 방식을 보다 정교하게 제어할 수 있도록 돕습니다. 이는 카메라 드라이버와 ISP 통합 시 하위 스택의 유연성과 안정성을 높이는 데 기여할 수 있습니다.",
+          "다만, 본 변경 사항은 현재 메일링 리스트에서 제안 및 검토 중인 단계(v5 패치)이므로 메인라인 커널에 최종 병합되기 전까지는 실제 프로덕션 환경에 즉각적인 영향을 주지 않습니다. Android Camera HAL이나 상위 프레임워크 계약에 직접적인 변경을 유발하지는 않지만, 하위 드라이버 스택의 의존성을 관리하는 엔지니어라면 향후 커널 업데이트에 대비해 주시할 필요가 있습니다."
+        ],
+        "camera_hal_takeaway": "본 패치 제안은 Android Camera HAL API나 프레임워크 계약에 직접적인 영향을 주지 않습니다. 그러나 하위 이미지 파이프라인의 포맷 협상 및 드라이버 통합 방식에 변화를 줄 수 있으므로, 향후 SoC 벤더의 커널 업데이트 시 드라이버 호환성 검증 요소로 참고해야 합니다.",
+        "reader_checkpoints": [
+          "v5 패치 시리즈의 메인라인 커널 병합 여부 및 최종 API 변경 사항을 모니터링합니다.",
+          "SoC 벤더의 카메라 드라이버 및 ISP 통합 코드에서 V4L2 subdev pad ops 참조 방식을 검토합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops",
+            "url": "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "V4L2 subdev pad ops에 const struct v4l2_subdev_client_info 포인터 추가 제안",
+        "editorial_story": {
+          "reader_scenario": "새로운 SoC 플랫폼으로의 마이그레이션을 준비하면서 하위 V4L2 카메라 드라이버 스택의 변경 사항과 호환성을 검토해야 하는 상황입니다.",
+          "what_happened": "V4L2 서브디바이스 패드 작업(set_fmt, get_selection, set_selection)에 v4l2_subdev_client_info 포인터를 추가하는 패치 제안이 메일링 리스트에 공개되었습니다.",
+          "why_it_matters": "하위 드라이버 레벨의 포맷 협상 및 정보 교환 방식이 변경되면, 카메라 드라이버와 ISP 간의 통합 코드 수정이 필요할 수 있습니다.",
+          "field_scenario": "SoC 벤더가 제공하는 최신 커널 패치를 적용할 때 V4L2 서브디바이스 관련 컴파일 에러나 동작 이상 여부를 검증하는 시나리오에 적용됩니다.",
+          "not_to_overclaim": "이 패치 제안이 Android Camera HAL3 규격이나 CTS 테스트 요구사항에 즉각적인 변경을 가져온다고 해석해서는 안 됩니다.",
+          "editor_take": "제안 단계의 패치이므로 즉각적인 코드 수정은 불필요하나, 하위 이미지 파이프라인의 아키텍처 변화 흐름을 파악하는 용도로 적합합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "High"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "v4l2-subdev pad ops에 const struct v4l2_subdev_client_info 포인터 추가가 제안되었습니다.",
+          "이 변경은 set_fmt, get_selection, set_selection 함수에 영향을 줍니다.",
+          "해당 제안은 v5 10/10 패치 시리즈 형식으로 lore.kernel.org linux-media 메일링 리스트에 2026년 6월 28일 공개되었습니다."
+        ],
+        "background_context": "Linux 커널의 V4L2(Video for Linux Two) 서브디바이스는 카메라 센서, ISP(Image Signal Processor) 등 미디어 파이프라인의 개별 구성 요소를 추상화하는 프레임워크입니다. 'pad ops'는 이러한 서브디바이스 간의 데이터 흐름 및 속성 협상을 정의하는 작업(operation) 집합을 의미합니다. 이 변경은 드라이버 레벨에서 서브디바이스 간의 정보 교환 방식을 개선하여, 카메라 드라이버와 ISP 통합에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "Android Camera HAL에 직접적인 런타임 영향은 없으나, 하위 드라이버 스택의 포맷 협상(format negotiation) 및 미디어 컨트롤러 구성 요소 간의 인터페이스가 변경되므로, 향후 SoC 벤더의 드라이버 업데이트 시 통합 및 빌드 안정성 관점에서 검토가 필요합니다.",
+        "action_items": [
+          "향후 SoC 벤더 커널 업데이트 시 V4L2 서브디바이스 패드 작업 관련 패치(v5 10/10)의 포함 여부를 확인하고 빌드 호환성을 검증합니다.",
+          "카메라 드라이버 및 ISP 통합 코드에서 set_fmt, get_selection, set_selection 호출부의 시그니처 변경 대응 계획을 수립합니다."
+        ],
+        "team_share_points": "V4L2 서브디바이스 패드 작업에 클라이언트 정보 포인터를 추가하는 패치가 제안 중이므로, 향후 드라이버 업데이트 시 빌드 에러 방지를 위해 관련 인터페이스 변경을 주시해야 합니다.",
+        "do_not_claim": [
+          "이 패치 제안이 Android Camera HAL API 또는 프레임워크 계약에 즉각적인 변경을 의미한다고 주장하지 마십시오.",
+          "현재 제안 단계의 변경 사항이 모든 Linux 커널 버전 또는 모든 SoC 플랫폼에 즉시 적용된다고 단정하지 마십시오."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:v4l2_subdev_client_info_patch_proposal",
+          "text": "v4l2-subdev pad ops에 const struct v4l2_subdev_client_info 포인터 추가가 제안되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:dd37e4f8525ca7da:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:v4l2_subdev_client_info_affected_functions",
+          "text": "이 변경은 set_fmt, get_selection, set_selection 함수에 영향을 줍니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:dd37e4f8525ca7da:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:v4l2_subdev_client_info_patch_date",
+          "text": "해당 제안은 v5 10/10 패치 시리즈 형식으로 lore.kernel.org linux-media 메일링 리스트에 2026년 6월 28일 공개되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:dd37e4f8525ca7da:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "V4L2 subdev pad ops (set_fmt, get_selection, set_selection) 시그니처 변경 여부 확인",
+        "SoC 벤더 드라이버 통합 시 빌드 호환성 검증"
+      ],
+      "action_hints": [
+        "V4L2 서브디바이스 패치 시리즈 진행 상황 모니터링",
+        "드라이버 레벨 포맷 협상 코드 영향도 분석"
+      ],
+      "action_items": [
+        "향후 SoC 벤더 커널 업데이트 시 V4L2 서브디바이스 패드 작업 관련 패치(v5 10/10)의 포함 여부를 확인하고 빌드 호환성을 검증합니다.",
+        "카메라 드라이버 및 ISP 통합 코드에서 set_fmt, get_selection, set_selection 호출부의 시그니처 변경 대응 계획을 수립합니다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v11431966d26d9f049ef61662c2b798f1cdee8af320f1ba0f77a43eee64301d60/android/images/lockup.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/s4097/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1807162
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/w1200-h630-p-k-no-nu/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 320599
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available in the primary selected article capsule.",
+      "sources": [
+        {
+          "title": "Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops",
+          "url": "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "V4L2 서브디바이스 패드 작업에 대한 주요 인터페이스 변경 제안이 2026년 6월 28일 메일링 리스트에 공개되어 하위 드라이버 스택의 변화를 예고하고 있습니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "SoC 벤더의 카메라 드라이버 로드맵 및 V4L2 서브디바이스 패치 적용 계획을 확인하십시오.",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "이 패치가 Android Camera HAL3 규격이나 CTS 테스트에 직접적인 영향을 미친다고 과장하지 마십시오."
+        ]
+      },
+      "source_candidate_url": "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/",
+      "source_candidate_hash": "dd37e4f8525ca7da0e992e5b90bb74ce00fdf9b3561c177da65ceeb9d4427946",
+      "article_group_key": "article:https://lore.kernel.org/linux-media/aketov7zdedape15@kekkonen.localdomain",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "sailus-media-tree 개발 브랜치에서 cvs_csi_set_fmt 함수 파라미터 설명 누락 경고 발생",
+      "what_changed": "sailus-media-tree의 metadata-pre 브랜치 빌드 중, drivers/media/i2c/cvs/v4l2.c 파일의 cvs_csi_set_fmt 함수에서 파라미터 'ci'가 설명되지 않았다는 컴파일러 경고가 발생했습니다.",
+      "confirmed_facts": [
+        "sailus-media-tree의 metadata-pre 브랜치(head: 66c090febbc3c412ced4e71cb69f47b05eea0331)에서 컴파일러 경고가 발생했습니다.",
+        "경고 위치는 drivers/media/i2c/cvs/v4l2.c:203 이며, cvs_csi_set_fmt 함수의 파라미터 'ci'가 설명되지 않았다는 내용입니다.",
+        "해당 경고는 Clang 22.1.3 환경에서 빌드 시 감지되어 2026년 6월 29일 메일링 리스트에 보고되었습니다."
+      ],
+      "evidence_summary": "V4L2 드라이버 코드 빌드 중 컴파일러 경고 발생 (cvs_csi_set_fmt 함수 파라미터 설명 누락)",
+      "specificity_checks": [
+        "Version/Release: Clang 22.1.3, sailus-media-tree metadata-pre head: 66c090febbc3c412ced4e71cb69f47b05eea0331",
+        "Release Date: 2026-06-29",
+        "API/Component: v4l2-subdev, drivers/media/i2c/cvs/v4l2.c",
+        "Behavior Change: cvs_csi_set_fmt 함수의 파라미터 'ci' 설명 누락 경고 발생"
+      ],
+      "source_verification_notes": [
+        "lore.kernel.org linux-media 메일링 리스트의 빌드 경고 리포트를 통해 확인된 사실입니다."
+      ],
+      "public_article": {
+        "headline": "V4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락",
+        "lead": "Linux 커널의 V4L2 드라이버 개발 브랜치인 sailus-media-tree에서 빌드 중 cvs_csi_set_fmt 함수의 파라미터 설명이 누락되어 컴파일러 경고가 발생한 것으로 확인되었습니다.",
+        "body_paragraphs": [
+          "Linux 커널의 V4L2(Video for Linux Two) 서브디바이스 프레임워크는 카메라 센서 및 ISP 등 미디어 파이프라인의 개별 구성 요소를 추상화합니다. 최근 sailus-media-tree의 metadata-pre 개발 브랜치(head: 66c090febbc3c412ced4e71cb69f47b05eea0331)를 Clang 22.1.3 환경에서 빌드하는 과정에서 드라이버 코드 내 컴파일러 경고가 보고되었습니다.",
+          "경고가 발생한 곳은 drivers/media/i2c/cvs/v4l2.c 파일의 203번째 라인으로, cvs_csi_set_fmt 함수의 파라미터 중 하나인 ci에 대한 설명이 커널 문서화 주석(kernel-doc)에서 누락되었다는 내용입니다. 이는 기능적인 오동작을 유발하는 치명적인 버그는 아니지만, 코드 품질 및 유지보수성 관점에서 개선이 필요한 영역입니다.",
+          "이 경고는 특정 개발 브랜치에서 발생한 것이므로 프로덕션 커널이나 실제 디바이스의 동작에 즉각적인 악영향을 미치지는 않습니다. 그러나 드라이버 코드의 정적 분석 및 품질 관리 기준이 강화되고 있음을 보여주는 사례로, 벤더 커널을 관리하는 엔지니어들은 자체 드라이버 빌드 환경에서도 유사한 경고가 발생하는지 점검할 필요가 있습니다."
+        ],
+        "camera_hal_takeaway": "본 경고는 Android Camera HAL의 런타임 동작이나 성능에 영향을 주지 않는 단순 문서화 누락 경고입니다. 다만, 드라이버 코드의 품질 관리 및 정적 분석 빌드 환경에서 경고를 무결하게 유지하기 위해 벤더 드라이버 빌드 시 유사 경고 발생 여부를 체크하는 것이 좋습니다.",
+        "reader_checkpoints": [
+          "벤더 드라이버 빌드 환경에서 Clang 컴파일러 경고 옵션이 엄격하게 적용되고 있는지 확인합니다.",
+          "V4L2 관련 드라이버 코드의 kernel-doc 주석 누락 여부를 정적 분석 도구로 점검합니다."
+        ],
+        "source_links": [
+          {
+            "title": "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'",
+            "url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "sailus-media-tree metadata-pre 브랜치에서 cvs_csi_set_fmt 함수 파라미터 'ci' 설명 누락 경고",
+        "editorial_story": {
+          "reader_scenario": "드라이버 빌드 환경을 최신 Clang 툴체인으로 마이그레이션한 후, 기존에 감지되지 않던 정적 분석 및 문서화 경고가 다수 발생하는 상황입니다.",
+          "what_happened": "sailus-media-tree의 metadata-pre 브랜치 빌드 중 cvs_csi_set_fmt 함수의 파라미터 설명 누락 경고가 발생했습니다.",
+          "why_it_matters": "컴파일러 경고는 단순 문서화 누락일지라도 향후 엄격한 빌드 환경(Werror 등)에서 빌드 실패를 유발할 수 있습니다.",
+          "field_scenario": "벤더 커널 빌드 CI 파이프라인에서 컴파일러 경고를 모니터링하고 코드 클린업을 진행하는 시나리오에 적용됩니다.",
+          "not_to_overclaim": "이 경고가 카메라 센서의 포맷 설정 실패나 프레임 드랍 등 런타임 오류를 유발한다고 확대 해석해서는 안 됩니다.",
+          "editor_take": "단순 문서화 경고이지만, 최신 툴체인 도입 시 빌드 안정성을 확보하기 위해 경고 제로(Zero-warning) 정책을 유지하는 것이 바람직합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "Tooling"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "sailus-media-tree의 metadata-pre 브랜치(head: 66c090febbc3c412ced4e71cb69f47b05eea0331)에서 컴파일러 경고가 발생했습니다.",
+          "경고 위치는 drivers/media/i2c/cvs/v4l2.c:203 이며, cvs_csi_set_fmt 함수의 파라미터 'ci'가 설명되지 않았다는 내용입니다.",
+          "해당 경고는 Clang 22.1.3 환경에서 빌드 시 감지되어 2026년 6월 29일 메일링 리스트에 보고되었습니다."
+        ],
+        "background_context": "Linux 커널의 V4L2(Video for Linux Two) 서브디바이스는 카메라 센서, ISP(Image Signal Processor) 등 미디어 파이프라인의 개별 구성 요소를 추상화하는 프레임워크입니다. 컴파일러 경고는 코드 품질 문제나 잠재적인 버그를 나타낼 수 있으며, 특히 드라이버 코드에서는 시스템 안정성에 직접적인 영향을 미칠 수 있습니다. 'cvs_csi_set_fmt' 함수는 카메라 센서의 포맷 설정과 관련된 드라이버 함수로, 이 함수의 파라미터 설명 누락 경고는 드라이버의 유지보수성과 정확성에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "Android Camera HAL에 직접적인 영향은 없으나, 벤더 드라이버 빌드 환경에서 경고(Warning)를 에러(Error)로 처리하는 빌드 옵션(-Werror)을 사용하는 경우 빌드 실패를 유발할 수 있으므로 사전 클린업이 필요합니다.",
+        "action_items": [
+          "자사 벤더 커널의 drivers/media/i2c/ 관련 코드 빌드 시 Clang 경고 발생 여부를 확인합니다.",
+          "CI 빌드 파이프라인에서 컴파일러 경고 수준을 점검하고, 무결한 빌드 상태를 유지하기 위해 경고 수정 패치를 적용합니다."
+        ],
+        "team_share_points": "V4L2 드라이버 코드 빌드 중 파라미터 설명 누락으로 인한 컴파일러 경고가 보고되었으므로, 벤더 드라이버 코드 품질 관리 차원에서 유사한 정적 분석 경고를 점검해야 합니다.",
+        "do_not_claim": [
+          "이 컴파일러 경고가 Android Camera HAL의 기능적 오류나 성능 저하로 직접 이어진다고 주장하지 마십시오.",
+          "특정 개발 브랜치에서 발생한 경고가 모든 프로덕션 커널에 즉시 영향을 미친다고 가정하지 마십시오."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:sailus_media_tree_compiler_warning",
+          "text": "sailus-media-tree의 metadata-pre 브랜치(head: 66c090febbc3c412ced4e71cb69f47b05eea0331)에서 컴파일러 경고가 발생했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:fd5092f5d5cca47f:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:compiler_warning_location_and_details",
+          "text": "경고 위치는 drivers/media/i2c/cvs/v4l2.c:203 이며, cvs_csi_set_fmt 함수의 파라미터 'ci'가 설명되지 않았다는 내용입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:fd5092f5d5cca47f:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:sailus_media_tree_compiler_warning_date",
+          "text": "해당 경고는 Clang 22.1.3 환경에서 빌드 시 감지되어 2026년 6월 29일 메일링 리스트에 보고되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:fd5092f5d5cca47f:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "drivers/media/i2c/cvs/v4l2.c 빌드 경고 발생 여부 확인",
+        "Clang 컴파일러 경고 옵션 검토"
+      ],
+      "action_hints": [
+        "컴파일러 경고 모니터링 및 정적 분석 수행",
+        "드라이버 코드 품질 및 문서화 상태 점검"
+      ],
+      "action_items": [
+        "자사 벤더 커널의 drivers/media/i2c/ 관련 코드 빌드 시 Clang 경고 발생 여부를 확인합니다.",
+        "CI 빌드 파이프라인에서 컴파일러 경고 수준을 점검하고, 무결한 빌드 상태를 유지하기 위해 경고 수정 패치를 적용합니다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v11431966d26d9f049ef61662c2b798f1cdee8af320f1ba0f77a43eee64301d60/android/images/lockup.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/s4097/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1807162
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVRZrq_G4uVlVKLwXHoXqLsp3SGb-2GJbHfNRNmjfSPuZ9gUrLJ8_fyNTDP-_jsJowwajpxaLPFd8047rF7B5IpSE8-gXFtwVx3x4WpEqWLX3Cm-bKo9tof1j5yTLT66FmzpEnod7EK8_3vUDNZv12uDz1lnfZ5O8iOQqxfWgH0oOYXd3CXvG4IUJuRfU/w1200-h630-p-k-no-nu/MM_Dev%20Productivity_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 320599
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available in the primary selected article capsule.",
+      "sources": [
+        {
+          "title": "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'",
+          "url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "Clang 22.1.3 환경에서 V4L2 드라이버 빌드 경고가 2026년 6월 29일 보고되어, 최신 컴파일러 환경에서의 드라이버 코드 품질 점검이 요구됩니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "native_tooling_owner"
+        ],
+        "check_within_2_weeks": "자사 벤더 드라이버 빌드 환경에서 Clang 컴파일 경고가 발생하는지 확인하십시오.",
+        "impact_axes": [
+          "native_tooling_workflow"
+        ],
+        "do_not_overstate": [
+          "이 컴파일러 경고가 런타임 카메라 오동작이나 성능 저하를 일으킨다고 단정하지 마십시오."
+        ]
+      },
+      "source_candidate_url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/",
+      "source_candidate_hash": "fd5092f5d5cca47f810333d2a709821cd7b9231a2554864413258b86c9744cc3",
+      "article_group_key": "article:https://lore.kernel.org/linux-media/202606291022.4zxe8dz4-lkp@intel.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "향후 SoC 벤더 커널 업데이트 시 V4L2 서브디바이스 패드 작업 관련 패치(v5 10/10)의 포함 여부를 확인하고 빌드 호환성을 검증합니다.",
+    "카메라 드라이버 및 ISP 통합 코드에서 set_fmt, get_selection, set_selection 호출부의 시그니처 변경 대응 계획을 수립합니다.",
+    "자사 벤더 커널의 drivers/media/i2c/ 관련 코드 빌드 시 Clang 경고 발생 여부를 확인합니다.",
+    "CI 빌드 파이프라인에서 컴파일러 경고 수준을 점검하고, 무결한 빌드 상태를 유지하기 위해 경고 수정 패치를 적용합니다."
+  ],
+  "references": [
+    {
+      "title": "Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops",
+      "url": "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/"
+    },
+    {
+      "title": "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'",
+      "url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [],
+  "selected_group_count": 2,
+  "rendered_group_count": 2,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://lore.kernel.org/linux-media/aketov7zdedape15@kekkonen.localdomain",
+    "article:https://lore.kernel.org/linux-media/202606291022.4zxe8dz4-lkp@intel.com"
+  ],
+  "rendered_group_keys": [
+    "article:https://lore.kernel.org/linux-media/aketov7zdedape15@kekkonen.localdomain",
+    "article:https://lore.kernel.org/linux-media/202606291022.4zxe8dz4-lkp@intel.com"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "publish_mode": "DEEP",
+  "reference_articles": [],
+  "weekly_key": "2026-W27",
+  "week_start_date": "2026-06-29",
+  "week_end_date": "2026-07-05",
+  "tags": [
+    "Camera HAL",
+    "Android"
+  ]
+}
