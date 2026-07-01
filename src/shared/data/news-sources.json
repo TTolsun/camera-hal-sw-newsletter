@@ -900,6 +900,65 @@
       "sourceQualityNotes": []
     },
     {
+      "id": "raspberrypi-libcamera-releases",
+      "name": "Raspberry Pi libcamera Releases",
+      "sourceUrl": "https://github.com/raspberrypi/libcamera/releases",
+      "rssUrl": "https://github.com/raspberrypi/libcamera/releases.atom",
+      "collectionModeHint": "release-note-watch",
+      "category": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "Raspberry Pi 다운스트림 libcamera 릴리스 태그(v*+rpt*)에서 날짜, 버전, SoftISP, pipeline handler, sensor 변경을 확인",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "github.com",
+          "libcamera.org",
+          "git.libcamera.org",
+          "lists.libcamera.org"
+        ],
+        "importantAnchorKeywords": [
+          "release notes",
+          "release announcement",
+          "changelog",
+          "tag",
+          "commit",
+          "source code",
+          "details",
+          "learn more"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
+      "keywords": [
+        "libcamera",
+        "Raspberry Pi",
+        "SoftISP",
+        "camera",
+        "pipeline",
+        "image sensor"
+      ],
+      "sourceRole": "project_release_source",
+      "sourceUrlQualityHint": "project_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "dated_project_announcement",
+      "sourceQualityNotes": []
+    },
+    {
       "id": "libcamera-documentation",
       "name": "libcamera Documentation",
       "sourceUrl": "https://libcamera.org/introduction.html",
