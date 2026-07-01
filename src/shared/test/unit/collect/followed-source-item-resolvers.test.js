@@ -4,7 +4,8 @@ const test = require('node:test');
 const {
   FOLLOWED_SOURCE_RESOLVERS,
   followedSourceResolverIds,
-  resolveFollowedSourceItems
+  resolveFollowedSourceItems,
+  shouldSuppressGenericFallback
 } = require('../../../collect/followed-source-item-resolvers');
 const { readTextFixture } = require('../../helpers/fixture-loader');
 
@@ -22,12 +23,44 @@ function securityIndexItems() {
   ];
 }
 
-test('registers exactly the two known followed-source resolver ids', () => {
+test('registers exactly the known followed-source resolver ids', () => {
   assert.deepEqual(
     followedSourceResolverIds().sort(),
-    ['android-security-bulletin', 'libcamera-release-announcements']
+    ['android-security-bulletin', 'libcamera-release-announcements', 'raspberrypi-libcamera-releases']
   );
-  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 2);
+  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 3);
+});
+
+test('routes raspberrypi-libcamera-releases to the release resolver with text (atom) as the first arg', async () => {
+  const atom = [
+    '<feed xmlns="http://www.w3.org/2005/Atom">',
+    '<entry><updated>2026-06-09T07:36:01Z</updated>',
+    '<link rel="alternate" href="https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"/>',
+    '<title>v0.7.1+rpt20260609</title></entry>',
+    '<entry><updated>2026-05-22T10:41:17Z</updated>',
+    '<link rel="alternate" href="https://github.com/raspberrypi/libcamera/releases/tag/pios%2F0.7.1"/>',
+    '<title>pios/0.7.1+rpt20260429-1</title></entry>',
+    '</feed>'
+  ].join('');
+  let fetchCount = 0;
+  const items = await resolveFollowedSourceItems(
+    { id: 'raspberrypi-libcamera-releases', name: 'Raspberry Pi libcamera Releases', url: 'https://github.com/raspberrypi/libcamera/releases' },
+    { indexItems: [], text: atom, fetchTextImpl: async () => { fetchCount += 1; return ''; } }
+  );
+
+  // 리졸버는 text(atom)만 파싱하고 추가 fetch는 하지 않는다.
+  assert.equal(fetchCount, 0);
+  assert.equal(items.length, 1, 'only the v* release survives, packaging tag dropped');
+  assert.equal(items[0].version_or_release, 'v0.7.1+rpt20260609');
+  assert.equal(items[0].relevanceBucketHint, 'camera_driver_image_pipeline');
+});
+
+test('shouldSuppressGenericFallback is true only for followed-resolver sources', () => {
+  assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-release-announcements' }), true);
+  assert.equal(shouldSuppressGenericFallback({ id: 'android-security-bulletin' }), true);
+  assert.equal(shouldSuppressGenericFallback({ id: 'raspberrypi-libcamera-releases' }), true);
+  assert.equal(shouldSuppressGenericFallback({ id: 'lore-linux-media-list' }), false);
+  assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-blog' }), false);
 });
 
 test('routes android-security-bulletin to the CVE resolver with indexItems as the first arg', async () => {

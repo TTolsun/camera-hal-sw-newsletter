@@ -4,10 +4,11 @@
 // collect 디스패치 코드를 고치지 않고 이 테이블에만 항목을 더하면 된다(OCP).
 const { resolveSecurityBulletinCveItems } = require('./security-bulletin-cve');
 const { resolveLibcameraReleaseAnnouncementItems } = require('./libcamera-release-announcements');
+const { resolveRaspberryPiLibcameraReleaseItems } = require('./raspberrypi-libcamera-releases');
 
-// 각 리졸버의 첫 인자가 다르다(security-bulletin은 indexItems, libcamera는 text/indexHtml).
-// 그래서 레지스트리 항목이 공통 컨텍스트({ indexItems, text, source, fetchTextImpl })를 받아
-// 각자에게 맞는 위치 인자로 풀어 넘긴다.
+// 각 리졸버의 첫 인자가 다르다(security-bulletin은 indexItems, libcamera는 text/indexHtml,
+// raspberrypi는 text/atom). 그래서 레지스트리 항목이 공통 컨텍스트({ indexItems, text, source,
+// fetchTextImpl })를 받아 각자에게 맞는 위치 인자로 풀어 넘긴다.
 const FOLLOWED_SOURCE_RESOLVERS = [
   {
     id: 'android-security-bulletin',
@@ -18,6 +19,11 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     id: 'libcamera-release-announcements',
     resolve: ({ text, source, fetchTextImpl }) =>
       resolveLibcameraReleaseAnnouncementItems(text, source, { fetchTextImpl })
+  },
+  {
+    id: 'raspberrypi-libcamera-releases',
+    resolve: ({ text, source }) =>
+      resolveRaspberryPiLibcameraReleaseItems(text, source)
   }
 ];
 
@@ -35,8 +41,18 @@ async function resolveFollowedSourceItems(source, { indexItems = [], text = '', 
   return entry.resolve({ indexItems, text, source, fetchTextImpl });
 }
 
+/**
+ * followed-resolver가 등록된 소스는 인덱스 페이지에 직접 후보가 없어 리졸버가 상세를 따라간다.
+ * 그 큐레이션 추출이 비었다는 건 "이번 window에 신호 없음"이지, 인덱스 나비링크를 제너릭
+ * 스크레이프하라는 뜻이 아니다. 그래서 이런 소스는 제너릭 parseRss/parseHtmlPage 폴백을 막는다.
+ */
+function shouldSuppressGenericFallback(source) {
+  return followedSourceResolverIds().includes(source && source.id);
+}
+
 module.exports = {
   FOLLOWED_SOURCE_RESOLVERS,
   followedSourceResolverIds,
-  resolveFollowedSourceItems
+  resolveFollowedSourceItems,
+  shouldSuppressGenericFallback
 };

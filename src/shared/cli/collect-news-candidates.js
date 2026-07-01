@@ -30,7 +30,8 @@ const {
   resolveLinkedReleaseNoteEvidenceItems
 } = require('../collect/linked-release-note-evidence');
 const {
-  resolveFollowedSourceItems
+  resolveFollowedSourceItems,
+  shouldSuppressGenericFallback
 } = require('../collect/followed-source-item-resolvers');
 const {
   DEFAULT_SECTION_MAP,
@@ -1374,8 +1375,11 @@ async function main() {
       const resolvedSourceSpecificItems = sourceSpecificItems.length > 0
         ? await resolveLinkedReleaseNoteEvidenceItems(sourceSpecificItems, source, { fetchTextImpl: fetchText })
         : [];
+      // followed-resolver 소스는 큐레이션 추출이 비면 신호 없음이므로 제너릭 폴백을 막는다
+      // (pipermail/bulletin 인덱스 나비링크를 후보로 만들던 origin).
       const parsed = resolvedSourceSpecificItems.length > 0
         ? resolvedSourceSpecificItems.map(item => normalizeCandidate(item))
+        : shouldSuppressGenericFallback(source) ? []
         : feed ? parseRss(text, source) : parseHtmlPage(text, source);
       candidates.push(...parsed);
     } catch (error) {
