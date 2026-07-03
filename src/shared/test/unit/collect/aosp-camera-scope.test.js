@@ -69,6 +69,29 @@ test('classifies article-level Linux camera subsystem and pipeline evidence as d
   assert.equal(camera.evidence_origin, 'article_text');
 });
 
+test('classifies vendor ISP driver names (atomisp, rkisp1, camss, mtk-isp) as camera driver topic', () => {
+  // Short lore linux-media patch titles carry the vendor ISP driver name but no
+  // "image sensor" / "camera pipeline" literal, so \bISP\b (word boundary) misses
+  // the ISP inside "atomisp"/"rkisp1". The driver name itself is camera evidence.
+  const titles = [
+    'staging: media: atomisp: use kvmalloc_objs() for object allocation',
+    'media: rkisp1: use fwnode_graph_for_each_endpoint_scoped()',
+    'media: qcom: camss: fix VFE buffer done handling',
+    'media: mediatek: mtk-isp: correct clock disable ordering'
+  ];
+
+  for (const title of titles) {
+    const result = classifyAospCameraStackCandidate({
+      title,
+      summary: 'Kernel driver refactor for allocation and endpoint iteration helpers.'
+    });
+    assert.equal(result.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE, title);
+    assert.equal(result.counts_as_driver_topic, true, title);
+    assert.equal(result.evidence_origin, 'article_text', title);
+    assert.ok(result.driver_stack_relevance > 0, title);
+  }
+});
+
 test('classifies public SoC platform signals without excluding them', () => {
   const soc = classifyAospCameraStackCandidate({
     title: 'Qualcomm Snapdragon platform update improves camera performance latency',

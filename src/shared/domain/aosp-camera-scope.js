@@ -75,6 +75,14 @@ const DRIVER_PATTERNS = [
   /\bMIPI\s*CSI-?2\b/i,
   /\bISP\b[^.\n]{0,120}\b(?:camera|image|sensor|pipeline)\b/i,
   /\b(?:camera|image|sensor|pipeline)\b[^.\n]{0,120}\bISP\b/i,
+  // Vendor camera/ISP driver module names. The "ISP" is inside the token, so the
+  // \bISP\b patterns above miss them, and short lore patch titles ("media: rkisp1: ...")
+  // carry no separate "camera/image/sensor" literal. The driver name is the evidence.
+  /\batomisp\b/i,        // Intel Atom ISP (drivers/staging/media/atomisp)
+  /\brkisp\d*\b/i,       // Rockchip ISP (rkisp, rkisp1)
+  /\bcamss\b/i,          // Qualcomm Camera Subsystem (drivers/media/platform/qcom/camss)
+  /\bmtk[-_]?isp\b/i,    // MediaTek ISP (drivers/media/platform/mediatek/isp)
+  /\bmtk[-_]?cam\b/i,    // MediaTek camera (mtk-cam)
   /\bDMA-?BUF\b[^.\n]{0,120}\b(?:camera|frame|image|buffer|pipeline)\b/i,
   /\b(?:camera|frame|image|buffer|pipeline)\b[^.\n]{0,120}\bDMA-?BUF\b/i,
   /\bvideo capture pipeline\b/i
