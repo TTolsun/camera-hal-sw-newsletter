@@ -1,18 +1,21 @@
 :root {
-  --bg: #f8fafc;
+  /* 웜 크림 캔버스(#f2f0eb)를 기본 페이지 색으로 둔다(DESIGN.md §2 warm-neutral canvas). */
+  --bg: #f2f0eb;
   --surface: #ffffff;
-  --surface-soft: #f1f5f9;
+  --surface-soft: #e9e6dd;
   --text: #1f2937;
-  --muted: #667085;
+  /* 크림 캔버스에서도 본문 보조 텍스트 대비를 WCAG AA(>=4.5:1) 이상으로 유지하려 약간 어둡게 조정. */
+  --muted: #5c6470;
   --line: #dde3ea;
   --primary: #188038;
   --primary-hover: #12642c;
   --chip: #eaf4ee;
   --focus-ring: rgba(24, 128, 56, 0.35);
   --primary-border: rgba(24, 128, 56, 0.22);
-  --shadow-sm: 0 8px 18px rgba(15, 23, 42, 0.08);
-  --shadow-md: 0 12px 32px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 20px 44px rgba(15, 23, 42, 0.12);
+  /* 하나의 무거운 그림자 대신 접촉+환경광 2겹 저알파 스택으로 부드럽게(DESIGN.md §6 layered elevation). */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05), 0 6px 16px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 1px 2px rgba(15, 23, 42, 0.05), 0 10px 26px rgba(15, 23, 42, 0.07);
+  --shadow-lg: 0 2px 6px rgba(15, 23, 42, 0.06), 0 18px 40px rgba(15, 23, 42, 0.10);
   --shadow: var(--shadow-md);
   --radius-lg: 24px;
   --radius-md: 18px;
@@ -141,7 +144,7 @@ pre code {
 .newsletter-issue-page {
   background:
     radial-gradient(circle at 50% -80px, rgba(24, 128, 56, 0.09), transparent 34%),
-    linear-gradient(180deg, #f7faf8 0%, #ffffff 320px, #f8fafc 100%);
+    linear-gradient(180deg, #f6f3ec 0%, #ffffff 320px, #f2f0eb 100%);
 }
 
 .homepage .content-wrap {
@@ -196,7 +199,7 @@ pre code {
   top: 0;
   z-index: 20;
   border-bottom: 1px solid rgba(221, 227, 234, 0.82);
-  background: rgba(248, 250, 252, 0.92);
+  background: rgba(244, 242, 236, 0.92);
   backdrop-filter: blur(16px);
 }
 
