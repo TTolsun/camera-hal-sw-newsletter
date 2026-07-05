@@ -1942,7 +1942,7 @@ pre code {
   place-items: center;
   aspect-ratio: 16 / 9;
   background:
-    linear-gradient(135deg, rgba(0, 102, 204, 0.13), rgba(37, 99, 235, 0.12)),
+    linear-gradient(135deg, rgba(0, 102, 204, 0.13), rgba(0, 102, 204, 0.12)),
     repeating-linear-gradient(90deg, rgba(15, 23, 42, 0.06) 0 1px, transparent 1px 42px),
     var(--surface-soft);
 }
@@ -1981,7 +1981,7 @@ pre code {
 
 .article-placeholder-ai {
   background:
-    linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(0, 102, 204, 0.12)),
+    linear-gradient(135deg, rgba(0, 102, 204, 0.14), rgba(0, 102, 204, 0.12)),
     repeating-linear-gradient(0deg, rgba(15, 23, 42, 0.05) 0 1px, transparent 1px 38px),
     var(--surface-soft);
 }

@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
   <title id="title">Android camera fallback image</title>
   <desc id="desc">A simple Android camera stack fallback illustration.</desc>
-  <rect width="1280" height="720" fill="#f5fbf7"/>
-  <g fill="#e7f3ea">
+  <rect width="1280" height="720" fill="#f4f9fd"/>
+  <g fill="#e8f1fb">
     <rect x="170" y="120" width="940" height="110" rx="20"/>
     <rect x="170" y="305" width="940" height="110" rx="20"/>
     <rect x="170" y="490" width="940" height="110" rx="20"/>
   </g>
-  <g fill="none" stroke="#188038" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+  <g fill="none" stroke="#0066cc" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
     <path d="M290 175h700M290 360h700M290 545h700"/>
     <path d="M640 230v75M640 415v75"/>
   </g>
