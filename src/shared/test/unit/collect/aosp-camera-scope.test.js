@@ -92,6 +92,29 @@ test('classifies vendor ISP driver names (atomisp, rkisp1, camss, mtk-isp) as ca
   }
 });
 
+test('classifies uvcvideo driver and VIDIOC_ ioctl patch titles as camera driver topic', () => {
+  // Camera/V4L2-specific linux-media titles whose only camera signal is the USB Video
+  // Class driver name (uvcvideo) or a V4L2 ioctl identifier (VIDIOC_*) carry no separate
+  // "V4L2"/"camera"/"sensor" literal, so \bV4L2\b and the descriptive patterns miss them
+  // and they slipped to generic_tech_watchlist. The driver name / uAPI ioctl is the evidence.
+  const titles = [
+    'media: uvcvideo: fix race condition in status queue',
+    'media: uvcvideo: correct bandwidth calculation for usb bulk endpoints',
+    'media: reject invalid VIDIOC_SUBDEV_S_FMT flags in the subdev core'
+  ];
+
+  for (const title of titles) {
+    const result = classifyAospCameraStackCandidate({
+      title,
+      summary: 'Kernel patch reworks queue handling and format validation helpers.'
+    });
+    assert.equal(result.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE, title);
+    assert.equal(result.counts_as_driver_topic, true, title);
+    assert.equal(result.evidence_origin, 'article_text', title);
+    assert.ok(result.driver_stack_relevance > 0, title);
+  }
+});
+
 test('classifies public SoC platform signals without excluding them', () => {
   const soc = classifyAospCameraStackCandidate({
     title: 'Qualcomm Snapdragon platform update improves camera performance latency',

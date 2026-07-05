@@ -83,6 +83,10 @@ const DRIVER_PATTERNS = [
   /\bcamss\b/i,          // Qualcomm Camera Subsystem (drivers/media/platform/qcom/camss)
   /\bmtk[-_]?isp\b/i,    // MediaTek ISP (drivers/media/platform/mediatek/isp)
   /\bmtk[-_]?cam\b/i,    // MediaTek camera (mtk-cam)
+  // Camera/V4L2-specific driver and uAPI tokens that carry no separate "V4L2"/"camera"
+  // literal, so \bV4L2\b and the descriptive patterns above miss them.
+  /\buvcvideo\b/i,       // USB Video Class camera driver (drivers/media/usb/uvc)
+  /\bvidioc_[a-z]/i,     // V4L2 VIDIOC_* userspace ioctl identifiers
   /\bDMA-?BUF\b[^.\n]{0,120}\b(?:camera|frame|image|buffer|pipeline)\b/i,
   /\b(?:camera|frame|image|buffer|pipeline)\b[^.\n]{0,120}\bDMA-?BUF\b/i,
   /\bvideo capture pipeline\b/i
