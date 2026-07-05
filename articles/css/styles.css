@@ -200,6 +200,7 @@ pre code {
   z-index: 20;
   border-bottom: 1px solid rgba(221, 227, 234, 0.82);
   background: rgba(244, 242, 236, 0.92);
+  -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
 }
 

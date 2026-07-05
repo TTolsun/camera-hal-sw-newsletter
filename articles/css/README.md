@@ -7,7 +7,6 @@
 | 파일 | 역할 |
 | --- | --- |
 | `styles.css` | 정적 사이트와 newsletter page의 기본 style입니다. |
-| `hero-override.css` | homepage hero 영역의 override(덮어쓰기) style입니다. |
 
 ## 작업 규칙
 
