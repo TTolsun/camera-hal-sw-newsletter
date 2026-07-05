@@ -5,6 +5,11 @@ name: Site 02 - Build & Deploy (GitHub Pages)
 # Pages Actions로 배포하므로 서빙 URL(/, /newsletters/..., /css/..., /assets/...,
 # /data/newsletters.json, /sitemap.xml, /robots.txt, /archive.html, /content/...)이 보존된다.
 #
+# build/deploy 2-job 분리: assemble+upload은 build에서 한 번만 수행하고 deploy는 그 아티팩트만
+# 배포한다. 그래서 GitHub Pages 백엔드 일시장애로 deploy가 실패해도 `rerun --failed`가 deploy
+# job만 다시 돌려 기존 아티팩트를 재사용한다 — 단일 job이 재-upload해 "github-pages" 아티팩트가
+# 2개가 되던(Multiple artifacts) footgun을 없앤다.
+#
 # NOTE: 이 워크플로는 운영자가 GitHub Pages source를 "GitHub Actions"로 전환한 뒤에만 발행한다.
 
 on:
@@ -26,11 +31,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -51,6 +53,13 @@ jobs:
         with:
           path: _site
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
