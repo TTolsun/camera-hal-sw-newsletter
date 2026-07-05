@@ -913,7 +913,7 @@ test('homepage shell stays wide while hero second line remains unwrapped', () =>
   assertCssDeclaration(nowrapTitle, 'white-space', 'nowrap');
   assertCssDeclaration(heroTitle, 'font-size', 'clamp(2rem, 4vw, 3.3rem)');
   assertCssDeclaration(heroPrimaryCta, 'border-color', '#0066cc');
-  assert.match(heroPrimaryCta, /background\s*:\s*linear-gradient\(135deg, #0066cc 0%, #0052a3 100%\)\s*;/);
+  assertCssDeclaration(heroPrimaryCta, 'background', '#0066cc');
   assertCssDeclaration(tabletHero, 'grid-template-columns', '1fr');
   assertCssDeclaration(tabletHero, 'gap', '18px');
   assertCssDeclaration(mobileHero, 'gap', '14px');
