@@ -887,7 +887,7 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   assertCssDeclaration(archivePagination, 'justify-content', 'center');
   assertCssDeclaration(archivePageButton, 'min-width', '42px');
   assertCssDeclaration(archivePageButton, 'border-radius', 'var(--radius-xs)');
-  assertCssDeclaration(archivePageCurrent, 'background', '#0f8f49');
+  assertCssDeclaration(archivePageCurrent, 'background', '#0066cc');
 });
 
 test('homepage shell stays wide while hero second line remains unwrapped', () => {
@@ -912,8 +912,8 @@ test('homepage shell stays wide while hero second line remains unwrapped', () =>
   assertCssDeclaration(hero, 'gap', 'clamp(40px, 5.5vw, 80px)');
   assertCssDeclaration(nowrapTitle, 'white-space', 'nowrap');
   assertCssDeclaration(heroTitle, 'font-size', 'clamp(2rem, 4vw, 3.3rem)');
-  assertCssDeclaration(heroPrimaryCta, 'border-color', '#0f8f49');
-  assert.match(heroPrimaryCta, /background\s*:\s*linear-gradient\(135deg, #0c9650 0%, #08783a 100%\)\s*;/);
+  assertCssDeclaration(heroPrimaryCta, 'border-color', '#0066cc');
+  assert.match(heroPrimaryCta, /background\s*:\s*linear-gradient\(135deg, #0066cc 0%, #0052a3 100%\)\s*;/);
   assertCssDeclaration(tabletHero, 'grid-template-columns', '1fr');
   assertCssDeclaration(tabletHero, 'gap', '18px');
   assertCssDeclaration(mobileHero, 'gap', '14px');
@@ -964,14 +964,14 @@ test('newsletter issue page CSS uses homepage shell with issue landing layout', 
   const issueCompactMascot = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.archive-hero-mascot,\n  .issue-hero-mascot');
   const issueCompactMascotImage = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.hero-mascot img,\n  .archive-hero-mascot img,\n  .issue-hero-mascot img');
 
-  assert.match(pageBackground, /radial-gradient\(circle at 50% -80px, rgba\(24, 128, 56, 0\.09\), transparent 34%\)/);
+  assert.match(pageBackground, /radial-gradient\(circle at 50% -80px, rgba\(0, 102, 204, 0\.09\), transparent 34%\)/);
   assertCssDeclaration(issueArticlePage, 'padding', '52px 0 0');
   assertCssDeclaration(issueWrap, 'width', 'min(100% - 48px, 1120px)');
   assertCssDeclaration(issueWrap, 'max-width', 'none');
   assertCssDeclaration(issueHero, 'grid-template-columns', 'minmax(0, 1.12fr) minmax(260px, 0.52fr)');
   assertCssDeclaration(issueHero, 'padding', '46px 0 42px');
   assertCssDeclaration(issueHeroGlow, 'width', 'min(38vw, 440px)');
-  assert.match(issueHeroGlow, /rgba\(24, 128, 56, 0\.12\)/);
+  assert.match(issueHeroGlow, /rgba\(0, 102, 204, 0\.12\)/);
   assert.doesNotMatch(css, /issue-actions|bottom-nav|newsletter-actions/);
   assertCssDeclaration(issueMascotContainer, 'transform', 'none');
   assertCssDeclaration(issueMascot, 'width', 'min(100%, clamp(260px, 32vw, 420px))');
