@@ -68,6 +68,8 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `articles/content/collected-news/YYYY-MM-DD/` 순수 디버그 파일 (파이프라인 입력 파일 제외):
   - `gemini-candidates.json`
 
+> **`editor-draft.{json,md}`는 리뷰 신뢰원(source of truth)이 아닙니다.** debug_heavy 등급이라 커밋되지 않으므로, 로컬 디스크에 남은 `editor-draft.{json,md}`는 커밋된 review artifact를 만든 run이 아니라 **리뷰어의 이전(로컬) `generate` run이 남긴 미커밋 잔재**일 수 있습니다(예: 위클리 incremental로 기사가 나중 run에 추가되면, 로컬 editor-draft는 기사가 더 적은 중간 상태만 담을 수 있음). 발행된 실제 내용을 리뷰할 때는 커밋되는 `review_required_compact` artifact(`newsletter.md`·`quality-report.{json,md}`·`retry-history.{json,md}`)를 신뢰원으로 보세요 — 이들은 한 run에서 함께 커밋되어 서로 일관됩니다. 같은 이유로 로컬 `validate:quality`가 stale editor-draft를 재채점해 거짓 stale을 낼 수 있는데(clean clone·CI에는 editor-draft가 없어 재현 안 됨), 로컬 `editor-draft.json`을 치우고 다시 실행하면 해소됩니다.
+
 ### transient_attempt (Actions + manifest만, 커밋 제외)
 
 - `*-attempt-*.{json,md}`, `*-repair-attempt-*`, `*-completion-attempt-*` 패턴 매칭 파일
