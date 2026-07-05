@@ -5,10 +5,11 @@
 const { resolveSecurityBulletinCveItems } = require('./security-bulletin-cve');
 const { resolveLibcameraReleaseAnnouncementItems } = require('./libcamera-release-announcements');
 const { resolveRaspberryPiLibcameraReleaseItems } = require('./raspberrypi-libcamera-releases');
+const { resolvePatchworkLibcameraPatchItems } = require('./patchwork-libcamera-patches');
 
 // 각 리졸버의 첫 인자가 다르다(security-bulletin은 indexItems, libcamera는 text/indexHtml,
-// raspberrypi는 text/atom). 그래서 레지스트리 항목이 공통 컨텍스트({ indexItems, text, source,
-// fetchTextImpl })를 받아 각자에게 맞는 위치 인자로 풀어 넘긴다.
+// raspberrypi는 text/atom, patchwork는 text/JSON). 그래서 레지스트리 항목이 공통 컨텍스트
+// ({ indexItems, text, source, fetchTextImpl })를 받아 각자에게 맞는 위치 인자로 풀어 넘긴다.
 const FOLLOWED_SOURCE_RESOLVERS = [
   {
     id: 'android-security-bulletin',
@@ -24,6 +25,11 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     id: 'raspberrypi-libcamera-releases',
     resolve: ({ text, source }) =>
       resolveRaspberryPiLibcameraReleaseItems(text, source)
+  },
+  {
+    id: 'patchwork-libcamera-patches',
+    resolve: ({ text, source }) =>
+      resolvePatchworkLibcameraPatchItems(text, source)
   }
 ];
 

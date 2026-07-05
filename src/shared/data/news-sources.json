@@ -2298,6 +2298,65 @@
       ]
     },
     {
+      "id": "patchwork-libcamera-patches",
+      "name": "libcamera Patchwork (patch review)",
+      "sourceUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
+      "rssUrl": null,
+      "collectionModeHint": "rss-source",
+      "category": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": true,
+      "usageHint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "patchwork.libcamera.org",
+          "libcamera.org",
+          "git.libcamera.org",
+          "lists.libcamera.org",
+          "lore.kernel.org"
+        ],
+        "importantAnchorKeywords": [
+          "patch",
+          "series",
+          "commit",
+          "mbox",
+          "review",
+          "comments"
+        ],
+        "ignoreAnchorKeywords": [
+          "subscribe",
+          "rss",
+          "atom",
+          "login",
+          "raw"
+        ]
+      },
+      "keywords": [
+        "libcamera",
+        "IPA",
+        "ISP",
+        "pipeline handler",
+        "pixel format",
+        "V4L2",
+        "camera sensor",
+        "metadata control",
+        "patch review"
+      ],
+      "sourceRole": "project_mailing_list_source",
+      "sourceUrlQualityHint": "project_mailing_list_release",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "libcamera patch-review lead source (patchwork.libcamera.org REST API, patch별 실제 date 노출)",
+        "개별 patch는 제안된 변경이라 main 승격 전 강한 기술 근거 또는 landed 소스 cross-check 필요"
+      ]
+    },
+    {
       "id": "kernel-org-releases",
       "name": "kernel.org Linux Releases",
       "sourceUrl": "https://www.kernel.org/",

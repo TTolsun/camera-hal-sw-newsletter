@@ -26,9 +26,14 @@ function securityIndexItems() {
 test('registers exactly the known followed-source resolver ids', () => {
   assert.deepEqual(
     followedSourceResolverIds().sort(),
-    ['android-security-bulletin', 'libcamera-release-announcements', 'raspberrypi-libcamera-releases']
+    [
+      'android-security-bulletin',
+      'libcamera-release-announcements',
+      'patchwork-libcamera-patches',
+      'raspberrypi-libcamera-releases'
+    ]
   );
-  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 3);
+  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 4);
 });
 
 test('routes raspberrypi-libcamera-releases to the release resolver with text (atom) as the first arg', async () => {
@@ -55,10 +60,33 @@ test('routes raspberrypi-libcamera-releases to the release resolver with text (a
   assert.equal(items[0].relevanceBucketHint, 'camera_driver_image_pipeline');
 });
 
+test('routes patchwork-libcamera-patches to the patch resolver with text (JSON) as the first arg', async () => {
+  const json = JSON.stringify([
+    {
+      web_url: 'https://patchwork.libcamera.org/patch/27198/',
+      date: '2026-07-03T22:48:16',
+      name: '[v2,1/2] libcamera: Add SensorSequence metadata control',
+      state: 'new'
+    }
+  ]);
+  let fetchCount = 0;
+  const items = await resolveFollowedSourceItems(
+    { id: 'patchwork-libcamera-patches', name: 'libcamera Patchwork (patch review)' },
+    { indexItems: [], text: json, fetchTextImpl: async () => { fetchCount += 1; return ''; } }
+  );
+
+  // 리졸버는 text(JSON)만 파싱하고 추가 fetch는 하지 않는다.
+  assert.equal(fetchCount, 0);
+  assert.equal(items.length, 1);
+  assert.equal(items[0].sourceKind, 'rss_item');
+  assert.equal(items[0].publishedAt, '2026-07-03');
+});
+
 test('shouldSuppressGenericFallback is true only for followed-resolver sources', () => {
   assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-release-announcements' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'android-security-bulletin' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'raspberrypi-libcamera-releases' }), true);
+  assert.equal(shouldSuppressGenericFallback({ id: 'patchwork-libcamera-patches' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'lore-linux-media-list' }), false);
   assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-blog' }), false);
 });
