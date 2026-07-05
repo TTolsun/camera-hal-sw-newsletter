@@ -18,8 +18,8 @@
   --shadow-md: 0 1px 3px rgba(15, 23, 42, 0.05);
   --shadow-lg: 0 4px 12px rgba(15, 23, 42, 0.06);
   --shadow: var(--shadow-md);
-  --radius-lg: 24px;
-  --radius-md: 18px;
+  --radius-lg: 18px;
+  --radius-md: 14px;
   --radius-sm: 12px;
   --radius-xs: 8px;
   --radius-pill: 999px;
@@ -87,13 +87,15 @@ h1 {
   margin-bottom: 22px;
   font-size: clamp(2.5rem, 6vw, 4.6rem);
   line-height: 1.04;
-  letter-spacing: 0;
+  /* Apple tight tracking을 아주 소폭만: 한글 Noto Sans KR 가독성을 해치지 않는 범위. */
+  letter-spacing: -0.01em;
 }
 
 h2 {
   margin-bottom: 0;
   font-size: clamp(1.5rem, 3vw, 2.1rem);
   line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 h3 {
