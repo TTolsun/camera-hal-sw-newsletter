@@ -10,11 +10,11 @@
     <circle cx="640" cy="370" r="50"/>
     <path d="M330 590h620"/>
   </g>
-  <g fill="#188038" opacity=".88">
+  <g fill="#0066cc" opacity=".88">
     <rect x="146" y="128" width="130" height="34" rx="17"/>
     <rect x="1004" y="558" width="130" height="34" rx="17"/>
   </g>
-  <g fill="#2563eb" opacity=".8">
+  <g fill="#0066cc" opacity=".8">
     <circle cx="190" cy="585" r="24"/>
     <circle cx="1090" cy="142" r="24"/>
   </g>
