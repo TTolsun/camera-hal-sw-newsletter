@@ -735,9 +735,7 @@ pre code {
   display: grid;
   gap: var(--space-4);
   border-color: rgba(0, 102, 204, 0.26);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(232, 241, 251, 0.68)),
-    var(--surface);
+  background: var(--surface);
   box-shadow: var(--shadow-lg);
   transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
@@ -801,7 +799,7 @@ pre code {
   padding: 0;
   border: 1px solid rgba(0, 102, 204, 0.28);
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(232, 241, 251, 0.74));
+  background: var(--surface);
   box-shadow: var(--shadow-lg);
 }
 
@@ -1137,9 +1135,7 @@ pre code {
   padding: 22px 24px;
   border: 1px solid rgba(0, 102, 204, 0.2);
   border-radius: var(--radius-md);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(244, 248, 252, 0.76)),
-    var(--surface);
+  background: var(--surface);
 }
 
 .subscribe-copy {
@@ -1260,9 +1256,7 @@ pre code {
   padding: var(--card-padding-md);
   border: 1px solid rgba(0, 102, 204, 0.22);
   border-radius: var(--radius-lg);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(232, 241, 251, 0.64)),
-    var(--surface);
+  background: var(--surface);
   box-shadow: var(--shadow-sm);
 }
 
@@ -1405,9 +1399,7 @@ pre code {
 
 .archive-page .archive-card:first-child {
   border-color: rgba(0, 102, 204, 0.32);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(232, 241, 251, 0.7)),
-    var(--surface);
+  background: var(--surface);
   box-shadow: var(--shadow-lg);
 }
 
