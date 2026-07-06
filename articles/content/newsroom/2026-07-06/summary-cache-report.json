@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "date": "2026-07-06",
+  "generated_at": "2026-07-06T03:59:58.214Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 5,
+    "hit_count": 0,
+    "miss_count": 5,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 5
+    }
+  ],
+  "entries": [
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "source": "CameraX Release Notes",
+      "published_date": "July 01, 2026",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+        "url_hash": "6cc3115222373933c0df10c8df24e6dbd7043ec79d598384cff10acbc94317cd",
+        "published_date": "July 01, 2026",
+        "content_hash": "ea40ebeca5e06f185008196ef0490877c0c4a4c3739015d5985d87b3d53b0007"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[v2,1/2] libcamera: Add SensorSequence metadata control",
+      "url": "https://patchwork.libcamera.org/patch/27198/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-07-03",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27198",
+        "url_hash": "bb8e14bc83a41f470594fb3f6c05c49f1914c9d45400c99feab556e5dc779255",
+        "published_date": "2026-07-03",
+        "content_hash": "aa678247b9ad04131f3dbf3f18afcdc25c1ffda6020ce929dd767021525fb609"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "CameraX | Jetpack | Android Developers",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "source": "androidx-camerax-release-notes",
+      "published_date": "",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+        "url_hash": "49d58944bd3ca26fc6929250597a6e3ac743d90f600cd01698fcbefbe1b6c83f",
+        "published_date": "",
+        "content_hash": "f4ebd60db3e34af0e2f1322b4d7816c5d6b007e94f96c41bca406e17682967ac"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2] media: dw2102: Fix a buffer overflow",
+      "url": "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-05T14:46:14Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org",
+        "url_hash": "cee358be237afa485891cf3c73a522a30c629d5af81fc4be9ce60b969c3588bb",
+        "published_date": "2026-07-05T14:46:14Z",
+        "content_hash": "52c3fb18b7f739a8ac58c8e756c2bf77b84aee6ee68596b9537151d1da23362c"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH] media: dw2102: Fix a buffer overflow - Maksim Pinigin",
+      "url": "https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-05",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org",
+        "url_hash": "5de22bc8f6cf11837836ad8d92121b279100cf5f121fc3930ea70d2be3ef1bf9",
+        "published_date": "2026-07-05",
+        "content_hash": "e007993955855c2028017ff615d163d8ac37502544e9e4cf32dae467f1c6214b"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}
