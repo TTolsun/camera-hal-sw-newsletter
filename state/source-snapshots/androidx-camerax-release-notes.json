@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "androidx-camerax-release-notes",
-  "updated_at": "2026-06-29T00:00:00.000Z",
+  "updated_at": "2026-07-06T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "androidx-camerax-release-notes:49d58944bd3ca26fc6929250597a6e3a",
@@ -13,9 +13,9 @@
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-06-17",
-      "content_hash": "d67790e1e00d1598e4edc3efea97b7eb51ad2cb73dd54a321d0e7eee3df3eddc",
-      "normalized_content_hash": "464f1d37d462b2a170fafb6683a91bd5ed29b8f8ce382cbc1c748b70009d2d28",
+      "http_last_modified": "2026-07-01",
+      "content_hash": "9cbc8b33090f725bd6d7c5dd7a149f4534d9d7a865531fc9ca07b14797549869",
+      "normalized_content_hash": "b0bc42c4832c6ff7ee1f536246f97c722de46c138a206ee6f9f8485c78c19ae4",
       "anchors": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha01",
@@ -118,6 +118,7 @@
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-rc01",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
         "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha07",
         "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha08",
         "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha09",
@@ -946,6 +947,13 @@
           "title": "Version 1.7.0-alpha01"
         },
         {
+          "version": "1.7.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "date": "2026-07-01",
+          "hash": "db9437f7e4805c8d2f3da77855f1a871",
+          "title": "Version 1.7.0-alpha02"
+        },
+        {
           "version": "1.1.0",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2_camera-core_camera-lifecycle_camera-video_version_110_2",
           "date": "",
@@ -1536,8 +1544,8 @@
         {
           "version": "1.0.0-alpha01",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
-          "date": "2026-06-17",
-          "hash": "040d2d1bcb62aec629ce64c53e8440ff",
+          "date": "2026-07-01",
+          "hash": "e25bfee0555cf529aa00d95039d8c878",
           "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha01"
         },
         {
@@ -1576,17 +1584,17 @@
           "title": "Version 1.0.0-alpha28"
         },
         {
-          "version": "1.7.0-alpha01",
+          "version": "1.7.0-alpha02",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#groovy",
           "date": "",
-          "hash": "6910c556f7b98df0100b8efed31cba55",
+          "hash": "a1b65af737bae98586390a66fb5a61e8",
           "title": "Groovy"
         },
         {
-          "version": "1.7.0-alpha01",
+          "version": "1.7.0-alpha02",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#kts",
           "date": "",
-          "hash": "9476721dcd080c3856d06323b6b7b900",
+          "hash": "6328599e126bc670ec1a372a447faef0",
           "title": "Kotlin"
         },
         {
@@ -1633,19 +1641,21 @@
         }
       ],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-06-29T00:00:00.000Z",
-      "seen_count": 94,
+      "last_seen_at": "2026-07-06T00:00:00.000Z",
+      "seen_count": 95,
       "status": 200
     }
   ],
   "processed_source_event_ids": [
     "source-event-a593b0187b96e7638fe4af9fb327f9f8",
     "source-event-3616a9f0c9e81670bcd09140c52b6f04",
-    "source-event-aafc952ea6e65f65d2cbacbfa9ee38c8"
+    "source-event-aafc952ea6e65f65d2cbacbfa9ee38c8",
+    "source-event-da02771cf7d01aa9856b8802b7959b95"
   ],
   "processed_evidence_ids": [
     "evidence-d134d45807b498f036b07fa3d599ac42",
     "evidence-ac4c255a57a844d0e96a9da7336ad513",
-    "evidence-64bd9749c37789e74a4690ca8c029bfa"
+    "evidence-64bd9749c37789e74a4690ca8c029bfa",
+    "evidence-e3847bbdd6a264f2cec103284d7e1ce3"
   ]
 }
