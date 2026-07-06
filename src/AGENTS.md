@@ -42,6 +42,7 @@
 - CommonJS `require`, 2칸 들여쓰기, 세미콜론, Node 20 compatibility를 유지합니다.
 - prompt-only logic으로 **safety** deterministic validation(source binding, fact-check must_fix, claim evidence_id, required fields, composition, stale claim, duplicate URL)을 대체하지 마세요. 단, **editorial 품질/깊이 판정**은 fact-checker(LLM)의 `article_quality[]` verdict("Camera HAL SW 엔지니어에게의 유용성", 주제 무관)가 담당하며 deterministic topic/depth heuristic으로 gate하지 않습니다.
 - safety hard blocker, source integrity check, image fallback contract, fact-checker usefulness verdict gate를 약화하지 마세요. publish gate는 numeric threshold가 아니라 (안전 검사 통과) AND (모든 기사 publishable)의 boolean입니다.
+- **coverage 권한 경계(#724):** 발행가능 main *자격*(source-binding/evidence/freshness/cap/floor/forbidden bucket)은 deterministic code가 결정합니다. 그 결정론적으로 허용된 봉투 *안에서* coverage 등급(main/short/reference/exclude) 재배치만 LLM editorial-plan이 *제안*하고, deterministic reconciler(`select/coverage-reconciliation.js`)가 승급 자격 가드·cap clamp·발행 floor backfill을 강제합니다. 이 권한은 `NEWSROOM_LLM_COVERAGE_AUTHORITY`(default OFF) 뒤에 있으며, 프로덕션 ON/OFF A/B 검증 전에는 OFF입니다. reconciler는 hard blocker를 우회하지 않으며, LLM은 뉴스레터를 발행불가로 만들 수 없습니다.
 - generated artifact path를 바꿀 때는 workflow, docs, tests를 함께 갱신해야 합니다.
 - 일시적인 실험, 재현, probe, local 분석용 script는 `src/` 아래에 남기지 않습니다. 영구 script가 필요하면 유지보수 가능한 CLI/tool로 범위와 검증을 명확히 합니다. `npm.cmd run check:repo-hygiene`가 `src/` 아래 one-off script와 misplaced test file을 검출합니다.
 
