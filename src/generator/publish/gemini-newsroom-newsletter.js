@@ -323,6 +323,9 @@ const {
 const {
   buildEditorialPlanReport
 } = require('./orchestrator-editorial-plan-stage');
+const {
+  reconcileCoverage
+} = require('../select/coverage-reconciliation');
 
 // attempt loop 안의 repair 패스 + completion 패스(editor + fact-check 단계 직후)는
 // orchestrator-repair-completion.js로 분리했다(#655). 두 패스는 main()을 reviewable
@@ -474,13 +477,38 @@ async function main() {
     // #700: editorial plan(전용 LLM 호출, 필수 단계). 실패/빈 결과면 throw해서 editor 등 뒤 단계
     // 비용을 들이기 전에 파이프라인을 멈춘다. 성공하면 항상 유효한 plan이라 artifact를 기록하고
     // editor 작성을 안내한다.
+    const coverageAuthority = runtimeConfig.newsroomLlmCoverageAuthority;
     const editorialPlanReport = await buildEditorialPlanReport({
       date,
       articleCapsuleReport,
       commonContext,
-      stage: `editorial-plan attempt ${attempt}/${totalAttempts}`
+      stage: `editorial-plan attempt ${attempt}/${totalAttempts}`,
+      coverageAuthority
     });
     writeJson(path.join(newsroomDir, 'editorial-plan.json'), editorialPlanReport);
+    // #724: LLM coverage 등급을 결정론 재조정으로 main-set에 반영한다. 재조정 입력은 항상
+    // pristine 결정론 baseline(primary_selected_articles)이라 attempt 재시도에도 누적되지
+    // 않는다. flag OFF면 shortlistReport/capsule을 건드리지 않아 현행과 완전히 동일하다.
+    const deterministicSelectedBaseline = ensureArray(shortlistReport.primary_selected_articles).length > 0
+      ? shortlistReport.primary_selected_articles
+      : shortlistReport.selected_articles;
+    const coverageReconciliation = reconcileCoverage({
+      shortlistReport: {
+        selected_articles: deterministicSelectedBaseline,
+        reserve_candidates: shortlistReport.reserve_candidates
+      },
+      editorialPlanReport,
+      enabled: coverageAuthority
+    });
+    writeJson(path.join(newsroomDir, 'coverage-reconciliation.json'), coverageReconciliation.diff);
+    if (coverageAuthority) {
+      shortlistReport.selected_articles = coverageReconciliation.selected;
+      generationRunState.selectedInputs = shortlistReport.selected_articles;
+      articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates }, {
+        seedEvidencePack
+      });
+      writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
+    }
     for (const candidate of ensureArray(reporter.candidates)) {
       writeCacheRecord(candidate, cacheDir, { stage: reporterStage, model: getLlmModelUsage(reporterStage) || 'unknown' });
     }
