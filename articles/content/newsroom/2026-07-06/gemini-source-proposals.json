@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-07-06",
+  "proposals": [
+    {
+      "proposal_id": "P001",
+      "topic_gap": "Recent advancements in Camera HAL SW for Android, focusing on new features, performance improvements, and bug fixes.",
+      "source_family": "Official Android media/camera-output discovery intent",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX release notes",
+        "Android camera HAL updates",
+        "Camera2 API changes"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+        "https://developer.android.com/jetpack/androidx/releases/camera"
+      ],
+      "expected_evidence": [
+        "CameraX release notes detailing specific changes, bug fixes, or new features relevant to camera HAL.",
+        "General CameraX documentation that might include updates or new APIs related to camera pipeline."
+      ],
+      "risk_notes": [
+        "The provided URL for CameraX 1.7.0-alpha02 is an alpha release, which might not reflect stable production features.",
+        "The general CameraX release notes page might not always contain item-level dated evidence for every change."
+      ]
+    },
+    {
+      "proposal_id": "P002",
+      "topic_gap": "Low-level camera driver and media pipeline improvements in the Linux kernel that could impact Android camera HAL.",
+      "source_family": "Official Android media/camera-output discovery intent",
+      "allowed_domains": [
+        "lore.kernel.org",
+        "patchwork.libcamera.org"
+      ],
+      "search_keywords": [
+        "linux kernel camera driver",
+        "V4L2 changes",
+        "libcamera patches",
+        "media controller updates",
+        "dw2102 driver fix"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/",
+        "https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org/",
+        "https://patchwork.libcamera.org/patch/27198/"
+      ],
+      "expected_evidence": [
+        "Kernel patches addressing buffer overflows or other critical issues in media drivers (e.g., dw2102).",
+        "libcamera patches related to metadata controls or sensor sequence handling that could affect camera pipeline.",
+        "Specific kernel commits that fix bugs or introduce new capabilities relevant to camera hardware abstraction."
+      ],
+      "risk_notes": [
+        "Kernel mailing lists and patchwork sites contain raw development information, requiring careful filtering for relevance and impact on Android.",
+        "Some patches might be very low-level and not directly translatable to user-facing features or HAL changes.",
+        "The dates of the patches (July 5th, 2026) are very close to the newsletter date, indicating potential for last-minute inclusion."
+      ]
+    },
+    {
+      "proposal_id": "P003",
+      "topic_gap": "Updates and new capabilities in the libcamera framework relevant to Android camera development.",
+      "source_family": "Official Android media/camera-output discovery intent",
+      "allowed_domains": [
+        "github.com"
+      ],
+      "search_keywords": [
+        "libcamera release notes",
+        "Raspberry Pi libcamera updates",
+        "camera pipeline framework"
+      ],
+      "candidate_urls": [
+        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+      ],
+      "expected_evidence": [
+        "Release notes or changelogs for libcamera, specifically mentioning new features, bug fixes, or improvements relevant to camera pipelines or sensor integration.",
+        "Evidence of updates to the libcamera framework that could be adopted or integrated into Android's camera stack."
+      ],
+      "risk_notes": [
+        "The provided URL is a Raspberry Pi specific release, which might not be directly representative of broader libcamera developments relevant to Android.",
+        "Release notes might be too high-level and lack specific technical details about HAL interactions."
+      ]
+    },
+    {
+      "proposal_id": "P004",
+      "topic_gap": "Advancements in HDR video processing and display technologies that impact camera output quality on Android.",
+      "source_family": "Official Android media/camera-output discovery intent",
+      "allowed_domains": [
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android HDR video",
+        "Eclipsa video technology",
+        "camera HDR capture",
+        "display P3",
+        "Dolby Vision on Android"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html"
+      ],
+      "expected_evidence": [
+        "Technical details or reviews of new HDR video technologies (like Eclipsa) and their implementation or benefits on Android devices.",
+        "Information on how these technologies affect camera-generated video output and playback.",
+        "Discussions on challenges and solutions for achieving accurate HDR rendering across different displays."
+      ],
+      "risk_notes": [
+        "The article is a review from June 2026, which might be slightly dated for a July 2026 newsletter, but could still be relevant if it covers foundational concepts.",
+        "The focus might be more on playback and display than on camera capture HAL, requiring careful extraction of relevant camera-output aspects."
+      ]
+    }
+  ]
+}

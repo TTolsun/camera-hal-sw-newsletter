@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "77edb777a54540a2",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "published_at": "July 01, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CameraXViewfinder now supports built-in gestures for pinch-to-zoom and tap-to-focus, and adds support for screen flash and stream state. FocusState is now public in viewfinder-core to allow monitoring tap-to-focus results. ( I66a17 , b/522549890 )",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"tr-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.849,
+      "warnings": []
+    },
+    {
+      "id": "gemini-7e7b1d6e2f31bf74",
+      "url": "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/",
+      "title": "[PATCH v2] media: dw2102: Fix a buffer overflow - Maksim Pinigin",
+      "published_at": "2026-07-05",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v2] media: dw2102: Fix a buffer overflow - Maksim Pinigin",
+          "evidence_text": "<html><head><title>[PATCH v2] media: dw2102: Fix a buffer overflow - Maksim Pinigin</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216dar",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-b993edc9fe86c11a",
+      "url": "https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org/",
+      "title": "[PATCH] media: dw2102: Fix a buffer overflow - Maksim Pinigin",
+      "published_at": "2026-07-05",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH] media: dw2102: Fix a buffer overflow - Maksim Pinigin",
+          "evidence_text": "<html><head><title>[PATCH] media: dw2102: Fix a buffer overflow - Maksim Pinigin</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216dark.c",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "5c4928076a2f076d",
+      "url": "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/",
+      "title": "[PATCH v2] media: dw2102: Fix a buffer overflow",
+      "published_at": "2026-07-05T14:46:14Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This bug in dw2102_load_firmware() function appears only when building the kernel via LLVM+Clang. Due to reading of 64 bytes chunk, it may happen that there will be an attempt to read a more bytes in chunk than there is left, which is why Kernel oops occurs. At least this bug happens when downloading the firmware for Prof Revolution DVB-S2 7500 USB. Signed-off-by: Maksim Pinigin --- Changes in v2: - Fix patch syntax drivers/media/usb/dvb-usb/dw2102.c | 2 +- 1 file changed , 1 insertion(+), 1 del",
+          "evidence_text": "<html><head><title>[PATCH v2] media: dw2102: Fix a buffer overflow - Maksim Pinigin</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216dar",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0,
+      "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "a37dca9371168236",
+      "url": "https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org/",
+      "title": "[PATCH] media: dw2102: Fix a buffer overflow",
+      "published_at": "2026-07-05T12:41:08Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This bug in dw2102_load_firmware() function appears only when building the kernel via LLVM+Clang. Due to reading of 64 bytes chunk, it may happen that there will be an attempt to read a more bytes in chunk than there is left, which is why Kernel oops occurs. At least this bug happens when downloading the firmware for Prof Revolution DVB-S2 7500 USB. Signed-off-by: Maksim Pinigin --- drivers/media/usb/dvb-usb/dw2102.c | 2 +- 1 file changed, 1 insertion(+), 1 deletion(-) diff --git a/drivers/media",
+          "evidence_text": "<html><head><title>[PATCH] media: dw2102: Fix a buffer overflow - Maksim Pinigin</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216dark.c",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0,
+      "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "ac8fd7268a56f563",
+      "url": "https://patchwork.libcamera.org/patch/27198/",
+      "title": "[v2,1/2] libcamera: Add SensorSequence metadata control",
+      "published_at": "2026-07-03",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Bruce Allen); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v2,1/2] libcamera: Add SensorSequence metadata control - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css\"/",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "be08fd39a8fec72f",
+      "url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "title": "Eclipsa Video: HDR That Looks Right on Every Screen",
+      "published_at": "Mon, 29 Jun 2026 20:00:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Tibian Elsheikh, Product Manager, Android Core Graphics and Jeffrey Jose, Product Manager, Android Core Graphics We’ve all been there: You’re scrolling through your favorite social media feed in a dim room, and suddenly an HDR video pops up. It’s so intensely bright that you have to squint, or maybe you find yourself turning down your screen brightness just to read the caption. Other times, a video that looks vibrant on your phone looks flat, dark, or washed out when you watch it on yo",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.6,
+      "android_hal_relevance": 0.6,
+      "ai_relevance": 0,
+      "technical_depth": 0.552,
+      "warnings": []
+    },
+    {
+      "id": "gemini-3d49be2669b59306",
+      "url": "https://patchwork.libcamera.org/patch/27198/",
+      "title": "[v2,1/2] libcamera: Add SensorSequence metadata control - Patchwork",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[v2,1/2] libcamera: Add SensorSequence metadata control - Patchwork",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v2,1/2] libcamera: Add SensorSequence metadata control - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css\"/",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.545,
+      "warnings": []
+    },
+    {
+      "id": "gemini-b09ca66144996dac",
+      "url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "title": "Android Developers Blog: Eclipsa Video: HDR That Looks Right on Every Screen",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Developers Blog: Eclipsa Video: HDR That Looks Right on Every Screen",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.492,
+      "warnings": []
+    },
+    {
+      "id": "1dbe1c628b26e5d5",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "published_at": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "source_type": "roundup_child",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "We’ve shipped a fresh new batch of skills, with now more than 17 skills for areas such as: Adaptive UI Display Glasses and Jetpack Compose Glimmer for XR Migration to CameraX Perfetto SQL and Trace Analysis Jetpack Compose Styles API AppFunctions Verified email retrieval with Android Credential Manager Engage SDK integration Testing setup Wear OS Jetpack Compose Material3 Android skills keep growing You can browse skills and install using the Android CLI commands: android skills list android ski",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"id-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
+      "warnings": []
+    },
+    {
+      "id": "9b460337b26c1fbb",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "published_at": "Tue, 02 Jun 2026 17:00:00 +0000",
+      "source_type": "roundup_child",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "By leveraging Jetpack CameraX and Media3, you can build professional-grade experiences that feel native across the entire ecosystem.&nbsp; It starts with high-fidelity capture using the CameraXViewfinder Composable, which ensures your preview remains perfectly scaled and responsive on any form factor, including foldables and tablets.",
+          "evidence_text": "<!DOCTYPE html><html style=\"font-size: 62.5%;font-family: Roboto, Arial, sans-serif;\" lang=\"en\" darker-dark-theme darker-dark-theme-deprecate system-icons color-version=\"v2_0\" typography typography-spacing><head><script data-id=\"_gd\" nonce=\"H3JxRllKCIhflmOi7rTGGA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"FL1an\":false,\"HiPsbb\":0,\"MUE6Ne\":\"youtube_web\",\"MuJWjd\":false,\"UUFaWc\":\"%.@.null,1000,2]\",\"cfb2h\":\"youtube.web-front-end-critical_20260630.07_p0\",\"fPDxwd\":[],\"hsFLT\":\"%.@.null,10,3]\",\"iCzhFc\":f",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
+      "warnings": []
+    },
+    {
+      "id": "bacf2dfd798c4a0d",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "title": "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609",
+      "published_at": "2026-06-09",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Released v0.7.1+rpt20260609 (Raspberry Pi downstream libcamera).",
+          "evidence_text": "<!DOCTYPE html>\n<html\n  lang=\"en\"\n  \n  data-color-mode=\"auto\" data-light-theme=\"light\" data-dark-theme=\"dark\"\n  data-a11y-animated-images=\"system\" data-a11y-link-underlines=\"true\"\n  \n  >\n\n\n\n\n  <head>\n    <meta charset=\"utf-8\">\n  <link rel=\"dns-prefetch\" href=\"https://github.githubassets.com\">\n  <link rel=\"dns-prefetch\" href=\"https://avatars.githubusercontent.com\">\n  <link rel=\"dns-prefetch\" href=\"https://github-cloud.s3.amazonaws.com\">\n  <link rel=\"dns-prefetch\" href=\"https://user-images.githubu",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.81,
+      "android_hal_relevance": 0.81,
+      "ai_relevance": 0,
+      "technical_depth": 0.804,
+      "warnings": []
+    }
+  ]
+}

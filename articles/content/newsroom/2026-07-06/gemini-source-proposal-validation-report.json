@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-07-06",
+  "validations": [
+    {
+      "proposal_id": "P001",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "P001",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "P002",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "P002",
+      "candidate_url": "https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org/",
+      "normalized_url": "https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "P002",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27198/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27198/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "P003",
+      "candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "normalized_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "raspberrypi-libcamera-releases",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "raspberrypi-libcamera-releases",
+      "suggested_fixture_case": "Add a parser regression fixture for the discovered release-note source.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "P004",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    }
+  ],
+  "counts": {
+    "discovered_not_extractable": 3,
+    "accepted": 4
+  }
+}
