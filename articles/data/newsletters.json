@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-07-06",
+    "title": "Camera HAL / SW Newsletter - 2026-07-06",
+    "summary": "이번 주 뉴스레터에서는 CameraX 1.7.0-alpha02 릴리스를 통한 GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입 소식을 다룹니다. 또한 libcamera의 SensorSequence 메타데이터 제어 패치 제안과 LLVM/Clang 빌드 환경에서 발생하는 미디어 드라이버 버퍼 오버플로우 수정 패치를 분석하여 하위 드라이버 스택 및 빌드 툴체인 변화가 카메라 시스템 안정성에 미치는 영향을 살펴봅니다.",
+    "html": "newsletters/2026-07-06/index.html",
+    "md": "newsletters/2026-07-06/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-06-29",
     "title": "Camera HAL / SW Newsletter - 2026-06-29",
     "summary": "이번 주 뉴스레터에서는 Linux 커널 V4L2 서브디바이스 패드 작업(pad ops)에 v4l2_subdev_client_info 포인터를 추가하는 제안과 관련 드라이버 코드의 컴파일러 경고를 다룹니다. 하위 드라이버 스택의 변화가 카메라 드라이버 및 이미지 파이프라인 통합에 미치는 영향과 코드 품질 관리의 중요성을 분석합니다.",

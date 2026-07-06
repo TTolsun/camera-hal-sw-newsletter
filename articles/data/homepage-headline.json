@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-06-29T00:00:00+09:00",
+  "updated_at": "2026-07-06T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com",
-    "title": "V4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락",
-    "summary": "Linux 커널의 V4L2 드라이버 개발 브랜치인 sailus-media-tree에서 빌드 중 cvs_csi_set_fmt 함수의 파라미터 설명이 누락되어 컴파일러 경고가 발생한 것으로 확인되었습니다.",
-    "source_url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/",
-    "newsletter_date": "2026-06-29",
-    "newsletter_url": "newsletters/2026-06-29/index.html",
-    "selected_at": "2026-06-29",
+    "article_identity_key": "url:https://patchwork.libcamera.org/patch/27198",
+    "title": "libcamera, 센서 프레임 추적을 위한 SensorSequence 메타데이터 컨트롤 패치 제안",
+    "summary": "2026년 7월 3일 제안된 libcamera 패치 v2에서는 센서 프레임 시퀀스를 정밀하게 제어하고 추적하기 위한 SensorSequence 메타데이터 컨트롤 추가가 논의되고 있습니다.",
+    "source_url": "https://patchwork.libcamera.org/patch/27198/",
+    "newsletter_date": "2026-07-06",
+    "newsletter_url": "newsletters/2026-07-06/index.html",
+    "selected_at": "2026-07-06",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-06-29",
+    "last_scored_at": "2026-07-06",
     "date_evidence": {
-      "date": "2026-06-29T02:11:57Z",
+      "date": "2026-07-03",
       "date_field": "published_date",
       "evidence_level": "watch",
       "publish_ready_date_evidence": true
@@ -38,13 +38,58 @@
     },
     "snapshot": {
       "category": "camera_driver_image_pipeline",
-      "source_name": "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'"
+      "source_name": "[v2,1/2] libcamera: Add SensorSequence metadata control"
     },
-    "newsletter_article_url": "newsletters/2026-06-29/index.html#article-v4l2-cvs-csi-set-fmt",
+    "newsletter_article_url": "newsletters/2026-07-06/index.html#article-libcamera-sensorsequence",
     "image_url": "assets/images/fallback/newsletter-default.svg",
-    "image_alt": "V4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락 image"
+    "image_alt": "libcamera, 센서 프레임 추적을 위한 SensorSequence 메타데이터 컨트롤 패치 제안 image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com",
+      "title": "V4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락",
+      "summary": "Linux 커널의 V4L2 드라이버 개발 브랜치인 sailus-media-tree에서 빌드 중 cvs_csi_set_fmt 함수의 파라미터 설명이 누락되어 컴파일러 경고가 발생한 것으로 확인되었습니다.",
+      "source_url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/",
+      "newsletter_date": "2026-06-29",
+      "newsletter_url": "newsletters/2026-06-29/index.html",
+      "selected_at": "2026-06-29",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-06-29",
+      "date_evidence": {
+        "date": "2026-06-29T02:11:57Z",
+        "date_field": "published_date",
+        "evidence_level": "watch",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 3,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "camera_driver_image_pipeline",
+        "source_name": "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'"
+      },
+      "newsletter_article_url": "newsletters/2026-06-29/index.html#article-v4l2-cvs-csi-set-fmt",
+      "image_url": "assets/images/fallback/newsletter-default.svg",
+      "image_alt": "V4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락 image",
+      "replaced_at": "2026-07-06",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://developer.android.com/tools/agents/android-cli",
       "title": "Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장",

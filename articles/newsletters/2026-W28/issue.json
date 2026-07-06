@@ -1,0 +1,792 @@
+{
+  "date": "2026-07-06",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "2026 W28 (07.06 ~ 07.12)",
+  "summary": "이번 주에는 ‘CameraX 1.7.0-alpha02 발표: GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입’, ‘libcamera, 센서 프레임 추적을 위한 SensorSequence 메타데이터 컨트롤 패치 제안’ 등 3건의 소식을 다룹니다.",
+  "briefing": [
+    "CameraX 1.7.0-alpha02 발표: GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입",
+    "libcamera, 센서 프레임 추적을 위한 SensorSequence 메타데이터 컨트롤 패치 제안",
+    "LLVM/Clang 빌드 환경에서 발생하는 미디어 드라이버 버퍼 오버플로우 수정 패치 분석"
+  ],
+  "sections": [
+    {
+      "category": "direct_aosp_camera",
+      "headline": "CameraX 1.7.0-alpha02 공개: GPU 기반 이미지 분석 및 야간 모드 상태 모니터링 API 도입",
+      "what_changed": "CameraX 1.7.0-alpha02 릴리스(2026년 7월 1일)에서 ImageAnalysis.OUTPUT_IMAGE_FORMAT_PRIVATE 및 ImageProxy.getHardwareBuffer()가 공개 API로 노출되어 GPU 기반 이미지 분석이 지원됩니다. 또한 CameraInfo에 야간 모드 진입 여부를 판단할 수 있는 isNightModeIndicatorSupported() 및 getNightModeIndicator() API가 추가되었습니다.",
+      "confirmed_facts": [
+        "2026년 7월 1일 CameraX 1.7.0-alpha02 버전이 출시되었습니다.",
+        "ImageAnalysis.OUTPUT_IMAGE_FORMAT_PRIVATE 및 ImageProxy.getHardwareBuffer()가 GPU 기반 이미지 분석 지원을 위해 공개 API로 노출되었습니다.",
+        "CameraInfo 및 CameraExtensionsInfo에 야간 모드 상태를 모니터링할 수 있는 isNightModeIndicatorSupported() 및 getNightModeIndicator() API가 추가되었습니다.",
+        "CameraXViewfinder가 핀치 투 줌, 탭 투 포커스 내스처 및 화면 플래시, 스트림 상태를 지원합니다.",
+        "SessionConfig.Builder 등에 isAutoRotationEnabled가 추가되었습니다."
+      ],
+      "evidence_summary": "CameraX 1.7.0-alpha02 릴리스 노트를 통해 GPU 기반 이미지 분석을 위한 하드웨어 버퍼 노출, 야간 모드 인디케이터 API 추가, 그리고 뷰파인더 제스처 및 스트림 상태 지원이 공식 확인되었습니다.",
+      "specificity_checks": [
+        "Version: CameraX 1.7.0-alpha02",
+        "Release Date: 2026년 7월 1일",
+        "API/Component: CameraX / androidx.camera",
+        "Behavior Change: GPU 기반 이미지 분석을 위한 PRIVATE 포맷 및 HardwareBuffer 노출, 야간 모드 인디케이터 API 추가"
+      ],
+      "source_verification_notes": [
+        "구글 공식 AndroidX 릴리스 노트를 기반으로 작성되었으며, API 변경 사항과 버그 수정 내역이 명확히 명시되어 있습니다."
+      ],
+      "public_article": {
+        "headline": "CameraX 1.7.0-alpha02 발표: GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입",
+        "lead": "2026년 7월 1일 공개된 CameraX 1.7.0-alpha02 릴리스에서는 GPU 기반 이미지 분석을 지원하기 위한 하드웨어 버퍼 노출과 야간 모드 상태를 감지할 수 있는 신규 API가 대거 추가되었습니다.",
+        "body_paragraphs": [
+          "AndroidX CameraX 라이브러리의 최신 알파 버전인 1.7.0-alpha02가 2026년 7월 1일 공식 출시되었습니다. 이번 업데이트의 가장 핵심적인 변화는 GPU 기반의 고성능 이미지 분석을 지원하기 위해 ImageAnalysis.OUTPUT_IMAGE_FORMAT_PRIVATE 포맷과 ImageProxy.getHardwareBuffer()를 공개 API로 노출한 점입니다. 이를 통해 앱 개발자들은 CPU 메모리 복사 과정을 거치지 않고 GPU 파이프라인에서 직접 카메라 프레임에 접근할 수 있어 이미지 처리 효율을 극대화할 수 있게 되었습니다.",
+          "또한, 조도 및 환경 조건을 분석하여 야간 모드 진입 기준을 충족하는지 판단할 수 있는 야간 모드 인디케이터 API가 새롭게 도입되었습니다. CameraInfo 및 CameraExtensionsInfo 클래스에 추가된 isNightModeIndicatorSupported() 및 getNightModeIndicator() 메서드를 통해 애플리케이션은 현재 환경이 야간 모드에 적합한 상태인지 실시간으로 모니터링하고 UI에 반영할 수 있습니다.",
+          "그 외에도 CameraXViewfinder 컴포넌트에 핀치 투 줌 및 탭 투 포커스를 위한 내장 제스처 지원이 추가되었으며, 화면 플래시 및 스트림 상태 제어 기능이 보강되었습니다. SessionConfig.Builder에는 기기 센서 데이터를 기반으로 적절한 회전 값을 자동으로 설정해 주는 isAutoRotationEnabled 속성이 추가되어 다양한 폼팩터 기기에서의 호환성이 개선되었습니다."
+        ],
+        "camera_hal_takeaway": "직접적인 HAL 변경은 없으나, 앱이 PRIVATE 스트림을 통해 GPU 분석을 수행하므로 버퍼 할당 및 획득 지연 시간 검증이 필요합니다. 또한 야간 모드 인디케이터 API는 HAL의 AE 모드 및 벤더 확장 메타데이터 상태와 연동되므로 정확한 메타데이터 전달 여부를 확인해야 합니다.",
+        "reader_checkpoints": [
+          "ImageAnalysis.OUTPUT_IMAGE_FORMAT_PRIVATE 스트림 구성 시 HAL 수준에서 프레임 드롭 및 지연 시간이 발생하는지 측정하십시오.",
+          "야간 모드 조건에서 HAL 메타데이터가 프레임워크를 거쳐 CameraInfo API로 누락 없이 전달되는지 검증하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "AndroidX CameraX 1.7.0-alpha02 Release Notes",
+        "editorial_story": {
+          "reader_scenario": "새로운 GPU 기반 이미지 분석 기능을 적용한 카메라 앱에서 프레임 드롭이 발생하여 원인을 분석해야 하는 상황",
+          "what_happened": "CameraX 1.7.0-alpha02에서 GPU 이미지 분석을 위한 하드웨어 버퍼 API 및 야간 모드 인디케이터 API가 추가되었습니다.",
+          "why_it_matters": "앱이 하드웨어 버퍼에 직접 접근함에 따라 HAL의 PRIVATE 스트림 버퍼 처리 성능이 앱의 전체 프레임 레이트에 직접적인 영향을 미치게 됩니다.",
+          "field_scenario": "ImageAnalysis 스트림을 PRIVATE 포맷으로 설정하고 GPU 파이프라인에서 하드웨어 버퍼를 획득하여 분석하는 시나리오 검증",
+          "not_to_overclaim": "이 변경 사항은 CameraX 프레임워크 라이브러리의 업데이트이며, 직접적인 Camera HAL 인터페이스 규격 변경을 수반하지 않습니다.",
+          "editor_take": "앱 개발자들의 GPU 활용도가 높아짐에 따라 HAL 단에서의 Zero-Copy 버퍼 효율성 검증이 더욱 중요해질 것입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 7월 1일 CameraX 1.7.0-alpha02 버전이 출시되었습니다.",
+          "ImageAnalysis.OUTPUT_IMAGE_FORMAT_PRIVATE 및 ImageProxy.getHardwareBuffer()가 GPU 기반 이미지 분석 지원을 위해 공개 API로 노출되었습니다.",
+          "CameraInfo 및 CameraExtensionsInfo에 야간 모드 상태를 모니터링할 수 있는 isNightModeIndicatorSupported() 및 getNightModeIndicator() API가 추가되었습니다."
+        ],
+        "background_context": "CameraXViewfinder는 핀치 투 줌 및 탭 투 포커스를 위한 내장 제스처를 지원하며, 화면 플래시 및 스트림 상태를 추가합니다. FocusState는 이제 viewfinder-core에서 공개되어 탭 투 포커스 결과를 모니터링할 수 있습니다. 이는 CameraX 1.7.0-alpha02 릴리스의 일부로, 앱 개발자가 카메라 미리보기 및 캡처 경험을 향상시키는 데 도움이 되는 새로운 기능을 제공합니다. HAL 관점에서는 이러한 UI/UX 개선 사항이 직접적인 HAL 계약 변경을 의미하지는 않지만, 카메라 프레임워크 및 CameraX 라이브러리의 진화를 보여주며, 이는 궁극적으로 HAL 팀의 테스트 및 검증 시나리오에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "직접적인 Camera HAL contract 변경은 없으나, 앱이 OUTPUT_IMAGE_FORMAT_PRIVATE 스트림을 구성하고 AHardwareBuffer를 직접 획득하여 GPU 분석을 수행함에 따라, HAL 수준에서 HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED (또는 PRIVATE) 스트림의 버퍼 할당 및 획득 지연 시간(latency) 관리가 중요해집니다. 또한, 야간 모드 인디케이터 API는 HAL의 CONTROL_AE_MODE 또는 벤더 확장 메타데이터 상태와 연동되므로, 관련 메타데이터가 프레임워크로 정확히 전달되는지 검증해야 합니다.",
+        "action_items": [
+          "ImageAnalysis.OUTPUT_IMAGE_FORMAT_PRIVATE 스트림 구성 시 HAL 수준에서 버퍼 할당 및 획득 지연 시간(latency)을 측정하고 프레임 드롭 여부를 검증한다.",
+          "야간 모드 활성화 조건에서 HAL 메타데이터가 CameraInfo 야간 모드 인디케이터 API로 올바르게 매핑되어 전달되는지 CTS 테스트 및 디바이스 검증을 수행한다."
+        ],
+        "team_share_points": "CameraX 1.7.0-alpha02에서 GPU 기반 이미지 분석을 위한 하드웨어 버퍼 노출 및 야간 모드 인디케이터 API가 추가되었습니다. HAL 팀은 PRIVATE 스트림 성능 및 야간 모드 메타데이터 전달 정확성을 검증해야 합니다.",
+        "do_not_claim": [
+          "이 변경 사항이 직접적인 Camera HAL API 또는 벤더 HAL 계약 변경을 의미한다고 주장하지 마십시오. CameraX는 HAL 위에 있는 라이브러리입니다.",
+          "릴리스 노트의 테이블 텍스트나 UI 스니펫을 배경 지식으로 사용하지 마십시오."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c0",
+          "text": "2026년 7월 1일 CameraX 1.7.0-alpha02 버전이 출시되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:6cc3115222373933:4699202f755e:8abd200cc12669bb"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c1",
+          "text": "CameraX 1.7.0-alpha02에서 GPU 기반 이미지 분석을 위해 ImageAnalysis.OUTPUT_IMAGE_FORMAT_PRIVATE 및 ImageProxy.getHardwareBuffer()가 공개 API로 노출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:6cc3115222373933:4699202f755e:a972c4f4eea7d932"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c2",
+          "text": "CameraInfo 및 CameraExtensionsInfo에 야간 모드 상태를 모니터링할 수 있는 isNightModeIndicatorSupported() 및 getNightModeIndicator() API가 추가되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:6cc3115222373933:4699202f755e:b435f53b68501840"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c3",
+          "text": "GPU 기반 이미지 분석 지원으로 인해 HAL 수준에서 PRIVATE 스트림의 버퍼 할당 및 획득 지연 시간 관리가 중요해집니다.",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "sx:6cc3115222373933:4699202f755e:a972c4f4eea7d932"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "medium"
+        }
+      ],
+      "camera_hal_checks": [
+        "ImageAnalysis.OUTPUT_IMAGE_FORMAT_PRIVATE 스트림 구성 시 HAL 버퍼 할당 성능 측정",
+        "야간 모드 메타데이터가 CameraInfo API로 정확히 매핑되는지 검증"
+      ],
+      "action_hints": [
+        "ImageAnalysis PRIVATE 스트림 성능 테스트 시나리오 추가",
+        "야간 모드 메타데이터 전달 정확성 검증"
+      ],
+      "action_items": [
+        "ImageAnalysis.OUTPUT_IMAGE_FORMAT_PRIVATE 스트림 구성 시 HAL 수준에서 버퍼 할당 및 획득 지연 시간(latency)을 측정하고 프레임 드롭 여부를 검증한다.",
+        "야간 모드 활성화 조건에서 HAL 메타데이터가 CameraInfo 야간 모드 인디케이터 API로 올바르게 매핑되어 전달되는지 CTS 테스트 및 디바이스 검증을 수행한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "direct_aosp_camera",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v3be1e30159846e100d05529400567b663b9f8b605137438a2f417848d68359dd/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        }
+      ],
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
+      "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "imageAttribution": "CameraX Release Notes",
+      "imageAlt": "CameraX 1.7.0-alpha02 발표: GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "2026년 7월 1일 출시된 최신 CameraX 릴리스로, GPU 이미지 분석 및 야간 모드 연동 등 HAL 성능 및 메타데이터 검증에 직접적인 영향을 미치는 기능들이 포함되어 있습니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "ImageAnalysis PRIVATE 스트림의 버퍼 획득 지연 시간 및 야간 모드 메타데이터 연동 상태 검증",
+        "impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "이 변경 사항은 CameraX 프레임워크 라이브러리의 업데이트이며, 직접적인 Camera HAL AIDL/HIDL 인터페이스 규격 변경을 수반하지 않습니다."
+        ]
+      },
+      "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "source_candidate_hash": "6cc3115222373933c0df10c8df24e6dbd7043ec79d598384cff10acbc94317cd",
+      "article_group_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1,
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "CameraX API, compatibility workaround, app-side camera behavior change 확인",
+      "resolvedImage": {
+        "url": "https://developer.android.com/static/images/social/android-developers.png",
+        "src": "https://developer.android.com/static/images/social/android-developers.png",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
+      },
+      "coverage_type": "fresh",
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+        "attribution": "CameraX Release Notes",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://developer.android.com/static/images/social/android-developers.png",
+        "exclusionEvidence": []
+      }
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "libcamera 패치 제안: 센서 시퀀스 제어를 위한 SensorSequence 메타데이터 컨트롤 추가",
+      "what_changed": "libcamera 메일링 리스트에 센서 프레임 시퀀스를 정밀하게 제어하고 추적하기 위한 SensorSequence 메타데이터 컨트롤을 추가하는 패치(v2)가 제안되어 검토 중입니다.",
+      "confirmed_facts": [
+        "2026년 7월 3일, libcamera Patchwork에 SensorSequence 메타데이터 컨트롤을 추가하는 패치 v2가 제출되어 검토 중입니다.",
+        "이 패치는 아직 메인라인에 병합되지 않은 제안 상태입니다."
+      ],
+      "evidence_summary": "libcamera Patchwork 메일링 리스트를 통해 센서 시퀀스 메타데이터 제어 기능 추가를 위한 패치 v2 제안이 확인되었습니다.",
+      "specificity_checks": [
+        "Version: v2 patch",
+        "Release Date: 2026년 7월 3일 (제안일)",
+        "API/Component: libcamera / metadata control",
+        "Behavior Change: SensorSequence 메타데이터 컨트롤 추가 제안"
+      ],
+      "source_verification_notes": [
+        "libcamera Patchwork의 패치 리뷰 시스템을 통해 확인된 제안 단계의 소식입니다."
+      ],
+      "public_article": {
+        "headline": "libcamera, 센서 프레임 추적을 위한 SensorSequence 메타데이터 컨트롤 패치 제안",
+        "lead": "2026년 7월 3일 제안된 libcamera 패치 v2에서는 센서 프레임 시퀀스를 정밀하게 제어하고 추적하기 위한 SensorSequence 메타데이터 컨트롤 추가가 논의되고 있습니다.",
+        "body_paragraphs": [
+          "리눅스 기반 카메라 프레임워크인 libcamera의 메일링 리스트에 센서 프레임 시퀀스를 정밀하게 추적하고 제어할 수 있는 'SensorSequence' 메타데이터 컨트롤을 추가하는 패치 v2가 제출되었습니다. 이 제안은 카메라 센서 하드웨어와 이미지 파이프라인 간의 프레임 동기화를 개선하기 위한 목적을 가지고 있습니다.",
+          "센서 시퀀스 메타데이터가 도입되면 각 프레임이 센서로부터 출력된 정확한 순서와 타이밍을 추적할 수 있게 됩니다. 이는 특히 멀티 카메라 시스템에서 양쪽 센서의 프레임 동기화 상태를 정밀하게 맞추거나, 파이프라인 내부에서 발생하는 미세한 프레임 드롭을 감지하고 디버깅하는 데 매우 유용한 도구가 될 수 있습니다.",
+          "다만, 본 패치는 현재 커뮤니티에서 검토 중인 단계로 아직 libcamera 메인라인 소스 코드에 공식 병합되지는 않았습니다. 따라서 실제 상용 디바이스나 Android Camera HAL 스택에 직접 적용되기까지는 추가적인 검토와 벤더 통합 과정이 필요할 것으로 보입니다."
+        ],
+        "camera_hal_takeaway": "하위 드라이버 스택에서 프레임 동기화 및 시퀀스 추적의 정밀도를 높이는 데 기여할 수 있는 드라이버 레벨의 변경 사항입니다. 직접적인 Android Camera HAL API 변경은 없으나, 하위 드라이버가 제공하는 시퀀스 정보를 활용해 HAL 단에서 프레임 동기화 디버깅을 고도화할 수 있습니다.",
+        "reader_checkpoints": [
+          "libcamera 기반 하위 드라이버를 사용하는 플랫폼의 경우, 해당 패치의 병합 여부와 센서 시퀀스 메타데이터 전달 구조를 파악하십시오.",
+          "멀티 카메라 동기화 검증 시 하위 드라이버의 시퀀스 메타데이터 활용 방안을 검토하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "[v2,1/2] libcamera: Add SensorSequence metadata control",
+            "url": "https://patchwork.libcamera.org/patch/27198/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "libcamera Patchwork (patch review)",
+        "editorial_story": {
+          "reader_scenario": "멀티 카메라 시스템에서 양쪽 센서의 프레임 동기화가 어긋나 프레임 타이밍을 정밀하게 분석해야 하는 상황",
+          "what_happened": "libcamera에 센서 프레임 시퀀스를 추적하기 위한 SensorSequence 메타데이터 컨트롤 추가 패치가 제안되었습니다.",
+          "why_it_matters": "센서 수준의 프레임 시퀀스가 메타데이터로 명확히 전달되면 드라이버 및 HAL 단에서 동기화 오류를 디버깅하기가 훨씬 수월해집니다.",
+          "field_scenario": "듀얼 카메라 스트리밍 중 프레임 드롭 발생 시 하위 드라이버의 시퀀스 메타데이터를 대조하여 원인을 규명하는 시나리오",
+          "not_to_overclaim": "이 패치는 아직 검토 중인 제안 단계이며, 공식 릴리스에 포함되거나 Android Camera HAL 규격을 직접 변경하지 않습니다.",
+          "editor_take": "하위 스택의 메타데이터 정밀도 향상은 상위 HAL 및 프레임워크의 안정성 확보에 긍정적인 영향을 미칠 것입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "Sensor"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 7월 3일, libcamera Patchwork에 SensorSequence 메타데이터 컨트롤을 추가하는 패치 v2가 제출되어 검토 중입니다."
+        ],
+        "background_context": "libcamera의 SensorSequence 메타데이터 제어 기능 추가에 대한 패치 검토 중입니다. 이 변경 사항은 아직 커밋되지 않은 제안된 변경 사항으로, 카메라 드라이버 및 이미지 파이프라인의 메타데이터 처리 방식에 영향을 줄 수 있습니다. HAL 엔지니어는 이러한 드라이버 레벨의 변경이 프레임워크 및 HAL 계약에 미치는 잠재적 영향을 고려해야 합니다.",
+        "hal_driver_impact": "Android Camera HAL 자체의 규격 변경은 아니지만, libcamera 기반 하위 드라이버 스택을 사용하는 플랫폼의 경우, 센서 프레임의 시퀀스 번호가 메타데이터로 정확히 전달됨으로써 프레임 동기화 및 지연 시간 분석의 정밀도를 높일 수 있습니다.",
+        "action_items": [
+          "libcamera SensorSequence 패치 진행 상황을 모니터링하고, 멀티 카메라 동기화 시나리오에서 하위 드라이버의 시퀀스 메타데이터 활용 가능성을 평가한다."
+        ],
+        "team_share_points": "libcamera에 SensorSequence 메타데이터 컨트롤 추가 패치가 제안되었습니다. 하위 드라이버 스택에서의 프레임 동기화 정밀도 향상 가능성을 검토해야 합니다.",
+        "do_not_claim": [
+          "이 패치는 아직 검토 중인 제안 단계이며, libcamera 메인라인에 공식 병합되었거나 Android Camera HAL 규격을 직접 변경한다고 주장해서는 안 됩니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c4",
+          "text": "2026년 7월 3일, libcamera Patchwork에 SensorSequence 메타데이터 컨트롤을 추가하는 패치 v2가 제출되어 검토 중입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:bb8e14bc83a41f47:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/27198/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c5",
+          "text": "SensorSequence 메타데이터 제어를 통해 하위 드라이버 스택에서 센서 프레임의 정확한 순서와 타이밍을 추적할 수 있습니다.",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "candidate:bb8e14bc83a41f47:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/27198/"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "medium"
+        }
+      ],
+      "camera_hal_checks": [
+        "하위 드라이버의 센서 시퀀스 메타데이터 전달 여부 확인"
+      ],
+      "action_hints": [
+        "SensorSequence 메타데이터 연동성 검토"
+      ],
+      "action_items": [
+        "libcamera SensorSequence 패치 진행 상황을 모니터링하고, 멀티 카메라 동기화 시나리오에서 하위 드라이버의 시퀀스 메타데이터 활용 가능성을 평가한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v3be1e30159846e100d05529400567b663b9f8b605137438a2f417848d68359dd/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No suitable specific image available.",
+      "sources": [
+        {
+          "title": "[v2,1/2] libcamera: Add SensorSequence metadata control",
+          "url": "https://patchwork.libcamera.org/patch/27198/"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "2026년 7월 3일 제안된 최신 드라이버 레벨 패치로, 센서 프레임 동기화 및 시퀀스 추적 정밀도 향상과 관련이 깊습니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "하위 드라이버 스택의 센서 시퀀스 메타데이터 전달 구조 분석",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "stream_buffer_metadata"
+        ],
+        "do_not_overstate": [
+          "이 패치는 아직 검토 중인 제안 단계이며, 공식 릴리스에 포함되거나 Android Camera HAL 규격을 직접 변경하지 않습니다."
+        ]
+      },
+      "source_candidate_url": "https://patchwork.libcamera.org/patch/27198/",
+      "source_candidate_hash": "bb8e14bc83a41f470594fb3f6c05c49f1914c9d45400c99feab556e5dc779255",
+      "article_group_key": "article:https://patchwork.libcamera.org/patch/27198",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "cpp_ai_tooling_fallback",
+      "headline": "LLVM/Clang 빌드 환경에서 발생하는 dw2102 미디어 드라이버 버퍼 오버플로우 수정 패치",
+      "what_changed": "LLVM+Clang 컴파일러로 커널을 빌드할 때 dw2102_load_firmware() 함수에서 64바이트 청크를 읽는 과정 중 남은 바이트보다 더 많은 데이터를 읽으려고 시도하여 발생하는 버퍼 오버플로우 버그 수정 패치(v2)가 제안되었습니다.",
+      "confirmed_facts": [
+        "2026년 7월 5일, lore.kernel.org linux-media 리스트에 dw2102 미디어 드라이버의 버퍼 오버플로우를 수정하는 패치 v2가 제출되었습니다.",
+        "해당 버그는 커널이 LLVM+Clang으로 빌드될 때만 나타나며, 커널 oops를 유발할 수 있습니다."
+      ],
+      "evidence_summary": "Linux 미디어 서브시스템 메일링 리스트를 통해 LLVM/Clang 빌드 환경에서 발생하는 dw2102 드라이버의 버퍼 오버플로우 수정 패치가 확인되었습니다.",
+      "specificity_checks": [
+        "Version: v2 patch",
+        "Release Date: 2026년 7월 5일",
+        "API/Component: dw2102 / LLVM Clang build",
+        "Behavior Change: dw2102_load_firmware() 내 버퍼 오버플로우 및 커널 oops 방지"
+      ],
+      "source_verification_notes": [
+        "lore.kernel.org 메일링 리스트의 패치 제출 내역을 바탕으로 작성되었습니다."
+      ],
+      "public_article": {
+        "headline": "LLVM/Clang 빌드 환경에서 발생하는 미디어 드라이버 버퍼 오버플로우 수정 패치 분석",
+        "lead": "2026년 7월 5일 제출된 커널 패치 v2에서는 LLVM+Clang 컴파일러로 빌드할 때만 발생하는 dw2102 미디어 드라이버의 버퍼 오버플로우 및 커널 oops 문제를 해결하는 방안이 제시되었습니다.",
+        "body_paragraphs": [
+          "리눅스 미디어 서브시스템 메일링 리스트에 dw2102 미디어 드라이버의 버퍼 오버플로우 취약점을 해결하기 위한 패치 v2가 제출되었습니다. 이 버그는 dw2102_load_firmware() 함수에서 펌웨어 데이터를 64바이트 청크 단위로 읽어오는 과정에서 발생합니다. 남은 데이터 바이트 수보다 더 큰 크기의 청크를 무조건 읽으려고 시도하면서 메모리 경계를 초과하는 문제가 발생하게 됩니다.",
+          "특히 주목할 점은 이 버그가 커널을 LLVM+Clang 컴파일러 툴체인으로 빌드할 때만 명확하게 표면화되어 커널 oops를 유발한다는 것입니다. 이는 컴파일러 최적화 방식이나 메모리 배치 구조의 차이로 인해 기존 GCC 빌드에서는 드러나지 않던 잠재적 버퍼 처리 오류가 Clang 환경에서 치명적인 오류로 이어질 수 있음을 보여줍니다.",
+          "Android 시스템 및 벤더 커널 빌드 환경이 LLVM/Clang 중심으로 완전히 전환된 상황에서, 이러한 툴체인 특이적 버그는 카메라 드라이버나 펌웨어 로더 모듈에서도 발생할 가능성이 있습니다. 따라서 하위 미디어 드라이버 개발팀은 메모리 경계 검사 로직을 재점검하고 컴파일러 경고 및 정적 분석 도구를 적극 활용해야 합니다."
+        ],
+        "camera_hal_takeaway": "빌드 툴체인 변화에 따른 드라이버 안정성 리스크를 보여주는 사례로, 카메라 드라이버 펌웨어 로더의 메모리 경계 검사를 강화할 필요가 있습니다. 직접적인 Android Camera HAL 영향은 없으나, LLVM/Clang 빌드 환경을 사용하는 드라이버 모듈의 안정성 확보에 중요한 참고가 됩니다.",
+        "reader_checkpoints": [
+          "LLVM/Clang 빌드 환경에서 카메라 드라이버 펌웨어 로딩 모듈의 버퍼 경계 검사 로직을 재점검하십시오.",
+          "Clang 정적 분석 도구를 실행하여 유사한 메모리 경계 초과 오류가 존재하는지 확인하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v2] media: dw2102: Fix a buffer overflow",
+            "url": "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media list",
+        "editorial_story": {
+          "reader_scenario": "커널 빌드 툴체인을 LLVM/Clang으로 마이그레이션한 후, 미디어 드라이버 로딩 중 간헐적인 커널 oops가 발생하는 상황",
+          "what_happened": "dw2102_load_firmware() 함수에서 LLVM+Clang 빌드 시에만 발생하는 버퍼 오버플로우 버그 수정 패치가 제안되었습니다.",
+          "why_it_matters": "컴파일러 툴체인 변경은 기존에 숨겨져 있던 드라이버의 메모리 경계 조건 오류를 유발할 수 있으므로 철저한 정적 분석이 요구됩니다.",
+          "field_scenario": "LLVM/Clang 환경에서 드라이버 펌웨어 로딩 시 청크 크기 경계 조건을 검증하는 시나리오",
+          "not_to_overclaim": "이 패치는 dw2102 드라이버에 특화된 수정안이며, Android Camera HAL이나 전체 카메라 드라이버에 공통된 보안 취약점은 아닙니다.",
+          "editor_take": "네이티브 툴체인 현대화 과정에서 발생할 수 있는 드라이버 안정성 리스크를 선제적으로 방어해야 합니다."
+        },
+        "decision_metadata": {
+          "impact": "Medium",
+          "scope": [
+            "Tooling"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 7월 5일, dw2102 미디어 드라이버의 버퍼 오버플로우를 수정하는 패치 v2가 제출되었습니다.",
+          "해당 버그는 커널이 LLVM+Clang으로 빌드될 때만 나타나며, 커널 oops를 유발할 수 있습니다."
+        ],
+        "background_context": "dw2102_load_firmware() 함수에서 발생하는 버퍼 오버플로우 버그로, 커널이 LLVM+Clang으로 빌드될 때만 나타납니다. 이는 64바이트 청크를 읽을 때 남은 바이트보다 더 많은 바이트를 읽으려고 시도하여 커널 oops를 유발할 수 있습니다. 이 문제는 카메라 드라이버와 관련된 커널 레벨의 버그이며, LLVM/Clang 빌드 환경에서의 안정성 및 디버깅 워크플로우와 관련이 있습니다.",
+        "hal_driver_impact": "직접적인 Android Camera HAL의 영향은 없으나, LLVM/Clang 빌드 환경을 사용하는 카메라 드라이버 및 미디어 서브시스템 개발팀은 펌웨어 로드 및 버퍼 처리 로직에서 유사한 경계 조건 오버플로우가 존재하지 않는지 정적 분석 및 컴파일러 경고를 통해 점검해야 합니다.",
+        "action_items": [
+          "LLVM/Clang으로 빌드되는 카메라 드라이버 및 펌웨어 로더 모듈의 버퍼 경계 검사 로직을 검토하고, Clang의 정적 분석 도구(Static Analyzer)를 실행한다."
+        ],
+        "team_share_points": "LLVM/Clang 빌드 시에만 발생하는 미디어 드라이버 버퍼 오버플로우 사례가 보고되었습니다. 툴체인 전환 및 빌드 시 드라이버 내 버퍼 경계 검사 로직을 재점검해야 합니다.",
+        "do_not_claim": [
+          "이 버그 수정은 dw2102 드라이버에 특화된 것이며, 모든 카메라 드라이버에 공통적으로 존재하는 버그이거나 Android Camera HAL의 직접적인 취약점이라고 과장해서는 안 됩니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c6",
+          "text": "2026년 7월 5일, dw2102 미디어 드라이버의 버퍼 오버플로우를 수정하는 패치 v2가 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:cee358be237afa48:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c7",
+          "text": "해당 버그는 커널이 LLVM+Clang으로 빌드될 때만 나타나며, 커널 oops를 유발할 수 있습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:cee358be237afa48:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c8",
+          "text": "LLVM/Clang 빌드 환경으로 전환된 시스템에서는 컴파일러 최적화 및 경계 검사 방식의 차이로 인해 기존 드라이버의 잠재적 버퍼 오버플로우가 표면화될 수 있습니다.",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "candidate:cee358be237afa48:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "medium"
+        }
+      ],
+      "camera_hal_checks": [
+        "LLVM/Clang 빌드 시 드라이버 펌웨어 로더 버퍼 경계 검사"
+      ],
+      "action_hints": [
+        "Clang 정적 분석 도구 실행"
+      ],
+      "action_items": [
+        "LLVM/Clang으로 빌드되는 카메라 드라이버 및 펌웨어 로더 모듈의 버퍼 경계 검사 로직을 검토하고, Clang의 정적 분석 도구(Static Analyzer)를 실행한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "cpp_ai_tooling_fallback",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v3be1e30159846e100d05529400567b663b9f8b605137438a2f417848d68359dd/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No suitable specific image available.",
+      "sources": [
+        {
+          "title": "[PATCH v2] media: dw2102: Fix a buffer overflow",
+          "url": "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "2026년 7월 5일 제출된 최신 패치로, LLVM/Clang 빌드 환경 마이그레이션 시 발생할 수 있는 드라이버 메모리 안정성 문제를 다루고 있습니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "native_tooling_owner",
+          "security_owner"
+        ],
+        "check_within_2_weeks": "카메라 드라이버 펌웨어 로더 모듈의 버퍼 경계 검사 로직 정적 분석",
+        "impact_axes": [
+          "native_tooling_workflow",
+          "security_vendor_component"
+        ],
+        "do_not_overstate": [
+          "이 패치는 dw2102 드라이버에 특화된 수정안이며, Android Camera HAL이나 전체 카메라 드라이버에 공통된 보안 취약점은 아닙니다."
+        ]
+      },
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/",
+      "source_candidate_hash": "cee358be237afa485891cf3c73a522a30c629d5af81fc4be9ce60b969c3588bb",
+      "article_group_key": "lore-series:20260705144550.455058-pinigin@mapicom.org",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "editorial_priority": 6,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 3,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": true,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/cpp.svg",
+        "src": "../../assets/images/fallback/cpp.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "CameraX 1.7.0-alpha02의 ImageAnalysis.OUTPUT_IMAGE_FORMAT_PRIVATE 스트림 구성 시 HAL 수준에서 버퍼 할당 및 획득 지연 시간(latency)을 측정하고 프레임 드롭 여부를 검증한다.",
+    "야간 모드 활성화 조건에서 HAL 메타데이터가 CameraInfo 야간 모드 인디케이터 API로 올바르게 매핑되어 전달되는지 CTS 테스트 및 디바이스 검증을 수행한다.",
+    "libcamera SensorSequence 패치 진행 상황을 모니터링하고, 멀티 카메라 동기화 시나리오에서 하위 드라이버의 시퀀스 메타데이터 활용 가능성을 평가한다.",
+    "LLVM/Clang으로 빌드되는 카메라 드라이버 및 펌웨어 로더 모듈의 버퍼 경계 검사 로직을 검토하고 Clang 정적 분석 도구를 실행하여 잠재적 오버플로우를 방지한다."
+  ],
+  "references": [
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
+    },
+    {
+      "title": "[v2,1/2] libcamera: Add SensorSequence metadata control",
+      "url": "https://patchwork.libcamera.org/patch/27198/"
+    },
+    {
+      "title": "[PATCH v2] media: dw2102: Fix a buffer overflow",
+      "url": "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [],
+  "selected_group_count": 3,
+  "rendered_group_count": 3,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+    "article:https://patchwork.libcamera.org/patch/27198",
+    "lore-series:20260705144550.455058-pinigin@mapicom.org"
+  ],
+  "rendered_group_keys": [
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+    "article:https://patchwork.libcamera.org/patch/27198",
+    "lore-series:20260705144550.455058-pinigin@mapicom.org"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "source": "Raspberry Pi libcamera Releases",
+      "published_date": "2026-06-09",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    },
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "note": "Android 플랫폼 · 카메라 인접 주제 참고"
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "note": "C++ / AI 네이티브 툴링 참고"
+    }
+  ],
+  "weekly_key": "2026-W28",
+  "week_start_date": "2026-07-06",
+  "week_end_date": "2026-07-12",
+  "tags": [
+    "Camera HAL",
+    "Android"
+  ]
+}

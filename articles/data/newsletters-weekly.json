@@ -1,5 +1,23 @@
 [
   {
+    "weeklyKey": "2026-W28",
+    "weekStartDate": "2026-07-06",
+    "weekEndDate": "2026-07-12",
+    "date": "2026-07-06",
+    "title": "2026 W28",
+    "summary": "CameraX 1.7.0-alpha02 발표: GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입\nlibcamera, 센서 프레임 추적을 위한 SensorSequence 메타데이터 컨트롤 패치 제안\nLLVM/Clang 빌드 환경에서 발생하는 미디어 드라이버 버퍼 오버플로우 수정 패치 분석",
+    "html": "newsletters/2026-W28/index.html",
+    "md": "newsletters/2026-W28/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ],
+    "article_count": 3,
+    "article_images": [
+      "https://developer.android.com/static/images/social/android-developers.png"
+    ]
+  },
+  {
     "weeklyKey": "2026-W27",
     "weekStartDate": "2026-06-29",
     "weekEndDate": "2026-07-05",
