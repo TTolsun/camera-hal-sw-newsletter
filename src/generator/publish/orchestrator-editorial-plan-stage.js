@@ -38,18 +38,13 @@ function normalizeEditorialPlanReport(value, date) {
   };
 }
 
-// #724: coverage 권한 ON일 때만 editorial-plan이 reserve 포함 shortlisted view를 받아
-// 승급 후보까지 등급을 매길 수 있다. OFF는 현행 selected view를 유지해 입력·비용·결과가
-// 완전히 동일하다.
-function editorialPlanCapsuleView(coverageAuthority) {
-  return coverageAuthority === true ? 'shortlisted' : 'selected';
-}
-
-async function buildEditorialPlanReport({ date, articleCapsuleReport, commonContext, stage, coverageAuthority = false }) {
+// #724: coverage 권한은 항상 켜져 있으므로 editorial-plan은 언제나 reserve 포함 shortlisted
+// view를 받아 승급 후보까지 등급을 매긴다.
+async function buildEditorialPlanReport({ date, articleCapsuleReport, commonContext, stage }) {
   const result = await callLlmJson(
     stage,
     editorialPlanSystemPrompt(),
-    `${commonContext}\n\nSelected article capsule JSON:\n${JSON.stringify(capsuleInputFromReport(articleCapsuleReport, editorialPlanCapsuleView(coverageAuthority)), null, 2)}`,
+    `${commonContext}\n\nSelected article capsule JSON:\n${JSON.stringify(capsuleInputFromReport(articleCapsuleReport, 'shortlisted'), null, 2)}`,
     editorialPlanSchema
   );
   const normalized = normalizeEditorialPlanReport(result, date);
@@ -64,8 +59,9 @@ async function buildEditorialPlanReport({ date, articleCapsuleReport, commonCont
 // 기사를 모두 렌더해야 한다(editor group-coverage 계약). plan의 coverage_decision을 editor가 보면
 // 선택된 기사를 demote/병합하도록 유도해 그 계약과 충돌하므로, editor에는 framing 필드(target/
 // angle/why/takeaway/misunderstanding_risks/source_limitations + direct_hal_impact)만 전달한다.
-// coverage_decision/impact_level은 artifact(editorial-plan.json)에 그대로 남겨 review·후속
-// coverage-authority 슬라이스에서 쓴다.
+// coverage_decision/impact_level은 artifact(editorial-plan.json)에 남겨 review와 always-on coverage
+// 재조정(coverage-reconciliation.js)이 쓴다 — 재조정은 이 값을 소비해 main-set을 정하되 결정론
+// 불변식 안에서만 반영한다.
 function editorFacingEditorialPlan(report) {
   if (!report || !Array.isArray(report.editorial_plans)) return report;
   return {
@@ -77,6 +73,5 @@ function editorFacingEditorialPlan(report) {
 module.exports = {
   normalizeEditorialPlanReport,
   buildEditorialPlanReport,
-  editorialPlanCapsuleView,
   editorFacingEditorialPlan
 };

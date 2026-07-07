@@ -122,13 +122,7 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.newsroomCandidateInputPath, '');
   assert.equal(config.newsroomEnableGeminiSourceDiscovery, true);
   assert.equal(config.newsroomEnableLinkedEvidenceDiscovery, true);
-  assert.equal(config.newsroomLlmCoverageAuthority, false);
   assert.equal(config.geminiApiKeyConfigured, false);
-});
-
-test('newsroomLlmCoverageAuthority parses NEWSROOM_LLM_COVERAGE_AUTHORITY=true', () => {
-  const config = readRuntimeConfig({ NEWSROOM_LLM_COVERAGE_AUTHORITY: 'true' });
-  assert.equal(config.newsroomLlmCoverageAuthority, true);
 });
 
 test('CSV parsing trims values and drops empty items', () => {

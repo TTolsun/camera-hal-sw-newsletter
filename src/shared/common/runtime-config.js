@@ -113,9 +113,6 @@ const DEFAULT_RUNTIME_CONFIG = {
   // #429 linked evidence expansion은 Gemini source discovery가 켜진 run 안에서만 동작하고
   // non-failing이므로 기본 켜되, 문제 시 source discovery 전체를 끄지 않고 이 단계만 끌 수 있게 한다.
   newsroomEnableLinkedEvidenceDiscovery: true,
-  // #724: LLM coverage 권한(editorial-plan coverage_decision → main-set composition).
-  // 발행안전 계약을 바꾸는 가장 민감한 슬라이스라 프로덕션 A/B 검증 전까지 기본 OFF다.
-  newsroomLlmCoverageAuthority: false,
   githubEventName: ''
 };
 
@@ -453,15 +450,6 @@ function readRuntimeConfig(env = process.env, options = {}) {
       ),
       'NEWSROOM_ENABLE_LINKED_EVIDENCE_DISCOVERY',
       { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomEnableLinkedEvidenceDiscovery }
-    ),
-    newsroomLlmCoverageAuthority: parseBoolean(
-      envValue(
-        env,
-        'NEWSROOM_LLM_COVERAGE_AUTHORITY',
-        DEFAULT_RUNTIME_CONFIG.newsroomLlmCoverageAuthority
-      ),
-      'NEWSROOM_LLM_COVERAGE_AUTHORITY',
-      { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomLlmCoverageAuthority }
     ),
     githubEventName: String(envValue(env, 'GITHUB_EVENT_NAME', DEFAULT_RUNTIME_CONFIG.githubEventName) || '').trim(),
     geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim())

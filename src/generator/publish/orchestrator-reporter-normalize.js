@@ -277,6 +277,30 @@ function reserveReporterCapsules(date, reporter, capsuleReport, options = {}) {
   return capsuleInputForCandidates(date, ensureArray(reporter.candidates).filter(isReserveCandidate), capsuleReport, options);
 }
 
+// #724 always-on: coverage 재조정이 main-set을 바꾼 뒤, reporter 후보의 선택 플래그를 재조정
+// 결과에 맞춘다. editor/fact-check/repair/completion/judge는 전부 selectedReporterCapsules
+// (= reporter.candidates.filter(isFinalSelected))로 작성·검증 대상 집합을 정하므로, 이 재동기화가
+// 없으면 콘텐츠는 재조정 前 집합을 쓰고 publish_ready/composition은 재조정 後 집합을 써서 발행
+// 콘텐츠와 게이트가 어긋난다. enforceDeterministicReporterSelection은 pristine
+// primary_selected_articles까지 참조 map에 넣어 강등 후보가 그대로 남으므로 재사용하지 않고,
+// 재조정된 main 집합만으로 플래그를 직접 세팅한다.
+function syncReporterSelectionToMain(reporter, reconciledMain) {
+  const mainUrls = new Set(ensureArray(reconciledMain)
+    .map(candidate => normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl))
+    .filter(Boolean));
+  reporter.candidates = ensureArray(reporter.candidates).map(candidate => {
+    const selected = mainUrls.has(normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl));
+    return {
+      ...candidate,
+      final_selected: selected,
+      selected_for_editor: selected,
+      primary_selected: selected,
+      reserve_candidate: selected ? false : isReserveCandidate(candidate)
+    };
+  });
+  return reporter;
+}
+
 function reporterCandidateCapsules(date, candidates, capsuleReport, options = {}) {
   return capsuleInputForCandidates(date, candidates, capsuleReport, options);
 }
@@ -495,6 +519,7 @@ module.exports = {
   candidatePriority,
   validateReporter,
   enforceDeterministicReporterSelection,
+  syncReporterSelectionToMain,
   selectedReporterCapsules,
   reserveReporterCapsules,
   reporterCandidateCapsules,
