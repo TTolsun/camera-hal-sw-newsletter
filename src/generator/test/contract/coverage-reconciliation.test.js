@@ -53,7 +53,7 @@ test('forbidden-bucket reserve candidate cannot be promoted even if LLM asks', (
   assert.ok(!out.selected.map(a => a.url).includes('b'));
 });
 
-test('cap clamp keeps at most mainArticleCount.max, ordered by impact then score', () => {
+test('cap clamp drops the lowest impact/score candidates when over mainArticleCount.max', () => {
   const many = Array.from({ length: 7 }, (_, i) => mainEligible({ url: `u${i}`, deterministic_score: 50 + i }));
   const shortlistReport = { selected_articles: many, reserve_candidates: [] };
   const editorialPlanReport = {
@@ -61,7 +61,20 @@ test('cap clamp keeps at most mainArticleCount.max, ordered by impact then score
   };
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport, enabled: true });
   assert.equal(out.selected.length, 5);
-  assert.equal(out.selected[0].url, 'u0');
+  const kept = out.selected.map(a => a.url);
+  assert.ok(kept.includes('u0'), 'high-impact survives');
+  assert.ok(!kept.includes('u1') && !kept.includes('u2'), 'lowest-score low-impact dropped');
+});
+
+test('cap clamp preserves deterministic (input) emit order, not impact/score order', () => {
+  // 결정론 입력 순서: c1(editorial_priority 우선) 먼저, c2가 점수는 높지만 뒤. cap 미초과.
+  const c1 = mainEligible({ url: 'c1', deterministic_score: 40 });
+  const c2 = mainEligible({ url: 'c2', deterministic_score: 99 });
+  const shortlistReport = { selected_articles: [c1, c2], reserve_candidates: [] };
+  // LLM이 둘 다 같은 impact로 매김 → 재정렬 유혹이 있는 흔한 경우.
+  const editorialPlanReport = { editorial_plans: [plan(c1, 'main_article', 'medium'), plan(c2, 'main_article', 'medium')] };
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport, enabled: true });
+  assert.deepEqual(out.selected.map(a => a.url), ['c1', 'c2'], 'lead order must not flip to score-desc');
 });
 
 test('supporting-main bucket count is clamped to supportingMainMaxAllowed', () => {

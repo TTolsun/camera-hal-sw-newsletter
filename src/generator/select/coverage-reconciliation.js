@@ -84,20 +84,22 @@ function orderForClamp(items, entryFor) {
 }
 
 function applyCaps(proposedMain, entryFor) {
+  // impact→score 순서는 cap 초과 시 "무엇을 떨굴지"만 정한다. emit 순서는 결정론 입력
+  // 순서(proposedMain, editorial_priority 우선)를 보존해야 리드/본문 순서가 뒤집히지 않는다.
   const ordered = orderForClamp(proposedMain, entryFor);
   const supporting = supportingBuckets();
   const supportingMax = Number(articlePolicy.publishReadyComposition?.supportingMainMaxAllowed ?? 1);
   const mainMax = Number(articlePolicy.mainArticleCount?.max ?? 5);
-  const kept = [];
+  const survivors = new Set();
   let supportingCount = 0;
   for (const candidate of ordered) {
-    if (kept.length >= mainMax) break;
+    if (survivors.size >= mainMax) break;
     const isSupporting = supporting.has(String(candidate.relevance_bucket || ''));
     if (isSupporting && supportingCount >= supportingMax) continue;
     if (isSupporting) supportingCount += 1;
-    kept.push(candidate);
+    survivors.add(candidateKey(candidate));
   }
-  return kept;
+  return proposedMain.filter(candidate => survivors.has(candidateKey(candidate)));
 }
 
 // 결정론 재조정 진입점. enabled=false면 결정론 selected를 그대로(동일 참조) 반환한다.
@@ -135,7 +137,10 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport, enabled } = {
   const clamped = applyCaps(proposedMain, entryFor);
   const clampedKeys = new Set(clamped.map(candidateKey));
 
-  // 4. 발행가능 floor backfill.
+  // 4. 발행가능 floor backfill. deterministicSelected는 이미 forbidden-free이고, 현재
+  //    mainArticleCount.min===1·supportingMainMaxAllowed===1이라 최대 1건만 backfill돼 cap을
+  //    깨지 않는다. min을 1보다 크게 올리면 backfill이 supporting cap을 넘길 수 있으므로 그때는
+  //    backfill도 applyCaps와 동일한 keep-predicate를 거쳐야 한다.
   const mainMin = Number(articlePolicy.mainArticleCount?.min ?? 1);
   if (clamped.length < mainMin) {
     const backfill = deterministicSelected

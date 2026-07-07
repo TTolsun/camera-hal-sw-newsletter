@@ -324,8 +324,14 @@ const {
   buildEditorialPlanReport
 } = require('./orchestrator-editorial-plan-stage');
 const {
-  reconcileCoverage
+  reconcileCoverage,
+  candidateKey
 } = require('../select/coverage-reconciliation');
+const {
+  compositionSummary,
+  reviewCompositionGatePasses,
+  publishReadyGateReasonSummary
+} = require('../select/selection-composition-gates');
 
 // attempt loop 안의 repair 패스 + completion 패스(editor + fact-check 단계 직후)는
 // orchestrator-repair-completion.js로 분리했다(#655). 두 패스는 main()을 reviewable
@@ -502,7 +508,20 @@ async function main() {
     });
     writeJson(path.join(newsroomDir, 'coverage-reconciliation.json'), coverageReconciliation.diff);
     if (coverageAuthority) {
-      shortlistReport.selected_articles = coverageReconciliation.selected;
+      const reconciledSelected = coverageReconciliation.selected;
+      const reconciledSelectedKeys = new Set(reconciledSelected.map(candidateKey));
+      shortlistReport.selected_articles = reconciledSelected;
+      // 승급된 reserve는 reserve_candidates에서 제거해 selected/reserve 캡슐 중복을 막는다.
+      shortlistReport.reserve_candidates = ensureArray(shortlistReport.reserve_candidates)
+        .filter(candidate => !reconciledSelectedKeys.has(candidateKey(candidate)));
+      // 재조정된 편성으로 composition_summary·publish_ready를 재계산한다. publish_ready는 단조
+      // 하향만 한다 — 결정론이 not-ready였으면 그대로 두고, 재조정 편성이 composition/publish
+      // 게이트를 못 넘으면 false로 낮춘다(결정론 편성 불변식을 재조정이 우회하지 못하게).
+      const reconciledSummary = compositionSummary(reconciledSelected);
+      shortlistReport.composition_summary = reconciledSummary;
+      shortlistReport.publish_ready = shortlistReport.publish_ready === true
+        && reviewCompositionGatePasses(reconciledSummary)
+        && publishReadyGateReasonSummary(reconciledSummary).length === 0;
       generationRunState.selectedInputs = shortlistReport.selected_articles;
       articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates }, {
         seedEvidencePack
