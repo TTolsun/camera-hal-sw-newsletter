@@ -59,8 +59,9 @@ async function buildEditorialPlanReport({ date, articleCapsuleReport, commonCont
 // 기사를 모두 렌더해야 한다(editor group-coverage 계약). plan의 coverage_decision을 editor가 보면
 // 선택된 기사를 demote/병합하도록 유도해 그 계약과 충돌하므로, editor에는 framing 필드(target/
 // angle/why/takeaway/misunderstanding_risks/source_limitations + direct_hal_impact)만 전달한다.
-// coverage_decision/impact_level은 artifact(editorial-plan.json)에 그대로 남겨 review·후속
-// coverage-authority 슬라이스에서 쓴다.
+// coverage_decision/impact_level은 artifact(editorial-plan.json)에 남겨 review와 always-on coverage
+// 재조정(coverage-reconciliation.js)이 쓴다 — 재조정은 이 값을 소비해 main-set을 정하되 결정론
+// 불변식 안에서만 반영한다.
 function editorFacingEditorialPlan(report) {
   if (!report || !Array.isArray(report.editorial_plans)) return report;
   return {

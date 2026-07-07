@@ -101,7 +101,7 @@ Workflow/Stage: Stage 3 `editorial-plan attempt <n>/<total>`
 - plan은 작성을 안내할 internal scaffolding입니다. `coverage_decision`/`impact_level` 같은 값은 public 본문에 라벨로 노출하지 않습니다.
 - `direct_hal_impact`는 source가 직접 HAL/runtime 변경을 뒷받침할 때만 true입니다. source 근거 없는 Samsung/S.LSI/Exynos/양산/성능·화질 확대 판단을 금지합니다.
 - 이미지 센서 제조사, SoC/platform vendor, ISP IP 제공자, 패치 작성자, 테스트 보드, 적용 디바이스를 혼동하지 않습니다.
-- 현재 슬라이스에서 plan은 작성 안내(advisory)로만 쓰입니다. plan이 렌더 set(coverage 권한)을 바꾸는 wiring은 후속 슬라이스입니다.
+- plan의 `coverage_decision`은 always-on coverage 재조정(deterministic reconciler)이 소비해 main-set 편성을 정합니다 — 단, 결정론 불변식(main-eligibility·cap·발행 floor·`publish_ready` 단조 하향) 안에서만 반영됩니다. editor에게 넘기는 plan에서는 `coverage_decision`/`impact_level`을 제거해 group-coverage 계약과 충돌하지 않게 합니다.
 
 ### Reporter
 

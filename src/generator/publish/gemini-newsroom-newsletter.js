@@ -132,6 +132,7 @@ const {
   collectedCandidateFor,
   validateReporter,
   enforceDeterministicReporterSelection,
+  syncReporterSelectionToMain,
   selectedReporterCapsules,
   reporterImageCandidatesForSection,
   authoritativeImageProvenanceByUrl,
@@ -435,6 +436,13 @@ async function main() {
   let excludedSections = [];
   let attemptedSections = [];
 
+  // #724 always-on: coverage 재조정은 매 attempt pristine 결정론 baseline에서 파생돼야 품질
+  // 재시도에 누적되지 않는다. selected는 primary_selected_articles(재조정이 안 건드림)가 앵커하고,
+  // reserve 풀과 결정론 publish_ready는 재조정이 shortlistReport를 mutate하기 전인 아래 pristine
+  // 스냅샷이 앵커한다. 이 값들을 재조정 입력·publish_ready 기준으로 써서 attempt 간 멱등성을 지킨다.
+  const pristineReserveCandidates = ensureArray(shortlistReport.reserve_candidates);
+  const deterministicPublishReady = shortlistReport.publish_ready === true;
+
   for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
     generationRunState.currentQualityAttempt = attempt;
     const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
@@ -491,15 +499,16 @@ async function main() {
     });
     writeJson(path.join(newsroomDir, 'editorial-plan.json'), editorialPlanReport);
     // #724: LLM coverage 등급을 결정론 재조정으로 main-set에 항상 반영한다(toggle 없음). 재조정
-    // 입력은 항상 pristine 결정론 baseline(primary_selected_articles)이라 attempt 재시도에도
-    // 누적되지 않는다.
+    // 입력은 항상 pristine 결정론 baseline(selected=primary_selected_articles, reserve=루프 밖에서
+    // 캡처한 pristineReserveCandidates)이라 attempt 재시도에도 누적되지 않는다 — 이전 attempt가
+    // shortlistReport.reserve_candidates를 mutate해도 재조정 입력은 pristine을 쓴다.
     const deterministicSelectedBaseline = ensureArray(shortlistReport.primary_selected_articles).length > 0
       ? shortlistReport.primary_selected_articles
       : shortlistReport.selected_articles;
     const coverageReconciliation = reconcileCoverage({
       shortlistReport: {
         selected_articles: deterministicSelectedBaseline,
-        reserve_candidates: shortlistReport.reserve_candidates
+        reserve_candidates: pristineReserveCandidates
       },
       editorialPlanReport
     });
@@ -510,15 +519,21 @@ async function main() {
     // 승급된 reserve는 reserve_candidates에서 제거해 selected/reserve 캡슐 중복을 막는다.
     shortlistReport.reserve_candidates = ensureArray(shortlistReport.reserve_candidates)
       .filter(candidate => !reconciledSelectedKeys.has(candidateKey(candidate)));
-    // 재조정된 편성으로 composition_summary·publish_ready를 재계산한다. publish_ready는 단조
-    // 하향만 한다 — 결정론이 not-ready였으면 그대로 두고, 재조정 편성이 composition/publish
-    // 게이트를 못 넘으면 false로 낮춘다(결정론 편성 불변식을 재조정이 우회하지 못하게).
+    // 재조정된 편성으로 composition_summary·publish_ready를 재계산한다. publish_ready는 결정론
+    // 값(deterministicPublishReady)에서 단조 하향만 한다 — 결정론이 not-ready였으면 그대로 두고,
+    // 재조정 편성이 composition/publish 게이트를 못 넘으면 false로 낮춘다(결정론 편성 불변식을
+    // 재조정이 우회하지 못하게). 기준을 shortlistReport.publish_ready가 아닌 결정론 스냅샷으로
+    // 두어, 이전 attempt의 일시적 false가 다음 attempt를 영구 차단하지 않게 한다.
     const reconciledSummary = compositionSummary(reconciledSelected);
     shortlistReport.composition_summary = reconciledSummary;
-    shortlistReport.publish_ready = shortlistReport.publish_ready === true
+    shortlistReport.publish_ready = deterministicPublishReady
       && reviewCompositionGatePasses(reconciledSummary)
       && publishReadyGateReasonSummary(reconciledSummary).length === 0;
     generationRunState.selectedInputs = shortlistReport.selected_articles;
+    // 재조정된 main-set에 맞춰 reporter 선택 플래그를 재동기화한다. 이것이 없으면
+    // editor/fact-check/repair/completion/judge(전부 selectedReporterCapsules 소비)가 재조정 前
+    // 집합을 작성·검증해 발행 콘텐츠가 publish_ready/composition 게이트가 승인한 편성과 어긋난다.
+    reporter = syncReporterSelectionToMain(reporter, reconciledSelected);
     articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates }, {
       seedEvidencePack
     });
