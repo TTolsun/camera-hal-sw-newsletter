@@ -38,18 +38,13 @@ function normalizeEditorialPlanReport(value, date) {
   };
 }
 
-// #724: coverage 권한 ON일 때만 editorial-plan이 reserve 포함 shortlisted view를 받아
-// 승급 후보까지 등급을 매길 수 있다. OFF는 현행 selected view를 유지해 입력·비용·결과가
-// 완전히 동일하다.
-function editorialPlanCapsuleView(coverageAuthority) {
-  return coverageAuthority === true ? 'shortlisted' : 'selected';
-}
-
-async function buildEditorialPlanReport({ date, articleCapsuleReport, commonContext, stage, coverageAuthority = false }) {
+// #724: coverage 권한은 항상 켜져 있으므로 editorial-plan은 언제나 reserve 포함 shortlisted
+// view를 받아 승급 후보까지 등급을 매긴다.
+async function buildEditorialPlanReport({ date, articleCapsuleReport, commonContext, stage }) {
   const result = await callLlmJson(
     stage,
     editorialPlanSystemPrompt(),
-    `${commonContext}\n\nSelected article capsule JSON:\n${JSON.stringify(capsuleInputFromReport(articleCapsuleReport, editorialPlanCapsuleView(coverageAuthority)), null, 2)}`,
+    `${commonContext}\n\nSelected article capsule JSON:\n${JSON.stringify(capsuleInputFromReport(articleCapsuleReport, 'shortlisted'), null, 2)}`,
     editorialPlanSchema
   );
   const normalized = normalizeEditorialPlanReport(result, date);
@@ -77,6 +72,5 @@ function editorFacingEditorialPlan(report) {
 module.exports = {
   normalizeEditorialPlanReport,
   buildEditorialPlanReport,
-  editorialPlanCapsuleView,
   editorFacingEditorialPlan
 };

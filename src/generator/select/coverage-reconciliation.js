@@ -102,13 +102,10 @@ function applyCaps(proposedMain, entryFor) {
   return proposedMain.filter(candidate => survivors.has(candidateKey(candidate)));
 }
 
-// 결정론 재조정 진입점. enabled=false면 결정론 selected를 그대로(동일 참조) 반환한다.
-function reconcileCoverage({ shortlistReport, editorialPlanReport, enabled } = {}) {
+// 결정론 재조정 진입점. 항상 실행된다(toggle 없음) — LLM coverage 제안을 받아 결정론
+// 불변식(승급 자격 가드·cap clamp·발행 floor backfill)을 강제한 최종 main 집합을 돌려준다.
+function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   const deterministicSelected = ensureArray(shortlistReport?.selected_articles);
-  if (!enabled) {
-    return { selected: deterministicSelected, diff: { enabled: false, changes: [] } };
-  }
-
   const reserve = ensureArray(shortlistReport?.reserve_candidates);
   const lookup = buildCoverageLookup(editorialPlanReport);
   const entryFor = (candidate) => coverageFor(lookup, candidate);
@@ -169,7 +166,6 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport, enabled } = {
   return {
     selected: clamped,
     diff: {
-      enabled: true,
       deterministic_selected: [...deterministicKeys],
       reconciled_selected: clamped.map(candidateKey),
       changes

@@ -24,21 +24,13 @@ function plan(candidate, coverage_decision, impact_level = 'medium') {
   return { url: candidate.url, coverage_decision, impact_level };
 }
 
-test('OFF flag returns deterministic selected unchanged (same reference)', () => {
-  const selected = [mainEligible({ url: 'a' })];
-  const shortlistReport = { selected_articles: selected, reserve_candidates: [] };
-  const out = reconcileCoverage({ shortlistReport, editorialPlanReport: { editorial_plans: [] }, enabled: false });
-  assert.equal(out.selected, selected);
-  assert.deepEqual(out.diff, { enabled: false, changes: [] });
-});
-
 test('LLM cannot promote a reserve candidate that is not deterministically main-eligible', () => {
   const shortlistReport = {
     selected_articles: [mainEligible({ url: 'a' })],
     reserve_candidates: [mainEligible({ url: 'b', main_article_source_allowed: false })]
   };
   const editorialPlanReport = { editorial_plans: [plan({ url: 'b' }, 'main_article', 'high')] };
-  const out = reconcileCoverage({ shortlistReport, editorialPlanReport, enabled: true });
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.ok(!out.selected.map(a => a.url).includes('b'), 'ineligible reserve must not become main');
   assert.ok(out.diff.changes.some(c => c.action === 'promotion_blocked_ineligible'));
 });
@@ -49,7 +41,7 @@ test('forbidden-bucket reserve candidate cannot be promoted even if LLM asks', (
     reserve_candidates: [mainEligible({ url: 'b', relevance_bucket: 'generic_tech_watchlist' })]
   };
   const editorialPlanReport = { editorial_plans: [plan({ url: 'b' }, 'main_article', 'high')] };
-  const out = reconcileCoverage({ shortlistReport, editorialPlanReport, enabled: true });
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.ok(!out.selected.map(a => a.url).includes('b'));
 });
 
@@ -59,7 +51,7 @@ test('cap clamp drops the lowest impact/score candidates when over mainArticleCo
   const editorialPlanReport = {
     editorial_plans: many.map((c, i) => plan(c, 'main_article', i === 0 ? 'high' : 'low'))
   };
-  const out = reconcileCoverage({ shortlistReport, editorialPlanReport, enabled: true });
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.equal(out.selected.length, 5);
   const kept = out.selected.map(a => a.url);
   assert.ok(kept.includes('u0'), 'high-impact survives');
@@ -73,7 +65,7 @@ test('cap clamp preserves deterministic (input) emit order, not impact/score ord
   const shortlistReport = { selected_articles: [c1, c2], reserve_candidates: [] };
   // LLM이 둘 다 같은 impact로 매김 → 재정렬 유혹이 있는 흔한 경우.
   const editorialPlanReport = { editorial_plans: [plan(c1, 'main_article', 'medium'), plan(c2, 'main_article', 'medium')] };
-  const out = reconcileCoverage({ shortlistReport, editorialPlanReport, enabled: true });
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.deepEqual(out.selected.map(a => a.url), ['c1', 'c2'], 'lead order must not flip to score-desc');
 });
 
@@ -83,7 +75,7 @@ test('supporting-main bucket count is clamped to supportingMainMaxAllowed', () =
   const s2 = mainEligible({ url: 's2', relevance_bucket: 'soc_platform_signal' });
   const shortlistReport = { selected_articles: [primary, s1, s2], reserve_candidates: [] };
   const editorialPlanReport = { editorial_plans: [primary, s1, s2].map(c => plan(c, 'main_article')) };
-  const out = reconcileCoverage({ shortlistReport, editorialPlanReport, enabled: true });
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   const supporting = out.selected.filter(a =>
     ['android_multimedia_camera_output', 'soc_platform_signal', 'cpp_ai_tooling_fallback'].includes(a.relevance_bucket)
   );
@@ -95,7 +87,7 @@ test('floor backfill restores min main count when LLM excludes everything', () =
   const b = mainEligible({ url: 'b', deterministic_score: 65 });
   const shortlistReport = { selected_articles: [a, b], reserve_candidates: [] };
   const editorialPlanReport = { editorial_plans: [plan(a, 'exclude', 'low'), plan(b, 'exclude', 'low')] };
-  const out = reconcileCoverage({ shortlistReport, editorialPlanReport, enabled: true });
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.ok(out.selected.length >= 1);
   assert.equal(out.selected[0].url, 'a');
   assert.ok(out.diff.changes.some(c => c.action === 'floor_backfill'));
@@ -106,7 +98,7 @@ test('diff records demotions and promotions vs deterministic', () => {
   const r = mainEligible({ url: 'r', deterministic_score: 40 });
   const shortlistReport = { selected_articles: [a], reserve_candidates: [r] };
   const editorialPlanReport = { editorial_plans: [plan(a, 'reference_only', 'low'), plan(r, 'main_article', 'high')] };
-  const out = reconcileCoverage({ shortlistReport, editorialPlanReport, enabled: true });
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.ok(out.selected.map(x => x.url).includes('r'));
   assert.ok(out.diff.changes.some(c => c.action === 'promoted'));
   assert.ok(out.diff.changes.some(c => c.action === 'demoted'));
@@ -115,6 +107,6 @@ test('diff records demotions and promotions vs deterministic', () => {
 test('ungraded candidate keeps its deterministic tier', () => {
   const a = mainEligible({ url: 'a' });
   const shortlistReport = { selected_articles: [a], reserve_candidates: [] };
-  const out = reconcileCoverage({ shortlistReport, editorialPlanReport: { editorial_plans: [] }, enabled: true });
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport: { editorial_plans: [] } });
   assert.deepEqual(out.selected.map(x => x.url), ['a']);
 });

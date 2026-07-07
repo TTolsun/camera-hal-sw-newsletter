@@ -483,18 +483,16 @@ async function main() {
     // #700: editorial plan(전용 LLM 호출, 필수 단계). 실패/빈 결과면 throw해서 editor 등 뒤 단계
     // 비용을 들이기 전에 파이프라인을 멈춘다. 성공하면 항상 유효한 plan이라 artifact를 기록하고
     // editor 작성을 안내한다.
-    const coverageAuthority = runtimeConfig.newsroomLlmCoverageAuthority;
     const editorialPlanReport = await buildEditorialPlanReport({
       date,
       articleCapsuleReport,
       commonContext,
-      stage: `editorial-plan attempt ${attempt}/${totalAttempts}`,
-      coverageAuthority
+      stage: `editorial-plan attempt ${attempt}/${totalAttempts}`
     });
     writeJson(path.join(newsroomDir, 'editorial-plan.json'), editorialPlanReport);
-    // #724: LLM coverage 등급을 결정론 재조정으로 main-set에 반영한다. 재조정 입력은 항상
-    // pristine 결정론 baseline(primary_selected_articles)이라 attempt 재시도에도 누적되지
-    // 않는다. flag OFF면 shortlistReport/capsule을 건드리지 않아 현행과 완전히 동일하다.
+    // #724: LLM coverage 등급을 결정론 재조정으로 main-set에 항상 반영한다(toggle 없음). 재조정
+    // 입력은 항상 pristine 결정론 baseline(primary_selected_articles)이라 attempt 재시도에도
+    // 누적되지 않는다.
     const deterministicSelectedBaseline = ensureArray(shortlistReport.primary_selected_articles).length > 0
       ? shortlistReport.primary_selected_articles
       : shortlistReport.selected_articles;
@@ -503,31 +501,28 @@ async function main() {
         selected_articles: deterministicSelectedBaseline,
         reserve_candidates: shortlistReport.reserve_candidates
       },
-      editorialPlanReport,
-      enabled: coverageAuthority
+      editorialPlanReport
     });
     writeJson(path.join(newsroomDir, 'coverage-reconciliation.json'), coverageReconciliation.diff);
-    if (coverageAuthority) {
-      const reconciledSelected = coverageReconciliation.selected;
-      const reconciledSelectedKeys = new Set(reconciledSelected.map(candidateKey));
-      shortlistReport.selected_articles = reconciledSelected;
-      // 승급된 reserve는 reserve_candidates에서 제거해 selected/reserve 캡슐 중복을 막는다.
-      shortlistReport.reserve_candidates = ensureArray(shortlistReport.reserve_candidates)
-        .filter(candidate => !reconciledSelectedKeys.has(candidateKey(candidate)));
-      // 재조정된 편성으로 composition_summary·publish_ready를 재계산한다. publish_ready는 단조
-      // 하향만 한다 — 결정론이 not-ready였으면 그대로 두고, 재조정 편성이 composition/publish
-      // 게이트를 못 넘으면 false로 낮춘다(결정론 편성 불변식을 재조정이 우회하지 못하게).
-      const reconciledSummary = compositionSummary(reconciledSelected);
-      shortlistReport.composition_summary = reconciledSummary;
-      shortlistReport.publish_ready = shortlistReport.publish_ready === true
-        && reviewCompositionGatePasses(reconciledSummary)
-        && publishReadyGateReasonSummary(reconciledSummary).length === 0;
-      generationRunState.selectedInputs = shortlistReport.selected_articles;
-      articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates }, {
-        seedEvidencePack
-      });
-      writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
-    }
+    const reconciledSelected = coverageReconciliation.selected;
+    const reconciledSelectedKeys = new Set(reconciledSelected.map(candidateKey));
+    shortlistReport.selected_articles = reconciledSelected;
+    // 승급된 reserve는 reserve_candidates에서 제거해 selected/reserve 캡슐 중복을 막는다.
+    shortlistReport.reserve_candidates = ensureArray(shortlistReport.reserve_candidates)
+      .filter(candidate => !reconciledSelectedKeys.has(candidateKey(candidate)));
+    // 재조정된 편성으로 composition_summary·publish_ready를 재계산한다. publish_ready는 단조
+    // 하향만 한다 — 결정론이 not-ready였으면 그대로 두고, 재조정 편성이 composition/publish
+    // 게이트를 못 넘으면 false로 낮춘다(결정론 편성 불변식을 재조정이 우회하지 못하게).
+    const reconciledSummary = compositionSummary(reconciledSelected);
+    shortlistReport.composition_summary = reconciledSummary;
+    shortlistReport.publish_ready = shortlistReport.publish_ready === true
+      && reviewCompositionGatePasses(reconciledSummary)
+      && publishReadyGateReasonSummary(reconciledSummary).length === 0;
+    generationRunState.selectedInputs = shortlistReport.selected_articles;
+    articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates }, {
+      seedEvidencePack
+    });
+    writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
     for (const candidate of ensureArray(reporter.candidates)) {
       writeCacheRecord(candidate, cacheDir, { stage: reporterStage, model: getLlmModelUsage(reporterStage) || 'unknown' });
     }
