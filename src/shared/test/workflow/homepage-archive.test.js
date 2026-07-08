@@ -65,39 +65,21 @@ function createElement(overrides = {}) {
   };
 }
 
-function updateLocationFromUrl(location, url) {
-  const parsed = new URL(url, 'https://example.com');
-  location.pathname = parsed.pathname;
-  location.search = parsed.search;
-  location.hash = parsed.hash;
-}
-
 async function renderHomepage(newsletters, headlineState = null, options = {}) {
   const script = extractHomepageScript();
   const errors = [];
   const elements = {
-    headline: createElement(),
-    'headline-card': createElement(),
-    'latest-card': createElement(),
-    'archive-list': createElement(),
+    'featured-card': createElement(),
+    'latest-grid': createElement(),
+    'latest-topics': createElement(),
+    'latest-sort': createElement({ value: 'latest' }),
+    'latest-empty': createElement({ hidden: true }),
     subscribe: createElement({ hidden: true }),
     'subscription-action': createElement()
   };
-  const historyUpdates = [];
-  const location = {
-    pathname: options.pathname || '/index.html',
-    search: options.search || '',
-    hash: options.hash || ''
-  };
   const window = {
-    location,
-    NewsletterArchive,
-    history: {
-      replaceState(_state, _title, url) {
-        historyUpdates.push(url);
-        updateLocationFromUrl(location, url);
-      }
-    }
+    location: { pathname: '/index.html', search: '', hash: '' },
+    NewsletterArchive
   };
 
   const context = {
@@ -160,7 +142,24 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
   await context.__homepageReady;
   await context.__subscriptionReady;
 
-  return { elements, errors, context, historyUpdates, location };
+  return { elements, errors, context };
+}
+
+// A minimal event target for a topic chip, matching the homepage delegated-click contract.
+function createTopicTarget(key, disabled = false) {
+  const button = {
+    getAttribute(name) {
+      return name === 'data-latest-topic' ? key : '';
+    },
+    hasAttribute(name) {
+      return name === 'disabled' && disabled;
+    },
+    closest(selector) {
+      assert.equal(selector, '[data-latest-topic]');
+      return button;
+    }
+  };
+  return button;
 }
 
 function newsletter(date, title = `Issue ${date}`) {
@@ -200,49 +199,8 @@ function archiveCardElements(html) {
     }));
 }
 
-function classAttribute(attrs) {
-  const match = String(attrs || '').match(/\bclass="([^"]*)"/);
-  return match ? match[1].split(/\s+/).filter(Boolean) : [];
-}
-
-function attrValue(attrs, name) {
-  const pattern = new RegExp(`\\b${name}="([^"]*)"`);
-  const match = String(attrs || '').match(pattern);
-  return match ? match[1] : '';
-}
-
 function assertNoNestedInteractive(html) {
   assert.doesNotMatch(String(html), /<a\b|<button\b|\brole="button"/i);
-}
-
-function childKind(tag, attrs) {
-  const classes = classAttribute(attrs);
-  if (classes.includes('card-meta')) return 'card-meta';
-  if (classes.includes('archive-tags')) return 'archive-tags';
-  if (classes.includes('card-title')) return 'card-title';
-  if (classes.includes('card-summary')) return 'card-summary';
-  if (classes.includes('card-actions')) return 'card-actions';
-  return tag;
-}
-
-function topLevelChildKinds(html) {
-  const kinds = [];
-  let depth = 0;
-  for (const match of String(html).matchAll(/<\/?([a-z0-9]+)\b([^>]*)>/gi)) {
-    const [source, rawTag, attrs = ''] = match;
-    const tag = rawTag.toLowerCase();
-    const isClosing = source.startsWith('</');
-    const isSelfClosing = source.endsWith('/>');
-    if (isClosing) {
-      depth = Math.max(0, depth - 1);
-      continue;
-    }
-    if (depth === 0) {
-      kinds.push(childKind(tag, attrs));
-    }
-    if (!isSelfClosing) depth += 1;
-  }
-  return kinds;
 }
 
 function readStylesheet() {
@@ -288,576 +246,247 @@ function assertCssDeclaration(block, property, value) {
   assert.match(normalized, new RegExp(`${property}\\s*:\\s*${value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*;`));
 }
 
-test('homepage shows empty states when there are no newsletters', async () => {
-  const { elements } = await renderHomepage([]);
-
-  assert.match(elements['latest-card'].innerHTML, /등록된 뉴스레터가 없습니다/);
-  assert.match(elements['archive-list'].innerHTML, /아카이브가 비어 있습니다/);
-});
-
-test('homepage keeps the latest issue visible and shows an archive empty state for one issue', async () => {
-  const items = [newsletter('2026-05-09', 'Current issue')];
-  const { elements } = await renderHomepage(items);
-
-  assert.match(elements['latest-card'].innerHTML, /2026-05-09/);
-  assert.match(elements['latest-card'].innerHTML, /Current issue/);
-  assert.match(elements['latest-card'].innerHTML, /<span class="status-chip">Latest<\/span>/);
-  assert.match(elements['latest-card'].innerHTML, /<div class="tag-row latest-tags"><span class="tag">Camera HAL<\/span><\/div>/);
-  assert.equal(elements['latest-card'].href, 'newsletters/2026-05-09/index.html');
-  assert.match(elements['latest-card']['aria-label'], /2026-05-09 Current issue 최신 뉴스레터 열기/);
-  assertNoNestedInteractive(elements['latest-card'].innerHTML);
-  assert.doesNotMatch(elements['latest-card'].innerHTML, /Markdown|button|card-actions/);
-  assert.doesNotMatch(elements['latest-card'].innerHTML, /Latest issue/);
-  assert.doesNotMatch(elements['latest-card'].innerHTML, />기사 보기<\/a>/);
-  assert.match(elements['archive-list'].innerHTML, /이전 뉴스레터가 없습니다/);
-});
-
-test('homepage excludes the latest issue from archive after sorting a copy', async () => {
-  const items = [
-    newsletter('2026-05-07', 'Older issue'),
-    newsletter('2026-05-09', 'Current issue'),
-    newsletter('2026-05-08', 'Middle issue')
-  ];
-  const originalOrder = items.map(item => item.date);
-
-  const { elements } = await renderHomepage(items);
-
-  assert.match(elements['latest-card'].innerHTML, /2026-05-09/);
-  assert.match(elements['latest-card'].innerHTML, /Current issue/);
-  assert.match(elements['latest-card'].innerHTML, /<span class="status-chip">Latest<\/span>/);
-  assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-09/);
-  assert.match(elements['archive-list'].innerHTML, /2026-05-08/);
-  assert.match(elements['archive-list'].innerHTML, /2026-05-07/);
-  const cards = archiveCardElements(elements['archive-list'].innerHTML);
-  assert.equal(cards.length, 2);
-  assert.equal(attrValue(cards[0].attrs, 'href'), 'newsletters/2026-05-08/index.html');
-  assert.equal(attrValue(cards[1].attrs, 'href'), 'newsletters/2026-05-07/index.html');
-  for (const card of cards) assertNoNestedInteractive(card.body);
-  assert.doesNotMatch(elements['archive-list'].innerHTML, /기사 보기|Markdown|card-actions/);
-  assert.doesNotMatch(elements['archive-list'].innerHTML, /이슈 보기/);
-  assert.deepEqual(items.map(item => item.date), originalOrder);
-});
-
-test('archive preview ignores old topic and sort query parameters without mutating history', async () => {
-  const items = [
-    newsletter('2026-05-10', 'Latest issue'),
-    { ...newsletter('2026-05-09', 'Android archive issue'), tags: ['Android'] },
-    { ...newsletter('2026-05-08', 'Camera archive issue'), tags: ['Camera HAL'] }
-  ];
-
-  const { elements, historyUpdates, location } = await renderHomepage(items, null, {
-    search: '?topic=android&sort=oldest&keep=1',
-    hash: '#archive'
-  });
-
-  const archiveHtml = elements['archive-list'].innerHTML;
-  assert.match(archiveHtml, /Android archive issue/);
-  assert.match(archiveHtml, /Camera archive issue/);
-  assert.ok(archiveHtml.indexOf('Android archive issue') < archiveHtml.indexOf('Camera archive issue'));
-  assert.deepEqual(historyUpdates, []);
-  assert.equal(location.search, '?topic=android&sort=oldest&keep=1');
-  assert.equal(location.hash, '#archive');
-});
-
-test('homepage archive preview keeps filter and sort controls delegated to archive page', async () => {
-  const items = [
-    newsletter('2026-05-11', 'Latest issue'),
-    { ...newsletter('2026-05-10', 'Camera archive issue'), tags: ['Camera HAL'] },
-    { ...newsletter('2026-05-09', 'Newer Android archive issue'), tags: ['Android'] },
-    { ...newsletter('2026-05-08', 'Older Android archive issue'), tags: ['Android'] }
-  ];
-
-  const { elements, historyUpdates } = await renderHomepage(items);
-
-  const archiveHtml = elements['archive-list'].innerHTML;
-  assert.match(archiveHtml, /Camera archive issue/);
-  assert.match(archiveHtml, /Newer Android archive issue/);
-  assert.match(archiveHtml, /Older Android archive issue/);
-  assert.ok(archiveHtml.indexOf('Camera archive issue') < archiveHtml.indexOf('Newer Android archive issue'));
-  assert.ok(archiveHtml.indexOf('Newer Android archive issue') < archiveHtml.indexOf('Older Android archive issue'));
-  assert.equal(elements['topic-filter-list'], undefined);
-  assert.equal(elements['archive-sort'], undefined);
-  assert.equal(elements['archive-filter-shortcut'], undefined);
-  assert.deepEqual(historyUpdates, []);
-});
-
-test('archive preview shows fetch error without toolbar state', async () => {
-  const { elements, errors } = await renderHomepage([], null, { newsletterFetchError: true });
-
-  assert.match(elements['latest-card'].innerHTML, /뉴스레터 정보를 불러오지 못했습니다/);
-  assert.match(elements['archive-list'].innerHTML, /아카이브 정보를 불러오지 못했습니다/);
-  assert.equal(errors.length, 1);
-});
-
-test('renders at most four archive preview cards after sorting and excluding the latest newsletter', async () => {
-  const items = [
-    newsletter('2026-05-19'),
-    newsletter('2026-05-20'),
-    newsletter('2026-05-26', 'Latest issue'),
-    newsletter('2026-05-21'),
-    newsletter('2026-05-25'),
-    newsletter('2026-05-22'),
-    newsletter('2026-05-24'),
-    newsletter('2026-05-23')
-  ];
-
-  const { elements } = await renderHomepage(items);
-  const cards = archiveCards(elements['archive-list'].innerHTML);
-
-  assert.equal(cards.length, 4);
-  assert.match(elements['latest-card'].innerHTML, /2026-05-26/);
-  assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-26/);
-  for (const date of ['2026-05-25', '2026-05-24', '2026-05-23', '2026-05-22']) {
-    assert.match(elements['archive-list'].innerHTML, new RegExp(date));
-  }
-  assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-21/);
-  assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-20/);
-  assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-19/);
-});
-
-test('archive card order, clamps, and tag overflow keep archive cards scannable', async () => {
-  const archiveItem = {
-    ...newsletter('2026-05-24', 'Archive card title'),
-    summary: 'Archive card summary',
-    tags: ['Camera HAL', 'Camera "HAL" & Android', 'CameraX', 'Image Processing', 'AOSP <Camera>']
-  };
-  const { elements } = await renderHomepage([
-    newsletter('2026-05-25', 'Latest issue'),
-    archiveItem
-  ]);
-  const [card] = archiveCards(elements['archive-list'].innerHTML);
-
-  assert.deepEqual(topLevelChildKinds(card), [
-    'card-meta',
-    'archive-tags',
-    'card-title',
-    'card-summary'
-  ]);
-  assert.match(card, /<h3 class="card-title clamp-2">Archive card title<\/h3>/);
-  // Weekly cards list each article title on its own line, so the summary is no longer line-clamped.
-  assert.match(card, /<p class="card-summary archive-card-summary">Archive card summary<\/p>/);
-  assert.match(card, /<span class="tag">Camera HAL<\/span>/);
-  assert.match(card, /<span class="tag">Camera &quot;HAL&quot; &amp; Android<\/span>/);
-  assert.match(card, /<span class="tag">CameraX<\/span>/);
-  assert.match(card, /class="tag tag-more" aria-label="추가 태그 2개: Image Processing, AOSP &lt;Camera&gt;" title="Image Processing, AOSP &lt;Camera&gt;">\+2<\/span>/);
-});
-
-test('archive card summary lists each article title on its own line and truncates past 40 chars', async () => {
-  const shortTitle = 'CameraX 1.6.1 업데이트';
-  const longTitle = 'A'.repeat(60);
-  const archiveItem = {
-    ...newsletter('2026-05-24', 'Archive card title'),
-    summary: `${shortTitle}\n${longTitle}`
-  };
-  const { elements } = await renderHomepage([
-    newsletter('2026-05-25', 'Latest issue'),
-    archiveItem
-  ]);
-  const [card] = archiveCards(elements['archive-list'].innerHTML);
-
-  // Titles render one per line, joined by <br>; titles longer than 40 chars are cut to 40 + "..".
-  assert.match(card, new RegExp(`<p class="card-summary archive-card-summary">${shortTitle}<br>${'A'.repeat(40)}\\.\\.</p>`));
-});
-
-test('latest card shows a weekly article image that is not the headline image', async () => {
-  const imgA = 'https://example.com/camerax.png';
-  const imgB = 'https://i.ytimg.com/vi/abc/hqdefault.jpg?days_since_epoch=20609';
-  const latest = {
-    ...newsletter('2026-06-06', 'Weekly issue'),
-    weeklyKey: '2026-W23',
-    weekStartDate: '2026-06-01',
-    weekEndDate: '2026-06-07',
-    article_count: 2,
-    article_images: [imgA, imgB]
-  };
-  const { elements } = await renderHomepage([latest], {
-    schemaVersion: 1,
-    current_headline: { image_url: 'https://i.ytimg.com/vi/abc/hqdefault.jpg?days_since_epoch=99999' }
-  });
-  const html = elements['latest-card'].innerHTML;
-  assert.match(html, /class="latest-card-media"/);
-  assert.match(html, /<img src="https:\/\/example\.com\/camerax\.png"/);
-  // The headline image (same ytimg path, different query) must not be reused here.
-  assert.doesNotMatch(html, /i\.ytimg\.com/);
-});
-
-test('latest card reuses the headline image only for a single-article (headline) week', async () => {
-  const img = 'https://i.ytimg.com/vi/abc/hqdefault.jpg';
-  const latest = {
-    ...newsletter('2026-06-06', 'Weekly issue'),
-    weeklyKey: '2026-W23',
-    weekStartDate: '2026-06-01',
-    weekEndDate: '2026-06-07',
-    article_count: 1,
-    article_images: [img]
-  };
-  const { elements } = await renderHomepage([latest], {
-    schemaVersion: 1,
-    current_headline: { image_url: img }
-  });
-  assert.match(elements['latest-card'].innerHTML, /<img src="https:\/\/i\.ytimg\.com\/vi\/abc\/hqdefault\.jpg"/);
-});
-
-test('latest card omits the image when the only weekly image is the headline image (multi-article week)', async () => {
-  const img = 'https://i.ytimg.com/vi/abc/hqdefault.jpg';
-  const latest = {
-    ...newsletter('2026-06-06', 'Weekly issue'),
-    weeklyKey: '2026-W23',
-    weekStartDate: '2026-06-01',
-    weekEndDate: '2026-06-07',
-    article_count: 2,
-    article_images: [img]
-  };
-  const { elements } = await renderHomepage([latest], {
-    schemaVersion: 1,
-    current_headline: { image_url: img }
-  });
-  assert.doesNotMatch(elements['latest-card'].innerHTML, /latest-card-media/);
-});
-
-test('latest card renders the site-relative fallback image when the weekly has no https article image', async () => {
-  // 유효 https 이미지가 없는 주는 article_images에 fallback 자산 경로 1개가 담기며,
-  // 이는 헤드라인 이미지와 절대 같지 않으므로 article_count와 무관하게 항상 노출된다.
-  for (const articleCount of [1, 2]) {
-    const latest = {
-      ...newsletter('2026-06-06', 'Weekly issue'),
-      weeklyKey: '2026-W23',
-      weekStartDate: '2026-06-01',
-      weekEndDate: '2026-06-07',
-      article_count: articleCount,
-      article_images: ['assets/images/fallback/android.svg']
-    };
-    const { elements } = await renderHomepage([latest], {
-      schemaVersion: 1,
-      current_headline: { image_url: 'https://i.ytimg.com/vi/abc/hqdefault.jpg' }
-    });
-    const html = elements['latest-card'].innerHTML;
-    assert.match(html, /class="latest-card-media"/);
-    assert.match(html, /<img src="assets\/images\/fallback\/android\.svg"/);
-  }
-});
-
-test('archive cards omit empty tag rows while preserving the remaining child order', async () => {
-  const archiveItem = {
-    ...newsletter('2026-05-24', 'No tags archive card'),
-    tags: []
-  };
-  const { elements } = await renderHomepage([
-    newsletter('2026-05-25', 'Latest issue'),
-    archiveItem
-  ]);
-  const [card] = archiveCards(elements['archive-list'].innerHTML);
-
-  assert.deepEqual(topLevelChildKinds(card), [
-    'card-meta',
-    'card-title',
-    'card-summary'
-  ]);
-  assert.doesNotMatch(card, /archive-tags/);
-});
-
-test('does not remove the featured headline newsletter from archive unless it is the latest newsletter', async () => {
-  const { elements } = await renderHomepage([
-    newsletter('2026-05-25', 'Latest issue'),
-    newsletter('2026-05-24', 'Featured archive issue'),
-    newsletter('2026-05-23', 'Older archive issue')
-  ], {
+function validHeadlineState(overrides = {}) {
+  return {
     schemaVersion: 1,
     current_headline: {
       article_identity_key: 'url:https://example.com/source',
-      title: 'Featured archive headline',
-      summary: 'Featured archive summary',
+      title: 'Camera HAL headline',
+      summary: 'Camera HAL summary',
       source_url: 'https://example.com/source',
-      newsletter_date: '2026-05-24',
-      newsletter_url: 'newsletters/2026-05-24/index.html',
-      selected_at: '2026-05-24',
-      snapshot: {
-        source_name: 'Example Source'
-      }
+      newsletter_date: '2026-05-23',
+      selected_at: '2026-05-23',
+      snapshot: { source_name: 'Example Source' },
+      ...overrides
     },
     headline_history: []
-  });
+  };
+}
 
-  assert.match(elements['headline-card'].innerHTML, /Featured archive headline/);
-  assert.match(elements['archive-list'].innerHTML, /Featured archive issue/);
-  assert.match(elements['archive-list'].innerHTML, /Older archive issue/);
-  assert.doesNotMatch(elements['archive-list'].innerHTML, /Latest issue/);
+// ---- Featured hero (from homepage-headline.json) ----
+
+test('featured hero renders the current headline with escaped copy, image, kicker, and article link', async () => {
+  const weekly = {
+    ...newsletter('2026-05-23', 'Weekly issue'),
+    weeklyKey: '2026-W21',
+    weekStartDate: '2026-05-18',
+    weekEndDate: '2026-05-24',
+    html: 'newsletters/2026-W21/index.html',
+    tags: ['Camera HAL']
+  };
+  const { elements } = await renderHomepage([weekly], validHeadlineState({
+    title: '<Camera HAL headline>',
+    summary: 'Summary & details',
+    newsletter_url: 'newsletters/2026-W21/index.html',
+    newsletter_article_url: 'newsletters/2026-W21/index.html#article-camerax-preview',
+    image_url: 'https://example.com/headline.png',
+    image_alt: '<Camera preview image>'
+  }));
+
+  const html = elements['featured-card'].innerHTML;
+  assert.match(html, /<h1 id="featured-title" class="featured-title">&lt;Camera HAL headline&gt;<\/h1>/);
+  assert.match(html, /<p class="featured-lead">Summary &amp; details<\/p>/);
+  assert.match(html, /<img class="featured-img" src="https:\/\/example\.com\/headline\.png" alt="&lt;Camera preview image&gt;"/);
+  assert.match(html, /<p class="featured-kicker">Camera HAL<\/p>/);
+  assert.match(html, /<div class="featured-meta">2026-05-23 · Example Source<\/div>/);
+  assert.match(html, /href="newsletters\/2026-W21\/index\.html#article-camerax-preview"[^>]*>기사 읽기 →<\/a>/);
+  assert.doesNotMatch(html, /rel="noopener"/);
 });
 
-test('homepage shows review publication issues when data entry paths are present', async () => {
-  const items = [
-    newsletter('2026-05-13', 'Previous issue'),
-    newsletter('2026-05-14', 'Review publication issue')
-  ];
-
-  const { elements } = await renderHomepage(items);
-
-  assert.match(elements['latest-card'].innerHTML, /2026-05-14/);
-  assert.match(elements['latest-card'].innerHTML, /Review publication issue/);
-  assert.equal(elements['latest-card'].href, 'newsletters/2026-05-14/index.html');
-  assert.match(elements['archive-list'].innerHTML, /2026-05-13/);
-});
-
-test('only Latest appears beside a homepage date while archive keeps fallback tags below metadata', async () => {
-  const { elements } = await renderHomepage([
-    fallbackNewsletter('2026-05-20', 'Archived fallback issue'),
-    fallbackNewsletter('2026-05-24', 'Current fallback issue')
-  ]);
-  const [archiveCard] = archiveCards(elements['archive-list'].innerHTML);
-  const latestMeta = elements['latest-card'].innerHTML.match(/<div class="card-meta">([\s\S]*?)<\/div>/)?.[1] || '';
-  const archiveMeta = archiveCard.match(/<div class="card-meta archive-card-meta">([\s\S]*?)<\/div>/)?.[1] || '';
-
-  assert.match(latestMeta, /<span class="issue-date">2026-05-24<\/span>\s*<span class="status-chip">Latest<\/span>/);
-  assert.doesNotMatch(latestMeta, /Tooling Watch Edition/);
-  assert.match(elements['latest-card'].innerHTML, /Current fallback issue/);
-  assert.match(archiveMeta, /<span class="issue-date">2026-05-20<\/span>/);
-  assert.doesNotMatch(archiveMeta, /status-chip|Tooling Watch Edition/);
-  assert.match(archiveCard, /<div class="tag-row archive-tags"><span class="tag">Tooling Watch Edition<\/span><span class="tag">Tooling Watch<\/span><\/div>/);
-  assertNoNestedInteractive(archiveCard);
-});
-
-test('homepage and archive accept single-article public issues as normal entries', async () => {
-  const items = [
-    newsletter('2026-05-20', 'Previous one-article issue'),
-    newsletter('2026-05-21', 'Latest one-article issue')
-  ];
-
-  const { elements } = await renderHomepage(items);
-
-  assert.match(elements['latest-card'].innerHTML, /2026-05-21/);
-  assert.match(elements['latest-card'].innerHTML, /Latest one-article issue/);
-  assert.equal(elements['latest-card'].href, 'newsletters/2026-05-21/index.html');
-  assert.match(elements['archive-list'].innerHTML, /2026-05-20/);
-  assert.match(elements['archive-list'].innerHTML, /Previous one-article issue/);
-  assert.doesNotMatch(elements['latest-card'].innerHTML, /review-only|diagnostics-only|Tooling Watch Edition/i);
-});
-
-test('homepage headline fetch absence does not block latest/archive rendering', async () => {
+test('featured hero leaves the static brand hero in place when the headline is missing', async () => {
   const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], null);
-
-  assert.equal(elements.headline.hidden, true);
-  assert.match(elements['latest-card'].innerHTML, /Current issue/);
+  // The harness starts the featured card empty; a missing headline must not inject article markup.
+  assert.equal(elements['featured-card'].innerHTML, '');
   assert.equal(errors.length, 0);
 });
 
-test('homepage hides null headline state', async () => {
+test('featured hero ignores a malformed headline payload without throwing', async () => {
+  const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], 'malformed');
+  assert.equal(elements['featured-card'].innerHTML, '');
+  assert.equal(errors.length, 1);
+});
+
+test('featured hero ignores a null headline while keeping the grid working', async () => {
   const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
     schemaVersion: 1,
     current_headline: null,
     headline_history: []
   });
-
-  assert.equal(elements.headline.hidden, true);
-  assert.match(elements['latest-card'].innerHTML, /Current issue/);
+  assert.equal(elements['featured-card'].innerHTML, '');
+  assert.match(elements['latest-grid'].innerHTML, /Current issue/);
 });
 
-test('homepage malformed headline state is a headline-only fallback', async () => {
-  const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], 'malformed');
+test('featured hero falls back to the external source link when no internal URL exists', async () => {
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], validHeadlineState({
+    newsletter_date: '',
+    snapshot: {}
+  }));
+  const html = elements['featured-card'].innerHTML;
+  assert.match(html, /href="https:\/\/example\.com\/source" rel="noopener">원문 보기 →<\/a>/);
+});
 
-  assert.equal(elements.headline.hidden, true);
-  assert.match(elements['latest-card'].innerHTML, /Current issue/);
+test('featured hero uses the site fallback image when the headline image is unusable', async () => {
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], validHeadlineState());
+  assert.match(elements['featured-card'].innerHTML, /src="assets\/images\/fallback\/newsletter-default\.svg"/);
+});
+
+test('featured hero escapes a long headline title without truncating the DOM text', async () => {
+  const longTitle = '<Camera HAL headline with a very long title that should stay fully present in the DOM>';
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], validHeadlineState({ title: longTitle }));
+  assert.match(
+    elements['featured-card'].innerHTML,
+    /&lt;Camera HAL headline with a very long title that should stay fully present in the DOM&gt;/
+  );
+});
+
+// ---- 최신 소식 grid (from newsletters-weekly.json) ----
+
+test('최신 소식 grid renders every weekly issue as an image-forward card in date order', async () => {
+  const { elements } = await renderHomepage([
+    newsletter('2026-05-23', 'Older issue'),
+    newsletter('2026-05-25', 'Latest issue'),
+    newsletter('2026-05-24', 'Middle issue')
+  ], null);
+  const html = elements['latest-grid'].innerHTML;
+  const cards = archiveCards(html);
+
+  assert.equal(cards.length, 3);
+  // The homepage grid keeps the latest issue (unlike the old preview that hid it).
+  assert.ok(html.indexOf('Latest issue') < html.indexOf('Middle issue'));
+  assert.ok(html.indexOf('Middle issue') < html.indexOf('Older issue'));
+  assert.equal(elements['latest-empty'].hidden, true);
+  for (const card of cards) assertNoNestedInteractive(card);
+});
+
+test('최신 소식 grid shows an empty message when there are no newsletters', async () => {
+  const { elements } = await renderHomepage([], null);
+  assert.match(elements['latest-grid'].innerHTML, /등록된 뉴스레터가 없습니다/);
+});
+
+test('최신 소식 grid surfaces a fetch error without throwing', async () => {
+  const { elements, errors } = await renderHomepage([], null, { newsletterFetchError: true });
+  assert.match(elements['latest-grid'].innerHTML, /뉴스레터 정보를 불러오지 못했습니다/);
   assert.equal(errors.length, 1);
 });
 
-test('homepage renders valid headline state linking to the weekly issue, image, and escaped text', async () => {
-  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
-    schemaVersion: 1,
-    current_headline: {
-      article_identity_key: 'url:https://example.com/source',
-      title: '<Camera HAL headline>',
-      summary: 'Summary & details',
-      source_url: 'https://example.com/source',
-      newsletter_date: '2026-05-23',
-      newsletter_url: 'newsletters/2026-05-23/index.html',
-      newsletter_article_url: 'newsletters/2026-05-23/index.html#article-camerax-preview',
-      image_url: 'https://example.com/headline.png',
-      image_alt: '<Camera preview image>',
-      selected_at: '2026-05-23',
-      snapshot: {
-        source_name: 'Example Source'
-      }
-    },
-    headline_history: []
-  });
+test('최신 소식 grid filters by topic on chip click and shows the empty state for no matches', async () => {
+  const { elements } = await renderHomepage([
+    newsletter('2026-05-25', 'Camera issue'),
+    { ...newsletter('2026-05-24', 'Android issue'), tags: ['Android'] }
+  ], null);
+  const topicHandler = elements['latest-topics'].listeners.click;
 
-  assert.equal(elements.headline.hidden, false);
-  assert.match(elements['headline-card'].innerHTML, /<figure class="headline-media">/);
-  assert.match(elements['headline-card'].innerHTML, /&lt;Camera HAL headline&gt;/);
-  assert.match(elements['headline-card'].innerHTML, /Summary &amp; details/);
-  assert.match(elements['headline-card'].innerHTML, /<img src="https:\/\/example\.com\/headline\.png" alt="&lt;Camera preview image&gt;" loading="lazy" decoding="async" data-homepage-image-fallback>/);
-  assert.match(elements['headline-card'].innerHTML, /<div class="tag-row headline-tags"><span class="tag">Camera HAL<\/span><\/div>/);
-  assert.match(elements['headline-card'].innerHTML, /class="card-title clamp-2"/);
-  assert.match(elements['headline-card'].innerHTML, /class="card-summary clamp-3"/);
-  // "기사 보기" links to the matched issue page (the weekly newsletter) at the article's anchor.
-  assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/index\.html#article-camerax-preview">기사 보기<\/a>/);
-  assert.match(elements['headline-card'].innerHTML, /기사 보기/);
-  assert.match(elements['headline-card'].innerHTML, /href="newsletters\/2026-05-23\/newsletter\.md">Markdown<\/a>/);
-  assert.match(elements['headline-card'].innerHTML, /Headline/);
-  assert.doesNotMatch(elements['headline-card'].innerHTML, /rel="noopener"/);
+  topicHandler({ target: createTopicTarget('android') });
+  assert.match(elements['latest-grid'].innerHTML, /Android issue/);
+  assert.doesNotMatch(elements['latest-grid'].innerHTML, /Camera issue/);
+  assert.match(elements['latest-topics'].innerHTML, /data-latest-topic="android" aria-pressed="true"/);
+  assert.equal(elements['latest-empty'].hidden, true);
+
+  topicHandler({ target: createTopicTarget('soc-platform') });
+  assert.equal(elements['latest-grid'].innerHTML, '');
+  assert.equal(elements['latest-empty'].hidden, false);
 });
 
-test('homepage headline renders missing image fallback without hiding metadata', async () => {
-  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
-    schemaVersion: 1,
-    current_headline: {
-      article_identity_key: 'url:https://example.com/source',
-      title: 'Camera HAL headline',
-      summary: 'Camera HAL summary',
-      source_url: 'https://example.com/source',
-      newsletter_date: '2026-05-23',
-      newsletter_url: 'newsletters/2026-05-23/index.html',
-      selected_at: '2026-05-23',
-      snapshot: {
-        source_name: 'Example Source'
-      }
-    },
-    headline_history: []
-  });
+test('최신 소식 grid reorders when the sort control changes', async () => {
+  const { elements } = await renderHomepage([
+    newsletter('2026-05-25', 'Newer issue'),
+    newsletter('2026-05-23', 'Older issue')
+  ], null);
+  const sortHandler = elements['latest-sort'].listeners.change;
 
-  assert.equal(elements.headline.hidden, false);
-  assert.match(elements['headline-card'].innerHTML, /<div class="headline-media is-image-unavailable" aria-hidden="true">/);
-  assert.match(elements['headline-card'].innerHTML, /이미지 없음/);
-  assert.match(elements['headline-card'].innerHTML, /2026-05-23/);
-  assert.match(elements['headline-card'].innerHTML, /Example Source/);
+  assert.ok(elements['latest-grid'].innerHTML.indexOf('Newer issue') < elements['latest-grid'].innerHTML.indexOf('Older issue'));
+  elements['latest-sort'].value = 'oldest';
+  sortHandler();
+  const html = elements['latest-grid'].innerHTML;
+  assert.ok(html.indexOf('Older issue') < html.indexOf('Newer issue'));
 });
 
-test('homepage headline image error handler hides broken image and marks fallback state', async () => {
-  const { context } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
-    schemaVersion: 1,
-    current_headline: {
-      article_identity_key: 'url:https://example.com/source',
-      title: 'Camera HAL headline',
-      summary: 'Camera HAL summary',
-      source_url: 'https://example.com/source',
-      newsletter_date: '2026-05-23',
-      newsletter_url: 'newsletters/2026-05-23/index.html',
-      image_url: 'https://example.com/broken.png',
-      image_alt: 'Broken image',
-      selected_at: '2026-05-23',
-      snapshot: {
-        source_name: 'Example Source'
-      }
-    },
-    headline_history: []
-  });
-  const addedClasses = [];
-  const image = {
-    hidden: false,
-    closest(selector) {
-      assert.equal(selector, '.headline-media');
-      return {
-        classList: {
-          add(value) {
-            addedClasses.push(value);
-          }
-        }
-      };
-    }
-  };
+test('최신 소식 topic chips reflect counts and disable empty topics', async () => {
+  const { elements } = await renderHomepage([
+    newsletter('2026-05-25', 'Camera issue'),
+    { ...newsletter('2026-05-24', 'Android issue'), tags: ['Android'] }
+  ], null);
+  const chips = elements['latest-topics'].innerHTML;
 
-  context.handleHomepageImageError({ currentTarget: image });
-
-  assert.equal(image.hidden, true);
-  assert.deepEqual(addedClasses, ['is-image-unavailable']);
+  assert.match(chips, /data-latest-topic="all" aria-pressed="true"/);
+  assert.match(chips, /data-latest-topic="camera-hal"[^>]*>Camera HAL<\/button>/);
+  assert.match(chips, /data-latest-topic="soc-platform"[^>]*disabled aria-disabled="true"/);
 });
 
-test('homepage headline omits malformed matched tags while keeping source metadata', async () => {
-  const malformedNewsletter = {
-    ...newsletter('2026-05-23', 'Current issue'),
-    tags: 'Camera HAL'
-  };
-  const { elements } = await renderHomepage([malformedNewsletter], {
-    schemaVersion: 1,
-    current_headline: {
-      article_identity_key: 'url:https://example.com/source',
-      title: 'Camera HAL headline',
-      summary: 'Camera HAL summary',
-      source_url: 'https://example.com/source',
-      newsletter_date: '2026-05-23',
-      newsletter_url: 'newsletters/2026-05-23/index.html',
-      selected_at: '2026-05-23',
-      snapshot: {
-        source_name: 'Example Source'
-      }
-    },
-    headline_history: []
-  });
-
-  assert.equal(elements.headline.hidden, false);
-  assert.doesNotMatch(elements['headline-card'].innerHTML, /headline-tags/);
-  assert.match(elements['headline-card'].innerHTML, /2026-05-23/);
-  assert.match(elements['headline-card'].innerHTML, /Example Source/);
+test('최신 소식 grid surfaces a fallback edition as the card kicker', async () => {
+  const { elements } = await renderHomepage([fallbackNewsletter('2026-05-24', 'Fallback issue')], null);
+  const [card] = archiveCards(elements['latest-grid'].innerHTML);
+  assert.match(card, /<div class="card-kicker">Tooling Watch Edition<\/div>/);
+  assertNoNestedInteractive(card);
 });
 
-test('homepage clamps long card copy without truncating escaped DOM text', async () => {
-  const longTitle = '<Camera HAL headline with a very long title that should stay fully present in the DOM>';
-  const longSummary = 'Summary & details with enough words to represent a long homepage card summary that is visually clamped but not removed from the markup.';
-  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
-    schemaVersion: 1,
-    current_headline: {
-      article_identity_key: 'url:https://example.com/source',
-      title: longTitle,
-      summary: longSummary,
-      source_url: 'https://example.com/source',
-      newsletter_date: '2026-05-23',
-      newsletter_url: 'newsletters/2026-05-23/index.html',
-      selected_at: '2026-05-23',
-      snapshot: {
-        source_name: 'Example Source'
-      }
-    },
-    headline_history: []
+// ---- Shared card renderer ----
+
+test('renderArchiveCard builds an image-forward card with kicker, headline, and week meta', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    weeklyKey: '2026-W28',
+    date: '2026-07-06',
+    title: '2026 W28',
+    weekStartDate: '2026-07-06',
+    weekEndDate: '2026-07-12',
+    article_count: 3,
+    summary: '기사 A\n기사 B',
+    tags: ['Camera HAL', 'Android'],
+    html: 'newsletters/2026-W28/index.html',
+    article_images: ['https://example.com/thumb.png']
   });
 
-  assert.match(elements['headline-card'].innerHTML, /class="card-title clamp-2"/);
-  assert.match(elements['headline-card'].innerHTML, /&lt;Camera HAL headline with a very long title that should stay fully present in the DOM&gt;/);
-  assert.match(elements['headline-card'].innerHTML, /class="card-summary clamp-3"/);
-  assert.match(elements['headline-card'].innerHTML, /Summary &amp; details with enough words to represent a long homepage card summary that is visually clamped but not removed from the markup\./);
+  assert.ok(html.indexOf('card-thumb') < html.indexOf('card-body'));
+  assert.match(html, /<img class="card-thumb-img" src="https:\/\/example\.com\/thumb\.png"[^>]*onerror=/);
+  assert.match(html, /<div class="card-kicker">Camera HAL<\/div>/);
+  // Headline is the issue's top article title (first summary line), not the issue label.
+  assert.match(html, /<h3 class="card-title clamp-2 nc-h">기사 A<\/h3>/);
+  assert.match(html, /<div class="card-meta archive-card-meta"><span class="issue-date">W28<\/span> · 2026\.07\.06 – 07\.12 · 총 3건<\/div>/);
+  assert.doesNotMatch(html, /card-summary|tag-row/);
 });
 
-test('homepage headline falls back to external source CTA when no newsletter URL is available', async () => {
-  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
-    schemaVersion: 1,
-    current_headline: {
-      article_identity_key: 'url:https://example.com/source',
-      title: 'Camera HAL headline',
-      summary: 'Camera HAL summary',
-      source_url: 'https://example.com/source',
-      selected_at: '2026-05-23',
-      snapshot: {}
-    },
-    headline_history: []
+test('renderArchiveCard falls back to the site newsletter image and a kicker when data is sparse', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    date: '2026-06-03',
+    title: 'Daily issue',
+    summary: '',
+    tags: [],
+    html: 'newsletters/2026-06-03/index.html'
   });
 
-  assert.equal(elements.headline.hidden, false);
-  assert.match(elements['headline-card'].innerHTML, /출처/);
-  assert.match(elements['headline-card'].innerHTML, /href="https:\/\/example\.com\/source" rel="noopener"/);
-  assert.match(elements['headline-card'].innerHTML, /원문 보기/);
+  assert.match(html, /src="assets\/images\/fallback\/newsletter-default\.svg"/);
+  assert.match(html, /<div class="card-kicker">Camera HAL<\/div>/);
+  assert.match(html, /<h3 class="card-title clamp-2 nc-h">Daily issue<\/h3>/);
 });
 
-test('homepage exposes clear Featured and Latest heading rows without changing heading levels', () => {
+// ---- Static homepage markup contracts ----
+
+test('homepage renders a static brand featured hero and a 최신 소식 grid with sort and topic hooks', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
-  assert.match(html, /보이지 않는[\s\S]*hero-title-main[\s\S]*카메라의[\s\S]*오늘[\s\S]*hero-title-nowrap[\s\S]*그러나[\s\S]*hero-title-main[\s\S]*미래/);
-  assert.match(html, /Camera HAL, Android, Linux Driver, AI 기술을 중심으로 모바일 카메라 기술의 변화를 추적합니다\./);
+  // A static brand hero keeps a single H1 present before the headline data loads.
+  assert.match(html, /<article id="featured-card" class="featured-hero">/);
+  assert.match(html, /<h1 id="featured-title" class="featured-title">보이지 않는 카메라의 오늘, 그러나 미래<\/h1>/);
+  assert.match(html, /<p class="featured-kicker">Camera SW Newsroom<\/p>/);
+  // 최신 소식 grid section with sort + topic filter + grid hooks.
+  assert.match(html, /<h2 id="latest-title">최신 소식<\/h2>/);
+  assert.match(html, /<select id="latest-sort" class="nc-sort"[\s\S]*?<option value="latest">최신순<\/option>[\s\S]*?<option value="oldest">오래된순<\/option>/);
+  assert.match(html, /<div id="latest-topics" class="keyword-row latest-topics"/);
+  assert.match(html, /<div id="latest-grid" class="archive-grid latest-grid">/);
+  assert.match(html, /<a class="section-link" href="archive\.html">전체 아카이브 보기<\/a>/);
+  // Shared nav and subscription hooks are preserved.
   assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">Home<\/a>[\s\S]*href="archive\.html">Archive<\/a>[\s\S]*href="https:\/\/github\.com\/TTolsun\/camera-hal-sw-newsletter">GitHub<\/a>/);
-  assert.match(html, /<a class="button button-secondary" href="#archive">/);
-  assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search|Archive로 이동|Archive 탐색/);
-  assert.match(html, /<section id="headline"[\s\S]*?<div class="section-heading section-heading-row">[\s\S]*?<h2 id="headline-title">Featured Headline<\/h2>/);
-  assert.match(html, /<section id="latest"[\s\S]*?<span class="section-icon section-icon-latest" aria-hidden="true"><\/span>[\s\S]*?<h2 id="latest-title">Latest Newsletter<\/h2>[\s\S]*?<\/div>\s*<\/div>\s*<a id="latest-card"/);
-  assert.match(html, /<section id="archive"[\s\S]*?<span class="section-icon section-icon-archive" aria-hidden="true"><\/span>[\s\S]*?<h2 id="archive-title">Archive<\/h2>[\s\S]*?<div class="archive-controls">\s*<a class="section-link" href="archive\.html">전체 아카이브 보기<\/a>\s*<\/div>/);
-  assert.match(html, /<article id="headline-card" class="headline-card"><\/article>/);
-  assert.match(html, /<a id="latest-card" class="newsletter-card latest-newsletter-card loading-card">/);
+  assert.match(html, /<section id="subscribe"[\s\S]*data-subscription-section hidden>/);
+  assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search/);
 });
 
-test('homepage removes local archive controls and delegates browsing to archive.html', () => {
+test('homepage script fetches the weekly source of truth, headline, and subscription config only', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
-  assert.doesNotMatch(html, /주제 키워드로 빠르게 탐색하세요|id="topic-filter-list"|data-homepage-topic/);
-  assert.doesNotMatch(html, /id="archive-sort"|id="archive-filter-shortcut"|Archive sort order/);
-  assert.doesNotMatch(html, /archive-toolbar|archive-result-summary/);
-  assert.doesNotMatch(html, /readArchiveStateFromUrl|replaceArchiveUrl|URLSearchParams|normalizeArchiveState|filterEntries/);
-  assert.match(html, /<div class="archive-controls">\s*<a class="section-link" href="archive\.html">전체 아카이브 보기<\/a>\s*<\/div>/);
+  assert.match(html, /fetch\('data\/newsletters-weekly\.json'/);
+  assert.match(html, /fetch\('data\/homepage-headline\.json'/);
+  assert.match(html, /fetch\('config\/subscription\.json'/);
+  assert.doesNotMatch(html, /localStorage|sessionStorage|document\.cookie/);
 });
 
 test('archive grid CSS caps columns and preserves card interaction layout contracts', () => {
@@ -872,16 +501,18 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   const archivePageButton = exactSelectorBlock(css, '.archive-page-button');
   const archivePageCurrent = exactSelectorBlock(css, '.archive-page-button.is-current');
   const mediumGrid = exactSelectorBlock(mediaBlock(css, '(min-width: 700px)'), '.archive-grid');
+  const wideGrid = exactSelectorBlock(mediaBlock(css, '(min-width: 1000px)'), '.archive-page .archive-grid');
 
   assertCssDeclaration(archiveGrid, 'display', 'grid');
   assertCssDeclaration(archiveGrid, 'grid-template-columns', '1fr');
   assertCssDeclaration(mediumGrid, 'grid-template-columns', 'repeat(2, minmax(0, 1fr))');
-  assert.doesNotMatch(css, /@media \(min-width: 1100px\)[\s\S]*?\.archive-grid[\s\S]*?repeat\(3, minmax\(0, 1fr\)\)/);
+  // The archive page fans out to three image-forward columns on wide viewports.
+  assertCssDeclaration(wideGrid, 'grid-template-columns', 'repeat(3, minmax(0, 1fr))');
   assertCssDeclaration(archiveCard, 'display', 'flex');
   assertCssDeclaration(archiveCard, 'flex-direction', 'column');
   assertCssDeclaration(archivePageSection, 'min-height', '520px');
   assertCssDeclaration(archivePageGrid, 'gap', 'var(--space-5)');
-  assertCssDeclaration(archivePageCard, 'padding', '22px 24px');
+  assertCssDeclaration(archivePageCard, 'padding', '0');
   assert.match(archiveFocus, /outline\s*:\s*3px solid var\(--focus-ring\)\s*;/);
   assertCssDeclaration(archiveFocus, 'outline-offset', '4px');
   assertCssDeclaration(archivePagination, 'justify-content', 'center');
@@ -931,10 +562,8 @@ test('latest and archive card CSS preserves whole-card links and mobile summary 
   assertCssDeclaration(cardLink, 'text-decoration', 'none');
   assert.match(latestFocus, /outline\s*:\s*3px solid var\(--focus-ring\)\s*;/);
   assertCssDeclaration(emptyState, 'grid-column', '1 / -1');
-  assert.match(mobile, /main:not\(\[data-page="archive"\]\) #archive-list \.archive-card-summary\s*\{[\s\S]*?display\s*:\s*none\s*;/);
   assert.doesNotMatch(mobile, /latest-card-summary\s*\{[\s\S]*?display\s*:\s*none\s*;/);
   assert.doesNotMatch(css, /archive-toolbar/);
-  assert.match(css, /main:not\(\[data-page="archive"\]\) #archive-list \.archive-card-summary/);
   assert.doesNotMatch(css, /filter-shortcut/);
 });
 
@@ -979,7 +608,8 @@ test('newsletter issue page CSS uses homepage shell with issue landing layout', 
   assertCssDeclaration(issueTitle, 'font-size', 'clamp(1.75rem, 3.55vw, 2.95rem)');
   assertCssDeclaration(issueArticleTitle, 'font-size', 'clamp(1.24rem, 2.05vw, 1.6rem)');
   assertCssDeclaration(issueCard, 'padding', '28px');
-  assertCssDeclaration(issueFeatureRow, 'grid-template-columns', 'minmax(260px, 0.9fr) minmax(0, 1.1fr)');
+  // The article image stacks full-width above the copy (mockup article layout).
+  assertCssDeclaration(issueFeatureRow, 'grid-template-columns', '1fr');
   assertCssDeclaration(issueStory, 'padding-left', '38px');
   assertCssDeclaration(issueStoryNumber, 'border-radius', '50%');
   assertCssDeclaration(issueTakeaway, 'border-radius', '12px');

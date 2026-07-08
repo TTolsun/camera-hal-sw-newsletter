@@ -376,8 +376,8 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
   writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), overrides.html || buildHtml(issue));
   writeText(path.join(root, 'index.html'), overrides.rootIndex || [
     '<!doctype html><html><body>',
-    '<div id="latest-card"></div>',
-    '<div id="archive-list"></div>',
+    '<div id="featured-card"></div>',
+    '<div id="latest-grid"></div>',
     '<script>',
     "async function loadNewsletters() { await fetch('data/newsletters.json'); const latest = {}; const archive = []; }",
     'loadNewsletters();',
@@ -409,8 +409,8 @@ function writeNewsletterIndex(root, items) {
 function writeRootIndexContract(root) {
   writeText(path.join(root, 'index.html'), [
     '<!doctype html><html><body>',
-    '<div id="latest-card"></div>',
-    '<div id="archive-list"></div>',
+    '<div id="featured-card"></div>',
+    '<div id="latest-grid"></div>',
     '<script>',
     "async function loadNewsletters() { const latest = {}; const archive = []; await fetch('data/newsletters.json'); }",
     'loadNewsletters();',

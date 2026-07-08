@@ -124,8 +124,8 @@ function rootIndexHtml(extra = '', { navLabels = null, siteHeaderComponent = tru
     '<!doctype html><html><body>',
     navLabels ? rootNavHtml(navLabels) : (siteHeaderComponent ? rootSiteHeaderComponentHtml() : ''),
     '<a class="section-link" href="archive.html">전체 아카이브 보기</a>',
-    '<div id="latest-card"></div>',
-    '<div id="archive-list"></div>',
+    '<div id="featured-card"></div>',
+    '<div id="latest-grid"></div>',
     '<section class="section subscribe-section" data-subscription-section hidden>',
     '<a class="button subscribe-link" data-subscription-action>Subscribe</a>',
     '</section>',
@@ -632,7 +632,7 @@ test('validate-site rejects shared site header component without script', () => 
   });
   writeText(path.join(root, 'index.html'), rootIndexHtml('', {
     siteHeaderComponent: false
-  }).replace('<div id="latest-card"></div>', '<header class="site-header" data-site-header></header>\n<div id="latest-card"></div>'));
+  }).replace('<div id="featured-card"></div>', '<header class="site-header" data-site-header></header>\n<div id="featured-card"></div>'));
 
   const result = runScript(validateSitePath, root);
 
