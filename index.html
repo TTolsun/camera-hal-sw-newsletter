@@ -286,7 +286,7 @@
           ${renderFeaturedMedia(headline)}
           <div class="featured-copy">
             <p class="featured-kicker">${escapeHtml(featuredKicker(matchedNewsletter, headline))}</p>
-            <h1 class="featured-title">${escapeHtml(headline.title)}</h1>
+            <h1 id="featured-title" class="featured-title">${escapeHtml(headline.title)}</h1>
             <p class="featured-lead">${escapeHtml(headline.summary)}</p>
             <div class="featured-meta">${escapeHtml(metaText)}</div>
             ${renderFeaturedLink(headline, matchedNewsletter)}

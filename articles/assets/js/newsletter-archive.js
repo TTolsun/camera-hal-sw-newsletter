@@ -146,12 +146,12 @@
     return WEEKLY_KEY_PATTERN.test(key) ? key : '';
   }
 
-  // Card date label prefers the ISO week ("2026-W28" -> "W28"), then a daily date, then the
-  // raw title, so weekly and legacy daily entries both read cleanly in the meta line.
+  // Card date label prefers the ISO week ("2026-W28" -> "W28"), then a daily date. Falls back to
+  // empty (never the title, which the headline already shows) so the meta line never duplicates it.
   function cardKeyLabel(entry) {
     const key = weeklyKeyOf(entry);
     if (key) return key.slice(5);
-    return sortableDate(entry) || cardTitle(entry);
+    return sortableDate(entry);
   }
 
   // Full "YYYY.MM.DD – MM.DD" range shown after the week label when week bounds are known.

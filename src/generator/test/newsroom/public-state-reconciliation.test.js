@@ -35,8 +35,8 @@ const {
 function writeRootIndex(root) {
   writeText(path.join(root, 'index.html'), [
     '<!doctype html><html><body>',
-    '<div id="latest-card"></div>',
-    '<div id="archive-list"></div>',
+    '<div id="featured-card"></div>',
+    '<div id="latest-grid"></div>',
     '<script>',
     "async function loadNewsletters() { await fetch('data/newsletters.json'); }",
     'loadNewsletters();',

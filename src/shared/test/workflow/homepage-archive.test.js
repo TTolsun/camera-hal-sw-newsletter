@@ -284,7 +284,7 @@ test('featured hero renders the current headline with escaped copy, image, kicke
   }));
 
   const html = elements['featured-card'].innerHTML;
-  assert.match(html, /<h1 class="featured-title">&lt;Camera HAL headline&gt;<\/h1>/);
+  assert.match(html, /<h1 id="featured-title" class="featured-title">&lt;Camera HAL headline&gt;<\/h1>/);
   assert.match(html, /<p class="featured-lead">Summary &amp; details<\/p>/);
   assert.match(html, /<img class="featured-img" src="https:\/\/example\.com\/headline\.png" alt="&lt;Camera preview image&gt;"/);
   assert.match(html, /<p class="featured-kicker">Camera HAL<\/p>/);

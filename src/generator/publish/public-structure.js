@@ -115,8 +115,8 @@ function rootIndexContractErrors(root) {
   const checks = [
     { label: "fetch('data/newsletters-weekly.json')", pattern: /fetch\(\s*['"]data\/newsletters(?:-weekly)?\.json['"]/ },
     { label: 'loadNewsletters', pattern: /\bloadNewsletters\b/ },
-    { label: 'latest-card', pattern: /latest-card/ },
-    { label: 'archive-list', pattern: /archive-list/ }
+    { label: 'featured-card', pattern: /featured-card/ },
+    { label: 'latest-grid', pattern: /latest-grid/ }
   ];
   return checks
     .filter(check => !check.pattern.test(html))

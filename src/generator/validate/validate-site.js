@@ -520,7 +520,7 @@ function subscriptionScopedScriptHtml(html) {
   const chunks = [];
   for (const match of String(html || '').matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
     const script = match[1];
-    const blockMatch = script.match(/\basync function fetchSubscriptionConfig\b[\s\S]*?\n\s*function hideHomepageHeadline\b/);
+    const blockMatch = script.match(/\basync function fetchSubscriptionConfig\b[\s\S]*?\n\s*function findHeadlineNewsletter\b/);
     if (blockMatch) {
       chunks.push(blockMatch[0]);
       continue;
