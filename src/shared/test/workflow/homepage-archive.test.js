@@ -552,6 +552,24 @@ test('homepage shell stays wide while hero second line remains unwrapped', () =>
   assert.doesNotMatch(css, /homepage-header-actions|icon-link|icon-menu|icon-search|section-icon-bolt/);
 });
 
+test('homepage featured hero and latest grid CSS cover the rebuilt layout', () => {
+  const css = readStylesheet();
+  const featuredHero = exactSelectorBlock(css, '.featured-hero');
+  const featuredThumb = exactSelectorBlock(css, '.featured-thumb');
+  const featuredCopy = exactSelectorBlock(css, '.featured-copy');
+  const featuredTitle = exactSelectorBlock(css, '.featured-title');
+  const wideLatestGrid = exactSelectorBlock(mediaBlock(css, '(min-width: 1000px)'), '.latest-grid');
+
+  // The rebuilt homepage renders `.featured-hero`/`.latest-grid` (not `.site-hero`); assert the
+  // live layout so a regression in the new hero is caught, not just the retained dead-CSS pins.
+  assertCssDeclaration(featuredHero, 'display', 'grid');
+  assertCssDeclaration(featuredThumb, 'aspect-ratio', '16 / 9');
+  assertCssDeclaration(featuredThumb, 'border-radius', 'var(--radius-lg)');
+  assertCssDeclaration(featuredCopy, 'text-align', 'center');
+  assertCssDeclaration(featuredTitle, 'font-size', 'clamp(1.9rem, 3.4vw, 2.9rem)');
+  assertCssDeclaration(wideLatestGrid, 'grid-template-columns', 'repeat(3, minmax(0, 1fr))');
+});
+
 test('latest and archive card CSS preserves whole-card links and mobile summary behavior', () => {
   const css = readStylesheet();
   const cardLink = exactSelectorBlock(css, '.newsletter-card,\n.archive-card');
