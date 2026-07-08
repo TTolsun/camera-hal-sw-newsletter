@@ -37,67 +37,42 @@
   </header>
 
   <main class="site-main">
-    <section class="site-hero content-wrap" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow">Camera HAL - Android - Driver - AI</p>
-        <h1 id="hero-title">
-          <span class="hero-title-line">보이지 않는 <span class="hero-title-main">카메라의</span> 오늘,</span>
-          <span class="hero-title-line hero-title-nowrap">그러나 <span class="hero-title-main">미래</span></span>
-        </h1>
-        <p class="hero-description">
-          Camera HAL, Android, Linux Driver, AI 기술을 중심으로 모바일 카메라 기술의 변화를 추적합니다.
-        </p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#latest">최신 뉴스레터 보기</a>
-          <a class="button button-secondary" href="#archive">아카이브 둘러보기</a>
+    <section id="featured" class="featured-section content-wrap" aria-labelledby="featured-title">
+      <article id="featured-card" class="featured-hero">
+        <div class="featured-thumb nc-thumb">
+          <img class="featured-img is-brand" src="assets/images/brand/HALley.png" alt="HALley 뉴스레터 마스코트" width="1254" height="1254" decoding="async" fetchpriority="high">
         </div>
-      </div>
-      <figure class="hero-mascot" aria-label="HALley mascot">
-        <img
-          src="assets/images/brand/HALley.png"
-          alt="HALley 뉴스레터 마스코트"
-          width="1254"
-          height="1254"
-          decoding="async"
-          fetchpriority="high"
-        />
-      </figure>
+        <div class="featured-copy">
+          <p class="featured-kicker">Camera SW Newsroom</p>
+          <h1 id="featured-title" class="featured-title">보이지 않는 카메라의 오늘, 그러나 미래</h1>
+          <p class="featured-lead">Camera HAL, Android, Linux Driver, AI 기술을 중심으로 모바일 카메라 기술의 변화를 추적합니다.</p>
+        </div>
+      </article>
     </section>
 
-    <section id="headline" class="section headline-section content-wrap" aria-labelledby="headline-title" hidden>
-      <div class="section-heading section-heading-row">
-        <span class="section-icon section-icon-star" aria-hidden="true">☆</span>
-        <div>
-          <h2 id="headline-title">Featured Headline</h2>
-        </div>
-      </div>
-      <article id="headline-card" class="headline-card"></article>
-    </section>
-
-    <section id="latest" class="section content-wrap" aria-labelledby="latest-title">
-      <div class="section-heading section-heading-row">
-        <span class="section-icon section-icon-latest" aria-hidden="true"></span>
-        <div>
-          <h2 id="latest-title">Latest Newsletter</h2>
-        </div>
-      </div>
-      <a id="latest-card" class="newsletter-card latest-newsletter-card loading-card">
-        <p class="muted">최신 뉴스레터를 불러오는 중입니다.</p>
-      </a>
-    </section>
-
-    <section id="archive" class="section content-wrap" aria-labelledby="archive-title">
-      <div class="section-heading archive-heading">
+    <section id="latest" class="section latest-section content-wrap" aria-labelledby="latest-title">
+      <div class="section-heading latest-heading">
         <div class="section-heading-row">
-          <span class="section-icon section-icon-archive" aria-hidden="true"></span>
-          <h2 id="archive-title">Archive</h2>
+          <span class="section-icon section-icon-latest" aria-hidden="true"></span>
+          <h2 id="latest-title">최신 소식</h2>
         </div>
-        <div class="archive-controls">
+        <div class="latest-controls">
           <a class="section-link" href="archive.html">전체 아카이브 보기</a>
+          <label class="latest-sort">
+            <span class="sr-only">정렬 순서</span>
+            <select id="latest-sort" class="nc-sort" aria-label="정렬 순서">
+              <option value="latest">최신순</option>
+              <option value="oldest">오래된순</option>
+            </select>
+          </label>
         </div>
       </div>
-      <div id="archive-list" class="archive-grid">
-        <p class="muted">아카이브를 불러오는 중입니다.</p>
+      <div id="latest-topics" class="keyword-row latest-topics" role="group" aria-label="주제 필터"></div>
+      <div id="latest-grid" class="archive-grid latest-grid">
+        <p class="muted">뉴스레터를 불러오는 중입니다.</p>
+      </div>
+      <div id="latest-empty" class="archive-empty-state" hidden>
+        <p class="muted">선택한 주제의 소식이 없습니다.</p>
       </div>
     </section>
 
@@ -132,16 +107,6 @@
       .map(tag => String(tag ?? '').trim())
       .filter(Boolean);
 
-    const renderTags = (tags = []) => visibleTags(tags)
-      .map(tag => `<span class="tag">${escapeHtml(tag)}</span>`)
-      .join('');
-
-    const renderTagRow = (tags = [], className = '') => {
-      const tagHtml = renderTags(tags);
-      const classes = ['tag-row', className].filter(Boolean).join(' ');
-      return tagHtml ? `<div class="${classes}">${tagHtml}</div>` : '';
-    };
-
     const isExternalUrl = value => /^https?:\/\//i.test(String(value || ''));
     const isHttpsUrl = value => /^https:\/\//i.test(String(value || ''));
 
@@ -156,50 +121,18 @@
       return isHttpsUrl(raw) ? raw : safeInternalPath(raw);
     };
 
-    const ARCHIVE_PREVIEW_LIMIT = 4;
+    const FALLBACK_IMAGE = 'assets/images/fallback/newsletter-default.svg';
     const archiveHelpers = window.NewsletterArchive;
-
-    function getArchiveItems(newsletters) {
-      const sortedNewsletters = archiveHelpers.sortEntries(newsletters, 'latest');
-      return {
-        latest: sortedNewsletters[0] || null,
-        archiveItems: sortedNewsletters.slice(1)
-      };
-    }
-
-    function newsletterHtmlHref(item) {
-      return archiveHelpers.getSafeNewsletterHref(item);
-    }
-
-    function renderArchiveEmptyState() {
-      return '<div class="archive-empty-state"><p class="muted">이전 뉴스레터가 없습니다.</p></div>';
-    }
-
-    function renderArchivePreview(archiveEl, archiveItems) {
-      const visibleItems = archiveHelpers.sortEntries(archiveItems, 'latest').slice(0, ARCHIVE_PREVIEW_LIMIT);
-      archiveEl.innerHTML = visibleItems.length > 0
-        ? visibleItems.map(item => archiveHelpers.renderArchiveCard(item)).join('')
-        : renderArchiveEmptyState();
-    }
-
-    function initializeArchivePreview(archiveItems) {
-      const archiveEl = document.getElementById('archive-list');
-      if (!archiveEl) return;
-
-      renderArchivePreview(archiveEl, archiveItems);
-    }
 
     async function fetchHomepageNewsletters() {
       const response = await fetch('data/newsletters-weekly.json', { cache: 'no-store' });
       if (!response.ok) {
         throw new Error(`Failed to fetch newsletters.json: ${response.status}`);
       }
-
       const newsletters = await response.json();
       if (!Array.isArray(newsletters)) {
         throw new Error('newsletters.json must contain an array');
       }
-
       return newsletters;
     }
 
@@ -221,7 +154,6 @@
     function hostedSubscribeUrl(value) {
       const raw = String(value || '').trim();
       if (!raw || /[<>]/.test(raw) || /placeholder|todo|actual beehiiv/i.test(raw)) return '';
-
       try {
         const url = new URL(raw);
         if (url.protocol !== 'https:') return '';
@@ -277,28 +209,8 @@
       }
     }
 
-    function hideHomepageHeadline() {
-      const headlineSection = document.getElementById('headline');
-      if (headlineSection) headlineSection.hidden = true;
-    }
-
-    function handleHomepageImageError(event) {
-      const image = event && event.currentTarget;
-      if (!image) return;
-      image.hidden = true;
-      const media = typeof image.closest === 'function' ? image.closest('.headline-media') : null;
-      if (media && media.classList) media.classList.add('is-image-unavailable');
-    }
-
-    function attachHomepageImageFallbacks(root) {
-      if (!root || typeof root.querySelectorAll !== 'function') return;
-      for (const image of root.querySelectorAll('[data-homepage-image-fallback]')) {
-        image.addEventListener('error', handleHomepageImageError, { once: true });
-      }
-    }
-
     // Match the headline's date to the WEEKLY newsletter whose ISO week contains it, so the
-    // headline CTA links to the weekly issue (not a single-day page). Falls back to an exact date.
+    // featured CTA links to the weekly issue (not a single-day page). Falls back to an exact date.
     function findHeadlineNewsletter(headline, newsletters = []) {
       const date = String(headline && headline.newsletter_date || '').trim();
       if (!date) return null;
@@ -310,66 +222,26 @@
       return within || newsletters.find(item => item && item.date === date) || null;
     }
 
-    // Card date chip shows the week's date range ("06.01~06.07"). Falls back to the ISO week
-    // ("2026-W23" -> "W23") and then the raw date when range bounds are unavailable.
-    function weekLabel(entry) {
-      const md = value => String(value).slice(5).replace('-', '.');
-      const start = String((entry && (entry.weekStartDate || entry.week_start_date)) || '').trim();
-      const end = String((entry && (entry.weekEndDate || entry.week_end_date)) || '').trim();
-      if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
-        return `${md(start)}~${md(end)}`;
-      }
-      const key = String((entry && entry.weeklyKey) || '').trim();
-      return /^\d{4}-W\d{2}$/.test(key) ? key.slice(5) : String((entry && entry.date) || '');
+    // Featured hero panel image: the headline image, or the shared newsletter fallback SVG.
+    function renderFeaturedMedia(headline) {
+      const imageSrc = safeImageSrc(headline.image_url) || FALLBACK_IMAGE;
+      const alt = escapeHtml(headline.image_alt || headline.title);
+      return `<div class="featured-thumb nc-thumb">
+              <img class="featured-img" src="${escapeHtml(imageSrc)}" alt="${alt}" loading="eager" decoding="async" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
+            </div>`;
     }
 
-    // Card title without the trailing "(MM.DD ~ MM.DD)" range (the range is shown in the date chip).
-    function cardTitle(entry) {
-      return String((entry && entry.title) || '').replace(/\s*\([^)]*\)\s*$/, '');
+    // Kicker above the featured headline: the matched issue's primary topic, else the source name.
+    function featuredKicker(matchedNewsletter, headline) {
+      const [tag] = visibleTags(matchedNewsletter && matchedNewsletter.tags);
+      if (tag) return tag;
+      const source = headline.snapshot && headline.snapshot.source_name;
+      return source || 'Camera SW Newsroom';
     }
 
-    // Render the weekly card summary (this week's article titles) one per line so they stay
-    // distinguishable. Splits on newline or the legacy " · " separator for older index entries.
-    function cardSummaryHtml(entry) {
-      return String((entry && entry.summary) || '')
-        .split(/\n+|\s+·\s+/)
-        .map(line => line.trim())
-        .filter(Boolean)
-        .map(line => (line.length > 40 ? `${line.slice(0, 40)}..` : line))
-        .map(escapeHtml)
-        .join('<br>');
-    }
-
-    // Pick one weekly article image for the Latest card. Prefer an image that is NOT the homepage
-    // headline image (compared without query strings, which carry volatile params). When the only
-    // available image is the headline's, show it only for a single-article (headline) week.
-    function latestCardImage(entry, headlineImageUrl) {
-      const images = (entry && Array.isArray(entry.article_images) ? entry.article_images : []).filter(Boolean);
-      if (!images.length) return '';
-      const base = url => String(url || '').split('?')[0];
-      const headlineBase = base(headlineImageUrl);
-      const distinct = images.find(url => base(url) !== headlineBase);
-      if (distinct) return distinct;
-      return Number(entry && entry.article_count) <= 1 ? images[0] : '';
-    }
-
-    function renderHeadlineMedia(headline) {
-      const imageSrc = safeImageSrc(headline.image_url);
-      const fallback = '<span class="headline-media-fallback" aria-hidden="true">이미지 없음</span>';
-      if (!imageSrc) {
-        return `<div class="headline-media is-image-unavailable" aria-hidden="true">${fallback}</div>`;
-      }
-
-      return `<figure class="headline-media">
-              <img src="${escapeHtml(imageSrc)}" alt="${escapeHtml(headline.image_alt || headline.title)}" loading="lazy" decoding="async" data-homepage-image-fallback>
-              ${fallback}
-            </figure>`;
-    }
-
-    function renderHeadlineCta(headline, matchedNewsletter) {
-      // "기사 보기" opens the specific article inside the matched WEEKLY issue page: the weekly
-      // index route plus the article anchor taken from the headline's article-URL fragment. The
-      // weekly page reuses the same anchor ids, so this lands on the article, not the page top.
+    // "기사 읽기 →" opens the article inside its matched weekly issue page (weekly route + article
+    // anchor). Falls back to the article/newsletter path, then the external source ("원문 보기 →").
+    function renderFeaturedLink(headline, matchedNewsletter) {
       const anchorMatch = String(headline.newsletter_article_url || '').match(/#[A-Za-z0-9_-]+$/);
       const anchor = anchorMatch ? anchorMatch[0] : '';
       const weeklyBase = matchedNewsletter ? String(matchedNewsletter.html || '') : '';
@@ -377,31 +249,17 @@
       const internalHref = weeklyHref || safeInternalPath(headline.newsletter_article_url) || safeInternalPath(headline.newsletter_url);
       const sourceHref = isExternalUrl(headline.source_url) ? headline.source_url : '';
       const href = internalHref || sourceHref;
-      const primaryLink = href
-        ? `<a class="button button-primary" href="${escapeHtml(href)}"${sourceHref && !internalHref ? ' rel="noopener"' : ''}>${escapeHtml(internalHref ? '기사 보기' : '원문 보기')}</a>`
-        : '';
-      const mdLink = matchedNewsletter && matchedNewsletter.md
-        ? `<a class="button button-secondary" href="${escapeHtml(matchedNewsletter.md)}">Markdown</a>`
-        : '';
-      return `${primaryLink}${mdLink}`;
+      if (!href) return '';
+      const rel = sourceHref && !internalHref ? ' rel="noopener"' : '';
+      const label = internalHref ? '기사 읽기 →' : '원문 보기 →';
+      return `<a class="featured-link" href="${escapeHtml(href)}"${rel}>${escapeHtml(label)}</a>`;
     }
 
-    function renderHeadlineMeta(headline, sourceName) {
-      const date = headline.newsletter_date || headline.selected_at || '';
-      const dateChip = date ? `<span class="issue-date">${escapeHtml(date)}</span>` : '';
-      const badge = headline.newsletter_date ? '<span class="status-chip">Headline</span>' : '';
-      return `<div class="card-meta headline-meta">
-              ${dateChip}
-              ${badge}
-              <span class="headline-source">${escapeHtml(sourceName)}</span>
-            </div>`;
-    }
-
+    // The featured hero shows the current headline (the latest issue's top article). When the
+    // headline data is missing or malformed the static brand hero already in the markup stays.
     async function loadHomepageHeadline() {
-      const headlineSection = document.getElementById('headline');
-      const headlineCard = document.getElementById('headline-card');
-      if (!headlineSection || !headlineCard) return;
-      headlineSection.hidden = true;
+      const featuredCard = document.getElementById('featured-card');
+      if (!featuredCard) return;
 
       try {
         const response = await fetch('data/homepage-headline.json', { cache: 'no-store' });
@@ -421,86 +279,99 @@
           console.error(newsletterError);
         }
         const matchedNewsletter = findHeadlineNewsletter(headline, newsletters);
-        headlineCard.innerHTML = `
-          ${renderHeadlineMedia(headline)}
-          <div class="headline-body">
-            ${renderTagRow(matchedNewsletter && matchedNewsletter.tags, 'headline-tags')}
-            <h3 class="card-title clamp-2">${escapeHtml(headline.title)}</h3>
-            <p class="card-summary clamp-3">${escapeHtml(headline.summary)}</p>
-            ${renderHeadlineMeta(headline, sourceName)}
-            <div class="card-actions">
-              ${renderHeadlineCta(headline, matchedNewsletter)}
-            </div>
+        const date = headline.newsletter_date || headline.selected_at || '';
+        const metaText = [date, sourceName].filter(Boolean).join(' · ');
+        featuredCard.classList.add('is-article');
+        featuredCard.innerHTML = `
+          ${renderFeaturedMedia(headline)}
+          <div class="featured-copy">
+            <p class="featured-kicker">${escapeHtml(featuredKicker(matchedNewsletter, headline))}</p>
+            <h1 class="featured-title">${escapeHtml(headline.title)}</h1>
+            <p class="featured-lead">${escapeHtml(headline.summary)}</p>
+            <div class="featured-meta">${escapeHtml(metaText)}</div>
+            ${renderFeaturedLink(headline, matchedNewsletter)}
           </div>
         `;
-        attachHomepageImageFallbacks(headlineCard);
-        headlineSection.hidden = false;
       } catch (error) {
-        hideHomepageHeadline();
         console.error(error);
       }
     }
 
-    async function loadNewsletters() {
-      const latestEl = document.getElementById('latest-card');
-      const archiveEl = document.getElementById('archive-list');
+    const LATEST_TOPICS = archiveHelpers.TOPICS;
+    let latestEntries = [];
+    let latestState = { topic: 'all', sort: 'latest' };
 
+    function topicCountOf(topic) {
+      if (topic.key === 'all') return latestEntries.length;
+      return latestEntries.filter(entry => visibleTags(entry.tags).includes(topic.tag)).length;
+    }
+
+    function renderLatestTopics(activeTopic) {
+      const topicsEl = document.getElementById('latest-topics');
+      if (!topicsEl) return;
+      topicsEl.innerHTML = LATEST_TOPICS.map(topic => {
+        const isActive = topic.key === activeTopic;
+        const disabled = topic.key !== 'all' && topicCountOf(topic) === 0;
+        const classes = ['keyword', 'latest-topic-chip', isActive ? 'is-active' : ''].filter(Boolean).join(' ');
+        return `<button type="button" class="${classes}" data-latest-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}>${escapeHtml(topic.label)}</button>`;
+      }).join('');
+    }
+
+    function renderLatestGrid() {
+      const gridEl = document.getElementById('latest-grid');
+      const emptyEl = document.getElementById('latest-empty');
+      if (!gridEl) return;
+      const filtered = archiveHelpers.sortEntries(
+        archiveHelpers.filterEntries(latestEntries, latestState),
+        latestState.sort
+      );
+      gridEl.innerHTML = filtered.map(entry => archiveHelpers.renderArchiveCard(entry)).join('');
+      if (emptyEl) emptyEl.hidden = filtered.length > 0;
+    }
+
+    function applyLatestState(nextState) {
+      const normalized = archiveHelpers.normalizeArchiveState(nextState);
+      latestState = { topic: normalized.topic, sort: normalized.sort };
+      const sortEl = document.getElementById('latest-sort');
+      if (sortEl) sortEl.value = latestState.sort;
+      renderLatestTopics(latestState.topic);
+      renderLatestGrid();
+    }
+
+    async function loadNewsletters() {
+      const gridEl = document.getElementById('latest-grid');
       try {
         const newsletters = await fetchHomepageNewsletters();
-        const { latest, archiveItems } = getArchiveItems(newsletters);
-
-        if (!latest) {
-          latestEl.innerHTML = '<p class="muted">등록된 뉴스레터가 없습니다.</p>';
-          archiveEl.innerHTML = '<p class="muted">아카이브가 비어 있습니다.</p>';
+        latestEntries = archiveHelpers.sortEntries(newsletters, 'latest');
+        if (latestEntries.length === 0) {
+          if (gridEl) gridEl.innerHTML = '<p class="muted">등록된 뉴스레터가 없습니다.</p>';
+          renderLatestTopics(latestState.topic);
           return;
         }
-
-        const latestHref = newsletterHtmlHref(latest);
-        if (latestHref && typeof latestEl.setAttribute === 'function') {
-          latestEl.setAttribute('href', latestHref);
-          latestEl.setAttribute('aria-label', `${latest.date || ''} ${latest.title || ''} 최신 뉴스레터 열기`.trim());
-        }
-
-        let headlineImageUrl = '';
-        try {
-          const headlineResponse = await fetch('data/homepage-headline.json', { cache: 'no-store' });
-          if (headlineResponse.ok) {
-            const headlineState = await headlineResponse.json();
-            headlineImageUrl = (headlineState && headlineState.current_headline && headlineState.current_headline.image_url) || '';
-          }
-        } catch (_error) { /* best-effort: no headline image to dedupe the Latest card image against */ }
-
-        const latestImage = safeImageSrc(latestCardImage(latest, headlineImageUrl));
-        const latestMediaHtml = latestImage
-          ? `<figure class="latest-card-media"><img src="${escapeHtml(latestImage)}" alt="${escapeHtml(cardTitle(latest))}" loading="lazy" decoding="async" data-homepage-image-fallback></figure>`
-          : '';
-        latestEl.classList.remove('loading-card');
-        latestEl.classList.toggle('has-latest-media', Boolean(latestImage));
-        latestEl.innerHTML = `
-          <div class="latest-card-body">
-            <div class="card-meta">
-              <span class="issue-date">${escapeHtml(weekLabel(latest))}</span>
-              <span class="status-chip">Latest</span>
-            </div>
-            <h3 class="card-title clamp-2">${escapeHtml(cardTitle(latest))}</h3>
-            <p class="card-summary latest-card-summary">${cardSummaryHtml(latest)}</p>
-            ${renderTagRow(latest.tags, 'latest-tags')}
-          </div>
-          ${latestMediaHtml}
-        `;
-        attachHomepageImageFallbacks(latestEl);
-
-        if (archiveItems.length === 0) {
-          archiveEl.innerHTML = '<p class="muted">이전 뉴스레터가 없습니다.</p>';
-          return;
-        }
-
-        initializeArchivePreview(archiveItems);
+        applyLatestState(latestState);
       } catch (error) {
-        latestEl.innerHTML = '<p class="muted">뉴스레터 정보를 불러오지 못했습니다.</p>';
-        archiveEl.innerHTML = '<p class="muted">아카이브 정보를 불러오지 못했습니다.</p>';
+        if (gridEl) gridEl.innerHTML = '<p class="muted">뉴스레터 정보를 불러오지 못했습니다.</p>';
         console.error(error);
       }
+    }
+
+    const latestTopicsEl = document.getElementById('latest-topics');
+    if (latestTopicsEl && typeof latestTopicsEl.addEventListener === 'function') {
+      latestTopicsEl.addEventListener('click', event => {
+        const button = event.target && typeof event.target.closest === 'function'
+          ? event.target.closest('[data-latest-topic]')
+          : null;
+        if (!button) return;
+        if (typeof button.hasAttribute === 'function' && button.hasAttribute('disabled')) return;
+        applyLatestState({ topic: button.getAttribute('data-latest-topic'), sort: latestState.sort });
+      });
+    }
+
+    const latestSortEl = document.getElementById('latest-sort');
+    if (latestSortEl && typeof latestSortEl.addEventListener === 'function') {
+      latestSortEl.addEventListener('change', () => {
+        applyLatestState({ topic: latestState.topic, sort: latestSortEl.value });
+      });
     }
 
     loadHomepageHeadline();

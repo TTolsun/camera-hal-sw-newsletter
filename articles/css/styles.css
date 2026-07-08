@@ -1077,6 +1077,144 @@ pre code {
   color: #ffffff;
 }
 
+/* Homepage featured hero (Camera SW Newsroom) — 16:9 media panel over centered copy. */
+.featured-section {
+  padding-top: 44px;
+}
+
+.featured-hero {
+  display: grid;
+  gap: 34px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding-bottom: 44px;
+  border-bottom: 1px solid var(--line);
+}
+
+.featured-thumb {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg);
+  background: var(--surface-soft);
+}
+
+.featured-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-img.is-brand {
+  width: 44%;
+  max-width: 460px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(3px 5px 30px rgba(0, 0, 0, 0.22));
+}
+
+.featured-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.featured-kicker {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.featured-title {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.022em;
+  font-weight: 600;
+}
+
+.featured-lead {
+  max-width: 730px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.16rem;
+  line-height: 1.45;
+}
+
+.featured-meta {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.featured-link {
+  color: var(--primary);
+  font-size: 1.02rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.18s ease;
+}
+
+.featured-link:hover,
+.featured-link:focus-visible {
+  opacity: 0.62;
+}
+
+/* Homepage "최신 소식" grid controls (topic chips + sort). */
+.latest-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.latest-heading .section-heading-row {
+  width: auto;
+}
+
+.latest-controls {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.nc-sort {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 40px;
+  padding: 0 34px 0 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%2386868b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 12px center;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.nc-sort:hover,
+.nc-sort:focus-visible {
+  border-color: rgba(0, 102, 204, 0.32);
+}
+
+.latest-topics {
+  margin: 22px 0 0;
+}
+
+.latest-grid {
+  margin-top: 28px;
+}
+
 .archive-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1487,6 +1625,10 @@ pre code {
 
 @media (min-width: 1000px) {
   .archive-page .archive-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .latest-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
