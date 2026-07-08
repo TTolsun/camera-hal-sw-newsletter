@@ -695,6 +695,8 @@ function buildPublicHtml(issue) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${escapeHtml(issuePageTitle(issue))}</title>
 ${articleSeoHead(issue)}
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
   <link rel="stylesheet" href="../../css/styles.css" />
 </head>
 <body class="homepage newsletter-issue-page">
