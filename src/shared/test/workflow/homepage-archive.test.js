@@ -608,7 +608,8 @@ test('newsletter issue page CSS uses homepage shell with issue landing layout', 
   assertCssDeclaration(issueTitle, 'font-size', 'clamp(1.75rem, 3.55vw, 2.95rem)');
   assertCssDeclaration(issueArticleTitle, 'font-size', 'clamp(1.24rem, 2.05vw, 1.6rem)');
   assertCssDeclaration(issueCard, 'padding', '28px');
-  assertCssDeclaration(issueFeatureRow, 'grid-template-columns', 'minmax(260px, 0.9fr) minmax(0, 1.1fr)');
+  // The article image stacks full-width above the copy (mockup article layout).
+  assertCssDeclaration(issueFeatureRow, 'grid-template-columns', '1fr');
   assertCssDeclaration(issueStory, 'padding-left', '38px');
   assertCssDeclaration(issueStoryNumber, 'border-radius', '50%');
   assertCssDeclaration(issueTakeaway, 'border-radius', '12px');

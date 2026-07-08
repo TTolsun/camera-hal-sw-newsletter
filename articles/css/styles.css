@@ -2029,8 +2029,8 @@ pre code {
 
 .article-feature-row {
   display: grid;
-  grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.1fr);
-  gap: 30px;
+  grid-template-columns: 1fr;
+  gap: 24px;
   align-items: start;
 }
 
@@ -2218,14 +2218,18 @@ pre code {
 }
 
 .newsletter-issue-page .camera-hal-takeaway {
-  padding: 18px 20px;
-  border: 1px solid rgba(0, 102, 204, 0.14);
+  padding: 20px 22px;
+  border: none;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(232, 241, 251, 0.72), rgba(255, 255, 255, 0.96));
+  background: var(--bg);
 }
 
 .newsletter-issue-page .camera-hal-takeaway .article-block-title {
-  color: var(--primary);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .newsletter-issue-page .source-list {
