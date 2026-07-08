@@ -200,11 +200,6 @@ function archiveCardElements(html) {
     }));
 }
 
-function classAttribute(attrs) {
-  const match = String(attrs || '').match(/\bclass="([^"]*)"/);
-  return match ? match[1].split(/\s+/).filter(Boolean) : [];
-}
-
 function attrValue(attrs, name) {
   const pattern = new RegExp(`\\b${name}="([^"]*)"`);
   const match = String(attrs || '').match(pattern);
@@ -213,36 +208,6 @@ function attrValue(attrs, name) {
 
 function assertNoNestedInteractive(html) {
   assert.doesNotMatch(String(html), /<a\b|<button\b|\brole="button"/i);
-}
-
-function childKind(tag, attrs) {
-  const classes = classAttribute(attrs);
-  if (classes.includes('card-meta')) return 'card-meta';
-  if (classes.includes('archive-tags')) return 'archive-tags';
-  if (classes.includes('card-title')) return 'card-title';
-  if (classes.includes('card-summary')) return 'card-summary';
-  if (classes.includes('card-actions')) return 'card-actions';
-  return tag;
-}
-
-function topLevelChildKinds(html) {
-  const kinds = [];
-  let depth = 0;
-  for (const match of String(html).matchAll(/<\/?([a-z0-9]+)\b([^>]*)>/gi)) {
-    const [source, rawTag, attrs = ''] = match;
-    const tag = rawTag.toLowerCase();
-    const isClosing = source.startsWith('</');
-    const isSelfClosing = source.endsWith('/>');
-    if (isClosing) {
-      depth = Math.max(0, depth - 1);
-      continue;
-    }
-    if (depth === 0) {
-      kinds.push(childKind(tag, attrs));
-    }
-    if (!isSelfClosing) depth += 1;
-  }
-  return kinds;
 }
 
 function readStylesheet() {
@@ -415,11 +380,12 @@ test('renders at most four archive preview cards after sorting and excluding the
   assert.doesNotMatch(elements['archive-list'].innerHTML, /2026-05-19/);
 });
 
-test('archive card order, clamps, and tag overflow keep archive cards scannable', async () => {
+test('archive card leads with a thumbnail, kicker, and top-article headline', async () => {
   const archiveItem = {
     ...newsletter('2026-05-24', 'Archive card title'),
-    summary: 'Archive card summary',
-    tags: ['Camera HAL', 'Camera "HAL" & Android', 'CameraX', 'Image Processing', 'AOSP <Camera>']
+    summary: '기사 A\n기사 B',
+    tags: ['Camera HAL', 'Android'],
+    article_images: ['https://example.com/thumb.png']
   };
   const { elements } = await renderHomepage([
     newsletter('2026-05-25', 'Latest issue'),
@@ -427,27 +393,20 @@ test('archive card order, clamps, and tag overflow keep archive cards scannable'
   ]);
   const [card] = archiveCards(elements['archive-list'].innerHTML);
 
-  assert.deepEqual(topLevelChildKinds(card), [
-    'card-meta',
-    'archive-tags',
-    'card-title',
-    'card-summary'
-  ]);
-  assert.match(card, /<h3 class="card-title clamp-2">Archive card title<\/h3>/);
-  // Weekly cards list each article title on its own line, so the summary is no longer line-clamped.
-  assert.match(card, /<p class="card-summary archive-card-summary">Archive card summary<\/p>/);
-  assert.match(card, /<span class="tag">Camera HAL<\/span>/);
-  assert.match(card, /<span class="tag">Camera &quot;HAL&quot; &amp; Android<\/span>/);
-  assert.match(card, /<span class="tag">CameraX<\/span>/);
-  assert.match(card, /class="tag tag-more" aria-label="추가 태그 2개: Image Processing, AOSP &lt;Camera&gt;" title="Image Processing, AOSP &lt;Camera&gt;">\+2<\/span>/);
+  // Image-forward card: thumbnail wrapper first, then the copy body (no summary or tag rows).
+  assert.ok(card.indexOf('card-thumb') < card.indexOf('card-body'));
+  assert.match(card, /<img class="card-thumb-img" src="https:\/\/example\.com\/thumb\.png"[^>]*onerror=/);
+  assert.match(card, /<div class="card-kicker">Camera HAL<\/div>/);
+  // Headline is the issue's top article title (first summary line), not the issue label.
+  assert.match(card, /<h3 class="card-title clamp-2 nc-h">기사 A<\/h3>/);
+  assert.doesNotMatch(card, /card-summary|tag-row|archive-tags/);
+  assertNoNestedInteractive(card);
 });
 
-test('archive card summary lists each article title on its own line and truncates past 40 chars', async () => {
-  const shortTitle = 'CameraX 1.6.1 업데이트';
-  const longTitle = 'A'.repeat(60);
+test('archive card headline uses the top article title and falls back to the newsletter image', async () => {
   const archiveItem = {
     ...newsletter('2026-05-24', 'Archive card title'),
-    summary: `${shortTitle}\n${longTitle}`
+    summary: 'CameraX 1.6.1 업데이트\nSecond article title'
   };
   const { elements } = await renderHomepage([
     newsletter('2026-05-25', 'Latest issue'),
@@ -455,8 +414,9 @@ test('archive card summary lists each article title on its own line and truncate
   ]);
   const [card] = archiveCards(elements['archive-list'].innerHTML);
 
-  // Titles render one per line, joined by <br>; titles longer than 40 chars are cut to 40 + "..".
-  assert.match(card, new RegExp(`<p class="card-summary archive-card-summary">${shortTitle}<br>${'A'.repeat(40)}\\.\\.</p>`));
+  // The headline is the first summary line; the thumbnail falls back to the site newsletter SVG.
+  assert.match(card, /<h3 class="card-title clamp-2 nc-h">CameraX 1\.6\.1 업데이트<\/h3>/);
+  assert.match(card, /src="assets\/images\/fallback\/newsletter-default\.svg"/);
 });
 
 test('latest card shows a weekly article image that is not the headline image', async () => {
@@ -537,7 +497,7 @@ test('latest card renders the site-relative fallback image when the weekly has n
   }
 });
 
-test('archive cards omit empty tag rows while preserving the remaining child order', async () => {
+test('archive cards render a kicker even when the entry has no tags', async () => {
   const archiveItem = {
     ...newsletter('2026-05-24', 'No tags archive card'),
     tags: []
@@ -548,12 +508,8 @@ test('archive cards omit empty tag rows while preserving the remaining child ord
   ]);
   const [card] = archiveCards(elements['archive-list'].innerHTML);
 
-  assert.deepEqual(topLevelChildKinds(card), [
-    'card-meta',
-    'card-title',
-    'card-summary'
-  ]);
-  assert.doesNotMatch(card, /archive-tags/);
+  assert.match(card, /<div class="card-kicker">Camera HAL<\/div>/);
+  assert.doesNotMatch(card, /archive-tags|tag-row/);
 });
 
 test('does not remove the featured headline newsletter from archive unless it is the latest newsletter', async () => {
@@ -598,7 +554,7 @@ test('homepage shows review publication issues when data entry paths are present
   assert.match(elements['archive-list'].innerHTML, /2026-05-13/);
 });
 
-test('only Latest appears beside a homepage date while archive keeps fallback tags below metadata', async () => {
+test('only Latest appears beside a homepage date while archive surfaces the fallback edition as its kicker', async () => {
   const { elements } = await renderHomepage([
     fallbackNewsletter('2026-05-20', 'Archived fallback issue'),
     fallbackNewsletter('2026-05-24', 'Current fallback issue')
@@ -612,7 +568,8 @@ test('only Latest appears beside a homepage date while archive keeps fallback ta
   assert.match(elements['latest-card'].innerHTML, /Current fallback issue/);
   assert.match(archiveMeta, /<span class="issue-date">2026-05-20<\/span>/);
   assert.doesNotMatch(archiveMeta, /status-chip|Tooling Watch Edition/);
-  assert.match(archiveCard, /<div class="tag-row archive-tags"><span class="tag">Tooling Watch Edition<\/span><span class="tag">Tooling Watch<\/span><\/div>/);
+  // The image-forward card carries the fallback edition as its kicker instead of a tag row.
+  assert.match(archiveCard, /<div class="card-kicker">Tooling Watch Edition<\/div>/);
   assertNoNestedInteractive(archiveCard);
 });
 
@@ -872,16 +829,18 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   const archivePageButton = exactSelectorBlock(css, '.archive-page-button');
   const archivePageCurrent = exactSelectorBlock(css, '.archive-page-button.is-current');
   const mediumGrid = exactSelectorBlock(mediaBlock(css, '(min-width: 700px)'), '.archive-grid');
+  const wideGrid = exactSelectorBlock(mediaBlock(css, '(min-width: 1000px)'), '.archive-page .archive-grid');
 
   assertCssDeclaration(archiveGrid, 'display', 'grid');
   assertCssDeclaration(archiveGrid, 'grid-template-columns', '1fr');
   assertCssDeclaration(mediumGrid, 'grid-template-columns', 'repeat(2, minmax(0, 1fr))');
-  assert.doesNotMatch(css, /@media \(min-width: 1100px\)[\s\S]*?\.archive-grid[\s\S]*?repeat\(3, minmax\(0, 1fr\)\)/);
+  // The archive page fans out to three image-forward columns on wide viewports.
+  assertCssDeclaration(wideGrid, 'grid-template-columns', 'repeat(3, minmax(0, 1fr))');
   assertCssDeclaration(archiveCard, 'display', 'flex');
   assertCssDeclaration(archiveCard, 'flex-direction', 'column');
   assertCssDeclaration(archivePageSection, 'min-height', '520px');
   assertCssDeclaration(archivePageGrid, 'gap', 'var(--space-5)');
-  assertCssDeclaration(archivePageCard, 'padding', '22px 24px');
+  assertCssDeclaration(archivePageCard, 'padding', '0');
   assert.match(archiveFocus, /outline\s*:\s*3px solid var\(--focus-ring\)\s*;/);
   assertCssDeclaration(archiveFocus, 'outline-offset', '4px');
   assertCssDeclaration(archivePagination, 'justify-content', 'center');
@@ -931,10 +890,8 @@ test('latest and archive card CSS preserves whole-card links and mobile summary 
   assertCssDeclaration(cardLink, 'text-decoration', 'none');
   assert.match(latestFocus, /outline\s*:\s*3px solid var\(--focus-ring\)\s*;/);
   assertCssDeclaration(emptyState, 'grid-column', '1 / -1');
-  assert.match(mobile, /main:not\(\[data-page="archive"\]\) #archive-list \.archive-card-summary\s*\{[\s\S]*?display\s*:\s*none\s*;/);
   assert.doesNotMatch(mobile, /latest-card-summary\s*\{[\s\S]*?display\s*:\s*none\s*;/);
   assert.doesNotMatch(css, /archive-toolbar/);
-  assert.match(css, /main:not\(\[data-page="archive"\]\) #archive-list \.archive-card-summary/);
   assert.doesNotMatch(css, /filter-shortcut/);
 });
 

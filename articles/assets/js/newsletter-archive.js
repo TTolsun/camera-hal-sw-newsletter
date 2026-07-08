@@ -146,34 +146,63 @@
     return WEEKLY_KEY_PATTERN.test(key) ? key : '';
   }
 
-  // Card date chip shows the week's date range ("06.01~06.07"); falls back to the ISO week
-  // ("2026-W23" -> "W23") and then the raw date when range bounds are unavailable.
-  function weekLabel(entry) {
-    const md = value => String(value).slice(5).replace('-', '.');
+  // Card date label prefers the ISO week ("2026-W28" -> "W28"), then a daily date, then the
+  // raw title, so weekly and legacy daily entries both read cleanly in the meta line.
+  function cardKeyLabel(entry) {
+    const key = weeklyKeyOf(entry);
+    if (key) return key.slice(5);
+    return sortableDate(entry) || cardTitle(entry);
+  }
+
+  // Full "YYYY.MM.DD – MM.DD" range shown after the week label when week bounds are known.
+  function weekRangeText(entry) {
     const start = String((entry && (entry.weekStartDate || entry.week_start_date)) || '').trim();
     const end = String((entry && (entry.weekEndDate || entry.week_end_date)) || '').trim();
     if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
-      return `${md(start)}~${md(end)}`;
+      return `${start.replace(/-/g, '.')} – ${end.slice(5).replace('-', '.')}`;
     }
-    const key = weeklyKeyOf(entry);
-    return key ? key.slice(5) : String((entry && entry.date) || '');
+    return '';
   }
 
-  // Card title without the trailing "(MM.DD ~ MM.DD)" range (shown in the date chip instead).
+  // Card title without the trailing "(MM.DD ~ MM.DD)" range (shown in the meta line instead).
   function cardTitle(entry) {
     return String((entry && entry.title) || '').replace(/\s*\([^)]*\)\s*$/, '');
   }
 
-  // Render the weekly card summary (this week's article titles) one per line so each title stays
-  // distinguishable. Splits on newline or the legacy " · " separator for older index entries.
-  function cardSummaryHtml(entry) {
-    return String((entry && entry.summary) || '')
+  // The card leads with the issue's top article headline (first summary line), falling back to
+  // the issue title. Splits on newline or the legacy " · " separator used by older entries.
+  function cardHeadline(entry) {
+    const [firstLine] = String((entry && entry.summary) || '')
       .split(/\n+|\s+·\s+/)
       .map(line => line.trim())
-      .filter(Boolean)
-      .map(line => (line.length > 40 ? `${line.slice(0, 40)}..` : line))
-      .map(escapeHtml)
-      .join('<br>');
+      .filter(Boolean);
+    return firstLine || cardTitle(entry);
+  }
+
+  // Primary topic used as the card kicker; fallback issues surface their edition tag here.
+  function cardKicker(entry) {
+    const [first] = visibleTags(entry && entry.tags);
+    return first || 'Camera HAL';
+  }
+
+  const FALLBACK_CARD_IMAGE = 'assets/images/fallback/newsletter-default.svg';
+
+  // First weekly article image, or the shared newsletter fallback when none is available.
+  function cardImage(entry) {
+    const [first] = ensureArray(entry && entry.article_images)
+      .map(src => String(src ?? '').trim())
+      .filter(Boolean);
+    return first || FALLBACK_CARD_IMAGE;
+  }
+
+  function cardMetaHtml(entry) {
+    const range = weekRangeText(entry);
+    const count = Number(entry && entry.article_count) || 0;
+    const extras = [];
+    if (range) extras.push(escapeHtml(range));
+    if (count > 0) extras.push(`총 ${count}건`);
+    const suffix = extras.length ? ` · ${extras.join(' · ')}` : '';
+    return `<span class="issue-date">${escapeHtml(cardKeyLabel(entry))}</span>${suffix}`;
   }
 
   function fallbackNewsletterHref(entry) {
@@ -198,35 +227,20 @@
     return fallback;
   }
 
-  function renderArchiveTags(tags = []) {
-    const normalizedTags = visibleTags(tags);
-    if (normalizedTags.length === 0) return '';
-
-    const visibleArchiveTags = normalizedTags.slice(0, 3);
-    const hiddenArchiveTags = normalizedTags.slice(3);
-    const hiddenTagNames = hiddenArchiveTags.join(', ');
-    const hiddenTagChip = hiddenArchiveTags.length > 0
-      ? `<span class="tag tag-more" aria-label="${escapeHtml(`추가 태그 ${hiddenArchiveTags.length}개: ${hiddenTagNames}`)}" title="${escapeHtml(hiddenTagNames)}">+${hiddenArchiveTags.length}</span>`
-      : '';
-
-    return `<div class="tag-row archive-tags">${
-      visibleArchiveTags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')
-    }${hiddenTagChip}</div>`;
-  }
-
+  // Image-forward card: 16:9 thumbnail, topic kicker, top-article headline, week meta line.
   function renderArchiveCard(entry, options = {}) {
     const href = getSafeNewsletterHref(entry);
     const accessibleName = `${entry && entry.date || ''} ${entry && entry.title || ''} ${options.ariaSuffix || '뉴스레터 열기'}`.trim();
-    const summaryClass = options.summaryClass || 'archive-card-summary';
-    const tagHtml = renderArchiveTags(entry && entry.tags);
     return `
       <a class="archive-card" href="${escapeHtml(href)}" aria-label="${escapeHtml(accessibleName)}">
-        <div class="card-meta archive-card-meta">
-          <span class="issue-date">${escapeHtml(weekLabel(entry))}</span>
+        <div class="card-thumb nc-thumb">
+          <img class="card-thumb-img" src="${escapeHtml(cardImage(entry))}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${FALLBACK_CARD_IMAGE}'">
         </div>
-        ${tagHtml}
-        <h3 class="card-title clamp-2">${escapeHtml(cardTitle(entry))}</h3>
-        <p class="card-summary ${escapeHtml(summaryClass)}">${cardSummaryHtml(entry)}</p>
+        <div class="card-body">
+          <div class="card-kicker">${escapeHtml(cardKicker(entry))}</div>
+          <h3 class="card-title clamp-2 nc-h">${escapeHtml(cardHeadline(entry))}</h3>
+          <div class="card-meta archive-card-meta">${cardMetaHtml(entry)}</div>
+        </div>
       </a>
     `;
   }
