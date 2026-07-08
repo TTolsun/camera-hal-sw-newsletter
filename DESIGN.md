@@ -67,6 +67,7 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 
 ## 알려진 갭 / 후속
 
-- 이슈 페이지는 디자인 시스템(폰트·색·카드)·풀폭 이미지·회색 take 박스를 반영했으나, mockup의 좁은 760px 단일 리딩 컬럼과 마스코트 없는 히어로는 test-lock이 넓어 후속 증분으로 남긴다.
-- 공유 헤더의 "Newsroom" 워드마크·로고 이미지와 3‑컬럼 푸터는 아카이브·이슈까지 걸친 shared-chrome 변경이라 별도 증분 대상.
-- `.homepage .site-hero`·`.hero-*` 규칙은 홈 재구성 이후 미사용(dead) 상태로 남아 있으며, 관련 CSS-lock 테스트와 함께 정리하는 것이 후속 과제.
+- **이슈 페이지 좁은 컬럼**: 디자인 시스템(폰트·색·카드)·풀폭 이미지·회색 take 박스·공유 chrome은 반영됐으나, mockup의 좁은 760px 단일 리딩 컬럼과 마스코트 없는 히어로("2026 W##" 타이틀)는 issue CSS 계약(`homepage-archive.test.js`의 issue 블록)과 `newsletter-renderer.test.js`가 현재 2-컬럼 마스코트 히어로를 넓게 잠그고 있어, 마스코트 제거는 디자인 판단이 필요하므로 별도 증분으로 남긴다.
+- **미사용(dead) CSS 정리**: 홈 재구성 이후 `.homepage .site-hero`·`.hero-*`·`.latest-newsletter-card`·`.latest-card-*`·`.headline-*` 규칙이 미사용이나, 이 클래스들이 살아있는 archive/issue와 공유되는 grouped·test-lock 셀렉터(예: `.site-hero::before, .archive-hero::before, .issue-hero::before` 글로우, `.hero-mascot img, .archive-hero-mascot img, ...`)에 얽혀 있어(파일 전반 40+ 지점, media query 포함) 성급히 걷으면 라이브 스타일이 깨진다. 셀렉터 분리 + CSS-lock 테스트 갱신을 동반하는 신중한 리팩터 증분으로 남긴다. (새 `.featured-hero` CSS 커버리지는 추가됨.)
+
+> 진행 완료(main): 홈 재구성·이미지 카드·아카이브 3-col·Pretendard·이슈 풀폭 이미지/회색 take 박스·공유 chrome(Newsroom 워드마크+로고+3-컬럼 푸터)·featured-hero 커버리지.
