@@ -157,7 +157,7 @@ test('newsletter renderer keeps generated issue nav labels in English', () => {
   assert.match(html, /<header class="site-header homepage-site-header">/);
   assert.match(html, /<div class="homepage-nav content-wrap">/);
   assert.match(html, /<footer class="site-footer">/);
-  assert.match(html, /<span>Camera SW<\/span>\s*<span class="brand-subtitle">Newsletter<\/span>/);
+  assert.match(html, /<span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom<\/span><\/span>/);
   assert.match(html, /<title>Camera SW Newsletter - 2026-05-03<\/title>/);
   assert.doesNotMatch(html, /data-site-header|site-header\.js/);
   assert.deepEqual(labels.slice(0, 3), ['Home', 'Archive', 'GitHub']);
