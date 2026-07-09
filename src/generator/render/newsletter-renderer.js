@@ -270,7 +270,7 @@ function issuePageTitle(issue = {}) {
 function issueTitleHtml(issue = {}) {
   const weekLabel = issueWeekLabel(issue);
   if (weekLabel) {
-    return `<span>${escapeHtml(weekLabel)} Camera SW</span><span>Newsletter</span>`;
+    return `<span>${escapeHtml(weekLabel)}</span>`;
   }
   const date = issueDisplayDate(issue);
   return `<span>Camera SW</span><span>Newsletter${date ? ` - ${escapeHtml(date)}` : ''}</span>`;
@@ -642,24 +642,13 @@ ${articleCopyHtml}
 
 function issueHeroHtml(issue) {
   return `<header class="article-header issue-hero">
-        <div class="issue-hero-copy">
-          <div class="article-meta issue-hero-meta">
-            <span class="issue-kicker">${escapeHtml(issueKickerText(issue))}</span>
-            <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
-          </div>
-          <h1 class="issue-title">${issueTitleHtml(issue)}</h1>
-          <p class="subtitle">${escapeHtml(issue.summary)}</p>
+        <a class="issue-back" href="../../index.html">← 뉴스룸</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">${escapeHtml(issueKickerText(issue))}</span>
         </div>
-        <figure class="issue-hero-mascot" aria-label="HALley mascot">
-          <img
-            src="../../assets/images/brand/HALley.png"
-            alt="HALley 뉴스레터 마스코트"
-            width="1254"
-            height="1254"
-            decoding="async"
-            loading="eager"
-          />
-        </figure>
+        <h1 class="issue-title">${issueTitleHtml(issue)}</h1>
+        <p class="subtitle">${escapeHtml(issue.summary)}</p>
+        <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
       </header>`;
 }
 

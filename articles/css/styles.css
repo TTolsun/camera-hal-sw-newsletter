@@ -1798,7 +1798,7 @@ pre code {
 }
 
 .newsletter-issue-page .wrap {
-  width: min(100% - 48px, 1120px);
+  width: min(100% - 44px, 760px);
   max-width: none;
   padding-bottom: 0;
 }
@@ -1816,9 +1816,7 @@ pre code {
 .newsletter-issue-page .issue-hero {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.12fr) minmax(260px, 0.52fr);
-  align-items: center;
-  gap: clamp(40px, 5.5vw, 80px);
+  grid-template-columns: 1fr;
   margin: 0;
   padding: 46px 0 42px;
   isolation: isolate;
@@ -1861,19 +1859,28 @@ pre code {
   line-height: 1.76;
 }
 
-.issue-hero-copy {
+.newsletter-issue-page .issue-hero > * {
   position: relative;
   z-index: 1;
-  min-width: 0;
+}
+
+.issue-back {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.issue-back:hover,
+.issue-back:focus-visible {
+  color: var(--text);
 }
 
 .issue-hero-meta {
-  margin-bottom: 20px;
-}
-
-.issue-hero-meta .issue-tags {
-  display: inline-flex;
-  margin-top: 0;
+  margin-bottom: 14px;
 }
 
 .issue-hero-mascot {

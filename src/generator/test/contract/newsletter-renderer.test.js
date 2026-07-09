@@ -217,8 +217,8 @@ test('newsletter renderer structures issue pages as homepage-shell landing artic
   assert.match(html, /<article class="wrap issue-wrap">/);
   assert.match(html, /<header class="article-header issue-hero">/);
   assert.match(html, /<h1 class="issue-title"><span>Camera SW<\/span><span>Newsletter - 2026-05-03<\/span><\/h1>/);
-  assert.match(html, /<figure class="issue-hero-mascot" aria-label="HALley mascot">/);
-  assert.match(html, /src="\.\.\/\.\.\/assets\/images\/brand\/HALley\.png"/);
+  assert.match(html, /<a class="issue-back" href="\.\.\/\.\.\/index\.html">← 뉴스룸<\/a>/);
+  assert.doesNotMatch(html, /issue-hero-mascot/);
   assert.match(html, /<div class="card issue-briefing-card">/);
   assert.match(html, /<span class="issue-story-number" aria-label="Article 1">1<\/span>/);
   assert.match(html, /<div class="article-feature-row">/);
