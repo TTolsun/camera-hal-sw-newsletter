@@ -613,9 +613,10 @@ test('newsletter issue page CSS uses homepage shell with issue landing layout', 
 
   assert.match(pageBackground, /radial-gradient\(circle at 50% -80px, rgba\(0, 102, 204, 0\.09\), transparent 34%\)/);
   assertCssDeclaration(issueArticlePage, 'padding', '52px 0 0');
-  assertCssDeclaration(issueWrap, 'width', 'min(100% - 48px, 1120px)');
+  // Issue pages read in a narrow single column (mockup): 760px wrap, single-column hero.
+  assertCssDeclaration(issueWrap, 'width', 'min(100% - 44px, 760px)');
   assertCssDeclaration(issueWrap, 'max-width', 'none');
-  assertCssDeclaration(issueHero, 'grid-template-columns', 'minmax(0, 1.12fr) minmax(260px, 0.52fr)');
+  assertCssDeclaration(issueHero, 'grid-template-columns', '1fr');
   assertCssDeclaration(issueHero, 'padding', '46px 0 42px');
   assertCssDeclaration(issueHeroGlow, 'width', 'min(38vw, 440px)');
   assert.match(issueHeroGlow, /rgba\(0, 102, 204, 0\.12\)/);
