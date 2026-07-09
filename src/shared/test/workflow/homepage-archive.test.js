@@ -521,34 +521,15 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   assertCssDeclaration(archivePageCurrent, 'background', '#0066cc');
 });
 
-test('homepage shell stays wide while hero second line remains unwrapped', () => {
+test('homepage shell stays wide', () => {
   const css = readStylesheet();
   const homepageNav = exactSelectorBlock(css, '.homepage-nav');
   const homepageWrap = exactSelectorBlock(css, '.homepage .content-wrap');
   const homepageShell = exactSelectorBlock(css, '.homepage .site-header,\n.homepage .site-main,\n.homepage .site-footer');
-  const hero = exactSelectorBlock(css, '.homepage .site-hero');
-  const heroTitle = exactSelectorBlock(css, '.homepage .site-hero h1');
-  const heroPrimaryCta = exactSelectorBlock(css, '.homepage .hero-actions .button-primary');
-  const nowrapTitle = exactSelectorBlock(css, '.homepage .hero-title-nowrap');
-  const tabletHero = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.homepage .site-hero');
-  const mobile = mediaBlock(css, '(max-width: 640px)');
-  const mobileHero = exactSelectorBlock(mobile, '.homepage .site-hero');
-  const mobileHeroTitle = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.homepage .site-hero h1');
 
   assertCssDeclaration(homepageNav, 'justify-content', 'space-between');
   assertCssDeclaration(homepageWrap, 'width', 'min(100% - 48px, 1120px)');
   assertCssDeclaration(homepageShell, 'width', 'min(100% - 28px, 1200px)');
-  assertCssDeclaration(hero, 'width', 'min(100% - 48px, 1120px)');
-  assertCssDeclaration(hero, 'grid-template-columns', 'minmax(0, 1.12fr) minmax(260px, 0.52fr)');
-  assertCssDeclaration(hero, 'gap', 'clamp(40px, 5.5vw, 80px)');
-  assertCssDeclaration(nowrapTitle, 'white-space', 'nowrap');
-  assertCssDeclaration(heroTitle, 'font-size', 'clamp(2rem, 4vw, 3.3rem)');
-  assertCssDeclaration(heroPrimaryCta, 'border-color', '#0066cc');
-  assertCssDeclaration(heroPrimaryCta, 'background', '#0066cc');
-  assertCssDeclaration(tabletHero, 'grid-template-columns', '1fr');
-  assertCssDeclaration(tabletHero, 'gap', '18px');
-  assertCssDeclaration(mobileHero, 'gap', '14px');
-  assertCssDeclaration(mobileHeroTitle, 'font-size', 'clamp(1.53rem, 7.2vw, 2.1rem)');
   assert.doesNotMatch(css, /homepage-header-actions|icon-link|icon-menu|icon-search|section-icon-bolt/);
 });
 

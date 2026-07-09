@@ -298,72 +298,6 @@ pre code {
   padding: 52px 0 84px;
 }
 
-.site-hero {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.58fr);
-  align-items: center;
-  gap: clamp(24px, 4vw, 56px);
-  padding: 44px 0 46px;
-  isolation: isolate;
-}
-
-.homepage .site-hero {
-  width: min(100% - 48px, 1120px);
-  grid-template-columns: minmax(0, 1.12fr) minmax(260px, 0.52fr);
-  gap: clamp(40px, 5.5vw, 80px);
-  padding-top: 46px;
-  padding-bottom: 42px;
-}
-
-.homepage .site-hero .eyebrow {
-  color: #0066cc;
-  font-size: 0.9rem;
-  letter-spacing: 0;
-  text-transform: none;
-}
-
-.homepage .site-hero h1 {
-  max-width: 700px;
-  font-size: clamp(2rem, 4vw, 3.3rem);
-  line-height: 1.18;
-}
-
-.homepage .hero-title-nowrap {
-  white-space: nowrap;
-}
-
-.homepage .hero-title-main {
-  color: #0066cc;
-}
-
-.homepage .hero-description {
-  max-width: 640px;
-  font-size: 1.08rem;
-}
-
-.homepage .hero-actions {
-  gap: var(--space-5);
-}
-
-.homepage .hero-actions .button {
-  min-width: 184px;
-  min-height: 54px;
-  border-radius: var(--radius-pill);
-  font-weight: 850;
-}
-
-.homepage .hero-actions .button-primary {
-  border-color: #0066cc;
-  background: #0066cc;
-}
-
-.homepage .hero-actions .button-primary:hover,
-.homepage .hero-actions .button-primary:focus-visible {
-  border-color: #0052a3;
-  background: #0052a3;
-}
-
 .archive-hero {
   position: relative;
   display: grid;
@@ -445,47 +379,6 @@ pre code {
   box-shadow: none;
 }
 
-.hero-copy {
-  position: relative;
-  z-index: 1;
-  min-width: 0;
-  max-width: 720px;
-}
-
-.site-hero h1 {
-  max-width: 720px;
-  margin-bottom: 18px;
-  font-size: clamp(2.45rem, 5vw, 4.25rem);
-  line-height: 1.03;
-}
-
-.hero-mascot {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  min-width: 0;
-  margin: 0;
-}
-
-.hero-mascot img {
-  display: block;
-  width: min(100%, clamp(260px, 32vw, 420px));
-  height: auto;
-  margin-left: auto;
-  border-radius: 20px;
-  filter: drop-shadow(0 16px 28px rgba(15, 23, 42, 0.11)) drop-shadow(0 0 18px rgba(0, 102, 204, 0.08));
-}
-
-.hero-title-line {
-  display: block;
-}
-
-.hero-title-main {
-  color: var(--primary);
-}
-
 .eyebrow {
   margin-bottom: 12px;
   color: var(--primary);
@@ -495,19 +388,12 @@ pre code {
   text-transform: uppercase;
 }
 
-.hero-description,
 .subtitle {
   max-width: 760px;
   margin-bottom: 30px;
   color: var(--muted);
   font-size: 1.2rem;
   overflow-wrap: anywhere;
-}
-
-.hero-description {
-  max-width: 680px;
-  margin-bottom: 22px;
-  font-size: clamp(1.03rem, 2vw, 1.16rem);
 }
 
 .publication-notice {
@@ -2202,20 +2088,6 @@ pre code {
     padding-top: 28px;
   }
 
-  .site-hero {
-    grid-template-columns: 1fr;
-    gap: 18px;
-    padding-top: 24px;
-    padding-bottom: 30px;
-  }
-
-  .homepage .site-hero {
-    grid-template-columns: 1fr;
-    gap: 18px;
-    padding-top: 24px;
-    padding-bottom: 30px;
-  }
-
   .archive-hero {
     grid-template-columns: 1fr;
     gap: 18px;
@@ -2235,19 +2107,6 @@ pre code {
   #latest,
   #archive {
     scroll-margin-top: 124px;
-  }
-
-  .hero-copy {
-    max-width: 760px;
-  }
-
-  .hero-mascot {
-    justify-content: center;
-  }
-
-  .hero-mascot img {
-    width: min(100%, 340px);
-    margin-right: auto;
   }
 
   .archive-hero-mascot {
@@ -2419,11 +2278,6 @@ pre code {
     min-height: 34px;
   }
 
-  .homepage .hero-actions .button {
-    width: auto;
-    flex: 1 1 150px;
-  }
-
   .archive-heading {
     align-items: stretch;
     flex-direction: column;
@@ -2462,18 +2316,6 @@ pre code {
     grid-template-columns: 1fr;
   }
 
-  .site-hero {
-    gap: 14px;
-    padding-top: 18px;
-    padding-bottom: 24px;
-  }
-
-  .homepage .site-hero {
-    gap: 14px;
-    padding-top: 18px;
-    padding-bottom: 24px;
-  }
-
   .archive-hero {
     gap: 14px;
     padding-top: 18px;
@@ -2491,23 +2333,8 @@ pre code {
     transform: none;
   }
 
-  .site-hero h1 {
-    margin-bottom: 14px;
-    font-size: clamp(2rem, 9vw, 2.7rem);
-    line-height: 1.07;
-  }
-
-  .homepage .site-hero h1 {
-    font-size: clamp(1.53rem, 7.2vw, 2.1rem);
-  }
-
   .archive-hero h1 {
     font-size: 2.22rem;
-  }
-
-  .hero-description {
-    margin-bottom: 18px;
-    font-size: 1rem;
   }
 
   .hero-mascot img,
