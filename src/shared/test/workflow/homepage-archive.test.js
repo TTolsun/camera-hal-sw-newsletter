@@ -573,12 +573,10 @@ test('homepage featured hero and latest grid CSS cover the rebuilt layout', () =
 test('latest and archive card CSS preserves whole-card links and mobile summary behavior', () => {
   const css = readStylesheet();
   const cardLink = exactSelectorBlock(css, '.newsletter-card,\n.archive-card');
-  const latestFocus = exactSelectorBlock(css, '.latest-newsletter-card[href]:focus-visible');
   const emptyState = exactSelectorBlock(css, '.archive-empty-state');
   const mobile = mediaBlock(css, '(max-width: 640px)');
 
   assertCssDeclaration(cardLink, 'text-decoration', 'none');
-  assert.match(latestFocus, /outline\s*:\s*3px solid var\(--focus-ring\)\s*;/);
   assertCssDeclaration(emptyState, 'grid-column', '1 / -1');
   assert.doesNotMatch(mobile, /latest-card-summary\s*\{[\s\S]*?display\s*:\s*none\s*;/);
   assert.doesNotMatch(css, /archive-toolbar/);

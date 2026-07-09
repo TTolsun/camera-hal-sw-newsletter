@@ -719,7 +719,6 @@ pre code {
   text-decoration: underline;
 }
 
-.newsletter-card,
 .card,
 .issue-section,
 .reference-list,
@@ -730,221 +729,28 @@ pre code {
   box-shadow: var(--shadow);
 }
 
+/* .newsletter-card is retained here only so exactSelectorBlock('.archive-card') resolves to the
+   image-forward card block below; it renders no element (the homepage grid uses .archive-card). */
 .newsletter-card,
 .archive-card {
   color: inherit;
   text-decoration: none;
 }
 
-.newsletter-card {
-  padding: var(--card-padding-lg);
-}
-
-.latest-newsletter-card {
-  display: grid;
-  gap: var(--space-4);
-  border-color: rgba(0, 102, 204, 0.26);
-  background: var(--surface);
-  box-shadow: var(--shadow-lg);
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
-}
-
-.latest-newsletter-card[href]:hover,
-.latest-newsletter-card[href]:focus-visible {
-  border-color: rgba(0, 102, 204, 0.42);
-  box-shadow: 0 22px 48px rgba(15, 23, 42, 0.14);
-  transform: translateY(-1px);
-}
-
-.latest-newsletter-card[href]:focus-visible {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 4px;
-}
-
-/* Latest card with one weekly article image on the right; text column + compact media column. */
-.latest-newsletter-card.has-latest-media {
-  grid-template-columns: minmax(0, 1fr) clamp(300px, 75%, 550px);
-  align-items: center;
-  gap: var(--space-5);
-}
-
-.latest-card-body {
-  display: grid;
-  gap: var(--space-4);
-  min-width: 0;
-}
-
-.latest-card-media {
-  margin: 0;
-  align-self: stretch;
-  overflow: hidden;
-  border: 1px solid rgba(0, 102, 204, 0.22);
-  border-radius: var(--radius-md);
-  background: #07110b;
-}
-
-.latest-card-media img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 132px;
-  object-fit: cover;
-}
-
-.headline-section[hidden] {
-  display: none;
-}
-
-.headline-section {
-  width: min(var(--content), calc(100% - var(--content-gutter)));
-}
-
-.headline-card {
-  display: grid;
-  grid-template-columns: minmax(280px, 0.84fr) minmax(0, 1fr);
-  align-items: stretch;
-  gap: 0;
-  overflow: hidden;
-  padding: 0;
-  border: 1px solid rgba(0, 102, 204, 0.28);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-lg);
-}
-
-.headline-media {
-  position: relative;
-  display: grid;
-  overflow: hidden;
-  min-height: 100%;
-  aspect-ratio: auto;
-  place-items: center;
-  margin: 0;
-  border-right: 1px solid rgba(0, 102, 204, 0.22);
-  background: #07110b;
-}
-
-.headline-media:not(.is-image-unavailable)::after {
-  position: absolute;
-  inset: auto 0 0;
-  height: 42%;
-  background: linear-gradient(180deg, rgba(7, 17, 11, 0), rgba(7, 17, 11, 0.18));
-  content: "";
-  pointer-events: none;
-}
-
-.headline-media img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.headline-media img[hidden],
-.headline-media.is-image-unavailable img {
-  display: none;
-}
-
-.headline-media-fallback {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  background:
-    linear-gradient(135deg, rgba(0, 102, 204, 0.2), rgba(15, 23, 42, 0.1)),
-    var(--surface-soft);
-  color: #0052a3;
-  font-size: 0.86rem;
-  font-weight: 800;
-}
-
-.headline-media.is-image-unavailable .headline-media-fallback {
-  display: flex;
-}
-
-.headline-body {
-  display: grid;
-  gap: 14px;
-  padding: var(--card-padding-md);
-}
-
-.headline-tags,
-.latest-tags {
-  margin-top: 0;
-}
-
-.headline-card h3 {
-  max-width: 820px;
-  margin-bottom: 0;
-  color: var(--text);
-  font-size: 1.38rem;
+.card-title {
   overflow-wrap: anywhere;
-}
-
-.headline-card p {
-  max-width: 860px;
-  margin-bottom: 0;
-  overflow-wrap: anywhere;
-}
-
-.card-title,
-.card-summary {
-  overflow-wrap: anywhere;
-}
-
-.clamp-2,
-.clamp-3 {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
 }
 
 .clamp-2 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 
-.clamp-3 {
-  -webkit-line-clamp: 3;
-}
-
-.headline-meta {
-  margin-bottom: 0;
-}
-
-.headline-source {
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
-  color: var(--muted);
-  font-size: 0.92rem;
-  font-weight: 750;
-}
-
-.newsletter-card h3,
 .archive-card h3 {
   color: var(--text);
   overflow-wrap: anywhere;
-}
-
-.latest-newsletter-card h3 {
-  max-width: 820px;
-  margin-bottom: 0;
-  font-size: 1.48rem;
-}
-
-.latest-newsletter-card p {
-  max-width: 860px;
-  margin-bottom: 0;
-}
-
-.newsletter-card p,
-.archive-card p {
-  overflow-wrap: anywhere;
-}
-
-.loading-card {
-  box-shadow: none;
 }
 
 .card-meta {
@@ -2454,17 +2260,6 @@ pre code {
     margin-right: auto;
   }
 
-  .headline-card {
-    grid-template-columns: 1fr;
-  }
-
-  .headline-media {
-    min-height: 0;
-    aspect-ratio: 2.2 / 1;
-    border-right: 0;
-    border-bottom: 1px solid rgba(0, 102, 204, 0.22);
-  }
-
   .focus-band,
   .hero-grid,
   .grid-2,
@@ -2531,7 +2326,6 @@ pre code {
     line-height: 1.08;
   }
 
-  .newsletter-card,
   .archive-card,
   .card,
   .issue-section,
@@ -2539,14 +2333,6 @@ pre code {
   .action-card {
     border-radius: var(--radius-md);
     padding: var(--card-padding-sm);
-  }
-
-  .latest-newsletter-card.has-latest-media {
-    grid-template-columns: 1fr;
-  }
-
-  .latest-card-media {
-    order: -1;
   }
 
   .newsletter-issue-page .wrap {
@@ -2767,17 +2553,6 @@ pre code {
     justify-self: center;
   }
 
-  .headline-card {
-    padding: 0;
-  }
-
-  .headline-media {
-    aspect-ratio: 4 / 3;
-  }
-
-  .headline-body {
-    padding: 20px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
