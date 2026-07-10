@@ -149,7 +149,7 @@ test('newsletter renderer uses public_article for public markdown and HTML', () 
   }
 });
 
-test('newsletter renderer keeps generated issue nav labels in English', () => {
+test('newsletter renderer keeps generated issue nav labels on the newsroom Korean set', () => {
   const html = buildHtml(issue());
   const labels = siteNavLabels(html);
 
@@ -160,10 +160,11 @@ test('newsletter renderer keeps generated issue nav labels in English', () => {
   assert.match(html, /<span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom<\/span><\/span>/);
   assert.match(html, /<title>Camera SW Newsletter - 2026-05-03<\/title>/);
   assert.doesNotMatch(html, /data-site-header|site-header\.js/);
-  assert.deepEqual(labels.slice(0, 3), ['Home', 'Archive', 'GitHub']);
+  assert.deepEqual(labels.slice(0, 3), ['\ud648', '\uc544\uce74\uc774\ube0c', 'GitHub']);
   assert.equal(labels.includes('Sources'), false);
   assert.equal(labels.includes('\ucd5c\uc2e0\ud638'), false);
-  assert.equal(labels.includes('\uc544\uce74\uc774\ube0c'), false);
+  assert.equal(labels.includes('Home'), false);
+  assert.equal(labels.includes('Archive'), false);
   assert.equal(labels.includes('\ucd9c\ucc98'), false);
 });
 
@@ -171,15 +172,15 @@ test('shared site header renders consistent root-relative links', () => {
   const homeHeader = siteHeaderHtml();
   const issueHeader = siteHeaderHtml({ rootPath: '../../' });
 
-  assert.match(homeHeader, /href="index\.html">Home<\/a>/);
-  assert.match(homeHeader, /href="archive\.html">Archive<\/a>/);
+  assert.match(homeHeader, /href="index\.html">홈<\/a>/);
+  assert.match(homeHeader, /href="archive\.html">아카이브<\/a>/);
   assert.doesNotMatch(homeHeader, /docs\/NEWS_SOURCES\.md/);
-  assert.match(issueHeader, /href="\.\.\/\.\.\/index\.html">Home<\/a>/);
-  assert.match(issueHeader, /href="\.\.\/\.\.\/archive\.html">Archive<\/a>/);
+  assert.match(issueHeader, /href="\.\.\/\.\.\/index\.html">홈<\/a>/);
+  assert.match(issueHeader, /href="\.\.\/\.\.\/archive\.html">아카이브<\/a>/);
   assert.doesNotMatch(issueHeader, /\.\.\/\.\.\/docs\/NEWS_SOURCES\.md/);
   assert.deepEqual(siteNavLabels(`<header class="site-header" data-site-header data-site-root="../../"></header><script src="../../assets/js/site-header.js" defer></script>`).slice(0, 3), [
-    'Home',
-    'Archive',
+    '홈',
+    '아카이브',
     'GitHub'
   ]);
 });
@@ -224,7 +225,7 @@ test('newsletter renderer structures issue pages as homepage-shell landing artic
   assert.match(html, /<div class="article-feature-row">/);
   assert.match(html, /<h2 id="article-camerax-release-gives-hal-teams-a-target-title" class="article-title">CameraX release gives HAL teams a target<\/h2>/);
   assert.match(html, /<section class="section issue-references" aria-labelledby="issue-references-title">/);
-  assert.match(html, /<a href="\.\.\/\.\.\/archive\.html">Archive<\/a>/);
+  assert.match(html, /<a href="\.\.\/\.\.\/archive\.html">아카이브<\/a>/);
   assert.doesNotMatch(html, /아카이브로 돌아가기|MD 원본 보기|newsletter\.md|bottom-nav|issue-actions/);
 });
 
