@@ -99,7 +99,7 @@ function newsletterHtml(date, {
   ].join('\n');
 }
 
-function rootNavHtml(navLabels = ['Home', 'Archive', 'GitHub']) {
+function rootNavHtml(navLabels = ['홈', '아카이브', 'GitHub']) {
   const navHrefs = ['index.html', 'archive.html', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
   const navHtml = navLabels
     .map((label, index) => `<a href="${navHrefs[index] || '#'}">${label}</a>`)
@@ -188,7 +188,7 @@ function writeSiteFixture(root, {
   editorApprovedException = false,
   dataTags = ['camera-hal'],
   htmlTags = dataTags,
-  navLabels = ['Home', 'Archive', 'GitHub'],
+  navLabels = ['홈', '아카이브', 'GitHub'],
   sourceGapCount = null,
   staleClaimHardFailure = false,
   qualityDeductions = null,
@@ -566,7 +566,7 @@ test('strict validate-site HTML issue tag drift remains hard failure', () => {
   assert.match(result.stderr, /HTML issue tags \[Camera HAL, Android, AI\] do not match articles\/data\/newsletters\.json tags \[Camera HAL, Android\]/);
 });
 
-test('strict validate-site rejects localized issue site nav labels', () => {
+test('strict validate-site rejects mismatched issue site nav labels', () => {
   const root = tempRoot('validate-site-nav-labels-');
   writeSiteFixture(root, {
     strict: true,
@@ -577,7 +577,7 @@ test('strict validate-site rejects localized issue site nav labels', () => {
   const result = runScript(validateSitePath, root);
 
   assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Site navigation labels must be Home \/ Archive \/ GitHub/);
+  assert.match(result.stderr, /Site navigation labels must be \ud648 \/ \uc544\uce74\uc774\ube0c \/ GitHub/);
 });
 
 test('validate-site accepts root homepage nav without Sources link', () => {
@@ -587,7 +587,7 @@ test('validate-site accepts root homepage nav without Sources link', () => {
     articleCount: articlePolicy.mainArticleCount.min
   });
   writeText(path.join(root, 'index.html'), rootIndexHtml('', {
-    navLabels: ['Home', 'Archive', 'GitHub']
+    navLabels: ['\ud648', '\uc544\uce74\uc774\ube0c', 'GitHub']
   }));
 
   const result = runScript(validateSitePath, root);
@@ -602,13 +602,13 @@ test('validate-site rejects root homepage nav with stale Sources link', () => {
     articleCount: articlePolicy.mainArticleCount.min
   });
   writeText(path.join(root, 'index.html'), rootIndexHtml('', {
-    navLabels: ['Home', 'Archive', 'Sources', 'GitHub']
+    navLabels: ['\ud648', '\uc544\uce74\uc774\ube0c', 'Sources', 'GitHub']
   }));
 
   const result = runScript(validateSitePath, root);
 
   assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Site navigation labels must be Home \/ Archive \/ GitHub in index\.html/);
+  assert.match(result.stderr, /Site navigation labels must be \ud648 \/ \uc544\uce74\uc774\ube0c \/ GitHub in index\.html/);
 });
 
 test('validate-site accepts shared root site header component', () => {

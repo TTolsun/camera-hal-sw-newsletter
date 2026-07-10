@@ -370,7 +370,7 @@ function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
 }
 
 function siteHeaderExpectedLabels() {
-  return ['Home', 'Archive', 'GitHub'];
+  return ['홈', '아카이브', 'GitHub'];
 }
 
 function escapeRegex(value) {

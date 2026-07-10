@@ -2,8 +2,8 @@
   const GITHUB_URL = 'https://github.com/TTolsun/camera-hal-sw-newsletter';
   const BRAND_LABEL = 'Camera SW Newsletter';
   const NAV_ITEMS = [
-    { label: 'Home', path: 'index.html' },
-    { label: 'Archive', path: 'archive.html' },
+    { label: '홈', path: 'index.html' },
+    { label: '아카이브', path: 'archive.html' },
     { label: 'GitHub', href: GITHUB_URL }
   ];
 

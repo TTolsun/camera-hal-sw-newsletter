@@ -475,7 +475,7 @@ test('homepage renders a static brand featured hero and a 최신 소식 grid wit
   assert.match(html, /<div id="latest-grid" class="archive-grid latest-grid">/);
   assert.match(html, /<a class="section-link" href="archive\.html">전체 아카이브 보기<\/a>/);
   // Shared nav and subscription hooks are preserved.
-  assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">Home<\/a>[\s\S]*href="archive\.html">Archive<\/a>[\s\S]*href="https:\/\/github\.com\/TTolsun\/camera-hal-sw-newsletter">GitHub<\/a>/);
+  assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">홈<\/a>[\s\S]*href="archive\.html">아카이브<\/a>[\s\S]*href="https:\/\/github\.com\/TTolsun\/camera-hal-sw-newsletter">GitHub<\/a>/);
   assert.match(html, /<section id="subscribe"[\s\S]*data-subscription-section hidden>/);
   assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search/);
 });
