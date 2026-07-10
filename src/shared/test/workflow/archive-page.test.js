@@ -186,8 +186,9 @@ test('archive page uses homepage shell, shared footer, metadata, and stable hook
   assert.match(html, /<body class="homepage">/);
   assert.match(html, /<header class="site-header homepage-site-header">/);
   assert.match(html, /<section class="archive-hero content-wrap" aria-labelledby="archive-page-title">/);
-  assert.match(html, /<h1 id="archive-page-title">Archive<\/h1>/);
-  assert.match(html, /assets\/images\/brand\/HALley\.png/);
+  assert.match(html, /<h1 id="archive-page-title">아카이브<\/h1>/);
+  // mockup 아카이브 헤더는 카피 블록만 — 마스코트 이미지가 되살아나면 안 된다.
+  assert.doesNotMatch(html, /archive-hero-mascot/);
   assert.doesNotMatch(html, /archive-hero-actions|<a class="button button-primary" href="index\.html">Home<\/a>/);
   assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">홈<\/a>[\s\S]*href="archive\.html">아카이브<\/a>[\s\S]*GitHub/);
   for (const hook of [
@@ -265,7 +266,7 @@ test('archive page renders all newsletters including latest in date-descending o
   assert.ok(html.indexOf('Latest issue') < html.indexOf('Middle issue'));
   assert.ok(html.indexOf('Middle issue') < html.indexOf('Older issue'));
   assert.match(elements['[data-result-summary]'].textContent, /전체 3개 아카이브를 최신순으로 표시 중입니다/);
-  assert.equal(elements['[data-archive-count]'].textContent, '3개');
+  assert.equal(elements['[data-archive-count]'].textContent, '3호');
   assert.equal(elements['[data-archive-topic-label]'].textContent, '전체');
   assert.equal(elements['[data-archive-sort-label]'].textContent, '최신순');
   assert.equal(elements['[data-archive-controls]'].hidden, false);
@@ -289,7 +290,7 @@ test('archive page paginates newsletters eight per page and keeps page in the UR
   assert.match(html, /Issue 18/);
   assert.doesNotMatch(html, /Issue 17/);
   assert.match(rendered.elements['[data-result-summary]'].textContent, /전체 11개 아카이브 중 1-8개를 최신순으로 표시 중입니다/);
-  assert.equal(rendered.elements['[data-archive-count]'].textContent, '11개');
+  assert.equal(rendered.elements['[data-archive-count]'].textContent, '11호');
   assert.equal(rendered.elements['[data-archive-pagination]'].hidden, false);
   assert.match(rendered.elements['[data-archive-pagination]'].innerHTML, /data-archive-page="1" aria-current="page"/);
   assert.match(rendered.elements['[data-archive-pagination]'].innerHTML, /data-archive-page="2"/);
@@ -323,7 +324,7 @@ test('archive page filters by topic, updates aria-pressed, and changes sort orde
   assert.doesNotMatch(html, /Camera issue/);
   assert.match(rendered.elements['[data-topic-filter]'].innerHTML, /data-archive-topic="android" aria-pressed="true"/);
   assert.match(rendered.elements['[data-result-summary]'].textContent, /Android 2개 아카이브를 최신순으로 표시 중입니다/);
-  assert.equal(rendered.elements['[data-archive-count]'].textContent, '2/3개');
+  assert.equal(rendered.elements['[data-archive-count]'].textContent, '2/3호');
   assert.equal(rendered.elements['[data-archive-topic-label]'].textContent, 'Android');
   assert.equal(rendered.elements['[data-archive-sort-label]'].textContent, '최신순');
   assert.equal(rendered.elements['[data-archive-pagination]'].hidden, true);
@@ -382,7 +383,7 @@ test('archive page shows no-result state for direct topic URL with no matches', 
   assert.equal(elements['[data-empty-state]'].hidden, false);
   assert.equal(elements['[data-archive-pagination]'].hidden, true);
   assert.match(elements['[data-result-summary]'].textContent, /SoC Platform 결과가 없습니다/);
-  assert.equal(elements['[data-archive-count]'].textContent, '0/1개');
+  assert.equal(elements['[data-archive-count]'].textContent, '0/1호');
   assert.match(elements['[data-topic-filter]'].innerHTML, /data-archive-topic="soc-platform" aria-pressed="true" disabled aria-disabled="true"/);
 });
 
