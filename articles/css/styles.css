@@ -3,10 +3,12 @@
   --bg: #f5f5f7;
   --surface: #ffffff;
   --surface-soft: #ececf1;
-  --text: #1f2937;
-  /* 크림 캔버스에서도 본문 보조 텍스트 대비를 WCAG AA(>=4.5:1) 이상으로 유지하려 약간 어둡게 조정. */
-  --muted: #5c6470;
-  --line: #dde3ea;
+  --text: #1d1d1f;
+  /* 보조 텍스트(#6e6e73)는 흰 배경 5.07:1, 파치먼트 4.65:1로 WCAG AA(>=4.5:1)를 만족. */
+  --muted: #6e6e73;
+  /* 3차 메타 텍스트(날짜·캡션·법적 표기). 디자인 정본(Apple Newsroom mockup) 값. */
+  --text-tertiary: #86868b;
+  --line: #e0e0e0;
   --primary: #0066cc;
   --primary-hover: #0052a3;
   --chip: #e8f1fb;
@@ -147,38 +149,16 @@ pre code {
 
 .homepage,
 .newsletter-issue-page {
-  background:
-    radial-gradient(circle at 50% -80px, rgba(0, 102, 204, 0.09), transparent 34%),
-    linear-gradient(180deg, #ffffff 0%, #ffffff 320px, #f5f5f7 100%);
+  background: #ffffff;
 }
 
+/* mockup 콘텐츠 영역: max-width 1080px에 좌우 22px 거터 → 실제 콘텐츠 폭 1036px. */
 .homepage .content-wrap {
-  width: min(100% - 48px, 1120px);
-}
-
-.homepage .site-header,
-.homepage .site-main,
-.homepage .site-footer {
-  width: min(100% - 28px, 1200px);
-  margin-right: auto;
-  margin-left: auto;
-  border-right: 1px solid rgba(221, 227, 234, 0.86);
-  border-left: 1px solid rgba(221, 227, 234, 0.86);
-  background: rgba(255, 255, 255, 0.96);
-}
-
-.homepage .site-header {
-  top: 0;
-  border-top: 1px solid rgba(221, 227, 234, 0.86);
-  border-radius: 22px 22px 0 0;
+  width: min(100% - 44px, 1036px);
 }
 
 .homepage .site-main {
   padding: 0 0 28px;
-}
-
-.homepage .site-footer {
-  border-radius: 0 0 22px 22px;
 }
 
 .sr-only {
@@ -201,10 +181,10 @@ pre code {
   position: sticky;
   top: 0;
   z-index: 20;
-  border-bottom: 1px solid rgba(221, 227, 234, 0.82);
-  background: rgba(255, 255, 255, 0.85);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 
 .site-header[data-site-header]:empty {
@@ -255,7 +235,7 @@ pre code {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 72px;
+  min-height: 58px;
   gap: var(--space-5);
 }
 
@@ -287,11 +267,26 @@ pre code {
 .homepage-nav-links {
   align-items: center;
   flex-wrap: nowrap;
+  gap: 26px;
 }
 
 .homepage-nav-links a {
-  font-size: 1.15rem;
-  font-weight: 760;
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.homepage-nav-links a:hover {
+  color: var(--text);
+}
+
+.homepage-nav-links a[href*="github.com"] {
+  color: var(--text-tertiary);
+}
+
+.homepage-nav-links a[href*="github.com"]:hover {
+  color: var(--text);
 }
 
 .site-main {
@@ -1387,7 +1382,7 @@ pre code {
 .footer-legal {
   padding-top: 18px;
   border-top: 1px solid var(--line);
-  color: var(--muted);
+  color: var(--text-tertiary);
   font-size: 0.75rem;
 }
 
@@ -2250,14 +2245,8 @@ pre code {
     width: 100%;
   }
 
-  .homepage .site-header,
-  .homepage .site-main,
-  .homepage .site-footer {
-    width: min(100% - 12px, 1200px);
-  }
-
   .homepage .content-wrap {
-    width: min(100% - var(--content-gutter-mobile), 1120px);
+    width: min(100% - var(--content-gutter-mobile), 1036px);
   }
 
   .homepage-nav {
