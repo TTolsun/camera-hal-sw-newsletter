@@ -190,7 +190,7 @@ test('newsletter renderer renders a single main article without empty sections',
   const html = buildHtml(issue());
 
   assert.match(markdown, /^## 2\. CameraX release gives HAL teams a target/m);
-  assert.match(html, /<section class="section issue-story" id="article-camerax-release-gives-hal-teams-a-target"/);
+  assert.match(html, /<section class="section issue-story issue-section article-card[^"]*" id="article-camerax-release-gives-hal-teams-a-target"/);
   assert.doesNotMatch(markdown, /^## 3\./m);
   assert.equal((html.match(/\barticle-card\b/g) || []).length, 1);
   for (const rendered of [markdown, html]) {
@@ -211,7 +211,7 @@ test('newsletter renderer keeps article anchors unique when titles repeat', () =
   assert.match(html, /id="article-camerax-release-gives-hal-teams-a-target-2"/);
 });
 
-test('newsletter renderer structures issue pages as homepage-shell landing articles', () => {
+test('newsletter renderer structures issue pages as newsroom flow articles', () => {
   const html = buildHtml(issue());
 
   assert.match(html, /<main class="site-main article-page newsletter-main">/);
@@ -220,11 +220,15 @@ test('newsletter renderer structures issue pages as homepage-shell landing artic
   assert.match(html, /<h1 class="issue-title"><span>Camera SW<\/span><span>Newsletter - 2026-05-03<\/span><\/h1>/);
   assert.match(html, /<a class="issue-back" href="\.\.\/\.\.\/index\.html">← 뉴스룸<\/a>/);
   assert.doesNotMatch(html, /issue-hero-mascot/);
-  assert.match(html, /<div class="card issue-briefing-card">/);
-  assert.match(html, /<span class="issue-story-number" aria-label="Article 1">1<\/span>/);
-  assert.match(html, /<div class="article-feature-row">/);
+  assert.match(html, /<div class="issue-briefing-card">/);
+  // mockup: 제로패딩 번호 + 카테고리 눈썹이 카드 프레임 없는 섹션 헤더로 흐른다.
+  assert.match(html, /<div class="issue-story-eyebrow">\s*<span class="issue-story-number" aria-label="Article 1">01<\/span>\s*<span class="issue-story-category">Camera<\/span>/);
+  assert.match(html, /<section class="section issue-story issue-section article-card[^"]*"/);
+  assert.doesNotMatch(html, /article-feature-row|section-icon-list/);
   assert.match(html, /<h2 id="article-camerax-release-gives-hal-teams-a-target-title" class="article-title">CameraX release gives HAL teams a target<\/h2>/);
   assert.match(html, /<section class="section issue-references" aria-labelledby="issue-references-title">/);
+  // mockup 하단 내비: 뉴스룸/아카이브 이동 링크.
+  assert.match(html, /<nav class="issue-footer-navigation"[^>]*>[\s\S]*?← 뉴스룸으로[\s\S]*?아카이브 전체 보기 →[\s\S]*?<\/nav>/);
   assert.match(html, /<a href="\.\.\/\.\.\/archive\.html">아카이브<\/a>/);
   assert.doesNotMatch(html, /아카이브로 돌아가기|MD 원본 보기|newsletter\.md|bottom-nav|issue-actions/);
 });
@@ -295,7 +299,9 @@ test('newsletter renderer renders story v1 as natural prose without public story
   assert.doesNotMatch(markdown, /Camera ITS와 preview latency log를 비교하는 리뷰 흐름/);
   assert.match(markdown, /### Camera HAL\/Driver 관점에서의 의미/);
   assert.match(html, /Android Developers가 CameraX 변경점을 공개했습니다/);
-  assert.match(html, /Camera HAL\/Driver 관점에서의 의미/);
+  // HTML 관점 박스는 mockup 라벨, markdown 은 기존 헤딩을 유지한다(재렌더 시 md 불변).
+  assert.match(html, /Camera HAL · Driver 관점/);
+  assert.doesNotMatch(html, /관점에서의 의미/);
   assert.doesNotMatch(html, /article-decision-metadata/);
   for (const label of [
     /^### 현업 장면/m,

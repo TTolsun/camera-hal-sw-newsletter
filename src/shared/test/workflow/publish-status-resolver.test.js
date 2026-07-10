@@ -150,7 +150,8 @@ test('fallback_public renderer uses tooling perspective label', () => {
   const html = buildHtml(issue);
 
   assert.match(markdown, /### Camera HAL\/Driver 관점에서의 의미/);
-  assert.match(html, /Camera HAL\/Driver 관점에서의 의미/);
+  // HTML 관점 박스는 mockup 라벨(markdown 헤딩과 분리 — 재렌더 시 md 불변 계약).
+  assert.match(html, /Camera HAL · Driver 관점/);
   assert.doesNotMatch(markdown, /### Android Native \/ Tooling 관점에서 확인할 점/);
 });
 

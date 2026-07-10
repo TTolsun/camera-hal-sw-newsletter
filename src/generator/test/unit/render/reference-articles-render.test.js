@@ -68,6 +68,8 @@ test('escapes markdown-breaking titles and uses a safe link destination', () => 
 test('html renders the reference-articles section with links', () => {
   const html = buildHtml(issueWithReferences());
   assert.match(html, /issue-reference-articles/);
-  assert.match(html, /참고 \/ 더 읽을거리/);
+  // HTML 은 mockup 중점 표기, meta 는 링크 아래 별도 줄(markdown 은 기존 표기 유지).
+  assert.match(html, /참고 · 더 읽을거리/);
+  assert.match(html, /<span class="reference-meta">CameraX Release Notes \(2026-03-25\) · AOSP Camera 프레임워크 관련 참고<\/span>/);
   assert.match(html, /href="https:\/\/isocpp\.org\/blog\/gcc-16-1"/);
 });
