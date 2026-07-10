@@ -28,8 +28,8 @@
         <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
       </a>
       <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
-        <a href="../../index.html">Home</a>
-        <a href="../../archive.html">Archive</a>
+        <a href="../../index.html">홈</a>
+        <a href="../../archive.html">아카이브</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </div>
@@ -40,7 +40,7 @@
       <header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← 뉴스룸</a>
         <div class="article-meta issue-hero-meta">
-          <span class="issue-kicker">2026.06.15 ~ 2026.06.21</span>
+          <span class="issue-kicker">2026.06.15 – 06.21</span>
         </div>
         <h1 class="issue-title"><span>2026 W25</span></h1>
         <p class="subtitle">이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 6건의 소식을 다룹니다.</p>
@@ -48,160 +48,141 @@
       </header>
 
       <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
-        <div class="card issue-briefing-card">
-          <div class="issue-section-heading">
-            <span class="section-icon section-icon-list" aria-hidden="true"></span>
-            <h2 id="issue-briefing-title">이번 주 기사</h2>
-          </div>
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">이번 호 기사</h2>
           <ul><li>ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개</li><li>Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가</li><li>GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선</li><li>Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안</li><li>Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개</li><li>Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개</li></ul>
         </div>
       </section>
 
-      <section class="section issue-story" id="article-arm-mali-c55-isp-ccm-rgb-gamma" aria-labelledby="article-arm-mali-c55-isp-ccm-rgb-gamma-title">
-        <span class="issue-story-number" aria-label="Article 1">1</span>
-        <article class="card issue-section article-card story-article has-image main">
-          <div class="article-feature-row">
-            <figure class="article-media">
-            <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개 image" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">이미지: <a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/">[PATCH 1/2] media: arm: mali-c55: Add support for CCM</a></figcaption>
-            </figure>
-            <div class="article-copy">
-              <h2 id="article-arm-mali-c55-isp-ccm-rgb-gamma-title" class="article-title">ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개</h2>
-              <p class="article-source-subtitle">Linux media mailing list에서 이미지 처리 파이프라인 개선 제안</p>
-              <p class="article-lead">최근 Linux media mailing list를 통해 ARM Mali C55 ISP 드라이버에 CCM(Color Correction Matrix) 및 RGB Gamma 지원을 추가하는 패치가 공개되었습니다. 이 패치는 이미지 처리 파이프라인의 핵심 기능을 강화하여 보다 정확한 색상 표현을 가능하게 할 것으로 보입니다.</p>
-              <p>2026년 6월 16일, Linux media mailing list에 ARM Mali C55 ISP 드라이버를 위한 두 가지 중요한 패치가 게시되었습니다. 첫 번째 패치는 CCM(Color Correction Matrix) 지원을 추가하며, 두 번째 패치는 RGB Gamma 지원을 포함합니다. 이 두 기능은 이미지 센서에서 들어오는 원시 데이터가 최종 사용자에게 보여지는 이미지로 변환되는 과정에서 색상 정확도와 톤 매핑을 최적화하는 데 필수적입니다.</p>
-              <p>CCM은 카메라 센서의 색상 응답 특성을 보정하여 실제 색상과 가깝게 재현하는 데 사용되며, RGB Gamma는 이미지의 밝기 분포를 조정하여 시각적으로 자연스러운 결과물을 만듭니다. 이러한 기능들은 ISP(Image Signal Processor)의 핵심적인 역할 중 하나로, 고품질 이미지 출력을 위해 중요합니다.</p>
-              <p>이 패치들이 Linux 커널에 통합되면, Mali C55 ISP를 사용하는 SoC 플랫폼은 더욱 정교한 이미지 처리 기능을 하드웨어 레벨에서 지원할 수 있게 됩니다. 이는 Android Camera HAL 구현에서 드라이버와의 상호작용 및 이미지 처리 파이프라인 최적화에 직접적인 영향을 미칠 수 있습니다.</p>
-            </div>
-          </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이 패치는 Mali C55 ISP의 저수준 이미지 처리 기능을 강화하는 것으로, Camera HAL 구현 시 드라이버와의 연동을 통해 색상 보정 및 감마 처리 로직을 최적화할 기회를 제공합니다. HAL은 이러한 ISP 기능을 활용하여 최종 이미지 품질을 개선하고, 특정 색상 프로파일 또는 HDR 시나리오에서 더 나은 결과를 얻을 수 있는지 검토해야 합니다.</p></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/">[PATCH 1/2] media: arm: mali-c55: Add support for CCM</a> — <a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t">전체 패치 시리즈</a></li></ul></div>
-        </article>
+      <section class="section issue-story issue-section article-card story-article has-image main" id="article-arm-mali-c55-isp-ccm-rgb-gamma" aria-labelledby="article-arm-mali-c55-isp-ccm-rgb-gamma-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-arm-mali-c55-isp-ccm-rgb-gamma-title" class="article-title">ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개</h2>
+        <p class="article-source-subtitle">Linux media mailing list에서 이미지 처리 파이프라인 개선 제안</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개 image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/">[PATCH 1/2] media: arm: mali-c55: Add support for CCM</a></figcaption>
+        </figure>
+        <p class="article-lead">최근 Linux media mailing list를 통해 ARM Mali C55 ISP 드라이버에 CCM(Color Correction Matrix) 및 RGB Gamma 지원을 추가하는 패치가 공개되었습니다. 이 패치는 이미지 처리 파이프라인의 핵심 기능을 강화하여 보다 정확한 색상 표현을 가능하게 할 것으로 보입니다.</p>
+        <p>2026년 6월 16일, Linux media mailing list에 ARM Mali C55 ISP 드라이버를 위한 두 가지 중요한 패치가 게시되었습니다. 첫 번째 패치는 CCM(Color Correction Matrix) 지원을 추가하며, 두 번째 패치는 RGB Gamma 지원을 포함합니다. 이 두 기능은 이미지 센서에서 들어오는 원시 데이터가 최종 사용자에게 보여지는 이미지로 변환되는 과정에서 색상 정확도와 톤 매핑을 최적화하는 데 필수적입니다.</p>
+        <p>CCM은 카메라 센서의 색상 응답 특성을 보정하여 실제 색상과 가깝게 재현하는 데 사용되며, RGB Gamma는 이미지의 밝기 분포를 조정하여 시각적으로 자연스러운 결과물을 만듭니다. 이러한 기능들은 ISP(Image Signal Processor)의 핵심적인 역할 중 하나로, 고품질 이미지 출력을 위해 중요합니다.</p>
+        <p>이 패치들이 Linux 커널에 통합되면, Mali C55 ISP를 사용하는 SoC 플랫폼은 더욱 정교한 이미지 처리 기능을 하드웨어 레벨에서 지원할 수 있게 됩니다. 이는 Android Camera HAL 구현에서 드라이버와의 상호작용 및 이미지 처리 파이프라인 최적화에 직접적인 영향을 미칠 수 있습니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>이 패치는 Mali C55 ISP의 저수준 이미지 처리 기능을 강화하는 것으로, Camera HAL 구현 시 드라이버와의 연동을 통해 색상 보정 및 감마 처리 로직을 최적화할 기회를 제공합니다. HAL은 이러한 ISP 기능을 활용하여 최종 이미지 품질을 개선하고, 특정 색상 프로파일 또는 HDR 시나리오에서 더 나은 결과를 얻을 수 있는지 검토해야 합니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/">[PATCH 1/2] media: arm: mali-c55: Add support for CCM</a> — <a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t">전체 패치 시리즈</a></li></ul></div>
       </section>
 
-      <section class="section issue-story" id="article-android-camerax" aria-labelledby="article-android-camerax-title">
-        <span class="issue-story-number" aria-label="Article 2">2</span>
-        <article class="card issue-section article-card story-article has-image main">
-          <div class="article-feature-row">
-            <figure class="article-media">
-            <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=tr" alt="Android Developers Blog 로고" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">이미지: <a href="https://android-developers.googleblog.com/">Android Developers Blog</a></figcaption>
-            </figure>
-            <div class="article-copy">
-              <h2 id="article-android-camerax-title" class="article-title">Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가</h2>
-              <p class="article-source-subtitle">Android CLI 및 GitHub를 통해 LLM 기반 개발 지원 확대</p>
-              <p class="article-lead">2026년 6월 9일, Android 개발자 생산성 향상을 위한 새로운 Android skills 배치에 CameraX 마이그레이션 관련 스킬이 포함되었습니다. 이 업데이트는 LLM(Large Language Model)을 활용하여 개발자들이 CameraX 관련 작업을 더욱 효율적으로 처리할 수 있도록 돕습니다.</p>
-              <p>Android 개발자 도구 팀은 개발자 생산성 향상을 위해 Android skills 저장소를 지속적으로 확장하고 있으며, 최근 업데이트에는 CameraX 마이그레이션 관련 스킬이 추가되었습니다. 이 스킬은 Android CLI와 GitHub를 통해 제공되며, LLM이 특정 개발 패턴과 모범 사례에 대한 전문 지식을 갖추도록 돕습니다.</p>
-              <p>CameraX는 Android Camera2 API를 기반으로 구축된 Jetpack 라이브러리로, 카메라 앱 개발을 간소화하는 것을 목표로 합니다. 따라서 CameraX 마이그레이션 스킬은 기존 Camera1 또는 Camera2 API를 사용하는 앱을 CameraX로 전환하거나, CameraX 앱의 유지보수 및 최적화 작업을 지원하는 데 유용할 것입니다.</p>
-              <p>이러한 도구의 개선은 CameraX를 사용하는 앱 개발 워크플로우에 직접적인 영향을 미치며, 개발자들이 CameraX API를 더 쉽게 채택하고 활용할 수 있도록 지원합니다. 이는 결과적으로 CameraX 기반 앱의 품질 향상과 개발 시간 단축에 기여할 수 있습니다.</p>
-            </div>
-          </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이 업데이트는 Camera HAL 자체의 변경 사항은 아니지만, CameraX 앱 개발 워크플로우에 영향을 미치므로 CameraX 기반 앱의 호환성 및 성능 검증에 간접적인 영향을 줄 수 있습니다. HAL 팀은 CameraX 앱에서 발생하는 특정 카메라 동작 문제(예: 미리보기, 캡처, 비디오 녹화)를 디버깅할 때, 이러한 개발자 도구의 사용으로 인한 새로운 패턴이나 잠재적 이슈를 인지하고 있어야 합니다.</p></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing - Top 3 updates for Android developer productivity</a></li></ul></div>
-        </article>
+      <section class="section issue-story issue-section article-card story-article has-image main" id="article-android-camerax" aria-labelledby="article-android-camerax-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">Android Platform</span>
+        </div>
+        <h2 id="article-android-camerax-title" class="article-title">Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가</h2>
+        <p class="article-source-subtitle">Android CLI 및 GitHub를 통해 LLM 기반 개발 지원 확대</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=tr" alt="Android Developers Blog 로고" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://android-developers.googleblog.com/">Android Developers Blog</a></figcaption>
+        </figure>
+        <p class="article-lead">2026년 6월 9일, Android 개발자 생산성 향상을 위한 새로운 Android skills 배치에 CameraX 마이그레이션 관련 스킬이 포함되었습니다. 이 업데이트는 LLM(Large Language Model)을 활용하여 개발자들이 CameraX 관련 작업을 더욱 효율적으로 처리할 수 있도록 돕습니다.</p>
+        <p>Android 개발자 도구 팀은 개발자 생산성 향상을 위해 Android skills 저장소를 지속적으로 확장하고 있으며, 최근 업데이트에는 CameraX 마이그레이션 관련 스킬이 추가되었습니다. 이 스킬은 Android CLI와 GitHub를 통해 제공되며, LLM이 특정 개발 패턴과 모범 사례에 대한 전문 지식을 갖추도록 돕습니다.</p>
+        <p>CameraX는 Android Camera2 API를 기반으로 구축된 Jetpack 라이브러리로, 카메라 앱 개발을 간소화하는 것을 목표로 합니다. 따라서 CameraX 마이그레이션 스킬은 기존 Camera1 또는 Camera2 API를 사용하는 앱을 CameraX로 전환하거나, CameraX 앱의 유지보수 및 최적화 작업을 지원하는 데 유용할 것입니다.</p>
+        <p>이러한 도구의 개선은 CameraX를 사용하는 앱 개발 워크플로우에 직접적인 영향을 미치며, 개발자들이 CameraX API를 더 쉽게 채택하고 활용할 수 있도록 지원합니다. 이는 결과적으로 CameraX 기반 앱의 품질 향상과 개발 시간 단축에 기여할 수 있습니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>이 업데이트는 Camera HAL 자체의 변경 사항은 아니지만, CameraX 앱 개발 워크플로우에 영향을 미치므로 CameraX 기반 앱의 호환성 및 성능 검증에 간접적인 영향을 줄 수 있습니다. HAL 팀은 CameraX 앱에서 발생하는 특정 카메라 동작 문제(예: 미리보기, 캡처, 비디오 녹화)를 디버깅할 때, 이러한 개발자 도구의 사용으로 인한 새로운 패턴이나 잠재적 이슈를 인지하고 있어야 합니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing - Top 3 updates for Android developer productivity</a></li></ul></div>
       </section>
 
-      <section class="section issue-story" id="article-gcc-16-sarif" aria-labelledby="article-gcc-16-sarif-title">
-        <span class="issue-story-number" aria-label="Article 3">3</span>
-        <article class="card issue-section article-card story-article has-image main">
-          <div class="article-feature-row">
-            <figure class="article-media">
-            <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Red Hat graphic on ISO C++ Blog representing GCC 16 compiler updates" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">이미지: <a href="https://isocpp.org/blog">ISO C++ Blog</a></figcaption>
-            </figure>
-            <div class="article-copy">
-              <h2 id="article-gcc-16-sarif-title" class="article-title">GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선</h2>
-              <p class="article-source-subtitle">C++ 개발 워크플로우의 코드 품질 분석 및 디버깅 효율성 향상 기대</p>
-              <p class="article-lead">2026년 6월 15일, GCC 16이 출시되며 개발자들에게 반가운 소식을 전했습니다. 이번 버전에서는 개선된 오류 메시지와 SARIF(Static Analysis Results Interchange Format) 출력 기능이 추가되어 C++ 개발 워크플로우의 코드 품질 분석 및 디버깅 효율성을 크게 향상시킬 것으로 기대됩니다.</p>
-              <p>GCC 16의 가장 주목할 만한 변화 중 하나는 더욱 명확하고 이해하기 쉬운 오류 메시지입니다. 컴파일러 오류는 개발 과정에서 흔히 마주치는 문제이며, 오류 메시지의 가독성 향상은 문제 해결 시간을 단축하고 개발 생산성을 높이는 데 직접적으로 기여합니다. 이는 특히 복잡한 C++ 템플릿 메타프로그래밍이나 복잡한 상속 구조를 사용하는 HAL 및 드라이버 코드에서 큰 도움이 될 수 있습니다.</p>
-              <p>또한, SARIF 출력 기능은 정적 분석 도구의 결과를 표준화된 형식으로 제공하여, 다양한 분석 도구와 통합하고 결과를 쉽게 시각화 및 관리할 수 있게 합니다. SARIF는 GitHub Code Scanning과 같은 CI/CD 파이프라인에 널리 사용되므로, GCC 16의 이 기능은 C++ 기반 프로젝트의 자동화된 코드 품질 검사 및 보안 분석 워크플로우를 더욱 효율적으로 만들 것입니다.</p>
-              <p>Android HAL 및 드라이버 개발은 주로 Clang/LLVM 툴체인을 사용하지만, GCC의 이러한 개선 사항은 C++ 생태계 전반의 코드 품질 도구 발전을 의미합니다. 이는 장기적으로 Android 네이티브 개발 환경에도 긍정적인 영향을 미칠 수 있으며, 특히 크로스 컴파일러 호환성 및 정적 분석 도구의 선택에 대한 고려 사항을 제공합니다.</p>
-            </div>
-          </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>GCC 16의 개선된 오류 메시지와 SARIF 출력 기능은 직접적으로 Android HAL 툴체인(Clang/LLVM)을 변경하지는 않지만, C++ 기반 HAL 및 드라이버 코드의 빌드, 디버그, 정적 분석 워크플로우에 대한 통찰력을 제공합니다. HAL 엔지니어는 이러한 기능들을 Clang/LLVM 환경에서 유사하게 활용하거나, SARIF와 같은 표준화된 출력 형식을 통해 코드 품질 분석 결과를 통합 관리하는 방안을 검토할 수 있습니다.</p></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">New features in GCC 16: Improved error messages and SARIF output -- David Malcolm</a></li></ul></div>
-        </article>
+      <section class="section issue-story issue-section article-card story-article has-image main" id="article-gcc-16-sarif" aria-labelledby="article-gcc-16-sarif-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-gcc-16-sarif-title" class="article-title">GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선</h2>
+        <p class="article-source-subtitle">C++ 개발 워크플로우의 코드 품질 분석 및 디버깅 효율성 향상 기대</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Red Hat graphic on ISO C++ Blog representing GCC 16 compiler updates" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://isocpp.org/blog">ISO C++ Blog</a></figcaption>
+        </figure>
+        <p class="article-lead">2026년 6월 15일, GCC 16이 출시되며 개발자들에게 반가운 소식을 전했습니다. 이번 버전에서는 개선된 오류 메시지와 SARIF(Static Analysis Results Interchange Format) 출력 기능이 추가되어 C++ 개발 워크플로우의 코드 품질 분석 및 디버깅 효율성을 크게 향상시킬 것으로 기대됩니다.</p>
+        <p>GCC 16의 가장 주목할 만한 변화 중 하나는 더욱 명확하고 이해하기 쉬운 오류 메시지입니다. 컴파일러 오류는 개발 과정에서 흔히 마주치는 문제이며, 오류 메시지의 가독성 향상은 문제 해결 시간을 단축하고 개발 생산성을 높이는 데 직접적으로 기여합니다. 이는 특히 복잡한 C++ 템플릿 메타프로그래밍이나 복잡한 상속 구조를 사용하는 HAL 및 드라이버 코드에서 큰 도움이 될 수 있습니다.</p>
+        <p>또한, SARIF 출력 기능은 정적 분석 도구의 결과를 표준화된 형식으로 제공하여, 다양한 분석 도구와 통합하고 결과를 쉽게 시각화 및 관리할 수 있게 합니다. SARIF는 GitHub Code Scanning과 같은 CI/CD 파이프라인에 널리 사용되므로, GCC 16의 이 기능은 C++ 기반 프로젝트의 자동화된 코드 품질 검사 및 보안 분석 워크플로우를 더욱 효율적으로 만들 것입니다.</p>
+        <p>Android HAL 및 드라이버 개발은 주로 Clang/LLVM 툴체인을 사용하지만, GCC의 이러한 개선 사항은 C++ 생태계 전반의 코드 품질 도구 발전을 의미합니다. 이는 장기적으로 Android 네이티브 개발 환경에도 긍정적인 영향을 미칠 수 있으며, 특히 크로스 컴파일러 호환성 및 정적 분석 도구의 선택에 대한 고려 사항을 제공합니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>GCC 16의 개선된 오류 메시지와 SARIF 출력 기능은 직접적으로 Android HAL 툴체인(Clang/LLVM)을 변경하지는 않지만, C++ 기반 HAL 및 드라이버 코드의 빌드, 디버그, 정적 분석 워크플로우에 대한 통찰력을 제공합니다. HAL 엔지니어는 이러한 기능들을 Clang/LLVM 환경에서 유사하게 활용하거나, SARIF와 같은 표준화된 출력 형식을 통해 코드 품질 분석 결과를 통합 관리하는 방안을 검토할 수 있습니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">New features in GCC 16: Improved error messages and SARIF output -- David Malcolm</a></li></ul></div>
       </section>
 
-      <section class="section issue-story" id="article-linux-himax-hm1246-v10" aria-labelledby="article-linux-himax-hm1246-v10-title">
-        <span class="issue-story-number" aria-label="Article 4">4</span>
-        <article class="card issue-section article-card story-article has-image camera_driver_image_pipeline">
-          <div class="article-feature-row">
-            <figure class="article-media">
-            <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안 image" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">이미지: <a href="https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/">[PATCH v10 0/2] media: add Himax HM1246 image sensor</a></figcaption>
-            </figure>
-            <div class="article-copy">
-              <h2 id="article-linux-himax-hm1246-v10-title" class="article-title">Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안</h2>
-              <p class="article-source-subtitle">lore.kernel.org linux-media list (2026-06-19)</p>
-              <p class="article-lead">최근 Himax HM1246 이미지 센서를 지원하기 위한 v10 패치 시리즈가 Linux 커널 미디어 서브시스템에 제안되었습니다. 이번 드라이버는 Native RAW 모드만을 우선 지원하며, 센서 내부 ISP 파이프라인은 활성화되지 않은 상태로 검토 중입니다.</p>
-              <p>2026년 6월 19일, Linux 커널 미디어 메일링 리스트를 통해 Himax HM1246 이미지 센서 드라이버 추가를 위한 열 번째 패치 시리즈가 공개되었습니다. 이 드라이버는 하드웨어 제어 및 V4L2 프레임 캡처 인터페이스를 제공합니다.</p>
-              <p>현재 제안된 드라이버의 핵심 제약 사항은 Native RAW 모드만 지원한다는 점입니다. 센서 내부의 ISP 파이프라인이나 기타 가공된 출력 모드는 지원 대상에서 제외되어 있어, 센서가 출력하는 순수 RAW 데이터를 외부 ISP나 AP 수준에서 처리해야 합니다.</p>
-              <p>v10까지 검토가 진행된 만큼 드라이버의 구조적 완성도는 높을 것으로 예상되나, 여전히 검토 중인 패치 단계입니다. 따라서 실제 제품 개발 시에는 Native RAW 모드 전용 지원이라는 제약 조건을 고려하여 파이프라인 설계를 진행해야 합니다.</p>
-            </div>
-          </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>Himax HM1246 드라이버는 Native RAW 모드만 지원하므로, Android Camera HAL 수준에서 YUV나 JPEG 스트림을 생성하기 위해서는 AP의 하드웨어 ISP 또는 소프트웨어 이미지 처리 파이프라인과의 연동이 필수적입니다. 센서 내부 ISP를 활용한 간편한 YUV 출력이 불가능하다는 점을 아키텍처 설계 시 반영해야 합니다.</p></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/">[PATCH v10 0/2] media: add Himax HM1246 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/T/#t">전체 패치 시리즈</a></li></ul></div>
-        </article>
+      <section class="section issue-story issue-section article-card story-article has-image camera_driver_image_pipeline" id="article-linux-himax-hm1246-v10" aria-labelledby="article-linux-himax-hm1246-v10-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-linux-himax-hm1246-v10-title" class="article-title">Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list (2026-06-19)</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안 image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/">[PATCH v10 0/2] media: add Himax HM1246 image sensor</a></figcaption>
+        </figure>
+        <p class="article-lead">최근 Himax HM1246 이미지 센서를 지원하기 위한 v10 패치 시리즈가 Linux 커널 미디어 서브시스템에 제안되었습니다. 이번 드라이버는 Native RAW 모드만을 우선 지원하며, 센서 내부 ISP 파이프라인은 활성화되지 않은 상태로 검토 중입니다.</p>
+        <p>2026년 6월 19일, Linux 커널 미디어 메일링 리스트를 통해 Himax HM1246 이미지 센서 드라이버 추가를 위한 열 번째 패치 시리즈가 공개되었습니다. 이 드라이버는 하드웨어 제어 및 V4L2 프레임 캡처 인터페이스를 제공합니다.</p>
+        <p>현재 제안된 드라이버의 핵심 제약 사항은 Native RAW 모드만 지원한다는 점입니다. 센서 내부의 ISP 파이프라인이나 기타 가공된 출력 모드는 지원 대상에서 제외되어 있어, 센서가 출력하는 순수 RAW 데이터를 외부 ISP나 AP 수준에서 처리해야 합니다.</p>
+        <p>v10까지 검토가 진행된 만큼 드라이버의 구조적 완성도는 높을 것으로 예상되나, 여전히 검토 중인 패치 단계입니다. 따라서 실제 제품 개발 시에는 Native RAW 모드 전용 지원이라는 제약 조건을 고려하여 파이프라인 설계를 진행해야 합니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>Himax HM1246 드라이버는 Native RAW 모드만 지원하므로, Android Camera HAL 수준에서 YUV나 JPEG 스트림을 생성하기 위해서는 AP의 하드웨어 ISP 또는 소프트웨어 이미지 처리 파이프라인과의 연동이 필수적입니다. 센서 내부 ISP를 활용한 간편한 YUV 출력이 불가능하다는 점을 아키텍처 설계 시 반영해야 합니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/">[PATCH v10 0/2] media: add Himax HM1246 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/T/#t">전체 패치 시리즈</a></li></ul></div>
       </section>
 
-      <section class="section issue-story" id="article-himax-hm1246-v4l2-v10" aria-labelledby="article-himax-hm1246-v4l2-v10-title">
-        <span class="issue-story-number" aria-label="Article 5">5</span>
-        <article class="card issue-section article-card story-article has-image driver">
-          <div class="article-feature-row">
-            <figure class="article-media">
-            <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개 image" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">이미지: <a href="https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/">Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver</a></figcaption>
-            </figure>
-            <div class="article-copy">
-              <h2 id="article-himax-hm1246-v4l2-v10-title" class="article-title">Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개</h2>
-              <p class="article-source-subtitle">lore.kernel.org linux-media list</p>
-              <p class="article-lead">최근 Linux 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 시리즈가 제출되었습니다. 이 센서는 I2C 인터페이스와 병렬 버스를 지원하며 내부 ISP를 내장하고 있어, 향후 임베디드 및 Android 기기의 하위 이미지 파이프라인 통합에 기여할 것으로 기대됩니다.</p>
-              <p>이번에 공개된 v10 패치 시리즈는 Himax HM1246 이미지 센서를 제어하기 위한 V4L2 하위 장치(sub-device) 드라이버를 Linux 커널에 추가하는 것을 목표로 합니다. 이 센서는 I2C 인터페이스를 통해 레지스터 설정 및 제어가 가능하며, 물리적으로는 병렬 버스 인터페이스를 통해 호스트 프로세서와 연결됩니다.</p>
-              <p>특히 이 센서는 내부에 자체 ISP(Image Signal Processor)를 포함하고 있어, 센서 단에서 기본적인 이미지 처리 및 포맷 변환을 수행할 수 있는 특징을 가집니다. 드라이버는 V4L2 프레임워크 표준에 맞춰 작성되어 리눅스 미디어 컨트롤러 아키텍처와의 호환성을 제공합니다.</p>
-              <p>다만 본 패치는 현재 메일링 리스트에서 리뷰 중인 제안 단계로, 최종 커널 메인라인 병합 여부와 상세 사양은 추가 피드백에 따라 변경될 수 있습니다. Android 기기에 탑재될 경우, V4L2 드라이버 계층을 거쳐 Camera HAL의 이미지 입력 파이프라인과 통합되는 경로를 밟게 됩니다.</p>
-            </div>
-          </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>본 패치는 아직 제안 단계이므로 Android Camera HAL API나 메타데이터 계약에 직접적인 영향은 없습니다. 그러나 내부 ISP를 내장한 병렬 버스 기반 센서이므로, 향후 HAL 통합 시 프레임 타이밍 및 V4L2 하위 장치 포맷 협상(format negotiation) 단에서의 호환성 검증이 필요할 수 있습니다.</p></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/">Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver</a></li></ul></div>
-        </article>
+      <section class="section issue-story issue-section article-card story-article has-image driver" id="article-himax-hm1246-v4l2-v10" aria-labelledby="article-himax-hm1246-v4l2-v10-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 5">05</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-himax-hm1246-v4l2-v10-title" class="article-title">Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개 image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/">Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver</a></figcaption>
+        </figure>
+        <p class="article-lead">최근 Linux 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 시리즈가 제출되었습니다. 이 센서는 I2C 인터페이스와 병렬 버스를 지원하며 내부 ISP를 내장하고 있어, 향후 임베디드 및 Android 기기의 하위 이미지 파이프라인 통합에 기여할 것으로 기대됩니다.</p>
+        <p>이번에 공개된 v10 패치 시리즈는 Himax HM1246 이미지 센서를 제어하기 위한 V4L2 하위 장치(sub-device) 드라이버를 Linux 커널에 추가하는 것을 목표로 합니다. 이 센서는 I2C 인터페이스를 통해 레지스터 설정 및 제어가 가능하며, 물리적으로는 병렬 버스 인터페이스를 통해 호스트 프로세서와 연결됩니다.</p>
+        <p>특히 이 센서는 내부에 자체 ISP(Image Signal Processor)를 포함하고 있어, 센서 단에서 기본적인 이미지 처리 및 포맷 변환을 수행할 수 있는 특징을 가집니다. 드라이버는 V4L2 프레임워크 표준에 맞춰 작성되어 리눅스 미디어 컨트롤러 아키텍처와의 호환성을 제공합니다.</p>
+        <p>다만 본 패치는 현재 메일링 리스트에서 리뷰 중인 제안 단계로, 최종 커널 메인라인 병합 여부와 상세 사양은 추가 피드백에 따라 변경될 수 있습니다. Android 기기에 탑재될 경우, V4L2 드라이버 계층을 거쳐 Camera HAL의 이미지 입력 파이프라인과 통합되는 경로를 밟게 됩니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>본 패치는 아직 제안 단계이므로 Android Camera HAL API나 메타데이터 계약에 직접적인 영향은 없습니다. 그러나 내부 ISP를 내장한 병렬 버스 기반 센서이므로, 향후 HAL 통합 시 프레임 타이밍 및 V4L2 하위 장치 포맷 협상(format negotiation) 단에서의 호환성 검증이 필요할 수 있습니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/">Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver</a></li></ul></div>
       </section>
 
-      <section class="section issue-story" id="article-sony-imx576-v4l2-v2" aria-labelledby="article-sony-imx576-v4l2-v2-title">
-        <span class="issue-story-number" aria-label="Article 6">6</span>
-        <article class="card issue-section article-card story-article has-image driver">
-          <div class="article-feature-row">
-            <figure class="article-media">
-            <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개 image" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">이미지: <a href="https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/">Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver</a></figcaption>
-            </figure>
-            <div class="article-copy">
-              <h2 id="article-sony-imx576-v4l2-v2-title" class="article-title">Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개</h2>
-              <p class="article-source-subtitle">lore.kernel.org linux-media list</p>
-              <p class="article-lead">최근 Linux 미디어 메일링 리스트에 Sony IMX576 이미지 센서 지원을 위한 v2 패치 시리즈가 제출되었습니다. 이 드라이버는 고해상도 활성 어레이 지원과 함께 수동 노출, 게인, 블랭킹 제어 기능을 포함하고 있어 향후 고성능 카메라 파이프라인 통합의 기반이 될 것입니다.</p>
-              <p>이번에 제출된 v2 패치 시리즈는 Sony IMX576 이미지 센서용 V4L2 하위 장치 드라이버를 신규 추가하는 내용을 담고 있습니다. IMX576 센서는 5760 x 4312 크기의 거대한 활성 픽셀 어레이(active array)를 특징으로 하며, 고해상도 이미지 캡처에 적합한 하드웨어입니다.</p>
-              <p>제안된 드라이버는 센서의 성능을 활용할 수 있도록 수동 노출 제어(manual exposure control), 아날로그/디지털 게인 제어, 그리고 수직/수평 블랭킹(vblank/hblank) 제어 기능을 구현하고 있습니다. 또한 풀 해상도 외에도 2880 x 2156 해상도 출력을 지원하여 다양한 스트림 조합에 대응할 수 있도록 설계되었습니다.</p>
-              <p>이 드라이버 역시 현재 업스트림 리뷰 단계에 있으며, 실제 상용 기기에 적용하기 위해서는 V4L2 프레임워크 표준 인터페이스를 통한 제어 신뢰성 검증과 호스트 ISP 파이프라인과의 정밀한 타이밍 튜닝이 선행되어야 합니다.</p>
-            </div>
-          </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>Sony IMX576 센서의 고해상도(5760 x 4312) 및 수동 제어 기능(노출, 게인, 블랭킹)은 Android Camera HAL3의 수동 제어 기능(Manual Camera capabilities)과 직접 매핑됩니다. 드라이버가 안정화되면 HAL 단에서 3A 엔진 및 수동 메타데이터 제어의 신뢰성을 확보하는 데 기여할 것입니다.</p></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/">Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver</a></li></ul></div>
-        </article>
+      <section class="section issue-story issue-section article-card story-article has-image driver" id="article-sony-imx576-v4l2-v2" aria-labelledby="article-sony-imx576-v4l2-v2-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 6">06</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-sony-imx576-v4l2-v2-title" class="article-title">Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개 image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/">Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver</a></figcaption>
+        </figure>
+        <p class="article-lead">최근 Linux 미디어 메일링 리스트에 Sony IMX576 이미지 센서 지원을 위한 v2 패치 시리즈가 제출되었습니다. 이 드라이버는 고해상도 활성 어레이 지원과 함께 수동 노출, 게인, 블랭킹 제어 기능을 포함하고 있어 향후 고성능 카메라 파이프라인 통합의 기반이 될 것입니다.</p>
+        <p>이번에 제출된 v2 패치 시리즈는 Sony IMX576 이미지 센서용 V4L2 하위 장치 드라이버를 신규 추가하는 내용을 담고 있습니다. IMX576 센서는 5760 x 4312 크기의 거대한 활성 픽셀 어레이(active array)를 특징으로 하며, 고해상도 이미지 캡처에 적합한 하드웨어입니다.</p>
+        <p>제안된 드라이버는 센서의 성능을 활용할 수 있도록 수동 노출 제어(manual exposure control), 아날로그/디지털 게인 제어, 그리고 수직/수평 블랭킹(vblank/hblank) 제어 기능을 구현하고 있습니다. 또한 풀 해상도 외에도 2880 x 2156 해상도 출력을 지원하여 다양한 스트림 조합에 대응할 수 있도록 설계되었습니다.</p>
+        <p>이 드라이버 역시 현재 업스트림 리뷰 단계에 있으며, 실제 상용 기기에 적용하기 위해서는 V4L2 프레임워크 표준 인터페이스를 통한 제어 신뢰성 검증과 호스트 ISP 파이프라인과의 정밀한 타이밍 튜닝이 선행되어야 합니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>Sony IMX576 센서의 고해상도(5760 x 4312) 및 수동 제어 기능(노출, 게인, 블랭킹)은 Android Camera HAL3의 수동 제어 기능(Manual Camera capabilities)과 직접 매핑됩니다. 드라이버가 안정화되면 HAL 단에서 3A 엔진 및 수동 메타데이터 제어의 신뢰성을 확보하는 데 기여할 것입니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/">Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver</a></li></ul></div>
       </section>
 
       <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
-        <div class="card issue-reference-articles-card">
-          <div class="issue-section-heading">
-            <h2 id="issue-reference-articles-title">참고 / 더 읽을거리</h2>
-          </div>
-          <ul><li><a href="https://goo.gle/AdaptiveApps_IO26">8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O</a> — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고</li></ul>
-        </div>
+        <h2 id="issue-reference-articles-title">참고 · 더 읽을거리</h2>
+        <ul class="reference-articles-list"><li><a href="https://goo.gle/AdaptiveApps_IO26">8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O</a><span class="reference-meta">Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고</span></li></ul>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">참고자료</h2>
-        <div class="card reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/">[PATCH 1/2] media: arm: mali-c55: Add support for CCM</a> — <a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t">전체 패치 시리즈</a></li><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing - Top 3 updates for Android developer productivity</a></li><li><a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">New features in GCC 16: Improved error messages and SARIF output -- David Malcolm</a></li><li><a href="https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/">[PATCH v10 0/2] media: add Himax HM1246 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/T/#t">전체 패치 시리즈</a></li><li><a href="https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/">Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver</a></li><li><a href="https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/">Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver</a></li></ul></div>
+        <div class="reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/">[PATCH 1/2] media: arm: mali-c55: Add support for CCM</a> — <a href="https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t">전체 패치 시리즈</a></li><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing - Top 3 updates for Android developer productivity</a></li><li><a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">New features in GCC 16: Improved error messages and SARIF output -- David Malcolm</a></li><li><a href="https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/">[PATCH v10 0/2] media: add Himax HM1246 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/T/#t">전체 패치 시리즈</a></li><li><a href="https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/">Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver</a></li><li><a href="https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/">Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver</a></li></ul></div>
       </section>
+
+      <nav class="issue-footer-navigation" aria-label="이슈 하단 이동">
+        <a href="../../index.html">← 뉴스룸으로</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">아카이브 전체 보기 →</a>
+      </nav>
 
     </article>
   </main>
@@ -223,6 +204,8 @@
         <div class="footer-col">
           <span class="footer-col-title">리소스</span>
           <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (지원예정)</span>
+          <span class="footer-note">편집 정책 (지원예정)</span>
         </div>
       </div>
       <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Gemini 뉴스룸이 모아 사람이 검토·발행합니다.</small></div>

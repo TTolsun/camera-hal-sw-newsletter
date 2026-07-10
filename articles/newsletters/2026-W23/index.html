@@ -28,8 +28,8 @@
         <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
       </a>
       <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
-        <a href="../../index.html">Home</a>
-        <a href="../../archive.html">Archive</a>
+        <a href="../../index.html">홈</a>
+        <a href="../../archive.html">아카이브</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </div>
@@ -40,7 +40,7 @@
       <header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← 뉴스룸</a>
         <div class="article-meta issue-hero-meta">
-          <span class="issue-kicker">2026.06.01 ~ 2026.06.07</span>
+          <span class="issue-kicker">2026.06.01 – 06.07</span>
         </div>
         <h1 class="issue-title"><span>2026 W23</span></h1>
         <p class="subtitle">이번 주에는 ‘CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영’, ‘Google I/O &#39;26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표’ 두 건의 소식을 다룹니다.</p>
@@ -48,64 +48,61 @@
       </header>
 
       <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
-        <div class="card issue-briefing-card">
-          <div class="issue-section-heading">
-            <span class="section-icon section-icon-list" aria-hidden="true"></span>
-            <h2 id="issue-briefing-title">이번 주 기사</h2>
-          </div>
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">이번 호 기사</h2>
           <ul><li>CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영</li><li>Google I/O &#39;26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표</li></ul>
         </div>
       </section>
 
-      <section class="section issue-story" id="article-camerax-1-6-0-api" aria-labelledby="article-camerax-1-6-0-api-title">
-        <span class="issue-story-number" aria-label="Article 1">1</span>
-        <article class="card issue-section article-card has-image article">
-          <div class="article-feature-row">
-            <figure class="article-media">
-            <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=bn" alt="CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영 image" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">이미지: <a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX Release Notes</a></figcaption>
-            </figure>
-            <div class="article-copy">
-              <h2 id="article-camerax-1-6-0-api-title" class="article-title">CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영</h2>
-              <p class="article-lead">CameraX 1.6.0 Release Notes (March 25, 2026)</p>
-              <p>2026년 3월 25일 공식 발표된 CameraX 1.6.0 릴리스에서는 앱이 카메라 라이프사이클에 바인딩하기 전에 기기의 하드웨어 지원 여부를 미리 확인할 수 있는 강력한 기능 조합 쿼리 API가 도입되었습니다. 이와 함께 차세대 Android 17 대응 크래시 패치와 Samsung Z Fold 4, A53 등 특정 단말에서 보고된 YUV 스트림 왜곡 및 플래시 연동 캡처 실패를 우회하는 호환성 패치가 대거 적용되었습니다.</p>
-              <p>이번 CameraX 1.6.0 릴리스의 가장 핵심적인 변화는 개발자가 HDR, 손떨림 방지(PREVIEW_STABILIZATION), 특정 해상도 설정, CameraX 확장 기능(Extensions) 또는 슬로우 모션과 같은 복잡한 유스케이스 조합이 타겟 기기에서 정상적으로 작동하는지 사전에 쿼리할 수 있는 API를 도입한 것입니다. 이를 통해 앱 계층에서 지원되지 않는 하드웨어 스트림 조합을 무리하게 요청하여 발생하던 런타임 예외나 오동작을 사전에 방지할 수 있게 되었습니다.</p>
-              <p>또한 다가올 Android 17 기기에서 새롭게 추가되는 미지의 다이내믹 레인지 모드로 인해 기존 CameraX 기반 앱들이 비정상 종료되던 치명적인 호환성 문제가 해결되었습니다. 이 크래시 방지 패치는 하위 버전인 1.5.2에도 체리픽되었으며, 구글은 향후 Android 17 배포 시 발생할 수 있는 앱 비정상 종료를 예방하기 위해 모든 개발자에게 CameraX 버전을 1.5.2 또는 1.6.0 이상으로 즉시 업데이트할 것을 강력히 권장하고 있습니다.</p>
-              <p>기기별 하드웨어 특성에 대응하는 호환성 패치도 대거 포함되었습니다. 대표적으로 Samsung Z Fold 4 기기에서 이미지 왜곡 현상을 일으키던 특정 YUV 포맷 출력 크기를 지원 대상에서 제외(Exclude)하는 조치가 취해졌습니다. 또한 Samsung A53 기기에서 비디오 녹화(VideoCapture) 유스케이스가 활성화된 상태로 토치를 켜고 사진을 촬영할 때 간헐적으로 캡처가 실패하던 타이밍 이슈가 수정되었습니다.</p>
-              <p>그 외에도 초광각 카메라에서 플래시를 사용할 때 노출 부족으로 이미지가 어둡게 나오던 현상과, 일부 기기의 JPEG 인코더가 마커 앞에 0xFF 패딩 바이트를 추가하여 이미지 파싱이 실패하던 문제를 해결하기 위해 ExifInterface 라이브러리 의존성을 업데이트하는 등 하위 이미지 처리 파이프라인의 안정성을 높이기 위한 세부 수정들이 대거 반영되었습니다.</p>
-            </div>
-          </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이번 릴리스는 Camera HAL 개발팀에게 시사하는 바가 큽니다. 상위 프레임워크 계층에서 유스케이스 조합 지원 여부를 사전에 쿼리하는 API가 도입됨에 따라, HAL 수준에서 선언하는 CameraCharacteristics 및 isStreamCombinationSupported 인터페이스의 정확성이 더욱 엄격하게 요구됩니다. 또한 Z Fold 4의 YUV 왜곡이나 A53의 토치 연동 캡처 실패처럼 HAL/드라이버 계층의 불안정성이 상위 라이브러리에서 강제로 우회(Exclude/Filter) 처리되고 있는 만큼, 벤더사에서는 자사 기기의 스트림 조합 신뢰성과 버퍼 처리 로직을 재검증해야 합니다.</p></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.0">CameraX Release Notes - CameraX 1.6.0</a></li></ul></div>
-        </article>
+      <section class="section issue-story issue-section article-card has-image article" id="article-camerax-1-6-0-api" aria-labelledby="article-camerax-1-6-0-api-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">Camera</span>
+        </div>
+        <h2 id="article-camerax-1-6-0-api-title" class="article-title">CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영</h2>
+        <figure class="article-media">
+        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=bn" alt="CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영 image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://developer.android.com/jetpack/androidx/releases/camera">CameraX Release Notes</a></figcaption>
+        </figure>
+        <p class="article-lead">CameraX 1.6.0 Release Notes (March 25, 2026)</p>
+        <p>2026년 3월 25일 공식 발표된 CameraX 1.6.0 릴리스에서는 앱이 카메라 라이프사이클에 바인딩하기 전에 기기의 하드웨어 지원 여부를 미리 확인할 수 있는 강력한 기능 조합 쿼리 API가 도입되었습니다. 이와 함께 차세대 Android 17 대응 크래시 패치와 Samsung Z Fold 4, A53 등 특정 단말에서 보고된 YUV 스트림 왜곡 및 플래시 연동 캡처 실패를 우회하는 호환성 패치가 대거 적용되었습니다.</p>
+        <p>이번 CameraX 1.6.0 릴리스의 가장 핵심적인 변화는 개발자가 HDR, 손떨림 방지(PREVIEW_STABILIZATION), 특정 해상도 설정, CameraX 확장 기능(Extensions) 또는 슬로우 모션과 같은 복잡한 유스케이스 조합이 타겟 기기에서 정상적으로 작동하는지 사전에 쿼리할 수 있는 API를 도입한 것입니다. 이를 통해 앱 계층에서 지원되지 않는 하드웨어 스트림 조합을 무리하게 요청하여 발생하던 런타임 예외나 오동작을 사전에 방지할 수 있게 되었습니다.</p>
+        <p>또한 다가올 Android 17 기기에서 새롭게 추가되는 미지의 다이내믹 레인지 모드로 인해 기존 CameraX 기반 앱들이 비정상 종료되던 치명적인 호환성 문제가 해결되었습니다. 이 크래시 방지 패치는 하위 버전인 1.5.2에도 체리픽되었으며, 구글은 향후 Android 17 배포 시 발생할 수 있는 앱 비정상 종료를 예방하기 위해 모든 개발자에게 CameraX 버전을 1.5.2 또는 1.6.0 이상으로 즉시 업데이트할 것을 강력히 권장하고 있습니다.</p>
+        <p>기기별 하드웨어 특성에 대응하는 호환성 패치도 대거 포함되었습니다. 대표적으로 Samsung Z Fold 4 기기에서 이미지 왜곡 현상을 일으키던 특정 YUV 포맷 출력 크기를 지원 대상에서 제외(Exclude)하는 조치가 취해졌습니다. 또한 Samsung A53 기기에서 비디오 녹화(VideoCapture) 유스케이스가 활성화된 상태로 토치를 켜고 사진을 촬영할 때 간헐적으로 캡처가 실패하던 타이밍 이슈가 수정되었습니다.</p>
+        <p>그 외에도 초광각 카메라에서 플래시를 사용할 때 노출 부족으로 이미지가 어둡게 나오던 현상과, 일부 기기의 JPEG 인코더가 마커 앞에 0xFF 패딩 바이트를 추가하여 이미지 파싱이 실패하던 문제를 해결하기 위해 ExifInterface 라이브러리 의존성을 업데이트하는 등 하위 이미지 처리 파이프라인의 안정성을 높이기 위한 세부 수정들이 대거 반영되었습니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>이번 릴리스는 Camera HAL 개발팀에게 시사하는 바가 큽니다. 상위 프레임워크 계층에서 유스케이스 조합 지원 여부를 사전에 쿼리하는 API가 도입됨에 따라, HAL 수준에서 선언하는 CameraCharacteristics 및 isStreamCombinationSupported 인터페이스의 정확성이 더욱 엄격하게 요구됩니다. 또한 Z Fold 4의 YUV 왜곡이나 A53의 토치 연동 캡처 실패처럼 HAL/드라이버 계층의 불안정성이 상위 라이브러리에서 강제로 우회(Exclude/Filter) 처리되고 있는 만큼, 벤더사에서는 자사 기기의 스트림 조합 신뢰성과 버퍼 처리 로직을 재검증해야 합니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.0">CameraX Release Notes - CameraX 1.6.0</a></li></ul></div>
       </section>
 
-      <section class="section issue-story" id="article-google-i-o-26-jetpack-camerax-media3-cameraxviewfinder-composable" aria-labelledby="article-google-i-o-26-jetpack-camerax-media3-cameraxviewfinder-composable-title">
-        <span class="issue-story-number" aria-label="Article 2">2</span>
-        <article class="card issue-section article-card story-article has-image camera-hal">
-          <div class="article-feature-row">
-            <figure class="article-media">
-            <img class="article-image" src="https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&amp;days_since_epoch=20609" alt="Google I/O &#39;26 Android Developers session thumbnail" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">이미지: <a href="https://android-developers.googleblog.com/">Android Developers Blog</a></figcaption>
-            </figure>
-            <div class="article-copy">
-              <h2 id="article-google-i-o-26-jetpack-camerax-media3-cameraxviewfinder-composable-title" class="article-title">Google I/O &#39;26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표</h2>
-              <p class="article-source-subtitle">Jetpack CameraX와 Media3를 활용한 고품질 안드로이드 미디어 경험 구축</p>
-              <p class="article-lead">Google I/O &#39;26에서 Jetpack CameraX와 Media3를 활용하여 폴더블 및 태블릿 등 다양한 폼 팩터에서 유연하게 반응하는 카메라 미리보기를 제공하는 CameraXViewfinder Composable이 발표되었습니다.</p>
-              <p>안드로이드 생태계가 고품질 미디어 라이프사이클을 지원하는 플랫폼으로 진화함에 따라, 구글은 첫 캡처부터 최종 재생까지의 개발 여정을 단순화하기 위한 툴킷을 제시했습니다. 이번 Google I/O &#39;26 발표의 핵심은 Jetpack CameraX와 Media3의 긴밀한 통합입니다.</p>
-              <p>새롭게 도입된 CameraXViewfinder Composable은 선언형 UI 프레임워크인 Jetpack Compose 환경에서 카메라 미리보기를 쉽게 구현할 수 있도록 돕습니다. 특히 화면 크기가 동적으로 변하는 폴더블 기기나 대화면 태블릿 환경에서 레이아웃 변화에 맞춰 완벽하게 확장되고 반응하는 뷰파인더를 제공합니다.</p>
-              <p>이 툴킷은 애플리케이션 개발자가 복잡한 Surface 생명주기 관리나 화면 비율 계산 없이도 네이티브 수준의 고품질 카메라 및 재생 경험을 구축할 수 있도록 설계되었습니다. 이를 통해 앱 개발 프로세스가 크게 단축될 것으로 기대됩니다.</p>
-            </div>
-          </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이번 변화는 Camera HAL의 직접적인 인터페이스 변경을 수반하지는 않지만, 프레임워크 및 앱 계층에서 HAL이 제공하는 스트림(Preview, ImageCapture)을 어떻게 소비하고 렌더링하는지 보여줍니다. 폴더블 기기의 화면 전환 시 발생할 수 있는 Surface 재구성 및 스트림 재설정 요청에 대해 HAL이 프레임 드롭 없이 안정적으로 버퍼를 공급해야 함을 시사합니다.</p></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&amp;si=H6-8-AbtEyTqSxeY">Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26</a></li></ul></div>
-        </article>
+      <section class="section issue-story issue-section article-card story-article has-image camera-hal" id="article-google-i-o-26-jetpack-camerax-media3-cameraxviewfinder-composable" aria-labelledby="article-google-i-o-26-jetpack-camerax-media3-cameraxviewfinder-composable-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-google-i-o-26-jetpack-camerax-media3-cameraxviewfinder-composable-title" class="article-title">Google I/O &#39;26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표</h2>
+        <p class="article-source-subtitle">Jetpack CameraX와 Media3를 활용한 고품질 안드로이드 미디어 경험 구축</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&amp;days_since_epoch=20609" alt="Google I/O &#39;26 Android Developers session thumbnail" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://android-developers.googleblog.com/">Android Developers Blog</a></figcaption>
+        </figure>
+        <p class="article-lead">Google I/O &#39;26에서 Jetpack CameraX와 Media3를 활용하여 폴더블 및 태블릿 등 다양한 폼 팩터에서 유연하게 반응하는 카메라 미리보기를 제공하는 CameraXViewfinder Composable이 발표되었습니다.</p>
+        <p>안드로이드 생태계가 고품질 미디어 라이프사이클을 지원하는 플랫폼으로 진화함에 따라, 구글은 첫 캡처부터 최종 재생까지의 개발 여정을 단순화하기 위한 툴킷을 제시했습니다. 이번 Google I/O &#39;26 발표의 핵심은 Jetpack CameraX와 Media3의 긴밀한 통합입니다.</p>
+        <p>새롭게 도입된 CameraXViewfinder Composable은 선언형 UI 프레임워크인 Jetpack Compose 환경에서 카메라 미리보기를 쉽게 구현할 수 있도록 돕습니다. 특히 화면 크기가 동적으로 변하는 폴더블 기기나 대화면 태블릿 환경에서 레이아웃 변화에 맞춰 완벽하게 확장되고 반응하는 뷰파인더를 제공합니다.</p>
+        <p>이 툴킷은 애플리케이션 개발자가 복잡한 Surface 생명주기 관리나 화면 비율 계산 없이도 네이티브 수준의 고품질 카메라 및 재생 경험을 구축할 수 있도록 설계되었습니다. 이를 통해 앱 개발 프로세스가 크게 단축될 것으로 기대됩니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>이번 변화는 Camera HAL의 직접적인 인터페이스 변경을 수반하지는 않지만, 프레임워크 및 앱 계층에서 HAL이 제공하는 스트림(Preview, ImageCapture)을 어떻게 소비하고 렌더링하는지 보여줍니다. 폴더블 기기의 화면 전환 시 발생할 수 있는 Surface 재구성 및 스트림 재설정 요청에 대해 HAL이 프레임 드롭 없이 안정적으로 버퍼를 공급해야 함을 시사합니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&amp;si=H6-8-AbtEyTqSxeY">Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26</a></li></ul></div>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">참고자료</h2>
-        <div class="card reference-list"><ul><li><a href="https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&amp;si=H6-8-AbtEyTqSxeY">Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26</a></li></ul></div>
+        <div class="reference-list"><ul><li><a href="https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&amp;si=H6-8-AbtEyTqSxeY">Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26</a></li></ul></div>
       </section>
+
+      <nav class="issue-footer-navigation" aria-label="이슈 하단 이동">
+        <a href="../../index.html">← 뉴스룸으로</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">아카이브 전체 보기 →</a>
+      </nav>
 
     </article>
   </main>
@@ -127,6 +124,8 @@
         <div class="footer-col">
           <span class="footer-col-title">리소스</span>
           <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (지원예정)</span>
+          <span class="footer-note">편집 정책 (지원예정)</span>
         </div>
       </div>
       <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Gemini 뉴스룸이 모아 사람이 검토·발행합니다.</small></div>
