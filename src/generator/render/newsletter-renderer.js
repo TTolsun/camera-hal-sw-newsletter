@@ -176,18 +176,23 @@ function articlePerspectiveHeadingHtml() {
   return 'Camera HAL · Driver 관점';
 }
 
-// mockup 카테고리 눈썹 라벨: section.article_type -> 표시 라벨.
+// mockup 카테고리 눈썹 라벨: relevance bucket -> 표시 라벨.
 const ARTICLE_CATEGORY_LABELS = {
   direct_aosp_camera: 'AOSP Camera',
   camera_driver_image_pipeline: 'Camera Driver · ISP',
   android_platform_camera_adjacent: 'Android Platform',
   cpp_ai_tooling_fallback: 'C++ · AI Tooling',
   soc_platform_signal: 'SoC Platform',
-  android_multimedia_camera_output: 'Android Multimedia'
+  android_multimedia_camera_output: 'Android Multimedia',
+  generic_tech_watchlist: 'Tooling Watch'
 };
 
+// bucket 은 sectionRelevanceBucket 이 8개 필드 변형에서 해석한다. article_type 은
+// 예전 아티팩트가 bucket 값을 article_type 에 실었던 경우를 위한 보조 키다.
 function articleCategoryLabel(section = {}) {
-  return ARTICLE_CATEGORY_LABELS[String(section.article_type || '').trim()] || 'Camera';
+  return ARTICLE_CATEGORY_LABELS[sectionRelevanceBucket(section)] ||
+    ARTICLE_CATEGORY_LABELS[String(section.article_type || '').trim()] ||
+    'Camera';
 }
 
 function issueTags(issue) {
@@ -275,12 +280,14 @@ function issueWeekLabel(issue = {}) {
 }
 
 // Weekly issue hero kicker shows the week's date range in the mockup format ("2026.05.25 – 05.31").
+// 연말처럼 주가 연도를 걸치면 끝 날짜의 연도를 생략하지 않는다.
 function issueKickerText(issue = {}) {
   const dot = value => String(value).replace(/-/g, '.');
   const start = String(issue.week_start_date || '').trim();
   const end = String(issue.week_end_date || '').trim();
   if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
-    return `${dot(start)} – ${dot(end).slice(5)}`;
+    const sameYear = start.slice(0, 4) === end.slice(0, 4);
+    return `${dot(start)} – ${sameYear ? dot(end).slice(5) : dot(end)}`;
   }
   return `주간 뉴스레터 ${issue.date || ''}`.trim();
 }
@@ -637,7 +644,7 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, ancho
     ? storyBodyParagraphsForRender(publicArticle)
     : bodyParagraphsForRender(publicArticle);
   const sourceSubtitle = isStoryArticle(publicArticle) && publicArticle.source_subtitle
-    ? `<p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>`
+    ? `        <p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>`
     : '';
   const displayNumber = String(articleNumber).padStart(2, '0');
   const mediaHtml = articleMediaHtml(section, publicArticle)

@@ -72,6 +72,12 @@ a {
   color: inherit;
 }
 
+/* mockup 전역 리셋: 이미지가 컨테이너를 넘지 않는다(레거시 페이지의 원본 크기 이미지 포함). */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 a:focus-visible,
 button:focus-visible,
 select:focus-visible {
@@ -1558,8 +1564,10 @@ pre code {
   display: grid;
   gap: 14px;
   padding: 26px 28px;
+  border: none;
   border-radius: var(--radius-lg);
   background: var(--bg);
+  box-shadow: none;
 }
 
 .issue-briefing-card h2 {
@@ -1740,8 +1748,9 @@ pre code {
   background: var(--surface-soft);
 }
 
-/* mockup: 이미지는 테두리 없이 14px 라운드, 캡션은 도판 아래 평문. */
-.newsletter-issue-page .article-media {
+/* mockup: 이미지는 테두리 없이 14px 라운드, 캡션은 도판 아래 평문.
+   figure 로만 한정해 placeholder(div)의 그라디언트 배경은 유지한다. */
+.newsletter-issue-page figure.article-media {
   overflow: visible;
   border: none;
   border-radius: 0;
@@ -1759,6 +1768,7 @@ pre code {
 
 .newsletter-issue-page .article-placeholder-visual {
   overflow: hidden;
+  border: none;
   border-radius: var(--radius-md);
 }
 
@@ -1883,14 +1893,15 @@ pre code {
   letter-spacing: -0.01em;
 }
 
-.newsletter-issue-page .article-source-subtitle {
+/* .article-card p(클래스2+타입1)보다 높은 명시도가 필요해 .article-card 를 포함한다. */
+.newsletter-issue-page .article-card .article-source-subtitle {
   margin: 8px 0 0;
   color: var(--text-tertiary);
   font-size: 0.875rem;
   font-weight: 400;
 }
 
-.newsletter-issue-page .article-lead {
+.newsletter-issue-page .article-card .article-lead {
   margin: 22px 0 0;
   color: var(--text);
   font-size: 1.1875rem;
@@ -2282,7 +2293,7 @@ pre code {
   }
 
   .newsletter-issue-page .subtitle,
-  .newsletter-issue-page .article-lead {
+  .newsletter-issue-page .article-card .article-lead {
     font-size: 1.0625rem;
     line-height: 1.6;
   }
