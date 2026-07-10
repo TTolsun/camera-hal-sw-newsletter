@@ -511,13 +511,14 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   assertCssDeclaration(archiveCard, 'display', 'flex');
   assertCssDeclaration(archiveCard, 'flex-direction', 'column');
   assertCssDeclaration(archivePageSection, 'min-height', '520px');
-  assertCssDeclaration(archivePageGrid, 'gap', 'var(--space-5)');
+  // mockup 카드 그리드 리듬: 세로 46px / 가로 28px.
+  assertCssDeclaration(archivePageGrid, 'gap', '46px 28px');
   assertCssDeclaration(archivePageCard, 'padding', '0');
   assert.match(archiveFocus, /outline\s*:\s*3px solid var\(--focus-ring\)\s*;/);
   assertCssDeclaration(archiveFocus, 'outline-offset', '4px');
   assertCssDeclaration(archivePagination, 'justify-content', 'center');
   assertCssDeclaration(archivePageButton, 'min-width', '42px');
-  assertCssDeclaration(archivePageButton, 'border-radius', 'var(--radius-xs)');
+  assertCssDeclaration(archivePageButton, 'border-radius', 'var(--radius-pill)');
   assertCssDeclaration(archivePageCurrent, 'background', '#0066cc');
 });
 

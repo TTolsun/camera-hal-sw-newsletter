@@ -40,33 +40,14 @@
     <section class="archive-hero content-wrap" aria-labelledby="archive-page-title">
       <div class="archive-hero-copy">
         <p class="eyebrow">Newsletter Archive</p>
-        <h1 id="archive-page-title">Archive</h1>
+        <h1 id="archive-page-title">아카이브</h1>
         <p class="archive-hero-description">
-          Newsletter를 날짜 흐름 또는 주제별로 모아봅니다.
+          모든 뉴스레터를 날짜 흐름과 주제별로 모아봅니다.
         </p>
       </div>
-      <figure class="archive-hero-mascot" aria-label="HALley mascot">
-        <img
-          src="assets/images/brand/HALley.png"
-          alt="HALley 뉴스레터 마스코트"
-          width="1254"
-          height="1254"
-          decoding="async"
-          loading="eager"
-        />
-      </figure>
     </section>
 
-    <section class="section archive-page-section content-wrap" aria-labelledby="archive-results-title">
-      <div class="section-heading archive-page-heading">
-        <div class="section-heading-row">
-          <span class="section-icon section-icon-archive" aria-hidden="true"></span>
-          <div>
-            <h2 id="archive-results-title">모든 뉴스레터</h2>
-          </div>
-        </div>
-      </div>
-
+    <section class="section archive-page-section content-wrap" aria-label="아카이브 목록">
       <section class="archive-status sr-only" data-archive-status role="status" aria-live="polite">
         아카이브를 불러오는 중입니다.
       </section>
@@ -74,27 +55,23 @@
       <section class="archive-page-panel" data-archive-controls aria-label="Archive controls" hidden>
         <div class="archive-stat-grid" aria-label="Archive summary">
           <div class="archive-stat">
-            <span class="archive-stat-label">Issue count</span>
+            <span class="archive-stat-label">발행 호수</span>
             <strong data-archive-count>-</strong>
           </div>
           <div class="archive-stat">
-            <span class="archive-stat-label">Topic</span>
+            <span class="archive-stat-label">주제</span>
             <strong data-archive-topic-label>전체</strong>
           </div>
           <div class="archive-stat">
-            <span class="archive-stat-label">Sort</span>
+            <span class="archive-stat-label">정렬</span>
             <strong data-archive-sort-label>최신순</strong>
           </div>
         </div>
 
         <form class="archive-page-controls" aria-label="Archive controls">
-          <div class="archive-control-group">
-            <span class="archive-control-label">주제</span>
-            <div class="keyword-row archive-topic-list" data-topic-filter role="group" aria-label="Archive topic filter"></div>
-          </div>
+          <div class="keyword-row archive-topic-list" data-topic-filter role="group" aria-label="Archive topic filter"></div>
           <label class="archive-sort-control archive-page-sort">
-            <span class="archive-control-label">정렬</span>
-            <select data-sort-control aria-label="Archive sort order">
+            <select class="nc-sort" data-sort-control aria-label="Archive sort order">
               <option value="latest">최신순</option>
               <option value="oldest">오래된순</option>
             </select>
@@ -288,7 +265,7 @@
           ? `${topic} ${count}개 아카이브 중 ${startIndex + 1}-${endIndex}개를 ${sortLabel(currentState.sort)}으로 표시 중입니다.`
           : `${topic} ${count}개 아카이브를 ${sortLabel(currentState.sort)}으로 표시 중입니다.`
         : `${topic} 결과가 없습니다.`;
-      const countLabel = currentState.topic === 'all' ? `${count}개` : `${count}/${total}개`;
+      const countLabel = currentState.topic === 'all' ? `${count}호` : `${count}/${total}호`;
 
       if (archiveGridEl) {
         archiveGridEl.innerHTML = pageEntries.map(entry => archiveHelpers.renderArchiveCard(entry)).join('');
