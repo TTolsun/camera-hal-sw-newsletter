@@ -473,12 +473,12 @@ pre code {
   margin-top: var(--section-gap);
 }
 
+/* mockup: 섹션 사이 구분은 featured 하단 hairline 하나만 — 섹션 자체 border 없음. */
 .homepage .section,
 .homepage .focus-brief {
   margin-top: 0;
-  padding-top: 30px;
-  padding-bottom: 30px;
-  border-top: 1px solid rgba(221, 227, 234, 0.7);
+  padding-top: 36px;
+  padding-bottom: 44px;
 }
 
 #latest,
@@ -590,8 +590,8 @@ pre code {
 .section-link {
   margin-left: auto;
   color: #0066cc;
-  font-size: 0.98rem;
-  font-weight: 850;
+  font-size: 0.875rem;
+  font-weight: 500;
   text-decoration: none;
 }
 
@@ -754,16 +754,21 @@ pre code {
   cursor: pointer;
   font: inherit;
   font-size: 0.82rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.01em;
   white-space: nowrap;
   transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
 }
 
-.keyword:hover,
+.keyword:not(:disabled):hover,
 .keyword:focus-visible {
   border-color: #e3e3e8;
   background: #eaeaef;
+}
+
+.keyword:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .keyword.is-active {
@@ -774,12 +779,12 @@ pre code {
 
 /* Homepage featured hero (Camera SW Newsroom) — 16:9 media panel over centered copy. */
 .featured-section {
-  padding-top: 44px;
+  padding-top: 60px;
 }
 
 .featured-hero {
   display: grid;
-  gap: 34px;
+  gap: 38px;
   max-width: 1000px;
   margin: 0 auto;
   padding-bottom: 44px;
@@ -813,17 +818,16 @@ pre code {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
 }
 
 .featured-kicker {
-  margin: 0;
+  margin: 0 0 14px;
   color: var(--muted);
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -839,21 +843,25 @@ pre code {
 
 .featured-lead {
   max-width: 730px;
-  margin: 0;
+  margin: 18px 0 0;
   color: var(--muted);
-  font-size: 1.16rem;
+  font-size: 1.3125rem;
   line-height: 1.45;
+  letter-spacing: -0.01em;
 }
 
 .featured-meta {
-  color: var(--muted);
-  font-size: 0.86rem;
+  margin-top: 20px;
+  color: var(--text-tertiary);
+  font-size: 0.875rem;
+  letter-spacing: -0.01em;
 }
 
 .featured-link {
+  margin-top: 12px;
   color: var(--primary);
-  font-size: 1.02rem;
-  font-weight: 600;
+  font-size: 1.0625rem;
+  font-weight: 500;
   text-decoration: none;
   transition: opacity 0.18s ease;
 }
@@ -872,6 +880,23 @@ pre code {
   gap: var(--space-5);
 }
 
+.latest-heading h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.latest-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.latest-sort-label {
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
+}
+
 .latest-heading .section-heading-row {
   width: auto;
 }
@@ -886,14 +911,14 @@ pre code {
 .nc-sort {
   -webkit-appearance: none;
   appearance: none;
-  min-height: 40px;
-  padding: 0 34px 0 15px;
-  border: 1px solid var(--line);
+  min-height: 36px;
+  padding: 0 32px 0 15px;
+  border: 1px solid #d2d2d7;
   border-radius: var(--radius-pill);
   background: var(--surface) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%2386868b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 12px center;
   color: var(--text);
   font: inherit;
-  font-size: 0.86rem;
+  font-size: 0.8125rem;
   cursor: pointer;
 }
 
@@ -907,7 +932,8 @@ pre code {
 }
 
 .latest-grid {
-  margin-top: 28px;
+  margin-top: 32px;
+  gap: 46px 28px;
 }
 
 .archive-grid {
@@ -1048,7 +1074,7 @@ pre code {
 .card-kicker {
   color: var(--muted);
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -1080,8 +1106,9 @@ pre code {
 .archive-card .card-meta {
   display: block;
   margin: 0;
-  color: var(--muted);
-  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
+  letter-spacing: -0.01em;
 }
 
 .archive-card .card-meta .issue-date {
@@ -1090,7 +1117,7 @@ pre code {
   background: transparent;
   color: inherit;
   font-size: inherit;
-  font-weight: 600;
+  font-weight: inherit;
 }
 
 .archive-empty-state {
