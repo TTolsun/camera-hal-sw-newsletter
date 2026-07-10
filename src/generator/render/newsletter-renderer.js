@@ -170,6 +170,26 @@ function articlePerspectiveHeading(issue, section) {
   return `${articlePerspectiveLabel(issue, section)}에서의 의미`;
 }
 
+// HTML 페이지 전용 관점 박스 라벨(mockup). markdown 산출물은 articlePerspectiveHeading 을 유지해
+// 재렌더 시 newsletter.md 가 변하지 않는다.
+function articlePerspectiveHeadingHtml() {
+  return 'Camera HAL · Driver 관점';
+}
+
+// mockup 카테고리 눈썹 라벨: section.article_type -> 표시 라벨.
+const ARTICLE_CATEGORY_LABELS = {
+  direct_aosp_camera: 'AOSP Camera',
+  camera_driver_image_pipeline: 'Camera Driver · ISP',
+  android_platform_camera_adjacent: 'Android Platform',
+  cpp_ai_tooling_fallback: 'C++ · AI Tooling',
+  soc_platform_signal: 'SoC Platform',
+  android_multimedia_camera_output: 'Android Multimedia'
+};
+
+function articleCategoryLabel(section = {}) {
+  return ARTICLE_CATEGORY_LABELS[String(section.article_type || '').trim()] || 'Camera';
+}
+
 function issueTags(issue) {
   const tags = ensureArray(issue.tags).length > 0 ? issue.tags : ['Camera HAL', 'Android'];
   if (issue?.publication_mode !== PUBLICATION_MODES.FALLBACK_PUBLIC && issue?.fallback_only !== true) return tags;
@@ -243,19 +263,24 @@ function briefingHeading(issue = {}) {
   return issue.weekly_key ? '이번 주 기사' : '이번 주 3줄 브리핑';
 }
 
+// HTML 페이지 전용 브리핑 박스 타이틀(mockup "이번 호 기사"). markdown 은 briefingHeading 유지.
+function briefingHeadingHtml(issue = {}) {
+  return issue.weekly_key ? '이번 호 기사' : briefingHeading(issue);
+}
+
 // Weekly issues are labeled by ISO week ("2026-W22" -> "2026 W22"); daily issues fall back to date.
 function issueWeekLabel(issue = {}) {
   const key = String(issue.weekly_key || '').trim();
   return /^\d{4}-W\d{2}$/.test(key) ? key.replace('-W', ' W') : '';
 }
 
-// Weekly issue hero kicker shows the week's full date range ("2026.05.25 ~ 2026.05.31").
+// Weekly issue hero kicker shows the week's date range in the mockup format ("2026.05.25 – 05.31").
 function issueKickerText(issue = {}) {
   const dot = value => String(value).replace(/-/g, '.');
   const start = String(issue.week_start_date || '').trim();
   const end = String(issue.week_end_date || '').trim();
   if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
-    return `${dot(start)} ~ ${dot(end)}`;
+    return `${dot(start)} – ${dot(end).slice(5)}`;
   }
   return `주간 뉴스레터 ${issue.date || ''}`.trim();
 }
@@ -569,19 +594,18 @@ ${bullets}
 `;
 }
 
+// HTML 페이지 전용 헤딩(mockup 중점 표기). markdown 은 REFERENCE_ARTICLES_HEADING 유지.
+const REFERENCE_ARTICLES_HEADING_HTML = '참고 · 더 읽을거리';
+
 function referenceArticlesHtml(issue) {
   const articles = Array.isArray(issue?.reference_articles) ? issue.reference_articles : [];
   if (!articles.length) return '';
   const items = articles
-    .map(article => `<li><a href="${escapeHtml(article.url)}">${escapeHtml(article.title)}</a> — ${escapeHtml(article.source)} (${escapeHtml(article.published_date)}) · ${escapeHtml(article.note)}</li>`)
+    .map(article => `<li><a href="${escapeHtml(article.url)}">${escapeHtml(article.title)}</a><span class="reference-meta">${escapeHtml(article.source)} (${escapeHtml(article.published_date)}) · ${escapeHtml(article.note)}</span></li>`)
     .join('');
   return `\n      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
-        <div class="card issue-reference-articles-card">
-          <div class="issue-section-heading">
-            <h2 id="issue-reference-articles-title">${escapeHtml(REFERENCE_ARTICLES_HEADING)}</h2>
-          </div>
-          <ul>${items}</ul>
-        </div>
+        <h2 id="issue-reference-articles-title">${escapeHtml(REFERENCE_ARTICLES_HEADING_HTML)}</h2>
+        <ul class="reference-articles-list">${items}</ul>
       </section>\n`;
 }
 
@@ -604,41 +628,41 @@ ${sourceListMarkdown(issue.references)}
 `;
 }
 
+// mockup 기사 흐름: [번호+카테고리 눈썹] → 제목 → 출처 서브타이틀 → 이미지 → 리드 → 본문 →
+// 관점 박스 → 출처. 카드 프레임 없이 섹션 자체가 hairline 으로 구분된다.
 function publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, articleNumber, section) {
   const publicArticle = publicArticleForSection(section, { issue });
-  const perspectiveHeading = articlePerspectiveHeading(issue, section);
+  const perspectiveHeading = articlePerspectiveHeadingHtml();
   const bodyParagraphs = isStoryArticle(publicArticle)
     ? storyBodyParagraphsForRender(publicArticle)
     : bodyParagraphsForRender(publicArticle);
   const sourceSubtitle = isStoryArticle(publicArticle) && publicArticle.source_subtitle
     ? `<p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>`
     : '';
-  const articleCopyBlocks = [
-    articleTagsHtml(section, headingCategory),
-    `<h2 id="${escapeHtml(anchorId)}-title" class="article-title">${escapeHtml(publicArticle.headline || htmlHeading)}</h2>`,
-    sourceSubtitle,
-    `<p class="article-lead">${escapeHtml(publicArticle.lead)}</p>`,
-    ...bodyParagraphs.map(paragraphHtml)
-  ].filter(Boolean);
-  const articleCopyHtml = articleCopyBlocks.map(block => `              ${block}`).join('\n');
+  const displayNumber = String(articleNumber).padStart(2, '0');
   const mediaHtml = articleMediaHtml(section, publicArticle)
     .split('\n')
-    .map(line => `            ${line.trimStart()}`)
+    .map(line => `        ${line.trimStart()}`)
     .join('\n');
+  const articleBodyBlocks = [
+    sourceSubtitle,
+    mediaHtml,
+    `        <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>`,
+    ...bodyParagraphs.map(paragraph => `        ${paragraphHtml(paragraph)}`)
+  ].filter(Boolean).join('\n');
   const articleTypeClass = isStoryArticle(publicArticle) ? ' story-article' : '';
   const articleImageClass = resolvedArticleImage(section) ? 'has-image' : 'has-placeholder-image';
-  return `      <section class="section issue-story" id="${escapeHtml(anchorId)}" aria-labelledby="${escapeHtml(anchorId)}-title">
-        <span class="issue-story-number" aria-label="Article ${escapeHtml(articleNumber)}">${escapeHtml(articleNumber)}</span>
-        <article class="card issue-section article-card${articleTypeClass} ${articleImageClass} ${escapeHtml(className)}">
-          <div class="article-feature-row">
-${mediaHtml}
-            <div class="article-copy">
-${articleCopyHtml}
-            </div>
-          </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
-          <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
-        </article>
+  const articleTags = articleTagsHtml(section, headingCategory);
+  const articleTagsBlock = articleTags ? `\n        ${articleTags}` : '';
+  return `      <section class="section issue-story issue-section article-card${articleTypeClass} ${articleImageClass} ${escapeHtml(className)}" id="${escapeHtml(anchorId)}" aria-labelledby="${escapeHtml(anchorId)}-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article ${escapeHtml(articleNumber)}">${escapeHtml(displayNumber)}</span>
+          <span class="issue-story-category">${escapeHtml(articleCategoryLabel(section))}</span>
+        </div>
+        <h2 id="${escapeHtml(anchorId)}-title" class="article-title">${escapeHtml(publicArticle.headline || htmlHeading)}</h2>${articleTagsBlock}
+${articleBodyBlocks}
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
+        <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
       </section>`;
 }
 
@@ -656,11 +680,8 @@ function issueHeroHtml(issue) {
 
 function issueBriefingHtml(issue) {
   return `<section class="section issue-briefing" aria-labelledby="issue-briefing-title">
-        <div class="card issue-briefing-card">
-          <div class="issue-section-heading">
-            <span class="section-icon section-icon-list" aria-hidden="true"></span>
-            <h2 id="issue-briefing-title">${briefingHeading(issue)}</h2>
-          </div>
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">${briefingHeadingHtml(issue)}</h2>
           <ul>${bulletsHtml(issue.briefing)}</ul>
         </div>
       </section>`;
@@ -723,8 +744,14 @@ ${sectionsHtmlWithCatchUpDivider(issue)}
 ${watchPointsHtml(issue)}${referenceArticlesHtml(issue)}
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">참고자료</h2>
-        <div class="card reference-list"><ul>${sourceListHtml(issue.references)}</ul></div>
+        <div class="reference-list"><ul>${sourceListHtml(issue.references)}</ul></div>
       </section>
+
+      <nav class="issue-footer-navigation" aria-label="이슈 하단 이동">
+        <a href="../../index.html">← 뉴스룸으로</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">아카이브 전체 보기 →</a>
+      </nav>
 
     </article>
   </main>

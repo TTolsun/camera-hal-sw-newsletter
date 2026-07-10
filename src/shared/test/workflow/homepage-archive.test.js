@@ -570,66 +570,72 @@ test('latest and archive card CSS preserves whole-card links and mobile summary 
   assert.doesNotMatch(css, /filter-shortcut/);
 });
 
-test('newsletter issue page CSS uses homepage shell with issue landing layout', () => {
+test('newsletter issue page CSS follows the newsroom flat article layout', () => {
   const css = readStylesheet();
   const pageBackground = exactSelectorBlock(css, '.homepage,\n.newsletter-issue-page');
   const issueArticlePage = exactSelectorBlock(css, '.newsletter-issue-page .article-page');
   const issueWrap = exactSelectorBlock(css, '.newsletter-issue-page .wrap');
   const issueHero = exactSelectorBlock(css, '.newsletter-issue-page .issue-hero');
-  const issueHeroGlow = exactSelectorBlock(css, '.newsletter-issue-page .issue-hero::before');
-  const issueMascotContainer = exactSelectorBlock(css, '.issue-hero-mascot');
-  const issueMascot = exactSelectorBlock(css, '.issue-hero-mascot img');
+  const issueKicker = exactSelectorBlock(css, '.newsletter-issue-page .issue-kicker');
   const issueTitle = exactSelectorBlock(css, '.newsletter-issue-page .article-header h1');
   const issueArticleTitle = exactSelectorBlock(css, '.newsletter-issue-page .article-title');
-  const issueCard = exactSelectorBlock(css, '.newsletter-issue-page .issue-section');
-  const issueFeatureRow = exactSelectorBlock(css, '.article-feature-row');
-  const issueStory = exactSelectorBlock(css, '.issue-story');
+  const issueSection = exactSelectorBlock(css, '.newsletter-issue-page .issue-section');
+  const issueStoryFlow = exactSelectorBlock(css, '.newsletter-issue-page .issue-story.issue-section');
   const issueStoryNumber = exactSelectorBlock(css, '.issue-story-number');
+  const issueStoryCategory = exactSelectorBlock(css, '.issue-story-category');
+  const issueBriefingCard = exactSelectorBlock(css, '.issue-briefing-card');
   const issueTakeaway = exactSelectorBlock(css, '.newsletter-issue-page .camera-hal-takeaway');
-  const issueMobileHeroAndRow = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.newsletter-issue-page .issue-hero,\n  .newsletter-issue-page .article-feature-row');
+  const issueSourceList = exactSelectorBlock(css, '.newsletter-issue-page .source-list');
+  const issueReferences = exactSelectorBlock(css, '.newsletter-issue-page .issue-references');
+  const issueFooterNavigation = exactSelectorBlock(css, '.issue-footer-navigation');
   const issueMobileArticlePage = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.newsletter-issue-page .article-page');
-  const issueMobileHero = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.newsletter-issue-page .issue-hero');
-  const issueMobileHeroGlow = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.site-hero::before,\n  .archive-hero::before,\n  .newsletter-issue-page .issue-hero::before');
-  const issueMobileMascot = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.issue-hero-mascot');
-  const issueMobileMascotImage = exactSelectorBlock(mediaBlock(css, '(max-width: 860px)'), '.issue-hero-mascot img');
-  const issueCompactHero = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.newsletter-issue-page .issue-hero');
-  const issueCompactMascot = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.archive-hero-mascot,\n  .issue-hero-mascot');
-  const issueCompactMascotImage = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.hero-mascot img,\n  .archive-hero-mascot img,\n  .issue-hero-mascot img');
+  const issueCompactWrap = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.newsletter-issue-page .wrap');
+  const issueCompactStory = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.newsletter-issue-page .issue-story.issue-section');
 
   // mockup: 홈·이슈 페이지 캔버스는 그라디언트 없는 순백 풀블리드.
   assertCssDeclaration(pageBackground, 'background', '#ffffff');
-  assertCssDeclaration(issueArticlePage, 'padding', '52px 0 0');
-  // Issue pages read in a narrow single column (mockup): 760px wrap, single-column hero.
+  assertCssDeclaration(issueArticlePage, 'padding', '34px 0 0');
+  // Issue pages read in a narrow single column (mockup): 760px wrap, 80px bottom exit.
   assertCssDeclaration(issueWrap, 'width', 'min(100% - 44px, 760px)');
   assertCssDeclaration(issueWrap, 'max-width', 'none');
+  assertCssDeclaration(issueWrap, 'padding-bottom', '80px');
   assertCssDeclaration(issueHero, 'grid-template-columns', '1fr');
-  assertCssDeclaration(issueHero, 'padding', '46px 0 42px');
-  assertCssDeclaration(issueHeroGlow, 'width', 'min(38vw, 440px)');
-  assert.match(issueHeroGlow, /rgba\(0, 102, 204, 0\.12\)/);
+  // mockup 히어로는 장식 glow·마스코트 없는 평문 흐름.
+  assert.doesNotMatch(css, /\.newsletter-issue-page \.issue-hero::before/);
+  assert.doesNotMatch(css, /issue-hero-mascot/);
   assert.doesNotMatch(css, /issue-actions|bottom-nav|newsletter-actions/);
-  assertCssDeclaration(issueMascotContainer, 'transform', 'none');
-  assertCssDeclaration(issueMascot, 'width', 'min(100%, clamp(260px, 32vw, 420px))');
-  assert.match(issueMascot, /drop-shadow\(0 16px 28px rgba\(15, 23, 42, 0\.11\)\)/);
-  assertCssDeclaration(issueTitle, 'font-size', 'clamp(1.75rem, 3.55vw, 2.95rem)');
-  assertCssDeclaration(issueArticleTitle, 'font-size', 'clamp(1.24rem, 2.05vw, 1.6rem)');
-  assertCssDeclaration(issueCard, 'padding', '28px');
-  // The article image stacks full-width above the copy (mockup article layout).
-  assertCssDeclaration(issueFeatureRow, 'grid-template-columns', '1fr');
-  assertCssDeclaration(issueStory, 'padding-left', '38px');
+  // 주차 range 는 알약이 아닌 uppercase 평문 눈썹.
+  assertCssDeclaration(issueKicker, 'background', 'transparent');
+  assertCssDeclaration(issueKicker, 'text-transform', 'uppercase');
+  assertCssDeclaration(issueTitle, 'font-size', 'clamp(2.125rem, 4vw, 3.25rem)');
+  assertCssDeclaration(issueTitle, 'letter-spacing', '-0.022em');
+  assertCssDeclaration(issueArticleTitle, 'font-size', 'clamp(1.5rem, 2.4vw, 2rem)');
+  // 기사 섹션은 카드 프레임 없이 hairline 위 평문 흐름(60px 리듬).
+  assertCssDeclaration(issueSection, 'border-top', '1px solid var(--line)');
+  assertCssDeclaration(issueSection, 'background', 'transparent');
+  assertCssDeclaration(issueSection, 'box-shadow', 'none');
+  assertCssDeclaration(issueStoryFlow, 'margin-top', '60px');
+  assertCssDeclaration(issueStoryFlow, 'padding-left', '0');
+  // mockup 번호 배지: 30px 아웃라인 원.
   assertCssDeclaration(issueStoryNumber, 'border-radius', '50%');
-  assertCssDeclaration(issueTakeaway, 'border-radius', '12px');
-  assertCssDeclaration(issueMobileHeroAndRow, 'grid-template-columns', '1fr');
+  assertCssDeclaration(issueStoryNumber, 'border', '1px solid #d2d2d7');
+  assertCssDeclaration(issueStoryNumber, 'background', 'transparent');
+  assertCssDeclaration(issueStoryCategory, 'text-transform', 'uppercase');
+  // 브리핑·관점·참고자료는 파치먼트 박스 언어.
+  assertCssDeclaration(issueBriefingCard, 'background', 'var(--bg)');
+  assertCssDeclaration(issueBriefingCard, 'border-radius', 'var(--radius-lg)');
+  assertCssDeclaration(issueTakeaway, 'border-radius', 'var(--radius-md)');
+  assertCssDeclaration(issueTakeaway, 'background', 'var(--bg)');
+  // 출처는 박스 없는 세로 불릿 목록.
+  assertCssDeclaration(issueSourceList, 'border', 'none');
+  assertCssDeclaration(issueSourceList, 'background', 'transparent');
+  assertCssDeclaration(issueReferences, 'background', 'var(--bg)');
+  assertCssDeclaration(issueReferences, 'border-radius', 'var(--radius-lg)');
+  // 하단 내비("← 뉴스룸으로 · 아카이브 전체 보기 →")가 있어야 한다.
+  assertCssDeclaration(issueFooterNavigation, 'margin-top', '48px');
   assertCssDeclaration(issueMobileArticlePage, 'padding-top', '28px');
-  assertCssDeclaration(issueMobileHero, 'padding-top', '24px');
-  assertCssDeclaration(issueMobileHero, 'padding-bottom', '30px');
-  assertCssDeclaration(issueMobileHeroGlow, 'width', 'min(64vw, 340px)');
-  assertCssDeclaration(issueMobileMascot, 'justify-content', 'center');
-  assertCssDeclaration(issueMobileMascot, 'transform', 'none');
-  assertCssDeclaration(issueMobileMascotImage, 'width', 'min(100%, 340px)');
-  assertCssDeclaration(issueCompactHero, 'padding-top', '18px');
-  assertCssDeclaration(issueCompactHero, 'padding-bottom', '24px');
-  assertCssDeclaration(issueCompactMascot, 'transform', 'none');
-  assertCssDeclaration(issueCompactMascotImage, 'width', 'min(100%, 300px)');
+  assertCssDeclaration(issueCompactWrap, 'width', 'min(100% - var(--content-gutter-mobile), 760px)');
+  assertCssDeclaration(issueCompactStory, 'padding-top', '28px');
 });
 
 test('getSafeNewsletterHref resolves a weekly entry to its weekly directory route (#486)', () => {

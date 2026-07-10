@@ -1420,13 +1420,13 @@ pre code {
 }
 
 .newsletter-issue-page .article-page {
-  padding: 52px 0 0;
+  padding: 34px 0 0;
 }
 
 .newsletter-issue-page .wrap {
   width: min(100% - 44px, 760px);
   max-width: none;
-  padding-bottom: 0;
+  padding-bottom: 80px;
 }
 
 .article-header {
@@ -1439,27 +1439,12 @@ pre code {
   max-width: none;
 }
 
+/* mockup 이슈 히어로: 장식 없는 평문 흐름(back → range → 제목 → 부제 → 태그). */
 .newsletter-issue-page .issue-hero {
-  position: relative;
   display: grid;
   grid-template-columns: 1fr;
   margin: 0;
-  padding: 46px 0 42px;
-  isolation: isolate;
-}
-
-.newsletter-issue-page .issue-hero::before {
-  position: absolute;
-  right: 0;
-  bottom: 8px;
-  z-index: 0;
-  width: min(38vw, 440px);
-  aspect-ratio: 1;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(0, 102, 204, 0.12) 0%, rgba(0, 102, 204, 0.06) 38%, rgba(0, 102, 204, 0) 70%);
-  content: "";
-  pointer-events: none;
-  transform: translateY(10%);
+  padding: 0 0 4px;
 }
 
 .article-header h1 {
@@ -1468,10 +1453,12 @@ pre code {
 
 .newsletter-issue-page .article-header h1 {
   max-width: 780px;
-  margin-bottom: 14px;
-  color: #111827;
-  font-size: clamp(1.75rem, 3.55vw, 2.95rem);
-  line-height: 1.12;
+  margin-bottom: 0;
+  color: var(--text);
+  font-size: clamp(2.125rem, 4vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+  font-weight: 600;
 }
 
 .newsletter-issue-page .issue-title span {
@@ -1480,21 +1467,18 @@ pre code {
 
 .newsletter-issue-page .subtitle {
   max-width: 760px;
-  color: #4b5563;
-  font-size: 1.08rem;
-  line-height: 1.76;
-}
-
-.newsletter-issue-page .issue-hero > * {
-  position: relative;
-  z-index: 1;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 1.25rem;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
 }
 
 .issue-back {
   display: inline-block;
-  margin-bottom: 24px;
+  margin-bottom: 26px;
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: 0.875rem;
   font-weight: 500;
   text-decoration: none;
   transition: color 0.18s ease;
@@ -1506,27 +1490,35 @@ pre code {
 }
 
 .issue-hero-meta {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
-.issue-hero-mascot {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  min-width: 0;
-  margin: 0;
-  transform: none;
+/* mockup: 주차 range 는 알약이 아니라 평문 uppercase 눈썹. */
+.newsletter-issue-page .issue-kicker {
+  min-height: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-.issue-hero-mascot img {
-  display: block;
-  width: min(100%, clamp(260px, 32vw, 420px));
-  height: auto;
-  margin-left: auto;
-  border-radius: 20px;
-  filter: drop-shadow(0 16px 28px rgba(15, 23, 42, 0.11)) drop-shadow(0 0 18px rgba(0, 102, 204, 0.08));
+/* mockup: 이슈 태그는 무채색 파치먼트 알약. */
+.newsletter-issue-page .issue-tags {
+  margin-top: 20px;
+}
+
+.newsletter-issue-page .issue-tags .tag {
+  min-height: 0;
+  padding: 5px 12px;
+  border: none;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .article-meta {
@@ -1542,44 +1534,47 @@ pre code {
 }
 
 .newsletter-issue-page .section {
-  margin-top: 42px;
+  margin-top: 48px;
 }
 
 .newsletter-issue-page .section > h2 {
   max-width: 100%;
   margin-right: auto;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   margin-left: auto;
-  color: #111827;
-  font-size: clamp(1.28rem, 2.2vw, 1.72rem);
+  color: var(--text);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   line-height: 1.34;
 }
 
+/* mockup "이번 호 기사" 박스: 파치먼트 라운드 박스 + 소형 uppercase 라벨. */
 .newsletter-issue-page .issue-briefing {
-  margin-top: 8px;
-}
-
-.issue-briefing .card {
-  padding: 24px;
-  background: #f6fbf7;
-}
-
-.newsletter-issue-page .issue-briefing .card,
-.newsletter-issue-page .reference-list,
-.newsletter-issue-page .action-card,
-.newsletter-issue-page .issue-section {
-  border-color: rgba(221, 227, 234, 0.84);
-  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.065);
-}
-
-.newsletter-issue-page .issue-briefing .card {
-  padding: 28px 32px;
-  background: rgba(255, 255, 255, 0.94);
+  margin-top: 40px;
 }
 
 .issue-briefing-card {
   display: grid;
-  gap: 18px;
+  gap: 14px;
+  padding: 26px 28px;
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+}
+
+.issue-briefing-card h2 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.issue-briefing-card li {
+  margin-bottom: 9px;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .issue-section-heading {
@@ -1657,9 +1652,15 @@ pre code {
   gap: 20px;
 }
 
+/* mockup 기사 섹션: 카드 프레임 없이 hairline + 여백으로만 구분되는 평문 흐름. */
 .newsletter-issue-page .issue-section {
-  gap: 18px;
-  padding: 28px;
+  display: block;
+  padding: 38px 0 0;
+  border: none;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .issue-story {
@@ -1667,6 +1668,32 @@ pre code {
   padding-left: 38px;
 }
 
+/* 새 위클리 마크업: 번호+카테고리가 인라인 눈썹으로 흐른다(레거시 절대배치 대체). */
+.newsletter-issue-page .issue-story.issue-section {
+  margin-top: 60px;
+  padding-left: 0;
+}
+
+.issue-story-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.issue-story-eyebrow .issue-story-number {
+  position: static;
+}
+
+.issue-story-category {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* mockup 번호 배지: 채움 없는 아웃라인 원. */
 .issue-story-number {
   position: absolute;
   top: 22px;
@@ -1675,11 +1702,13 @@ pre code {
   width: 30px;
   height: 30px;
   place-items: center;
+  border: 1px solid #d2d2d7;
   border-radius: 50%;
-  background: #0066cc;
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 850;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .article-feature-row {
@@ -1711,9 +1740,26 @@ pre code {
   background: var(--surface-soft);
 }
 
+/* mockup: 이미지는 테두리 없이 14px 라운드, 캡션은 도판 아래 평문. */
 .newsletter-issue-page .article-media {
-  border-color: rgba(221, 227, 234, 0.9);
-  border-radius: 12px;
+  overflow: visible;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.newsletter-issue-page .issue-section .article-media {
+  margin-top: 24px;
+}
+
+.newsletter-issue-page .article-image {
+  border-radius: var(--radius-md);
+  background: var(--surface-soft);
+}
+
+.newsletter-issue-page .article-placeholder-visual {
+  overflow: hidden;
+  border-radius: var(--radius-md);
 }
 
 .article-image {
@@ -1733,7 +1779,10 @@ pre code {
 }
 
 .newsletter-issue-page .article-image-caption {
-  padding: 10px 12px;
+  padding: 8px 0 0;
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
 }
 
 .article-image-caption a {
@@ -1817,36 +1866,41 @@ pre code {
 }
 
 .newsletter-issue-page .article-title {
-  color: #111827;
-  font-size: clamp(1.24rem, 2.05vw, 1.6rem);
-  line-height: 1.34;
+  margin-bottom: 0;
+  color: var(--text);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+/* mockup 본문 리듬: 17px/1.68 본문 텍스트, 블록 사이 18px. */
+.newsletter-issue-page .article-card p {
+  margin: 18px 0 0;
+  color: var(--text);
+  font-size: 1.0625rem;
+  line-height: 1.68;
+  letter-spacing: -0.01em;
 }
 
 .newsletter-issue-page .article-source-subtitle {
-  margin-bottom: 10px;
-  color: var(--primary);
-  font-size: 0.9rem;
-  font-weight: 750;
+  margin: 8px 0 0;
+  color: var(--text-tertiary);
+  font-size: 0.875rem;
+  font-weight: 400;
 }
 
 .newsletter-issue-page .article-lead {
-  color: #374151;
-  font-size: 1.04rem;
-  line-height: 1.76;
-}
-
-.newsletter-issue-page .article-card p {
-  line-height: 1.76;
+  margin: 22px 0 0;
+  color: var(--text);
+  font-size: 1.1875rem;
+  line-height: 1.55;
+  font-weight: 500;
 }
 
 .article-block {
   padding-top: 18px;
   border-top: 1px solid var(--line);
-}
-
-.newsletter-issue-page .article-block,
-.newsletter-issue-page .source-list {
-  padding: 18px 20px;
 }
 
 .article-block:first-of-type {
@@ -1872,55 +1926,166 @@ pre code {
   border-top: 1px solid var(--line);
 }
 
+/* mockup 관점 박스: 파치먼트 14px 라운드 + 소형 uppercase 라벨 + 16px 본문. */
 .newsletter-issue-page .camera-hal-takeaway {
-  padding: 20px 22px;
+  margin-top: 24px;
+  padding: 22px 24px;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   background: var(--bg);
 }
 
 .newsletter-issue-page .camera-hal-takeaway .article-block-title {
+  margin-bottom: 8px;
   color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
+.newsletter-issue-page .camera-hal-takeaway p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* mockup 출처: 박스 없는 세로 불릿 목록. */
 .newsletter-issue-page .source-list {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  border-top-color: rgba(221, 227, 234, 0.92);
-  border: 1px solid rgba(221, 227, 234, 0.84);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.9);
+  margin-top: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
 }
 
 .newsletter-issue-page .source-list strong {
-  margin-bottom: 0;
-  white-space: nowrap;
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 600;
 }
 
 .newsletter-issue-page .source-list ul {
-  display: flex;
-  min-width: 0;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  gap: 8px 14px;
-  padding-left: 0;
-  list-style: none;
+  display: block;
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style: disc;
 }
 
 .newsletter-issue-page .source-list li {
-  margin-bottom: 0;
+  margin-bottom: 6px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.newsletter-issue-page .source-list a {
+  overflow-wrap: anywhere;
+}
+
+/* mockup 참고자료: 섹션 자체가 파치먼트 박스, 내부 목록은 평문. */
+.newsletter-issue-page .issue-references {
+  margin-top: 52px;
+  padding: 26px 28px;
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+}
+
+.newsletter-issue-page .issue-references > h2 {
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .newsletter-issue-page .reference-list {
   max-width: 100%;
   margin-right: auto;
   margin-left: auto;
-  padding: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.newsletter-issue-page .reference-list li {
+  margin-bottom: 8px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.newsletter-issue-page .reference-list a {
+  overflow-wrap: anywhere;
+}
+
+/* mockup 참고 · 더 읽을거리: hairline 위 평문 섹션, meta 는 링크 아래 별도 줄. */
+.newsletter-issue-page .issue-reference-articles {
+  margin-top: 60px;
+  padding-top: 38px;
+  border-top: 1px solid var(--line);
+}
+
+.reference-articles-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.reference-articles-list li {
+  margin-bottom: 12px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.reference-articles-list a {
+  color: var(--primary);
+  overflow-wrap: anywhere;
+  text-underline-offset: 3px;
+}
+
+.reference-articles-list .reference-meta {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
+}
+
+/* mockup 하단 내비: "← 뉴스룸으로 · 아카이브 전체 보기 →". */
+.issue-footer-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 48px;
+}
+
+.issue-footer-navigation a {
+  color: var(--primary);
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.18s ease;
+}
+
+.issue-footer-navigation a:hover,
+.issue-footer-navigation a:focus-visible {
+  opacity: 0.62;
+}
+
+.issue-footer-navigation span {
+  color: #d2d2d7;
+}
+
+/* 운영 안내 블록(quiet-core/watch-points)도 같은 파치먼트 언어로. */
+.newsletter-issue-page .issue-quiet-core-note-card,
+.newsletter-issue-page .issue-watch-points-card {
+  border: none;
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  box-shadow: none;
 }
 
 .source-list a,
@@ -2029,9 +2194,7 @@ pre code {
     padding-bottom: 30px;
   }
 
-  .site-hero::before,
-  .archive-hero::before,
-  .newsletter-issue-page .issue-hero::before {
+  .site-hero::before {
     right: 50%;
     bottom: 0;
     width: min(64vw, 340px);
@@ -2041,16 +2204,6 @@ pre code {
   #latest,
   #archive {
     scroll-margin-top: 124px;
-  }
-
-  .archive-hero-mascot {
-    justify-content: center;
-    transform: none;
-  }
-
-  .archive-hero-mascot img {
-    width: min(100%, 340px);
-    margin-right: auto;
   }
 
   .focus-band,
@@ -2082,22 +2235,6 @@ pre code {
     grid-template-columns: 1fr;
   }
 
-  .newsletter-issue-page .issue-hero {
-    gap: 18px;
-    padding-top: 24px;
-    padding-bottom: 30px;
-  }
-
-  .issue-hero-mascot {
-    justify-content: center;
-    transform: none;
-  }
-
-  .issue-hero-mascot img {
-    width: min(100%, 340px);
-    margin-right: auto;
-  }
-
   .issue-story {
     padding-left: 0;
   }
@@ -2105,6 +2242,10 @@ pre code {
   .issue-story-number {
     position: static;
     margin-bottom: 12px;
+  }
+
+  .issue-story-eyebrow .issue-story-number {
+    margin-bottom: 0;
   }
 }
 
@@ -2129,31 +2270,39 @@ pre code {
   }
 
   .newsletter-issue-page .wrap {
-    width: min(100% - var(--content-gutter-mobile), 1120px);
+    width: min(100% - var(--content-gutter-mobile), 760px);
   }
 
   .newsletter-issue-page .article-header {
-    padding: 40px 0 26px;
+    padding: 0 0 4px;
   }
 
   .newsletter-issue-page .article-header h1 {
-    font-size: clamp(1.44rem, 7.2vw, 1.95rem);
+    font-size: clamp(1.6rem, 7.2vw, 2.1rem);
   }
 
   .newsletter-issue-page .subtitle,
-  .newsletter-issue-page .article-lead,
+  .newsletter-issue-page .article-lead {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
   .newsletter-issue-page .article-card p {
-    font-size: 0.98rem;
-    line-height: 1.72;
+    font-size: 1rem;
+    line-height: 1.68;
   }
 
   .newsletter-issue-page .section {
     margin-top: 34px;
   }
 
-  .newsletter-issue-page .issue-section,
-  .newsletter-issue-page .issue-briefing .card,
-  .newsletter-issue-page .reference-list {
+  .newsletter-issue-page .issue-story.issue-section {
+    margin-top: 44px;
+    padding-top: 28px;
+  }
+
+  .issue-briefing-card,
+  .newsletter-issue-page .issue-references {
     padding: var(--card-padding-sm);
   }
 
@@ -2162,18 +2311,7 @@ pre code {
   }
 
   .newsletter-issue-page .article-title {
-    font-size: clamp(1.06rem, 5.4vw, 1.3rem);
-  }
-
-  .newsletter-issue-page .source-list {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .newsletter-issue-page .source-list ul {
-    display: block;
-    padding-left: 1.1rem;
-    list-style: disc;
+    font-size: clamp(1.3rem, 5.4vw, 1.6rem);
   }
 
   .focus-band {
@@ -2230,51 +2368,37 @@ pre code {
     width: 100%;
   }
 
-  .archive-page-heading,
   .archive-page-controls {
     align-items: stretch;
-    grid-template-columns: 1fr;
   }
 
-  .archive-page-heading {
+  /* 좁은 화면에서 스탯 밴드는 세로 스택 + 가로 hairline 으로 전환. */
+  .archive-stat-grid {
     flex-direction: column;
   }
 
-  .archive-stat-grid {
-    grid-template-columns: 1fr;
+  .archive-stat {
+    padding: 14px 0;
+  }
+
+  .archive-stat + .archive-stat {
+    border-top: 1px solid var(--line);
+    border-left: none;
   }
 
   .archive-hero {
-    gap: 14px;
-    padding-top: 18px;
+    padding-top: 24px;
     padding-bottom: 24px;
-  }
-
-  .newsletter-issue-page .issue-hero {
-    gap: 14px;
-    padding-top: 18px;
-    padding-bottom: 24px;
-  }
-
-  .archive-hero-mascot,
-  .issue-hero-mascot {
-    transform: none;
   }
 
   .archive-hero h1 {
     font-size: 2.22rem;
   }
 
-  .hero-mascot img,
-  .archive-hero-mascot img,
-  .issue-hero-mascot img {
+  .hero-mascot img {
     width: min(100%, 300px);
     border-radius: 18px;
     filter: drop-shadow(0 12px 22px rgba(15, 23, 42, 0.1)) drop-shadow(0 0 14px rgba(0, 102, 204, 0.07));
-  }
-
-  .archive-page-panel {
-    padding: var(--card-padding-sm);
   }
 
   .archive-pagination {
