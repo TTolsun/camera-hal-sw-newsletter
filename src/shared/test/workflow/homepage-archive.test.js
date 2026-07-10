@@ -521,15 +521,20 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   assertCssDeclaration(archivePageCurrent, 'background', '#0066cc');
 });
 
-test('homepage shell stays wide', () => {
+test('homepage shell is full-bleed with the newsroom translucent header', () => {
   const css = readStylesheet();
   const homepageNav = exactSelectorBlock(css, '.homepage-nav');
   const homepageWrap = exactSelectorBlock(css, '.homepage .content-wrap');
-  const homepageShell = exactSelectorBlock(css, '.homepage .site-header,\n.homepage .site-main,\n.homepage .site-footer');
+  const siteHeader = exactSelectorBlock(css, '.site-header');
 
   assertCssDeclaration(homepageNav, 'justify-content', 'space-between');
-  assertCssDeclaration(homepageWrap, 'width', 'min(100% - 48px, 1120px)');
-  assertCssDeclaration(homepageShell, 'width', 'min(100% - 28px, 1200px)');
+  // mockup: 콘텐츠 폭 1080px에 좌우 22px 거터(실제 콘텐츠 1036px), 58px sticky 헤더.
+  assertCssDeclaration(homepageWrap, 'width', 'min(100% - 44px, 1036px)');
+  assertCssDeclaration(homepageNav, 'min-height', '58px');
+  assertCssDeclaration(siteHeader, 'backdrop-filter', 'saturate(180%) blur(20px)');
+  assertCssDeclaration(siteHeader, 'background', 'rgba(255, 255, 255, 0.82)');
+  // 풀블리드 chrome: 헤더/메인/푸터를 감싸는 라운드 프레임 셀렉터가 되살아나면 안 된다.
+  assert.doesNotMatch(css, /\.homepage \.site-header,\n\.homepage \.site-main,\n\.homepage \.site-footer/);
   assert.doesNotMatch(css, /homepage-header-actions|icon-link|icon-menu|icon-search|section-icon-bolt/);
 });
 
@@ -590,7 +595,8 @@ test('newsletter issue page CSS uses homepage shell with issue landing layout', 
   const issueCompactMascot = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.archive-hero-mascot,\n  .issue-hero-mascot');
   const issueCompactMascotImage = exactSelectorBlock(mediaBlock(css, '(max-width: 640px)'), '.hero-mascot img,\n  .archive-hero-mascot img,\n  .issue-hero-mascot img');
 
-  assert.match(pageBackground, /radial-gradient\(circle at 50% -80px, rgba\(0, 102, 204, 0\.09\), transparent 34%\)/);
+  // mockup: 홈·이슈 페이지 캔버스는 그라디언트 없는 순백 풀블리드.
+  assertCssDeclaration(pageBackground, 'background', '#ffffff');
   assertCssDeclaration(issueArticlePage, 'padding', '52px 0 0');
   // Issue pages read in a narrow single column (mockup): 760px wrap, single-column hero.
   assertCssDeclaration(issueWrap, 'width', 'min(100% - 44px, 760px)');
