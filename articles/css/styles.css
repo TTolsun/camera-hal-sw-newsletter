@@ -91,7 +91,10 @@ body {
   color: var(--text);
   background: var(--bg);
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
-  line-height: 1.6;
+  /* handoff body 는 line-height 를 주지 않아 normal(~1.2) 로 렌더된다. line-height 를 따로 주지
+     않은 UI 텍스트(나브·칩·메타·푸터·스탯)가 1.6 으로 늘어지지 않도록 base 를 normal 로 맞춘다.
+     본문·prose·헤드라인 등은 각자 명시적 line-height 가 있어 영향받지 않는다. */
+  line-height: normal;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -270,7 +273,7 @@ pre code {
   align-items: center;
   justify-content: space-between;
   min-height: 58px;
-  gap: var(--space-5);
+  gap: 20px;
 }
 
 .homepage-brand {
@@ -294,7 +297,7 @@ pre code {
 }
 
 .brand-subtitle {
-  color: var(--muted);
+  color: var(--text-tertiary);
   font-weight: 500;
 }
 
@@ -728,7 +731,7 @@ pre code {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: var(--space-2) 9px;
+  gap: 9px;
 }
 
 .keyword {
@@ -767,8 +770,11 @@ pre code {
 }
 
 /* Homepage featured hero (Camera SW Newsroom) — 16:9 media panel over centered copy. */
+/* handoff: 하단 hairline 은 1036px 폭 셀에 걸린다. 1000px 인 .featured-hero 가 아니라
+   풀폭 .featured-section 에 border-bottom·padding-bottom 을 둬 선이 1036px 로 뻗게 한다. */
 .featured-section {
-  padding-top: 60px;
+  padding: 60px 0 44px;
+  border-bottom: 1px solid var(--line);
 }
 
 .featured-hero {
@@ -776,8 +782,6 @@ pre code {
   gap: 38px;
   max-width: 1000px;
   margin: 0 auto;
-  padding-bottom: 44px;
-  border-bottom: 1px solid var(--line);
 }
 
 .featured-thumb {
@@ -822,10 +826,9 @@ pre code {
 }
 
 .featured-title {
-  max-width: 760px;
   margin: 0;
   font-size: clamp(1.9rem, 3.4vw, 2.9rem);
-  line-height: 1.1;
+  line-height: 1.09;
   letter-spacing: -0.022em;
   font-weight: 600;
 }
@@ -866,7 +869,7 @@ pre code {
   flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--space-5);
+  gap: 20px;
 }
 
 .latest-heading h2 {
@@ -918,9 +921,12 @@ pre code {
 
 .latest-topics {
   margin: 22px 0 0;
+  padding-bottom: 4px;
 }
 
-.latest-grid {
+/* 홈 그리드는 `archive-grid latest-grid` 두 클래스를 함께 단다. 뒤에 오는 `.archive-grid`
+   (gap 16px)가 소스 순서로 이기지 않도록 `.homepage` 로 특이도를 높여 handoff 46/28 을 지킨다. */
+.homepage .latest-grid {
   margin-top: 32px;
   gap: 46px 28px;
 }
@@ -949,7 +955,7 @@ pre code {
 }
 
 .archive-sort-control select {
-  min-width: 104px;
+  min-width: 0;
 }
 
 .archive-controls .section-link {
@@ -1146,6 +1152,11 @@ pre code {
   padding-left: 0;
 }
 
+/* handoff: 마지막 칸(정렬)은 오른쪽 패딩 0 으로 밴드 오른쪽 끝에 붙는다(왼쪽 쏠림 방지). */
+.archive-stat:last-child {
+  padding-right: 0;
+}
+
 .archive-stat + .archive-stat {
   border-left: 1px solid var(--line);
 }
@@ -1189,14 +1200,15 @@ pre code {
 }
 
 .archive-topic-chip {
-  gap: 8px;
+  gap: 7px;
+  padding: 0 15px;
 }
 
 .archive-topic-count {
   color: inherit;
   opacity: 0.55;
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.8125rem;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1360,6 +1372,12 @@ pre code {
   border-top: 1px solid var(--line);
   color: var(--text-tertiary);
   font-size: 0.75rem;
+}
+
+/* 법적 표기는 <small> 안에 있어 브라우저 기본 `small{font-size:smaller}` 로 12px 밑으로
+   줄어든다. handoff(12px)에 맞춰 부모 크기를 그대로 쓰게 한다. */
+.footer-legal small {
+  font-size: inherit;
 }
 
 .topbar {
