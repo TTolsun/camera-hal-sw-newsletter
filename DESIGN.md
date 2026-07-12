@@ -12,7 +12,7 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 
 ## 브랜드
 
-- 워드마크: 헤더는 "Camera SW Newsroom"(‘Newsroom’은 muted), 문서 title·OG·푸터 법적표기는 "Camera SW Newsletter"를 유지한다.
+- 워드마크: 헤더는 "Camera SW Newsroom"(‘Newsroom’은 `--text-tertiary` #86868b — handoff 값), 문서 title·OG·푸터 법적표기는 "Camera SW Newsletter"를 유지한다.
 - 마스코트: HALley (`assets/images/brand/HALley.png`, 헤더 로고 `HALley-logo.png`) — 홈 브랜드 히어로의 fallback 이미지, OG 이미지, 헤더 로고. (이슈·아카이브 히어로에는 쓰지 않는다 — mockup은 카피 중심.) 래스터는 handoff 레퍼런스의 **초록 액센트 일러스트**를 쓴다(단일 blue UI 액센트와 별개인 브랜드 그래픽 — 아래 색 참고).
 - 폰트: **Pretendard Variable** (jsdelivr CDN) + 시스템 폴백(`-apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Segoe UI", Roboto, "Noto Sans KR"`). 한글·라틴 모두 Apple SD Gothic Neo에 가까운 조용한 인상을 준다.
 

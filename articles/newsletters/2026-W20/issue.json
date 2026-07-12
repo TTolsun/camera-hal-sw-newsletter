@@ -43,7 +43,8 @@
       ],
       "selectedImage": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
       "imageAttribution": "Phoronix Linux Camera / Media",
-      "imageSource": "https://www.phoronix.com/review/gcc-16-vs-clang-22"
+      "imageSource": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+      "relevance_bucket": "generic_tech_watchlist"
     },
     {
       "category": "주간 다이제스트",
@@ -91,7 +92,8 @@
       ],
       "selectedImage": "https://developer.android.com/static/images/social/android-developers.png",
       "imageAttribution": "Android Developers Latest Updates",
-      "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1"
+      "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "relevance_bucket": "direct_aosp_camera"
     }
   ],
   "references": [],

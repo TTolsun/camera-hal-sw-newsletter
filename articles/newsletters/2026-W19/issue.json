@@ -43,7 +43,8 @@
           "title": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
           "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/300"
         }
-      ]
+      ],
+      "relevance_bucket": "camera_driver_image_pipeline"
     },
     {
       "category": "주간 다이제스트",
@@ -78,7 +79,8 @@
           "title": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
           "url": "https://gitlab.freedesktop.org/camera/libcamera/-/issues/311"
         }
-      ]
+      ],
+      "relevance_bucket": "camera_driver_image_pipeline"
     },
     {
       "category": "주간 다이제스트",
@@ -113,7 +115,8 @@
           "title": "Claude Code Changelog - 2.1.128",
           "url": "https://code.claude.com/docs/en/changelog"
         }
-      ]
+      ],
+      "relevance_bucket": "cpp_ai_tooling_fallback"
     },
     {
       "category": "주간 다이제스트",
@@ -152,7 +155,8 @@
       ],
       "selectedImage": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
       "imageAttribution": "Android Security Bulletin",
-      "imageSource": "https://source.android.com/docs/security/bulletin/asb-overview"
+      "imageSource": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "relevance_bucket": "android_platform_camera_adjacent"
     },
     {
       "category": "주간 다이제스트",
@@ -191,7 +195,8 @@
       ],
       "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
       "imageAttribution": "Android Developers Blog",
-      "imageSource": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html"
+      "imageSource": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+      "relevance_bucket": "cpp_ai_tooling_fallback"
     },
     {
       "category": "주간 다이제스트",
@@ -230,7 +235,8 @@
       ],
       "selectedImage": "../../assets/images/fallback/newsletter-default.svg",
       "imageAttribution": "ISO C++ Blog",
-      "imageSource": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo"
+      "imageSource": "https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+      "relevance_bucket": "generic_tech_watchlist"
     }
   ],
   "references": [],
