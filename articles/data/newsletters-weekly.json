@@ -131,8 +131,9 @@
     "html": "newsletters/2026-W22/index.html",
     "md": "newsletters/2026-W22/newsletter.md",
     "tags": [
-      "Camera HAL",
-      "Android"
+      "Android",
+      "AI",
+      "Camera HAL"
     ],
     "article_count": 2,
     "article_images": [
@@ -150,8 +151,11 @@
     "html": "newsletters/2026-W21/index.html",
     "md": "newsletters/2026-W21/newsletter.md",
     "tags": [
-      "Camera HAL",
-      "Android"
+      "AI",
+      "Android",
+      "Driver",
+      "Image Processing",
+      "Camera HAL"
     ],
     "article_count": 5,
     "article_images": [
@@ -188,8 +192,11 @@
     "html": "newsletters/2026-W19/index.html",
     "md": "newsletters/2026-W19/newsletter.md",
     "tags": [
-      "Camera HAL",
-      "Android"
+      "Driver",
+      "Image Processing",
+      "AI",
+      "Android",
+      "Camera HAL"
     ],
     "article_count": 6,
     "article_images": [
