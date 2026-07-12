@@ -57,10 +57,32 @@ html {
   scroll-behavior: smooth;
 }
 
-/* mockup 처럼 페이지 이동에 부드러운 전환(크로스페이드)을 준다. 지원 브라우저(Chrome/Edge)에서만
-   적용되고, 그 외에는 일반 이동으로 폴백한다 — MPA 라서 SPA 의 스크롤-투-톱 자체 재현은 아니다. */
+/* mockup(SPA)은 페이지 전환 시 스크롤이 부드럽게 위로 올라간다. 이 사이트는 페이지별 문서(MPA)라,
+   cross-document View Transition 으로 새 페이지가 아래에서 위로 부드럽게 슬라이드-업 하도록 재현한다.
+   지원 브라우저(Chrome/Edge)에서만 동작하고, 모션 최소화 설정이면 아래 @media 로 끈다. */
 @view-transition {
   navigation: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes page-slide-up-out {
+    to {
+      opacity: 0;
+      transform: translateY(-18px);
+    }
+  }
+  @keyframes page-slide-up-in {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+  }
+  ::view-transition-old(root) {
+    animation: page-slide-up-out 0.26s ease both;
+  }
+  ::view-transition-new(root) {
+    animation: page-slide-up-in 0.34s ease both;
+  }
 }
 
 body {
