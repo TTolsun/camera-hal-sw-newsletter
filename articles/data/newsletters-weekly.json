@@ -10,6 +10,9 @@
     "md": "newsletters/2026-W28/newsletter.md",
     "tags": [
       "Camera HAL",
+      "Driver",
+      "Image Processing",
+      "AI",
       "Android"
     ],
     "article_count": 3,
@@ -27,6 +30,8 @@
     "html": "newsletters/2026-W27/index.html",
     "md": "newsletters/2026-W27/newsletter.md",
     "tags": [
+      "Driver",
+      "Image Processing",
       "Camera HAL",
       "Android"
     ],
@@ -45,8 +50,11 @@
     "html": "newsletters/2026-W26/index.html",
     "md": "newsletters/2026-W26/newsletter.md",
     "tags": [
-      "Camera HAL",
-      "Android"
+      "Driver",
+      "Image Processing",
+      "AI",
+      "Android",
+      "Camera HAL"
     ],
     "article_count": 4,
     "article_images": [
@@ -64,8 +72,11 @@
     "html": "newsletters/2026-W25/index.html",
     "md": "newsletters/2026-W25/newsletter.md",
     "tags": [
-      "Camera HAL",
-      "Android"
+      "Driver",
+      "Image Processing",
+      "Android",
+      "AI",
+      "Camera HAL"
     ],
     "article_count": 6,
     "article_images": [
@@ -83,8 +94,8 @@
     "html": "newsletters/2026-W24/index.html",
     "md": "newsletters/2026-W24/newsletter.md",
     "tags": [
-      "Camera HAL",
-      "Android"
+      "Android",
+      "Camera HAL"
     ],
     "article_count": 1,
     "article_images": [
@@ -121,9 +132,7 @@
     "md": "newsletters/2026-W22/newsletter.md",
     "tags": [
       "Camera HAL",
-      "Android",
-      "Tooling Watch Edition",
-      "Tooling Watch"
+      "Android"
     ],
     "article_count": 2,
     "article_images": [
@@ -141,8 +150,6 @@
     "html": "newsletters/2026-W21/index.html",
     "md": "newsletters/2026-W21/newsletter.md",
     "tags": [
-      "Tooling Watch Edition",
-      "Tooling Watch",
       "Camera HAL",
       "Android"
     ],
@@ -162,10 +169,8 @@
     "html": "newsletters/2026-W20/index.html",
     "md": "newsletters/2026-W20/newsletter.md",
     "tags": [
-      "Tooling Watch Edition",
-      "Tooling Watch",
-      "Android",
-      "Camera HAL"
+      "Camera HAL",
+      "Android"
     ],
     "article_count": 3,
     "article_images": [

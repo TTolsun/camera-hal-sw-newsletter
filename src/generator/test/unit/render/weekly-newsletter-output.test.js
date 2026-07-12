@@ -69,6 +69,19 @@ test('a single publish-ready run writes the weekly page, issue.json, and a weekl
   assert.equal(readIssue(root, '2026-W23').sections.length, 1);
 });
 
+test('weekly tags derive archive topics and kicker from article relevance buckets', async () => {
+  const root = tempRoot();
+  const driver = { ...section('driver', 'https://example.com/driver'), relevance_bucket: 'camera_driver_image_pipeline' };
+  const ai = { ...section('ai', 'https://example.com/ai'), relevance_bucket: 'cpp_ai_tooling_fallback' };
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([driver, ai]), tags: [] });
+
+  // 위클리 tags 는 이슈 기본값이 아니라 그 주 기사 버킷에서 나온다: lead(camera_driver) topic 이
+  // 맨 앞이라 카드 kicker 가 되고, AI 도 채워지며 baseline(Camera HAL/Android)이 뒤에 붙는다.
+  const issue = readIssue(root, '2026-W23');
+  assert.deepEqual(issue.tags, ['Driver', 'Image Processing', 'AI', 'Camera HAL', 'Android']);
+  assert.equal(issue.tags[0], 'Driver');
+});
+
 test('publishing a weekly issue regenerates sitemap.xml with the issue URL', async () => {
   const root = tempRoot();
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', 'https://example.com/a')]), tags: [] });
