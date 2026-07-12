@@ -187,12 +187,15 @@
 
   const FALLBACK_CARD_IMAGE = 'assets/images/fallback/newsletter-default.svg';
 
-  // First weekly article image, or the shared newsletter fallback when none is available.
+  // First real weekly article image, or the shared newsletter fallback when none is available.
+  // Some legacy entries list a bundled fallback placeholder before a real https image, so we
+  // prefer the first non-fallback source and only fall back to the placeholder when none exists.
   function cardImage(entry) {
-    const [first] = ensureArray(entry && entry.article_images)
+    const images = ensureArray(entry && entry.article_images)
       .map(src => String(src ?? '').trim())
       .filter(Boolean);
-    return first || FALLBACK_CARD_IMAGE;
+    const firstReal = images.find(src => !src.includes('assets/images/fallback/'));
+    return firstReal || images[0] || FALLBACK_CARD_IMAGE;
   }
 
   function cardMetaHtml(entry) {

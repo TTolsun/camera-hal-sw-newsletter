@@ -330,6 +330,7 @@ pre code {
 .archive-hero-description {
   max-width: 640px;
   margin-bottom: 0;
+  color: var(--muted);
   font-size: 1.1875rem;
   line-height: 1.45;
   overflow-wrap: anywhere;
@@ -1074,9 +1075,10 @@ pre code {
   font-size: 1rem;
 }
 
-.archive-page-section {
-  min-height: 520px;
-  padding-top: 34px;
+/* mockup: 헤더 hairline 아래로 통계 밴드가 바로 이어짐 — 섹션 자체 세로 패딩·최소 높이 없음.
+   (.homepage .section 의 padding-top 36px 를 이기려면 같은 특이도의 후행 규칙이어야 한다.) */
+.homepage .archive-page-section {
+  padding-top: 0;
 }
 
 .archive-status,

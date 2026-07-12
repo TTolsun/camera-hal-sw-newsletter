@@ -275,8 +275,8 @@ test('archive page renders all newsletters including latest in date-descending o
   assert.equal(elements['[data-archive-pagination]'].hidden, true);
 });
 
-test('archive page paginates newsletters eight per page and keeps page in the URL', async () => {
-  const items = Array.from({ length: 11 }, (_, index) => {
+test('archive page paginates newsletters twelve per page and keeps page in the URL', async () => {
+  const items = Array.from({ length: 15 }, (_, index) => {
     const day = String(25 - index).padStart(2, '0');
     return newsletter(`2026-05-${day}`, `Issue ${day}`);
   });
@@ -285,12 +285,12 @@ test('archive page paginates newsletters eight per page and keeps page in the UR
   let html = rendered.elements['[data-archive-grid]'].innerHTML;
   let cards = archiveCards(html);
 
-  assert.equal(cards.length, 8);
+  assert.equal(cards.length, 12);
   assert.match(html, /Issue 25/);
-  assert.match(html, /Issue 18/);
-  assert.doesNotMatch(html, /Issue 17/);
-  assert.match(rendered.elements['[data-result-summary]'].textContent, /전체 11개 아카이브 중 1-8개를 최신순으로 표시 중입니다/);
-  assert.equal(rendered.elements['[data-archive-count]'].textContent, '11호');
+  assert.match(html, /Issue 14/);
+  assert.doesNotMatch(html, /Issue 13/);
+  assert.match(rendered.elements['[data-result-summary]'].textContent, /전체 15개 아카이브 중 1-12개를 최신순으로 표시 중입니다/);
+  assert.equal(rendered.elements['[data-archive-count]'].textContent, '15호');
   assert.equal(rendered.elements['[data-archive-pagination]'].hidden, false);
   assert.match(rendered.elements['[data-archive-pagination]'].innerHTML, /data-archive-page="1" aria-current="page"/);
   assert.match(rendered.elements['[data-archive-pagination]'].innerHTML, /data-archive-page="2"/);
@@ -300,10 +300,10 @@ test('archive page paginates newsletters eight per page and keeps page in the UR
   cards = archiveCards(html);
 
   assert.equal(cards.length, 3);
-  assert.match(html, /Issue 17/);
-  assert.match(html, /Issue 15/);
-  assert.doesNotMatch(html, /Issue 18/);
-  assert.match(rendered.elements['[data-result-summary]'].textContent, /전체 11개 아카이브 중 9-11개를 최신순으로 표시 중입니다/);
+  assert.match(html, /Issue 13/);
+  assert.match(html, /Issue 11/);
+  assert.doesNotMatch(html, /Issue 14/);
+  assert.match(rendered.elements['[data-result-summary]'].textContent, /전체 15개 아카이브 중 13-15개를 최신순으로 표시 중입니다/);
   assert.equal(rendered.location.search, '?page=2');
   assert.deepEqual(rendered.historyUpdates, ['/archive.html?page=2']);
 });
@@ -338,7 +338,7 @@ test('archive page filters by topic, updates aria-pressed, and changes sort orde
 });
 
 test('archive page clamps stale page URLs and resets page when filters change', async () => {
-  const items = Array.from({ length: 10 }, (_, index) => {
+  const items = Array.from({ length: 15 }, (_, index) => {
     const day = String(25 - index).padStart(2, '0');
     const tags = index < 2 ? ['Android'] : ['Camera HAL'];
     return newsletter(`2026-05-${day}`, `Issue ${day}`, tags);
@@ -348,8 +348,8 @@ test('archive page clamps stale page URLs and resets page when filters change', 
 
   assert.equal(rendered.location.search, '?page=2');
   assert.deepEqual(rendered.historyUpdates, ['/archive.html?page=2']);
-  assert.equal(archiveCards(rendered.elements['[data-archive-grid]'].innerHTML).length, 2);
-  assert.match(rendered.elements['[data-result-summary]'].textContent, /전체 10개 아카이브 중 9-10개를 최신순으로 표시 중입니다/);
+  assert.equal(archiveCards(rendered.elements['[data-archive-grid]'].innerHTML).length, 3);
+  assert.match(rendered.elements['[data-result-summary]'].textContent, /전체 15개 아카이브 중 13-15개를 최신순으로 표시 중입니다/);
 
   topicHandler({ target: createTopicTarget('android') });
 
