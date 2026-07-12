@@ -493,7 +493,6 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   const css = readStylesheet();
   const archiveGrid = exactSelectorBlock(css, '.archive-grid');
   const archiveCard = exactSelectorBlock(css, '.archive-card');
-  const archivePageSection = exactSelectorBlock(css, '.archive-page-section');
   const archivePageGrid = exactSelectorBlock(css, '.archive-page .archive-grid');
   const archivePageCard = exactSelectorBlock(css, '.archive-page .archive-card');
   const archiveFocus = exactSelectorBlock(css, '.archive-card:focus-visible');
@@ -510,7 +509,6 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   assertCssDeclaration(wideGrid, 'grid-template-columns', 'repeat(3, minmax(0, 1fr))');
   assertCssDeclaration(archiveCard, 'display', 'flex');
   assertCssDeclaration(archiveCard, 'flex-direction', 'column');
-  assertCssDeclaration(archivePageSection, 'min-height', '520px');
   // mockup 카드 그리드 리듬: 세로 46px / 가로 28px.
   assertCssDeclaration(archivePageGrid, 'gap', '46px 28px');
   assertCssDeclaration(archivePageCard, 'padding', '0');

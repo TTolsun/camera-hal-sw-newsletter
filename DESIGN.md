@@ -13,12 +13,12 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 ## 브랜드
 
 - 워드마크: 헤더는 "Camera SW Newsroom"(‘Newsroom’은 muted), 문서 title·OG·푸터 법적표기는 "Camera SW Newsletter"를 유지한다.
-- 마스코트: HALley (`assets/images/brand/HALley.png`) — 홈 브랜드 히어로의 fallback 이미지, OG 이미지. (이슈·아카이브 히어로에는 쓰지 않는다 — mockup은 카피 중심.)
+- 마스코트: HALley (`assets/images/brand/HALley.png`, 헤더 로고 `HALley-logo.png`) — 홈 브랜드 히어로의 fallback 이미지, OG 이미지, 헤더 로고. (이슈·아카이브 히어로에는 쓰지 않는다 — mockup은 카피 중심.) 래스터는 handoff 레퍼런스의 **초록 액센트 일러스트**를 쓴다(단일 blue UI 액센트와 별개인 브랜드 그래픽 — 아래 색 참고).
 - 폰트: **Pretendard Variable** (jsdelivr CDN) + 시스템 폴백(`-apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Segoe UI", Roboto, "Noto Sans KR"`). 한글·라틴 모두 Apple SD Gothic Neo에 가까운 조용한 인상을 준다.
 
 ## 색
 
-단일 액센트 원칙: 모든 링크·활성 상태·focus 신호는 `--primary`(#0066cc)만 쓴다. 두 번째 브랜드 색은 없다.
+단일 액센트 원칙: 모든 링크·활성 상태·focus 신호는 `--primary`(#0066cc)만 쓴다. 두 번째 UI 액센트 색은 없다. (예외: 마스코트 HALley 일러스트는 자체 **초록** 팔레트를 쓰는 브랜드 그래픽이다 — UI chrome·상호작용 요소는 여전히 blue 하나만. handoff mockup도 초록 마스코트 + blue UI 구성이다.)
 
 - 액센트: `--primary` #0066cc, `--primary-hover` #0052a3, `--focus-ring` rgba(0,102,204,.35).
 - 텍스트: `--text` #1d1d1f(본문 ink), 보조 텍스트 `--muted` #6e6e73(흰 배경 5.07:1, 파치먼트 4.65:1로 WCAG AA ≥4.5:1), 3차 메타 `--text-tertiary` #86868b(날짜·캡션·법적 표기 — Apple Newsroom 원값).
@@ -48,11 +48,11 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 ## 컴포넌트
 
 - **헤더(`.site-header.homepage-site-header`)**: sticky 58px, 반투명 흰 배경(rgba(255,255,255,.82)) + `backdrop-filter: saturate(180%) blur(20px)`, hairline bottom. 좌측 브랜드, 우측 나브(홈 / 아카이브 / GitHub — GitHub만 tertiary 색, 14px/500).
-- **Featured 히어로(`.featured-hero`)**: 16:9 라운드 미디어 패널(`.featured-thumb`) 위/아래로, 가운데 정렬된 kicker → h1 타이틀 → lead → `date · source` → "기사 읽기 →" 링크. 헤드라인 데이터가 없으면 정적 브랜드 히어로(HALley + 브랜드 카피)가 h1을 유지한다.
-- **이미지 카드(`.archive-card`, 공유 `renderArchiveCard`)**: 16:9 썸네일(hover 시 1.045 scale) → uppercase kicker(주제) → 톱 기사 헤드라인(hover underline) → 주(week) meta. 배경·테두리 없는 투명 카드. 홈 "최신 소식" 그리드와 아카이브 그리드가 공유한다.
+- **Featured 히어로(`.featured-hero`)**: 16:9 라운드 미디어 패널(`.featured-thumb`) 위/아래로, 가운데 정렬된 kicker → h1 타이틀 → lead → `date · source` → "기사 읽기 →" 링크. featured 이미지는 실제 기사 이미지면 16:9 풀커버(`.featured-img`), 실제 이미지 없이 fallback placeholder면 mockup처럼 44% 중앙 + product drop-shadow(`.featured-img.is-brand`)로 보인다. 헤드라인 데이터가 없으면 정적 브랜드 히어로(HALley + 브랜드 카피)가 h1을 유지한다.
+- **이미지 카드(`.archive-card`, 공유 `renderArchiveCard`)**: 16:9 썸네일(hover 시 1.045 scale) → uppercase kicker(주제) → 톱 기사 헤드라인(hover underline) → 주(week) meta. 배경·테두리 없는 투명 카드. 홈 "최신 소식" 그리드와 아카이브 그리드가 공유한다. 썸네일은 첫 **실제(비-fallback)** 기사 이미지를 우선하고 없을 때만 placeholder를 쓴다(`cardImage`). kicker(주제)와 아카이브 필터 카운트는 그 주 기사 relevance bucket에서 파생한 위클리 topic 태그(첫 값이 kicker)에서 나온다(`weeklyTopicTags`) — 이슈 레벨 기본 태그가 아니다.
 - **주제 chip(`.keyword`)**: 평평한 pill, 기본 #f5f5f7, 활성 ink 채움. 아카이브 chip은 카운트 뱃지(`.archive-topic-count`)를 곁들인다.
 - **정렬(`.nc-sort`)**: pill 셀렉트 + 인라인 chevron. 최신순/오래된순.
-- **아카이브 통계행(`.archive-stat-grid`)**: 발행 호수(`N호`) / 주제 / 정렬 — hairline으로만 나눈 오픈 밴드(라벨 12px tertiary, 값 30px/600).
+- **아카이브 헤더·통계행**: kicker "Newsletter Archive" → h1 "아카이브" → **muted 설명 문장**(`.archive-hero-description`, `--muted`). 그 아래 통계행(`.archive-stat-grid`)은 발행 호수(`N호`) / 주제 / 정렬 — hairline으로만 나눈 오픈 밴드(라벨 12px tertiary, 값 30px/600). 세로 리듬은 mockup을 따른다: 헤더 hairline 바로 아래 통계밴드(‌`.homepage .archive-page-section` 세로 패딩·최소 높이 없음), 결과 요약 줄(`.archive-result-summary`)은 sr-only(시각 숨김·스크린리더 유지), 페이지당 12개(`ARCHIVE_PAGE_SIZE`)라 현재 발행분은 한 페이지에 전부 보이고 성장 시에만 페이지네이션이 나타난다.
 - **이슈 기사(`.issue-story.issue-section`)**: 카드 프레임 없이 hairline+60px 리듬으로 구분되는 평문 흐름 — 제로패딩 아웃라인 번호(`01`, #d2d2d7 원) + uppercase 카테고리 눈썹 → 헤드라인 → 회색 출처 서브타이틀 → **풀폭 16:9 라운드 이미지 + 평문 캡션** → 19px/500 리드 → 17px prose → "Camera HAL · Driver 관점" 파치먼트 take 박스 → 세로 불릿 출처 목록. 페이지 끝에는 `issue-footer-navigation`("← 뉴스룸으로 · 아카이브 전체 보기 →").
 - **푸터(`.site-footer`)**: 파치먼트 배경 + hairline top, 3컬럼(뉴스레터/주제/리소스) + 법적 표기(tertiary).
 
@@ -70,5 +70,8 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 - **미사용(dead) CSS 정리 (완료)**: 리디자인으로 도달 불가가 된 dead CSS **규칙 전부 제거**함 — `.headline-*`, `.latest-newsletter-card`/`.latest-card-*`, `.newsletter-card`, `.card-summary`/`.clamp-3`, 그리고 홈 tagline 히어로(`.site-hero`/`.homepage .site-hero`/`.hero-copy`/`.hero-mascot`/`.hero-title-*`/`.hero-description`)와 그 반응형 규칙(styles.css 약 300줄 감소, 홈·아카이브 스크린샷 byte-identical=시각 회귀 0). 남은 것은 **살아있는 그룹 셀렉터 안의 무해한 dead-selector**뿐이며(dead 규칙이 아니라 라이브 규칙의 dead 셀렉터라 제거 이득이 없음) 의도적으로 유지: `.site-hero::before`(archive/issue 글로우 그룹), `.hero-mascot img`·`.issue-hero-mascot`(archive/issue 마스코트 그룹), `.hero-actions`(actions 그룹), `.hero-tags`(`.tag-row`/`.tag` 그룹), `.newsletter-card`(text-decoration 그룹 — `exactSelectorBlock('.archive-card')`가 image-forward 카드로 해석되도록 유지). `:524` shell 테스트는 dead 히어로 단언을 걷어내고 라이브 shell-width 계약만 남김(라이브 featured-hero는 별도 테스트로 커버).
 - **레거시 daily 페이지 27개**: 재렌더 소스가 없어 구 마크업(feature-row·카드 프레임·마스코트 히어로) 그대로 남는다. 공유 CSS와 전역 `img { max-width: 100% }` 리셋 덕에 깨지지는 않지만, 리디자인된 위클리와 룩이 다르다(수용된 예외 — #778 전례).
 - **RSS·편집 정책**: 푸터에 "(지원예정)" 노트로만 존재. 실제 피드/페이지가 생기면 링크로 승격.
+- **구형 위클리 분류 데이터**: W19–W22 등 예전 `issue.json`은 section에 relevance bucket이 없어 카드 topic이 baseline(Camera HAL / Android)으로만 파생된다. 최근 주(W23–W28)는 bucket이 있어 Driver·Image Processing·AI 등으로 분류된다. SoC Platform 칩은 현재 발행분에 해당 bucket 기사가 없어 count 0(비활성)이다 — 데이터가 생기면 자동으로 채워진다.
 
 > 진행 완료(main, handoff mockup `Camera SW Newsroom.dc.html` 정렬 — PR #779–#783 + 위클리 재렌더): 풀블리드 흰 셸(라운드 프레임·그라디언트 제거)·58px 반투명 헤더·한글 나브(홈/아카이브)·featured 히어로 mockup 리듬·홈/아카이브 46×28px 카드 그리드·아카이브 오픈 스탯 밴드+단일 필터 행·이슈 페이지 평문 흐름(아웃라인 번호+카테고리 눈썹·파치먼트 박스 언어·하단 내비)·W19–W28 재렌더 발행.
+
+> 진행 완료(handoff `untitled/project` 레퍼런스 재정렬 라운드 2): HALley 마스코트 초록 복원(#785 되돌림)·featured fallback 이미지 브랜드 처리(`.featured-img.is-brand`)·카드 썸네일 실제 이미지 우선(`cardImage`)·아카이브 설명 muted·아카이브 세로 리듬 정리(헤더↔통계밴드 gap 제거·결과 요약 sr-only·min-height 제거·페이지당 12)·위클리 topic 태그를 기사 relevance bucket에서 파생(`weeklyTopicTags` — Driver/Image Processing/AI 필터 활성화·kicker 다양화·Tooling Watch 노이즈 제거).

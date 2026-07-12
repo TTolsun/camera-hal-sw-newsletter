@@ -20,6 +20,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { buildWeeklyNewsletterPage } = require('./weekly-newsletter-page');
+const { weeklyTopicTags } = require('./newsletter-renderer');
 const { writeSitemap } = require('./generate-sitemap');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../reporter/weekly-article-limits');
@@ -208,10 +209,10 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
   });
   const { articles } = applyWeeklyArticleLimits({ existing: resolved.existingArticles, incoming: resolved.appendedArticles });
 
-  const mergedTags = [...new Set([
-    ...ensureArray(existingIssue && existingIssue.tags).map(String),
-    ...ensureArray(tags).map(String)
-  ].filter(Boolean))];
+  // 아카이브/홈 카드의 주제 분류·kicker 는 위클리 tags 로 결정된다. 이슈 레벨 editor.tags(대개
+  // ['Camera HAL','Android'] 기본값이라 분류가 단조롭고 Driver/Image Processing/AI/SoC Platform
+  // 필터가 비어 버린다) 대신, 그 주 기사(section)들의 relevance bucket 을 topic 태그로 집계한다.
+  const mergedTags = weeklyTopicTags(articles);
 
   const mergedDraft = {
     ...editor,

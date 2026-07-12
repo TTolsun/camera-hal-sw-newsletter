@@ -195,6 +195,37 @@ function articleCategoryLabel(section = {}) {
     'Camera';
 }
 
+// relevance bucket -> archive/home 카드 topic 태그. archive 필터 TOPICS(Camera HAL / Android /
+// Driver / Image Processing / AI / SoC Platform) 값에 맞춘다. 각 리스트의 첫 항목이 그 bucket 의
+// primary topic 이고, lead 기사(첫 section)의 primary 가 카드 kicker(tags[0]) 가 된다.
+// generic_tech_watchlist 는 topic 이 아니라 편집 상태 마커라 비워 둔다.
+const BUCKET_TOPIC_TAGS = {
+  direct_aosp_camera: ['Camera HAL'],
+  camera_driver_image_pipeline: ['Driver', 'Image Processing'],
+  android_platform_camera_adjacent: ['Android'],
+  android_multimedia_camera_output: ['Android', 'Image Processing'],
+  soc_platform_signal: ['SoC Platform'],
+  cpp_ai_tooling_fallback: ['AI'],
+  generic_tech_watchlist: []
+};
+
+// 모든 카메라 뉴스레터가 공통으로 걸치는 baseline topic — 카드 필터가 항상 잡도록 맨 뒤에 붙인다.
+const BASELINE_TOPIC_TAGS = ['Camera HAL', 'Android'];
+
+// 그 주 기사(section)들의 relevance bucket 을 archive/home 카드 topic 태그로 집계한다. lead 기사
+// topic 을 앞에 두어 카드 kicker(tags[0]) 로 삼고, 나머지 기사 topic, 마지막에 baseline 순으로
+// 중복을 제거한다. 이슈 레벨 editor.tags(대개 ['Camera HAL','Android'] 기본값)에 의존하지 않으므로
+// Driver·Image Processing·AI·SoC Platform 필터가 실제로 채워지고 카드 kicker 가 다양화된다.
+function weeklyTopicTags(sections = []) {
+  const ordered = [];
+  for (const section of ensureArray(sections)) {
+    for (const tag of BUCKET_TOPIC_TAGS[sectionRelevanceBucket(section)] || []) {
+      ordered.push(tag);
+    }
+  }
+  return [...new Set([...ordered, ...BASELINE_TOPIC_TAGS])];
+}
+
 function issueTags(issue) {
   const tags = ensureArray(issue.tags).length > 0 ? issue.tags : ['Camera HAL', 'Android'];
   if (issue?.publication_mode !== PUBLICATION_MODES.FALLBACK_PUBLIC && issue?.fallback_only !== true) return tags;
@@ -924,5 +955,6 @@ module.exports = {
   buildEditorChiefBrief,
   buildReleaseQaReport,
   issueTags,
+  weeklyTopicTags,
   ensureArray
 };

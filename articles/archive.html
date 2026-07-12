@@ -78,7 +78,7 @@
           </label>
         </form>
 
-        <p class="archive-result-summary" data-result-summary aria-live="polite"></p>
+        <p class="archive-result-summary sr-only" data-result-summary aria-live="polite"></p>
       </section>
 
       <div class="archive-grid" data-archive-grid></div>
@@ -124,7 +124,7 @@
 
   <script src="assets/js/newsletter-archive.js"></script>
   <script>
-    const ARCHIVE_PAGE_SIZE = 8;
+    const ARCHIVE_PAGE_SIZE = 12;
     const archiveHelpers = window.NewsletterArchive;
     const statusEl = document.querySelector('[data-archive-status]');
     const controlsEl = document.querySelector('[data-archive-controls]');
