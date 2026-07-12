@@ -194,7 +194,7 @@
     const images = ensureArray(entry && entry.article_images)
       .map(src => String(src ?? '').trim())
       .filter(Boolean);
-    const firstReal = images.find(src => !src.includes('assets/images/fallback/'));
+    const firstReal = images.find(src => !src.startsWith('assets/images/fallback/'));
     return firstReal || images[0] || FALLBACK_CARD_IMAGE;
   }
 
