@@ -53,11 +53,45 @@
     }
   }
 
+  function normalizeComparablePath(path) {
+    const withoutIndex = String(path || '').replace(/\/index\.html$/i, '/');
+    const trimmed = withoutIndex.replace(/\/+$/, '');
+    return trimmed || '/';
+  }
+
+  // 이미 보고 있는 페이지를 가리키는 내부 링크(홈에서 "홈"/로고, 아카이브에서 "아카이브")를 누르면
+  // 리로드 대신 맨 위로 부드럽게 스크롤한다 — handoff SPA 의 스크롤-업 느낌. 다른 페이지로 가는
+  // 링크는 그대로 두어 페이지 전환(cross-document View Transition)이 작동한다.
+  function initSamePageScrollToTop(doc = global.document) {
+    if (!doc || typeof doc.addEventListener !== 'function') return;
+    doc.addEventListener('click', (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const anchor = event.target && typeof event.target.closest === 'function' ? event.target.closest('a[href]') : null;
+      if (!anchor || anchor.target === '_blank' || anchor.hasAttribute('download')) return;
+      const href = anchor.getAttribute('href');
+      if (!href || href.charAt(0) === '#') return;
+      let url;
+      try {
+        url = new URL(anchor.href, global.location.href);
+      } catch (error) {
+        return;
+      }
+      if (url.origin !== global.location.origin) return;
+      const samePage = normalizeComparablePath(url.pathname) === normalizeComparablePath(global.location.pathname) &&
+        url.search === global.location.search;
+      if (!samePage) return;
+      event.preventDefault();
+      const reduce = typeof global.matchMedia === 'function' && global.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      global.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  }
+
   const api = {
     BRAND_LABEL,
     NAV_ITEMS,
     siteHeaderHtml,
-    mountSiteHeaders
+    mountSiteHeaders,
+    initSamePageScrollToTop
   };
 
   if (typeof module !== 'undefined' && module.exports) {
@@ -72,5 +106,6 @@
     } else {
       mountSiteHeaders();
     }
+    initSamePageScrollToTop();
   }
 })(typeof globalThis !== 'undefined' ? globalThis : this);
