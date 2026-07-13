@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-07-13",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-sw-20260713-001",
+      "topic_gap": "Recent updates or changes to the Android Camera HAL interface or implementation, focusing on new features, performance improvements, or bug fixes.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android 17 Camera HAL",
+        "Camera HAL updates",
+        "Camera API changes"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/Android-17.html"
+      ],
+      "expected_evidence": [
+        "Camera HAL API changes",
+        "Camera HAL implementation details",
+        "New camera features in Android 17"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-002",
+      "topic_gap": "Specific improvements or new capabilities in CameraX, particularly those impacting HAL interaction or camera output processing.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX 1.7.0-alpha02",
+        "CameraX 1.4.0-alpha07",
+        "CameraX release notes"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+      ],
+      "expected_evidence": [
+        "CameraX release notes",
+        "CameraX new features",
+        "CameraX bug fixes related to camera output"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-003",
+      "topic_gap": "Kernel-level changes or additions to camera drivers and the V4L2 subsystem that are relevant to Android camera HAL development.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel media",
+        "V4L2 driver updates",
+        "camera kernel patches"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/alOpwQx-43WNPHcL@baldur/",
+        "https://lore.kernel.org/linux-media/alOii3vwmkWGfVNx@ashevche-desk.local/",
+        "https://lore.kernel.org/linux-media/xrfd2dbhmpiy7ftpztcswba6iyzt3dsajqtr4fpq2iyn6tbeny@4wijspe7n2ig/",
+        "https://lore.kernel.org/linux-media/f7b6225063d1cb92d5ea12d0d40f8a1c1d51c9c8.camel@mediatek.com/",
+        "https://lore.kernel.org/linux-media/20260712-urb-abstraction-v1-v1-4-9fa011634ead@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260712161256.2244864-1-y-abhilashchandra@ti.com/",
+        "https://lore.kernel.org/linux-media/fffa0aaf-e637-46e2-8117-decc5b1af075@ti.com/",
+        "https://lore.kernel.org/linux-media/20260712115012.91600-6-mitltlatltl@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Linux kernel patches related to media/camera drivers",
+        "V4L2 subsystem updates",
+        "New hardware support for cameras"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-004",
+      "topic_gap": "Developments in the libcamera project that could influence or be integrated into Android camera stacks.",
+      "source_family": "libcamera-patchwork-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera patches",
+        "SoftISP",
+        "camera pipeline"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/27349/",
+        "https://patchwork.libcamera.org/patch/27351/",
+        "https://patchwork.libcamera.org/patch/27347/",
+        "https://patchwork.libcamera.org/patch/27346/"
+      ],
+      "expected_evidence": [
+        "libcamera patches",
+        "Software ISP (SoftISP) developments",
+        "Camera pipeline improvements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-005",
+      "topic_gap": "Updates on HDR video capabilities and support, particularly relevant to camera output and playback.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "HDR video Android",
+        "camera HDR",
+        "Eclipsa video"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html"
+      ],
+      "expected_evidence": [
+        "HDR video support",
+        "Camera output formats",
+        "Video playback compatibility"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-006",
+      "topic_gap": "Advancements in AI and machine learning applied to camera image processing, especially on-device or for camera HAL enhancements.",
+      "source_family": "google-research-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "AI camera processing",
+        "neural ISP",
+        "on-device AI camera"
+      ],
+      "candidate_urls": [
+        "https://research.google/blog/"
+      ],
+      "expected_evidence": [
+        "AI in image processing",
+        "On-device AI for cameras",
+        "Neural ISP",
+        "Computer vision advancements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-007",
+      "topic_gap": "New developments or discussions regarding camera hardware and software integration, particularly from a vendor perspective.",
+      "source_family": "ee-times-semiconductors",
+      "allowed_domains": [],
+      "search_keywords": [
+        "camera sensor news",
+        "ISP technology",
+        "semiconductor imaging"
+      ],
+      "candidate_urls": [],
+      "expected_evidence": [
+        "New camera sensors",
+        "ISP advancements",
+        "Semiconductor news related to imaging"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-008",
+      "topic_gap": "Security updates or vulnerabilities related to the Android camera framework or vendor camera components.",
+      "source_family": "android-security-bulletin",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android security bulletin camera",
+        "camera vulnerabilities",
+        "CVE camera"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/security/bulletin/2026/2026-07-01"
+      ],
+      "expected_evidence": [
+        "Android Security Bulletin",
+        "Camera-related CVEs",
+        "Vendor security updates"
+      ],
+      "risk_notes": []
+    }
+  ]
+}

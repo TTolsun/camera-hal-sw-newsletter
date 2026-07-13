@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "28bddd343ec56e86",
+      "url": "https://lore.kernel.org/linux-media/alOpwQx-43WNPHcL@baldur/",
+      "title": "Re: [PATCH v4 3/5] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "published_at": "2026-07-12T14:55:29Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "On Mon, Jul 06, 2026 at 10:11:11AM +0300, Atanas Filipov wrote: > Add device-tree binding for the Qualcomm JPEG encoder hardware block > present in SM8250 (Kona) SoCs. > > The JPEG encoder is a standalone hardware IP within the camera subsystem > that performs JPEG compression in memory-to-memory fashion. It is > separate from the CAMSS ISP pipeline and has its own register space, > interrupt, clocks, power domain, IOMMU streams, and interconnect paths. > > Signed-off-by: Atanas Filipov > --- >",
+          "evidence_text": "<html><head><title>Re: [PATCH v4 3/5] dt-bindings: media: qcom: Add JPEG encoder binding - Bjorn Andersson</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "77edb777a54540a2",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "published_at": "July 01, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CameraXViewfinder now supports built-in gestures for pinch-to-zoom and tap-to-focus, and adds support for screen flash and stream state. FocusState is now public in viewfinder-core to allow monitoring tap-to-focus results. ( I66a17 , b/522549890 )",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.849,
+      "warnings": []
+    },
+    {
+      "id": "c8fc7cc2214a9260",
+      "url": "https://lore.kernel.org/linux-media/alOii3vwmkWGfVNx@ashevche-desk.local/",
+      "title": "Re: [PATCH] staging: media: atomisp: Drop unnecessary else block after return/break",
+      "published_at": "2026-07-12T14:20:22Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "On Mon, Jul 06, 2026 at 04:08:10PM +0530, Dileep Sankhla wrote: > Remove redundant else blocks following return or break statements. As > control flow exits in these cases, the else branch is unnecessary. > Dropping it improves code readability. > > No functional change. ... > +++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c > static int atomisp_mrfld_pre_power_down(struct atomisp_device *isp) > spin_unlock_irqrestore(&isp->lock, flags); > return -EAGAIN; > - } else { > - pci_read_config_d",
+          "evidence_text": "<html><head><title>Re: [PATCH] staging: media: atomisp: Drop unnecessary else block after return/break - Andy Shevchenko</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefe",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.83,
+      "warnings": []
+    },
+    {
+      "id": "gemini-a9bf24b15e9ba534",
+      "url": "https://lore.kernel.org/linux-media/20260712161256.2244864-1-y-abhilashchandra@ti.com/",
+      "title": "[PATCH] media: ti: vpe: Select V4L2_FWNODE for VIP - Yemike Abhilash Chandra",
+      "published_at": "2026-07-12",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH] media: ti: vpe: Select V4L2_FWNODE for VIP - Yemike Abhilash Chandra",
+          "evidence_text": "<html><head><title>[PATCH] media: ti: vpe: Select V4L2_FWNODE for VIP - Yemike Abhilash Chandra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhr",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-b866eb3110762511",
+      "url": "https://lore.kernel.org/linux-media/alOii3vwmkWGfVNx@ashevche-desk.local/",
+      "title": "Re: [PATCH] staging: media: atomisp: Drop unnecessary else block after return/break - Andy Shevchenko",
+      "published_at": "2026-07-12",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH] staging: media: atomisp: Drop unnecessary else block after return/break - Andy Shevchenko",
+          "evidence_text": "<html><head><title>Re: [PATCH] staging: media: atomisp: Drop unnecessary else block after return/break - Andy Shevchenko</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefe",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-de293d78f23750ce",
+      "url": "https://lore.kernel.org/linux-media/fffa0aaf-e637-46e2-8117-decc5b1af075@ti.com/",
+      "title": "Re: [PATCH] media: ti: vpe: quiesce overflow recovery before freeing streams - Yemike Abhilash Chandra",
+      "published_at": "2026-07-12",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Re: [PATCH] media: ti: vpe: quiesce overflow recovery before freeing streams - Yemike Abhilash Chandra",
+          "evidence_text": "<html><head><title>Re: [PATCH] media: ti: vpe: quiesce overflow recovery before freeing streams - Yemike Abhilash Chandra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (pref",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-ffadf11ab3293408",
+      "url": "https://lore.kernel.org/linux-media/20260712-urb-abstraction-v1-v1-4-9fa011634ead@gmail.com/",
+      "title": "[RFC PATCH 4/4] media: add gv-usb2 audio capture driver - Colin Braun",
+      "published_at": "2026-07-12",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[RFC PATCH 4/4] media: add gv-usb2 audio capture driver - Colin Braun",
+          "evidence_text": "<html><head><title>[RFC PATCH 4/4] media: add gv-usb2 audio capture driver - Colin Braun</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../2",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "dfaaf5271893a162",
+      "url": "https://patchwork.libcamera.org/patch/27349/",
+      "title": "[RFC,v7,5/6] libcamera: software_isp: Pass LSC availability to debayering",
+      "published_at": "2026-07-08",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Milan Zamazal); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[RFC,v7,5/6] libcamera: software_isp: Pass LSC availability to debayering - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "1077c2129eec04e4",
+      "url": "https://patchwork.libcamera.org/patch/27346/",
+      "title": "[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "published_at": "2026-07-08",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Milan Zamazal); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D() - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "537d9c2289e857c1",
+      "url": "https://patchwork.libcamera.org/patch/27347/",
+      "title": "[RFC,v7,2/6] libcamera: software_isp: Add LSC data to DebayerParams",
+      "published_at": "2026-07-08",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Milan Zamazal); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[RFC,v7,2/6] libcamera: software_isp: Add LSC data to DebayerParams - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac9",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "79992d0ff6279a9b",
+      "url": "https://patchwork.libcamera.org/patch/27351/",
+      "title": "[RFC,v7,6/6] libcamera: software_isp: debayer_egl: Add LSC support",
+      "published_at": "2026-07-08",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Milan Zamazal); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[RFC,v7,6/6] libcamera: software_isp: debayer_egl: Add LSC support - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac97",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "gemini-cb9b804333e21624",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+      "title": "Android Security Bulletin—July 2026 &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-07-01",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Security Bulletin—July 2026 &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"de-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.737,
+      "warnings": []
+    }
+  ]
+}

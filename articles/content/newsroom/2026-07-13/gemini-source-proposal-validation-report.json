@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-07-13",
+  "validations": [
+    {
+      "proposal_id": "camera-hal-sw-20260713-001",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-002",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-002",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/alOpwQx-43WNPHcL@baldur/",
+      "normalized_url": "https://lore.kernel.org/linux-media/alOpwQx-43WNPHcL@baldur/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/alOii3vwmkWGfVNx@ashevche-desk.local/",
+      "normalized_url": "https://lore.kernel.org/linux-media/alOii3vwmkWGfVNx@ashevche-desk.local/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/xrfd2dbhmpiy7ftpztcswba6iyzt3dsajqtr4fpq2iyn6tbeny@4wijspe7n2ig/",
+      "normalized_url": "https://lore.kernel.org/linux-media/xrfd2dbhmpiy7ftpztcswba6iyzt3dsajqtr4fpq2iyn6tbeny@4wijspe7n2ig/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/f7b6225063d1cb92d5ea12d0d40f8a1c1d51c9c8.camel@mediatek.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/f7b6225063d1cb92d5ea12d0d40f8a1c1d51c9c8.camel@mediatek.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260712-urb-abstraction-v1-v1-4-9fa011634ead@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260712-urb-abstraction-v1-v1-4-9fa011634ead@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260712161256.2244864-1-y-abhilashchandra@ti.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260712161256.2244864-1-y-abhilashchandra@ti.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/fffa0aaf-e637-46e2-8117-decc5b1af075@ti.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/fffa0aaf-e637-46e2-8117-decc5b1af075@ti.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260712115012.91600-6-mitltlatltl@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260712115012.91600-6-mitltlatltl@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-004",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27349/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27349/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-004",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27351/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27351/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-004",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27347/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27347/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-004",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27346/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27346/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-005",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-006",
+      "candidate_url": "https://research.google/blog/",
+      "normalized_url": "https://research.google/blog/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "google-research-blog"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-008",
+      "candidate_url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+      "normalized_url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-security-bulletin"
+    }
+  ],
+  "counts": {
+    "accepted": 16,
+    "discovered_not_extractable": 2
+  }
+}

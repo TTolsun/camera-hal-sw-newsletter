@@ -1,0 +1,1010 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-07-13",
+  "clusters": [
+    {
+      "cluster_id": "ab2b8e420e165e84",
+      "cluster_key": "https://developer.android.com/tools/agents/android-cli",
+      "canonical_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "canonical_title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "49d58944bd3ca26f",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "canonical_title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "title": "1.4.0-alpha07",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5e3f5455fa83d19c",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "canonical_title": "What’s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+          "title": "What’s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "98444c77340368f8",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "canonical_title": "Top 3 updates for Android developer productivity",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "title": "Top 3 updates for Android developer productivity",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b59408fc88377647",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "canonical_title": "Android developer verification: Building a safer ecosystem together",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+          "title": "Android developer verification: Building a safer ecosystem together",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1f75bec69c0f5436",
+      "cluster_key": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+      "canonical_title": "Evolving how LLMs are measured for Android: the next era of Android Bench",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+          "title": "Evolving how LLMs are measured for Android: the next era of Android Bench",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2e09be47b7d035b1",
+      "cluster_key": "https://source.android.com/docs/core/camera",
+      "canonical_url": "https://source.android.com/docs/core/camera",
+      "canonical_title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b09ca66144996dac",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "canonical_title": "Eclipsa Video: HDR That Looks Right on Every Screen",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+          "title": "Eclipsa Video: HDR That Looks Right on Every Screen",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+          "title": "Android Developers Blog: Eclipsa Video: HDR That Looks Right on Every Screen",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ead5dbe355c7c1d9",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+      "canonical_title": "Building a Mixed-Reality Tour Guide with Android XR, the Geospatial API, and Gemini",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+          "title": "Building a Mixed-Reality Tour Guide with Android XR, the Geospatial API, and Gemini",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ae53265d4caf5293",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/android-17.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+      "canonical_title": "Android 17 is here",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+          "title": "Android 17 is here",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+          "title": "Android Developers Blog: Android 17 is here",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9e95b9aeb5650263",
+      "cluster_key": "https://source.android.com/docs/whatsnew",
+      "canonical_url": "https://source.android.com/docs/whatsnew",
+      "canonical_title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew",
+          "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b564c567eef7ae59",
+      "cluster_key": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_url": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cdd",
+          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "827f3a39ff281180",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "canonical_title": "Overview",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "title": "Overview",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cb9b804333e21624",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+      "canonical_title": "July",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+          "title": "July",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+          "title": "Android Security Bulletin—July 2026 &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d49d643975eb925f",
+      "cluster_key": "https://lore.kernel.org/linux-media/alopwqx-43wnphcl@baldur",
+      "canonical_url": "https://lore.kernel.org/linux-media/alOpwQx-43WNPHcL@baldur/",
+      "canonical_title": "Re: [PATCH v4 3/5] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/alOpwQx-43WNPHcL@baldur/",
+          "title": "Re: [PATCH v4 3/5] dt-bindings: media: qcom: Add JPEG encoder binding",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/alOpwQx-43WNPHcL@baldur/",
+          "title": "Re: [PATCH v4 3/5] dt-bindings: media: qcom: Add JPEG encoder binding - Bjorn Andersson",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9f52da38111ac9bf",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2brpt20260609",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "canonical_title": "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "title": "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "78d542236556dd53",
+      "cluster_key": "https://lore.kernel.org/linux-media/aloii3vwmkwgfvnx@ashevche-desk.local",
+      "canonical_url": "https://lore.kernel.org/linux-media/alOii3vwmkWGfVNx@ashevche-desk.local/",
+      "canonical_title": "Re: [PATCH] staging: media: atomisp: Drop unnecessary else block after return/break",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/alOii3vwmkWGfVNx@ashevche-desk.local/",
+          "title": "Re: [PATCH] staging: media: atomisp: Drop unnecessary else block after return/break",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/alOii3vwmkWGfVNx@ashevche-desk.local/",
+          "title": "Re: [PATCH] staging: media: atomisp: Drop unnecessary else block after return/break - Andy Shevchenko",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3406643309fdf61f",
+      "cluster_key": "https://lore.kernel.org/linux-media/xrfd2dbhmpiy7ftpztcswba6iyzt3dsajqtr4fpq2iyn6tbeny@4wijspe7n2ig",
+      "canonical_url": "https://lore.kernel.org/linux-media/xrfd2dbhmpiy7ftpztcswba6iyzt3dsajqtr4fpq2iyn6tbeny@4wijspe7n2ig/",
+      "canonical_title": "Re: [RFC PATCH 07/11] arm64: dts: qcom: hamoa: Move Iris IOMMUs to sub nodes",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/xrfd2dbhmpiy7ftpztcswba6iyzt3dsajqtr4fpq2iyn6tbeny@4wijspe7n2ig/",
+          "title": "Re: [RFC PATCH 07/11] arm64: dts: qcom: hamoa: Move Iris IOMMUs to sub nodes",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/xrfd2dbhmpiy7ftpztcswba6iyzt3dsajqtr4fpq2iyn6tbeny@4wijspe7n2ig/",
+          "title": "Re: [RFC PATCH 07/11] arm64: dts: qcom: hamoa: Move Iris IOMMUs to sub nodes - Dmitry Baryshkov",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9d2676d14e88d13f",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27349",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27349/",
+      "canonical_title": "[RFC,v7,5/6] libcamera: software_isp: Pass LSC availability to debayering",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27349/",
+          "title": "[RFC,v7,5/6] libcamera: software_isp: Pass LSC availability to debayering",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/27349/",
+          "title": "[RFC,v7,5/6] libcamera: software_isp: Pass LSC availability to debayering - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "df69f5f7a441bd6e",
+      "cluster_key": "https://lore.kernel.org/linux-media/f7b6225063d1cb92d5ea12d0d40f8a1c1d51c9c8.camel@mediatek.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/f7b6225063d1cb92d5ea12d0d40f8a1c1d51c9c8.camel@mediatek.com/",
+      "canonical_title": "Re: [PATCH v5 11/14] dt-bindings: media: mediatek: vcodec: add decoder dt-bindings for mt8196",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/f7b6225063d1cb92d5ea12d0d40f8a1c1d51c9c8.camel@mediatek.com/",
+          "title": "Re: [PATCH v5 11/14] dt-bindings: media: mediatek: vcodec: add decoder dt-bindings for mt8196",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/f7b6225063d1cb92d5ea12d0d40f8a1c1d51c9c8.camel@mediatek.com/",
+          "title": "Re: [PATCH v5 11/14] dt-bindings: media: mediatek: vcodec: add decoder dt-bindings for mt8196 - Kyrie Wu (&#21556;&#26199;)",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "114454d6a19b6039",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27351",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27351/",
+      "canonical_title": "[RFC,v7,6/6] libcamera: software_isp: debayer_egl: Add LSC support",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27351/",
+          "title": "[RFC,v7,6/6] libcamera: software_isp: debayer_egl: Add LSC support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/27351/",
+          "title": "[RFC,v7,6/6] libcamera: software_isp: debayer_egl: Add LSC support - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2c67431c1f3efa0a",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27347",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27347/",
+      "canonical_title": "[RFC,v7,2/6] libcamera: software_isp: Add LSC data to DebayerParams",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27347/",
+          "title": "[RFC,v7,2/6] libcamera: software_isp: Add LSC data to DebayerParams",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/27347/",
+          "title": "[RFC,v7,2/6] libcamera: software_isp: Add LSC data to DebayerParams - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "19843ec1e8a8e2f7",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27346",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27346/",
+      "canonical_title": "[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27346/",
+          "title": "[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/27346/",
+          "title": "[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D() - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "04eb690a0b8fa9dc",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260712-urb-abstraction-v1-v1-4-9fa011634ead@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260712-urb-abstraction-v1-v1-4-9fa011634ead@gmail.com/",
+      "canonical_title": "[RFC PATCH 4/4] media: add gv-usb2 audio capture driver",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260712-urb-abstraction-v1-v1-4-9fa011634ead@gmail.com/",
+          "title": "[RFC PATCH 4/4] media: add gv-usb2 audio capture driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260712-urb-abstraction-v1-v1-4-9fa011634ead@gmail.com/",
+          "title": "[RFC PATCH 4/4] media: add gv-usb2 audio capture driver - Colin Braun",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1ac9ec4398f2199e",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260712161256.2244864-1-y-abhilashchandra@ti.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260712161256.2244864-1-y-abhilashchandra@ti.com/",
+      "canonical_title": "[PATCH] media: ti: vpe: Select V4L2_FWNODE for VIP",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260712161256.2244864-1-y-abhilashchandra@ti.com/",
+          "title": "[PATCH] media: ti: vpe: Select V4L2_FWNODE for VIP",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260712161256.2244864-1-y-abhilashchandra@ti.com/",
+          "title": "[PATCH] media: ti: vpe: Select V4L2_FWNODE for VIP - Yemike Abhilash Chandra",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b3311931c216ad88",
+      "cluster_key": "https://lore.kernel.org/linux-media/fffa0aaf-e637-46e2-8117-decc5b1af075@ti.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/fffa0aaf-e637-46e2-8117-decc5b1af075@ti.com/",
+      "canonical_title": "Re: [PATCH] media: ti: vpe: quiesce overflow recovery before freeing streams",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/fffa0aaf-e637-46e2-8117-decc5b1af075@ti.com/",
+          "title": "Re: [PATCH] media: ti: vpe: quiesce overflow recovery before freeing streams",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/fffa0aaf-e637-46e2-8117-decc5b1af075@ti.com/",
+          "title": "Re: [PATCH] media: ti: vpe: quiesce overflow recovery before freeing streams - Yemike Abhilash Chandra",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "de9f080d4694c61c",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260712115012.91600-6-mitltlatltl@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260712115012.91600-6-mitltlatltl@gmail.com/",
+      "canonical_title": "[PATCH v5 5/5] arm64: dts: imx8mq-librem5: Correct link frequency list",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260712115012.91600-6-mitltlatltl@gmail.com/",
+          "title": "[PATCH v5 5/5] arm64: dts: imx8mq-librem5: Correct link frequency list",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260712115012.91600-6-mitltlatltl@gmail.com/",
+          "title": "[PATCH v5 5/5] arm64: dts: imx8mq-librem5: Correct link frequency list - Pengyu Luo",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "60f3adf50c5d49ce",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27361",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27361/",
+      "canonical_title": "[v2] libcamera: Replace outdated git URLs",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27361/",
+          "title": "[v2] libcamera: Replace outdated git URLs",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2c630a9715128e8e",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27358",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27358/",
+      "canonical_title": "[v3,2/2] libcamera: converter: converter_dw100: Allow to transform between different camera matrices",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27358/",
+          "title": "[v3,2/2] libcamera: converter: converter_dw100: Allow to transform between different camera matrices",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1e1f03dcaeb31bee",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27357",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27357/",
+      "canonical_title": "[v3,1/2] libcamera: converter: converter_dw100: Refactor dewarp param handling",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27357/",
+          "title": "[v3,1/2] libcamera: converter: converter_dw100: Refactor dewarp param handling",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6fec2cbff19436b6",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27354",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27354/",
+      "canonical_title": "[1/1] package/libcamera: update source URL",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27354/",
+          "title": "[1/1] package/libcamera: update source URL",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d4a0acfc0ac6ad6e",
+      "cluster_key": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f8d1cacd47b7c58b",
+      "cluster_key": "https://developer.android.com/media/platform/mediarecorder",
+      "canonical_url": "https://developer.android.com/media/platform/mediarecorder",
+      "canonical_title": "MediaRecorder overview &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/media/platform/mediarecorder",
+          "title": "MediaRecorder overview &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5e9a33e9fbaae52e",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/media3",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-beta01",
+      "canonical_title": "Media3 Release Notes - Media3 1.11.0-beta01",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-beta01",
+          "title": "Media3 Release Notes - Media3 1.11.0-beta01",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ae9e55f7b032d076",
+      "cluster_key": "https://developer.android.com/media/platform/supported-formats",
+      "canonical_url": "https://developer.android.com/media/platform/supported-formats",
+      "canonical_title": "Supported media formats &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/media/platform/supported-formats",
+          "title": "Supported media formats &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "049447beb348daf0",
+      "cluster_key": "https://security.samsungmobile.com/securityupdate.smsb",
+      "canonical_url": "https://security.samsungmobile.com/securityUpdate.smsb",
+      "canonical_title": "Samsung Mobile Security",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://security.samsungmobile.com/securityUpdate.smsb",
+          "title": "Samsung Mobile Security",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3accfe248397b72f",
+      "cluster_key": "https://docs.qualcomm.com/product/publicresources/securitybulletin",
+      "canonical_url": "https://docs.qualcomm.com/product/publicresources/securitybulletin",
+      "canonical_title": "Qualcomm Documentation",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://docs.qualcomm.com/product/publicresources/securitybulletin",
+          "title": "Qualcomm Documentation",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0dd63da9c4f049b5",
+      "cluster_key": "https://developer.android.com/newsletter",
+      "canonical_url": "https://developer.android.com/newsletter",
+      "canonical_title": "Android Developer Newsletters &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/newsletter",
+          "title": "Android Developer Newsletters &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2207a7330a3d8881",
+      "cluster_key": "https://research.google/blog",
+      "canonical_url": "https://research.google/blog/",
+      "canonical_title": "Latest News from Google Research Blog - Google Research",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://research.google/blog/",
+          "title": "Latest News from Google Research Blog - Google Research",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://research.google/blog/",
+          "title": "Latest News from Google Research Blog - Google Research",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f6e7543b89342f88",
+      "cluster_key": "https://issuetracker.google.com/issues/522549890",
+      "canonical_url": "https://issuetracker.google.com/issues/522549890",
+      "canonical_title": "b/522549890",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/522549890",
+          "title": "b/522549890",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6cc1017e4144265b",
+      "cluster_key": "https://issuetracker.google.com/issues/510752515",
+      "canonical_url": "https://issuetracker.google.com/issues/510752515",
+      "canonical_title": "b/510752515",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/510752515",
+          "title": "b/510752515",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "601f7f3472ada89e",
+      "cluster_key": "https://issuetracker.google.com/issues/487826941",
+      "canonical_url": "https://issuetracker.google.com/issues/487826941",
+      "canonical_title": "b/487826941",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/487826941",
+          "title": "b/487826941",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0b28cb9ccc4ab4b9",
+      "cluster_key": "https://issuetracker.google.com/issues/499389465",
+      "canonical_url": "https://issuetracker.google.com/issues/499389465",
+      "canonical_title": "b/499389465",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/499389465",
+          "title": "b/499389465",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0d92648690a0eadc",
+      "cluster_key": "https://issuetracker.google.com/issues/496022391",
+      "canonical_url": "https://issuetracker.google.com/issues/496022391",
+      "canonical_title": "b/496022391",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/496022391",
+          "title": "b/496022391",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "16b7e0671b024dcd",
+      "cluster_key": "https://issuetracker.google.com/issues/492934501",
+      "canonical_url": "https://issuetracker.google.com/issues/492934501",
+      "canonical_title": "b/492934501",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/492934501",
+          "title": "b/492934501",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cc4a113dcfe707e1",
+      "cluster_key": "https://issuetracker.google.com/issues/473715607",
+      "canonical_url": "https://issuetracker.google.com/issues/473715607",
+      "canonical_title": "b/473715607",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/473715607",
+          "title": "b/473715607",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "83920430c1be5b76",
+      "cluster_key": "https://source.android.com/docs/whatsnew/release-notes",
+      "canonical_url": "https://source.android.com/docs/whatsnew/release-notes",
+      "canonical_title": "Release notes",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/release-notes",
+          "title": "Release notes",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0779844e3674fa79",
+      "cluster_key": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+      "canonical_url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+      "canonical_title": "Latest security bulletins",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/latest-security-bulletins",
+          "title": "Latest security bulletins",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "584a6a0cadfdd7d4",
+      "cluster_key": "https://source.android.com/docs/whatsnew/latest-cdd",
+      "canonical_url": "https://source.android.com/docs/whatsnew/latest-cdd",
+      "canonical_title": "Latest Compatibility Definition Document (CDD)",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew/latest-cdd",
+          "title": "Latest Compatibility Definition Document (CDD)",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7317dd637c497758",
+      "cluster_key": "https://source.android.com/docs/security/bulletin",
+      "canonical_url": "https://source.android.com/docs/security/bulletin",
+      "canonical_title": "Bulletins",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin",
+          "title": "Bulletins",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6377a832d1751e51",
+      "cluster_key": "https://lore.kernel.org/oe-kbuild-all/202607031826.vopabt39-lkp@intel.com",
+      "canonical_url": "https://lore.kernel.org/oe-kbuild-all/202607031826.vOPABT39-lkp@intel.com",
+      "canonical_title": "https://lore.kernel.org/oe-kbuild-all/202607031826.vOPABT39-lkp@intel.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/oe-kbuild-all/202607031826.vOPABT39-lkp@intel.com",
+          "title": "https://lore.kernel.org/oe-kbuild-all/202607031826.vOPABT39-lkp@intel.com/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6fad670087397d55",
+      "cluster_key": "https://lore.kernel.org/all/20240227172852.2386358-1-tj@kernel.org",
+      "canonical_url": "https://lore.kernel.org/all/20240227172852.2386358-1-tj@kernel.org",
+      "canonical_title": "https://lore.kernel.org/all/20240227172852.2386358-1-tj@kernel.org/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20240227172852.2386358-1-tj@kernel.org",
+          "title": "https://lore.kernel.org/all/20240227172852.2386358-1-tj@kernel.org/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}
