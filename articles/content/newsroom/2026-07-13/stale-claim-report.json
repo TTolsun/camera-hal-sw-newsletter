@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "date": "2026-07-13",
+  "status": "PASS",
+  "removed_sections": [],
+  "final_section_sources": [
+    {
+      "title": "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
+      "url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
+    },
+    {
+      "title": "[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "url": "https://patchwork.libcamera.org/patch/27346/"
+    },
+    {
+      "title": "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}

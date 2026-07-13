@@ -1,0 +1,738 @@
+{
+  "date": "2026-07-13",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "2026 W29 (07.13 ~ 07.19)",
+  "summary": "이번 주에는 ‘Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안’, ‘libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 강화를 위한 EGL 텍스처 필터 파라미터 도입’ 등 3건의 소식을 다룹니다.",
+  "briefing": [
+    "Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안",
+    "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 강화를 위한 EGL 텍스처 필터 파라미터 도입",
+    "Raspberry Pi, libcamera v0.7.1+rpt20260609 다운스트림 버전 배포"
+  ],
+  "sections": [
+    {
+      "category": "Camera Driver & Image Pipeline",
+      "headline": "Qualcomm CAMSS 오프라인 프로세싱 엔진(OPE) 드라이버 추가 제안",
+      "what_changed": "Qualcomm CAMSS(Camera Subsystem)에 Offline Processing Engine(OPE) 드라이버를 추가하는 v4 패치 시리즈가 제안되었습니다. OPE는 raw Bayer 프레임을 YUV로 변환하며 화이트 밸런스, 디모자이크, 크로마 향상, 색 보정, 다운스케일링을 수행하는 메모리-투-메모리 ISP 블록입니다.",
+      "confirmed_facts": [
+        "2026년 7월 13일, Qualcomm CAMSS에 Offline Processing Engine(OPE) 드라이버를 추가하는 PATCH v4 6/7이 lore.kernel.org linux-media 메일링 리스트에 제안되었습니다.",
+        "OPE는 raw Bayer 프레임을 YUV로 변환하는 하드웨어 가속 메모리-투-메모리(M2M) ISP 블록입니다.",
+        "제안된 드라이버는 화이트 밸런스, 디모자이크, 크로마 향상, 색 보정, 다운스케일링 등의 이미지 처리 작업을 수행합니다."
+      ],
+      "evidence_summary": "PATCH v4 6/7 제안을 통해 Qualcomm CAMSS 드라이버 스택에 Offline Processing Engine(OPE) 지원이 추가되었습니다.",
+      "specificity_checks": [
+        "Version: PATCH v4 6/7",
+        "Release Date: 2026-07-13",
+        "Component: Qualcomm CAMSS (Camera Subsystem) Offline Processing Engine (OPE) Driver",
+        "Behavior Change: 메모리-투-메모리(M2M) 기반의 raw Bayer to YUV 변환 및 ISP 가속 기능 드라이버 제안"
+      ],
+      "source_verification_notes": [
+        "lore.kernel.org linux-media 메일링 리스트의 패치 제안으로 공식 확인되었습니다.",
+        "아직 메인라인 커널에 병합되지 않은 검토 단계(PATCH v4)입니다."
+      ],
+      "public_article": {
+        "headline": "Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안",
+        "lead": "Qualcomm CAMSS(Camera Subsystem)에 오프라인 이미지 처리를 전담하는 OPE(Offline Processing Engine) 드라이버를 추가하는 v4 패치가 제안되었습니다.",
+        "body_paragraphs": [
+          "이번 주 리눅스 미디어 메일링 리스트를 통해 Qualcomm CAMSS 드라이버 스택에 Offline Processing Engine(OPE) 지원을 추가하는 네 번째 패치 시리즈가 공개되었습니다. OPE는 raw Bayer 프레임을 입력받아 YUV 프레임으로 변환하는 메모리-투-메모리(M2M) 방식의 ISP 하드웨어 블록입니다.",
+          "이 드라이버는 하드웨어 수준에서 화이트 밸런스, 디모자이크, 크로마 향상, 색 보정, 다운스케일링 등 핵심적인 ISP 파이프라인 가공을 수행합니다. 기존의 실시간 스트리밍 처리와 달리 오프라인 가속 방식을 취함으로써 카메라 시스템의 유연한 버퍼 처리와 효율적인 자원 분배가 가능해집니다.",
+          "다만 본 패치는 현재 리눅스 커널 메인라인에 병합되지 않은 제안 단계(PATCH v4)이므로 실제 상용 칩셋 및 Android 디바이스에 적용되기까지는 벤더의 통합 및 검증 프로세스가 추가로 요구됩니다. HAL 개발자들은 하위 드라이버의 M2M 아키텍처 도입에 따른 버퍼 라이프사이클 변화를 장기적으로 관찰할 필요가 있습니다."
+        ],
+        "camera_hal_takeaway": "Android Camera HAL에 직접적인 API 변경을 주지는 않으나, 하위 드라이버 레벨에서 RAW-to-YUV 오프라인 변환 경로가 최적화됨에 따라 YUV_420_888 및 RAW 스트림의 동시 처리 효율성과 전력 소모가 개선될 가능성이 있습니다.",
+        "reader_checkpoints": [
+          "Qualcomm CAMSS OPE 드라이버가 제안 단계(v4)임을 인지하고 메인라인 병합 여부를 모니터링합니다.",
+          "M2M ISP 가속 도입 시 DMA-BUF 공유 및 버퍼 라이프사이클 관리 방식을 검토합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
+            "url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media 메일링 리스트 패치 분석",
+        "editorial_story": {
+          "reader_scenario": "Qualcomm 플랫폼 기반 차세대 디바이스에서 RAW 캡처와 YUV 프리뷰 동시 구동 시 발생하는 ISP 대역폭 병목 및 발열 문제를 해결해야 하는 상황입니다.",
+          "what_happened": "Qualcomm CAMSS에 오프라인 이미지 처리를 전담하여 디모자이크 및 화이트 밸런스를 수행하는 OPE 드라이버 v4 패치가 제안되었습니다.",
+          "why_it_matters": "메모리-투-메모리 가속을 통해 실시간 ISP 부하를 줄이고, 버퍼 관리 효율성을 높여 전반적인 카메라 파이프라인의 전력 및 지연 시간을 개선할 수 있습니다.",
+          "field_scenario": "향후 OPE 드라이버가 통합된 커널 환경에서 RAW_OPAQUE 스트림과 YUV_420_888 스트림의 동시 처리 시 지연 시간 변화를 벤치마크합니다.",
+          "not_to_overclaim": "이 패치는 제안 단계의 커널 드라이버 변경이며, Android Camera HAL3 API나 프레임워크의 직접적인 계약 변경을 수반하지 않습니다.",
+          "editor_take": "하드웨어 가속 오프라인 ISP 블록의 드라이버 지원은 고화질 이미지 처리 시 모바일 AP의 전력 효율을 극대화할 수 있는 중요한 하부 스택 변화입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 7월 13일, Qualcomm CAMSS에 OPE(Offline Processing Engine) 드라이버를 추가하는 PATCH v4 6/7이 제안되었습니다.",
+          "OPE는 raw Bayer 프레임을 YUV로 변환하는 메모리-투-메모리 ISP 블록으로 작동합니다.",
+          "해당 드라이버는 화이트 밸런스, 디모자이크, 크로마 향상, 색 보정, 다운스케일링을 수행합니다."
+        ],
+        "background_context": "Qualcomm CAMSS(Camera Subsystem)의 Offline Processing Engine(OPE)은 raw Bayer 프레임을 YUV로 변환하는 메모리-투-메모리 ISP 블록입니다. 이는 화이트 밸런스, 디모자이크, 크로마 향상, 색 보정, 다운스케일링과 같은 이미지 처리 작업을 수행합니다. 이러한 드라이버 수준의 변경은 Android 카메라 HAL의 하위 계층에 영향을 미칠 수 있으며, 특히 ISP 파이프라인의 효율성, 성능 및 전력 소비에 영향을 줄 수 있습니다. HAL 개발자는 이러한 하드웨어 가속 이미지 처리 기능이 Android Camera Framework of 특정 스트림 구성(예: RAW_OPAQUE 또는 YUV_420_888)과 어떻게 매핑되는지 이해해야 합니다.",
+        "hal_driver_impact": "이 드라이버는 리눅스 커널 레벨의 변경 사항으로, Android Camera HAL API나 프레임워크 계약을 직접적으로 변경하지는 않습니다. 하지만 Qualcomm 플랫폼 기반의 HAL 구현에서 RAW-to-YUV 오프라인 변환 경로의 성능 최적화, 전력 소모 감소, 지연 시간 단축에 기여할 수 있습니다. 특히 메모리-투-메모리(M2M) 동작 특성상 버퍼 라이프사이클 관리와 DMA-BUF 공유 효율성을 검증하는 것이 중요합니다.",
+        "action_items": [
+          "Qualcomm CAMSS 하드웨어를 사용하는 타겟 보드에서 OPE 드라이버 패치 적용 여부와 커널 버전을 확인합니다.",
+          "M2M 이미지 처리 경로 도입 시 RAW_OPAQUE 및 YUV_420_888 스트림 구성에서의 프레임 지연 시간과 전력 소모 변화를 측정할 벤치마크 시나리오를 준비합니다."
+        ],
+        "team_share_points": "Qualcomm CAMSS에 오프라인 이미지 처리를 가속하는 OPE 드라이버 패치 v4가 제안되었으니, 향후 플랫폼 통합 시 RAW-to-YUV 변환 성능 개선 요소로 참고하시기 바랍니다."
+      },
+      "claims": [
+        {
+          "claim_id": "claim:qcom-ope-patch-v4",
+          "text": "2026년 7월 13일, Qualcomm CAMSS에 OPE(Offline Processing Engine) 드라이버를 추가하는 PATCH v4 6/7이 제안되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:2d07a630d036215b:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:qcom-ope-m2m-isp-block",
+          "text": "OPE는 raw Bayer 프레임을 YUV로 변환하는 메모리-투-메모리 ISP 블록으로 작동합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:2d07a630d036215b:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:qcom-ope-driver-functions",
+          "text": "해당 드라이버는 화이트 밸런스, 디모자이크, 크로마 향상, 색 보정, 다운스케일링을 수행합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:2d07a630d036215b:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "OPE 드라이버 활성화 시 RAW_OPAQUE 및 YUV_420_888 동시 스트림 구성 검증"
+      ],
+      "action_hints": [
+        "Qualcomm CAMSS 커널 드라이버 소스 검토"
+      ],
+      "action_items": [
+        "Qualcomm CAMSS 하드웨어를 사용하는 타겟 보드에서 OPE 드라이버 패치 적용 여부와 커널 버전을 확인합니다.",
+        "M2M 이미지 처리 경로 도입 시 RAW_OPAQUE 및 YUV_420_888 스트림 구성에서의 프레임 지연 시간과 전력 소모 변화를 측정할 벤치마크 시나리오를 준비합니다."
+      ],
+      "is_ai_related": false,
+      "article_type": "driver_patch",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pl",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v63ff991b83776932202eabe7967909a8dae574de15846bab934768a76bf6c589/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=pl",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "sourceUrl": "https://github.com/raspberrypi/libcamera/releases",
+          "articleUrl": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Raspberry Pi libcamera Releases",
+          "validationStatus": "ok",
+          "contentLength": 42133
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No high-quality, confirmed-license image available in candidates.",
+      "sources": [
+        {
+          "title": "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
+          "url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "Qualcomm CAMSS 드라이버 스택에 OPE 하드웨어 가속을 지원하는 드라이버 패치 v4가 이번 주 제안되어 하위 이미지 파이프라인의 아키텍처 변화가 예고되었습니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "performance_thermal_owner"
+        ],
+        "check_within_2_weeks": "Qualcomm CAMSS 하드웨어를 사용하는 타겟 플랫폼의 커널 로드맵에서 OPE 드라이버 도입 계획을 확인합니다.",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "thermal_power_memory_pressure"
+        ],
+        "do_not_overstate": [
+          "Android Camera HAL API 직접 변경",
+          "모든 Qualcomm SoC에 즉시 적용 가능성"
+        ]
+      },
+      "source_candidate_url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/",
+      "source_candidate_hash": "2d07a630d036215bf6828b0bcffa3adaa5e138d63d28159b9c3459daea95b47d",
+      "article_group_key": "lore-series:20260710-camss-isp-ope-v4-51207a0319d8@oss.qualcomm.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 4,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Driver & Image Pipeline",
+      "headline": "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 지원을 위한 EGL 텍스처 필터 파라미터 추가",
+      "what_changed": "libcamera의 software_isp EGL 모듈 내 createTexture2D() 함수에 필터 파라미터를 추가하는 패치(v7 1/6)가 제안되었습니다. 이 변경은 렌즈 쉐이딩 보정(LSC) 기능 지원을 위한 기반 작업입니다.",
+      "confirmed_facts": [
+        "2026년 7월 8일, libcamera의 software_isp EGL 모듈 내 createTexture2D() 함수에 필터 파라미터를 추가하는 RFC v7 1/6 패치가 제안되었습니다.",
+        "이 변경은 소프트웨어 ISP에서 렌즈 쉐이딩 보정(LSC)을 지원하기 위한 텍스처 필터링 제어와 연계됩니다."
+      ],
+      "evidence_summary": "libcamera software_isp EGL 모듈의 createTexture2D() 함수에 필터 파라미터를 추가하여 LSC 지원을 강화하는 패치 제안입니다.",
+      "specificity_checks": [
+        "Version: RFC v7, 1/6",
+        "Release Date: 2026-07-08",
+        "Component: libcamera software_isp EGL module",
+        "Behavior Change: createTexture2D() 함수에 필터 파라미터 추가 및 LSC 지원 연계"
+      ],
+      "source_verification_notes": [
+        "libcamera Patchwork 시스템의 공식 RFC v7 패치 제안으로 확인되었습니다.",
+        "아직 검토 중인 제안 단계(RFC)입니다."
+      ],
+      "public_article": {
+        "headline": "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 강화를 위한 EGL 텍스처 필터 파라미터 도입",
+        "lead": "최근 libcamera의 소프트웨어 ISP EGL 모듈에서 렌즈 쉐이딩 보정(LSC) 성능을 개선하기 위해 createTexture2D() 함수에 필터 파라미터를 추가하는 패치가 제안되었습니다.",
+        "body_paragraphs": [
+          "지난 7월 8일 제안된 RFC v7 패치 시리즈에 따르면, libcamera의 소프트웨어 ISP(software_isp) 내 EGL 모듈에 중요한 인터페이스 변경이 포함되었습니다. 구체적으로 createTexture2D() 함수에 필터 파라미터가 새롭게 추가되었습니다.",
+          "이 변경은 렌즈 주변부의 광량 저하 및 색상 왜곡을 보정하는 렌즈 쉐이딩 보정(LSC) 기능을 소프트웨어 ISP 상에서 정교하게 지원하기 위한 사전 작업입니다. 텍스처 생성 시 필터링 방식을 직접 제어함으로써 보정 데이터의 보간 품질을 높일 수 있게 됩니다.",
+          "해당 패치는 아직 검토 단계(RFC v7)에 머물러 있어 메인라인에 완전히 통합되지는 않았습니다. libcamera를 하부 스택으로 활용하는 임베디드 시스템이나 특정 가상화 환경의 Android HAL 개발자들은 소프트웨어 ISP 구동 시의 이미지 품질 향상 여부를 추적할 필요가 있습니다."
+        ],
+        "camera_hal_takeaway": "Android Camera HAL에 직접적인 영향은 없으나, libcamera 소프트웨어 ISP를 사용하는 플랫폼에서 LSC 보정 품질과 GPU 텍스처 처리 효율성을 동시에 높일 수 있는 기반이 마련되었습니다.",
+        "reader_checkpoints": [
+          "libcamera software_isp EGL 모듈의 createTexture2D() 필터 파라미터 추가 제안을 확인합니다.",
+          "LSC 기능 활성화 시의 GPU 텍스처 필터링 동작과 이미지 주변부 품질 변화를 검증합니다."
+        ],
+        "source_links": [
+          {
+            "title": "[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+            "url": "https://patchwork.libcamera.org/patch/27346/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "libcamera Patchwork RFC v7 패치 검토",
+        "editorial_story": {
+          "reader_scenario": "하드웨어 ISP가 없는 저가형 임베디드 보드나 가상 머신 환경에서 libcamera 소프트웨어 ISP를 통해 카메라 화면을 렌더링할 때, 주변부 어두워짐(Vignetting) 보정 품질을 개선해야 하는 상황입니다.",
+          "what_happened": "libcamera의 software_isp EGL 모듈 내 createTexture2D() 함수에 필터 파라미터를 추가하여 LSC 지원을 용이하게 하는 패치가 제안되었습니다.",
+          "why_it_matters": "소프트웨어 ISP 환경에서도 하드웨어 ISP 수준의 렌즈 쉐이딩 보정을 정교하게 수행할 수 있도록 GPU 텍스처 필터링 제어력을 확보하게 됩니다.",
+          "field_scenario": "libcamera 소프트웨어 ISP 기반 테스트 환경에서 LSC 파라미터 적용 시 주변부 밝기 균일도와 GPU 렌더링 지연 시간을 측정합니다.",
+          "not_to_overclaim": "이 패치는 libcamera 내부 소프트웨어 ISP의 EGL 모듈 변경 사항이며, 하드웨어 ISP를 직접 제어하는 일반적인 Android 기기의 Camera HAL3 구현에는 영향을 미치지 않습니다.",
+          "editor_take": "하드웨어 제약이 있는 환경에서 소프트웨어 ISP의 화질 보정 능력을 극대화하기 위한 실용적인 그래픽스 파이프라인 개선 조치입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 7월 8일, libcamera의 software_isp EGL 모듈 내 createTexture2D() 함수에 필터 파라미터를 추가하는 RFC v7 1/6 패치가 제안되었습니다.",
+          "이 변경은 소프트웨어 ISP에서 렌즈 쉐이딩 보정(LSC)을 지원하기 위한 텍스처 필터링 제어와 연계됩니다."
+        ],
+        "background_context": "libcamera는 Linux 기반 시스템에서 카메라 하드웨어에 접근하기 위한 오픈 소스 프레임워크입니다. 이 패치는 libcamera의 software_isp EGL 모듈에 createTexture2D() 함수에 필터 파라미터를 추가하여 렌즈 쉐이딩 보정(LSC) 지원을 개선하는 것을 목표로 합니다. LSC는 렌즈의 주변부에서 발생하는 밝기 및 색상 변화를 보정하여 이미지 품질을 향상시키는 중요한 ISP 기능입니다. 이러한 변경은 libcamera를 사용하는 Android 기기에서 카메라 드라이버 및 ISP 파이프라인의 이미지 처리 정확도와 효율성에 영향을 미칠 수 있습니다.",
+        "hal_driver_impact": "이 변경은 libcamera 내부의 소프트웨어 ISP 구현에 국한되며, Android Camera HAL API에 직접적인 영향을 미치지 않습니다. 그러나 libcamera 기반의 카메라 스택을 활용하는 가상 디바이스나 임베디드 Android 환경에서 렌즈 주변부 광량 저하를 보정하는 LSC 기능의 정확도와 EGL 렌더링 성능을 개선하는 데 기여할 수 있습니다.",
+        "action_items": [
+          "libcamera 기반의 카메라 스택을 사용하는 환경에서 소프트웨어 ISP의 EGL 렌더링 경로를 점검합니다.",
+          "LSC 데이터가 적용될 때 주변부 밝기 보정 품질 및 텍스처 필터링에 따른 GPU 오버헤드를 모니터링합니다."
+        ],
+        "team_share_points": "libcamera 소프트웨어 ISP의 EGL 모듈에 LSC 지원을 위한 텍스처 필터 파라미터 추가 패치가 제안되었으니, libcamera 기반 스택 검증 시 참고하시기 바랍니다."
+      },
+      "claims": [
+        {
+          "claim_id": "claim:libcamera-egl-filter-patch",
+          "text": "2026년 7월 8일, libcamera의 software_isp EGL 모듈 내 createTexture2D() 함수에 필터 파라미터를 추가하는 RFC v7 1/6 패치가 제안되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:19843ec1e8a8e2f7:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/27346/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:libcamera-lsc-texture-filter",
+          "text": "이 변경은 소프트웨어 ISP에서 렌즈 쉐이딩 보정(LSC)을 지원하기 위한 텍스처 필터링 제어와 연계됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:19843ec1e8a8e2f7:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/27346/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "소프트웨어 ISP 구동 시 EGL 텍스처 생성 필터링 옵션 확인"
+      ],
+      "action_hints": [
+        "libcamera software_isp 소스 코드 검토"
+      ],
+      "action_items": [
+        "libcamera 기반의 카메라 스택을 사용하는 환경에서 소프트웨어 ISP의 EGL 렌더링 경로를 점검합니다.",
+        "LSC 데이터가 적용될 때 주변부 밝기 보정 품질 및 텍스처 필터링에 따른 GPU 오버헤드를 모니터링합니다."
+      ],
+      "is_ai_related": false,
+      "article_type": "driver_patch",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pl",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v63ff991b83776932202eabe7967909a8dae574de15846bab934768a76bf6c589/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=pl",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "sourceUrl": "https://github.com/raspberrypi/libcamera/releases",
+          "articleUrl": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Raspberry Pi libcamera Releases",
+          "validationStatus": "ok",
+          "contentLength": 42133
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No high-quality, confirmed-license image available in candidates.",
+      "sources": [
+        {
+          "title": "[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+          "url": "https://patchwork.libcamera.org/patch/27346/"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "libcamera 소프트웨어 ISP의 화질 보정 능력을 높이기 위한 EGL 모듈 패치가 최근 제안되어 하부 렌더링 파이프라인의 변화가 시작되었습니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "libcamera 기반 가상화 또는 임베디드 환경에서 소프트웨어 ISP 소스 트리를 점검하고 해당 패치의 적용 가능성을 검토합니다.",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "하드웨어 ISP 기반 Android 기기의 직접적인 성능 향상",
+          "Android Camera HAL API 변경"
+        ]
+      },
+      "source_candidate_url": "https://patchwork.libcamera.org/patch/27346/",
+      "source_candidate_hash": "19843ec1e8a8e2f7688f4e92e553c56cd45d79beadadb561451bcdcab73b433a",
+      "article_group_key": "patchwork-series:6049",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Driver & Image Pipeline",
+      "headline": "Raspberry Pi libcamera v0.7.1+rpt20260609 다운스트림 릴리스",
+      "what_changed": "Raspberry Pi의 다운스트림 libcamera 버전 v0.7.1+rpt20260609가 릴리스되었습니다. 이는 Raspberry Pi 플랫폼에 최적화된 카메라 드라이버 및 이미지 파이프라인 업데이트를 포함합니다.",
+      "confirmed_facts": [
+        "2026년 6월 9일, Raspberry Pi의 다운스트림 libcamera v0.7.1+rpt20260609 버전이 공식 릴리스되었습니다."
+      ],
+      "evidence_summary": "Raspberry Pi의 libcamera 다운스트림 프로젝트에서 v0.7.1+rpt20260609 버전이 릴리스되었습니다.",
+      "specificity_checks": [
+        "Version: v0.7.1+rpt20260609",
+        "Release Date: 2026-06-09",
+        "Component: Raspberry Pi libcamera downstream repository",
+        "Behavior Change: Raspberry Pi 플랫폼 전용 libcamera 다운스트림 업데이트 배포"
+      ],
+      "source_verification_notes": [
+        "GitHub 공식 릴리스 페이지를 통해 2026년 6월 9일 배포가 확인되었습니다.",
+        "Android 공식 AOSP 카메라 프레임워크와는 무관한 Raspberry Pi 전용 다운스트림 릴리스입니다."
+      ],
+      "public_article": {
+        "headline": "Raspberry Pi, libcamera v0.7.1+rpt20260609 다운스트림 버전 배포",
+        "lead": "지난 2026년 6월 9일, Raspberry Pi가 자사 플랫폼에 최적화된 libcamera v0.7.1+rpt20260609 다운스트림 버전을 공식 릴리스했습니다.",
+        "body_paragraphs": [
+          "이번 소식은 지난 6월 9일 공개된 Raspberry Pi의 libcamera 프로젝트 다운스트림 릴리스에 대한 회고입니다. 배포된 v0.7.1+rpt20260609 버전은 Raspberry Pi 하드웨어에 특화된 카메라 드라이버 및 이미지 파이프라인 최적화 요소를 담고 있습니다.",
+          "libcamera는 리눅스 환경에서 카메라 기기를 추상화하는 핵심 프레임워크로, Raspberry Pi의 다운스트림 버전은 임베디드 리눅스 및 V4L2 서브시스템의 최신 변경 사항을 가장 빠르게 반영하는 창구 역할을 해왔습니다. 이번 릴리스 역시 해당 플랫폼에서의 카메라 구동 안정성을 높이는 데 주안점을 두고 있습니다.",
+          "다만 이 릴리스는 Raspberry Pi 특정 하드웨어와 소프트웨어 스택에 초점을 맞추고 있으므로, 일반적인 Android 기기의 Camera HAL3 구현이나 AOSP 프레임워크 계약에는 직접적인 영향을 미치지 않습니다. 임베디드 Android 환경을 다루거나 V4L2 드라이버 통합을 담당하는 엔지니어들이 상류(upstream) 기술 동향을 파악하는 참조 자료로 활용하기에 적합합니다."
+        ],
+        "camera_hal_takeaway": "Android Camera HAL에 직접적인 API나 계약 변화를 주지는 않으나, V4L2 기반 드라이버 통합 및 임베디드 리눅스 카메라 스택의 최적화 기법을 벤치마킹하는 용도로 참고할 수 있습니다.",
+        "reader_checkpoints": [
+          "지난 6월 9일 배포된 Raspberry Pi libcamera v0.7.1+rpt20260609 릴리스를 확인합니다.",
+          "V4L2 드라이버 및 ISP 통합과 관련된 패치 중 참조할 만한 버그 수정 사항이 있는지 검토합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609",
+            "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "Raspberry Pi GitHub 공식 릴리스 분석",
+        "editorial_story": {
+          "reader_scenario": "Raspberry Pi 보드를 활용하여 임베디드 Android 카메라 프로토타입을 빌드하거나 V4L2 드라이버의 안정성 문제를 해결해야 하는 상황입니다.",
+          "what_happened": "Raspberry Pi가 자사 하드웨어에 맞춤화된 libcamera v0.7.1+rpt20260609 다운스트림 버전을 릴리스했습니다.",
+          "why_it_matters": "리눅스 카메라 생태계의 주요 축인 Raspberry Pi의 릴리스를 통해 V4L2 및 libcamera의 최신 안정화 패치 동향을 파악할 수 있습니다.",
+          "field_scenario": "임베디드 카메라 테스트 환경에서 새 릴리스 버전을 적용해 보고 프레임 드롭이나 드라이버 레벨의 오동작이 개선되는지 관찰합니다.",
+          "not_to_overclaim": "이 릴리스는 Raspberry Pi 전용 다운스트림 배포판이며, AOSP 공식 카메라 프레임워크나 범용 Android 기기의 HAL3 스택과는 직접적인 연관이 없습니다.",
+          "editor_take": "임베디드 리눅스 카메라 개발자들에게는 실질적인 가이드라인을 제공하는 릴리스이나, 범용 Android HAL 개발자에게는 기술 참조용 성격이 강합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 6월 9일, Raspberry Pi의 다운스트림 libcamera v0.7.1+rpt20260609 버전이 릴리스되었습니다."
+        ],
+        "background_context": "libcamera는 Linux 생태계에서 카메라 스택을 표준화하고 추상화하는 데 중요한 역할을 하는 프레임워크입니다. Raspberry Pi는 libcamera 프로젝트의 주요 기여자 중 하나이며, 그들의 릴리스는 종종 V4L2 드라이버, ISP(Image Signal Processor) 통합, 그리고 전반적인 카메라 파이프라인 기능에 대한 업데이트를 포함합니다. 이러한 릴리스는 Android 기기의 카메라 드라이버 및 HAL 개발자에게 직접적인 영향을 미치지는 않지만, Linux 커널의 V4L2 서브시스템 및 libcamera의 상류(upstream) 개발 동향을 파악하는 데 중요합니다.",
+        "hal_driver_impact": "이 릴리스는 Raspberry Pi 특정 하드웨어 및 소프트웨어 스택에 초점을 맞추고 있어, 일반적인 Android 플랫폼에 대한 직접적인 영향은 없습니다. 다만, 리눅스 커널 V4L2 서브시스템 및 libcamera 상류(upstream)의 버그 수정이나 성능 최적화 기법이 포함되어 있을 수 있으므로, 임베디드 Android 환경에서 참조용으로 유용합니다.",
+        "action_items": [
+          "임베디드 Android 또는 Raspberry Pi 기반 카메라 프로토타이핑 환경을 운영 중인 경우, v0.7.1+rpt20260609 버전의 변경 사항을 로컬 빌드에 반영하여 동작을 검증합니다.",
+          "릴리스에 포함된 V4L2 및 ISP 통합 관련 패치 중 상류(upstream)로 병합될 만한 핵심 버그 수정 사항이 있는지 소스 코드를 비교 분석합니다."
+        ],
+        "team_share_points": "지난 2026년 6월 9일에 Raspberry Pi의 libcamera v0.7.1+rpt20260609 버전이 릴리스되었으니, 임베디드 카메라 드라이버 및 V4L2 통합 업무 시 참고하시기 바랍니다."
+      },
+      "claims": [
+        {
+          "claim_id": "claim:rpi-libcamera-release-v071",
+          "text": "2026년 6월 9일, Raspberry Pi의 다운스트림 libcamera v0.7.1+rpt20260609 버전이 릴리스되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:9f52da38111ac9bf:source-summary"
+          ],
+          "source_urls": [
+            "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "Raspberry Pi 릴리스 내 V4L2 패치 분석"
+      ],
+      "action_hints": [
+        "Raspberry Pi libcamera 릴리스 노트 검토"
+      ],
+      "action_items": [
+        "임베디드 Android 또는 Raspberry Pi 기반 카메라 프로토타이핑 환경을 운영 중인 경우, v0.7.1+rpt20260609 버전의 변경 사항을 로컬 빌드에 반영하여 동작을 검증합니다.",
+        "릴리스에 포함된 V4L2 및 ISP 통합 관련 패치 중 상류(upstream)로 병합될 만한 핵심 버그 수정 사항이 있는지 소스 코드를 비교 분석합니다."
+      ],
+      "is_ai_related": false,
+      "article_type": "release_note",
+      "imageCandidates": [
+        {
+          "url": "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "sourceUrl": "https://github.com/raspberrypi/libcamera/releases",
+          "articleUrl": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Raspberry Pi libcamera Releases",
+          "validationStatus": "ok",
+          "contentLength": 42133
+        }
+      ],
+      "selectedImage": "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "imageSource": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "imageAttribution": "Raspberry Pi libcamera Releases",
+      "imageAlt": "Raspberry Pi, libcamera v0.7.1+rpt20260609 다운스트림 버전 배포",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "sources": [
+        {
+          "title": "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609",
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+        }
+      ],
+      "hal_signal_capsule": {
+        "why_now": "지난 6월 9일 배포된 Raspberry Pi의 다운스트림 libcamera 릴리스로, 임베디드 리눅스 카메라 스택의 최신 안정화 내역을 파악하기 위해 지난 소식으로 다룹니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "임베디드 카메라 프로토타이핑 환경에서 v0.7.1+rpt20260609 릴리스의 변경 내역 중 V4L2 드라이버 관련 패치를 분석합니다.",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "Android Camera HAL3 직접 호환성",
+          "AOSP 공식 프레임워크 업데이트"
+        ]
+      },
+      "source_candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "source_candidate_hash": "9f52da38111ac9bffb30afb5b5877902e84932d8fa13091b7deb0bf9d089aa0b",
+      "article_group_key": "article:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2brpt20260609",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "Raspberry Pi 다운스트림 libcamera 릴리스 태그(v*+rpt*)에서 날짜, 버전, SoftISP, pipeline handler, sensor 변경을 확인",
+      "resolvedImage": {
+        "url": "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+        "src": "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
+      },
+      "coverage_type": "catch_up",
+      "catch_up_age_days": 34,
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+        "attribution": "Raspberry Pi libcamera Releases",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+        "exclusionEvidence": []
+      }
+    }
+  ],
+  "action_items": [
+    "Qualcomm CAMSS 하드웨어 기반 타겟 보드에서 OPE 드라이버 패치 v4의 적용 가능성 및 커널 로드맵을 점검합니다.",
+    "libcamera 소프트웨어 ISP 환경에서 LSC 활성화 시 GPU 텍스처 필터링 동작과 주변부 화질 보정 성능을 벤치마크합니다.",
+    "임베디드 Android 카메라 프로토타이핑 환경에서 Raspberry Pi libcamera v0.7.1+rpt20260609 릴리스의 V4L2 패치 내역을 분석합니다."
+  ],
+  "references": [
+    {
+      "title": "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
+      "url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
+    },
+    {
+      "title": "[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "url": "https://patchwork.libcamera.org/patch/27346/"
+    },
+    {
+      "title": "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [],
+  "selected_group_count": 3,
+  "rendered_group_count": 3,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "lore-series:20260710-camss-isp-ope-v4-51207a0319d8@oss.qualcomm.com",
+    "patchwork-series:6049",
+    "article:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2brpt20260609"
+  ],
+  "rendered_group_keys": [
+    "lore-series:20260710-camss-isp-ope-v4-51207a0319d8@oss.qualcomm.com",
+    "patchwork-series:6049",
+    "article:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2brpt20260609"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "note": "Android 플랫폼 · 카메라 인접 주제 참고"
+    },
+    {
+      "title": "Top 3 updates for Android developer productivity",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 09 Jun 2026 13:00:00 +0000",
+      "note": "C++ / AI 네이티브 툴링 참고"
+    }
+  ],
+  "weekly_key": "2026-W29",
+  "week_start_date": "2026-07-13",
+  "week_end_date": "2026-07-19",
+  "tags": [
+    "Driver",
+    "Image Processing",
+    "Camera HAL",
+    "Android"
+  ]
+}

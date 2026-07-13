@@ -1,0 +1,277 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 94,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 3,
+    "locked_article_count": 3,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Qualcomm CAMSS 오프라인 프로세싱 엔진(OPE) 드라이버 추가 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 지원을 위한 EGL 텍스처 필터 파라미터 추가",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Raspberry Pi libcamera v0.7.1+rpt20260609 다운스트림 릴리스",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Qualcomm CAMSS 오프라인 프로세싱 엔진(OPE) 드라이버 추가 제안",
+      "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 지원을 위한 EGL 텍스처 필터 파라미터 추가",
+      "Raspberry Pi libcamera v0.7.1+rpt20260609 다운스트림 릴리스"
+    ],
+    "locked_article_headlines": [
+      "Qualcomm CAMSS 오프라인 프로세싱 엔진(OPE) 드라이버 추가 제안",
+      "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 지원을 위한 EGL 텍스처 필터 파라미터 추가",
+      "Raspberry Pi libcamera v0.7.1+rpt20260609 다운스트림 릴리스"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Qualcomm CAMSS 오프라인 프로세싱 엔진(OPE) 드라이버 추가 제안",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 지원을 위한 EGL 텍스처 필터 파라미터 추가",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/27346/"
+        ],
+        "source_titles": [
+          "[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "Raspberry Pi libcamera v0.7.1+rpt20260609 다운스트림 릴리스",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+        ],
+        "source_titles": [
+          "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Qualcomm CAMSS 오프라인 프로세싱 엔진(OPE) 드라이버 추가 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Qualcomm CAMSS 오프라인 프로세싱 엔진(OPE) 드라이버 추가 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 지원을 위한 EGL 텍스처 필터 파라미터 추가",
+        "sources": [
+          "https://patchwork.libcamera.org/patch/27346/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 지원을 위한 EGL 텍스처 필터 파라미터 추가"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "Raspberry Pi libcamera v0.7.1+rpt20260609 다운스트림 릴리스",
+        "sources": [
+          "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Raspberry Pi libcamera v0.7.1+rpt20260609 다운스트림 릴리스"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Qualcomm CAMSS 오프라인 프로세싱 엔진(OPE) 드라이버 추가 제안",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
+        ],
+        "source_titles": [
+          "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 지원을 위한 EGL 텍스처 필터 파라미터 추가",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/27346/"
+        ],
+        "source_titles": [
+          "[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "Raspberry Pi libcamera v0.7.1+rpt20260609 다운스트림 릴리스",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+        ],
+        "source_titles": [
+          "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 1,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 2,
+      "ai_camera_path_hal_workflow": 0,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [
+      {
+        "title": "[PATCH v7 07/19] media: meson: vdec: Refactor esparser work queue and fix teardown race - Anand Moon",
+        "url": "https://lore.kernel.org/linux-media/20260713120840.17427-8-linux.amoon@gmail.com/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      },
+      {
+        "title": "Android Security Bulletin—July 2026 &nbsp;|&nbsp; Android Open Source Project",
+        "url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+        "source": "Android Security Bulletin",
+        "reason": "evidence_score=0 < 6"
+      }
+    ],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "Qualcomm CAMSS 오프라인 프로세싱 엔진(OPE) 드라이버 추가 제안",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "Qualcomm CAMSS 드라이버에 제안된 OPE 드라이버 추가는 RAW-to-YUV 변환 경로의 효율성, 성능 및 전력 소비에 영향을 미칠 수 있어 HAL SW 엔지니어에게 실질적인 가치를 제공합니다."
+    },
+    {
+      "section_index": 1,
+      "headline": "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 지원을 위한 EGL 텍스처 필터 파라미터 추가",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "libcamera 소프트웨어 ISP의 LSC 지원 개선은 하드웨어 제약이 있는 환경에서 이미지 품질 향상과 EGL 렌더링 효율성에 대한 통찰력을 제공하여 HAL SW 엔지니어에게 유용합니다."
+    },
+    {
+      "section_index": 2,
+      "headline": "Raspberry Pi libcamera v0.7.1+rpt20260609 다운스트림 릴리스",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "Raspberry Pi libcamera 릴리스는 임베디드 리눅스 카메라 스택의 최신 동향과 V4L2 드라이버 통합 기법을 벤치마킹하는 데 유용하여 HAL SW 엔지니어에게 참고 가치가 있습니다."
+    }
+  ],
+  "final_comment": "모든 기사가 제공된 소스에 잘 근거하고 있으며, HAL/드라이버 관점의 해석과 구체적인 Action Item이 명확하게 제시되었습니다. 과장된 주장은 없으며, 편집 정책을 잘 준수하고 있습니다. 모든 기사는 Camera HAL SW 엔지니어에게 유용한 정보를 담고 있어 발행 가능합니다."
+}
