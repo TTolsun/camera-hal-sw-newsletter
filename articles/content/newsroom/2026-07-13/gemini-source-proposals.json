@@ -4,37 +4,55 @@
   "newsletter_date": "2026-07-13",
   "proposals": [
     {
-      "proposal_id": "camera-hal-sw-20260713-01",
-      "topic_gap": "CameraX 1.7.0-alpha02 release notes",
+      "proposal_id": "proposal-1",
+      "topic_gap": "CameraX API changes and new features",
       "source_family": "camerax-release-notes",
       "allowed_domains": [],
       "search_keywords": [
-        "CameraX 1.7.0-alpha02",
-        "release notes",
-        "camera output"
+        "CameraX release notes",
+        "CameraX 1.7.0-alpha02"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
       ],
       "expected_evidence": [
-        "CameraX 1.7.0-alpha02 release notes",
-        "camera output",
-        "camera pipeline"
+        "CameraX API changes",
+        "new features",
+        "bug fixes"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-02",
-      "topic_gap": "Linux kernel media subsystem updates for camera and video processing",
+      "proposal_id": "proposal-2",
+      "topic_gap": "Updates to Android's media pipeline for camera output processing",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3 release notes",
+        "camera output",
+        "A/V sync"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-beta01"
+      ],
+      "expected_evidence": [
+        "Media3 release notes",
+        "camera output processing",
+        "A/V sync improvements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-3",
+      "topic_gap": "Kernel-level camera driver and media subsystem updates relevant to Android",
       "source_family": "lore-linux-media-list",
       "allowed_domains": [],
       "search_keywords": [
-        "linux kernel media",
-        "camera subsystem",
+        "linux-media",
         "V4L2",
+        "camera driver",
         "ISP",
-        "meson vdec",
-        "drm meson"
+        "kernel"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260713120840.17427-19-linux.amoon@gmail.com/",
@@ -42,29 +60,25 @@
         "https://lore.kernel.org/linux-media/20260713120840.17427-16-linux.amoon@gmail.com/",
         "https://lore.kernel.org/linux-media/20260713120840.17427-13-linux.amoon@gmail.com/",
         "https://lore.kernel.org/linux-media/20260713120840.17427-8-linux.amoon@gmail.com/",
-        "https://lore.kernel.org/linux-media/5224ab5bffdee0777ecef73a3b96c88e8eed38e8.camel@ndufresne.ca/",
         "https://lore.kernel.org/linux-media/20260713120840.17427-20-linux.amoon@gmail.com/"
       ],
       "expected_evidence": [
-        "Linux kernel media subsystem",
-        "camera driver updates",
-        "video processing improvements",
-        "V4L2",
-        "ISP"
+        "Linux kernel media subsystem changes",
+        "V4L2 driver updates",
+        "ISP driver improvements",
+        "camera HAL relevance"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-03",
-      "topic_gap": "libcamera software ISP updates for debayering and LSC support",
+      "proposal_id": "proposal-4",
+      "topic_gap": "libcamera framework updates and new features for camera pipelines",
       "source_family": "patchwork-libcamera-patches",
       "allowed_domains": [],
       "search_keywords": [
         "libcamera",
         "software ISP",
-        "debayer",
-        "LSC",
-        "EGL",
+        "camera pipeline",
         "patch review"
       ],
       "candidate_urls": [
@@ -74,57 +88,345 @@
         "https://patchwork.libcamera.org/patch/27346/"
       ],
       "expected_evidence": [
-        "libcamera",
-        "software ISP",
-        "debayering",
-        "LSC (Lens Shading Correction)",
-        "camera pipeline"
+        "libcamera framework changes",
+        "ISP processing updates",
+        "camera pipeline enhancements",
+        "software ISP"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-04",
-      "topic_gap": "Raspberry Pi libcamera release with potential camera pipeline improvements",
+      "proposal_id": "proposal-5",
+      "topic_gap": "Raspberry Pi's libcamera release notes and updates",
       "source_family": "raspberrypi-libcamera-releases",
       "allowed_domains": [],
       "search_keywords": [
-        "raspberrypi libcamera",
-        "release v0.7.1",
-        "camera pipeline"
+        "raspberrypi libcamera releases",
+        "libcamera v0.7.1"
       ],
       "candidate_urls": [
         "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
       ],
       "expected_evidence": [
-        "Raspberry Pi libcamera",
-        "release notes",
-        "camera pipeline",
-        "image sensor",
-        "ISP"
+        "libcamera release notes",
+        "Raspberry Pi specific camera updates",
+        "camera pipeline changes"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-05",
-      "topic_gap": "QCOM CAMSS offline processing engine driver addition",
-      "source_family": "lore-linux-media-list",
+      "proposal_id": "proposal-6",
+      "topic_gap": "Android developer productivity tools and updates",
+      "source_family": "android-developers-blog",
       "allowed_domains": [],
       "search_keywords": [
-        "QCOM CAMSS",
-        "offline processing",
-        "camera driver",
-        "linux-media"
+        "Android developer productivity",
+        "developer tools",
+        "Android Developers Blog"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
       ],
       "expected_evidence": [
-        "QCOM CAMSS driver",
-        "offline processing engine",
-        "camera HAL",
-        "image processing"
+        "Android developer productivity",
+        "new tools",
+        "developer workflow improvements"
       ],
       "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-7",
+      "topic_gap": "Updates on Android XR and related technologies",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android XR",
+        "XR tooling",
+        "geospatial API"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+        "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html"
+      ],
+      "expected_evidence": [
+        "Android XR updates",
+        "XR tooling",
+        "geospatial API integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-8",
+      "topic_gap": "Advancements in HDR video technology for Android",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "HDR video",
+        "Eclipsa video",
+        "Android"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html"
+      ],
+      "expected_evidence": [
+        "HDR video technology",
+        "Eclipsa video",
+        "display compatibility"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-9",
+      "topic_gap": "New developments in measuring LLMs for Android",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "LLM measurement",
+        "Android Bench",
+        "AI"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html"
+      ],
+      "expected_evidence": [
+        "LLM measurement on Android",
+        "Android Bench",
+        "AI performance"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-10",
+      "topic_gap": "Android 17 release highlights and new features",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android 17",
+        "Android release notes"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/Android-17.html"
+      ],
+      "expected_evidence": [
+        "Android 17 features",
+        "release notes",
+        "developer previews"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-11",
+      "topic_gap": "Updates to Android's developer verification and security ecosystem",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android developer verification",
+        "security",
+        "ecosystem"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/android-developer-verification.html"
+      ],
+      "expected_evidence": [
+        "Android developer verification",
+        "security ecosystem",
+        "safer platform"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-12",
+      "topic_gap": "New features and improvements in the Android CLI",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android CLI",
+        "developer tools",
+        "productivity"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/tools/agents/android-cli#skills-add"
+      ],
+      "expected_evidence": [
+        "Android CLI updates",
+        "developer productivity tools",
+        "command-line interface"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-13",
+      "topic_gap": "Camera HAL and driver-level changes in AOSP",
+      "source_family": "aosp-camera-documentation",
+      "allowed_domains": [],
+      "search_keywords": [
+        "AOSP Camera HAL",
+        "camera provider HAL",
+        "camera stream",
+        "camera request"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/core/camera"
+      ],
+      "expected_evidence": [],
+      "risk_notes": [
+        "This is a reference document and may not contain dated release information. It should be used to supplement dated articles."
+      ]
+    },
+    {
+      "proposal_id": "proposal-14",
+      "topic_gap": "Camera-related changes and updates in the Android Compatibility Definition Document",
+      "source_family": "android-compatibility-definition-document",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android CDD",
+        "Camera compatibility",
+        "MUST",
+        "SHOULD"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cdd"
+      ],
+      "expected_evidence": [],
+      "risk_notes": [
+        "This is a reference document and may not contain dated release information. It should be used to supplement dated articles."
+      ]
+    },
+    {
+      "proposal_id": "proposal-15",
+      "topic_gap": "Security updates and bulletins relevant to Android camera components",
+      "source_family": "android-security-bulletin",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Security Bulletin",
+        "July 2026",
+        "camera security"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/security/bulletin/2026/2026-07-01"
+      ],
+      "expected_evidence": [
+        "Android security bulletin",
+        "camera component vulnerabilities",
+        "patches"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-16",
+      "topic_gap": "Camera-related updates in the Linux kernel's media subsystem",
+      "source_family": "kernelnewbies-linuxchanges",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Linux kernel media changes",
+        "drivers/media",
+        "V4L2",
+        "kernel release"
+      ],
+      "candidate_urls": [],
+      "expected_evidence": [],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-17",
+      "topic_gap": "Camera and media driver development discussions on the Linux kernel mailing list",
+      "source_family": "lwn-camera-media-articles",
+      "allowed_domains": [],
+      "search_keywords": [
+        "LWN.net",
+        "Linux camera",
+        "media subsystem",
+        "V4L2"
+      ],
+      "candidate_urls": [],
+      "expected_evidence": [],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-18",
+      "topic_gap": "Updates and discussions on libcamera software ISP features",
+      "source_family": "libcamera-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera blog",
+        "software ISP",
+        "camera pipeline"
+      ],
+      "candidate_urls": [],
+      "expected_evidence": [],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-19",
+      "topic_gap": "Camera pipeline and driver updates for Raspberry Pi",
+      "source_family": "raspberry-pi-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Raspberry Pi blog",
+        "libcamera",
+        "camera module",
+        "ISP"
+      ],
+      "candidate_urls": [],
+      "expected_evidence": [],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal-20",
+      "topic_gap": "On-device neural ISP and camera pipeline research",
+      "source_family": "microisp-neural-isp",
+      "allowed_domains": [],
+      "search_keywords": [
+        "MicroISP",
+        "neural ISP",
+        "on-device AI",
+        "camera pipeline"
+      ],
+      "candidate_urls": [
+        "https://github.com/aiff22/MicroISP"
+      ],
+      "expected_evidence": [],
+      "risk_notes": [
+        "This is a project repository, not a dated article. It provides context for potential future developments."
+      ]
+    },
+    {
+      "proposal_id": "proposal-21",
+      "topic_gap": "Research on replacing mobile camera ISP with deep learning models",
+      "source_family": "pynet-learned-isp",
+      "allowed_domains": [],
+      "search_keywords": [
+        "PyNET",
+        "learned ISP",
+        "deep learning",
+        "camera pipeline"
+      ],
+      "candidate_urls": [
+        "https://github.com/aiff22/PyNET"
+      ],
+      "expected_evidence": [],
+      "risk_notes": [
+        "This is a project repository, not a dated article. It provides context for potential future developments."
+      ]
+    },
+    {
+      "proposal_id": "proposal-22",
+      "topic_gap": "Learned Smartphone ISP research and benchmarks",
+      "source_family": "mobile-ai-learned-isp-challenge",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Learned ISP",
+        "Mobile AI Workshop",
+        "on-device AI",
+        "camera pipeline"
+      ],
+      "candidate_urls": [
+        "https://ai-benchmark.com/workshops/mai/2025/"
+      ],
+      "expected_evidence": [],
+      "risk_notes": [
+        "This is a workshop page, not a dated article. It provides context for potential future developments."
+      ]
     }
   ]
 }

@@ -8,13 +8,20 @@
       "cluster_key": "https://developer.android.com/tools/agents/android-cli",
       "canonical_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
       "canonical_title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
           "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+          "title": "Overview of Android CLI &nbsp;|&nbsp; Android Studio &nbsp;|&nbsp; Android Developers",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -49,13 +56,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
       "canonical_title": "What’s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
           "title": "What’s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+          "title": "Android Developers Blog: What&#8217;s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -66,13 +80,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "canonical_title": "Top 3 updates for Android developer productivity",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
           "title": "Top 3 updates for Android developer productivity",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+          "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -83,13 +104,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
       "canonical_title": "Android developer verification: Building a safer ecosystem together",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
           "title": "Android developer verification: Building a safer ecosystem together",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+          "title": "Android Developers Blog: Android developer verification: Building a safer ecosystem together",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -100,13 +128,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
       "canonical_title": "Evolving how LLMs are measured for Android: the next era of Android Bench",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
           "title": "Evolving how LLMs are measured for Android: the next era of Android Bench",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+          "title": "Android Developers Blog: Evolving how LLMs are measured for Android: the next era of Android Bench",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -117,13 +152,20 @@
       "cluster_key": "https://source.android.com/docs/core/camera",
       "canonical_url": "https://source.android.com/docs/core/camera",
       "canonical_title": "Camera &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/core/camera",
           "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -134,13 +176,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
       "canonical_title": "Eclipsa Video: HDR That Looks Right on Every Screen",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
           "title": "Eclipsa Video: HDR That Looks Right on Every Screen",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+          "title": "Android Developers Blog: Eclipsa Video: HDR That Looks Right on Every Screen",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -151,13 +200,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
       "canonical_title": "Building a Mixed-Reality Tour Guide with Android XR, the Geospatial API, and Gemini",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
           "title": "Building a Mixed-Reality Tour Guide with Android XR, the Geospatial API, and Gemini",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+          "title": "Android Developers Blog: Building a Mixed-Reality Tour Guide with Android XR, the Geospatial API, and Gemini",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -168,13 +224,20 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/06/android-17.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
       "canonical_title": "Android 17 is here",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
           "title": "Android 17 is here",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+          "title": "Android Developers Blog: Android 17 is here",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -202,13 +265,20 @@
       "cluster_key": "https://source.android.com/docs/compatibility/cdd",
       "canonical_url": "https://source.android.com/docs/compatibility/cdd",
       "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/compatibility/cdd",
           "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cdd",
+          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -236,13 +306,20 @@
       "cluster_key": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
       "canonical_url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
       "canonical_title": "July",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
           "title": "July",
           "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+          "title": "Android Security Bulletin—July 2026 &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -318,20 +395,13 @@
       "cluster_key": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org",
       "canonical_url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/",
       "canonical_title": "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/",
           "title": "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/",
-          "title": "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver - Bryan O&#39;Donoghue",
-          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -414,20 +484,13 @@
       "cluster_key": "https://lore.kernel.org/linux-media/5224ab5bffdee0777ecef73a3b96c88e8eed38e8.camel@ndufresne.ca",
       "canonical_url": "https://lore.kernel.org/linux-media/5224ab5bffdee0777ecef73a3b96c88e8eed38e8.camel@ndufresne.ca/",
       "canonical_title": "Re: [PATCH v7 19/19] gpu: drm: meson: Fix DMA segment size limits and maximize allocation boundaries",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/5224ab5bffdee0777ecef73a3b96c88e8eed38e8.camel@ndufresne.ca/",
           "title": "Re: [PATCH v7 19/19] gpu: drm: meson: Fix DMA segment size limits and maximize allocation boundaries",
           "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/5224ab5bffdee0777ecef73a3b96c88e8eed38e8.camel@ndufresne.ca/",
-          "title": "Re: [PATCH v7 19/19] gpu: drm: meson: Fix DMA segment size limits and maximize allocation boundaries - Nicolas Dufresne",
-          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -753,6 +816,193 @@
           "title": "Latest News from Google Research Blog - Google Research",
           "canonical": true,
           "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "884ae74e438501d5",
+      "cluster_key": "https://github.com/aiff22/microisp",
+      "canonical_url": "https://github.com/aiff22/MicroISP",
+      "canonical_title": "GitHub - aiff22/MicroISP · GitHub",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/aiff22/MicroISP",
+          "title": "GitHub - aiff22/MicroISP · GitHub",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "212fe6bc37f3473d",
+      "cluster_key": "https://github.com/aiff22/pynet",
+      "canonical_url": "https://github.com/aiff22/PyNET",
+      "canonical_title": "GitHub - aiff22/PyNET: Generating RGB photos from RAW image files with PyNET · GitHub",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/aiff22/PyNET",
+          "title": "GitHub - aiff22/PyNET: Generating RGB photos from RAW image files with PyNET · GitHub",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6d434e60254b9d14",
+      "cluster_key": "https://ai-benchmark.com/workshops/mai/2025",
+      "canonical_url": "https://ai-benchmark.com/workshops/mai/2025/",
+      "canonical_title": "MAI 2025 Workshop",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://ai-benchmark.com/workshops/mai/2025/",
+          "title": "MAI 2025 Workshop",
+          "canonical": true,
+          "reliability": "conference",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f6e7543b89342f88",
+      "cluster_key": "https://issuetracker.google.com/issues/522549890",
+      "canonical_url": "https://issuetracker.google.com/issues/522549890",
+      "canonical_title": "b/522549890",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/522549890",
+          "title": "b/522549890",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6cc1017e4144265b",
+      "cluster_key": "https://issuetracker.google.com/issues/510752515",
+      "canonical_url": "https://issuetracker.google.com/issues/510752515",
+      "canonical_title": "b/510752515",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/510752515",
+          "title": "b/510752515",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "601f7f3472ada89e",
+      "cluster_key": "https://issuetracker.google.com/issues/487826941",
+      "canonical_url": "https://issuetracker.google.com/issues/487826941",
+      "canonical_title": "b/487826941",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/487826941",
+          "title": "b/487826941",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0b28cb9ccc4ab4b9",
+      "cluster_key": "https://issuetracker.google.com/issues/499389465",
+      "canonical_url": "https://issuetracker.google.com/issues/499389465",
+      "canonical_title": "b/499389465",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/499389465",
+          "title": "b/499389465",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0d92648690a0eadc",
+      "cluster_key": "https://issuetracker.google.com/issues/496022391",
+      "canonical_url": "https://issuetracker.google.com/issues/496022391",
+      "canonical_title": "b/496022391",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/496022391",
+          "title": "b/496022391",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "16b7e0671b024dcd",
+      "cluster_key": "https://issuetracker.google.com/issues/492934501",
+      "canonical_url": "https://issuetracker.google.com/issues/492934501",
+      "canonical_title": "b/492934501",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/492934501",
+          "title": "b/492934501",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cc4a113dcfe707e1",
+      "cluster_key": "https://issuetracker.google.com/issues/473715607",
+      "canonical_url": "https://issuetracker.google.com/issues/473715607",
+      "canonical_title": "b/473715607",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://issuetracker.google.com/issues/473715607",
+          "title": "b/473715607",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4c252955b9dbe0de",
+      "cluster_key": "https://lore.kernel.org/linux-media/5224ab5bffdee0777ecef73a3b96c88e8eed38e8.camel@ndufresne.ca/1-a.txt",
+      "canonical_url": "https://lore.kernel.org/linux-media/5224ab5bffdee0777ecef73a3b96c88e8eed38e8.camel@ndufresne.ca/1-a.txt",
+      "canonical_title": "[-- Attachment #1: Type: text/plain, Size: 1889 bytes --]",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/5224ab5bffdee0777ecef73a3b96c88e8eed38e8.camel@ndufresne.ca/1-a.txt",
+          "title": "[-- Attachment #1: Type: text/plain, Size: 1889 bytes --]",
+          "canonical": true,
+          "reliability": "project-official",
           "manual_seed": false
         }
       ]

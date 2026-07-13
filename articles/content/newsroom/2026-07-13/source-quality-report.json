@@ -814,24 +814,6 @@
       }
     },
     {
-      "candidate_id": "gemini-3946d6db1940f5e3",
-      "url": "https://lore.kernel.org/linux-media/5224ab5bffdee0777ecef73a3b96c88e8eed38e8.camel@ndufresne.ca/",
-      "title": "Re: [PATCH v7 19/19] gpu: drm: meson: Fix DMA segment size limits and maximize allocation boundaries - Nicolas Dufresne",
-      "source_quality_score": 0.72,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-61008277fc92a51f",
       "url": "https://lore.kernel.org/linux-media/20260713120840.17427-20-linux.amoon@gmail.com/",
       "title": "[PATCH v7 19/19] gpu: drm: meson: Fix DMA segment size limits and maximize allocation boundaries - Anand Moon",
@@ -922,18 +904,396 @@
       }
     },
     {
-      "candidate_id": "gemini-dc24fd0705b4c29b",
-      "url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/",
-      "title": "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver - Bryan O&#39;Donoghue",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
+      "candidate_id": "gemini-98444c77340368f8",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "title": "Android Developers Blog: Top 3 updates for Android developer productivity",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
       "breakdown": {
-        "reliability_score": 0.85,
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-5e3f5455fa83d19c",
+      "url": "https://android-developers.googleblog.com/2026/06/what-is-new-android-xr.html",
+      "title": "Android Developers Blog: What&#8217;s New in Android XR: Tooling, Engine Support, and Ecosystem Updates",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-ead5dbe355c7c1d9",
+      "url": "https://android-developers.googleblog.com/2026/06/android-xr-geospatial-api-gemini.html",
+      "title": "Android Developers Blog: Building a Mixed-Reality Tour Guide with Android XR, the Geospatial API, and Gemini",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-b09ca66144996dac",
+      "url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "title": "Android Developers Blog: Eclipsa Video: HDR That Looks Right on Every Screen",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-1f75bec69c0f5436",
+      "url": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+      "title": "Android Developers Blog: Evolving how LLMs are measured for Android: the next era of Android Bench",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-ae53265d4caf5293",
+      "url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
+      "title": "Android Developers Blog: Android 17 is here",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-b59408fc88377647",
+      "url": "https://android-developers.googleblog.com/2026/06/android-developer-verification.html",
+      "title": "Android Developers Blog: Android developer verification: Building a safer ecosystem together",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-8eccf001d6d4bbf1",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "title": "Overview of Android CLI &nbsp;|&nbsp; Android Studio &nbsp;|&nbsp; Android Developers",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-2e09be47b7d035b1",
+      "url": "https://source.android.com/docs/core/camera",
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.537,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-b564c567eef7ae59",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.708,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
         "camera_relevance": 0.7,
         "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
+        "technical_depth": 0.25,
+        "recency_score": 0.5,
         "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-cb9b804333e21624",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+      "title": "Android Security Bulletin—July 2026 &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.737,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-884ae74e438501d5",
+      "url": "https://github.com/aiff22/MicroISP",
+      "title": "GitHub - aiff22/MicroISP · GitHub",
+      "source_quality_score": 0.545,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-212fe6bc37f3473d",
+      "url": "https://github.com/aiff22/PyNET",
+      "title": "GitHub - aiff22/PyNET: Generating RGB photos from RAW image files with PyNET · GitHub",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-6f338a181db64224",
+      "url": "https://ai-benchmark.com/workshops/mai/2025/",
+      "title": "MAI 2025 Workshop",
+      "source_quality_score": 0.293,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-f6e7543b89342f88",
+      "url": "https://issuetracker.google.com/issues/522549890",
+      "title": "b/522549890",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-6cc1017e4144265b",
+      "url": "https://issuetracker.google.com/issues/510752515",
+      "title": "b/510752515",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-601f7f3472ada89e",
+      "url": "https://issuetracker.google.com/issues/487826941",
+      "title": "b/487826941",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-0b28cb9ccc4ab4b9",
+      "url": "https://issuetracker.google.com/issues/499389465",
+      "title": "b/499389465",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-0d92648690a0eadc",
+      "url": "https://issuetracker.google.com/issues/496022391",
+      "title": "b/496022391",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-16b7e0671b024dcd",
+      "url": "https://issuetracker.google.com/issues/492934501",
+      "title": "b/492934501",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-cc4a113dcfe707e1",
+      "url": "https://issuetracker.google.com/issues/473715607",
+      "title": "b/473715607",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-4c252955b9dbe0de",
+      "url": "https://lore.kernel.org/linux-media/5224ab5bffdee0777ecef73a3b96c88e8eed38e8.camel@ndufresne.ca/1-a.txt",
+      "title": "[-- Attachment #1: Type: text/plain, Size: 1889 bytes --]",
+      "source_quality_score": 0.33,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -941,8 +1301,9 @@
     }
   ],
   "counts": {
-    "strong_candidate": 6,
-    "blocked_candidate": 35,
-    "review_candidate": 11
+    "strong_candidate": 5,
+    "blocked_candidate": 47,
+    "review_candidate": 12,
+    "weak_candidate": 8
   }
 }
