@@ -27,7 +27,8 @@ function apiJson() {
       date: '2026-07-03T22:48:16',
       name: '[v2,1/2] libcamera: Add SensorSequence metadata control',
       state: 'new',
-      submitter: { name: 'Jane Dev', email: 'jane@example.org' }
+      submitter: { name: 'Jane Dev', email: 'jane@example.org' },
+      series: [{ id: 880, name: 'Add SensorSequence metadata control', version: 2 }]
     },
     {
       id: 27196,
@@ -65,6 +66,15 @@ test('parses patchwork JSON patches into dated rss_item candidates', () => {
   assert.equal(first.sourceKind, 'rss_item');
   assert.equal(first.collectionMode, 'rss-item');
   assert.equal(first.parentTitle, 'libcamera Patchwork (patch review)');
+});
+
+test('captures the REST series id so a patch series collapses into one candidate (#795)', () => {
+  // patchwork 후보는 URL(패치별 고유)·message-id로는 시리즈를 못 묶는다. REST의 series id를 후보에
+  // 실어 dedup(article-groups seriesKey)이 같은 시리즈 조각을 하나로 collapse하게 한다.
+  const items = resolvePatchworkLibcameraPatchItems(apiJson(), source());
+  assert.equal(items[0].seriesId, 880);
+  // series 필드가 없는 patch는 seriesId 없음(무회귀, 단일 patch로 취급).
+  assert.equal(items[1].seriesId, undefined);
 });
 
 test('does not set a relevance bucket hint so the classifier decides camera relevance', () => {

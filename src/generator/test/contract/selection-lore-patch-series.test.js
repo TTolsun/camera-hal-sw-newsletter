@@ -7,6 +7,7 @@ const { candidatesAreDuplicate } = require('../../select/newsroom-selection');
 const { buildShortlistReport, policyDriverCandidate } = require('../../../shared/test/helpers/selection-builders');
 
 const LORE_LIST = 'https://lore.kernel.org/linux-media';
+const PATCHWORK_PATCH = 'https://patchwork.libcamera.org/patch';
 
 function loreSeriesCandidate(index, messageId, title, overrides = {}) {
   return policyDriverCandidate(index, {
@@ -14,6 +15,17 @@ function loreSeriesCandidate(index, messageId, title, overrides = {}) {
     url: `${LORE_LIST}/${messageId}/`,
     source: 'lore.kernel.org',
     published_date: '2026-05-29',
+    ...overrides
+  });
+}
+
+function patchworkSeriesCandidate(index, patchId, seriesId, title, overrides = {}) {
+  return policyDriverCandidate(index, {
+    title,
+    url: `${PATCHWORK_PATCH}/${patchId}/`,
+    source: 'libcamera Patchwork (patch review)',
+    seriesId,
+    published_date: '2026-07-08',
     ...overrides
   });
 }
@@ -59,6 +71,46 @@ test('a lore.kernel.org patch series collapses to exactly one main candidate (th
   // 살아남은 후보는 cover letter (patch 번호 0) 여야 한다.
   assert.equal(seriesSelected[0].url, cover.url);
   // 무관한 후보는 영향을 받지 않고 그대로 선택된다.
+  assert.ok(
+    report.selected_articles.some(article => article.url === unrelated.url),
+    'the unrelated non-series candidate should still survive'
+  );
+});
+
+test('candidatesAreDuplicate treats same-series patchwork patches as duplicates and distinct series as distinct (#795)', () => {
+  const p1 = { url: `${PATCHWORK_PATCH}/27346/`, title: '[RFC,v7,1/6] libcamera: software_isp: egl', seriesId: 880 };
+  const p2 = { url: `${PATCHWORK_PATCH}/27347/`, title: '[RFC,v7,2/6] libcamera: software_isp: Add LSC data', seriesId: 880 };
+  const otherSeries = { url: `${PATCHWORK_PATCH}/30000/`, title: '[v2,1/3] libcamera: pipeline handler', seriesId: 999 };
+
+  assert.equal(candidatesAreDuplicate(p1, p2), true);
+  assert.ok(!candidatesAreDuplicate(p1, otherSeries));
+});
+
+test('a patchwork.libcamera.org patch series collapses to exactly one main candidate (#795)', () => {
+  // #793 재현: 한 libcamera software_isp RFC v7 시리즈 조각 3개가 각기 다른 patch URL·title로 도착.
+  // 같은 REST series id를 공유하므로 하나의 대표 main 기사로 묶여야 한다.
+  const f1 = patchworkSeriesCandidate(0, 27346, 880,
+    '[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()');
+  const f2 = patchworkSeriesCandidate(1, 27347, 880,
+    '[RFC,v7,2/6] libcamera: software_isp: Add LSC data to DebayerParams');
+  const f5 = patchworkSeriesCandidate(2, 27349, 880,
+    '[RFC,v7,5/6] libcamera: software_isp: Pass LSC availability to debayering');
+  const unrelated = policyDriverCandidate(9, {
+    title: 'media: i2c: imx camera sensor format negotiation fix',
+    url: `${LORE_LIST}/20260708170531.111111-1-other.author@example.com/`,
+    source: 'lore.kernel.org',
+    published_date: '2026-07-07'
+  });
+
+  const report = buildShortlistReport('2026-07-13', [f2, f5, f1, unrelated], {
+    minArticles: 1,
+    maxArticles: 5
+  });
+
+  const seriesSelected = report.selected_articles.filter(article => article.url.startsWith(`${PATCHWORK_PATCH}/`));
+  assert.equal(seriesSelected.length, 1, 'exactly one patchwork series fragment should survive as a main article');
+  // 대표는 patch 번호가 가장 낮은 1/6 (patch 27346).
+  assert.equal(seriesSelected[0].url, `${PATCHWORK_PATCH}/27346/`);
   assert.ok(
     report.selected_articles.some(article => article.url === unrelated.url),
     'the unrelated non-series candidate should still survive'

@@ -189,11 +189,62 @@ function loreSeriesPatchNumber(candidate = {}) {
   return parts ? parts.patch : UNKNOWN_PATCH_NUMBER;
 }
 
+// patchwork.libcamera.org는 lore와 시리즈 신호 구조가 다르다. patch URL(/patch/<id>/)의 <id>는
+// 패치별 고유(시리즈 아님)이고 message-id도 없어, URL·제목만으로는 시리즈를 못 묶는다. 시리즈
+// 식별자는 수집기(patchwork-libcamera-patches.js)가 REST의 series id를 candidate.seriesId로 실어주고,
+// patch 번호는 제목의 [..,x/N]에서 온다(lore가 message-id 하나에서 둘 다 얻는 것을 두 소스로 나눠 얻음).
+const PATCHWORK_HOST = 'patchwork.libcamera.org';
+// [<flags>,][v<ver>,]<patch>/<total>] — 그룹1 = patch 번호. subject base는 시리즈 조각마다 달라
+// 시리즈 키로 쓰지 않는다(시리즈 키는 seriesId). x/N이 없으면(단일 패치) 매치 실패 → 시리즈 아님.
+const PATCHWORK_SERIES_SEQUENCE = /^\s*\[[^\]]*?(?:v\d+\s*,\s*)?(\d+)\s*\/\s*\d+\s*\]/i;
+
+function isPatchworkUrl(raw) {
+  if (!raw) return false;
+  try {
+    return new URL(raw).hostname.toLowerCase() === PATCHWORK_HOST;
+  } catch {
+    return false;
+  }
+}
+
+function candidateSeriesId(candidate = {}) {
+  const raw = candidate.seriesId ?? candidate.series_id;
+  return raw === undefined || raw === null ? '' : text(raw);
+}
+
+function patchworkSeriesParts(candidate = {}) {
+  if (!isPatchworkUrl(candidateUrl(candidate))) return null;
+  const seriesId = candidateSeriesId(candidate);
+  if (!seriesId) return null;
+  const match = candidateTitle(candidate).match(PATCHWORK_SERIES_SEQUENCE);
+  return {
+    key: `patchwork-series:${seriesId}`,
+    patch: match ? Number(match[1]) : UNKNOWN_PATCH_NUMBER
+  };
+}
+
+// lore/patchwork 어느 소스든 같은 패치 시리즈를 하나의 그룹으로 묶는 generic 시리즈 키/번호.
+// lore를 먼저 시도하고(자기·부모 message-id), 아니면 patchwork(seriesId + 제목 x/N)로 떨어진다.
+// dedup(candidatesAreDuplicate), 대표 선택(shouldPreferDuplicateCandidate), fallbackGroupKey가 모두 이걸 쓴다.
+function seriesParts(candidate = {}) {
+  return loreSeriesParts(candidate) || patchworkSeriesParts(candidate);
+}
+
+function seriesKey(candidate = {}) {
+  const parts = seriesParts(candidate);
+  return parts ? parts.key : '';
+}
+
+function seriesPatchNumber(candidate = {}) {
+  const parts = seriesParts(candidate);
+  return parts ? parts.patch : UNKNOWN_PATCH_NUMBER;
+}
+
 function fallbackGroupKey(candidate = {}) {
-  const seriesKey = loreSeriesKey(candidate);
-  if (seriesKey) return seriesKey;
-  const key = normalizeUrl(candidateUrl(candidate)) || candidateTitle(candidate);
-  return key ? `article:${key}` : '';
+  const key = seriesKey(candidate);
+  if (key) return key;
+  const urlOrTitleKey = normalizeUrl(candidateUrl(candidate)) || candidateTitle(candidate);
+  return urlOrTitleKey ? `article:${urlOrTitleKey}` : '';
 }
 
 function candidateGroupKey(candidate = {}) {
@@ -480,6 +531,8 @@ module.exports = {
   loreSeriesKey,
   loreThreadUrl,
   loreSeriesPatchNumber,
+  seriesKey,
+  seriesPatchNumber,
   normalizeCanonicalUrlStripAnchor,
   normalizeSourceUrlPreserveAnchor,
   normalizeUrl,
