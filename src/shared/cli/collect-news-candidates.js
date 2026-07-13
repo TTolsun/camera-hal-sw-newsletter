@@ -1023,6 +1023,11 @@ function normalizeCandidate(raw) {
     parentUrl: parentUrl || '',
     parent_url: parentUrl || '',
     in_reply_to: canonicalContentUrl(raw.in_reply_to || raw.inReplyTo || ''),
+    // patchwork.libcamera.org REST series id — 패치 시리즈 dedup 그룹 키(#795). 수집기(patchCandidate)가
+    // 실어주며, 이 whitelist에 없으면 candidates.json에서 탈락해 선정 단계 dedup(article-groups seriesKey)이
+    // 무효가 된다(#795 후속: 필드가 정규화에서 누락돼 프로덕션에서 시리즈가 collapse되지 않던 갭 수정).
+    seriesId: raw.seriesId ?? raw.series_id ?? null,
+    series_id: raw.seriesId ?? raw.series_id ?? null,
     parentTitle: raw.parentTitle || raw.parent_title || '',
     parent_title: raw.parentTitle || raw.parent_title || '',
     parentCanonicalUrl: canonicalContentUrl(raw.parentCanonicalUrl || raw.parent_canonical_url || parentUrl || ''),
