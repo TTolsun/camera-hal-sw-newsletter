@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-07-13",
+    "title": "AOSP Camera & Driver Platform 기술 뉴스레터 (2026-07-13)",
+    "summary": "이번 주 뉴스레터에서는 Qualcomm CAMSS 드라이버 스택에 제안된 Offline Processing Engine(OPE) v4 패치와 libcamera 소프트웨어 ISP의 렌즈 쉐이딩 보정(LSC)을 위한 EGL 모듈 개선 제안을 다룹니다. 또한 지난 6월 9일 배포된 Raspberry Pi의 libcamera 다운스트림 릴리스를 통해 임베디드 리눅스 카메라 드라이버 생태계의 최신 흐름을 짚어봅니다. 하부 드라이버 및 ISP 이미지 파이프라인의 아키텍처 변화가 Android 카메라 스택에 미치는 영향을 실무 관점에서 분석합니다.",
+    "html": "newsletters/2026-07-13/index.html",
+    "md": "newsletters/2026-07-13/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-07-06",
     "title": "Camera HAL / SW Newsletter - 2026-07-06",
     "summary": "이번 주 뉴스레터에서는 CameraX 1.7.0-alpha02 릴리스를 통한 GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입 소식을 다룹니다. 또한 libcamera의 SensorSequence 메타데이터 제어 패치 제안과 LLVM/Clang 빌드 환경에서 발생하는 미디어 드라이버 버퍼 오버플로우 수정 패치를 분석하여 하위 드라이버 스택 및 빌드 툴체인 변화가 카메라 시스템 안정성에 미치는 영향을 살펴봅니다.",

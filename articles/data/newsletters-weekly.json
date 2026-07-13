@@ -1,5 +1,25 @@
 [
   {
+    "weeklyKey": "2026-W29",
+    "weekStartDate": "2026-07-13",
+    "weekEndDate": "2026-07-19",
+    "date": "2026-07-13",
+    "title": "2026 W29",
+    "summary": "Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안\nlibcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 강화를 위한 EGL 텍스처 필터 파라미터 도입\nRaspberry Pi, libcamera v0.7.1+rpt20260609 다운스트림 버전 배포",
+    "html": "newsletters/2026-W29/index.html",
+    "md": "newsletters/2026-W29/newsletter.md",
+    "tags": [
+      "Driver",
+      "Image Processing",
+      "Camera HAL",
+      "Android"
+    ],
+    "article_count": 3,
+    "article_images": [
+      "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+    ]
+  },
+  {
     "weeklyKey": "2026-W28",
     "weekStartDate": "2026-07-06",
     "weekEndDate": "2026-07-12",
