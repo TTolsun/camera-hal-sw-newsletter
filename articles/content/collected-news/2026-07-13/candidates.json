@@ -4,7 +4,7 @@
   "newsletter_date": "2026-07-13",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 35,
-  "generated_at": "2026-07-13T16:27:34.014Z",
+  "generated_at": "2026-07-13T16:51:15.929Z",
   "sources_path": "src/shared/data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -213,6 +213,8 @@
       "parentUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "parent_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "Top 3 updates for Android developer productivity",
       "parent_title": "Top 3 updates for Android developer productivity",
       "parentCanonicalUrl": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
@@ -313,7 +315,7 @@
       "aosp_camera_relevance_reason": "Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path. Matched 4 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pl",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ja",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
           "sourceKind": "og",
@@ -341,7 +343,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=pl",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=ja",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
           "sourceKind": "article-img",
@@ -357,7 +359,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pl",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ja",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
           "sourceKind": "og",
@@ -385,7 +387,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=pl",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=ja",
           "sourceUrl": "https://android-developers.googleblog.com/",
           "articleUrl": "https://developer.android.com/tools/agents/android-cli#skills-add",
           "sourceKind": "article-img",
@@ -1231,6 +1233,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -1581,7 +1585,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pl",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
           "sourceKind": "og",
@@ -1609,23 +1613,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=pl",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pl",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
           "sourceKind": "og",
@@ -1653,18 +1657,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=pl",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "CameraX Release Notes",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "main-article",
@@ -1822,6 +1826,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -2111,6 +2117,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -2424,6 +2432,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -2722,6 +2732,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -3026,6 +3038,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -9784,6 +9798,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -10082,6 +10098,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -10380,6 +10398,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -10728,6 +10748,8 @@
       "parentUrl": "https://developer.android.com/latest-updates",
       "parent_url": "https://developer.android.com/latest-updates",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "Android Developers Latest Updates",
       "parent_title": "Android Developers Latest Updates",
       "parentCanonicalUrl": "https://developer.android.com/latest-updates",
@@ -10797,7 +10819,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -10825,23 +10847,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=id",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -10869,18 +10891,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=id",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -11030,6 +11052,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -11869,20 +11893,6 @@
           "attribution": "AOSP What's New / Release Notes",
           "validationStatus": "ok",
           "contentLength": 1165
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
-          "sourceUrl": "https://source.android.com/docs/whatsnew",
-          "articleUrl": "https://source.android.com/docs/whatsnew",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP What's New / Release Notes",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -11913,20 +11923,6 @@
           "attribution": "AOSP What's New / Release Notes",
           "validationStatus": "ok",
           "contentLength": 1165
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=th",
-          "sourceUrl": "https://source.android.com/docs/whatsnew",
-          "articleUrl": "https://source.android.com/docs/whatsnew",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "AOSP What's New / Release Notes",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -12084,6 +12080,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -14178,7 +14176,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -14208,7 +14206,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fa",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
           "sourceUrl": "https://source.android.com/docs/compatibility/cdd",
           "articleUrl": "https://source.android.com/docs/compatibility/cdd",
           "sourceKind": "article-img",
@@ -14371,6 +14369,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -14618,6 +14618,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -14703,7 +14705,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fr",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
           "sourceKind": "article-img",
@@ -14733,7 +14735,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=fr",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
           "sourceKind": "article-img",
@@ -14881,6 +14883,8 @@
       "parentUrl": "https://github.com/raspberrypi/libcamera/releases",
       "parent_url": "https://github.com/raspberrypi/libcamera/releases",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "Raspberry Pi libcamera Releases",
       "parent_title": "Raspberry Pi libcamera Releases",
       "parentCanonicalUrl": "https://github.com/raspberrypi/libcamera/releases",
@@ -14951,8 +14955,38 @@
       ],
       "aospCameraRelevanceReason": "Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.",
       "aosp_camera_relevance_reason": "Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "sourceUrl": "https://github.com/raspberrypi/libcamera/releases",
+          "articleUrl": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Raspberry Pi libcamera Releases",
+          "validationStatus": "ok",
+          "contentLength": 42133
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "sourceUrl": "https://github.com/raspberrypi/libcamera/releases",
+          "articleUrl": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Raspberry Pi libcamera Releases",
+          "validationStatus": "ok",
+          "contentLength": 42133
+        }
+      ],
       "candidateTier": "main-article",
       "reason": "Raspberry Pi libcamera Releases (project-official, high, score 81): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
       "collection_reason": "Raspberry Pi libcamera Releases (project-official, high, score 81): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
@@ -15106,6 +15140,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "https://lore.kernel.org/linux-media/20260713120840.17427-1-linux.amoon@gmail.com/",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -15332,6 +15368,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "https://lore.kernel.org/linux-media/20260713120840.17427-1-linux.amoon@gmail.com/",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -15550,6 +15588,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "https://lore.kernel.org/linux-media/20260710-camss-isp-ope-v4-6-51207a0319d8@oss.qualcomm.com/",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -15778,6 +15818,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "https://lore.kernel.org/linux-media/20260713120840.17427-1-linux.amoon@gmail.com/",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -16002,6 +16044,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "https://lore.kernel.org/linux-media/20260713120840.17427-1-linux.amoon@gmail.com/",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -16228,6 +16272,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "https://lore.kernel.org/linux-media/20260713120840.17427-1-linux.amoon@gmail.com/",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -16452,6 +16498,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "https://lore.kernel.org/linux-media/20260713120840.17427-20-linux.amoon@gmail.com/",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -16692,6 +16740,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "https://lore.kernel.org/linux-media/20260713120840.17427-1-linux.amoon@gmail.com/",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -16912,6 +16962,8 @@
       "parentUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "parent_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "in_reply_to": "",
+      "seriesId": 6049,
+      "series_id": 6049,
       "parentTitle": "libcamera Patchwork (patch review)",
       "parent_title": "libcamera Patchwork (patch review)",
       "parentCanonicalUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
@@ -17128,6 +17180,8 @@
       "parentUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "parent_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "in_reply_to": "",
+      "seriesId": 6049,
+      "series_id": 6049,
       "parentTitle": "libcamera Patchwork (patch review)",
       "parent_title": "libcamera Patchwork (patch review)",
       "parentCanonicalUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
@@ -17344,6 +17398,8 @@
       "parentUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "parent_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "in_reply_to": "",
+      "seriesId": 6049,
+      "series_id": 6049,
       "parentTitle": "libcamera Patchwork (patch review)",
       "parent_title": "libcamera Patchwork (patch review)",
       "parentCanonicalUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
@@ -17560,6 +17616,8 @@
       "parentUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "parent_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "in_reply_to": "",
+      "seriesId": 6049,
+      "series_id": 6049,
       "parentTitle": "libcamera Patchwork (patch review)",
       "parent_title": "libcamera Patchwork (patch review)",
       "parentCanonicalUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
@@ -17779,6 +17837,8 @@
       "parentUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "parent_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "in_reply_to": "",
+      "seriesId": 6057,
+      "series_id": 6057,
       "parentTitle": "libcamera Patchwork (patch review)",
       "parent_title": "libcamera Patchwork (patch review)",
       "parentCanonicalUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
@@ -17998,6 +18058,8 @@
       "parentUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "parent_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "in_reply_to": "",
+      "seriesId": 6054,
+      "series_id": 6054,
       "parentTitle": "libcamera Patchwork (patch review)",
       "parent_title": "libcamera Patchwork (patch review)",
       "parentCanonicalUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
@@ -18217,6 +18279,8 @@
       "parentUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "parent_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "in_reply_to": "",
+      "seriesId": 6054,
+      "series_id": 6054,
       "parentTitle": "libcamera Patchwork (patch review)",
       "parent_title": "libcamera Patchwork (patch review)",
       "parentCanonicalUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
@@ -18436,6 +18500,8 @@
       "parentUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "parent_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
       "in_reply_to": "",
+      "seriesId": 6052,
+      "series_id": 6052,
       "parentTitle": "libcamera Patchwork (patch review)",
       "parent_title": "libcamera Patchwork (patch review)",
       "parentCanonicalUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
@@ -18658,6 +18724,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -20538,6 +20606,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -23690,6 +23760,8 @@
       "parentUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
       "parent_url": "https://developer.android.com/jetpack/androidx/releases/media3",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "Media3 Release Notes",
       "parent_title": "Media3 Release Notes",
       "parentCanonicalUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
@@ -23810,7 +23882,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-beta01",
           "sourceKind": "og",
@@ -23838,23 +23910,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=it",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-beta01",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Media3 Release Notes",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=it",
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-beta01",
           "sourceKind": "og",
@@ -23882,18 +23954,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=it",
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-beta01",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
+          "alt": "YouTube",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
           "attribution": "Media3 Release Notes",
           "validationStatus": "ok",
-          "contentLength": 1760
+          "contentLength": 2833
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -24058,6 +24130,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -26863,6 +26937,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -27293,6 +27369,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -27505,6 +27583,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -28945,6 +29025,8 @@
       "parentUrl": "",
       "parent_url": "",
       "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
       "parentTitle": "",
       "parent_title": "",
       "parentCanonicalUrl": "",
@@ -30027,6 +30109,10 @@
     {
       "source": "libcamera Documentation",
       "message": "404 Not Found"
+    },
+    {
+      "source": "KernelNewbies LinuxChanges",
+      "message": "502 Bad Gateway"
     },
     {
       "source": "LLVM Project Blog",
