@@ -225,6 +225,19 @@ function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFin
         allow_rewrite: false,
         reason: `article gate status DEMOTE requires replacement path (${articleResult.repair_action || 'demote-or-replace'})`
       });
+    } else if (articleResult?.status === 'FAIL' && articleResult.repair_action === 'repair-section') {
+      // 게이트가 이 FAIL을 same-source 보존 수정(repair-section)으로 판정한 경우(예: actionability_level
+      // 같은 필드 단위 fact-check must_fix — source-gap/binding 실패가 아님)는 structural
+      // replace-or-demote로 승격하지 않는다. 승격하면 기사가 1개뿐일 때 결정론 demote가 그 유일 기사를
+      // 0개로 만들어 "Editor output must contain 1-5 sections; got 0."로 발행이 통째로 막힌다(PR #793).
+      // 진짜 구조 실패(source gap/binding, scope demote)는 repairActionForArticleStatus가 이미
+      // replace-or-demote/demote-or-replace를 주므로 위 DEMOTE 분기나 아래 else 분기로 남는다.
+      policies.push({
+        failure_type: 'article-gate-fail-repairable',
+        action: 'repair-section',
+        allow_rewrite: true,
+        reason: 'article gate marked this FAIL repairable in place (repair-section); patch the flagged fields without demoting the article'
+      });
     } else if (articleResult?.status === 'FAIL') {
       policies.push({
         failure_type: 'article-gate-fail',
