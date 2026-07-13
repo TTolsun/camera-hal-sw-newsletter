@@ -117,6 +117,58 @@ test('targeted retry repairs missing actionability with the same source', () => 
   assert.equal(repairPlan[0].allow_rewrite, true);
 });
 
+test('article-gate FAIL that the gate itself marked repair-section stays repair-section (does not demote the sole article)', () => {
+  // 재현(PR #793): 렌더 기사가 1개뿐인 run에서 fact-check must_fix가 그 유일 기사를 언급하면
+  // article gate는 status=FAIL, 그러나 repair_action='repair-section'(same-source 보존 수정 대상,
+  // 예: actionability_level 필드 불일치)으로 판정한다. repair plan이 이를 structural
+  // replace-or-demote로 승격하면 유일 기사가 결정론 demote로 0개가 되어
+  // "Editor output must contain 1-5 sections; got 0."로 발행이 통째로 막힌다. 게이트의 보존 판정을 존중해야 한다.
+  const failed = section('Qualcomm JPEG encoder dt-bindings article', 'https://lore.kernel.org/linux-media/example/');
+  const editor = { sections: [failed] };
+  const qualityReport = {
+    deductions: [],
+    article_results: [{
+      headline: failed.headline,
+      status: 'FAIL',
+      repair_action: 'repair-section',
+      sources: failed.sources
+    }]
+  };
+
+  const repairPlan = buildSectionRepairPlan(editor, qualityReport, {}, []);
+
+  assert.equal(repairPlan.length, 1);
+  assert.equal(repairPlan[0].action, 'repair-section');
+  assert.equal(repairPlan[0].failure_type, 'article-gate-fail-repairable');
+  assert.equal(repairPlan[0].allow_rewrite, true);
+  // 보존 경로이므로 유일 기사가 structural demote 대상에서 빠진다(keptSections가 비지 않는다).
+  const structuralPlan = repairPlan.filter(item => item.action !== 'repair-section');
+  assert.deepEqual(sectionsOutsideRepairPlan(editor.sections, structuralPlan), [failed]);
+});
+
+test('article-gate FAIL that the gate marked replace-or-demote still demotes (source binding failure)', () => {
+  // 회귀 가드: source-gap/binding 실패로 게이트가 repair_action='replace-or-demote'를 준 FAIL은
+  // 그대로 structural로 남아야 한다(보존 승격 금지).
+  const failed = section('Source binding failure article', 'https://example.com/binding');
+  const editor = { sections: [failed] };
+  const qualityReport = {
+    deductions: [],
+    article_results: [{
+      headline: failed.headline,
+      status: 'FAIL',
+      repair_action: 'replace-or-demote',
+      sources: failed.sources
+    }]
+  };
+
+  const repairPlan = buildSectionRepairPlan(editor, qualityReport, {}, []);
+
+  assert.equal(repairPlan.length, 1);
+  assert.equal(repairPlan[0].action, 'replace-or-demote');
+  assert.equal(repairPlan[0].failure_type, 'article-gate-fail');
+  assert.equal(repairPlan[0].allow_rewrite, false);
+});
+
 test('targeted retry demotes or replaces source gaps instead of rewriting them', () => {
   const failed = section('Source gap article', 'https://example.com/gap');
   const editor = { sections: [failed] };
