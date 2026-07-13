@@ -22,13 +22,13 @@
     {
       "severity": "warning",
       "action": "GEMINI_PARSER_EXTRACTION_REQUIRED",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "source_policy_match": "camerax-release-notes",
+      "candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "source_policy_match": "raspberrypi-libcamera-releases",
       "discovery_status": "discovered",
       "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-jetpack-release",
+      "adapter_hint": "raspberrypi-libcamera-releases",
       "rejected_reason": "discovered_not_extractable",
-      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "suggested_fixture_case": "Add a parser regression fixture for the discovered release-note source.",
       "message": "Deterministic parser did not extract release-note evidence for this discovered URL."
     }
   ],

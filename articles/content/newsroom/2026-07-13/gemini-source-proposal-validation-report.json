@@ -4,15 +4,7 @@
   "newsletter_date": "2026-07-13",
   "validations": [
     {
-      "proposal_id": "camera-hal-sw-20260713-001",
-      "candidate_url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
-      "normalized_url": "https://android-developers.googleblog.com/2026/06/Android-17.html",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "android-developers-blog"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-002",
+      "proposal_id": "camerax-1.7.0-alpha02",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
       "accepted": false,
@@ -26,85 +18,37 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-002",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "proposal_id": "raspberrypi-libcamera-v0.7.1-rpt20260609",
+      "candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "normalized_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
       "accepted": false,
       "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "camerax-release-notes",
+      "source_policy_match": "raspberrypi-libcamera-releases",
       "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
       "discovery_status": "discovered",
       "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-jetpack-release",
-      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "adapter_hint": "raspberrypi-libcamera-releases",
+      "suggested_fixture_case": "Add a parser regression fixture for the discovered release-note source.",
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-003",
-      "candidate_url": "https://lore.kernel.org/linux-media/alOpwQx-43WNPHcL@baldur/",
-      "normalized_url": "https://lore.kernel.org/linux-media/alOpwQx-43WNPHcL@baldur/",
+      "proposal_id": "linux-media-vdec-vp9-header-fix",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260713120840.17427-10-linux.amoon@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260713120840.17427-10-linux.amoon@gmail.com/",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "lore-linux-media-list"
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-003",
-      "candidate_url": "https://lore.kernel.org/linux-media/alOii3vwmkWGfVNx@ashevche-desk.local/",
-      "normalized_url": "https://lore.kernel.org/linux-media/alOii3vwmkWGfVNx@ashevche-desk.local/",
+      "proposal_id": "android-developer-productivity-updates",
+      "candidate_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html",
       "accepted": true,
       "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
+      "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-003",
-      "candidate_url": "https://lore.kernel.org/linux-media/xrfd2dbhmpiy7ftpztcswba6iyzt3dsajqtr4fpq2iyn6tbeny@4wijspe7n2ig/",
-      "normalized_url": "https://lore.kernel.org/linux-media/xrfd2dbhmpiy7ftpztcswba6iyzt3dsajqtr4fpq2iyn6tbeny@4wijspe7n2ig/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-003",
-      "candidate_url": "https://lore.kernel.org/linux-media/f7b6225063d1cb92d5ea12d0d40f8a1c1d51c9c8.camel@mediatek.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/f7b6225063d1cb92d5ea12d0d40f8a1c1d51c9c8.camel@mediatek.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-003",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260712-urb-abstraction-v1-v1-4-9fa011634ead@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260712-urb-abstraction-v1-v1-4-9fa011634ead@gmail.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-003",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260712161256.2244864-1-y-abhilashchandra@ti.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260712161256.2244864-1-y-abhilashchandra@ti.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-003",
-      "candidate_url": "https://lore.kernel.org/linux-media/fffa0aaf-e637-46e2-8117-decc5b1af075@ti.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/fffa0aaf-e637-46e2-8117-decc5b1af075@ti.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-003",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260712115012.91600-6-mitltlatltl@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260712115012.91600-6-mitltlatltl@gmail.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-list"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-004",
+      "proposal_id": "libcamera-software-isp-lsc-support",
       "candidate_url": "https://patchwork.libcamera.org/patch/27349/",
       "normalized_url": "https://patchwork.libcamera.org/patch/27349/",
       "accepted": true,
@@ -112,7 +56,7 @@
       "source_policy_match": "patchwork-libcamera-patches"
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-004",
+      "proposal_id": "libcamera-software-isp-lsc-support",
       "candidate_url": "https://patchwork.libcamera.org/patch/27351/",
       "normalized_url": "https://patchwork.libcamera.org/patch/27351/",
       "accepted": true,
@@ -120,7 +64,7 @@
       "source_policy_match": "patchwork-libcamera-patches"
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-004",
+      "proposal_id": "libcamera-software-isp-lsc-support",
       "candidate_url": "https://patchwork.libcamera.org/patch/27347/",
       "normalized_url": "https://patchwork.libcamera.org/patch/27347/",
       "accepted": true,
@@ -128,7 +72,7 @@
       "source_policy_match": "patchwork-libcamera-patches"
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-004",
+      "proposal_id": "libcamera-software-isp-lsc-support",
       "candidate_url": "https://patchwork.libcamera.org/patch/27346/",
       "normalized_url": "https://patchwork.libcamera.org/patch/27346/",
       "accepted": true,
@@ -136,32 +80,16 @@
       "source_policy_match": "patchwork-libcamera-patches"
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-005",
-      "candidate_url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
-      "normalized_url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "proposal_id": "linux-media-qcom-camss-offline-engine",
+      "candidate_url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/",
+      "normalized_url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/",
       "accepted": true,
       "rejected_reason": "",
-      "source_policy_match": "android-developers-blog"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-006",
-      "candidate_url": "https://research.google/blog/",
-      "normalized_url": "https://research.google/blog/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "google-research-blog"
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-008",
-      "candidate_url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
-      "normalized_url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "android-security-bulletin"
+      "source_policy_match": "lore-linux-media-list"
     }
   ],
   "counts": {
-    "accepted": 16,
-    "discovered_not_extractable": 2
+    "discovered_not_extractable": 2,
+    "accepted": 7
   }
 }

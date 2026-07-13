@@ -4,82 +4,106 @@
   "newsletter_date": "2026-07-13",
   "proposals": [
     {
-      "proposal_id": "camera-hal-sw-20260713-001",
-      "topic_gap": "Recent updates or changes to the Android Camera HAL interface or implementation, focusing on new features, performance improvements, or bug fixes.",
-      "source_family": "android-developers-blog",
-      "allowed_domains": [],
-      "search_keywords": [
-        "Android 17 Camera HAL",
-        "Camera HAL updates",
-        "Camera API changes"
-      ],
-      "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/06/Android-17.html"
-      ],
-      "expected_evidence": [
-        "Camera HAL API changes",
-        "Camera HAL implementation details",
-        "New camera features in Android 17"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-002",
-      "topic_gap": "Specific improvements or new capabilities in CameraX, particularly those impacting HAL interaction or camera output processing.",
+      "proposal_id": "camerax-1.7.0-alpha02",
+      "topic_gap": "CameraX 1.7.0-alpha02 release details and new features for Android camera developers.",
       "source_family": "camerax-release-notes",
-      "allowed_domains": [],
+      "allowed_domains": [
+        "developer.android.com"
+      ],
       "search_keywords": [
         "CameraX 1.7.0-alpha02",
-        "CameraX 1.4.0-alpha07",
-        "CameraX release notes"
-      ],
-      "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-      ],
-      "expected_evidence": [
-        "CameraX release notes",
+        "AndroidX Camera release",
         "CameraX new features",
-        "CameraX bug fixes related to camera output"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-003",
-      "topic_gap": "Kernel-level changes or additions to camera drivers and the V4L2 subsystem that are relevant to Android camera HAL development.",
-      "source_family": "lore-linux-media-list",
-      "allowed_domains": [],
-      "search_keywords": [
-        "linux kernel media",
-        "V4L2 driver updates",
-        "camera kernel patches"
+        "CameraX updates"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/alOpwQx-43WNPHcL@baldur/",
-        "https://lore.kernel.org/linux-media/alOii3vwmkWGfVNx@ashevche-desk.local/",
-        "https://lore.kernel.org/linux-media/xrfd2dbhmpiy7ftpztcswba6iyzt3dsajqtr4fpq2iyn6tbeny@4wijspe7n2ig/",
-        "https://lore.kernel.org/linux-media/f7b6225063d1cb92d5ea12d0d40f8a1c1d51c9c8.camel@mediatek.com/",
-        "https://lore.kernel.org/linux-media/20260712-urb-abstraction-v1-v1-4-9fa011634ead@gmail.com/",
-        "https://lore.kernel.org/linux-media/20260712161256.2244864-1-y-abhilashchandra@ti.com/",
-        "https://lore.kernel.org/linux-media/fffa0aaf-e637-46e2-8117-decc5b1af075@ti.com/",
-        "https://lore.kernel.org/linux-media/20260712115012.91600-6-mitltlatltl@gmail.com/"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
       ],
       "expected_evidence": [
-        "Linux kernel patches related to media/camera drivers",
-        "V4L2 subsystem updates",
-        "New hardware support for cameras"
+        "Release notes for CameraX 1.7.0-alpha02",
+        "New APIs, bug fixes, or behavioral changes related to CameraX",
+        "Impact on camera output, preview, or recording functionalities"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-004",
-      "topic_gap": "Developments in the libcamera project that could influence or be integrated into Android camera stacks.",
-      "source_family": "libcamera-patchwork-patches",
-      "allowed_domains": [],
+      "proposal_id": "raspberrypi-libcamera-v0.7.1-rpt20260609",
+      "topic_gap": "Updates and new features in Raspberry Pi's libcamera v0.7.1+rpt20260609, relevant for embedded camera development.",
+      "source_family": "raspberrypi-libcamera-releases",
+      "allowed_domains": [
+        "github.com"
+      ],
       "search_keywords": [
-        "libcamera patches",
-        "SoftISP",
-        "camera pipeline"
+        "Raspberry Pi libcamera v0.7.1+rpt20260609",
+        "libcamera release Raspberry Pi",
+        "Raspberry Pi camera updates"
+      ],
+      "candidate_urls": [
+        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+      ],
+      "expected_evidence": [
+        "Release notes for Raspberry Pi libcamera v0.7.1+rpt20260609",
+        "Changes or new features in libcamera for Raspberry Pi",
+        "Impact on camera drivers, ISP, or image processing pipeline"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-vdec-vp9-header-fix",
+      "topic_gap": "Kernel-level fixes for VP9 header update failures in meson VDEC, impacting video decoding and potentially camera-generated video playback.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "linux-media meson vdec vp9 header fix",
+        "kernel video decoder update",
+        "camera video playback fix"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260713120840.17427-10-linux.amoon@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Details on VP9 header update failure fix in meson VDEC driver",
+        "Impact on video decoding stability and performance",
+        "Relevance to camera-generated video content playback"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developer-productivity-updates",
+      "topic_gap": "Updates on Android developer productivity, potentially including tools or APIs relevant to Camera HAL SW development or testing workflows.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [
+        "android-developers.googleblog.com"
+      ],
+      "search_keywords": [
+        "Android developer productivity",
+        "Android development tools",
+        "Android CLI updates"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
+      ],
+      "expected_evidence": [
+        "Information on new tools or features improving Android developer productivity",
+        "Relevance to camera development, debugging, or testing",
+        "Specific examples of productivity enhancements for native/HAL developers"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-software-isp-lsc-support",
+      "topic_gap": "Introduction of Lens Shading Correction (LSC) support in libcamera's software ISP, enhancing image quality for Linux-based camera systems.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [
+        "patchwork.libcamera.org"
+      ],
+      "search_keywords": [
+        "libcamera software ISP LSC",
+        "libcamera debayering LSC",
+        "libcamera EGL LSC",
+        "lens shading correction libcamera"
       ],
       "candidate_urls": [
         "https://patchwork.libcamera.org/patch/27349/",
@@ -88,88 +112,31 @@
         "https://patchwork.libcamera.org/patch/27346/"
       ],
       "expected_evidence": [
-        "libcamera patches",
-        "Software ISP (SoftISP) developments",
-        "Camera pipeline improvements"
+        "Details on LSC implementation in libcamera's software ISP",
+        "Impact on image quality and color correction",
+        "Technical specifics of the debayering and EGL integration"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sw-20260713-005",
-      "topic_gap": "Updates on HDR video capabilities and support, particularly relevant to camera output and playback.",
-      "source_family": "android-developers-blog",
-      "allowed_domains": [],
+      "proposal_id": "linux-media-qcom-camss-offline-engine",
+      "topic_gap": "Addition of CAMSS Offline Processing Engine driver for Qualcomm platforms in the Linux media subsystem, potentially affecting camera image processing pipelines.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
       "search_keywords": [
-        "HDR video Android",
-        "camera HDR",
-        "Eclipsa video"
+        "linux-media qcom camss offline processing engine",
+        "qualcomm camera driver",
+        "camera image processing linux kernel"
       ],
       "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html"
+        "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
       ],
       "expected_evidence": [
-        "HDR video support",
-        "Camera output formats",
-        "Video playback compatibility"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-006",
-      "topic_gap": "Advancements in AI and machine learning applied to camera image processing, especially on-device or for camera HAL enhancements.",
-      "source_family": "google-research-blog",
-      "allowed_domains": [],
-      "search_keywords": [
-        "AI camera processing",
-        "neural ISP",
-        "on-device AI camera"
-      ],
-      "candidate_urls": [
-        "https://research.google/blog/"
-      ],
-      "expected_evidence": [
-        "AI in image processing",
-        "On-device AI for cameras",
-        "Neural ISP",
-        "Computer vision advancements"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-007",
-      "topic_gap": "New developments or discussions regarding camera hardware and software integration, particularly from a vendor perspective.",
-      "source_family": "ee-times-semiconductors",
-      "allowed_domains": [],
-      "search_keywords": [
-        "camera sensor news",
-        "ISP technology",
-        "semiconductor imaging"
-      ],
-      "candidate_urls": [],
-      "expected_evidence": [
-        "New camera sensors",
-        "ISP advancements",
-        "Semiconductor news related to imaging"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-sw-20260713-008",
-      "topic_gap": "Security updates or vulnerabilities related to the Android camera framework or vendor camera components.",
-      "source_family": "android-security-bulletin",
-      "allowed_domains": [],
-      "search_keywords": [
-        "Android security bulletin camera",
-        "camera vulnerabilities",
-        "CVE camera"
-      ],
-      "candidate_urls": [
-        "https://source.android.com/docs/security/bulletin/2026/2026-07-01"
-      ],
-      "expected_evidence": [
-        "Android Security Bulletin",
-        "Camera-related CVEs",
-        "Vendor security updates"
+        "Information on the CAMSS Offline Processing Engine driver",
+        "How it impacts camera image processing or post-processing on Qualcomm platforms",
+        "Potential implications for Android Camera HAL on these devices"
       ],
       "risk_notes": []
     }
