@@ -4,106 +4,68 @@
   "newsletter_date": "2026-07-13",
   "proposals": [
     {
-      "proposal_id": "camerax-1.7.0-alpha02",
-      "topic_gap": "CameraX 1.7.0-alpha02 release details and new features for Android camera developers.",
+      "proposal_id": "camera-hal-sw-20260713-01",
+      "topic_gap": "CameraX 1.7.0-alpha02 release notes",
       "source_family": "camerax-release-notes",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
         "CameraX 1.7.0-alpha02",
-        "AndroidX Camera release",
-        "CameraX new features",
-        "CameraX updates"
+        "release notes",
+        "camera output"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
       ],
       "expected_evidence": [
-        "Release notes for CameraX 1.7.0-alpha02",
-        "New APIs, bug fixes, or behavioral changes related to CameraX",
-        "Impact on camera output, preview, or recording functionalities"
+        "CameraX 1.7.0-alpha02 release notes",
+        "camera output",
+        "camera pipeline"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "raspberrypi-libcamera-v0.7.1-rpt20260609",
-      "topic_gap": "Updates and new features in Raspberry Pi's libcamera v0.7.1+rpt20260609, relevant for embedded camera development.",
-      "source_family": "raspberrypi-libcamera-releases",
-      "allowed_domains": [
-        "github.com"
-      ],
-      "search_keywords": [
-        "Raspberry Pi libcamera v0.7.1+rpt20260609",
-        "libcamera release Raspberry Pi",
-        "Raspberry Pi camera updates"
-      ],
-      "candidate_urls": [
-        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
-      ],
-      "expected_evidence": [
-        "Release notes for Raspberry Pi libcamera v0.7.1+rpt20260609",
-        "Changes or new features in libcamera for Raspberry Pi",
-        "Impact on camera drivers, ISP, or image processing pipeline"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "linux-media-vdec-vp9-header-fix",
-      "topic_gap": "Kernel-level fixes for VP9 header update failures in meson VDEC, impacting video decoding and potentially camera-generated video playback.",
+      "proposal_id": "camera-hal-sw-20260713-02",
+      "topic_gap": "Linux kernel media subsystem updates for camera and video processing",
       "source_family": "lore-linux-media-list",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
-        "linux-media meson vdec vp9 header fix",
-        "kernel video decoder update",
-        "camera video playback fix"
+        "linux kernel media",
+        "camera subsystem",
+        "V4L2",
+        "ISP",
+        "meson vdec",
+        "drm meson"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260713120840.17427-10-linux.amoon@gmail.com/"
+        "https://lore.kernel.org/linux-media/20260713120840.17427-19-linux.amoon@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260713120840.17427-10-linux.amoon@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260713120840.17427-16-linux.amoon@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260713120840.17427-13-linux.amoon@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260713120840.17427-8-linux.amoon@gmail.com/",
+        "https://lore.kernel.org/linux-media/5224ab5bffdee0777ecef73a3b96c88e8eed38e8.camel@ndufresne.ca/",
+        "https://lore.kernel.org/linux-media/20260713120840.17427-20-linux.amoon@gmail.com/"
       ],
       "expected_evidence": [
-        "Details on VP9 header update failure fix in meson VDEC driver",
-        "Impact on video decoding stability and performance",
-        "Relevance to camera-generated video content playback"
+        "Linux kernel media subsystem",
+        "camera driver updates",
+        "video processing improvements",
+        "V4L2",
+        "ISP"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-developer-productivity-updates",
-      "topic_gap": "Updates on Android developer productivity, potentially including tools or APIs relevant to Camera HAL SW development or testing workflows.",
-      "source_family": "android-developers-blog",
-      "allowed_domains": [
-        "android-developers.googleblog.com"
-      ],
-      "search_keywords": [
-        "Android developer productivity",
-        "Android development tools",
-        "Android CLI updates"
-      ],
-      "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html"
-      ],
-      "expected_evidence": [
-        "Information on new tools or features improving Android developer productivity",
-        "Relevance to camera development, debugging, or testing",
-        "Specific examples of productivity enhancements for native/HAL developers"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "libcamera-software-isp-lsc-support",
-      "topic_gap": "Introduction of Lens Shading Correction (LSC) support in libcamera's software ISP, enhancing image quality for Linux-based camera systems.",
+      "proposal_id": "camera-hal-sw-20260713-03",
+      "topic_gap": "libcamera software ISP updates for debayering and LSC support",
       "source_family": "patchwork-libcamera-patches",
-      "allowed_domains": [
-        "patchwork.libcamera.org"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
-        "libcamera software ISP LSC",
-        "libcamera debayering LSC",
-        "libcamera EGL LSC",
-        "lens shading correction libcamera"
+        "libcamera",
+        "software ISP",
+        "debayer",
+        "LSC",
+        "EGL",
+        "patch review"
       ],
       "candidate_urls": [
         "https://patchwork.libcamera.org/patch/27349/",
@@ -112,31 +74,55 @@
         "https://patchwork.libcamera.org/patch/27346/"
       ],
       "expected_evidence": [
-        "Details on LSC implementation in libcamera's software ISP",
-        "Impact on image quality and color correction",
-        "Technical specifics of the debayering and EGL integration"
+        "libcamera",
+        "software ISP",
+        "debayering",
+        "LSC (Lens Shading Correction)",
+        "camera pipeline"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "linux-media-qcom-camss-offline-engine",
-      "topic_gap": "Addition of CAMSS Offline Processing Engine driver for Qualcomm platforms in the Linux media subsystem, potentially affecting camera image processing pipelines.",
-      "source_family": "lore-linux-media-list",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-sw-20260713-04",
+      "topic_gap": "Raspberry Pi libcamera release with potential camera pipeline improvements",
+      "source_family": "raspberrypi-libcamera-releases",
+      "allowed_domains": [],
       "search_keywords": [
-        "linux-media qcom camss offline processing engine",
-        "qualcomm camera driver",
-        "camera image processing linux kernel"
+        "raspberrypi libcamera",
+        "release v0.7.1",
+        "camera pipeline"
+      ],
+      "candidate_urls": [
+        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
+      ],
+      "expected_evidence": [
+        "Raspberry Pi libcamera",
+        "release notes",
+        "camera pipeline",
+        "image sensor",
+        "ISP"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260713-05",
+      "topic_gap": "QCOM CAMSS offline processing engine driver addition",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "QCOM CAMSS",
+        "offline processing",
+        "camera driver",
+        "linux-media"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/"
       ],
       "expected_evidence": [
-        "Information on the CAMSS Offline Processing Engine driver",
-        "How it impacts camera image processing or post-processing on Qualcomm platforms",
-        "Potential implications for Android Camera HAL on these devices"
+        "QCOM CAMSS driver",
+        "offline processing engine",
+        "camera HAL",
+        "image processing"
       ],
       "risk_notes": []
     }
