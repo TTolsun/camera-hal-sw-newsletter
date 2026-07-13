@@ -13,6 +13,15 @@
 
 const DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
+// patchwork patch 객체의 series id. 한 시리즈의 조각들이 같은 series id를 공유하므로, 이 id를 후보에
+// 실어 선정 단계 dedup(article-groups seriesKey)이 시리즈를 하나의 대표 기사로 collapse하게 한다(#795).
+// URL(/patch/<id>/)의 id는 패치별 고유라 시리즈를 못 묶고, patchwork 후보엔 message-id도 없다.
+function patchSeriesId(patch) {
+  const series = patch && patch.series;
+  const first = Array.isArray(series) ? series[0] : series;
+  return first && first.id !== undefined && first.id !== null ? first.id : undefined;
+}
+
 function patchCandidate(patch, source) {
   if (!patch || typeof patch !== 'object') return null;
   const title = String(patch.name || '').replace(/\s+/g, ' ').trim();
@@ -34,6 +43,7 @@ function patchCandidate(patch, source) {
     url,
     publishedAt,
     summary,
+    seriesId: patchSeriesId(patch),
     sourceKind: 'rss_item',
     collectionMode: 'rss-item',
     parentUrl: source.sourceUrl || source.url,

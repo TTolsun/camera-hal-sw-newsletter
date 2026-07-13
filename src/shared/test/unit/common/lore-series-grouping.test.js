@@ -7,7 +7,9 @@ const {
   fallbackGroupKey,
   loreSeriesKey,
   loreSeriesPatchNumber,
-  loreThreadUrl
+  loreThreadUrl,
+  seriesKey,
+  seriesPatchNumber
 } = require('../../../common/article-groups');
 
 const LORE_LIST = 'https://lore.kernel.org/linux-media';
@@ -100,6 +102,67 @@ test('fallbackGroupKey collapses a patch series and keeps non-series lore messag
   const standalone = loreCandidate('051b9597-873c-44ca-b7a5-29efa795406f@oss.qualcomm.com', 'standalone fix');
   assert.ok(fallbackGroupKey(standalone).startsWith('article:'));
   assert.notEqual(fallbackGroupKey(standalone), groupKey);
+});
+
+// patchwork.libcamera.org 시리즈: lore와 달리 patch URL(/patch/<id>/)은 패치별 고유이고
+// message-id도 없다. 시리즈 식별자는 수집기가 REST의 series id를 후보에 실어준 candidate.seriesId,
+// patch 번호는 제목의 [..,x/N]에서 온다. generic seriesKey/seriesPatchNumber가 lore와 patchwork를
+// 모두 커버해야 한다(#795).
+const PATCHWORK_PATCH = 'https://patchwork.libcamera.org/patch';
+
+function patchworkCandidate(patchId, seriesId, title) {
+  return {
+    title: title || `[v1,1/1] patchwork patch ${patchId}`,
+    url: `${PATCHWORK_PATCH}/${patchId}/`,
+    seriesId
+  };
+}
+
+test('seriesKey collapses patchwork series fragments sharing a seriesId', () => {
+  const p1 = patchworkCandidate(27346, 880, '[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter');
+  const p2 = patchworkCandidate(27347, 880, '[RFC,v7,2/6] libcamera: software_isp: Add LSC data to DebayerParams');
+  const p5 = patchworkCandidate(27349, 880, '[RFC,v7,5/6] libcamera: software_isp: Pass LSC availability');
+
+  const key1 = seriesKey(p1);
+  assert.ok(key1, 'patchwork series key should be non-empty');
+  assert.ok(key1.startsWith('patchwork-series:'), 'patchwork key should be namespaced');
+  assert.equal(seriesKey(p2), key1);
+  assert.equal(seriesKey(p5), key1);
+});
+
+test('seriesKey keeps distinct patchwork series distinct and ignores missing seriesId', () => {
+  const a = patchworkCandidate(27346, 880, '[RFC,v7,1/6] series A');
+  const b = patchworkCandidate(30000, 999, '[v2,1/3] series B');
+  assert.notEqual(seriesKey(a), seriesKey(b));
+  // seriesId 없는 단일 patch는 시리즈 그룹핑 없음(무회귀).
+  const standalone = patchworkCandidate(40000, undefined, '[PATCH] standalone libcamera fix');
+  assert.equal(seriesKey(standalone), '');
+});
+
+test('seriesPatchNumber extracts x/N from patchwork titles', () => {
+  assert.equal(seriesPatchNumber(patchworkCandidate(1, 5, '[RFC,v7,0/6] cover letter')), 0);
+  assert.equal(seriesPatchNumber(patchworkCandidate(2, 5, '[RFC,v7,3/6] patch three')), 3);
+  assert.equal(seriesPatchNumber(patchworkCandidate(3, 5, '[v2,1/2] add control')), 1);
+  // 제목에 x/N이 없으면 unknown(큰 수).
+  assert.ok(seriesPatchNumber(patchworkCandidate(4, 5, '[PATCH] single patch')) > 1000000);
+});
+
+test('generic seriesKey still resolves lore series (wraps loreSeriesKey)', () => {
+  const lore = {
+    title: 'cover',
+    url: `${LORE_LIST}/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/`
+  };
+  assert.equal(seriesKey(lore), loreSeriesKey(lore));
+  assert.ok(seriesKey(lore).startsWith('lore-series:'));
+  assert.equal(seriesPatchNumber(lore), loreSeriesPatchNumber(lore));
+});
+
+test('fallbackGroupKey collapses a patchwork series into one group', () => {
+  const p1 = patchworkCandidate(27346, 880, '[RFC,v7,1/6] a');
+  const p2 = patchworkCandidate(27347, 880, '[RFC,v7,2/6] b');
+  const key = fallbackGroupKey(p1);
+  assert.ok(key.startsWith('patchwork-series:'), 'patchwork series should flow into the group key');
+  assert.equal(fallbackGroupKey(p2), key);
 });
 
 test('loreThreadUrl maps a series patch URL to its thread view and ignores non-series', () => {

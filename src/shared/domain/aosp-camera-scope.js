@@ -62,11 +62,11 @@ const DIRECT_AOSP_PATTERNS = [
   /\bCDD\b[^.\n]{0,120}\bcamera orientation\b/i
 ];
 
-const DRIVER_PATTERNS = [
-  /\bV4L2\b/i,
+// 카메라 특정 driver evidence — 무조건 카메라 드라이버 근거로 인정한다. 벤더 카메라/ISP 드라이버명과
+// camera/image sensor·CSI-2·libcamera 리터럴은 비카메라 미디어 게이트 뒤로 넣지 않는다(#792가 지키는
+// rkisp2/camss 같은 진짜 기사 보호). #792(벤더 ISP 토큰 단일출처)가 재사용할 수 있게 export한다.
+const STRONG_CAMERA_DRIVER_PATTERNS = [
   /\blibcamera\b/i,
-  /\bmedia controller\b/i,
-  /\bLinux media subsystem\b/i,
   /\bcamera driver\b/i,
   /\bLinux\b[^.\n]{0,120}\bcamera\s+(?:subsystem|pipeline|driver)\b/i,
   /\bcamera\s+(?:subsystem|pipeline|driver)\b[^.\n]{0,120}\bLinux\b/i,
@@ -83,14 +83,40 @@ const DRIVER_PATTERNS = [
   /\bcamss\b/i,          // Qualcomm Camera Subsystem (drivers/media/platform/qcom/camss)
   /\bmtk[-_]?isp\b/i,    // MediaTek ISP (drivers/media/platform/mediatek/isp)
   /\bmtk[-_]?cam\b/i,    // MediaTek camera (mtk-cam)
-  // Camera/V4L2-specific driver and uAPI tokens that carry no separate "V4L2"/"camera"
-  // literal, so \bV4L2\b and the descriptive patterns above miss them.
-  /\buvcvideo\b/i,       // USB Video Class camera driver (drivers/media/usb/uvc)
+  /\buvcvideo\b/i        // USB Video Class camera driver (drivers/media/usb/uvc)
+];
+
+// Linux media 프레임워크 공용 API 토큰 — 디코더/인코더/DVB/튜너/HDMI-RX도 공유한다. 카메라 특정
+// 토큰이 함께 있을 때만(또는 비카메라 미디어 신호가 없을 때만) 카메라 드라이버 근거로 인정한다
+// (driverEvidenceTerms). "video capture pipeline"의 capture는 카메라 쪽이지만 안전하게 문맥 게이트에 둔다.
+const SHARED_MEDIA_API_PATTERNS = [
+  /\bV4L2\b/i,
+  /\bmedia controller\b/i,
+  /\bLinux media subsystem\b/i,
   /\bvidioc_[a-z]/i,     // V4L2 VIDIOC_* userspace ioctl identifiers
   /\bDMA-?BUF\b[^.\n]{0,120}\b(?:camera|frame|image|buffer|pipeline)\b/i,
   /\b(?:camera|frame|image|buffer|pipeline)\b[^.\n]{0,120}\bDMA-?BUF\b/i,
   /\bvideo capture pipeline\b/i
 ];
+
+// 비카메라 미디어 신호 — video decode/encode, codec, DVB/튜너/HDMI-RX 등. 이 신호가 있는데 카메라 특정
+// 토큰이 없으면 공용 V4L2 토큰을 카메라 드라이버 근거로 세지 않는다(#795 scope 누수 차단).
+const NON_CAMERA_MEDIA_PATTERNS = [
+  /\bvdec\b/i,           // video decoder module
+  /\bvenc\b/i,           // video encoder module
+  /\bvideo\s+(?:decoder|decoding|encoder|encoding)\b/i,
+  /\bstateless\s+(?:decoder|encoder)\b/i,
+  /\b(?:H\.?26[45]|HEVC|VP[89]|AV1|MPEG-?\d?)\b/i,   // video codecs
+  /\bbitstream\b/i,
+  /\bDVB\b/i,            // digital video broadcast (tuner)
+  /\bdemux\b/i,
+  /\btuner\b/i,
+  /\bHDMI[\s-]?RX\b/i
+];
+
+// 기존 참조(source hint 매칭 등)를 위해 STRONG+SHARED 합집합을 DRIVER_PATTERNS로 유지한다. 실제
+// 카메라 드라이버 근거 판정은 driverEvidenceTerms가 비카메라 미디어 문맥 게이트와 함께 수행한다.
+const DRIVER_PATTERNS = [...STRONG_CAMERA_DRIVER_PATTERNS, ...SHARED_MEDIA_API_PATTERNS];
 
 const ANDROID_ADJACENT_PATTERNS = [
   /\bAndroid\b[^.\n]{0,120}\b(?:release|platform|compatibility|CDD|CTS|VTS|security bulletin|media framework|Surface|graphics buffer|power|thermal|scheduler|memory pressure)\b/i,
@@ -487,11 +513,24 @@ function bucketReason(bucket, terms, evidenceOrigin) {
   return `${BUCKET_DEFINITIONS[bucket]} Matched ${terms.length} article-level signal(s) from ${evidenceOrigin}.`;
 }
 
+// 카메라 드라이버 근거 토큰. STRONG(카메라 특정)은 항상 인정한다. SHARED(공용 V4L2/media)는 비카메라
+// 미디어 신호가 있고 카메라 특정 토큰이 없을 때만 제외한다. 이렇게 해야 meson vdec 같은 순수 video
+// decoder가 camera_driver로 새지 않으면서(#795), rkisp2/camss 같은 진짜 카메라 드라이버(디코드 언급이
+// 섞여도 카메라 토큰이 있으면)는 유지된다(과도 제외 방지).
+function driverEvidenceTerms(body) {
+  const strong = patternHits(STRONG_CAMERA_DRIVER_PATTERNS, body);
+  const shared = patternHits(SHARED_MEDIA_API_PATTERNS, body);
+  if (shared.length === 0) return strong;
+  const nonCameraMediaPresent = patternHits(NON_CAMERA_MEDIA_PATTERNS, body).length > 0;
+  if (nonCameraMediaPresent && strong.length === 0) return strong;
+  return [...strong, ...shared];
+}
+
 function classifyAospCameraStackCandidate(candidate = {}) {
   const body = candidateArticleText(candidate);
   const sourceHint = sourceHintText(candidate);
   const directTerms = patternHits(DIRECT_AOSP_PATTERNS, body);
-  const driverTerms = patternHits(DRIVER_PATTERNS, body);
+  const driverTerms = driverEvidenceTerms(body);
   const androidAdjacentTerms = patternHits(ANDROID_ADJACENT_PATTERNS, body);
   const adaptiveUiAdjacentTerms = androidAdaptiveUiCameraAdjacentTerms(body);
   const cameraImpactTerms = patternHits(CAMERA_IMPACT_PATTERNS, body);
@@ -675,5 +714,7 @@ module.exports = {
   classifyAospCameraStackCandidate,
   detectNativeAndroidToolingWorkflow,
   normalizeAospCameraScope,
-  candidateArticleText
+  candidateArticleText,
+  // 벤더 카메라/ISP 드라이버명 등 카메라 특정 driver 토큰. #792(벤더 ISP 토큰 단일출처)가 재사용한다.
+  STRONG_CAMERA_DRIVER_PATTERNS
 };

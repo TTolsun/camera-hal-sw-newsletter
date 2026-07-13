@@ -83,8 +83,8 @@ const {
   candidateGroupKey,
   groupCoverageSummary,
   isNativeToolingWorkflow,
-  loreSeriesKey,
-  loreSeriesPatchNumber
+  seriesKey,
+  seriesPatchNumber
 } = require('../../shared/common/article-groups');
 const {
   dateQualityForCandidate
@@ -183,10 +183,10 @@ function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectio
 }
 
 function candidatesAreDuplicate(left, right) {
-  // 같은 lore.kernel.org 패치 시리즈(cover letter + 각 패치)는 URL/title이 모두 달라도
-  // 하나의 main 기사로 묶어야 한다. 시리즈 키가 같으면 즉시 중복으로 본다.
-  const leftSeries = loreSeriesKey(left);
-  if (leftSeries && leftSeries === loreSeriesKey(right)) return true;
+  // 같은 패치 시리즈(lore.kernel.org cover letter + 각 패치, patchwork.libcamera.org 시리즈 조각)는
+  // URL/title이 모두 달라도 하나의 main 기사로 묶어야 한다. 시리즈 키가 같으면 즉시 중복으로 본다.
+  const leftSeries = seriesKey(left);
+  if (leftSeries && leftSeries === seriesKey(right)) return true;
   const leftUrl = normalizeUrl(candidateUrl(left));
   const rightUrl = normalizeUrl(candidateUrl(right));
   if (leftUrl && rightUrl && leftUrl === rightUrl) return true;
@@ -203,9 +203,9 @@ function candidatesAreDuplicate(left, right) {
 
 function shouldPreferDuplicateCandidate(candidate, existing) {
   // 같은 패치 시리즈면 patch 번호가 낮은 쪽(cover letter 0)을 대표로 남긴다.
-  const candidateSeries = loreSeriesKey(candidate);
-  if (candidateSeries && candidateSeries === loreSeriesKey(existing)) {
-    return loreSeriesPatchNumber(candidate) < loreSeriesPatchNumber(existing);
+  const candidateSeries = seriesKey(candidate);
+  if (candidateSeries && candidateSeries === seriesKey(existing)) {
+    return seriesPatchNumber(candidate) < seriesPatchNumber(existing);
   }
   const candidateCameraPage = cameraReleasePageKey(candidate);
   const existingCameraPage = cameraReleasePageKey(existing);

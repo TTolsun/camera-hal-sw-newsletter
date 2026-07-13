@@ -58,6 +58,28 @@ test('classifies V4L2, libcamera, ISP, image sensor, and driver evidence', () =>
   assert.ok(camera.driver_stack_relevance > 0);
 });
 
+test('does not leak non-camera V4L2 media (video decoder) into the camera driver bucket (#795)', () => {
+  // meson vdec 같은 V4L2 M2M video decoder는 공용 V4L2/vidioc_ 토큰을 쓰지만 카메라가 아니다.
+  // 카메라 특정 토큰(sensor/ISP/camera/libcamera/벤더 카메라 드라이버명)이 없고 비카메라 미디어
+  // 신호(vdec/decode/vp9/bitstream)가 지배하면 camera_driver로 승격하지 않고 watchlist로 흘려보낸다.
+  const vdec = classifyAospCameraStackCandidate({
+    title: 'media: meson: vdec: Fix vp9 header update failure',
+    summary: 'The V4L2 stateless video decoder driver updates vidioc_ decoder ops for VP9 bitstream handling.'
+  });
+  assert.equal(vdec.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
+  assert.equal(vdec.counts_as_driver_topic, false);
+});
+
+test('keeps real camera drivers that also touch shared V4L2/decode tokens (#795 no over-exclusion)', () => {
+  // 카메라 특정 토큰(image sensor / rkisp / camss)이 있으면 V4L2·decode 언급이 섞여도 camera driver 유지.
+  const cameraV4l2 = classifyAospCameraStackCandidate({
+    title: 'media: rkisp1: fix V4L2 image sensor format negotiation',
+    summary: 'The camera ISP driver updates vidioc_ ops for the image sensor capture pipeline.'
+  });
+  assert.equal(cameraV4l2.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE);
+  assert.equal(cameraV4l2.counts_as_driver_topic, true);
+});
+
 test('classifies article-level Linux camera subsystem and pipeline evidence as driver topic', () => {
   const camera = classifyAospCameraStackCandidate({
     title: 'Linux camera subsystem update improves sensor routing',
