@@ -153,7 +153,7 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /3-5개 자연스러운 문단/);
   assert.match(prompt, /발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획/);
   assert.match(prompt, /Public-facing impact wording과 claim-level classification은 public_article\.camera_hal_takeaway, article_sections\.hal_driver_impact, claims\[\]\.impact_level/);
-  assert.match(prompt, /source가 직접 말하지 않는 HAL\/driver\/runtime 영향은 없다고 제한/);
+  assert.match(prompt, /source가 뒷받침하는 범위 안에서만 HAL\/driver\/runtime 영향을 서술하고, source가 말하지 않는 영향을 지어내거나 확대하지 마세요/);
   assert.match(prompt, /Camera HAL\/Driver 관점에서의 의미/);
   // camera_hal_takeaway는 디스클레이머로 시작하지 말고 구체 점검 항목을 먼저 제시해야 한다(de-hedge).
   assert.match(prompt, /"직접적인 HAL 변경은 없으나" 같은 디스클레이머로 문장을 시작하지 말고/);

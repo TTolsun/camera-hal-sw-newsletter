@@ -257,7 +257,7 @@ function buildHalPerspective(candidate = {}) {
     return 'Linked source가 직접 뒷받침하는 범위에서만 HAL API, metadata, request/result, stream, buffer contract 항목으로 다룹니다.';
   }
   if (impact === GUARDRAIL_IMPACT_CLASSES.CAMERA_STACK_SOURCE) {
-    return 'Android HAL contract 변경으로 단정하지 말고 driver, sensor, ISP, image pipeline, frame timing, integration validation을 위한 camera stack input으로 검토합니다.';
+    return 'driver, sensor, ISP, image pipeline 관점에서 frame timing, format negotiation, integration validation 같은 구체 점검 항목을 먼저 제시하고, source 범위를 벗어난 Android HAL contract 변경으로는 단정하지 않습니다.';
   }
   if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
     return 'Do not infer a HAL API change; review preview, video, gallery, video-call, and captured image/video output quality or compatibility regressions.';

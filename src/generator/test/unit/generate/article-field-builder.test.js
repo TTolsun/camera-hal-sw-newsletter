@@ -112,6 +112,11 @@ test('guardrail impact class controls HAL perspective strength', () => {
   assert.match(adjacent, /CameraX|Camera2/);
   assert.match(tooling, /build|test|debug|tooling/);
   assert.equal(inferGuardrailImpactClass(cameraXCandidate()), GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT);
+
+  // camera-stack(driver/ISP) 힌트는 디스클레이머로 시작하지 말고 구체 점검 항목을 먼저 제시해야 한다(de-hedge).
+  const cameraStack = buildHalPerspective({ relevance_bucket: 'camera_driver_image_pipeline' });
+  assert.match(cameraStack, /frame timing|format negotiation|integration validation/);
+  assert.doesNotMatch(cameraStack, /^Android HAL contract 변경으로 단정하지 말고/);
 });
 
 test('multimedia camera-output fields avoid CameraX Camera2 and direct HAL wording', () => {
