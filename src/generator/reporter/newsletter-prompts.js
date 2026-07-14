@@ -71,7 +71,7 @@ function publicArticleContractPrompt() {
     'what_happened에는 source-confirmed fact만 쓰고, HAL 해석이나 권고는 why_it_matters, field_scenario, editor_take로 분리하세요. 다만 body_paragraphs에는 이 내용을 독자-facing 기사 문장으로 자연스럽게 합쳐 쓰세요.',
     'not_to_overclaim과 editor_take는 내부 구조화 필드입니다. public article prose에는 "편집자 판단", "과장 금지", "overclaim", "validation report" 같은 편집/검증 용어를 노출하지 말고 필요한 제한은 자연스러운 설명으로만 표현하세요.',
     'Gemini는 public article writer입니다. selected article capsule과 source facts를 바탕으로 public-facing impact wording과 source-bound engineering inference를 자연스러운 한국어 기사 문장으로 작성하세요.',
-    'Public-facing impact wording과 claim-level classification은 public_article.camera_hal_takeaway, article_sections.hal_driver_impact, claims[].impact_level에 원문 근거 기반으로 작성하세요. source가 직접 말하지 않는 HAL/driver/runtime 영향은 없다고 제한하세요.',
+    'Public-facing impact wording과 claim-level classification은 public_article.camera_hal_takeaway, article_sections.hal_driver_impact, claims[].impact_level에 원문 근거 기반으로 작성하세요. source가 뒷받침하는 범위 안에서만 HAL/driver/runtime 영향을 서술하고, source가 말하지 않는 영향을 지어내거나 확대하지 마세요.',
     'public_article은 한국어 독자-facing technical newsletter prose로 작성하세요. validation report, checklist, enum, schema/debug field name을 노출하지 마세요.',
     'claim/schema contract와 public prose contract를 섞지 마세요. enum, diagnostic term, internal field name은 public_article 문장에 쓰지 마세요.',
     'source_links는 selected capsule의 primary 또는 seed evidence URL만 사용하고 새 URL을 만들지 마세요.',
