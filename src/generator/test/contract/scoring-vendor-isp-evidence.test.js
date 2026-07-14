@@ -21,6 +21,7 @@ const VENDOR_DRIVER_CANDIDATES = [
   { token: 'atomisp', title: 'media: atomisp: fix input buffer queue underflow' },
   { token: 'camss', title: 'media: camss: add VFE hardware version for glymur' },
   { token: 'mtk-isp', title: 'media: mtk-isp: rework DIP frame job scheduling' },
+  { token: 'mtk-cam', title: 'media: mtk-cam: fix seninf DMA buffer handling' },
   { token: 'uvcvideo', title: 'media: uvcvideo: fix control descriptor parsing' }
 ];
 
