@@ -1205,6 +1205,28 @@ function isSourceChangeEventCandidate(item = {}) {
     item.collection_mode === 'source-change-event';
 }
 
+// patchwork 등 series를 가진 소스는 한 patch 시리즈가 수십 개 조각으로 후보에 들어온다.
+// per-source 캡(capPerSource)은 조각 단위로 세므로, 큰 시리즈가 캡을 자기 조각들로 소진하다
+// 대표조차 남기지 못하고 통째로 밀려날 수 있다(선정 단계 series dedup(#795)은 캡 이후라 이때는
+// 이미 늦다 — 캡에서 사라진 시리즈는 선정이 볼 기회조차 없다). 캡 이전에 (source, seriesId)별
+// 대표 1건으로 collapse해, 시리즈가 캡에 대해 하나의 후보로 경쟁하게 한다. 입력이 이미 rank
+// 정렬 상태이므로 first-seen이 그 시리즈의 최상위 대표다. seriesId가 없는 후보(대부분의 소스)는
+// 그대로 통과하므로 다른 소스 동작에는 영향이 없다.
+function collapseSeriesRepresentatives(candidates) {
+  const seenSeries = new Set();
+  const result = [];
+  for (const item of candidates) {
+    const seriesId = item.seriesId ?? item.series_id;
+    if (seriesId !== undefined && seriesId !== null && seriesId !== '') {
+      const key = `${item.source_id || item.source || ''}::${seriesId}`;
+      if (seenSeries.has(key)) continue;
+      seenSeries.add(key);
+    }
+    result.push(item);
+  }
+  return result;
+}
+
 function capPerSource(candidates, maxPerSource) {
   if (!Number.isFinite(maxPerSource) || maxPerSource <= 0) return [...candidates];
   const perSourceCount = new Map();
@@ -1411,7 +1433,7 @@ async function main() {
       const reliabilityDelta = (RELIABILITY_WEIGHT[b.source_reliability] || 0) - (RELIABILITY_WEIGHT[a.source_reliability] || 0);
       return priorityDelta || reliabilityDelta || b.relevanceScore - a.relevanceScore;
     });
-  candidates = capPerSource(rankedCandidates, MAX_CANDIDATES_PER_SOURCE).slice(0, MAX_FINAL_CANDIDATES);
+  candidates = capPerSource(collapseSeriesRepresentatives(rankedCandidates), MAX_CANDIDATES_PER_SOURCE).slice(0, MAX_FINAL_CANDIDATES);
 
   const enrichedCandidates = [];
   for (const candidate of candidates) {
@@ -1490,6 +1512,7 @@ module.exports = {
   MAX_CANDIDATES_PER_SOURCE,
   canonicalContentUrl,
   capPerSource,
+  collapseSeriesRepresentatives,
   componentFromText,
   decisionFromCandidate,
   dedupe,
