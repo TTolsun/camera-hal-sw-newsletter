@@ -75,7 +75,7 @@ function publicArticleContractPrompt() {
     'public_article은 한국어 독자-facing technical newsletter prose로 작성하세요. validation report, checklist, enum, schema/debug field name을 노출하지 마세요.',
     'claim/schema contract와 public prose contract를 섞지 마세요. enum, diagnostic term, internal field name은 public_article 문장에 쓰지 마세요.',
     'source_links는 selected capsule의 primary 또는 seed evidence URL만 사용하고 새 URL을 만들지 마세요.',
-    'camera_hal_takeaway는 별도 섹션에 들어갈 "Camera HAL/Driver 관점에서의 의미"입니다. 직접 HAL/Driver 변경이면 실제 확인 포인트를 쓰고, 직접 변경이 아니면 직접 영향은 없지만 앱/API/tooling/debug/repro 맥락에서 어떤 참고 의미가 있는지만 제한적으로 쓰세요.',
+    'camera_hal_takeaway는 별도 섹션에 들어갈 "Camera HAL/Driver 관점에서의 의미"입니다. "직접적인 HAL 변경은 없으나" 같은 디스클레이머로 문장을 시작하지 말고, 직접 HAL/Driver 변경이면 실제 확인 포인트를, 직접 변경이 아니어도 이 변경이 닿는 하위 스택에서 개발자가 점검할 구체 항목(관련 metadata key, request/result 필드, CTS/VTS/ITS 항목, V4L2/uAPI 구조체, 버퍼/포맷, 라이브러리 버전·재빌드 영향 중 source가 뒷받침하는 것)을 한두 가지 먼저 제시하세요. 단, source_extraction/behavior_change가 뒷받침하지 않는 HAL/driver/runtime 영향은 지어내지 말고, 그 범위를 벗어나는 부분만 참고 맥락으로 쓰세요.',
     'android_multimedia_camera_output article의 camera_hal_takeaway는 Camera HAL 직접 변경이 아니라 camera-generated output, preview/recording, gallery/media access, sharing, video communication, A/V sync 같은 downstream validation 의미로 제한해 쓰세요.',
     'reader_checkpoints는 최소 2개이며 내부 QA/checklist용 필드입니다. Markdown/HTML에 직접 렌더링되지 않으므로, public body나 "Camera HAL/Driver 관점에서의 의미" 섹션을 대체하지 마세요. 독자가 실제로 확인할 행동과 source 범위 제한을 자연어로 작성하되 body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요.',
     'API/component/date, stream/metadata, compatibility test scenario처럼 validator token을 조합한 문장을 쓰지 마세요.',

@@ -155,6 +155,11 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /Public-facing impact wording과 claim-level classification은 public_article\.camera_hal_takeaway, article_sections\.hal_driver_impact, claims\[\]\.impact_level/);
   assert.match(prompt, /source가 직접 말하지 않는 HAL\/driver\/runtime 영향은 없다고 제한/);
   assert.match(prompt, /Camera HAL\/Driver 관점에서의 의미/);
+  // camera_hal_takeaway는 디스클레이머로 시작하지 말고 구체 점검 항목을 먼저 제시해야 한다(de-hedge).
+  assert.match(prompt, /"직접적인 HAL 변경은 없으나" 같은 디스클레이머로 문장을 시작하지 말고/);
+  assert.match(prompt, /관련 metadata key, request\/result 필드, CTS\/VTS\/ITS 항목, V4L2\/uAPI 구조체, 버퍼\/포맷, 라이브러리 버전·재빌드 영향/);
+  // 단, overclaim 안전장치(source 미근거 영향 지어내기 금지)는 유지되어야 한다.
+  assert.match(prompt, /source_extraction\/behavior_change가 뒷받침하지 않는 HAL\/driver\/runtime 영향은 지어내지 말고/);
   assert.match(prompt, /android_multimedia_camera_output article의 camera_hal_takeaway는 Camera HAL 직접 변경이 아니라 camera-generated output/);
   assert.match(prompt, /validation report, checklist, enum, schema\/debug field name/);
   assert.match(prompt, /claim\/schema contract와 public prose contract를 섞지 마세요/);
