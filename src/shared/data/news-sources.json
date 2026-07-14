@@ -900,6 +900,69 @@
       "sourceQualityNotes": []
     },
     {
+      "id": "libcamera-upstream-releases",
+      "name": "libcamera Upstream Releases",
+      "sourceUrl": "https://gitlab.com/libcamera/libcamera/-/tags",
+      "rssUrl": "https://gitlab.com/libcamera/libcamera/-/tags?format=atom",
+      "collectionModeHint": "release-note-watch",
+      "category": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "libcamera 업스트림 릴리스 태그(GitLab, v0.7.x)에서 날짜, 버전, SoftISP, IPA, pipeline handler, sensor 지원 변경을 확인",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "gitlab.com",
+          "libcamera.org",
+          "git.libcamera.org",
+          "lists.libcamera.org"
+        ],
+        "importantAnchorKeywords": [
+          "release notes",
+          "release announcement",
+          "changelog",
+          "tag",
+          "commit",
+          "source code",
+          "details",
+          "learn more"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
+      "keywords": [
+        "libcamera",
+        "SoftISP",
+        "IPA",
+        "camera",
+        "pipeline",
+        "image sensor",
+        "V4L2"
+      ],
+      "sourceRole": "project_release_source",
+      "sourceUrlQualityHint": "project_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "dated_project_announcement",
+      "sourceQualityNotes": [
+        "libcamera 업스트림 릴리스는 GitLab tag(gitlab.com/libcamera/libcamera/-/tags)로 발표되며, ?format=atom 피드가 ISO 날짜를 제공한다",
+        "다운스트림 raspberrypi-libcamera-releases와 달리 업스트림 정식 릴리스(v0.7.x)를 창 내에서 포착하기 위한 소스"
+      ]
+    },
+    {
       "id": "raspberrypi-libcamera-releases",
       "name": "Raspberry Pi libcamera Releases",
       "sourceUrl": "https://github.com/raspberrypi/libcamera/releases",
