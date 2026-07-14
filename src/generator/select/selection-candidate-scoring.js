@@ -29,7 +29,8 @@ const {
 const {
   BUCKETS,
   classifyAospCameraStackCandidate,
-  normalizeAospCameraScope
+  normalizeAospCameraScope,
+  STRONG_CAMERA_DRIVER_PATTERNS
 } = require('../../shared/domain/aosp-camera-scope');
 const {
   isNativeToolingWorkflow
@@ -241,10 +242,15 @@ function hasConcreteMultimediaCameraOutputComponent(candidate) {
 
 function hasConcreteApiComponent(candidate) {
   if (text(candidate.api_or_component || candidate.apiOrComponent)) return true;
+  const body = candidateBody(candidate);
   return hasGoogleTensorSocComponent(candidate) ||
     hasConcreteMultimediaCameraOutputComponent(candidate) ||
     /Camera HAL|CameraProvider|CameraService|CameraX|Camera2|AOSP Camera|AIDL|HIDL|ICamera|camera3|camera provider|capture request|capture result|stream configuration|camera metadata|ImageReader|AHardwareBuffer|NDK camera|Camera ITS|CTS.{0,80}camera|camera.{0,80}CTS|VTS.{0,80}camera|camera.{0,80}VTS|CDD.{0,80}camera|camera.{0,80}CDD|libcamera|V4L2|media controller|MIPI\s*CSI-?2|CSI-2|DMA-?BUF|image sensor|\bISP\b|\bGPU\b|\bNPU\b|\bDSP\b|Exynos|Snapdragon|\b(?:LLVM|Clang|GCC)\s*\d+(?:\.\d+)*|\b\d+(?:\.\d+)*\s*(?:LLVM|Clang|GCC)\b|AddressSanitizer|ThreadSanitizer|UndefinedBehaviorSanitizer|MemorySanitizer|\b(?:ASan|TSan|UBSan|MSan)\b/i
-      .test(candidateBody(candidate));
+      .test(body) ||
+    // 벤더 카메라/ISP 드라이버 모듈명(rkisp*/atomisp/camss/mtk-isp/uvcvideo 등)은 위 정규식의 \bISP\b가
+    // 토큰 내부라 놓친다. 분류기와 동일한 단일출처 토큰(STRONG_CAMERA_DRIVER_PATTERNS)을 재사용해
+    // 어휘 드리프트 없이 인식한다(#792). aosp-camera-scope.js가 이 목록의 정본이다.
+    STRONG_CAMERA_DRIVER_PATTERNS.some((pattern) => pattern.test(body));
 }
 
 function hasBehaviorEvidence(candidate) {
