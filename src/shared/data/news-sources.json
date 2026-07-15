@@ -2296,7 +2296,7 @@
       "id": "lore-linux-media-list",
       "name": "lore.kernel.org linux-media list",
       "sourceUrl": "https://lore.kernel.org/linux-media/",
-      "rssUrl": "https://lore.kernel.org/linux-media/new.atom",
+      "rssUrl": "https://lore.kernel.org/linux-media/?q=s%3Acamera%20OR%20s%3Alibcamera%20OR%20s%3Acamss%20OR%20s%3Arkisp1%20OR%20s%3Aatomisp%20OR%20s%3Auvcvideo%20OR%20s%3Asensor%20OR%20s%3Acsi2%20OR%20s%3Aisp&x=A",
       "collectionModeHint": "rss-source",
       "category": "linux-camera",
       "priority": "high",
