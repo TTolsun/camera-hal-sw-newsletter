@@ -214,9 +214,9 @@ generator는 `articles/content/newsroom/YYYY-MM-DD/summary-cache-report.json`, `
 
 Gemini 호출이 성공적으로 응답을 반환하면 generator는 response usage metadata를 stage/model/attempt 단위로 기록합니다. 비용 리포트는 `.tmp/newsroom-cost-report.json`과 `articles/content/newsroom/YYYY-MM-DD/cost-report.md`에 남으며, prompt tokens, output tokens, thinking tokens, cached tokens, total tokens, estimated cost를 포함합니다.
 
-Gemini request에는 stage별 thinking budget(추론 예산)과 temperature를 적용합니다. thinking budget 기본값은 stage별로 reporter `0`, editor/completion `1024`, repair `0`, fact-check `1024`, judge `1024`, scoring `0`입니다. editor/fact-check/judge에서 thinking budget을 켜면 하루 약 12K thinking 토큰이 추가되는데, Gemini 2.5 가격 기준으로 수 센트 수준입니다. 이는 fact-check 정확도와 publication-ready 판정의 신뢰도가 올라가는 것으로 정당화됩니다. 비용이 예상을 넘으면 `GEMINI_THINKING_BUDGET_JUDGE=0` 같은 env override로 코드 변경 없이 바로 조정할 수 있습니다.
+Gemini request에는 stage별 thinking budget(추론 예산)과 temperature를 적용합니다. thinking budget 기본값은 stage별로 reporter `512`, editor/completion `1024`, repair `1024`, fact-check `2048`, judge `1024`, scoring `0`입니다. editor/fact-check/judge에서 thinking budget을 켜면 하루 약 12K thinking 토큰이 추가되는데, Gemini 2.5 가격 기준으로 수 센트 수준입니다. 이는 fact-check 정확도와 publication-ready 판정의 신뢰도가 올라가는 것으로 정당화됩니다. 비용이 예상을 넘으면 `GEMINI_THINKING_BUDGET_JUDGE=0` 같은 env override로 코드 변경 없이 바로 조정할 수 있습니다.
 
-temperature 기본값도 stage별로 다릅니다: reporter `0.30`, editor `0.55`, fact-check `0.20`, repair `0.25`, judge `0.20`, source discovery `0.45`, 기타(default) `0.35`. `GEMINI_TEMPERATURE_*` 환경변수로 각 stage를 따로 조정할 수 있습니다(범위 0 이상 2 이하).
+temperature 기본값도 stage별로 다릅니다: reporter `0.30`, editor `0.40`, fact-check `0.20`, repair `0.25`, judge `0.20`, source discovery `0.45`, 기타(default) `0.35`. `GEMINI_TEMPERATURE_*` 환경변수로 각 stage를 따로 조정할 수 있습니다(범위 0 이상 2 이하).
 
 thinking budget과 temperature는 `GEMINI_THINKING_BUDGET_*`, `GEMINI_TEMPERATURE_*` 환경변수로 조정합니다. cost report의 call row에는 실제 response의 `thinking_tokens`와 함께 `thinking_budget_requested`, `thinking_budget_applied`가 남습니다.
 
@@ -234,7 +234,7 @@ Stage별 기본 모델은 다음과 같습니다.
 - editor: `gemini-3.5-flash`
 - repair: `gemini-3.5-flash` (editor와 같은 schema를 재생성하므로 editor 모델에 맞춤)
 - public article judge / source discovery: `gemini-2.5-flash-lite`
-- 기본 fallback: `gemini-2.5-flash-lite`
+- 기본 fallback: `gemini-2.5-flash` → `gemini-2.5-flash-lite` 순서 (flash 우선, flash-lite는 최후 안전망)
 
 source discovery(`newsletters-02-source-discovery-pr.yml`의 Gemini source/linked evidence 발견)는 후보를 새로 쓰지 않고 선별/판정만 하는 단계라서, 비용이 가장 낮은 `gemini-2.5-flash-lite`로 고정합니다. Gemini Pro 계열 모델명은 모든 public model override 경로에서 validation error로 차단합니다. 비용 리포트는 call 단위 `pro_model` audit marker를 유지하지만, 정상 run에서는 항상 `false`여야 하고 report 단위 정책은 `Pro policy: disabled`로 고정됩니다.
 
@@ -282,7 +282,7 @@ fact-checker는 새 글을 쓰는 stage가 아닙니다. source gap, unsupported
 
 ## Safe Scheduled Defaults
 
-현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 정해집니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter/fact-checker `gemini-2.5-flash`, editor/repair `gemini-3.5-flash`, public article judge·source discovery `gemini-2.5-flash-lite`, fallback `gemini-2.5-flash-lite`입니다. Workflow YAML은 Pro 계열 fallback 모델을 자동으로 추가하지 않으며, runtime config는 Gemini Pro 계열 모델명을 모든 public model override 경로에서 차단합니다.
+현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 정해집니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter/fact-checker `gemini-2.5-flash`, editor/repair `gemini-3.5-flash`, public article judge·source discovery `gemini-2.5-flash-lite`, fallback `gemini-2.5-flash` → `gemini-2.5-flash-lite`입니다. Workflow YAML은 Pro 계열 fallback 모델을 자동으로 추가하지 않으며, runtime config는 Gemini Pro 계열 모델명을 모든 public model override 경로에서 차단합니다.
 
 scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. provider/model은 code default를 쓰고, 나머지는 workflow와 runtime config의 기본값을 그대로 씁니다.
 
@@ -294,30 +294,30 @@ GEMINI_MODEL unset
 NEWSROOM_REPORTER_MODEL=gemini-2.5-flash
 NEWSROOM_EDITOR_MODEL=gemini-3.5-flash
 NEWSROOM_FACTCHECK_MODEL=gemini-2.5-flash
-NEWSROOM_REPAIR_MODEL=gemini-2.5-flash
+NEWSROOM_REPAIR_MODEL=gemini-3.5-flash
 NEWSROOM_JUDGE_MODEL=gemini-2.5-flash-lite
 NEWSROOM_SOURCEDISCOVERY_MODEL=gemini-2.5-flash-lite
-LLM_FALLBACK_MODELS=gemini-2.5-flash-lite
+LLM_FALLBACK_MODELS=gemini-2.5-flash,gemini-2.5-flash-lite
 GEMINI_MAX_RETRIES=2
 GEMINI_RETRY_DELAYS_MS=20000,10000
 GEMINI_RETRY_MAX_DELAY_MS=300000
-GEMINI_THINKING_BUDGET_REPORTER=0
+GEMINI_THINKING_BUDGET_REPORTER=512
 GEMINI_THINKING_BUDGET_EDITOR=1024
 GEMINI_THINKING_BUDGET_REPAIR=1024
 GEMINI_THINKING_BUDGET_FACTCHECK=2048
-GEMINI_THINKING_BUDGET_JUDGE=512
+GEMINI_THINKING_BUDGET_JUDGE=1024
 GEMINI_THINKING_BUDGET_SCORING=0
 GEMINI_TEMPERATURE_DEFAULT=0.35
 GEMINI_TEMPERATURE_SOURCE_DISCOVERY=0.45
 GEMINI_TEMPERATURE_REPORTER=0.30
-GEMINI_TEMPERATURE_EDITOR=0.55
+GEMINI_TEMPERATURE_EDITOR=0.40
 GEMINI_TEMPERATURE_FACTCHECK=0.20
 GEMINI_TEMPERATURE_REPAIR=0.25
 GEMINI_TEMPERATURE_JUDGE=0.20
 NEWSROOM_MAX_QUALITY_RETRIES=1
 NEWSROOM_MAX_SECTION_REPAIRS=1
-NEWSROOM_WARN_COST_USD=0.15
-NEWSROOM_MAX_COST_USD=0.25
+NEWSROOM_WARN_COST_USD=0.2
+NEWSROOM_MAX_COST_USD=0.35
 ```
 
 manual high-quality run(수동 고품질 실행)의 기본 입력은 `llm_model=""`입니다. 이때 workflow는 `LLM_MODEL`을 전달하지 않으므로 code default stage model을 씁니다. 수동 실행에서도 `llm_model`, `llm_fallback_models`, stage별 model variable에 Gemini Pro 계열 모델명을 넣으면 `doctor:config` 단계에서 실패합니다.
@@ -360,20 +360,20 @@ PR마다 failure classification(실패 분류)을 다음 중 하나로 기록합
 
 ## GitHub Actions 운영
 
-### 일일 RAW 후보 PR
+### 주간 RAW 후보 수집
 
-`Newsletters 01 - Source Collection PR` (`.github/workflows/newsletters-01-source-collect-pr.yml`) workflow는 주 1회 월요일 09:00 KST에 실행됩니다.
+`Newsletters 01 - Source Collection PR` (`.github/workflows/newsletters-01-source-collect-pr.yml`) workflow 자체에는 schedule이 없습니다. `workflow_dispatch`(수동)와 `workflow_call`(다른 workflow가 호출)만 있습니다. 예약 경로에서는 아래 00 orchestrator가 주 1회 월요일 09:00 KST에 이 workflow를 호출합니다.
 
 ```text
 KST Mon 09:00 = UTC Mon 00:00
 branch: newsroom-raw/YYYY-MM-DD
 ```
 
-workflow는 `main`에 직접 push하지 않고 RAW candidate 검토용 PR을 만듭니다.
+workflow는 `main`에 직접 push하지 않습니다. 수동 실행 시에는 RAW candidate 검토용 PR을 만듭니다.
 
 ### 3-stage RAW workflow
 
-현재 schedule entrypoint는 Stage 1 RAW workflow입니다. Final newsletter generation은 승인된 candidate artifact를 입력으로 받는 수동 workflow로만 실행합니다.
+현재 schedule entrypoint는 `Newsletters 00 - Weekly Orchestrator` (`.github/workflows/newsletters-00-orchestrator.yml`)입니다. cron(`0 0 * * 1`)을 가진 workflow는 00 하나뿐이고, 00이 collect(01) → discover(02) → generate(03)를 순서대로 호출합니다. 따라서 final newsletter generation도 예약 경로에서 자동 실행됩니다. 각 단계를 따로 돌리려면 `workflow_dispatch`로 수동 실행합니다.
 
 - `Newsletters 01 - Source Collection PR` (`.github/workflows/newsletters-01-source-collect-pr.yml`): `collect`만 실행해 `manual-candidates.json`, 호환용 `candidates.json`, `raw-candidate-manifest.json`을 만듭니다. Gemini/API secret은 쓰지 않습니다.
 - `Newsletters 02 - Source Discovery PR` (`.github/workflows/newsletters-02-source-discovery-pr.yml`): source discovery 전용 workflow입니다. 따라서 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하고, 별도 toggle input은 없습니다. 동작 순서는 LLM credential preflight → Gemini proposal을 `gemini-source-proposals.json`에 저장 → deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영, 입니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`로 자격 증명 없이 도는 disabled pass-through는 code 수준에서는 여전히 지원하지만, 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록합니다. `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 이 파일들의 존재를 필수로 검증하므로, 모두 Git에 커밋(`review_required_compact` 등급)해야 합니다:
@@ -386,8 +386,6 @@ workflow는 `main`에 직접 push하지 않고 RAW candidate 검토용 PR을 만
 - `Newsletters 03 - Editor PR` (`.github/workflows/newsletters-03-editor-pr.yml`): `NEWSROOM_CANDIDATE_INPUT_MODE=artifact`로 approved candidate artifact만 읽고 `collect`를 재실행하지 않습니다.
 
 Stage 2/3 manual run의 `newsletter_date`는 optional입니다. 비워두면 workflow 실행 시점의 KST 날짜(`YYYY-MM-DD`)로 resolve되며, resolved date는 workflow log에 출력됩니다.
-
-Stage 1/3 smoke가 통과하기 전에는 새 Stage 1 schedule을 활성화하지 않습니다. cutover PR에서 기존 all-in-one schedule을 제거한 뒤 새 Stage 1 RAW workflow schedule을 활성화합니다.
 
 ### Secret
 
@@ -407,16 +405,16 @@ GEMINI_RETRY_DELAYS_MS=20000,10000
 GEMINI_RETRY_MAX_DELAY_MS=300000
 # thinking budget 기본값은 코드(runtime-config.js)가 정본이며, 비워두면 코드 기본값을 사용합니다.
 # 아래는 repo variable로 override할 때의 예시이며, 값은 코드 기본값과 동일합니다.
-GEMINI_THINKING_BUDGET_REPORTER=0
+GEMINI_THINKING_BUDGET_REPORTER=512
 GEMINI_THINKING_BUDGET_EDITOR=1024
 GEMINI_THINKING_BUDGET_REPAIR=1024
 GEMINI_THINKING_BUDGET_FACTCHECK=2048
-GEMINI_THINKING_BUDGET_JUDGE=512
+GEMINI_THINKING_BUDGET_JUDGE=1024
 GEMINI_THINKING_BUDGET_SCORING=0
 NEWSROOM_MAX_QUALITY_RETRIES=1
 NEWSROOM_MAX_SECTION_REPAIRS=1
-NEWSROOM_WARN_COST_USD=0.15
-NEWSROOM_MAX_COST_USD=0.25
+NEWSROOM_WARN_COST_USD=0.2
+NEWSROOM_MAX_COST_USD=0.35
 ```
 
 ### 수동 Final Generation 실행
