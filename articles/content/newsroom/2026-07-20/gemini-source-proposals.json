@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-07-20",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-driver-updates-july-2026",
+      "topic_gap": "Camera HAL driver updates in July 2026, focusing on new sensor support and ISP engine enhancements.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "linux media driver",
+        "camera sensor driver",
+        "ISP driver",
+        "V4L2",
+        "kernel patch camera"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-2-da610d7fd494@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-0-da610d7fd494@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-2-a1f5baa6fe08@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-1-a1f5baa6fe08@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-0-a1f5baa6fe08@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260708-og0va1b-v3-0-de8e44455a42@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-1-da610d7fd494@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260710-camss-isp-ope-v4-6-51207a0319d8@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "New sensor driver additions (e.g., S5KJN5, HM1092, OG0VA1B)",
+        "ISP engine driver updates (e.g., CAMSS Offline Processing Engine)",
+        "Kernel driver patches related to camera hardware"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-updates-july-2026",
+      "topic_gap": "Recent updates and patch reviews for the libcamera project in July 2026, highlighting camera pipeline and sensor property changes.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "gitlab.com",
+        "patchwork.libcamera.org"
+      ],
+      "search_keywords": [
+        "libcamera release",
+        "libcamera patch review",
+        "camera pipeline",
+        "software ISP",
+        "camera sensor properties"
+      ],
+      "candidate_urls": [
+        "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+        "https://patchwork.libcamera.org/patch/27373/",
+        "https://patchwork.libcamera.org/patch/27349/",
+        "https://patchwork.libcamera.org/patch/27362/"
+      ],
+      "expected_evidence": [
+        "New libcamera releases or tags",
+        "Reviewed patches for camera sensor properties",
+        "Updates to software ISP or pipeline handlers",
+        "Changes related to camera sensor drivers and metadata"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camerax-updates-july-2026",
+      "topic_gap": "CameraX library updates in July 2026, specifically focusing on any new features or bug fixes relevant to camera output or media pipeline.",
+      "source_family": "camera-api",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "CameraX release notes",
+        "androidx.camera updates",
+        "camera preview",
+        "camera recording",
+        "camera output"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+      ],
+      "expected_evidence": [
+        "CameraX release notes mentioning new features or bug fixes",
+        "Changes impacting camera preview, recording, or output formats",
+        "Updates related to camera hardware abstraction or integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "media3-updates-july-2026",
+      "topic_gap": "Media3 library updates in July 2026, with a focus on changes relevant to camera-generated media playback or A/V synchronization.",
+      "source_family": "android-media",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "Media3 release notes",
+        "A/V sync",
+        "media playback",
+        "camera output playback",
+        "MediaCodec",
+        "MediaRecorder"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-beta01"
+      ],
+      "expected_evidence": [
+        "Media3 release notes detailing new features or bug fixes",
+        "Improvements in A/V synchronization",
+        "Changes affecting playback of camera-generated media",
+        "Updates related to media encoding/decoding relevant to camera output"
+      ],
+      "risk_notes": []
+    }
+  ]
+}

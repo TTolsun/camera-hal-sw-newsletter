@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-07-20",
+  "validations": [
+    {
+      "proposal_id": "camera-hal-driver-updates-july-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-2-da610d7fd494@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-2-da610d7fd494@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-driver-updates-july-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-0-da610d7fd494@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-0-da610d7fd494@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-driver-updates-july-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-2-a1f5baa6fe08@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-2-a1f5baa6fe08@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-driver-updates-july-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-1-a1f5baa6fe08@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-1-a1f5baa6fe08@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-driver-updates-july-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-0-a1f5baa6fe08@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-0-a1f5baa6fe08@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-driver-updates-july-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260708-og0va1b-v3-0-de8e44455a42@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260708-og0va1b-v3-0-de8e44455a42@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-driver-updates-july-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-1-da610d7fd494@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-1-da610d7fd494@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-driver-updates-july-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260710-camss-isp-ope-v4-6-51207a0319d8@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260710-camss-isp-ope-v4-6-51207a0319d8@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "libcamera-updates-july-2026",
+      "candidate_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "normalized_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "libcamera-upstream-releases"
+    },
+    {
+      "proposal_id": "libcamera-updates-july-2026",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27373/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27373/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "libcamera-updates-july-2026",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27349/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27349/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "libcamera-updates-july-2026",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27362/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27362/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camerax-updates-july-2026",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camerax-updates-july-2026",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "media3-updates-july-2026",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-beta01",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-beta01",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "androidx-media3-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-media3-release",
+      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
+      "source_extraction_item_count": 0
+    }
+  ],
+  "counts": {
+    "accepted": 12,
+    "discovered_not_extractable": 3
+  }
+}

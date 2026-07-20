@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "64f51544c1cedb7f",
+      "url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-2-da610d7fd494@oss.qualcomm.com/",
+      "title": "[PATCH 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver",
+      "published_at": "2026-07-17T04:09:11Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add a V4L2 sub-device driver for the Samsung S5KJN5, a 50 MP GBRG 10-bit RAW MIPI CSI-2 image sensor. The driver supports the 4096x3072 mode and exposes the standard controls (exposure, gain, vblank/hblank, test pattern). Signed-off-by: Wenmeng Liu --- MAINTAINERS | 1 + drivers/media/i2c/Kconfig | 11 + drivers/media/i2c/Makefile | 1 + drivers/media/i2c/s5kjn5.c | 2835 ++++++++++++++++++++++++++++++++++++++++++++ 4 files changed , 2848 insertions(+) diff --git a/MAINTAINERS b/MAINTAINERS index 02",
+          "evidence_text": "<html><head><title>[PATCH 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?69f21e90\nmedia=\"screen and (p",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "160a7a2e4c061f4b",
+      "url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-0-da610d7fd494@oss.qualcomm.com/",
+      "title": "[PATCH 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "published_at": "2026-07-17T04:09:06Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This series adds support for the Samsung S5KJN5, a 50 MP GBRG 10-bit RAW MIPI CSI-2 image sensor. This is implemented as a separate driver rather than extending the existing s5kjn1 driver. Although both sensors belong to the same family, they are different parts with different register maps, power supplies. Combining support for both devices in a single driver would result in very little shared code while introducing separate initialization and control paths, so keeping them as independent drive",
+          "evidence_text": "<html><head><title>[PATCH 0/2] media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?69f21e90\nmedia=\"screen and (prefers-",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "182a3e4d891da244",
+      "url": "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-2-a1f5baa6fe08@gmail.com/",
+      "title": "[PATCH v5 2/2] media: i2c: hm1092: add Himax HM1092 mono NIR sensor driver",
+      "published_at": "2026-07-09T08:12:43Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add a V4L2 subdev driver for the Himax HM1092, a 1 megapixel monochrome near-infrared image sensor with a single-lane MIPI CSI-2 interface, typically used as the face-authentication IR camera on laptops. The driver supports the sensor's native 560x360 10-bit mono mode, a test pattern control and the standard fwnode properties (orientation, rotation). Signed-off-by: Ramshouriesh R --- MAINTAINERS | 7 + drivers/media/i2c/Kconfig | 11 + drivers/media/i2c/Makefile | 1 + drivers/media/i2c/hm1092.c |",
+          "evidence_text": "<html><head><title>[PATCH v5 2/2] media: i2c: hm1092: add Himax HM1092 mono NIR sensor driver - Ramshouriesh R</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?69f21e90\nmedia",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.91,
+      "warnings": []
+    },
+    {
+      "id": "dd939f0ab3fac3dd",
+      "url": "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-1-a1f5baa6fe08@gmail.com/",
+      "title": "[PATCH v5 1/2] media: dt-bindings: Add Himax HM1092 NIR sensor",
+      "published_at": "2026-07-09T08:12:37Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add a dt-binding schema for the Himax HM1092, a 1 megapixel monochrome near-infrared CMOS image sensor used as the face-authentication IR camera on laptops. The sensor streams 10-bit RAW over a single MIPI CSI-2 data lane. Reviewed-by: Conor Dooley Signed-off-by: Ramshouriesh R --- .../bindings/media/i2c/himax,hm1092.yaml | 101 +++++++++++++++++++++ 1 file changed , 101 insertions(+) diff --git a/Documentation/devicetree/bindings/media/i2c/himax,hm1092.yaml b/Documentation/devicetree/bindings/me",
+          "evidence_text": "<html><head><title>[PATCH v5 1/2] media: dt-bindings: Add Himax HM1092 NIR sensor - Ramshouriesh R</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?69f21e90\nmedia=\"screen and",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.91,
+      "warnings": []
+    },
+    {
+      "id": "669fde3a1267732a",
+      "url": "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-0-a1f5baa6fe08@gmail.com/",
+      "title": "[PATCH v5 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+      "published_at": "2026-07-09T08:12:31Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This adds a V4L2 subdev driver and DT binding for the Himax HM1092, a 1 megapixel monochrome near-infrared image sensor. On laptops it sits behind the IR camera used for face unlock. It speaks a single MIPI CSI-2 data lane and outputs 10-bit RAW at 560x360. The driver exposes that one native mode, a test pattern control and the standard fwnode properties (orientation, rotation). It has been tested on real hardware (an ASUS Zenbook A14): the sensor probes, streams, and the on-chip test patterns c",
+          "evidence_text": "<html><head><title>[PATCH v5 0/2] media: Add Himax HM1092 mono NIR sensor driver - Ramshouriesh R</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?69f21e90\nmedia=\"screen and ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.91,
+      "warnings": []
+    },
+    {
+      "id": "e807f8a5e1a167e8",
+      "url": "https://lore.kernel.org/linux-media/20260708-og0va1b-v3-0-de8e44455a42@oss.qualcomm.com/",
+      "title": "[PATCH v3 0/3] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+      "published_at": "2026-07-08T14:33:46Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add OmniVision OG0VA1B driver support. The OmniVision OG0VA1B is a 1/10-inch monochrome CMOS VGA image sensor. It outputs 10-bit raw (Y10) frames at up to 640x480 resolution over a single-lane MIPI CSI-2 interface and is controlled via an I2C-compatible SCCB bus. This driver has been verified(include tpg) on the Purwa EVK. Signed-off-by: Wenmeng Liu --- Changes in v3: - Generalise the binding title and description for both sensors. -- Vladimir - Keep the cached pre_isp read so the OG0VE1B test p",
+          "evidence_text": "<html><head><title>[PATCH v3 0/3] media: i2c: Add OmniVision OG0VA1B camera sensor driver - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?69f21e90\nmedia=\"scree",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.91,
+      "warnings": []
+    },
+    {
+      "id": "c008bb2b7ed78da5",
+      "url": "https://lore.kernel.org/linux-media/20260710-camss-isp-ope-v4-6-51207a0319d8@oss.qualcomm.com/",
+      "title": "[PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
+      "published_at": "2026-07-10T09:05:09Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add an image processing driver for the Qualcomm Offline Processing Engine (OPE). OPE is a memory-to-memory ISP block that converts raw Bayer frames to YUV, performing white balance, demosaic, chroma enhancement, color correction and downscaling. The hardware architecture consists of Fetch Engines and Write Engines, connected through intermediate pipeline modules for pix processing. The driver exposes three video nodes per pipeline instance: - ope_input: Bayer RAW input (V4L2_BUF_TYPE_VIDEO_OUTPU",
+          "evidence_text": "<html><head><title>[PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver - Loic Poulain</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?69f21e90\nmedi",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.99,
+      "android_hal_relevance": 0.99,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.906,
+      "warnings": []
+    },
+    {
+      "id": "0e22d0e11b82c3c3",
+      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "title": "v0.7.2",
+      "published_at": "2026-07-10T11:12:38+01:00",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "libcamera v0.7.2 This release brings 113 commits, and interestingly fixes two separate saturation handling bugs in both the SoftISP and the Raspberry Pi IPA independently. In particular the fixes to the SoftISP mean we can look forward to tuning cameras on laptops and mobile phones with real CCMs now. Also on the SoftISP 12-bit formats are now supported, black level correction is 'fixed' and there are interesting performance improvements with eGL buffer caching. Within the IPA handling, we have",
+          "evidence_text": "<!DOCTYPE html>\n<html class=\"gl-system ui-neutral with-top-bar with-header page-theme-background page-with-panels with-gl-container-queries  user-logged-out\" lang=\"en\">\n<head prefix=\"og: http://ogp.me/ns#\">\n<meta charset=\"utf-8\">\n<meta content=\"IE=edge\" http-equiv=\"X-UA-Compatible\">\n<meta content=\"width=device-width, initial-scale=1\" name=\"viewport\">\n<title>v0.7.2 · Tags · libcamera / libcamera · GitLab</title>\n<link crossorigin=\"\" href=\"https://snowplowprd.trx.gitlab.net\" rel=\"preconnect\">\n<lin",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.93,
+      "android_hal_relevance": 0.93,
+      "ai_relevance": 0,
+      "technical_depth": 0.882,
+      "warnings": []
+    },
+    {
+      "id": "d1fc41f2f4879dc9",
+      "url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-1-da610d7fd494@oss.qualcomm.com/",
+      "title": "[PATCH 1/2] dt-bindings: media: i2c: Add Samsung S5KJN5 image sensor",
+      "published_at": "2026-07-17T04:09:10Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add device tree bindings for the Samsung S5KJN5, a 50 MP GBRG 10-bit RAW MIPI CSI-2 image sensor controlled over CCI. Signed-off-by: Wenmeng Liu --- .../bindings/media/i2c/samsung,s5kjn5.yaml | 109 +++++++++++++++++++++ MAINTAINERS | 7 ++ 2 files changed , 116 insertions(+) diff --git a/Documentation/devicetree/bindings/media/i2c/samsung,s5kjn5.yaml b/Documentation/devicetree/bindings/media/i2c/samsung,s5kjn5.yaml new file mode 100644 index 0000000000000000000000000000000000000000..7fd9034f32efa",
+          "evidence_text": "<html><head><title>[PATCH 1/2] dt-bindings: media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?69f21e90\nmedia=\"screen ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.99,
+      "android_hal_relevance": 0.99,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.881,
+      "warnings": []
+    },
+    {
+      "id": "77edb777a54540a2",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "published_at": "July 01, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "CameraXViewfinder now supports built-in gestures for pinch-to-zoom and tap-to-focus, and adds support for screen flash and stream state. FocusState is now public in viewfinder-core to allow monitoring tap-to-focus results. ( I66a17 , b/522549890 )",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"es-419-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develop",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.89,
+      "android_hal_relevance": 0.89,
+      "ai_relevance": 0,
+      "technical_depth": 0.849,
+      "warnings": []
+    },
+    {
+      "id": "gemini-0b1237a553743995",
+      "url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-2-da610d7fd494@oss.qualcomm.com/",
+      "title": "[PATCH 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver - Wenmeng Liu",
+      "published_at": "2026-07-17",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver - Wenmeng Liu",
+          "evidence_text": "<html><head><title>[PATCH 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?69f21e90\nmedia=\"screen and (p",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-665e6510fc8ac66c",
+      "url": "https://lore.kernel.org/linux-media/20260710-camss-isp-ope-v4-6-51207a0319d8@oss.qualcomm.com/",
+      "title": "[PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver - Loic Poulain",
+      "published_at": "2026-07-10",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver - Loic Poulain",
+          "evidence_text": "<html><head><title>[PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver - Loic Poulain</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?69f21e90\nmedi",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.79,
+      "warnings": []
+    }
+  ]
+}
