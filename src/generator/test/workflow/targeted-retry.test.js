@@ -677,6 +677,39 @@ test('targeted repair allows metadata repair when article identity stays fixed',
   }), true);
 });
 
+test('targeted repair keeps issue-level story markers so story-v1 sections stay valid', () => {
+  // 2026-07-20 재발 회귀: 최후 가드가 합성 wrapper로 검증할 때 issue 레벨 story marker
+  // (public_contract_version/generation_contract_version)를 떨어뜨리면, story marker를 가진
+  // section이 story_contract_version_mismatch로 항상 실패한다. baseIssue가 marker를 공급해야 한다.
+  const storySection = policySection('CameraX release', 'https://example.com/camerax');
+  storySection.public_article = {
+    ...storySection.public_article,
+    story_contract_version: 1,
+    source_subtitle: 'Example Source 발표 분석',
+    editorial_story: {
+      reader_scenario: '독자가 CameraX 릴리스를 검증 입력으로 검토하는 상황을 가정합니다.',
+      what_happened: 'CameraX release가 2026-05-01에 공개되었습니다.',
+      why_it_matters: 'Camera HAL 검증 입력으로 쓸 수 있는 근거가 생겼습니다.',
+      field_scenario: '스트림 구성과 메타데이터 로그 확인 시나리오에 적용됩니다.',
+      not_to_overclaim: '이 릴리스는 HAL API 규격의 직접 변경을 의미하지 않습니다.',
+      editor_take: '검증 입력으로만 반영합니다.'
+    }
+  };
+  const repaired = JSON.parse(JSON.stringify(storySection));
+  repaired.public_article.editorial_story.editor_take = '검증 입력으로 반영하고 다음 창에서 재확인합니다.';
+
+  assert.equal(validateTargetedRepairResult({
+    beforeSections: [storySection],
+    repairSections: [repaired],
+    afterSections: [repaired],
+    lockedSections: [],
+    mode: 'targeted-repair',
+    allowCountChange: false,
+    date: DATE,
+    baseIssue: { public_contract_version: 'story-v1', generation_contract_version: 1 }
+  }), true);
+});
+
 test('targeted repair rejects same-count article identity drift', () => {
   const a = policySection('CameraX release', 'https://example.com/a');
   const b = policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline');
