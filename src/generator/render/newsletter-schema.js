@@ -283,6 +283,7 @@ const section = {
     'source_verification_notes',
     'public_article',
     'article_sections',
+    'hal_signal_capsule',
     'claims',
     'camera_hal_checks',
     'action_hints',

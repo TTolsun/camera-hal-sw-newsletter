@@ -1211,7 +1211,7 @@ test('editor schema requires public_article with reader-facing fields', () => {
   assert.deepEqual(publicArticle.properties.source_links.items.required, ['title', 'url']);
 });
 
-test('editor schema keeps hal_signal_capsule optional with required capsule keys when present', () => {
+test('editor schema requires hal_signal_capsule on every section with required capsule keys', () => {
   const capsule = editorSchema.properties.sections.items.properties.hal_signal_capsule;
 
   assert.ok(capsule);
@@ -1222,9 +1222,12 @@ test('editor schema keeps hal_signal_capsule optional with required capsule keys
     'impact_axes',
     'do_not_overstate'
   ]);
+  // validateHalSignalCapsules가 모든 section에 capsule을 hard-require하는데 response schema가
+  // 생략을 허용하면 constrained decoding이 capsule 없는 draft를 만들 수 있고, 그 생략은
+  // deterministic repair(섹션에 남는 날짜/축 필드 없음)로도 복구되지 않는다(2026-07-20 발행 차단).
   assert.equal(
     editorSchema.properties.sections.items.required.includes('hal_signal_capsule'),
-    false
+    true
   );
 });
 
