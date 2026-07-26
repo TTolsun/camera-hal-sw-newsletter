@@ -169,19 +169,19 @@ Workflow/Stage: Stage 3 `fact-checker attempt <n>/<total>`
 
 ### Targeted repair editor
 
-이름: Targeted repair editor prompt
+이름: Editor repair patch prompt
 
-목적: quality/fact-check failure가 있는 section만 repair, replace, demote하기 위한 replacement section JSON을 생성합니다.
+목적: quality/fact-check failure가 있는 section을 repair plan에 따라 처리합니다. `repair-section` action만 있는 plan은 LLM에게 field-level patch(`{patches:[...]}`)를 받아 결정론적으로 적용하고(#482), `replace-section`/`replace-or-demote` 같은 structural action은 LLM 재생성 없이 결정론 강등(deterministic demote)으로 처리합니다(#632). 강등으로 비는 자리는 이후 completion 패스가 reserve candidate로 보충합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 repair editor `callLlmJson()` 호출
+위치: `src/generator/publish/orchestrator-repair-completion.js`의 `runRepairAndCompletionPasses()` (system prompt는 `src/generator/publish/orchestrator-stage-prompts.js`의 `editorRepairPatchSystemPrompt()`)
 
 Workflow/Stage: Stage 3 `editor repair attempt <n>/<total>`
 
-주요 입력: `commonContext`, locked article context, repair plan JSON, locked/passing section summary, failed section summary, selected/reserve article capsule JSON, background context JSON, candidate rejection diagnostics, current fact-check JSON, quality deductions
+주요 입력: `commonContext`, failed section patch target JSON(section_index, section_key, summary, `article_sections`, `public_article`), repair plan JSON, primary selected article capsule JSON, current fact-check JSON, quality deductions JSON. LLM 호출은 `repair-section` 전용 patch 경로에서만 일어나고, structural 경로는 LLM 없이 진행됩니다.
 
-출력/schema: `editorCompletionSchema`, `editor-repair-sections-attempt-<n>.json`
+출력/schema: `editorRepairPatchSchema`(`{patches:[...]}`), `editor-repair-patches-attempt-<n>.json`. patch는 `applyRepairPatchesAndValidate()`가 결정론적으로 적용하며, article-preserving 계약을 위반하면 targeted repair가 실패합니다. `editor-repair-sections-attempt-<n>.json`은 두 경로 모두에서 locked/failed/regenerated section summary와 repair plan을 담는 요약 artifact로 계속 기록됩니다.
 
-주요 guardrail: Full newsletter draft를 반환하지 않고 regenerated section JSON만 반환합니다. Locked/passing section은 변경하지 않습니다. Source gap을 publishable fact처럼 재사용하지 않고, coverage나 source binding을 충족할 수 없으면 demote 또는 replace합니다.
+주요 guardrail: Patch-only 계약 — full editor 또는 full section JSON을 반환하지 않고 `{patches:[...]}`만 반환합니다. `op`는 `replace`만, `path`는 `/article_sections/` 또는 `/public_article/`로 시작하는 독자-facing 문구 경로만 허용합니다. source, source URL, evidence id, candidate identity, section 개수/순서는 수정 금지이며, 새 evidence id를 만들거나 source가 뒷받침하지 않는 사실을 patch value에 쓰지 않습니다.
 
 ### Repair fact-check
 
