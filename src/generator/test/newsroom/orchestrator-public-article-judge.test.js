@@ -1,7 +1,10 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { validatePublicArticleJudgeOrRepair } = require('../../publish/orchestrator-public-article-judge');
+const {
+  repairEditorSemanticWithLlm,
+  validatePublicArticleJudgeOrRepair
+} = require('../../publish/orchestrator-public-article-judge');
 
 // 추출 전 main()의 editor public-article judge / semantic repair 흐름을 입력→출력으로 고정한다.
 // 모듈의 책임은 orchestration(judge → 차단 시 repair → 재judge → status 기록)이며,
@@ -218,6 +221,32 @@ test('repair 프롬프트에 desk 교정 지침이 포함된다', async () => {
   const repairPrompt = prompts.find(entry => /semantic repair$/.test(entry.stage));
   assert.ok(repairPrompt, 'semantic repair가 호출되어야 한다');
   assert.match(repairPrompt.prompt, /desk_target_explanation/);
+});
+
+test('semantic repair 프롬프트에 sections.hal_signal_capsule 수리 지침이 포함된다', async () => {
+  const prompts = [];
+  const deps = {
+    callLlmJson: async (stage, prompt) => {
+      prompts.push({ stage, prompt });
+      return editorWithOneSection();
+    }
+  };
+
+  await repairEditorSemanticWithLlm({
+    date: '2026-05-08',
+    editorStage: 'editor attempt 1/3',
+    commonContext: '',
+    lockedContext: '',
+    reporter: { candidates: [] },
+    articleCapsuleReport: null,
+    invalidEditor: editorWithOneSection(),
+    validationError: { field: 'sections.hal_signal_capsule' }
+  }, deps);
+
+  assert.equal(prompts.length, 1);
+  // validationError JSON echo에도 sections.hal_signal_capsule이 등장하므로 지시문 고유 문구로 잡는다.
+  assert.match(prompts[0].prompt, /sections\.hal_signal_capsule failure는/);
+  assert.match(prompts[0].prompt, /why_now, reader_owners, check_within_2_weeks, impact_axes, do_not_overstate/);
 });
 
 test('차단도 desk advisory도 없으면 repair 없이 editor를 반환한다', async () => {

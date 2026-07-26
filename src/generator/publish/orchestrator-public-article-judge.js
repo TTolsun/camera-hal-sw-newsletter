@@ -51,6 +51,7 @@ async function repairEditorSemanticWithLlm({
       claimRepairEvidencePrompt(),
       'sections.group_coverage failure는 missing selected representative group을 selected capsule만 사용해 article로 복구하세요. 해당 group을 render할 수 없으면 article_group_key, reason_code, reason text를 포함해 explicitly_demoted_groups[] 또는 hard_blocked_groups[]에 기록하세요.',
       'sections.blocked_context failure는 article sources와 headline에서 blocked context URL/title을 제거하세요. Blocked context는 diagnostic context로만 남길 수 있습니다.',
+      'sections.hal_signal_capsule failure는 validation error가 가리킨 각 section에 why_now, reader_owners, check_within_2_weeks, impact_axes, do_not_overstate key를 모두 가진 hal_signal_capsule을 채우세요. 제공된 capsule metadata와 해당 article evidence 범위 안에서 다섯 key를 전부 빈 값 없이 작성하고, 다른 field는 바꾸지 마세요.',
       'sections.claims failure는 source-backed article_sections.verified_facts[]의 각 항목마다 matching claim_type=fact claim이 있도록 claims를 추가하거나 조정하세요. (confirmed_facts / evidence_summary는 claim 바인딩 대상이 아닙니다.)',
       'validation error JSON의 details.issues[].uncovered_facts[](article_index/field/text)와 deterministic_repair_failure_reason_codes를 먼저 읽고, 그 verified_fact에만 정확히 대응하는 claim_type=fact claim을 추가하세요. 목록에 없는 fact나 section은 건드리지 말고, 새 fact·evidence_id·source URL은 만들지 마세요.',
       'Claim repair에는 허용된 claim_type과 impact_level 값만 사용하세요. 직접 HAL contract를 뒷받침하는 근거가 없으면 CameraX/adaptive UI impact는 app_api_or_framework_adjacent로 매핑하세요.',

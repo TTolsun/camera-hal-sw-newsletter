@@ -48,7 +48,7 @@ function articleSectionContractPrompt() {
     '- reference_only/watchlist: 직접 조치 문장이 아니라 관찰/제한 문장으로만 작성하세요.',
     'article_sections.team_share_points는 팀 리뷰 때 공유할 핵심 takeaway string이어야 합니다.',
     'do_not_claim은 source-backed fact나 public article content로 render하지 말고 claim guardrail로만 사용하세요.',
-    'HAL Signal contract: 모든 main article은 why_now, reader_owners, check_within_2_weeks, impact_axes, do_not_overstate key만 가진 hal_signal_capsule을 포함해야 합니다.',
+    'HAL Signal contract: 모든 article(section)은 why_now, reader_owners, check_within_2_weeks, impact_axes, do_not_overstate key만 가진 hal_signal_capsule을 포함해야 합니다.',
     'hal_signal_capsule.reader_owners와 hal_signal_capsule.impact_axes는 arrays여야 합니다. 제공된 capsule metadata와 article evidence만 사용하고 누락된 source claim을 만들지 마세요.',
     'hal_signal_capsule.check_within_2_weeks는 generic review가 아니라 bucket scope에 맞는 구체 follow-up을 명명해야 합니다. direct HAL/driver evidence가 있는 경우에만 stream, buffer, metadata, request/result, vendor tag를 사용하세요. app/API/tooling article에서는 permission, CameraX/Camera2 usage, preview/capture behavior, build/test/debug workflow 수준으로 제한하세요.',
     'hal_signal_capsule.do_not_overstate는 generic guardrail 문구나 prompt boilerplate를 그대로 복사하지 말고, 해당 article의 source가 직접 뒷받침하지 않는 구체적 HAL/driver claim, API name, metadata key, stream/buffer behavior, vendor tag, CTS/VTS test 항목을 명명해 article-specific warning 배열로 작성하세요. 과장 위험이 없으면 빈 배열을 두세요.',
