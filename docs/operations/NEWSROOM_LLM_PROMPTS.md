@@ -141,7 +141,7 @@ Workflow/Stage: Stage 3 `editor attempt <n>/<total>`
 
 목적: editor JSON이 schema는 만족했지만 semantic validation에 실패했을 때, 해당 validation error만 고쳐 complete editor JSON으로 복구합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 `repairEditorSemanticWithLlm()`
+위치: `src/generator/publish/orchestrator-public-article-judge.js`의 `repairEditorSemanticWithLlm()`
 
 Workflow/Stage: Stage 3 `<editorStage> semantic repair`
 

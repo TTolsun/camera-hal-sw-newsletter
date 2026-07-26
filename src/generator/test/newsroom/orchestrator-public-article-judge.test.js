@@ -244,7 +244,8 @@ test('semantic repair 프롬프트에 sections.hal_signal_capsule 수리 지침�
   }, deps);
 
   assert.equal(prompts.length, 1);
-  assert.match(prompts[0].prompt, /sections\.hal_signal_capsule/);
+  // validationError JSON echo에도 sections.hal_signal_capsule이 등장하므로 지시문 고유 문구로 잡는다.
+  assert.match(prompts[0].prompt, /sections\.hal_signal_capsule failure는/);
   assert.match(prompts[0].prompt, /why_now, reader_owners, check_within_2_weeks, impact_axes, do_not_overstate/);
 });
 
