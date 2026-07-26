@@ -6,7 +6,9 @@ API key, runtime secret, prompt 전체 원문, generated artifact 내용은 이 
 
 ## 기준 위치 링크
 
-- [Stage 3 prompt host](../../src/generator/publish/gemini-newsroom-newsletter.js)
+- [Stage 3 시스템 프롬프트 빌더](../../src/generator/publish/orchestrator-stage-prompts.js)
+- [Stage 3 공통 프롬프트 조각·context 빌더](../../src/generator/reporter/newsletter-prompts.js)
+- [Stage 3 실행 진입점(main loop)](../../src/generator/publish/gemini-newsroom-newsletter.js)
 - [Stage 2 source discovery prompt host](../../src/discovery/gemini-source-discovery.js)
 - [Editorial policy](../EDITORIAL_POLICY.md)
 - [Newsletter template](../NEWSLETTER_TEMPLATE.md)
@@ -55,7 +57,7 @@ Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
 목적: Stage 3의 reporter, editor, fact-check, repair, completion prompt에 공통 운영 정책과 작성 기준을 전달합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 `commonContext`
+위치: `src/generator/reporter/newsletter-prompts.js`의 `buildPromptContexts()` (`src/generator/publish/gemini-newsroom-newsletter.js`의 `main()`이 조립해 각 stage prompt에 전달)
 
 Workflow/Stage: `Newsletters 03 - Editor PR`, Stage 3 전체
 
@@ -71,7 +73,7 @@ Workflow/Stage: `Newsletters 03 - Editor PR`, Stage 3 전체
 
 목적: selected article capsule을 바탕으로 editor가 사용할 optional technical background context를 생성합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 `buildBackgroundContextReport()`
+위치: `src/generator/publish/orchestrator-editor-validation.js`의 `buildBackgroundContextReport()`
 
 Workflow/Stage: Stage 3 `background-context`
 
@@ -109,7 +111,7 @@ Workflow/Stage: Stage 3 `editorial-plan attempt <n>/<total>`
 
 목적: deterministic shortlist가 이미 고른 final article input을 재선정하지 않고, evidence field를 요약, tagging, refinement합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 reporter `callLlmJson()` 호출
+위치: `src/generator/publish/gemini-newsroom-newsletter.js` `main()`의 reporter `callLlmJson()` 호출, 프롬프트는 `src/generator/publish/orchestrator-stage-prompts.js`의 `reporterSystemPrompt()`
 
 Workflow/Stage: Stage 3 `reporter attempt <n>/<total>`
 
@@ -125,7 +127,7 @@ Workflow/Stage: Stage 3 `reporter attempt <n>/<total>`
 
 목적: final-selected article capsule을 사용해 한국어 technical newsletter draft를 생성합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 editor `callLlmJson()` 호출
+위치: `src/generator/publish/orchestrator-editor-stage.js`의 `runEditorStage()`, 프롬프트는 `src/generator/publish/orchestrator-stage-prompts.js`의 `editorSystemPrompt()`
 
 Workflow/Stage: Stage 3 `editor attempt <n>/<total>`
 
@@ -157,7 +159,7 @@ Workflow/Stage: Stage 3 `<editorStage> semantic repair`
 
 목적: editor draft의 factuality, missing source, exaggerated language, missing date, editorial-policy violation을 검토합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 fact-checker `callLlmJson()` 호출
+위치: `src/generator/publish/gemini-newsroom-newsletter.js` `main()`의 fact-checker `callLlmJson()` 호출, 프롬프트는 `src/generator/publish/orchestrator-stage-prompts.js`의 `factCheckSystemPrompt()`
 
 Workflow/Stage: Stage 3 `fact-checker attempt <n>/<total>`
 
@@ -173,7 +175,7 @@ Workflow/Stage: Stage 3 `fact-checker attempt <n>/<total>`
 
 목적: quality/fact-check failure가 있는 section만 repair, replace, demote하기 위한 replacement section JSON을 생성합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 repair editor `callLlmJson()` 호출
+위치: `src/generator/publish/orchestrator-repair-completion.js`의 `runRepairAndCompletionPasses()`, 프롬프트는 `src/generator/publish/orchestrator-stage-prompts.js`의 `editorRepairPatchSystemPrompt()`
 
 Workflow/Stage: Stage 3 `editor repair attempt <n>/<total>`
 
@@ -189,7 +191,7 @@ Workflow/Stage: Stage 3 `editor repair attempt <n>/<total>`
 
 목적: repaired editor draft를 다시 fact-check하고 unresolved source gap 또는 editorial-policy violation을 확인합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 repair fact-checker `callLlmJson()` 호출
+위치: `src/generator/publish/orchestrator-repair-completion.js`의 `runRepairAndCompletionPasses()`, 프롬프트는 `src/generator/publish/orchestrator-stage-prompts.js`의 `factCheckRepairSystemPrompt()`
 
 Workflow/Stage: Stage 3 `fact-checker repair attempt <n>/<total>`
 
@@ -205,7 +207,7 @@ Workflow/Stage: Stage 3 `fact-checker repair attempt <n>/<total>`
 
 목적: quality gate가 article count 부족을 보고하고 eligible candidate가 남아 있을 때, 부족한 main article section만 추가 생성합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 completion editor `callLlmJson()` 호출
+위치: `src/generator/publish/orchestrator-repair-completion.js`의 `runRepairAndCompletionPasses()`, 프롬프트는 `src/generator/publish/orchestrator-stage-prompts.js`의 `editorCompletionSystemPrompt()`
 
 Workflow/Stage: Stage 3 `editor completion attempt <n>/<total>`
 
@@ -221,7 +223,7 @@ Workflow/Stage: Stage 3 `editor completion attempt <n>/<total>`
 
 목적: completed editor draft와 추가 section이 eligible candidate만 사용했는지, full draft가 article composition contract를 만족하는지 확인합니다.
 
-위치: `src/generator/publish/gemini-newsroom-newsletter.js`의 completion fact-checker `callLlmJson()` 호출
+위치: `src/generator/publish/orchestrator-repair-completion.js`의 `runRepairAndCompletionPasses()`, 프롬프트는 `src/generator/publish/orchestrator-stage-prompts.js`의 `factCheckCompletionSystemPrompt()`
 
 Workflow/Stage: Stage 3 `fact-checker completion attempt <n>/<total>`
 
