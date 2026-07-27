@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "date": "2026-07-27",
+  "generated_at": "2026-07-27T03:34:10.516Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 8,
+    "hit_count": 1,
+    "miss_count": 7,
+    "by_url_hit_count": 1,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 7
+    },
+    {
+      "reason": "url-hit",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "[PATCH v5 4/5] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
+      "url": "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-24T12:42:28Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com",
+        "url_hash": "7e8fed834647f37363ea3f4fefbb44c6b2fc82366d315130a722e1b4181711a6",
+        "published_date": "2026-07-24T12:42:28Z",
+        "content_hash": "188199d0d4039961717ed21d6603bba6f852ecd4c6b73468d9e9c3524e90bf15"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support",
+      "url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-26T21:44:27Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca",
+        "url_hash": "78bdfd2b91470d5ef3e3ada0daf6db707b252532e03d5b9322162905b0b4d199",
+        "published_date": "2026-07-26T21:44:27Z",
+        "content_hash": "efae99032e75d1a89bfe682fe65dc4ef9e15a5d02fefd18347128627c7c432bd"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[v2,2/2] libcamera: Harden control serializer size and input validation",
+      "url": "https://patchwork.libcamera.org/patch/27507/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-07-25",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27507",
+        "url_hash": "2edd2a48c155ecfac59d7ebcc93f7bf6608d05e7bc80bed307670e9a6c35b1e9",
+        "published_date": "2026-07-25",
+        "content_hash": "cf33218f549158150eda1c44d2cb170cca19352144dbd7b9a36ebf00c6ddcf3d"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown",
+      "url": "https://patchwork.libcamera.org/patch/27496/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-07-24",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27496",
+        "url_hash": "32b614434e7eb1c2dc2b9d1b44e80b88e875157c9337c8ac9bc78701526a49e9",
+        "published_date": "2026-07-24",
+        "content_hash": "a82b58029c4636a10048f670cab4fb7a250d8ed256c3f1a52c8fecf1c884dd4b"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-24T09:51:05Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com",
+        "url_hash": "ea4258326fcb98c8ced4660a79dcccd34bb68551a6c335fbcf11b07d3ade5135",
+        "published_date": "2026-07-24T09:51:05Z",
+        "content_hash": "3e044b2a22837ab2ef329b28c6cb526083e5a6b98db8c6a931ba4a7a7725e631"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: Add Samsung S5KJN5 image sensor - Vladimir Zapolskiy",
+      "url": "https://lore.kernel.org/linux-media/442145bb-9487-41be-8a9d-af5553e6fe8b@linaro.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-24",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/442145bb-9487-41be-8a9d-af5553e6fe8b@linaro.org",
+        "url_hash": "a68090df439ed4dc892421cf2a91e453b4d3c6010f4642c36914bc3e7aa08137",
+        "published_date": "2026-07-24",
+        "content_hash": "f1ee15efe39ae620fe94864b8709bffe66133b0813c93929ae64ece52380bc84"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Re: [PATCH v2 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver - Vladimir Zapolskiy",
+      "url": "https://lore.kernel.org/linux-media/940d7267-cdfb-4dbd-9b4a-6fcd26c4fd58@linaro.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-25",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/940d7267-cdfb-4dbd-9b4a-6fcd26c4fd58@linaro.org",
+        "url_hash": "2112647f4ffca7bfb3b8cd3bc44fd75d41e81ce47095d15ca7331365259b6b53",
+        "published_date": "2026-07-25",
+        "content_hash": "fb7e8da575c6dce2df187c7f2563edd839db462e03ff3e0ccfdf322b5b15b1df"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "v0.7.2",
+      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "source": "libcamera Upstream Releases",
+      "published_date": "2026-07-10T11:12:38+01:00",
+      "cache_key": {
+        "normalized_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+        "url_hash": "6365ddeedd43a7c732b9dce4d49a96beeef6ad30e111063439f0a6cd79ae5e1b",
+        "published_date": "2026-07-10T11:12:38+01:00",
+        "content_hash": "7e6ed8c401e438ca86c774c73c50ea87c24703040a50f394a8e25c5ab7f88a57"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/6365ddeedd43a7c732b9dce4d49a96beeef6ad30e111063439f0a6cd79ae5e1b.json"
+    }
+  ]
+}
