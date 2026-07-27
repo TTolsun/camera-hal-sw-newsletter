@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-07-27",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-sw-20260727-001",
+      "topic_gap": "CameraX 1.7.0-alpha02 release notes are available, detailing new features or changes relevant to camera HAL developers.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX 1.7.0-alpha02 release notes",
+        "CameraX camera HAL changes"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
+      ],
+      "expected_evidence": [
+        "Release notes for CameraX 1.7.0-alpha02",
+        "New features or changes impacting camera HAL"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-002",
+      "topic_gap": "Recent Linux kernel media subsystem patches introduce drivers for new image sensors, potentially impacting camera HAL development and support.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel media driver Himax HM1092",
+        "linux kernel media driver Samsung S5KJN5",
+        "camera HAL sensor support kernel"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260726214401.19042-2-j@metarealtyinc.ca/",
+        "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+        "https://lore.kernel.org/linux-media/940d7267-cdfb-4dbd-9b4a-6fcd26c4fd58@linaro.org/",
+        "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-2-871d3b9a2e47@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/442145bb-9487-41be-8a9d-af5553e6fe8b@linaro.org/",
+        "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-1-871d3b9a2e47@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "New image sensor drivers (e.g., Himax HM1092, Samsung S5KJN5)",
+        "Camera HAL implications for these sensors",
+        "Kernel media subsystem changes"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-003",
+      "topic_gap": "libcamera project has released version v0.7.2, which may contain updates relevant to camera HAL development and integration.",
+      "source_family": "libcamera-upstream-releases",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera v0.7.2 release notes",
+        "libcamera camera HAL updates"
+      ],
+      "candidate_urls": [
+        "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2"
+      ],
+      "expected_evidence": [
+        "libcamera v0.7.2 release notes",
+        "Changes impacting camera HAL or driver integration",
+        "New camera features or bug fixes"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-004",
+      "topic_gap": "Recent libcamera patchwork reviews include changes to control serialization and EGLDisplay caching, which could be relevant for camera HAL developers.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera control serialization",
+        "libcamera EGLDisplay caching",
+        "camera HAL libcamera changes"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/27507/",
+        "https://patchwork.libcamera.org/patch/27496/",
+        "https://patchwork.libcamera.org/patch/27495/"
+      ],
+      "expected_evidence": [
+        "libcamera control serialization changes",
+        "EGLDisplay caching in libcamera",
+        "Impact on camera HAL performance or stability"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-005",
+      "topic_gap": "Android Developers Blog posts discuss building intelligent Android apps with AI, which may involve new camera input or processing techniques relevant to HAL.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android intelligent apps camera AI",
+        "Android on-device inference camera",
+        "camera input for ML Android"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/07/optimize-galaxy-screen-sizes.html",
+        "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-introduction-jetpack.html",
+        "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+        "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-cloud-hybrid-inference.html",
+        "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-appfunctions.html",
+        "https://android-developers.googleblog.com/2026/07/android-on-device-inference.html"
+      ],
+      "expected_evidence": [
+        "Camera input for AI/ML tasks",
+        "On-device inference and camera processing",
+        "New Android features related to intelligent apps"
+      ],
+      "risk_notes": [
+        "These articles are general AI/ML focused and may not have direct camera HAL relevance."
+      ]
+    }
+  ]
+}

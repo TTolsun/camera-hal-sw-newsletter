@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-07-27",
+  "validations": [
+    {
+      "proposal_id": "camera-hal-sw-20260727-001",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-002",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260726214401.19042-2-j@metarealtyinc.ca/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260726214401.19042-2-j@metarealtyinc.ca/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-002",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-002",
+      "candidate_url": "https://lore.kernel.org/linux-media/940d7267-cdfb-4dbd-9b4a-6fcd26c4fd58@linaro.org/",
+      "normalized_url": "https://lore.kernel.org/linux-media/940d7267-cdfb-4dbd-9b4a-6fcd26c4fd58@linaro.org/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-002",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-2-871d3b9a2e47@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-2-871d3b9a2e47@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-002",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-002",
+      "candidate_url": "https://lore.kernel.org/linux-media/442145bb-9487-41be-8a9d-af5553e6fe8b@linaro.org/",
+      "normalized_url": "https://lore.kernel.org/linux-media/442145bb-9487-41be-8a9d-af5553e6fe8b@linaro.org/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-002",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-002",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-1-871d3b9a2e47@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-1-871d3b9a2e47@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-003",
+      "candidate_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "normalized_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "libcamera-upstream-releases"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-004",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27507/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27507/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-004",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27496/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27496/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-004",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27495/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27495/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-005",
+      "candidate_url": "https://android-developers.googleblog.com/2026/07/optimize-galaxy-screen-sizes.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/07/optimize-galaxy-screen-sizes.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-005",
+      "candidate_url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-introduction-jetpack.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-introduction-jetpack.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-005",
+      "candidate_url": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-005",
+      "candidate_url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-cloud-hybrid-inference.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-cloud-hybrid-inference.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-005",
+      "candidate_url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-appfunctions.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-appfunctions.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260727-005",
+      "candidate_url": "https://android-developers.googleblog.com/2026/07/android-on-device-inference.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/07/android-on-device-inference.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    }
+  ],
+  "counts": {
+    "discovered_not_extractable": 1,
+    "accepted": 18
+  }
+}

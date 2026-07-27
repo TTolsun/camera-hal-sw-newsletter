@@ -1,0 +1,790 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-07-27",
+  "clusters": [
+    {
+      "cluster_id": "49d58944bd3ca26f",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "canonical_title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "candidate_count": 4,
+      "duplicate_count": 3,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+          "title": "1.6.1",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "title": "1.3.0-beta02",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "title": "1.4.0-alpha07",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e0628af8d7c21e1a",
+      "cluster_key": "https://android-developers.googleblog.com/2026/07/optimize-galaxy-screen-sizes.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/07/optimize-galaxy-screen-sizes.html",
+      "canonical_title": "Optimize your apps for the next generation of Samsung Galaxy devices",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/optimize-galaxy-screen-sizes.html",
+          "title": "Optimize your apps for the next generation of Samsung Galaxy devices",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/optimize-galaxy-screen-sizes.html",
+          "title": "Android Developers Blog: Optimize your apps for the next generation of Samsung Galaxy devices",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f79eb315d591ba15",
+      "cluster_key": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-introduction-jetpack.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-introduction-jetpack.html",
+      "canonical_title": "Build intelligent Android apps: Introduction to Jetpacker",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-introduction-jetpack.html",
+          "title": "Build intelligent Android apps: Introduction to Jetpacker",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-introduction-jetpack.html",
+          "title": "Android Developers Blog: Build intelligent Android apps: Introduction to Jetpacker",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1f75bec69c0f5436",
+      "cluster_key": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+      "canonical_title": "Evolving how LLMs are measured for Android: the next era of Android Bench",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+          "title": "Evolving how LLMs are measured for Android: the next era of Android Bench",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/android-bench-llm-measurement.html",
+          "title": "Android Developers Blog: Evolving how LLMs are measured for Android: the next era of Android Bench",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2e09be47b7d035b1",
+      "cluster_key": "https://source.android.com/docs/core/camera",
+      "canonical_url": "https://source.android.com/docs/core/camera",
+      "canonical_title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c9555c41505d04f6",
+      "cluster_key": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-cloud-hybrid-inference.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-cloud-hybrid-inference.html",
+      "canonical_title": "Build intelligent Android apps: Cloud and hybrid inference",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-cloud-hybrid-inference.html",
+          "title": "Build intelligent Android apps: Cloud and hybrid inference",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-cloud-hybrid-inference.html",
+          "title": "Android Developers Blog: Build intelligent Android apps: Cloud and hybrid inference",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b948818e550d4759",
+      "cluster_key": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-appfunctions.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-appfunctions.html",
+      "canonical_title": "Build intelligent Android apps: Integrate into Android's intelligence system using AppFunctions",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-appfunctions.html",
+          "title": "Build intelligent Android apps: Integrate into Android's intelligence system using AppFunctions",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-appfunctions.html",
+          "title": "Android Developers Blog: Build intelligent Android apps: Integrate into Android's intelligence system using AppFunctions",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b09ca66144996dac",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+      "canonical_title": "Eclipsa Video: HDR That Looks Right on Every Screen",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/eclipsa-video-hdr-review.html",
+          "title": "Eclipsa Video: HDR That Looks Right on Every Screen",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e35eb2ba0c67b9e4",
+      "cluster_key": "https://android-developers.googleblog.com/2026/07/android-on-device-inference.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/07/android-on-device-inference.html",
+      "canonical_title": "Build intelligent Android apps: On-device inference",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/android-on-device-inference.html",
+          "title": "Build intelligent Android apps: On-device inference",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/android-on-device-inference.html",
+          "title": "Android Developers Blog: Build intelligent Android apps: On-device inference",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c3196b168ba23760",
+      "cluster_key": "https://android-developers.googleblog.com/2026/06/android-studio-quail-2-stable-features.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/06/android-studio-quail-2-stable-features.html",
+      "canonical_title": "Android Studio Quail 2 is Stable: Multi-task with the Android Studio AI agent",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/06/android-studio-quail-2-stable-features.html",
+          "title": "Android Studio Quail 2 is Stable: Multi-task with the Android Studio AI agent",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9e95b9aeb5650263",
+      "cluster_key": "https://source.android.com/docs/whatsnew",
+      "canonical_url": "https://source.android.com/docs/whatsnew",
+      "canonical_title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew",
+          "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b564c567eef7ae59",
+      "cluster_key": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_url": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cdd",
+          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "827f3a39ff281180",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/asb-overview",
+      "canonical_title": "Overview",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+          "title": "Overview",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cb9b804333e21624",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+      "canonical_title": "July",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-07-01",
+          "title": "July",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "55a7771bb06b7109",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260726214401.19042-2-j@metarealtyinc.ca",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260726214401.19042-2-j@metarealtyinc.ca/",
+      "canonical_title": "[PATCH 1/2] media: i2c: add Himax HM1092 IR sensor driver",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260726214401.19042-2-j@metarealtyinc.ca/",
+          "title": "[PATCH 1/2] media: i2c: add Himax HM1092 IR sensor driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260726214401.19042-2-j@metarealtyinc.ca/",
+          "title": "[PATCH 1/2] media: i2c: add Himax HM1092 IR sensor driver - Jake Steinman",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "78bdfd2b91470d5e",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+      "canonical_title": "[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+          "title": "[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+          "title": "[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support - Jake Steinman",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2112647f4ffca7bf",
+      "cluster_key": "https://lore.kernel.org/linux-media/940d7267-cdfb-4dbd-9b4a-6fcd26c4fd58@linaro.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/940d7267-cdfb-4dbd-9b4a-6fcd26c4fd58@linaro.org/",
+      "canonical_title": "Re: [PATCH v2 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/940d7267-cdfb-4dbd-9b4a-6fcd26c4fd58@linaro.org/",
+          "title": "Re: [PATCH v2 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/940d7267-cdfb-4dbd-9b4a-6fcd26c4fd58@linaro.org/",
+          "title": "Re: [PATCH v2 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver - Vladimir Zapolskiy",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6ebcb12b94a344e2",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-2-871d3b9a2e47@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-2-871d3b9a2e47@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v2 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-2-871d3b9a2e47@oss.qualcomm.com/",
+          "title": "[PATCH v2 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-2-871d3b9a2e47@oss.qualcomm.com/",
+          "title": "[PATCH v2 2/2] media: i2c: Add Samsung S5KJN5 image sensor driver - Wenmeng Liu",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ea4258326fcb98c8",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v2 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/",
+          "title": "[PATCH v2 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/",
+          "title": "[PATCH v2 0/2] media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a68090df439ed4dc",
+      "cluster_key": "https://lore.kernel.org/linux-media/442145bb-9487-41be-8a9d-af5553e6fe8b@linaro.org",
+      "canonical_url": "https://lore.kernel.org/linux-media/442145bb-9487-41be-8a9d-af5553e6fe8b@linaro.org/",
+      "canonical_title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: Add Samsung S5KJN5 image sensor",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/442145bb-9487-41be-8a9d-af5553e6fe8b@linaro.org/",
+          "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: Add Samsung S5KJN5 image sensor",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/442145bb-9487-41be-8a9d-af5553e6fe8b@linaro.org/",
+          "title": "Re: [PATCH v2 1/2] dt-bindings: media: i2c: Add Samsung S5KJN5 image sensor - Vladimir Zapolskiy",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7e8fed834647f373",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v5 4/5] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/",
+          "title": "[PATCH v5 4/5] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/",
+          "title": "[PATCH v5 4/5] media: qcom: camss: Add CAMSS Offline Processing Engine driver - Loic Poulain",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "30a5ba0b2015a0c9",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-1-871d3b9a2e47@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-1-871d3b9a2e47@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v2 1/2] dt-bindings: media: i2c: Add Samsung S5KJN5 image sensor",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-1-871d3b9a2e47@oss.qualcomm.com/",
+          "title": "[PATCH v2 1/2] dt-bindings: media: i2c: Add Samsung S5KJN5 image sensor",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-1-871d3b9a2e47@oss.qualcomm.com/",
+          "title": "[PATCH v2 1/2] dt-bindings: media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6365ddeedd43a7c7",
+      "cluster_key": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "canonical_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "canonical_title": "v0.7.2",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+          "title": "v0.7.2",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+          "title": "v0.7.2 · Tags · libcamera / libcamera · GitLab",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2edd2a48c155ecfa",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27507",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27507/",
+      "canonical_title": "[v2,2/2] libcamera: Harden control serializer size and input validation",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27507/",
+          "title": "[v2,2/2] libcamera: Harden control serializer size and input validation",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/27507/",
+          "title": "[v2,2/2] libcamera: Harden control serializer size and input validation - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "32b614434e7eb1c2",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27496",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27496/",
+      "canonical_title": "libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27496/",
+          "title": "libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/27496/",
+          "title": "libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5dfbd313785a0d71",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27495",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27495/",
+      "canonical_title": "[2/2] libcamera: Harden control serializer size and input validation",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27495/",
+          "title": "[2/2] libcamera: Harden control serializer size and input validation",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/27495/",
+          "title": "[2/2] libcamera: Harden control serializer size and input validation - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0df06df29b485e1f",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27506",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27506/",
+      "canonical_title": "[v2] libcamera: Serialize local control names in IPA format v3",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27506/",
+          "title": "[v2] libcamera: Serialize local control names in IPA format v3",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c4580abfd63ace21",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27503",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27503/",
+      "canonical_title": "[v2,5/5] libcamera: sensor: Add Mira220 sensor properties",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27503/",
+          "title": "[v2,5/5] libcamera: sensor: Add Mira220 sensor properties",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a8f5f0c9d93fb8eb",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27491",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27491/",
+      "canonical_title": "[RFC,v2,42/43] ipa: libipa: agc: Work without `CameraSensorHelper`",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27491/",
+          "title": "[RFC,v2,42/43] ipa: libipa: agc: Work without `CameraSensorHelper`",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f6b0314ca8494da3",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27508",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27508/",
+      "canonical_title": "[v2,RFC,v2,1/1] pipeline: tegra: Add NVIDIA Tegra VI pipeline handler",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27508/",
+          "title": "[v2,RFC,v2,1/1] pipeline: tegra: Add NVIDIA Tegra VI pipeline handler",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3b5a0aac7134e604",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27505",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27505/",
+      "canonical_title": "[RFC,1/1] pipeline: Add NVIDIA Tegra VI pipeline handler",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27505/",
+          "title": "[RFC,1/1] pipeline: Add NVIDIA Tegra VI pipeline handler",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5e9a33e9fbaae52e",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/media3",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-rc01",
+      "canonical_title": "Media3 Release Notes - Media3 1.11.0-rc01",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-rc01",
+          "title": "Media3 Release Notes - Media3 1.11.0-rc01",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0-beta01",
+          "title": "Media3 Release Notes - Media3 1.11.0-beta01",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d4a0acfc0ac6ad6e",
+      "cluster_key": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+      "canonical_title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/training/data-storage/shared/photo-picker",
+          "title": "Photo picker &nbsp;|&nbsp; App data and files &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f8d1cacd47b7c58b",
+      "cluster_key": "https://developer.android.com/media/platform/mediarecorder",
+      "canonical_url": "https://developer.android.com/media/platform/mediarecorder",
+      "canonical_title": "MediaRecorder overview &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/media/platform/mediarecorder",
+          "title": "MediaRecorder overview &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ae9e55f7b032d076",
+      "cluster_key": "https://developer.android.com/media/platform/supported-formats",
+      "canonical_url": "https://developer.android.com/media/platform/supported-formats",
+      "canonical_title": "Supported media formats &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/media/platform/supported-formats",
+          "title": "Supported media formats &nbsp;|&nbsp; Android media &nbsp;|&nbsp; Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "049447beb348daf0",
+      "cluster_key": "https://security.samsungmobile.com/securityupdate.smsb",
+      "canonical_url": "https://security.samsungmobile.com/securityUpdate.smsb",
+      "canonical_title": "Samsung Mobile Security",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://security.samsungmobile.com/securityUpdate.smsb",
+          "title": "Samsung Mobile Security",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a90b77262b582b4e",
+      "cluster_key": "https://lore.kernel.org/r/20260717-sk5jn5-v1-0-da610d7fd494@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260717-sk5jn5-v1-0-da610d7fd494@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260717-sk5jn5-v1-0-da610d7fd494@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260717-sk5jn5-v1-0-da610d7fd494@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260717-sk5jn5-v1-0-da610d7fd494@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}
