@@ -273,8 +273,8 @@ function buildHalSignalQualityReport(options = {}) {
     main_article_signal_checks: checks,
     selection_shortage_hint_details: shortageDetails,
     gate_boundary: {
-      quality_validation_records_hal_signal_deductions: true,
-      publish_gate_blocks_hal_signal_hard_blockers: true,
+      hal_signal_checks_are_observability_only: true,
+      hal_signal_capsule_enforced_by_editor_output_contract: true,
       review_artifacts_preserved: true,
       optional_input_unavailable_is_not_pass: true
     },

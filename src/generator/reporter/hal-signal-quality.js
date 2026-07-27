@@ -987,8 +987,8 @@ function renderHalSignalQualityMarkdown(report = {}) {
 
 - status: ${report.status || 'UNKNOWN'}
 - input_completeness: ${report.input_completeness || 'unknown'}
-- quality validation records HAL signal deductions: true
-- publish gate blocks HAL signal hard blockers through quality status: true
+- HAL signal checks are observability only; quality status does not gate on them: true
+- hal_signal_capsule enforced by the editor output contract (validateHalSignalCapsules): true
 - review artifacts preserved: true
 
 ## Inputs
