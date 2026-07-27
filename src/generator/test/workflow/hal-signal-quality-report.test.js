@@ -123,7 +123,11 @@ test('HAL signal quality report writes JSON and Markdown with complete inputs', 
   assert.equal(report.hal_signal_quality_summary.main_article_count, 1);
   assert.equal(report.hal_signal_quality_summary.article_count_with_hal_signal_capsule, 1);
   assert.equal(report.main_article_signal_checks[0].hal_signal_capsule_complete, true);
+  assert.equal(report.gate_boundary.hal_signal_capsule_enforced_by_editor_output_contract, true);
   assert.match(markdown, /HAL Signal Quality Report/);
+  assert.match(markdown, /editor output contract \(validateHalSignalCapsules\)/);
+  // b4cf2e87에서 hal-signal deduction 생산자가 삭제된 뒤에도 남아 있던 doc-drift 문구 재발 방지
+  assert.doesNotMatch(markdown, /publish gate blocks HAL signal hard blockers/);
 });
 
 test('HAL signal quality report records missing optional inputs as input_unavailable and not PASS', () => {
