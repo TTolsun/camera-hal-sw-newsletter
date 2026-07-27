@@ -38,6 +38,7 @@ function validateTargetedRepairResult({
   allowCountChange = false,
   date,
   reporter = { candidates: [] },
+  baseIssue = null,
   validateEditor
 } = {}) {
   const before = ensureArray(beforeSections);
@@ -160,6 +161,18 @@ function validateTargetedRepairResult({
     }
   }
 
+  // 합성 wrapper는 base editor의 issue 레벨 story marker를 그대로 물려받아야 한다.
+  // marker 없이 검증하면 story-v1 section(public_article.story_contract_version 보유)이
+  // story_contract_version_mismatch로 항상 실패한다(2026-07-20 발행 차단 원인).
+  // key 목록의 정본은 public-article-contract.js의 storyContractMarkers가 issue에서 읽는
+  // 두 key다 — 계약에 issue 레벨 marker가 추가되면 이 pass-through도 같이 갱신해야 한다.
+  const storyMarkers = {};
+  if (baseIssue && baseIssue.public_contract_version !== undefined) {
+    storyMarkers.public_contract_version = baseIssue.public_contract_version;
+  }
+  if (baseIssue && baseIssue.generation_contract_version !== undefined) {
+    storyMarkers.generation_contract_version = baseIssue.generation_contract_version;
+  }
   validateEditor({
     date,
     title: `Camera HAL / SW Newsletter - ${date}`,
@@ -167,7 +180,8 @@ function validateTargetedRepairResult({
     briefing: ['validation', 'validation', 'validation'],
     sections: after,
     action_items: [],
-    references: []
+    references: [],
+    ...storyMarkers
   }, date, reporter, { strictClaims: false });
   return true;
 }
@@ -233,6 +247,7 @@ function applyRepairPatchesAndValidate({
     allowCountChange: false,
     date,
     reporter,
+    baseIssue: baseEditor,
     validateEditor
   });
   return { ok: true, editor: applied.output, violations: [] };

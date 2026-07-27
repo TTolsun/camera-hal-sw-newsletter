@@ -459,7 +459,8 @@ async function runRepairAndCompletionPasses({
           mode: 'completion',
           allowCountChange: true,
           date,
-          reporter
+          reporter,
+          baseIssue: editor
         });
         rejectedGeneratedSections = rejectedGeneratedSections.concat(completionMerged.rejected);
         reserveCandidatesUsed = reserveCandidatesUsed.concat(reserveUsageForSections(completionMerged.sections, reporter));

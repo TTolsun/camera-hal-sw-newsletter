@@ -11,7 +11,7 @@ const {
   applyRepairPatchesAndValidate,
   remapRepairPatchSections
 } = require('../../../publish/gemini-newsroom-newsletter');
-const { editor, section } = require('../../../../shared/test/helpers/editor-builders');
+const { editor, section, storyEditor } = require('../../../../shared/test/helpers/editor-builders');
 const { stableSectionKey } = require('../../../../shared/common/section-identity');
 
 const DATE = '2026-05-08';
@@ -57,6 +57,27 @@ test('applyRepairPatchesAndValidate keeps 2 selected sections at 2 after repair 
 
   assert.equal(result.ok, true);
   assert.equal(result.editor.sections.length, 2);
+});
+
+test('applyRepairPatchesAndValidate keeps story markers so story-v1 patches validate (2026-07-20 regression)', () => {
+  // 최후 가드의 합성 wrapper가 base editor의 issue 레벨 story marker를 물려받지 않으면,
+  // story-v1 draft에 대한 유효한 patch도 story_contract_version_mismatch로 항상 거부된다.
+  const draft = storyEditor();
+  const patches = [{
+    section_index: 0,
+    section_key: stableSectionKey(draft.sections[0]),
+    op: 'replace',
+    path: '/public_article/editorial_story/editor_take',
+    value: '검증 입력으로 반영하고 다음 검증 창에서 재확인합니다.'
+  }];
+
+  const result = applyRepairPatchesAndValidate({ editor: draft, patches, date: DATE });
+
+  assert.equal(result.ok, true);
+  assert.equal(
+    result.editor.sections[0].public_article.editorial_story.editor_take,
+    '검증 입력으로 반영하고 다음 검증 창에서 재확인합니다.'
+  );
 });
 
 test('remapRepairPatchSections resolves section_key to the real editor index', () => {
