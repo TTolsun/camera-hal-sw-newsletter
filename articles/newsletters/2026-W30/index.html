@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W30 Camera SW Newsletter</title>
+  <meta name="description" content="이번 주에는 ‘libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안’ 소식을 다룹니다." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W30/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W30 Camera SW Newsletter" />
+  <meta property="og:description" content="이번 주에는 ‘libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안’ 소식을 다룹니다." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W30/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W30 Camera SW Newsletter" />
+  <meta name="twitter:description" content="이번 주에는 ‘libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안’ 소식을 다룹니다." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../index.html">홈</a>
+        <a href="../../archive.html">아카이브</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← 뉴스룸</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.07.20 – 07.26</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W30</span></h1>
+        <p class="subtitle">이번 주에는 ‘libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안’ 소식을 다룹니다.</p>
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">이번 호 기사</h2>
+          <ul><li>libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image camera_driver_image_pipeline" id="article-libcamera-imx335" aria-labelledby="article-libcamera-imx335-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-libcamera-imx335-title" class="article-title">libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안</h2>
+        <p class="article-source-subtitle">libcamera 패치워크를 통한 IMX335 센서 속성 검토</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안 image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://patchwork.libcamera.org/patch/27362/">libcamera: camera_sensor: Add IMX335 test pattern sensor properties</a></figcaption>
+        </figure>
+        <p class="article-lead">최근 libcamera 패치워크에 소니 IMX335 이미지 센서의 테스트 패턴 속성을 추가하는 패치가 제안되어 검토가 진행 중입니다. 이번 패치는 드라이버 수준에서 표준화된 테스트 패턴을 정의하여 이미지 파이프라인의 검증과 디버깅 편의성을 높이는 것을 목표로 합니다.</p>
+        <p>2026년 7월 14일, libcamera 프로젝트의 패치워크를 통해 소니(Sony) IMX335 이미지 센서의 테스트 패턴 속성(test pattern sensor properties)을 추가하기 위한 신규 패치가 공개되었습니다. 이 패치는 현재 커뮤니티에서 검토 중인 단계로, 센서 드라이버가 제공하는 테스트 패턴 메타데이터를 libcamera 프레임워크 내에서 올바르게 인식하고 활용할 수 있도록 지원하는 것을 골자로 합니다.</p>
+        <p>libcamera는 리눅스 카메라 스택의 핵심 추상화 계층으로, V4L2 API 상단에서 센서와 ISP 간의 복잡한 상호작용을 제어합니다. 이번에 제안된 IMX335 테스트 패턴 속성 추가는 하드웨어 검증 및 이미지 파이프라인 디버깅 시 매우 유용하게 활용될 수 있습니다. 표준화된 테스트 패턴을 활성화하면 센서 자체의 데이터 출력 상태와 이후 ISP 처리 단계를 분리하여 검증할 수 있기 때문입니다.</p>
+        <p>다만, 본 패치는 현재 제안 및 검토 단계(RFC/Patch review)에 머물러 있어 최종 메인라인 병합 여부와 구체적인 적용 시점은 유동적입니다. 또한, 이 변경사항이 Android Camera HAL API나 프레임워크의 동작을 직접적으로 수정하는 것은 아니므로, 상위 레이어 개발자는 하위 드라이버 및 미디어 스택의 호환성 준비 관점에서 이 흐름을 관찰할 필요가 있습니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>본 패치는 Android Camera HAL을 직접 변경하지는 않으나, 하위 드라이버 및 libcamera 스택에서 IMX335 센서 검증 시 테스트 패턴 속성을 활용할 수 있는 기반을 제공합니다. 개발자는 향후 해당 센서 통합 시 드라이버 단의 테스트 패턴 메타데이터가 V4L2 및 libcamera를 거쳐 상위 HAL 계층까지 올바르게 전달되는지 검증 경로를 점검해야 합니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://patchwork.libcamera.org/patch/27362/">libcamera: camera_sensor: Add IMX335 test pattern sensor properties</a></li></ul></div>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">참고자료</h2>
+        <div class="reference-list"><ul><li><a href="https://patchwork.libcamera.org/patch/27362/">libcamera: camera_sensor: Add IMX335 test pattern sensor properties</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="이슈 하단 이동">
+        <a href="../../index.html">← 뉴스룸으로</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">아카이브 전체 보기 →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">뉴스레터</span>
+          <a class="footer-link" href="../../index.html">홈</a>
+          <a class="footer-link" href="../../archive.html">아카이브</a>
+          <span class="footer-note">구독 (지원예정)</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">주제</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">리소스</span>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (지원예정)</span>
+          <span class="footer-note">편집 정책 (지원예정)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Gemini 뉴스룸이 모아 사람이 검토·발행합니다.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-07-20",
+    "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-07-20",
+    "summary": "이번 주 뉴스레터에서는 libcamera 프레임워크에 제안된 소니 IMX335 이미지 센서의 테스트 패턴 속성 추가 패치를 다룹니다. 직접적인 Android Camera HAL 변경은 없으나, 하위 드라이버 및 이미지 파이프라인 검증 단계에서 테스트 패턴을 활용한 분리 디버깅 효율성을 높일 수 있는 방안을 제시합니다.",
+    "html": "newsletters/2026-07-20/index.html",
+    "md": "newsletters/2026-07-20/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-07-13",
     "title": "AOSP Camera & Driver Platform 기술 뉴스레터 (2026-07-13)",
     "summary": "이번 주 뉴스레터에서는 Qualcomm CAMSS 드라이버 스택에 제안된 Offline Processing Engine(OPE) v4 패치와 libcamera 소프트웨어 ISP의 렌즈 쉐이딩 보정(LSC)을 위한 EGL 모듈 개선 제안을 다룹니다. 또한 지난 6월 9일 배포된 Raspberry Pi의 libcamera 다운스트림 릴리스를 통해 임베디드 리눅스 카메라 드라이버 생태계의 최신 흐름을 짚어봅니다. 하부 드라이버 및 ISP 이미지 파이프라인의 아키텍처 변화가 Android 카메라 스택에 미치는 영향을 실무 관점에서 분석합니다.",

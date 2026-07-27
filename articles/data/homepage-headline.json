@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-07-13T00:00:00+09:00",
+  "updated_at": "2026-07-20T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org",
-    "title": "Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안",
-    "summary": "Qualcomm CAMSS(Camera Subsystem)에 오프라인 이미지 처리를 전담하는 OPE(Offline Processing Engine) 드라이버를 추가하는 v4 패치가 제안되었습니다.",
-    "source_url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/",
-    "newsletter_date": "2026-07-13",
-    "newsletter_url": "newsletters/2026-07-13/index.html",
-    "selected_at": "2026-07-13",
+    "article_identity_key": "url:https://patchwork.libcamera.org/patch/27362",
+    "title": "libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안",
+    "summary": "최근 libcamera 패치워크에 소니 IMX335 이미지 센서의 테스트 패턴 속성을 추가하는 패치가 제안되어 검토가 진행 중입니다. 이번 패치는 드라이버 수준에서 표준화된 테스트 패턴을 정의하여 이미지 파이프라인의 검증과 디버깅 편의성을 높이는 것을 목표로 합니다.",
+    "source_url": "https://patchwork.libcamera.org/patch/27362/",
+    "newsletter_date": "2026-07-20",
+    "newsletter_url": "newsletters/2026-07-20/index.html",
+    "selected_at": "2026-07-20",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-07-13",
+    "last_scored_at": "2026-07-20",
     "date_evidence": {
-      "date": "2026-07-13T13:05:33Z",
+      "date": "2026-07-14",
       "date_field": "published_date",
       "evidence_level": "watch",
       "publish_ready_date_evidence": true
@@ -38,13 +38,58 @@
     },
     "snapshot": {
       "category": "camera_driver_image_pipeline",
-      "source_name": "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver"
+      "source_name": "libcamera: camera_sensor: Add IMX335 test pattern sensor properties"
     },
-    "newsletter_article_url": "newsletters/2026-07-13/index.html#article-qualcomm-camss-ope-v4",
-    "image_url": "assets/images/fallback/android.svg",
-    "image_alt": "Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안 image"
+    "newsletter_article_url": "newsletters/2026-07-20/index.html#article-libcamera-imx335",
+    "image_url": "assets/images/fallback/newsletter-default.svg",
+    "image_alt": "libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안 image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org",
+      "title": "Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안",
+      "summary": "Qualcomm CAMSS(Camera Subsystem)에 오프라인 이미지 처리를 전담하는 OPE(Offline Processing Engine) 드라이버를 추가하는 v4 패치가 제안되었습니다.",
+      "source_url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/",
+      "newsletter_date": "2026-07-13",
+      "newsletter_url": "newsletters/2026-07-13/index.html",
+      "selected_at": "2026-07-13",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-07-13",
+      "date_evidence": {
+        "date": "2026-07-13T13:05:33Z",
+        "date_field": "published_date",
+        "evidence_level": "watch",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 3,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "camera_driver_image_pipeline",
+        "source_name": "Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver"
+      },
+      "newsletter_article_url": "newsletters/2026-07-13/index.html#article-qualcomm-camss-ope-v4",
+      "image_url": "assets/images/fallback/android.svg",
+      "image_alt": "Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안 image",
+      "replaced_at": "2026-07-20",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://patchwork.libcamera.org/patch/27198",
       "title": "libcamera, 센서 프레임 추적을 위한 SensorSequence 메타데이터 컨트롤 패치 제안",

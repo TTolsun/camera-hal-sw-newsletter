@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "date": "2026-07-20",
+  "generated_at": "2026-07-27T00:41:45.750Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 8,
+    "hit_count": 5,
+    "miss_count": 3,
+    "by_url_hit_count": 5,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "url-hit",
+      "count": 5
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 3
+    }
+  ],
+  "entries": [
+    {
+      "title": "libcamera: camera_sensor: Add IMX335 test pattern sensor properties",
+      "url": "https://patchwork.libcamera.org/patch/27362/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-07-14",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27362",
+        "url_hash": "a9a3506a5274fbba45a42b4576cf99ca01ec881fab15c6fb4db0970fb305df5d",
+        "published_date": "2026-07-14",
+        "content_hash": "c6f4edadea197c097e556db5259f20ec4f7ead38f6fbad61bb973ab6321aaf56"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[RFC,v8,5/6] libcamera: software_isp: Pass LSC availability to debayering",
+      "url": "https://patchwork.libcamera.org/patch/27373/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-07-16",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27373",
+        "url_hash": "5ed675e38e011f7d09f7086bd785521b47c6ffb8ba45edb5225f0a2f91147635",
+        "published_date": "2026-07-16",
+        "content_hash": "6fcc22af21ef307a9f55dc078a3c14b77221b448cc7055a0bc9bccaed36c8abe"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-0-da610d7fd494@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-17T04:09:06Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260717-sk5jn5-v1-0-da610d7fd494@oss.qualcomm.com",
+        "url_hash": "61bf0c9ba0fef223a520fd028129ffeaec0f369c0ee2699cec15baba51a4bcc9",
+        "published_date": "2026-07-17T04:09:06Z",
+        "content_hash": "57f42232bba9f3464ab96f0b69c014cad1f278adc898d0c938a5322fbd86f48c"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "source": "CameraX Release Notes",
+      "published_date": "July 01, 2026",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+        "url_hash": "6cc3115222373933c0df10c8df24e6dbd7043ec79d598384cff10acbc94317cd",
+        "published_date": "July 01, 2026",
+        "content_hash": "ea40ebeca5e06f185008196ef0490877c0c4a4c3739015d5985d87b3d53b0007"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/6cc3115222373933c0df10c8df24e6dbd7043ec79d598384cff10acbc94317cd.json"
+    },
+    {
+      "title": "[PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
+      "url": "https://lore.kernel.org/linux-media/20260710-camss-isp-ope-v4-6-51207a0319d8@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-10T09:05:09Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260710-camss-isp-ope-v4-6-51207a0319d8@oss.qualcomm.com",
+        "url_hash": "6fdd8be205f68deb87c2a3fa9db1481fcb0098e7f6d1f93136104d2b6bc43b6c",
+        "published_date": "2026-07-10T09:05:09Z",
+        "content_hash": "33b2258e4a91c156f2d7bd05df9434a7d5f55c451f0357925e5f60fd849e0ee3"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/6fdd8be205f68deb87c2a3fa9db1481fcb0098e7f6d1f93136104d2b6bc43b6c.json"
+    },
+    {
+      "title": "[PATCH v3 0/3] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260708-og0va1b-v3-0-de8e44455a42@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-08T14:33:46Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260708-og0va1b-v3-0-de8e44455a42@oss.qualcomm.com",
+        "url_hash": "8858e40d18f3f51d97ad1733cb9c0998b40332aa5dbb152c95b8b60bed5afbe2",
+        "published_date": "2026-07-08T14:33:46Z",
+        "content_hash": "6092c6c08a22d7c10c3bbbbd65c94a16c0c7f3b6635b3ed0745ae74c69f4b9a7"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/8858e40d18f3f51d97ad1733cb9c0998b40332aa5dbb152c95b8b60bed5afbe2.json"
+    },
+    {
+      "title": "[PATCH v5 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-0-a1f5baa6fe08@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-09T08:12:31Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260709-hm1092-driver-v5-0-a1f5baa6fe08@gmail.com",
+        "url_hash": "6ddc54c8bfc5e21bb03e517be7bcf3d6a1c7ec203ae1d97d165f94d09f51fd24",
+        "published_date": "2026-07-09T08:12:31Z",
+        "content_hash": "853a8f369029de698048eaa0eb60baea1397bf808bf8f22920e3894030b1dd05"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/6ddc54c8bfc5e21bb03e517be7bcf3d6a1c7ec203ae1d97d165f94d09f51fd24.json"
+    },
+    {
+      "title": "v0.7.2",
+      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "source": "libcamera Upstream Releases",
+      "published_date": "2026-07-10T11:12:38+01:00",
+      "cache_key": {
+        "normalized_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+        "url_hash": "6365ddeedd43a7c732b9dce4d49a96beeef6ad30e111063439f0a6cd79ae5e1b",
+        "published_date": "2026-07-10T11:12:38+01:00",
+        "content_hash": "7e6ed8c401e438ca86c774c73c50ea87c24703040a50f394a8e25c5ab7f88a57"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/6365ddeedd43a7c732b9dce4d49a96beeef6ad30e111063439f0a6cd79ae5e1b.json"
+    }
+  ]
+}

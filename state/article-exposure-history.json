@@ -7,6 +7,23 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://patchwork.libcamera.org/patch/27362",
+      "title": "libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안",
+      "source_url": "https://patchwork.libcamera.org/patch/27362/",
+      "newsletter_date": "2026-07-20",
+      "newsletter_url": "newsletters/2026-07-20/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-07-20",
+      "first_exposed_at": "2026-07-20",
+      "last_exposed_at": "2026-07-20",
+      "exposure_count": 1,
+      "exposure_types": [
+        "homepage_headline"
+      ]
+    },
+    {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org",
       "title": "Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안",
       "source_url": "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/",
@@ -163,16 +180,16 @@
       "article_identity_key": "content:2dca6397f6798483d79ea9e0",
       "title": "",
       "source_url": "",
-      "newsletter_date": "2026-07-13",
-      "newsletter_url": "newsletters/2026-07-13/index.html",
+      "newsletter_date": "2026-07-20",
+      "newsletter_url": "newsletters/2026-07-20/index.html",
       "exposure_type": "newsletter_article",
       "headline_score": null,
       "reuse_reason": "",
-      "exposed_at": "2026-07-13",
-      "cooldown_until": "2026-08-03",
+      "exposed_at": "2026-07-20",
+      "cooldown_until": "2026-08-10",
       "first_exposed_at": "2026-06-03",
-      "last_exposed_at": "2026-07-13",
-      "exposure_count": 11,
+      "last_exposed_at": "2026-07-20",
+      "exposure_count": 12,
       "exposure_types": [
         "newsletter_article"
       ]
