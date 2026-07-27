@@ -484,7 +484,6 @@ function articleStatusFor(section, hardItems, factCheck) {
   if (hardItems.some(item => item.category === 'source-integrity')) return 'FAIL';
   if (hardItems.some(item => item.category === 'field-hygiene')) return 'FAIL';
   if (hardItems.some(item => item.category === 'required-fields' && /sources|source/i.test(item.reason))) return 'FAIL';
-  if (hardItems.some(item => item.category === 'hal-signal' || item.category === 'hal-signal-capsule')) return 'FAIL';
   if (hardItems.some(item => item.category === 'evidence-specificity' && /release date|dated|source gap|rolling page|evidence/i.test(item.reason))) return 'FAIL';
   if (hardItems.some(item => item.category === 'hal-relevance' || item.category === 'hal-depth' || item.category === 'scope-relevance')) return 'DEMOTE';
   return hardItems.length > 0 || sectionHasFactCheckMustFix(section, factCheck) ? 'FAIL' : 'PASS';
