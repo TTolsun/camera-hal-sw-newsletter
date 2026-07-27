@@ -157,7 +157,10 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(evidencePackStep, /npm run report:evidence-pack -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(halSignalQualityStep, /if: always\(\) && steps\.resolve-newsletter-date\.outputs\.date != ''/);
   assert.match(halSignalQualityStep, /continue-on-error:\s*true/);
-  assert.match(halSignalQualityStep, /npm run report:hal-signal-quality -- --date "\$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}"/);
+  // generate가 리뷰 패키지 작성 전에 리포트를 이미 생성하므로 이 스텝은 crash-path 백필 전용이다.
+  // --skip-if-present 없이 재생성하면 generated_at만 바뀐 바이트가 artifact-manifest.json의
+  // sha256과 어긋난 채 커밋되므로, 플래그를 계약으로 고정한다.
+  assert.match(halSignalQualityStep, /npm run report:hal-signal-quality -- --date "\$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}" --skip-if-present/);
   assert.match(imageAuditStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   assert.doesNotMatch(imageAuditStep, /continue-on-error:\s*true/);
   assert.match(imageAuditStep, /steps\.meta\.outputs\.public_newsletter_ready/);

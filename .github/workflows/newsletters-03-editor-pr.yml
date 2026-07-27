@@ -181,10 +181,14 @@ jobs:
         continue-on-error: true
         run: npm run newsroom:repair-images -- --date "${{ steps.resolve-newsletter-date.outputs.date }}"
 
+      # generate(리뷰 패키지 writer)가 hal-signal-quality-report를 이미 생성하므로 이 스텝은
+      # generate가 리뷰 패키지 작성 전에 죽은 crash-path의 진단 백필 전용이다. 이미 있는
+      # 리포트를 재생성하면 generated_at만 바뀐 바이트가 artifact-manifest.json의 sha256과
+      # 어긋난 채 커밋되므로 --skip-if-present로 막는다.
       - name: Generate HAL signal quality report
         if: always() && steps.resolve-newsletter-date.outputs.date != ''
         continue-on-error: true
-        run: npm run report:hal-signal-quality -- --date "${{ steps.resolve-newsletter-date.outputs.date }}"
+        run: npm run report:hal-signal-quality -- --date "${{ steps.resolve-newsletter-date.outputs.date }}" --skip-if-present
 
       - name: Ensure public newsletter artifacts
         id: ensure-public-newsletter

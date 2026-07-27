@@ -293,14 +293,20 @@ function buildHalSignalQualityReport(options = {}) {
 function writeHalSignalQualityArtifacts(options = {}) {
   const root = path.resolve(options.root || process.cwd());
   const date = text(options.date) || kstDate();
-  const inputs = options.inputs || loadHalSignalQualityInputs(root, date);
-  const report = buildHalSignalQualityReport({ ...options, root, date, inputs });
   const outDir = newsroomDir(root, date);
   const jsonPath = path.join(outDir, 'hal-signal-quality-report.json');
   const markdownPath = path.join(outDir, 'hal-signal-quality-report.md');
+  // skipIfPresent: generate(리뷰 패키지 writer)가 이미 온전한 리포트 쌍을 썼으면 재생성하지
+  // 않는다. 재생성하면 generated_at만 바뀐 바이트가 artifact-manifest.json의 sha256과 어긋난다.
+  // 한 쪽만 남은 경우는 온전한 쌍으로 다시 만든다.
+  if (options.skipIfPresent === true && fs.existsSync(jsonPath) && fs.existsSync(markdownPath)) {
+    return { report: null, jsonPath, markdownPath, skipped: true };
+  }
+  const inputs = options.inputs || loadHalSignalQualityInputs(root, date);
+  const report = buildHalSignalQualityReport({ ...options, root, date, inputs });
   writeJson(jsonPath, report);
   fs.writeFileSync(markdownPath, renderHalSignalQualityMarkdown(report), 'utf8');
-  return { report, jsonPath, markdownPath };
+  return { report, jsonPath, markdownPath, skipped: false };
 }
 
 module.exports = {
