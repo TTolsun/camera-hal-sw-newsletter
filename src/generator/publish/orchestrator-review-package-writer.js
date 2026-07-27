@@ -4,7 +4,8 @@
 // 전부 module-level import라 god-file-local 함수 주입이 없다(god-file을 import하지 않아 순환 없음).
 // rootDir 기본값으로 쓰는 root는 god-file의 process.cwd()와 동일 시점에 같은 값으로 파생한다.
 // 인벤토리가 required(always)로 선언한 hal-signal-quality-report.{json,md}는 인벤토리 스캔 전에
-// 이 writer가 직접 생성한다(생성 순서 불변식: 리뷰 패키지가 있으면 hal-signal 리포트도 있다).
+// 이 writer가 직접 생성한다(best-effort: 생성이 실패하면 경고만 남기고 리뷰 패키지는 계속 쓰며,
+// 인벤토리는 실제 결측 상태를 그대로 기록한다).
 const fs = require('fs');
 const path = require('path');
 const { writeJson } = require('../../shared/common/common');
