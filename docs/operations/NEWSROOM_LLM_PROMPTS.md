@@ -177,7 +177,7 @@ Workflow/Stage: Stage 3 `fact-checker attempt <n>/<total>`
 
 Workflow/Stage: Stage 3 `editor repair attempt <n>/<total>`
 
-주요 입력: `commonContext`, failed section patch target JSON(section_index, section_key, summary, `article_sections`, `public_article`), repair plan JSON, primary selected article capsule JSON, current fact-check JSON, quality deductions JSON. LLM 호출은 `repair-section` 전용 patch 경로에서만 일어나고, structural 경로는 LLM 없이 진행됩니다.
+주요 입력: `commonContext`, failed section patch target JSON(section_index, section_key, summary, `article_sections`, `public_article`), repair plan JSON, primary selected article capsule JSON, current fact-check JSON, quality deductions JSON. 이 repair patch prompt의 LLM 호출은 `repair-section` 전용 patch 경로에서만 일어나고, structural 경로는 이 prompt 호출 없이 진행됩니다(강등 뒤 public-article judge와 repair fact-check LLM 호출은 두 경로 공통 후처리에서 실행됩니다).
 
 출력/schema: `editorRepairPatchSchema`(`{patches:[...]}`), `editor-repair-patches-attempt-<n>.json`. patch는 `applyRepairPatchesAndValidate()`가 결정론적으로 적용하며, article-preserving 계약을 위반하면 targeted repair가 실패합니다. `editor-repair-sections-attempt-<n>.json`은 두 경로 모두에서 locked/failed/regenerated section summary와 repair plan을 담는 요약 artifact로 계속 기록됩니다.
 
