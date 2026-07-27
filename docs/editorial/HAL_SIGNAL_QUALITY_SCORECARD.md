@@ -56,7 +56,8 @@ main article은 다음 additive field를 가져야 합니다.
 
 이 점수가 발행 판정에 미치는 영향의 경계는 다음과 같습니다.
 
-- Quality validation은 HAL signal 감점과 hard blocker를 기록합니다.
+- HAL signal 검사는 관측(observability) 전용입니다. quality validation은 검사 결과(`hal_signal_quality_summary`, `main_article_signal_checks`)를 기록만 하고, 품질 상태 판정에는 쓰지 않습니다.
+- `hal_signal_capsule` 강제는 editor output contract(`validateHalSignalCapsules`)가 담당합니다. capsule이 없거나 필수 키가 빠지면 editor 출력 검증이 실패합니다.
 - 품질 상태가 `PASS`가 아니면 publish gate가 최종 발행을 차단합니다.
 - 리뷰 산출물(artifact), 진단, 디버그 artifact, PR 컨텍스트는 모두 보존됩니다.
 - `hal-signal-quality-report`에서 선택적(optional) report 입력이 누락되면 그 부분을 `input_unavailable`로 기록합니다. 선택적 입력만 있는 부분 report는 `status=WARN`과 `input_completeness=partial`로 표시합니다.
