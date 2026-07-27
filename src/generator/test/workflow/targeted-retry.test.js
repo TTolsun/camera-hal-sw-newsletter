@@ -677,24 +677,29 @@ test('targeted repair allows metadata repair when article identity stays fixed',
   }), true);
 });
 
+function storyPolicySection(headline, url, bucket = 'direct_aosp_camera') {
+  const built = policySection(headline, url, bucket);
+  built.public_article = {
+    ...built.public_article,
+    story_contract_version: 1,
+    source_subtitle: 'Example Source 발표 분석',
+    editorial_story: {
+      reader_scenario: `독자가 ${headline}을 검증 입력으로 검토하는 상황을 가정합니다.`,
+      what_happened: `${headline}가 2026-05-01에 공개되었습니다.`,
+      why_it_matters: 'Camera HAL 검증 입력으로 쓸 수 있는 근거가 생겼습니다.',
+      field_scenario: '스트림 구성과 메타데이터 로그 확인 시나리오에 적용됩니다.',
+      not_to_overclaim: '이 변경은 HAL API 규격의 직접 변경을 의미하지 않습니다.',
+      editor_take: '검증 입력으로만 반영합니다.'
+    }
+  };
+  return built;
+}
+
 test('targeted repair keeps issue-level story markers so story-v1 sections stay valid', () => {
   // 2026-07-20 재발 회귀: 최후 가드가 합성 wrapper로 검증할 때 issue 레벨 story marker
   // (public_contract_version/generation_contract_version)를 떨어뜨리면, story marker를 가진
   // section이 story_contract_version_mismatch로 항상 실패한다. baseIssue가 marker를 공급해야 한다.
-  const storySection = policySection('CameraX release', 'https://example.com/camerax');
-  storySection.public_article = {
-    ...storySection.public_article,
-    story_contract_version: 1,
-    source_subtitle: 'Example Source 발표 분석',
-    editorial_story: {
-      reader_scenario: '독자가 CameraX 릴리스를 검증 입력으로 검토하는 상황을 가정합니다.',
-      what_happened: 'CameraX release가 2026-05-01에 공개되었습니다.',
-      why_it_matters: 'Camera HAL 검증 입력으로 쓸 수 있는 근거가 생겼습니다.',
-      field_scenario: '스트림 구성과 메타데이터 로그 확인 시나리오에 적용됩니다.',
-      not_to_overclaim: '이 릴리스는 HAL API 규격의 직접 변경을 의미하지 않습니다.',
-      editor_take: '검증 입력으로만 반영합니다.'
-    }
-  };
+  const storySection = storyPolicySection('CameraX release', 'https://example.com/camerax');
   const repaired = JSON.parse(JSON.stringify(storySection));
   repaired.public_article.editorial_story.editor_take = '검증 입력으로 반영하고 다음 창에서 재확인합니다.';
 
@@ -705,6 +710,24 @@ test('targeted repair keeps issue-level story markers so story-v1 sections stay 
     lockedSections: [],
     mode: 'targeted-repair',
     allowCountChange: false,
+    date: DATE,
+    baseIssue: { public_contract_version: 'story-v1', generation_contract_version: 1 }
+  }), true);
+});
+
+test('completion mode keeps issue-level story markers for story-v1 sections', () => {
+  // completion 경로(mode: completion, allowCountChange: true)도 같은 합성 wrapper를 쓰므로
+  // baseIssue marker 상속이 없으면 story-v1 completion 결과가 항상 차단된다.
+  const existing = storyPolicySection('CameraX release', 'https://example.com/camerax');
+  const added = storyPolicySection('Driver pipeline update', 'https://example.com/driver', 'camera_driver_image_pipeline');
+
+  assert.equal(validateTargetedRepairResult({
+    beforeSections: [existing],
+    repairSections: [added],
+    afterSections: [existing, added],
+    lockedSections: [existing],
+    mode: 'completion',
+    allowCountChange: true,
     date: DATE,
     baseIssue: { public_contract_version: 'story-v1', generation_contract_version: 1 }
   }), true);
