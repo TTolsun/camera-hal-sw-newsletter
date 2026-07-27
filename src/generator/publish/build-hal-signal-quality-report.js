@@ -7,20 +7,26 @@ const {
 
 function usage() {
   return [
-    'Usage: node src/generator/publish/build-hal-signal-quality-report.js [--date YYYY-MM-DD]',
+    'Usage: node src/generator/publish/build-hal-signal-quality-report.js [--date YYYY-MM-DD] [--skip-if-present]',
     '',
-    'Date priority: --date, NEWSLETTER_DATE, .tmp/newsletter-date.txt, today KST.'
+    'Date priority: --date, NEWSLETTER_DATE, .tmp/newsletter-date.txt, today KST.',
+    '--skip-if-present: keep an existing report pair untouched (workflow crash-path backfill mode).'
   ].join('\n');
 }
 
 function main(argv = process.argv.slice(2), env = process.env, root = process.cwd()) {
-  const options = parseArgs(argv);
+  const skipIfPresent = argv.includes('--skip-if-present');
+  const options = parseArgs(argv.filter(arg => arg !== '--skip-if-present'));
   if (options.help) {
     console.log(usage());
     return 0;
   }
   const date = resolveDate(options, env, root);
-  const result = writeHalSignalQualityArtifacts({ root, date });
+  const result = writeHalSignalQualityArtifacts({ root, date, skipIfPresent });
+  if (result.skipped) {
+    console.log(`Skipped existing ${path.relative(root, result.jsonPath).replace(/\\/g, '/')} (--skip-if-present)`);
+    return 0;
+  }
   console.log(`Wrote ${path.relative(root, result.jsonPath).replace(/\\/g, '/')}`);
   console.log(`Wrote ${path.relative(root, result.markdownPath).replace(/\\/g, '/')}`);
   if (result.report.status !== 'PASS') {

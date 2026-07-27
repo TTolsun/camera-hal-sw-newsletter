@@ -122,3 +122,38 @@ test('writeDateReviewPackage: review-guide/release-qa/manifest 세 파일을 한
   const manifest = JSON.parse(fs.readFileSync(path.join(newsroomDir, 'artifact-manifest.json'), 'utf8'));
   assert.ok(manifest);
 });
+
+test('writeDateReviewPackage: required인 hal-signal-quality-report를 먼저 생성해 인벤토리 자기모순을 없앤다', () => {
+  // 리뷰 패키지 인벤토리는 hal-signal-quality-report.md를 required(always)로 선언한다.
+  // 리포트를 나중에 별도 워크플로우 스텝이 만들면, 같은 커밋에 리포트가 있는데도
+  // 00-review-guide/release-qa/artifact-manifest에는 required_artifact_missing으로 영구 기록된다.
+  // 그래서 리뷰 패키지 작성이 리포트 생성을 선행해야 한다.
+  const rootDir = tempRoot('review-package-');
+  const date = '2026-05-08';
+
+  writeDateReviewPackage({
+    rootDir,
+    date,
+    files: [],
+    validateText: 'characterization run',
+    runContext: { status: 'OK', publicOutputExpected: false }
+  });
+
+  const newsroomDir = path.join(rootDir, 'articles', 'content', 'newsroom', date);
+  assert.ok(fs.existsSync(path.join(newsroomDir, 'hal-signal-quality-report.json')));
+  assert.ok(fs.existsSync(path.join(newsroomDir, 'hal-signal-quality-report.md')));
+
+  // 입력 산출물이 없는 실패 경로에서도 리포트는 INPUT_INCOMPLETE로 정직하게 생성된다.
+  const report = JSON.parse(fs.readFileSync(path.join(newsroomDir, 'hal-signal-quality-report.json'), 'utf8'));
+  assert.equal(report.status, 'INPUT_INCOMPLETE');
+
+  const guide = fs.readFileSync(path.join(newsroomDir, '00-review-guide.md'), 'utf8');
+  assert.doesNotMatch(guide, /hal-signal-quality-report\.md` - missing required/);
+
+  const halSignalMarkdownPath = `articles/content/newsroom/${date}/hal-signal-quality-report.md`;
+  const manifest = JSON.parse(fs.readFileSync(path.join(newsroomDir, 'artifact-manifest.json'), 'utf8'));
+  assert.ok(!manifest.missing_required_review_artifacts.includes(halSignalMarkdownPath));
+  const halSignalEntry = manifest.review_artifacts.find(artifact => artifact.path === halSignalMarkdownPath);
+  assert.equal(halSignalEntry.present, true);
+  assert.equal(halSignalEntry.warning, undefined);
+});
