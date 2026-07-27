@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "date": "2026-07-27",
+  "status": "PASS",
+  "removed_sections": [],
+  "final_section_sources": [
+    {
+      "title": "[PATCH v5 4/5] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
+      "url": "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/"
+    },
+    {
+      "title": "[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support",
+      "url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/"
+    },
+    {
+      "title": "[v2,2/2] libcamera: Harden control serializer size and input validation",
+      "url": "https://patchwork.libcamera.org/patch/27507/"
+    },
+    {
+      "title": "libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown",
+      "url": "https://patchwork.libcamera.org/patch/27496/"
+    },
+    {
+      "title": "[PATCH v2 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}
