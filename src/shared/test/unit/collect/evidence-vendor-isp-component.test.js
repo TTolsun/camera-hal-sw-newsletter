@@ -21,6 +21,9 @@ const VENDOR_DRIVER_TITLES = [
   { token: 'atomisp', title: 'media: atomisp: fix input buffer queue underflow' },
   { token: 'camss', title: 'media: camss: add VFE hardware version for glymur' },
   { token: 'mtk-isp', title: 'media: mtk-isp: rework DIP frame job scheduling' },
+  // 언더스코어 표기는 하이픈과 달리 \bISP\b 단어 경계에 안 걸려 fallback 경로만이 잡는다
+  // (하이픈 표기는 기존 패턴이 우연히 통과시키므로 이 항목이 fallback의 실제 회귀 가드다).
+  { token: 'mtk_isp', title: 'media: mtk_isp: rework DIP frame job scheduling' },
   { token: 'mtk-cam', title: 'media: mtk-cam: fix seninf DMA buffer handling' },
   { token: 'uvcvideo', title: 'media: uvcvideo: fix control descriptor parsing' },
   // 2026-W31 갭 감사 실증: libcamera libipa AGC 43-patch RFC가 evidence 4로 watchlist 강등됐다.
