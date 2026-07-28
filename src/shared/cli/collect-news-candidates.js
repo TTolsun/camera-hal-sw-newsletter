@@ -52,7 +52,9 @@ const {
 } = require('../domain/aosp-camera-scope');
 const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
-  NATIVE_TOOLING_WORKFLOW_TYPE
+  NATIVE_TOOLING_WORKFLOW_TYPE,
+  loreSeriesKey,
+  seriesPatchNumber
 } = require('../common/article-groups');
 const {
   analyzeLinkedEvidenceForCandidates,
@@ -325,6 +327,10 @@ function rssParentRawItem(block, source) {
     sourceKind: 'rss_item',
     collectionMode: 'rss-item',
     in_reply_to: inReplyTo,
+    // lore 시리즈 조각을 collapseSeriesRepresentatives가 대표 1건으로 묶을 수 있게 시리즈 키를
+    // 파생한다. 파서는 선정 단계와 같은 단일출처(article-groups loreSeriesParts: 자기 message-id
+    // 우선, 답장만 부모 폴백, 버전 토큰 선택적)를 재사용한다. 비-lore URL은 null.
+    seriesId: loreSeriesKey({ url: link, in_reply_to: inReplyTo }) || null,
     outgoing_links: outgoingLinks,
     imageCandidates: extractImageCandidatesFromRssBlock(block, link, source)
   };
@@ -337,10 +343,20 @@ function rssItemHtml(block) {
     rawTag(block, 'summary');
 }
 
+// lore(public-inbox) 답장(Re:)은 시리즈의 리드가 될 수 없으므로 후보에서 제외한다.
+function isLoreReplyItem({ url, title } = {}) {
+  return /^https?:\/\/lore\.kernel\.org\//i.test(String(url || '')) &&
+    /^\s*re\s*:/i.test(String(title || ''));
+}
+
 function parseRss(xml, source) {
   const blocks = xml.match(/<item[\s\S]*?<\/item>/gi) || xml.match(/<entry[\s\S]*?<\/entry>/gi) || [];
   return blocks.flatMap(block => {
     const parentRaw = rssParentRawItem(block, source);
+    // lore 답장(Re:)은 후보로 만들지 않는다 — 답장이 캡 슬롯/reserve를 차지하는 것을 막는다
+    // (2026-W31 실측: reserve 3석 중 2석이 Re: 답장). 원본 패치는 같은 제목 토큰으로 검색
+    // 피드에 함께 들어오므로 창 안 시리즈의 신호는 유지된다.
+    if (isLoreReplyItem(parentRaw)) return [];
     const parent = normalizeCandidate(parentRaw);
     const childItems = extractRoundupChildTopics({
       source,
@@ -1222,18 +1238,23 @@ function isSourceChangeEventCandidate(item = {}) {
 // per-source 캡(capPerSource)은 조각 단위로 세므로, 큰 시리즈가 캡을 자기 조각들로 소진하다
 // 대표조차 남기지 못하고 통째로 밀려날 수 있다(선정 단계 series dedup(#795)은 캡 이후라 이때는
 // 이미 늦다 — 캡에서 사라진 시리즈는 선정이 볼 기회조차 없다). 캡 이전에 (source, seriesId)별
-// 대표 1건으로 collapse해, 시리즈가 캡에 대해 하나의 후보로 경쟁하게 한다. 입력이 이미 rank
-// 정렬 상태이므로 first-seen이 그 시리즈의 최상위 대표다. seriesId가 없는 후보(대부분의 소스)는
-// 그대로 통과하므로 다른 소스 동작에는 영향이 없다.
+// 대표 1건으로 collapse해, 시리즈가 캡에 대해 하나의 후보로 경쟁하게 한다. 대표의 캡 경쟁
+// 순위는 first-seen(rank 최상위 조각)의 자리를 쓰되, 내용은 patch 번호가 가장 낮은 조각
+// (커버레터 0/N이 시리즈 개요를 담아 capsule/선정 입력 품질이 가장 좋다)으로 채운다.
+// seriesId가 없는 후보(대부분의 소스)는 그대로 통과하므로 다른 소스 동작에는 영향이 없다.
 function collapseSeriesRepresentatives(candidates) {
-  const seenSeries = new Set();
+  const seenSeries = new Map();
   const result = [];
   for (const item of candidates) {
     const seriesId = item.seriesId ?? item.series_id;
     if (seriesId !== undefined && seriesId !== null && seriesId !== '') {
       const key = `${item.source_id || item.source || ''}::${seriesId}`;
-      if (seenSeries.has(key)) continue;
-      seenSeries.add(key);
+      if (seenSeries.has(key)) {
+        const index = seenSeries.get(key);
+        if (seriesPatchNumber(item) < seriesPatchNumber(result[index])) result[index] = item;
+        continue;
+      }
+      seenSeries.set(key, result.length);
     }
     result.push(item);
   }
