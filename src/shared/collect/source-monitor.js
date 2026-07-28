@@ -179,7 +179,10 @@ function firstDateMatch(value = '') {
 
 function visibleLastUpdated(html = '') {
   const value = visibleText(html);
-  const match = value.match(/\bLast updated\s+([^.\n]+?)(?:\s+UTC)?\.?\b/i);
+  // lazy 캡처는 "Last updated 2026-07-21 UTC."에서 첫 단어 경계("2026")까지만 잡아
+  // firstDateMatch의 new Date("2026") 폴백이 연초 날짜(2026-01-01)로 둔갑시켰다(실스냅샷 실증).
+  // "Last updated" 뒤 구간을 통째로 넘겨 완전한 날짜 매칭(ISO/월 이름)에 맡긴다.
+  const match = value.match(/\bLast updated\b([^.\n]*)/i);
   return match ? firstDateMatch(match[1]) : '';
 }
 
@@ -1087,5 +1090,6 @@ module.exports = {
   sourceEventsJsonPath,
   sourceEventsMarkdownPath,
   snapshotPath,
-  summarizeEvents
+  summarizeEvents,
+  visibleLastUpdated
 };
