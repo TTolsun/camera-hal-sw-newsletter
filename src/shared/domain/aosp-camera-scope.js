@@ -83,7 +83,8 @@ const STRONG_CAMERA_DRIVER_PATTERNS = [
   /\bcamss\b/i,          // Qualcomm Camera Subsystem (drivers/media/platform/qcom/camss)
   /\bmtk[-_]?isp\b/i,    // MediaTek ISP (drivers/media/platform/mediatek/isp)
   /\bmtk[-_]?cam\b/i,    // MediaTek camera (mtk-cam)
-  /\buvcvideo\b/i        // USB Video Class camera driver (drivers/media/usb/uvc)
+  /\buvcvideo\b/i,       // USB Video Class camera driver (drivers/media/usb/uvc)
+  /\blibipa\b/i          // libcamera IPA shared algorithm library (patch prefix "ipa: libipa:")
 ];
 
 // Linux media 프레임워크 공용 API 토큰 — 디코더/인코더/DVB/튜너/HDMI-RX도 공유한다. 카메라 특정
