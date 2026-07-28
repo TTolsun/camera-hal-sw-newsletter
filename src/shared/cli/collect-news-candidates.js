@@ -46,6 +46,7 @@ const {
 } = require('../collect/outgoing-links');
 const {
   BUCKETS,
+  STRONG_CAMERA_DRIVER_PATTERNS,
   classifyAospCameraStackCandidate,
   detectNativeAndroidToolingWorkflow
 } = require('../domain/aosp-camera-scope');
@@ -442,7 +443,14 @@ function hasBehaviorChangeForRaw(raw, behaviorChange) {
 
 function componentFromText(value, source) {
   const match = firstMatch(API_OR_COMPONENT_PATTERN, value);
-  return match || '';
+  if (match) return match;
+  // #805: rkisp1/camss처럼 "ISP"가 토큰 내부에 있는 벤더 드라이버명은 위 패턴의 \bISP\b가 놓친다.
+  // 분류기·스코어러(#744/#792)와 같은 단일출처 어휘로 fallback해 세 소비자의 인식 범위를 정합시킨다.
+  for (const pattern of STRONG_CAMERA_DRIVER_PATTERNS) {
+    const driverMatch = firstMatch(pattern, value);
+    if (driverMatch) return driverMatch;
+  }
+  return '';
 }
 
 function inferFallbackSourceKind(source) {
