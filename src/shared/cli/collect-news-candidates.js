@@ -45,6 +45,10 @@ const {
   normalizeOutgoingLinks
 } = require('../collect/outgoing-links');
 const {
+  deriveLoreSeriesId,
+  isLoreReplyItem
+} = require('../collect/lore-thread-series');
+const {
   BUCKETS,
   STRONG_CAMERA_DRIVER_PATTERNS,
   classifyAospCameraStackCandidate,
@@ -325,6 +329,9 @@ function rssParentRawItem(block, source) {
     sourceKind: 'rss_item',
     collectionMode: 'rss-item',
     in_reply_to: inReplyTo,
+    // lore 시리즈 조각을 collapseSeriesRepresentatives가 대표 1건으로 묶을 수 있게
+    // message-id 규약에서 시리즈 키를 파생한다(비-lore URL은 null).
+    seriesId: deriveLoreSeriesId({ url: link, inReplyTo }),
     outgoing_links: outgoingLinks,
     imageCandidates: extractImageCandidatesFromRssBlock(block, link, source)
   };
@@ -341,6 +348,8 @@ function parseRss(xml, source) {
   const blocks = xml.match(/<item[\s\S]*?<\/item>/gi) || xml.match(/<entry[\s\S]*?<\/entry>/gi) || [];
   return blocks.flatMap(block => {
     const parentRaw = rssParentRawItem(block, source);
+    // lore 답장(Re:)은 후보로 만들지 않는다 — 캡 슬롯/reserve를 답장이 차지하는 것을 막는다.
+    if (isLoreReplyItem(parentRaw)) return [];
     const parent = normalizeCandidate(parentRaw);
     const childItems = extractRoundupChildTopics({
       source,
