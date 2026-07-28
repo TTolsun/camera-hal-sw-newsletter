@@ -9,7 +9,8 @@ const {
   commitSourceSnapshotWrites,
   filterSnapshotWritesByIncludedEvidenceIds,
   runSourceMonitor,
-  snapshotPath
+  snapshotPath,
+  visibleLastUpdated
 } = require('../../../collect/source-monitor');
 const {
   hashText,
@@ -576,4 +577,18 @@ test('atomic snapshot write failure preserves the previous snapshot file', () =>
 
   const after = JSON.parse(fs.readFileSync(target, 'utf8'));
   assert.deepEqual(after.processed_source_event_ids, ['existing-event']);
+});
+
+// devsite(source.android.com/developer.android.com) footer의 "Last updated <ISO날짜> UTC." 형식에서
+// lazy 캡처가 연도("2026")까지만 잡아 firstDateMatch의 new Date 폴백이 2026-01-01로 둔갑시키던
+// 버그 회귀 가드. 같은 해 안의 문서 갱신이 전부 무변화로 보여 dated 이벤트가 안 나오던 원인.
+test('visibleLastUpdated extracts the full ISO date from a devsite footer', () => {
+  const html = '<html><body><p>Camera ITS release notes body.</p>' +
+    '<devsite-content-footer><p>Last updated 2026-07-21 UTC.</p></devsite-content-footer></body></html>';
+  assert.equal(visibleLastUpdated(html), '2026-07-21');
+});
+
+test('visibleLastUpdated handles month-name dates and missing footers', () => {
+  assert.equal(visibleLastUpdated('<p>Last updated January 5, 2026</p>'), '2026-01-05');
+  assert.equal(visibleLastUpdated('<p>No footer here</p>'), '');
 });
