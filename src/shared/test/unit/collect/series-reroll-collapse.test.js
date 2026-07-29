@@ -69,6 +69,41 @@ test('version tokens are read from the bracket prefix only, not the subject body
   assert.equal(collapsed[0].seriesId, 6081, '브래킷 v2가 본문 v3 표기를 이기고 대표가 돼야 한다');
 });
 
+test('a surviving cover letter beats a newer non-cover fragment across the version boundary (#822 preference)', () => {
+  // 실측 창 축소 사례(2026-07-20 series 6049: 4조각 -> 5/6 단일 조각)처럼 최신 버전은
+  // 조각만 남고 구버전 커버레터가 살아 있으면, 커버레터(낮은 patch 번호)를 대표로 지킨다.
+  const collapsed = collapseSeriesRepresentatives([
+    patchworkItem({
+      title: '[v2,2/2] libcamera: Harden control serializer size and input validation',
+      seriesId: 6082,
+      patchId: 27502
+    }),
+    patchworkItem({
+      title: '[0/2] libcamera: Harden control serializer size and input validation',
+      seriesId: 6076,
+      patchId: 27450
+    })
+  ]);
+  assert.equal(collapsed.length, 1);
+  assert.equal(collapsed[0].seriesId, 6076, '구버전이라도 커버레터가 조각을 이겨야 한다');
+
+  // 반대 방향: 최신 버전의 커버레터는 구버전 조각을 이긴다(patch 번호 비교로 동일 규칙).
+  const reversed = collapseSeriesRepresentatives([
+    patchworkItem({
+      title: '[2/2] libcamera: Harden control serializer size and input validation',
+      seriesId: 6076,
+      patchId: 27455
+    }),
+    patchworkItem({
+      title: '[v2,0/2] libcamera: Harden control serializer size and input validation',
+      seriesId: 6082,
+      patchId: 27500
+    })
+  ]);
+  assert.equal(reversed.length, 1);
+  assert.equal(reversed[0].seriesId, 6082);
+});
+
 test('lore re-rolls with a changed patch count still collapse (v5 0/6 -> v6 0/7)', () => {
   const loreItem = (title, seriesId) => ({
     source_id: 'lore-linux-media-list',
