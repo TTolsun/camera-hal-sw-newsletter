@@ -50,6 +50,7 @@
   "catchUpPolicy": {
     "enabled": true,
     "maxCatchUpArticles": 2,
+    "maxReleaseClassArticles": 1,
     "maxAgeDays": 35,
     "targetMainArticles": 3,
     "eligibleBuckets": [

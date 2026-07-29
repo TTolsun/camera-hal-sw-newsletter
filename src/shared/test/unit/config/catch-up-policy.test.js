@@ -17,10 +17,27 @@ test('default policy exposes a normalized catchUpPolicy', () => {
   const policy = getCatchUpPolicy();
   assert.equal(policy.enabled, true);
   assert.equal(policy.maxCatchUpArticles, 2);
+  assert.equal(policy.maxReleaseClassArticles, 1);
   assert.equal(policy.maxAgeDays, 35);
   assert.equal(policy.targetMainArticles, 3);
   assert.equal(policy.activationMode, 'fill_open_slots');
   assert.ok(Array.isArray(policy.eligibleBuckets) && policy.eligibleBuckets.length > 0);
+});
+
+test('validation rejects maxReleaseClassArticles above mainArticleCount.max and below zero', () => {
+  const config = baseConfig();
+  config.catchUpPolicy = {
+    enabled: true, maxCatchUpArticles: 2, maxReleaseClassArticles: 99, maxAgeDays: 35,
+    targetMainArticles: 3, eligibleBuckets: ['direct_aosp_camera'], activationMode: 'fill_open_slots'
+  };
+  let result = validateNewsletterPolicyConfig(config);
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some(e => e.includes('catchUpPolicy.maxReleaseClassArticles')));
+
+  config.catchUpPolicy.maxReleaseClassArticles = -1;
+  result = validateNewsletterPolicyConfig(config);
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some(e => e.includes('catchUpPolicy.maxReleaseClassArticles')));
 });
 
 test('validation rejects targetMainArticles above mainArticleCount.max', () => {

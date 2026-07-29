@@ -84,17 +84,30 @@ function renderCatchUpSummary(root, date) {
   const shortlist = loadNewsroomReport(root, date, 'shortlisted-candidates.json');
   const used = Number(shortlist?.catch_up_used_count || 0);
   if (!Number.isFinite(used) || used <= 0) return '';
-  const titles = ensureArray(shortlist?.catch_up_articles)
+  const articles = ensureArray(shortlist?.catch_up_articles);
+  const titles = articles
     .map(item => {
       const weeks = Number.isFinite(Number(item.catch_up_age_days))
         ? `${Math.max(1, Math.round(Number(item.catch_up_age_days) / 7))}주 전`
         : '';
       return `${item.title}${weeks ? ` (${weeks})` : ''}`;
     });
+  // release-class 레인(#825)은 fresh 선정이 목표를 채운 주에도 발동하므로, "fresh 기사가
+  // 부족해" 문구는 일반(fill_open_slots) 레인 승급분에만 쓴다. catch_up_lane이 없는 과거
+  // 리포트는 일반 레인만 있던 시기의 산출물이라 기존 문구 그대로가 사실이다.
+  const releaseClassCount = articles.filter(item => item.catch_up_lane === 'release_class').length;
+  const generalCount = used - releaseClassCount;
+  const summaryLines = [];
+  if (generalCount > 0) {
+    summaryLines.push(`이번 호는 fresh 기사가 부족해 ${generalCount}건의 "지난 소식" 기사가 catch-up 레인으로 채워졌습니다.`);
+  }
+  if (releaseClassCount > 0) {
+    summaryLines.push(`릴리스 캐치업(release-class) 레인이 신선도 창을 놓친 미게재 릴리스 ${releaseClassCount}건을 여유 슬롯에 채웠습니다(신규 기사를 밀어내지 않음).`);
+  }
   return [
     '## 지난 소식 (Catch-up)',
     '',
-    `이번 호는 fresh 기사가 부족해 ${used}건의 "지난 소식" 기사가 catch-up 레인으로 채워졌습니다.`,
+    ...summaryLines,
     ...titles.map(title => `- ${title}`),
     '',
     '이 기사는 수 주 전 릴리스를 회고로 다룬 것으로, 한 번만 다루도록 exposure history에 기록됩니다.'
