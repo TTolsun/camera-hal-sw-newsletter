@@ -653,6 +653,12 @@ function catchUpCandidateHasEvidence(candidate) {
   );
 }
 
+// release 채널 후보(#825): collectionModeHint가 release-note-watch인 소스에서 온 후보.
+// 릴리스 이벤트는 빈도가 낮고 반감기가 길어 catch-up에서 별도 상한(release-class 레인)을 갖는다.
+function isReleaseClassCandidate(candidate = {}) {
+  return text(candidate.source_collection_mode || candidate.sourceCollectionMode) === 'release-note-watch';
+}
+
 function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = getCatchUpPolicy()) {
   if (!catchUpPolicy || catchUpPolicy.enabled !== true) return [];
   const eligibleBuckets = new Set(ensureArray(catchUpPolicy.eligibleBuckets));
@@ -717,9 +723,23 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const catchUpPolicy = options.catchUpPolicy || getCatchUpPolicy();
   let catchUpSelected = [];
   const catchUpTarget = Number(catchUpPolicy.targetMainArticles) || articlePolicy.mainArticleCount.min;
-  if (catchUpPolicy.enabled === true && selected.length < catchUpTarget) {
+  // release-class 레인(#825): release 채널 후보는 주간 발행 주기와 신선도 창 사이에 끼면
+  // thin week가 올 때까지 영원히 기회가 없다(실측: libcamera v0.7.2 — W29 소스 미등록,
+  // W30/W31은 primary 창 밖 fallback 창인데 fallback은 primary가 min을 못 채울 때만 참조돼
+  // 3주 연속 어느 선정 산출물에도 등장 0). 릴리스는 빈도가 낮고 반감기가 길므로, 신규
+  // 선정이 target을 채운 주에도 mainArticleCount.max 아래 여유 슬롯을 정책 상한만큼 내준다.
+  // 일반 레인과 같은 pool 필터(main_article_score_eligible 포함)·중복 가드·게재 이력을
+  // 그대로 지나므로 품질 게이트 약화는 없다. 일반(thin-week) 레인은 기존대로 reference 창만
+  // 보고, release-class 레인만 fallback 창 후보까지 본다(fallback 창이 릴리스가 실제로
+  // 갇히는 지점이다).
+  const maxReleaseClassArticles = Number(catchUpPolicy.maxReleaseClassArticles) || 0;
+  const thinWeek = selected.length < catchUpTarget;
+  if (catchUpPolicy.enabled === true && (thinWeek || maxReleaseClassArticles > 0)) {
     const selectedKeys = new Set(selected.map(item => articleIdentityKey(item)));
-    const pool = buildCatchUpPool(referenceContextCandidates, exposureHistory, catchUpPolicy)
+    const poolSourceCandidates = maxReleaseClassArticles > 0
+      ? [...ensureArray(selectionPools?.fallback), ...ensureArray(referenceContextCandidates)]
+      : referenceContextCandidates;
+    const pool = buildCatchUpPool(poolSourceCandidates, exposureHistory, catchUpPolicy)
       .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)))
       // Thin-week guard: only promote catch-up candidates that clear the same deterministic
       // selection floor as fresh main articles. The normal path (selectFinalArticlesFromPool)
@@ -728,21 +748,34 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       // subsumes dated-evidence/source-gap/scope checks, so this single test is enough.
       .filter(candidate => candidate.main_article_score_eligible !== false);
     pool.sort(deterministicCandidateSort);
-    const openSlots = Math.max(0, catchUpTarget - selected.length);
-    const roomUnderMax = Math.max(0, articlePolicy.mainArticleCount.max - selected.length);
-    const take = Math.max(0, Math.min(catchUpPolicy.maxCatchUpArticles, openSlots, roomUnderMax));
+    const openSlots = thinWeek ? Math.max(0, catchUpTarget - selected.length) : 0;
+    const generalTake = Math.max(0, Math.min(catchUpPolicy.maxCatchUpArticles, openSlots));
     // The catch-up lane must enforce the same release-note dedup that pushUnique applies to primary
     // selection (#500). Otherwise a fresh main article and an older catch-up article from the same
     // CameraX release-note page are both promoted, sharing one source URL across sections, which
     // trips the "Duplicate source URL"/"Shared release-note URL" hard fails on thin days. The growing
     // lineup is checked so two catch-up candidates from the same page cannot slip through together.
     const catchUpAccepted = [];
+    const laneByCandidate = new Map();
+    let generalAdmitted = 0;
+    let releaseClassAdmitted = 0;
     for (const candidate of pool) {
-      if (catchUpAccepted.length >= take) break;
       const lineup = [...selected, ...catchUpAccepted];
+      if (lineup.length >= articlePolicy.mainArticleCount.max) break;
       if (selectedHasSameCameraReleasePage(lineup, candidate)) continue;
       if (lineup.some(existing => candidatesAreDuplicate(existing, candidate))) continue;
-      catchUpAccepted.push(candidate);
+      // 일반 레인은 기존 계약 유지: reference 창 후보만 채운다.
+      if (generalAdmitted < generalTake && text(candidate.freshness_window) === 'reference') {
+        catchUpAccepted.push(candidate);
+        laneByCandidate.set(candidate, 'fill_open_slots');
+        generalAdmitted += 1;
+        continue;
+      }
+      if (releaseClassAdmitted < maxReleaseClassArticles && isReleaseClassCandidate(candidate)) {
+        catchUpAccepted.push(candidate);
+        laneByCandidate.set(candidate, 'release_class');
+        releaseClassAdmitted += 1;
+      }
     }
     catchUpSelected = catchUpAccepted.map(candidate => {
       // Promoting a reference-window candidate to a catch-up main article: clear the
@@ -757,6 +790,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
         ...cleared,
         freshness_window: 'fallback',
         coverage_type: 'catch_up',
+        catch_up_lane: laneByCandidate.get(candidate) || 'fill_open_slots',
         catch_up_age_days: Number(candidate.days_since_published),
         catch_up_origin_window: text(candidate.freshness_window) || 'reference',
         selected: true,
