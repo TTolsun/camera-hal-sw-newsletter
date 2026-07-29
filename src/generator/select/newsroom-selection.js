@@ -717,7 +717,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   });
   selected = headlineSelection.selected_articles;
   const windowDiagnostics = selectionResult.diagnostics;
-  const reserve = reserveCandidates(selectionCandidatePool, selected, options);
+  let reserve = reserveCandidates(selectionCandidatePool, selected, options);
   const exposureHistory = options.exposureHistory ||
     (options.root ? readExposureHistory(options.root, date) : null);
   const catchUpPolicy = options.catchUpPolicy || getCatchUpPolicy();
@@ -800,6 +800,15 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       };
     });
     selected = [...selected, ...catchUpSelected];
+    // 승급된 catch-up 후보는 reserve에서 뺀다. release-class 레인이 fallback 창을 쓰면서
+    // reserve의 fallback 좌석과 같은 후보를 잡을 수 있게 됐는데, 그대로 두면 같은 기사가
+    // selected_articles와 reserve_candidates(그리고 article-capsules의 reserve_capsules)에
+    // 동시에 실려 리뷰 산출물이 자기모순이 된다(선례: gemini-newsroom-newsletter.js의
+    // coverage-reconciliation 승급 eviction).
+    if (catchUpSelected.length > 0) {
+      const catchUpKeys = new Set(catchUpSelected.map(item => articleIdentityKey(item)));
+      reserve = reserve.filter(candidate => !catchUpKeys.has(articleIdentityKey(candidate)));
+    }
   }
   const warnings = selectionWarnings(selected, { exposureHistory });
   const errors = selectionErrors(selected);
@@ -946,7 +955,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     excluded_candidates: excluded,
     catch_up_used_count: catchUpSelected.length,
     catch_up_articles: catchUpSelected.map(item => ({
-      title: item.title, url: item.url, catch_up_age_days: item.catch_up_age_days
+      title: item.title, url: item.url, catch_up_age_days: item.catch_up_age_days,
+      catch_up_lane: item.catch_up_lane
     })),
     selection_warnings: warnings,
     selection_errors: errors,

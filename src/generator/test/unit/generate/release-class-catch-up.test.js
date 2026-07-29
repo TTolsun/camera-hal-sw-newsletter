@@ -87,6 +87,21 @@ test('a fallback-window release fills a slot under max even when the week alread
   assert.equal(release.catch_up_age_days, 17);
 });
 
+test('a promoted release is evicted from reserve_candidates (no selected/reserve duplication)', () => {
+  // reserve는 catch-up 전에 계산되고 fallback 좌석이 release-class 레인과 같은 창을 본다.
+  // 승급된 릴리스가 reserve에 남으면 리뷰 산출물(reserve_capsules)이 자기모순이 된다.
+  const result = report([...freshWeek(), releaseCandidate()]);
+  const inReserve = (result.reserve_candidates || [])
+    .filter(candidate => candidate.url === 'https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2');
+  assert.equal(inReserve.length, 0, '승급된 릴리스는 reserve_candidates에서 빠져야 한다');
+});
+
+test('catch_up_articles report entries carry the admitting lane', () => {
+  const result = report([...freshWeek(), releaseCandidate()]);
+  assert.equal(result.catch_up_articles.length, 1);
+  assert.equal(result.catch_up_articles[0].catch_up_lane, 'release_class');
+});
+
 test('a non-release fallback-window candidate is NOT admitted on a strong week', () => {
   // release 채널 표식이 없으면 fallback 창 후보는 기존대로 강한 주에 승격되지 않는다.
   const notRelease = releaseCandidate({ source_collection_mode: undefined });
