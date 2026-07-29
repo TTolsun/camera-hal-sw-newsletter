@@ -1244,17 +1244,60 @@ function isSourceChangeEventCandidate(item = {}) {
 // seriesId가 없는 후보(대부분의 소스)는 그대로 통과하므로 다른 소스 동작에는 영향이 없다.
 function collapseSeriesRepresentatives(candidates) {
   const seenSeries = new Map();
-  const result = [];
+  const collapsed = [];
   for (const item of candidates) {
     const seriesId = item.seriesId ?? item.series_id;
     if (seriesId !== undefined && seriesId !== null && seriesId !== '') {
       const key = `${item.source_id || item.source || ''}::${seriesId}`;
       if (seenSeries.has(key)) {
         const index = seenSeries.get(key);
-        if (seriesPatchNumber(item) < seriesPatchNumber(result[index])) result[index] = item;
+        if (seriesPatchNumber(item) < seriesPatchNumber(collapsed[index])) collapsed[index] = item;
         continue;
       }
-      seenSeries.set(key, result.length);
+      seenSeries.set(key, collapsed.length);
+    }
+    collapsed.push(item);
+  }
+  return collapseSeriesRerolls(collapsed);
+}
+
+// 시리즈 re-roll(v1 -> v2 재제출)은 patchwork series id도 lore message-id도 새로 발급받아
+// 위 (source, seriesId) collapse를 그대로 통과한다(#824 실측: 2026-W31 patchwork 8슬롯 중
+// 4개가 같은 신호의 v1/v2 중복). 시리즈 후보 대표들끼리 브래킷 접두부([PATCH v2 3/6],
+// [RFC,v2,1/1] 등)를 뗀 제목이 정확히 같으면 같은 논리 시리즈로 보고 최신 버전 대표만
+// 남긴다. 캡 경쟁 자리는 first-seen 슬롯을 유지한다(위 collapse와 같은 원칙). 제목을 고쳐
+// 재제출한 시리즈는 의도적으로 병합하지 않는다 — 퍼지 매칭의 오병합 위험이 슬롯 중복보다
+// 나쁘다(실측된 한계 사례: Tegra VI RFC v2가 subject에 "tegra:" prefix를 추가해 미병합).
+const SERIES_TITLE_BRACKET_PREFIX = /^\s*(?:\[[^\]]*\]\s*)+/;
+
+function seriesSubjectKey(item = {}) {
+  return titleKey(String(item.title || '').replace(SERIES_TITLE_BRACKET_PREFIX, ''));
+}
+
+// 버전은 브래킷 접두부 안에서만 읽는다 — 제목 본문의 "IPA format v3" 같은 표기를
+// re-roll 버전으로 오인하면 안 된다. 접두부가 없거나 v 토큰이 없으면 첫 버전(1)이다.
+function seriesRerollVersion(item = {}) {
+  const prefix = String(item.title || '').match(SERIES_TITLE_BRACKET_PREFIX);
+  if (!prefix) return 1;
+  const version = prefix[0].match(/\bv(\d+)\b/i);
+  return version ? Number(version[1]) : 1;
+}
+
+function collapseSeriesRerolls(candidates) {
+  const seenSubjects = new Map();
+  const result = [];
+  for (const item of candidates) {
+    const seriesId = item.seriesId ?? item.series_id;
+    const isSeriesCandidate = seriesId !== undefined && seriesId !== null && seriesId !== '';
+    const subject = isSeriesCandidate ? seriesSubjectKey(item) : '';
+    if (subject) {
+      const key = `${item.source_id || item.source || ''}::${subject}`;
+      if (seenSubjects.has(key)) {
+        const index = seenSubjects.get(key);
+        if (seriesRerollVersion(item) > seriesRerollVersion(result[index])) result[index] = item;
+        continue;
+      }
+      seenSubjects.set(key, result.length);
     }
     result.push(item);
   }
