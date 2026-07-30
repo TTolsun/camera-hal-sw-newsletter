@@ -71,6 +71,9 @@ jobs:
       NEWSROOM_JUDGE_MODEL: ${{ vars.NEWSROOM_JUDGE_MODEL || '' }}
       NEWSROOM_MAX_QUALITY_RETRIES: ${{ vars.NEWSROOM_MAX_QUALITY_RETRIES || '1' }}
       NEWSROOM_MAX_SECTION_REPAIRS: ${{ vars.NEWSROOM_MAX_SECTION_REPAIRS || '1' }}
+      # 비용 임계값도 같은 규칙이다(#660). 빈 문자열이면 코드 기본값(parseNumber defaultOnEmpty).
+      # 위 두 줄과 달리 리터럴 폴백을 두지 않는 이유는, 그 리터럴이 코드 기본값을 항상 이겨서
+      # #574의 weekly 상향이 프로덕션에 도달하지 못했기 때문이다.
       NEWSROOM_WARN_COST_USD: ${{ vars.NEWSROOM_WARN_COST_USD || '' }}
       NEWSROOM_MAX_COST_USD: ${{ vars.NEWSROOM_MAX_COST_USD || '' }}
       NEWSROOM_BACKGROUND_CONTEXT_STAGE: ${{ vars.NEWSROOM_BACKGROUND_CONTEXT_STAGE || 'gemini' }}

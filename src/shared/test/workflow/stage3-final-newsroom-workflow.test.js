@@ -85,6 +85,10 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /NEWSROOM_REPAIR_MODEL: \$\{\{ vars\.NEWSROOM_REPAIR_MODEL \|\| '' \}\}/);
   assert.match(workflow, /NEWSROOM_JUDGE_MODEL: \$\{\{ vars\.NEWSROOM_JUDGE_MODEL \|\| '' \}\}/);
   assert.match(workflow, /GEMINI_THINKING_BUDGET_JUDGE: \$\{\{ vars\.GEMINI_THINKING_BUDGET_JUDGE \|\| '' \}\}/);
+  // 비용 임계값도 코드 기본값이 단일 정본이다(#660). 여기서 리터럴 폴백이 되살아나면
+  // 코드 기본값이 프로덕션에 영원히 도달하지 못한다 — #574가 실제로 그렇게 묻혔다.
+  assert.match(workflow, /NEWSROOM_WARN_COST_USD: \$\{\{ vars\.NEWSROOM_WARN_COST_USD \|\| '' \}\}/);
+  assert.match(workflow, /NEWSROOM_MAX_COST_USD: \$\{\{ vars\.NEWSROOM_MAX_COST_USD \|\| '' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MODE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MODE \|\| 'extract_only' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_CANDIDATE \|\| '8' \}\}/);
   assert.match(workflow, /NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN: \$\{\{ vars\.NEWSROOM_LINKED_EVIDENCE_MAX_LINKS_PER_RUN \|\| '40' \}\}/);
