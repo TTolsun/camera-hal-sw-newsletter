@@ -65,6 +65,29 @@ test('빈 문자열 thinking budget env는 코드 기본값으로 해석된다 (
   assert.equal(config.geminiThinkingBudgetScoring, 0);
 });
 
+// workflow가 `${{ vars.X || '' }}`로 넘기면 repo variable이 없을 때 빈 문자열이 env로 들어온다.
+// 이때 코드 기본값으로 해석되지 않으면 config 로딩이 throw해 주간 발행이 통째로 실패한다.
+test('빈 문자열 비용 임계값 env는 코드 기본값으로 해석된다 (#660)', () => {
+  const config = readRuntimeConfig({
+    NEWSROOM_WARN_COST_USD: '',
+    NEWSROOM_MAX_COST_USD: ''
+  });
+  assert.equal(config.newsroomWarnCostUsd, 0.5);
+  assert.equal(config.newsroomMaxCostUsd, 0.7);
+});
+
+// 빈 문자열 허용이 값 검증까지 무르게 만들면 안 된다.
+test('비용 임계값은 빈 문자열을 허용해도 잘못된 값은 그대로 막는다 (#660)', () => {
+  assert.throws(
+    () => readRuntimeConfig({ NEWSROOM_WARN_COST_USD: 'abc' }),
+    /NEWSROOM_WARN_COST_USD must be a number/
+  );
+  assert.throws(
+    () => readRuntimeConfig({ NEWSROOM_MAX_COST_USD: '-1' }),
+    /NEWSROOM_MAX_COST_USD must be >= 0/
+  );
+});
+
 test('defaults match workflow runtime defaults', () => {
   const config = readRuntimeConfig({});
 
@@ -98,8 +121,8 @@ test('defaults match workflow runtime defaults', () => {
   assert.equal(config.geminiRetryMaxDelayMs, 300000);
   assert.equal(config.newsroomMaxQualityRetries, 1);
   assert.equal(config.newsroomMaxSectionRepairs, 1);
-  assert.equal(config.newsroomWarnCostUsd, 0.2);
-  assert.equal(config.newsroomMaxCostUsd, 0.35);
+  assert.equal(config.newsroomWarnCostUsd, 0.5);
+  assert.equal(config.newsroomMaxCostUsd, 0.7);
   assert.equal(config.geminiThinkingBudgetReporter, 512);
   assert.equal(config.geminiThinkingBudgetEditor, 1024);
   assert.equal(config.geminiThinkingBudgetRepair, 1024);
@@ -683,8 +706,8 @@ test('sanitized diagnostics never include the raw API key', () => {
     fallbackSelectionDays: 21,
     referenceContextDays: 35
   });
-  assert.equal(sanitized.newsroomWarnCostUsd, 0.2);
-  assert.equal(sanitized.newsroomMaxCostUsd, 0.35);
+  assert.equal(sanitized.newsroomWarnCostUsd, 0.5);
+  assert.equal(sanitized.newsroomMaxCostUsd, 0.7);
   assert.equal(sanitized.newsroomMaxSectionRepairs, 1);
   assert.equal(sanitized.geminiThinkingBudgetEditor, 1024);
   assert.equal(sanitized.geminiThinkingBudgetJudge, 1024);

@@ -87,8 +87,10 @@ const DEFAULT_RUNTIME_CONFIG = {
   geminiCallTimeoutMs: 480000,
   newsroomMaxQualityRetries: 1,
   newsroomMaxSectionRepairs: 1,
-  newsroomWarnCostUsd: 0.2,
-  newsroomMaxCostUsd: 0.35,
+  // weekly run 실측(2026-06-29 ~ 07-27) 정상 대역은 0.17~0.45 USD다. 경보가 매 run 울리면
+  // 이상치를 가려내지 못하므로, 정상 주는 조용하고 튀는 주만 걸리도록 대역 위에 둔다.
+  newsroomWarnCostUsd: 0.5,
+  newsroomMaxCostUsd: 0.7,
   geminiThinkingBudgetReporter: 512,
   geminiThinkingBudgetEditor: 1024,
   geminiThinkingBudgetRepair: 1024,
@@ -323,12 +325,12 @@ function readRuntimeConfig(env = process.env, options = {}) {
     newsroomWarnCostUsd: parseNumber(
       envValue(env, 'NEWSROOM_WARN_COST_USD', DEFAULT_RUNTIME_CONFIG.newsroomWarnCostUsd),
       'NEWSROOM_WARN_COST_USD',
-      { min: 0 }
+      { min: 0, defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomWarnCostUsd, defaultOnEmpty: true }
     ),
     newsroomMaxCostUsd: parseNumber(
       envValue(env, 'NEWSROOM_MAX_COST_USD', DEFAULT_RUNTIME_CONFIG.newsroomMaxCostUsd),
       'NEWSROOM_MAX_COST_USD',
-      { min: 0 }
+      { min: 0, defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomMaxCostUsd, defaultOnEmpty: true }
     ),
     deprecatedProEnvKeys: deprecatedProEnvKeys(env),
     geminiThinkingBudgetReporter: parseInteger(
