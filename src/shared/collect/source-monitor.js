@@ -1066,7 +1066,6 @@ async function runSourceMonitor(options = {}) {
 }
 
 module.exports = {
-  CANDIDATE_SCHEMA_VERSION,
   CANDIDATE_BLOCKED_EVENT_TYPES,
   NON_CONTENT_CHANGE_EVENT_TYPES,
   PROCESSED_ID_LIMIT,

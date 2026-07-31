@@ -33,6 +33,7 @@ const {
   sourceDiscoveryFeedbackReportRelPath
 } = require('../../../common/artifact-paths');
 const {
+  CANDIDATE_SCHEMA_VERSION,
   CandidateArtifactValidationError,
   buildRawCandidateManifest,
   resolveCandidateInputArtifact,
@@ -411,6 +412,24 @@ test('strict candidate artifacts reject schema, manifest type, and count mismatc
     }),
     /candidate_count mismatch/
   );
+});
+
+test('strict candidate artifacts accept the producer schema version contract', () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const payload = candidatePayload('producer contract', { schema_version: CANDIDATE_SCHEMA_VERSION });
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+
+  const validated = validateCandidateArtifact({
+    root,
+    date,
+    candidatePath: manualCandidatesPath(root, date),
+    manifestPath: rawCandidateManifestPath(root, date),
+    requireManifest: true,
+    validationMode: 'strict',
+    expectedManifestType: 'raw_candidate'
+  });
+  assert.equal(validated.validation_status, 'validated');
 });
 
 test('Stage 2 disabled pass-through writes merged artifact, manifest, and report', async () => {

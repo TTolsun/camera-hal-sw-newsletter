@@ -1595,7 +1595,6 @@ if (require.main === module) {
 }
 
 module.exports = {
-  CANDIDATE_SCHEMA_VERSION,
   MAX_FINAL_CANDIDATES,
   MAX_CANDIDATES_PER_SOURCE,
   canonicalContentUrl,
