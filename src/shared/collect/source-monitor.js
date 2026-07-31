@@ -24,11 +24,10 @@ const {
 const {
   validateSourceMonitorRegistryText
 } = require('../validate/source-monitor-registry-validator');
+const { CANDIDATE_SCHEMA_VERSION } = require('../common/candidate-artifacts');
 
 const SNAPSHOT_SCHEMA_VERSION = 1;
 const PROCESSED_ID_LIMIT = 500;
-// collect-news-candidates.js 와 공유하는 값 — 순환 참조 방지를 위해 로컬 복사.
-const CANDIDATE_SCHEMA_VERSION = 6;
 // page_removed 는 콘텐츠 자체가 사라진 변경이라 content_changed=true 로 두지만,
 // candidateAllowed 산정에서는 별도로 차단된다(URL 안정성 결여).
 const NON_CONTENT_CHANGE_EVENT_TYPES = new Set(['no_meaningful_change', 'metadata_only_changed']);
@@ -1067,7 +1066,6 @@ async function runSourceMonitor(options = {}) {
 }
 
 module.exports = {
-  CANDIDATE_SCHEMA_VERSION,
   CANDIDATE_BLOCKED_EVENT_TYPES,
   NON_CONTENT_CHANGE_EVENT_TYPES,
   PROCESSED_ID_LIMIT,

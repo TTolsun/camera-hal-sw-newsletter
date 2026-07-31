@@ -10,6 +10,7 @@ const {
   newsroomDir
 } = require('../common/artifact-paths');
 const {
+  CANDIDATE_SCHEMA_VERSION,
   writeManualCandidateArtifacts
 } = require('../common/candidate-artifacts');
 const { parseManualSourceUrls } = require('../collect/collection-intent');
@@ -80,8 +81,6 @@ const runtimeConfig = readRuntimeConfig(process.env);
 const structuredSourcesPath = path.join(root, 'src', 'shared', 'data', 'news-sources.json');
 const legacySourcesPath = path.join(root, 'docs', 'NEWS_SOURCES.md');
 const AUDIENCE = 'AOSP Camera / Camera Driver / SoC Platform / C++ engineer';
-
-const CANDIDATE_SCHEMA_VERSION = 6;
 
 // Final candidate pool handed to the newsroom. A per-source cap keeps a single
 // high-volume source (e.g. an Android Developers Blog roundup that explodes into
@@ -1596,7 +1595,6 @@ if (require.main === module) {
 }
 
 module.exports = {
-  CANDIDATE_SCHEMA_VERSION,
   MAX_FINAL_CANDIDATES,
   MAX_CANDIDATES_PER_SOURCE,
   canonicalContentUrl,

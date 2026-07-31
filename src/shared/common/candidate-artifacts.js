@@ -43,6 +43,11 @@ const CANDIDATE_INPUT_MODES = Object.freeze({
   ARTIFACT: 'artifact'
 });
 
+// 후보 artifact에 기록되는 schema_version 계약값. 생산자(collect CLI, source-monitor,
+// seed-evidence)가 공유한다. 아래 strict 검증 하한(>= 5)은 "5 이상 수용"이라는 의도된
+// 하한이라 이 값과 별개다.
+const CANDIDATE_SCHEMA_VERSION = 6;
+
 class CandidateArtifactValidationError extends Error {
   constructor(message, details = {}) {
     super(message);
@@ -906,6 +911,7 @@ function resolveCandidateInputArtifact({
 
 module.exports = {
   CANDIDATE_INPUT_MODES,
+  CANDIDATE_SCHEMA_VERSION,
   CandidateArtifactValidationError,
   buildMergedCandidateManifest,
   buildRawCandidateManifest,

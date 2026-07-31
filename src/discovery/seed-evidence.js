@@ -44,7 +44,7 @@ const {
 } = require('../shared/collect/source-intelligence-utils');
 const {
   CANDIDATE_SCHEMA_VERSION
-} = require('../shared/cli/collect-news-candidates');
+} = require('../shared/common/candidate-artifacts');
 
 const SCHEMA_VERSION = 1;
 const DEFAULT_LIMITS = Object.freeze({
