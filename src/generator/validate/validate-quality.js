@@ -9,7 +9,8 @@ const { readJson } = require('../../shared/common/common');
 const {
   newsroomDir,
   newsroomRelPath,
-  seedEvidencePackPath
+  seedEvidencePackPath,
+  seedEvidencePackRelPath
 } = require('../../shared/common/artifact-paths');
 const {
   historicalPolicyWarningReason,
@@ -68,16 +69,36 @@ function currentCanonicalGenerationStatusDates(items = []) {
   return dates;
 }
 
-// 발행본(origin/main)과 byte 동일한 quality-report는 이미 리뷰·머지가 끝난 확정본이므로,
-// 이때의 재계산 불일치는 리포트가 아니라 미커밋 editor-draft.json 로컬 잔재(다른 run 산출물)에서 온다(#742).
-// git 확인이 불가능한 환경(비-git 루트 등)에서는 false를 반환해 strict fail 쪽을 유지한다.
-function reportMatchesPublishedMain(date) {
-  const relPath = newsroomRelPath(date, 'quality-report.json');
+// 발행 확정본 판별(#742): 재계산이 소비하는 committed 입력 전부가 origin/main과 byte 동일하면
+// 그 날짜의 발행 상태가 그대로라는 뜻이므로, 재계산 불일치는 커밋 산출물이 아니라 로컬 worktree 쪽
+// (남는 파일 입력은 gitignored editor-draft.json 잔재뿐)에서 온다. 하나라도 다르거나 git 확인이
+// 불가능하면 false를 반환해 기존 strict fail을 유지한다(fail-closed — quality-report.json은 이
+// 경로에서 항상 로컬에 존재하므로 git이 없으면 반드시 false가 된다).
+function publishedRecomputeInputsIntact(date) {
+  const relPaths = [
+    'quality-report.json',
+    'generation-status.json',
+    'fact-check-report.json',
+    'reporter-candidates.json',
+    'shortlisted-candidates.json',
+    'stale-claim-report.json'
+  ].map(name => newsroomRelPath(date, name));
+  relPaths.push(seedEvidencePackRelPath(date));
+  return relPaths.every(matchesPublishedMain);
+}
+
+function matchesPublishedMain(relPath) {
   const gitOptions = { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] };
+  let publishedHash = null;
   try {
-    const worktreeHash = execFileSync('git', ['hash-object', '--', relPath], gitOptions).trim();
-    const publishedHash = execFileSync('git', ['rev-parse', `origin/main:${relPath}`], gitOptions).trim();
-    return worktreeHash !== '' && worktreeHash === publishedHash;
+    publishedHash = execFileSync('git', ['rev-parse', `origin/main:${relPath}`], gitOptions).trim();
+  } catch (_) {
+    publishedHash = null;
+  }
+  if (!fs.existsSync(path.join(root, relPath))) return publishedHash === null;
+  if (!publishedHash) return false;
+  try {
+    return execFileSync('git', ['hash-object', '--', relPath], gitOptions).trim() === publishedHash;
   } catch (_) {
     return false;
   }
@@ -202,8 +223,8 @@ function validateQualityReport(item, { requireReport = false, strictPolicy = fal
       const message = `Newsletter ${item.date} quality report is stale. Expected ${recomputed.score}/${threshold} ${recomputed.status}, found ${score}/${threshold} ${report.status}.`;
       if (!strictPolicy) {
         warn(`${message} ${historicalPolicyWarningReason()}.`);
-      } else if (reportMatchesPublishedMain(item.date)) {
-        warn(`${message} quality-report.json matches published origin/main, so the drift comes from uncommitted local editor-draft.json residue, warning only. Remove ${newsroomRelPath(item.date, 'editor-draft.json')} to clear this warning.`);
+      } else if (publishedRecomputeInputsIntact(item.date)) {
+        warn(`${message} Every committed recompute input matches published origin/main, so the drift most likely comes from the uncommitted local editor-draft.json residue, warning only. Remove ${newsroomRelPath(item.date, 'editor-draft.json')} to clear this warning.`);
       } else {
         fail(message);
       }

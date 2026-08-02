@@ -1177,7 +1177,7 @@ test('historical validate-quality threshold and recompute drift are warning-only
   assert.match(result.stderr, /historical artifact outside current\/changed\/generated validation target, warning only/);
 });
 
-test('strict validate-quality threshold and recompute drift remain hard failures', () => {
+test('strict validate-quality threshold and recompute drift remain hard failures outside the published-unchanged residue exception', () => {
   const root = tempRoot('validate-quality-strict-');
   writeQualityFixture(root, { strict: true });
 
@@ -1188,11 +1188,19 @@ test('strict validate-quality threshold and recompute drift remain hard failures
   assert.match(result.stderr, /quality report is stale/);
 });
 
+function publishedRecomputeInputPaths(date) {
+  return [
+    `articles/content/newsroom/${date}/quality-report.json`,
+    `articles/content/newsroom/${date}/fact-check-report.json`,
+    `articles/content/newsroom/${date}/reporter-candidates.json`
+  ];
+}
+
 test('strict validate-quality recompute drift on a published-unchanged report downgrades to residue warning', () => {
   const root = tempRoot('validate-quality-residue-');
   const date = '2026-04-01';
   writeQualityFixture(root, { date, strict: true, lowerThreshold: false });
-  publishCommittedArtifacts(root, [`articles/content/newsroom/${date}/quality-report.json`]);
+  publishCommittedArtifacts(root, publishedRecomputeInputPaths(date));
 
   const result = runScript(validateQualityPath, root);
 
@@ -1206,10 +1214,39 @@ test('strict validate-quality recompute drift still fails when the report differ
   const root = tempRoot('validate-quality-residue-strict-');
   const date = '2026-04-01';
   writeQualityFixture(root, { date, strict: true, lowerThreshold: false });
-  publishCommittedArtifacts(root, [`articles/content/newsroom/${date}/quality-report.json`]);
+  publishCommittedArtifacts(root, publishedRecomputeInputPaths(date));
   const reportPath = path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json');
   const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
   writeJson(reportPath, { ...report, summary: 'locally modified after publication' });
+
+  const result = runScript(validateQualityPath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /quality report is stale/);
+  assert.doesNotMatch(result.stderr, /uncommitted local editor-draft\.json residue/);
+});
+
+test('strict validate-quality recompute drift still fails when a committed recompute input differs from origin/main', () => {
+  const root = tempRoot('validate-quality-input-drift-');
+  const date = '2026-04-01';
+  writeQualityFixture(root, { date, strict: true, lowerThreshold: false });
+  publishCommittedArtifacts(root, publishedRecomputeInputPaths(date));
+  const factCheckPath = path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json');
+  const factCheck = JSON.parse(fs.readFileSync(factCheckPath, 'utf8'));
+  writeJson(factCheckPath, { ...factCheck, note: 'locally modified after publication' });
+
+  const result = runScript(validateQualityPath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /quality report is stale/);
+  assert.doesNotMatch(result.stderr, /uncommitted local editor-draft\.json residue/);
+});
+
+test('strict validate-quality recompute drift still fails when the report is absent from origin/main', () => {
+  const root = tempRoot('validate-quality-unpublished-');
+  const date = '2026-04-01';
+  writeQualityFixture(root, { date, strict: true, lowerThreshold: false });
+  publishCommittedArtifacts(root, ['articles/data/newsletters.json']);
 
   const result = runScript(validateQualityPath, root);
 
