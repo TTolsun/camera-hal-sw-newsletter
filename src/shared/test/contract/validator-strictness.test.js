@@ -374,7 +374,7 @@ function homepageHeadlineState({
   };
 }
 
-function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {}) {
+function writeQualityFixture(root, { date = '2026-04-01', strict = false, lowerThreshold = true } = {}) {
   writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date,
     title: 'Camera HAL / SW Newsletter',
@@ -387,7 +387,7 @@ function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {})
   const editor = { briefing: ['one', 'two', 'three'], sections };
   const reporter = { candidates: reporterCandidatesFor(sections) };
   const factCheck = { status: 'PASS', must_fix: [], source_gaps: [], source_gap_count: 0 };
-  const threshold = Math.max(0, qualityGatePolicy.threshold - 1);
+  const threshold = lowerThreshold ? Math.max(0, qualityGatePolicy.threshold - 1) : qualityGatePolicy.threshold;
   const report = buildNewsletterQualityReport(date, editor, reporter, factCheck, { threshold });
   const staleReport = {
     ...report,
@@ -401,6 +401,24 @@ function writeQualityFixture(root, { date = '2026-04-01', strict = false } = {})
   if (strict) {
     writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   }
+}
+
+// 임시 fixture 루트를 "발행 완료" 상태의 git 저장소로 만든다: 지정한 파일만 커밋하고
+// 그 커밋을 origin/main으로 가리키게 해, worktree 파일이 발행본과 byte 동일한 상황을 재현한다.
+function publishCommittedArtifacts(root, relPaths) {
+  const run = (args) => {
+    const result = spawnSync('git', args, { cwd: root, encoding: 'utf8' });
+    assert.equal(result.status, 0, `git ${args.join(' ')} failed: ${result.stderr}`);
+  };
+  run(['init']);
+  run(['add', '--', ...relPaths]);
+  run([
+    '-c', 'user.name=validator-strictness-test',
+    '-c', 'user.email=validator-strictness-test@example.com',
+    '-c', 'commit.gpgsign=false',
+    'commit', '--no-verify', '-m', 'published state'
+  ]);
+  run(['update-ref', 'refs/remotes/origin/main', 'HEAD']);
 }
 
 function writeMissingClaimsQualityFixture(root, { date = '2026-04-01', strictReport = false } = {}) {
@@ -1168,6 +1186,36 @@ test('strict validate-quality threshold and recompute drift remain hard failures
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /quality threshold is below current Newsletter Policy threshold/);
   assert.match(result.stderr, /quality report is stale/);
+});
+
+test('strict validate-quality recompute drift on a published-unchanged report downgrades to residue warning', () => {
+  const root = tempRoot('validate-quality-residue-');
+  const date = '2026-04-01';
+  writeQualityFixture(root, { date, strict: true, lowerThreshold: false });
+  publishCommittedArtifacts(root, [`articles/content/newsroom/${date}/quality-report.json`]);
+
+  const result = runScript(validateQualityPath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stderr, /quality report is stale/);
+  assert.match(result.stderr, /uncommitted local editor-draft\.json residue/);
+  assert.doesNotMatch(result.stderr, /historical artifact outside current\/changed\/generated validation target/);
+});
+
+test('strict validate-quality recompute drift still fails when the report differs from origin/main', () => {
+  const root = tempRoot('validate-quality-residue-strict-');
+  const date = '2026-04-01';
+  writeQualityFixture(root, { date, strict: true, lowerThreshold: false });
+  publishCommittedArtifacts(root, [`articles/content/newsroom/${date}/quality-report.json`]);
+  const reportPath = path.join(root, 'articles', 'content', 'newsroom', date, 'quality-report.json');
+  const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+  writeJson(reportPath, { ...report, summary: 'locally modified after publication' });
+
+  const result = runScript(validateQualityPath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /quality report is stale/);
+  assert.doesNotMatch(result.stderr, /uncommitted local editor-draft\.json residue/);
 });
 
 test('historical validate-quality missing claims report is warning-only', () => {

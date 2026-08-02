@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 const {
   buildNewsletterQualityReport
 } = require('../quality/newsletter-quality');
@@ -65,6 +66,21 @@ function currentCanonicalGenerationStatusDates(items = []) {
     }
   }
   return dates;
+}
+
+// 발행본(origin/main)과 byte 동일한 quality-report는 이미 리뷰·머지가 끝난 확정본이므로,
+// 이때의 재계산 불일치는 리포트가 아니라 미커밋 editor-draft.json 로컬 잔재(다른 run 산출물)에서 온다(#742).
+// git 확인이 불가능한 환경(비-git 루트 등)에서는 false를 반환해 strict fail 쪽을 유지한다.
+function reportMatchesPublishedMain(date) {
+  const relPath = newsroomRelPath(date, 'quality-report.json');
+  const gitOptions = { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] };
+  try {
+    const worktreeHash = execFileSync('git', ['hash-object', '--', relPath], gitOptions).trim();
+    const publishedHash = execFileSync('git', ['rev-parse', `origin/main:${relPath}`], gitOptions).trim();
+    return worktreeHash !== '' && worktreeHash === publishedHash;
+  } catch (_) {
+    return false;
+  }
 }
 
 function readJsonIfExists(filePath) {
@@ -184,10 +200,12 @@ function validateQualityReport(item, { requireReport = false, strictPolicy = fal
     });
     if (recomputed.score !== score || recomputed.status !== report.status) {
       const message = `Newsletter ${item.date} quality report is stale. Expected ${recomputed.score}/${threshold} ${recomputed.status}, found ${score}/${threshold} ${report.status}.`;
-      if (strictPolicy) {
-        fail(message);
-      } else {
+      if (!strictPolicy) {
         warn(`${message} ${historicalPolicyWarningReason()}.`);
+      } else if (reportMatchesPublishedMain(item.date)) {
+        warn(`${message} quality-report.json matches published origin/main, so the drift comes from uncommitted local editor-draft.json residue, warning only. Remove ${newsroomRelPath(item.date, 'editor-draft.json')} to clear this warning.`);
+      } else {
+        fail(message);
       }
     }
   }
