@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "androidx-camerax-release-notes",
-  "updated_at": "2026-07-27T00:00:00.000Z",
+  "updated_at": "2026-08-03T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "androidx-camerax-release-notes:49d58944bd3ca26fc6929250597a6e3a",
@@ -9,7 +9,7 @@
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera",
       "title": "CameraX | Jetpack | Android Developers",
       "visible_date": "2024-06-12",
-      "visible_last_updated": "",
+      "visible_last_updated": "2026-07-01",
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
@@ -1641,8 +1641,8 @@
         }
       ],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-07-27T00:00:00.000Z",
-      "seen_count": 101,
+      "last_seen_at": "2026-08-03T00:00:00.000Z",
+      "seen_count": 102,
       "status": 200
     }
   ],

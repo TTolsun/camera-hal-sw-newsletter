@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "source_id": "aosp-camera-its-release-notes",
+  "updated_at": "2026-08-03T00:00:00.000Z",
+  "pages": [
+    {
+      "source_identity_key": "aosp-camera-its-release-notes:a67cc111aac23254e453759a5bae82dc",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its",
+      "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its",
+      "title": "Camera ITS overview | Android Open Source Project",
+      "visible_date": "",
+      "visible_last_updated": "2026-07-23",
+      "structured_date_published": "",
+      "structured_date_modified": "",
+      "sitemap_lastmod": "",
+      "http_last_modified": "2026-07-23",
+      "content_hash": "ad269ac74082649ae23a9f5a72f9d8b7e42dce096b001a6d666aa015bb215ebf",
+      "normalized_content_hash": "d5726d61fe18159b7374c2a2db47c2b8fe34e000e117f745bdf14636f122c41d",
+      "anchors": [
+        "https://source.android.com/docs/compatibility/cts/camera-its#benefits-marginal-pass",
+        "https://source.android.com/docs/compatibility/cts/camera-its#running-its-tests",
+        "https://source.android.com/docs/compatibility/cts/camera-its#sub-camera-testing"
+      ],
+      "release_row_date": "",
+      "release_row_version": "",
+      "release_row_anchor": "",
+      "release_row_hash": "",
+      "release_rows": [],
+      "first_seen_at": "2026-08-03T00:00:00.000Z",
+      "last_seen_at": "2026-08-03T00:00:00.000Z",
+      "seen_count": 1,
+      "status": 200
+    },
+    {
+      "source_identity_key": "aosp-camera-its-release-notes:d893134af706f7df8f1c0716f00e4d41",
+      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "canonical_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
+      "visible_date": "",
+      "visible_last_updated": "2026-07-31",
+      "structured_date_published": "",
+      "structured_date_modified": "",
+      "sitemap_lastmod": "",
+      "http_last_modified": "2026-07-31",
+      "content_hash": "ccfd139d2c8984a01e191720715a55cb8f3bf37bb55092f74c83da31bad9737e",
+      "normalized_content_hash": "e0fdc28bf02ba5939f744dc82594f30d7d55de3e609d1d378de5a4af990108e0",
+      "anchors": [],
+      "release_row_date": "",
+      "release_row_version": "7.0.2",
+      "release_row_anchor": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#package-versions",
+      "release_row_hash": "5099c51b47492b4b99c4b981758f936d",
+      "release_rows": [
+        {
+          "version": "7.0.2",
+          "anchor": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#package-versions",
+          "date": "",
+          "hash": "5099c51b47492b4b99c4b981758f936d",
+          "title": "Python and package versions"
+        }
+      ],
+      "first_seen_at": "2026-08-03T00:00:00.000Z",
+      "last_seen_at": "2026-08-03T00:00:00.000Z",
+      "seen_count": 1,
+      "status": 200
+    }
+  ],
+  "processed_source_event_ids": [
+    "source-event-fb05acebbfa8b6aca58f1ef364425fb2",
+    "source-event-723126c7451b2946fb7979853a681019"
+  ],
+  "processed_evidence_ids": [
+    "evidence-e3e8f17f3e26e490f5c7766bd371bcae",
+    "evidence-58963151a28c98fd472d86330f561c51"
+  ]
+}
