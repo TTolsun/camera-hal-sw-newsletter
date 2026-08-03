@@ -575,6 +575,51 @@ function dropVerifiedFactsClassifiedAsNonFact(section) {
   return { ...section, article_sections: { ...articleSections, verified_facts: kept } };
 }
 
+// repair patch 계약은 /article_sections/verified_facts/{i}는 수정을 허용하지만 claims는 수정 금지
+// 경로다. 그런데 claim 바인딩 게이트는 모든 verified_facts가 claim_type=fact claim과 fuzzy 유사도
+// (>=0.5)로 이어질 것을 요구하므로, patch가 사실을 같은 의미의 다른 문장으로 바꾸면(허용된 편집)
+// 그 사실을 cover하던 claim은 옛 문구로 남아 missing_matching_fact_claim이 되고 repair 전체가
+// 거부된다(2026-08-03 FAILED_REPAIR_REVIEWABLE). patch 적용 직후 base에서 바뀐 사실만 골라, 그
+// 옛 문구를 cover하던 fact claim의 텍스트를 새 문구로 결정론적으로 따라 바꾼다.
+//   - claim_id/evidence_ids/source_urls는 그대로 둔다(새 근거·새 사실을 만들지 않음). 텍스트 출처는
+//     이미 patch로 승인된 verified_facts 문구 그 자체다.
+//   - 새 문구를 이미 cover하는 fact claim이 있으면 건드리지 않는다.
+//   - 변경되지 않은 다른 fact를 함께 cover 중인 claim은 제외한다(그 fact가 uncovered로 뒤바뀌는
+//     것 방지). cover 판정은 게이트와 동일한 factCoveredByClaim을 쓴다.
+//   - 동기화 후에도 strict 검증(claim binding + evidence support)이 그대로 다시 돌므로 fail-closed다.
+function syncFactClaimTextsWithPatchedVerifiedFacts(baseEditor, patchedEditor) {
+  const baseSections = ensureArray(baseEditor?.sections);
+  if (baseSections.length === 0 || ensureArray(patchedEditor?.sections).length === 0) return patchedEditor;
+  const repaired = cloneJson(patchedEditor);
+  const coveredBy = (factText, claim) => factCoveredByClaim(factText, claim, EMPTY_EVIDENCE_INDEX);
+  let changed = false;
+  // patch 경로는 section 개수/순서를 보존하므로(applyRepairPatches는 clone 후 in-place 교체) index로 대응한다.
+  ensureArray(repaired.sections).forEach((section, sectionIndex) => {
+    const baseSection = baseSections[sectionIndex];
+    if (!baseSection) return;
+    const oldFacts = ensureArray(normalizeArticleSections(baseSection).verified_facts).map(text);
+    const newFacts = ensureArray(normalizeArticleSections(section).verified_facts).map(text);
+    const factClaims = ensureArray(section.claims).filter(claim =>
+      String(claim?.claim_type || claim?.claimType || '').trim().toLowerCase() === 'fact');
+    if (factClaims.length === 0) return;
+    newFacts.forEach((newFact, factIndex) => {
+      const oldFact = oldFacts[factIndex] || '';
+      if (!newFact || !oldFact || newFact === oldFact) return;
+      if (factClaims.some(claim => coveredBy(newFact, claim).covered)) return;
+      const best = factClaims
+        .filter(claim =>
+          coveredBy(oldFact, claim).covered &&
+          !newFacts.some((other, otherIndex) => otherIndex !== factIndex && other && coveredBy(other, claim).covered))
+        .map(claim => ({ claim, confidence: coveredBy(oldFact, claim).confidence }))
+        .sort((left, right) => right.confidence - left.confidence)[0];
+      if (!best) return;
+      best.claim.text = newFact;
+      changed = true;
+    });
+  });
+  return changed ? repaired : patchedEditor;
+}
+
 function validateArticleSectionContract(value) {
   const issues = [];
   ensureArray(value.sections).forEach((section, index) => {
@@ -1381,6 +1426,7 @@ module.exports = {
   bindMissingFactClaimEvidence,
   dropVerifiedFactsClassifiedAsNonFact,
   reconcileFactClaimEvidence,
+  syncFactClaimTextsWithPatchedVerifiedFacts,
   repairEditorOutputContract,
   serializeEditorValidationError,
   validateEditorArticlePolicy,

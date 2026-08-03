@@ -80,6 +80,42 @@ test('applyRepairPatchesAndValidate keeps story markers so story-v1 patches vali
   );
 });
 
+test('applyRepairPatchesAndValidate syncs the covering fact claim when a patch rewrites its verified_fact (2026-08-03 regression)', () => {
+  // patch는 verified_facts를 바꿀 수 있지만 claims는 patch 금지 경로다. 동기화가 없으면 옛 claim
+  // 문구가 남아 이후 strict claim binding에서 missing_matching_fact_claim으로 repair 전체가 거부된다.
+  const draft = editor({
+    sections: [
+      section(1, {
+        claims: [{
+          claim_id: 'claim:hash-1:1',
+          claim_type: 'fact',
+          text: 'Fact 1',
+          evidence_ids: ['candidate:hash-1:source-summary'],
+          source_urls: ['https://example.com/source-1']
+        }]
+      }),
+      section(2)
+    ]
+  });
+  const rewrittenFact = '패치로 완전히 재작성되어 원문과 겹치는 단어가 없는 사실 문장입니다.';
+  const patches = [{
+    section_index: 0,
+    section_key: stableSectionKey(draft.sections[0]),
+    op: 'replace',
+    path: '/article_sections/verified_facts/0',
+    value: rewrittenFact
+  }];
+
+  const result = applyRepairPatchesAndValidate({ editor: draft, patches, date: DATE });
+
+  assert.equal(result.ok, true);
+  assert.equal(result.editor.sections[0].article_sections.verified_facts[0], rewrittenFact);
+  assert.equal(result.editor.sections[0].claims[0].text, rewrittenFact);
+  // evidence 바인딩과 claim identity는 그대로다.
+  assert.deepEqual(result.editor.sections[0].claims[0].evidence_ids, ['candidate:hash-1:source-summary']);
+  assert.equal(result.editor.sections[0].claims[0].claim_id, 'claim:hash-1:1');
+});
+
 test('remapRepairPatchSections resolves section_key to the real editor index', () => {
   const draft = editor({ sections: [section(1), section(2)] });
   const { normalized, violations } = remapRepairPatchSections(draft.sections, [
