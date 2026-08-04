@@ -8,7 +8,10 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { cloneJson, fail } = require('./orchestrator-shared-helpers');
 const { normalizeEditorSection } = require('./orchestrator-reporter-normalize');
-const { EditorSemanticValidationError } = require('../editor/editor-output-contract');
+const {
+  EditorSemanticValidationError,
+  revertUncoveredPatchedVerifiedFacts
+} = require('../editor/editor-output-contract');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { applyRepairPatches, REPAIR_PATCH_CONTRACT_VIOLATION } = require('../repair/repair-patch-contract');
 const {
@@ -222,6 +225,7 @@ function applyRepairPatchesAndValidate({
   patches = [],
   reporter = { candidates: [] },
   date,
+  seedEvidencePack = null,
   validateEditor
 } = {}) {
   const baseEditor = cloneJson(editor);
@@ -234,7 +238,14 @@ function applyRepairPatchesAndValidate({
   if (!applied.ok) {
     return { ok: false, editor: baseEditor, violations: applied.violations };
   }
-  const patchedSections = ensureArray(applied.output.sections);
+  // patch는 verified_facts를 바꿀 수 있지만 claims는 patch 금지 경로라, patch가 사실 문구를
+  // 어떤 fact claim도 cover하지 못하게 바꾸면 그 항목만 base 문구로 되돌린다(claims 불변,
+  // 게이트 강도 유지 — 2026-08-03 missing_matching_fact_claim로 repair 전체가 죽던 회귀 방지).
+  const reverted = revertUncoveredPatchedVerifiedFacts(baseEditor, applied.output, {
+    reporter,
+    seedEvidencePack
+  });
+  const patchedSections = ensureArray(reverted.sections);
   // 최후의 가드: patch-only 편집에서는 identity set, 개수, 보호 필드가 구조적으로
   // 불변이다. 이 검사는 방어선으로 남아, patch가 applyRepairPatches allowlist를
   // 빠져나간 경우에만 throw(-> reviewable 실패)한다.
@@ -250,7 +261,7 @@ function applyRepairPatchesAndValidate({
     baseIssue: baseEditor,
     validateEditor
   });
-  return { ok: true, editor: applied.output, violations: [] };
+  return { ok: true, editor: reverted, violations: [] };
 }
 
 function fallbackFactCheckForRepairFailure(error, factCheck = null) {
