@@ -119,6 +119,40 @@ test('does not hijack a claim that still covers another unchanged verified_fact'
   assert.equal(result.sections[0].claims[0].text, sharedClaimText);
 });
 
+test('rewrite guard: a fabricated fact unrelated to the old wording is not synced', () => {
+  const { base, patched } = camssEditorPair();
+  // 옛 WIP 문장과 무관한 완전 신규 주장 — 유사도가 floor(0.2) 미만이므로 동기화하지 않는다.
+  patched.sections[0].article_sections.verified_facts[1] =
+    '전혀 무관한 신규 기능이 기본 활성화되도록 결정되었습니다.';
+  const result = syncFactClaimTextsWithPatchedVerifiedFacts(base, patched);
+  assert.equal(result.sections[0].claims[1].text, OLD_WIP_FACT);
+});
+
+test('rewrite guard: a rewrite that smuggles in a new protected token (date) is not synced', () => {
+  const { base, patched } = camssEditorPair();
+  // 옛 문구에 없던 날짜 토큰이 들어오면 protected-token 불일치로 동기화하지 않는다(fail-closed).
+  patched.sections[0].article_sections.verified_facts[1] =
+    '이전 리뷰 피드백이 일부 누락되어 WIP 태그가 2026-09-01 릴리스에 추가되었습니다.';
+  const result = syncFactClaimTextsWithPatchedVerifiedFacts(base, patched);
+  assert.equal(result.sections[0].claims[1].text, OLD_WIP_FACT);
+});
+
+test('alias-field claims (claim/evidenceIds) do not crash and still sync via the normalized view', () => {
+  const { base, patched } = camssEditorPair();
+  // 스키마는 snake_case를 강제하지만, 방어적으로 별칭 필드 claim에서도 TypeError 없이 동작해야 한다.
+  const aliasClaim = {
+    claim_id: 'claim:7dc57c68dd701d6d:2',
+    claim_type: 'fact',
+    claim: OLD_WIP_FACT,
+    evidenceIds: ['candidate:7dc57c68dd701d6d:source-summary']
+  };
+  base.sections[0].claims[1] = { ...aliasClaim };
+  patched.sections[0].claims[1] = { ...aliasClaim };
+  const result = syncFactClaimTextsWithPatchedVerifiedFacts(base, patched);
+  assert.equal(result.sections[0].claims[1].text, NEW_WIP_FACT);
+  assert.deepEqual(result.sections[0].claims[1].evidenceIds, ['candidate:7dc57c68dd701d6d:source-summary']);
+});
+
 test('non-fact claims are never rewritten', () => {
   const { base, patched } = camssEditorPair();
   base.sections[0].claims[1].claim_type = 'inference';

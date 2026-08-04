@@ -225,6 +225,7 @@ function applyRepairPatchesAndValidate({
   patches = [],
   reporter = { candidates: [] },
   date,
+  seedEvidencePack = null,
   validateEditor
 } = {}) {
   const baseEditor = cloneJson(editor);
@@ -241,7 +242,10 @@ function applyRepairPatchesAndValidate({
   // fact claim의 텍스트를 결정론적으로 따라 바꿔 claim 바인딩 게이트와의 동기화를 유지한다
   // (2026-08-03 missing_matching_fact_claim 회귀). evidence 바인딩은 그대로이며 strict 검증이
   // 이후에 다시 돈다.
-  const synced = syncFactClaimTextsWithPatchedVerifiedFacts(baseEditor, applied.output);
+  const synced = syncFactClaimTextsWithPatchedVerifiedFacts(baseEditor, applied.output, {
+    reporter,
+    seedEvidencePack
+  });
   const patchedSections = ensureArray(synced.sections);
   // 최후의 가드: patch-only 편집에서는 identity set, 개수, 보호 필드가 구조적으로
   // 불변이다. 이 검사는 방어선으로 남아, patch가 applyRepairPatches allowlist를

@@ -583,15 +583,29 @@ function dropVerifiedFactsClassifiedAsNonFact(section) {
 // 옛 문구를 cover하던 fact claim의 텍스트를 새 문구로 결정론적으로 따라 바꾼다.
 //   - claim_id/evidence_ids/source_urls는 그대로 둔다(새 근거·새 사실을 만들지 않음). 텍스트 출처는
 //     이미 patch로 승인된 verified_facts 문구 그 자체다.
+//   - 재작성 가드: 새 문구가 옛 문구의 rewording일 때만 동기화한다. covered(유사도>=0.5)거나,
+//     protected-token 불일치 없이 유사도가 floor 이상이어야 한다. patch가 전혀 새로운 주장을 쓰거나
+//     옛 문구에 없던 날짜/버전/보호 토큰을 들여오면 동기화하지 않아, claim은 옛 문구로 남고 게이트가
+//     기존처럼 fail-closed로 막는다(coverage 게이트를 항진명제로 만들지 않기 위한 하한).
 //   - 새 문구를 이미 cover하는 fact claim이 있으면 건드리지 않는다.
 //   - 변경되지 않은 다른 fact를 함께 cover 중인 claim은 제외한다(그 fact가 uncovered로 뒤바뀌는
-//     것 방지). cover 판정은 게이트와 동일한 factCoveredByClaim을 쓴다.
+//     것 방지). cover 판정은 게이트(validateClaimBindingContract)와 동일하게 후보의 실제 evidence
+//     index를 써서 오라클 불일치를 없앤다.
 //   - 동기화 후에도 strict 검증(claim binding + evidence support)이 그대로 다시 돌므로 fail-closed다.
-function syncFactClaimTextsWithPatchedVerifiedFacts(baseEditor, patchedEditor) {
+//
+// floor 0.2 근거: 실측 paraphrase(2026-08-03 WIP 쌍)는 max(token, bigram) 유사도 ~0.35로 게이트
+// 문턱(0.5)만 못 넘긴 rewording이었다. 주제 단어를 공유하는 정상 rewording은 0.2를 여유 있게 넘고,
+// 무관한 날조 문장은 0에 가깝다. floor에 걸리면 동기화만 생략되므로(수정 전과 동일한 실패 경로)
+// 발행 게이트가 약해지는 방향의 오판은 없다.
+const VERIFIED_FACT_REWRITE_SIMILARITY_FLOOR = 0.2;
+
+function syncFactClaimTextsWithPatchedVerifiedFacts(baseEditor, patchedEditor, options = {}) {
   const baseSections = ensureArray(baseEditor?.sections);
   if (baseSections.length === 0 || ensureArray(patchedEditor?.sections).length === 0) return patchedEditor;
+  const reporter = options.reporter || { candidates: [] };
+  const seedEvidencePack = options.seedEvidencePack || null;
+  const candidateIndex = buildCandidateIndex(reporter);
   const repaired = cloneJson(patchedEditor);
-  const coveredBy = (factText, claim) => factCoveredByClaim(factText, claim, EMPTY_EVIDENCE_INDEX);
   let changed = false;
   // patch 경로는 section 개수/순서를 보존하므로(applyRepairPatches는 clone 후 in-place 교체) index로 대응한다.
   ensureArray(repaired.sections).forEach((section, sectionIndex) => {
@@ -599,21 +613,35 @@ function syncFactClaimTextsWithPatchedVerifiedFacts(baseEditor, patchedEditor) {
     if (!baseSection) return;
     const oldFacts = ensureArray(normalizeArticleSections(baseSection).verified_facts).map(text);
     const newFacts = ensureArray(normalizeArticleSections(section).verified_facts).map(text);
-    const factClaims = ensureArray(section.claims).filter(claim =>
-      String(claim?.claim_type || claim?.claimType || '').trim().toLowerCase() === 'fact');
+    // factCoveredByClaim은 claim의 text/evidence_ids만 읽는다. 별칭 필드(claim/claimType/evidenceIds)
+    // claim에서도 안전하도록 정규화 view로 판정하고, 텍스트는 원본 객체에 써 넣는다.
+    const factClaims = ensureArray(section.claims)
+      .filter(claim => String(claim?.claim_type || claim?.claimType || '').trim().toLowerCase() === 'fact')
+      .map(claim => ({
+        raw: claim,
+        text: text(claim?.text || claim?.claim),
+        evidence_ids: ensureArray(claim?.evidence_ids || claim?.evidenceIds).map(text).filter(Boolean)
+      }))
+      .filter(view => view.text);
     if (factClaims.length === 0) return;
+    const candidate = candidateForSection(section, candidateIndex) || {};
+    const evidenceIndex = buildEvidenceIndex(candidate, section, { seedEvidencePack });
+    const coveredBy = (factText, view) => factCoveredByClaim(factText, view, evidenceIndex);
     newFacts.forEach((newFact, factIndex) => {
       const oldFact = oldFacts[factIndex] || '';
       if (!newFact || !oldFact || newFact === oldFact) return;
-      if (factClaims.some(claim => coveredBy(newFact, claim).covered)) return;
+      const rewrite = factCoveredByClaim(newFact, { text: oldFact, evidence_ids: [] }, evidenceIndex);
+      if (!rewrite.covered && !(rewrite.confidence >= VERIFIED_FACT_REWRITE_SIMILARITY_FLOOR)) return;
+      if (factClaims.some(view => coveredBy(newFact, view).covered)) return;
       const best = factClaims
-        .filter(claim =>
-          coveredBy(oldFact, claim).covered &&
-          !newFacts.some((other, otherIndex) => otherIndex !== factIndex && other && coveredBy(other, claim).covered))
-        .map(claim => ({ claim, confidence: coveredBy(oldFact, claim).confidence }))
+        .filter(view =>
+          coveredBy(oldFact, view).covered &&
+          !newFacts.some((other, otherIndex) => otherIndex !== factIndex && other && coveredBy(other, view).covered))
+        .map(view => ({ view, confidence: coveredBy(oldFact, view).confidence }))
         .sort((left, right) => right.confidence - left.confidence)[0];
       if (!best) return;
-      best.claim.text = newFact;
+      best.view.raw.text = newFact;
+      best.view.text = newFact;
       changed = true;
     });
   });

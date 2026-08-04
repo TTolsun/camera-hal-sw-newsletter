@@ -267,7 +267,7 @@ async function runRepairAndCompletionPasses({
         );
         const patches = ensureArray(patchResponse && patchResponse.patches);
         writeJson(path.join(newsroomDir, `editor-repair-patches-attempt-${attempt}.json`), { patches });
-        const patchResult = applyRepairPatchesAndValidate({ editor, patches, reporter, date });
+        const patchResult = applyRepairPatchesAndValidate({ editor, patches, reporter, date, seedEvidencePack });
         if (!patchResult.ok) {
           throw targetedRepairError('Editor repair violated the article-preserving patch contract.', {
             field: 'sections.repair_patch',

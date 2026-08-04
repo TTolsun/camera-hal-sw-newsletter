@@ -83,21 +83,30 @@ test('applyRepairPatchesAndValidate keeps story markers so story-v1 patches vali
 test('applyRepairPatchesAndValidate syncs the covering fact claim when a patch rewrites its verified_fact (2026-08-03 regression)', () => {
   // patch는 verified_facts를 바꿀 수 있지만 claims는 patch 금지 경로다. 동기화가 없으면 옛 claim
   // 문구가 남아 이후 strict claim binding에서 missing_matching_fact_claim으로 repair 전체가 거부된다.
+  // 2026-08-03 run의 실제 rewording 쌍(유사도 ~0.35: floor 0.2와 게이트 문턱 0.5 사이)을 쓴다.
+  const oldFact = '이전 리뷰 피드백이 일부 누락되어 WIP 태그가 추가되었습니다.';
+  const rewrittenFact = '해당 패치 시리즈에는 이전 리뷰 피드백이 완전히 반영되지 않아 WIP(Work In Progress) 태그가 추가되었습니다.';
   const draft = editor({
     sections: [
       section(1, {
         claims: [{
           claim_id: 'claim:hash-1:1',
           claim_type: 'fact',
-          text: 'Fact 1',
+          text: oldFact,
           evidence_ids: ['candidate:hash-1:source-summary'],
           source_urls: ['https://example.com/source-1']
-        }]
+        }],
+        article_sections: {
+          verified_facts: [oldFact],
+          background_context: '배경',
+          hal_driver_impact: 'HAL 영향',
+          action_items: ['액션'],
+          team_share_points: '공유'
+        }
       }),
       section(2)
     ]
   });
-  const rewrittenFact = '패치로 완전히 재작성되어 원문과 겹치는 단어가 없는 사실 문장입니다.';
   const patches = [{
     section_index: 0,
     section_key: stableSectionKey(draft.sections[0]),
@@ -114,6 +123,47 @@ test('applyRepairPatchesAndValidate syncs the covering fact claim when a patch r
   // evidence 바인딩과 claim identity는 그대로다.
   assert.deepEqual(result.editor.sections[0].claims[0].evidence_ids, ['candidate:hash-1:source-summary']);
   assert.equal(result.editor.sections[0].claims[0].claim_id, 'claim:hash-1:1');
+});
+
+test('applyRepairPatchesAndValidate does not sync a fabricated (unrelated) verified_fact into the claim', () => {
+  // 재작성 가드: patch가 옛 사실의 rewording이 아니라 전혀 새로운 주장을 쓰면 claim은 옛 문구로
+  // 남아 이후 strict claim binding이 기존처럼 fail-closed로 막는다(coverage 게이트 항진명제 방지).
+  const oldFact = '이전 리뷰 피드백이 일부 누락되어 WIP 태그가 추가되었습니다.';
+  const fabricated = '전혀 무관한 신규 기능이 기본 활성화되도록 결정되었습니다.';
+  const draft = editor({
+    sections: [
+      section(1, {
+        claims: [{
+          claim_id: 'claim:hash-1:1',
+          claim_type: 'fact',
+          text: oldFact,
+          evidence_ids: ['candidate:hash-1:source-summary'],
+          source_urls: ['https://example.com/source-1']
+        }],
+        article_sections: {
+          verified_facts: [oldFact],
+          background_context: '배경',
+          hal_driver_impact: 'HAL 영향',
+          action_items: ['액션'],
+          team_share_points: '공유'
+        }
+      }),
+      section(2)
+    ]
+  });
+  const patches = [{
+    section_index: 0,
+    section_key: stableSectionKey(draft.sections[0]),
+    op: 'replace',
+    path: '/article_sections/verified_facts/0',
+    value: fabricated
+  }];
+
+  const result = applyRepairPatchesAndValidate({ editor: draft, patches, date: DATE });
+
+  assert.equal(result.ok, true);
+  assert.equal(result.editor.sections[0].article_sections.verified_facts[0], fabricated);
+  assert.equal(result.editor.sections[0].claims[0].text, oldFact);
 });
 
 test('remapRepairPatchSections resolves section_key to the real editor index', () => {
