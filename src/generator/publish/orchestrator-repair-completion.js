@@ -276,7 +276,11 @@ async function runRepairAndCompletionPasses({
             sectionCount: ensureArray(editor.sections).length
           });
         }
-        editor = validateEditor(patchResult.editor, date, reporter, { strictClaims: true, requireStoryContract: true });
+        // seedEvidencePack을 함께 전달해 revertUncoveredPatchedVerifiedFacts의 keep/revert 판정과
+        // 이 strict 게이트가 같은 evidence 입력으로 커버리지를 보게 한다. pack 없이 재게이트하면
+        // seed-pack 근거로만 protected token이 해소되는 유지된 fact가 여기서 다시
+        // missing_matching_fact_claim으로 죽는다(오라클 입력 불일치).
+        editor = validateEditor(patchResult.editor, date, reporter, { strictClaims: true, requireStoryContract: true, seedEvidencePack });
       } else {
       // #632: replace/demote를 LLM 전체-재생성 대신 결정론 강등으로 처리한다. 실패(structural)
       // 섹션을 떨어뜨리고 통과 섹션만 남긴다. 이로써 #628의 identity-drift throw와 evidence_id 반복

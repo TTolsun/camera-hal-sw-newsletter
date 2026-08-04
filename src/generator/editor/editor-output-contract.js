@@ -586,9 +586,11 @@ function dropVerifiedFactsClassifiedAsNonFact(section) {
 // coverage 게이트가 무력화되고, 유사도 하한으로는 의미 반전 날조([0.2,0.5) 구간)와 짧은 문장의
 // 어미-bigram 우연 일치를 막을 수 없음이 적대적 리뷰 재현으로 확인됐다. revert 방식은:
 //   - claims 불변 + 커버 요구(>=0.5) 그대로 → 게이트 강도가 수정 전과 정확히 동일하다.
-//   - base 문구는 repair 진입 시점에 strict 검증을 통과한 상태이므로 revert 결과는 항상 covered다.
+//   - base 문구는 repair 진입 시점에 strict 검증을 통과한 상태이므로, 이후 게이트가 같은 evidence
+//     입력(reporter + seedEvidencePack)으로 재검증하는 한 revert 결과는 covered로 유지된다.
 //   - 각 fact 항목을 독립적으로 keep-or-revert하므로 다중 fact 동시 rewrite의 순서 의존성이 없다.
 //   - cover 판정은 게이트(validateClaimBindingContract)와 동일하게 후보의 실제 evidence index를 쓴다.
+//     호출처는 후속 strict 게이트에도 같은 seedEvidencePack을 넘겨야 한다(오라클 입력 불일치 방지).
 //   - 효과: 커버 범위를 벗어난 문구 편집 1건만 무효화되고 나머지 patch(prose 등)는 살아남아,
 //     run 전체가 FAILED_REPAIR_REVIEWABLE로 죽는 대신 정상 재게이트(fact-check/quality)로 진행한다.
 function revertUncoveredPatchedVerifiedFacts(baseEditor, patchedEditor, options = {}) {
@@ -629,6 +631,8 @@ function revertUncoveredPatchedVerifiedFacts(baseEditor, patchedEditor, options 
     articleSections.verified_facts.forEach((rawNewFact, factIndex) => {
       const newFact = text(rawNewFact);
       const oldFact = text(oldFacts[factIndex]);
+      // oldFact가 비어 있으면(base slot이 빈 문자열 — strictArticleSections 이후엔 사실상 없음)
+      // 되돌릴 base 문구가 없다. 그대로 두고 이후 strict 게이트가 판정하게 한다(fail-closed).
       if (!newFact || !oldFact || newFact === oldFact) return;
       if (factClaims.some(view => factCoveredByClaim(newFact, view, evidenceIndex).covered)) return;
       articleSections.verified_facts[factIndex] = oldFacts[factIndex];

@@ -11,6 +11,7 @@ const {
   applyRepairPatchesAndValidate,
   remapRepairPatchSections
 } = require('../../../publish/gemini-newsroom-newsletter');
+const { validateArticleClaims } = require('../../../quality/claim-source-binding');
 const { editor, section, storyEditor } = require('../../../../shared/test/helpers/editor-builders');
 const { stableSectionKey } = require('../../../../shared/common/section-identity');
 
@@ -177,6 +178,97 @@ test('applyRepairPatchesAndValidate keeps a verified_fact patch an existing fact
   assert.equal(result.ok, true);
   assert.equal(result.editor.sections[0].article_sections.verified_facts[0], rewrittenFact);
   assert.equal(result.editor.sections[0].claims[0].text, oldFact);
+});
+
+test('kept verified_fact patches agree with the strict claim gate when both use the same seedEvidencePack', () => {
+  // 오라클 입력 합의 회귀: revertUncoveredPatchedVerifiedFacts는 seedEvidencePack을 포함해
+  // keep/revert를 판정한다. 직후 strict 게이트(orchestrator-repair-completion.js의 validateEditor)가
+  // pack 없이 재검증하면, seed-pack 근거로만 protected token이 해소되는 유지된 fact가 다시
+  // missing_matching_fact_claim으로 죽는다. 이 테스트는 (a) pack 기반으로 fact가 유지되고,
+  // (b) 같은 pack을 받은 strict 게이트는 통과하며, (c) pack 없는 게이트는 발산함을 고정한다 —
+  // 호출처가 후속 게이트에 같은 seedEvidencePack을 넘겨야 하는 이유다.
+  const oldFact = '패치가 제출되었으며 리뷰가 진행 중입니다.';
+  const datedRewrite = '2026-08-01 패치가 제출되었으며 리뷰가 진행 중입니다.';
+  const seedEvidencePack = {
+    packs: [{
+      evidence_pack_id: 'pack-1',
+      seed_id: 'seed-1',
+      title: 'Headline 1',
+      seed_url: 'https://example.com/source-1',
+      primary_evidence: [{
+        evidence_id: 'seed-ev-1',
+        fetch_status: 'allowed',
+        source_text: '2026-08-01 패치가 제출되었으며 리뷰가 진행 중입니다.',
+        url: 'https://example.com/source-1'
+      }]
+    }]
+  };
+  const reporter = {
+    candidates: [{
+      url: 'https://example.com/source-1',
+      source_candidate_hash: 'hash-1',
+      url_hash: 'hash-1',
+      title: 'Headline 1',
+      primary_evidence_ids: ['seed-ev-1']
+    }]
+  };
+  const draft = editor({
+    sections: [
+      section(1, {
+        claims: [{
+          claim_id: 'claim:hash-1:1',
+          claim_type: 'fact',
+          text: oldFact,
+          evidence_ids: ['seed-ev-1'],
+          source_urls: ['https://example.com/source-1']
+        }],
+        article_sections: {
+          verified_facts: [oldFact],
+          background_context: '배경',
+          hal_driver_impact: 'HAL 영향',
+          action_items: ['액션'],
+          team_share_points: '공유'
+        }
+      }),
+      section(2)
+    ]
+  });
+  const patches = [{
+    section_index: 0,
+    section_key: stableSectionKey(draft.sections[0]),
+    op: 'replace',
+    path: '/article_sections/verified_facts/0',
+    value: datedRewrite
+  }];
+
+  const result = applyRepairPatchesAndValidate({ editor: draft, patches, date: DATE, reporter, seedEvidencePack });
+
+  assert.equal(result.ok, true);
+  // (a) 날짜 토큰이 seed-pack evidence 텍스트로 해소되므로 rewording은 covered → 유지된다.
+  assert.equal(result.editor.sections[0].article_sections.verified_facts[0], datedRewrite);
+
+  const gateWithPack = validateArticleClaims({
+    section: result.editor.sections[0],
+    candidate: reporter.candidates[0],
+    articleIndex: 0,
+    strict: true,
+    seedEvidencePack
+  });
+  const blockingWithPack = [
+    ...gateWithPack.issues,
+    ...gateWithPack.claim_results.flatMap(claim => claim.issues)
+  ].filter(item => item.blocking !== false).map(item => item.reason_code);
+  // (b) 같은 pack을 받은 strict 게이트는 유지된 fact를 covered로 본다.
+  assert.deepEqual(blockingWithPack.filter(code => code === 'missing_matching_fact_claim'), []);
+
+  const gateWithoutPack = validateArticleClaims({
+    section: result.editor.sections[0],
+    candidate: reporter.candidates[0],
+    articleIndex: 0,
+    strict: true
+  });
+  // (c) pack 없는 게이트는 같은 fact를 uncovered로 본다 — 오라클 입력이 반드시 일치해야 한다.
+  assert.ok(gateWithoutPack.uncovered_facts.some(item => item.reason_code === 'missing_matching_fact_claim'));
 });
 
 test('remapRepairPatchSections resolves section_key to the real editor index', () => {
