@@ -10,7 +10,7 @@ const { cloneJson, fail } = require('./orchestrator-shared-helpers');
 const { normalizeEditorSection } = require('./orchestrator-reporter-normalize');
 const {
   EditorSemanticValidationError,
-  syncFactClaimTextsWithPatchedVerifiedFacts
+  revertUncoveredPatchedVerifiedFacts
 } = require('../editor/editor-output-contract');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { applyRepairPatches, REPAIR_PATCH_CONTRACT_VIOLATION } = require('../repair/repair-patch-contract');
@@ -238,11 +238,10 @@ function applyRepairPatchesAndValidate({
   if (!applied.ok) {
     return { ok: false, editor: baseEditor, violations: applied.violations };
   }
-  // patch는 verified_facts를 바꿀 수 있지만 claims는 patch 금지 경로라, 바뀐 사실을 cover하던
-  // fact claim의 텍스트를 결정론적으로 따라 바꿔 claim 바인딩 게이트와의 동기화를 유지한다
-  // (2026-08-03 missing_matching_fact_claim 회귀). evidence 바인딩은 그대로이며 strict 검증이
-  // 이후에 다시 돈다.
-  const synced = syncFactClaimTextsWithPatchedVerifiedFacts(baseEditor, applied.output, {
+  // patch는 verified_facts를 바꿀 수 있지만 claims는 patch 금지 경로라, patch가 사실 문구를
+  // 어떤 fact claim도 cover하지 못하게 바꾸면 그 항목만 base 문구로 되돌린다(claims 불변,
+  // 게이트 강도 유지 — 2026-08-03 missing_matching_fact_claim로 repair 전체가 죽던 회귀 방지).
+  const synced = revertUncoveredPatchedVerifiedFacts(baseEditor, applied.output, {
     reporter,
     seedEvidencePack
   });

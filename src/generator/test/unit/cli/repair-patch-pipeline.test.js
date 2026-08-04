@@ -80,12 +80,69 @@ test('applyRepairPatchesAndValidate keeps story markers so story-v1 patches vali
   );
 });
 
-test('applyRepairPatchesAndValidate syncs the covering fact claim when a patch rewrites its verified_fact (2026-08-03 regression)', () => {
-  // patch는 verified_facts를 바꿀 수 있지만 claims는 patch 금지 경로다. 동기화가 없으면 옛 claim
+test('applyRepairPatchesAndValidate reverts a verified_fact patch no fact claim covers (2026-08-03 regression)', () => {
+  // patch는 verified_facts를 바꿀 수 있지만 claims는 patch 금지 경로다. 되돌리지 않으면 옛 claim
   // 문구가 남아 이후 strict claim binding에서 missing_matching_fact_claim으로 repair 전체가 거부된다.
-  // 2026-08-03 run의 실제 rewording 쌍(유사도 ~0.35: floor 0.2와 게이트 문턱 0.5 사이)을 쓴다.
+  // 2026-08-03 run의 실제 rewording 쌍(유사도 ~0.35 < 게이트 문턱 0.5)을 쓴다. claims는 불변이고
+  // 해당 fact 항목만 base 문구로 돌아가 run이 계속 진행된다.
   const oldFact = '이전 리뷰 피드백이 일부 누락되어 WIP 태그가 추가되었습니다.';
   const rewrittenFact = '해당 패치 시리즈에는 이전 리뷰 피드백이 완전히 반영되지 않아 WIP(Work In Progress) 태그가 추가되었습니다.';
+  const draft = editor({
+    sections: [
+      section(1, {
+        claims: [{
+          claim_id: 'claim:hash-1:1',
+          claim_type: 'fact',
+          text: oldFact,
+          evidence_ids: ['candidate:hash-1:source-summary'],
+          source_urls: ['https://example.com/source-1']
+        }],
+        article_sections: {
+          verified_facts: [oldFact],
+          background_context: '배경',
+          hal_driver_impact: 'HAL 영향',
+          action_items: ['액션'],
+          team_share_points: '공유'
+        }
+      }),
+      section(2)
+    ]
+  });
+  const patches = [
+    {
+      section_index: 0,
+      section_key: stableSectionKey(draft.sections[0]),
+      op: 'replace',
+      path: '/article_sections/verified_facts/0',
+      value: rewrittenFact
+    },
+    {
+      section_index: 0,
+      section_key: stableSectionKey(draft.sections[0]),
+      op: 'replace',
+      path: '/public_article/lead',
+      value: '수정된 리드 문장입니다. Camera HAL 독자를 위한 검증 신호를 요약합니다.'
+    }
+  ];
+
+  const result = applyRepairPatchesAndValidate({ editor: draft, patches, date: DATE });
+
+  assert.equal(result.ok, true);
+  // 커버되지 않는 fact 편집만 되돌아가고, 나머지 patch(prose)는 살아남는다.
+  assert.equal(result.editor.sections[0].article_sections.verified_facts[0], oldFact);
+  assert.equal(
+    result.editor.sections[0].public_article.lead,
+    '수정된 리드 문장입니다. Camera HAL 독자를 위한 검증 신호를 요약합니다.'
+  );
+  // claims는 완전히 불변이다.
+  assert.equal(result.editor.sections[0].claims[0].text, oldFact);
+  assert.deepEqual(result.editor.sections[0].claims[0].evidence_ids, ['candidate:hash-1:source-summary']);
+});
+
+test('applyRepairPatchesAndValidate keeps a verified_fact patch an existing fact claim still covers', () => {
+  // 유사도>=0.5로 기존 claim이 cover하는 가벼운 rewording은 그대로 유지된다.
+  const oldFact = '퀄컴 CAMSS 드라이버에 C-PHY 구성을 지원하는 v9 패치 시리즈가 제출되었습니다.';
+  const rewrittenFact = '퀄컴 플랫폼의 CAMSS 드라이버에 C-PHY 구성을 지원하기 위한 v9 패치 시리즈가 제안되었습니다.';
   const draft = editor({
     sections: [
       section(1, {
@@ -119,50 +176,6 @@ test('applyRepairPatchesAndValidate syncs the covering fact claim when a patch r
 
   assert.equal(result.ok, true);
   assert.equal(result.editor.sections[0].article_sections.verified_facts[0], rewrittenFact);
-  assert.equal(result.editor.sections[0].claims[0].text, rewrittenFact);
-  // evidence 바인딩과 claim identity는 그대로다.
-  assert.deepEqual(result.editor.sections[0].claims[0].evidence_ids, ['candidate:hash-1:source-summary']);
-  assert.equal(result.editor.sections[0].claims[0].claim_id, 'claim:hash-1:1');
-});
-
-test('applyRepairPatchesAndValidate does not sync a fabricated (unrelated) verified_fact into the claim', () => {
-  // 재작성 가드: patch가 옛 사실의 rewording이 아니라 전혀 새로운 주장을 쓰면 claim은 옛 문구로
-  // 남아 이후 strict claim binding이 기존처럼 fail-closed로 막는다(coverage 게이트 항진명제 방지).
-  const oldFact = '이전 리뷰 피드백이 일부 누락되어 WIP 태그가 추가되었습니다.';
-  const fabricated = '전혀 무관한 신규 기능이 기본 활성화되도록 결정되었습니다.';
-  const draft = editor({
-    sections: [
-      section(1, {
-        claims: [{
-          claim_id: 'claim:hash-1:1',
-          claim_type: 'fact',
-          text: oldFact,
-          evidence_ids: ['candidate:hash-1:source-summary'],
-          source_urls: ['https://example.com/source-1']
-        }],
-        article_sections: {
-          verified_facts: [oldFact],
-          background_context: '배경',
-          hal_driver_impact: 'HAL 영향',
-          action_items: ['액션'],
-          team_share_points: '공유'
-        }
-      }),
-      section(2)
-    ]
-  });
-  const patches = [{
-    section_index: 0,
-    section_key: stableSectionKey(draft.sections[0]),
-    op: 'replace',
-    path: '/article_sections/verified_facts/0',
-    value: fabricated
-  }];
-
-  const result = applyRepairPatchesAndValidate({ editor: draft, patches, date: DATE });
-
-  assert.equal(result.ok, true);
-  assert.equal(result.editor.sections[0].article_sections.verified_facts[0], fabricated);
   assert.equal(result.editor.sections[0].claims[0].text, oldFact);
 });
 

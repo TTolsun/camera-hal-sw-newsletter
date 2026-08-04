@@ -579,27 +579,19 @@ function dropVerifiedFactsClassifiedAsNonFact(section) {
 // 경로다. 그런데 claim 바인딩 게이트는 모든 verified_facts가 claim_type=fact claim과 fuzzy 유사도
 // (>=0.5)로 이어질 것을 요구하므로, patch가 사실을 같은 의미의 다른 문장으로 바꾸면(허용된 편집)
 // 그 사실을 cover하던 claim은 옛 문구로 남아 missing_matching_fact_claim이 되고 repair 전체가
-// 거부된다(2026-08-03 FAILED_REPAIR_REVIEWABLE). patch 적용 직후 base에서 바뀐 사실만 골라, 그
-// 옛 문구를 cover하던 fact claim의 텍스트를 새 문구로 결정론적으로 따라 바꾼다.
-//   - claim_id/evidence_ids/source_urls는 그대로 둔다(새 근거·새 사실을 만들지 않음). 텍스트 출처는
-//     이미 patch로 승인된 verified_facts 문구 그 자체다.
-//   - 재작성 가드: 새 문구가 옛 문구의 rewording일 때만 동기화한다. covered(유사도>=0.5)거나,
-//     protected-token 불일치 없이 유사도가 floor 이상이어야 한다. patch가 전혀 새로운 주장을 쓰거나
-//     옛 문구에 없던 날짜/버전/보호 토큰을 들여오면 동기화하지 않아, claim은 옛 문구로 남고 게이트가
-//     기존처럼 fail-closed로 막는다(coverage 게이트를 항진명제로 만들지 않기 위한 하한).
-//   - 새 문구를 이미 cover하는 fact claim이 있으면 건드리지 않는다.
-//   - 변경되지 않은 다른 fact를 함께 cover 중인 claim은 제외한다(그 fact가 uncovered로 뒤바뀌는
-//     것 방지). cover 판정은 게이트(validateClaimBindingContract)와 동일하게 후보의 실제 evidence
-//     index를 써서 오라클 불일치를 없앤다.
-//   - 동기화 후에도 strict 검증(claim binding + evidence support)이 그대로 다시 돌므로 fail-closed다.
+// 거부된다(2026-08-03 FAILED_REPAIR_REVIEWABLE). patch 적용 직후, 어떤 fact claim도 cover하지
+// 못하는 verified_facts 편집만 base 문구로 되돌린다(claims는 절대 변경하지 않는다).
 //
-// floor 0.2 근거: 실측 paraphrase(2026-08-03 WIP 쌍)는 max(token, bigram) 유사도 ~0.35로 게이트
-// 문턱(0.5)만 못 넘긴 rewording이었다. 주제 단어를 공유하는 정상 rewording은 0.2를 여유 있게 넘고,
-// 무관한 날조 문장은 0에 가깝다. floor에 걸리면 동기화만 생략되므로(수정 전과 동일한 실패 경로)
-// 발행 게이트가 약해지는 방향의 오판은 없다.
-const VERIFIED_FACT_REWRITE_SIMILARITY_FLOOR = 0.2;
-
-function syncFactClaimTextsWithPatchedVerifiedFacts(baseEditor, patchedEditor, options = {}) {
+// claim 텍스트를 새 문구로 "동기화"하는 설계는 채택하지 않는다: fact==claim 항진 커버가 되어
+// coverage 게이트가 무력화되고, 유사도 하한으로는 의미 반전 날조([0.2,0.5) 구간)와 짧은 문장의
+// 어미-bigram 우연 일치를 막을 수 없음이 적대적 리뷰 재현으로 확인됐다. revert 방식은:
+//   - claims 불변 + 커버 요구(>=0.5) 그대로 → 게이트 강도가 수정 전과 정확히 동일하다.
+//   - base 문구는 repair 진입 시점에 strict 검증을 통과한 상태이므로 revert 결과는 항상 covered다.
+//   - 각 fact 항목을 독립적으로 keep-or-revert하므로 다중 fact 동시 rewrite의 순서 의존성이 없다.
+//   - cover 판정은 게이트(validateClaimBindingContract)와 동일하게 후보의 실제 evidence index를 쓴다.
+//   - 효과: 커버 범위를 벗어난 문구 편집 1건만 무효화되고 나머지 patch(prose 등)는 살아남아,
+//     run 전체가 FAILED_REPAIR_REVIEWABLE로 죽는 대신 정상 재게이트(fact-check/quality)로 진행한다.
+function revertUncoveredPatchedVerifiedFacts(baseEditor, patchedEditor, options = {}) {
   const baseSections = ensureArray(baseEditor?.sections);
   if (baseSections.length === 0 || ensureArray(patchedEditor?.sections).length === 0) return patchedEditor;
   const reporter = options.reporter || { candidates: [] };
@@ -611,37 +603,35 @@ function syncFactClaimTextsWithPatchedVerifiedFacts(baseEditor, patchedEditor, o
   ensureArray(repaired.sections).forEach((section, sectionIndex) => {
     const baseSection = baseSections[sectionIndex];
     if (!baseSection) return;
-    const oldFacts = ensureArray(normalizeArticleSections(baseSection).verified_facts).map(text);
-    const newFacts = ensureArray(normalizeArticleSections(section).verified_facts).map(text);
+    // patch는 실제 저장 배열(article_sections.verified_facts)의 기존 index만 교체할 수 있다
+    // (setByPointer는 존재하는 키만 허용). 그 배열이 없으면 이 섹션은 patch 대상이 아니었다.
+    const articleSections = section.article_sections;
+    if (!articleSections || typeof articleSections !== 'object' || Array.isArray(articleSections)) return;
+    if (!Array.isArray(articleSections.verified_facts)) return;
+    const baseArticleSections = baseSection.article_sections;
+    const oldFacts = baseArticleSections && typeof baseArticleSections === 'object' && !Array.isArray(baseArticleSections)
+      ? ensureArray(baseArticleSections.verified_facts)
+      : [];
     // factCoveredByClaim은 claim의 text/evidence_ids만 읽는다. 별칭 필드(claim/claimType/evidenceIds)
-    // claim에서도 안전하도록 정규화 view로 판정하고, 텍스트는 원본 객체에 써 넣는다.
+    // claim에서도 안전하도록 정규화 view로 판정한다(view는 판정 전용, 원본 claim은 불변).
     const factClaims = ensureArray(section.claims)
       .filter(claim => String(claim?.claim_type || claim?.claimType || '').trim().toLowerCase() === 'fact')
       .map(claim => ({
-        raw: claim,
         text: text(claim?.text || claim?.claim),
         evidence_ids: ensureArray(claim?.evidence_ids || claim?.evidenceIds).map(text).filter(Boolean)
       }))
       .filter(view => view.text);
+    // fact claim이 하나도 없으면 커버리지 판정이 성립하지 않는다(base fact도 똑같이 uncovered라
+    // revert가 게이트 결과를 바꾸지 못하고, 비-strict 흐름의 정당한 문구 patch만 막는다). 그대로 둔다.
     if (factClaims.length === 0) return;
     const candidate = candidateForSection(section, candidateIndex) || {};
     const evidenceIndex = buildEvidenceIndex(candidate, section, { seedEvidencePack });
-    const coveredBy = (factText, view) => factCoveredByClaim(factText, view, evidenceIndex);
-    newFacts.forEach((newFact, factIndex) => {
-      const oldFact = oldFacts[factIndex] || '';
+    articleSections.verified_facts.forEach((rawNewFact, factIndex) => {
+      const newFact = text(rawNewFact);
+      const oldFact = text(oldFacts[factIndex]);
       if (!newFact || !oldFact || newFact === oldFact) return;
-      const rewrite = factCoveredByClaim(newFact, { text: oldFact, evidence_ids: [] }, evidenceIndex);
-      if (!rewrite.covered && !(rewrite.confidence >= VERIFIED_FACT_REWRITE_SIMILARITY_FLOOR)) return;
-      if (factClaims.some(view => coveredBy(newFact, view).covered)) return;
-      const best = factClaims
-        .filter(view =>
-          coveredBy(oldFact, view).covered &&
-          !newFacts.some((other, otherIndex) => otherIndex !== factIndex && other && coveredBy(other, view).covered))
-        .map(view => ({ view, confidence: coveredBy(oldFact, view).confidence }))
-        .sort((left, right) => right.confidence - left.confidence)[0];
-      if (!best) return;
-      best.view.raw.text = newFact;
-      best.view.text = newFact;
+      if (factClaims.some(view => factCoveredByClaim(newFact, view, evidenceIndex).covered)) return;
+      articleSections.verified_facts[factIndex] = oldFacts[factIndex];
       changed = true;
     });
   });
@@ -1454,7 +1444,7 @@ module.exports = {
   bindMissingFactClaimEvidence,
   dropVerifiedFactsClassifiedAsNonFact,
   reconcileFactClaimEvidence,
-  syncFactClaimTextsWithPatchedVerifiedFacts,
+  revertUncoveredPatchedVerifiedFacts,
   repairEditorOutputContract,
   serializeEditorValidationError,
   validateEditorArticlePolicy,
