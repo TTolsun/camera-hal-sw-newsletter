@@ -34,8 +34,8 @@ const FOLLOWED_SOURCE_RESOLVERS = [
   },
   {
     id: 'aosp-release-camera-changes',
-    resolve: ({ text, source, fetchTextImpl }) =>
-      resolveAospReleaseCameraChangeItems(text, source, { fetchTextImpl })
+    resolve: ({ text, source, fetchTextImpl, now, lookbackDays }) =>
+      resolveAospReleaseCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays })
   }
 ];
 
@@ -47,10 +47,10 @@ function followedSourceResolverIds() {
  * source.id에 맞는 followed-source 리졸버를 찾아 호출하고 그 결과(후보 배열)를 반환한다.
  * 등록된 리졸버가 없으면 빈 배열을 반환한다(기존 `let followedItems = []` 기본값과 동일).
  */
-async function resolveFollowedSourceItems(source, { indexItems = [], text = '', fetchTextImpl } = {}) {
+async function resolveFollowedSourceItems(source, { indexItems = [], text = '', fetchTextImpl, now, lookbackDays } = {}) {
   const entry = FOLLOWED_SOURCE_RESOLVERS.find(candidate => candidate.id === source.id);
   if (!entry) return [];
-  return entry.resolve({ indexItems, text, source, fetchTextImpl });
+  return entry.resolve({ indexItems, text, source, fetchTextImpl, now, lookbackDays });
 }
 
 /**

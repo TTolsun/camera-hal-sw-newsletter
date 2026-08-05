@@ -46,9 +46,13 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - Qualcomm Security Bulletins (`release-note-watch`): https://docs.qualcomm.com/product/publicresources/securitybulletin
 - Android Developer Newsletter (`documentation-watch`): https://developer.android.com/newsletter
 
-공개 AOSP는 2025년 3월 이후 `main` 브랜치로 개발이 흘러들지 않고 릴리스 태그(`android-N.M.P_rK`)로 몇 달에 한 번 통째로 공개됩니다. AOSP Release Source Drop 출처는 build-numbers 표에서 최신 릴리스 태그와 보안 패치 레벨을 읽고, 직전 릴리스와의 차이(`이전태그..새태그`)에서 camera 경로를 건드린 커밋만 모아 저장소별로 후보 1건을 만듭니다. 감시 저장소는 `platform/hardware/interfaces`(Camera HAL AIDL), `platform/frameworks/av`(camera framework/cameraserver), `platform/hardware/google/camera`(Google Camera HAL)입니다.
+공개 AOSP는 2025년 3월 이후 `main` 브랜치로 개발이 흘러들지 않고 릴리스 태그(`android-N.M.P_rK`)로 몇 달에 한 번 통째로 공개됩니다. AOSP Release Source Drop 출처는 build-numbers 표에서 릴리스 쌍을 고르고, 그 차이(`이전태그..새태그`)에서 camera 경로를 건드린 커밋만 모아 저장소별로 후보 1건을 만듭니다. 감시 저장소는 `platform/hardware/interfaces`(Camera HAL AIDL), `platform/frameworks/av`(camera framework/cameraserver), `platform/hardware/google/camera`(Google Camera HAL)입니다.
+
+릴리스 쌍은 이렇게 고릅니다. 새 릴리스는 **보안 패치 레벨이 가장 늦은 것**입니다. 버전 태그 내림차순으로 고르면 상위 major가 나온 뒤 도착하는 하위 major 보안 드롭(예: `android-17.0.0_r1` 뒤의 `android-16.0.0_r5`)을 영영 놓칩니다. 직전 릴리스는 새 릴리스보다 **버전이 낮은 것 중 가장 높은 태그**입니다. 같은 라인의 직전 `_r`을 자연히 고르고, 라인의 첫 릴리스에서는 직전 major의 마지막 태그를 고릅니다.
 
 후보 날짜는 표의 보안 패치 레벨만 사용합니다. 같은 릴리스라도 저장소별 태그 커밋 시각이 흩어져 있고(`android-17.0.0_r1` 기준 `frameworks/av` 2026-05-14, `hardware/google/camera` 2026-03-28) 어느 쪽도 공개 시점이 아니기 때문입니다. 표에 ISO 날짜가 없는 행은 날짜를 추정하지 않고 건너뜁니다.
+
+수집 창은 파이프라인이 넘겨준 `now`/`lookbackDays`에서 파생합니다. 릴리스가 창 밖이면 gitiles 조회를 아예 하지 않아, 드롭이 없는 대부분의 주에는 요청 한 번으로 끝납니다. 델타가 페이지 상한(6 × 100 커밋)을 넘어 다 읽지 못하면 후보 제목과 요약이 건수를 `at least N` 하한으로 말합니다.
 
 Media3 release note는 날짜가 있는 item-level 변경, 구체 component/API/behavior, camera output path 연결이 모두 있을 때만 `android_multimedia_camera_output` 후보로 봅니다. MediaCodec, MediaRecorder, MediaStore, Photo Picker, supported formats 문서는 reference/background source이며 단독 기사 후보가 아닙니다.
 

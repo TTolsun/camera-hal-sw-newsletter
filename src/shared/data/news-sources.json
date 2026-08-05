@@ -533,7 +533,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "공개 AOSP는 릴리스 태그(android-N.M.P_rK)로 몇 달에 한 번 통째로 공개된다. 이 소스는 build-numbers 표에서 최신 릴리스와 보안 패치 레벨을 읽고, 직전 릴리스와의 차이에서 camera 경로를 건드린 커밋을 저장소별로 모아 Camera HAL 인터페이스 확정·GCH 구현·cameraserver 변경을 드롭 단위로 잡는다",
+      "usageHint": "공개 AOSP는 릴리스 태그(android-N.M.P_rK)로 몇 달에 한 번 통째로 공개된다. build-numbers 표에서 보안 패치 레벨이 가장 늦은 릴리스를 고르고(버전 태그 내림차순으로 고르면 상위 major 뒤에 오는 하위 major 보안 드롭을 놓친다) 버전이 낮은 것 중 최고 태그와의 차이에서 camera 경로를 건드린 커밋을 저장소별로 모아, Camera HAL 인터페이스 확정·GCH 구현·cameraserver 변경을 드롭 단위로 잡는다",
       "keywords": [
         "AOSP",
         "Camera HAL",
