@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-03",
+  "generated_at": "2026-08-05T17:06:19.552Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 12,
+    "hit_count": 7,
+    "miss_count": 5,
+    "by_url_hit_count": 7,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "url-hit",
+      "count": 7
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 5
+    }
+  ],
+  "entries": [
+    {
+      "title": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-01T12:56:38Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com",
+        "url_hash": "73bc8fbc8075cab360ada45e1ae1d4433cbf8b21a53aac31645c89c1d40ef44f",
+        "published_date": "2026-08-01T12:56:38Z",
+        "content_hash": "2551191f7c28e6c1fd521c5296ab7dbcfabda922ad6348fe7b6a1d604099caba"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-31T07:35:25Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com",
+        "url_hash": "c1f5a10780dc7d00dde953fdff6e9f2d17d56a1ffe1448f45f0839fd62b0e45b",
+        "published_date": "2026-07-31T07:35:25Z",
+        "content_hash": "b5e8655940f4db3eb5ec7d82c43d37ba5505b3c1e822a734acef8e42065b1129"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v5 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-31T06:45:25Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com",
+        "url_hash": "ccc5f04628a7d84fa4ab64508721ef07781959aea9a45ad1981902b698eeef4c",
+        "published_date": "2026-07-31T06:45:25Z",
+        "content_hash": "b6c0a4f25535c45558e1e5fea2e04080a0e1213de6d431c3ce6d1a205a6436e4"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor bindings",
+      "url": "https://lore.kernel.org/linux-media/20260730021525.166811-2-lachlan.michael@sony.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-30T02:16:11Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260730021525.166811-2-lachlan.michael@sony.com",
+        "url_hash": "bb337f6541f725a2c3abff87b5ae6a51acd3ecb2879167e77f27a248f3fd0850",
+        "published_date": "2026-07-30T02:16:11Z",
+        "content_hash": "e63c34bc9d0b3c89266290bd6587f3987841cd2b33d401c269bf71d8c200aa21"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+      "url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-29T20:20:08Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz",
+        "url_hash": "7dc57c68dd701d6d1960a53c82b617e62ce0cac3be31bb0d19f1e7159546ae60",
+        "published_date": "2026-07-29T20:20:08Z",
+        "content_hash": "50d7da26e554aab092e037de5dabc5c3ca67319df3a5d1e0e5509d2cdacc03f0"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[RFC,v10,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "url": "https://patchwork.libcamera.org/patch/27533/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-07-31",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27533",
+        "url_hash": "d44cf2480eb7e1bf69bb6cc9ffb5f3aa34778db28b6b79c6f473bb7f16fbdc7d",
+        "published_date": "2026-07-31",
+        "content_hash": "7209fc2d4f8d5215603475a1974b33d171165eab1b56b2fb2706fe80d5d98b46"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/d44cf2480eb7e1bf69bb6cc9ffb5f3aa34778db28b6b79c6f473bb7f16fbdc7d.json"
+    },
+    {
+      "title": "[v1] libcamera: v4l2_videodevice: Use `VIDEO_MAX_PLANES`",
+      "url": "https://patchwork.libcamera.org/patch/27510/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-07-27",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27510",
+        "url_hash": "f74e736016032112afdc4859111815b9cd96a9805d68764c60d3a8181d148f02",
+        "published_date": "2026-07-27",
+        "content_hash": "e8d11e40db2b6a3bd734d0d5d1bb463e77d3c3f0d95671a35aa55767354b5fa8"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/f74e736016032112afdc4859111815b9cd96a9805d68764c60d3a8181d148f02.json"
+    },
+    {
+      "title": "[v3] libcamera: egl: Pass EGLDisplay to eGL constructor to avoid double init",
+      "url": "https://patchwork.libcamera.org/patch/27519/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-07-29",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27519",
+        "url_hash": "8950fa23bf700de7a2f08f3ba4641c22b1074ea4b9d0a6d038f5309f85797dcb",
+        "published_date": "2026-07-29",
+        "content_hash": "8d0bc90c61d90650ee782869feec6bea35c49c3fba7d10557090c708e509aca0"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/8950fa23bf700de7a2f08f3ba4641c22b1074ea4b9d0a6d038f5309f85797dcb.json"
+    },
+    {
+      "title": "[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support",
+      "url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-26T21:44:27Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca",
+        "url_hash": "78bdfd2b91470d5ef3e3ada0daf6db707b252532e03d5b9322162905b0b4d199",
+        "published_date": "2026-07-26T21:44:27Z",
+        "content_hash": "efae99032e75d1a89bfe682fe65dc4ef9e15a5d02fefd18347128627c7c432bd"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/78bdfd2b91470d5ef3e3ada0daf6db707b252532e03d5b9322162905b0b4d199.json"
+    },
+    {
+      "title": "[v2,2/2] libcamera: Harden control serializer size and input validation",
+      "url": "https://patchwork.libcamera.org/patch/27507/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-07-25",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27507",
+        "url_hash": "2edd2a48c155ecfac59d7ebcc93f7bf6608d05e7bc80bed307670e9a6c35b1e9",
+        "published_date": "2026-07-25",
+        "content_hash": "cf33218f549158150eda1c44d2cb170cca19352144dbd7b9a36ebf00c6ddcf3d"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/2edd2a48c155ecfac59d7ebcc93f7bf6608d05e7bc80bed307670e9a6c35b1e9.json"
+    },
+    {
+      "title": "libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown",
+      "url": "https://patchwork.libcamera.org/patch/27496/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-07-24",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27496",
+        "url_hash": "32b614434e7eb1c2dc2b9d1b44e80b88e875157c9337c8ac9bc78701526a49e9",
+        "published_date": "2026-07-24",
+        "content_hash": "027a6585758b1cfdf33b1cb9334b460ec2f488d0e4de4c7e3bb6cce335349079"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/32b614434e7eb1c2dc2b9d1b44e80b88e875157c9337c8ac9bc78701526a49e9.json"
+    },
+    {
+      "title": "[PATCH v2 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-07-24T09:51:05Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com",
+        "url_hash": "ea4258326fcb98c8ced4660a79dcccd34bb68551a6c335fbcf11b07d3ade5135",
+        "published_date": "2026-07-24T09:51:05Z",
+        "content_hash": "3e044b2a22837ab2ef329b28c6cb526083e5a6b98db8c6a931ba4a7a7725e631"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/ea4258326fcb98c8ced4660a79dcccd34bb68551a6c335fbcf11b07d3ade5135.json"
+    }
+  ]
+}

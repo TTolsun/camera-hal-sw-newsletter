@@ -15,6 +15,7 @@
 
 | Date | Original generation mode | Known quality issues | Rewrite allowed | Rewrite status | Archive status | Public visibility | Cleanup context |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-08-03 | current_generation | current generated public artifact; no historical provenance backfill required | no | none | stable_archive | listed | current_generation_archive_review |
 | 2026-07-27 | current_generation | current generated public artifact; no historical provenance backfill required | no | none | stable_archive | listed | current_generation_archive_review |
 | 2026-07-20 | current_generation | current generated public artifact; no historical provenance backfill required | no | none | stable_archive | listed | current_generation_archive_review |
 | 2026-07-13 | current_generation | current generated public artifact; no historical provenance backfill required | no | none | stable_archive | listed | current_generation_archive_review |

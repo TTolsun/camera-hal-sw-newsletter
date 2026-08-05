@@ -1,0 +1,833 @@
+{
+  "date": "2026-08-03",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "2026 W32 (08.03 ~ 08.09)",
+  "summary": "이번 주에는 ‘Himax HM1092 흑백 근적외선 센서용 V4L2 드라이버 패치 v6 공개’, ‘onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출’ 등 4건의 소식을 다룹니다.",
+  "briefing": [
+    "Himax HM1092 흑백 근적외선 센서용 V4L2 드라이버 패치 v6 공개",
+    "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+    "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+    "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개"
+  ],
+  "sections": [
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+      "what_changed": "Himax HM1092 100만 화소 흑백 근적외선 이미지 센서용 V4L2 subdev 드라이버 및 Device Tree 바인딩 추가 제안",
+      "confirmed_facts": [
+        "2026년 8월 1일 Linux media 메일링 리스트에 Himax HM1092 센서 드라이버 패치 v6가 제출되었습니다.",
+        "이 센서는 단일 MIPI CSI-2 데이터 레인을 사용하며, 560x360 해상도의 10비트 RAW 출력을 지원합니다.",
+        "제공되는 드라이버는 고정 모드, 테스트 패턴, 노출 제어, 아날로그 및 디지털 게인 컨트롤을 노출합니다."
+      ],
+      "evidence_summary": "2026년 8월 1일 게시된 v6 패치 시리즈는 노트북의 얼굴 잠금 해제용 IR 카메라 등에 사용되는 Himax HM1092 흑백 근적외선 센서의 V4L2 드라이버와 DT 바인딩을 추가합니다.",
+      "specificity_checks": [
+        "Himax HM1092",
+        "v6 패치",
+        "2026-08-01",
+        "10-bit RAW 560x360"
+      ],
+      "source_verification_notes": [
+        "lore.kernel.org linux-media 메일링 리스트의 패치 시리즈를 기반으로 확인되었습니다."
+      ],
+      "public_article": {
+        "headline": "Himax HM1092 흑백 근적외선 센서용 V4L2 드라이버 패치 v6 공개",
+        "lead": "Linux 커널 미디어 서브시스템에 Himax HM1092 흑백 근적외선(NIR) 이미지 센서를 지원하기 위한 V4L2 subdev 드라이버 패치 v6가 제출되었습니다.",
+        "body_paragraphs": [
+          "이번에 제안된 패치 v6는 노트북의 얼굴 잠금 해제용 IR 카메라 등에 주로 탑재되는 Himax HM1092 100만 화소 흑백 근적외선 센서를 위한 V4L2 subdev 드라이버 및 Device Tree 바인딩을 추가하는 것을 골자로 합니다.",
+          "이 센서는 단일 MIPI CSI-2 데이터 레인을 통해 통신하며, 560x360 해상도에서 10비트 RAW 포맷 출력을 지원합니다. 드라이버는 해당 고정 모드와 함께 테스트 패턴 제어, 노출 제어, 아날로그 및 디지털 게인 컨트롤을 V4L2 서브디바이스 인터페이스를 통해 노출합니다.",
+          "이 패치는 현재 커널 메인라인 검토 단계에 있으며, 실제 Android 기기나 임베디드 플랫폼에 적용되기 위해서는 SoC 벤더 및 OEM의 커널 통합 과정이 필요합니다. 드라이버 수준의 변경이므로 Android Camera HAL API나 프레임워크에 직접적인 변경을 유발하지는 않습니다."
+        ],
+        "camera_hal_takeaway": "직접적인 HAL API 변경은 없으나, IR 카메라를 활용한 얼굴 인식(Face Unlock) 시나리오에서 하위 V4L2 subdev 노출 및 게인 컨트롤이 Android Camera HAL의 생체 인식 메타데이터 요구사항과 올바르게 매핑되는지 확인해야 합니다.",
+        "reader_checkpoints": [
+          "V4L2 subdev 드라이버가 노출하는 노출 및 게인 컨트롤이 HAL 메타데이터 요청과 연동되는지 검증",
+          "560x360 10비트 RAW 스트림의 프레임 타이밍 및 버퍼 획득 안정성 확인"
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+            "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "Himax HM1092 mono NIR sensor driver v6 patch",
+        "editorial_story": {
+          "reader_scenario": "노트북 또는 모바일 기기에서 IR 카메라 기반 얼굴 인식 기능을 구현하기 위해 신규 NIR 센서를 통합하고 드라이버를 검증해야 하는 상황",
+          "what_happened": "Himax HM1092 흑백 NIR 센서용 V4L2 subdev 드라이버 및 DT 바인딩을 추가하는 패치 v6가 제안되었습니다.",
+          "why_it_matters": "얼굴 인식 등 특수 목적 카메라 하드웨어를 Linux 커널 미디어 스택에 통합하고 Android HAL에서 제어할 수 있는 기반을 마련합니다.",
+          "field_scenario": "V4L2 subdev를 통해 노출, 아날로그/디지털 게인 컨트롤을 설정하고 10비트 RAW 프레임이 정상적으로 캡처되는지 테스트 패턴으로 확인하는 단계",
+          "not_to_overclaim": "이 패치는 커널 드라이버 수준의 제안이며 Android Camera HAL 프레임워크 자체를 변경하지는 않습니다.",
+          "editor_take": "얼굴 인식용 IR 카메라 통합을 준비하는 엔지니어라면 해당 드라이버의 V4L2 컨트롤 노출 방식을 참고할 가치가 있습니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "High"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 8월 1일 Linux media 메일링 리스트에 Himax HM1092 센서 드라이버 패치 v6가 제출되었습니다.",
+          "이 센서는 단일 MIPI CSI-2 데이터 레인을 사용하며, 560x360 해상도의 10비트 RAW 출력을 지원합니다.",
+          "제공되는 드라이버는 고정 모드, 테스트 패턴, 노출 제어, 아날로그 및 디지털 게인 컨트롤을 노출합니다."
+        ],
+        "background_context": "Linux 커널의 V4L2 서브시스템에 새로운 이미지 센서 드라이버가 추가되는 것은 카메라 드라이버 및 이미지 파이프라인 개발자에게 직접적인 관련이 있습니다. 이는 새로운 하드웨어 지원을 위한 V4L2 드라이버 구현, Device Tree 바인딩 업데이트, 그리고 센서의 특정 기능(예: 흑백 근적외선, MIPI CSI-2 출력, RAW 형식, 노출 및 게인 컨트롤)을 Android Camera HAL이 활용할 수 있도록 하는 과정에 영향을 미칩니다. 이러한 변경은 이미지 파이프라인의 초기 단계에서 프레임 타이밍, 형식 협상, 그리고 최종적인 이미지 품질 및 성능 검증에 중요한 역할을 합니다.",
+        "hal_driver_impact": "드라이버 수준의 제안으로 직접적인 HAL 계약 변경은 없으나, 얼굴 인식용 IR 카메라 스트림 구성 시 V4L2 subdev 컨트롤(노출, 게인)이 Android Camera HAL의 생체 인식 메타데이터와 올바르게 연동되는지 확인해야 합니다.",
+        "action_items": [
+          "Himax HM1092 센서 통합 시 v6 패치의 V4L2 컨트롤 노출 범위(노출, 게인)가 HAL 요구사항을 충족하는지 비교 분석한다.",
+          "560x360 10비트 RAW 스트림의 프레임 드롭 여부 및 캡처 지연 시간을 타깃 하드웨어에서 측정한다."
+        ],
+        "team_share_points": "Himax HM1092 NIR 센서용 V4L2 드라이버 v6 패치가 제안되었으니, 향후 IR 카메라 기반 얼굴 인식 프로젝트 진행 시 드라이버 구현의 참고 자료로 활용하시기 바랍니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 8월 1일 최신 v6 패치가 공개되어 커널 검토가 진행 중이기 때문입니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "V4L2 subdev 컨트롤 노출 방식 및 DT 바인딩 구조 검토",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "이 패치가 Android Camera HAL API나 프레임워크의 직접적인 변경을 의미하지는 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim_73bc_1",
+          "text": "2026년 8월 1일 Linux media 메일링 리스트에 Himax HM1092 센서 드라이버 패치 v6가 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:73bc8fbc8075cab3:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_73bc_2",
+          "text": "이 센서는 단일 MIPI CSI-2 데이터 레인을 사용하며, 560x360 해상도의 10비트 RAW 출력을 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:73bc8fbc8075cab3:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_73bc_3",
+          "text": "제공되는 드라이버는 고정 모드, 테스트 패턴, 노출 제어, 아날로그 및 디지털 게인 컨트롤을 노출합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:73bc8fbc8075cab3:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "V4L2 subdev 노출/게인 제어와 Android Camera HAL 메타데이터 매핑 검증"
+      ],
+      "action_hints": [
+        "Himax HM1092 V4L2 드라이버 컨트롤 검토"
+      ],
+      "action_items": [
+        "Himax HM1092 센서 통합 시 v6 패치의 V4L2 컨트롤 노출 범위(노출, 게인)가 HAL 요구사항을 충족하는지 비교 분석한다.",
+        "560x360 10비트 RAW 스트림의 프레임 드롭 여부 및 캡처 지연 시간을 타깃 하드웨어에서 측정한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "driver",
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available.",
+      "sources": [
+        {
+          "title": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+      "source_candidate_hash": "73bc8fbc8075cab360ada45e1ae1d4433cbf8b21a53aac31645c89c1d40ef44f",
+      "article_group_key": "lore-series:20260801-hm1092-driver-v6-5979f223748a@gmail.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 4,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+      "what_changed": "onsemi AR0234 CMOS 이미지 센서용 Linux 커널 V4L2 드라이버 추가 제안",
+      "confirmed_facts": [
+        "2026년 7월 31일 Linux media 메일링 리스트에 onsemi AR0234 이미지 센서 드라이버 패치가 제출되었습니다.",
+        "AR0234는 1/2.6인치 글로벌 셔터 센서로, 1940x1220 픽셀 배열을 가지며 최대 120fps로 1920x1200 해상도를 지원합니다.",
+        "MIPI CSI-2 출력(1~4개 데이터 레인), raw Bayer (8/10비트) 및 흑백 형식, DPCM 10->8 압축을 지원합니다."
+      ],
+      "evidence_summary": "onsemi AR0234 글로벌 셔터 센서용 신규 V4L2 드라이버 패치가 2026년 7월 31일 제출되었습니다. 이 센서는 고속 캡처 및 머신 비전에 적합하며 최대 120fps를 지원합니다.",
+      "specificity_checks": [
+        "onsemi AR0234",
+        "2026-07-31",
+        "120fps",
+        "1920x1200"
+      ],
+      "source_verification_notes": [
+        "lore.kernel.org linux-media 메일링 리스트 패치 기반"
+      ],
+      "public_article": {
+        "headline": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+        "lead": "Linux 커널 미디어 서브시스템에 고속 캡처를 지원하는 onsemi AR0234 글로벌 셔터 CMOS 이미지 센서용 신규 V4L2 드라이버 패치가 제출되었습니다.",
+        "body_paragraphs": [
+          "2026년 7월 31일 제출된 이번 패치는 1/2.6인치 글로벌 셔터 센서인 onsemi AR0234를 위한 드라이버를 추가합니다. 이 센서는 1940x1220 픽셀 배열을 갖추고 있으며, 최대 120fps의 고속 프레임률로 1920x1200 해상도 출력을 지원하여 움직이는 피사체의 롤링 셔터 왜곡을 방지합니다.",
+          "물리 인터페이스로는 1개에서 4개 데이터 레인의 MIPI CSI-2 출력을 지원하며, raw Bayer(8/10비트) 및 흑백 형식, 그리고 DPCM 10->8 압축 모드를 지원하는 것이 특징입니다. 드라이버는 Purwa EVK 보드에서 테스트 및 검증되었습니다.",
+          "글로벌 셔터 센서는 고속 움직임 캡처, 머신 비전, AR/VR 헤드셋의 슬램(SLAM) 카메라 등 특수 목적 기기에서 중요한 역할을 합니다. 이 드라이버의 추가로 Android 임베디드 플랫폼에서 고성능 글로벌 셔터 카메라 솔루션을 구현할 수 있는 하위 기반이 마련되었습니다."
+        ],
+        "camera_hal_takeaway": "글로벌 셔터 센서 도입 시, 고속 프레임률(120fps) 스트림 구성에서 YUV/RAW 프레임 드롭 여부와 MIPI CSI-2 레인 구성에 따른 대역폭 병목을 드라이버 및 HAL 레이어에서 검증해야 합니다.",
+        "reader_checkpoints": [
+          "120fps 고속 프레임률 스트림 구성 시 프레임 드롭 및 지연 시간 측정",
+          "DPCM 10->8 압축 포맷 디코딩 및 ISP 파이프라인 정합성 확인"
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+            "url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "onsemi AR0234 CMOS image sensor driver patch",
+        "editorial_story": {
+          "reader_scenario": "고속 움직임 캡처 또는 로봇 공학용 Android 기기에서 롤링 셔터 왜곡을 방지하기 위해 글로벌 셔터 센서를 통합해야 하는 상황",
+          "what_happened": "onsemi AR0234 글로벌 셔터 센서용 V4L2 드라이버 패치가 제안되었습니다.",
+          "why_it_matters": "롤링 셔터 왜곡이 없는 고속 글로벌 셔터 센서 지원을 통해 특수 목적 Android 기기의 카메라 성능을 극대화할 수 있습니다.",
+          "field_scenario": "MIPI CSI-2 4레인 설정을 통해 1920x1200 @ 120fps 스트림을 구동하고, 고속 회전하는 물체를 촬영하여 왜곡 여부와 프레임 드롭을 검증하는 단계",
+          "not_to_overclaim": "이 패치는 커널 드라이버 수준의 제안이며, 일반적인 스마트폰의 메인 카메라 HAL 규격을 직접 변경하는 것은 아닙니다.",
+          "editor_take": "고속 카메라 솔루션이나 AR/VR 기기를 개발하는 팀이라면 이 글로벌 셔터 드라이버의 메인라인 통합 흐름을 주시할 필요가 있습니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 7월 31일 Linux media 메일링 리스트에 onsemi AR0234 이미지 센서 드라이버 패치가 제출되었습니다.",
+          "AR0234는 1/2.6인치 글로벌 셔터 센서로, 1940x1220 픽셀 배열을 가지며 최대 120fps로 1920x1200 해상도를 지원합니다.",
+          "MIPI CSI-2 출력(1~4개 데이터 레인), raw Bayer (8/10비트) 및 흑백 형식, DPCM 10->8 압축을 지원합니다."
+        ],
+        "background_context": "Linux 커널의 V4L2 서브시스템에 새로운 이미지 센서 드라이버가 추가되는 것은 카메라 드라이버 및 이미지 파이프라인 개발자에게 직접적인 관련이 있습니다. onsemi AR0234 CMOS 이미지 센서 드라이버 추가는 새로운 하드웨어 지원을 위한 V4L2 드라이버 구현, Device Tree 바인딩 업데이트, 그리고 센서의 특정 기능(예: 글로벌 셔터, 고속 프레임률, MIPI CSI-2 출력, RAW Bayer 및 흑백 형식)을 Android Camera HAL이 활용할 수 있도록 하는 과정에 영향을 미칩니다. 이러한 변경은 이미지 파이프라인의 초기 단계에서 프레임 타이밍, 형식 협상, 그리고 최종적인 이미지 품질 및 성능 검증에 중요한 역할을 합니다.",
+        "hal_driver_impact": "글로벌 셔터 센서의 120fps 고속 출력을 안정적으로 수신하기 위해, MIPI CSI-2 대역폭 설정 및 ISP 프레임 드롭 제어가 정상 작동하는지 드라이버 수준에서 검증해야 합니다.",
+        "action_items": [
+          "AR0234 센서 평가 보드(Purwa EVK 등)에서 1920x1200 @ 120fps 스트림 구동 시 프레임 드롭 및 지연 시간을 측정한다.",
+          "DPCM 10->8 압축 모드 활성화 시 ISP 디코딩 파이프라인과의 호환성을 확인한다."
+        ],
+        "team_share_points": "onsemi AR0234 글로벌 셔터 센서 드라이버 패치가 제출되었습니다. 고속 캡처 및 머신 비전 시나리오가 필요한 프로젝트에서 하드웨어 검토 시 참고하시기 바랍니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 7월 31일 신규 드라이버 패치가 제출되어 메인라인 검토가 시작되었기 때문입니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "performance_thermal_owner"
+        ],
+        "check_within_2_weeks": "120fps 고속 스트림 구동 시 MIPI CSI-2 대역폭 및 프레임 드롭 검증",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "performance_latency_frame_drop"
+        ],
+        "do_not_overstate": [
+          "글로벌 셔터 센서 드라이버 추가가 Android Camera HAL의 표준 동작이나 API 규격을 직접 변경하지는 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim_c1f5_1",
+          "text": "2026년 7월 31일 Linux media 메일링 리스트에 onsemi AR0234 이미지 센서 드라이버 패치가 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:c1f5a10780dc7d00:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_c1f5_2",
+          "text": "AR0234는 1/2.6인치 글로벌 셔터 센서로, 1940x1220 픽셀 배열을 가지며 최대 120fps로 1920x1200 해상도를 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:c1f5a10780dc7d00:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_c1f5_3",
+          "text": "MIPI CSI-2 출력(1~4개 데이터 레인), raw Bayer (8/10비트) 및 흑백 형식, DPCM 10->8 압축을 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:c1f5a10780dc7d00:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "120fps 고속 스트림 구동 시 프레임 드롭 및 ISP 대역폭 검증"
+      ],
+      "action_hints": [
+        "onsemi AR0234 고속 스트림 검증"
+      ],
+      "action_items": [
+        "AR0234 센서 평가 보드(Purwa EVK 등)에서 1920x1200 @ 120fps 스트림 구동 시 프레임 드롭 및 지연 시간을 측정한다.",
+        "DPCM 10->8 압축 모드 활성화 시 ISP 디코딩 파이프라인과의 호환성을 확인한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "driver",
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available.",
+      "sources": [
+        {
+          "title": "[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/",
+      "source_candidate_hash": "c1f5a10780dc7d00dde953fdff6e9f2d17d56a1ffe1448f45f0839fd62b0e45b",
+      "article_group_key": "lore-series:20260731073505.2278769-eagle.alexander923@gmail.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 4,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+      "what_changed": "OmniVision OG0VA1B 흑백 CMOS VGA 이미지 센서용 Linux 커널 드라이버 추가 제안",
+      "confirmed_facts": [
+        "2026년 7월 31일 Linux media 메일링 리스트에 OmniVision OG0VA1B 이미지 센서 드라이버 패치 v5가 제출되었습니다.",
+        "OG0VA1B는 1/10인치 흑백 CMOS VGA 이미지 센서로, 단일 레인 MIPI CSI-2 인터페이스를 통해 최대 640x480 해상도로 10비트 RAW (Y10) 프레임을 출력합니다.",
+        "I2C 호환 SCCB 버스를 통해 제어되며, Purwa EVK 보드에서 테스트 패턴 제너레이터(TPG)를 포함하여 검증되었습니다."
+      ],
+      "evidence_summary": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5가 2026년 7월 31일 제출되었습니다. 이 센서는 단일 레인 MIPI CSI-2 및 Y10 RAW 출력을 지원합니다.",
+      "specificity_checks": [
+        "OmniVision OG0VA1B",
+        "v5 패치",
+        "2026-07-31",
+        "640x480 Y10 RAW"
+      ],
+      "source_verification_notes": [
+        "lore.kernel.org linux-media 메일링 리스트 패치 기반"
+      ],
+      "public_article": {
+        "headline": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+        "lead": "Linux 커널 미디어 서브시스템에 저전력 보조 카메라 및 감지용으로 적합한 OmniVision OG0VA1B 흑백 VGA 이미지 센서용 V4L2 드라이버 패치 v5가 제출되었습니다.",
+        "body_paragraphs": [
+          "2026년 7월 31일 제출된 패치 v5는 1/10인치 초소형 흑백 CMOS VGA 이미지 센서인 OmniVision OG0VA1B를 위한 드라이버 지원을 추가합니다. 이 센서는 단일 레인 MIPI CSI-2 인터페이스를 통해 최대 640x480 해상도로 10비트 RAW (Y10) 프레임을 출력합니다.",
+          "제어 인터페이스로는 I2C 호환 SCCB 버스를 사용하며, 이번 드라이버 패치는 Purwa EVK 보드에서 테스트 패턴 제너레이터(TPG) 동작을 포함하여 기능 검증이 완료되었습니다.",
+          "OG0VA1B와 같은 저해상도 흑백 센서는 주로 저전력 임베디드 기기, 보안 카메라, 제스처 인식 또는 깊이 감지용 보조 센서로 활용됩니다. 이번 드라이버 추가를 통해 임베디드 Android 시스템 개발 시 하드웨어 선택지가 넓어질 것으로 기대됩니다."
+        ],
+        "camera_hal_takeaway": "VGA급 저해상도 Y10 RAW 포맷 스트림을 수신할 때, ISP 파이프라인 및 Camera HAL에서 10비트 흑백 포맷(Y10)을 올바르게 처리하고 프레임 버퍼를 할당하는지 확인해야 합니다.",
+        "reader_checkpoints": [
+          "Y10 RAW 포맷 스트림 수신 시 ISP 및 HAL의 버퍼 할당 및 포맷 정합성 확인",
+          "Purwa EVK 등 평가 보드에서 TPG(테스트 패턴 제너레이터) 구동 검증"
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v5 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+            "url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "OmniVision OG0VA1B CMOS VGA image sensor driver patch",
+        "editorial_story": {
+          "reader_scenario": "저전력 제스처 인식 또는 깊이 센서용 보조 카메라로 VGA급 흑백 센서를 Android 시스템에 통합해야 하는 상황",
+          "what_happened": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5가 제안되었습니다.",
+          "why_it_matters": "저전력/저비용 임베디드 기기 및 보조 카메라 솔루션을 위한 초소형 흑백 센서의 커널 수준 지원을 확보합니다.",
+          "field_scenario": "SCCB 버스를 통해 센서 레지스터를 제어하고, 단일 레인 MIPI CSI-2 인터페이스로 640x480 Y10 프레임을 정상 수신하는지 확인하는 단계",
+          "not_to_overclaim": "이 패치는 보조 또는 특수 목적 센서용 드라이버 제안이며, 메인 고해상도 카메라 HAL 파이프라인에 직접적인 영향을 주지는 않습니다.",
+          "editor_take": "초소형 저전력 감지용 카메라 모듈을 설계하는 팀이라면 이 드라이버의 V4L2 통합 상태를 참고할 만합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 7월 31일 Linux media 메일링 리스트에 OmniVision OG0VA1B 이미지 센서 드라이버 패치 v5가 제출되었습니다.",
+          "OG0VA1B는 1/10인치 흑백 CMOS VGA 이미지 센서로, 단일 레인 MIPI CSI-2 인터페이스를 통해 최대 640x480 해상도로 10비트 RAW (Y10) 프레임을 출력합니다.",
+          "I2C 호환 SCCB 버스를 통해 제어되며, Purwa EVK 보드에서 테스트 패턴 제너레이터(TPG)를 포함하여 검증되었습니다."
+        ],
+        "background_context": "Linux 커널의 V4L2 서브시스템에 새로운 이미지 센서 드라이버가 추가되는 것은 카메라 드라이버 및 이미지 파이프라인 개발자에게 직접적인 관련이 있습니다. OmniVision OG0VA1B 이미지 센서 드라이버 추가는 새로운 하드웨어 지원을 위한 V4L2 드라이버 구현, Device Tree 바인딩 업데이트, 그리고 센서의 특정 기능(예: 흑백 CMOS VGA, MIPI CSI-2 인터페이스, RAW 형식)을 Android Camera HAL이 활용할 수 있도록 하는 과정에 영향을 미칩니다. 이러한 변경은 이미지 파이프라인의 초기 단계에서 프레임 타이밍, 형식 협상, 그리고 최종적인 이미지 품질 및 성능 검증에 중요한 역할을 합니다.",
+        "hal_driver_impact": "Y10(10비트 흑백 RAW) 포맷 스트림을 수신할 때, ISP 및 Camera HAL 레이어에서 해당 포맷을 정상적으로 인식하고 프레임 버퍼를 할당하는지 검증해야 합니다.",
+        "action_items": [
+          "OG0VA1B 센서의 Y10 RAW 포맷 출력이 타깃 ISP 및 HAL의 버퍼 포맷 요구사항과 일치하는지 확인한다.",
+          "Purwa EVK 보드 환경에서 드라이버의 TPG(테스트 패턴 제너레이터)를 활성화하여 데이터 경로를 검증한다."
+        ],
+        "team_share_points": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5가 제출되었습니다. 저전력 보조 센서 통합이 필요한 경우 참고하시기 바랍니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 7월 31일 v5 패치가 제출되어 커널 메인라인 검토가 진행 중이기 때문입니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "Y10 RAW 포맷 수신 시 ISP 및 HAL 버퍼 할당 호환성 검토",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "이 패치는 보조 센서용 드라이버 추가 제안이며, Android Camera HAL API 자체를 변경하지는 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim_ccc5_1",
+          "text": "2026년 7월 31일 Linux media 메일링 리스트에 OmniVision OG0VA1B 이미지 센서 드라이버 패치 v5가 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:ccc5f04628a7d84f:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_ccc5_2",
+          "text": "OG0VA1B는 1/10인치 흑백 CMOS VGA 이미지 센서로, 단일 레인 MIPI CSI-2 인터페이스를 통해 최대 640x480 해상도로 10비트 RAW (Y10) 프레임을 출력합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:ccc5f04628a7d84f:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_ccc5_3",
+          "text": "I2C 호환 SCCB 버스를 통해 제어되며, Purwa EVK 보드에서 테스트 패턴 제너레이터(TPG)를 포함하여 검증되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:ccc5f04628a7d84f:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "Y10 RAW 포맷 스트림 수신 시 ISP 및 HAL 버퍼 할당 검증"
+      ],
+      "action_hints": [
+        "OmniVision OG0VA1B Y10 RAW 스트림 검증"
+      ],
+      "action_items": [
+        "OG0VA1B 센서의 Y10 RAW 포맷 출력이 타깃 ISP 및 HAL의 버퍼 포맷 요구사항과 일치하는지 확인한다.",
+        "Purwa EVK 보드 환경에서 드라이버의 TPG(테스트 패턴 제너레이터)를 활성화하여 데이터 경로를 검증한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "driver",
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available.",
+      "sources": [
+        {
+          "title": "[PATCH v5 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/",
+      "source_candidate_hash": "ccc5f04628a7d84fa4ab64508721ef07781959aea9a45ad1981902b698eeef4c",
+      "article_group_key": "lore-series:20260731-og0va1b-v5-c2b90b601241@oss.qualcomm.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 4,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+      "what_changed": "Qualcomm CAMSS(CSID 및 CSIPHY)에 MIPI C-PHY 모드 구성 지원을 추가하는 패치 시리즈 제안",
+      "confirmed_facts": [
+        "2026년 7월 29일 Linux media 메일링 리스트에 Qualcomm CAMSS C-PHY 지원 패치 v9가 제출되었습니다.",
+        "이 패치 시리즈는 CSID 및 CSIPHY 구성 요소를 포함하여 Qualcomm CAMSS가 C-PHY 모드 구성을 지원하도록 확장합니다.",
+        "이전 검토 라운드의 모든 사항이 반영되지 않아 'WIP' (작업 중) 태그가 추가된 상태입니다."
+      ],
+      "evidence_summary": "Qualcomm CAMSS에 MIPI C-PHY 지원을 추가하는 패치 v9가 2026년 7월 29일 제출되었습니다. 이 패치는 CSID 및 CSIPHY 구성을 포함하며 현재 WIP 상태입니다.",
+      "specificity_checks": [
+        "Qualcomm CAMSS",
+        "v9 패치",
+        "2026-07-29",
+        "MIPI C-PHY",
+        "CSID",
+        "CSIPHY"
+      ],
+      "source_verification_notes": [
+        "lore.kernel.org linux-media 메일링 리스트 패치 기반"
+      ],
+      "public_article": {
+        "headline": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+        "lead": "Qualcomm 플랫폼의 오픈소스 카메라 서브시스템(CAMSS) 드라이버에 고대역폭 MIPI C-PHY 물리 계층 구성을 지원하기 위한 패치 시리즈 v9가 제안되었습니다.",
+        "body_paragraphs": [
+          "2026년 7월 29일 제출된 이번 패치 시리즈 v9는 Qualcomm CAMSS의 CSID(CSI Decoder) 및 CSIPHY(CSI PHY) 구성 요소를 확장하여 MIPI C-PHY 모드 구성을 지원하도록 합니다. MIPI C-PHY는 기존 D-PHY에 비해 더 높은 데이터 처리량과 뛰어난 신호 효율성을 제공하여, 최신 고해상도 및 고프레임률 스마트폰 카메라 센서 통합에 필수적인 기술입니다.",
+          "다만, 이번 패치에는 이전 검토 라운드에서 제기된 모든 피드백이 완벽히 반영되지 않아 'WIP' (Work In Progress) 태그가 추가된 상태로 제출되었습니다. 따라서 메인라인 병합 전 추가적인 수정과 검토가 진행될 예정입니다.",
+          "물리 계층 및 드라이버 수준의 변경은 Android Camera HAL API에 직접적인 수정을 요구하지는 않습니다. 그러나 하위 드라이버가 C-PHY 모드를 안정적으로 지원하게 되면, HAL 레이어에서는 더 높은 대역폭의 스트림 구성(예: 고해상도 RAW 캡처 또는 고속 프레임률 비디오)을 안정적으로 처리할 수 있는 성능적 이점을 얻을 수 있습니다."
+        ],
+        "camera_hal_takeaway": "물리 계층이 C-PHY로 전환됨에 따라, 고대역폭 스트림 구성 시 신호 정합성으로 인한 프레임 드롭이나 전송 지연이 발생하지 않는지 드라이버 및 ISP 연동 테스트를 통해 밀착 검증해야 합니다.",
+        "reader_checkpoints": [
+          "C-PHY 구성 활성화 시 고대역폭 스트림의 프레임 드롭 및 지연 시간 변화 측정",
+          "CSID 및 CSIPHY 드라이버 레지스터 설정의 안정성 및 전력 소비 영향 검토"
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+            "url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "Qualcomm CAMSS MIPI C-PHY support patch v9",
+        "editorial_story": {
+          "reader_scenario": "Qualcomm SoC 기반 플랫폼에서 고해상도 센서를 연동하기 위해 MIPI C-PHY 물리 계층을 구성하고 카메라 데이터 경로를 안정화해야 하는 상황",
+          "what_happened": "Qualcomm CAMSS 드라이버에 MIPI C-PHY 모드 구성을 지원하는 패치 v9가 제안되었습니다.",
+          "why_it_matters": "MIPI C-PHY 지원을 통해 고해상도/고프레임률 카메라 스트림 처리 시 데이터 처리량과 신호 효율성을 대폭 개선할 수 있습니다.",
+          "field_scenario": "CSIPHY 레지스터 설정을 통해 C-PHY 모드를 활성화하고, 고대역폭 RAW 스트림을 수신하면서 프레임 드롭이나 하드웨어 인터럽트 오류가 발생하는지 모니터링하는 단계",
+          "not_to_overclaim": "이 패치는 WIP 태그가 붙은 검토 중인 단계이며, 모든 Qualcomm 플랫폼에 즉시 완벽하게 적용되는 것은 아닙니다.",
+          "editor_take": "Qualcomm 플랫폼에서 오픈소스 CAMSS 드라이버를 활용하는 팀이라면 C-PHY 지원을 통한 대역폭 확장 가능성을 염두에 두고 이 패치의 진행 상황을 추적해야 합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 7월 29일 Linux media 메일링 리스트에 Qualcomm CAMSS C-PHY 지원 패치 v9가 제출되었습니다.",
+          "이 패치 시리즈는 CSID 및 CSIPHY 구성 요소를 포함하여 Qualcomm CAMSS가 C-PHY 모드 구성을 지원하도록 확장합니다.",
+          "이전 검토 라운드의 모든 사항이 반영되지 않아 'WIP' (작업 중) 태그가 추가된 상태입니다."
+        ],
+        "background_context": "Qualcomm 플랫폼의 카메라 서브시스템(CAMSS)에 MIPI C-PHY 구성 지원이 추가되는 것은 카메라 드라이버, 이미지 파이프라인, SoC 플랫폼 개발자에게 직접적인 관련이 있습니다. MIPI C-PHY는 D-PHY에 비해 더 높은 데이터 처리량과 신호 효율성을 제공하여 최신 스마트폰 카메라에서 중요성이 커지고 있습니다. 이 변경은 카메라 센서와 ISP 간의 물리적 인터페이스를 업데이트하며, 이는 카메라 데이터 경로의 대역폭, 전력 효율성, 그리고 잠재적으로는 이미지 캡처 성능에 영향을 미칩니다. Android Camera HAL은 이러한 하위 레벨의 물리적 계층 변경을 직접적으로 다루지는 않지만, 드라이버가 새로운 C-PHY 모드를 지원함으로써 얻을 수 있는 성능 향상(예: 더 높은 해상도 또는 프레임률)을 활용할 수 있도록 준비해야 합니다. 이는 스트림 구성, 버퍼 관리, 그리고 전체 시스템의 성능 및 전력 소비 검증에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "물리 계층의 C-PHY 지원으로 대역폭이 확장됨에 따라, 고해상도/고프레임률 스트림 구성 시 프레임 드롭이나 신호 왜곡으로 인한 데이터 손실이 발생하지 않는지 드라이버 및 ISP 단에서 철저한 검증이 요구됩니다.",
+        "action_items": [
+          "Qualcomm CAMSS 드라이버 v9 패치를 적용하여 C-PHY 모드 활성화 시 CSID/CSIPHY 레지스터 설정의 정합성을 검증한다.",
+          "고대역폭 RAW 스트림 구동 시 프레임 드롭, 인터럽트 발생 빈도 및 전력 소비 변화를 측정한다."
+        ],
+        "team_share_points": "Qualcomm CAMSS 드라이버에 MIPI C-PHY 지원을 추가하는 패치 v9가 제안되었습니다. WIP 상태이므로 메인라인 병합 추이를 지켜보며 고대역폭 센서 연동 계획에 반영하시기 바랍니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 7월 29일 WIP 태그가 포함된 v9 패치 시리즈가 제출되어 검토가 재개되었기 때문입니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "camera_hal_owner",
+          "performance_thermal_owner"
+        ],
+        "check_within_2_weeks": "C-PHY 모드 활성화 시 CSID/CSIPHY 레지스터 설정 및 프레임 드롭 검증",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "stream_buffer_metadata",
+          "performance_latency_frame_drop"
+        ],
+        "do_not_overstate": [
+          "이 패치는 아직 WIP 단계이며, Qualcomm 플랫폼에 한정된 하위 드라이버 변경으로 Android Camera HAL API 자체를 수정하지는 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim_7dc5_1",
+          "text": "2026년 7월 29일 Linux media 메일링 리스트에 Qualcomm CAMSS C-PHY 지원 패치 v9가 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:7dc57c68dd701d6d:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_7dc5_2",
+          "text": "이 패치 시리즈는 CSID 및 CSIPHY 구성 요소를 포함하여 Qualcomm CAMSS가 C-PHY 모드 구성을 지원하도록 확장합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:7dc57c68dd701d6d:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_7dc5_3",
+          "text": "이전 검토 라운드의 모든 사항이 반영되지 않아 'WIP' (작업 중) 태그가 추가된 상태입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:7dc57c68dd701d6d:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "C-PHY 구성 활성화 시 고대역폭 스트림의 프레임 드롭 및 지연 시간 변화 검증"
+      ],
+      "action_hints": [
+        "Qualcomm CAMSS C-PHY 레지스터 검증"
+      ],
+      "action_items": [
+        "Qualcomm CAMSS 드라이버 v9 패치를 적용하여 C-PHY 모드 활성화 시 CSID/CSIPHY 레지스터 설정의 정합성을 검증한다.",
+        "고대역폭 RAW 스트림 구동 시 프레임 드롭, 인터럽트 발생 빈도 및 전력 소비 변화를 측정한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "driver",
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available.",
+      "sources": [
+        {
+          "title": "[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+          "url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
+      "source_candidate_hash": "7dc57c68dd701d6d1960a53c82b617e62ce0cac3be31bb0d19f1e7159546ae60",
+      "article_group_key": "lore-series:20260729-qcom-cphy-v9-1f8d9fdab037@ixit.cz",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "Himax HM1092 센서 통합 시 v6 패치의 V4L2 컨트롤 노출 범위(노출, 게인)가 HAL 요구사항을 충족하는지 비교 분석한다.",
+    "AR0234 센서 평가 보드(Purwa EVK 등)에서 1920x1200 @ 120fps 스트림 구동 시 프레임 드롭 및 지연 시간을 측정한다.",
+    "OG0VA1B 센서의 Y10 RAW 포맷 출력이 타깃 ISP 및 HAL의 버퍼 포맷 요구사항과 일치하는지 확인한다.",
+    "Qualcomm CAMSS 드라이버 v9 패치를 적용하여 C-PHY 모드 활성화 시 CSID/CSIPHY 레지스터 설정의 정합성을 검증한다.",
+    "고대역폭 RAW 스트림 구동 시 프레임 드롭, 인터럽트 발생 빈도 및 전력 소비 변화를 측정한다."
+  ],
+  "references": [
+    {
+      "title": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/"
+    },
+    {
+      "title": "[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/"
+    },
+    {
+      "title": "[PATCH v5 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/"
+    },
+    {
+      "title": "[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+      "url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [],
+  "selected_group_count": 4,
+  "rendered_group_count": 4,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "lore-series:20260801-hm1092-driver-v6-5979f223748a@gmail.com",
+    "lore-series:20260731073505.2278769-eagle.alexander923@gmail.com",
+    "lore-series:20260731-og0va1b-v5-c2b90b601241@oss.qualcomm.com",
+    "lore-series:20260729-qcom-cphy-v9-1f8d9fdab037@ixit.cz"
+  ],
+  "rendered_group_keys": [
+    "lore-series:20260801-hm1092-driver-v6-5979f223748a@gmail.com",
+    "lore-series:20260731073505.2278769-eagle.alexander923@gmail.com",
+    "lore-series:20260731-og0va1b-v5-c2b90b601241@oss.qualcomm.com",
+    "lore-series:20260729-qcom-cphy-v9-1f8d9fdab037@ixit.cz"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "source": "CameraX Release Notes",
+      "published_date": "July 01, 2026",
+      "note": "AOSP Camera 프레임워크 관련 참고"
+    },
+    {
+      "title": "v0.7.2",
+      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "source": "libcamera Upstream Releases",
+      "published_date": "2026-07-10T11:12:38+01:00",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    }
+  ],
+  "weekly_key": "2026-W32",
+  "week_start_date": "2026-08-03",
+  "week_end_date": "2026-08-09",
+  "tags": [
+    "Driver",
+    "Image Processing",
+    "Camera HAL",
+    "Android"
+  ]
+}

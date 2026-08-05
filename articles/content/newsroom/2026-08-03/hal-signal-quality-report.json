@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "report_type": "hal_signal_quality",
+  "date": "2026-08-03",
+  "generated_at": "2026-08-05T17:09:25.026Z",
+  "status": "WARN",
+  "input_completeness": "partial",
+  "input_statuses": {
+    "shortlisted_candidates": "loaded",
+    "editor_draft": "loaded",
+    "quality_report": "loaded",
+    "source_effectiveness_report": "input_unavailable",
+    "source_quality_report": "loaded",
+    "evidence_pack_summary": "input_unavailable",
+    "merged_candidate_manifest": "loaded"
+  },
+  "inputs": {
+    "required": {
+      "shortlisted_candidates": {
+        "path": "articles/content/newsroom/2026-08-03/shortlisted-candidates.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "editor_draft": {
+        "path": "articles/content/newsroom/2026-08-03/editor-draft.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "quality_report": {
+        "path": "articles/content/newsroom/2026-08-03/quality-report.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "optional": {
+      "source_effectiveness_report": {
+        "path": "articles/content/newsroom/2026-08-03/source-effectiveness-report.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "source_quality_report": {
+        "path": "articles/content/newsroom/2026-08-03/source-quality-report.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "evidence_pack_summary": {
+        "path": "articles/content/newsroom/2026-08-03/evidence-pack-summary.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "merged_candidate_manifest": {
+        "path": "articles/content/collected-news/2026-08-03/merged-candidate-manifest.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "missing_required": [],
+    "unavailable_optional": [
+      "source_effectiveness_report",
+      "evidence_pack_summary"
+    ]
+  },
+  "quality_status": "PASS",
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 4,
+    "strong_signal_count": 4,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 4,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 4,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 4,
+      "performance_latency_frame_drop": 2,
+      "stream_buffer_metadata": 1
+    },
+    "actionability_level_counts": {
+      "measurable_test": 3,
+      "owner_metric_log": 1
+    },
+    "effective_actionability_level_counts": {
+      "measurable_test": 3,
+      "owner_metric_log": 1
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 4
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+      "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치가 Android Camera HAL API나 프레임워크의 직접적인 변경을 의미하지는 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+      "url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "performance_latency_frame_drop"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "performance_thermal_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "글로벌 셔터 센서 드라이버 추가가 Android Camera HAL의 표준 동작이나 API 규격을 직접 변경하지는 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+      "url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 99): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 보조 센서용 드라이버 추가 제안이며, Android Camera HAL API 자체를 변경하지는 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+      "url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "performance_latency_frame_drop"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "camera_hal_owner",
+        "performance_thermal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 87): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 아직 WIP 단계이며, Qualcomm 플랫폼에 한정된 하위 드라이버 변경으로 Android Camera HAL API 자체를 수정하지는 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "selection_shortage_hint_details": [
+    {
+      "bucket": "direct_aosp_camera",
+      "severity": "medium",
+      "reason_code": "camerax_release_note_parser_missing_version_or_anchor",
+      "affected_sources": [],
+      "recommended_fix": "Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "gate_boundary": {
+    "hal_signal_checks_are_observability_only": true,
+    "hal_signal_capsule_enforced_by_editor_output_contract": true,
+    "review_artifacts_preserved": true,
+    "optional_input_unavailable_is_not_pass": true
+  },
+  "close_criteria": {
+    "report_generated": true,
+    "main_article_capsule_validation": true,
+    "actionability_hard_blocker_reflected": true,
+    "generic_fallback_soc_overpromotion_tests_required": true,
+    "source_expansion_followups": [
+      "#55",
+      "#57"
+    ],
+    "historical_rewrite_followup": "#108"
+  },
+  "warnings": [
+    "Optional input_unavailable: source_effectiveness_report",
+    "Optional input_unavailable: evidence_pack_summary"
+  ]
+}
