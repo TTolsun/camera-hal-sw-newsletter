@@ -128,10 +128,30 @@ function stableCandidateSummaryEvidenceId(candidate = {}) {
   return `candidate:${compactEvidenceCandidateHash(candidate)}:source-summary`;
 }
 
-function compactEvidencePromptText(value, max = 360) {
+// 결정론 claim 검증(factSupportIssues)은 evidence item의 texts 전부를 이어 붙여 지지 여부를 판정하는데,
+// prompt에는 texts[0] 하나만 360자로 잘라 보여주고 있었다. 그 결과 editor는 볼 수 없는 근거에 claim을
+// 묶어야 했고, fact checker는 잘린 근거만 보고 "출처가 뒷받침하지 않는다"는 must_fix를 정당한 기사에
+// 붙였다(2026-08-03 W32: 5개 기사 전부, must_fix 31건). 검증기가 쓰는 것과 같은 텍스트를 보여준다.
+// 조각별 상한은 단일 조각만 싣던 시절과 같은 360자로 두어, 긴 요약 하나가 뒤따르는 조각(날짜·
+// 컴포넌트명)을 밀어내지 않게 한다. 전체 상한은 capsule token 예산을 지키는 안전장치다.
+const EVIDENCE_PROMPT_FRAGMENT_MAX = 360;
+const EVIDENCE_PROMPT_TEXT_MAX = 900;
+
+function truncated(value, max) {
   const raw = text(value).replace(/\s+/g, ' ');
   if (raw.length <= max) return raw;
   return `${raw.slice(0, max - 1).trim()}...`;
+}
+
+function evidencePromptText(texts = []) {
+  const fragments = [];
+  for (const value of uniqueTexts(texts)) {
+    const fragment = truncated(value, EVIDENCE_PROMPT_FRAGMENT_MAX);
+    // behavior_change가 summary의 첫 문장인 경우처럼 이미 실린 조각에 담긴 내용은 다시 싣지 않는다.
+    if (!fragment || fragments.some(kept => kept.includes(fragment))) continue;
+    fragments.push(fragment);
+  }
+  return truncated(fragments.join(' | '), EVIDENCE_PROMPT_TEXT_MAX);
 }
 
 function sourceExtractionItems(candidate = {}) {
@@ -849,7 +869,7 @@ function buildAllowedClaimEvidence(candidate = {}, section = {}, options = {}) {
       evidence_id: item.id,
       kind: item.kind || 'evidence',
       source_urls: uniqueTexts(item.urls).slice(0, 4),
-      text: compactEvidencePromptText(ensureArray(item.texts)[0] || '')
+      text: evidencePromptText(item.texts)
     }))
     .sort((left, right) => {
       const leftRank = ALLOWED_EVIDENCE_KIND_ORDER[left.kind] ?? 100;

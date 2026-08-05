@@ -258,6 +258,18 @@ function sourceQualityDoNotClaim(sourceQuality) {
   return messages;
 }
 
+// hal-signal-quality는 "작성된 기사"를 채점하는 모듈이다(action_items·hal_signal_capsule·본문을 읽는다).
+// 후보 캡슐은 기사가 쓰이기 전 단계라 그 입력이 아직 없고, 그래서 actionability 파생 판정은 후보가
+// 아무리 좋아도 항상 none으로 나온다. 그 값을 캡슐에 실으면 editor와 fact checker가 "결정론 선정기가
+// 메인으로 고른 기사인데 actionability가 없다"는 모순된 전제를 받는다(2026-08-03 W32에서 source gap
+// 2건의 원인). 후보 단계에서 알 수 없는 판정은 캡슐에 싣지 않는다 — 정본은 발행 후 hal-signal-quality-report다.
+const ARTICLE_GRADED_HAL_BLOCKERS = new Set(['actionability_none', 'generic_review_actionability']);
+
+function candidateKnowableHalBlockers(halSignal) {
+  return ensureArray(halSignal.hal_signal_hard_blockers)
+    .filter(blocker => !ARTICLE_GRADED_HAL_BLOCKERS.has(blocker));
+}
+
 function readinessBlockers(candidate, sourceQuality, halSignal, drift) {
   const blockers = [];
   if (!candidateUrl(candidate)) blockers.push('missing_url');
@@ -265,7 +277,7 @@ function readinessBlockers(candidate, sourceQuality, halSignal, drift) {
   if (sourceQuality.source_quality_status === 'blocked') blockers.push('source_quality_status_blocked');
   if (sourceQuality.main_article_source_allowed !== true) blockers.push('main_article_source_allowed_false');
   for (const blocker of ensureArray(sourceQuality.main_article_source_blockers)) blockers.push(blocker);
-  for (const blocker of ensureArray(halSignal.hal_signal_hard_blockers)) blockers.push(`hal_signal:${blocker}`);
+  for (const blocker of candidateKnowableHalBlockers(halSignal)) blockers.push(`hal_signal:${blocker}`);
   if (drift.length > 0) blockers.push('SOURCE_QUALITY_FIELD_DRIFT');
   if (!['main', 'short'].includes(text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility))) {
     blockers.push('selection_not_main_or_short');
@@ -281,7 +293,7 @@ function mainArticleReadiness(candidate, sourceQuality, halSignal, drift) {
     sourceQuality.source_url_quality !== 'unknown' &&
     sourceQuality.source_quality_status !== 'blocked' &&
     drift.length === 0;
-  const halSignalReady = ensureArray(halSignal.hal_signal_hard_blockers).length === 0;
+  const halSignalReady = candidateKnowableHalBlockers(halSignal).length === 0;
   const selectionReady = ['main', 'short'].includes(text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility)) &&
     candidate.main_eligible !== false &&
     candidate.source_gap_risk !== true &&
@@ -423,9 +435,6 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
     },
     hal_impact_axes: halSignal.hal_impact_axes,
     reader_owners: halSignal.reader_owners,
-    actionability_level: halSignal.actionability_level,
-    effective_actionability_level: halSignal.effective_actionability_level,
-    signal_quality_status: halSignal.signal_quality_status,
     fallback_promotion_allowed: halSignal.fallback_promotion_allowed,
     soc_signal_source_allowed: halSignal.soc_signal_source_allowed,
     ...(candidate.decision ? { decision: candidate.decision } : {}),

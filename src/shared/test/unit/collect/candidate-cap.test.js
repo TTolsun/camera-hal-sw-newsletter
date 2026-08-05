@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  candidateRankOrder,
   capPerSource,
   collapseSeriesRepresentatives,
   MAX_CANDIDATES_PER_SOURCE
@@ -77,4 +78,56 @@ test('collapseSeriesRepresentatives keeps one top-ranked candidate per (source, 
 test('collapseSeriesRepresentatives leaves candidates without a seriesId untouched', () => {
   const ranked = [item('a', 'a-0'), item('a', 'a-1'), item('b', 'b-0')];
   assert.deepEqual(collapseSeriesRepresentatives(ranked).map(c => c.title), ['a-0', 'a-1', 'b-0']);
+});
+
+// 2026-08-03(W32) 회귀: 랭킹에 최신성 항이 없어 35일 lookback 풀에서 지난 주 후보가 소스당 캡을
+// 차지했다. lore 8칸 중 3칸이 07-24~07-26 항목으로 가면서 창 안 R-Car ISP 시리즈 등이 통째로 잘렸다.
+function datedItem(sourceId, title, publishedAt, relevanceScore = 50) {
+  return {
+    source_id: sourceId,
+    source: sourceId,
+    title,
+    publishedAt,
+    relevanceScore,
+    source_priority: 'high',
+    source_reliability: 'project-official'
+  };
+}
+
+test('primary-window candidates win the per-source cap over older ones', () => {
+  const now = new Date('2026-08-03T23:59:59.999Z');
+  const ranked = [
+    ...Array.from({ length: 8 }, (_, i) =>
+      datedItem('lore-linux-media-list', `stale-${i}`, '2026-07-24T00:00:00Z', 90)),
+    datedItem('lore-linux-media-list', 'in-window-rcar-isp', '2026-07-30T00:00:00Z', 40)
+  ].sort(candidateRankOrder(now));
+  const capped = capPerSource(ranked, MAX_CANDIDATES_PER_SOURCE);
+
+  assert.equal(capped[0].title, 'in-window-rcar-isp',
+    'in-window candidate outranks higher-scoring candidates from before the selection window');
+  assert.ok(capped.some(c => c.title === 'in-window-rcar-isp'),
+    'the cap no longer drops this week signals in favour of last week leftovers');
+});
+
+test('primary-window preference never overrides source priority or reliability', () => {
+  const now = new Date('2026-08-03T23:59:59.999Z');
+  const fresh = datedItem('low-priority-blog', 'fresh-but-low-priority', '2026-08-02T00:00:00Z');
+  fresh.source_priority = 'low';
+  fresh.source_reliability = 'community';
+  const stale = datedItem('lore-linux-media-list', 'stale-but-official', '2026-07-20T00:00:00Z');
+
+  assert.deepEqual([fresh, stale].sort(candidateRankOrder(now)).map(c => c.title),
+    ['stale-but-official', 'fresh-but-low-priority']);
+});
+
+test('candidates from before the selection window stay in the pool for the catch-up lane', () => {
+  const now = new Date('2026-08-03T23:59:59.999Z');
+  const ranked = [
+    datedItem('lore-linux-media-list', 'older-release', '2026-07-10T00:00:00Z'),
+    datedItem('lore-linux-media-list', 'in-window', '2026-08-01T00:00:00Z')
+  ].sort(candidateRankOrder(now));
+
+  assert.deepEqual(ranked.map(c => c.title), ['in-window', 'older-release']);
+  assert.equal(capPerSource(ranked, MAX_CANDIDATES_PER_SOURCE).length, 2,
+    'older candidates are re-ranked, not dropped');
 });
