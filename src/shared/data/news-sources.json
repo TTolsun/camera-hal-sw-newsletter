@@ -522,6 +522,38 @@
       ]
     },
     {
+      "id": "aosp-release-camera-changes",
+      "name": "AOSP Release Source Drop (camera changes)",
+      "sourceUrl": "https://source.android.com/docs/setup/reference/build-numbers?hl=en",
+      "rssUrl": null,
+      "collectionModeHint": "release-note-watch",
+      "category": "camera-hal",
+      "priority": "high",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "공개 AOSP는 릴리스 태그(android-N.M.P_rK)로 몇 달에 한 번 통째로 공개된다. 이 소스는 build-numbers 표에서 최신 릴리스와 보안 패치 레벨을 읽고, 직전 릴리스와의 차이에서 camera 경로를 건드린 커밋을 저장소별로 모아 Camera HAL 인터페이스 확정·GCH 구현·cameraserver 변경을 드롭 단위로 잡는다",
+      "keywords": [
+        "AOSP",
+        "Camera HAL",
+        "AIDL",
+        "camera metadata",
+        "cameraserver",
+        "Google Camera HAL",
+        "release tag"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_dated_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "versioned_release_row",
+      "sourceQualityNotes": [
+        "official source (AOSP build-numbers 표가 릴리스 태그와 보안 패치 레벨을 직접 라벨)",
+        "날짜는 표의 보안 패치 레벨만 사용한다. 저장소별 태그 커밋 시각은 같은 릴리스 안에서도 흩어져 있어 드롭 날짜가 아니다"
+      ]
+    },
+    {
       "id": "aosp-whats-new-release-notes",
       "name": "AOSP What's New / Release Notes",
       "sourceUrl": "https://source.android.com/docs/whatsnew",

@@ -28,12 +28,13 @@ test('registers exactly the known followed-source resolver ids', () => {
     followedSourceResolverIds().sort(),
     [
       'android-security-bulletin',
+      'aosp-release-camera-changes',
       'libcamera-release-announcements',
       'patchwork-libcamera-patches',
       'raspberrypi-libcamera-releases'
     ]
   );
-  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 4);
+  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 5);
 });
 
 test('routes raspberrypi-libcamera-releases to the release resolver with text (atom) as the first arg', async () => {
@@ -80,6 +81,36 @@ test('routes patchwork-libcamera-patches to the patch resolver with text (JSON) 
   assert.equal(items.length, 1);
   assert.equal(items[0].sourceKind, 'rss_item');
   assert.equal(items[0].publishedAt, '2026-07-03');
+});
+
+test('routes aosp-release-camera-changes to the release resolver with text (build-numbers HTML) as the first arg', async () => {
+  // 리졸버는 릴리스가 수집 창 안일 때만 git을 조회한다. 디스패치를 관찰하려면 릴리스가 신선해야
+  // 하므로 실행 시점의 오늘 날짜를 표에 넣는다(고정 날짜를 쓰면 시간이 지나 조회가 사라져
+  // 라우팅이 깨져도 통과하는 테스트가 된다).
+  const today = new Date().toISOString().slice(0, 10);
+  const html = '<table><tbody>'
+    + `<tr><td>CP2A.260605.016</td><td>android-17.0.0_r1</td><td>Android17</td><td></td><td>${today}</td></tr>`
+    + '<tr><td>BP4A.251205.006</td><td>android-16.0.0_r4</td><td>Android16</td><td></td><td>2025-12-05</td></tr>'
+    + '</tbody></table>';
+  const fetched = [];
+  const items = await resolveFollowedSourceItems(
+    { id: 'aosp-release-camera-changes', name: 'AOSP Release Source Drop (camera changes)' },
+    {
+      indexItems: [],
+      text: html,
+      fetchTextImpl: async (url) => {
+        fetched.push(url);
+        return ')]}\'\n{"log":[]}';
+      }
+    }
+  );
+
+  // text(build-numbers HTML)가 첫 인자로 전달돼야 릴리스 태그를 뽑아 gitiles 범위를 조회한다.
+  assert.ok(fetched.length > 0, 'dispatched to the release resolver with the build-numbers HTML');
+  for (const url of fetched) {
+    assert.match(url, /\+log\/android-16\.0\.0_r4\.\.android-17\.0\.0_r1\?format=JSON/);
+  }
+  assert.deepEqual(items, [], 'no camera commits in the stubbed delta');
 });
 
 test('shouldSuppressGenericFallback is true only for followed-resolver sources', () => {
