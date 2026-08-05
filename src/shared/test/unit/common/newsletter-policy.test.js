@@ -73,6 +73,17 @@ test('loaded headlinePolicy is normalized from config file', () => {
   assert.equal(Object.isFrozen(loaded.headlinePolicy), true);
 });
 
+// 2026-08-03 회귀: 이 블록은 EDITORIAL_POLICY.md로 생성돼 editor prompt에 정본으로 들어간다.
+// "주요 기사 하나만 담을 수 있습니다"라는 표현이 상한으로 읽혀 editor가 선정된 5개 그룹 중 4개를
+// reason_code=one_article_policy로 강등했고(계약에 없는 코드) semantic validation이 발행을 막았다.
+test('one-article policy reads as a minimum, never as an article-count ceiling', () => {
+  const block = renderNewsletterPolicyBlock();
+
+  assert.match(block, /단일 기사 정책\(one-article policy\): 완전히 발행 가능한 주요 기사가 하나뿐이어도 공개 발행할 수 있습니다/);
+  assert.equal(/주요 기사 하나만 담을 수 있습니다/.test(block), false);
+  assert.match(block, /기사 수 상한은 위의 주요 기사 수\(1-5\)를 그대로 따릅니다/);
+});
+
 test('generated policy docs include headline policy summary', () => {
   const block = renderNewsletterPolicyBlock();
 
