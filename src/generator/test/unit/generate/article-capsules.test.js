@@ -93,7 +93,10 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   assert.equal(capsule.source_fact_bundle.source_url, 'https://example.com/camera-hal-metadata?utm=1');
   assert.deepEqual(capsule.source_fact_bundle.facts, []);
   assert.ok(capsule.evidence.length > 0);
-  assert.ok(capsule.estimated_tokens <= 1200);
+  // allowed_claim_evidence가 결정론 검증기와 같은 텍스트 조각을 전부 싣게 되면서 이 fixture의
+  // capsule이 1163 -> 1254 토큰으로 늘었다. fixture는 evidence 필드를 실제 후보보다 많이 채워 둔
+  // 편이라 증가폭이 크게 잡히며, 2026-08-03 실제 후보 capsule은 오히려 1545 -> 1516으로 줄었다.
+  assert.ok(capsule.estimated_tokens <= 1300);
   assert.equal(Object.hasOwn(capsule, 'impact_claim_level'), false);
 });
 
@@ -351,6 +354,44 @@ test('article capsule exposes allowed claim evidence from validator helper', () 
     Array.isArray(item.source_urls) &&
     typeof item.text === 'string'
   ));
+});
+
+// 2026-08-03(W32) 회귀: allowed_claim_evidence가 texts[0] 하나만 노출해 editor/fact-checker가
+// 날짜·컴포넌트·behavior_change를 보지 못했고, 결정론 검증기는 그 조각들까지 보고 판정하는 비대칭
+// 때문에 정당한 기사 5건에 must_fix 31건이 붙었다. prompt 텍스트가 검증기와 같은 조각을 담아야 한다.
+test('allowed_claim_evidence exposes every evidence fragment the deterministic validator uses', () => {
+  const capsule = buildArticleCapsule(candidate({
+    summary: 'Sensor driver adds a V4L2 subdev.',
+    behavior_change: 'Sensor driver adds a V4L2 subdev.',
+    version_or_release: 'v6 (patch series)',
+    published_date: '2026-08-01T12:56:38Z',
+    api_or_component: 'camss',
+    evidence_notes: []
+  }));
+  const summaryEvidence = capsule.allowed_claim_evidence
+    .find(item => item.evidence_id.endsWith(':source-summary'));
+
+  assert.ok(summaryEvidence);
+  assert.match(summaryEvidence.text, /Sensor driver adds a V4L2 subdev\./);
+  assert.match(summaryEvidence.text, /v6 \(patch series\)/);
+  assert.match(summaryEvidence.text, /2026-08-01T12:56:38Z/);
+  assert.match(summaryEvidence.text, /camss$/);
+  // behavior_change가 summary와 같은 문장이면 한 번만 싣는다.
+  assert.equal(summaryEvidence.text.match(/Sensor driver adds a V4L2 subdev\./g).length, 1);
+});
+
+// 후보 캡슐은 기사가 쓰이기 전 단계라 actionability를 알 수 없다. hal-signal-quality의 기사 채점
+// 결과(항상 none/weak)를 캡슐에 실으면 editor/fact-checker가 "메인으로 뽑힌 기사인데 actionability가
+// 없다"는 모순된 전제를 받는다(W32 source gap 원인).
+test('article capsule omits article-graded HAL signal verdicts', () => {
+  const capsule = buildArticleCapsule(candidate());
+
+  assert.equal(Object.hasOwn(capsule, 'actionability_level'), false);
+  assert.equal(Object.hasOwn(capsule, 'effective_actionability_level'), false);
+  assert.equal(Object.hasOwn(capsule, 'signal_quality_status'), false);
+  assert.equal(capsule.main_article_readiness.hal_signal_ready, true);
+  assert.equal(capsule.main_article_readiness.blockers.includes('hal_signal:actionability_none'), false);
+  assert.equal(capsule.main_article_readiness.ready, true);
 });
 
 test('article capsule report separates shortlist and selected capsule inputs', () => {

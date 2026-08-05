@@ -15,6 +15,7 @@ const {
 } = require('../common/candidate-artifacts');
 const { parseManualSourceUrls } = require('../collect/collection-intent');
 const { readRuntimeConfig } = require('../common/runtime-config');
+const { getSelectionWindowPolicy } = require('../common/newsletter-policy');
 const {
   extractImageCandidatesFromHtml,
   extractImageCandidatesFromRssBlock,
@@ -1203,6 +1204,26 @@ function withinLookback(candidate, now, lookbackDays) {
   return candidateMs >= windowStartMs && candidateMs <= windowEndMs;
 }
 
+// 소스당 캡(MAX_CANDIDATES_PER_SOURCE)은 lookback 35일 풀에 걸리는데 정렬에 최신성 항이 없어서,
+// lore처럼 한 주에 수십 건이 올라오는 메일링 리스트에서는 지난 주 후보가 이번 주 신호를 밀어냈다
+// (2026-08-03 W32 실측: 라이브 피드에 창 안 비-답장 카메라 신호가 75건 있었는데 수집은 8건이고
+// 그중 3건이 07-24~07-26 항목, 그 결과 R-Car ISP 확장 uAPI·CAMSS 하드웨어 버전 보고·uvcvideo quirk가
+// 통째로 잘렸다). 같은 우선순위/신뢰도 안에서 primary selection window 후보를 앞세워 캡이 이번 주
+// 신호부터 채우게 한다. 창 밖 후보를 버리지는 않으므로 catch-up lane이 쓸 재고는 그대로 남는다.
+function withinPrimarySelectionWindow(candidate, now) {
+  return withinLookback(candidate, now, getSelectionWindowPolicy().primarySelectionDays);
+}
+
+function candidateRankOrder(now) {
+  return (a, b) => {
+    const priorityDelta = (PRIORITY_WEIGHT[b.source_priority] || 0) - (PRIORITY_WEIGHT[a.source_priority] || 0);
+    const reliabilityDelta = (RELIABILITY_WEIGHT[b.source_reliability] || 0) - (RELIABILITY_WEIGHT[a.source_reliability] || 0);
+    const primaryWindowDelta = Number(withinPrimarySelectionWindow(b, now)) -
+      Number(withinPrimarySelectionWindow(a, now));
+    return priorityDelta || reliabilityDelta || primaryWindowDelta || b.relevanceScore - a.relevanceScore;
+  };
+}
+
 function titleKey(title) {
   return title
     .toLowerCase()
@@ -1516,11 +1537,7 @@ async function main() {
   const rankedCandidates = dedupe(candidates)
     .filter(item => withinLookback(item, now, lookbackDays))
     .filter(item => item.cameraHalRelevanceScore >= 30 || item.source_priority === 'high')
-    .sort((a, b) => {
-      const priorityDelta = (PRIORITY_WEIGHT[b.source_priority] || 0) - (PRIORITY_WEIGHT[a.source_priority] || 0);
-      const reliabilityDelta = (RELIABILITY_WEIGHT[b.source_reliability] || 0) - (RELIABILITY_WEIGHT[a.source_reliability] || 0);
-      return priorityDelta || reliabilityDelta || b.relevanceScore - a.relevanceScore;
-    });
+    .sort(candidateRankOrder(now));
   candidates = capPerSource(collapseSeriesRepresentatives(rankedCandidates), MAX_CANDIDATES_PER_SOURCE).slice(0, MAX_FINAL_CANDIDATES);
 
   const enrichedCandidates = [];
@@ -1598,6 +1615,7 @@ module.exports = {
   MAX_FINAL_CANDIDATES,
   MAX_CANDIDATES_PER_SOURCE,
   canonicalContentUrl,
+  candidateRankOrder,
   capPerSource,
   collapseSeriesRepresentatives,
   componentFromText,
