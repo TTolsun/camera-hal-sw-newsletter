@@ -1506,7 +1506,16 @@ async function main() {
       // 일부 공식 소스는 인덱스 페이지(월별/아카이브 링크)만 연결돼 있어 인덱스 파싱만으로는
       // dated 증거를 못 만든다(source-gap). 최신 상세 페이지를 따라가 dated 후보를 만들고,
       // 만들지 못하면 기존 인덱스 동작을 유지한다.
-      const followedItems = await resolveFollowedSourceItems(source, { indexItems, text, fetchTextImpl: fetchText });
+      // 수집 창(now/lookbackDays)도 함께 넘긴다. 릴리스 드롭처럼 "창 안일 때만 상세를 따라가는"
+      // 리졸버가 창을 따로 하드코딩하면 catch-up run(LOOKBACK_DAYS 조정)이나 과거 날짜 재수집에서
+      // 파이프라인 창과 어긋나 조용히 누락된다.
+      const followedItems = await resolveFollowedSourceItems(source, {
+        indexItems,
+        text,
+        fetchTextImpl: fetchText,
+        now,
+        lookbackDays
+      });
       const sourceSpecificItems = followedItems.length > 0 ? followedItems : indexItems;
       const resolvedSourceSpecificItems = sourceSpecificItems.length > 0
         ? await resolveLinkedReleaseNoteEvidenceItems(sourceSpecificItems, source, { fetchTextImpl: fetchText })
