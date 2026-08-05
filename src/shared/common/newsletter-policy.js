@@ -647,7 +647,11 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
     `- 주요 기사 수: ${articleCountRangeText(policy)}`,
     ...(oneArticlePolicyEnabled
       ? [
-          '- 단일 기사 정책(one-article policy): 공개 뉴스레터는 완전히 발행 가능한 주요 기사 하나만 담을 수 있습니다.',
+          // 이 문장은 최소 기사 수가 1이라는 뜻이지 상한이 1이라는 뜻이 아니다. 예전 표현("주요 기사
+          // 하나만 담을 수 있습니다")은 상한으로 읽혀서, EDITORIAL_POLICY.md를 정본으로 받는 editor가
+          // 2026-08-03 실행에서 선정된 5개 그룹 중 4개를 reason_code=one_article_policy로 강등했다
+          // (그런 reason code는 계약에 없어 editor semantic validation 실패 -> 발행 차단).
+          `- 단일 기사 정책(one-article policy): 완전히 발행 가능한 주요 기사가 하나뿐이어도 공개 발행할 수 있습니다. 기사 수 상한은 위의 주요 기사 수(${articleCountRangeText(policy)})를 그대로 따릅니다.`,
           '- 기사 수만으로 단일 기사 호가 품질 저하 또는 검토 전용으로 분류되지는 않습니다. 단, 하드 품질 게이트는 그대로 적용됩니다.',
           '- 보조 전용 정책(supporting-only policy): 보조 주요 버킷 기사 하나도 모든 하드 게이트를 통과하면 공개 가능 상태가 될 수 있습니다.'
         ]
