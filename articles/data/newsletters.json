@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-08-03",
+    "title": "AOSP Camera / Driver / SoC Platform 기술 뉴스레터 (2026-08-03)",
+    "summary": "이번 주 뉴스레터는 Linux 커널 V4L2 서브시스템에 제안된 다양한 이미지 센서 드라이버 패치와 Qualcomm CAMSS의 MIPI C-PHY 지원 확장을 다룹니다. Himax HM1092, onsemi AR0234, OmniVision OG0VA1B 드라이버 추가는 하위 스택 하드웨어 지원을 강화하며, Qualcomm의 C-PHY 지원은 고해상도 및 고프레임률 카메라 스트림의 전력 효율성과 성능 최적화에 기여할 것입니다.",
+    "html": "newsletters/2026-08-03/index.html",
+    "md": "newsletters/2026-08-03/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-07-27",
     "title": "Camera HAL / SW Newsletter - 2026-07-27",
     "summary": "이번 주 뉴스레터에서는 Qualcomm CAMSS의 OPE(Offline Processing Engine) 드라이버 추가 제안과 Samsung S5KJN5 및 Himax HM1092 이미지 센서 드라이버 패치 등 하위 이미지 파이프라인의 핵심 변화를 다룹니다. 또한 libcamera의 제어 직렬화 유효성 검사 강화 및 EGLDisplay 캐싱 최적화 패치 등 카메라 드라이버 스택의 안정성과 성능을 개선하기 위한 최신 오픈소스 커뮤니티의 움직임을 분석합니다.",

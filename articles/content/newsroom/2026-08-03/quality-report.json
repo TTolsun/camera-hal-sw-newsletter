@@ -1,0 +1,1325 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-03",
+  "score": 94,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "PASS",
+  "summary": "Safety checks passed and the fact-checker found every article useful to a Camera HAL SW engineer. Editor review is ready.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+        "source_candidate_hash": "73bc8fbc8075cab360ada45e1ae1d4433cbf8b21a53aac31645c89c1d40ef44f",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/",
+        "source_candidate_hash": "c1f5a10780dc7d00dde953fdff6e9f2d17d56a1ffe1448f45f0839fd62b0e45b",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "performance_latency_frame_drop"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH v5 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/",
+        "source_candidate_hash": "ccc5f04628a7d84fa4ab64508721ef07781959aea9a45ad1981902b698eeef4c",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "headline": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+          "url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 4,
+        "headline": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
+        "source_candidate_hash": "7dc57c68dd701d6d1960a53c82b617e62ce0cac3be31bb0d19f1e7159546ae60",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "performance_latency_frame_drop"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 12,
+    "total_claims": 12,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 4,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+      "claim_id": "claim_73bc_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 8월 1일 Linux media 메일링 리스트에 Himax HM1092 센서 드라이버 패치 v6가 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:73bc8fbc8075cab3:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:73bc8fbc8075cab3:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:73bc8fbc8075cab3:source-summary",
+          "resolved_evidence_id": "candidate:73bc8fbc8075cab3:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+      "claim_id": "claim_73bc_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 센서는 단일 MIPI CSI-2 데이터 레인을 사용하며, 560x360 해상도의 10비트 RAW 출력을 지원합니다.",
+      "evidence_ids": [
+        "candidate:73bc8fbc8075cab3:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:73bc8fbc8075cab3:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:73bc8fbc8075cab3:source-summary",
+          "resolved_evidence_id": "candidate:73bc8fbc8075cab3:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+      "claim_id": "claim_73bc_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "제공되는 드라이버는 고정 모드, 테스트 패턴, 노출 제어, 아날로그 및 디지털 게인 컨트롤을 노출합니다.",
+      "evidence_ids": [
+        "candidate:73bc8fbc8075cab3:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:73bc8fbc8075cab3:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:73bc8fbc8075cab3:source-summary",
+          "resolved_evidence_id": "candidate:73bc8fbc8075cab3:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+      "claim_id": "claim_c1f5_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 7월 31일 Linux media 메일링 리스트에 onsemi AR0234 이미지 센서 드라이버 패치가 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:c1f5a10780dc7d00:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:c1f5a10780dc7d00:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:c1f5a10780dc7d00:source-summary",
+          "resolved_evidence_id": "candidate:c1f5a10780dc7d00:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+      "claim_id": "claim_c1f5_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "AR0234는 1/2.6인치 글로벌 셔터 센서로, 1940x1220 픽셀 배열을 가지며 최대 120fps로 1920x1200 해상도를 지원합니다.",
+      "evidence_ids": [
+        "candidate:c1f5a10780dc7d00:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:c1f5a10780dc7d00:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:c1f5a10780dc7d00:source-summary",
+          "resolved_evidence_id": "candidate:c1f5a10780dc7d00:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+      "claim_id": "claim_c1f5_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "MIPI CSI-2 출력(1~4개 데이터 레인), raw Bayer (8/10비트) 및 흑백 형식, DPCM 10->8 압축을 지원합니다.",
+      "evidence_ids": [
+        "candidate:c1f5a10780dc7d00:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:c1f5a10780dc7d00:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:c1f5a10780dc7d00:source-summary",
+          "resolved_evidence_id": "candidate:c1f5a10780dc7d00:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+      "claim_id": "claim_ccc5_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 7월 31일 Linux media 메일링 리스트에 OmniVision OG0VA1B 이미지 센서 드라이버 패치 v5가 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:ccc5f04628a7d84f:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:ccc5f04628a7d84f:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:ccc5f04628a7d84f:source-summary",
+          "resolved_evidence_id": "candidate:ccc5f04628a7d84f:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+      "claim_id": "claim_ccc5_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "OG0VA1B는 1/10인치 흑백 CMOS VGA 이미지 센서로, 단일 레인 MIPI CSI-2 인터페이스를 통해 최대 640x480 해상도로 10비트 RAW (Y10) 프레임을 출력합니다.",
+      "evidence_ids": [
+        "candidate:ccc5f04628a7d84f:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:ccc5f04628a7d84f:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:ccc5f04628a7d84f:source-summary",
+          "resolved_evidence_id": "candidate:ccc5f04628a7d84f:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+      "claim_id": "claim_ccc5_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "I2C 호환 SCCB 버스를 통해 제어되며, Purwa EVK 보드에서 테스트 패턴 제너레이터(TPG)를 포함하여 검증되었습니다.",
+      "evidence_ids": [
+        "candidate:ccc5f04628a7d84f:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:ccc5f04628a7d84f:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:ccc5f04628a7d84f:source-summary",
+          "resolved_evidence_id": "candidate:ccc5f04628a7d84f:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+      "claim_id": "claim_7dc5_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 7월 29일 Linux media 메일링 리스트에 Qualcomm CAMSS C-PHY 지원 패치 v9가 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:7dc57c68dd701d6d:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:7dc57c68dd701d6d:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:7dc57c68dd701d6d:source-summary",
+          "resolved_evidence_id": "candidate:7dc57c68dd701d6d:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+      "claim_id": "claim_7dc5_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 패치 시리즈는 CSID 및 CSIPHY 구성 요소를 포함하여 Qualcomm CAMSS가 C-PHY 모드 구성을 지원하도록 확장합니다.",
+      "evidence_ids": [
+        "candidate:7dc57c68dd701d6d:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:7dc57c68dd701d6d:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:7dc57c68dd701d6d:source-summary",
+          "resolved_evidence_id": "candidate:7dc57c68dd701d6d:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+      "claim_id": "claim_7dc5_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이전 검토 라운드의 모든 사항이 반영되지 않아 'WIP' (작업 중) 태그가 추가된 상태입니다.",
+      "evidence_ids": [
+        "candidate:7dc57c68dd701d6d:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:7dc57c68dd701d6d:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:7dc57c68dd701d6d:source-summary",
+          "resolved_evidence_id": "candidate:7dc57c68dd701d6d:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 4,
+    "strong_signal_count": 4,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 4,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 4,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 4,
+      "performance_latency_frame_drop": 2,
+      "stream_buffer_metadata": 1
+    },
+    "actionability_level_counts": {
+      "measurable_test": 3,
+      "owner_metric_log": 1
+    },
+    "effective_actionability_level_counts": {
+      "measurable_test": 3,
+      "owner_metric_log": 1
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 4
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+      "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치가 Android Camera HAL API나 프레임워크의 직접적인 변경을 의미하지는 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+      "url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "performance_latency_frame_drop"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "performance_thermal_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "글로벌 셔터 센서 드라이버 추가가 Android Camera HAL의 표준 동작이나 API 규격을 직접 변경하지는 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+      "url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 99): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 보조 센서용 드라이버 추가 제안이며, Android Camera HAL API 자체를 변경하지는 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+      "url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "stream_buffer_metadata",
+        "performance_latency_frame_drop"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "camera_hal_owner",
+        "performance_thermal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 87): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 아직 WIP 단계이며, Qualcomm 플랫폼에 한정된 하위 드라이버 변경으로 Android Camera HAL API 자체를 수정하지는 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 4,
+    "briefing_count": 3,
+    "camera_article_count": 4,
+    "legacy_regex_camera_article_count": 4,
+    "expanded_scope_article_count": 4,
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 4,
+    "android_platform_camera_adjacent_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 4,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 0,
+    "publishable_scope_count": 4,
+    "composition_mode": "NORMAL",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+        "source_candidate_hash": "73bc8fbc8075cab360ada45e1ae1d4433cbf8b21a53aac31645c89c1d40ef44f",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/",
+        "source_candidate_hash": "c1f5a10780dc7d00dde953fdff6e9f2d17d56a1ffe1448f45f0839fd62b0e45b",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 3,
+        "headline": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/",
+        "source_candidate_hash": "ccc5f04628a7d84fa4ab64508721ef07781959aea9a45ad1981902b698eeef4c",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 4,
+        "headline": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
+        "source_candidate_hash": "7dc57c68dd701d6d1960a53c82b617e62ce0cac3be31bb0d19f1e7159546ae60",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 4,
+      "android_platform_camera_adjacent": 0,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 4,
+      "multimedia": 0,
+      "platform": 0,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android_platform_camera_adjacent"
+      ],
+      "multimedia": [
+        "android_multimedia_camera_output"
+      ],
+      "platform": [
+        "soc_platform_signal"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 0,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 0,
+    "blocking_deduction_categories": [],
+    "hard_fail_count": 0,
+    "soft_deduction_count": 6,
+    "article_gate_counts": {
+      "PASS": 4,
+      "DEMOTE": 0,
+      "FAIL": 0
+    },
+    "article_section_contract": {
+      "complete_count": 4,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {},
+      "limitation_visibility_counts": {
+        "none": 4
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 12,
+      "total_claims": 12,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 4,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 4,
+      "strong_signal_count": 4,
+      "usable_signal_count": 0,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 4,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 1,
+      "main_articles_with_concrete_action": 4,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "driver_image_pipeline": 4,
+        "performance_latency_frame_drop": 2,
+        "stream_buffer_metadata": 1
+      },
+      "actionability_level_counts": {
+        "measurable_test": 3,
+        "owner_metric_log": 1
+      },
+      "effective_actionability_level_counts": {
+        "measurable_test": 3,
+        "owner_metric_log": 1
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 4
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+        "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치가 Android Camera HAL API나 프레임워크의 직접적인 변경을 의미하지는 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+        "url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "performance_latency_frame_drop"
+        ],
+        "reader_owners": [
+          "camera_driver_owner",
+          "performance_thermal_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "글로벌 셔터 센서 드라이버 추가가 Android Camera HAL의 표준 동작이나 API 규격을 직접 변경하지는 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+        "url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 99): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치는 보조 센서용 드라이버 추가 제안이며, Android Camera HAL API 자체를 변경하지는 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 4,
+        "title": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+        "url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "stream_buffer_metadata",
+          "performance_latency_frame_drop"
+        ],
+        "reader_owners": [
+          "camera_driver_owner",
+          "camera_hal_owner",
+          "performance_thermal_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 87): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치는 아직 WIP 단계이며, Qualcomm 플랫폼에 한정된 하위 드라이버 변경으로 Android Camera HAL API 자체를 수정하지는 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "image-fallback",
+        "count": 4
+      },
+      {
+        "category": "editorial-story",
+        "count": 2
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

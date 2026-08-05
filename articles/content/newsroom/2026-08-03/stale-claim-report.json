@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-03",
+  "status": "PASS",
+  "removed_sections": [],
+  "final_section_sources": [
+    {
+      "title": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/"
+    },
+    {
+      "title": "[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/"
+    },
+    {
+      "title": "[PATCH v5 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/"
+    },
+    {
+      "title": "[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+      "url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}
