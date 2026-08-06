@@ -166,10 +166,19 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
   const hardBlockedGroups = ensureArray(options.hardBlockedGroups).length > 0
     ? ensureArray(options.hardBlockedGroups)
     : ensureArray(report.hard_blocked_group_keys).map(key => ({ article_group_key: key, hard_block_reason: 'status' }));
+  // 같은 그룹이 강등과 hard block 양쪽에 기록될 수 있다(editor 스키마가 금지하지 않는다).
+  // 권위 검증기는 hard block을 우선해 강등 목록에서 그 그룹을 빼고 등식을 센다
+  // (editor-output-contract.js의 effectiveDemotedGroups). status가 같은 전처리를 하지
+  // 않으면 검증기가 통과시킨 발행에만 group_coverage_ok=false가 찍힌다. 같은 규칙을 쓴다.
+  const hardBlockedKeys = new Set(
+    ensureArray(hardBlockedGroups).map(item => String(item?.article_group_key || '')).filter(Boolean)
+  );
+  const effectiveDemotedGroups = ensureArray(explicitlyDemotedGroups)
+    .filter(item => !hardBlockedKeys.has(String(item?.article_group_key || '')));
   const groupCoverage = groupCoverageSummary({
     selectedGroupKeys,
     renderedGroupKeys,
-    demotedGroups: explicitlyDemotedGroups,
+    demotedGroups: effectiveDemotedGroups,
     hardBlockedGroups
   });
   return {
@@ -187,6 +196,13 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     explicitly_demoted_group_keys: groupCoverage.explicitly_demoted_group_keys,
     hard_blocked_group_keys: groupCoverage.hard_blocked_group_keys,
     group_coverage_ok: hasRenderedGroupObservation ? groupCoverage.ok : null,
+    // #837: 재조정 provenance. coverage 등식에는 참여하지 않는 순수 기록이다.
+    // 이게 없으면 "결정론 N건이 왜 M건이 됐는지"를 발행 후에 알 방법이 없다
+    // (그 사실을 담은 coverage-reconciliation.json은 커밋되지 않는다).
+    deterministic_selected_representative_group_keys:
+      ensureArray(report.deterministic_selected_representative_group_keys),
+    reconciliation_demoted_group_keys: ensureArray(report.reconciliation_demoted_group_keys),
+    reconciliation_promoted_group_keys: ensureArray(report.reconciliation_promoted_group_keys),
     reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,
     demoted_article_count: options.demotedArticleCount ?? diagnostics.demoted_candidate_count ?? report.demoted_candidate_count ?? null,
     locked_article_count: options.lockedArticleCount ?? null,

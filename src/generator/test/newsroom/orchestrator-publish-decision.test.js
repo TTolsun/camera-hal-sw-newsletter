@@ -37,7 +37,8 @@ function withStubbedCollaborators(run) {
     persistHeadlineStateArtifacts: [],
     writeGenerationStatus: [],
     writeSelectionDiagnosticsArtifact: 0,
-    weekly: 0
+    weekly: 0,
+    selectionStatusExtraOptions: []
   };
   const stubs = [
     stubModule(VALIDATE_RUNNER, {
@@ -59,7 +60,11 @@ function withStubbedCollaborators(run) {
       // 받은 status/extra를 그대로 담아 반환해, 어떤 값이 흘러갔는지 검증할 수 있게 한다.
       buildGenerationStatus: ({ date, status, extra }) => ({ date, status, ...extra }),
       editorSemanticStatusExtra: () => ({}),
-      selectionStatusExtra: () => ({})
+      // #837: 어떤 coverage 입력이 status로 흘러가는지 검증할 수 있게 options를 붙잡는다.
+      selectionStatusExtra: (report, options) => {
+        calls.selectionStatusExtraOptions.push(options);
+        return {};
+      }
     }),
     stubModule(ARTIFACT_WRITERS, {
       writeGenerationStatus: (artifact) => { calls.writeGenerationStatus.push(artifact); }
@@ -217,5 +222,32 @@ test('reviewable(NEEDS_FIX) 입력: 공개 산출물을 쓰지 않고 validate�
     // generation-status는 여전히 한 번 기록된다(reviewable diagnostics 경로).
     assert.equal(calls.writeGenerationStatus.length, 1);
     assert.equal(out.generationStatusArtifact.status, 'NEEDS_FIX');
+  });
+});
+
+// #837: editor가 기록한 hard block이 status coverage 입력으로 실제 전달되는지 잠근다.
+// 이 배선이 없으면 salvage/구조적 demote로 빠진 그룹이 "설명 없는 손실"로 보여
+// 정상 발행에도 group_coverage_ok=false가 찍힌다.
+test('editor가 기록한 hard block을 status coverage 입력으로 넘긴다', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    await decide(baseArgs(newsroomDir, newsletterDir, {
+      editor: {
+        ...baseArgs(newsroomDir, newsletterDir).editor,
+        hard_blocked_groups: [{
+          article_group_key: 'group:dropped',
+          hard_block_reason: 'thin-week salvage dropped unpublishable article',
+          reason_code: 'quality_hard_blocker'
+        }]
+      }
+    }));
+
+    assert.equal(calls.selectionStatusExtraOptions.length, 1);
+    const options = calls.selectionStatusExtraOptions[0];
+    assert.deepEqual(
+      options.hardBlockedGroups.map(item => item.article_group_key),
+      ['group:dropped']
+    );
   });
 });

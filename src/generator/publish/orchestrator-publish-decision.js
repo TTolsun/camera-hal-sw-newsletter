@@ -38,6 +38,7 @@ const { buildWeeklyMergeResolver } = require('../editor/weekly-merge');
 const {
   editorRenderedGroupKeys,
   editorExplicitlyDemotedGroups,
+  editorHardBlockedGroups,
   validateMergedWeeklyArticle
 } = require('./orchestrator-report-builders');
 const {
@@ -195,6 +196,7 @@ async function decidePublishReadinessAndWriteStatus({
         renderedMainArticleCount: ensureArray(editor.sections).length,
         renderedGroupKeys: editorRenderedGroupKeys(editor),
         explicitlyDemotedGroups: editorExplicitlyDemotedGroups(editor),
+        hardBlockedGroups: editorHardBlockedGroups(editor),
         lockedArticleCount: retryHistory.at(-1)?.locked_article_headlines.length || 0,
         demotedArticleCount: retryHistory.at(-1)?.demoted_article_count ?? retryHistory.at(-1)?.demoted_sections?.length ?? 0,
         finalPublishReady,

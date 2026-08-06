@@ -526,6 +526,23 @@ async function main() {
     // 두어, 이전 attempt의 일시적 false가 다음 attempt를 영구 차단하지 않게 한다.
     const reconciledSummary = compositionSummary(reconciledSelected);
     shortlistReport.composition_summary = reconciledSummary;
+    // #837: main 집합에서 파생되는 요약도 같이 갱신한다. 정본(selected_articles)만
+    // 갈아끼우고 selected_article_count/selected_group_count/
+    // selected_representative_group_keys를 결정론 시점 값으로 두면, 같은 artifact 안에서
+    // composition_summary(재조정 후)와 top-level 카운트(재조정 전)가 모순되고
+    // generation-status의 coverage 등식 좌변만 재조정 前 값이 되어 정상 발행에도
+    // group_coverage_ok=false가 찍힌다(실측: 2026-07-20·2026-08-03).
+    Object.assign(shortlistReport, coverageReconciliation.selection_summary);
+    // 강등/승급 사실은 coverage 등식에 참여하지 않는 별도 필드로 남긴다.
+    // explicitly_demoted_group_keys는 editor가 스스로 선언한 강등 전용이고
+    // (article-groups.js의 explicitDemotedGroups가 editor 출력만 읽는다), 거기에 합치면
+    // 등식이 selected 4 !== rendered 4 + demoted 1로 새로 깨진다. 유일하게 이 사실을
+    // 담고 있던 coverage-reconciliation.json은 커밋되지 않으므로, 여기서 남기지 않으면
+    // "결정론 5건이 왜 4건이 됐는지"를 발행 후에 추적할 방법이 사라진다.
+    shortlistReport.deterministic_selected_representative_group_keys =
+      coverageReconciliation.diff.deterministic_selected_group_keys;
+    shortlistReport.reconciliation_demoted_group_keys = coverageReconciliation.diff.demoted_group_keys;
+    shortlistReport.reconciliation_promoted_group_keys = coverageReconciliation.diff.promoted_group_keys;
     shortlistReport.publish_ready = deterministicPublishReady
       && reviewCompositionGatePasses(reconciledSummary)
       && publishReadyGateReasonSummary(reconciledSummary).length === 0;
