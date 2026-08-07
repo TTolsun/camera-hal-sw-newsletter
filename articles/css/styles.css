@@ -8,7 +8,9 @@
   --muted: #6e6e73;
   /* 3차 메타 텍스트(날짜·캡션·법적 표기). handoff 원값 #86868b 는 흰 배경 3.62:1,
      파치먼트 3.33:1 로 WCAG AA(>=4.5:1) 미달이라 --muted 와 같은 #6e6e73 으로 맞춘다.
-     3차 층은 색이 아니라 크기(12~14px)·트래킹으로 구분한다. */
+     --muted 와의 구분은 색이 아니라 크기(12~14px)·트래킹으로 낸다.
+     값이 같다고 --muted 로 합치거나 alias 하지 말 것 — 의미 층이 다르고, 어두운 표면이
+     생기면 두 층이 다시 갈라진다. */
   --text-tertiary: #6e6e73;
   --line: #e0e0e0;
   --primary: #0066cc;
@@ -1106,9 +1108,9 @@ pre code {
   text-align: center;
 }
 
+/* 빈 상태·오류 문장은 16px 라 3차 층(12~14px)이 아니다 — 색은 .muted 를 그대로 상속한다. */
 .archive-empty-state .muted {
   margin-bottom: 0;
-  color: var(--text-tertiary);
   font-size: 1rem;
 }
 
