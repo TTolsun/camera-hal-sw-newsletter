@@ -376,7 +376,9 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- Non-fallback reviewable: ${formatCount(diagnostics.non_fallback_reviewable_article_count ?? composition.non_fallback_reviewable_article_count)}`,
     `- release_class_pool_size: ${formatCount(releaseClassCatchUp.pool_size)}`,
     `- release_class_admitted: ${formatCount(releaseClassCatchUp.admitted)}`,
-    `- release_class_blocked_reason: ${formatCount(releaseClassCatchUp.blocked_reason || 'none')}`,
+    // 값이 없는 주(unknown)와 레인이 막히지 않은 주(none)는 서로 다른 사실이다.
+    // 둘을 같은 문자열로 접으면 관측 누락이 정상 출력처럼 보인다.
+    `- release_class_blocked_reason: ${releaseClassCatchUp.blocked_reason === '' ? 'none' : formatCount(releaseClassCatchUp.blocked_reason)}`,
     '',
     'Source/parser recovery hint:',
     hints,

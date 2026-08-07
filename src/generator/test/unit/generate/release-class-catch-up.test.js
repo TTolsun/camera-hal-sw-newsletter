@@ -9,6 +9,7 @@ const {
   selectionDiagnosticsFromReports
 } = require('../../../select/selection-diagnostics');
 const { buildSelectionReport } = require('../../../publish/orchestrator-report-builders');
+const { selectionStatusExtra } = require('../../../publish/orchestrator-status-builders');
 
 // release-class 레인(#825): release 채널(collectionModeHint: release-note-watch) 후보는
 // 주간 발행 주기와 신선도 창 사이에 끼면 thin week가 올 때까지 영원히 기회가 없다.
@@ -226,6 +227,18 @@ test('a release sharing a selected release page is recorded as duplicate_release
   });
 });
 
+test('a near-duplicate release never reaches the lane (shortlist dedup owns it)', () => {
+  // 사유 이름이 release page 전용인 근거: 일반 중복은 같은 candidatesAreDuplicate로
+  // shortlist 단계가 먼저 제외해 catch-up pool에 아예 들어오지 않는다.
+  const duplicateOfFresh = releaseCandidate({
+    title: 'Fresh camera B', url: 'https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2',
+    version_or_release: 'b1', api_or_component: 'libcamera', behavior_change: 'API change B'
+  });
+  const result = report([...freshWeek(), duplicateOfFresh]);
+  assert.equal(result.release_class_catch_up.pool_size, 0);
+  assert.equal(result.release_class_catch_up.blocked_reason, 'no_eligible_candidate');
+});
+
 test('a disabled lane is recorded as lane_disabled instead of looking candidate-starved', () => {
   const { maxReleaseClassArticles, ...withoutKey } = CATCH_UP_POLICY;
   const result = report([...freshWeek(), releaseCandidate()], { catchUpPolicy: withoutKey });
@@ -233,12 +246,24 @@ test('a disabled lane is recorded as lane_disabled instead of looking candidate-
   assert.equal(result.release_class_catch_up.blocked_reason, 'lane_disabled');
 });
 
+test('a release the general lane admitted is counted as admitted, not as starvation', () => {
+  // 승급 수를 레인 라벨로 세면, thin week에 일반 레인이 먼저 가져간 reference 창
+  // 릴리스가 미승급으로 잡혀 blocked_reason이 사실과 어긋난다.
+  const referenceRelease = releaseCandidate({ published_date: '2026-06-30' }); // 27일령 → reference 창
+  const result = report([freshWeek()[0], referenceRelease], {
+    catchUpPolicy: { ...CATCH_UP_POLICY, maxReleaseClassArticles: 0 }
+  });
+  const promoted = result.selected_articles.find(article => article.coverage_type === 'catch_up');
+  assert.equal(promoted.catch_up_lane, 'fill_open_slots', '일반 레인이 먼저 가져간 상황을 만든다');
+  assert.equal(result.release_class_catch_up.admitted, 1);
+  assert.equal(result.release_class_catch_up.blocked_reason, '');
+});
+
 test('the lane diagnostics reach the committed selection-report.json', () => {
   // shortlisted-candidates.json은 .gitignore 대상이라 커밋되지 않는다. 진단이
   // buildSelectionReport 투영을 통과하지 못하면 다음 run에서도 판정할 수 없다.
   const shortlist = report([...maxedWeek(), releaseCandidate()]);
-  const diagnostics = selectionDiagnosticsFromReports(shortlist, null);
-  const selectionReport = buildSelectionReport('2026-07-27', shortlist, diagnostics);
+  const selectionReport = buildSelectionReport('2026-07-27', shortlist, selectionStatusExtra(shortlist));
   assert.deepEqual(selectionReport.release_class_catch_up, {
     pool_size: 1,
     admitted: 0,
@@ -247,11 +272,26 @@ test('the lane diagnostics reach the committed selection-report.json', () => {
 });
 
 test('the lane diagnostics are rendered into selection-diagnostics.md', () => {
+  // 렌더는 production writer와 같은 seam(selectionStatusExtra)을 통과해야 한다.
+  // selectionDiagnosticsFromReports로 직접 렌더하면 status allow-list 누락을 놓친다.
   const shortlist = report([...maxedWeek(), releaseCandidate()]);
-  const markdown = renderCandidateSelectionDiagnostics(selectionDiagnosticsFromReports(shortlist, null));
+  const markdown = renderCandidateSelectionDiagnostics(selectionStatusExtra(shortlist));
   assert.match(markdown, /- release_class_pool_size: 1/);
   assert.match(markdown, /- release_class_admitted: 0/);
   assert.match(markdown, /- release_class_blocked_reason: lineup_at_max/);
+});
+
+test('an admitting run renders none, and a report without the block renders unknown', () => {
+  // 관측 누락(unknown)과 "막히지 않음"(none)이 같은 문자열로 접히면 갭이 정상 출력처럼 보인다.
+  const admitted = renderCandidateSelectionDiagnostics(
+    selectionStatusExtra(report([...freshWeek(), releaseCandidate()]))
+  );
+  assert.match(admitted, /- release_class_admitted: 1/);
+  assert.match(admitted, /- release_class_blocked_reason: none/);
+
+  const legacy = renderCandidateSelectionDiagnostics(selectionDiagnosticsFromReports({}, null));
+  assert.match(legacy, /- release_class_pool_size: unknown/);
+  assert.match(legacy, /- release_class_blocked_reason: unknown/);
 });
 
 test('thin-week general lane and release lane compose without double-counting', () => {
