@@ -127,11 +127,14 @@ p {
   margin-top: 0;
 }
 
+/* 헤드라인 기본 굵기는 DESIGN.md weight 램프의 600이다. 개별 heading 규칙이 없는 자리는
+   브라우저 기본값 bold(700)로 떨어져 램프를 벗어나므로(예: 구독 섹션 h2) 여기서 못박는다. */
 h1 {
   max-width: 840px;
   margin-bottom: 22px;
   font-size: clamp(2.5rem, 6vw, 4.6rem);
   line-height: 1.04;
+  font-weight: 600;
   /* Apple tight tracking을 아주 소폭만: 한글 Noto Sans KR 가독성을 해치지 않는 범위. */
   letter-spacing: -0.01em;
 }
@@ -140,6 +143,7 @@ h2 {
   margin-bottom: 0;
   font-size: clamp(1.5rem, 3vw, 2.1rem);
   line-height: 1.2;
+  font-weight: 600;
   letter-spacing: -0.01em;
 }
 
@@ -147,6 +151,7 @@ h3 {
   margin-bottom: 12px;
   font-size: 1.22rem;
   line-height: 1.35;
+  font-weight: 600;
 }
 
 p {
@@ -245,7 +250,7 @@ pre code {
   align-items: center;
   min-height: var(--control-height);
   color: var(--text);
-  font-weight: 800;
+  font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -264,7 +269,7 @@ pre code {
   min-width: var(--control-height);
   color: var(--muted);
   font-size: 0.95rem;
-  font-weight: 650;
+  font-weight: 500;
   text-decoration: none;
 }
 
@@ -398,7 +403,7 @@ pre code {
   margin-bottom: 12px;
   color: var(--primary);
   font-size: 0.78rem;
-  font-weight: 850;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -448,7 +453,7 @@ pre code {
   border-radius: var(--radius-pill);
   background: var(--surface);
   color: var(--text);
-  font-weight: 750;
+  font-weight: 500;
   text-decoration: none;
   transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
@@ -552,6 +557,9 @@ pre code {
   content: "";
 }
 
+/* 램프의 유일한 예외. 900은 텍스트 굵기가 아니라 글리프 아이콘(★)의 획 두께를 만드는 값이다.
+   현재 이 클래스를 쓰는 마크업은 없다(형제 .section-icon-* 와 함께 남은 dead anchor) — 지울
+   거라면 .section-icon 계열을 통째로 다루는 별도 정리에서 하고, weight 정렬로 섞지 않는다. */
 .section-icon-star {
   color: #0066cc;
   font-size: 1.32rem;
@@ -649,7 +657,7 @@ pre code {
   padding: 0 10px;
   border-radius: var(--radius-pill);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .issue-date {
@@ -699,7 +707,7 @@ pre code {
   background: var(--chip);
   color: #0052a3;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .tag-more {
@@ -1006,10 +1014,10 @@ pre code {
   overflow-wrap: anywhere;
 }
 
+/* 굵기는 .button 하나로 통일한다(구독 CTA만 따로 굵게 두면 램프가 다시 갈라진다). */
 .subscribe-link {
   min-width: 144px;
   border-radius: var(--radius-xs);
-  font-weight: 850;
 }
 
 .subscribe-link.is-coming-soon {
@@ -1409,7 +1417,7 @@ pre code {
   background: var(--surface);
   color: var(--muted);
   font-size: 0.9rem;
-  font-weight: 700;
+  font-weight: 500;
   text-decoration: none;
 }
 
@@ -1435,7 +1443,7 @@ pre code {
   background: var(--chip);
   color: #0052a3;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .brief-card,
@@ -1978,7 +1986,7 @@ pre code {
   display: block;
   margin-bottom: 8px;
   color: var(--text);
-  font-weight: 850;
+  font-weight: 600;
 }
 
 .article-block p:last-child {
@@ -2169,7 +2177,7 @@ pre code {
 .diagram-title {
   margin-bottom: 14px;
   color: var(--text);
-  font-weight: 850;
+  font-weight: 600;
 }
 
 .diagram-lane {
@@ -2185,7 +2193,7 @@ pre code {
 .diagram-lane-label {
   color: var(--primary);
   font-size: 0.78rem;
-  font-weight: 850;
+  font-weight: 600;
 }
 
 .diagram-node {

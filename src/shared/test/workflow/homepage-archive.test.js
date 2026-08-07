@@ -548,6 +548,22 @@ test('tertiary meta text keeps WCAG AA contrast on the white and parchment canva
   assert.match(css, /stroke='%236e6e73'/);
 });
 
+test('font weights stay on the DESIGN.md 400/500/600 ramp', () => {
+  const css = readStylesheet();
+
+  // DESIGN.md Do & Don't: 400(본문) / 500(리드·나브·chip) / 600(헤드라인·라벨), 700 이상 금지.
+  // 개별 규칙이 없는 heading은 브라우저 기본 bold(700)로 떨어지므로 base 규칙에서 못박는다.
+  for (const heading of ['h1', 'h2', 'h3']) {
+    assertCssDeclaration(exactSelectorBlock(css, heading), 'font-weight', '600');
+  }
+
+  // 램프 밖 값은 .section-icon-star 하나뿐이다(텍스트 굵기가 아니라 글리프 아이콘 획 두께).
+  const offRamp = [...css.matchAll(/font-weight:\s*([^;]+);/g)]
+    .map(match => match[1].trim())
+    .filter(value => !['400', '500', '600', 'inherit'].includes(value));
+  assert.deepEqual(offRamp, ['900']);
+});
+
 test('homepage featured hero and latest grid CSS cover the rebuilt layout', () => {
   const css = readStylesheet();
   const featuredHero = exactSelectorBlock(css, '.featured-hero');
