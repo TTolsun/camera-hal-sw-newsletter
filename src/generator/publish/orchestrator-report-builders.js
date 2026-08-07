@@ -8,7 +8,7 @@ const { stringOrEmpty } = require('./orchestrator-shared-helpers');
 const { normalizeUrl } = require('../select/newsroom-selection');
 const { validatePublicArticle } = require('../reporter/public-article-contract');
 const { renderCandidateSelectionDiagnostics } = require('../select/selection-diagnostics');
-const { explicitDemotedGroups } = require('../../shared/common/article-groups');
+const { explicitDemotedGroups, explicitHardBlockedGroups } = require('../../shared/common/article-groups');
 
 function reviewPackageFactCheck(factCheck) {
   return factCheck || {
@@ -75,6 +75,13 @@ function editorRenderedGroupKeys(editor = {}) {
 
 function editorExplicitlyDemotedGroups(editor = {}) {
   return explicitDemotedGroups(editor);
+}
+
+// #837: editor가 기록한 hard block. thin-week salvage(newsletter-quality.js)와 구조적
+// demote(orchestrator-repair-completion.js)가 떨군 section을 사유와 함께 여기에 남기는데,
+// 이 값이 status로 전달되지 않아 coverage 등식에서 "설명 없는 손실"로 보였다.
+function editorHardBlockedGroups(editor = {}) {
+  return explicitHardBlockedGroups(editor);
 }
 
 function buildRetryHistoryMarkdown(date, attempts, selectionDiagnostics = null) {
@@ -219,6 +226,7 @@ module.exports = {
   normalizeBackgroundContextReport,
   editorRenderedGroupKeys,
   editorExplicitlyDemotedGroups,
+  editorHardBlockedGroups,
   buildRetryHistoryMarkdown,
   buildSelectionReport,
   validateMergedWeeklyArticle

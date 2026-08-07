@@ -161,3 +161,56 @@ test('runtime-demoted candidate가 있으면 shortlist를 재계산하고 다시
     assert.ok(out.shortlistReport.demoted_candidate_count >= 1);
   });
 });
+
+// #837: normalizeShortlistReport는 selected_articles를 primary_selected_articles(결정론 앵커)에서
+// 다시 투영한다. runtime-demoted가 잡혀 여기서 재정규화가 돌면 재조정으로 좁혀진 main 집합이
+// 결정론 집합으로 되감겨, 배열은 되감긴 값인데 카운트는 재조정 값이라는 자기모순이 생긴다.
+test('finalize 재정규화가 재조정된 main 집합을 되감지 않는다 (#837)', () => {
+  withStubbedEditorValidation((finalizeDraftAfterAttempts) => {
+    const newsroomDir = tempRoot('finalize-');
+    const demotedUrl = 'https://example.com/demoted';
+    const article = (url) => ({
+      url,
+      url_hash: url,
+      title: url,
+      article_group_key: `group:${url}`,
+      relevance_bucket: 'direct_aosp_camera'
+    });
+    // 결정론 앵커는 3건, 재조정된 현재 main 집합은 2건인 상태.
+    const deterministic = [article('a'), article('b'), article('c')];
+    const reconciled = deterministic.slice(0, 2);
+
+    const out = finalizeDraftAfterAttempts(baseArgs(newsroomDir, {
+      shortlistReport: {
+        selected_articles: reconciled,
+        primary_selected_articles: deterministic,
+        shortlisted_candidates: deterministic,
+        selected_article_count: reconciled.length,
+        selected_group_count: reconciled.length,
+        selected_representative_group_keys: reconciled.map(item => item.article_group_key),
+        deterministic_selected_count: deterministic.length
+      },
+      reporter: {
+        candidates: [{
+          title: 'Demoted source',
+          url: demotedUrl,
+          source_candidate_hash: 'hash-demoted',
+          relevance_bucket: 'direct_aosp_camera'
+        }]
+      },
+      excludedSections: [{
+        headline: 'Demoted article',
+        sources: [{ title: 'Demoted source', url: demotedUrl }]
+      }]
+    }));
+
+    assert.equal(out.shortlistReport.demoted_candidate_count, 1, '재정규화 경로를 실제로 탔는지 확인');
+    assert.equal(
+      out.shortlistReport.selected_articles.length,
+      out.shortlistReport.selected_article_count,
+      '배열과 카운트가 어긋나면 안 된다'
+    );
+    assert.equal(out.shortlistReport.selected_articles.length, 2, '재조정된 main 집합이 유지된다');
+    assert.equal(out.shortlistReport.primary_selected_articles.length, 3, '결정론 앵커는 보존된다');
+  });
+});

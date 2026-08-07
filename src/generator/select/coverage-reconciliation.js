@@ -15,6 +15,7 @@
 // exclude는 전부 "main 아님"으로 collapse한다(참고자료 섹션은 기존 결정론 로직 유지).
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
+const { candidateGroupKey } = require('../../shared/common/article-groups');
 
 const COVERAGE_MAIN = 'main_article';
 const IMPACT_RANK = { high: 3, medium: 2, low: 1 };
@@ -31,6 +32,11 @@ function supportingBuckets() {
 // url_hash를 가지며 url로 폴백한다.
 function candidateKey(candidate) {
   return String(candidate?.url_hash || candidate?.url || candidate?.title || '').trim();
+}
+
+// 후보 목록의 대표 그룹키를 입력 순서대로, 중복 없이 뽑는다.
+function uniqueGroupKeys(candidates) {
+  return [...new Set(ensureArray(candidates).map(candidateGroupKey).filter(Boolean))];
 }
 
 // 승급 가드: LLM은 결정론이 이미 main 자격을 준 후보만 main으로 올릴 수 있다.
@@ -163,12 +169,34 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
     }
   }
 
+  // #837: 재조정이 main 집합을 바꾸면 그 집합에서 파생된 요약도 같이 바뀌어야 한다.
+  // 정본만 갈아끼우고 파생을 그대로 두면 generation-status의 coverage 등식
+  // (selected === rendered + demoted + hardBlocked)이 재조정 前 좌변과 재조정 後
+  // 우변을 섞어 계산해 정상 발행에도 group_coverage_ok=false를 찍는다.
+  // 파생을 여기서 함께 내보내 호출부가 필드를 하나씩 대입하지 않게 한다.
+  const deterministicGroupKeys = uniqueGroupKeys(deterministicSelected);
+  const reconciledGroupKeys = uniqueGroupKeys(clamped);
+  const reconciledGroupKeySet = new Set(reconciledGroupKeys);
+  const deterministicGroupKeySet = new Set(deterministicGroupKeys);
+
   return {
     selected: clamped,
+    // 재조정된 main 집합에서 파생되는 shortlistReport 요약 필드.
+    selection_summary: {
+      selected_article_count: clamped.length,
+      selected_group_count: reconciledGroupKeys.length,
+      selected_representative_group_keys: reconciledGroupKeys
+    },
     diff: {
       deterministic_selected: [...deterministicKeys],
       reconciled_selected: clamped.map(candidateKey),
-      changes
+      changes,
+      // 그룹 단위 provenance. changes[].key는 candidateKey(url_hash/url/title)라
+      // 그룹키와 네임스페이스가 달라 그대로 쓰면 selected와 매칭되지 않는다. 또 같은
+      // 그룹의 다른 후보가 살아남았으면 그룹이 강등된 게 아니므로 집합 차집합으로 센다.
+      deterministic_selected_group_keys: deterministicGroupKeys,
+      demoted_group_keys: deterministicGroupKeys.filter(key => !reconciledGroupKeySet.has(key)),
+      promoted_group_keys: reconciledGroupKeys.filter(key => !deterministicGroupKeySet.has(key))
     }
   };
 }

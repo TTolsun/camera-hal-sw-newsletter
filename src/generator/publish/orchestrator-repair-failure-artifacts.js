@@ -39,6 +39,7 @@ const {
 const {
   editorRenderedGroupKeys,
   editorExplicitlyDemotedGroups,
+  editorHardBlockedGroups,
   buildRetryHistoryMarkdown
 } = require('./orchestrator-report-builders');
 const {
@@ -173,6 +174,7 @@ function writeReviewableRepairFailureArtifacts({
       renderedMainArticleCount: ensureArray(fallbackEditor.sections).length,
       renderedGroupKeys: editorRenderedGroupKeys(fallbackEditor),
       explicitlyDemotedGroups: editorExplicitlyDemotedGroups(fallbackEditor),
+      hardBlockedGroups: editorHardBlockedGroups(fallbackEditor),
       finalPublishReady: false,
       publishGatePassed: false,
       compositionMode: COMPOSITION_MODES.NEEDS_FIX,
@@ -218,6 +220,7 @@ function writeReviewableRepairFailureArtifacts({
         renderedMainArticleCount: ensureArray(fallbackEditor.sections).length,
         renderedGroupKeys: editorRenderedGroupKeys(fallbackEditor),
         explicitlyDemotedGroups: editorExplicitlyDemotedGroups(fallbackEditor),
+        hardBlockedGroups: editorHardBlockedGroups(fallbackEditor),
         lockedArticleCount: 0,
         demotedArticleCount: 0,
         finalPublishReady: false,

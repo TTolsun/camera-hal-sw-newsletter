@@ -52,11 +52,19 @@ function finalizeDraftAfterAttempts({
 }) {
   const runtimeDemotedCandidates = candidatesForSections(excludedSections, reporter);
   if (runtimeDemotedCandidates.length > 0) {
+    // #837: normalizeShortlistReport는 selected_articles를 primary_selected_articles
+    // (결정론 앵커)에서 다시 투영한다(selection-diagnostics.js:148-152). 그 재투영은
+    // attempt 시작 지점에서 재조정 결과를 초기화하려고 의도된 것이고, attempt loop가
+    // 끝난 여기서는 재조정된 main 집합을 결정론 집합으로 되감아 버린다. 그러면 배열은
+    // 되감긴 5건인데 카운트는 재조정된 4건이라는 자기모순이 생긴다. 앵커는 그대로 두고
+    // 현재 main 집합만 보존한다.
+    const reconciledSelectedArticles = ensureArray(shortlistReport.selected_articles);
     shortlistReport = normalizeShortlistReport({
       ...shortlistReport,
       demoted_candidates: runtimeDemotedCandidates,
       demoted_candidate_count: runtimeDemotedCandidates.length
     }, reporter);
+    shortlistReport.selected_articles = reconciledSelectedArticles;
     generationRunState.shortlistReport = shortlistReport;
     writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
     writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
