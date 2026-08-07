@@ -313,6 +313,7 @@ function selectionDiagnosticsFromReports(shortlistReport = null, reporterReport 
     composition_reason: shortlistReport?.composition_reason || '',
     composition_summary: shortlistReport?.composition_summary || {},
     editor_review_required: shortlistReport?.editor_review_required === true,
+    release_class_catch_up: shortlistReport?.release_class_catch_up || null,
     reporter_selected_but_final_excluded_count:
       reporterReport?.reporter_selected_but_final_excluded_count ??
       shortlistReport?.reporter_selected_but_final_excluded_count ??
@@ -338,6 +339,7 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
   const headlineInclusion = diagnostics.headline_latest_inclusion || {};
   const headlinePublicRender = diagnostics.headline_public_render_reconciliation || {};
   const headlineRemoved = ensureArray(diagnostics.removed_due_to_headline_inclusion);
+  const releaseClassCatchUp = diagnostics.release_class_catch_up || {};
   const hints = ensureArray(diagnostics.selection_shortage_hints)
     .map(item => `- ${item}`)
     .join('\n') || '- none';
@@ -372,6 +374,9 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- Supporting main articles: ${formatCount(diagnostics.supporting_main_article_count ?? composition.supporting_main_article_count)}`,
     `- Forbidden main articles: ${formatCount(diagnostics.forbidden_main_article_count ?? composition.forbidden_main_article_count)}`,
     `- Non-fallback reviewable: ${formatCount(diagnostics.non_fallback_reviewable_article_count ?? composition.non_fallback_reviewable_article_count)}`,
+    `- release_class_pool_size: ${formatCount(releaseClassCatchUp.pool_size)}`,
+    `- release_class_admitted: ${formatCount(releaseClassCatchUp.admitted)}`,
+    `- release_class_blocked_reason: ${formatCount(releaseClassCatchUp.blocked_reason || 'none')}`,
     '',
     'Source/parser recovery hint:',
     hints,

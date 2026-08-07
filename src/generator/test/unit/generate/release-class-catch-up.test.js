@@ -4,6 +4,11 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const { buildShortlistReport } = require('../../../select/newsroom-selection');
+const {
+  renderCandidateSelectionDiagnostics,
+  selectionDiagnosticsFromReports
+} = require('../../../select/selection-diagnostics');
+const { buildSelectionReport } = require('../../../publish/orchestrator-report-builders');
 
 // release-class 레인(#825): release 채널(collectionModeHint: release-note-watch) 후보는
 // 주간 발행 주기와 신선도 창 사이에 끼면 thin week가 올 때까지 영원히 기회가 없다.
@@ -152,6 +157,101 @@ test('an already-covered release is not re-selected', () => {
   ] };
   const result = report([...freshWeek(), releaseCandidate()], { exposureHistory: history });
   assert.equal(result.catch_up_used_count, 0);
+});
+
+// #838: 레인이 아무것도 승급하지 않은 주에는 산출물에 흔적이 전혀 남지 않아
+// "자격 있는 후보가 없었다"와 "자리가 없었다"를 사후에 구분할 수 없었다(실측 W32).
+// 아래 테스트들은 레인 진단이 항상 기록되고, 커밋되는 selection-report.json까지
+// 도달하는지를 고정한다.
+
+// 2026-07-27 기준 primary 창 안의 강한 신규 5건 — mainArticleCount.max를 채우는 주.
+function maxedWeek() {
+  return [
+    ...freshWeek(),
+    strongCandidate({
+      title: 'Fresh camera D', url: 'https://git.kernel.org/linux/c/fresh-d',
+      published_date: '2026-07-23', version_or_release: 'd1', behavior_change: 'API change D'
+    }),
+    strongCandidate({
+      title: 'Fresh camera E', url: 'https://source.android.com/docs/core/camera/fresh-e',
+      published_date: '2026-07-22', version_or_release: 'e1', behavior_change: 'API change E'
+    })
+  ];
+}
+
+test('the lane records pool size, admissions, and no blocked reason when it admits', () => {
+  const result = report([...freshWeek(), releaseCandidate()]);
+  assert.deepEqual(result.release_class_catch_up, {
+    pool_size: 1,
+    admitted: 1,
+    blocked_reason: ''
+  });
+});
+
+test('a full lineup is recorded as lineup_at_max, not as a missing candidate', () => {
+  // 실측 W32: deterministic_selected_count 5 == mainArticleCount.max 5.
+  // 자격을 갖춘 릴리스가 pool에 있었는데도 루프가 첫 반복에서 빠져나갔다.
+  const result = report([...maxedWeek(), releaseCandidate()]);
+  assert.equal(result.selected_articles.length, 5);
+  assert.equal(result.catch_up_used_count, 0);
+  assert.deepEqual(result.release_class_catch_up, {
+    pool_size: 1,
+    admitted: 0,
+    blocked_reason: 'lineup_at_max'
+  });
+});
+
+test('an empty release pool is recorded as no_eligible_candidate', () => {
+  const result = report(freshWeek());
+  assert.deepEqual(result.release_class_catch_up, {
+    pool_size: 0,
+    admitted: 0,
+    blocked_reason: 'no_eligible_candidate'
+  });
+});
+
+test('a release sharing a selected release page is recorded as duplicate_release_page', () => {
+  // freshWeek()[0]은 CameraX 릴리스 노트 페이지다. 같은 페이지의 다른 버전은
+  // release-note dedup(#500)에 걸려 승급되지 않는다 — 자리가 없어서가 아니다.
+  const sameReleasePage = releaseCandidate({
+    title: 'CameraX 1.5.0', url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.5.0',
+    version_or_release: '1.5.0', api_or_component: 'CameraX'
+  });
+  const result = report([...freshWeek(), sameReleasePage]);
+  assert.equal(result.catch_up_used_count, 0);
+  assert.deepEqual(result.release_class_catch_up, {
+    pool_size: 1,
+    admitted: 0,
+    blocked_reason: 'duplicate_release_page'
+  });
+});
+
+test('a disabled lane is recorded as lane_disabled instead of looking candidate-starved', () => {
+  const { maxReleaseClassArticles, ...withoutKey } = CATCH_UP_POLICY;
+  const result = report([...freshWeek(), releaseCandidate()], { catchUpPolicy: withoutKey });
+  assert.equal(result.release_class_catch_up.admitted, 0);
+  assert.equal(result.release_class_catch_up.blocked_reason, 'lane_disabled');
+});
+
+test('the lane diagnostics reach the committed selection-report.json', () => {
+  // shortlisted-candidates.json은 .gitignore 대상이라 커밋되지 않는다. 진단이
+  // buildSelectionReport 투영을 통과하지 못하면 다음 run에서도 판정할 수 없다.
+  const shortlist = report([...maxedWeek(), releaseCandidate()]);
+  const diagnostics = selectionDiagnosticsFromReports(shortlist, null);
+  const selectionReport = buildSelectionReport('2026-07-27', shortlist, diagnostics);
+  assert.deepEqual(selectionReport.release_class_catch_up, {
+    pool_size: 1,
+    admitted: 0,
+    blocked_reason: 'lineup_at_max'
+  });
+});
+
+test('the lane diagnostics are rendered into selection-diagnostics.md', () => {
+  const shortlist = report([...maxedWeek(), releaseCandidate()]);
+  const markdown = renderCandidateSelectionDiagnostics(selectionDiagnosticsFromReports(shortlist, null));
+  assert.match(markdown, /- release_class_pool_size: 1/);
+  assert.match(markdown, /- release_class_admitted: 0/);
+  assert.match(markdown, /- release_class_blocked_reason: lineup_at_max/);
 });
 
 test('thin-week general lane and release lane compose without double-counting', () => {
