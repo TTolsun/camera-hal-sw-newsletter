@@ -557,7 +557,9 @@ pre code {
   content: "";
 }
 
-/* 글리프 아이콘(★)의 획 두께를 만드는 값이라 DESIGN.md 텍스트 weight 램프(400/500/600) 대상이 아니다. */
+/* 램프의 유일한 예외. 900은 텍스트 굵기가 아니라 글리프 아이콘(★)의 획 두께를 만드는 값이다.
+   현재 이 클래스를 쓰는 마크업은 없다(형제 .section-icon-* 와 함께 남은 dead anchor) — 지울
+   거라면 .section-icon 계열을 통째로 다루는 별도 정리에서 하고, weight 정렬로 섞지 않는다. */
 .section-icon-star {
   color: #0066cc;
   font-size: 1.32rem;
