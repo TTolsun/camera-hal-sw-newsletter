@@ -95,6 +95,8 @@ function renderCatchUpSummary(root, date) {
   // release-class 레인(#825)은 fresh 선정이 목표를 채운 주에도 발동하므로, "fresh 기사가
   // 부족해" 문구는 일반(fill_open_slots) 레인 승급분에만 쓴다. catch_up_lane이 없는 과거
   // 리포트는 일반 레인만 있던 시기의 산출물이라 기존 문구 그대로가 사실이다.
+  // 이 수는 레인 라벨 기준이라, release 채널 기준으로 세는 selection-report.json의
+  // release_class_catch_up.admitted(#838)와 다를 수 있다. 서로 다른 질문에 답하는 값이다.
   const releaseClassCount = articles.filter(item => item.catch_up_lane === 'release_class').length;
   const generalCount = used - releaseClassCount;
   const summaryLines = [];

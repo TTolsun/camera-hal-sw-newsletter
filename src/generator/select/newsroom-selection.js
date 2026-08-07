@@ -659,6 +659,24 @@ function isReleaseClassCandidate(candidate = {}) {
   return text(candidate.source_collection_mode || candidate.sourceCollectionMode) === 'release-note-watch';
 }
 
+// release-class 레인이 아무것도 승급하지 않으면 산출물에 흔적이 전혀 남지 않아, 나중에
+// "자격 있는 릴리스가 없었다"와 "자리가 없었다"를 구분할 수 없다(#838, 실측 2026-08-03).
+// 레인이 열려 있는 한 아래 사유 중 하나를 항상 기록한다.
+//
+// 순서가 곧 계약이다. 승급이 있었으면 다른 사유는 성립하지 않으므로 admitted가 최우선이고
+// (레인이 꺼진 주에도 일반 레인이 릴리스를 가져갈 수 있다), 자리가 없어 후보를 평가조차
+// 못 한 주는 중복보다 먼저 보고한다 — 슬롯 기아는 이 진단이 찾으려는 신호 자체라 중복
+// 스킵 1건에 가려지면 안 된다. 마지막 반환은 사실과 어긋나는 사유를 재사용하는 대신
+// 분류 실패임을 그대로 드러낸다(pool_size > 0인데 no_eligible_candidate를 찍지 않는다).
+function releaseClassBlockedReason(observation) {
+  if (observation.admitted > 0) return '';
+  if (!observation.lane_enabled) return 'lane_disabled';
+  if (observation.pool_size === 0) return 'no_eligible_candidate';
+  if (observation.lineup_reached_max) return 'lineup_at_max';
+  if (observation.release_page_skips > 0) return 'duplicate_release_page';
+  return 'unclassified';
+}
+
 function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = getCatchUpPolicy()) {
   if (!catchUpPolicy || catchUpPolicy.enabled !== true) return [];
   const eligibleBuckets = new Set(ensureArray(catchUpPolicy.eligibleBuckets));
@@ -734,6 +752,18 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   // 갇히는 지점이다).
   const maxReleaseClassArticles = Number(catchUpPolicy.maxReleaseClassArticles) || 0;
   const thinWeek = selected.length < catchUpTarget;
+  const releaseClassObservation = {
+    lane_enabled: catchUpPolicy.enabled === true && maxReleaseClassArticles > 0,
+    pool_size: 0,
+    admitted: 0,
+    // 릴리스 페이지 dedup만 센다. 일반 중복(candidatesAreDuplicate)은 같은 함수로
+    // shortlist 단계(buildEligibleShortlist)가 먼저 걸러 사실상 여기까지 오지 않으므로,
+    // 그 가드를 사유에 섞으면 이름과 실제가 어긋난다. 제목 유사도 판정이 비추이적이라
+    // 드물게 도달할 수는 있는데, 그때는 카운터가 오르지 않아 unclassified로 떨어진다 —
+    // 틀린 사유를 찍는 대신 분류 실패가 그대로 드러난다.
+    release_page_skips: 0,
+    lineup_reached_max: false
+  };
   if (catchUpPolicy.enabled === true && (thinWeek || maxReleaseClassArticles > 0)) {
     const selectedKeys = new Set(selected.map(item => articleIdentityKey(item)));
     const poolSourceCandidates = maxReleaseClassArticles > 0
@@ -748,6 +778,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       // subsumes dated-evidence/source-gap/scope checks, so this single test is enough.
       .filter(candidate => candidate.main_article_score_eligible !== false);
     pool.sort(deterministicCandidateSort);
+    releaseClassObservation.pool_size = pool.filter(isReleaseClassCandidate).length;
     const openSlots = thinWeek ? Math.max(0, catchUpTarget - selected.length) : 0;
     const generalTake = Math.max(0, Math.min(catchUpPolicy.maxCatchUpArticles, openSlots));
     // The catch-up lane must enforce the same release-note dedup that pushUnique applies to primary
@@ -761,8 +792,14 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     let releaseClassAdmitted = 0;
     for (const candidate of pool) {
       const lineup = [...selected, ...catchUpAccepted];
-      if (lineup.length >= articlePolicy.mainArticleCount.max) break;
-      if (selectedHasSameCameraReleasePage(lineup, candidate)) continue;
+      if (lineup.length >= articlePolicy.mainArticleCount.max) {
+        releaseClassObservation.lineup_reached_max = true;
+        break;
+      }
+      if (selectedHasSameCameraReleasePage(lineup, candidate)) {
+        if (isReleaseClassCandidate(candidate)) releaseClassObservation.release_page_skips += 1;
+        continue;
+      }
       if (lineup.some(existing => candidatesAreDuplicate(existing, candidate))) continue;
       // 일반 레인은 기존 계약 유지: reference 창 후보만 채운다.
       if (generalAdmitted < generalTake && text(candidate.freshness_window) === 'reference') {
@@ -777,6 +814,11 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
         releaseClassAdmitted += 1;
       }
     }
+    // 승급 수는 레인 라벨이 아니라 후보의 release 채널 여부로 센다. reference 창 릴리스는
+    // 일반 레인이 먼저 가져갈 수 있는데, 그걸 미승급으로 세면 진단이 사실과 어긋난다.
+    // PR body의 release-class 건수(pr-body-diagnostic-sections.js)는 레인 라벨로 세므로
+    // 그 주에는 두 수가 다를 수 있다. 서로 다른 질문에 답하는 값이라 의도된 차이다.
+    releaseClassObservation.admitted = catchUpAccepted.filter(isReleaseClassCandidate).length;
     catchUpSelected = catchUpAccepted.map(candidate => {
       // Promoting a reference-window candidate to a catch-up main article: clear the
       // reference-window exclusion markers so the editor group-coverage validation does
@@ -953,6 +995,11 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     reference_context_candidates: referenceContextCandidates,
     demoted_candidates: [],
     excluded_candidates: excluded,
+    release_class_catch_up: {
+      pool_size: releaseClassObservation.pool_size,
+      admitted: releaseClassObservation.admitted,
+      blocked_reason: releaseClassBlockedReason(releaseClassObservation)
+    },
     catch_up_used_count: catchUpSelected.length,
     catch_up_articles: catchUpSelected.map(item => ({
       title: item.title, url: item.url, catch_up_age_days: item.catch_up_age_days,

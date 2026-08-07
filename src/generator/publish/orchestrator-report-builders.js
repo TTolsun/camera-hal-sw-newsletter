@@ -202,6 +202,9 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
       forbidden_main_article_count: selectionDiagnostics.forbidden_main_article_count,
       non_fallback_reviewable_article_count: selectionDiagnostics.non_fallback_reviewable_article_count
     },
+    // #838: 전체 shortlistReport가 담기는 shortlisted-candidates.json은 커밋되지 않는다.
+    // release-class 레인 진단은 이 투영을 통과해야만 다음 run에서 판정할 수 있다.
+    release_class_catch_up: selectionDiagnostics.release_class_catch_up || report.release_class_catch_up || null,
     exclusion_reason_summary: selectionDiagnostics.exclusion_reason_summary || [],
     final_exclusion_reason_summary: selectionDiagnostics.final_exclusion_reason_summary || [],
     candidate_selection_note: selectionDiagnostics.candidate_selection_note || ''
