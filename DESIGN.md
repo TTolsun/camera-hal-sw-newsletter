@@ -12,7 +12,7 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 
 ## 브랜드
 
-- 워드마크: 헤더는 "Camera SW Newsroom"(‘Newsroom’은 `--text-tertiary` #86868b — handoff 값), 문서 title·OG·푸터 법적표기는 "Camera SW Newsletter"를 유지한다.
+- 워드마크: 헤더는 "Camera SW Newsroom"(‘Newsroom’은 `--text-tertiary`), 문서 title·OG·푸터 법적표기는 "Camera SW Newsletter"를 유지한다.
 - 마스코트: HALley (`assets/images/brand/HALley.png`, 헤더 로고 `HALley-logo.png`) — 홈 브랜드 히어로의 fallback 이미지, OG 이미지, 헤더 로고. (이슈·아카이브 히어로에는 쓰지 않는다 — mockup은 카피 중심.) 래스터는 handoff 레퍼런스의 **초록 액센트 일러스트**를 쓴다(단일 blue UI 액센트와 별개인 브랜드 그래픽 — 아래 색 참고).
 - 폰트: **Pretendard Variable** (jsdelivr CDN) + 시스템 폴백(`-apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Segoe UI", Roboto, "Noto Sans KR"`). 한글·라틴 모두 Apple SD Gothic Neo에 가까운 조용한 인상을 준다.
 
@@ -21,7 +21,7 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 단일 액센트 원칙: 모든 링크·활성 상태·focus 신호는 `--primary`(#0066cc)만 쓴다. 두 번째 UI 액센트 색은 없다. (예외: 마스코트 HALley 일러스트는 자체 **초록** 팔레트를 쓰는 브랜드 그래픽이다 — UI chrome·상호작용 요소는 여전히 blue 하나만. handoff mockup도 초록 마스코트 + blue UI 구성이다.)
 
 - 액센트: `--primary` #0066cc, `--primary-hover` #0052a3, `--focus-ring` rgba(0,102,204,.35).
-- 텍스트: `--text` #1d1d1f(본문 ink), 보조 텍스트 `--muted` #6e6e73(흰 배경 5.07:1, 파치먼트 4.65:1로 WCAG AA ≥4.5:1), 3차 메타 `--text-tertiary` #86868b(날짜·캡션·법적 표기 — Apple Newsroom 원값).
+- 텍스트: `--text` #1d1d1f(본문 ink), 보조 텍스트 `--muted` #6e6e73(흰 배경 5.07:1, 파치먼트 4.65:1로 WCAG AA ≥4.5:1), 3차 메타 `--text-tertiary` #6e6e73(날짜·캡션·법적 표기). handoff 원값 #86868b 는 흰 배경 3.62:1·파치먼트 3.33:1 로 AA 미달이라 쓰지 않는다 — 흰/파치먼트 캔버스에서 AA 를 지키면서 `--muted` 보다 밝은 색은 사실상 없으므로(상한 ≈#707075, 4.52:1) **3차 층은 색이 아니라 크기(12–14px)·트래킹·배치로 구분**한다.
 - 캔버스: `--surface` #ffffff(지배·풀블리드), `--bg` #f5f5f7(파치먼트: 브리핑/take/참고자료 박스·푸터·chip 기본), `--surface-soft` #f5f5f7(썸네일·featured·이미지 placeholder 배경 — handoff 와 동일하게 파치먼트 톤).
 - 라인: `--line` #e0e0e0 hairline. 컨트롤(정렬 pill·페이지 버튼·번호 배지) 테두리는 #d2d2d7.
 - chip: 기본 #f5f5f7 + #e3e3e8 border, **활성은 ink(#1d1d1f) 채움 + 흰 글자**(파랑이 아니라 검정 — 편집형 필터 grammar).

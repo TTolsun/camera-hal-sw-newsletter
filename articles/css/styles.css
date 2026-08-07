@@ -6,8 +6,10 @@
   --text: #1d1d1f;
   /* 보조 텍스트(#6e6e73)는 흰 배경 5.07:1, 파치먼트 4.65:1로 WCAG AA(>=4.5:1)를 만족. */
   --muted: #6e6e73;
-  /* 3차 메타 텍스트(날짜·캡션·법적 표기). 디자인 정본(Apple Newsroom mockup) 값. */
-  --text-tertiary: #86868b;
+  /* 3차 메타 텍스트(날짜·캡션·법적 표기). handoff 원값 #86868b 는 흰 배경 3.62:1,
+     파치먼트 3.33:1 로 WCAG AA(>=4.5:1) 미달이라 --muted 와 같은 #6e6e73 으로 맞춘다.
+     3차 층은 색이 아니라 크기(12~14px)·트래킹으로 구분한다. */
+  --text-tertiary: #6e6e73;
   --line: #e0e0e0;
   --primary: #0066cc;
   --primary-hover: #0052a3;
@@ -907,7 +909,7 @@ pre code {
   padding: 0 32px 0 15px;
   border: 1px solid #d2d2d7;
   border-radius: var(--radius-pill);
-  background: var(--surface) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%2386868b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 12px center;
+  background: var(--surface) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%236e6e73' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 12px center;
   color: var(--text);
   font: inherit;
   font-size: 0.8125rem;
