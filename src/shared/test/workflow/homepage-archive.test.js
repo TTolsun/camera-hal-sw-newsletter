@@ -537,6 +537,17 @@ test('homepage shell is full-bleed with the newsroom translucent header', () => 
   assert.doesNotMatch(css, /homepage-header-actions|icon-link|icon-menu|icon-search|section-icon-bolt/);
 });
 
+test('tertiary meta text keeps WCAG AA contrast on the white and parchment canvases', () => {
+  const css = readStylesheet();
+  const rootTokens = exactSelectorBlock(css, ':root');
+
+  // #86868b (the handoff literal) measures 3.62:1 on #ffffff and 3.33:1 on #f5f5f7, below the
+  // WCAG AA 4.5:1 floor for normal-size text. #6e6e73 measures 5.07:1 and 4.65:1.
+  assertCssDeclaration(rootTokens, '--text-tertiary', '#6e6e73');
+  // The sort chevron data URI cannot use var(), so it repeats the same value by hand.
+  assert.match(css, /stroke='%236e6e73'/);
+});
+
 test('homepage featured hero and latest grid CSS cover the rebuilt layout', () => {
   const css = readStylesheet();
   const featuredHero = exactSelectorBlock(css, '.featured-hero');
