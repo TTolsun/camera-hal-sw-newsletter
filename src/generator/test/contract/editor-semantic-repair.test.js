@@ -13,6 +13,7 @@ const {
   section,
   editor,
   normalizeSection,
+  reporterForClaimTests,
   tempNewsroomDir,
   readJson,
   buildGroupCoverageFixture
@@ -504,4 +505,158 @@ test('unrepairable section-count semantic failures are not repaired', async () =
 
   assert.equal(repairCalled, false);
   assert.equal(readJson(path.join(newsroomDir, 'editor-validation-error-attempt-5.json')).details.field, 'sections');
+});
+
+// #660: editor가 대표 사실만 claim으로 쓰고 부수 verified_fact의 claim을 빠뜨리는 부분 미커버
+// (claims는 있는데 일부 fact가 missing_matching_fact_claim)가 4/6주 LLM semantic repair를
+// 발동시키던 지배 트리거다. claims가 이미 있는 섹션도 미커버 fact만 결정론 backfill로 채운다.
+test('semantic repair deterministically backfills fact claims for uncovered verified facts in sections with existing claims', async () => {
+  const newsroomDir = tempNewsroomDir();
+  const uncoveredFact = '센서 출력 데이터 전송은 별도의 직렬 인터페이스를 통해 이루어집니다.';
+  const existingClaim = {
+    claim_id: 'claim-1',
+    text: 'Fact 1',
+    claim_type: 'fact',
+    evidence_ids: ['evidence-1'],
+    source_urls: ['https://example.com/source-1'],
+    impact_level: 'app_api_or_framework_adjacent',
+    overclaim_risk: 'low'
+  };
+  const draft = editor({
+    sections: [
+      section(1, {
+        article_sections: {
+          verified_facts: ['Fact 1', uncoveredFact],
+          background_context: 'Background 1',
+          hal_driver_impact: 'HAL perspective 1',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1'
+        },
+        claims: [existingClaim]
+      })
+    ]
+  });
+
+  const result = await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    reporter: reporterForClaimTests(),
+    attempt: 1,
+    stage: 'editor attempt 1/2',
+    newsroomDir,
+    normalizeSection,
+    strictClaims: true,
+    repairFn: async () => {
+      throw new Error('LLM repair should not be needed for deterministic partial-coverage backfill.');
+    }
+  });
+
+  assert.equal(result.repairAttempted, true);
+  assert.equal(result.repairSucceeded, true);
+  assert.equal(result.deterministicRepair, true);
+  const claims = result.editor.sections[0].claims;
+  assert.equal(claims.length, 2);
+  assert.deepEqual(claims[0], existingClaim);
+  assert.equal(claims[1].text, uncoveredFact);
+  assert.equal(claims[1].claim_type, 'fact');
+  assert.deepEqual(claims[1].evidence_ids, ['evidence-1']);
+  assert.notEqual(claims[1].claim_id, existingClaim.claim_id);
+});
+
+test('partial-coverage backfill generates non-colliding claim ids next to editor-authored ids', async () => {
+  const newsroomDir = tempNewsroomDir();
+  const uncoveredFact = '센서 출력 데이터 전송은 별도의 직렬 인터페이스를 통해 이루어집니다.';
+  const draft = editor({
+    sections: [
+      section(1, {
+        article_sections: {
+          verified_facts: ['Fact 1', uncoveredFact],
+          background_context: 'Background 1',
+          hal_driver_impact: 'HAL perspective 1',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1'
+        },
+        claims: [{
+          claim_id: 'article-1-fact-1',
+          text: 'Fact 1',
+          claim_type: 'fact',
+          evidence_ids: ['evidence-1'],
+          source_urls: ['https://example.com/source-1'],
+          impact_level: 'app_api_or_framework_adjacent',
+          overclaim_risk: 'low'
+        }]
+      })
+    ]
+  });
+
+  const result = await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    reporter: reporterForClaimTests(),
+    attempt: 1,
+    stage: 'editor attempt 1/2',
+    newsroomDir,
+    normalizeSection,
+    strictClaims: true,
+    repairFn: async () => {
+      throw new Error('LLM repair should not be needed for deterministic partial-coverage backfill.');
+    }
+  });
+
+  assert.equal(result.deterministicRepair, true);
+  const claimIds = result.editor.sections[0].claims.map(claim => claim.claim_id);
+  assert.equal(new Set(claimIds).size, claimIds.length);
+});
+
+test('partial-coverage backfill fails closed to LLM repair when the uncovered fact cannot bind evidence', async () => {
+  const newsroomDir = tempNewsroomDir();
+  // protected token(v9.87.6)이 evidence 텍스트에 없어 strict 오라클이 바인딩을 거부한다.
+  const unbindableFact = '이 드라이버는 v9.87.6 릴리스에서 확인되었습니다.';
+  const draft = editor({
+    sections: [
+      section(1, {
+        article_sections: {
+          verified_facts: ['Fact 1', unbindableFact],
+          background_context: 'Background 1',
+          hal_driver_impact: 'HAL perspective 1',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1'
+        },
+        claims: [{
+          claim_id: 'claim-1',
+          text: 'Fact 1',
+          claim_type: 'fact',
+          evidence_ids: ['evidence-1'],
+          source_urls: ['https://example.com/source-1'],
+          impact_level: 'app_api_or_framework_adjacent',
+          overclaim_risk: 'low'
+        }]
+      })
+    ]
+  });
+
+  let repairPayload = null;
+  await assert.rejects(
+    repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      reporter: reporterForClaimTests(),
+      attempt: 1,
+      stage: 'editor attempt 1/2',
+      newsroomDir,
+      normalizeSection,
+      strictClaims: true,
+      repairFn: async payload => {
+        repairPayload = payload;
+        throw new Error('stop after recording the fallback payload');
+      }
+    }),
+    error => error instanceof EditorSemanticValidationError
+  );
+
+  assert.ok(repairPayload, 'LLM repair fallback should run when deterministic backfill cannot bind');
+  assert.deepEqual(
+    repairPayload.validationError.deterministic_repair_failure_reason_codes,
+    ['unbindable_verified_fact']
+  );
 });
