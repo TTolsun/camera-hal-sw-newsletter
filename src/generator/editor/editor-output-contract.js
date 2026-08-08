@@ -332,10 +332,18 @@ function backfillFactClaim({ section, candidate, articleIndex, seedEvidencePack,
 }
 
 // Deterministic repair for `sections.claims`: when a strict main article has source-backed
-// verified_facts[] but an empty claims[], copy each verified fact verbatim into a fact claim and
-// bind it only to the candidate's own allowed_claim_evidence. No new facts and no evidence are
-// invented; the real claim binding validator is the oracle, so anything that cannot bind safely is
-// left to the LLM repair path (and ultimately fails closed).
+// verified_facts[] that no claim_type=fact claim covers, copy each uncovered fact verbatim into a
+// fact claim and bind it only to the candidate's own allowed_claim_evidence. This handles both an
+// empty claims[] (원래 범위) and the #660 partial-coverage shape — editor가 대표 사실만 claim으로
+// 쓰고 부수 verified_fact(스펙·리뷰 상태)의 claim을 빠뜨려 missing_matching_fact_claim으로 LLM
+// semantic repair가 발동하던 지배 트리거. No new facts and no evidence are invented; the real
+// claim binding validator is the oracle, so anything that cannot bind safely is left to the LLM
+// repair path (and ultimately fails closed).
+//
+// #833이 기각한 "claim 텍스트 동기화"와 다르다: 그 설계는 이미 수용된 출력의 claim을 사후에 새
+// 문구로 덮어써 coverage를 항진(fact==claim)으로 만들면서 evidence 재검증이 없었다. 여기서는 검증
+// 진입 시점에 새 claim을 추가하고 같은 strict 오라클이 evidence 바인딩(protected token 지지 포함)을
+// 통과시킬 때만 수용하므로, 게이트 강도는 editor가 직접 그 claim을 썼을 때와 동일하다.
 function deterministicallyBackfillFactClaims(value, options = {}) {
   const reporter = options.reporter || { candidates: [] };
   const seedEvidencePack = options.seedEvidencePack || null;
@@ -345,24 +353,52 @@ function deterministicallyBackfillFactClaims(value, options = {}) {
   let changed = false;
 
   ensureArray(repaired?.sections).forEach((section, index) => {
-    if (ensureArray(section.claims).length > 0) return;
+    const existingClaims = ensureArray(section.claims);
     const candidate = candidateForSection(section, candidateIndex) || {};
-    const verifiedFacts = uniqueText(
-      ensureArray(normalizeArticleSections(section).verified_facts).map(text).filter(Boolean)
-    );
-    if (verifiedFacts.length === 0) {
-      reasonCodes.push('no_verified_facts_to_bind');
-      return;
+    let uncoveredFacts;
+    if (existingClaims.length === 0) {
+      uncoveredFacts = uniqueText(
+        ensureArray(normalizeArticleSections(section).verified_facts).map(text).filter(Boolean)
+      );
+      if (uncoveredFacts.length === 0) {
+        reasonCodes.push('no_verified_facts_to_bind');
+        return;
+      }
+    } else {
+      // claims가 이미 있는 섹션은 게이트와 같은 오라클로 미커버 fact만 추려서 그 부분만 채운다.
+      // 미커버가 없으면(이 섹션의 실패 원인이 coverage가 아니면) 손대지 않는다.
+      const currentResult = validateArticleClaims({
+        section,
+        candidate,
+        articleIndex: index,
+        strict: true,
+        seedEvidencePack
+      });
+      uncoveredFacts = uniqueText(
+        ensureArray(currentResult.uncovered_facts).map(item => text(item.text)).filter(Boolean)
+      );
+      if (uncoveredFacts.length === 0) return;
     }
     const allowedEvidence = buildAllowedClaimEvidence(candidate, section, { seedEvidencePack });
     if (allowedEvidence.length === 0) {
       reasonCodes.push('no_allowed_claim_evidence');
       return;
     }
+    // 오라클의 duplicate_claim_id 판정과 같은 정규화(claim_id || claimId 별칭)로 수집해야
+    // 별칭 형태의 기존 id와 충돌한 backfill id가 최종 검증을 무산시키지 않는다.
+    const usedClaimIds = new Set(
+      existingClaims.map(claim => text(claim?.claim_id || claim?.claimId)).filter(Boolean)
+    );
     const newClaims = [];
     let sectionFailed = false;
-    verifiedFacts.forEach((factText, factIndex) => {
+    uncoveredFacts.forEach((factText, factIndex) => {
       if (sectionFailed) return;
+      let claimIdNumber = factIndex + 1;
+      let claimId = `article-${index + 1}-fact-${claimIdNumber}`;
+      while (usedClaimIds.has(claimId)) {
+        claimIdNumber += 1;
+        claimId = `article-${index + 1}-fact-${claimIdNumber}`;
+      }
       const claim = backfillFactClaim({
         section,
         candidate,
@@ -370,18 +406,19 @@ function deterministicallyBackfillFactClaims(value, options = {}) {
         seedEvidencePack,
         factText,
         allowedEvidence,
-        claimId: `article-${index + 1}-fact-${factIndex + 1}`
+        claimId
       });
       if (!claim) {
         sectionFailed = true;
         reasonCodes.push('unbindable_verified_fact');
         return;
       }
+      usedClaimIds.add(claimId);
       newClaims.push(claim);
     });
     if (sectionFailed) return;
     const candidateSection = cloneJson(section);
-    candidateSection.claims = newClaims;
+    candidateSection.claims = [...existingClaims, ...newClaims];
     const finalResult = validateArticleClaims({
       section: candidateSection,
       candidate,
@@ -393,7 +430,7 @@ function deterministicallyBackfillFactClaims(value, options = {}) {
       reasonCodes.push('backfilled_claims_failed_validation');
       return;
     }
-    section.claims = newClaims;
+    section.claims = candidateSection.claims;
     changed = true;
   });
 
