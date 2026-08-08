@@ -384,7 +384,11 @@ function deterministicallyBackfillFactClaims(value, options = {}) {
       reasonCodes.push('no_allowed_claim_evidence');
       return;
     }
-    const usedClaimIds = new Set(existingClaims.map(claim => text(claim?.claim_id)).filter(Boolean));
+    // 오라클의 duplicate_claim_id 판정과 같은 정규화(claim_id || claimId 별칭)로 수집해야
+    // 별칭 형태의 기존 id와 충돌한 backfill id가 최종 검증을 무산시키지 않는다.
+    const usedClaimIds = new Set(
+      existingClaims.map(claim => text(claim?.claim_id || claim?.claimId)).filter(Boolean)
+    );
     const newClaims = [];
     let sectionFailed = false;
     uncoveredFacts.forEach((factText, factIndex) => {

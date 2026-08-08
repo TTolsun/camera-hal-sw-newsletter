@@ -660,3 +660,117 @@ test('partial-coverage backfill fails closed to LLM repair when the uncovered fa
     ['unbindable_verified_fact']
   );
 });
+
+test('partial-coverage backfill keeps generated claim ids unique across multiple backfilled facts and claimId aliases', async () => {
+  const newsroomDir = tempNewsroomDir();
+  const uncoveredFactA = '센서 출력 데이터 전송은 별도의 직렬 인터페이스를 통해 이루어집니다.';
+  const uncoveredFactB = '해당 드라이버는 검토 중인 제안 상태로 아직 병합되지 않았습니다.';
+  const draft = editor({
+    sections: [
+      section(1, {
+        article_sections: {
+          verified_facts: ['Fact 1', uncoveredFactA, uncoveredFactB],
+          background_context: 'Background 1',
+          hal_driver_impact: 'HAL perspective 1',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1'
+        },
+        claims: [{
+          // 오라클이 인식하는 claimId 별칭 + 생성 규칙과 충돌하는 id를 함께 검증한다.
+          claimId: 'article-1-fact-2',
+          text: 'Fact 1',
+          claim_type: 'fact',
+          evidence_ids: ['evidence-1'],
+          source_urls: ['https://example.com/source-1'],
+          impact_level: 'app_api_or_framework_adjacent',
+          overclaim_risk: 'low'
+        }]
+      })
+    ]
+  });
+
+  const result = await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    reporter: reporterForClaimTests(),
+    attempt: 1,
+    stage: 'editor attempt 1/2',
+    newsroomDir,
+    normalizeSection,
+    strictClaims: true,
+    repairFn: async () => {
+      throw new Error('LLM repair should not be needed for deterministic partial-coverage backfill.');
+    }
+  });
+
+  assert.equal(result.deterministicRepair, true);
+  const claims = result.editor.sections[0].claims;
+  assert.equal(claims.length, 3);
+  const claimIds = claims.map(claim => claim.claim_id || claim.claimId);
+  assert.equal(new Set(claimIds).size, claimIds.length);
+});
+
+test('partial-coverage backfill fails closed when an existing claim keeps its own blocking issue', async () => {
+  const newsroomDir = tempNewsroomDir();
+  const uncoveredFact = '센서 출력 데이터 전송은 별도의 직렬 인터페이스를 통해 이루어집니다.';
+  const draft = editor({
+    sections: [
+      section(1, {
+        article_sections: {
+          verified_facts: ['Fact 1', uncoveredFact],
+          background_context: 'Background 1',
+          hal_driver_impact: 'HAL perspective 1',
+          action_items: ['Action 1'],
+          team_share_points: 'Summary 1'
+        },
+        claims: [
+          {
+            claim_id: 'claim-1',
+            text: 'Fact 1',
+            claim_type: 'fact',
+            evidence_ids: ['evidence-1'],
+            source_urls: ['https://example.com/source-1'],
+            impact_level: 'app_api_or_framework_adjacent',
+            overclaim_risk: 'low'
+          },
+          {
+            // protected token(v9.87.6)이 evidence에 없어 이 claim의 blocking issue는
+            // backfill로 고칠 수 없다 — 결합 최종 검증이 실패해야 한다.
+            claim_id: 'claim-2',
+            text: '이 변경은 v9.87.6 릴리스에 포함되었습니다.',
+            claim_type: 'fact',
+            evidence_ids: ['evidence-1'],
+            source_urls: ['https://example.com/source-1'],
+            impact_level: 'app_api_or_framework_adjacent',
+            overclaim_risk: 'low'
+          }
+        ]
+      })
+    ]
+  });
+
+  let repairPayload = null;
+  await assert.rejects(
+    repairEditorOutputContract({
+      value: draft,
+      date: DATE,
+      reporter: reporterForClaimTests(),
+      attempt: 1,
+      stage: 'editor attempt 1/2',
+      newsroomDir,
+      normalizeSection,
+      strictClaims: true,
+      repairFn: async payload => {
+        repairPayload = payload;
+        throw new Error('stop after recording the fallback payload');
+      }
+    }),
+    error => error instanceof EditorSemanticValidationError
+  );
+
+  assert.ok(repairPayload, 'LLM repair fallback should run when the merged section still has blocking issues');
+  assert.deepEqual(
+    repairPayload.validationError.deterministic_repair_failure_reason_codes,
+    ['backfilled_claims_failed_validation']
+  );
+});
