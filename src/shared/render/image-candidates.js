@@ -377,6 +377,14 @@ function isSafeExternalImageUrl(value) {
   return Boolean(normalizeImageUrl(value, value));
 }
 
+// repo 안에 들어 있는 fallback 그림을 가리키는 경로인지 판정합니다.
+// 이 판정이 필요한 이유는 fallback 그림이 "어느 기사에서도 오지 않은 그림"이기 때문입니다.
+// 렌더러는 이 그림에 출처 캡션을 붙이면 안 되고, 렌더 결과를 검사하는 게이트도 같은 이유로
+// 이 그림에는 출처 링크를 요구하면 안 됩니다. 두 곳이 같은 규칙을 쓰도록 여기에 한 벌만 둡니다.
+function isFallbackImagePath(value) {
+  return /^(?:(?:\.\.\/){1,3})?assets\/images\/fallback\//.test(String(value || '').replace(/\\/g, '/'));
+}
+
 module.exports = {
   MIN_CONTENT_LENGTH,
   extractImageCandidatesFromHtml,
@@ -387,6 +395,7 @@ module.exports = {
   validateImageUrl,
   validateImageCandidates,
   isSafeExternalImageUrl,
+  isFallbackImagePath,
   normalizeImageUrl,
   REJECT_PATH_PATTERN
 };

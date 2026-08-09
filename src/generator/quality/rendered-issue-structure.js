@@ -6,7 +6,7 @@ const {
   readJson,
   repoPath
 } = require('../../shared/common/common');
-const { isSafeExternalImageUrl, REJECT_PATH_PATTERN } = require('../../shared/render/image-candidates');
+const { isSafeExternalImageUrl, isFallbackImagePath, REJECT_PATH_PATTERN } = require('../../shared/render/image-candidates');
 const { repoLocalPath } = require('../render/article-image-resolver');
 const { ensureArray } = require('../render/newsletter-renderer');
 const {
@@ -72,10 +72,6 @@ function mainArticleBlocks(markdown) {
     blocks.push({ heading: matches[i][0], title, text: markdown.slice(start, end) });
   }
   return blocks;
-}
-
-function isFallbackImagePath(value) {
-  return /^(?:(?:\.\.\/){1,3})?assets\/images\/fallback\//.test(String(value || '').replace(/\\/g, '/'));
 }
 
 function hasClassToken(content, className) {
@@ -201,10 +197,15 @@ function validateArticleImages(relPath, html, root, errors) {
       errors.push(`Newsletter article image missing loading="lazy": ${relPath}`);
     }
 
-    const start = String(html || '').indexOf(tag);
-    const nearby = start >= 0 ? String(html || '').slice(start, start + 900) : '';
-    if (!/article-image-caption/.test(nearby) || !/<a\s+[^>]*href=["']https:\/\//i.test(nearby)) {
-      errors.push(`Newsletter article image missing caption attribution link: ${relPath}`);
+    // 출처 캡션은 그 기사 출처에서 가져온 이미지에만 요구합니다. repo fallback 그림은
+    // 어느 출처에서도 오지 않았으므로, 여기서 출처 링크를 요구하면 렌더러에게 가짜 출처를
+    // 만들라고 시키는 셈이 됩니다.
+    if (!isFallbackImagePath(src)) {
+      const start = String(html || '').indexOf(tag);
+      const nearby = start >= 0 ? String(html || '').slice(start, start + 900) : '';
+      if (!/article-image-caption/.test(nearby) || !/<a\s+[^>]*href=["']https:\/\//i.test(nearby)) {
+        errors.push(`Newsletter article image missing caption attribution link: ${relPath}`);
+      }
     }
   }
 }

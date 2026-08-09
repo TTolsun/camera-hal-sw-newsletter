@@ -164,7 +164,6 @@ test('rendered issue structure rejects article image HTML contract failures', ()
     ['disallowed scheme', html.replace('src="../../assets/images/fallback/android.svg"', 'src="http://example.com/image.jpg"'), /disallowed URL scheme/],
     ['missing alt', html.replace(/(<img class="article-image"[^>]*\balt=")[^"]+"/, '$1"'), /missing alt text/],
     ['missing lazy loading', html.replace('loading="lazy"', 'loading="eager"'), /loading="lazy"/],
-    ['missing caption attribution', html.replace(/<figcaption class="article-image-caption">[\s\S]*?<\/figcaption>/, '<figcaption class="article-image-caption">Image source</figcaption>'), /caption attribution/],
     ['invalid fallback path', html.replace('../../assets/images/fallback/android.svg', '../assets/images/not-fallback/android.svg'), /repo-local fallback/]
   ];
 
@@ -172,6 +171,55 @@ test('rendered issue structure rejects article image HTML contract failures', ()
     const result = validateRenderedIssueStructure({ root, date, editor, markdown, html: badHtml });
     assert.equal(result.ok, false, `${name} unexpectedly passed`);
     assert.match(result.text, pattern, name);
+  }
+});
+
+test('article image caption attribution is required only for images that came from a source', () => {
+  // fallback 이미지는 어느 출처에서도 오지 않았으므로 캡션 출처 링크를 요구하지 않는다.
+  const fallbackRoot = tempRoot('rendered-issue-structure-');
+  const fallbackDate = writeNewsletterIndex(fallbackRoot);
+  const fallbackEditor = issue({ date: fallbackDate, sections: withImageSection(fallbackRoot) });
+  const fallbackResult = validateRenderedIssueStructure({
+    root: fallbackRoot,
+    date: fallbackDate,
+    editor: fallbackEditor,
+    markdown: buildMarkdown(fallbackEditor),
+    html: buildHtml(fallbackEditor).replace(/<figcaption class="article-image-caption">[\s\S]*?<\/figcaption>/, '')
+  });
+  assert.equal(fallbackResult.ok, true, fallbackResult.text);
+
+  // 반대로 실제 출처에서 가져온 이미지는 캡션 출처 링크가 계속 강제된다.
+  const sourcedRoot = tempRoot('rendered-issue-structure-');
+  const sourcedDate = writeNewsletterIndex(sourcedRoot);
+  const sourcedEditor = issue({
+    date: sourcedDate,
+    sections: withImageSection(sourcedRoot, {
+      selectedImage: 'https://developer.android.com/static/images/social/android-developers.png',
+      section: {
+        resolvedImage: {
+          url: 'https://developer.android.com/static/images/social/android-developers.png',
+          src: 'https://developer.android.com/static/images/social/android-developers.png',
+          usedFallback: false
+        }
+      }
+    })
+  });
+  const sourcedHtml = buildHtml(sourcedEditor);
+  assert.match(sourcedHtml, /article-image-caption/, 'sourced image should render a caption');
+  const sourcedFailures = [
+    ['caption removed', sourcedHtml.replace(/<figcaption class="article-image-caption">[\s\S]*?<\/figcaption>/, '')],
+    ['caption without source link', sourcedHtml.replace(/<figcaption class="article-image-caption">[\s\S]*?<\/figcaption>/, '<figcaption class="article-image-caption">Image source</figcaption>')]
+  ];
+  for (const [name, badHtml] of sourcedFailures) {
+    const sourcedResult = validateRenderedIssueStructure({
+      root: sourcedRoot,
+      date: sourcedDate,
+      editor: sourcedEditor,
+      markdown: buildMarkdown(sourcedEditor),
+      html: badHtml
+    });
+    assert.equal(sourcedResult.ok, false, `${name} unexpectedly passed`);
+    assert.match(sourcedResult.text, /caption attribution/, name);
   }
 });
 

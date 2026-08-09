@@ -1,5 +1,6 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { loreThreadUrl } = require('../../shared/common/article-groups');
+const { isFallbackImagePath } = require('../../shared/render/image-candidates');
 const {
   PUBLICATION_MODES,
   FALLBACK_TAGS,
@@ -115,23 +116,44 @@ function articleImageSource(section) {
   );
 }
 
+// 그림이 repo 안의 fallback 그림인지 봅니다. fallback 그림은 어느 기사 출처에서도 오지
+// 않았으므로 출처 캡션을 붙이면 안 됩니다. 붙이면 그 기사에서 가져온 그림처럼 보입니다.
+//
+// 판정에 usedFallback 플래그만 쓰지 않는 이유가 있습니다. 실제 발행물(2026-W26 3번째 기사)에는
+// selectedImage가 이미 fallback 경로인데 resolvedImage.usedFallback은 false인 형태가 있습니다.
+// 그래서 최종적으로 렌더되는 경로도 함께 봅니다. 경로 판정은 렌더 결과를 검사하는 게이트와
+// 같은 함수를 씁니다.
+function isFallbackArticleImage(image) {
+  if (!image) return false;
+  return image.usedFallback === true || isFallbackImagePath(image.src);
+}
+
 function articleImageMarkdown(section, publicArticle = null) {
   const image = resolvedArticleImage(section);
   if (!image || !image.src) return '';
+  const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
+  if (isFallbackArticleImage(image)) {
+    return `\n![${alt}](${image.src})\n`;
+  }
   const attribution = section.imageAttribution || section.sources?.[0]?.title || '출처 기사';
   const source = articleImageSource(section);
-  const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
   return `\n![${alt}](${image.src})\n\n_이미지: [${attribution}](${source})_\n`;
 }
 
 function articleMediaHtml(section, publicArticle = null) {
   const image = resolvedArticleImage(section);
   if (image && image.src) {
+    const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
+    const imageHtml = `<img class="article-image" src="${escapeHtml(image.src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`;
+    if (isFallbackArticleImage(image)) {
+      return `<figure class="article-media">
+            ${imageHtml}
+          </figure>`;
+    }
     const imageSource = articleImageSource(section);
     const attribution = section.imageAttribution || section.sources?.[0]?.title || '출처 기사';
-    const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
     return `<figure class="article-media">
-            <img class="article-image" src="${escapeHtml(image.src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">
+            ${imageHtml}
             <figcaption class="article-image-caption">이미지: <a href="${escapeHtml(imageSource)}">${escapeHtml(attribution)}</a></figcaption>
           </figure>`;
   }
