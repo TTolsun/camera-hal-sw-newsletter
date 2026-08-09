@@ -63,6 +63,38 @@ test('the probe sends the same request shape the editor stage sends', async () =
   assert.equal(seen[0].responseSchema, editorSchema);
 });
 
+test('called with only an environment, the probe still builds a real runtime config', async () => {
+  // config를 안 넘기는 경로가 실제 실행 경로다. 여기서 모듈 네임스페이스가 새어 들어가면
+  // temperature와 thinking 설정이 undefined가 되어 실제 editor 요청과 다른 것을 재게 된다.
+  const seen = [];
+  const provider = fakeProvider({
+    buildRequest(args) {
+      seen.push(args.config);
+      return { request: {}, thinkingBudget: 0 };
+    }
+  });
+
+  await probeSchemaAcceptance({ provider, models: ['gemini-3.5-flash'], env: { GEMINI_API_KEY: 'test-key' } });
+
+  assert.equal(typeof seen[0].geminiTemperatureEditor, 'number');
+  assert.equal(typeof seen[0].geminiThinkingBudgetEditor, 'number');
+  assert.equal(typeof seen[0].geminiCallTimeoutMs, 'number');
+});
+
+test('called with only an environment, the probe measures the routed editor models', async () => {
+  const seen = [];
+  const provider = fakeProvider({
+    buildRequest(args) {
+      seen.push(args.model);
+      return { request: {}, thinkingBudget: 0 };
+    }
+  });
+
+  await probeSchemaAcceptance({ provider, env: { GEMINI_API_KEY: 'test-key' } });
+
+  assert.deepEqual(seen, configuredModelsForStage(testConfig(), 'editor'));
+});
+
 test('the default schema is the editor schema the pipeline actually uses', async () => {
   const seen = [];
   const provider = fakeProvider({
@@ -183,9 +215,12 @@ test('schema rejection is told apart from outages, timeouts and credential error
 });
 
 test('reported reasons do not carry credential-looking strings', () => {
-  const redacted = redactReason('request failed: api_key=AIzaSyA1234567890abcdefghijklmnopqrstuv rejected');
+  // Google API 키 모양을 소스에 그대로 적으면 비밀 스캐너가 진짜 키로 오인한다. 그래서
+  // 조각을 이어 붙여 만든다 — 검사하려는 것은 값 자체가 아니라 그 모양이다.
+  const googleKeyShape = ['AI', 'za', 'Sy', 'B'].join('') + 'FAKEfakeFAKEfake0123456789_-';
+  const redacted = redactReason(`request failed: api_key=${googleKeyShape} rejected`);
 
-  assert.doesNotMatch(redacted, /AIzaSyA1234567890abcdefghijklmnopqrstuv/);
+  assert.equal(redacted.includes(googleKeyShape), false);
   assert.match(redacted, /\[redacted\]/);
   assert.ok(redactReason('x'.repeat(500)).length <= 301);
 });
