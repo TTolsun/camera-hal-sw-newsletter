@@ -1,3 +1,7 @@
+// 이 파일의 editorSchema를 늘릴 때는 `npm run check:editor-schema-acceptance`로 실측하세요.
+// Gemini의 constrained decoding은 스키마 상태 수가 많으면 호출 자체를 거부하는데, 그 한계는
+// 공표된 수치가 없어 코드를 읽어 예측할 수 없습니다.
+
 const {
   CLAIM_TYPES,
   CLAIM_IMPACT_LEVELS,
@@ -200,6 +204,18 @@ const reporterCandidate = {
 // 코드가 editor 출력 객체에 이 값들을 그대로 채우므로 출력은 보존되며, optional 필드가 줄어
 // Gemini constrained-decoding의 "too many states" 상태 폭발이 사라진다(작은 fallback 모델
 // gemini-2.5-flash / flash-lite 도 editor schema를 수용 — 실측 확인).
+//
+// 그 뒤 같은 목적으로 뺀 것이 더 있는데, 빼도 되는 이유가 위와 달라 나눠 적는다.
+//
+// (a) 코드 파생값으로 대체되는 것 — `public_article.decision_metadata`. 모델이 채워도
+//     normalizeDecisionMetadata가 그 값을 버리고 deriveDecisionMetadata 결과로 덮는다
+//     (public-article-contract.js). 값 자체는 종전대로 artifact에 남는다.
+// (b) 아무도 읽지 않는 것 — actionability_upgrade_evidence, article_tier, topic_area,
+//     camera_output_relevance, newsletter_relevance. 채우는 코드도 소비자도 없어서
+//     스키마에서 빼면 그대로 사라진다. (a)와 달리 출력에 남지 않는다.
+//
+// 주의: actionability_upgrade_evidence는 editor 출력에서만 사라진다. 입력 capsule을 만드는
+// hal-signal-quality.js·article-capsules.js의 생산 경로는 그대로 살아 있어야 한다.
 const section = {
   type: 'OBJECT',
   properties: {

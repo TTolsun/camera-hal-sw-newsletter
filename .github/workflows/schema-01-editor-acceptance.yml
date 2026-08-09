@@ -13,9 +13,17 @@ on:
 permissions:
   contents: read
 
+# 중복 dispatch가 겹치면 LLM 호출 비용도 겹칩니다. 뒤에 온 실행만 남깁니다.
+concurrency:
+  group: editor-schema-acceptance-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   editor-schema-acceptance:
     runs-on: ubuntu-latest
+    # 모델이 응답하지 않으면 프로브 자체도 타임아웃하지만, 러너가 기본 6시간까지 묶이지
+    # 않도록 job에도 상한을 둡니다.
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repository
