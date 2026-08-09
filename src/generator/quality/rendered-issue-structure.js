@@ -164,7 +164,7 @@ function validateMarkdownStructure(date, markdown, errors) {
   }
 }
 
-function validateArticleImages(relPath, html, root, errors) {
+function validateArticleImages(relPath, html, root, errors, strictArtifactValidation) {
   const imageTags = String(html || '').match(/<img\b(?=[^>]*class=["'][^"']*\barticle-image\b)[^>]*>/gi) || [];
   for (const tag of imageTags) {
     const src = htmlAttr(tag, 'src');
@@ -197,20 +197,31 @@ function validateArticleImages(relPath, html, root, errors) {
       errors.push(`Newsletter article image missing loading="lazy": ${relPath}`);
     }
 
-    // 출처 캡션은 그 기사 출처에서 가져온 이미지에만 요구합니다. repo fallback 그림은
-    // 어느 출처에서도 오지 않았으므로, 여기서 출처 링크를 요구하면 렌더러에게 가짜 출처를
-    // 만들라고 시키는 셈이 됩니다.
-    if (!isFallbackImagePath(src)) {
-      const start = String(html || '').indexOf(tag);
-      const nearby = start >= 0 ? String(html || '').slice(start, start + 900) : '';
-      if (!/article-image-caption/.test(nearby) || !/<a\s+[^>]*href=["']https:\/\//i.test(nearby)) {
-        errors.push(`Newsletter article image missing caption attribution link: ${relPath}`);
+    // 출처 캡션 규칙은 그림이 어디서 왔는지에 따라 방향이 반대입니다.
+    //
+    // - 기사 출처에서 가져온 그림: 출처 캡션을 반드시 붙인다.
+    // - repo fallback 그림: 어느 출처에서도 오지 않았으므로 출처 캡션을 붙이면 안 된다.
+    //
+    // 두 방향을 다 검사해야 게이트가 닫힙니다. fallback 쪽을 검사에서 빼기만 하면, 가짜 출처
+    // 캡션이 다시 생겨도 게이트가 통과시킵니다.
+    const start = String(html || '').indexOf(tag);
+    const nearby = start >= 0 ? String(html || '').slice(start, start + 900) : '';
+    const hasCaption = /article-image-caption/.test(nearby);
+    const hasCaptionSourceLink = /<a\s+[^>]*href=["']https:\/\//i.test(nearby);
+    if (isFallbackImagePath(src)) {
+      // 가짜 출처 캡션 금지는 발행 대상 호에만 적용합니다. 이 규칙이 생기기 전에 발행된 호에는
+      // 이미 이 캡션이 들어 있어서, 전체에 적용하면 내용과 무관한 PR까지 전부 막힙니다.
+      // 형제 validator들이 이미 쓰는 정책과 같습니다(과거 산출물은 검사 대상 밖).
+      if (strictArtifactValidation && hasCaption && hasCaptionSourceLink) {
+        errors.push(`Newsletter fallback article image must not carry a source attribution caption: ${relPath}`);
       }
+    } else if (!hasCaption || !hasCaptionSourceLink) {
+      errors.push(`Newsletter article image missing caption attribution link: ${relPath}`);
     }
   }
 }
 
-function validateHtmlStructure(date, html, root, errors) {
+function validateHtmlStructure(date, html, root, errors, strictArtifactValidation) {
   const content = String(html || '');
   const relPath = `newsletters/${date}/index.html`;
   if (!/<!doctype html>/i.test(content) || !/<html\b/i.test(content) || !/<\/html>/i.test(content)) {
@@ -247,7 +258,7 @@ function validateHtmlStructure(date, html, root, errors) {
     }
   }
 
-  validateArticleImages(relPath, content, root, errors);
+  validateArticleImages(relPath, content, root, errors, strictArtifactValidation);
 }
 
 function validateSelectedImageContract(date, editor, root, errors) {
@@ -307,7 +318,8 @@ function validateRenderedIssueStructure({
   markdown = '',
   html = '',
   root = process.cwd(),
-  validateDataIndex = true
+  validateDataIndex = true,
+  strictArtifactValidation = true
 } = {}) {
   editor = toLegacyEditorIssue(editor, { date });
   const errors = [];
@@ -317,7 +329,7 @@ function validateRenderedIssueStructure({
     validateNewsletterIndex(root, errors);
   }
   validateMarkdownStructure(issueDate, markdown, errors);
-  validateHtmlStructure(issueDate, html, root, errors);
+  validateHtmlStructure(issueDate, html, root, errors, strictArtifactValidation);
   validateSelectedImageContract(issueDate, editor, root, errors);
 
   return {

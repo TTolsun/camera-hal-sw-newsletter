@@ -119,20 +119,21 @@ function articleImageSource(section) {
 // 그림이 repo 안의 fallback 그림인지 봅니다. fallback 그림은 어느 기사 출처에서도 오지
 // 않았으므로 출처 캡션을 붙이면 안 됩니다. 붙이면 그 기사에서 가져온 그림처럼 보입니다.
 //
-// 판정에 usedFallback 플래그만 쓰지 않는 이유가 있습니다. 실제 발행물(2026-W26 3번째 기사)에는
-// selectedImage가 이미 fallback 경로인데 resolvedImage.usedFallback은 false인 형태가 있습니다.
-// 그래서 최종적으로 렌더되는 경로도 함께 봅니다. 경로 판정은 렌더 결과를 검사하는 게이트와
-// 같은 함수를 씁니다.
-function isFallbackArticleImage(image) {
-  if (!image) return false;
-  return image.usedFallback === true || isFallbackImagePath(image.src);
-}
-
+// 판정 기준은 "최종적으로 렌더되는 경로"입니다. resolvedImage.usedFallback 플래그는 쓰지
+// 않습니다. 두 가지 이유가 있습니다.
+//
+// 1. 플래그로는 못 잡는 형태가 실제 발행물에 있습니다. selectedImage가 이미 fallback
+//    경로인데 usedFallback은 false인 기사가 있고, 그런 기사에도 출처 캡션이 붙어 있었습니다.
+// 2. 반대로 플래그를 함께 보면 렌더러와 게이트의 답이 갈립니다. 게이트는 렌더된 HTML만
+//    보므로 경로로 판정할 수밖에 없는데, 렌더러만 플래그를 더 보면 "플래그는 true인데 경로는
+//    fallback이 아닌" 그림에서 렌더러는 캡션을 빼고 게이트는 캡션을 요구해 발행이 막힙니다.
+//
+// 그래서 렌더러와 게이트가 같은 함수 하나로 판정합니다.
 function articleImageMarkdown(section, publicArticle = null) {
   const image = resolvedArticleImage(section);
   if (!image || !image.src) return '';
   const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
-  if (isFallbackArticleImage(image)) {
+  if (isFallbackImagePath(image.src)) {
     return `\n![${alt}](${image.src})\n`;
   }
   const attribution = section.imageAttribution || section.sources?.[0]?.title || '출처 기사';
@@ -145,7 +146,7 @@ function articleMediaHtml(section, publicArticle = null) {
   if (image && image.src) {
     const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
     const imageHtml = `<img class="article-image" src="${escapeHtml(image.src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`;
-    if (isFallbackArticleImage(image)) {
+    if (isFallbackImagePath(image.src)) {
       return `<figure class="article-media">
             ${imageHtml}
           </figure>`;
