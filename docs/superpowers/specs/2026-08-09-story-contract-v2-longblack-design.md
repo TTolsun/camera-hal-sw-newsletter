@@ -14,9 +14,9 @@
 2. **인트로가 템플릿.** `이번 주에는 '…' 소식을 다룹니다`(weekly-newsletter-page.js:46-48)가 매주 첫 문장. LLM이 쓴 `draft.summary`는 구조적으로 도달 불가(`weeklySummaryText(titles) || draft.summary` — 제목이 하나라도 있으면 항상 템플릿 승리). 이 문장이 md 2행·hero subtitle·og:description(소셜 공유 문구)까지 차지한다.
 3. **코드가 쓴 보일러플레이트가 LLM 입력으로 순환.** `buildStaticBackgroundContext`/`buildHalPerspective`(article-field-builder.js:232,253)가 impact class 5종당 고정 한국어 문단을 만들고, orchestrator-stage-prompts.js:90이 editor에게 "background-context.json 없으면 `background_context_static`을 사용"하라고 지시 — 5개 논조로 수렴하는 공식 경로.
 4. **프롬프트가 양식 채우기를 강제.** "3-5개 자연스러운 문단"(newsletter-prompts.js:68), 고정 3-beat 아크(:106), editorial_story 6칸 각 1~2문장(orchestrator-stage-prompts.js:124).
-5. **검증기가 고정 구조를 되강제.** public-newsletter.js:158 정규식과 validate-site.js:491이 고정 소제목 존재를 요구 — 소제목만 바꿔도 게이트 탈락.
+5. **검증·파서가 고정 구조를 전제.** public-newsletter.js:158 정규식은 고정 소제목을 파싱 전제로 삼고(비일치 시 무음 skip — hard fail은 아님), validate-site.js:491은 warn 수준의 advisory다. 구조를 실질적으로 고정하는 것은 md 기사 splitter(`^## \d+.`)·렌더러 하드코딩·계약 테스트들이며, 소제목 문자열 자체는 지금도 hard gate가 아니다 — 다만 v1 byte-identity와 checkpointItems 파서 호환 때문에 시그니처 박스 라벨은 문자 그대로 유지한다(§4.1).
 
-추가로 감사에서 확정된 코드 fabrication (독자 도달, v2와 별개로 수정):
+추가로 감사에서 확정된 코드 fabrication — 감사가 확정한 패턴은 총 5개이며, 그중 주간 인트로 템플릿(위 2번)은 v2 트랙 T10(§4.7)으로 해소하고 나머지 4개(F1~F4)는 v2와 별개 독립 트랙으로 수정한다:
 
 - **F1 (최악, 라이브)**: fallback 이미지에 가짜 출처 캡션. `articleImageMarkdown`/`articleMediaHtml`이 `image.usedFallback`을 검사하지 않고 `section.sources[0]`으로 `이미지: [실제 기사 제목](URL)` 캡션을 합성(newsletter-renderer.js:107-135). W31 전 5개 기사 + W30 1개 라이브. rendered-issue-structure.js:206은 이 가짜 캡션을 오히려 강제.
 - **F2 (라이브 오보)**: `QUIET_CORE_CONTEXT_NOTE = '이번 기간 카메라 코어 직접 변경은 없었습니다…'`(newsletter-renderer.js:570)가 `publish_mode === 'CONTEXT'` 플래그 하나로 출력 — W26에서 V4L2 센서 드라이버 기사(정확히 카메라 코어 변경) 바로 위에 인쇄됨. 팩트체커가 본 적 없는 기간-수준 사실 주장.
@@ -109,7 +109,8 @@
 
 ### 4.8 Fabrication 제거 (v2 경로)
 
-- `buildStoryFromPublicArticle`/`completeStoryPublicArticle`의 prose 합성(템플릿 reader_scenario, 기본 not_to_overclaim, source_subtitle fallback, headline suffix 5종) — v2 경로에서 삭제. 부재 시 repairable:false → demote(completion top-up이 정상 보충). v1 재검증 경로에서는 버전 가드 뒤 존치.
+- `buildStoryFromPublicArticle`/`completeStoryPublicArticle`의 prose 합성(템플릿 reader_scenario, 기본 not_to_overclaim, source_subtitle fallback, headline suffix 5종) — v2 경로에서 삭제. v1 재검증 경로에서는 버전 가드 뒤 존치.
+- **계층 주의(코드리뷰 확정 사항)**: `completeStoryPublicArticle`은 editor-output validation 단계의 `deterministicallyRepairEditorSchema`(editor-output-contract.js:216-283)가 **draft 전체 루프에서 무조건 호출**하며, 이 단계에는 per-article demote 개념이 없다 — 한 섹션이라도 reason_codes가 남으면 draft 전체가 `{editor:null}`로 실패하고, orchestrator-editor-stage.js catch(:103-119)가 whole-draft LLM repair → `lastKnownValidEditor` revert → attempt 실패로 확산시킨다. "demote + completion top-up"은 그보다 뒤의 post-selection 단계 메커니즘이다. 따라서 v2에서 합성을 그냥 삭제하면 기사 1건의 결손이 draft 전체 실패로 번진다. **T7 설계 보완**: v2 경로의 deterministicallyRepairEditorSchema에 per-article 강등 경로를 신설 — story 필수 필드 결손 섹션은 reason_codes로 draft를 죽이는 대신 해당 섹션을 draft에서 제거(demote 마킹)하고 잔여 섹션으로 draft를 유지한다. 최소 발행 기사 수 미달일 때만 draft 수준 실패로 승격. reviewableReturn/lastKnownValidEditor 경로는 무수정.
 - headline 중복 → duplicate_headline issue 신설 → `/public_article/headline` 패치 repair → 실패 시 demote.
 - 결정론 fallback 문구 생성 경로 제거, 탐지 패턴(PUBLIC_PROSE_PLACEHOLDER_PATTERNS)은 회귀 가드로 영구 존치.
 - 독자 비도달 확인 존치: 합성 validation wrapper, fallbackFactCheckForRepairFailure, demote 메타데이터, revertUncoveredPatchedVerifiedFacts(LLM 원문 복원 — fabrication 아님).
