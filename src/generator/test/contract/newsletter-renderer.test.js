@@ -9,6 +9,14 @@ const {
 const {
   siteHeaderHtml
 } = require('../../../../articles/assets/js/site-header');
+const {
+  STORY_CONTRACT_VERSIONS,
+  publicContractVersionFor
+} = require('../../../shared/common/story-contract-version');
+
+// 지원 집합 바로 위 값. 숫자를 박아 두면 계약 버전이 추가될 때 이 테스트가 지원
+// 버전을 검사하게 되어 조용히 공허해진다.
+const UNSUPPORTED_FUTURE_STORY_VERSION = Math.max(...STORY_CONTRACT_VERSIONS) + 1;
 
 function issue(overrides = {}) {
   return {
@@ -336,8 +344,8 @@ test('newsletter renderer renders story v1 as natural prose without public story
 
 test('newsletter renderer does not treat unsupported future story versions as story v1', () => {
   const futureIssue = storyIssue();
-  futureIssue.public_contract_version = 'story-v2';
-  futureIssue.sections[0].public_article.story_contract_version = 2;
+  futureIssue.public_contract_version = publicContractVersionFor(UNSUPPORTED_FUTURE_STORY_VERSION);
+  futureIssue.sections[0].public_article.story_contract_version = UNSUPPORTED_FUTURE_STORY_VERSION;
 
   const markdown = buildMarkdown(futureIssue);
   const html = buildHtml(futureIssue);

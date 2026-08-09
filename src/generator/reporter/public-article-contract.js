@@ -12,6 +12,16 @@ const {
   publicProseLeakageIssues,
   publicUrlError
 } = require('./public-prose-leakage');
+const {
+  PUBLIC_CONTRACT_VERSIONS,
+  STORY_CONTRACT_VERSIONS,
+  publicContractVersionFor,
+  storyContractVersionFromPublicContractVersion
+} = require('../../shared/common/story-contract-version');
+const {
+  lintBodyMarkdown,
+  normalizeBodyMarkdown
+} = require('./public-body-markdown');
 const PUBLIC_ARTICLE_BASE_REQUIRED_KEYS = Object.freeze([
   'headline',
   'lead',
@@ -21,12 +31,16 @@ const PUBLIC_ARTICLE_BASE_REQUIRED_KEYS = Object.freeze([
   'source_links'
 ]);
 
+// 생산자가 찍는 기본 버전은 v1 그대로다. v2는 "수용"만 한다 — 어떤 producer도 아직
+// v2를 만들지 않는다(T9에서 뒤집는다).
 const STORY_CONTRACT_VERSION = 1;
-const STORY_PUBLIC_CONTRACT_VERSION = 'story-v1';
+const STORY_PUBLIC_CONTRACT_VERSION = publicContractVersionFor(STORY_CONTRACT_VERSION);
 const GENERATION_CONTRACT_VERSION = 1;
-const SUPPORTED_STORY_CONTRACT_VERSIONS = new Set([STORY_CONTRACT_VERSION]);
-const SUPPORTED_PUBLIC_CONTRACT_VERSIONS = new Set([STORY_PUBLIC_CONTRACT_VERSION]);
-const SUPPORTED_GENERATION_CONTRACT_VERSIONS = new Set([GENERATION_CONTRACT_VERSION]);
+// v1은 영구 존치한다. quality recompute와 validate-public-newsletter가 W20~W32 영속
+// 아티팩트를 계속 재검증하기 때문이다.
+const SUPPORTED_STORY_CONTRACT_VERSIONS = new Set(STORY_CONTRACT_VERSIONS);
+const SUPPORTED_PUBLIC_CONTRACT_VERSIONS = new Set(PUBLIC_CONTRACT_VERSIONS);
+const SUPPORTED_GENERATION_CONTRACT_VERSIONS = new Set(STORY_CONTRACT_VERSIONS);
 
 const PUBLIC_ARTICLE_STORY_KEYS = Object.freeze([
   'story_contract_version',
@@ -50,6 +64,16 @@ const PUBLIC_ARTICLE_ALLOWED_KEYS = Object.freeze([
   ...PUBLIC_ARTICLE_STORY_KEYS
 ]);
 
+// v2는 본문 필드만 갈아 끼운다. 나머지 키는 v1과 같은 자리, 같은 이름이다.
+const PUBLIC_ARTICLE_V2_BASE_REQUIRED_KEYS = Object.freeze(
+  PUBLIC_ARTICLE_BASE_REQUIRED_KEYS.map(key => (key === 'body_paragraphs' ? 'body_markdown' : key))
+);
+
+const PUBLIC_ARTICLE_V2_ALLOWED_KEYS = Object.freeze([
+  ...PUBLIC_ARTICLE_V2_BASE_REQUIRED_KEYS,
+  ...PUBLIC_ARTICLE_STORY_KEYS
+]);
+
 const EDITORIAL_STORY_KEYS = Object.freeze([
   'reader_scenario',
   'what_happened',
@@ -58,6 +82,17 @@ const EDITORIAL_STORY_KEYS = Object.freeze([
   'not_to_overclaim',
   'editor_take'
 ]);
+
+// v2는 안전 기능인 두 칸만 남긴다. 나머지 4칸은 필드명 자체가 v1 템플릿 어휘라
+// 남겨 두면 LLM을 인벤토리식 사고로 되돌린다(훅 지시는 프롬프트로 이전).
+const EDITORIAL_STORY_V2_KEYS = Object.freeze([
+  'not_to_overclaim',
+  'editor_take'
+]);
+
+function editorialStoryKeysFor(storyContractVersion) {
+  return storyContractVersion >= 2 ? EDITORIAL_STORY_V2_KEYS : EDITORIAL_STORY_KEYS;
+}
 
 const PUBLIC_SOURCE_LINK_ALLOWED_KEYS = Object.freeze([
   'title',
@@ -194,6 +229,22 @@ function storyContractMarkers(issue = {}, section = {}, options = {}) {
     hasGenerationMarker,
     hasSectionStoryMarker
   ].filter(Boolean).length;
+  // 세 마커가 전부 지원 버전일 때만 패밀리를 본다. 하나라도 빠져 있으면 아래 markerCount
+  // mismatch가 이미 잡으므로, 같은 입력에 이슈를 두 번 싣지 않는다.
+  const declaredFamilyVersions = {
+    public_contract_version: storyContractVersionFromPublicContractVersion(issue.public_contract_version),
+    generation_contract_version: contractVersion(issue.generation_contract_version),
+    story_contract_version: contractVersion(article.story_contract_version)
+  };
+  if (markerCount === 3 && unsupported.length === 0 &&
+    new Set(Object.values(declaredFamilyVersions)).size > 1) {
+    unsupported.push({
+      type: 'story_contract_version_family_mismatch',
+      key: 'story_contract_version',
+      supported: [...STORY_CONTRACT_VERSIONS],
+      ...declaredFamilyVersions
+    });
+  }
   const rawMarkerCount = [
     hasIssueContractValue,
     hasGenerationContractValue,
@@ -201,7 +252,18 @@ function storyContractMarkers(issue = {}, section = {}, options = {}) {
   ].filter(Boolean).length;
   const complete = markerCount === 3 && unsupported.length === 0;
   const requiredByCaller = options.requireStoryContract === true;
+  // 존재하는 지원 마커가 한 버전을 가리킬 때만 그 버전을 쓴다. 마커가 없거나 섞여 있으면
+  // 생산자 기본값(v1)으로 둔다 — 어느 계약인지 모르는 입력에 v2 처리를 걸면 안 된다.
+  const presentFamilyVersions = new Set([
+    hasIssueStoryMarker ? declaredFamilyVersions.public_contract_version : 0,
+    hasGenerationMarker ? declaredFamilyVersions.generation_contract_version : 0,
+    hasSectionStoryMarker ? declaredFamilyVersions.story_contract_version : 0
+  ].filter(Boolean));
+  const version = presentFamilyVersions.size === 1
+    ? [...presentFamilyVersions][0]
+    : STORY_CONTRACT_VERSION;
   return {
+    version,
     hasIssueStoryMarker,
     hasGenerationMarker,
     hasSectionStoryMarker,
@@ -220,6 +282,25 @@ function storyContractMarkers(issue = {}, section = {}, options = {}) {
 
 function requiresStoryContract(issue = {}, section = {}, options = {}) {
   return storyContractMarkers(issue, section, options).required;
+}
+
+// 이슈가 선언한 계약 버전. 섹션 마커는 보지 않는다 — 이슈 레벨 stamp와 진단 메시지처럼
+// "이 draft는 어느 계약인가"를 물을 때 쓴다.
+function issueStoryContractVersion(issue = {}) {
+  return storyContractMarkers(issue, {}, {}).version;
+}
+
+// 계약 위반을 보고할 때 함께 싣는 키 목록. 버전마다 본문 키 이름이 다르므로 한 곳에서
+// 고른다. 고정하면 v2 draft가 v1 키 이름으로 안내받는다.
+function publicArticleExpectedKeys(issue = {}, { requireStoryContract = false } = {}) {
+  if (issueStoryContractVersion(issue) >= 2) {
+    return requireStoryContract
+      ? PUBLIC_ARTICLE_V2_ALLOWED_KEYS
+      : PUBLIC_ARTICLE_V2_BASE_REQUIRED_KEYS;
+  }
+  return requireStoryContract
+    ? PUBLIC_ARTICLE_STORY_REQUIRED_KEYS
+    : PUBLIC_ARTICLE_REQUIRED_KEYS;
 }
 
 function detectStoryContractMismatch(issue = {}, section = {}, options = {}) {
@@ -537,12 +618,20 @@ function normalizeDecisionMetadata(value = {}, section = {}, issue = {}) {
   return deriveDecisionMetadata(section, issue);
 }
 
-function normalizeEditorialStory(value = {}) {
+function normalizeEditorialStory(value = {}, storyContractVersion = STORY_CONTRACT_VERSION) {
   const story = isPlainObject(value) ? value : {};
-  return EDITORIAL_STORY_KEYS.reduce((output, key) => {
+  return editorialStoryKeysFor(storyContractVersion).reduce((output, key) => {
     output[key] = compactText(story[key]);
     return output;
   }, {});
+}
+
+// v2 본문은 v1 정규화 경로를 절대 타지 않는다. compactText는 개행을 지워 문단 경계를
+// 없애고, normalizeStringArray의 lowercase dedupe는 같은 문구의 소제목을 무음 drop한다.
+function normalizeBodyField(raw, storyContractVersion) {
+  return storyContractVersion >= 2
+    ? { body_markdown: normalizeBodyMarkdown(raw.body_markdown) }
+    : { body_paragraphs: normalizeStringArray(raw.body_paragraphs) };
 }
 
 function publicArticleForSection(section = {}, { issue = {}, requireStoryContract = false } = {}) {
@@ -554,16 +643,16 @@ function publicArticleForSection(section = {}, { issue = {}, requireStoryContrac
   const normalized = {
     headline: compactText(raw.headline),
     lead: compactText(raw.lead),
-    body_paragraphs: normalizeStringArray(raw.body_paragraphs),
+    ...normalizeBodyField(raw, storyState.version),
     camera_hal_takeaway: compactText(raw.camera_hal_takeaway),
     reader_checkpoints: normalizeStringArray(raw.reader_checkpoints),
     source_links: sourceLinks
   };
   const storyEnabled = (storyState.required || storyState.hasStoryField) && !storyState.hasUnsupportedMarker;
   if (storyEnabled) {
-    normalized.story_contract_version = STORY_CONTRACT_VERSION;
+    normalized.story_contract_version = storyState.version;
     normalized.source_subtitle = compactText(raw.source_subtitle);
-    normalized.editorial_story = normalizeEditorialStory(raw.editorial_story);
+    normalized.editorial_story = normalizeEditorialStory(raw.editorial_story, storyState.version);
     normalized.decision_metadata = normalizeDecisionMetadata(raw.decision_metadata, section, issue);
   }
 
@@ -880,12 +969,18 @@ function publicSourceLinkMergeIssues(section = {}) {
 }
 
 function publicArticleAllowedKeysFor(storyState) {
+  const storyKeys = storyState.version >= 2
+    ? PUBLIC_ARTICLE_V2_ALLOWED_KEYS
+    : PUBLIC_ARTICLE_ALLOWED_KEYS;
+  const baseKeys = storyState.version >= 2
+    ? PUBLIC_ARTICLE_V2_BASE_REQUIRED_KEYS
+    : PUBLIC_ARTICLE_BASE_REQUIRED_KEYS;
   return storyState.required ||
     storyState.hasStoryField ||
     storyState.markerCount > 0 ||
     storyState.rawMarkerCount > 0
-    ? PUBLIC_ARTICLE_ALLOWED_KEYS
-    : PUBLIC_ARTICLE_BASE_REQUIRED_KEYS;
+    ? storyKeys
+    : baseKeys;
 }
 
 function validateDecisionMetadataShape(metadata = {}, index, headline) {
@@ -973,7 +1068,13 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
   for (const key of ['headline', 'lead', 'camera_hal_takeaway']) {
     if (!normalized[key]) issues.push({ index: index + 1, headline, type: 'empty_public_article_field', key });
   }
-  if (normalized.body_paragraphs.length < 2) {
+  if (storyState.version >= 2) {
+    // 문단 수 부족(insufficient_public_body_paragraphs)도 lint가 함께 낸다. 본문 판정을
+    // parseBodyBlocks 하나로 모으기 위해 여기서 따로 세지 않는다.
+    for (const bodyIssue of lintBodyMarkdown(normalized.body_markdown)) {
+      issues.push({ index: index + 1, headline, ...bodyIssue });
+    }
+  } else if (normalized.body_paragraphs.length < 2) {
     issues.push({ index: index + 1, headline, type: 'insufficient_public_body_paragraphs', key: 'body_paragraphs', actualCount: normalized.body_paragraphs.length, expectedMinCount: 2 });
   }
   if (normalized.reader_checkpoints.length === 0) {
@@ -992,8 +1093,8 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
     if (!isPlainObject(raw.editorial_story)) {
       issues.push({ index: index + 1, headline, type: 'missing_story_public_article_field', key: 'editorial_story' });
     } else {
-      const story = normalizeEditorialStory(raw.editorial_story);
-      for (const key of EDITORIAL_STORY_KEYS) {
+      const story = normalizeEditorialStory(raw.editorial_story, storyState.version);
+      for (const key of editorialStoryKeysFor(storyState.version)) {
         if (!story[key]) {
           issues.push({ index: index + 1, headline, type: 'empty_editorial_story_field', key });
         }
@@ -1014,7 +1115,9 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
     headline: normalized.headline,
     lead: normalized.lead,
     camera_hal_takeaway: normalized.camera_hal_takeaway,
-    body_paragraphs: normalized.body_paragraphs,
+    // 본문 필드는 버전마다 이름이 다르다. 이름을 고정하면 v2 본문이 누수 스캔에서
+    // 통째로 빠져 무음 fail-open이 된다.
+    ...normalizeBodyField(normalized, storyState.version),
     reader_checkpoints: normalized.reader_checkpoints,
     source_subtitle: normalized.source_subtitle || '',
     editorial_story: normalized.editorial_story || {}
@@ -1043,12 +1146,15 @@ module.exports = {
   DECISION_RISK_VALUES,
   DECISION_SCOPE_VALUES,
   EDITORIAL_STORY_KEYS,
+  EDITORIAL_STORY_V2_KEYS,
   GENERATION_CONTRACT_VERSION,
   NO_IMMEDIATE_ACTION_TEXT,
   PUBLIC_ARTICLE_ALLOWED_KEYS,
   PUBLIC_ARTICLE_BASE_REQUIRED_KEYS,
   PUBLIC_ARTICLE_REQUIRED_KEYS,
   PUBLIC_ARTICLE_STORY_REQUIRED_KEYS,
+  PUBLIC_ARTICLE_V2_ALLOWED_KEYS,
+  PUBLIC_ARTICLE_V2_BASE_REQUIRED_KEYS,
   STORY_CONTRACT_VERSION,
   STORY_PUBLIC_CONTRACT_VERSION,
   PUBLIC_SOURCE_LINK_ALLOWED_KEYS,
@@ -1058,6 +1164,8 @@ module.exports = {
   deriveDecisionMetadata,
   detectStoryContractMismatch,
   isConcreteCheckpoint,
+  issueStoryContractVersion,
+  publicArticleExpectedKeys,
   mergePublicArticleFromLlm,
   mergePublicArticlesFromLlmSections,
   requiresStoryContract,

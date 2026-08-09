@@ -1,5 +1,12 @@
 const { ensureArray } = require('../common/value-coercion');
 const {
+  STORY_CONTRACT_VERSIONS,
+  storyContractVersionFromPublicContractVersion
+} = require('../common/story-contract-version');
+
+// 마커가 없거나 알 수 없는 값이면 legacy 아티팩트로 보고 v1로 둔다.
+const DEFAULT_STORY_CONTRACT_VERSION = STORY_CONTRACT_VERSIONS[0];
+const {
   NEWSLETTER_DOMAIN_SCHEMA_VERSION
 } = require('./newsletter-domain-schema');
 const {
@@ -248,7 +255,7 @@ function sourceRefsToLegacySources(sourceRefs = []) {
   })).filter(source => source.url);
 }
 
-function toLegacySection(article = {}, index = 0) {
+function toLegacySection(article = {}, index = 0, storyContractVersion = DEFAULT_STORY_CONTRACT_VERSION) {
   const legacy = cloneJson(article.metadata?.legacySection || {});
   const sources = sourceRefsToLegacySources(article.sourceRefs);
   const actionItems = actionItemsToLegacyStrings(article.actionItems);
@@ -271,7 +278,7 @@ function toLegacySection(article = {}, index = 0) {
       camera_hal_takeaway: article.halPerspective || '',
       reader_checkpoints: actionItems,
       source_links: sources,
-      story_contract_version: 1,
+      story_contract_version: storyContractVersion,
       source_subtitle: ''
     },
     article_sections: legacy.article_sections || {
@@ -289,14 +296,19 @@ function toLegacyEditorIssue(input = {}, options = {}) {
   if (!input || typeof input !== 'object') return input;
   if (Array.isArray(input.sections) && !isDomainDraftArtifact(input)) return input;
   const issue = normalizeNewsletterIssue(input, options);
+  const publicContractVersion = input.public_contract_version || issue.metadata.public_contract_version;
+  // 섹션 stamp를 1로 박아 두면 v2 draft가 quality recompute에서 v1 stamp를 받아
+  // 이슈 마커와 어긋난 혼합 아티팩트가 된다. 이슈가 선언한 버전을 그대로 싣는다.
+  const storyContractVersion = storyContractVersionFromPublicContractVersion(publicContractVersion) ||
+    DEFAULT_STORY_CONTRACT_VERSION;
   return {
     date: issue.newsletterDate,
-    public_contract_version: input.public_contract_version || issue.metadata.public_contract_version,
+    public_contract_version: publicContractVersion,
     generation_contract_version: input.generation_contract_version || issue.metadata.generation_contract_version,
     title: issue.title,
     summary: issue.summary,
     briefing: issue.briefing,
-    sections: issue.articles.map(toLegacySection),
+    sections: issue.articles.map((article, index) => toLegacySection(article, index, storyContractVersion)),
     action_items: actionItemsToLegacyStrings(issue.actionItems),
     references: sourceRefsToLegacySources(issue.references),
     tags: input.tags || issue.metadata.tags,

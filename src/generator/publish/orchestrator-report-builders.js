@@ -213,10 +213,17 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
 
 // #490: LLM이 병합한 weekly 기사를 기존 public-article 계약 검증기로 확인한 뒤에만 교체를 허용한다.
 // 검증 이슈나 오류가 있으면 기존 기사를 보존한다(fail closed).
-function validateMergedWeeklyArticle(mergedArticle) {
+// issue를 넘기지 않으면 story 계약 기사가 항상 marker mismatch로 떨어져 병합 결과가
+// 채택되지 않는다(섹션 마커 1개 < 3개). 검증은 이슈 마커와 함께 봐야 한다.
+function validateMergedWeeklyArticle(mergedArticle, issue = {}) {
   try {
-    const issues = validatePublicArticle(mergedArticle, 0, {});
-    return { ok: ensureArray(issues).length === 0, reason: ensureArray(issues).join('; ') };
+    const issues = ensureArray(validatePublicArticle(mergedArticle, 0, { issue }));
+    return {
+      ok: issues.length === 0,
+      // 이슈 객체를 그대로 join하면 '[object Object]'가 되어 weekly-merge-report.json에
+      // 원인이 남지 않는다.
+      reason: issues.map(item => JSON.stringify(item)).join('; ')
+    };
   } catch (error) {
     return { ok: false, reason: error.message };
   }

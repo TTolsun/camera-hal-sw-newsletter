@@ -17,8 +17,19 @@ const {
   storyEditor,
   normalizeSection
 } = require('../../../shared/test/helpers/editor-builders');
+const {
+  STORY_CONTRACT_VERSIONS,
+  publicContractVersionFor
+} = require('../../../shared/common/story-contract-version');
 
 const DATE = '2026-05-08';
+
+// "미지원 미래 버전"은 지원 집합 바로 위 값이어야 한다. 숫자를 그대로 박아 두면
+// 다음 계약 버전이 추가되는 순간 이 테스트들이 지원 버전을 검사하게 되어 조용히
+// 공허해진다(v2 추가 때 실제로 그렇게 됐다).
+const UNSUPPORTED_FUTURE_STORY_VERSION = Math.max(...STORY_CONTRACT_VERSIONS) + 1;
+const UNSUPPORTED_FUTURE_PUBLIC_CONTRACT_VERSION =
+  publicContractVersionFor(UNSUPPORTED_FUTURE_STORY_VERSION);
 
 test('story v1 editor output requires complete contract markers and story fields', () => {
   const draft = storyEditor();
@@ -85,7 +96,7 @@ test('story contract rejects unsupported future story versions instead of treati
       {
         ...section(1),
         public_article: storyPublicArticle(section(1), {
-          story_contract_version: 2
+          story_contract_version: UNSUPPORTED_FUTURE_STORY_VERSION
         })
       },
       { ...section(2), public_article: storyPublicArticle(section(2)) },
@@ -102,7 +113,7 @@ test('story contract rejects unsupported future story versions instead of treati
       assert.equal(error.details.field, 'sections.public_article');
       assert.ok(error.details.issues.some(issue =>
         issue.type === 'unsupported_story_contract_version' &&
-        issue.value === 2
+        issue.value === UNSUPPORTED_FUTURE_STORY_VERSION
       ));
       return true;
     }
@@ -111,7 +122,7 @@ test('story contract rejects unsupported future story versions instead of treati
 
 test('story contract rejects unsupported future public contract versions', () => {
   const draft = storyEditor({
-    public_contract_version: 'story-v2'
+    public_contract_version: UNSUPPORTED_FUTURE_PUBLIC_CONTRACT_VERSION
   });
 
   assert.throws(
@@ -122,7 +133,7 @@ test('story contract rejects unsupported future public contract versions', () =>
       assert.equal(error.details.field, 'sections.public_article');
       assert.ok(error.details.issues.some(issue =>
         issue.type === 'unsupported_public_contract_version' &&
-        issue.value === 'story-v2'
+        issue.value === UNSUPPORTED_FUTURE_PUBLIC_CONTRACT_VERSION
       ));
       return true;
     }
@@ -131,7 +142,7 @@ test('story contract rejects unsupported future public contract versions', () =>
 
 test('story repair does not downgrade unsupported future public contract versions', async () => {
   const draft = storyEditor({
-    public_contract_version: 'story-v2'
+    public_contract_version: UNSUPPORTED_FUTURE_PUBLIC_CONTRACT_VERSION
   });
 
   await assert.rejects(
@@ -148,7 +159,7 @@ test('story repair does not downgrade unsupported future public contract version
       assert.equal(error.repairSucceeded, false);
       assert.ok(error.details.issues.some(issue =>
         issue.type === 'unsupported_public_contract_version' &&
-        issue.value === 'story-v2'
+        issue.value === UNSUPPORTED_FUTURE_PUBLIC_CONTRACT_VERSION
       ));
       assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_public_contract_version'));
       return true;
@@ -162,7 +173,7 @@ test('story repair does not downgrade unsupported future section story versions'
       {
         ...section(1),
         public_article: storyPublicArticle(section(1), {
-          story_contract_version: 2
+          story_contract_version: UNSUPPORTED_FUTURE_STORY_VERSION
         })
       },
       { ...section(2), public_article: storyPublicArticle(section(2)) },
@@ -184,7 +195,7 @@ test('story repair does not downgrade unsupported future section story versions'
       assert.equal(error.repairSucceeded, false);
       assert.ok(error.details.issues.some(issue =>
         issue.type === 'unsupported_story_contract_version' &&
-        issue.value === 2
+        issue.value === UNSUPPORTED_FUTURE_STORY_VERSION
       ));
       assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_story_contract_version'));
       return true;
@@ -194,7 +205,7 @@ test('story repair does not downgrade unsupported future section story versions'
 
 test('story repair does not downgrade unsupported future generation contract versions', async () => {
   const draft = storyEditor({
-    generation_contract_version: 2
+    generation_contract_version: UNSUPPORTED_FUTURE_STORY_VERSION
   });
 
   await assert.rejects(
@@ -211,7 +222,7 @@ test('story repair does not downgrade unsupported future generation contract ver
       assert.equal(error.repairSucceeded, false);
       assert.ok(error.details.issues.some(issue =>
         issue.type === 'unsupported_generation_contract_version' &&
-        issue.value === 2
+        issue.value === UNSUPPORTED_FUTURE_STORY_VERSION
       ));
       assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_generation_contract_version'));
       return true;
@@ -221,8 +232,8 @@ test('story repair does not downgrade unsupported future generation contract ver
 
 test('story repair fails closed on unsupported markers before repairing earlier briefing errors', async () => {
   const draft = storyEditor({
-    public_contract_version: 'story-v2',
-    generation_contract_version: 2,
+    public_contract_version: UNSUPPORTED_FUTURE_PUBLIC_CONTRACT_VERSION,
+    generation_contract_version: UNSUPPORTED_FUTURE_STORY_VERSION,
     briefing: ['only one']
   });
   let repairCalled = false;
@@ -245,11 +256,11 @@ test('story repair fails closed on unsupported markers before repairing earlier 
       assert.equal(error.repairSucceeded, false);
       assert.ok(error.details.issues.some(issue =>
         issue.type === 'unsupported_public_contract_version' &&
-        issue.value === 'story-v2'
+        issue.value === UNSUPPORTED_FUTURE_PUBLIC_CONTRACT_VERSION
       ));
       assert.ok(error.details.issues.some(issue =>
         issue.type === 'unsupported_generation_contract_version' &&
-        issue.value === 2
+        issue.value === UNSUPPORTED_FUTURE_STORY_VERSION
       ));
       assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_public_contract_version'));
       assert.ok(error.deterministic_repair_failure_reason_codes.includes('unsupported_generation_contract_version'));
