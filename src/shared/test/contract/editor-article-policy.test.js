@@ -1139,6 +1139,35 @@ test('run-level editor semantic status preserves details and OR accumulates repa
   assert.equal(status.repairSucceeded, true);
 });
 
+test('editor schema does not ask the model for values the code always overwrites or nobody reads', () => {
+  // Gemini constrained decoding은 스키마의 상태 수가 많을수록 거부 위험이 커진다.
+  // 그래서 "모델이 채워도 코드가 버리는 값"과 "채운 뒤 아무도 읽지 않는 값"은 스키마에서 뺀다.
+  const sectionProperties = editorSchema.properties.sections.items.properties;
+  const publicArticleProperties = sectionProperties.public_article.properties;
+
+  // decision_metadata는 normalizeDecisionMetadata가 모델 값을 통째로 버리고 코드 파생값으로
+  // 대체한다(public-article-contract.js). 모델에게 물어볼 이유가 없다.
+  assert.equal('decision_metadata' in publicArticleProperties, false);
+  assert.equal(sectionProperties.public_article.required.includes('decision_metadata'), false);
+
+  // 아래 다섯은 editor 출력에서 읽는 소비자가 없다.
+  for (const key of [
+    'actionability_upgrade_evidence',
+    'article_tier',
+    'topic_area',
+    'camera_output_relevance',
+    'newsletter_relevance'
+  ]) {
+    assert.equal(key in sectionProperties, false, `${key} must not be in the editor schema`);
+    assert.equal(editorSchema.properties.sections.items.required.includes(key), false);
+  }
+
+  // 반대로 소비자가 있는 형제 필드는 그대로 남아 있어야 한다(과잉 삭제 방지).
+  for (const key of ['actionability_level', 'effective_actionability_level', 'actionability_upgrade_reason']) {
+    assert.equal(key in sectionProperties, true, `${key} must stay in the editor schema`);
+  }
+});
+
 test('editor schema constrains briefing to exactly 3 numeric items', () => {
   assert.equal(editorSchema.properties.briefing.minItems, 3);
   assert.equal(editorSchema.properties.briefing.maxItems, 3);
