@@ -181,6 +181,16 @@ test('lintBodyMarkdown rejects markdown constructs it does not enumerate by name
   }
 });
 
+test('lintBodyMarkdown keeps a mid-line greater-than sign as plain prose', () => {
+  assert.deepEqual(lintBodyMarkdown('DPCM 10->8 압축 모드가 기본이 됐다.\n\n둘째 문단이다.'), []);
+});
+
+test('lintBodyMarkdown still rejects an angle-bracket header path', () => {
+  const issues = lintBodyMarkdown('첫 문단이다.\n\n<linux/videodev2.h>가 바뀐다.\n\n둘째 문단이다.');
+  const issue = issues.find(item => item.type === 'body_markdown_forbidden_construct');
+  assert.equal(issue.construct, 'raw_html');
+});
+
 test('lintBodyMarkdown keeps a hash-prefixed reference as plain prose', () => {
   assert.deepEqual(lintBodyMarkdown('#844 패치가 병합됐다.\n\n둘째 문단이다.'), []);
 });

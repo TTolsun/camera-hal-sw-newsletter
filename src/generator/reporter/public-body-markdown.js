@@ -177,7 +177,10 @@ const INLINE_CONSTRUCTS = Object.freeze([
   { construct: 'strikethrough', pattern: /~~/ },
   { construct: 'emphasis_marker', pattern: /\*/ },
   // allow-list 마감. 위에서 이름 붙이지 못한 markdown 활성 문자가 남아 있으면 거부한다.
-  { construct: 'markdown_active_character', pattern: /[`*[\]<>~|]/ }
+  // `>`는 줄 중간에서는 아무 구조도 만들지 못하고(줄 시작 `>`는 blockquote 규칙이 잡는다),
+  // raw HTML·autolink는 어차피 `<`가 있어야 성립하므로 제외한다. `10->8` 같은 실제
+  // 카메라 산문 표기를 막지 않기 위해서다.
+  { construct: 'markdown_active_character', pattern: /[`*[\]<~|]/ }
 ]);
 
 function firstMatchingConstruct(text, constructs) {
