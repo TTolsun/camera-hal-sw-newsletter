@@ -7,8 +7,11 @@ const os = require('node:os');
 const path = require('node:path');
 
 const {
+  readRenderedNewsletterArticles,
   renderedHeadlineState
 } = require('../../reporter/headline-render-reconciliation');
+const { buildHtml } = require('../../render/newsletter-renderer');
+const { validSections } = require('../../../shared/test/helpers/quality-builders');
 const {
   writePublicNewsletterArtifacts
 } = require('../../../shared/test/helpers/workflow-fixtures');
@@ -98,6 +101,44 @@ test('retained headline whose article is not in the render is reconciled to a re
     anchors.includes(anchor),
     `reconciled anchor "${anchor}" must exist in the rendered index.html so validate:site passes`
   );
+});
+
+test('rendered article parsing survives a fallback image that carries no caption', () => {
+  // fallback 이미지 기사에는 figcaption이 없다. 이 파서는 figcaption 앵커를 먼저 보므로,
+  // 캡션이 사라져도 기사를 놓치지 않고 출처를 source-list에서 읽어야 한다.
+  const root = tempRoot();
+  const date = '2026-06-10';
+  const fallbackPath = '../../assets/images/fallback/newsletter-default.svg';
+  const sections = validSections(3).map((item, index) => (index === 0
+    ? {
+        ...item,
+        selectedImage: fallbackPath,
+        imageAlt: 'Fallback illustration',
+        // 캡션이 붙던 시절 이름('Example image source')과 출처 목록의 이름('Source')을 다르게
+        // 둬야, 파서가 실제로 어느 쪽을 읽는지 아래 단정이 구분할 수 있다.
+        imageAttribution: 'Example image source',
+        resolvedImage: { url: fallbackPath, src: fallbackPath, usedFallback: true }
+      }
+    : item));
+  const html = buildHtml({
+    date,
+    title: 'Camera HAL / SW Newsletter',
+    summary: 'Fallback image parsing regression.',
+    briefing: ['One', 'Two', 'Three'],
+    sections,
+    references: [{ title: 'Reference', url: 'https://example.com/reference' }]
+  });
+  assert.doesNotMatch(html, /article-image-caption/, 'fallback image must render without a caption');
+
+  fs.mkdirSync(path.join(root, 'articles', 'newsletters', date), { recursive: true });
+  fs.writeFileSync(path.join(root, 'articles', 'newsletters', date, 'index.html'), html, 'utf8');
+
+  const articles = readRenderedNewsletterArticles(root, date);
+
+  assert.equal(articles.length, sections.length, 'every rendered article must still be parsed');
+  assert.equal(articles[0].source_url, 'https://example.com/a');
+  assert.equal(articles[0].source_name, 'Source', 'source name must fall back to the source list');
+  assert.equal(articles[0].image_url, fallbackPath);
 });
 
 test('retained headline that is rendered gets its stale anchor refreshed to the rendered anchor', () => {

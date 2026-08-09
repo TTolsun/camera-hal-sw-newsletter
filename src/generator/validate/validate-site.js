@@ -836,7 +836,8 @@ for (const [index, item] of newsletters.entries()) {
         markdown: md,
         html,
         root,
-        validateDataIndex: index === 0
+        validateDataIndex: index === 0,
+        strictArtifactValidation
       });
       if (!structural.ok) {
         errors.push(...structural.errors);

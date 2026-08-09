@@ -436,7 +436,7 @@ PR에서 다음 항목을 확인합니다.
 - 단순 요약이 아니라 HAL 관점의 해석과 Action Item이 있는가?
 - Sources와 References가 충분한가?
 - fact-check 결과에 unresolved `must_fix`가 없는가?
-- article image가 source attribution과 fallback contract를 지키는가?
+- article image가 source attribution과 fallback contract를 지키는가? (source attribution 캡션은 기사 출처에서 가져온 이미지에만 붙는다. fallback 이미지에 출처 캡션이 붙어 있으면 가짜 출처다.)
 
 ## Release
 

@@ -108,6 +108,117 @@ test('broken external selectedImage is replaced with local fallback in final iss
   }
 });
 
+test('fallback image renders without a source attribution caption', async () => {
+  const root = tempRoot();
+  try {
+    const issue = {
+      date: '2026-05-04',
+      title: 'Camera HAL / SW Newsletter - 2026-05-04',
+      summary: 'Fallback caption contract test.',
+      briefing: ['One', 'Two', 'Three'],
+      sections: [section()],
+      references: [{ title: 'Android Developers Blog', url: 'https://android-developers.googleblog.com/post' }]
+    };
+
+    await resolveIssueArticleImages(issue, {
+      root,
+      validateImageUrl: async () => ({ ok: false, status: 404, contentType: 'text/html', contentLength: 1234, reason: 'HTTP 404' })
+    });
+
+    assert.equal(issue.sections[0].resolvedImage.usedFallback, true);
+
+    const markdown = buildMarkdown(issue);
+    const html = buildHtml(issue);
+
+    // 이미지 자체는 그대로 렌더된다.
+    assert.match(markdown, /!\[Android camera AI illustration\]\(\.\.\/\.\.\/assets\/images\/fallback\/ai\.svg\)/);
+    assert.match(html, /<img class="article-image" src="\.\.\/\.\.\/assets\/images\/fallback\/ai\.svg"/);
+
+    // 그러나 그 이미지는 출처 기사에서 온 것이 아니므로 출처 캡션을 붙이지 않는다.
+    assert.doesNotMatch(markdown, /_이미지: \[/);
+    assert.doesNotMatch(html, /article-image-caption/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('image kept from the article source still renders its attribution caption', () => {
+  const issue = {
+    date: '2026-05-04',
+    title: 'Camera HAL / SW Newsletter - 2026-05-04',
+    summary: 'Non-fallback caption contract test.',
+    briefing: ['One', 'Two', 'Three'],
+    sections: [section({
+      selectedImage: 'https://android-developers.googleblog.com/hero.png',
+      resolvedImage: {
+        url: 'https://android-developers.googleblog.com/hero.png',
+        src: 'https://android-developers.googleblog.com/hero.png',
+        usedFallback: false
+      }
+    })],
+    references: [{ title: 'Android Developers Blog', url: 'https://android-developers.googleblog.com/post' }]
+  };
+
+  const markdown = buildMarkdown(issue);
+  const html = buildHtml(issue);
+
+  assert.match(markdown, /_이미지: \[Android Developers Blog\]\(https:\/\/android-developers\.googleblog\.com\/post\)_/);
+  assert.match(html, /<figcaption class="article-image-caption">.*Android Developers Blog<\/a><\/figcaption>/);
+});
+
+test('selectedImage pointing at a fallback asset renders without a caption even when usedFallback is false', () => {
+  // 발행물에 실재하는 형태입니다. selectedImage와 resolvedImage가 모두 fallback 경로를
+  // 가리키는데 usedFallback만 false라, 플래그로 판정하면 가짜 출처를 놓칩니다.
+  const fallbackPath = '../../assets/images/fallback/newsletter-default.svg';
+  const issue = {
+    date: '2026-05-04',
+    title: 'Camera HAL / SW Newsletter - 2026-05-04',
+    summary: 'Legacy fallback shape contract test.',
+    briefing: ['One', 'Two', 'Three'],
+    sections: [section({
+      selectedImage: fallbackPath,
+      imageSource: '',
+      imageAttribution: '',
+      resolvedImage: { url: fallbackPath, src: fallbackPath, usedFallback: false }
+    })],
+    references: [{ title: 'Android Developers Blog', url: 'https://android-developers.googleblog.com/post' }]
+  };
+
+  const markdown = buildMarkdown(issue);
+  const html = buildHtml(issue);
+
+  assert.match(html, /<img class="article-image" src="\.\.\/\.\.\/assets\/images\/fallback\/newsletter-default\.svg"/);
+  assert.doesNotMatch(markdown, /_이미지: \[/);
+  assert.doesNotMatch(html, /article-image-caption/);
+});
+
+test('usedFallback alone does not drop the caption when the rendered path is not a fallback asset', () => {
+  // 캡션 여부는 렌더되는 경로로만 정합니다. 렌더 결과만 보는 게이트가 같은 판정을 내릴 수
+  // 있어야 하기 때문입니다. 플래그를 함께 보면 이 입력에서 렌더러는 캡션을 빼고 게이트는
+  // 캡션을 요구해 서로 반대가 됩니다.
+  const issue = {
+    date: '2026-05-04',
+    title: 'Camera HAL / SW Newsletter - 2026-05-04',
+    summary: 'Flag and path disagreement contract test.',
+    briefing: ['One', 'Two', 'Three'],
+    sections: [section({
+      selectedImage: 'https://android-developers.googleblog.com/hero.png',
+      resolvedImage: {
+        url: 'https://android-developers.googleblog.com/hero.png',
+        src: 'https://android-developers.googleblog.com/hero.png',
+        usedFallback: true
+      }
+    })],
+    references: [{ title: 'Android Developers Blog', url: 'https://android-developers.googleblog.com/post' }]
+  };
+
+  const markdown = buildMarkdown(issue);
+  const html = buildHtml(issue);
+
+  assert.match(markdown, /_이미지: \[Android Developers Blog\]\(https:\/\/android-developers\.googleblog\.com\/post\)_/);
+  assert.match(html, /article-image-caption/);
+});
+
 test('broken external selectedImage remains failing when fallback asset is missing', async () => {
   fs.mkdirSync(path.join(process.cwd(), '.tmp'), { recursive: true });
   const root = fs.mkdtempSync(path.join(process.cwd(), '.tmp', 'article-image-missing-fallback-'));

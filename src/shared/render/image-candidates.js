@@ -377,6 +377,18 @@ function isSafeExternalImageUrl(value) {
   return Boolean(normalizeImageUrl(value, value));
 }
 
+// 렌더될 그림 경로가 repo 안의 fallback 그림을 가리키는지 판정합니다.
+// 이 판정이 필요한 이유는 fallback 그림이 "어느 기사에서도 오지 않은 그림"이기 때문입니다.
+// 렌더러는 이 그림에 출처 캡션을 붙이면 안 되고, 렌더 결과를 검사하는 게이트는 반대로 이
+// 그림에 출처 캡션이 붙어 있으면 막아야 합니다. 두 곳이 같은 답을 내도록 이 함수를 공유합니다.
+//
+// 주의: 이것이 저장소 전체의 유일한 fallback 경로 판정은 아닙니다. 그림을 고르는 단계
+// (article-image-resolver.js)와 감사·주간 산출물 쪽에 규칙이 조금씩 다른 판정이 따로 있습니다.
+// 여기 있는 것은 "렌더 결과의 캡션 규칙"을 렌더러와 게이트가 함께 쓰는 한 벌입니다.
+function isFallbackImagePath(value) {
+  return /^(?:(?:\.\.\/){1,3})?assets\/images\/fallback\//.test(String(value || '').replace(/\\/g, '/'));
+}
+
 module.exports = {
   MIN_CONTENT_LENGTH,
   extractImageCandidatesFromHtml,
@@ -387,6 +399,7 @@ module.exports = {
   validateImageUrl,
   validateImageCandidates,
   isSafeExternalImageUrl,
+  isFallbackImagePath,
   normalizeImageUrl,
   REJECT_PATH_PATTERN
 };
