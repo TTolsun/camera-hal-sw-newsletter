@@ -153,6 +153,54 @@ test('lintBodyMarkdown rejects inline markdown constructs', () => {
   }
 });
 
+test('lintBodyMarkdown rejects raw HTML split across soft-wrapped lines', () => {
+  const body = '첫 문단이다.\n\n<img\nsrc="https://example.com/a.png"\n/>\n\n둘째 문단이다.';
+  const issue = lintBodyMarkdown(body).find(item => item.type === 'body_markdown_forbidden_construct');
+  assert.ok(issue, 'multi-line raw HTML must not pass the line-by-line scan');
+  assert.equal(issue.construct, 'raw_html');
+  assert.equal(issue.blockIndex, 1);
+});
+
+test('lintBodyMarkdown rejects a markdown link split across soft-wrapped lines', () => {
+  const body = '첫 문단이다.\n\n[캡션\n](https://example.com)\n\n둘째 문단이다.';
+  const issue = lintBodyMarkdown(body).find(item => item.type === 'body_markdown_forbidden_construct');
+  assert.equal(issue.construct, 'link');
+});
+
+test('lintBodyMarkdown rejects markdown constructs it does not enumerate by name', () => {
+  const cases = [
+    ['[ref]: https://example.com', 'link_reference'],
+    ['각주를 단다[^1] 이렇게.', 'markdown_active_character'],
+    ['배열 인덱스 buffer[0] 이야기.', 'markdown_active_character']
+  ];
+  for (const [line, construct] of cases) {
+    const issues = lintBodyMarkdown(`첫 문단이다.\n\n${line}\n\n둘째 문단이다.`);
+    const issue = issues.find(item => item.type === 'body_markdown_forbidden_construct');
+    assert.ok(issue, `expected construct issue for ${line}`);
+    assert.equal(issue.construct, construct, `construct mismatch for ${line}`);
+  }
+});
+
+test('lintBodyMarkdown keeps a hash-prefixed reference as plain prose', () => {
+  assert.deepEqual(lintBodyMarkdown('#844 패치가 병합됐다.\n\n둘째 문단이다.'), []);
+});
+
+test('lintBodyMarkdown rejects a heading marker with no space before its text', () => {
+  for (const line of ['##제목', '###소제목']) {
+    const issues = lintBodyMarkdown(`${line}\n\n첫 문단이다.\n\n둘째 문단이다.`);
+    const issue = issues.find(item => item.type === 'body_markdown_forbidden_construct');
+    assert.ok(issue, `expected construct issue for ${line}`);
+    assert.equal(issue.construct, 'malformed_subheading');
+    assert.equal(issue.line, 1);
+  }
+});
+
+test('lintBodyMarkdown reports line numbers on the normalized body', () => {
+  const issues = lintBodyMarkdown('\r\n\r\n첫 문단이다.\r\n\r\n## 잘못된 헤딩\r\n\r\n둘째 문단이다.');
+  const issue = issues.find(item => item.type === 'body_markdown_forbidden_heading_level');
+  assert.equal(issue.line, 3);
+});
+
 test('lintBodyMarkdown checks constructs inside subheading text too', () => {
   const issues = lintBodyMarkdown('첫 문단이다.\n\n### [소제목](https://example.com)\n\n둘째 문단이다.');
   const issue = issues.find(item => item.type === 'body_markdown_forbidden_construct');
@@ -225,6 +273,21 @@ test('lintBodyMarkdown allows a reworded echo of an earlier block', () => {
   assert.deepEqual(lintBodyMarkdown(body), []);
 });
 
+test('lintBodyMarkdown reports a duplicate subheading block', () => {
+  const body = [
+    '### 배선 순서',
+    '',
+    '첫 문단이다.',
+    '',
+    '### 배선 순서',
+    '',
+    '둘째 문단이다.'
+  ].join('\n');
+  const issue = lintBodyMarkdown(body).find(item => item.type === 'body_markdown_duplicate_block');
+  assert.equal(issue.blockIndex, 2);
+  assert.equal(issue.duplicateOfBlockIndex, 0);
+});
+
 test('lintBodyMarkdown rejects the v1 fixed perspective label as a subheading', () => {
   const body = '첫 문단이다.\n\n### Camera HAL/Driver 관점에서의 의미\n\n둘째 문단이다.';
   const issues = lintBodyMarkdown(body);
@@ -233,9 +296,17 @@ test('lintBodyMarkdown rejects the v1 fixed perspective label as a subheading', 
   assert.equal(issue.blockIndex, 1);
 });
 
+test('lintBodyMarkdown reports the deny-list rule that matched, not the input text', () => {
+  const [issue] = lintBodyMarkdown('첫 문단이다.\n\n### 왜 중요한가\n\n둘째 문단이다.');
+  assert.equal(issue.type, 'body_markdown_reserved_subheading');
+  assert.equal(issue.subheading, '왜 중요한가');
+  assert.ok(RESERVED_SUBHEADING_TERMS.includes(issue.reserved));
+});
+
 test('lintBodyMarkdown rejects perspective-style and internal-key subheadings', () => {
   const reserved = [
     'Camera HAL · Driver 관점',
+    'Camera HAL의 관점',
     '드라이버 관점에서의 의미',
     'editorial_story',
     '왜 중요한가',
@@ -256,23 +327,31 @@ test('lintBodyMarkdown allows an article-specific subheading that merely mention
   assert.deepEqual(lintBodyMarkdown(body), []);
 });
 
-test('reserved subheading constants are exported as the shared source for prompts', () => {
+// T9에서 프롬프트가 이 상수를 import하면, 그때 "프롬프트 문구가 상수에서 파생된다"는
+// 계약 테스트로 올린다. 지금은 소비자가 없으므로 export 형태만 잠근다.
+test('reserved subheading constants stay frozen and carry the v1 fixed labels', () => {
   assert.ok(RESERVED_SUBHEADING_TERMS.includes('Camera HAL/Driver 관점에서의 의미'));
+  assert.ok(RESERVED_SUBHEADING_TERMS.includes('Camera HAL · Driver 관점'));
   assert.ok(Object.isFrozen(RESERVED_SUBHEADING_TERMS));
   assert.ok(Object.isFrozen(RESERVED_SUBHEADING_PATTERNS));
 });
 
 test('bodyMarkdownMetrics reports subheading presence as an advisory signal', () => {
   assert.deepEqual(bodyMarkdownMetrics(VALID_BODY), {
-    blockCount: 4,
     paragraphCount: 3,
     subheadingCount: 1,
     hasSubheading: true
   });
   assert.deepEqual(bodyMarkdownMetrics('첫 문단이다.\n\n둘째 문단이다.'), {
-    blockCount: 2,
     paragraphCount: 2,
     subheadingCount: 0,
     hasSubheading: false
   });
+});
+
+test('bodyMarkdownMetrics paragraph count matches the lint paragraph count', () => {
+  const body = '문단 하나뿐이다.\n\n### 소제목';
+  const issue = lintBodyMarkdown(body)
+    .find(item => item.type === 'insufficient_public_body_paragraphs');
+  assert.equal(bodyMarkdownMetrics(body).paragraphCount, issue.actualCount);
 });
