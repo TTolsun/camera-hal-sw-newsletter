@@ -117,7 +117,7 @@
 
 ### 4.9 v2 무관 라이브 fabrication 수정 (별도 트랙, 즉시 가능)
 
-- **F1**: `articleImageMarkdown`/`articleMediaHtml`을 `image.usedFallback`으로 분기 — fallback 이미지는 캡션 무출력(또는 링크 없는 중립 "일러스트" 라벨), rendered-issue-structure.js:206은 non-fallback에만 캡션 요구.
+- **F1** (해결 — PR #861): fallback 이미지는 캡션 무출력, 게이트는 fallback에 캡션이 붙어 있으면 오히려 차단(양방향). 구현에서는 `image.usedFallback` 플래그가 아니라 렌더 경로로 판정했다 — 플래그가 false인데 경로는 fallback인 발행물이 실재하고, 렌더 결과만 보는 게이트와 술어를 통일해야 두 층 판정이 갈리지 않기 때문이다. 기존 발행분 재렌더는 F2·F3와 함께 정하기로 남겼다.
 - **F2**: `QUIET_CORE_CONTEXT_NOTE` 삭제 — CONTEXT 모드는 라벨/뱃지로 표현하거나 demote. 코드가 기간-수준 사실 주장을 쓰지 않는다.
 - **F3**: roundup child 합성 제목 `${heading} - ${parentTitle}`과 aosp-release 합성 제목 — 실제 페이지 제목/anchor 존재 확인 또는 "『부모 제목』 내 섹션" 형식으로 실존 표기.
 - **F4**: homepage-headline fallback 체인에서 `candidate.reason` 제거 — summary/description 없으면 히어로 lead 무출력.

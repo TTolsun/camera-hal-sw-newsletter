@@ -114,6 +114,9 @@ test('rendered article parsing survives a fallback image that carries no caption
         ...item,
         selectedImage: fallbackPath,
         imageAlt: 'Fallback illustration',
+        // 캡션이 붙던 시절 이름('Example image source')과 출처 목록의 이름('Source')을 다르게
+        // 둬야, 파서가 실제로 어느 쪽을 읽는지 아래 단정이 구분할 수 있다.
+        imageAttribution: 'Example image source',
         resolvedImage: { url: fallbackPath, src: fallbackPath, usedFallback: true }
       }
     : item));
