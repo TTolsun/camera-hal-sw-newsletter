@@ -50,16 +50,6 @@ const editorialStory = {
   ]
 };
 
-const decisionMetadata = {
-  type: 'OBJECT',
-  properties: {
-    impact: string,
-    scope: stringArray,
-    action: stringArray,
-    overclaim_risk: string
-  }
-};
-
 const publicArticle = {
   type: 'OBJECT',
   properties: {
@@ -71,7 +61,6 @@ const publicArticle = {
     camera_hal_takeaway: string,
     reader_checkpoints: stringArray,
     editorial_story: editorialStory,
-    decision_metadata: decisionMetadata,
     source_links: {
       type: 'ARRAY',
       items: publicSourceLink
@@ -170,18 +159,6 @@ const claimBinding = {
   ]
 };
 
-const actionabilityUpgradeEvidence = {
-  type: 'OBJECT',
-  properties: {
-    source_url: string,
-    evidence_id: string,
-    matched_signal: string,
-    verification_target: string,
-    upgrade_from: string,
-    upgrade_to: string
-  }
-};
-
 const reporterCandidate = {
   type: 'OBJECT',
   properties: {
@@ -245,7 +222,6 @@ const section = {
     actionability_level: string,
     effective_actionability_level: string,
     actionability_upgrade_reason: string,
-    actionability_upgrade_evidence: actionabilityUpgradeEvidence,
     do_not_overstate: stringArray,
     soc_signal_type: string,
     camera_pipeline_link: string,
@@ -254,10 +230,6 @@ const section = {
     action_items: stringArray,
     is_ai_related: { type: 'BOOLEAN' },
     article_type: string,
-    article_tier: string,
-    topic_area: string,
-    camera_output_relevance: { type: 'NUMBER' },
-    newsletter_relevance: { type: 'NUMBER' },
     imageCandidates: {
       type: 'ARRAY',
       items: imageCandidate

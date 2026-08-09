@@ -1,0 +1,36 @@
+name: Schema 01 - Editor Schema Acceptance
+
+# editor 단계의 세 모델이 현재 editorSchema를 실제로 받아주는지 라이브로 잽니다.
+# Gemini의 constrained decoding 한계(too many states)는 문서화된 수치가 없고 모델
+# 업데이트로 조용히 달라져서, 스키마를 손댈 때 실측으로만 확인할 수 있습니다.
+#
+# 수동 실행 전용입니다. 매 PR에서 돌리면 LLM 호출 비용이 스키마와 무관한 변경에도
+# 붙고, 일시 장애(503)로 무관한 PR이 막힙니다. 스키마를 건드리는 PR에서만 돌립니다.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  editor-schema-acceptance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Probe editor schema acceptance across editor models
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: npm run check:editor-schema-acceptance
