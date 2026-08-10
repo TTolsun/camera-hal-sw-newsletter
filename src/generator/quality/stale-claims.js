@@ -1,4 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { candidateGroupKey } = require('../../shared/common/article-groups');
 function text(value) {
   if (Array.isArray(value)) return value.map(text).join(' ');
   if (value && typeof value === 'object') return Object.values(value).map(text).join(' ');
@@ -78,6 +79,58 @@ function candidateEvidenceText(candidate) {
   ].map(text).join(' ');
 }
 
+// 기사 하나를 다른 기사와 구분해 주는 낱말만 남긴다.
+//
+// claimKeysForSection의 키(headline 전문, source_url, version 등)로는 못 잡는 잔재가 있다.
+// 실제로 막힌 사례(2026-08-10)에서 남은 것은 'Sony IMX576'이라는 센서 모델명이었는데,
+// headline 전문은 본문에 그대로 나타나지 않고 version('1.32.0')·api('v4l2')는
+// textContainsClaim의 8자 하한에 걸려 거부됐다.
+//
+// 그래서 낱말 단위로 본다. 안전장치는 길이 하한이 아니라 **차집합**이다 —
+// 살아남은 기사들이 쓰는 낱말은 전부 빼기 때문에, 'sony'·'v4l2'·'sensor'처럼
+// 공유되는 어휘로는 살아남은 기사의 문장을 지울 수 없다.
+//
+// 차집합만으로는 부족한 경우가 하나 있다. 살아남은 기사가 한국어로만 쓰였으면
+// 'camera'·'driver' 같은 일반 영어 낱말이 차집합에 남는다. 그래서 식별자처럼 보이는
+// 것만 통과시킨다: 숫자를 포함하거나(imx576·ar0234) 충분히 긴 것(siliconsignals.io).
+const DROPPED_GROUP_TOKEN_MIN_LENGTH = 5;
+const DROPPED_GROUP_TOKEN_LONG_LENGTH = 12;
+const DROPPED_GROUP_TOKEN_FIELD = 'dropped_group_token';
+
+function textTokens(value) {
+  return String(text(value) || '')
+    .toLowerCase()
+    .normalize('NFC')
+    .match(/[a-z0-9][a-z0-9._@-]*|[가-힣]{2,}/g) || [];
+}
+
+function looksLikeIdentifier(token) {
+  if (token.length < DROPPED_GROUP_TOKEN_MIN_LENGTH) return false;
+  return /\d/.test(token) || token.length >= DROPPED_GROUP_TOKEN_LONG_LENGTH;
+}
+
+function droppedGroupTokenClaimKeys(droppedCandidates, finalSections) {
+  const survivingTokens = new Set(
+    ensureArray(finalSections).flatMap(section => textTokens(sectionEvidenceText(section)))
+  );
+  const keys = new Map();
+  for (const candidate of ensureArray(droppedCandidates)) {
+    const source = [candidate?.title, candidate?.url, candidate?.headline].map(text).join(' ');
+    for (const token of textTokens(source)) {
+      if (survivingTokens.has(token)) continue;
+      if (!looksLikeIdentifier(token)) continue;
+      if (keys.has(token)) continue;
+      keys.set(token, {
+        field: DROPPED_GROUP_TOKEN_FIELD,
+        value: token,
+        normalized: token,
+        compact: compact(token)
+      });
+    }
+  }
+  return [...keys.values()];
+}
+
 function claimKeysForSection(section) {
   const keys = [];
   const fields = {
@@ -148,6 +201,11 @@ function textContainsClaim(value, claim) {
   const body = normalize(value);
   const packed = compact(value);
   if (!body || !claim?.compact) return false;
+  // 낱말 단위로 본다. 부분 문자열로 보면 'imx57'이 'imx576'에 걸리는 식의 오탐이 난다.
+  // 길이 하한도 적용하지 않는다 — 이 계열의 안전장치는 살아남은 기사와의 차집합이다.
+  if (claim.field === DROPPED_GROUP_TOKEN_FIELD) {
+    return textTokens(value).includes(claim.normalized);
+  }
   if (claim.field === 'source_url') return body.includes(claim.normalized);
   if (claim.compact.length < 8 && claim.field !== 'editorial_priority') return false;
   return body.includes(claim.normalized) || packed.includes(claim.compact);
@@ -272,6 +330,37 @@ function scrubReferences(editor, report) {
   editor.references = [...usedRefs.values()];
 }
 
+function selectedCandidates(reporter) {
+  return ensureArray(reporter?.candidates)
+    .filter(candidate => candidate?.final_selected === true || candidate?.selected_for_editor === true);
+}
+
+// 섹션과 후보는 그룹 키를 다르게 들고 있을 수 있다. 섹션은 보통 article_group_key를
+// 갖지만, 없으면 후보 쪽과 같은 규칙(url/title)으로 유도해야 짝이 맞는다. 한쪽만 보면
+// 살아남은 기사까지 "빠진 것"으로 세어 멀쩡한 문장을 지우게 된다 — 그래서 둘 다 담는다.
+function renderedGroupKeysForSections(finalSections) {
+  const keys = new Set();
+  for (const section of ensureArray(finalSections)) {
+    const explicit = text(section?.article_group_key || section?.articleGroupKey);
+    if (explicit) keys.add(explicit);
+    const derived = candidateGroupKey({
+      url: ensureArray(section?.sources)[0]?.url,
+      title: section?.headline
+    });
+    if (derived) keys.add(derived);
+  }
+  return keys;
+}
+
+function selectedCandidatesMissingFromSections(reporter, finalSections) {
+  const renderedGroupKeys = renderedGroupKeysForSections(finalSections);
+  return selectedCandidates(reporter)
+    .filter(candidate => {
+      const key = candidateGroupKey(candidate);
+      return key && !renderedGroupKeys.has(key);
+    });
+}
+
 function selectedCandidateEvidence(reporter) {
   return ensureArray(reporter?.candidates)
     .filter(candidate => candidate?.final_selected === true || candidate?.selected_for_editor === true)
@@ -288,8 +377,14 @@ function scrubStaleClaims(editor, options = {}) {
   };
   const finalSections = ensureArray(draft.sections);
   const removedSections = ensureArray(options.removedSections);
+  // 선정은 됐는데 최종 기사에 없는 그룹. removedSections는 editor가 한 번이라도 써낸
+  // 섹션에서만 나오므로, 한 번도 렌더되지 않고 hard block된 그룹은 여기서만 잡힌다.
+  const droppedSelectedCandidates = selectedCandidatesMissingFromSections(options.reporter, finalSections);
   const context = {
-    removedClaimKeys: removedSections.flatMap(claimKeysForSection),
+    removedClaimKeys: [
+      ...removedSections.flatMap(claimKeysForSection),
+      ...droppedGroupTokenClaimKeys(droppedSelectedCandidates, finalSections)
+    ],
     finalEvidenceText: finalSections.map(sectionEvidenceText).join(' '),
     selectedCandidateEvidenceText: selectedCandidateEvidence(options.reporter)
   };

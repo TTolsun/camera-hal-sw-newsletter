@@ -79,6 +79,169 @@ test('stale scrub removes Android 17 Beta 4 claims after the section is removed'
   assert.equal(report.unused_references_removed.length, 1);
 });
 
+// W33(2026-08-10) 재현. imx576 패치 시리즈가 선정됐지만 editor가 한 번도 렌더하지 않았고,
+// 그래서 removedSections(= 렌더된 적 있는 섹션에서 파생)에 들어가지 않아 스크럽이 못 봤다.
+// 결과: summary/briefing/action_items에 'Sony IMX576'이 남아 fact-checker가 must_fix 3건을
+// 냈고 호 전체가 diagnostics-only로 떨어졌다. 나머지 기사 4건은 발행 가능한 상태였다.
+test('scrub removes claims from a selected group the editor never rendered', () => {
+  const ar0234 = section({
+    headline: 'Linux 커널에 onsemi AR0234 글로벌 셔터 CMOS 이미지 센서 드라이버 패치(v2) 제출',
+    article_group_key: 'lore-series:ar0234',
+    sources: [source('https://lore.kernel.org/linux-media/ar0234-v2', 'AR0234 driver v2')]
+  });
+  const imx908 = section({
+    headline: 'Sony IMX908 8.39MP CMOS 센서를 위한 디바이스 트리 바인딩 패치(v2) 공개',
+    article_group_key: 'lore-series:imx908',
+    sources: [source('https://lore.kernel.org/linux-media/imx908-v2', 'IMX908 bindings v2')]
+  });
+  const editor = {
+    date: '2026-08-10',
+    summary: '이번 주에는 Sony IMX576, onsemi AR0234, Sony IMX908 등 신규 이미지 센서 드라이버 패치가 제안되었습니다.',
+    briefing: [
+      'Sony IMX576(v3) 및 onsemi AR0234(v2) 글로벌 셔터 센서 드라이버 패치가 제출되었습니다.',
+      'Sony IMX908 디바이스 트리 바인딩 패치 v2가 공개되었습니다.',
+      'AR0234 드라이버는 최대 120fps 출력을 지원합니다.'
+    ],
+    action_items: [
+      'Sony IMX576 및 onsemi AR0234 센서 도입 검토 시 제안된 드라이버 패치를 로컬 커널에 적용해 검증한다.',
+      'Sony IMX908 바인딩 규격을 하드웨어 핀맵과 대조해 정합성을 확인한다.'
+    ],
+    sections: [ar0234, imx908],
+    references: [
+      source('https://lore.kernel.org/linux-media/ar0234-v2', 'AR0234 driver v2'),
+      source('https://lore.kernel.org/linux-media/imx908-v2', 'IMX908 bindings v2')
+    ]
+  };
+  const reporter = {
+    candidates: [
+      {
+        title: '[PATCH v3 0/3] media: i2c: Add imx576 camera sensor driver',
+        url: 'https://lore.kernel.org/linux-media/20260806120216.24145-1-himanshu.bhavani@siliconsignals.io',
+        article_group_key: 'lore-series:imx576',
+        final_selected: true
+      },
+      {
+        title: 'AR0234 driver v2',
+        url: 'https://lore.kernel.org/linux-media/ar0234-v2',
+        article_group_key: 'lore-series:ar0234',
+        final_selected: true
+      },
+      {
+        title: 'IMX908 bindings v2',
+        url: 'https://lore.kernel.org/linux-media/imx908-v2',
+        article_group_key: 'lore-series:imx908',
+        final_selected: true
+      }
+    ]
+  };
+
+  const { editor: scrubbed } = scrubStaleClaims(editor, {
+    date: '2026-08-10',
+    removedSections: [],
+    reporter
+  });
+
+  const globalText = [
+    scrubbed.summary,
+    scrubbed.briefing,
+    scrubbed.action_items
+  ].flat().join(' ');
+  assert.doesNotMatch(globalText, /IMX576/i);
+  // 렌더된 기사 이야기는 살아 있어야 한다. 통째로 비우는 것은 해결이 아니다.
+  assert.match(globalText, /AR0234/i);
+  assert.match(globalText, /IMX908/i);
+  assert.equal(scrubbed.briefing.length, 3);
+});
+
+// 오탐 방지. 빠진 그룹과 렌더된 그룹이 어휘를 공유해도(둘 다 Sony 센서, 둘 다 V4L2)
+// 공유 토큰으로 렌더된 기사 문장을 지우면 안 된다.
+test('scrub keeps vocabulary shared between a dropped group and rendered ones', () => {
+  const imx908 = section({
+    headline: 'Sony IMX908 센서 V4L2 디바이스 트리 바인딩 패치',
+    article_group_key: 'lore-series:imx908',
+    sources: [source('https://lore.kernel.org/linux-media/imx908-v2', 'IMX908 bindings v2')]
+  });
+  const editor = {
+    date: '2026-08-10',
+    summary: 'Sony 센서용 V4L2 드라이버 패치가 이번 주 미디어 서브시스템에 제안되었습니다.',
+    briefing: [
+      'Sony IMX908 V4L2 바인딩 패치가 공개되었습니다.',
+      'V4L2 서브디바이스 계약을 검토할 시점입니다.',
+      'Sony 센서 라인업 변화를 추적합니다.'
+    ],
+    action_items: ['Sony IMX908 바인딩을 핀맵과 대조한다.'],
+    sections: [imx908],
+    references: [source('https://lore.kernel.org/linux-media/imx908-v2', 'IMX908 bindings v2')]
+  };
+  const reporter = {
+    candidates: [
+      {
+        title: '[PATCH v3 0/3] media: i2c: Add Sony imx576 V4L2 camera sensor driver',
+        url: 'https://lore.kernel.org/linux-media/imx576-v3',
+        article_group_key: 'lore-series:imx576',
+        final_selected: true
+      },
+      {
+        title: 'IMX908 bindings v2',
+        url: 'https://lore.kernel.org/linux-media/imx908-v2',
+        article_group_key: 'lore-series:imx908',
+        final_selected: true
+      }
+    ]
+  };
+
+  const { editor: scrubbed } = scrubStaleClaims(editor, {
+    date: '2026-08-10',
+    removedSections: [],
+    reporter
+  });
+
+  const globalText = [scrubbed.summary, scrubbed.briefing, scrubbed.action_items].flat().join(' ');
+  assert.doesNotMatch(globalText, /IMX576/i);
+  assert.match(globalText, /Sony/i);
+  assert.match(globalText, /V4L2/i);
+  assert.match(globalText, /IMX908/i);
+});
+
+// 섹션이 article_group_key를 안 들고 있어도 살아남은 기사가 "빠진 것"으로 세어지면 안 된다.
+// 한쪽 키만 보면 렌더된 기사의 문장까지 지워진다.
+test('scrub matches rendered groups even when sections carry no explicit group key', () => {
+  const rendered = section({
+    headline: 'Sony IMX908 디바이스 트리 바인딩 패치(v2) 공개',
+    sources: [source('https://lore.kernel.org/linux-media/imx908-v2', 'IMX908 bindings v2')]
+  });
+  delete rendered.article_group_key;
+  const editor = {
+    date: '2026-08-10',
+    summary: 'Sony IMX908 바인딩 패치가 공개되었습니다.',
+    briefing: [
+      'Sony IMX908 바인딩 패치 v2가 공개되었습니다.',
+      'RAW10/RAW12 포맷 지원이 명시되었습니다.',
+      'MIPI CSI-2 레인 구성을 확인할 시점입니다.'
+    ],
+    action_items: ['Sony IMX908 바인딩을 하드웨어 핀맵과 대조한다.'],
+    sections: [rendered],
+    references: [source('https://lore.kernel.org/linux-media/imx908-v2', 'IMX908 bindings v2')]
+  };
+  const reporter = {
+    candidates: [{
+      title: 'IMX908 bindings v2',
+      url: 'https://lore.kernel.org/linux-media/imx908-v2',
+      final_selected: true
+    }]
+  };
+
+  const { editor: scrubbed } = scrubStaleClaims(editor, {
+    date: '2026-08-10',
+    removedSections: [],
+    reporter
+  });
+
+  const globalText = [scrubbed.summary, scrubbed.briefing, scrubbed.action_items].flat().join(' ');
+  assert.match(globalText, /IMX908/i);
+  assert.equal(scrubbed.briefing.length, 3);
+});
+
 test('release claim with final section source evidence is retained', () => {
   const finalSection = section({
     headline: 'Android 17 Beta 4 reaches platform stability',
