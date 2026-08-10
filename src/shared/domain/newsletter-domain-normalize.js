@@ -274,7 +274,9 @@ function toLegacySection(article = {}, index = 0, storyContractVersion = DEFAULT
     public_article: legacy.public_article || {
       headline: article.headline,
       lead: article.evidenceSummary || article.summary || '',
-      body_paragraphs: [],
+      // 본문 키도 stamp와 같은 버전이어야 한다. stamp만 2로 올리고 body_paragraphs를
+      // 남기면 v2 계약에서 unexpected_public_article_keys가 되는 반쪽 아티팩트가 된다.
+      ...(storyContractVersion >= 2 ? { body_markdown: '' } : { body_paragraphs: [] }),
       camera_hal_takeaway: article.halPerspective || '',
       reader_checkpoints: actionItems,
       source_links: sources,

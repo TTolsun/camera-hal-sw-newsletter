@@ -10,6 +10,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  deriveDecisionMetadata,
   publicArticleForSection,
   validatePublicArticle
 } = require('../../reporter/public-article-contract');
@@ -174,4 +175,68 @@ test('v2 validation does not demand the four dropped editorial story slots', () 
   const types = issueTypes(v2Section(), V2_ISSUE);
 
   assert.equal(types.includes('empty_editorial_story_field'), false);
+});
+
+// v2 본문이 발행자격 텍스트 스캔에 들어가야 한다. 한쪽 본문 키만 읽으면 v2 기사의 본문이
+// 통째로 안 보여 source_gap_risk·watchlist 판정의 탐지가 조용히 줄어든다(fail-open 방향).
+// combinedSectionText는 내부 함수라 공개 소비자인 deriveDecisionMetadata로 확인한다.
+test('v2 body_markdown reaches the publish-eligibility text scan', () => {
+  function bareSection(body) {
+    return {
+      headline: '이번 주 공개 자료',
+      category: '공개 자료',
+      sources: [{ title: '공개 자료', url: 'https://example.com/notes' }],
+      public_article: {
+        headline: '이번 주 공개 자료',
+        lead: '자료가 공개되었다.',
+        body_markdown: body,
+        camera_hal_takeaway: '확인할 지점은 하나다.',
+        reader_checkpoints: ['확인한다.'],
+        source_links: [{ title: '공개 자료', url: 'https://example.com/notes' }],
+        story_contract_version: 2,
+        source_subtitle: '공개 자료',
+        editorial_story: { not_to_overclaim: '확대하지 않는다.', editor_take: '범위 안에서 본다.' },
+        decision_metadata: {}
+      }
+    };
+  }
+
+  const withoutSignal = deriveDecisionMetadata(bareSection('공개된 자료를 정리했다.'), V2_ISSUE);
+  const withSignal = deriveDecisionMetadata(bareSection('이 변경은 sensor 동작을 바꾼다.'), V2_ISSUE);
+
+  assert.notDeepEqual(withoutSignal.impact, withSignal.impact);
+});
+
+// 품질 게이트의 briefing story 구조 검사가 v2 이슈에서도 살아 있어야 한다.
+// 지원 버전 하나와 등가비교로 두면 v2에서 검사가 조용히 꺼지고, findings 0이
+// "문제 없음"과 구분되지 않는다.
+test('briefing story structure check stays on for a v2 issue', () => {
+  const { buildNewsletterQualityReport } = require('../../quality/newsletter-quality');
+  const { scopedCandidate, section: qualitySection } = require('../../../shared/test/helpers/quality-builders');
+
+  function reportFor(publicContractVersion) {
+    const editor = {
+      public_contract_version: publicContractVersion,
+      briefing: ['one', 'two', 'three'],
+      sections: [qualitySection({ headline: 'CameraX clean article', url: 'https://example.com/a' })]
+    };
+    const reporter = { candidates: [scopedCandidate('https://example.com/a', 'direct_aosp_camera')] };
+    const factCheck = {
+      status: 'PASS',
+      must_fix: [],
+      source_gaps: [],
+      source_gap_count: 0,
+      recommended_fixes: [],
+      article_quality: []
+    };
+    return buildNewsletterQualityReport('2026-08-10', editor, reporter, factCheck, {});
+  }
+
+  const briefingDeductions = report => report.deductions
+    .filter(item => /Briefing bullet misses story structure/.test(item.reason)).length;
+
+  // 얇은 briefing('one'/'two'/'three')은 v1에서 story 구조 감점을 받는다.
+  assert.equal(briefingDeductions(reportFor('story-v1')) > 0, true);
+  // v2에서도 같은 검사가 돌아야 한다.
+  assert.equal(briefingDeductions(reportFor('story-v2')) > 0, true);
 });

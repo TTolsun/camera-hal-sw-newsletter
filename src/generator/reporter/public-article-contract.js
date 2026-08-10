@@ -435,7 +435,10 @@ function combinedSectionText(section = {}, issue = {}) {
     section.public_article?.editorial_story,
     section.public_article?.headline,
     section.public_article?.lead,
+    // 본문 키는 버전마다 다르다. 한쪽만 읽으면 v2 기사의 본문이 source_gap_risk·
+    // watchlist 승격 판정에서 통째로 빠져 탐지가 조용히 줄어든다(fail-open 방향).
     section.public_article?.body_paragraphs,
+    section.public_article?.body_markdown,
     section.public_article?.camera_hal_takeaway,
     section.public_article?.reader_checkpoints
   ]);

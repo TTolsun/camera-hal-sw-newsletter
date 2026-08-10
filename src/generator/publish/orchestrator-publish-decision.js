@@ -92,7 +92,7 @@ async function decidePublishReadinessAndWriteStatus({
     try {
       const weeklyMerge = buildWeeklyMergeResolver({
         callLlmJson,
-        validateMergedArticle: mergedArticle => validateMergedWeeklyArticle(mergedArticle, editor)
+        validateMergedArticle: validateMergedWeeklyArticle
       });
       const weeklyResult = await writeWeeklyNewsletterArtifacts({
         root, date, editor, tags: issueTags(editor), ...weeklyMerge

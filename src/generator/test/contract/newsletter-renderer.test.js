@@ -355,3 +355,24 @@ test('newsletter renderer does not treat unsupported future story versions as st
   assert.doesNotMatch(html, /story-article/);
   assert.doesNotMatch(html, /article-decision-metadata/);
 });
+
+// 계약층은 v2를 수용하지만 렌더러는 아직 v2 본문을 모른다. 그 간극을 여기에 고정한다.
+// 지금은 producer가 v2를 만들지 않아 도달 불가지만, 테스트가 없으면 T5(#848)가
+// 렌더 분기를 붙일 때 무엇이 바뀌는지 대조할 기준이 없다.
+// T5에서 이 테스트는 "v2가 story 레이아웃으로 렌더된다"로 교체되어야 한다.
+test('renderer does not yet render a story v2 body (gap pinned for T5)', () => {
+  const issue = storyIssue();
+  issue.public_contract_version = 'story-v2';
+  issue.generation_contract_version = 2;
+  issue.sections[0].public_article.story_contract_version = 2;
+  delete issue.sections[0].public_article.body_paragraphs;
+  issue.sections[0].public_article.body_markdown = '첫 문단이다.\n\n### 소제목\n\n둘째 문단이다.';
+
+  const markdown = buildMarkdown(issue);
+
+  // 렌더가 통째로 망가져도 doesNotMatch는 통과한다. 나머지 필드가 여전히 나온다는
+  // 긍정 단언을 함께 걸어야 pin이 살아 있는지 구분된다.
+  assert.match(markdown, /Android Developers가 CameraX 변경점을 공개했습니다|CameraX/);
+  assert.doesNotMatch(markdown, /### 소제목/);
+  assert.doesNotMatch(markdown, /둘째 문단이다/);
+});

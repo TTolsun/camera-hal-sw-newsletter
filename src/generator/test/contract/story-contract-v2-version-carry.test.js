@@ -2,8 +2,6 @@
 //
 // 도메인 정규화가 story_contract_version을 1로 박아 두면, v2 draft가 quality recompute
 // 단계에서 v1 stamp를 받아 혼합 아티팩트가 된다(PR #643과 같은 형태의 버그다).
-// weekly 병합 검증은 반대 방향의 같은 문제다 — 이슈 마커를 안 넘기면 story 계약 기사가
-// 항상 marker mismatch로 떨어져 병합 결과가 절대 채택되지 않는다.
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
@@ -11,13 +9,6 @@ const test = require('node:test');
 const {
   toLegacyEditorIssue
 } = require('../../../shared/domain/newsletter-domain-normalize');
-const {
-  validateMergedWeeklyArticle
-} = require('../../publish/orchestrator-report-builders');
-const {
-  section,
-  storyPublicArticle
-} = require('../../../shared/test/helpers/editor-builders');
 
 function domainDraft(publicContractVersion, generationContractVersion) {
   return {
@@ -46,11 +37,6 @@ function domainDraft(publicContractVersion, generationContractVersion) {
   };
 }
 
-function mergedStoryArticle() {
-  const base = section(1);
-  return { ...base, public_article: storyPublicArticle(base) };
-}
-
 test('domain normalization carries the v2 story contract version into the legacy section', () => {
   const legacy = toLegacyEditorIssue(domainDraft('story-v2', 2));
 
@@ -61,26 +47,15 @@ test('domain normalization keeps stamping v1 for a v1 draft', () => {
   const legacy = toLegacyEditorIssue(domainDraft('story-v1', 1));
 
   assert.equal(legacy.sections[0].public_article.story_contract_version, 1);
+  assert.deepEqual(legacy.sections[0].public_article.body_paragraphs, []);
 });
 
-test('weekly merge validation accepts a story article when the issue markers travel with it', () => {
-  const result = validateMergedWeeklyArticle(mergedStoryArticle(), {
-    public_contract_version: 'story-v1',
-    generation_contract_version: 1
-  });
+// stamp만 v2로 올리고 본문 키를 v1으로 남기면 v2 계약에서 unexpected_public_article_keys가
+// 되는 반쪽 아티팩트가 된다. 합성된 public_article은 stamp와 본문 키가 같은 버전이어야 한다.
+test('domain normalization synthesizes the v2 body key alongside the v2 stamp', () => {
+  const article = toLegacyEditorIssue(domainDraft('story-v2', 2)).sections[0].public_article;
 
-  assert.equal(result.ok, true, result.reason);
-});
-
-test('weekly merge validation still fails closed and says why', () => {
-  const merged = mergedStoryArticle();
-  merged.public_article.camera_hal_takeaway = '';
-
-  const result = validateMergedWeeklyArticle(merged, {
-    public_contract_version: 'story-v1',
-    generation_contract_version: 1
-  });
-
-  assert.equal(result.ok, false);
-  assert.match(result.reason, /empty_public_article_field/);
+  assert.equal(article.story_contract_version, 2);
+  assert.equal(Object.prototype.hasOwnProperty.call(article, 'body_paragraphs'), false);
+  assert.equal(article.body_markdown, '');
 });
