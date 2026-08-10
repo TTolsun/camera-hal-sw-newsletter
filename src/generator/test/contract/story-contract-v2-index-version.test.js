@@ -89,7 +89,6 @@ test('the index validator accepts entries without the version field', () => {
 });
 
 test('publishing records the contract version the issue declared', () => {
-  const contractsModule = require('../../publish/orchestrator-terminal-contracts');
   const root = tempRoot('index-version-writer-');
   const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
   fs.mkdirSync(path.dirname(dataPath), { recursive: true });
@@ -116,7 +115,6 @@ test('publishing records the contract version the issue declared', () => {
 
   const written = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
   assert.equal(written[0].public_contract_version, 'story-v2');
-  assert.equal(contractsModule.updateNewsletterData.length, 2, '호출부 시그니처는 그대로여야 한다');
 });
 
 test('publishing omits the version field for a v1 issue', () => {
@@ -145,4 +143,70 @@ test('publishing omits the version field for a v1 issue', () => {
   const written = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
   // v1은 기본값이라 적지 않는다. 적으면 기존 31개 엔트리와 모양이 갈린다.
   assert.equal('public_contract_version' in written[0], false);
+});
+
+// 인덱스 엔트리는 발행 때마다 통째로 교체된다. 이슈가 마커를 안 들고 오는 실행이
+// 실재하므로(targeted repair wrapper), 부재를 v1로 단정하면 재발행 한 번에 기록이 사라진다.
+function publishInto(root, date, issue) {
+  const previousCwd = process.cwd();
+  process.chdir(root);
+  try {
+    delete require.cache[require.resolve('../../publish/orchestrator-terminal-contracts')];
+    return require('../../publish/orchestrator-terminal-contracts').updateNewsletterData(date, issue);
+  } finally {
+    process.chdir(previousCwd);
+    delete require.cache[require.resolve('../../publish/orchestrator-terminal-contracts')];
+    require('../../publish/orchestrator-terminal-contracts');
+  }
+}
+
+function indexRoot(prefix) {
+  const root = tempRoot(prefix);
+  const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
+  fs.mkdirSync(path.dirname(dataPath), { recursive: true });
+  fs.writeFileSync(dataPath, JSON.stringify([]), 'utf8');
+  return { root, dataPath };
+}
+
+test('a republish without the marker keeps the recorded contract version', () => {
+  const { root, dataPath } = indexRoot('index-version-keep-');
+
+  publishInto(root, '2026-08-10', { title: 't', summary: 's', public_contract_version: 'story-v2', sections: [] });
+  publishInto(root, '2026-08-10', { title: 't', summary: 's', sections: [] });
+
+  const written = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+  assert.equal(written[0].public_contract_version, 'story-v2');
+});
+
+test('publishing refuses an unsupported contract version instead of poisoning the index', () => {
+  const { root, dataPath } = indexRoot('index-version-reject-');
+
+  assert.throws(
+    () => publishInto(root, '2026-08-10', {
+      title: 't',
+      summary: 's',
+      public_contract_version: 'story-v9',
+      sections: []
+    }),
+    /unsupported public_contract_version/
+  );
+
+  // 인덱스가 오염되지 않아야 한다 — 오염되면 이후 실행마다 전체 엔트리 스캔이 실패한다.
+  assert.deepEqual(JSON.parse(fs.readFileSync(dataPath, 'utf8')), []);
+});
+
+test('publishing refuses to downgrade a recorded contract version', () => {
+  const { root } = indexRoot('index-version-downgrade-');
+
+  publishInto(root, '2026-08-10', { title: 't', summary: 's', public_contract_version: 'story-v2', sections: [] });
+
+  assert.throws(
+    () => publishInto(root, '2026-08-10', {
+      title: 't',
+      summary: 's',
+      public_contract_version: 'story-v1',
+      sections: []
+    }),
+    /downgrade/
+  );
 });

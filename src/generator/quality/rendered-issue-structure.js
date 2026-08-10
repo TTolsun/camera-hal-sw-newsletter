@@ -22,14 +22,14 @@ const {
 const REQUIRED_NEWSLETTER_FIELDS = ['date', 'title', 'summary', 'html', 'md', 'tags'];
 // 필수 목록에는 넣지 않는다. 그 목록은 `field in item` 존재 검사라, 넣는 순간 기존
 // 발행분 전부가 실패한다. 대신 값이 있을 때만 지원 여부를 본다.
-const DEFAULT_PUBLIC_CONTRACT_VERSION = STORY_CONTRACT_VERSIONS[0];
+const DEFAULT_STORY_CONTRACT_VERSION = STORY_CONTRACT_VERSIONS[0];
 
 // 인덱스 엔트리가 선언한 계약 버전. 필드가 없으면 v1이다(발행분 전부가 그 상태이고
 // backfill이 필요 없다). 값이 있는데 지원 목록 밖이면 0을 돌려준다 — "버전 없음"이
 // 아니라 "판별 실패"라는 뜻이고, 인덱스 검증이 그것을 오류로 올린다.
 function newsletterIndexContractVersion(entry = {}) {
   if (!Object.prototype.hasOwnProperty.call(entry || {}, 'public_contract_version')) {
-    return DEFAULT_PUBLIC_CONTRACT_VERSION;
+    return DEFAULT_STORY_CONTRACT_VERSION;
   }
   return storyContractVersionFromPublicContractVersion(entry.public_contract_version);
 }
