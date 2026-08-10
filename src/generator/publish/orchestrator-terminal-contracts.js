@@ -41,6 +41,8 @@ const {
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
+// v1은 인덱스에 적지 않는 기본값이다.
+const DEFAULT_PUBLIC_CONTRACT_VERSION = require('../../shared/common/story-contract-version').PUBLIC_CONTRACT_VERSIONS[0];
 
 function updateNewsletterData(date, issue) {
   const entry = {
@@ -51,6 +53,13 @@ function updateNewsletterData(date, issue) {
     md: `newsletters/${date}/newsletter.md`,
     tags: issueTags(issue)
   };
+  // 계약 버전을 발행 시점에 기록한다. 이슈별 버전을 알 수 있는 다른 입력은
+  // editor-draft.json뿐인데 그건 gitignored라 CI에서는 항상 없다.
+  // v1은 기본값이라 적지 않는다 — 적으면 기존 발행분과 엔트리 모양이 갈린다.
+  const publicContractVersion = String(issue?.public_contract_version || '').trim();
+  if (publicContractVersion && publicContractVersion !== DEFAULT_PUBLIC_CONTRACT_VERSION) {
+    entry.public_contract_version = publicContractVersion;
+  }
 
   const newsletters = fs.existsSync(dataPath) ? readJson(dataPath) : [];
   const updated = newsletters
