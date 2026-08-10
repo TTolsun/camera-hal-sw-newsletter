@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-08-03T00:00:00+09:00",
+  "updated_at": "2026-08-10T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com",
-    "title": "Himax HM1092 흑백 근적외선 센서용 V4L2 드라이버 패치 v6 공개",
-    "summary": "Linux 커널 미디어 서브시스템에 Himax HM1092 흑백 근적외선(NIR) 이미지 센서를 지원하기 위한 V4L2 subdev 드라이버 패치 v6가 제출되었습니다.",
-    "source_url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
-    "newsletter_date": "2026-08-03",
-    "newsletter_url": "newsletters/2026-08-03/index.html",
-    "selected_at": "2026-08-03",
+    "article_identity_key": "url:https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com",
+    "title": "글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)",
+    "summary": "이번 주 글로벌 셔터 기능을 갖춘 onsemi AR0234 CMOS 이미지 센서 드라이버를 추가하는 v2 패치 시리즈가 Linux 미디어 서브시스템에 제출되었습니다. 고속 촬영 및 정밀한 프레임 동기화가 필요한 머신 비전 및 AR/VR 시나리오에서 유용하게 활용될 수 있습니다.",
+    "source_url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+    "newsletter_date": "2026-08-10",
+    "newsletter_url": "newsletters/2026-08-10/index.html",
+    "selected_at": "2026-08-10",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-08-03",
+    "last_scored_at": "2026-08-10",
     "date_evidence": {
-      "date": "2026-08-01T12:56:38Z",
+      "date": "2026-08-07T10:29:11Z",
       "date_field": "published_date",
       "evidence_level": "watch",
       "publish_ready_date_evidence": true
@@ -38,13 +38,58 @@
     },
     "snapshot": {
       "category": "camera_driver_image_pipeline",
-      "source_name": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver"
+      "source_name": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver"
     },
-    "newsletter_article_url": "newsletters/2026-08-03/index.html#article-himax-hm1092-v4l2-v6",
+    "newsletter_article_url": "newsletters/2026-08-10/index.html#article-onsemi-ar0234-cmos-patch-v2",
     "image_url": "assets/images/fallback/newsletter-default.svg",
-    "image_alt": "Himax HM1092 흑백 근적외선 센서용 V4L2 드라이버 패치 v6 공개 image"
+    "image_alt": "글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2) image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com",
+      "title": "Himax HM1092 흑백 근적외선 센서용 V4L2 드라이버 패치 v6 공개",
+      "summary": "Linux 커널 미디어 서브시스템에 Himax HM1092 흑백 근적외선(NIR) 이미지 센서를 지원하기 위한 V4L2 subdev 드라이버 패치 v6가 제출되었습니다.",
+      "source_url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+      "newsletter_date": "2026-08-03",
+      "newsletter_url": "newsletters/2026-08-03/index.html",
+      "selected_at": "2026-08-03",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-08-03",
+      "date_evidence": {
+        "date": "2026-08-01T12:56:38Z",
+        "date_field": "published_date",
+        "evidence_level": "watch",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 3,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "camera_driver_image_pipeline",
+        "source_name": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver"
+      },
+      "newsletter_article_url": "newsletters/2026-08-03/index.html#article-himax-hm1092-v4l2-v6",
+      "image_url": "assets/images/fallback/newsletter-default.svg",
+      "image_alt": "Himax HM1092 흑백 근적외선 센서용 V4L2 드라이버 패치 v6 공개 image",
+      "replaced_at": "2026-08-10",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca",
       "title": "Himax HM1092 단색 적외선(IR) 센서 지원을 위한 신규 V4L2 드라이버 패치 공개",

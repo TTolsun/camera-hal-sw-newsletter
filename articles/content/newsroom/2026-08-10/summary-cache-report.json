@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-10",
+  "generated_at": "2026-08-10T16:34:26.426Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 11,
+    "hit_count": 5,
+    "miss_count": 6,
+    "by_url_hit_count": 5,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 6
+    },
+    {
+      "reason": "url-hit",
+      "count": 5
+    }
+  ],
+  "entries": [
+    {
+      "title": "[PATCH v3 0/3] media: i2c: Add imx576 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260806120216.24145-1-himanshu.bhavani@siliconsignals.io/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-06T12:02:41Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260806120216.24145-1-himanshu.bhavani@siliconsignals.io",
+        "url_hash": "4a242290facc283db9b0cd79ee80f55037a365323433b8262c10fcf745aa7385",
+        "published_date": "2026-08-06T12:02:41Z",
+        "content_hash": "2d361567133b92eb87710e5efbe180e4d998b33542cde947b7e0a8812156c8fe"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-07T10:29:11Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com",
+        "url_hash": "07aea4ea6876bf6b14f3d85fe544abb344fec11945a5a2f43b76680bf24d0981",
+        "published_date": "2026-08-07T10:29:11Z",
+        "content_hash": "c1f74957f07361f29a8ad6a57fe00e7bd0c1b5e5f5b2a45e9ca3ec1f407245dd"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v7 0/5] Add CAMSS and IMX577 sensor support for Shikra EVK",
+      "url": "https://lore.kernel.org/linux-media/20260806-shikra-camss-review-v7-0-c7360fd6a5ac@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-06T11:43:44Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260806-shikra-camss-review-v7-0-c7360fd6a5ac@oss.qualcomm.com",
+        "url_hash": "a90e4738f3963c5385394b5272f5f39153159ab9e9539d037637c11238d8fda3",
+        "published_date": "2026-08-06T11:43:44Z",
+        "content_hash": "c7a1fe7d8f75d96ef737e58f0401b93795bb15fda05ca4acc6cdc26306ff9ca9"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[v3,1/2] libcamera: Add SensorSequence metadata control",
+      "url": "https://patchwork.libcamera.org/patch/27621/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-08-05",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27621",
+        "url_hash": "1c03dacc223de92af4d7dadd1f8f1afc43831379159685bddc0bfc142be1ebc5",
+        "published_date": "2026-08-05",
+        "content_hash": "20f0a564f2ac176ceca56956b193b04f09e40cd5f4d533ebf3636e49d86e5516"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-06T07:11:17Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com",
+        "url_hash": "38c9b3e220f93b37cf246e9fa8b1936edc042605bc6a3288dae7bfc0d1b2288a",
+        "published_date": "2026-08-06T07:11:17Z",
+        "content_hash": "8a9fe86cb73cac714487832978b3e963f331a18b858fe8685b6774adbbd7411b"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2 1/3] dt-bindings: media: i2c: Add imx708 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260807-imx708-v2-1-7d3d7b57779d@ideasonboard.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-07T12:56:16Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260807-imx708-v2-1-7d3d7b57779d@ideasonboard.com",
+        "url_hash": "9fcbbf9071524df9702dcde5a06f9b408d924807c22af0552d01b363bd048c96",
+        "published_date": "2026-08-07T12:56:16Z",
+        "content_hash": "3d9f7a862adf9e3c88c289aec7b5888911c49889157b22720cf317382cee9ea1"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/9fcbbf9071524df9702dcde5a06f9b408d924807c22af0552d01b363bd048c96.json"
+    },
+    {
+      "title": "[PATCH] [RFC PATCH] staging: media: atomisp: remove redundant ov2722_startup() helper",
+      "url": "https://lore.kernel.org/linux-media/20260809180105.58428-1-mishraloopmohit@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-09T18:01:16Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260809180105.58428-1-mishraloopmohit@gmail.com",
+        "url_hash": "f2b64a3b4cceb8fa6283f952474c9e7a931071ab24b22ea352cec60d09197ebd",
+        "published_date": "2026-08-09T18:01:16Z",
+        "content_hash": "6f58020db05b28f324d245ebca01db88a0ced3b18892df16d44352c803a49445"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/f2b64a3b4cceb8fa6283f952474c9e7a931071ab24b22ea352cec60d09197ebd.json"
+    },
+    {
+      "title": "[PATCH v3 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260806-sk5jn5-v3-0-0b3ac1eadf8a@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-06T03:50:27Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260806-sk5jn5-v3-0-0b3ac1eadf8a@oss.qualcomm.com",
+        "url_hash": "c199ab99bf6f22c01f29a8fed36bdd692d774806600640f30ea8f4a014c9a76c",
+        "published_date": "2026-08-06T03:50:27Z",
+        "content_hash": "35fbc294b7d1e85a5a18896d3ddb25d12cf53181889da20497d956df8f93ffa0"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/c199ab99bf6f22c01f29a8fed36bdd692d774806600640f30ea8f4a014c9a76c.json"
+    },
+    {
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260807",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "source": "Raspberry Pi libcamera Releases",
+      "published_date": "2026-08-07",
+      "cache_key": {
+        "normalized_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20260807",
+        "url_hash": "635a6e61ae048b20672875bec4f3c88042c341311d9f6fe8ad8859c382c4f9fb",
+        "published_date": "2026-08-07",
+        "content_hash": "e34203b76ef7a867a601467de12324f354870c0148d6de8a6b3f466cf4c3337b"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/635a6e61ae048b20672875bec4f3c88042c341311d9f6fe8ad8859c382c4f9fb.json"
+    },
+    {
+      "title": "[RFC,v11,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "url": "https://patchwork.libcamera.org/patch/27657/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-08-05",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27657",
+        "url_hash": "86b47891905493517240b7a22c23915d928b8f5af5ce64c5c3c3bfba6794d98a",
+        "published_date": "2026-08-05",
+        "content_hash": "2dd3e4e50a7b8a6b3330835d02546b089870401d21ab509b4afb456184e926c8"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/86b47891905493517240b7a22c23915d928b8f5af5ce64c5c3c3bfba6794d98a.json"
+    },
+    {
+      "title": "[v2,1/2] ipa: rpi: Rename mistrustFrames* to mistrustMetadata* - Patchwork",
+      "url": "https://patchwork.libcamera.org/patch/27618/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-08-05",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27618",
+        "url_hash": "d86ff7176575bfdf9bbd3a4a5f2a0825d74a99da7b7f2eb9fc9529cd2f5e6011",
+        "published_date": "2026-08-05",
+        "content_hash": "1736f8adf1de91ddfdf2f2c7b572940b5456242530703c03ace71f25ae65f9c6"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}
