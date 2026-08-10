@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-08-10",
+  "validations": [
+    {
+      "proposal_id": "camera-hal-kernel-driver-updates-aug-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-kernel-driver-updates-aug-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-kernel-driver-updates-aug-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260806-sk5jn5-v3-0-0b3ac1eadf8a@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260806-sk5jn5-v3-0-0b3ac1eadf8a@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-kernel-driver-updates-aug-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260806120216.24145-1-himanshu.bhavani@siliconsignals.io/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260806120216.24145-1-himanshu.bhavani@siliconsignals.io/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-kernel-driver-updates-aug-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260807-imx708-v2-1-7d3d7b57779d@ideasonboard.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260807-imx708-v2-1-7d3d7b57779d@ideasonboard.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-kernel-driver-updates-aug-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260806-shikra-camss-review-v7-0-c7360fd6a5ac@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260806-shikra-camss-review-v7-0-c7360fd6a5ac@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-kernel-driver-updates-aug-2026",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260809180105.58428-1-mishraloopmohit@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260809180105.58428-1-mishraloopmohit@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "libcamera-updates-aug-2026",
+      "candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "normalized_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "raspberrypi-libcamera-releases",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "raspberrypi-libcamera-releases",
+      "suggested_fixture_case": "Add a parser regression fixture for the discovered release-note source.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "libcamera-updates-aug-2026",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27657/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27657/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "libcamera-updates-aug-2026",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27621/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27621/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "libcamera-updates-aug-2026",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27668/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27668/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "libcamera-updates-aug-2026",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27670/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27670/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "libcamera-updates-aug-2026",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27664/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27664/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "libcamera-updates-aug-2026",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27618/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27618/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "libcamera-updates-aug-2026",
+      "candidate_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "normalized_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "libcamera-upstream-releases"
+    },
+    {
+      "proposal_id": "libcamera-updates-aug-2026",
+      "candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2",
+      "normalized_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "raspberrypi-libcamera-releases",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "raspberrypi-libcamera-releases",
+      "suggested_fixture_case": "Add a parser regression fixture for the discovered release-note source.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "android-media3-updates-aug-2026",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "androidx-media3-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-media3-release",
+      "suggested_fixture_case": "Add or update a Media3 release-note fixture with version/date/component/behavior evidence and camera-output relevance.",
+      "source_extraction_item_count": 0
+    }
+  ],
+  "counts": {
+    "accepted": 14,
+    "discovered_not_extractable": 3
+  }
+}

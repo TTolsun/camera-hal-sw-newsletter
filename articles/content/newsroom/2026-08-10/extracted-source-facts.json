@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "f47d231e52984f4b",
+      "url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+      "title": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "published_at": "2026-08-07T10:29:11Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This series adds a driver for the onsemi AR0234 CMOS image sensor. The AR0234 is a 1/2.6-inch global-shutter sensor with a 1940x1220 pixel array, capable of 1920x1200 resolution at up to 120 fps. It supports MIPI CSI-2 output with 1 to 4 data lanes, raw Bayer (8/10-bit) and monochrome formats, as well as DPCM 10->8 compression. The driver has been tested with 2 and 4 lanes on an ARM64 Rockchip RK3588 platform with a 27 MHz external clock. Both 8-bit and 10-bit raw Bayer modes are functional. Not",
+          "evidence_text": "<html><head><title>[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver - Alexander Shiyan</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "1ffb9b72cff100aa",
+      "url": "https://lore.kernel.org/linux-media/20260806-sk5jn5-v3-0-0b3ac1eadf8a@oss.qualcomm.com/",
+      "title": "[PATCH v3 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "published_at": "2026-08-06T03:50:27Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This series adds support for the Samsung S5KJN5, a 50 MP 10-bit RAW MIPI CSI-2 image sensor. This is implemented as a separate driver rather than extending the existing s5kjn1 driver. Although both sensors belong to the same family, they are different parts with different register maps and power supplies. Combining support for both devices in a single driver would result in very little shared code while introducing separate initialization and control paths, so keeping them as independent drivers",
+          "evidence_text": "<html><head><title>[PATCH v3 0/2] media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "154db28f3180201f",
+      "url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/",
+      "title": "[PATCH v2 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "published_at": "2026-08-06T07:11:17Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The Sony IMX908 is an 8.39 megapixel (3856x2176) CMOS image sensor with a MIPI CSI-2 output interface, supporting RAW10 and RAW12 output over 2 or 4 data lanes. Add device tree bindings for the sensor. Signed-off-by: Lachlan Michael --- Changes in v2: - Reword subject to drop the redundant \"bindings\" suffix. - Reference video-interfaces.yaml for the endpoint and switch to unevaluatedProperties, fixing the remote-endpoint check. - Drop \"link-frequencies: true\". - MAINTAINERS: drop the L: line. -",
+          "evidence_text": "<html><head><title>[PATCH v2 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor - Lachlan Michael</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.885,
+      "warnings": []
+    },
+    {
+      "id": "f974c061e109af8d",
+      "url": "https://lore.kernel.org/linux-media/20260806120216.24145-1-himanshu.bhavani@siliconsignals.io/",
+      "title": "[PATCH v3 0/3] media: i2c: Add imx576 camera sensor driver",
+      "published_at": "2026-08-06T12:02:41Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The following features are supported: - Manual exposure an gain control support. - vblank/hblank control support. - Supported resolution: 5760 x 4312 30fps (SRGGB10) This series depends on the SM6350 CAMSS support series https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com/ The driver has been tested on the mainline v7.0-rc6 kernel on the Fairphone 4 running postmarketOS. fairphone-fp4:~$ v4l2-compliance -d /dev/v4l-subdev21 v4l2-compliance 1.32.0, 64 bits,",
+          "evidence_text": "<html><head><title>[PATCH v3 0/3] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nh",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.81,
+      "android_hal_relevance": 0.81,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.854,
+      "warnings": []
+    },
+    {
+      "id": "0e22d0e11b82c3c3",
+      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "title": "v0.7.2",
+      "published_at": "2026-07-10T11:12:38+01:00",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "libcamera v0.7.2 This release brings 113 commits, and interestingly fixes two separate saturation handling bugs in both the SoftISP and the Raspberry Pi IPA independently. In particular the fixes to the SoftISP mean we can look forward to tuning cameras on laptops and mobile phones with real CCMs now. Also on the SoftISP 12-bit formats are now supported, black level correction is 'fixed' and there are interesting performance improvements with eGL buffer caching. Within the IPA handling, we have",
+          "evidence_text": "<!DOCTYPE html>\n<html class=\"gl-system ui-neutral with-top-bar with-header page-theme-background page-with-panels with-gl-container-queries  user-logged-out\" lang=\"en\">\n<head prefix=\"og: http://ogp.me/ns#\">\n<meta charset=\"utf-8\">\n<meta content=\"IE=edge\" http-equiv=\"X-UA-Compatible\">\n<meta content=\"width=device-width, initial-scale=1\" name=\"viewport\">\n<title>v0.7.2 · Tags · libcamera / libcamera · GitLab</title>\n<link crossorigin=\"\" href=\"https://snowplowprd.trx.gitlab.net\" rel=\"preconnect\">\n<lin",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.93,
+      "android_hal_relevance": 0.93,
+      "ai_relevance": 0,
+      "technical_depth": 0.852,
+      "warnings": []
+    },
+    {
+      "id": "bc1b8ff2b7091c77",
+      "url": "https://lore.kernel.org/linux-media/20260807-imx708-v2-1-7d3d7b57779d@ideasonboard.com/",
+      "title": "[PATCH v2 1/3] dt-bindings: media: i2c: Add imx708 image sensor",
+      "published_at": "2026-08-07T12:56:16Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Sony IMX708 is an 11.9 Megapixel CMOS sensor, that can output pixels over MIPI CSI-2 bus. Add bindings for it. Reviewed-by: Krzysztof Kozlowski Signed-off-by: Jai Luthra --- Changes in v2: - Drop the |- before the description - Add Dave as M:, and move kernel-list@raspberrypi.com as R: - Add Krzysztof's R-by tag --- .../devicetree/bindings/media/i2c/sony,imx708.yaml | 120 +++++++++++++++++++++ MAINTAINERS | 8 ++ 2 files changed , 128 insertions(+) diff --git a/Documentation/devicetree/bindings/m",
+          "evidence_text": "<html><head><title>[PATCH v2 1/3] dt-bindings: media: i2c: Add imx708 image sensor - Jai Luthra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhr",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.83,
+      "warnings": []
+    },
+    {
+      "id": "b3ee6b579a0446c2",
+      "url": "https://lore.kernel.org/linux-media/20260806-shikra-camss-review-v7-0-c7360fd6a5ac@oss.qualcomm.com/",
+      "title": "[PATCH v7 0/5] Add CAMSS and IMX577 sensor support for Shikra EVK",
+      "published_at": "2026-08-06T11:43:44Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Shikra EVK is based on the Qualcomm Shikra SoC. It lacks a camera sensor in its default configuration. This series adds CAMSS driver support, CCI definitions and enables the 22-pin IMX577 sensor via CSIPHY1 through device tree overlays. We have tested IMX577 Sensor on CCI1 with following commands: - media-ctl --reset - media-ctl -d /dev/media0 -V '\"imx577 1-001a\":0[fmt:SRGGB10/4056x3040 field:none]' - media-ctl -d /dev/media0 -V '\"msm_csiphy1\":0[fmt:SRGGB10/4056x3040]' - media-ctl -d /dev/media0",
+          "evidence_text": "<html><head><title>[PATCH v7 0/5] Add CAMSS and IMX577 sensor support for Shikra EVK - Nihal Kumar Gupta</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0,
+      "technical_depth": 0.83,
+      "warnings": []
+    },
+    {
+      "id": "gemini-af2ef290417aa73d",
+      "url": "https://lore.kernel.org/linux-media/20260809180105.58428-1-mishraloopmohit@gmail.com/",
+      "title": "[PATCH] [RFC PATCH] staging: media: atomisp: remove redundant ov2722_startup() helper - Mohit Mishra",
+      "published_at": "2026-08-09",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH] [RFC PATCH] staging: media: atomisp: remove redundant ov2722_startup() helper - Mohit Mishra",
+          "evidence_text": "<html><head><title>[PATCH] [RFC PATCH] staging: media: atomisp: remove redundant ov2722_startup() helper - Mohit Mishra</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefer",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-5c6a9f46a5d1705f",
+      "url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+      "title": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver - Alexander Shiyan",
+      "published_at": "2026-08-07",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver - Alexander Shiyan",
+          "evidence_text": "<html><head><title>[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver - Alexander Shiyan</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-c9fc545c1f9b654c",
+      "url": "https://lore.kernel.org/linux-media/20260806-shikra-camss-review-v7-0-c7360fd6a5ac@oss.qualcomm.com/",
+      "title": "[PATCH v7 0/5] Add CAMSS and IMX577 sensor support for Shikra EVK - Nihal Kumar Gupta",
+      "published_at": "2026-08-06",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v7 0/5] Add CAMSS and IMX577 sensor support for Shikra EVK - Nihal Kumar Gupta",
+          "evidence_text": "<html><head><title>[PATCH v7 0/5] Add CAMSS and IMX577 sensor support for Shikra EVK - Nihal Kumar Gupta</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-d9a23c39ddd5b094",
+      "url": "https://lore.kernel.org/linux-media/20260806120216.24145-1-himanshu.bhavani@siliconsignals.io/",
+      "title": "[PATCH v3 0/3] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani",
+      "published_at": "2026-08-06",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 0/3] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani",
+          "evidence_text": "<html><head><title>[PATCH v3 0/3] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nh",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-6c4b8c5967957574",
+      "url": "https://patchwork.libcamera.org/patch/27618/",
+      "title": "[v2,1/2] ipa: rpi: Rename mistrustFrames* to mistrustMetadata* - Patchwork",
+      "published_at": "2026-08-05",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[v2,1/2] ipa: rpi: Rename mistrustFrames* to mistrustMetadata* - Patchwork",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v2,1/2] ipa: rpi: Rename mistrustFrames* to mistrustMetadata* - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    }
+  ]
+}

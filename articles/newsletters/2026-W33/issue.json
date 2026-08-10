@@ -1,0 +1,456 @@
+{
+  "date": "2026-08-10",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "2026 W33 (08.10 ~ 08.16)",
+  "summary": "이번 주에는 ‘글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)’, ‘Sony IMX908 8.39MP 센서 지원을 위한 디바이스 트리 바인딩 추가 (PATCH v2)’ 두 건의 소식을 다룹니다.",
+  "briefing": [
+    "글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)",
+    "Sony IMX908 8.39MP 센서 지원을 위한 디바이스 트리 바인딩 추가 (PATCH v2)"
+  ],
+  "sections": [
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)",
+      "what_changed": "onsemi AR0234 CMOS 이미지 센서 드라이버가 추가되었습니다. 이 센서는 1/2.6인치 글로벌 셔터 센서로, 1940x1220 픽셀 배열을 가지며 최대 120fps로 1920x1200 해상도를 지원합니다. MIPI CSI-2 출력, RAW Bayer (8/10비트) 및 흑백 형식, DPCM 10->8 압축을 지원합니다.",
+      "confirmed_facts": [
+        "onsemi AR0234 CMOS 이미지 센서 드라이버가 추가되었습니다.",
+        "이 센서는 1/2.6인치 글로벌 셔터 센서로, 1940x1220 픽셀 배열을 가지며 최대 120fps로 1920x1200 해상도를 지원합니다.",
+        "MIPI CSI-2 출력(1~4 데이터 레인), RAW Bayer (8/10비트) 및 흑백 형식, DPCM 10->8 압축을 지원합니다.",
+        "이 변경사항은 Linux media mailing list에 제출된 패치로, 현재 검토 중인 제안입니다."
+      ],
+      "evidence_summary": "onsemi AR0234 글로벌 셔터 CMOS 센서 드라이버를 추가하는 v2 패치가 제출되었습니다. 이 드라이버는 최대 120fps의 1920x1200 해상도, MIPI CSI-2 출력, RAW Bayer 및 흑백 형식, DPCM 10->8 압축을 지원합니다.",
+      "specificity_checks": [
+        "Version: PATCH v2",
+        "Release Date: 2026-08-07",
+        "API/Component: image sensor driver",
+        "Behavior Change: Add onsemi AR0234 driver with global shutter, 120fps support, and DPCM compression."
+      ],
+      "source_verification_notes": [
+        "Mailing list patch series is under review.",
+        "Tested with libcamera/V4L2 stack."
+      ],
+      "public_article": {
+        "headline": "글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)",
+        "lead": "이번 주 글로벌 셔터 기능을 갖춘 onsemi AR0234 CMOS 이미지 센서 드라이버를 추가하는 v2 패치 시리즈가 Linux 미디어 서브시스템에 제출되었습니다. 고속 촬영 및 정밀한 프레임 동기화가 필요한 머신 비전 및 AR/VR 시나리오에서 유용하게 활용될 수 있습니다.",
+        "body_paragraphs": [
+          "Linux 커널에 onsemi AR0234 CMOS 이미지 센서 드라이버가 추가되는 것은 Android Camera HAL 및 드라이버 개발에 중요한 영향을 미칩니다. 이 센서는 글로벌 셔터 기능을 지원하며, 1920x1200 해상도에서 최대 120fps를 제공합니다. 이는 고속 이미지 캡처 및 특정 머신 비전 애플리케이션에 유용할 수 있습니다.",
+          "MIPI CSI-2 출력, RAW Bayer 형식(8/10비트) 및 DPCM 10->8 압축 지원은 HAL이 센서로부터 데이터를 효율적으로 수신하고 처리하는 방식에 직접적인 영향을 줍니다. HAL은 이러한 RAW 데이터를 ISP(Image Signal Processor)로 전달하여 최종 이미지 처리를 수행하거나, Camera2 API를 통해 RAW 출력을 앱에 제공할 수 있습니다.",
+          "글로벌 셔터는 움직이는 객체 촬영 시 롤링 셔터 왜곡을 방지하여 이미지 품질을 향상시킬 수 있으며, 이는 특정 사용 사례에서 중요한 검증 포인트가 됩니다. 개발팀은 고속 프레임 레이트 구동 시의 전송 안정성과 압축 포맷 디코딩 성능을 면밀히 검토해야 합니다."
+        ],
+        "camera_hal_takeaway": "글로벌 셔터의 특성은 Android Camera HAL에서 고속 캡처 및 머신 비전 시나리오에 활용될 수 있습니다. 120fps 고속 스트림 구성 시 HAL의 버퍼 순환 주기와 ISP의 처리 지연 시간을 최소화해야 하며, DPCM 10->8 압축 해제 또는 RAW Bayer 8/10비트 포맷이 ISP 파이프라인에서 올바르게 디코딩되는지 검증해야 합니다.",
+        "reader_checkpoints": [
+          "AR0234 드라이버의 MIPI CSI-2 데이터 레인 설정(1~4 레인)에 따른 전송 안정성을 검증한다.",
+          "1920x1200 120fps 스트림 구동 시 프레임 드롭 발생 여부와 버퍼 큐 지연 시간을 모니터링한다."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+            "url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media list",
+        "editorial_story": {
+          "reader_scenario": "고속 산업용 카메라 또는 AR/VR 헤드셋 프로젝트에서 움직이는 물체의 왜곡 없는 캡처를 위해 글로벌 셔터 센서를 도입해야 하는 상황입니다.",
+          "what_happened": "onsemi AR0234 글로벌 셔터 센서 드라이버를 추가하는 v2 패치가 Linux 미디어 메일링 리스트에 제출되었습니다.",
+          "why_it_matters": "글로벌 셔터와 120fps 고속 촬영 지원은 모션 블러와 젤로 현상을 제거하여 정밀한 컴퓨터 비전 알고리즘 입력 데이터를 보장합니다.",
+          "field_scenario": "AR0234 센서를 탑재한 개발 보드에서 120fps 스트림을 구동하고, DPCM 10->8 압축 활성화 시 ISP 입력단에서 데이터 손실이나 아티팩트가 발생하는지 확인합니다.",
+          "not_to_overclaim": "이 패치는 제안 단계이며, 글로벌 셔터 특성이 Android Camera2 API의 표준 메타데이터 계약을 직접 변경하지는 않습니다.",
+          "editor_take": "글로벌 셔터 및 고속 캡처 지원 드라이버는 특수 목적의 Android 기기 카메라 파이프라인 구축에 매우 유용한 자산입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "onsemi AR0234 CMOS 이미지 센서 드라이버가 추가되었습니다.",
+          "이 센서는 1/2.6인치 글로벌 셔터 센서로, 1940x1220 픽셀 배열을 가지며 최대 120fps로 1920x1200 해상도를 지원합니다.",
+          "MIPI CSI-2 출력(1~4 데이터 레인), RAW Bayer (8/10비트) 및 흑백 형식, DPCM 10->8 압축을 지원합니다.",
+          "이 변경사항은 Linux media mailing list에 제출된 패치로, 현재 검토 중인 제안입니다."
+        ],
+        "background_context": "Linux 커널에 onsemi AR0234 CMOS 이미지 센서 드라이버가 추가되는 것은 Android Camera HAL 및 드라이버 개발에 중요한 영향을 미칩니다. 이 센서는 글로벌 셔터 기능을 지원하며, 1920x1200 해상도에서 최대 120fps를 제공합니다. 이는 고속 이미지 캡처 및 특정 머신 비전 애플리케이션에 유용할 수 있습니다. MIPI CSI-2 출력, RAW Bayer 형식(8/10비트) 및 DPCM 10->8 압축 지원은 HAL이 센서로부터 데이터를 효율적으로 수신하고 처리하는 방식에 직접적인 영향을 줍니다. HAL은 이러한 RAW 데이터를 ISP(Image Signal Processor)로 전달하여 최종 이미지 처리를 수행하거나, Camera2 API를 통해 RAW 출력을 앱에 제공할 수 있습니다. 글로벌 셔터는 움직이는 객체 촬영 시 롤링 셔터 왜곡을 방지하여 이미지 품질을 향상시킬 수 있으며, 이는 특정 사용 사례에서 중요한 검증 포인트가 됩니다.",
+        "hal_driver_impact": "글로벌 셔터의 특성은 Android Camera HAL에서 고속 캡처 및 머신 비전 시나리오에 활용될 수 있습니다. 120fps 고속 스트림 구성 시 HAL의 버퍼 순환 주기와 ISP의 처리 지연 시간을 최소화해야 하며, DPCM 10->8 압축 해제 또는 RAW Bayer 8/10비트 포맷이 ISP 파이프라인에서 올바르게 디코딩되는지 검증해야 합니다.",
+        "action_items": [
+          "2주 이내에 드라이버 담당자는 AR0234 드라이버의 MIPI CSI-2 데이터 레인 설정(1~4 레인)에 따른 전송 안정성을 검증한다.",
+          "1920x1200 120fps 스트림 구동 시 프레임 드롭(frame drop) 발생 여부와 버퍼 큐 지연 시간을 모니터링한다.",
+          "DPCM 10->8 압축 포맷 활성화 시 ISP 입력단에서 압축 해제 아티팩트가 발생하는지 이미지 품질(IQ) 테스트를 수행한다."
+        ],
+        "team_share_points": "AR0234 글로벌 셔터 센서의 고속 캡처 및 DPCM 압축 지원 드라이버 패치가 제안되었으므로, 고속 카메라 파이프라인 개발팀은 해당 기능을 검토해야 합니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026-08-07에 제출된 최신 패치로, 글로벌 셔터 및 고속 캡처 요구사항이 있는 신규 프로젝트의 드라이버 아키텍처 설계에 즉각 반영할 수 있습니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "performance_thermal_owner"
+        ],
+        "check_within_2_weeks": "MIPI CSI-2 레인 수 설정 및 DPCM 압축 포맷의 드라이버 수준 지원 여부를 확인해야 합니다.",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "performance_latency_frame_drop"
+        ],
+        "do_not_overstate": [
+          "글로벌 셔터 센서 드라이버 추가가 Android Camera HAL의 표준 API 규격을 강제로 변경하지는 않으며, 하위 드라이버 수준의 기능 지원에 국한됩니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:07aea4ea6876bf6b:1",
+          "text": "onsemi AR0234 CMOS 이미지 센서 드라이버가 추가되었습니다. 이 센서는 1/2.6인치 글로벌 셔터 센서로, 1940x1220 픽셀 배열을 가지며 최대 120fps로 1920x1200 해상도를 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:07aea4ea6876bf6b:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:07aea4ea6876bf6b:2",
+          "text": "MIPI CSI-2 출력(1~4 데이터 레인), RAW Bayer (8/10비트) 및 흑백 형식, DPCM 10->8 압축을 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:07aea4ea6876bf6b:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:07aea4ea6876bf6b:3",
+          "text": "이 변경사항은 Linux media mailing list에 제출된 패치로, 현재 검토 중인 제안입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:07aea4ea6876bf6b:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "MIPI CSI-2 데이터 레인 설정 호환성 검증",
+        "120fps 고속 스트림 구동 시 버퍼 지연 시간 측정"
+      ],
+      "action_hints": [
+        "DPCM 10->8 압축 해제 아티팩트 검증",
+        "RAW Bayer 8/10비트 포맷 디코딩 테스트"
+      ],
+      "action_items": [
+        "2주 이내에 드라이버 담당자는 AR0234 드라이버의 MIPI CSI-2 데이터 레인 설정(1~4 레인)에 따른 전송 안정성을 검증한다.",
+        "1920x1200 120fps 스트림 구동 시 프레임 드롭(frame drop) 발생 여부와 버퍼 큐 지연 시간을 모니터링한다.",
+        "DPCM 10->8 압축 포맷 활성화 시 ISP 입력단에서 압축 해제 아티팩트가 발생하는지 이미지 품질(IQ) 테스트를 수행한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available.",
+      "sources": [
+        {
+          "title": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+      "source_candidate_hash": "07aea4ea6876bf6b14f3d85fe544abb344fec11945a5a2f43b76680bf24d0981",
+      "article_group_key": "lore-series:20260807102847.1813059-eagle.alexander923@gmail.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 4,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "Sony IMX908 8.39MP 센서 지원을 위한 디바이스 트리 바인딩 추가 (PATCH v2)",
+      "what_changed": "Sony IMX908 센서에 대한 디바이스 트리 바인딩이 추가되었습니다. IMX908은 8.39 메가픽셀(3856x2176) CMOS 이미지 센서로, MIPI CSI-2 출력 인터페이스를 통해 RAW10 및 RAW12 출력을 2개 또는 4개 데이터 레인으로 지원합니다.",
+      "confirmed_facts": [
+        "Sony IMX908 센서에 대한 디바이스 트리 바인딩이 추가되었습니다.",
+        "IMX908은 8.39 메가픽셀(3856x2176) CMOS 이미지 센서로, MIPI CSI-2 출력 인터페이스를 통해 RAW10 및 RAW12 출력을 지원합니다.",
+        "2개 또는 4개 데이터 레인을 지원합니다.",
+        "이 변경사항은 Linux media mailing list에 제출된 패치로, 현재 검토 중인 제안입니다."
+      ],
+      "evidence_summary": "Sony IMX908 센서의 디바이스 트리 바인딩을 추가하는 v2 패치가 제출되었습니다. 이 센서는 8.39MP 해상도를 가지며, MIPI CSI-2 인터페이스를 통해 RAW10/RAW12 출력을 지원합니다.",
+      "specificity_checks": [
+        "Version: PATCH v2",
+        "Release Date: 2026-08-06",
+        "API/Component: dt-bindings / image sensor",
+        "Behavior Change: Add device tree bindings for Sony IMX908 supporting RAW10/RAW12 and 2/4 MIPI lanes."
+      ],
+      "source_verification_notes": [
+        "Device tree binding patch is under review.",
+        "References video-interfaces.yaml for endpoint configuration."
+      ],
+      "public_article": {
+        "headline": "Sony IMX908 8.39MP 센서 지원을 위한 디바이스 트리 바인딩 추가 (PATCH v2)",
+        "lead": "이번 주 Sony IMX908 8.39MP CMOS 이미지 센서의 Linux 디바이스 트리 바인딩을 추가하는 v2 패치 시리즈가 제출되었습니다. 고해상도 RAW 출력을 지원하는 센서의 하드웨어 인터페이스 정의가 추가되어 플랫폼 통합의 기반이 마련되었습니다.",
+        "body_paragraphs": [
+          "Sony IMX908 센서에 대한 디바이스 트리 바인딩 추가는 Linux 커널이 해당 센서를 인식하고 초기화하는 데 필요한 하드웨어 정보를 제공하는 것을 의미합니다. 디바이스 트리는 Linux 시스템에서 하드웨어 구성 정보를 커널에 전달하는 메커니즘으로, 카메라 센서의 경우 MIPI CSI-2 레인 구성, 클럭, 전원 관리, I2C 주소 등과 같은 중요한 파라미터를 정의합니다.",
+          "IMX908 센서가 8.39 메가픽셀(3856x2176) CMOS 이미지 센서로 RAW10 및 RAW12 출력을 지원한다는 점은, Android Camera HAL이 이 센서로부터 고해상도 RAW 데이터를 처리할 수 있어야 함을 시사합니다. HAL은 이러한 RAW 데이터를 ISP로 전달하거나, Camera2 API를 통해 앱에 직접 노출하여 고급 이미지 처리 기능을 가능하게 합니다.",
+          "디바이스 트리 바인딩의 정확성은 센서의 올바른 동작과 카메라 파이프라인의 안정성에 직접적인 영향을 미치므로, HAL 및 드라이버 개발자는 이 변경 사항을 면밀히 검토해야 합니다. 특히 MIPI CSI-2 레인 수 설정에 따른 대역폭 확보 여부를 확인하는 것이 중요합니다."
+        ],
+        "camera_hal_takeaway": "디바이스 트리 바인딩의 정확성은 센서 프로빙(probing) 및 초기화 성공 여부를 결정합니다. RAW12 고해상도(3856x2176) 스트림은 RAW10에 비해 더 넓은 버퍼 메모리와 대역폭을 요구하므로, HAL 및 드라이버 레이어에서 DMA-BUF 할당 및 ISP 입력 버퍼 크기 설정을 정확히 매칭해야 합니다.",
+        "reader_checkpoints": [
+          "IMX908 디바이스 트리 바인딩 규격에 맞춰 target 보드의 dts 파일을 구성하고 컴파일 호환성을 확인한다.",
+          "MIPI CSI-2 2레인 및 4레인 구성에 따른 RAW10/RAW12 데이터 전송 시 신호 무결성을 검증한다."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v2 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+            "url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media list",
+        "editorial_story": {
+          "reader_scenario": "새로운 고해상도 카메라 모듈을 개발 보드에 연결하고 커널에서 센서 드라이버가 정상적으로 로드되도록 디바이스 트리를 구성해야 하는 상황입니다.",
+          "what_happened": "Sony IMX908 센서의 하드웨어 연결 규격을 정의하는 디바이스 트리 바인딩 v2 패치가 제출되었습니다.",
+          "why_it_matters": "올바른 디바이스 트리 바인딩은 커널 드라이버가 센서의 MIPI 레인 및 전원을 정확히 제어하게 하여, 초기화 실패나 데이터 전송 오류를 방지합니다.",
+          "field_scenario": "dts 파일에 IMX908 노드를 추가하고, 4개 레인 설정을 적용한 후 커널 부팅 로그에서 센서 프로빙 성공 여부와 MIPI 클럭 주파수를 확인합니다.",
+          "not_to_overclaim": "디바이스 트리 바인딩 추가는 하드웨어 인터페이스 정의일 뿐이며, 센서 드라이버 자체의 세부 제어 로직이나 HAL API 변경을 포함하지는 않습니다.",
+          "editor_take": "정확한 하드웨어 바인딩 정의는 안정적인 카메라 파이프라인 구축의 기초가 됩니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "High"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "Sony IMX908 센서에 대한 디바이스 트리 바인딩이 추가되었습니다.",
+          "IMX908은 8.39 메가픽셀(3856x2176) CMOS 이미지 센서로, MIPI CSI-2 출력 인터페이스를 통해 RAW10 및 RAW12 출력을 지원합니다.",
+          "2개 또는 4개 데이터 레인을 지원합니다.",
+          "이 변경사항은 Linux media mailing list에 제출된 패치로, 현재 검토 중인 제안입니다."
+        ],
+        "background_context": "Sony IMX908 센서에 대한 디바이스 트리 바인딩 추가는 Linux 커널이 해당 센서를 인식하고 초기화하는 데 필요한 하드웨어 정보를 제공하는 것을 의미합니다. 디바이스 트리는 Linux 시스템에서 하드웨어 구성 정보를 커널에 전달하는 메커니즘으로, 카메라 센서의 경우 MIPI CSI-2 레인 구성, 클럭, 전원 관리, I2C 주소 등과 같은 중요한 파라미터를 정의합니다. IMX908 센서가 8.39 메가픽셀(3856x2176) CMOS 이미지 센서로 RAW10 및 RAW12 출력을 지원한다는 점은, Android Camera HAL이 이 센서로부터 고해상도 RAW 데이터를 처리할 수 있어야 함을 시사합니다. HAL은 이러한 RAW 데이터를 ISP로 전달하거나, Camera2 API를 통해 앱에 직접 노출하여 고급 이미지 처리 기능을 가능하게 합니다. 디바이스 트리 바인딩의 정확성은 센서의 올바른 동작과 카메라 파이프라인의 안정성에 직접적인 영향을 미치므로, HAL 및 드라이버 개발자는 이 변경 사항을 면밀히 검토해야 합니다.",
+        "hal_driver_impact": "디바이스 트리 바인딩의 정확성은 센서 프로빙(probing) 및 초기화 성공 여부를 결정합니다. RAW12 고해상도(3856x2176) 스트림은 RAW10에 비해 더 넓은 버퍼 메모리와 대역폭을 요구하므로, HAL 및 드라이버 레이어에서 DMA-BUF 할당 및 ISP 입력 버퍼 크기 설정을 정확히 매칭해야 합니다.",
+        "action_items": [
+          "2주 이내에 하드웨어 통합 담당자는 IMX908 디바이스 트리 바인딩 규격에 맞춰 target 보드의 dts 파일을 작성하고 컴파일 호환성을 확인한다.",
+          "MIPI CSI-2 2레인 및 4레인 구성에 따른 RAW10/RAW12 데이터 전송 시 신호 무결성(Signal Integrity)을 오실로스코프로 검증한다.",
+          "RAW12 포맷 스트림 구동 시 ISP 파이프라인의 비트 깊이 정렬(bit alignment)이 정상적으로 수행되는지 로그를 통해 확인한다."
+        ],
+        "team_share_points": "Sony IMX908 센서 지원을 위한 디바이스 트리 바인딩 패치가 제안되었으므로, 보드 통합 및 하드웨어 드라이버 팀은 dts 구성 요소를 미리 확인해야 합니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026-08-06에 제출된 최신 디바이스 트리 바인딩 패치로, 신규 고해상도 센서 도입 시 하드웨어 호환성 검증 단계에서 즉시 참고할 수 있습니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "디바이스 트리 바인딩 규격(dt-bindings)에 따른 dts 파일 작성 및 빌드 오류 여부를 확인해야 합니다.",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "디바이스 트리 바인딩 추가는 하드웨어 연결 규격 정의일 뿐이며, 센서 드라이버의 실제 제어 기능 구현이나 HAL 레이어의 동작을 보장하지는 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:38c9b3e220f93b37:1",
+          "text": "Sony IMX908 센서에 대한 디바이스 트리 바인딩이 추가되었습니다. IMX908은 8.39 메가픽셀(3856x2176) CMOS 이미지 센서로, MIPI CSI-2 출력 인터페이스를 통해 RAW10 및 RAW12 출력을 2개 또는 4개 데이터 레인으로 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:38c9b3e220f93b37:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:38c9b3e220f93b37:2",
+          "text": "이 변경사항은 Linux media mailing list에 제출된 패치로, 현재 검토 중인 제안입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:38c9b3e220f93b37:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "article-3-fact-1",
+          "text": "2개 또는 4개 데이터 레인을 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:38c9b3e220f93b37:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/"
+          ],
+          "impact_level": "no_hal_runtime_impact",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "디바이스 트리 바인딩 규격 호환성 검증",
+        "MIPI CSI-2 데이터 레인 구성에 따른 신호 무결성 확인"
+      ],
+      "action_hints": [
+        "RAW12 포맷 스트림 구동 시 비트 정렬 검증",
+        "dts 파일 컴파일 오류 검사"
+      ],
+      "action_items": [
+        "2주 이내에 하드웨어 통합 담당자는 IMX908 디바이스 트리 바인딩 규격에 맞춰 target 보드의 dts 파일을 작성하고 컴파일 호환성을 확인한다.",
+        "MIPI CSI-2 2레인 및 4레인 구성에 따른 RAW10/RAW12 데이터 전송 시 신호 무결성(Signal Integrity)을 오실로스코프로 검증한다.",
+        "RAW12 포맷 스트림 구동 시 ISP 파이프라인의 비트 깊이 정렬(bit alignment)이 정상적으로 수행되는지 로그를 통해 확인한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available.",
+      "sources": [
+        {
+          "title": "[PATCH v2 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+          "url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/",
+      "source_candidate_hash": "38c9b3e220f93b37cf246e9fa8b1936edc042605bc6a3288dae7bfc0d1b2288a",
+      "article_group_key": "lore-series:20260806070934.21764-lachlan.michael@sony.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "AR0234 글로벌 셔터 센서의 120fps 고속 스트림 구동 시 프레임 드롭 및 버퍼 지연 시간을 측정한다.",
+    "IMX908 디바이스 트리 바인딩 규격에 맞춰 target 보드의 dts 파일을 구성하고 신호 무결성을 검증한다."
+  ],
+  "references": [
+    {
+      "title": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/"
+    },
+    {
+      "title": "[PATCH v2 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [
+    {
+      "article_group_key": "lore-series:20260806120216.24145-himanshu.bhavani@siliconsignals.io",
+      "hard_block_reason": "deterministic demote dropped an unpublishable article",
+      "reason_code": "quality_hard_blocker"
+    }
+  ],
+  "selected_group_count": 3,
+  "rendered_group_count": 2,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 1,
+  "selected_representative_group_keys": [
+    "lore-series:20260806120216.24145-himanshu.bhavani@siliconsignals.io",
+    "lore-series:20260807102847.1813059-eagle.alexander923@gmail.com",
+    "lore-series:20260806070934.21764-lachlan.michael@sony.com"
+  ],
+  "rendered_group_keys": [
+    "lore-series:20260807102847.1813059-eagle.alexander923@gmail.com",
+    "lore-series:20260806070934.21764-lachlan.michael@sony.com"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [
+    "lore-series:20260806120216.24145-himanshu.bhavani@siliconsignals.io"
+  ],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "v0.7.2",
+      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "source": "libcamera Upstream Releases",
+      "published_date": "2026-07-10T11:12:38+01:00",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    }
+  ],
+  "weekly_key": "2026-W33",
+  "week_start_date": "2026-08-10",
+  "week_end_date": "2026-08-16",
+  "tags": [
+    "Driver",
+    "Image Processing",
+    "Camera HAL",
+    "Android"
+  ]
+}

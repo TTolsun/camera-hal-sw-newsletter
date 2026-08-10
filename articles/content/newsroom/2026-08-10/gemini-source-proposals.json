@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-08-10",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-kernel-driver-updates-aug-2026",
+      "topic_gap": "Recent kernel driver updates for image sensors and camera HALs in the Linux kernel, particularly those relevant to Android.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "lore.kernel.org"
+      ],
+      "search_keywords": [
+        "linux kernel camera driver",
+        "V4L2 sensor update",
+        "android camera HAL kernel"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/",
+        "https://lore.kernel.org/linux-media/20260806-sk5jn5-v3-0-0b3ac1eadf8a@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260806120216.24145-1-himanshu.bhavani@siliconsignals.io/",
+        "https://lore.kernel.org/linux-media/20260807-imx708-v2-1-7d3d7b57779d@ideasonboard.com/",
+        "https://lore.kernel.org/linux-media/20260806-shikra-camss-review-v7-0-c7360fd6a5ac@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260809180105.58428-1-mishraloopmohit@gmail.com/"
+      ],
+      "expected_evidence": [
+        "New camera sensor drivers",
+        "Updates to existing camera drivers",
+        "Camera HAL related changes in kernel"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-updates-aug-2026",
+      "topic_gap": "Recent updates and releases in the libcamera project, focusing on new features, bug fixes, and driver support relevant to camera pipelines.",
+      "source_family": "linux-camera",
+      "allowed_domains": [
+        "github.com",
+        "patchwork.libcamera.org",
+        "gitlab.com"
+      ],
+      "search_keywords": [
+        "libcamera release notes",
+        "libcamera patches",
+        "raspberry pi libcamera update"
+      ],
+      "candidate_urls": [
+        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+        "https://patchwork.libcamera.org/patch/27657/",
+        "https://patchwork.libcamera.org/patch/27621/",
+        "https://patchwork.libcamera.org/patch/27668/",
+        "https://patchwork.libcamera.org/patch/27670/",
+        "https://patchwork.libcamera.org/patch/27664/",
+        "https://patchwork.libcamera.org/patch/27618/",
+        "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2"
+      ],
+      "expected_evidence": [
+        "New features in libcamera",
+        "Bug fixes in camera pipeline processing",
+        "Support for new camera sensors or hardware",
+        "Updates to ISP or image processing modules"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-media3-updates-aug-2026",
+      "topic_gap": "Latest updates to Android's Media3 library, specifically looking for changes impacting camera output, recording, or A/V synchronization.",
+      "source_family": "android-media",
+      "allowed_domains": [
+        "developer.android.com"
+      ],
+      "search_keywords": [
+        "Media3 release notes",
+        "Android media recording changes",
+        "AV sync improvements"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/media3#1.11.0"
+      ],
+      "expected_evidence": [
+        "New features or bug fixes in Media3",
+        "Improvements in A/V synchronization",
+        "Changes related to media recording or playback of camera output"
+      ],
+      "risk_notes": []
+    }
+  ]
+}
