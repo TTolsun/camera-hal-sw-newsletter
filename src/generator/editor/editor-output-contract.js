@@ -21,13 +21,14 @@ const {
   normalizeHalSignalCapsule
 } = require('../reporter/hal-signal-quality');
 const {
-  PUBLIC_ARTICLE_REQUIRED_KEYS,
-  PUBLIC_ARTICLE_STORY_REQUIRED_KEYS,
-  GENERATION_CONTRACT_VERSION,
-  STORY_PUBLIC_CONTRACT_VERSION,
+  issueStoryContractVersion,
+  publicArticleExpectedKeys,
   storyContractMarkers,
   validatePublicArticle
 } = require('../reporter/public-article-contract');
+const {
+  publicContractVersionFor
+} = require('../../shared/common/story-contract-version');
 const {
   buildAllowedClaimEvidence,
   buildEvidenceIndex,
@@ -226,16 +227,20 @@ function deterministicallyRepairEditorSchema(value, options = {}) {
     };
   }
   if (options.requireStoryContract === true) {
-    if (repaired.public_contract_version !== STORY_PUBLIC_CONTRACT_VERSION) {
-      repaired.public_contract_version = STORY_PUBLIC_CONTRACT_VERSION;
+    // draft가 이미 선언한 버전으로 마커를 맞춘다. 버전을 고정해 두면 v2 draft의 이슈
+    // 마커만 v1으로 되돌아가 섹션 마커와 어긋난 혼합 패밀리가 만들어진다.
+    const draftContractVersion = issueStoryContractVersion(repaired);
+    const publicContractVersion = publicContractVersionFor(draftContractVersion);
+    if (repaired.public_contract_version !== publicContractVersion) {
+      repaired.public_contract_version = publicContractVersion;
       changed = true;
     }
     const generationContractVersion = Number(repaired.generation_contract_version);
     if (
       !Number.isFinite(generationContractVersion) ||
-      generationContractVersion < GENERATION_CONTRACT_VERSION
+      generationContractVersion < draftContractVersion
     ) {
-      repaired.generation_contract_version = GENERATION_CONTRACT_VERSION;
+      repaired.generation_contract_version = draftContractVersion;
       changed = true;
     }
   }
@@ -735,7 +740,9 @@ function validatePublicArticleContract(value, options = {}) {
   if (issues.length > 0) {
     throw semanticError('Editor output failed public article contract validation.', {
       field: 'sections.public_article',
-      expectedKeys: options.requireStoryContract === true ? PUBLIC_ARTICLE_STORY_REQUIRED_KEYS : PUBLIC_ARTICLE_REQUIRED_KEYS,
+      expectedKeys: publicArticleExpectedKeys(value, {
+        requireStoryContract: options.requireStoryContract === true
+      }),
       actualCount: issues.length,
       sectionCount: ensureArray(value.sections).length,
       issues
@@ -1483,6 +1490,7 @@ module.exports = {
   EditorSemanticValidationError,
   assertSectionsAndSourcesPreserved,
   bindMissingFactClaimEvidence,
+  deterministicallyRepairEditorSchema,
   dropVerifiedFactsClassifiedAsNonFact,
   reconcileFactClaimEvidence,
   revertUncoveredPatchedVerifiedFacts,

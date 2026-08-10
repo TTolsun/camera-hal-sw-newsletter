@@ -85,6 +85,7 @@ const {
   STORY_PUBLIC_CONTRACT_VERSION,
   validatePublicArticle
 } = require('../reporter/public-article-contract');
+const { PUBLIC_CONTRACT_VERSIONS } = require('../../shared/common/story-contract-version');
 const {
   PRODUCT_VERSION_TOKEN_PATTERN,
   RELEASE_BOILERPLATE_TOKEN_PATTERN,
@@ -649,7 +650,9 @@ function briefingRawCopyFindings(briefing = [], reporter = {}) {
 }
 
 function briefingStoryStructureFindings(briefing = [], editor = {}) {
-  if (editor.public_contract_version !== STORY_PUBLIC_CONTRACT_VERSION) return [];
+  // 지원 버전 하나와 등가비교하면 v2 이슈에서 이 검사가 조용히 꺼지고,
+  // findings 0이 "문제 없음"과 구분되지 않는다.
+  if (!PUBLIC_CONTRACT_VERSIONS.includes(editor.public_contract_version)) return [];
   const findings = [];
   ensureArray(briefing).forEach((item, index) => {
     const bullet = text(item);

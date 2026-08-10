@@ -7,6 +7,14 @@ const {
 const {
   publicArticlePathIssues
 } = require('../../validate/validate-public-newsletter');
+const {
+  STORY_CONTRACT_VERSIONS,
+  publicContractVersionFor
+} = require('../../../shared/common/story-contract-version');
+
+// 지원 집합 바로 위 값. 숫자를 박아 두면 다음 계약 버전이 추가될 때 이 테스트가
+// 지원 버전을 검사하게 되어 조용히 공허해진다.
+const UNSUPPORTED_FUTURE_STORY_VERSION = Math.max(...STORY_CONTRACT_VERSIONS) + 1;
 
 function markdown(overrides = {}) {
   const checkpoints = overrides.checkpoints || [
@@ -299,7 +307,7 @@ test('public article path validation uses nearest issue context for array and wr
 
 test('public article path validation rejects unsupported future story contract versions in wrappers', () => {
   const issue = storyIssue({
-    public_contract_version: 'story-v2'
+    public_contract_version: publicContractVersionFor(UNSUPPORTED_FUTURE_STORY_VERSION)
   });
   const errors = publicArticlePathIssues({ newsletters: [issue] }, 'issue-wrapper');
 
@@ -308,7 +316,7 @@ test('public article path validation rejects unsupported future story contract v
 
 test('public article path validation rejects unsupported future section story versions in wrappers', () => {
   const issue = storyIssue();
-  issue.sections[0].public_article.story_contract_version = 2;
+  issue.sections[0].public_article.story_contract_version = UNSUPPORTED_FUTURE_STORY_VERSION;
   const errors = publicArticlePathIssues({ newsletters: [issue] }, 'issue-wrapper');
 
   assert.ok(errors.some(error => /unsupported_story_contract_version/.test(error)));
