@@ -583,6 +583,81 @@ test('resolved stale fact-check items are pruned after scrub removes the claim',
   assert.equal(pruned.source_gap_count, 0);
 });
 
+// 모델명 키를 부분 문자열로 대조하면 'imx576'이 'IMX5761'을 삼켜 무관한 must_fix까지
+// 잘리고, status가 NEEDS_FIX에서 PASS로 뒤집힌다.
+test('pruning a model identifier claim does not swallow a longer identifier', () => {
+  const factCheck = {
+    status: 'NEEDS_FIX',
+    must_fix: [
+      'IMX576 언급을 요약에서 제거하세요.',
+      'IMX5761 센서 스펙의 출처가 없습니다.'
+    ],
+    source_gaps: []
+  };
+  const staleReport = {
+    stale_claim_items_removed: [
+      { field: 'summary', text: 'IMX576 …', stale_claims: ['imx576'], unsupported_release_claims: [] }
+    ],
+    unsupported_release_claims_removed: []
+  };
+
+  const pruned = pruneResolvedStaleFactCheckItems(factCheck, staleReport);
+
+  assert.deepEqual(pruned.must_fix, ['IMX5761 센서 스펙의 출처가 없습니다.']);
+  assert.equal(pruned.status, 'NEEDS_FIX');
+});
+
+// 차집합의 바탕에 공개 본문이 빠지면, 본문에서만 쓰인 모델명이 삭제 키가 되어
+// 그 기사의 문장이 지워진다.
+test('scrub subtracts identifiers that appear only in the public article body', () => {
+  const rendered = section({
+    headline: 'Qualcomm CAMSS 리뷰 시리즈',
+    article_group_key: 'lore-series:camss',
+    sources: [source('https://lore.kernel.org/linux-media/camss-v7', 'CAMSS v7')],
+    public_article: {
+      headline: 'CAMSS 리뷰 시리즈',
+      lead: '리뷰가 이어진다.',
+      body_paragraphs: ['이 시리즈는 IMX800 센서 경로를 함께 다룬다.'],
+      camera_hal_takeaway: 'HAL 쪽 확인 지점은 하나다.',
+      reader_checkpoints: ['경로를 확인한다.'],
+      source_links: [source('https://lore.kernel.org/linux-media/camss-v7', 'CAMSS v7')]
+    }
+  });
+  const editor = {
+    date: '2026-08-10',
+    summary: 'IMX800 센서 경로가 정리되었습니다.',
+    briefing: ['IMX800 경로 정리', '두 번째 항목', '세 번째 항목'],
+    action_items: ['IMX800 경로를 확인한다.'],
+    sections: [rendered],
+    references: [source('https://lore.kernel.org/linux-media/camss-v7', 'CAMSS v7')]
+  };
+  const reporter = {
+    candidates: [
+      {
+        title: 'Add imx800 sensor notes',
+        url: 'https://lore.kernel.org/linux-media/imx800-v1',
+        article_group_key: 'lore-series:imx800',
+        final_selected: true
+      },
+      {
+        title: 'CAMSS v7',
+        url: 'https://lore.kernel.org/linux-media/camss-v7',
+        article_group_key: 'lore-series:camss',
+        final_selected: true
+      }
+    ]
+  };
+
+  const { editor: scrubbed } = scrubStaleClaims(editor, {
+    date: '2026-08-10',
+    removedSections: [],
+    reporter
+  });
+
+  assert.equal(scrubbed.summary, 'IMX800 센서 경로가 정리되었습니다.');
+  assert.ok(scrubbed.briefing.includes('IMX800 경로 정리'));
+});
+
 test('removed-section claim reused by a surviving section source is not a stale orphan', () => {
   const playlistUrl = 'https://youtube.com/playlist?list=ABC';
   const playlistTitle = 'Supercharge your media pipeline at Google I/O';
