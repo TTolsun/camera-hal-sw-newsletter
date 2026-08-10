@@ -586,13 +586,29 @@ test('resolved stale fact-check items are pruned after scrub removes the claim',
 // 모델명 키를 부분 문자열로 대조하면 'imx576'이 'IMX5761'을 삼켜 무관한 must_fix까지
 // 잘리고, status가 NEEDS_FIX에서 PASS로 뒤집힌다.
 test('pruning a model identifier claim does not swallow a longer identifier', () => {
+  // must_fix는 정본 스키마상 객체다(newsletter-schema.js의 required location/problem/
+  // suggestion/source_url). 문자열 배열로 잠그면 객체 항목을 토큰화하지 못하게 만드는
+  // 회귀를 놓친다 — 실제 발행 경로가 내보내는 모양으로 잠근다.
+  const resolvedItem = {
+    location: 'summary',
+    problem: 'IMX576 언급을 요약에서 제거하세요.',
+    suggestion: 'IMX576 문장을 삭제하세요.',
+    source_url: ''
+  };
+  const unrelatedItem = {
+    location: 'sections[0]',
+    problem: 'IMX5761 센서 스펙의 출처가 없습니다.',
+    suggestion: '출처를 보강하세요.',
+    source_url: ''
+  };
   const factCheck = {
     status: 'NEEDS_FIX',
-    must_fix: [
-      'IMX576 언급을 요약에서 제거하세요.',
-      'IMX5761 센서 스펙의 출처가 없습니다.'
-    ],
-    source_gaps: []
+    must_fix: [resolvedItem, unrelatedItem],
+    recommended_fixes: [],
+    source_gaps: [],
+    source_gap_count: 0,
+    article_quality: [],
+    final_comment: ''
   };
   const staleReport = {
     stale_claim_items_removed: [
@@ -603,13 +619,14 @@ test('pruning a model identifier claim does not swallow a longer identifier', ()
 
   const pruned = pruneResolvedStaleFactCheckItems(factCheck, staleReport);
 
-  assert.deepEqual(pruned.must_fix, ['IMX5761 센서 스펙의 출처가 없습니다.']);
+  assert.deepEqual(pruned.must_fix, [unrelatedItem]);
   assert.equal(pruned.status, 'NEEDS_FIX');
 });
 
 // 차집합의 바탕에 공개 본문이 빠지면, 본문에서만 쓰인 모델명이 삭제 키가 되어
-// 그 기사의 문장이 지워진다.
-test('scrub subtracts identifiers that appear only in the public article body', () => {
+// 그 기사의 문장이 지워진다. 이름은 "지운다"가 아니라 "지키다" 쪽이 맞다 —
+// 차집합 대상은 본문이 아니라 삭제 키 집합이다.
+test('scrub keeps a model identifier that only the public article body uses', () => {
   const rendered = section({
     headline: 'Qualcomm CAMSS 리뷰 시리즈',
     article_group_key: 'lore-series:camss',
@@ -648,14 +665,24 @@ test('scrub subtracts identifiers that appear only in the public article body', 
     ]
   };
 
-  const { editor: scrubbed } = scrubStaleClaims(editor, {
+  const { editor: scrubbed, report } = scrubStaleClaims(editor, {
     date: '2026-08-10',
     removedSections: [],
     reporter
   });
 
+  // imx800 후보가 실제로 "빠진 그룹"으로 분류됐는지 먼저 고정한다. 이게 없으면
+  // dropped 판정 경로를 통째로 무력화해도 이 테스트가 통과한다(아무 키도 안 만들어지므로).
+  assert.deepEqual(
+    report.dropped_selected_groups.map(group => group.article_group_key),
+    ['lore-series:imx800']
+  );
   assert.equal(scrubbed.summary, 'IMX800 센서 경로가 정리되었습니다.');
   assert.ok(scrubbed.briefing.includes('IMX800 경로 정리'));
+  assert.deepEqual(scrubbed.action_items, ['IMX800 경로를 확인한다.']);
+  // 문장이 살아남아도 hard_failure가 붙으면 발행이 막힌다.
+  assert.deepEqual(report.hard_failures, []);
+  assert.equal(report.status, 'PASS');
 });
 
 test('removed-section claim reused by a surviving section source is not a stale orphan', () => {
