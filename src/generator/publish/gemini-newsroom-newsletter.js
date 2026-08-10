@@ -797,10 +797,16 @@ async function main() {
   let newsletterMarkdown;
   let newsletterHtmlContent;
   try {
-    // 결정론적 '참고 / 더 읽을거리' 섹션: reference 윈도우(22~90일) 후보 중 적격 버킷의
-    // dated+sourced 항목을 메인과 중복 없이 주입한다(LLM claim 없음).
+    // 결정론적 '참고 / 더 읽을거리' 섹션: 적격 버킷의 dated+sourced 후보를 메인과 중복 없이
+    // 주입한다(LLM claim 없음). reference 윈도우 후보만 넣으면 primary/fallback 창에서 main
+    // 경쟁에 진 카메라 코어 후보가 뉴스레터에 흔적 없이 사라진다 — 실측 2026-08-10: 창 안
+    // 적격 후보 12건 중 기사는 2건뿐이었고, AOSP Camera ITS 문서 갱신 2건을 포함한 나머지는
+    // 어느 섹션에도 나오지 않았다. 그래서 선정되지 않은 shortlist 후보도 같은 필터에 넣는다.
     editor.reference_articles = buildReferenceArticles(
-      ensureArray(shortlistReport?.reference_context_candidates),
+      [
+        ...ensureArray(shortlistReport?.reference_context_candidates),
+        ...ensureArray(shortlistReport?.shortlisted_candidates)
+      ],
       { excludeUrls: ensureArray(shortlistReport?.selected_articles).map(article => article && article.url).filter(Boolean) }
     );
     newsletterMarkdown = buildMarkdown(editor);

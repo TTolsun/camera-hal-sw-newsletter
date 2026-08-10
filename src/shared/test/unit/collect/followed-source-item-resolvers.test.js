@@ -30,11 +30,12 @@ test('registers exactly the known followed-source resolver ids', () => {
       'android-security-bulletin',
       'aosp-release-camera-changes',
       'libcamera-release-announcements',
+      'mediatek-security-bulletin',
       'patchwork-libcamera-patches',
       'raspberrypi-libcamera-releases'
     ]
   );
-  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 5);
+  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 6);
 });
 
 test('routes raspberrypi-libcamera-releases to the release resolver with text (atom) as the first arg', async () => {

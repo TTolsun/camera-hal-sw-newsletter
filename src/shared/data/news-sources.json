@@ -806,6 +806,36 @@
       ]
     },
     {
+      "id": "mediatek-security-bulletin",
+      "name": "MediaTek Security Bulletin",
+      "sourceUrl": "https://www.mediatek.com/product-security-bulletin",
+      "rssUrl": null,
+      "collectionModeHint": "release-note-watch",
+      "category": "vendor-security",
+      "priority": "high",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "MediaTek 카메라 커널 컴포넌트(imgsensor, imgsys) 보안 수정 확인. 인덱스에는 월별 링크만 있어 최신 월 게시판을 따라가 CVE별 표를 읽는다",
+      "keywords": [
+        "MediaTek",
+        "imgsensor",
+        "imgsys",
+        "camera",
+        "security"
+      ],
+      "sourceRole": "official_release_source",
+      "sourceUrlQualityHint": "official_dated_release",
+      "mainArticlePolicy": "allowed",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source",
+        "월별 게시판 본문의 Published 날짜만 쓴다. 날짜가 없으면 후보를 만들지 않는다"
+      ]
+    },
+    {
       "id": "libcamera-blog",
       "name": "libcamera Blog",
       "sourceUrl": "https://libcamera.org/blog/",

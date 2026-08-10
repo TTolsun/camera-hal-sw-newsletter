@@ -28,6 +28,26 @@ test('keeps only qualified buckets and shapes each item', () => {
   assert.ok(items[0].note);
 });
 
+// 실측 2026-08-10: 상한(4)이 lore 센서 패치들로 먼저 차서 그 주의 유일한 AOSP Camera 항목
+// (Camera ITS 문서 갱신 2건)이 잘려 나갔다. 상한까지만 담으므로 관련도가 높은 버킷부터 채운다.
+test('fills the cap in domain bucket priority order, not input order', () => {
+  const items = buildReferenceArticles([
+    candidate({ title: 'Tooling', url: 'https://a.example/tooling', relevance_bucket: 'cpp_ai_tooling_fallback' }),
+    candidate({ title: 'Driver patch A', url: 'https://a.example/driver-a', relevance_bucket: 'camera_driver_image_pipeline' }),
+    candidate({ title: 'Driver patch B', url: 'https://a.example/driver-b', relevance_bucket: 'camera_driver_image_pipeline' }),
+    candidate({ title: 'Driver patch C', url: 'https://a.example/driver-c', relevance_bucket: 'camera_driver_image_pipeline' }),
+    candidate({ title: 'Camera ITS tests', url: 'https://a.example/its', relevance_bucket: 'direct_aosp_camera' })
+  ]);
+
+  assert.equal(items.length, 4);
+  assert.equal(items[0].title, 'Camera ITS tests', 'direct_aosp_camera가 먼저 채워진다');
+  assert.deepEqual(
+    items.slice(1).map(item => item.title),
+    ['Driver patch A', 'Driver patch B', 'Driver patch C'],
+    '같은 버킷 안에서는 입력 순서를 유지한다'
+  );
+});
+
 test('includes the C++/AI native tooling bucket', () => {
   const items = buildReferenceArticles([
     candidate({

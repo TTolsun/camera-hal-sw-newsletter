@@ -3,6 +3,7 @@
 // followed-source 리졸버를 source.id 기준 레지스트리 테이블로 디스패치한다. 새 리졸버를 추가할 때
 // collect 디스패치 코드를 고치지 않고 이 테이블에만 항목을 더하면 된다(OCP).
 const { resolveSecurityBulletinCveItems } = require('./security-bulletin-cve');
+const { resolveMediatekSecurityBulletinItems } = require('./mediatek-security-bulletin');
 const { resolveLibcameraReleaseAnnouncementItems } = require('./libcamera-release-announcements');
 const { resolveRaspberryPiLibcameraReleaseItems } = require('./raspberrypi-libcamera-releases');
 const { resolvePatchworkLibcameraPatchItems } = require('./patchwork-libcamera-patches');
@@ -16,6 +17,11 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     id: 'android-security-bulletin',
     resolve: ({ indexItems, source, fetchTextImpl }) =>
       resolveSecurityBulletinCveItems(indexItems, source, { fetchTextImpl })
+  },
+  {
+    id: 'mediatek-security-bulletin',
+    resolve: ({ text, source, fetchTextImpl }) =>
+      resolveMediatekSecurityBulletinItems(text, source, { fetchTextImpl })
   },
   {
     id: 'libcamera-release-announcements',

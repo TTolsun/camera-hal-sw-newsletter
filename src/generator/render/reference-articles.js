@@ -2,7 +2,7 @@
 // selection이 이미 만든 reference_context_candidates(22~90일 reference 윈도우)에서
 // 적격 버킷 + dated + sourced 항목만 골라 메인 기사와 중복을 제거하고 상한까지 만든다.
 // LLM이 아니라 결정론 코드가 만들어, editor claim-binding 실패 경로를 피한다.
-const { BUCKETS } = require('../../shared/domain/aosp-camera-scope');
+const { BUCKETS, BUCKET_PRIORITY } = require('../../shared/domain/aosp-camera-scope');
 const { normalizeUrl } = require('../../shared/common/selection-normalizers');
 
 // generic_tech_watchlist를 뺀 모든 도메인 버킷이 참고 섹션 적격이다.
@@ -39,13 +39,32 @@ function isHttpUrl(value) {
   }
 }
 
+function candidateBucket(candidate) {
+  return pick(candidate, 'relevance_bucket', 'topic_bucket');
+}
+
+// 상한(DEFAULT_LIMIT)까지만 담기 때문에 입력 순서가 곧 노출 순서다. 받은 순서대로 담으면
+// 카메라 관련도가 가장 높은 direct_aosp_camera 항목이 뒤로 밀려 잘린다 — 실측 2026-08-10:
+// AOSP Camera ITS 문서 갱신 2건이 lore 센서 패치들에 밀려 상한 밖으로 잘렸다.
+// 도메인이 이미 정의한 버킷 우선순위로 안정 정렬해 관련도가 높은 것부터 채운다.
+function byBucketPriority(candidates) {
+  return candidates
+    .map((candidate, index) => ({ candidate, index }))
+    .sort((left, right) => {
+      const leftPriority = BUCKET_PRIORITY[candidateBucket(left.candidate)] ?? Number.MAX_SAFE_INTEGER;
+      const rightPriority = BUCKET_PRIORITY[candidateBucket(right.candidate)] ?? Number.MAX_SAFE_INTEGER;
+      return leftPriority - rightPriority || left.index - right.index;
+    })
+    .map(entry => entry.candidate);
+}
+
 function buildReferenceArticles(referenceCandidates = [], options = {}) {
   const limit = Number.isFinite(options.limit) ? Math.max(0, options.limit) : DEFAULT_LIMIT;
   const excluded = new Set((Array.isArray(options.excludeUrls) ? options.excludeUrls : []).map(normalizeUrl));
   const seen = new Set();
   const items = [];
 
-  for (const candidate of Array.isArray(referenceCandidates) ? referenceCandidates : []) {
+  for (const candidate of byBucketPriority(Array.isArray(referenceCandidates) ? referenceCandidates.filter(Boolean) : [])) {
     if (!candidate || typeof candidate !== 'object') continue;
     if (items.length >= limit) break;
 

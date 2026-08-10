@@ -16,8 +16,10 @@ const SEVERITY_RANK = { critical: 4, high: 3, moderate: 2, medium: 2, low: 1 };
 // dng_sdk/libpng/libjpeg/RAW는 촬영한 RAW를 DNG로 저장하거나 썸네일/EXIF 이미지를 디코딩하는
 // 카메라 출력 처리 라이브러리라 함께 본다. (bare "dng"는 무관 텍스트 오탐이 커서 제외하고
 // 라이브러리명 dng_sdk/libdng로 한정한다.)
+// imgsensor/imgsys는 MediaTek 게시판이 쓰는 카메라 센서·이미징 서브시스템 컴포넌트 이름이다
+// (2026-03~2026-08 게시판 24개 서브컴포넌트 전수 확인: 카메라 계열은 이 둘뿐).
 const CAMERA_MEDIA_PATTERN =
-  /\b(?:camera|camera2|cameraserver|camera\s*hal|isp|image\s*sensor|v4l2|video4linux|camss|camx|csiphy|csid|cam[_-]\w+|drivers\/media|media\s*framework|libstagefright|stagefright|mediacodec|mediaprovider|mediaserver|media\s*codec|dng_sdk|libdng|libpng|libjpeg(?:-turbo)?|camera\s*raw|raw\s+image)\b/i;
+  /\b(?:camera|camera2|cameraserver|camera\s*hal|isp|image\s*sensor|imgsensor|imgsys|v4l2|video4linux|camss|camx|csiphy|csid|cam[_-]\w+|drivers\/media|media\s*framework|libstagefright|stagefright|mediacodec|mediaprovider|mediaserver|media\s*codec|dng_sdk|libdng|libpng|libjpeg(?:-turbo)?|camera\s*raw|raw\s+image)\b/i;
 
 const CVE_PATTERN = /CVE-\d{4}-\d{4,}/i;
 
@@ -47,19 +49,29 @@ function monthLabel(date) {
   return name ? `${name} ${match[1]}` : '';
 }
 
+// 월별 게시판 페이지의 URL은 경로에 게시 날짜를 그대로 담는다
+// (예: /docs/security/bulletin/2026/2026-08-01). Overview나 버전별 게시판 같은
+// 내비게이션 링크에는 이 날짜 경로가 없다.
+const MONTHLY_BULLETIN_URL_PATTERN = /\/20\d{2}-\d{2}-\d{2}(?:[/?#]|$)/;
+
 function latestBulletin(indexItems) {
-  const withUrl = (Array.isArray(indexItems) ? indexItems : []).filter(item => item && item.url);
-  if (!withUrl.length) return null;
-  // 월별 게시판 링크는 href에 날짜를 담아 publishedAt가 채워진다. 날짜가 없는 항목
-  // (Overview 등 네비게이션 링크)은 제외하고 날짜가 가장 최신인 게시판을 고른다.
-  const dated = withUrl
+  // 인덱스에는 월별 게시판 말고도 Overview 같은 내비게이션 링크가 섞여 있고, 그 링크도
+  // 주변 텍스트에서 최신 월 날짜를 물려받는다. publishedAt만 보고 고르면 날짜가 같을 때
+  // 먼저 나온 Overview가 이겨서 CVE 표가 없는 페이지를 받아 오게 된다
+  // (라이브 실측 2026-08-11: Overview가 August와 같은 2026-08-01을 달고 있어
+  // 리졸버가 asb-overview를 fetch하고 카메라 CVE 0건을 반환했다).
+  // 그래서 URL 경로에 게시 날짜가 있는 월별 게시판만 후보로 본다.
+  const monthlyBulletins = (Array.isArray(indexItems) ? indexItems : [])
+    .filter(item => item && item.url && MONTHLY_BULLETIN_URL_PATTERN.test(item.url));
+  if (!monthlyBulletins.length) return null;
+  const dated = monthlyBulletins
     .map((item, index) => ({ item, index, time: Date.parse(item.publishedAt || '') }))
     .filter(entry => !Number.isNaN(entry.time));
   if (dated.length > 0) {
     return dated.sort((left, right) => right.time - left.time || left.index - right.index)[0].item;
   }
   // 파싱 가능한 날짜가 전혀 없으면 인덱스의 첫 항목(게시판은 최신순으로 나열된다)을 쓴다.
-  return withUrl[0];
+  return monthlyBulletins[0];
 }
 
 function parseCells(rowHtml) {
@@ -228,5 +240,8 @@ async function resolveSecurityBulletinCveItems(indexItems = [], source = {}, opt
 }
 
 module.exports = {
+  CAMERA_MEDIA_PATTERN,
+  SEVERITY_RANK,
+  severityRank,
   resolveSecurityBulletinCveItems
 };

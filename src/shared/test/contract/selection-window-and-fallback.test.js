@@ -44,6 +44,45 @@ test('month-level dated candidates do not receive exact-day freshness scoring', 
   assert.match(monthWindow.selection_window_reason, /month-level date precision/);
 });
 
+// 실측 2026-08-10: AOSP Site Updates의 'July 2026' 행(Camera ITS 문서 갱신 2건)이 07-01로
+// 채워져 40일령으로 계산됐고, reference 창(35일)을 넘겨 main·reference 어느 레인에도 남지
+// 못했다. 수집(collect-news-candidates.js의 withinLookback)은 같은 후보를 달 범위 겹침으로
+// 창 안이라 판단하는데 선정만 달의 1일을 기준으로 재서 생긴 불일치였다.
+test('month-level dated candidates age from the end of their month, matching the collect lookback rule', () => {
+  const metadata = freshnessWindowMetadata(candidate({
+    title: 'AOSP Site Updates - Camera ITS tests',
+    url: 'https://source.android.com/docs/compatibility/cts/camera-its-tests',
+    published_date: '2026-07-01',
+    datePrecision: 'month'
+  }), '2026-08-10');
+
+  assert.equal(metadata.days_since_published, 10);
+  assert.equal(metadata.freshness_window, 'fallback');
+});
+
+test('a month-level candidate inside the current month is not aged past the newsletter date', () => {
+  const metadata = freshnessWindowMetadata(candidate({
+    title: 'AOSP Site Updates - current month row',
+    url: 'https://source.android.com/docs/whatsnew/site-updates#current',
+    published_date: '2026-08-01',
+    datePrecision: 'month'
+  }), '2026-08-10');
+
+  assert.equal(metadata.days_since_published, 0);
+  assert.equal(metadata.freshness_window, 'primary');
+});
+
+test('day-precision candidates still age from their exact published date', () => {
+  const metadata = freshnessWindowMetadata(candidate({
+    title: 'Exact dated release note',
+    url: 'https://example.com/exact-aging',
+    published_date: '2026-07-01'
+  }), '2026-08-10');
+
+  assert.equal(metadata.days_since_published, 40);
+  assert.equal(metadata.freshness_window, 'stale');
+});
+
 test('freshness window metadata maps candidate age without changing freshness score semantics', () => {
   const cases = [
     ['2026-05-07', 'primary', 3],

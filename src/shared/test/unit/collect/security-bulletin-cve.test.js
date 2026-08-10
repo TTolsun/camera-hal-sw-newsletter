@@ -190,3 +190,41 @@ test('returns empty when there are no index items', async () => {
 
   assert.deepEqual(items, []);
 });
+
+// 라이브 실측(2026-08-11): 게시판 인덱스는 Overview 내비 링크를 월별 링크보다 먼저 내놓고,
+// 그 Overview 항목이 최신 월과 같은 날짜(2026-08-01)를 물려받는다. 날짜만 보고 고르면
+// 동률에서 Overview가 이겨 CVE 표가 없는 asb-overview 페이지를 받아 카메라 CVE가 0건이 된다.
+test('follows the monthly bulletin, not an Overview nav link that shares the newest date', async () => {
+  const OVERVIEW_URL = 'https://source.android.com/docs/security/bulletin/asb-overview';
+  const fetched = [];
+  const monthly = readTextFixture('source-html/android-security-bulletin-2026-06.html');
+  const fetchTextImpl = async (url) => {
+    fetched.push(url);
+    if (url === JUNE_URL) return monthly;
+    throw new Error(`should not fetch a non-monthly page: ${url}`);
+  };
+
+  const items = await resolveSecurityBulletinCveItems([
+    { url: OVERVIEW_URL, publishedAt: '2026-06-01', title: 'Overview', sourceKind: 'release_note_item' },
+    { url: JUNE_URL, publishedAt: '2026-06-01', title: 'June 2026', sourceKind: 'release_note_item' },
+    { url: MAY_URL, publishedAt: '2026-05-01', title: 'May 2026', sourceKind: 'release_note_item' }
+  ], source(), { fetchTextImpl });
+
+  assert.deepEqual(fetched, [JUNE_URL]);
+  assert.ok(items.length > 0, '월별 게시판을 따라갔으면 카메라/미디어 CVE 후보가 나와야 한다');
+});
+
+// 버전별 게시판(/bulletin/android-17)도 날짜 경로가 없는 내비 링크다. 월별 링크가 하나도
+// 없으면 아무 페이지나 받는 대신 조용히 비운다(없는 증거를 만들지 않는다).
+test('returns empty when the index has no monthly bulletin link', async () => {
+  const items = await resolveSecurityBulletinCveItems([
+    { url: 'https://source.android.com/docs/security/bulletin/asb-overview', publishedAt: '2026-06-01', title: 'Overview' },
+    { url: 'https://source.android.com/docs/security/bulletin/android-17', publishedAt: '2026-02-01', title: 'Android 17' }
+  ], source(), {
+    fetchTextImpl: async (url) => {
+      throw new Error(`should not fetch a non-monthly page: ${url}`);
+    }
+  });
+
+  assert.deepEqual(items, []);
+});

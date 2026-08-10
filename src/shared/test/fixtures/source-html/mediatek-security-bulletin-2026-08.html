@@ -1,0 +1,82 @@
+<!-- 실제 2026-08 MediaTek 게시판 구조를 줄인 fixture.
+     CVE 하나당 표 하나이고 각 행이 라벨/값 쌍이다(Android 게시판의 컬럼 표와 다르다).
+     카메라 1건(imgsensor, Medium), 카메라지만 Low라 하한에 걸리는 1건(imgsys),
+     비카메라 3건(TFA / hevc decoder / display), CVE가 없는 부속 표 1건을 담는다. -->
+<html>
+  <body>
+    <h1>August 2026 MediaTek Security Bulletin</h1>
+    <p>Published 2026-08-03</p>
+
+    <table class="table table-bordered bg-light">
+      <tbody>
+        <tr><th>Severity</th><td>Rating</td></tr>
+        <tr><th>Critical</th><td>0</td></tr>
+      </tbody>
+    </table>
+
+    <p id="CVE_2026_20484"></p>
+    <table class="table table-bordered bg-light">
+      <tbody>
+        <tr class="table-active"><th style="width: 250px;">CVE</th><td><strong>CVE-2026-20484</strong></td></tr>
+        <tr><th style="width: 250px;">Subcomponent</th><td>TFA</td></tr>
+        <tr><th style="width: 250px;">Severity</th><td>Medium</td></tr>
+        <tr><th style="width: 250px;">CWE</th><td>CWE-201 Insertion of Sensitive Information Into Sent Data</td></tr>
+        <tr><th style="width: 250px;">Description</th><td>There is a possible information disclosure due to a missing permission check.</td></tr>
+        <tr><th style="width: 250px;">Affected Chipsets</th><td>MT6739, MT6761</td></tr>
+        <tr><th style="width: 250px;">Report Source</th><td>External</td></tr>
+      </tbody>
+    </table>
+
+    <p id="CVE_2026_20485"></p>
+    <table class="table table-bordered bg-light">
+      <tbody>
+        <tr class="table-active"><th style="width: 250px;">CVE</th><td><strong>CVE-2026-20485</strong></td></tr>
+        <tr><th style="width: 250px;">Subcomponent</th><td>hevc decoder</td></tr>
+        <tr><th style="width: 250px;">Severity</th><td>High</td></tr>
+        <tr><th style="width: 250px;">CWE</th><td>CWE-787 Out-of-bounds Write</td></tr>
+        <tr><th style="width: 250px;">Description</th><td>There is a possible out of bounds write due to a missing bounds check.</td></tr>
+        <tr><th style="width: 250px;">Affected Chipsets</th><td>MT6993</td></tr>
+        <tr><th style="width: 250px;">Report Source</th><td>Internal</td></tr>
+      </tbody>
+    </table>
+
+    <p id="CVE_2026_20486"></p>
+    <table class="table table-bordered bg-light">
+      <tbody>
+        <tr class="table-active"><th style="width: 250px;">CVE</th><td><strong>CVE-2026-20486</strong></td></tr>
+        <tr><th style="width: 250px;">Subcomponent</th><td>imgsensor</td></tr>
+        <tr><th style="width: 250px;">Severity</th><td>Medium</td></tr>
+        <tr><th style="width: 250px;">CWE</th><td>CWE-754 Improper Check for Unusual or Exceptional Conditions</td></tr>
+        <tr><th style="width: 250px;">Description</th><td>There is a possible application crash due to incorrect error handling.</td></tr>
+        <tr><th style="width: 250px;">Affected Chipsets</th><td>MT2718, MT6878, MT6895, MT6991, MT6993, MT8370, MT8390, MT8395, MT8678, MT8799, MT8910</td></tr>
+        <tr><th style="width: 250px;">Report Source</th><td>External</td></tr>
+      </tbody>
+    </table>
+
+    <p id="CVE_2026_20489"></p>
+    <table class="table table-bordered bg-light">
+      <tbody>
+        <tr class="table-active"><th style="width: 250px;">CVE</th><td><strong>CVE-2026-20489</strong></td></tr>
+        <tr><th style="width: 250px;">Subcomponent</th><td>imgsys</td></tr>
+        <tr><th style="width: 250px;">Severity</th><td>Low</td></tr>
+        <tr><th style="width: 250px;">CWE</th><td>CWE-125 Out-of-bounds Read</td></tr>
+        <tr><th style="width: 250px;">Description</th><td>There is a possible out of bounds read due to a missing bounds check.</td></tr>
+        <tr><th style="width: 250px;">Affected Chipsets</th><td>MT6991</td></tr>
+        <tr><th style="width: 250px;">Report Source</th><td>Internal</td></tr>
+      </tbody>
+    </table>
+
+    <p id="CVE_2026_20490"></p>
+    <table class="table table-bordered bg-light">
+      <tbody>
+        <tr class="table-active"><th style="width: 250px;">CVE</th><td><strong>CVE-2026-20490</strong></td></tr>
+        <tr><th style="width: 250px;">Subcomponent</th><td>display</td></tr>
+        <tr><th style="width: 250px;">Severity</th><td>High</td></tr>
+        <tr><th style="width: 250px;">CWE</th><td>CWE-416 Use After Free</td></tr>
+        <tr><th style="width: 250px;">Description</th><td>There is a possible use after free due to a race condition.</td></tr>
+        <tr><th style="width: 250px;">Affected Chipsets</th><td>MT6989</td></tr>
+        <tr><th style="width: 250px;">Report Source</th><td>External</td></tr>
+      </tbody>
+    </table>
+  </body>
+</html>

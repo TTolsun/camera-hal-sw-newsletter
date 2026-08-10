@@ -126,6 +126,19 @@ function utcDayStart(date) {
   return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
 }
 
+// month 정밀도 후보(AOSP Site Updates의 월별 묶음 행)는 그 달 어느 날의 변경인지 알 수 없어
+// 날짜가 달의 1일로 채워진다. 수집(collect-news-candidates.js의 withinLookback)은 이 점을 알고
+// 달 범위가 창과 겹치는지로 판단하는데, 선정만 1일 기준으로 나이를 재서 같은 후보가 수집에는
+// 들어오고 선정에서는 사라졌다 — 실측 2026-08-10: AOSP Camera ITS 문서 갱신 2건("sub-camera
+// testing 가이드", "scene0 fast-FAIL 설명")이 40일령으로 계산돼 reference 창(35일)을 넘겨
+// main·reference 어느 레인에도 남지 않았다. 수집과 같은 겹침 기준을 쓰도록 달의 마지막 날로
+// 나이를 재고, 아직 진행 중인 달은 뉴스레터 날짜를 넘지 않게 자른다.
+function monthRangeEndDay(publishedDay, baseDay) {
+  const published = new Date(publishedDay);
+  const monthEnd = Date.UTC(published.getUTCFullYear(), published.getUTCMonth() + 1, 0);
+  return Math.min(monthEnd, baseDay);
+}
+
 function daysSincePublished(candidate, newsletterDate) {
   const rawDate = selectionDate(candidate);
   const published = rawDate ? new Date(rawDate) : null;
@@ -133,7 +146,10 @@ function daysSincePublished(candidate, newsletterDate) {
   const publishedDay = utcDayStart(published);
   const baseDay = utcDayStart(base);
   if (publishedDay === null || baseDay === null) return null;
-  return Math.max(0, Math.floor((baseDay - publishedDay) / (24 * 60 * 60 * 1000)));
+  const effectiveDay = datePrecision(candidate) === 'month'
+    ? monthRangeEndDay(publishedDay, baseDay)
+    : publishedDay;
+  return Math.max(0, Math.floor((baseDay - effectiveDay) / (24 * 60 * 60 * 1000)));
 }
 
 function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectionWindowPolicy()) {
