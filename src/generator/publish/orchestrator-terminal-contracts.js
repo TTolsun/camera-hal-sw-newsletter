@@ -41,6 +41,50 @@ const {
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
+const {
+  PUBLIC_CONTRACT_VERSIONS
+} = require('../../shared/common/story-contract-version');
+// v1은 인덱스에 적지 않는 기본값이다.
+const DEFAULT_PUBLIC_CONTRACT_VERSION = PUBLIC_CONTRACT_VERSIONS[0];
+
+// 인덱스에 남길 계약 버전을 정한다. 이 엔트리는 발행 때마다 통째로 교체되므로,
+// 규칙을 잘못 잡으면 한 번의 재발행으로 기록이 사라진다.
+//
+//  - 이슈가 마커를 안 들고 오면 **기존 기록을 보존한다.** 이 파이프라인에서 마커가 빠질 수
+//    있다는 건 orchestrator-targeted-repair.js의 `public_contract_version !== undefined`
+//    가드가 실증한다. 부재를 v1로 단정하면 재발행 한 번에 story-v2가 조용히 강등된다.
+//  - 지원 목록 밖 값은 쓰지 않고 throw한다. 쓰면 같은 저장소의 인덱스 검증기가 자기가 쓴
+//    파일을 거부해, 커밋된 newsletters.json이 오염되고 이후 실행마다 전체 엔트리 스캔이
+//    실패한다.
+//  - 기록된 버전을 더 낮은 버전으로 덮어쓰는 것도 throw한다. 강등은 backfill을 동반한
+//    의도적 작업이지 발행의 부산물이 아니다.
+function resolveIndexContractVersion(date, issue, previousEntry) {
+  const declared = String(issue?.public_contract_version || '').trim();
+  const previous = String(previousEntry?.public_contract_version || '').trim();
+
+  if (declared && !PUBLIC_CONTRACT_VERSIONS.includes(declared)) {
+    throw new Error(
+      `Refusing to index newsletter ${date} with unsupported public_contract_version "${declared}" ` +
+      `(supported: ${PUBLIC_CONTRACT_VERSIONS.join(', ')})`
+    );
+  }
+  // 보존값도 지원 목록을 통과해야 한다. 안 그러면 인덱스에 이미 미지원 값이 있을 때
+  // 마커 없는 재발행이 그 값을 검증 없이 다시 써서, 자기 validator가 거부할 파일을 만든다.
+  // 버전 표에서 값을 뺀 뒤 backfill 하려는 상황에서 재발행이 복구를 방해하기도 한다.
+  if (previous && !PUBLIC_CONTRACT_VERSIONS.includes(previous)) {
+    throw new Error(
+      `Refusing to reindex newsletter ${date}: recorded public_contract_version "${previous}" ` +
+      `is not supported (supported: ${PUBLIC_CONTRACT_VERSIONS.join(', ')})`
+    );
+  }
+  if (!declared) return previous;
+  if (previous && PUBLIC_CONTRACT_VERSIONS.indexOf(declared) < PUBLIC_CONTRACT_VERSIONS.indexOf(previous)) {
+    throw new Error(
+      `Refusing to downgrade newsletter ${date} contract version from "${previous}" to "${declared}"`
+    );
+  }
+  return declared;
+}
 
 function updateNewsletterData(date, issue) {
   const entry = {
@@ -53,6 +97,15 @@ function updateNewsletterData(date, issue) {
   };
 
   const newsletters = fs.existsSync(dataPath) ? readJson(dataPath) : [];
+  const previousEntry = newsletters.find(item => item?.date === date) || null;
+  // 계약 버전을 발행 시점에 기록한다. 이슈별 버전을 알 수 있는 다른 입력은
+  // editor-draft.json뿐인데 그건 gitignored라 CI에서는 항상 없다.
+  // v1은 기본값이라 적지 않는다 — 적으면 기존 발행분과 엔트리 모양이 갈린다.
+  const publicContractVersion = resolveIndexContractVersion(date, issue, previousEntry);
+  if (publicContractVersion && publicContractVersion !== DEFAULT_PUBLIC_CONTRACT_VERSION) {
+    entry.public_contract_version = publicContractVersion;
+  }
+
   const updated = newsletters
     .filter(item => item.date !== date)
     .concat(entry)

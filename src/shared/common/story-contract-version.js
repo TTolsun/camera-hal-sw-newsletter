@@ -14,6 +14,9 @@
 // 정규화(shared/domain)가 같은 표를 봐야 하는데 shared는 generator를 import할 수 없다
 // (check:layer-direction). 두 곳에 같은 매핑을 복사하면 한쪽만 바뀌는 드리프트가 난다.
 
+// 이 표에서 값을 **빼는** 것은 코드만 되돌리는 일이 아니다. 발행된 인덱스 엔트리에 그
+// 버전이 stamp돼 있으면 인덱스 검증이 그 엔트리들을 전부 거부한다(무관한 호의 발행까지
+// 막힌다). 값을 빼려면 articles/data/newsletters.json backfill이 선행돼야 한다.
 const STORY_CONTRACT_VERSIONS = Object.freeze([1, 2]);
 
 const PUBLIC_CONTRACT_VERSION_PREFIX = 'story-v';
