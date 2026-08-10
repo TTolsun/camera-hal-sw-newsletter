@@ -12,13 +12,21 @@ const {
   validatePublicArticle
 } = require('../../reporter/public-article-contract');
 
-// 텍스트가 아닌 키는 각자 다른 검증기가 본다. 여기 적힌 이유가 그 근거다.
-// 계약에 새 키가 생기면 아래 둘 중 하나에 반드시 분류돼야 하고, 아니면 이 파일이 깨진다.
+// 이 파일이 직접 누수 스캔을 확인하지 않는 키. 여기 적힌 이유가 그 근거다.
+// 계약에 새 키가 생기면 아래 분류에 들어가거나 아래 커버리지 루프에 들어가야 하고,
+// 둘 다 아니면 이 파일이 깨진다.
 const NON_TEXT_KEYS = Object.freeze({
-  source_links: 'URL·역할 검증은 sourceLinkIssues가 따로 본다(문자열 누수 스캔 대상 아님)',
+  // 링크 필드도 누수 스캔을 받는다 — 다만 sourceLinkIssues 안에서 `source_links[i].title`
+  // 같은 별도 라벨로 나오므로, 아래 public_article.<key> 라벨 검사와 모양이 다르다.
+  source_links: '누수 스캔은 sourceLinkIssues 안에서 별도 라벨로 돈다',
   story_contract_version: '숫자 마커. storyContractMarkers가 본다',
   decision_metadata: 'enum 집합. validateDecisionMetadataShape가 본다'
 });
+
+// 커버리지 루프와 분류 검사가 **같은 값**을 써야 한다. 루프에 키를 손으로 나열하면,
+// 계약에 키가 늘었을 때 분류 목록만 고치고 루프는 방치하는 최소 수정이 가능해진다 —
+// 그러면 새 필드가 누수 스캔 검증 없이 통과한다. 이 파일이 막겠다고 선언한 바로 그 구멍이다.
+const TEXT_SCANNED_KEYS = PUBLIC_ARTICLE_V2_ALLOWED_KEYS.filter(key => !(key in NON_TEXT_KEYS));
 
 // 누수 스캐너가 반드시 잡아야 하는 내부 식별자 하나. HARD_PUBLIC_IDENTIFIERS에 있다.
 const LEAKED_IDENTIFIER = 'hal_signal_capsule';
@@ -71,10 +79,9 @@ function withLeak(key) {
 }
 
 test('every v2 contract key is classified as text-scanned or explicitly non-text', () => {
-  const unclassified = PUBLIC_ARTICLE_V2_ALLOWED_KEYS.filter(key => !(key in NON_TEXT_KEYS));
-
   // 분류 자체가 목적이다. 새 키가 생기면 여기서 먼저 걸려 사람이 판단하게 된다.
-  assert.deepEqual(unclassified, [
+  // 그리고 그 키는 자동으로 아래 커버리지 루프에도 들어간다(같은 배열을 쓰므로).
+  assert.deepEqual(TEXT_SCANNED_KEYS, [
     'headline',
     'lead',
     'body_markdown',
@@ -85,7 +92,7 @@ test('every v2 contract key is classified as text-scanned or explicitly non-text
   ]);
 });
 
-for (const key of ['headline', 'lead', 'body_markdown', 'camera_hal_takeaway', 'reader_checkpoints', 'source_subtitle', 'editorial_story']) {
+for (const key of TEXT_SCANNED_KEYS) {
   test(`v2 leakage scan covers public_article.${key}`, () => {
     const issues = validatePublicArticle(withLeak(key), 0, { issue: V2_ISSUE });
     const leakage = issues.filter(issue => issue.type === 'public_article_leakage');
@@ -106,4 +113,20 @@ test('the v2 body field name is a forbidden public identifier', () => {
 
   assert.equal(HARD_PUBLIC_IDENTIFIERS.includes('body_markdown'), true);
   assert.equal(RESERVED_SUBHEADING_TERMS.includes('body_markdown'), true);
+});
+
+// 발행 직전 public JSON 스캐너도 필드 이름을 열거한다. public_article 하위 값은
+// keyPath 조건이 이미 걷지만, 그 조상 없이 놓인 본문 값은 이름 목록에만 걸린다.
+// 이 단언이 없으면 목록에서 이름을 빼도 아무 테스트가 깨지지 않는다.
+test('public JSON scanner covers a v2 body value outside public_article', () => {
+  const { validatePublicJsonText } = require('../../quality/public-newsletter');
+  const leaked = `내부 식별자 ${LEAKED_IDENTIFIER} 가 새어 나왔다.`;
+
+  const nested = { sections: [{ public_article: { body_markdown: leaked } }] };
+  const flat = { body_markdown: leaked };
+
+  // public_article 하위는 이름과 무관하게 이미 걷힌다(형제 keyPath 조건).
+  assert.equal(validatePublicJsonText(nested, 'public.json').length > 1, true);
+  // 조상이 없으면 이름 목록이 유일한 경로다.
+  assert.equal(validatePublicJsonText(flat, 'public.json').length > 1, true);
 });
