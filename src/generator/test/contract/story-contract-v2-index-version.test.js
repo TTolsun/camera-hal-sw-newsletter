@@ -210,3 +210,15 @@ test('publishing refuses to downgrade a recorded contract version', () => {
     /downgrade/
   );
 });
+
+// 보존 경로에도 같은 판정이 걸려야 한다. 안 그러면 인덱스에 이미 미지원 값이 있을 때
+// 마커 없는 재발행이 그 값을 다시 써서, 자기 validator가 거부할 파일을 만든다.
+test('publishing refuses to carry forward an unsupported recorded version', () => {
+  const { root, dataPath } = indexRoot('index-version-carry-');
+  fs.writeFileSync(dataPath, JSON.stringify([entry({ public_contract_version: 'story-v9' })]), 'utf8');
+
+  assert.throws(
+    () => publishInto(root, '2026-08-10', { title: 't', summary: 's', sections: [] }),
+    /not supported/
+  );
+});

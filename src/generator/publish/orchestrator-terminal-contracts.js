@@ -68,6 +68,15 @@ function resolveIndexContractVersion(date, issue, previousEntry) {
       `(supported: ${PUBLIC_CONTRACT_VERSIONS.join(', ')})`
     );
   }
+  // 보존값도 지원 목록을 통과해야 한다. 안 그러면 인덱스에 이미 미지원 값이 있을 때
+  // 마커 없는 재발행이 그 값을 검증 없이 다시 써서, 자기 validator가 거부할 파일을 만든다.
+  // 버전 표에서 값을 뺀 뒤 backfill 하려는 상황에서 재발행이 복구를 방해하기도 한다.
+  if (previous && !PUBLIC_CONTRACT_VERSIONS.includes(previous)) {
+    throw new Error(
+      `Refusing to reindex newsletter ${date}: recorded public_contract_version "${previous}" ` +
+      `is not supported (supported: ${PUBLIC_CONTRACT_VERSIONS.join(', ')})`
+    );
+  }
   if (!declared) return previous;
   if (previous && PUBLIC_CONTRACT_VERSIONS.indexOf(declared) < PUBLIC_CONTRACT_VERSIONS.indexOf(previous)) {
     throw new Error(
