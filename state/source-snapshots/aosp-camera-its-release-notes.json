@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "aosp-camera-its-release-notes",
-  "updated_at": "2026-08-03T00:00:00.000Z",
+  "updated_at": "2026-08-10T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "aosp-camera-its-release-notes:a67cc111aac23254e453759a5bae82dc",
@@ -27,8 +27,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-08-03T00:00:00.000Z",
-      "seen_count": 1,
+      "last_seen_at": "2026-08-10T00:00:00.000Z",
+      "seen_count": 2,
       "status": 200
     },
     {
@@ -37,12 +37,12 @@
       "canonical_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
       "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
       "visible_date": "",
-      "visible_last_updated": "2026-07-31",
+      "visible_last_updated": "2026-08-06",
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-07-31",
-      "content_hash": "ccfd139d2c8984a01e191720715a55cb8f3bf37bb55092f74c83da31bad9737e",
+      "http_last_modified": "2026-08-06",
+      "content_hash": "24bb009cbfffd0818056af4b4db1cc633c580e57ac6e93a45dee6289c28c038f",
       "normalized_content_hash": "e0fdc28bf02ba5939f744dc82594f30d7d55de3e609d1d378de5a4af990108e0",
       "anchors": [],
       "release_row_date": "",
@@ -59,14 +59,15 @@
         }
       ],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-08-03T00:00:00.000Z",
-      "seen_count": 1,
+      "last_seen_at": "2026-08-10T00:00:00.000Z",
+      "seen_count": 2,
       "status": 200
     }
   ],
   "processed_source_event_ids": [
     "source-event-fb05acebbfa8b6aca58f1ef364425fb2",
-    "source-event-723126c7451b2946fb7979853a681019"
+    "source-event-723126c7451b2946fb7979853a681019",
+    "source-event-73d88dc5066d889de246f5bdf92aa043"
   ],
   "processed_evidence_ids": [
     "evidence-e3e8f17f3e26e490f5c7766bd371bcae",
