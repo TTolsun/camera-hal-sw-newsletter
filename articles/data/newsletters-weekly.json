@@ -1,5 +1,25 @@
 [
   {
+    "weeklyKey": "2026-W33",
+    "weekStartDate": "2026-08-10",
+    "weekEndDate": "2026-08-16",
+    "date": "2026-08-10",
+    "title": "2026 W33",
+    "summary": "글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)\nSony IMX908 8.39MP 센서 지원을 위한 디바이스 트리 바인딩 추가 (PATCH v2)",
+    "html": "newsletters/2026-W33/index.html",
+    "md": "newsletters/2026-W33/newsletter.md",
+    "tags": [
+      "Driver",
+      "Image Processing",
+      "Camera HAL",
+      "Android"
+    ],
+    "article_count": 2,
+    "article_images": [
+      "assets/images/fallback/newsletter-default.svg"
+    ]
+  },
+  {
     "weeklyKey": "2026-W32",
     "weekStartDate": "2026-08-03",
     "weekEndDate": "2026-08-09",

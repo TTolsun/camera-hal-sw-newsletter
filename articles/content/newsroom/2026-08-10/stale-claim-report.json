@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-10",
+  "status": "PASS",
+  "removed_sections": [
+    {
+      "index": 1,
+      "headline": "Linux 미디어 서브시스템에 IMX576 카메라 센서 드라이버 추가 제안 (PATCH v3)",
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260806120216.24145-1-himanshu.bhavani@siliconsignals.io/"
+      ],
+      "source_titles": [
+        "[PATCH v3 0/3] media: i2c: Add imx576 camera sensor driver"
+      ],
+      "version_or_release": "",
+      "api_or_component": "",
+      "behavior_change": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2
+    }
+  ],
+  "dropped_selected_groups": [
+    {
+      "article_group_key": "lore-series:20260806120216.24145-himanshu.bhavani@siliconsignals.io",
+      "title": "[PATCH v3 0/3] media: i2c: Add imx576 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260806120216.24145-1-himanshu.bhavani@siliconsignals.io/"
+    }
+  ],
+  "restored_to_keep_minimum": [],
+  "final_section_sources": [
+    {
+      "title": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/"
+    },
+    {
+      "title": "[PATCH v2 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/"
+    }
+  ],
+  "stale_claim_items_removed": [
+    {
+      "field": "summary",
+      "text": "이번 주 Linux 미디어 서브시스템에는 IMX576, AR0234, IMX908 등 다양한 카메라 센서 드라이버 및 디바이스 트리 바인딩 추가 패치가 제안되었습니다.",
+      "stale_claims": [
+        "imx576"
+      ],
+      "unsupported_release_claims": [],
+      "action": "removed-sentence"
+    },
+    {
+      "field": "briefing",
+      "text": "IMX576 센서 드라이버 패치 v3가 제안되어 수동 노출/게인 제어 및 5760x4312 30fps 해상도 지원의 기반이 마련되었습니다.",
+      "stale_claims": [
+        "imx576"
+      ],
+      "unsupported_release_claims": [],
+      "action": "removed-item"
+    },
+    {
+      "field": "action_items",
+      "text": "로컬 커널 소스에 IMX576, AR0234, IMX908 패치를 적용하여 빌드 호환성을 검증한다.",
+      "stale_claims": [
+        "imx576"
+      ],
+      "unsupported_release_claims": [],
+      "action": "removed-item"
+    }
+  ],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}

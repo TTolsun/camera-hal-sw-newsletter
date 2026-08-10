@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-10",
+  "source_of_truth": "articles/content/newsroom/2026-08-10/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-08-10/newsletter.md",
+    "html": "newsletters/2026-08-10/index.html"
+  },
+  "mode": "publish-target",
+  "render_consistency_scope": "editor_draft",
+  "summary": {
+    "article_count": 2,
+    "rendered_image_count": 2,
+    "markdown_image_count": 2,
+    "fallback_visual_count": 0,
+    "image_candidates_count": 0,
+    "valid_image_candidate_count": 0,
+    "selected_image_count": 0,
+    "empty_selected_with_candidates_count": 0,
+    "selected_image_without_valid_candidate_count": 0,
+    "selected_image_not_in_candidates_count": 0,
+    "repairable_article_count": 0,
+    "selected_by_image_selection_count": 0,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
+    "unrepairable_no_candidate_count": 2,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)",
+      "selectedImage": "",
+      "image_candidate_count": 0,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "no_candidate",
+      "reasonLabel": "이미지 후보 없음",
+      "reasonText": "기존 artifact에 복원 가능한 이미지 후보가 없습니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": []
+    },
+    {
+      "index": 2,
+      "headline": "Sony IMX908 8.39MP 센서 지원을 위한 디바이스 트리 바인딩 추가 (PATCH v2)",
+      "selectedImage": "",
+      "image_candidate_count": 0,
+      "valid_image_candidate_count": 0,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": false,
+      "selected_image_has_valid_candidate": false,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "no_candidate",
+      "reasonLabel": "이미지 후보 없음",
+      "reasonText": "기존 artifact에 복원 가능한 이미지 후보가 없습니다.",
+      "selected_candidate_url": "",
+      "candidate_evidence": []
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": [],
+    "selected_image_without_valid_candidate_articles": []
+  },
+  "warnings": [],
+  "errors": []
+}
