@@ -14,6 +14,9 @@ function compactText(value) {
 
 const HARD_PUBLIC_IDENTIFIERS = Object.freeze([
   'story_contract_version',
+  // v2 본문 필드 이름. 독자가 읽는 글에 필드 이름이 나오면 안 된다 — T1의
+  // RESERVED_SUBHEADING_TERMS도 같은 이유로 이 이름을 소제목에서 막는다.
+  'body_markdown',
   'source_subtitle',
   'source_links',
   'decision_metadata',

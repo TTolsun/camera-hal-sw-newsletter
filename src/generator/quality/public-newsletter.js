@@ -301,6 +301,7 @@ function publicJsonTextValues(value, keyPath = []) {
       'headline',
       'lead',
       'body_paragraphs',
+      'body_markdown',
       'camera_hal_takeaway',
       'reader_checkpoints',
       'tags',
