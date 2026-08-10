@@ -1,4 +1,6 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { candidateGroupKey } = require('../../shared/common/article-groups');
+const { buildCandidateIndex, candidateForSection } = require('../editor/editor-contract-helpers');
 function text(value) {
   if (Array.isArray(value)) return value.map(text).join(' ');
   if (value && typeof value === 'object') return Object.values(value).map(text).join(' ');
@@ -78,6 +80,88 @@ function candidateEvidenceText(candidate) {
   ].map(text).join(' ');
 }
 
+// 기사 하나를 다른 기사와 구분해 주는 낱말만 남긴다.
+//
+// claimKeysForSection의 키(headline 전문, source_url, version 등)로는 못 잡는 잔재가 있다.
+// 실제로 막힌 사례(2026-08-10)에서 남은 것은 'Sony IMX576'이라는 센서 모델명이었는데,
+// headline 전문은 본문에 그대로 나타나지 않고 version('1.32.0')·api('v4l2')는
+// textContainsClaim의 8자 하한에 걸려 거부됐다.
+//
+// 삭제 키는 두 관문을 모두 통과해야 한다. 문장을 지우는 일이라 넓게 잡으면 살아남은
+// 기사의 참인 문장이 조용히 상투구로 바뀐다.
+//
+//  1. 모델명 형태여야 한다 — 글자 두 개 이상 뒤에 숫자 두 개 이상(imx576·ar0234·hm1092).
+//     'csi-2'·'10-bit'·'6.17.1'·'h.264'는 이 형태가 아니라 통과하지 못한다.
+//  2. 살아남은 기사들이 쓰지 않는 낱말이어야 한다(차집합). 차집합의 바탕은 최종 기사의
+//     **전체 내용**이다 — 공개 본문(public_article)까지 본다. evidence 필드만 빼면
+//     본문에서만 쓰인 모델명이 차집합에 남아 그 기사 문장을 지운다.
+//
+// 낱말은 구분자(- . _ @)로 한 번 더 쪼갠 하위 낱말까지 본다. 'IMX576-based'가 한 낱말로
+// 잡히면 이 변경이 잡으려던 잔재를 그대로 놓친다(실측 확인).
+const DROPPED_GROUP_TOKEN_FIELD = 'dropped_group_token';
+const MODEL_IDENTIFIER_PATTERN = /^[a-z]{2,}\d{2,}[a-z0-9]*$/;
+
+// 모델명과 같은 모양이지만 기사 식별자가 아닌 것들 — 픽셀 포맷과 비트 깊이 어휘다.
+// 'RAW10'은 imx576과 같은 모양(글자+숫자)이라 패턴만으로는 갈라지지 않는데, 빠진 기사와
+// 살아남은 기사가 같은 포맷을 다루면서 표기가 달라 차집합에 남는 일이 실제로 생긴다
+// (테스트가 이 오탐을 잡았다). 닫힌 어휘라 목록으로 두는 편이 규칙을 비트는 것보다 낫다.
+// 목록이 아니라 접두사 규칙으로 둔다. 'RAW10'을 목록에 넣어도 'SBGGR10'·'SRGGB12' 같은
+// V4L2 미디어버스 포맷이 같은 방식으로 새어 나오기 때문이다. 실제 센서 부품번호
+// (imx*/ov*/ar*/hm*/gc*/sc*)는 이 접두사들과 겹치지 않는다.
+const FORMAT_VOCABULARY_PATTERN =
+  /^(?:raw|rgb|bgr|argb|bgra|rgba|yuv|yuyv|uyvy|nv|sbggr|srggb|sgrbg|sgbrg|bayer|mipi|srgb)\d+[a-z0-9]*$/;
+
+function textTokens(value) {
+  const raw = String(text(value) || '')
+    .toLowerCase()
+    .normalize('NFC')
+    .match(/[a-z0-9][a-z0-9._@-]*|[가-힣]{2,}/g) || [];
+  const tokens = new Set();
+  for (const token of raw) {
+    tokens.add(token);
+    for (const part of token.split(/[._@-]+/)) {
+      if (part) tokens.add(part);
+    }
+  }
+  return [...tokens];
+}
+
+function looksLikeModelIdentifier(token) {
+  if (FORMAT_VOCABULARY_PATTERN.test(token)) return false;
+  return MODEL_IDENTIFIER_PATTERN.test(token);
+}
+
+// 최종 기사가 독자에게 내보내는 모든 글. evidence 필드만 보면 공개 본문에서만 쓰인
+// 낱말이 차집합에 남아 그 기사의 문장을 지운다.
+function sectionSurvivingText(section) {
+  // article_sections는 sectionEvidenceText가 이미 담는다. 공개 본문만 더한다.
+  return [sectionEvidenceText(section), text(section?.public_article)].join(' ');
+}
+
+function droppedGroupTokenClaimKeys(droppedCandidates, finalSections) {
+  const survivingTokens = new Set(
+    ensureArray(finalSections).flatMap(section => textTokens(sectionSurvivingText(section)))
+  );
+  const keys = new Map();
+  for (const candidate of ensureArray(droppedCandidates)) {
+    // url은 제외한다. 기존 source_url claim key가 이미 담당하고, 호스트 이름까지 삭제
+    // 키로 쓰면 기사 식별과 무관한 문장이 지워진다.
+    const source = [candidate?.title, candidate?.headline].map(text).join(' ');
+    for (const token of textTokens(source)) {
+      if (survivingTokens.has(token)) continue;
+      if (!looksLikeModelIdentifier(token)) continue;
+      if (keys.has(token)) continue;
+      keys.set(token, {
+        field: DROPPED_GROUP_TOKEN_FIELD,
+        value: token,
+        normalized: token,
+        compact: compact(token)
+      });
+    }
+  }
+  return [...keys.values()];
+}
+
 function claimKeysForSection(section) {
   const keys = [];
   const fields = {
@@ -148,6 +232,12 @@ function textContainsClaim(value, claim) {
   const body = normalize(value);
   const packed = compact(value);
   if (!body || !claim?.compact) return false;
+  // 낱말 단위로 본다. 부분 문자열로 보면 'imx57'이 'imx576'에 걸리는 식의 오탐이 난다.
+  // 아래 8자 하한은 이 계열에 적용하지 않는다 — 안전장치는 모델명 형태 판정과 살아남은
+  // 기사와의 차집합이고, 둘 다 키를 만드는 droppedGroupTokenClaimKeys에서 이미 걸렀다.
+  if (claim.field === DROPPED_GROUP_TOKEN_FIELD) {
+    return textTokens(value).includes(claim.normalized);
+  }
   if (claim.field === 'source_url') return body.includes(claim.normalized);
   if (claim.compact.length < 8 && claim.field !== 'editorial_priority') return false;
   return body.includes(claim.normalized) || packed.includes(claim.compact);
@@ -256,7 +346,18 @@ function scrubList(items, field, context, replacements = [], minCount = 0) {
     if (kept.length >= minCount) break;
     if (!kept.some(item => normalize(item) === normalize(replacement))) kept.push(replacement);
   }
-  return { value: kept, removals };
+  // 대체 문구가 모자라 최소 개수를 못 채우면 지운 항목을 되돌린다. 얇은 주(최종 기사
+  // 1~2건)에서는 replacements가 기사 수만큼만 나오므로 이 상황이 실제로 생긴다.
+  // 되돌리면 잔재가 남아 removed-section-claim-remains로 발행이 막히지만, 되돌리지
+  // 않으면 briefing 개수 계약을 어겨 finalize가 예외로 죽고 산출물조차 남지 않는다.
+  // 발행 차단은 진단이 남고 salvage까지 가지만 예외는 아무것도 남기지 않는다.
+  const restored = [];
+  while (kept.length < minCount && removals.length > 0) {
+    const item = removals.shift();
+    restored.push({ ...item, action: 'restored-to-keep-minimum' });
+    kept.push(item.text);
+  }
+  return { value: kept, removals: [...removals, ...restored] };
 }
 
 function scrubReferences(editor, report) {
@@ -272,11 +373,54 @@ function scrubReferences(editor, report) {
   editor.references = [...usedRefs.values()];
 }
 
+// coverage 게이트가 쓰는 판별과 같은 3개 플래그를 본다. 스크럽만 2개로 보면 선정 집합의
+// 정의가 게이트와 달라져, primary_selected로만 표시된 그룹의 잔재를 그대로 놓친다.
+function selectedCandidates(reporter) {
+  return ensureArray(reporter?.candidates).filter(candidate =>
+    candidate?.final_selected === true ||
+    candidate?.selected_for_editor === true ||
+    candidate?.primary_selected === true);
+}
+
+// 섹션 → 그룹 키. 정본 경로(source_candidate_hash와 섹션의 모든 source URL로 후보를 찾아
+// 그 후보의 키를 쓰는 것)를 그대로 재사용한다. url/title로 약하게 다시 만들면
+// patchwork seriesId나 hash로만 묶인 그룹에서 키가 어긋나, 살아남은 기사가 "빠진 것"으로
+// 분류돼 그 기사의 참인 문장이 지워진다.
+function renderedGroupKeysForSections(finalSections, reporter) {
+  // buildCandidateIndex는 reporter 객체를 받아 내부에서 candidates를 읽는다. 배열을 넘기면
+  // 색인이 비어 candidateForSection이 항상 null을 돌려주고, 이 블록이 조용히 죽는다.
+  const candidateIndex = buildCandidateIndex(reporter);
+  const keys = new Set();
+  for (const section of ensureArray(finalSections)) {
+    const explicit = text(section?.article_group_key || section?.articleGroupKey);
+    if (explicit) keys.add(explicit);
+    const matched = candidateForSection(section, candidateIndex);
+    if (matched) {
+      const key = candidateGroupKey(matched);
+      if (key) keys.add(key);
+    }
+    // 후보 색인에 못 걸리는 섹션(직접 편집 등)을 위한 마지막 폴백. 넓게 잡는 방향이라
+    // 안전하다 — rendered 집합이 커지면 삭제가 줄어든다.
+    const derived = candidateGroupKey({
+      url: ensureArray(section?.sources)[0]?.url,
+      title: section?.headline
+    });
+    if (derived) keys.add(derived);
+  }
+  return keys;
+}
+
+function selectedCandidatesMissingFromSections(reporter, finalSections) {
+  const renderedGroupKeys = renderedGroupKeysForSections(finalSections, reporter);
+  return selectedCandidates(reporter)
+    .filter(candidate => {
+      const key = candidateGroupKey(candidate);
+      return key && !renderedGroupKeys.has(key);
+    });
+}
+
 function selectedCandidateEvidence(reporter) {
-  return ensureArray(reporter?.candidates)
-    .filter(candidate => candidate?.final_selected === true || candidate?.selected_for_editor === true)
-    .map(candidateEvidenceText)
-    .join(' ');
+  return selectedCandidates(reporter).map(candidateEvidenceText).join(' ');
 }
 
 function scrubStaleClaims(editor, options = {}) {
@@ -288,8 +432,14 @@ function scrubStaleClaims(editor, options = {}) {
   };
   const finalSections = ensureArray(draft.sections);
   const removedSections = ensureArray(options.removedSections);
+  // 선정은 됐는데 최종 기사에 없는 그룹. removedSections는 editor가 한 번이라도 써낸
+  // 섹션에서만 나오므로, 한 번도 렌더되지 않고 hard block된 그룹은 여기서만 잡힌다.
+  const droppedSelectedCandidates = selectedCandidatesMissingFromSections(options.reporter, finalSections);
   const context = {
-    removedClaimKeys: removedSections.flatMap(claimKeysForSection),
+    removedClaimKeys: [
+      ...removedSections.flatMap(claimKeysForSection),
+      ...droppedGroupTokenClaimKeys(droppedSelectedCandidates, finalSections)
+    ],
     finalEvidenceText: finalSections.map(sectionEvidenceText).join(' '),
     selectedCandidateEvidenceText: selectedCandidateEvidence(options.reporter)
   };
@@ -298,6 +448,14 @@ function scrubStaleClaims(editor, options = {}) {
     date: options.date || draft.date || '',
     status: 'PASS',
     removed_sections: removedSections.map(sectionSummary),
+    // 어느 그룹 때문에 문장을 지웠는지 남긴다. 토큰 문자열만 남기면 매주 되풀이되는
+    // editor 비일관성을 역추적할 수 없다.
+    dropped_selected_groups: droppedSelectedCandidates.map(candidate => ({
+      article_group_key: candidateGroupKey(candidate),
+      title: text(candidate?.title),
+      url: text(candidate?.url)
+    })),
+    restored_to_keep_minimum: [],
     final_section_sources: [...finalSourceMap(draft).values()],
     stale_claim_items_removed: [],
     unsupported_release_claims_removed: [],
@@ -317,7 +475,11 @@ function scrubStaleClaims(editor, options = {}) {
   draft.action_items = actions.value;
   scrubReferences(draft, report);
 
-  const removals = [...summary.removals, ...briefing.removals, ...actions.removals];
+  const allRemovals = [...summary.removals, ...briefing.removals, ...actions.removals];
+  // 최소 개수를 지키려고 되돌린 항목은 지운 게 아니다. 제거 목록에 넣으면 보고서가
+  // 실제로는 남아 있는 문장을 지웠다고 말하게 된다.
+  const removals = allRemovals.filter(item => item.action !== 'restored-to-keep-minimum');
+  report.restored_to_keep_minimum = allRemovals.filter(item => item.action === 'restored-to-keep-minimum');
   report.stale_claim_items_removed = removals.filter(item => item.stale_claims.length > 0);
   report.unsupported_release_claims_removed = removals.filter(item => item.unsupported_release_claims.length > 0);
 
@@ -374,9 +536,18 @@ function pruneResolvedStaleFactCheckItems(factCheck, staleReport) {
     ...ensureArray(item.unsupported_release_claims)
   ]);
   if (removedClaims.length === 0) return factCheck;
-  const removedClaimCompacts = new Set(removedClaims.map(compact).filter(Boolean));
+  // 모델명 형태의 짧은 키는 부분 문자열로 보면 무관한 must_fix까지 잘라 status를
+  // NEEDS_FIX에서 PASS로 뒤집을 수 있다. 그 계열만 낱말 단위로 본다.
+  const removedModelTokens = new Set(removedClaims.filter(looksLikeModelIdentifier));
+  const removedClaimCompacts = new Set(
+    removedClaims.filter(claim => !looksLikeModelIdentifier(claim)).map(compact).filter(Boolean)
+  );
   function mentionsRemovedClaim(item) {
     const body = compact(item);
+    if (removedModelTokens.size > 0) {
+      const tokens = textTokens(item);
+      if ([...removedModelTokens].some(token => tokens.includes(token))) return true;
+    }
     return [...removedClaimCompacts].some(claim => claim && body.includes(claim));
   }
   const next = {
