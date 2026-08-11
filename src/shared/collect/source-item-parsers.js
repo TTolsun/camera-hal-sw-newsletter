@@ -1,5 +1,6 @@
 const { decodeHtml, htmlAttr } = require('../common/common');
 const { extractOutgoingLinksFromHtml } = require('./outgoing-links');
+const { visibleLastUpdated } = require('./source-monitor');
 const { parseSourceWithAdapters } = require('../sources/registry');
 const {
   firstConcreteBullet: firstVersionedReleaseBullet,
@@ -813,6 +814,93 @@ function parseAospSiteUpdates(html, source) {
   return uniqueParserItems(items).slice(0, 12);
 }
 
+// Camera ITS 릴리스 노트 섹션에서 카메라 인증 실무와 닿는 것만 남긴다.
+// devsite 공통 푸터(Build / Connect / Get help)는 이 어휘에 걸리지 않는다.
+const ITS_RELEASE_SECTION_PATTERN =
+  /\b(?:test|tests|scene|scenes|rig|chart|tablet|activit(?:y|ies)|status|camera|package|version|deprecat|result)\b/i;
+const ITS_SECTION_LIMIT = 8;
+// 문장을 짧게 자르면 정작 실무에 필요한 뒷부분(예: "두 개의 CTS Verifier 액티비티로 분리")이
+// 잘려 나간다. 섹션 첫 문장이 그대로 담기도록 넉넉히 두되 전체 길이로 상한을 건다.
+const ITS_SECTION_SENTENCE_LIMIT = 200;
+const ITS_BEHAVIOR_LIMIT = 1400;
+// devsite가 모든 문서 제목 옆에 붙이는 안내 문구. 릴리스 내용이 아니므로 증거에서 뺀다.
+const DEVSITE_BOILERPLATE_PATTERN =
+  /\bStay organized with collections\b[\s\S]*?\bbased on your preferences\.?/i;
+
+// devsite 제목·본문에는 &nbsp;와 안내 문구가 섞여 있어 그대로는 비교도 표기도 안 된다.
+// 엔티티를 풀고 안내 문구를 뺀 뒤 공백을 접어 한 형태로 만든다.
+function itsText(value = '') {
+  return decodeHtml(clean(value).replace(/&nbsp;/gi, ' '))
+    .replace(DEVSITE_BOILERPLATE_PATTERN, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function firstSentence(value = '', limit = ITS_SECTION_SENTENCE_LIMIT) {
+  const text = itsText(value);
+  if (!text) return '';
+  const [sentence] = text.split(/(?<=\.)\s+/);
+  const picked = sentence || text;
+  return picked.length > limit ? `${picked.slice(0, limit).trim()}…` : picked;
+}
+
+// Android 17 Camera ITS 릴리스 노트는 h2 섹션마다 구체적 변경(새 테스트/시나리오, PASS* 상태,
+// CTS Verifier 액티비티 분리, Gen2 rig 이관)을 담은 한 장짜리 릴리스 문서다. 그런데 이 페이지는
+// 소스 모니터만 보고 있었고, 모니터는 첫 발견을 page_added(설계상 main 불가)로, 이후 갱신을
+// 정규화 본문이 같으면 metadata_only_changed로 처리한다. 그래서 내용이 한 번도 후보가 되지
+// 못했다(실측 2026-08-11, AOSP 카메라 기사 5호 연속 0건의 한 축).
+//
+// 섹션마다 후보를 쪼개지 않고 페이지 하나를 후보 1건으로 만든다. 우리가 실제로 아는 사실은
+// "이 문서가 그 날 갱신됐다" 하나뿐인데 섹션을 쪼개면 그 날 11가지 사건이 있었던 것처럼 보인다.
+// 대신 각 섹션의 제목과 첫 문장을 증거로 실어 편집 단계가 구체적으로 쓸 수 있게 한다.
+function parseAospCameraItsReleaseNotes(html, source) {
+  const pageText = clean(html);
+  if (!/Camera ITS/i.test(pageText)) return [];
+
+  // 날짜는 페이지 푸터의 Last updated만 쓴다. 없으면 추정하지 않고 후보를 만들지 않는다.
+  const date = visibleLastUpdated(html);
+  if (!date) return [];
+
+  // 문서 제목(h1)은 그 자체가 섹션이 아니라 페이지 이름이다. 같은 텍스트를 증거에 또 싣지 않는다.
+  const documentTitle = itsText(pageTitle(html, source.name).split('|')[0]);
+  const sections = headingBlocks(html, source.url)
+    .map(block => ({ ...block, heading: itsText(block.title) }))
+    .filter(block => block.heading && block.heading !== documentTitle)
+    .filter(block => ITS_RELEASE_SECTION_PATTERN.test(`${block.heading} ${itsText(block.body)}`))
+    .slice(0, ITS_SECTION_LIMIT);
+  if (sections.length === 0) return [];
+
+  const highlights = sections
+    .map(block => {
+      const sentence = firstSentence(block.body);
+      return sentence ? `${block.heading}: ${sentence}` : block.heading;
+    })
+    .join(' ');
+  const behavior = highlights.length > ITS_BEHAVIOR_LIMIT
+    ? `${highlights.slice(0, ITS_BEHAVIOR_LIMIT).trim()}…`
+    : highlights;
+
+  const release = (pageText.match(/\bAndroid\s+\d+\s+Camera\s+Image\s+Test\s+Suite\b/i) || [])[0] ||
+    (pageText.match(/\bAndroid\s+\d+\b/i) || [])[0] ||
+    'Android Camera ITS';
+
+  return [{
+    source,
+    title: documentTitle || source.name,
+    url: source.url,
+    publishedAt: date,
+    datePrecision: 'day',
+    sourceSection: source.section || '',
+    summary: behavior,
+    sourceKind: 'release_note_item',
+    collectionMode: 'release-note-item',
+    version_or_release: `${release} release notes`,
+    api_or_component: 'Camera ITS / CTS Verifier',
+    behavior_change: behavior,
+    outgoing_links: sections.map(block => block.url).filter(Boolean).slice(0, ITS_SECTION_LIMIT)
+  }];
+}
+
 function parseAndroidLatestUpdates(html, source) {
   if (!trustedAndroidLatestUpdatesSource(source)) return [];
   const linked = linkedItems(html, source, {
@@ -1048,6 +1136,7 @@ const PARSERS = {
   'androidx-media3-release-notes': parseMedia3ReleaseNotes,
   'aosp-whats-new-release-notes': parseAospWhatsNew,
   'aosp-site-updates': parseAospSiteUpdates,
+  'aosp-camera-its-release-notes': parseAospCameraItsReleaseNotes,
   'android-security-bulletin': parseAndroidSecurityBulletin,
   'claude-code-changelog': parseClaudeCodeChangelog,
   'libcamera-blog': parseLibcameraBlog,

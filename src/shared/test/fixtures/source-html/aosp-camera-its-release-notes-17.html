@@ -1,0 +1,39 @@
+<!-- 실제 source.android.com 의 its-release-notes-17 구조를 줄인 fixture.
+     devsite 특징을 그대로 담는다: 문서 제목의 non-breaking space, 제목 옆 컬렉션 안내 문구,
+     섹션마다 붙는 id 앵커, 푸터의 갱신일 표기, 그리고 공통 푸터 소제목(Build/Connect/Get help).
+     주의: 주석 텍스트도 파서 입력에 그대로 남는다. 태그처럼 보이는 토큰이나 갱신일 문구를
+     주석에 적으면 파서가 주석 쪽을 먼저 잡으므로 여기에는 적지 않는다. -->
+<html>
+  <head><title>Android 17 Camera Image Test Suite release notes &nbsp;|&nbsp; Android Open Source Project</title></head>
+  <body>
+    <h1>Android 17 Camera Image Test Suite release notes <span>Stay organized with collections</span> Save and categorize content based on your preferences.</h1>
+    <p>The Android 17 release includes a number of changes to Camera ITS.</p>
+
+    <h2 id="package-versions" data-text="Python and package versions">Python and package versions</h2>
+    <p>For Android 17 and higher, we strongly recommend using package management software to bundle the correct versions of packages. FFmpeg 7.0.2 is required.</p>
+
+    <h2 id="new-scenes" data-text="New or updated scenes">New or updated scenes</h2>
+    <p>Android 17 introduces the following scenes: gen2_chart uses the test_chart_gen2 paper chart instead of tablet scenes to improve test consistency. wide_gamut is a new scene for tablets with wide gamut support.</p>
+
+    <h2 id="new-tests" data-text="New tests">New tests</h2>
+    <p>Android 17 introduces test_tonemap_sequence, which verifies the android.tonemap.mode parameter is applied correctly. It also adds test_jca_jpegr_ip and test_display_p3.</p>
+
+    <h2 id="separated-test-activities" data-text="Separated test activities">Separated test activities</h2>
+    <p>In Android 17, for parallel testing on separate devices, the camera ITS tests are separated into two CTS Verifier activities, Camera ITS Test and Camera ITS Sensor Fusion Rig Test.</p>
+
+    <h2 id="gen2-rig-updates" data-text="Gen2 rig updates">Gen2 rig updates</h2>
+    <p>Android 17 migrated test_multi_camera_switch, all flash tests, and all sensor_fusion tests to the Gen2 rig.</p>
+
+    <h2 id="status-pass-star" data-text="New test status: PASS*">New test status: PASS*</h2>
+    <p>Android 17 introduces the test status PASS* to detect marginally passing tests.</p>
+
+    <h3>Build</h3>
+    <p>Android Studio</p>
+    <h3>Connect</h3>
+    <p>Blog</p>
+    <h3>Get help</h3>
+    <p>File a bug</p>
+
+    <div class="devsite-content-footer">Last updated 2026-08-06 UTC.</div>
+  </body>
+</html>
