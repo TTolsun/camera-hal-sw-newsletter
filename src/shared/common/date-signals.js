@@ -57,6 +57,18 @@ function isKnownEventType(value) {
   return EVENT_TYPE_SET.has(text(value));
 }
 
+// month 정밀도 후보(AOSP Site Updates의 월별 묶음 행)는 그 달 어느 날의 변경인지 알 수 없어
+// 날짜가 달의 1일로 채워진다. 그래서 창 안/밖 판정은 점이 아니라 달 범위(1일~말일)가 창과
+// 겹치는지로 해야 한다. 수집과 선정이 이 규칙을 각각 구현하다 어긋나서 창 안 AOSP Camera ITS
+// 문서 갱신이 통째로 사라진 적이 있어(2026-08-10) 규칙을 여기 한 곳에만 둔다.
+function monthRangeOverlapsWindow(value, windowStartMs, windowEndMs) {
+  const date = value instanceof Date ? value : new Date(String(value || ''));
+  if (Number.isNaN(date.getTime())) return false;
+  const monthStartMs = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1);
+  const monthEndMs = Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0, 23, 59, 59, 999);
+  return monthEndMs >= windowStartMs && monthStartMs <= windowEndMs;
+}
+
 function isKnownDateSource(value) {
   return DATE_SOURCE_SET.has(text(value));
 }
@@ -142,6 +154,7 @@ module.exports = {
   dateSourceConfidence,
   isKnownDateSource,
   isKnownEventType,
+  monthRangeOverlapsWindow,
   normalizeDate,
   publishReadyDateEvidenceFromConfidence,
   resolveCandidateDateEvidence,

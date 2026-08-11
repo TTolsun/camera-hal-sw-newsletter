@@ -1,45 +1,20 @@
 // Android Security Bulletin의 월별 페이지를 따라가 CVE 표를 파싱하고,
 // 카메라/미디어 핵심 CVE를 CVE별 후보로 만든다. 인덱스 페이지(월별 링크)만 보던
 // 기존 parseAndroidSecurityBulletin의 source-gap을 보완한다(게이트 약화 없이 진짜 증거 생성).
-const { decodeHtml } = require('../common/common');
 const { canonicalContentUrl, fetchUrlForContent, fetchTextWithLimit } = require('./source-intelligence-utils');
-
-const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
-
-const SEVERITY_RANK = { critical: 4, high: 3, moderate: 2, medium: 2, low: 1 };
-
-// 미디어+카메라 핵심: Media framework, Camera service/HAL, V4L2/media 커널, 벤더 camera/ISP.
-// 실제 게시판의 벤더/커널 섹션은 카메라 신호를 코드네임(camss/camx/csiphy 등)으로만 표기하므로 함께 본다.
-// dng_sdk/libpng/libjpeg/RAW는 촬영한 RAW를 DNG로 저장하거나 썸네일/EXIF 이미지를 디코딩하는
-// 카메라 출력 처리 라이브러리라 함께 본다. (bare "dng"는 무관 텍스트 오탐이 커서 제외하고
-// 라이브러리명 dng_sdk/libdng로 한정한다.)
-// imgsensor/imgsys는 MediaTek 게시판이 쓰는 카메라 센서·이미징 서브시스템 컴포넌트 이름이다
-// (2026-03~2026-08 게시판 24개 서브컴포넌트 전수 확인: 카메라 계열은 이 둘뿐).
-const CAMERA_MEDIA_PATTERN =
-  /\b(?:camera|camera2|cameraserver|camera\s*hal|isp|image\s*sensor|imgsensor|imgsys|v4l2|video4linux|camss|camx|csiphy|csid|cam[_-]\w+|drivers\/media|media\s*framework|libstagefright|stagefright|mediacodec|mediaprovider|mediaserver|media\s*codec|dng_sdk|libdng|libpng|libjpeg(?:-turbo)?|camera\s*raw|raw\s+image)\b/i;
-
-const CVE_PATTERN = /CVE-\d{4}-\d{4,}/i;
+const {
+  CAMERA_MEDIA_PATTERN,
+  CVE_PATTERN,
+  MONTH_NAMES,
+  cleanHtmlText: clean,
+  minimumSeverityRank,
+  severityRank
+} = require('./security-bulletin-shared');
 
 function defaultFetchText(url) {
   // source.android.com은 지역/Accept-Language에 따라 비영어(예: 번체 중국어) 페이지를 반환한다.
   // 그러면 표 헤더(Severity/Type)가 번역돼 컬럼 매칭이 깨지므로, fetchUrlForContent로 hl=en을 강제한다.
   return fetchTextWithLimit(globalThis.fetch, fetchUrlForContent(url), { timeoutMs: 5000, maxBytes: 400000 });
-}
-
-function clean(html = '') {
-  const stripped = String(html)
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&mdash;/gi, '—')
-    .replace(/&ndash;/gi, '–');
-  return decodeHtml(stripped).replace(/\s+/g, ' ').trim();
-}
-
-function severityRank(value) {
-  return SEVERITY_RANK[String(value || '').trim().toLowerCase()] || 0;
 }
 
 function monthLabel(date) {
@@ -61,9 +36,17 @@ function latestBulletin(indexItems) {
   // (라이브 실측 2026-08-11: Overview가 August와 같은 2026-08-01을 달고 있어
   // 리졸버가 asb-overview를 fetch하고 카메라 CVE 0건을 반환했다).
   // 그래서 URL 경로에 게시 날짜가 있는 월별 게시판만 후보로 본다.
-  const monthlyBulletins = (Array.isArray(indexItems) ? indexItems : [])
-    .filter(item => item && item.url && MONTHLY_BULLETIN_URL_PATTERN.test(item.url));
-  if (!monthlyBulletins.length) return null;
+  const items = Array.isArray(indexItems) ? indexItems : [];
+  const monthlyBulletins = items.filter(item => item && item.url && MONTHLY_BULLETIN_URL_PATTERN.test(item.url));
+  if (!monthlyBulletins.length) {
+    // 이 소스는 generic fallback이 막혀 있어(followed-source-item-resolvers.js) 빈 결과가 곧
+    // "이번 주 카메라 CVE 없음"으로 읽힌다. URL 형태가 바뀌어 매치가 0건이 된 경우와 구분되게
+    // 로그를 남긴다 — 이 커밋이 고친 원래 장애가 정확히 이 무음 실패였다.
+    if (items.length > 0) {
+      console.warn(`security-bulletin-cve: index had ${items.length} link(s) but none matched the monthly bulletin URL shape; no CVE candidates produced.`);
+    }
+    return null;
+  }
   const dated = monthlyBulletins
     .map((item, index) => ({ item, index, time: Date.parse(item.publishedAt || '') }))
     .filter(entry => !Number.isNaN(entry.time));
@@ -215,7 +198,7 @@ function buildCveItem(row, bulletin, source) {
 async function resolveSecurityBulletinCveItems(indexItems = [], source = {}, options = {}) {
   const fetchTextImpl = options.fetchTextImpl || defaultFetchText;
   const maxItems = Number.isFinite(options.maxItems) ? Math.max(0, options.maxItems) : 15;
-  const minRank = severityRank(options.minSeverity || 'moderate') || SEVERITY_RANK.moderate;
+  const minRank = minimumSeverityRank(options.minSeverity);
 
   const bulletin = latestBulletin(indexItems);
   if (!bulletin) return [];
@@ -240,8 +223,5 @@ async function resolveSecurityBulletinCveItems(indexItems = [], source = {}, opt
 }
 
 module.exports = {
-  CAMERA_MEDIA_PATTERN,
-  SEVERITY_RANK,
-  severityRank,
   resolveSecurityBulletinCveItems
 };

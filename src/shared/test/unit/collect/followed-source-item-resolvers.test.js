@@ -146,6 +146,40 @@ test('routes android-security-bulletin to the CVE resolver with indexItems as th
   }
 });
 
+// 형제 리졸버(android-security-bulletin)는 indexItems를, mediatek은 text(인덱스 HTML)를
+// 첫 인자로 받는다. 배선이 바뀌면 예외 없이 후보 0건이 되어 소스가 조용히 사라지므로
+// "어느 URL을 fetch했는가"로 배선을 관찰해 고정한다.
+test('routes mediatek-security-bulletin to the CVE resolver with text (index HTML) as the first arg', async () => {
+  const MEDIATEK_AUGUST_URL = 'https://www.mediatek.com/product-security-bulletin/august-2026?hsLang=en';
+  const monthly = readTextFixture('source-html/mediatek-security-bulletin-2026-08.html');
+  const fetched = [];
+  const fetchTextImpl = async (url) => {
+    fetched.push(url);
+    if (url === MEDIATEK_AUGUST_URL) return monthly;
+    throw new Error(`unexpected fetch: ${url}`);
+  };
+
+  const items = await resolveFollowedSourceItems(
+    {
+      id: 'mediatek-security-bulletin',
+      name: 'MediaTek Security Bulletin',
+      sourceUrl: 'https://www.mediatek.com/product-security-bulletin'
+    },
+    {
+      indexItems: [{ url: 'https://example.com/IGNORED', publishedAt: '2026-08-01', title: 'IGNORED' }],
+      text: readTextFixture('source-html/mediatek-security-bulletin-index.html'),
+      fetchTextImpl
+    }
+  );
+
+  assert.deepEqual(fetched, [MEDIATEK_AUGUST_URL]);
+  assert.ok(items.length > 0, 'camera CVE candidates emitted');
+  for (const item of items) {
+    assert.equal(item.sourceKind, 'release_note_item');
+    assert.match(item.api_or_component, /MediaTek Security Bulletin/);
+  }
+});
+
 test('routes libcamera-release-announcements to the release resolver with text as the first arg', async () => {
   const index = readTextFixture('source-html/libcamera-pipermail-index.html');
   const may = readTextFixture('source-html/libcamera-pipermail-2026-may.html');

@@ -10,55 +10,88 @@
 // 실측 근거(2026-08-11): 2026-08-03 게시판의 CVE-2026-20486(Subcomponent imgsensor,
 // CWE-754, 영향 칩셋 11종)이 이 창에서 확인된 유일한 벤더 카메라 코드 신호였는데,
 // MediaTek이 소스로 등록돼 있지 않아 뉴스레터가 통째로 놓쳤다.
-const { decodeHtml } = require('../common/common');
 const { canonicalContentUrl, fetchUrlForContent, fetchTextWithLimit } = require('./source-intelligence-utils');
-const { CAMERA_MEDIA_PATTERN, severityRank, SEVERITY_RANK } = require('./security-bulletin-cve');
-
-const MONTH_NAMES = [
-  'january', 'february', 'march', 'april', 'may', 'june',
-  'july', 'august', 'september', 'october', 'november', 'december'
-];
+const {
+  CAMERA_MEDIA_PATTERN,
+  CVE_PATTERN,
+  MONTH_NAMES,
+  cleanHtmlText: clean,
+  minimumSeverityRank,
+  severityRank
+} = require('./security-bulletin-shared');
 
 // MediaTek은 2월 링크를 'feb-2026'처럼 줄여 쓴 해가 있다. 월 이름 앞 3글자로 맞춘다.
 const MONTH_INDEX = new Map();
 for (const [index, name] of MONTH_NAMES.entries()) {
-  MONTH_INDEX.set(name, index + 1);
-  MONTH_INDEX.set(name.slice(0, 3), index + 1);
+  const lower = name.toLowerCase();
+  MONTH_INDEX.set(lower, index + 1);
+  MONTH_INDEX.set(lower.slice(0, 3), index + 1);
 }
 
-const CVE_PATTERN = /CVE-\d{4}-\d{4,}/i;
 const MONTHLY_LINK_PATTERN = /href="([^"]*\/product-security-bulletin\/([a-z]+)-(20\d{2})(?:\?[^"]*)?)"/gi;
 
 function defaultFetchText(url) {
   return fetchTextWithLimit(globalThis.fetch, fetchUrlForContent(url), { timeoutMs: 8000, maxBytes: 600000 });
 }
 
-function clean(html = '') {
-  const stripped = String(html)
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/gi, ' ');
-  return decodeHtml(stripped).replace(/\s+/g, ' ').trim();
-}
-
 function monthLabel(month, year) {
   const name = MONTH_NAMES[month - 1];
-  return name ? `${name[0].toUpperCase()}${name.slice(1)} ${year}` : String(year);
+  return `${name} ${year}`;
+}
+
+function sourceHost(source = {}) {
+  try {
+    return new URL(String(source.sourceUrl || source.url || '')).hostname.toLowerCase();
+  } catch {
+    return '';
+  }
+}
+
+// href를 소스 URL 기준으로 절대 URL로 풀고, 등록된 소스와 host가 같을 때만 받아들인다.
+// 이 리졸버가 만드는 후보는 official_release_source·mainArticlePolicy=allowed라 그 URL이
+// 그대로 main 기사 source binding 증거가 된다. 인덱스 HTML에 섞인 제3자 host 링크를
+// 따라가면 남의 페이지를 MediaTek 공식 증거로 싣게 되므로 host를 반드시 묶는다.
+function sameHostBulletinUrl(href, source) {
+  const host = sourceHost(source);
+  if (!host) return '';
+  let absolute;
+  try {
+    absolute = new URL(href, source.sourceUrl || source.url);
+  } catch {
+    return '';
+  }
+  if (absolute.hostname.toLowerCase() !== host) return '';
+  return absolute.toString();
 }
 
 /**
  * 인덱스 HTML에서 월별 게시판 링크를 뽑아 (연, 월) 기준 가장 최신 한 건을 돌려준다.
- * 링크가 없으면 null(=이번 실행에서 따라갈 게시판 없음).
+ * 등록 소스와 host가 다른 링크는 버린다. 링크가 없으면 null(=이번 실행에서 따라갈 게시판 없음).
  */
-function latestMonthlyBulletin(indexHtml = '') {
+function latestMonthlyBulletin(indexHtml = '', source = {}) {
   let latest = null;
+  let foreignHostSkips = 0;
   for (const match of String(indexHtml).matchAll(MONTHLY_LINK_PATTERN)) {
     const month = MONTH_INDEX.get(match[2].toLowerCase());
     if (!month) continue;
+    const url = sameHostBulletinUrl(match[1], source);
+    if (!url) {
+      foreignHostSkips += 1;
+      continue;
+    }
     const year = Number(match[3]);
     const rank = year * 100 + month;
     if (!latest || rank > latest.rank) {
-      latest = { url: match[1], month, year, rank };
+      latest = { url, month, year, rank };
     }
+  }
+  if (foreignHostSkips > 0) {
+    console.warn(`mediatek-security-bulletin: skipped ${foreignHostSkips} monthly link(s) whose host differs from the registered source host.`);
+  }
+  if (!latest) {
+    // 이 소스는 generic fallback이 막혀 있어 빈 결과가 곧 "이번 달 카메라 CVE 없음"으로 읽힌다.
+    // 링크 형태가 바뀌어 매치가 0건이 된 경우와 구분되게 로그를 남긴다.
+    console.warn('mediatek-security-bulletin: no monthly bulletin link matched on the index page; no CVE candidates produced.');
   }
   return latest;
 }
@@ -109,6 +142,7 @@ function buildCveItem(row, bulletin, source) {
   const anchor = `#${row.cve_id.toUpperCase().replace(/-/g, '_')}`;
   const chipsets = row.chipsets ? ` 영향 칩셋: ${row.chipsets}.` : '';
   const weakness = row.cwe ? ` (${row.cwe})` : '';
+  // severity는 심각도 하한 필터를 통과한 행만 여기 오므로 항상 값이 있다.
   return {
     source,
     title: `${label} MediaTek Security Bulletin: ${row.cve_id} — ${row.component}`,
@@ -118,7 +152,7 @@ function buildCveItem(row, bulletin, source) {
     version_or_release: row.cve_id,
     api_or_component: `MediaTek Security Bulletin / ${row.component}`,
     behavior_change:
-      `${row.description || 'Security fix'}${weakness} — ${row.severity || 'unspecified'} severity fix shipped in the ${label} MediaTek Security Bulletin (${row.cve_id}).${chipsets}`,
+      `${row.description || 'Security fix'}${weakness} — ${row.severity} severity fix shipped in the ${label} MediaTek Security Bulletin (${row.cve_id}).${chipsets}`,
     relevanceBucketHint: 'camera_driver_image_pipeline',
     cve_id: row.cve_id,
     severity: row.severity
@@ -132,9 +166,9 @@ function buildCveItem(row, bulletin, source) {
 async function resolveMediatekSecurityBulletinItems(indexHtml = '', source = {}, options = {}) {
   const fetchTextImpl = options.fetchTextImpl || defaultFetchText;
   const maxItems = Number.isFinite(options.maxItems) ? Math.max(0, options.maxItems) : 10;
-  const minRank = severityRank(options.minSeverity || 'moderate') || SEVERITY_RANK.moderate;
+  const minRank = minimumSeverityRank(options.minSeverity);
 
-  const latest = latestMonthlyBulletin(indexHtml);
+  const latest = latestMonthlyBulletin(indexHtml, source);
   if (!latest) return [];
 
   let html;

@@ -95,7 +95,9 @@ const {
   ensureArray
 } = require('../render/newsletter-renderer');
 const {
-  buildReferenceArticles
+  buildReferenceArticles,
+  referenceArticleCandidatePool,
+  referenceArticleExcludeUrls
 } = require('../render/reference-articles');
 const {
   buildPromptContexts
@@ -801,13 +803,10 @@ async function main() {
     // 주입한다(LLM claim 없음). reference 윈도우 후보만 넣으면 primary/fallback 창에서 main
     // 경쟁에 진 카메라 코어 후보가 뉴스레터에 흔적 없이 사라진다 — 실측 2026-08-10: 창 안
     // 적격 후보 12건 중 기사는 2건뿐이었고, AOSP Camera ITS 문서 갱신 2건을 포함한 나머지는
-    // 어느 섹션에도 나오지 않았다. 그래서 선정되지 않은 shortlist 후보도 같은 필터에 넣는다.
+    // 어느 섹션에도 나오지 않았다. 풀 조립·제외 규칙은 reference-articles 모듈이 단일 출처다.
     editor.reference_articles = buildReferenceArticles(
-      [
-        ...ensureArray(shortlistReport?.reference_context_candidates),
-        ...ensureArray(shortlistReport?.shortlisted_candidates)
-      ],
-      { excludeUrls: ensureArray(shortlistReport?.selected_articles).map(article => article && article.url).filter(Boolean) }
+      referenceArticleCandidatePool(shortlistReport),
+      { excludeUrls: referenceArticleExcludeUrls(shortlistReport) }
     );
     newsletterMarkdown = buildMarkdown(editor);
     newsletterHtmlContent = buildHtml(editor);

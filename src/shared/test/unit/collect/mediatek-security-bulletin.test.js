@@ -38,14 +38,23 @@ test('follows the newest monthly bulletin from the index', async () => {
   assert.deepEqual(fetched, [AUGUST_URL], '인덱스 링크 순서가 아니라 연/월이 가장 최신인 게시판을 따라간다');
 });
 
-test('emits one candidate per camera CVE with concrete dated evidence', async () => {
+test('emits one candidate per camera CVE, ordered by severity', async () => {
   const items = await resolveMediatekSecurityBulletinItems(indexHtml(), source(), {
     fetchTextImpl: monthlyFetch()
   });
 
-  assert.deepEqual(items.map(item => item.cve_id), ['CVE-2026-20486']);
+  // imgsys(High)가 imgsensor(Medium)보다 앞선다 — 심각도 내림차순 계약.
+  assert.deepEqual(items.map(item => item.cve_id), ['CVE-2026-20487', 'CVE-2026-20486']);
+  // imgsys 토큰이 카메라 어휘에 실제로 들어 있어야 이 항목이 나온다(심각도 하한과 무관하게).
+  assert.equal(items[0].api_or_component, 'MediaTek Security Bulletin / imgsys');
+});
 
-  const [item] = items;
+test('emits concrete dated evidence for each camera CVE', async () => {
+  const items = await resolveMediatekSecurityBulletinItems(indexHtml(), source(), {
+    fetchTextImpl: monthlyFetch()
+  });
+
+  const item = items.find(entry => entry.cve_id === 'CVE-2026-20486');
   assert.equal(item.publishedAt, '2026-08-03', '게시판 본문의 Published 날짜를 쓴다');
   assert.equal(item.sourceKind, 'release_note_item');
   assert.equal(item.version_or_release, 'CVE-2026-20486');
@@ -68,12 +77,67 @@ test('excludes non-camera subcomponents even at higher severity', async () => {
 });
 
 test('excludes camera CVEs below the Moderate severity floor', async () => {
-  // imgsys 행은 카메라지만 Low라 하한에 걸린다.
+  // 'camera raw' 행은 카메라 어휘에는 맞지만 Low라 하한에 걸린다.
   const items = await resolveMediatekSecurityBulletinItems(indexHtml(), source(), {
     fetchTextImpl: monthlyFetch()
   });
 
   assert.doesNotMatch(items.map(item => item.cve_id).join(' '), /CVE-2026-20489/);
+});
+
+// MediaTek은 2월 링크를 'feb-2026'처럼 줄여 쓴다. 약어 매핑이 빠지면 그 달을 통째로 못 본다.
+test('resolves abbreviated month links such as feb-2026', async () => {
+  const FEB_URL = 'https://www.mediatek.com/product-security-bulletin/feb-2026?hsLang=en';
+  const fetched = [];
+  const monthly = readTextFixture('source-html/mediatek-security-bulletin-2026-08.html');
+
+  await resolveMediatekSecurityBulletinItems([
+    '<html><body>',
+    '<a href="https://www.mediatek.com/product-security-bulletin/january-2026?hsLang=en"></a>',
+    `<a href="${FEB_URL}"></a>`,
+    '</body></html>'
+  ].join(''), source(), {
+    fetchTextImpl: async (url) => {
+      fetched.push(url);
+      return monthly;
+    }
+  });
+
+  assert.deepEqual(fetched, [FEB_URL]);
+});
+
+// 이 리졸버가 만드는 후보 URL은 official_release_source 증거로 쓰인다. 인덱스에 섞인
+// 제3자 host 링크를 따라가면 남의 페이지를 MediaTek 공식 증거로 싣게 된다.
+test('never follows a monthly link on a different host', async () => {
+  const items = await resolveMediatekSecurityBulletinItems(
+    '<html><body><a href="https://attacker.example/product-security-bulletin/december-2026?hsLang=en"></a></body></html>',
+    source(),
+    {
+      fetchTextImpl: async (url) => {
+        throw new Error(`should not fetch a foreign host: ${url}`);
+      }
+    }
+  );
+
+  assert.deepEqual(items, []);
+});
+
+test('resolves relative monthly links against the registered source URL', async () => {
+  const fetched = [];
+  const monthly = readTextFixture('source-html/mediatek-security-bulletin-2026-08.html');
+
+  await resolveMediatekSecurityBulletinItems(
+    '<html><body><a href="/product-security-bulletin/august-2026?hsLang=en"></a></body></html>',
+    source(),
+    {
+      fetchTextImpl: async (url) => {
+        fetched.push(url);
+        return monthly;
+      }
+    }
+  );
+
+  assert.deepEqual(fetched, ['https://www.mediatek.com/product-security-bulletin/august-2026?hsLang=en']);
 });
 
 test('returns empty when the bulletin has no Published date', async () => {
@@ -112,11 +176,11 @@ test('returns empty when the index has no monthly bulletin link', async () => {
   assert.deepEqual(items, []);
 });
 
-test('respects the per-bulletin item cap', async () => {
+test('respects the per-bulletin item cap, keeping the most severe', async () => {
   const items = await resolveMediatekSecurityBulletinItems(indexHtml(), source(), {
     fetchTextImpl: monthlyFetch(),
-    maxItems: 0
+    maxItems: 1
   });
 
-  assert.deepEqual(items, []);
+  assert.deepEqual(items.map(item => item.cve_id), ['CVE-2026-20487']);
 });

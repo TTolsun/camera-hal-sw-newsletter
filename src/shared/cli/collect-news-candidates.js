@@ -15,6 +15,7 @@ const {
 } = require('../common/candidate-artifacts');
 const { parseManualSourceUrls } = require('../collect/collection-intent');
 const { readRuntimeConfig } = require('../common/runtime-config');
+const { monthRangeOverlapsWindow } = require('../common/date-signals');
 const { getSelectionWindowPolicy } = require('../common/newsletter-policy');
 const {
   extractImageCandidatesFromHtml,
@@ -1196,9 +1197,7 @@ function withinLookback(candidate, now, lookbackDays) {
   const windowStartMs = windowEndMs - lookbackDays * DAY_MS;
   const precision = String(candidate.datePrecision || candidate.date_precision || '').toLowerCase();
   if (precision === 'month') {
-    const monthStartMs = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1);
-    const monthEndMs = Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0, 23, 59, 59, 999);
-    return monthEndMs >= windowStartMs && monthStartMs <= windowEndMs;
+    return monthRangeOverlapsWindow(date, windowStartMs, windowEndMs);
   }
   const candidateMs = date.getTime();
   return candidateMs >= windowStartMs && candidateMs <= windowEndMs;

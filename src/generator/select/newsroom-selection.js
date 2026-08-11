@@ -87,7 +87,8 @@ const {
   seriesPatchNumber
 } = require('../../shared/common/article-groups');
 const {
-  dateQualityForCandidate
+  dateQualityForCandidate,
+  monthRangeOverlapsWindow
 } = require('../../shared/common/date-signals');
 const {
   articleIdentityKey
@@ -126,30 +127,32 @@ function utcDayStart(date) {
   return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
 }
 
-// month 정밀도 후보(AOSP Site Updates의 월별 묶음 행)는 그 달 어느 날의 변경인지 알 수 없어
-// 날짜가 달의 1일로 채워진다. 수집(collect-news-candidates.js의 withinLookback)은 이 점을 알고
-// 달 범위가 창과 겹치는지로 판단하는데, 선정만 1일 기준으로 나이를 재서 같은 후보가 수집에는
-// 들어오고 선정에서는 사라졌다 — 실측 2026-08-10: AOSP Camera ITS 문서 갱신 2건("sub-camera
-// testing 가이드", "scene0 fast-FAIL 설명")이 40일령으로 계산돼 reference 창(35일)을 넘겨
-// main·reference 어느 레인에도 남지 않았다. 수집과 같은 겹침 기준을 쓰도록 달의 마지막 날로
-// 나이를 재고, 아직 진행 중인 달은 뉴스레터 날짜를 넘지 않게 자른다.
-function monthRangeEndDay(publishedDay, baseDay) {
-  const published = new Date(publishedDay);
-  const monthEnd = Date.UTC(published.getUTCFullYear(), published.getUTCMonth() + 1, 0);
-  return Math.min(monthEnd, baseDay);
+function newsletterDayStart(newsletterDate) {
+  return utcDayStart(newsletterDate ? new Date(`${newsletterDate}T00:00:00Z`) : new Date());
 }
 
 function daysSincePublished(candidate, newsletterDate) {
   const rawDate = selectionDate(candidate);
   const published = rawDate ? new Date(rawDate) : null;
-  const base = newsletterDate ? new Date(`${newsletterDate}T00:00:00Z`) : new Date();
   const publishedDay = utcDayStart(published);
-  const baseDay = utcDayStart(base);
+  const baseDay = newsletterDayStart(newsletterDate);
   if (publishedDay === null || baseDay === null) return null;
-  const effectiveDay = datePrecision(candidate) === 'month'
-    ? monthRangeEndDay(publishedDay, baseDay)
-    : publishedDay;
-  return Math.max(0, Math.floor((baseDay - effectiveDay) / (24 * 60 * 60 * 1000)));
+  return Math.max(0, Math.floor((baseDay - publishedDay) / (24 * 60 * 60 * 1000)));
+}
+
+// month 정밀도 후보(AOSP Site Updates의 월별 묶음 행)는 그 달 어느 날의 변경인지 알 수 없어
+// 날짜가 달의 1일로 채워진다. 나이는 계속 1일 기준(가장 오래된 쪽)으로 보수적으로 재서 main
+// 선정 창 등급을 느슨하게 만들지 않는다. 다만 stale 탈락만은 수집과 같은 겹침 기준으로
+// 구제한다 — 수집(withinLookback)은 달 범위가 창과 겹치면 창 안으로 보는데 선정만 1일 기준
+// 점으로 잘라내면 같은 후보가 수집에는 들어오고 선정에서 통째로 사라진다. 실측 2026-08-10:
+// AOSP Camera ITS 문서 갱신 2건("sub-camera testing 가이드", "scene0 fast-FAIL 설명")이
+// 40일령으로 계산돼 reference 창(35일) 밖으로 밀려 참고 섹션에도 남지 않았다.
+function monthRangeStillInReferenceWindow(candidate, newsletterDate, policy) {
+  if (datePrecision(candidate) !== 'month') return false;
+  const baseDay = newsletterDayStart(newsletterDate);
+  if (baseDay === null) return false;
+  const windowStartMs = baseDay - policy.referenceContextDays * 24 * 60 * 60 * 1000;
+  return monthRangeOverlapsWindow(selectionDate(candidate), windowStartMs, baseDay);
 }
 
 function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectionWindowPolicy()) {
@@ -188,6 +191,14 @@ function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectio
       freshness_window: 'reference',
       days_since_published: ageDays,
       selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; within reference ${policy.referenceContextDays} day window`
+    };
+  }
+
+  if (monthRangeStillInReferenceWindow(candidate, newsletterDate, policy)) {
+    return {
+      freshness_window: 'reference',
+      days_since_published: ageDays,
+      selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; month range still overlaps the reference ${policy.referenceContextDays} day window`
     };
   }
 

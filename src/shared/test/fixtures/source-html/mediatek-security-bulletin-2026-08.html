@@ -1,6 +1,7 @@
 <!-- 실제 2026-08 MediaTek 게시판 구조를 줄인 fixture.
      CVE 하나당 표 하나이고 각 행이 라벨/값 쌍이다(Android 게시판의 컬럼 표와 다르다).
-     카메라 1건(imgsensor, Medium), 카메라지만 Low라 하한에 걸리는 1건(imgsys),
+     카메라 2건(imgsensor Medium, imgsys High — 심각도 내림차순 정렬 확인용),
+     카메라지만 Low라 하한에 걸리는 1건(camera raw),
      비카메라 3건(TFA / hevc decoder / display), CVE가 없는 부속 표 1건을 담는다. -->
 <html>
   <body>
@@ -53,11 +54,24 @@
       </tbody>
     </table>
 
+    <p id="CVE_2026_20487"></p>
+    <table class="table table-bordered bg-light">
+      <tbody>
+        <tr class="table-active"><th style="width: 250px;">CVE</th><td><strong>CVE-2026-20487</strong></td></tr>
+        <tr><th style="width: 250px;">Subcomponent</th><td>imgsys</td></tr>
+        <tr><th style="width: 250px;">Severity</th><td>High</td></tr>
+        <tr><th style="width: 250px;">CWE</th><td>CWE-190 Integer Overflow or Wraparound</td></tr>
+        <tr><th style="width: 250px;">Description</th><td>There is a possible out of bounds write due to an integer overflow.</td></tr>
+        <tr><th style="width: 250px;">Affected Chipsets</th><td>MT6989, MT6991</td></tr>
+        <tr><th style="width: 250px;">Report Source</th><td>Internal</td></tr>
+      </tbody>
+    </table>
+
     <p id="CVE_2026_20489"></p>
     <table class="table table-bordered bg-light">
       <tbody>
         <tr class="table-active"><th style="width: 250px;">CVE</th><td><strong>CVE-2026-20489</strong></td></tr>
-        <tr><th style="width: 250px;">Subcomponent</th><td>imgsys</td></tr>
+        <tr><th style="width: 250px;">Subcomponent</th><td>camera raw</td></tr>
         <tr><th style="width: 250px;">Severity</th><td>Low</td></tr>
         <tr><th style="width: 250px;">CWE</th><td>CWE-125 Out-of-bounds Read</td></tr>
         <tr><th style="width: 250px;">Description</th><td>There is a possible out of bounds read due to a missing bounds check.</td></tr>

@@ -812,7 +812,7 @@
       "rssUrl": null,
       "collectionModeHint": "release-note-watch",
       "category": "vendor-security",
-      "priority": "high",
+      "priority": "medium",
       "reliability": "official",
       "enabled": true,
       "candidateOnly": false,
