@@ -11,6 +11,12 @@
 // 낼 때 이 증거를 실어 보낸다. 순환 의존을 만들지 않도록 모니터·파서 어느 쪽에도 의존하지 않는다.
 const { decodeHtml } = require('../common/common');
 
+// 자격은 URL로 정한다. 본문에 'Camera ITS'가 있는지로 판정하면 같은 소스의 랜딩 페이지나
+// Camera ITS를 언급하는 다른 감시 문서까지 "릴리스 노트"라고 주장하게 된다.
+const RELEASE_NOTES_URL_PATTERN = /\/compatibility\/cts\/its-release-notes-\d+(?:[/?#]|$)/i;
+// 릴리스 노트 제목은 문서 안에서 정확한 형태로 나온다. 페이지 전체에서 'Android \d+'를
+// 아무거나 집으면 nav/footer에 남은 옛 버전이 릴리스 이름으로 둔갑한다.
+const RELEASE_TITLE_PATTERN = /\bAndroid\s+\d+\s+Camera\s+Image\s+Test\s+Suite\b/i;
 // Camera ITS 릴리스 노트 섹션에서 카메라 인증 실무와 닿는 것만 남긴다.
 // devsite 공통 푸터(Build / Connect / Get help)는 이 어휘에 걸리지 않는다.
 const RELEASE_SECTION_PATTERN =
@@ -19,6 +25,10 @@ const RELEASE_SECTION_PATTERN =
 const DEVSITE_BOILERPLATE_PATTERN =
   /\bStay organized with collections\b[\s\S]*?\bbased on your preferences\.?/i;
 const HEADING_PATTERN = /<(h[1-4])([^>]*)>([\s\S]*?)<\/\1>/gi;
+// 본문 컨테이너. devsite 페이지에는 좌측 book nav와 사이드바 heading이 함께 있어서
+// 문서 전체를 훑으면 내비게이션 문구가 릴리스 섹션 자리를 차지한다.
+const ARTICLE_BODY_PATTERN = /<article\b[^>]*>([\s\S]*?)<\/article>/i;
+const DEVSITE_CONTENT_PATTERN = /<devsite-content\b[^>]*>([\s\S]*?)<\/devsite-content>/i;
 
 const SECTION_LIMIT = 8;
 const SENTENCE_LIMIT = 200;
@@ -34,17 +44,26 @@ function text(value = '') {
     .trim();
 }
 
+function articleBody(html = '') {
+  const article = ARTICLE_BODY_PATTERN.exec(String(html));
+  if (article) return article[1];
+  const content = DEVSITE_CONTENT_PATTERN.exec(String(html));
+  return content ? content[1] : String(html);
+}
+
 function headingId(attrs = '') {
   const match = /\bid="([^"]+)"/i.exec(String(attrs));
   return match ? match[1] : '';
 }
 
+// 상한을 넘는 문장은 자르지 않고 버린다. 중간에서 자르면 조건이나 부정이 잘린 부분 문장이
+// 그대로 증거가 되어 기사에 실린다(짓느니 빠뜨린다).
 function firstSentence(value = '') {
   const body = text(value);
   if (!body) return '';
   const [sentence] = body.split(/(?<=\.)\s+/);
   const picked = sentence || body;
-  return picked.length > SENTENCE_LIMIT ? `${picked.slice(0, SENTENCE_LIMIT).trim()}…` : picked;
+  return picked.length > SENTENCE_LIMIT ? '' : picked;
 }
 
 function pageTitle(html = '') {
@@ -53,23 +72,24 @@ function pageTitle(html = '') {
 }
 
 function releaseSections(html, pageUrl) {
-  const matches = [...String(html).matchAll(HEADING_PATTERN)];
+  const body = articleBody(html);
+  const matches = [...String(body).matchAll(HEADING_PATTERN)];
   const documentTitle = pageTitle(html);
   const sections = [];
   for (let index = 0; index < matches.length; index += 1) {
     const current = matches[index];
     const next = matches[index + 1];
     const start = current.index + current[0].length;
-    const end = next ? next.index : String(html).length;
+    const end = next ? next.index : String(body).length;
     const heading = text(current[3]);
     // 문서 제목(h1)은 섹션이 아니라 페이지 이름이다. 같은 텍스트를 증거에 또 싣지 않는다.
     if (!heading || heading === documentTitle) continue;
-    const body = String(html).slice(start, Math.min(end, start + 3500));
-    if (!RELEASE_SECTION_PATTERN.test(`${heading} ${text(body)}`)) continue;
+    const sectionHtml = String(body).slice(start, Math.min(end, start + 3500));
+    if (!RELEASE_SECTION_PATTERN.test(`${heading} ${text(sectionHtml)}`)) continue;
     const id = headingId(current[2]);
     sections.push({
       heading,
-      sentence: firstSentence(body),
+      sentence: firstSentence(sectionHtml),
       url: id && pageUrl ? `${String(pageUrl).replace(/#.*$/, '')}#${id}` : ''
     });
     if (sections.length >= SECTION_LIMIT) break;
@@ -82,15 +102,13 @@ function releaseSections(html, pageUrl) {
  * 날짜는 넣지 않는다 — 사건의 날짜는 모니터가 정한다.
  */
 function cameraItsReleaseNoteEvidence(html = '', pageUrl = '') {
-  const body = text(html);
-  if (!/Camera ITS/i.test(body)) return null;
+  if (!RELEASE_NOTES_URL_PATTERN.test(String(pageUrl))) return null;
+
+  const release = (text(html).match(RELEASE_TITLE_PATTERN) || [])[0];
+  if (!release) return null;
 
   const sections = releaseSections(html, pageUrl);
   if (sections.length === 0) return null;
-
-  const release = (body.match(/\bAndroid\s+\d+\s+Camera\s+Image\s+Test\s+Suite\b/i) || [])[0] ||
-    (body.match(/\bAndroid\s+\d+\b/i) || [])[0] ||
-    'Android Camera ITS';
 
   return {
     version_or_release: `${release} release notes`,
@@ -99,11 +117,20 @@ function cameraItsReleaseNoteEvidence(html = '', pageUrl = '') {
     behavior_change: sections
       .map(section => (section.sentence ? `${section.heading}: ${section.sentence}` : section.heading))
       .join(' '),
-    section_links: sections.map(section => section.url).filter(Boolean)
+    // outgoing-links 계층은 링크 레코드를 받는다. 문자열을 넣으면 증거로 보이지만 조용히 버려진다.
+    section_links: sections
+      .filter(section => section.url)
+      .map(section => ({
+        url: section.url,
+        text: section.heading,
+        source_field: 'release_note_section',
+        extraction_method: 'heading_anchor'
+      }))
   };
 }
 
 module.exports = {
+  RELEASE_NOTES_URL_PATTERN,
   SECTION_LIMIT,
   cameraItsReleaseNoteEvidence
 };

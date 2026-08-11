@@ -551,8 +551,8 @@ function buildEvent({ source, previous, current, eventType, dateSource, effectiv
     url: current?.url || previous?.url || '',
     canonical_url: current?.canonical_url || previous?.canonical_url || '',
     title: current?.title || previous?.title || source.source_id,
-    previous_values: previous || null,
-    current_values: current || null,
+    previous_values: withoutDerivedEvidence(previous),
+    current_values: withoutDerivedEvidence(current),
     content_changed: text(previous?.normalized_content_hash) !== text(current?.normalized_content_hash),
     detected_at: detectedAt,
     effective_date: normalizedEffectiveDate,
@@ -671,13 +671,20 @@ function classifyObservation({ source, previous, current, snapshot, detectedAt }
   return event;
 }
 
+// release_note_evidence는 매 실행마다 페이지에서 다시 뽑는 파생 값이다. 스냅샷에도, git으로
+// 추적되는 source-change-events.json의 previous/current_values에도 저장하지 않는다 —
+// 파일만 커지고 diff가 시끄러워질 뿐 변화 판정에는 쓰이지 않는다(해시가 그 일을 한다).
+// 증거는 event의 release_note_evidence 필드 한 곳으로만 전달된다.
+function withoutDerivedEvidence(observation) {
+  if (!observation) return null;
+  const { release_note_evidence: derived, ...persisted } = observation;
+  void derived;
+  return persisted;
+}
+
 function nextPage(previous, current, detectedAt) {
-  // release_note_evidence는 매 실행마다 페이지에서 다시 뽑는 파생 값이다. 스냅샷에 저장하면
-  // 파일만 커지고 diff가 시끄러워질 뿐, 변화 판정에는 쓰이지 않는다(해시가 그 일을 한다).
-  const { release_note_evidence: derivedEvidence, ...persisted } = current;
-  void derivedEvidence;
   return {
-    ...persisted,
+    ...withoutDerivedEvidence(current),
     first_seen_at: previous?.first_seen_at || detectedAt,
     last_seen_at: detectedAt,
     seen_count: number(previous?.seen_count) + 1
@@ -828,7 +835,9 @@ function candidateFromEvent(event, source) {
     api_or_component: releaseNoteEvidence?.api_or_component ||
       (bucket === 'cpp_ai_tooling_fallback' ? 'Android native tooling workflow' : 'Camera source snapshot change'),
     behavior_change: releaseNoteEvidence?.behavior_change || event.reason,
-    outgoing_links: releaseNoteEvidence?.section_links || [],
+    ...(releaseNoteEvidence?.section_links?.length
+      ? { outgoing_links: releaseNoteEvidence.section_links }
+      : {}),
     evidence_score: mainDateEligible ? 8 : 4,
     relevanceScore: mainDateEligible ? 85 : 45,
     relevance_score: mainDateEligible ? 85 : 45,

@@ -42,10 +42,16 @@ test('drops the page-title heading and the devsite collections boilerplate', () 
 test('links each release-note section anchor and skips the devsite footer headings', () => {
   const evidence = cameraItsReleaseNoteEvidence(releaseNotesHtml(), PAGE_URL);
 
-  assert.ok(evidence.section_links.includes(`${PAGE_URL}#new-tests`));
-  assert.ok(evidence.section_links.includes(`${PAGE_URL}#separated-test-activities`));
-  assert.ok(evidence.section_links.includes(`${PAGE_URL}#status-pass-star`));
-  assert.ok(evidence.section_links.every(link => link.startsWith(`${PAGE_URL}#`)));
+  const urls = evidence.section_links.map(link => link.url);
+  assert.ok(urls.includes(`${PAGE_URL}#new-tests`));
+  assert.ok(urls.includes(`${PAGE_URL}#separated-test-activities`));
+  assert.ok(urls.includes(`${PAGE_URL}#status-pass-star`));
+  assert.ok(urls.every(url => url.startsWith(`${PAGE_URL}#`)));
+  // outgoing-links 계층은 레코드를 받는다. 문자열이면 증거로 보이지만 조용히 버려진다.
+  for (const link of evidence.section_links) {
+    assert.equal(link.source_field, 'release_note_section');
+    assert.ok(link.text);
+  }
   assert.doesNotMatch(evidence.behavior_change, /\bBuild: |\bConnect: |\bGet help: /);
 });
 
@@ -59,6 +65,45 @@ test('caps the section count and cuts on section boundaries, never mid-sentence'
 
   assert.equal(evidence.section_links.length, SECTION_LIMIT);
   assert.doesNotMatch(evidence.behavior_change, /…$/, '섹션 경계에서만 자르므로 문장이 잘리지 않는다');
+});
+
+// 자격은 URL로 정한다. 본문에 'Camera ITS'가 있는지로 판정하면 같은 소스의 랜딩 페이지나
+// Camera ITS를 언급하는 다른 감시 문서까지 "릴리스 노트"라고 주장하게 된다.
+test('does not claim release notes for the Camera ITS landing page', () => {
+  const landingUrl = 'https://source.android.com/docs/compatibility/cts/camera-its';
+
+  assert.equal(cameraItsReleaseNoteEvidence(releaseNotesHtml(), landingUrl), null);
+});
+
+test('does not touch another monitored page that merely mentions Camera ITS', () => {
+  const cameraDocsUrl = 'https://source.android.com/docs/core/camera';
+  const html = [
+    '<html><head><title>Camera</title></head><body><article>',
+    '<h2 id="overview">Camera HAL versions</h2>',
+    '<p>Devices must pass the Camera ITS tests for every advertised camera feature.</p>',
+    '</article></body></html>'
+  ].join('');
+
+  assert.equal(cameraItsReleaseNoteEvidence(html, cameraDocsUrl), null);
+});
+
+// devsite 페이지에는 좌측 book nav와 사이드바 heading이 함께 있다. 본문 컨테이너로 좁히지
+// 않으면 내비게이션 문구가 상한 8칸을 선점해 "이번에 바뀐 내용"으로 실린다.
+test('reads headings from the article body, not the surrounding navigation', () => {
+  const nav = Array.from({ length: 9 }, (unused, index) =>
+    `<h2 id="nav-${index}">Test navigation entry ${index}</h2><p>Camera scene index ${index}.</p>`
+  ).join('');
+  const html = releaseNotesHtml()
+    .replace('<body>', `<body><nav>${nav}</nav><article>`)
+    .replace('</body>', '</article></body>');
+
+  const evidence = cameraItsReleaseNoteEvidence(html, PAGE_URL);
+
+  assert.ok(
+    evidence.section_links.every(link => !link.url.includes('#nav-')),
+    '내비게이션 heading은 릴리스 섹션이 아니다'
+  );
+  assert.match(evidence.behavior_change, /Separated test activities/);
 });
 
 test('returns null for a page that is not Camera ITS', () => {
@@ -119,6 +164,7 @@ test('a content-change candidate carries the parsed evidence instead of placehol
   assert.match(candidate.version_or_release, /Android 17 Camera Image Test Suite release notes/);
   assert.equal(candidate.relevance_bucket, 'direct_aosp_camera');
   assert.ok(candidate.outgoing_links.length > 0);
+  assert.ok(candidate.outgoing_links.every(link => typeof link.url === 'string' && link.url));
 });
 
 // 증거가 없는 소스는 기존 동작 그대로여야 한다.
@@ -130,5 +176,5 @@ test('other monitored sources keep the placeholder evidence fields', () => {
 
   assert.equal(candidate.api_or_component, 'Camera source snapshot change');
   assert.equal(candidate.behavior_change, 'Normalized content hash changed.');
-  assert.deepEqual(candidate.outgoing_links, []);
+  assert.equal(candidate.outgoing_links, undefined, '증거가 없으면 필드 자체를 만들지 않는다');
 });
