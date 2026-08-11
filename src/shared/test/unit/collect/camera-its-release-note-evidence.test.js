@@ -106,6 +106,29 @@ test('reads headings from the article body, not the surrounding navigation', () 
   assert.match(evidence.behavior_change, /Separated test activities/);
 });
 
+// 릴리스 이름을 페이지 전체의 느슨한 'Android \d+'로 정하면 nav/footer에 남은 옛 버전이
+// 릴리스 이름으로 둔갑한다. 정확한 제목이 없으면 증거를 만들지 않는다.
+test('returns null when the exact release title is absent, even with a bare Android version', () => {
+  const html = [
+    '<html><head><title>Camera ITS release notes</title></head><body><article>',
+    '<p>Android 16 devices must run the Camera ITS suite.</p>',
+    '<h2 id="new-tests">New tests</h2><p>Android 16 adds a camera test scene.</p>',
+    '</article></body></html>'
+  ].join('');
+
+  assert.equal(cameraItsReleaseNoteEvidence(html, PAGE_URL), null);
+});
+
+test('prefers the document title over stale release titles left in navigation', () => {
+  const html = releaseNotesHtml()
+    .replace('<body>', '<body><nav><h2 id="nav-old">Android 12 Camera Image Test Suite release notes</h2></nav><article>')
+    .replace('</body>', '</article></body>');
+
+  const evidence = cameraItsReleaseNoteEvidence(html, PAGE_URL);
+
+  assert.match(evidence.version_or_release, /Android 17 Camera Image Test Suite/);
+});
+
 test('returns null for a page that is not Camera ITS', () => {
   const unrelated = '<html><head><title>Bluetooth HCI requirements</title></head>' +
     '<body><h2 id="version">Versions</h2><p>Updated test coverage for the audio stack.</p></body></html>';

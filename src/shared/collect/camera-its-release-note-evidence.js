@@ -30,7 +30,10 @@ const HEADING_PATTERN = /<(h[1-4])([^>]*)>([\s\S]*?)<\/\1>/gi;
 const ARTICLE_BODY_PATTERN = /<article\b[^>]*>([\s\S]*?)<\/article>/i;
 const DEVSITE_CONTENT_PATTERN = /<devsite-content\b[^>]*>([\s\S]*?)<\/devsite-content>/i;
 
-const SECTION_LIMIT = 8;
+// 라이브 its-release-notes-17의 본문 섹션은 11개다. 상한이 8이면 뒤쪽 3개(차트 스케일링,
+// 와이드 감마 태블릿 허용, 빌드 승인용 결과 일괄 제출)가 조용히 빠진다 — 마지막 항목은
+// 인증 워크플로가 통째로 바뀌는 내용이라 놓치면 안 된다. 문서 한 장을 덮도록 여유를 둔다.
+const SECTION_LIMIT = 12;
 const SENTENCE_LIMIT = 200;
 
 function text(value = '') {
@@ -104,7 +107,9 @@ function releaseSections(html, pageUrl) {
 function cameraItsReleaseNoteEvidence(html = '', pageUrl = '') {
   if (!RELEASE_NOTES_URL_PATTERN.test(String(pageUrl))) return null;
 
-  const release = (text(html).match(RELEASE_TITLE_PATTERN) || [])[0];
+  // 문서 제목을 먼저 본다. 본문 전체를 훑으면 nav에 남은 옛 버전 제목이 먼저 잡힐 수 있다.
+  const release = (pageTitle(html).match(RELEASE_TITLE_PATTERN) || [])[0] ||
+    (text(articleBody(html)).match(RELEASE_TITLE_PATTERN) || [])[0];
   if (!release) return null;
 
   const sections = releaseSections(html, pageUrl);
