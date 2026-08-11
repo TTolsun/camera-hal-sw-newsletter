@@ -25,6 +25,7 @@ const {
   validateSourceMonitorRegistryText
 } = require('../validate/source-monitor-registry-validator');
 const { CANDIDATE_SCHEMA_VERSION } = require('../common/candidate-artifacts');
+const { cameraItsReleaseNoteEvidence } = require('./camera-its-release-note-evidence');
 
 const SNAPSHOT_SCHEMA_VERSION = 1;
 const PROCESSED_ID_LIMIT = 500;
@@ -357,6 +358,11 @@ function observationFromHtml({ source, url, html, status = 200, headers = {} }) 
     http_last_modified: httpLastModified,
     content_hash: contentHash(html),
     normalized_content_hash: normalizedContentHash(html),
+    // 릴리스 노트 문서는 "무엇이 적혀 있나"가 기사감인데 이벤트 후보는 자리표시자만 실어 왔다.
+    // 페이지에서 뽑은 증거를 이벤트까지 들려보내, 본문이 진짜 바뀐 주에 구체적인 기사가 되게 한다.
+    // 판정(언제 바뀌었나)은 그대로 정규화 본문 해시 비교가 한다 — 날짜만 바뀐 날은 여전히
+    // metadata_only_changed로 후보를 만들지 않는다.
+    release_note_evidence: cameraItsReleaseNoteEvidence(html, canonicalUrl),
     anchors: meaningfulAnchors(html, canonicalUrl),
     release_row_date: primaryReleaseRow.date || '',
     release_row_version: primaryReleaseRow.version || '',
@@ -554,6 +560,7 @@ function buildEvent({ source, previous, current, eventType, dateSource, effectiv
     date_confidence,
     candidate_allowed: candidateAllowed,
     main_article_allowed: mainArticleAllowed,
+    release_note_evidence: current?.release_note_evidence || null,
     release_row_date: releaseRow?.date || current?.release_row_date || '',
     release_row_version: releaseRow?.version || current?.release_row_version || '',
     release_row_anchor: releaseRow?.anchor || current?.release_row_anchor || '',
@@ -665,8 +672,12 @@ function classifyObservation({ source, previous, current, snapshot, detectedAt }
 }
 
 function nextPage(previous, current, detectedAt) {
+  // release_note_evidence는 매 실행마다 페이지에서 다시 뽑는 파생 값이다. 스냅샷에 저장하면
+  // 파일만 커지고 diff가 시끄러워질 뿐, 변화 판정에는 쓰이지 않는다(해시가 그 일을 한다).
+  const { release_note_evidence: derivedEvidence, ...persisted } = current;
+  void derivedEvidence;
   return {
-    ...current,
+    ...persisted,
     first_seen_at: previous?.first_seen_at || detectedAt,
     last_seen_at: detectedAt,
     seen_count: number(previous?.seen_count) + 1
@@ -736,6 +747,10 @@ function candidateFromEvent(event, source) {
     ? (source.selection_lane === 'supporting_native_tooling' || source.fallback_only ? 'short' : 'main')
     : 'watchlist';
   const bucket = bucketForSource(source);
+  // 릴리스 노트 증거가 있으면 자리표시자 대신 페이지에서 뽑은 구체 내용을 싣는다.
+  // 이벤트가 만들어졌다는 것 자체가 "본문이 바뀌었다"는 뜻이므로(날짜만 바뀐 날은 여기까지
+  // 오지 않는다) 이 증거를 그 주의 사건 내용으로 쓰는 것이 정확하다.
+  const releaseNoteEvidence = event.release_note_evidence || null;
   const sourceQuality = sourceQualityForEvent({
     ...event,
     main_article_allowed: mainDateEligible
@@ -808,9 +823,12 @@ function candidateFromEvent(event, source) {
     source_reliability: 'official',
     source_quality_required: true,
     ...sourceQuality,
-    version_or_release: event.release_row_version || event.release_row_anchor || releaseEvidenceKey(event.current_values?.anchors || []),
-    api_or_component: bucket === 'cpp_ai_tooling_fallback' ? 'Android native tooling workflow' : 'Camera source snapshot change',
-    behavior_change: event.reason,
+    version_or_release: releaseNoteEvidence?.version_or_release ||
+      event.release_row_version || event.release_row_anchor || releaseEvidenceKey(event.current_values?.anchors || []),
+    api_or_component: releaseNoteEvidence?.api_or_component ||
+      (bucket === 'cpp_ai_tooling_fallback' ? 'Android native tooling workflow' : 'Camera source snapshot change'),
+    behavior_change: releaseNoteEvidence?.behavior_change || event.reason,
+    outgoing_links: releaseNoteEvidence?.section_links || [],
     evidence_score: mainDateEligible ? 8 : 4,
     relevanceScore: mainDateEligible ? 85 : 45,
     relevance_score: mainDateEligible ? 85 : 45,

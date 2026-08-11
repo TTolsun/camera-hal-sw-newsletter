@@ -622,36 +622,6 @@
       ]
     },
     {
-      "id": "aosp-camera-its-release-notes",
-      "name": "AOSP Camera ITS Release Notes",
-      "sourceUrl": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-      "rssUrl": null,
-      "collectionModeHint": "release-note-watch",
-      "category": "camera-hal",
-      "priority": "high",
-      "reliability": "official",
-      "enabled": true,
-      "candidateOnly": false,
-      "requiresCrossCheck": false,
-      "usageHint": "Camera ITS 릴리스 노트에서 새 테스트·시나리오, PASS* 같은 판정 상태, CTS Verifier 액티비티 구성, Gen2 rig 이관, 허용 태블릿 변경을 확인한다. Android 18이 나오면 sourceUrl을 its-release-notes-18로 바꿔야 한다",
-      "keywords": [
-        "Camera ITS",
-        "CTS Verifier",
-        "Android",
-        "camera",
-        "test"
-      ],
-      "sourceRole": "official_release_source",
-      "sourceUrlQualityHint": "official_dated_release",
-      "mainArticlePolicy": "allowed",
-      "requiresCrossCheckDefault": false,
-      "evidenceGranularityHint": "article_level_concrete_source_fact",
-      "sourceQualityNotes": [
-        "official source",
-        "날짜는 페이지 푸터의 Last updated만 쓴다. 없으면 후보를 만들지 않는다"
-      ]
-    },
-    {
       "id": "aosp-site-updates",
       "name": "AOSP Site Updates",
       "sourceUrl": "https://source.android.com/docs/whatsnew/site-updates",

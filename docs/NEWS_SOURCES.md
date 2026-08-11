@@ -40,7 +40,6 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - AOSP Release Source Drop - camera changes (`release-note-watch`): https://source.android.com/docs/setup/reference/build-numbers
 - AOSP What's New / Release Notes (`release-note-watch`): https://source.android.com/docs/whatsnew
 - AOSP Site Updates (`release-note-watch`): https://source.android.com/docs/whatsnew/site-updates
-- AOSP Camera ITS Release Notes (`release-note-watch`): https://source.android.com/docs/compatibility/cts/its-release-notes-17
 - Android Compatibility Definition Document (`documentation-watch`): https://source.android.com/docs/compatibility/cdd
 - Android Security Bulletin (`release-note-watch`): https://source.android.com/docs/security/bulletin
 - Samsung Mobile Security Updates (`release-note-watch`): https://security.samsungmobile.com/securityUpdate.smsb

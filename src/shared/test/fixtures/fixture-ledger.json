@@ -540,7 +540,7 @@
       "source": "curated",
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
-      "protectedPolicy": "AOSP Camera ITS release notes dated candidate extraction",
+      "protectedPolicy": "Camera ITS release-note evidence extraction for monitor content-change events",
       "generatedArtifact": false,
       "relatedRules": [
         "parser_contract"
