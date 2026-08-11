@@ -536,6 +536,17 @@
       ]
     },
     {
+      "path": "source-html/aosp-camera-its-release-notes-17.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Camera ITS release-note evidence extraction for monitor content-change events",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
+    },
+    {
       "path": "source-html/aosp-site-updates-camera.html",
       "source": "curated",
       "allowedUse": "parser-source-html",
