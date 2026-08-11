@@ -42,9 +42,7 @@ function latestBulletin(indexItems) {
     // 이 소스는 generic fallback이 막혀 있어(followed-source-item-resolvers.js) 빈 결과가 곧
     // "이번 주 카메라 CVE 없음"으로 읽힌다. URL 형태가 바뀌어 매치가 0건이 된 경우와 구분되게
     // 로그를 남긴다 — 이 커밋이 고친 원래 장애가 정확히 이 무음 실패였다.
-    if (items.length > 0) {
-      console.warn(`security-bulletin-cve: index had ${items.length} link(s) but none matched the monthly bulletin URL shape; no CVE candidates produced.`);
-    }
+    console.warn(`security-bulletin-cve: index had ${items.length} link(s) but none matched the monthly bulletin URL shape; no CVE candidates produced.`);
     return null;
   }
   const dated = monthlyBulletins
