@@ -1,4 +1,5 @@
-// Camera ITS 릴리스 노트 페이지에서 "무엇이 적혀 있나"를 뽑아 증거 필드로 만든다.
+// Camera ITS 릴리스 노트 페이지에서 "무엇이 적혀 있나"를 뽑고, 직전 관측과 비교해
+// "이번에 무엇이 바뀌었나"만 증거로 만든다.
 //
 // 왜 별도 모듈인가: 소스 모니터는 "언제 바뀌었나"를 정확히 알지만(정규화 본문 해시 비교),
 // 후보를 만들 때 api_or_component/behavior_change에 'Camera source snapshot change' 같은
@@ -7,13 +8,16 @@
 // 만들어 "아무것도 안 바뀐 날"을 그 주의 사건으로 발행하게 된다(2026-08-06이 정확히 그런 날:
 // visible_last_updated는 07-31에서 08-06으로 움직였지만 정규화 본문 해시는 동일했다).
 //
-// 그래서 판정은 모니터에 두고, 이 모듈은 내용 추출만 한다. 모니터가 content-change 이벤트를
-// 낼 때 이 증거를 실어 보낸다. 순환 의존을 만들지 않도록 모니터·파서 어느 쪽에도 의존하지 않는다.
+// 그래서 판정은 모니터에 두고, 이 모듈은 내용 추출과 섹션 단위 비교만 한다.
+// 순환 의존을 만들지 않도록 모니터·파서 어느 쪽에도 의존하지 않는다.
 const { decodeHtml } = require('../common/common');
+const { hashText } = require('../common/source-identity');
+const { normalizeOutgoingLinks } = require('./outgoing-links');
 
-// 자격은 URL로 정한다. 본문에 'Camera ITS'가 있는지로 판정하면 같은 소스의 랜딩 페이지나
-// Camera ITS를 언급하는 다른 감시 문서까지 "릴리스 노트"라고 주장하게 된다.
-const RELEASE_NOTES_URL_PATTERN = /\/compatibility\/cts\/its-release-notes-\d+(?:[/?#]|$)/i;
+// 자격은 host와 경로로 정한다. 본문에 'Camera ITS'가 있는지로 판정하면 같은 소스의 랜딩
+// 페이지나 Camera ITS를 언급하는 다른 감시 문서까지 "릴리스 노트"라고 주장하게 된다.
+const RELEASE_NOTES_HOST = 'source.android.com';
+const RELEASE_NOTES_PATH_PATTERN = /^\/docs\/compatibility\/cts\/its-release-notes-\d+$/i;
 // 릴리스 노트 제목은 문서 안에서 정확한 형태로 나온다. 페이지 전체에서 'Android \d+'를
 // 아무거나 집으면 nav/footer에 남은 옛 버전이 릴리스 이름으로 둔갑한다.
 const RELEASE_TITLE_PATTERN = /\bAndroid\s+\d+\s+Camera\s+Image\s+Test\s+Suite\b/i;
@@ -30,21 +34,38 @@ const HEADING_PATTERN = /<(h[1-4])([^>]*)>([\s\S]*?)<\/\1>/gi;
 const ARTICLE_BODY_PATTERN = /<article\b[^>]*>([\s\S]*?)<\/article>/i;
 const DEVSITE_CONTENT_PATTERN = /<devsite-content\b[^>]*>([\s\S]*?)<\/devsite-content>/i;
 
-// 라이브 its-release-notes-17의 본문 섹션은 11개다. 상한이 8이면 뒤쪽 3개(차트 스케일링,
-// 와이드 감마 태블릿 허용, 빌드 승인용 결과 일괄 제출)가 조용히 빠진다 — 마지막 항목은
-// 인증 워크플로가 통째로 바뀌는 내용이라 놓치면 안 된다. 문서 한 장을 덮도록 여유를 둔다.
+// 라이브 its-release-notes-17의 본문 섹션은 11개다. 상한이 그보다 낮으면 뒤쪽 섹션이
+// 조용히 빠진다 — "빌드 승인용 결과 일괄 제출"처럼 인증 워크플로가 통째로 바뀌는 항목이
+// 문서 끝에 온다. 문서 한 장을 덮도록 여유를 둔다.
 const SECTION_LIMIT = 12;
-const SENTENCE_LIMIT = 200;
+// 문장을 자르지 않고 통째로 버리는 규칙이라 상한이 낮으면 알맹이가 통째로 사라진다
+// (라이브 실측: 상한 200에서 New tests 210자·Refactored tests 293자·Gen2 rig updates 203자가
+// 제목만 남았다). 실제 릴리스 노트 문장이 들어갈 만큼 잡고, 그보다 긴 비정상 문장만 버린다.
+const SENTENCE_LIMIT = 320;
+const SECTION_HASH_LENGTH = 16;
 
 function text(value = '') {
   return decodeHtml(
     String(value)
       .replace(/<[^>]+>/g, ' ')
       .replace(/&nbsp;/gi, ' ')
+      .replace(/\s+/g, ' ')
   )
+    // 공백을 먼저 접은 뒤에 안내 문구를 지운다. 순서가 반대면 문구가 태그로 쪼개져 있을 때
+    // 정규식이 빗나가 devsite 안내 문구가 증거에 남는다.
     .replace(DEVSITE_BOILERPLATE_PATTERN, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+function isReleaseNotesUrl(pageUrl = '') {
+  try {
+    const parsed = new URL(String(pageUrl));
+    return parsed.hostname.toLowerCase() === RELEASE_NOTES_HOST &&
+      RELEASE_NOTES_PATH_PATTERN.test(parsed.pathname.replace(/\/$/, ''));
+  } catch {
+    return false;
+  }
 }
 
 function articleBody(html = '') {
@@ -88,11 +109,13 @@ function releaseSections(html, pageUrl) {
     // 문서 제목(h1)은 섹션이 아니라 페이지 이름이다. 같은 텍스트를 증거에 또 싣지 않는다.
     if (!heading || heading === documentTitle) continue;
     const sectionHtml = String(body).slice(start, Math.min(end, start + 3500));
-    if (!RELEASE_SECTION_PATTERN.test(`${heading} ${text(sectionHtml)}`)) continue;
+    const sectionText = text(sectionHtml);
+    if (!RELEASE_SECTION_PATTERN.test(`${heading} ${sectionText}`)) continue;
     const id = headingId(current[2]);
     sections.push({
       heading,
       sentence: firstSentence(sectionHtml),
+      hash: hashText(`${heading}\n${sectionText}`, SECTION_HASH_LENGTH),
       url: id && pageUrl ? `${String(pageUrl).replace(/#.*$/, '')}#${id}` : ''
     });
     if (sections.length >= SECTION_LIMIT) break;
@@ -101,11 +124,11 @@ function releaseSections(html, pageUrl) {
 }
 
 /**
- * Camera ITS 릴리스 노트 페이지면 증거 필드를 돌려주고, 아니면 null.
- * 날짜는 넣지 않는다 — 사건의 날짜는 모니터가 정한다.
+ * 릴리스 노트 페이지면 릴리스 이름과 섹션 목록을 뽑고, 아니면 null.
+ * 관측 시점에 한 번만 계산해 지문(영속)과 증거(휘발) 양쪽에 쓴다.
  */
-function cameraItsReleaseNoteEvidence(html = '', pageUrl = '') {
-  if (!RELEASE_NOTES_URL_PATTERN.test(String(pageUrl))) return null;
+function cameraItsReleaseNoteExtract(html = '', pageUrl = '') {
+  if (!isReleaseNotesUrl(pageUrl)) return null;
 
   // 문서 제목을 먼저 본다. 본문 전체를 훑으면 nav에 남은 옛 버전 제목이 먼저 잡힐 수 있다.
   const release = (pageTitle(html).match(RELEASE_TITLE_PATTERN) || [])[0] ||
@@ -113,29 +136,68 @@ function cameraItsReleaseNoteEvidence(html = '', pageUrl = '') {
   if (!release) return null;
 
   const sections = releaseSections(html, pageUrl);
-  if (sections.length === 0) return null;
+  return sections.length > 0 ? { release, sections } : null;
+}
 
+/**
+ * 스냅샷에 저장할 섹션 지문(제목 + 내용 해시). 다음 실행에서 무엇이 바뀌었는지 가리는 데 쓴다.
+ * 문장·링크는 빼서 스냅샷이 커지지 않게 한다.
+ */
+function cameraItsReleaseNoteFingerprint(extract) {
+  return (extract?.sections || []).map(section => ({
+    heading: section.heading,
+    hash: section.hash
+  }));
+}
+
+/**
+ * 직전 관측 대비 새로 생겼거나 내용이 바뀐 섹션만 증거로 만든다.
+ * 바뀐 섹션이 없거나 비교 대상이 없으면 null.
+ *
+ * previousSections가 비어 있으면(최초 관측) 비교 대상이 없으므로 null을 돌려준다 —
+ * 그 상태에서 문서 전체를 "이번 변화"로 싣는 것이 정확히 과다 주장이다.
+ */
+function cameraItsReleaseNoteEvidence(extract, previousSections = []) {
+  if (!extract?.release || !Array.isArray(extract.sections)) return null;
+
+  const previousByHeading = new Map(
+    (Array.isArray(previousSections) ? previousSections : [])
+      .filter(section => section && section.heading)
+      .map(section => [section.heading, section.hash])
+  );
+  if (previousByHeading.size === 0) return null;
+
+  const changed = extract.sections
+    .filter(section => previousByHeading.get(section.heading) !== section.hash);
+  if (changed.length === 0) return null;
+
+  const release = extract.release;
   return {
     version_or_release: `${release} release notes`,
     api_or_component: 'Camera ITS / CTS Verifier',
-    // 섹션 경계에서만 자른다. 문자 수로 자르면 부분 문장이 증거로 남는다.
-    behavior_change: sections
+    // 바뀐 섹션만, 섹션 경계에서만 자른다. 문서 전체를 실으면 이번 주에 바뀌지 않은 섹션까지
+    // 그 주의 변화로 발행된다.
+    behavior_change: changed
       .map(section => (section.sentence ? `${section.heading}: ${section.sentence}` : section.heading))
       .join(' '),
-    // outgoing-links 계층은 링크 레코드를 받는다. 문자열을 넣으면 증거로 보이지만 조용히 버려진다.
-    section_links: sections
-      .filter(section => section.url)
-      .map(section => ({
-        url: section.url,
-        text: section.heading,
-        source_field: 'release_note_section',
-        extraction_method: 'heading_anchor'
-      }))
+    changed_section_headings: changed.map(section => section.heading),
+    // 링크 레코드는 정본 빌더로 만든다. 손으로 만들면 evidence_role이 빠져 계약이 둘로 갈린다.
+    section_links: normalizeOutgoingLinks(
+      changed
+        .filter(section => section.url)
+        .map(section => ({
+          url: section.url,
+          text: section.heading,
+          source_field: 'release_note_section',
+          extraction_method: 'heading_anchor'
+        }))
+    )
   };
 }
 
 module.exports = {
-  RELEASE_NOTES_URL_PATTERN,
   SECTION_LIMIT,
-  cameraItsReleaseNoteEvidence
+  cameraItsReleaseNoteEvidence,
+  cameraItsReleaseNoteExtract,
+  cameraItsReleaseNoteFingerprint
 };

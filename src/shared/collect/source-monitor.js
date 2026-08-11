@@ -25,7 +25,11 @@ const {
   validateSourceMonitorRegistryText
 } = require('../validate/source-monitor-registry-validator');
 const { CANDIDATE_SCHEMA_VERSION } = require('../common/candidate-artifacts');
-const { cameraItsReleaseNoteEvidence } = require('./camera-its-release-note-evidence');
+const {
+  cameraItsReleaseNoteEvidence,
+  cameraItsReleaseNoteExtract,
+  cameraItsReleaseNoteFingerprint
+} = require('./camera-its-release-note-evidence');
 
 const SNAPSHOT_SCHEMA_VERSION = 1;
 const PROCESSED_ID_LIMIT = 500;
@@ -342,6 +346,12 @@ function dateSignalForObservation(source = {}, observation = {}, releaseRow = nu
 
 function observationFromHtml({ source, url, html, status = 200, headers = {} }) {
   const canonicalUrl = normalizeSourceUrl(url);
+  let releaseNoteExtract = null;
+  try {
+    releaseNoteExtract = cameraItsReleaseNoteExtract(html, canonicalUrl);
+  } catch {
+    releaseNoteExtract = null;
+  }
   const httpLastModified = firstDateMatch(headers['last-modified'] || headers['Last-Modified']);
   const releaseRows = extractReleaseRows(html, canonicalUrl);
   const primaryReleaseRow = releaseRows[0] || {};
@@ -359,10 +369,12 @@ function observationFromHtml({ source, url, html, status = 200, headers = {} }) 
     content_hash: contentHash(html),
     normalized_content_hash: normalizedContentHash(html),
     // 릴리스 노트 문서는 "무엇이 적혀 있나"가 기사감인데 이벤트 후보는 자리표시자만 실어 왔다.
-    // 페이지에서 뽑은 증거를 이벤트까지 들려보내, 본문이 진짜 바뀐 주에 구체적인 기사가 되게 한다.
-    // 판정(언제 바뀌었나)은 그대로 정규화 본문 해시 비교가 한다 — 날짜만 바뀐 날은 여전히
-    // metadata_only_changed로 후보를 만들지 않는다.
-    release_note_evidence: cameraItsReleaseNoteEvidence(html, canonicalUrl),
+    // 섹션 지문은 스냅샷에 남겨 다음 실행에서 무엇이 바뀌었는지 가리고, 문장·링크가 붙은
+    // 추출 결과는 이벤트까지만 들려보낸다(스냅샷에는 저장하지 않는다).
+    // 판정(언제 바뀌었나)은 그대로 정규화 본문 해시 비교가 한다.
+    // 부가 기능인 내용 추출이 실패해도 핵심인 변화 감지는 계속돼야 하므로 여기서 삼킨다.
+    release_note_sections: cameraItsReleaseNoteFingerprint(releaseNoteExtract),
+    release_note_extract: releaseNoteExtract,
     anchors: meaningfulAnchors(html, canonicalUrl),
     release_row_date: primaryReleaseRow.date || '',
     release_row_version: primaryReleaseRow.version || '',
@@ -535,6 +547,7 @@ function buildEvent({ source, previous, current, eventType, dateSource, effectiv
     evidenceKey
   });
   const date_confidence = dateSourceConfidence(dateSource);
+  const contentChanged = text(previous?.normalized_content_hash) !== text(current?.normalized_content_hash);
   const candidateAllowed = !duplicate &&
     !NON_CONTENT_CHANGE_EVENT_TYPES.has(eventType) &&
     !CANDIDATE_BLOCKED_EVENT_TYPES.has(eventType);
@@ -553,14 +566,18 @@ function buildEvent({ source, previous, current, eventType, dateSource, effectiv
     title: current?.title || previous?.title || source.source_id,
     previous_values: withoutDerivedEvidence(previous),
     current_values: withoutDerivedEvidence(current),
-    content_changed: text(previous?.normalized_content_hash) !== text(current?.normalized_content_hash),
+    content_changed: contentChanged,
     detected_at: detectedAt,
     effective_date: normalizedEffectiveDate,
     date_source: dateSource,
     date_confidence,
     candidate_allowed: candidateAllowed,
     main_article_allowed: mainArticleAllowed,
-    release_note_evidence: current?.release_note_evidence || null,
+    // 증거는 본문이 실제로 바뀐 이벤트에만 싣는다. anchor_added/page_added는 candidate_allowed
+    // 이지만 본문 변경이 아니므로, 문서 내용을 그 주의 변화로 보고하면 과다 주장이 된다.
+    release_note_evidence: contentChanged
+      ? cameraItsReleaseNoteEvidence(current?.release_note_extract, previous?.release_note_sections)
+      : null,
     release_row_date: releaseRow?.date || current?.release_row_date || '',
     release_row_version: releaseRow?.version || current?.release_row_version || '',
     release_row_anchor: releaseRow?.anchor || current?.release_row_anchor || '',
@@ -671,14 +688,13 @@ function classifyObservation({ source, previous, current, snapshot, detectedAt }
   return event;
 }
 
-// release_note_evidence는 매 실행마다 페이지에서 다시 뽑는 파생 값이다. 스냅샷에도, git으로
-// 추적되는 source-change-events.json의 previous/current_values에도 저장하지 않는다 —
-// 파일만 커지고 diff가 시끄러워질 뿐 변화 판정에는 쓰이지 않는다(해시가 그 일을 한다).
-// 증거는 event의 release_note_evidence 필드 한 곳으로만 전달된다.
+// release_note_extract(문장·링크가 붙은 추출 결과)는 매 실행마다 다시 뽑는 파생 값이다.
+// 스냅샷에도, git으로 추적되는 source-change-events.json의 previous/current_values에도
+// 저장하지 않는다 — 파일만 커지고 diff가 시끄러워질 뿐이다. 다음 실행의 비교에 필요한 것은
+// 섹션 지문(release_note_sections)뿐이고 그것만 영속화한다.
 function withoutDerivedEvidence(observation) {
   if (!observation) return null;
-  const { release_note_evidence: derived, ...persisted } = observation;
-  void derived;
+  const { release_note_extract, ...persisted } = observation;
   return persisted;
 }
 
@@ -830,8 +846,9 @@ function candidateFromEvent(event, source) {
     source_reliability: 'official',
     source_quality_required: true,
     ...sourceQuality,
-    version_or_release: releaseNoteEvidence?.version_or_release ||
-      event.release_row_version || event.release_row_anchor || releaseEvidenceKey(event.current_values?.anchors || []),
+    version_or_release: event.release_row_version ||
+      releaseNoteEvidence?.version_or_release ||
+      event.release_row_anchor || releaseEvidenceKey(event.current_values?.anchors || []),
     api_or_component: releaseNoteEvidence?.api_or_component ||
       (bucket === 'cpp_ai_tooling_fallback' ? 'Android native tooling workflow' : 'Camera source snapshot change'),
     behavior_change: releaseNoteEvidence?.behavior_change || event.reason,
@@ -1110,6 +1127,7 @@ module.exports = {
   filterSnapshotWritesByIncludedEvidenceIds,
   loadRegistry,
   loadSnapshot,
+  observationFromHtml,
   markdownReport,
   runSourceMonitor,
   sourceEventsJsonPath,
