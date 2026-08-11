@@ -148,6 +148,58 @@ test('strips the locale query string from the emitted evidence URL', async () =>
   }
 });
 
+test('warns when the registered source URL is unreadable instead of blaming link hosts', async () => {
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  try {
+    await resolveMediatekSecurityBulletinItems(indexHtml(), source({ url: '', sourceUrl: 'not-a-url' }), {
+      fetchTextImpl: async (url) => {
+        throw new Error(`should not fetch: ${url}`);
+      }
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
+
+  assert.ok(warnings.some(line => line.includes('registered source URL is unreadable')));
+  assert.ok(!warnings.some(line => line.includes('host differs from')), 'host 불일치로 잘못 보고하지 않는다');
+});
+
+test('warns when no monthly bulletin link matches on the index page', async () => {
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  try {
+    await resolveMediatekSecurityBulletinItems(
+      '<html><body><a href="https://www.mediatek.com/product-security-bulletin">Security Bulletin</a></body></html>',
+      source(),
+      {
+        fetchTextImpl: async (url) => {
+          throw new Error(`should not fetch: ${url}`);
+        }
+      }
+    );
+  } finally {
+    console.warn = originalWarn;
+  }
+
+  assert.ok(warnings.some(line => line.includes('no monthly bulletin link matched')));
+});
+
+test('warns when the monthly page returns an empty body', async () => {
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  try {
+    await resolveMediatekSecurityBulletinItems(indexHtml(), source(), { fetchTextImpl: async () => '' });
+  } finally {
+    console.warn = originalWarn;
+  }
+
+  assert.ok(warnings.some(line => line.includes('returned an empty body')));
+});
+
 test('warns when the monthly page has no CVE table rows', async () => {
   const warnings = [];
   const originalWarn = console.warn;
