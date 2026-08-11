@@ -1,43 +1,20 @@
 // Android Security Bulletin의 월별 페이지를 따라가 CVE 표를 파싱하고,
 // 카메라/미디어 핵심 CVE를 CVE별 후보로 만든다. 인덱스 페이지(월별 링크)만 보던
 // 기존 parseAndroidSecurityBulletin의 source-gap을 보완한다(게이트 약화 없이 진짜 증거 생성).
-const { decodeHtml } = require('../common/common');
 const { canonicalContentUrl, fetchUrlForContent, fetchTextWithLimit } = require('./source-intelligence-utils');
-
-const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
-
-const SEVERITY_RANK = { critical: 4, high: 3, moderate: 2, medium: 2, low: 1 };
-
-// 미디어+카메라 핵심: Media framework, Camera service/HAL, V4L2/media 커널, 벤더 camera/ISP.
-// 실제 게시판의 벤더/커널 섹션은 카메라 신호를 코드네임(camss/camx/csiphy 등)으로만 표기하므로 함께 본다.
-// dng_sdk/libpng/libjpeg/RAW는 촬영한 RAW를 DNG로 저장하거나 썸네일/EXIF 이미지를 디코딩하는
-// 카메라 출력 처리 라이브러리라 함께 본다. (bare "dng"는 무관 텍스트 오탐이 커서 제외하고
-// 라이브러리명 dng_sdk/libdng로 한정한다.)
-const CAMERA_MEDIA_PATTERN =
-  /\b(?:camera|camera2|cameraserver|camera\s*hal|isp|image\s*sensor|v4l2|video4linux|camss|camx|csiphy|csid|cam[_-]\w+|drivers\/media|media\s*framework|libstagefright|stagefright|mediacodec|mediaprovider|mediaserver|media\s*codec|dng_sdk|libdng|libpng|libjpeg(?:-turbo)?|camera\s*raw|raw\s+image)\b/i;
-
-const CVE_PATTERN = /CVE-\d{4}-\d{4,}/i;
+const {
+  CAMERA_MEDIA_PATTERN,
+  CVE_PATTERN,
+  MONTH_NAMES,
+  cleanHtmlText: clean,
+  minimumSeverityRank,
+  severityRank
+} = require('./security-bulletin-shared');
 
 function defaultFetchText(url) {
   // source.android.com은 지역/Accept-Language에 따라 비영어(예: 번체 중국어) 페이지를 반환한다.
   // 그러면 표 헤더(Severity/Type)가 번역돼 컬럼 매칭이 깨지므로, fetchUrlForContent로 hl=en을 강제한다.
   return fetchTextWithLimit(globalThis.fetch, fetchUrlForContent(url), { timeoutMs: 5000, maxBytes: 400000 });
-}
-
-function clean(html = '') {
-  const stripped = String(html)
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&mdash;/gi, '—')
-    .replace(/&ndash;/gi, '–');
-  return decodeHtml(stripped).replace(/\s+/g, ' ').trim();
-}
-
-function severityRank(value) {
-  return SEVERITY_RANK[String(value || '').trim().toLowerCase()] || 0;
 }
 
 function monthLabel(date) {
@@ -47,19 +24,35 @@ function monthLabel(date) {
   return name ? `${name} ${match[1]}` : '';
 }
 
+// 월별 게시판 페이지의 URL은 경로에 게시 날짜를 그대로 담는다
+// (예: /docs/security/bulletin/2026/2026-08-01). Overview나 버전별 게시판 같은
+// 내비게이션 링크에는 이 날짜 경로가 없다.
+const MONTHLY_BULLETIN_URL_PATTERN = /\/20\d{2}-\d{2}-\d{2}(?:[/?#]|$)/;
+
 function latestBulletin(indexItems) {
-  const withUrl = (Array.isArray(indexItems) ? indexItems : []).filter(item => item && item.url);
-  if (!withUrl.length) return null;
-  // 월별 게시판 링크는 href에 날짜를 담아 publishedAt가 채워진다. 날짜가 없는 항목
-  // (Overview 등 네비게이션 링크)은 제외하고 날짜가 가장 최신인 게시판을 고른다.
-  const dated = withUrl
+  // 인덱스에는 월별 게시판 말고도 Overview 같은 내비게이션 링크가 섞여 있고, 그 링크도
+  // 주변 텍스트에서 최신 월 날짜를 물려받는다. publishedAt만 보고 고르면 날짜가 같을 때
+  // 먼저 나온 Overview가 이겨서 CVE 표가 없는 페이지를 받아 오게 된다
+  // (라이브 실측 2026-08-11: Overview가 August와 같은 2026-08-01을 달고 있어
+  // 리졸버가 asb-overview를 fetch하고 카메라 CVE 0건을 반환했다).
+  // 그래서 URL 경로에 게시 날짜가 있는 월별 게시판만 후보로 본다.
+  const items = Array.isArray(indexItems) ? indexItems : [];
+  const monthlyBulletins = items.filter(item => item && item.url && MONTHLY_BULLETIN_URL_PATTERN.test(item.url));
+  if (!monthlyBulletins.length) {
+    // 이 소스는 generic fallback이 막혀 있어(followed-source-item-resolvers.js) 빈 결과가 곧
+    // "이번 주 카메라 CVE 없음"으로 읽힌다. URL 형태가 바뀌어 매치가 0건이 된 경우와 구분되게
+    // 로그를 남긴다 — 이 커밋이 고친 원래 장애가 정확히 이 무음 실패였다.
+    console.warn(`security-bulletin-cve: index had ${items.length} link(s) but none matched the monthly bulletin URL shape; no CVE candidates produced.`);
+    return null;
+  }
+  const dated = monthlyBulletins
     .map((item, index) => ({ item, index, time: Date.parse(item.publishedAt || '') }))
     .filter(entry => !Number.isNaN(entry.time));
   if (dated.length > 0) {
     return dated.sort((left, right) => right.time - left.time || left.index - right.index)[0].item;
   }
   // 파싱 가능한 날짜가 전혀 없으면 인덱스의 첫 항목(게시판은 최신순으로 나열된다)을 쓴다.
-  return withUrl[0];
+  return monthlyBulletins[0];
 }
 
 function parseCells(rowHtml) {
@@ -203,7 +196,7 @@ function buildCveItem(row, bulletin, source) {
 async function resolveSecurityBulletinCveItems(indexItems = [], source = {}, options = {}) {
   const fetchTextImpl = options.fetchTextImpl || defaultFetchText;
   const maxItems = Number.isFinite(options.maxItems) ? Math.max(0, options.maxItems) : 15;
-  const minRank = severityRank(options.minSeverity || 'moderate') || SEVERITY_RANK.moderate;
+  const minRank = minimumSeverityRank(options.minSeverity);
 
   const bulletin = latestBulletin(indexItems);
   if (!bulletin) return [];

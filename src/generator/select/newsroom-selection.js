@@ -87,7 +87,8 @@ const {
   seriesPatchNumber
 } = require('../../shared/common/article-groups');
 const {
-  dateQualityForCandidate
+  dateQualityForCandidate,
+  monthRangeOverlapsWindow
 } = require('../../shared/common/date-signals');
 const {
   articleIdentityKey
@@ -126,14 +127,34 @@ function utcDayStart(date) {
   return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
 }
 
+function newsletterDayStart(newsletterDate) {
+  return utcDayStart(newsletterDate ? new Date(`${newsletterDate}T00:00:00Z`) : new Date());
+}
+
 function daysSincePublished(candidate, newsletterDate) {
   const rawDate = selectionDate(candidate);
   const published = rawDate ? new Date(rawDate) : null;
-  const base = newsletterDate ? new Date(`${newsletterDate}T00:00:00Z`) : new Date();
   const publishedDay = utcDayStart(published);
-  const baseDay = utcDayStart(base);
+  const baseDay = newsletterDayStart(newsletterDate);
   if (publishedDay === null || baseDay === null) return null;
   return Math.max(0, Math.floor((baseDay - publishedDay) / (24 * 60 * 60 * 1000)));
+}
+
+// month 정밀도 후보(AOSP Site Updates의 월별 묶음 행)는 그 달 어느 날의 변경인지 알 수 없어
+// 날짜가 달의 1일로 채워진다. 나이는 계속 1일 기준(가장 오래된 쪽)으로 보수적으로 재서 main
+// 선정 창 등급을 느슨하게 만들지 않는다. 다만 stale 탈락만은 달 범위 겹침으로 구제한다 —
+// 수집(withinLookback)도 같은 겹침 판정을 쓰는데 선정만 1일 기준 점으로 잘라내면 같은 후보가
+// 수집에는 들어오고 선정에서 통째로 사라진다. 실측 2026-08-10: AOSP Camera ITS 문서 갱신
+// 2건("sub-camera testing 가이드", "scene0 fast-FAIL 설명")이 40일령으로 계산돼 reference
+// 창(35일) 밖으로 밀려 참고 섹션에도 남지 않았다.
+// 겹침 판정 방식만 같고 창 길이는 서로 다른 knob이다(수집=runtimeConfig.lookbackDays,
+// 선정=policy.referenceContextDays). 두 값을 계약으로 묶지는 않는다.
+function monthRangeStillInReferenceWindow(candidate, newsletterDate, policy) {
+  if (datePrecision(candidate) !== 'month') return false;
+  const baseDay = newsletterDayStart(newsletterDate);
+  if (baseDay === null) return false;
+  const windowStartMs = baseDay - policy.referenceContextDays * 24 * 60 * 60 * 1000;
+  return monthRangeOverlapsWindow(selectionDate(candidate), windowStartMs, baseDay);
 }
 
 function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectionWindowPolicy()) {
@@ -172,6 +193,14 @@ function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectio
       freshness_window: 'reference',
       days_since_published: ageDays,
       selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; within reference ${policy.referenceContextDays} day window`
+    };
+  }
+
+  if (monthRangeStillInReferenceWindow(candidate, newsletterDate, policy)) {
+    return {
+      freshness_window: 'reference',
+      days_since_published: ageDays,
+      selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; month range still overlaps the reference ${policy.referenceContextDays} day window`
     };
   }
 
@@ -683,6 +712,9 @@ function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = 
   const maxAge = Number(catchUpPolicy.maxAgeDays) || 0;
   const history = exposureHistory || { articles: [] };
   return ensureArray(referenceCandidates).filter(candidate => {
+    // month 정밀도 후보는 날짜가 달의 1일로 채워진 값이라 그 달 어느 날인지 모른다. catch-up이
+    // main 기사로 올리면 모르는 날짜가 기사 날짜로 발행된다. 참고 레인까지만 남긴다.
+    if (datePrecision(candidate) === 'month') return false;
     const bucket = text(candidate.relevance_bucket || candidateScope(candidate).relevance_bucket);
     if (!eligibleBuckets.has(bucket)) return false;
     const age = Number(candidate.days_since_published);

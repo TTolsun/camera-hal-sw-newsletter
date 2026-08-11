@@ -95,7 +95,7 @@ const {
   ensureArray
 } = require('../render/newsletter-renderer');
 const {
-  buildReferenceArticles
+  buildReferenceArticlesForIssue
 } = require('../render/reference-articles');
 const {
   buildPromptContexts
@@ -797,12 +797,12 @@ async function main() {
   let newsletterMarkdown;
   let newsletterHtmlContent;
   try {
-    // 결정론적 '참고 / 더 읽을거리' 섹션: reference 윈도우(22~90일) 후보 중 적격 버킷의
-    // dated+sourced 항목을 메인과 중복 없이 주입한다(LLM claim 없음).
-    editor.reference_articles = buildReferenceArticles(
-      ensureArray(shortlistReport?.reference_context_candidates),
-      { excludeUrls: ensureArray(shortlistReport?.selected_articles).map(article => article && article.url).filter(Boolean) }
-    );
+    // 결정론적 '참고 / 더 읽을거리' 섹션: 적격 버킷의 dated+sourced 후보를 메인과 중복 없이
+    // 주입한다(LLM claim 없음). reference 윈도우 후보만 넣으면 primary/fallback 창에서 main
+    // 경쟁에 진 카메라 코어 후보가 뉴스레터에 흔적 없이 사라진다 — 실측 2026-08-10: 창 안
+    // 적격 후보 12건 중 기사는 2건뿐이었고, AOSP Camera ITS 문서 갱신 2건을 포함한 나머지는
+    // 어느 섹션에도 나오지 않았다. 풀 조립·제외 규칙은 reference-articles 모듈이 단일 출처다.
+    editor.reference_articles = buildReferenceArticlesForIssue(shortlistReport);
     newsletterMarkdown = buildMarkdown(editor);
     newsletterHtmlContent = buildHtml(editor);
     assertTerminalPublicationContracts({

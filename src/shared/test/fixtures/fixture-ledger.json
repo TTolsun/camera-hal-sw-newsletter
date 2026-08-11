@@ -679,6 +679,28 @@
       ]
     },
     {
+      "path": "source-html/mediatek-security-bulletin-2026-08.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "MediaTek monthly bulletin camera CVE extraction",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
+    },
+    {
+      "path": "source-html/mediatek-security-bulletin-index.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "MediaTek security bulletin index newest-month follow",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ]
+    },
+    {
       "path": "source-html/samsung-mobile-security.html",
       "source": "curated",
       "allowedUse": "parser-source-html",

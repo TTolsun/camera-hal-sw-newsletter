@@ -44,6 +44,7 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - Android Security Bulletin (`release-note-watch`): https://source.android.com/docs/security/bulletin
 - Samsung Mobile Security Updates (`release-note-watch`): https://security.samsungmobile.com/securityUpdate.smsb
 - Qualcomm Security Bulletins (`release-note-watch`): https://docs.qualcomm.com/product/publicresources/securitybulletin
+- MediaTek Security Bulletin (`release-note-watch`): https://www.mediatek.com/product-security-bulletin
 - Android Developer Newsletter (`documentation-watch`): https://developer.android.com/newsletter
 
 공개 AOSP는 2025년 3월 이후 `main` 브랜치로 개발이 흘러들지 않고 릴리스 태그(`android-N.M.P_rK`)로 몇 달에 한 번 통째로 공개됩니다. AOSP Release Source Drop 출처는 build-numbers 표에서 릴리스 쌍을 고르고, 그 차이(`이전태그..새태그`)에서 camera 경로를 건드린 커밋만 모아 저장소별로 후보 1건을 만듭니다. 감시 저장소는 `platform/hardware/interfaces`(Camera HAL AIDL), `platform/frameworks/av`(camera framework/cameraserver), `platform/hardware/google/camera`(Google Camera HAL)입니다.

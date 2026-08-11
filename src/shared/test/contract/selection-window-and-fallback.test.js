@@ -44,6 +44,97 @@ test('month-level dated candidates do not receive exact-day freshness scoring', 
   assert.match(monthWindow.selection_window_reason, /month-level date precision/);
 });
 
+// 실측 2026-08-10: AOSP Site Updates의 'July 2026' 행(Camera ITS 문서 갱신 2건)이 07-01로
+// 채워져 40일령으로 계산됐고, reference 창(35일)을 넘겨 main·reference 어느 레인에도 남지
+// 못했다. 수집(collect-news-candidates.js의 withinLookback)은 같은 후보를 달 범위 겹침으로
+// 창 안이라 판단하는데 선정만 달의 1일을 점으로 잘라내서 생긴 불일치였다.
+// 나이는 그대로 보수적으로(달의 1일 기준) 재고, stale 탈락만 겹침으로 구제한다.
+test('a month-level candidate whose month still overlaps the reference window is rescued from stale', () => {
+  const metadata = freshnessWindowMetadata(candidate({
+    title: 'AOSP Site Updates - Camera ITS tests',
+    url: 'https://source.android.com/docs/compatibility/cts/camera-its-tests',
+    published_date: '2026-07-01',
+    datePrecision: 'month'
+  }), '2026-08-10');
+
+  assert.equal(metadata.days_since_published, 40, '나이는 달의 1일 기준으로 보수적으로 잰다');
+  assert.equal(metadata.freshness_window, 'reference');
+  assert.match(metadata.selection_window_reason, /month range still overlaps/);
+});
+
+// month 정밀도가 main 선정 창(primary 7 / fallback 21)을 느슨하게 만들면 안 된다.
+// 최대 한 달 된 묶음 행이 '이번 주 신호'로 승격되는 경로를 막는다.
+test('month-level date precision never upgrades a candidate into the main selection windows', () => {
+  const metadata = freshnessWindowMetadata(candidate({
+    title: 'AOSP Site Updates - July camera row',
+    url: 'https://source.android.com/docs/whatsnew/site-updates#july',
+    published_date: '2026-07-01',
+    datePrecision: 'month'
+  }), '2026-07-31');
+
+  assert.equal(metadata.days_since_published, 30, '달 말일이 아니라 1일 기준으로 잰다');
+  assert.equal(metadata.freshness_window, 'reference', 'main 창(primary/fallback)이 아니라 reference에 머문다');
+});
+
+test('a month-level candidate whose month no longer overlaps the reference window stays stale', () => {
+  const metadata = freshnessWindowMetadata(candidate({
+    title: 'AOSP Site Updates - stale month row',
+    url: 'https://source.android.com/docs/whatsnew/site-updates#old',
+    published_date: '2026-05-01',
+    datePrecision: 'month'
+  }), '2026-08-10');
+
+  assert.equal(metadata.freshness_window, 'stale');
+});
+
+// stale에서 구제된 month 후보는 참고 섹션용 reference 후보로만 남아야 한다. catch-up 레인이
+// 그걸 main 기사로 승격하면 '1일로 채워진 날짜'가 기사 날짜로 발행된다. 지금은
+// catchUpPolicy.maxAgeDays == referenceContextDays라 승격이 불가능한데, 그 값 일치는
+// 정책 파일에서 언제든 깨질 수 있으므로 계약을 테스트로 잠근다.
+test('a rescued month-precision candidate never becomes a main article', () => {
+  const monthRow = policyPrimaryCandidate(90, {
+    title: 'AOSP Site Updates - July camera rows',
+    url: 'https://source.android.com/docs/whatsnew/site-updates#july-camera',
+    published_date: '2026-07-01',
+    datePrecision: 'month',
+    date_precision: 'month'
+  });
+
+  const report = buildShortlistReport('2026-08-10', { candidates: [monthRow] }, {
+    exposureHistory: { articles: [] },
+    catchUpPolicy: {
+      enabled: true,
+      maxCatchUpArticles: 2,
+      maxReleaseClassArticles: 1,
+      maxAgeDays: 90,
+      targetMainArticles: 3,
+      eligibleBuckets: [articlePolicy.primaryCameraStack.buckets[0]],
+      activationMode: 'fill_open_slots'
+    }
+  });
+
+  const urls = [
+    ...(report.selected_articles || []),
+    ...(report.catch_up_articles || [])
+  ].map(item => item.url);
+
+  assert.ok(
+    !urls.includes('https://source.android.com/docs/whatsnew/site-updates#july-camera'),
+    'stale 구제는 참고 레인까지만이다 — main·catch-up 승격은 없다'
+  );
+});
+
+test('day-precision candidates keep exact-day aging and are not rescued', () => {
+  const metadata = freshnessWindowMetadata(candidate({
+    title: 'Exact dated release note',
+    url: 'https://example.com/exact-aging',
+    published_date: '2026-07-01'
+  }), '2026-08-10');
+
+  assert.equal(metadata.days_since_published, 40);
+  assert.equal(metadata.freshness_window, 'stale');
+});
+
 test('freshness window metadata maps candidate age without changing freshness score semantics', () => {
   const cases = [
     ['2026-05-07', 'primary', 3],
