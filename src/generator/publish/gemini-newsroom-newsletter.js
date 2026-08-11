@@ -95,9 +95,7 @@ const {
   ensureArray
 } = require('../render/newsletter-renderer');
 const {
-  buildReferenceArticles,
-  referenceArticleCandidatePool,
-  referenceArticleExcludeUrls
+  buildReferenceArticlesForIssue
 } = require('../render/reference-articles');
 const {
   buildPromptContexts
@@ -804,10 +802,7 @@ async function main() {
     // 경쟁에 진 카메라 코어 후보가 뉴스레터에 흔적 없이 사라진다 — 실측 2026-08-10: 창 안
     // 적격 후보 12건 중 기사는 2건뿐이었고, AOSP Camera ITS 문서 갱신 2건을 포함한 나머지는
     // 어느 섹션에도 나오지 않았다. 풀 조립·제외 규칙은 reference-articles 모듈이 단일 출처다.
-    editor.reference_articles = buildReferenceArticles(
-      referenceArticleCandidatePool(shortlistReport),
-      { excludeUrls: referenceArticleExcludeUrls(shortlistReport) }
-    );
+    editor.reference_articles = buildReferenceArticlesForIssue(shortlistReport);
     newsletterMarkdown = buildMarkdown(editor);
     newsletterHtmlContent = buildHtml(editor);
     assertTerminalPublicationContracts({

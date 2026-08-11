@@ -150,7 +150,8 @@ test('routes android-security-bulletin to the CVE resolver with indexItems as th
 // 첫 인자로 받는다. 배선이 바뀌면 예외 없이 후보 0건이 되어 소스가 조용히 사라지므로
 // "어느 URL을 fetch했는가"로 배선을 관찰해 고정한다.
 test('routes mediatek-security-bulletin to the CVE resolver with text (index HTML) as the first arg', async () => {
-  const MEDIATEK_AUGUST_URL = 'https://www.mediatek.com/product-security-bulletin/august-2026?hsLang=en';
+  // 리졸버가 로케일 파라미터(?hsLang=en)를 떼고 fetch한다.
+  const MEDIATEK_AUGUST_URL = 'https://www.mediatek.com/product-security-bulletin/august-2026';
   const monthly = readTextFixture('source-html/mediatek-security-bulletin-2026-08.html');
   const fetched = [];
   const fetchTextImpl = async (url) => {

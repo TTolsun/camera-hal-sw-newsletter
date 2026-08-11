@@ -2,6 +2,11 @@
 // 헬퍼의 단일 출처. 게시판마다 표 구조는 다르지만 "무엇을 카메라로 볼 것인가"와 "어느 심각도부터
 // 실을 것인가"는 같은 기준이어야 한다. 두 모듈에 각자 두면 한쪽만 고쳐도 다른 쪽 수집 결과가
 // 말없이 달라지므로 여기 한 곳에만 둔다.
+//
+// 주의: 어휘는 공유하지만 **패턴에 먹이는 필드는 리졸버마다 다르다**. Android는
+// section/component/type/References href를, MediaTek은 subcomponent/CWE/description을 넣는다.
+// 그래서 토큰을 하나 추가해도 한쪽에서만 발동할 수 있다 — 새 토큰을 넣을 땐 두 리졸버 각각의
+// 입력 필드에 그 토큰이 실제로 나타나는지 확인할 것.
 const { decodeHtml } = require('../common/common');
 
 const MONTH_NAMES = Object.freeze([

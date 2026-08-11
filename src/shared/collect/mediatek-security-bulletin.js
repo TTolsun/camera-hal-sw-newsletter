@@ -61,6 +61,8 @@ function sameHostBulletinUrl(href, source) {
     return '';
   }
   if (absolute.hostname.toLowerCase() !== host) return '';
+  // `?hsLang=en` 같은 로케일 파라미터는 증거 URL의 일부가 아니다. 발행 링크에 남기지 않는다.
+  absolute.search = '';
   return absolute.toString();
 }
 
@@ -71,6 +73,13 @@ function sameHostBulletinUrl(href, source) {
 function latestMonthlyBulletin(indexHtml = '', source = {}) {
   let latest = null;
   let foreignHostSkips = 0;
+  const registeredHost = sourceHost(source);
+  if (!registeredHost) {
+    // 등록 소스 URL을 못 읽으면 host를 묶을 수 없다. 링크 host가 실제로 다른 경우와 원인이
+    // 달라서 사유를 따로 남긴다(같은 카운터로 합치면 사실과 다른 경고가 찍힌다).
+    console.warn('mediatek-security-bulletin: registered source URL is unreadable; cannot bind monthly links to a host.');
+    return null;
+  }
   for (const match of String(indexHtml).matchAll(MONTHLY_LINK_PATTERN)) {
     const month = MONTH_INDEX.get(match[2].toLowerCase());
     if (!month) continue;
@@ -86,7 +95,7 @@ function latestMonthlyBulletin(indexHtml = '', source = {}) {
     }
   }
   if (foreignHostSkips > 0) {
-    console.warn(`mediatek-security-bulletin: skipped ${foreignHostSkips} monthly link(s) whose host differs from the registered source host.`);
+    console.warn(`mediatek-security-bulletin: skipped ${foreignHostSkips} monthly link(s) whose host differs from ${registeredHost}.`);
   }
   if (!latest) {
     // 이 소스는 generic fallback이 막혀 있어 빈 결과가 곧 "이번 달 카메라 CVE 없음"으로 읽힌다.
@@ -153,6 +162,8 @@ function buildCveItem(row, bulletin, source) {
     api_or_component: `MediaTek Security Bulletin / ${row.component}`,
     behavior_change:
       `${row.description || 'Security fix'}${weakness} — ${row.severity} severity fix shipped in the ${label} MediaTek Security Bulletin (${row.cve_id}).${chipsets}`,
+    // Android 게시판은 framework/system 섹션이 섞여 있어 행마다 버킷을 유도하지만, MediaTek은
+    // 벤더 SoC 커널 컴포넌트(imgsensor/imgsys)만 카메라로 잡히므로 항상 driver/image pipeline이다.
     relevanceBucketHint: 'camera_driver_image_pipeline',
     cve_id: row.cve_id,
     severity: row.severity
@@ -171,21 +182,35 @@ async function resolveMediatekSecurityBulletinItems(indexHtml = '', source = {},
   const latest = latestMonthlyBulletin(indexHtml, source);
   if (!latest) return [];
 
+  // 아래 실패 경로는 전부 빈 배열로 끝난다. 이 소스는 generic fallback이 막혀 있어 빈 결과가
+  // 곧 "이번 달 카메라 CVE 없음"으로 읽히므로, 신호 없음과 구조 변경/네트워크 장애를 구분할 수
+  // 있게 각 경로에 사유를 남긴다.
   let html;
   try {
     html = await fetchTextImpl(latest.url);
-  } catch {
+  } catch (error) {
+    console.warn(`mediatek-security-bulletin: failed to fetch ${latest.url}: ${error && error.message}`);
     return [];
   }
-  if (!html) return [];
+  if (!html) {
+    console.warn(`mediatek-security-bulletin: ${latest.url} returned an empty body.`);
+    return [];
+  }
 
   // 게시일이 없으면 날짜를 추정하지 않는다. dated 증거 없는 후보는 어차피 main이 될 수 없고,
   // 월 첫날로 채우면 선정 창이 실제보다 오래된 신호로 오해한다.
   const publishedAt = bulletinPublishedDate(html);
-  if (!publishedAt) return [];
+  if (!publishedAt) {
+    console.warn(`mediatek-security-bulletin: ${latest.url} has no Published date; no CVE candidates produced.`);
+    return [];
+  }
 
   const bulletin = { ...latest, publishedAt };
-  const relevant = parseMonthlyBulletin(html)
+  const rows = parseMonthlyBulletin(html);
+  if (rows.length === 0) {
+    console.warn(`mediatek-security-bulletin: ${bulletin.url} yielded no CVE table rows; the page structure may have changed.`);
+  }
+  const relevant = rows
     .filter(row => isCameraOrImaging(row) && severityRank(row.severity) >= minRank)
     .sort((left, right) => severityRank(right.severity) - severityRank(left.severity));
 

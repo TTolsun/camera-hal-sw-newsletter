@@ -3,6 +3,7 @@ const test = require('node:test');
 
 const {
   buildReferenceArticles,
+  buildReferenceArticlesForIssue,
   referenceArticleCandidatePool,
   referenceArticleExcludeUrls
 } = require('../../../render/reference-articles');
@@ -67,6 +68,52 @@ test('the exclude list covers both selected and demoted candidates', () => {
   });
 
   assert.deepEqual(urls.sort(), ['https://a.example/demoted', 'https://a.example/selected']);
+});
+
+// 라이브 결함을 실제로 고친 것은 "shortlistReport에서 풀을 조립해 참고 섹션을 만든다"는 배선이다.
+// 발행 파이프라인이 부르는 그 조합을 그대로 잠근다.
+test('builds the issue reference section from a shortlist report end to end', () => {
+  const items = buildReferenceArticlesForIssue({
+    shortlisted_candidates: [
+      candidate({ title: 'Selected main', url: 'https://a.example/selected', published_date: '2026-08-09' }),
+      candidate({ title: 'Unselected shortlist', url: 'https://a.example/shortlist', published_date: '2026-08-08' }),
+      candidate({ title: 'Demoted', url: 'https://a.example/demoted', published_date: '2026-08-07' })
+    ],
+    reference_context_candidates: [
+      candidate({ title: 'Reference window', url: 'https://a.example/reference', published_date: '2026-07-10' })
+    ],
+    selected_articles: [{ url: 'https://a.example/selected' }],
+    demoted_candidates: [{ url: 'https://a.example/demoted' }]
+  });
+
+  assert.deepEqual(items.map(item => item.title), ['Unselected shortlist', 'Reference window']);
+});
+
+// 참고 섹션도 발행 링크다. main에서 증거 부족으로 막힌 후보가 링크로 우회 노출되면 안 된다.
+test('the candidate pool applies the same evidence floor as the catch-up lane', () => {
+  const pool = referenceArticleCandidatePool({
+    shortlisted_candidates: [
+      candidate({ title: 'Weak evidence', url: 'https://a.example/weak', main_article_score_eligible: false }),
+      candidate({ title: 'Source gap', url: 'https://a.example/gap', source_gap_risk: true }),
+      candidate({ title: 'Strong', url: 'https://a.example/strong' })
+    ]
+  });
+
+  assert.deepEqual(pool.map(item => item.title), ['Strong']);
+});
+
+// month 정밀도 후보는 그 달 어느 날인지 모른다. 아는 만큼만(YYYY-MM) 표기해야 한다.
+test('renders month-precision candidates with month granularity, not a fabricated day', () => {
+  const items = buildReferenceArticles([
+    candidate({
+      title: 'AOSP Site Updates - Camera ITS tests',
+      url: 'https://source.android.com/docs/compatibility/cts/camera-its-tests',
+      published_date: '2026-07-01',
+      datePrecision: 'month'
+    })
+  ]);
+
+  assert.equal(items[0].published_date, '2026-07');
 });
 
 test('skips null or non-object entries without throwing', () => {

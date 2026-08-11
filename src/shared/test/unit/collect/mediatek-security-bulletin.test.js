@@ -6,7 +6,8 @@ const {
 } = require('../../../collect/mediatek-security-bulletin');
 const { readTextFixture } = require('../../helpers/fixture-loader');
 
-const AUGUST_URL = 'https://www.mediatek.com/product-security-bulletin/august-2026?hsLang=en';
+// 로케일 파라미터(?hsLang=en)는 리졸버가 떼어낸다 — fetch도 후보 URL도 파라미터 없는 형태다.
+const AUGUST_URL = 'https://www.mediatek.com/product-security-bulletin/august-2026';
 
 function source(overrides = {}) {
   return {
@@ -87,14 +88,14 @@ test('excludes camera CVEs below the Moderate severity floor', async () => {
 
 // MediaTek은 2월 링크를 'feb-2026'처럼 줄여 쓴다. 약어 매핑이 빠지면 그 달을 통째로 못 본다.
 test('resolves abbreviated month links such as feb-2026', async () => {
-  const FEB_URL = 'https://www.mediatek.com/product-security-bulletin/feb-2026?hsLang=en';
+  const FEB_URL = 'https://www.mediatek.com/product-security-bulletin/feb-2026';
   const fetched = [];
   const monthly = readTextFixture('source-html/mediatek-security-bulletin-2026-08.html');
 
   await resolveMediatekSecurityBulletinItems([
     '<html><body>',
     '<a href="https://www.mediatek.com/product-security-bulletin/january-2026?hsLang=en"></a>',
-    `<a href="${FEB_URL}"></a>`,
+    `<a href="${FEB_URL}?hsLang=en"></a>`,
     '</body></html>'
   ].join(''), source(), {
     fetchTextImpl: async (url) => {
@@ -108,18 +109,91 @@ test('resolves abbreviated month links such as feb-2026', async () => {
 
 // 이 리졸버가 만드는 후보 URL은 official_release_source 증거로 쓰인다. 인덱스에 섞인
 // 제3자 host 링크를 따라가면 남의 페이지를 MediaTek 공식 증거로 싣게 된다.
+// 정규식 자체가 깨져도 items가 비므로, "host 때문에 버렸다"는 사실을 경고로 확인한다.
 test('never follows a monthly link on a different host', async () => {
-  const items = await resolveMediatekSecurityBulletinItems(
-    '<html><body><a href="https://attacker.example/product-security-bulletin/december-2026?hsLang=en"></a></body></html>',
-    source(),
-    {
-      fetchTextImpl: async (url) => {
-        throw new Error(`should not fetch a foreign host: ${url}`);
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  let items;
+  try {
+    items = await resolveMediatekSecurityBulletinItems(
+      '<html><body><a href="https://attacker.example/product-security-bulletin/december-2026?hsLang=en"></a></body></html>',
+      source(),
+      {
+        fetchTextImpl: async (url) => {
+          throw new Error(`should not fetch a foreign host: ${url}`);
+        }
       }
-    }
-  );
+    );
+  } finally {
+    console.warn = originalWarn;
+  }
 
   assert.deepEqual(items, []);
+  assert.ok(
+    warnings.some(line => line.includes('host differs from www.mediatek.com')),
+    'host 불일치로 버렸다는 사유가 남아야 한다(정규식 미매치와 구분)'
+  );
+});
+
+// 로케일 파라미터는 증거 URL의 일부가 아니다.
+test('strips the locale query string from the emitted evidence URL', async () => {
+  const items = await resolveMediatekSecurityBulletinItems(indexHtml(), source(), {
+    fetchTextImpl: async () => readTextFixture('source-html/mediatek-security-bulletin-2026-08.html')
+  });
+
+  for (const item of items) {
+    assert.doesNotMatch(item.url, /hsLang/);
+    assert.match(item.url, /^https:\/\/www\.mediatek\.com\/product-security-bulletin\/august-2026#CVE_/);
+  }
+});
+
+test('warns when the monthly page has no CVE table rows', async () => {
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  try {
+    await resolveMediatekSecurityBulletinItems(indexHtml(), source(), {
+      fetchTextImpl: async () => '<html><body><p>Published 2026-08-03</p></body></html>'
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
+
+  assert.ok(warnings.some(line => line.includes('no CVE table rows')));
+});
+
+test('warns when the monthly fetch fails instead of looking like a quiet month', async () => {
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  try {
+    await resolveMediatekSecurityBulletinItems(indexHtml(), source(), {
+      fetchTextImpl: async () => {
+        throw new Error('network down');
+      }
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
+
+  assert.ok(warnings.some(line => line.includes('failed to fetch') && line.includes('network down')));
+});
+
+test('warns when the monthly page has no Published date', async () => {
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  try {
+    await resolveMediatekSecurityBulletinItems(indexHtml(), source(), {
+      fetchTextImpl: async () => readTextFixture('source-html/mediatek-security-bulletin-2026-08.html')
+        .replace('Published 2026-08-03', 'Coming soon')
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
+
+  assert.ok(warnings.some(line => line.includes('no Published date')));
 });
 
 test('resolves relative monthly links against the registered source URL', async () => {
@@ -137,7 +211,7 @@ test('resolves relative monthly links against the registered source URL', async 
     }
   );
 
-  assert.deepEqual(fetched, ['https://www.mediatek.com/product-security-bulletin/august-2026?hsLang=en']);
+  assert.deepEqual(fetched, [AUGUST_URL]);
 });
 
 test('returns empty when the bulletin has no Published date', async () => {

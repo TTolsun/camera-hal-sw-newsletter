@@ -52,6 +52,18 @@ function publishedTime(candidate) {
   return Number.isNaN(parsed) ? Number.NEGATIVE_INFINITY : parsed;
 }
 
+// month 정밀도 후보(AOSP Site Updates의 월별 묶음 행)는 그 달 어느 날인지 모르는 채 날짜가
+// 달의 1일로 채워져 있다. 그대로 렌더링하면 'July 2026'만 아는 신호를 '2026-07-01'이라는
+// 더 높은 정밀도로 발행하게 된다. 아는 만큼만(YYYY-MM) 표기한다.
+function displayPublishedDate(candidate) {
+  const raw = pick(candidate, 'published_date', 'publishedAt');
+  if (!raw) return '';
+  const precision = pick(candidate, 'date_precision', 'datePrecision').toLowerCase();
+  if (precision !== 'month') return raw;
+  const match = /^(\d{4})-(\d{2})/.exec(raw);
+  return match ? `${match[1]}-${match[2]}` : raw;
+}
+
 // 상한(DEFAULT_LIMIT)까지만 담기 때문에 정렬 순서가 곧 노출 순서다. 받은 순서대로 담으면
 // 카메라 관련도가 가장 높은 direct_aosp_camera 항목이 뒤로 밀려 잘리고(실측 2026-08-10:
 // AOSP Camera ITS 문서 갱신 2건이 lore 센서 패치들에 밀려 잘림), 같은 버킷 안에서는 오래된
@@ -70,6 +82,13 @@ function byBucketPriorityThenRecency(candidates) {
     .map(entry => entry.candidate);
 }
 
+// 참고 섹션도 발행물의 링크다. catch-up 레인이 reference 후보를 승급할 때 쓰는 것과 같은
+// 하한을 적용해, 증거가 약해 main에서 막힌 후보(source_gap_risk / main_article_score_eligible)를
+// 링크로만 우회 노출하지 않는다.
+function meetsReferenceEvidenceFloor(candidate) {
+  return candidate.main_article_score_eligible !== false && candidate.source_gap_risk !== true;
+}
+
 /**
  * shortlistReport에서 참고 섹션 후보 풀을 조립한다.
  * 선정되지 않은 shortlist 후보와 reference 창 후보를 함께 보되, selection이 "기사 source로
@@ -79,7 +98,7 @@ function referenceArticleCandidatePool(shortlistReport = {}) {
   const combined = [
     ...ensureArray(shortlistReport.shortlisted_candidates),
     ...ensureArray(shortlistReport.reference_context_candidates)
-  ].filter(candidate => candidate && typeof candidate === 'object');
+  ].filter(candidate => candidate && typeof candidate === 'object' && meetsReferenceEvidenceFloor(candidate));
   return excludeParentRoundupContainers(combined).kept;
 }
 
@@ -114,7 +133,7 @@ function buildReferenceArticles(candidates = [], options = {}) {
     const url = pick(candidate, 'url', 'article_url', 'sourceUrl');
     const title = pick(candidate, 'title');
     const source = pick(candidate, 'source_name', 'source');
-    const publishedDate = pick(candidate, 'published_date', 'publishedAt');
+    const publishedDate = displayPublishedDate(candidate);
     if (!url || !title || !source || !publishedDate || !isHttpUrl(url)) continue;
 
     const key = normalizeUrl(url);
@@ -133,8 +152,21 @@ function buildReferenceArticles(candidates = [], options = {}) {
   return items;
 }
 
+/**
+ * 참고 섹션 데이터를 shortlistReport 하나에서 끝까지 만든다.
+ * 발행 파이프라인은 이 함수만 부른다 — 풀 조립·제외·상한·정렬 규칙이 호출부로 새면
+ * 배선을 되돌려도 단위 테스트가 전부 통과하는 상태가 된다(2026-08-11 리뷰 지적).
+ */
+function buildReferenceArticlesForIssue(shortlistReport = {}, options = {}) {
+  return buildReferenceArticles(referenceArticleCandidatePool(shortlistReport), {
+    ...options,
+    excludeUrls: referenceArticleExcludeUrls(shortlistReport)
+  });
+}
+
 module.exports = {
   buildReferenceArticles,
+  buildReferenceArticlesForIssue,
   referenceArticleCandidatePool,
   referenceArticleExcludeUrls
 };

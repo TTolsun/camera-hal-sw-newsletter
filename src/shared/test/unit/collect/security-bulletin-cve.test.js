@@ -216,15 +216,42 @@ test('follows the monthly bulletin, not an Overview nav link that shares the new
 
 // 버전별 게시판(/bulletin/android-17)도 날짜 경로가 없는 내비 링크다. 월별 링크가 하나도
 // 없으면 아무 페이지나 받는 대신 조용히 비운다(없는 증거를 만들지 않는다).
-test('returns empty when the index has no monthly bulletin link', async () => {
-  const items = await resolveSecurityBulletinCveItems([
-    { url: 'https://source.android.com/docs/security/bulletin/asb-overview', publishedAt: '2026-06-01', title: 'Overview' },
-    { url: 'https://source.android.com/docs/security/bulletin/android-17', publishedAt: '2026-02-01', title: 'Android 17' }
-  ], source(), {
-    fetchTextImpl: async (url) => {
-      throw new Error(`should not fetch a non-monthly page: ${url}`);
-    }
-  });
+// 이 소스는 generic fallback이 막혀 있어 빈 결과가 곧 "이번 달 카메라 CVE 없음"으로 읽히므로,
+// 구조 변경으로 매치가 0건이 된 경우를 사후에 구분할 수 있게 경고를 남겨야 한다.
+test('returns empty and warns when the index has no monthly bulletin link', async () => {
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  let items;
+  try {
+    items = await resolveSecurityBulletinCveItems([
+      { url: 'https://source.android.com/docs/security/bulletin/asb-overview', publishedAt: '2026-06-01', title: 'Overview' },
+      { url: 'https://source.android.com/docs/security/bulletin/android-17', publishedAt: '2026-02-01', title: 'Android 17' }
+    ], source(), {
+      fetchTextImpl: async (url) => {
+        throw new Error(`should not fetch a non-monthly page: ${url}`);
+      }
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
 
   assert.deepEqual(items, []);
+  assert.ok(
+    warnings.some(line => line.includes('none matched the monthly bulletin URL shape')),
+    '월별 링크 무매치는 경고로 남아야 한다'
+  );
+});
+
+test('warns even when the index itself is empty', async () => {
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  try {
+    await resolveSecurityBulletinCveItems([], source(), { fetchTextImpl: monthlyFetch() });
+  } finally {
+    console.warn = originalWarn;
+  }
+
+  assert.ok(warnings.some(line => line.includes('none matched the monthly bulletin URL shape')));
 });
