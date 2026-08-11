@@ -207,6 +207,39 @@ test('an event without a body change carries no release-note evidence', () => {
   assert.equal(unchanged.release_note_evidence, null);
 });
 
+// 정규화 본문 해시는 "Last updated ..." 문구를 지우고 계산하므로, 섹션 본문 안의 갱신일만
+// 바뀌면 페이지 해시는 그대로인데 섹션 지문은 달라진다. 그 경우가 content_changed 게이트가
+// 실제로 일하는 지점이다 — 게이트가 없으면 "날짜만 바뀐 날"이 섹션 변화로 발행된다.
+test('a date-only edit inside a section does not become release-note evidence', () => {
+  const dated = (date) => releaseNotesHtml().replace(
+    '<p>Android 17 introduces the test status PASS* to detect marginally passing tests.</p>',
+    `<p>Android 17 introduces the test status PASS* to detect marginally passing tests. Last updated ${date} UTC.</p>`
+  );
+
+  const previous = observe(dated('2026-08-06'));
+  const current = observe(dated('2026-08-13'));
+  const event = classify(previous, current);
+
+  assert.equal(
+    current.normalized_content_hash,
+    previous.normalized_content_hash,
+    '정규화 해시는 갱신일 문구를 지우므로 같아야 한다(이 테스트의 전제)'
+  );
+  assert.equal(event.content_changed, false);
+  assert.equal(event.release_note_evidence, null, '본문 변경이 아닌 이벤트에는 증거를 싣지 않는다');
+});
+
+test('a release row version stays ahead of the release-note title', () => {
+  const event = classify(observe(), observe(withChangedNewTests()));
+  const candidate = candidateFromEvent({ ...event, release_row_version: 'ITS 17_r2' }, SOURCE);
+
+  assert.equal(
+    candidate.version_or_release,
+    'ITS 17_r2',
+    '행 단위 변경 이벤트의 구체 증거가 페이지 상수 제목에 덮이면 안 된다'
+  );
+});
+
 test('a first observation produces no release-note evidence', () => {
   const firstRun = classify(null, observe());
 
