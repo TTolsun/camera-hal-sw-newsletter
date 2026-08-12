@@ -10,6 +10,7 @@
 // run-state 모듈을 공유해 그대로 유지한다.
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { writeJson } = require('../../shared/common/common');
 const { sectionsAreDuplicate } = require('../../shared/common/section-identity');
 const { normalizeShortlistReport } = require('../select/selection-diagnostics');
@@ -28,7 +29,6 @@ const {
   buildNewsletterQualityReport,
   salvagePublishableSubset
 } = require('../quality/newsletter-quality');
-const { ensureArray } = require('../render/newsletter-renderer');
 const { validateEditor } = require('./orchestrator-editor-validation');
 const { pruneResolvedFallbackImageFalsePositives } = require('./orchestrator-image-warnings');
 const {

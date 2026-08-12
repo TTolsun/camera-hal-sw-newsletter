@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 
 const {
   buildHtml,
-  buildMarkdown,
-  ensureArray
+  buildMarkdown
 } = require('./newsletter-renderer');
 const {
   REJECT_PATH_PATTERN,

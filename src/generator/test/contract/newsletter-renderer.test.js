@@ -1,5 +1,8 @@
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
+const fs = require('node:fs');
+const path = require('node:path');
+const { execFileSync } = require('node:child_process');
 const test = require('node:test');
 
 const {
@@ -14,6 +17,9 @@ const {
   STORY_CONTRACT_VERSIONS,
   publicContractVersionFor
 } = require('../../../shared/common/story-contract-version');
+const {
+  trackedFiles
+} = require('../../../shared/tooling/tracked-files');
 
 // 지원 집합 바로 위 값. 숫자를 박아 두면 계약 버전이 추가될 때 이 테스트가 지원
 // 버전을 검사하게 되어 조용히 공허해진다.
@@ -487,4 +493,37 @@ test('newsletter renderer keeps v1 output byte-identical', () => {
     contextMarkdown: 'baa3a66bce12cd3b',
     contextHtml: 'd4b8200319f8c5b9'
   });
+});
+
+// #887 — ensureArray는 value-coercion이 정본이다. 렌더러가 재수출하는 바람에 발행 계층
+// 모듈들이 헬퍼 하나 때문에 렌더 계층을 로드하고 있었다. 경로를 옮긴 뒤 다시 새지 않도록
+// 실제 트리를 훑어 잠근다(손으로 만든 목록이 아니라 git 추적 파일이 입력이다).
+// import 문 하나를 통째로 잡는다. require 앞에서 `const {`를 거꾸로 찾는 방식은 무관한
+// 앞쪽 코드를 블록으로 오인해(이 파일 자신이 그렇게 걸렸다) 거짓 양성을 만든다.
+function renderRequireDestructurings(text) {
+  return [...text.matchAll(/const \{([^}]*)\}\s*=\s*require\('[^']*newsletter-renderer'\)/g)]
+    .map(match => match[1]);
+}
+
+test('no module reaches ensureArray through the newsletter renderer', () => {
+  const root = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim();
+  // 추적 파일은 공유 헬퍼로 받는다 — 인덱스에는 남고 워크트리에서 지워진 경로를 이미 거른다
+  // (그 둘을 섞으면 가드와 무관한 ENOENT로 죽는다).
+  // 미추적 파일도 함께 본다: 드리프트가 가장 흔히 생기는 순간이 새 파일을 쓴 직후·커밋 전이라
+  // 인덱스 목록만 보면 그 순간이 사각지대다.
+  const untracked = execFileSync('git', ['-C', root, 'ls-files', '--others', '--exclude-standard', 'src'], { encoding: 'utf8' })
+    .split('\n')
+    .filter(Boolean);
+  const files = [...trackedFiles(root).filter(file => file.startsWith('src/')), ...untracked]
+    .filter(file => file.endsWith('.js'));
+  const offenders = [];
+  for (const file of files) {
+    const text = fs.readFileSync(path.join(root, file), 'utf8');
+    if (renderRequireDestructurings(text).some(block => block.includes('ensureArray'))) {
+      offenders.push(file);
+    }
+  }
+
+  assert.deepEqual(offenders, [], 'ensureArray는 src/shared/common/value-coercion에서 직접 가져온다');
+  assert.equal(require('../../render/newsletter-renderer').ensureArray, undefined);
 });

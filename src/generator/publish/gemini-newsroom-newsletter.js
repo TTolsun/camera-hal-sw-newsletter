@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   kstDate,
   readJson,
@@ -91,8 +92,7 @@ const {
   buildMarkdown,
   buildHtml,
   buildFactCheckMarkdown,
-  buildEditorChiefBrief,
-  ensureArray
+  buildEditorChiefBrief
 } = require('../render/newsletter-renderer');
 const {
   buildReferenceArticlesForIssue

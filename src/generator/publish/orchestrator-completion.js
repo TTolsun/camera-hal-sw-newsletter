@@ -8,7 +8,7 @@
 // extracted verbatim from the generation orchestrator
 // (gemini-newsroom-newsletter.js).
 
-const { ensureArray } = require('../render/newsletter-renderer');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { sectionSummary } = require('../../shared/common/section-identity');
 const { isFinalSelected } = require('../select/selection-diagnostics');
 const {

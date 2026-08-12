@@ -6,11 +6,11 @@
 // Pure transforms on their arguments only — no generationRunState, no fs, no
 // module globals — extracted verbatim from gemini-newsroom-newsletter.js.
 
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   normalizeTitle,
   sectionUrls
 } = require('../../shared/common/section-identity');
-const { ensureArray } = require('../render/newsletter-renderer');
 const {
   deductionMatchesSection,
   sectionHasSourceGap

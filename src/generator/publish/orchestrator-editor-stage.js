@@ -12,6 +12,7 @@
 // 않는다(순환 없음). generationRunState는 god-file과 동일한 run-state 모듈을 공유한다.
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { writeJson } = require('../../shared/common/common');
 const { editorSchema } = require('../render/newsletter-schema');
 const { resolveIssueArticleImages } = require('../render/article-image-resolver');
@@ -20,8 +21,7 @@ const {
   reconcileFactClaimEvidence
 } = require('../editor/editor-output-contract');
 const {
-  buildMarkdown,
-  ensureArray
+  buildMarkdown
 } = require('../render/newsletter-renderer');
 const { selectedReporterCapsules } = require('./orchestrator-reporter-normalize');
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');

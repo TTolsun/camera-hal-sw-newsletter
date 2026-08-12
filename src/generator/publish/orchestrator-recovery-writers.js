@@ -7,12 +7,12 @@
 // runtimeConfig도 god-file과 같은 process.env로 load 시점에 한 번 파생한다.
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { kstDate, writeJson } = require('../../shared/common/common');
 const { newsroomRelPath } = require('../../shared/common/artifact-paths');
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');
 const { publishGateCriteriaText } = require('../../shared/common/newsletter-policy');
 const { renderCandidateSelectionDiagnostics } = require('../select/selection-diagnostics');
-const { ensureArray } = require('../render/newsletter-renderer');
 const { buildSelectionReport } = require('./orchestrator-report-builders');
 const { selectionStatusExtra } = require('./orchestrator-status-builders');
 const { generationRunState } = require('./orchestrator-run-state');

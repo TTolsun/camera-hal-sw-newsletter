@@ -7,13 +7,13 @@
 // no LLM calls (the async runPublicArticleJudge / repair flow lives in
 // orchestrator-public-article-judge.js). Extracted verbatim from gemini-newsroom-newsletter.js.
 
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   normalizeUrl
 } = require('../select/newsroom-selection');
 const {
   sectionUrls
 } = require('../../shared/common/section-identity');
-const { ensureArray } = require('../render/newsletter-renderer');
 const {
   EditorSemanticValidationError
 } = require('../editor/editor-output-contract');

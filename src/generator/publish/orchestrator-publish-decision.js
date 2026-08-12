@@ -16,8 +16,9 @@
 // 상수는 god-file과 동일한 리터럴로 load 시점에 한 번 파생한다.
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { writeJson } = require('../../shared/common/common');
-const { ensureArray, issueTags } = require('../render/newsletter-renderer');
+const { issueTags } = require('../render/newsletter-renderer');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { COMPOSITION_MODES } = require('../select/newsroom-selection');
 const {

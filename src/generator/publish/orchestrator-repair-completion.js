@@ -21,6 +21,7 @@
 // 동일한 모듈에서 재파생한다.
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { writeJson } = require('../../shared/common/common');
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');
 const {
@@ -48,8 +49,7 @@ const { reconcileFactClaimEvidence } = require('../editor/editor-output-contract
 const { REPAIR_PATCH_CONTRACT_VIOLATION } = require('../repair/repair-patch-contract');
 const {
   buildMarkdown,
-  buildFactCheckMarkdown,
-  ensureArray
+  buildFactCheckMarkdown
 } = require('../render/newsletter-renderer');
 const {
   sectionLabel,

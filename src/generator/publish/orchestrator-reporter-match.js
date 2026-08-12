@@ -6,12 +6,12 @@
 // no generationRunState, no fs, no module globals — extracted verbatim from
 // the generation orchestrator (gemini-newsroom-newsletter.js).
 
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { normalizeTitle } = require('../../shared/common/section-identity');
 const {
   normalizeUrl,
   normalizedUrlHash
 } = require('../select/newsroom-selection');
-const { ensureArray } = require('../render/newsletter-renderer');
 const { stringOrEmpty } = require('./orchestrator-shared-helpers');
 
 function reporterCandidateId(candidate = {}) {

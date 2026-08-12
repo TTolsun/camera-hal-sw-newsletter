@@ -13,6 +13,7 @@
 // god-file과 byte-identical 동작을 유지한다.
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { writeJson } = require('../../shared/common/common');
 const { newsroomRelPath } = require('../../shared/common/artifact-paths');
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');
@@ -23,8 +24,7 @@ const {
 } = require('../editor/editor-output-contract');
 const {
   buildMarkdown,
-  buildFactCheckMarkdown,
-  ensureArray
+  buildFactCheckMarkdown
 } = require('../render/newsletter-renderer');
 const {
   buildNewsletterQualityReport,

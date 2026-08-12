@@ -7,17 +7,18 @@
 //  - assertTerminalPublicationContracts: 렌더된 이슈 구조를 검증하고 실패 시 recovery-prompt를
 //    남긴 뒤 fail한다.
 // 협력자는 모두 이미 분리된 sibling/shared 모듈에서 직접 import한다: writeRecoveryPrompt는
-// orchestrator-recovery-writers, fail은 orchestrator-shared-helpers, issueTags/ensureArray는
-// newsletter-renderer, 구조 검증은 quality/rendered-issue-structure, 헤드라인 reconcile은
+// orchestrator-recovery-writers, fail은 orchestrator-shared-helpers, issueTags는
+// newsletter-renderer, ensureArray는 shared/common/value-coercion, 구조 검증은
+// quality/rendered-issue-structure, 헤드라인 reconcile은
 // reporter/headline-render-reconciliation·homepage-headline·article-exposure-history에서 가져온다.
 // 이 모듈들은 god-file을 import하지 않아 순환이 없다. root와 dataPath는 god-file과 동일하게
 // process.cwd() 기준으로 load 시점에 한 번 파생한다.
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { readJson, writeJson } = require('../../shared/common/common');
 const {
-  issueTags,
-  ensureArray
+  issueTags
 } = require('../render/newsletter-renderer');
 const {
   validateRenderedIssueStructure
