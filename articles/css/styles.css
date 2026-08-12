@@ -1970,6 +1970,18 @@ pre code {
   font-weight: 500;
 }
 
+/* Story Contract v2 기사별 소제목. 본문 17px과 기사 h2(clamp 1.5rem~) 사이 단계이며
+   weight 램프의 헤드라인 값(600)과 음의 트래킹을 따른다. 데스크톱에서 리드와 크기는
+   같고 무게로 갈린다(640px 이하는 리드와 함께 1.0625rem으로 내려간다). */
+.newsletter-issue-page .article-card h3.article-subheading {
+  margin: 28px 0 0;
+  color: var(--text);
+  font-size: 1.1875rem;
+  line-height: 1.4;
+  letter-spacing: -0.014em;
+  font-weight: 600;
+}
+
 .article-block {
   padding-top: 18px;
   border-top: 1px solid var(--line);
@@ -2362,6 +2374,13 @@ pre code {
   .newsletter-issue-page .article-card p {
     font-size: 1rem;
     line-height: 1.68;
+  }
+
+  /* 리드가 1.0625rem으로 내려오므로 소제목도 함께 줄인다. 안 줄이면 모바일에서만
+     소제목이 리드보다 커져 데스크톱과 위계가 뒤집힌다. */
+  .newsletter-issue-page .article-card h3.article-subheading {
+    font-size: 1.0625rem;
+    margin-top: 24px;
   }
 
   .newsletter-issue-page .section {

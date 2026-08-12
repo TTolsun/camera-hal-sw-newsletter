@@ -15,8 +15,15 @@ const {
 } = require('../reporter/article-structure-summary');
 const {
   STORY_CONTRACT_VERSION,
-  publicArticleForSection
+  publicArticleForSection,
+  storyContractMarkers
 } = require('../reporter/public-article-contract');
+const {
+  parseBodyBlocks
+} = require('../reporter/public-body-markdown');
+const {
+  usesBodyMarkdown
+} = require('../../shared/common/story-contract-version');
 const {
   uniqueArticleAnchorId
 } = require('../reporter/article-anchor');
@@ -532,6 +539,55 @@ function isStoryArticle(publicArticle = {}) {
     typeof publicArticle.editorial_story === 'object';
 }
 
+// 렌더 분기는 **계약 마커가 선언한 버전**으로 정한다. 정규화된 필드의 유무로 정하면
+// "버전은 v2인데 본문이 비었다"가 조용히 v1 경로로 흘러 본문 0문단 기사가 발행된다 —
+// 이 모듈이 막으려는 무음 다운렌더와 같은 부류다.
+//
+// 미지원 버전과 빈 본문은 둘 다 render 진입에서 throw한다. 정상 경로는 validation이
+// 먼저 차단하는 것이고 이 throw는 최후 방어선이다. 판정은 새로 만들지 않고 계약 모듈의
+// 마커 판정(storyContractMarkers)과 버전 술어(usesBodyMarkdown)를 그대로 쓴다.
+//
+// **이 방어선의 범위**: 마커가 한 버전을 가리키거나(정상) 지원 밖 값일 때(throw)를 덮는다.
+// 마커 2개가 서로 다른 버전을 가리키는 조합은 계약 모듈이 unsupported가 아니라 mismatch로
+// 분류하고, 여기서는 생산자 기본값(v1)으로 폴백한다 — 그 상태는 상류 validateEditor가
+// story_contract_version_mismatch로 이미 차단한다. mismatch까지 render에서 throw로 올리면
+// 마커가 부분적인 **과거 발행분 재렌더**(syncWeeklyArticleImages)가 깨지므로 넓히지 않는다.
+function unsupportedContractDetail(item) {
+  // family mismatch 항목에는 value가 없고 선언된 세 버전이 각각 실려 온다. value만 읽으면
+  // 발행이 막힌 이유가 `(story_contract_version=undefined)`로 지워진다.
+  if (item.value !== undefined) return `${item.type}(${item.key}=${item.value})`;
+  const declared = ['public_contract_version', 'generation_contract_version', 'story_contract_version']
+    .filter(key => item[key] !== undefined)
+    .map(key => `${key}=${item[key]}`)
+    .join(' ');
+  return `${item.type}(${declared || item.key})`;
+}
+
+function storyContractRenderVersion(issue, section) {
+  const markers = storyContractMarkers(issue, section);
+  if (markers.hasUnsupportedMarker) {
+    const detail = markers.unsupported.map(unsupportedContractDetail).join(', ');
+    throw new Error(`newsletter-renderer: refusing to render an unsupported story contract — ${detail}`);
+  }
+  return markers.version;
+}
+
+function assertRenderableBody(publicArticle, storyContractVersion) {
+  if (!usesBodyMarkdown(storyContractVersion)) return;
+  const body = publicArticle.body_markdown;
+  if (typeof body === 'string' && body.trim() !== '') return;
+  throw new Error('newsletter-renderer: refusing to render a story contract '
+    + `v${storyContractVersion} article with an empty body_markdown (headline=${publicArticle.headline || 'unknown'})`);
+}
+
+function storyV2BodyHtml(publicArticle) {
+  return parseBodyBlocks(publicArticle.body_markdown)
+    .map(block => (block.type === 'subheading'
+      ? `        <h3 class="article-subheading">${escapeHtml(block.text)}</h3>`
+      : `        ${paragraphHtml(block.text)}`))
+    .join('\n');
+}
+
 function articleSectionContractRows(issue, qualityReport = null) {
   return buildArticleSectionContractRows(ensureArray(issue?.sections), {
     articleResults: ensureArray(qualityReport?.article_results)
@@ -548,37 +604,35 @@ function articleSectionContractMarkdown(issue, qualityReport = null) {
   ].join('\n');
 }
 
-function publicArticleMarkdown(issue, heading, section) {
-  const publicArticle = publicArticleForSection(section, { issue });
-  const perspectiveHeading = articlePerspectiveHeading(issue, section);
-  const bodyParagraphs = isStoryArticle(publicArticle)
+// 기사 markdown 셸은 하나뿐이다. 버전별로 다른 것은 본문 식과 출처 서브타이틀 유무이고,
+// 셸을 복제하면 v1 바이트 불변을 사람이 눈으로 맞춰야 한다(해시 잠금이 그것을 검사한다).
+function articleBodyMarkdown(publicArticle, storyContractVersion) {
+  if (usesBodyMarkdown(storyContractVersion)) {
+    // 정본은 계약 모듈이 정규화해 둔 문자열이다. 여기서 다시 손대면 lint가 본 문자열과
+    // 렌더되는 문자열이 갈린다.
+    return publicArticle.body_markdown;
+  }
+  const paragraphs = isStoryArticle(publicArticle)
     ? storyBodyParagraphsForRender(publicArticle)
     : bodyParagraphsForRender(publicArticle);
-  if (isStoryArticle(publicArticle)) {
-    return `${heading}
+  return paragraphs.join('\n\n');
+}
 
-${articleImageMarkdown(section, publicArticle)}
-
-${publicArticle.source_subtitle ? `_${publicArticle.source_subtitle}_\n\n` : ''}${publicArticle.lead}
-
-${bodyParagraphs.join('\n\n')}
-
-### ${perspectiveHeading}
-
-${publicArticle.camera_hal_takeaway}
-
-**출처**
-
-${sourceListMarkdown(publicArticle.source_links)}
-`;
-  }
+function publicArticleMarkdown(issue, heading, section) {
+  const storyContractVersion = storyContractRenderVersion(issue, section);
+  const publicArticle = publicArticleForSection(section, { issue });
+  assertRenderableBody(publicArticle, storyContractVersion);
+  const perspectiveHeading = articlePerspectiveHeading(issue, section);
+  const sourceSubtitle = publicArticle.source_subtitle
+    ? `_${publicArticle.source_subtitle}_\n\n`
+    : '';
   return `${heading}
 
 ${articleImageMarkdown(section, publicArticle)}
 
-${publicArticle.lead}
+${sourceSubtitle}${publicArticle.lead}
 
-${bodyParagraphs.join('\n\n')}
+${articleBodyMarkdown(publicArticle, storyContractVersion)}
 
 ### ${perspectiveHeading}
 
@@ -692,12 +746,12 @@ ${sourceListMarkdown(issue.references)}
 // mockup 기사 흐름: [번호+카테고리 눈썹] → 제목 → 출처 서브타이틀 → 이미지 → 리드 → 본문 →
 // 관점 박스 → 출처. 카드 프레임 없이 섹션 자체가 hairline 으로 구분된다.
 function publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, articleNumber, section) {
+  const storyContractVersion = storyContractRenderVersion(issue, section);
   const publicArticle = publicArticleForSection(section, { issue });
+  assertRenderableBody(publicArticle, storyContractVersion);
   const perspectiveHeading = articlePerspectiveHeadingHtml();
-  const bodyParagraphs = isStoryArticle(publicArticle)
-    ? storyBodyParagraphsForRender(publicArticle)
-    : bodyParagraphsForRender(publicArticle);
-  const sourceSubtitle = isStoryArticle(publicArticle) && publicArticle.source_subtitle
+  const storyV2 = usesBodyMarkdown(storyContractVersion);
+  const sourceSubtitle = publicArticle.source_subtitle
     ? `        <p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>`
     : '';
   const displayNumber = String(articleNumber).padStart(2, '0');
@@ -705,13 +759,19 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, ancho
     .split('\n')
     .map(line => `        ${line.trimStart()}`)
     .join('\n');
+  const bodyBlocksHtml = storyV2
+    ? [storyV2BodyHtml(publicArticle)]
+    : (isStoryArticle(publicArticle)
+      ? storyBodyParagraphsForRender(publicArticle)
+      : bodyParagraphsForRender(publicArticle)
+    ).map(paragraph => `        ${paragraphHtml(paragraph)}`);
   const articleBodyBlocks = [
     sourceSubtitle,
     mediaHtml,
     `        <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>`,
-    ...bodyParagraphs.map(paragraph => `        ${paragraphHtml(paragraph)}`)
+    ...bodyBlocksHtml
   ].filter(Boolean).join('\n');
-  const articleTypeClass = isStoryArticle(publicArticle) ? ' story-article' : '';
+  const articleTypeClass = storyV2 || isStoryArticle(publicArticle) ? ' story-article' : '';
   const articleImageClass = resolvedArticleImage(section) ? 'has-image' : 'has-placeholder-image';
   const articleTags = articleTagsHtml(section, headingCategory);
   const articleTagsBlock = articleTags ? `\n        ${articleTags}` : '';

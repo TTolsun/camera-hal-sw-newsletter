@@ -365,3 +365,21 @@ test('bodyMarkdownMetrics paragraph count matches the lint paragraph count', () 
     .find(item => item.type === 'insufficient_public_body_paragraphs');
   assert.equal(bodyMarkdownMetrics(body).paragraphCount, issue.actualCount);
 });
+
+// v1은 렌더 시점에 lead·camera_hal_takeaway와 겹치는 문단을 버렸다. v2는 정본 문자열을
+// 그대로 렌더하므로(무음 변형 금지) 그 겹침을 lint가 잡아야 한다.
+test('lintBodyMarkdown flags a paragraph that repeats lead or camera_hal_takeaway', () => {
+  const lead = '리드 문장은 이번 변경이 무엇인지 한 줄로 말한다.';
+  const takeaway = '드라이버 담당자는 스트림 설정 경로만 다시 확인하면 된다.';
+  const body = [lead, '', '본문 고유 문단이다. 여기서는 다른 이야기를 한다.', '', takeaway].join('\n');
+
+  const duplicates = lintBodyMarkdown(body, { lead, camera_hal_takeaway: takeaway })
+    .filter(item => item.type === 'body_markdown_duplicates_public_field');
+
+  assert.deepEqual(duplicates.map(item => item.duplicateOfField), ['lead', 'camera_hal_takeaway']);
+  // 본문 밖 문장을 안 넘기면 이 검사는 돌지 않는다(기존 호출부 계약 보존).
+  assert.deepEqual(
+    lintBodyMarkdown(body).filter(item => item.type === 'body_markdown_duplicates_public_field'),
+    []
+  );
+});

@@ -1,7 +1,8 @@
 const { ensureArray } = require('../common/value-coercion');
 const {
   STORY_CONTRACT_VERSIONS,
-  storyContractVersionFromPublicContractVersion
+  storyContractVersionFromPublicContractVersion,
+  usesBodyMarkdown
 } = require('../common/story-contract-version');
 
 // 마커가 없거나 알 수 없는 값이면 legacy 아티팩트로 보고 v1로 둔다.
@@ -276,7 +277,7 @@ function toLegacySection(article = {}, index = 0, storyContractVersion = DEFAULT
       lead: article.evidenceSummary || article.summary || '',
       // 본문 키도 stamp와 같은 버전이어야 한다. stamp만 2로 올리고 body_paragraphs를
       // 남기면 v2 계약에서 unexpected_public_article_keys가 되는 반쪽 아티팩트가 된다.
-      ...(storyContractVersion >= 2 ? { body_markdown: '' } : { body_paragraphs: [] }),
+      ...(usesBodyMarkdown(storyContractVersion) ? { body_markdown: '' } : { body_paragraphs: [] }),
       camera_hal_takeaway: article.halPerspective || '',
       reader_checkpoints: actionItems,
       source_links: sources,

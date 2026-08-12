@@ -232,7 +232,11 @@ function reservedSubheadingRule(subheading) {
   return pattern ? pattern.source : '';
 }
 
-function lintBodyMarkdown(value) {
+// surroundings = 같은 기사에서 본문 밖에 이미 발행되는 문장들(lead, camera_hal_takeaway).
+// v1은 렌더 시점에 이것과 겹치는 문단을 조용히 버렸는데, v2는 정본 문자열을 그대로
+// 렌더하므로(무음 변형 금지) 겹침을 여기서 잡아야 한다. 안 잡으면 같은 문단이 본문과
+// 시그니처 박스에 두 번 발행된다.
+function lintBodyMarkdown(value, surroundings = {}) {
   const issues = [];
   const normalized = normalizeBodyMarkdown(value);
   normalized.split('\n').forEach((line, index) => {
@@ -299,6 +303,24 @@ function lintBodyMarkdown(value) {
       continue;
     }
     seenBlockKeys.set(key, block.blockIndex);
+  }
+
+  // 본문 밖 문장과의 교차 중복. 위 블록 간 비교와 같은 기준(comparisonKey)을 쓴다.
+  const surroundingKeys = new Map();
+  for (const field of ['lead', 'camera_hal_takeaway']) {
+    const key = comparisonKey(surroundings[field]);
+    if (key) surroundingKeys.set(key, field);
+  }
+  if (surroundingKeys.size > 0) {
+    for (const block of blocks) {
+      if (block.type !== 'paragraph') continue;
+      const field = surroundingKeys.get(comparisonKey(block.text));
+      if (!field) continue;
+      issues.push(bodyMarkdownIssue('body_markdown_duplicates_public_field', {
+        blockIndex: block.blockIndex,
+        duplicateOfField: field
+      }));
+    }
   }
 
   return issues;
