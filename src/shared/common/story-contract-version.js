@@ -41,10 +41,21 @@ function isSupportedStoryContractVersion(value) {
   return STORY_CONTRACT_VERSIONS.includes(Number(value));
 }
 
+// 본문을 문단 배열(body_paragraphs)이 아니라 단일 markdown(body_markdown)으로 담는
+// 계약 버전인가. 계약 정규화(normalizeBodyField)·도메인 정규화·렌더 분기가 같은 질문을
+// 하므로 임계값을 각자 들고 있으면 버전이 늘 때 한쪽만 고쳐져 정규화한 필드와 렌더가
+// 읽는 필드가 갈린다. 그 세 곳은 전부 이 술어를 쓴다.
+const BODY_MARKDOWN_MIN_CONTRACT_VERSION = 2;
+
+function usesBodyMarkdown(storyContractVersion) {
+  return Number(storyContractVersion) >= BODY_MARKDOWN_MIN_CONTRACT_VERSION;
+}
+
 module.exports = {
   PUBLIC_CONTRACT_VERSIONS,
   STORY_CONTRACT_VERSIONS,
   isSupportedStoryContractVersion,
   publicContractVersionFor,
-  storyContractVersionFromPublicContractVersion
+  storyContractVersionFromPublicContractVersion,
+  usesBodyMarkdown
 };

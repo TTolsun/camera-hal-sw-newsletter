@@ -16,7 +16,8 @@ const {
   PUBLIC_CONTRACT_VERSIONS,
   STORY_CONTRACT_VERSIONS,
   publicContractVersionFor,
-  storyContractVersionFromPublicContractVersion
+  storyContractVersionFromPublicContractVersion,
+  usesBodyMarkdown
 } = require('../../shared/common/story-contract-version');
 const {
   lintBodyMarkdown,
@@ -632,7 +633,7 @@ function normalizeEditorialStory(value = {}, storyContractVersion = STORY_CONTRA
 // v2 본문은 v1 정규화 경로를 절대 타지 않는다. compactText는 개행을 지워 문단 경계를
 // 없애고, normalizeStringArray의 lowercase dedupe는 같은 문구의 소제목을 무음 drop한다.
 function normalizeBodyField(raw, storyContractVersion) {
-  return storyContractVersion >= 2
+  return usesBodyMarkdown(storyContractVersion)
     ? { body_markdown: normalizeBodyMarkdown(raw.body_markdown) }
     : { body_paragraphs: normalizeStringArray(raw.body_paragraphs) };
 }
@@ -1071,10 +1072,13 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
   for (const key of ['headline', 'lead', 'camera_hal_takeaway']) {
     if (!normalized[key]) issues.push({ index: index + 1, headline, type: 'empty_public_article_field', key });
   }
-  if (storyState.version >= 2) {
+  if (usesBodyMarkdown(storyState.version)) {
     // 문단 수 부족(insufficient_public_body_paragraphs)도 lint가 함께 낸다. 본문 판정을
     // parseBodyBlocks 하나로 모으기 위해 여기서 따로 세지 않는다.
-    for (const bodyIssue of lintBodyMarkdown(normalized.body_markdown)) {
+    // lead·camera_hal_takeaway를 함께 넘기는 이유: v1은 렌더가 겹치는 문단을 조용히
+    // 버렸지만 v2는 정본을 그대로 렌더하므로, 교차 중복을 여기서 잡지 않으면 같은 문단이
+    // 본문과 시그니처 박스에 두 번 발행된다.
+    for (const bodyIssue of lintBodyMarkdown(normalized.body_markdown, normalized)) {
       issues.push({ index: index + 1, headline, ...bodyIssue });
     }
   } else if (normalized.body_paragraphs.length < 2) {

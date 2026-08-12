@@ -355,6 +355,18 @@ test('newsletter renderer fails instead of silently downrendering an unsupported
   assert.throws(() => buildHtml(futureIssue), /unsupported_story_contract_version/);
 });
 
+// 세 마커가 서로 다른 버전을 가리키면 예외 메시지가 어느 마커가 무엇을 선언했는지 밝혀야
+// 한다. family mismatch 항목에는 value가 없어서, value만 읽으면 이유가 undefined로 지워진다.
+test('newsletter renderer names the declared versions when the contract family disagrees', () => {
+  const familyMismatchIssue = storyIssue();
+  familyMismatchIssue.sections[0].public_article.story_contract_version = 2;
+
+  assert.throws(
+    () => buildMarkdown(familyMismatchIssue),
+    /public_contract_version=1 generation_contract_version=1 story_contract_version=2/
+  );
+});
+
 // v2 본문은 문단 배열이 아니라 단일 markdown이다. 소제목은 `### `라 md 기사 splitter
 // (`^## \d+.`)에 구조적으로 안 걸린다.
 function storyV2Issue() {
@@ -364,10 +376,12 @@ function storyV2Issue() {
   const article = issue.sections[0].public_article;
   article.story_contract_version = 2;
   delete article.body_paragraphs;
+  // 소제목에 이스케이프 대상 문자를 일부러 넣는다. 없으면 escapeHtml을 지워도 테스트가
+  // 통과해 "이스케이프한다"는 주장이 공허해진다(body_markdown은 LLM 산출물이다).
   article.body_markdown = [
     '첫 문단이다. CameraX 변경이 무엇을 바꿨는지 장면으로 연다.',
     '',
-    '### 센서 드라이버가 받는 영향',
+    '### AE & AWB <드라이버> 영향',
     '',
     '둘째 문단이다. R&D 팀이 확인할 범위를 좁힌다.'
   ].join('\n');
@@ -382,7 +396,7 @@ test('newsletter renderer renders a story v2 body from body_markdown', () => {
   const markdown = buildMarkdown(storyV2Issue());
 
   assert.match(markdown, /첫 문단이다\. CameraX 변경이 무엇을 바꿨는지 장면으로 연다\./);
-  assert.match(markdown, /^### 센서 드라이버가 받는 영향$/m);
+  assert.match(markdown, /^### AE & AWB <드라이버> 영향$/m);
   assert.match(markdown, /둘째 문단이다\. R&D 팀이 확인할 범위를 좁힌다\./);
   // 시그니처 박스와 출처는 v1과 같은 자리·같은 라벨로 남는다.
   assert.match(markdown, /### Camera HAL\/Driver 관점에서의 의미/);
@@ -393,18 +407,48 @@ test('newsletter renderer renders a story v2 body from body_markdown', () => {
   const v1Boundaries = buildMarkdown(storyIssue()).match(/^## \d+\./gm).length;
   assert.equal(markdown.match(/^## \d+\./gm).length, v1Boundaries);
   assert.doesNotMatch(markdown, /body_markdown|story_contract_version/);
+  // v2 editorial_story는 안전 필드(not_to_overclaim·editor_take)라 공개 산출물로 나가지 않는다.
+  // 키 이름만 보면 값이 새도 통과하므로 두 필드의 **값 문구**를 함께 검사한다.
+  assert.doesNotMatch(markdown, /not_to_overclaim|editor_take/);
+  assert.doesNotMatch(markdown, /source가 직접 말하지 않는/);
+  assert.doesNotMatch(markdown, /검증 범위는 app\/framework 관찰 항목으로/);
 });
 
 test('newsletter renderer renders story v2 subheadings as escaped html blocks', () => {
   const html = buildHtml(storyV2Issue());
 
-  assert.match(html, /<h3 class="article-subheading">센서 드라이버가 받는 영향<\/h3>/);
+  assert.match(html, /<h3 class="article-subheading">AE &amp; AWB &lt;드라이버&gt; 영향<\/h3>/);
+  assert.doesNotMatch(html, /<h3 class="article-subheading">[^<]*<드라이버>/);
   assert.match(html, /<p>첫 문단이다\. CameraX 변경이 무엇을 바꿨는지 장면으로 연다\.<\/p>/);
   assert.match(html, /R&amp;D 팀이 확인할 범위를 좁힌다\./);
-  assert.match(html, /class="[^"]*story-article story-v2[^"]*"/);
+  assert.match(html, /class="[^"]*article-card story-article[^"]*"/);
   // v1 카드 셸(눈썹·제목·시그니처 박스·출처)은 그대로 재사용한다.
   assert.match(html, /<div class="article-block camera-hal-takeaway">/);
   assert.match(html, /<div class="source-list"><strong>출처<\/strong>/);
+  assert.doesNotMatch(html, /not_to_overclaim|editor_take/);
+  assert.doesNotMatch(html, /source가 직접 말하지 않는/);
+  assert.doesNotMatch(html, /검증 범위는 app\/framework 관찰 항목으로/);
+});
+
+// 선언 버전이 v2인데 본문이 비면 v1 경로로 떨어뜨리지 않는다. 그렇게 하면 게이트를 전부
+// 통과한 채 리드·관점·출처만 남은 0문단 기사가 발행된다 — 이 PR이 막으려는 무음
+// 다운렌더와 같은 부류다.
+test('newsletter renderer fails instead of rendering a story v2 article with an empty body', () => {
+  const emptyBodyIssue = storyV2Issue();
+  emptyBodyIssue.sections[0].public_article.body_markdown = '';
+
+  assert.throws(() => buildMarkdown(emptyBodyIssue), /empty body_markdown/);
+  assert.throws(() => buildHtml(emptyBodyIssue), /empty body_markdown/);
+});
+
+// 이슈 마커만 v2이고 섹션에 story 필드가 없는 상태도 같은 결로 막는다. 계약 정규화는
+// 이때 body_markdown만 만들고 body_paragraphs를 만들지 않으므로, 옛 판정(정규화된 필드
+// 유무)으로는 조용히 빈 본문이 됐다.
+test('newsletter renderer fails when only the issue declares v2 and the section body is missing', () => {
+  const partialIssue = issue();
+  partialIssue.public_contract_version = 'story-v2';
+
+  assert.throws(() => buildMarkdown(partialIssue), /empty body_markdown/);
 });
 
 // v1 바이트 불변 잠금.
@@ -418,21 +462,29 @@ test('newsletter renderer renders story v2 subheadings as escaped html blocks', 
 // 들어갈 자리가 없다. 정책을 넓히는 것은 이 변경의 범위가 아니다.
 //
 // 불일치가 나면 해시를 갱신하지 말고 먼저 원인을 보라. v1 출력이 바뀌었다면 그것이 결함이다.
-// 재현: node -e "const {buildMarkdown}=require('./src/generator/render/newsletter-renderer');…"
+// 어느 픽스처가 어긋났는지는 실패 메시지의 키가 알려주고, 실제 문자열은 이 파일의 픽스처를
+// 그대로 써서 다시 뽑는다:
+//   node --test --test-name-pattern "byte-identical" src/generator/test/contract/newsletter-renderer.test.js
 function sha256(text) {
   return crypto.createHash('sha256').update(text, 'utf8').digest('hex').slice(0, 16);
 }
 
 test('newsletter renderer keeps v1 output byte-identical', () => {
+  // CONTEXT 모드는 기사 셸 밖(이슈 수준 note)을 타는 별도 분기라 함께 잠근다.
+  const contextIssue = issue({ publish_mode: 'CONTEXT' });
   assert.deepEqual({
     plainMarkdown: sha256(buildMarkdown(issue())),
     plainHtml: sha256(buildHtml(issue())),
     storyMarkdown: sha256(buildMarkdown(storyIssue())),
-    storyHtml: sha256(buildHtml(storyIssue()))
+    storyHtml: sha256(buildHtml(storyIssue())),
+    contextMarkdown: sha256(buildMarkdown(contextIssue)),
+    contextHtml: sha256(buildHtml(contextIssue))
   }, {
     plainMarkdown: 'c48f47e42dc73097',
     plainHtml: '92cf196be12cfb3d',
     storyMarkdown: 'f3602357add8a9ff',
-    storyHtml: '73f0e99343b11f73'
+    storyHtml: '73f0e99343b11f73',
+    contextMarkdown: 'baa3a66bce12cd3b',
+    contextHtml: 'd4b8200319f8c5b9'
   });
 });
