@@ -453,6 +453,13 @@ test('site validation workflow keeps structural checks blocking and quality anno
     'npm run validate:policy'
   ]);
   assert.match(structuralStep, /npm run check:encoding/);
+  // #885 — committed repo state만 읽는 구조 검사(secret·네트워크·생성 artifact 불요)는 #712 기준상
+  // PR CI에서 blocking이어야 한다. 이 셋은 단위 테스트가 손으로 만든 경로 배열·임시 트리·주입된
+  // 목록만 입력으로 받아 `npm run test`가 실제 트리를 검사하지 않으므로, 워크플로에서 빠지면
+  // 위반이 머지 시점이 아니라 그 주 발행 때 처음 드러나 본문 품질과 무관한 이유로 발행이 강등된다.
+  assert.match(structuralStep, /npm run check:repo-hygiene/);
+  assert.match(structuralStep, /npm run check:artifact-retention/);
+  assert.match(structuralStep, /npm run check:domain-model-boundary/);
   assert.match(structuralStep, /npm run validate:policy/);
   assert.match(structuralStep, /npm run check:policy-docs/);
   assert.match(structuralStep, /npm run validate:config/);
