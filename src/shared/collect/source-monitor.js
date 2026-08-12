@@ -287,7 +287,11 @@ function extractReleaseRows(html = '', pageUrl = '') {
       title: heading.text || version
     });
   }
-  return rows.sort((a, b) => a.anchor.localeCompare(b.anchor));
+  // 대표 릴리스 행은 "가장 최근 날짜"여야 한다. anchor 알파벳 순으로 정렬하면 아카이브 행을
+  // 앞쪽에 싣는 페이지에서 5년 전 행이 첫 원소가 되고, 그 날짜가 release_row_date(신뢰도 95)를
+  // 달고 스냅샷과 이벤트에 그대로 실린다. 날짜가 없는 행은 뒤로 밀고, 동률과 무날짜는
+  // anchor 오름차순으로 갈라 실행마다 같은 순서가 나오게 한다.
+  return rows.sort((a, b) => text(b.date).localeCompare(text(a.date)) || a.anchor.localeCompare(b.anchor));
 }
 
 function hasExtractor(source = {}, name = '') {

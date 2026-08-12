@@ -8,6 +8,7 @@ const {
   classifyObservation,
   commitSourceSnapshotWrites,
   filterSnapshotWritesByIncludedEvidenceIds,
+  observationFromHtml,
   runSourceMonitor,
   snapshotPath,
   visibleLastUpdated
@@ -297,6 +298,98 @@ test('AndroidX Camera release row extractor matches version heading page shape',
   assert.equal(event.release_row_version, '1.7.0-alpha01');
   assert.equal(event.date_source, 'release_row_date');
   assert.equal(event.effective_date, '2026-03-11');
+});
+
+// 실제 CameraX 릴리스 노트는 아카이브 행을 앞쪽에 싣는다. 한 행짜리 fixture만 있어서
+// 여러 행의 순서를 아무도 잠그지 않았고, 대표 행이 5년 전 행으로 굳는 걸 놓쳤다.
+const multiReleaseRowHtml = `
+  <html>
+    <body>
+      <h2 id="camera-1.0.0">Camera 1.0.0</h2>
+      <p>May 5, 2021</p>
+      <p>The first stable CameraX release.</p>
+      <h2 id="camera-1.7.0-alpha02">Camera 1.7.0-alpha02</h2>
+      <p>July 1, 2026</p>
+      <p>Adds camera extension session behavior.</p>
+      <h2 id="camera-1.6.1">Camera 1.6.1</h2>
+      <p>May 14, 2026</p>
+      <p>Fixes stream behavior for CameraX.</p>
+      <h2 id="camera-1.5.0">Camera 1.5.0</h2>
+      <p>Documentation refresh without a published release date.</p>
+    </body>
+  </html>
+`;
+
+test('release rows are ordered newest date first and undated rows sort last', () => {
+  const observation = observationFromHtml({
+    source: androidxSource,
+    url: androidxSource.root_url,
+    html: multiReleaseRowHtml
+  });
+
+  // 문서 순서(1.0.0 먼저)도 anchor 알파벳 순(camera-1.0.0 먼저)도 대표 행 기준이 아니다.
+  assert.deepEqual(observation.release_rows.map(row => row.version), [
+    '1.7.0-alpha02',
+    '1.6.1',
+    '1.0.0',
+    '1.5.0'
+  ]);
+  assert.equal(observation.release_row_version, '1.7.0-alpha02');
+  assert.equal(observation.release_row_date, '2026-07-01');
+  assert.match(observation.release_row_anchor, /#camera-1\.7\.0-alpha02$/);
+});
+
+test('pages whose release rows all lack dates keep their deterministic anchor order', () => {
+  const observation = observationFromHtml({
+    source: androidxSource,
+    url: androidxSource.root_url,
+    html: `
+      <html>
+        <body>
+          <h2 id="camera-2.0.0">Camera 2.0.0</h2>
+          <p>Documentation refresh without a published release date.</p>
+          <h2 id="camera-1.0.0">Camera 1.0.0</h2>
+          <p>Another entry without a published release date.</p>
+        </body>
+      </html>
+    `
+  });
+
+  assert.deepEqual(observation.release_rows.map(row => row.version), ['1.0.0', '2.0.0']);
+  assert.equal(observation.release_row_version, '1.0.0');
+  assert.equal(observation.release_row_date, '');
+});
+
+test('release row event date comes from the newest row, not the alphabetically first anchor', async () => {
+  const url = androidxSource.root_url;
+  const canonicalUrl = normalizeSourceUrl(url);
+  const identity = sourceIdentityKey({ sourceId: androidxSource.source_id, url: canonicalUrl });
+  const result = await runSourceMonitor({
+    date: '2026-08-10',
+    registry: { schemaVersion: 1, sources: [androidxSource] },
+    snapshots: {
+      [androidxSource.source_id]: {
+        ...snapshot({ source_id: androidxSource.source_id }),
+        pages: [page({
+          source_identity_key: identity,
+          url,
+          canonical_url: canonicalUrl,
+          title: 'Camera release notes',
+          visible_last_updated: '',
+          normalized_content_hash: 'old-body'
+        })]
+      }
+    },
+    fetchImpl: async () => htmlResponse(multiReleaseRowHtml),
+    writeArtifacts: false
+  });
+
+  const event = result.report.events[0];
+  assert.equal(event.event_type, 'release_row_added');
+  assert.equal(event.date_source, 'release_row_date');
+  assert.equal(event.date_confidence, 95);
+  assert.equal(event.release_row_version, '1.7.0-alpha02');
+  assert.equal(event.effective_date, '2026-07-01');
 });
 
 test('existing release row body change creates release_row_changed', () => {
