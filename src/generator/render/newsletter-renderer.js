@@ -15,8 +15,12 @@ const {
 } = require('../reporter/article-structure-summary');
 const {
   STORY_CONTRACT_VERSION,
-  publicArticleForSection
+  publicArticleForSection,
+  storyContractMarkers
 } = require('../reporter/public-article-contract');
+const {
+  parseBodyBlocks
+} = require('../reporter/public-body-markdown');
 const {
   uniqueArticleAnchorId
 } = require('../reporter/article-anchor');
@@ -532,6 +536,44 @@ function isStoryArticle(publicArticle = {}) {
     typeof publicArticle.editorial_story === 'object';
 }
 
+// v2부터 본문은 문단 배열이 아니라 단일 markdown이다. 임계값 2는 계약 모듈의
+// normalizeBodyField(storyContractVersion >= 2)와 같은 규칙이다 — 한쪽만 바뀌면
+// 정규화한 필드와 렌더가 읽는 필드가 갈린다.
+const STORY_BODY_MARKDOWN_VERSION = 2;
+
+function isStoryV2Article(publicArticle = {}) {
+  return Number(publicArticle.story_contract_version) >= STORY_BODY_MARKDOWN_VERSION &&
+    typeof publicArticle.body_markdown === 'string' &&
+    publicArticle.body_markdown.trim() !== '';
+}
+
+// 미지원 계약 버전은 조용히 v1 비-story로 떨어뜨리지 않는다. 무음 다운렌더는 게이트를
+// 전부 통과한 채 본문 형태만 잃는 경로라, 발행 전에 소리가 나야 한다. 정상 경로는
+// validation이 먼저 차단하는 것이고 이 throw는 최후 방어선이다.
+// 판정은 새로 만들지 않고 계약 모듈의 마커 판정을 그대로 쓴다.
+function assertRenderableStoryContract(issue, section) {
+  const markers = storyContractMarkers(issue, section);
+  if (!markers.hasUnsupportedMarker) return;
+  const detail = markers.unsupported
+    .map(item => `${item.type}(${item.key}=${item.value})`)
+    .join(', ');
+  throw new Error(`newsletter-renderer: refusing to render an unsupported story contract — ${detail}`);
+}
+
+function storyV2BodyMarkdown(publicArticle) {
+  // 정본은 계약 모듈이 정규화해 둔 문자열이다. 여기서 다시 손대면 lint가 본 문자열과
+  // 렌더되는 문자열이 갈린다.
+  return publicArticle.body_markdown;
+}
+
+function storyV2BodyHtml(publicArticle) {
+  return parseBodyBlocks(publicArticle.body_markdown)
+    .map(block => (block.type === 'subheading'
+      ? `        <h3 class="article-subheading">${escapeHtml(block.text)}</h3>`
+      : `        ${paragraphHtml(block.text)}`))
+    .join('\n');
+}
+
 function articleSectionContractRows(issue, qualityReport = null) {
   return buildArticleSectionContractRows(ensureArray(issue?.sections), {
     articleResults: ensureArray(qualityReport?.article_results)
@@ -549,8 +591,27 @@ function articleSectionContractMarkdown(issue, qualityReport = null) {
 }
 
 function publicArticleMarkdown(issue, heading, section) {
+  assertRenderableStoryContract(issue, section);
   const publicArticle = publicArticleForSection(section, { issue });
   const perspectiveHeading = articlePerspectiveHeading(issue, section);
+  if (isStoryV2Article(publicArticle)) {
+    return `${heading}
+
+${articleImageMarkdown(section, publicArticle)}
+
+${publicArticle.source_subtitle ? `_${publicArticle.source_subtitle}_\n\n` : ''}${publicArticle.lead}
+
+${storyV2BodyMarkdown(publicArticle)}
+
+### ${perspectiveHeading}
+
+${publicArticle.camera_hal_takeaway}
+
+**출처**
+
+${sourceListMarkdown(publicArticle.source_links)}
+`;
+  }
   const bodyParagraphs = isStoryArticle(publicArticle)
     ? storyBodyParagraphsForRender(publicArticle)
     : bodyParagraphsForRender(publicArticle);
@@ -692,12 +753,14 @@ ${sourceListMarkdown(issue.references)}
 // mockup 기사 흐름: [번호+카테고리 눈썹] → 제목 → 출처 서브타이틀 → 이미지 → 리드 → 본문 →
 // 관점 박스 → 출처. 카드 프레임 없이 섹션 자체가 hairline 으로 구분된다.
 function publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, articleNumber, section) {
+  assertRenderableStoryContract(issue, section);
   const publicArticle = publicArticleForSection(section, { issue });
   const perspectiveHeading = articlePerspectiveHeadingHtml();
+  const storyV2 = isStoryV2Article(publicArticle);
   const bodyParagraphs = isStoryArticle(publicArticle)
     ? storyBodyParagraphsForRender(publicArticle)
     : bodyParagraphsForRender(publicArticle);
-  const sourceSubtitle = isStoryArticle(publicArticle) && publicArticle.source_subtitle
+  const sourceSubtitle = (isStoryArticle(publicArticle) || storyV2) && publicArticle.source_subtitle
     ? `        <p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>`
     : '';
   const displayNumber = String(articleNumber).padStart(2, '0');
@@ -709,9 +772,13 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, ancho
     sourceSubtitle,
     mediaHtml,
     `        <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>`,
-    ...bodyParagraphs.map(paragraph => `        ${paragraphHtml(paragraph)}`)
+    ...(storyV2
+      ? [storyV2BodyHtml(publicArticle)]
+      : bodyParagraphs.map(paragraph => `        ${paragraphHtml(paragraph)}`))
   ].filter(Boolean).join('\n');
-  const articleTypeClass = isStoryArticle(publicArticle) ? ' story-article' : '';
+  const articleTypeClass = storyV2
+    ? ' story-article story-v2'
+    : (isStoryArticle(publicArticle) ? ' story-article' : '');
   const articleImageClass = resolvedArticleImage(section) ? 'has-image' : 'has-placeholder-image';
   const articleTags = articleTagsHtml(section, headingCategory);
   const articleTagsBlock = articleTags ? `\n        ${articleTags}` : '';

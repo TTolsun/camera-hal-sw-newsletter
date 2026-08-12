@@ -610,6 +610,7 @@ test('newsletter issue page CSS follows the newsroom flat article layout', () =>
   const issueStoryCategory = exactSelectorBlock(css, '.issue-story-category');
   const issueBriefingCard = exactSelectorBlock(css, '.issue-briefing-card');
   const issueTakeaway = exactSelectorBlock(css, '.newsletter-issue-page .camera-hal-takeaway');
+  const issueArticleSubheading = exactSelectorBlock(css, '.newsletter-issue-page .article-card h3.article-subheading');
   const issueSourceList = exactSelectorBlock(css, '.newsletter-issue-page .source-list');
   const issueReferences = exactSelectorBlock(css, '.newsletter-issue-page .issue-references');
   const issueFooterNavigation = exactSelectorBlock(css, '.issue-footer-navigation');
@@ -635,6 +636,10 @@ test('newsletter issue page CSS follows the newsroom flat article layout', () =>
   assertCssDeclaration(issueTitle, 'font-size', 'clamp(2.125rem, 4vw, 3.25rem)');
   assertCssDeclaration(issueTitle, 'letter-spacing', '-0.022em');
   assertCssDeclaration(issueArticleTitle, 'font-size', 'clamp(1.5rem, 2.4vw, 2rem)');
+  // Story Contract v2 기사별 소제목: 본문(17px)과 기사 h2 사이 단계, weight 램프의 헤드라인 값.
+  assertCssDeclaration(issueArticleSubheading, 'font-size', '1.1875rem');
+  assertCssDeclaration(issueArticleSubheading, 'font-weight', '600');
+  assertCssDeclaration(issueArticleSubheading, 'letter-spacing', '-0.014em');
   // 기사 섹션은 카드 프레임 없이 hairline 위 평문 흐름(60px 리듬).
   assertCssDeclaration(issueSection, 'border-top', '1px solid var(--line)');
   assertCssDeclaration(issueSection, 'background', 'transparent');

@@ -1,4 +1,5 @@
 const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
 const test = require('node:test');
 
 const {
@@ -342,37 +343,96 @@ test('newsletter renderer renders story v1 as natural prose without public story
   }
 });
 
-test('newsletter renderer does not treat unsupported future story versions as story v1', () => {
+// 미지원 버전은 조용히 v1 비-story로 떨어뜨리지 않는다. 무음 다운렌더는 게이트를
+// 전부 통과한 채 본문 형태만 잃는 경로라, 발행 전에 소리가 나야 한다.
+// validation이 선차단하는 것이 정상 경로이고 이 throw는 최후 방어선이다.
+test('newsletter renderer fails instead of silently downrendering an unsupported contract version', () => {
   const futureIssue = storyIssue();
   futureIssue.public_contract_version = publicContractVersionFor(UNSUPPORTED_FUTURE_STORY_VERSION);
   futureIssue.sections[0].public_article.story_contract_version = UNSUPPORTED_FUTURE_STORY_VERSION;
 
-  const markdown = buildMarkdown(futureIssue);
-  const html = buildHtml(futureIssue);
-
-  assert.doesNotMatch(markdown, /Android Developers · CameraX release note/);
-  assert.doesNotMatch(markdown, /story_contract_version/);
-  assert.doesNotMatch(html, /story-article/);
-  assert.doesNotMatch(html, /article-decision-metadata/);
+  assert.throws(() => buildMarkdown(futureIssue), /unsupported_story_contract_version/);
+  assert.throws(() => buildHtml(futureIssue), /unsupported_story_contract_version/);
 });
 
-// 계약층은 v2를 수용하지만 렌더러는 아직 v2 본문을 모른다. 그 간극을 여기에 고정한다.
-// 지금은 producer가 v2를 만들지 않아 도달 불가지만, 테스트가 없으면 T5(#848)가
-// 렌더 분기를 붙일 때 무엇이 바뀌는지 대조할 기준이 없다.
-// T5에서 이 테스트는 "v2가 story 레이아웃으로 렌더된다"로 교체되어야 한다.
-test('renderer does not yet render a story v2 body (gap pinned for T5)', () => {
+// v2 본문은 문단 배열이 아니라 단일 markdown이다. 소제목은 `### `라 md 기사 splitter
+// (`^## \d+.`)에 구조적으로 안 걸린다.
+function storyV2Issue() {
   const issue = storyIssue();
   issue.public_contract_version = 'story-v2';
   issue.generation_contract_version = 2;
-  issue.sections[0].public_article.story_contract_version = 2;
-  delete issue.sections[0].public_article.body_paragraphs;
-  issue.sections[0].public_article.body_markdown = '첫 문단이다.\n\n### 소제목\n\n둘째 문단이다.';
+  const article = issue.sections[0].public_article;
+  article.story_contract_version = 2;
+  delete article.body_paragraphs;
+  article.body_markdown = [
+    '첫 문단이다. CameraX 변경이 무엇을 바꿨는지 장면으로 연다.',
+    '',
+    '### 센서 드라이버가 받는 영향',
+    '',
+    '둘째 문단이다. R&D 팀이 확인할 범위를 좁힌다.'
+  ].join('\n');
+  article.editorial_story = {
+    not_to_overclaim: 'source가 직접 말하지 않는 HAL runtime 변경으로 확대하지 않습니다.',
+    editor_take: '검증 범위는 app/framework 관찰 항목으로 제한하는 편이 안전합니다.'
+  };
+  return issue;
+}
 
-  const markdown = buildMarkdown(issue);
+test('newsletter renderer renders a story v2 body from body_markdown', () => {
+  const markdown = buildMarkdown(storyV2Issue());
 
-  // 렌더가 통째로 망가져도 doesNotMatch는 통과한다. 나머지 필드가 여전히 나온다는
-  // 긍정 단언을 함께 걸어야 pin이 살아 있는지 구분된다.
-  assert.match(markdown, /Android Developers가 CameraX 변경점을 공개했습니다|CameraX/);
-  assert.doesNotMatch(markdown, /### 소제목/);
-  assert.doesNotMatch(markdown, /둘째 문단이다/);
+  assert.match(markdown, /첫 문단이다\. CameraX 변경이 무엇을 바꿨는지 장면으로 연다\./);
+  assert.match(markdown, /^### 센서 드라이버가 받는 영향$/m);
+  assert.match(markdown, /둘째 문단이다\. R&D 팀이 확인할 범위를 좁힌다\./);
+  // 시그니처 박스와 출처는 v1과 같은 자리·같은 라벨로 남는다.
+  assert.match(markdown, /### Camera HAL\/Driver 관점에서의 의미/);
+  assert.match(markdown, /\*\*출처\*\*/);
+  assert.match(markdown, /_Android Developers · CameraX release note_/);
+  // 기사 splitter는 `## N.`만 본다. v2 소제목(`### `)이 기사 경계를 늘리면 안 되므로
+  // 같은 입력의 v1 렌더와 경계 수가 같아야 한다.
+  const v1Boundaries = buildMarkdown(storyIssue()).match(/^## \d+\./gm).length;
+  assert.equal(markdown.match(/^## \d+\./gm).length, v1Boundaries);
+  assert.doesNotMatch(markdown, /body_markdown|story_contract_version/);
+});
+
+test('newsletter renderer renders story v2 subheadings as escaped html blocks', () => {
+  const html = buildHtml(storyV2Issue());
+
+  assert.match(html, /<h3 class="article-subheading">센서 드라이버가 받는 영향<\/h3>/);
+  assert.match(html, /<p>첫 문단이다\. CameraX 변경이 무엇을 바꿨는지 장면으로 연다\.<\/p>/);
+  assert.match(html, /R&amp;D 팀이 확인할 범위를 좁힌다\./);
+  assert.match(html, /class="[^"]*story-article story-v2[^"]*"/);
+  // v1 카드 셸(눈썹·제목·시그니처 박스·출처)은 그대로 재사용한다.
+  assert.match(html, /<div class="article-block camera-hal-takeaway">/);
+  assert.match(html, /<div class="source-list"><strong>출처<\/strong>/);
+});
+
+// v1 바이트 불변 잠금.
+//
+// v2 분기는 additive여야 한다 — v1 산출물의 바이트가 한 글자라도 달라지면 과거 호
+// 재렌더(syncWeeklyArticleImages)와 quality recompute가 조용히 달라진다. 구조 단언은
+// 그 종류의 드리프트를 못 잡으므로 산출물 전체를 해시로 잠근다.
+//
+// 픽스처 파일이 아니라 해시인 이유: 이 저장소의 fixture ledger는 use 값을
+// good/bad/linked-evidence/parser-source-html/workflow-shape로 제한해 렌더 산출물 골든이
+// 들어갈 자리가 없다. 정책을 넓히는 것은 이 변경의 범위가 아니다.
+//
+// 불일치가 나면 해시를 갱신하지 말고 먼저 원인을 보라. v1 출력이 바뀌었다면 그것이 결함이다.
+// 재현: node -e "const {buildMarkdown}=require('./src/generator/render/newsletter-renderer');…"
+function sha256(text) {
+  return crypto.createHash('sha256').update(text, 'utf8').digest('hex').slice(0, 16);
+}
+
+test('newsletter renderer keeps v1 output byte-identical', () => {
+  assert.deepEqual({
+    plainMarkdown: sha256(buildMarkdown(issue())),
+    plainHtml: sha256(buildHtml(issue())),
+    storyMarkdown: sha256(buildMarkdown(storyIssue())),
+    storyHtml: sha256(buildHtml(storyIssue()))
+  }, {
+    plainMarkdown: 'c48f47e42dc73097',
+    plainHtml: '92cf196be12cfb3d',
+    storyMarkdown: 'f3602357add8a9ff',
+    storyHtml: '73f0e99343b11f73'
+  });
 });
