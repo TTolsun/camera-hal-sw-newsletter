@@ -6,6 +6,7 @@
 // 거른다.
 const { BUCKETS, BUCKET_PRIORITY } = require('../../shared/domain/aosp-camera-scope');
 const { excludeParentRoundupContainers } = require('../../shared/common/article-groups');
+const { displayDate } = require('../../shared/common/date-signals');
 const { normalizeUrl } = require('../../shared/common/selection-normalizers');
 const { ensureArray } = require('../../shared/common/value-coercion');
 
@@ -52,16 +53,19 @@ function publishedTime(candidate) {
   return Number.isNaN(parsed) ? Number.NEGATIVE_INFINITY : parsed;
 }
 
+// 참고 섹션 표시 날짜가 만들어지는 유일한 지점이다. markdown·HTML 두 렌더 경로는 이 값을
+// 가공 없이 그대로 찍으므로, 원문 표기를 여기서 맞춰야 두 경로가 함께 맞는다.
+// 소스마다 원문 표기가 다르다(ISO 타임스탬프 / 'July 01, 2026' / RSS pubDate). 그대로 두면
+// 한 목록 안에서 정밀도가 뒤섞인다(실측 2026-08-03호: 'July 01, 2026' 바로 다음 줄이
+// '2026-07-10T11:12:38+01:00'). displayDate로 YYYY-MM-DD 하나로 통일한다.
 // month 정밀도 후보(AOSP Site Updates의 월별 묶음 행)는 그 달 어느 날인지 모르는 채 날짜가
 // 달의 1일로 채워져 있다. 그대로 렌더링하면 'July 2026'만 아는 신호를 '2026-07-01'이라는
 // 더 높은 정밀도로 발행하게 된다. 아는 만큼만(YYYY-MM) 표기한다.
 function displayPublishedDate(candidate) {
-  const raw = pick(candidate, 'published_date', 'publishedAt');
-  if (!raw) return '';
+  const display = displayDate(pick(candidate, 'published_date', 'publishedAt'));
   const precision = pick(candidate, 'date_precision', 'datePrecision').toLowerCase();
-  if (precision !== 'month') return raw;
-  const match = /^(\d{4})-(\d{2})/.exec(raw);
-  return match ? `${match[1]}-${match[2]}` : raw;
+  // displayDate는 '' 아니면 YYYY-MM-DD만 돌려주므로 앞 7자가 곧 YYYY-MM이다.
+  return precision === 'month' ? display.slice(0, 7) : display;
 }
 
 // 상한(DEFAULT_LIMIT)까지만 담기 때문에 정렬 순서가 곧 노출 순서다. 받은 순서대로 담으면

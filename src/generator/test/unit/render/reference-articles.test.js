@@ -116,6 +116,37 @@ test('renders month-precision candidates with month granularity, not a fabricate
   assert.equal(items[0].published_date, '2026-07');
 });
 
+// 소스마다 published_date 원문 표기가 다르다. 그대로 찍으면 한 목록 안에서 정밀도가 뒤섞인다
+// (실측 2026-08-03호 126~127줄: 'July 01, 2026' 다음 줄이 '2026-07-10T11:12:38+01:00').
+// 아래 네 형식은 발행된 issue.json에서 실제로 관측된 전부다.
+test('normalizes every observed source date shape to YYYY-MM-DD', () => {
+  const items = buildReferenceArticles([
+    candidate({ url: 'https://a.example/iso-timestamp', published_date: '2026-07-10T11:12:38+01:00' }),
+    candidate({ url: 'https://a.example/month-name', published_date: 'July 01, 2026' }),
+    candidate({ url: 'https://a.example/rss-pubdate', published_date: 'Thu, 30 Apr 2026 22:36:23 +0000' }),
+    candidate({ url: 'https://a.example/already-clean', published_date: '2026-03-25' })
+  ]);
+
+  assert.deepEqual(Object.fromEntries(items.map(item => [item.url, item.published_date])), {
+    'https://a.example/iso-timestamp': '2026-07-10',
+    // 로컬 타임존 Date 파싱을 타면 '2026-06-30'으로 하루 밀린다. 월 이름은 표로 옮겨야 한다.
+    'https://a.example/month-name': '2026-07-01',
+    'https://a.example/rss-pubdate': '2026-04-30',
+    'https://a.example/already-clean': '2026-03-25'
+  });
+});
+
+// 아는 형식이 아니면 날짜를 지어내지 않는다. 기존 dated 게이트가 항목을 통째로 뺀다
+// (새 검사기를 더하지 않는다).
+test('drops items whose published date is in an unrecognized shape', () => {
+  const items = buildReferenceArticles([
+    candidate({ title: 'Unparseable date', url: 'https://a.example/unparseable', published_date: 'last Tuesday' }),
+    candidate({ title: 'Parseable date', url: 'https://a.example/ok' })
+  ]);
+
+  assert.deepEqual(items.map(item => item.title), ['Parseable date']);
+});
+
 test('skips null or non-object entries without throwing', () => {
   const items = buildReferenceArticles([null, undefined, 'not-a-candidate', candidate()]);
 

@@ -53,6 +53,58 @@ function normalizeDate(value) {
   return parsed.toISOString().slice(0, 10);
 }
 
+const MONTH_NAMES = Object.freeze([
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+]);
+
+const DISPLAY_ISO_DATE_PATTERN = /^(20\d{2})-(\d{2})-(\d{2})/;
+const DISPLAY_MONTH_DAY_YEAR_PATTERN = /^([A-Za-z]+)\s+(\d{1,2}),\s*(20\d{2})$/;
+const DISPLAY_DAY_MONTH_YEAR_PATTERN = /^(?:[A-Za-z]{3},\s+)?(\d{1,2})\s+([A-Za-z]+)\s+(20\d{2})\b/;
+
+// 월 이름을 숫자로 옮긴다. 전체 이름('July')과 3글자 약칭('Jul') 둘 다 받되 정확히 일치할
+// 때만 인정한다 — 앞 3글자만 보면 'Junk'가 6월로 둔갑한다.
+function monthNumberFromName(value) {
+  const name = text(value).toLowerCase();
+  const index = MONTH_NAMES.findIndex(month => {
+    const full = month.toLowerCase();
+    return name === full || name === full.slice(0, 3);
+  });
+  return index < 0 ? '' : String(index + 1).padStart(2, '0');
+}
+
+function formatDateFromMonthName(year, monthName, day) {
+  const month = monthNumberFromName(monthName);
+  if (!month) return '';
+  return `${year}-${month}-${String(day).padStart(2, '0')}`;
+}
+
+// 표시용 날짜 정규화. 소스마다 원문 표기가 달라(ISO 날짜 '2026-03-25' / ISO 타임스탬프
+// '2026-07-10T11:12:38+01:00' / 'July 01, 2026' / RSS pubDate 'Thu, 30 Apr 2026 22:36:23 +0000')
+// 원문을 그대로 찍으면 한 목록 안에서 표기가 뒤섞인다. 넷 다 YYYY-MM-DD로 맞춘다.
+// 돌려주는 값은 '' 아니면 YYYY-MM-DD 둘 중 하나뿐이다.
+//
+// normalizeDate를 재사용하지 않는 이유 두 가지:
+//   1. new Date('July 01, 2026')는 로컬 자정으로 해석돼 toISOString에서 하루 밀린다
+//      (실측 Asia/Seoul: '2026-06-30'). 그래서 월 이름은 표로 직접 옮긴다.
+//   2. normalizeDate('2026-07')는 '2026-07-01'로 없는 정밀도를 만들어낸다.
+// 타임존도 변환하지 않는다 — 변환하면 소스가 말한 날짜 자체가 바뀐다.
+// 아는 형식이 아니면 날짜를 지어내는 대신 ''를 돌려 호출부가 판단하게 한다.
+function displayDate(value) {
+  const raw = text(value);
+
+  const isoDate = DISPLAY_ISO_DATE_PATTERN.exec(raw);
+  if (isoDate) return `${isoDate[1]}-${isoDate[2]}-${isoDate[3]}`;
+
+  const monthDayYear = DISPLAY_MONTH_DAY_YEAR_PATTERN.exec(raw);
+  if (monthDayYear) return formatDateFromMonthName(monthDayYear[3], monthDayYear[1], monthDayYear[2]);
+
+  const dayMonthYear = DISPLAY_DAY_MONTH_YEAR_PATTERN.exec(raw);
+  if (dayMonthYear) return formatDateFromMonthName(dayMonthYear[3], dayMonthYear[2], dayMonthYear[1]);
+
+  return '';
+}
+
 function isKnownEventType(value) {
   return EVENT_TYPE_SET.has(text(value));
 }
@@ -152,6 +204,7 @@ module.exports = {
   EVENT_TYPES,
   dateQualityForCandidate,
   dateSourceConfidence,
+  displayDate,
   isKnownDateSource,
   isKnownEventType,
   monthRangeOverlapsWindow,
