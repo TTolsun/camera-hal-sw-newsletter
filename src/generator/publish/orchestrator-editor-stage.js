@@ -10,6 +10,7 @@
 // `if (reviewableReturn) return;`를 실행해 원래 early `return;`과 동일하게 main()을 끝낸다.
 // 협력자는 모두 이미 분리된 sibling/shared 모듈에서 직접 import하므로 god-file을 import하지
 // 않는다(순환 없음). generationRunState는 god-file과 동일한 run-state 모듈을 공유한다.
+const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const { writeJson } = require('../../shared/common/common');
@@ -20,8 +21,7 @@ const {
   reconcileFactClaimEvidence
 } = require('../editor/editor-output-contract');
 const {
-  buildMarkdown,
-  ensureArray
+  buildMarkdown
 } = require('../render/newsletter-renderer');
 const { selectedReporterCapsules } = require('./orchestrator-reporter-normalize');
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');

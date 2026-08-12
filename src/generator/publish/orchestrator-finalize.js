@@ -8,6 +8,7 @@
 // 협력자는 모두 이미 분리된 sibling/shared 모듈에서 직접 import하므로 god-file을
 // import하지 않는다(순환 없음). generationRunState 진행상황 갱신은 god-file과 동일한
 // run-state 모듈을 공유해 그대로 유지한다.
+const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const { writeJson } = require('../../shared/common/common');
@@ -28,7 +29,6 @@ const {
   buildNewsletterQualityReport,
   salvagePublishableSubset
 } = require('../quality/newsletter-quality');
-const { ensureArray } = require('../render/newsletter-renderer');
 const { validateEditor } = require('./orchestrator-editor-validation');
 const { pruneResolvedFallbackImageFalsePositives } = require('./orchestrator-image-warnings');
 const {

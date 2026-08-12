@@ -4,8 +4,8 @@
 // god-file에서 분리했다. 네 함수의 의존성은 모두 module-level import 또는 generationRunState
 // 싱글턴이라, god-file-local 함수 주입 없이 같은 출처에서 직접 import한다. buildRunContext는
 // orchestrator-report-builders에서 가져오며 그 모듈은 god-file을 import하지 않아 순환이 없다.
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { getLlmDiagnostics } = require('../../shared/llm/llm-client');
-const { ensureArray } = require('../render/newsletter-renderer');
 const { COMPOSITION_MODES } = require('../select/newsroom-selection');
 const { selectionDiagnosticsFromReports } = require('../select/selection-diagnostics');
 const { candidateGroupKey, groupCoverageSummary } = require('../../shared/common/article-groups');

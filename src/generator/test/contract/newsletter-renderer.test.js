@@ -1,5 +1,8 @@
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
+const fs = require('node:fs');
+const path = require('node:path');
+const { execFileSync } = require('node:child_process');
 const test = require('node:test');
 
 const {
@@ -487,4 +490,31 @@ test('newsletter renderer keeps v1 output byte-identical', () => {
     contextMarkdown: 'baa3a66bce12cd3b',
     contextHtml: 'd4b8200319f8c5b9'
   });
+});
+
+// #887 — ensureArray는 value-coercion이 정본이다. 렌더러가 재수출하는 바람에 발행 계층
+// 모듈들이 헬퍼 하나 때문에 렌더 계층을 로드하고 있었다. 경로를 옮긴 뒤 다시 새지 않도록
+// 실제 트리를 훑어 잠근다(손으로 만든 목록이 아니라 git 추적 파일이 입력이다).
+// import 문 하나를 통째로 잡는다. require 앞에서 `const {`를 거꾸로 찾는 방식은 무관한
+// 앞쪽 코드를 블록으로 오인해(이 파일 자신이 그렇게 걸렸다) 거짓 양성을 만든다.
+function renderRequireDestructurings(text) {
+  return [...text.matchAll(/const \{([^}]*)\}\s*=\s*require\('[^']*newsletter-renderer'\)/g)]
+    .map(match => match[1]);
+}
+
+test('no module reaches ensureArray through the newsletter renderer', () => {
+  const root = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim();
+  const files = execFileSync('git', ['-C', root, 'ls-files', 'src'], { encoding: 'utf8' })
+    .split('\n')
+    .filter(file => file.endsWith('.js'));
+  const offenders = [];
+  for (const file of files) {
+    const text = fs.readFileSync(path.join(root, file), 'utf8');
+    if (renderRequireDestructurings(text).some(block => block.includes('ensureArray'))) {
+      offenders.push(file);
+    }
+  }
+
+  assert.deepEqual(offenders, [], 'ensureArray는 src/shared/common/value-coercion에서 직접 가져온다');
+  assert.equal(require('../../render/newsletter-renderer').ensureArray, undefined);
 });

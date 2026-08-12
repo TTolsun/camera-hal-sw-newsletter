@@ -1,3 +1,4 @@
+const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
@@ -8,7 +9,6 @@ const {
 } = require('../../shared/common/common');
 const { isSafeExternalImageUrl, isFallbackImagePath, REJECT_PATH_PATTERN } = require('../../shared/render/image-candidates');
 const { repoLocalPath } = require('../render/article-image-resolver');
-const { ensureArray } = require('../render/newsletter-renderer');
 const {
   toLegacyEditorIssue
 } = require('../../shared/domain/newsletter-domain-normalize');

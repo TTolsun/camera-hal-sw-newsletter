@@ -6,7 +6,7 @@
 // fs, no module globals — extracted verbatim from the generation orchestrator
 // (gemini-newsroom-newsletter.js).
 
-const { ensureArray } = require('../render/newsletter-renderer');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   duplicateReasonForSections,
   sectionSummary,

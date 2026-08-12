@@ -1,3 +1,4 @@
+const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const {
@@ -91,8 +92,7 @@ const {
   buildMarkdown,
   buildHtml,
   buildFactCheckMarkdown,
-  buildEditorChiefBrief,
-  ensureArray
+  buildEditorChiefBrief
 } = require('../render/newsletter-renderer');
 const {
   buildReferenceArticlesForIssue

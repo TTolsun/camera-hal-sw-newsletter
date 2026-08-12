@@ -10,6 +10,7 @@
 // 순환이 없다. publicArticleJudgeDeps는 여기서 { callLlmJson, recordEditorSemanticStatus,
 // validateEditor }로 만들어 export하고, god-file은 main()의 두 judge 호출처에서 이걸 import해
 // 쓴다. validateOrRepairEditor는 같은 local publicArticleJudgeDeps를 쓴다.
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { backgroundContextSchema } = require('../render/newsletter-schema');
 const { capsuleInputFromReport } = require('../select/article-capsules');
 const { buildStaticBackgroundContextReport } = require('../reporter/background-context');
@@ -18,7 +19,6 @@ const {
   repairEditorOutputContract,
   validateEditorOutputContract
 } = require('../editor/editor-output-contract');
-const { ensureArray } = require('../render/newsletter-renderer');
 const { normalizeEditorSection } = require('./orchestrator-reporter-normalize');
 const {
   backgroundContextStageEnabled,

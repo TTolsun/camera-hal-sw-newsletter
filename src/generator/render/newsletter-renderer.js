@@ -1038,6 +1038,5 @@ module.exports = {
   buildEditorChiefBrief,
   buildReleaseQaReport,
   issueTags,
-  weeklyTopicTags,
-  ensureArray
+  weeklyTopicTags
 };

@@ -11,6 +11,7 @@
 // 않아 순환이 없다. STATUS_FAILED_REPAIR_REVIEWABLE 상수와 root/runtimeConfig는 publish-status.js·
 // resolve-reviewable-artifacts.js와 동일하게 같은 리터럴·process.cwd()/readRuntimeConfig로 파생해
 // god-file과 byte-identical 동작을 유지한다.
+const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const { writeJson } = require('../../shared/common/common');
@@ -23,8 +24,7 @@ const {
 } = require('../editor/editor-output-contract');
 const {
   buildMarkdown,
-  buildFactCheckMarkdown,
-  ensureArray
+  buildFactCheckMarkdown
 } = require('../render/newsletter-renderer');
 const {
   buildNewsletterQualityReport,

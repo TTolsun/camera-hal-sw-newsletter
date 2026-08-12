@@ -2,12 +2,10 @@
 // warnResolvedImageFallbacks는 렌더된 이슈 섹션의 resolvedImage가 fallback을 썼을 때 사람이
 // 리뷰할 수 있도록 stderr 경고를 찍고, pruneResolvedFallbackImageFalsePositives는 fact-check가
 // 이미 해소된 fallback 이미지를 must-fix로 잘못 잡은 항목을 제거한다. 둘 다 "이미지 fallback 진단"
-// 이라는 한 역할로 묶인다. 의존성은 newsletter-renderer의 ensureArray와 fact-check-repair의
+// 이라는 한 역할로 묶인다. 의존성은 value-coercion의 ensureArray와 fact-check-repair의
 // pruneResolvedFallbackImageFactCheckItems(+root)뿐이라 god-file을 import하지 않는다(순환 없음).
 // root는 god-file과 동일하게 process.cwd()로 load 시점에 한 번 파생한다.
-const {
-  ensureArray
-} = require('../render/newsletter-renderer');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   pruneResolvedFallbackImageFactCheckItems
 } = require('../reporter/fact-check-repair');

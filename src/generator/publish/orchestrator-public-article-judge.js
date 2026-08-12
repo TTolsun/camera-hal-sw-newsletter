@@ -4,6 +4,7 @@
 // LLM 계측 래퍼 callLlmJson, generationRunState 기록기 recordEditorSemanticStatus, editor 검증기
 // validateEditor는 orchestrator god-file에 정의된 run-state 결합 함수라 deps로 주입받는다.
 // 나머지 협력자(prompt/schema/judge helper/editor contract/capsule)는 직접 import한다.
+const { ensureArray } = require('../../shared/common/value-coercion');
 const path = require('path');
 const { editorSchema, publicArticleJudgeSchema } = require('../render/newsletter-schema');
 const {
@@ -11,7 +12,6 @@ const {
   EditorSemanticValidationError,
   serializeEditorValidationError
 } = require('../editor/editor-output-contract');
-const { ensureArray } = require('../render/newsletter-renderer');
 const { claimRepairEvidencePrompt, publicArticleJudgePrompt } = require('../reporter/newsletter-prompts');
 const { writeJson } = require('../../shared/common/common');
 const { cloneJson } = require('./orchestrator-shared-helpers');
