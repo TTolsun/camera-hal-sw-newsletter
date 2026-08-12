@@ -19,9 +19,9 @@
 // publicArticleJudgeDeps는 publish-mode(generationRunState)에 결합된 editor 검증 seam이라
 // orchestrator-editor-validation에서 import한다. generationRunState / runtimeConfig는 god-file과
 // 동일한 모듈에서 재파생한다.
-const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { writeJson } = require('../../shared/common/common');
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');
 const {

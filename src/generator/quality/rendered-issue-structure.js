@@ -1,6 +1,6 @@
-const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 
 const {
   htmlAttr,

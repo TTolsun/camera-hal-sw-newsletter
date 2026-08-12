@@ -5,9 +5,9 @@
 // 싱글턴, runtimeConfig(env 동일 시점 재파생), selectionStatusExtra/buildSelectionReport이며
 // god-file-local 함수 주입이 없어 god-file을 import하지 않는다(순환 없음). root와 동일하게
 // runtimeConfig도 god-file과 같은 process.env로 load 시점에 한 번 파생한다.
-const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { kstDate, writeJson } = require('../../shared/common/common');
 const { newsroomRelPath } = require('../../shared/common/artifact-paths');
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');

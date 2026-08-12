@@ -17,6 +17,9 @@ const {
   STORY_CONTRACT_VERSIONS,
   publicContractVersionFor
 } = require('../../../shared/common/story-contract-version');
+const {
+  trackedFiles
+} = require('../../../shared/tooling/tracked-files');
 
 // 지원 집합 바로 위 값. 숫자를 박아 두면 계약 버전이 추가될 때 이 테스트가 지원
 // 버전을 검사하게 되어 조용히 공허해진다.
@@ -504,8 +507,14 @@ function renderRequireDestructurings(text) {
 
 test('no module reaches ensureArray through the newsletter renderer', () => {
   const root = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim();
-  const files = execFileSync('git', ['-C', root, 'ls-files', 'src'], { encoding: 'utf8' })
+  // 추적 파일은 공유 헬퍼로 받는다 — 인덱스에는 남고 워크트리에서 지워진 경로를 이미 거른다
+  // (그 둘을 섞으면 가드와 무관한 ENOENT로 죽는다).
+  // 미추적 파일도 함께 본다: 드리프트가 가장 흔히 생기는 순간이 새 파일을 쓴 직후·커밋 전이라
+  // 인덱스 목록만 보면 그 순간이 사각지대다.
+  const untracked = execFileSync('git', ['-C', root, 'ls-files', '--others', '--exclude-standard', 'src'], { encoding: 'utf8' })
     .split('\n')
+    .filter(Boolean);
+  const files = [...trackedFiles(root).filter(file => file.startsWith('src/')), ...untracked]
     .filter(file => file.endsWith('.js'));
   const offenders = [];
   for (const file of files) {

@@ -14,13 +14,11 @@
 // 협력자는 모두 이미 분리된 sibling/shared 모듈에서 직접 import하므로 god-file을 import하지
 // 않는다(순환 없음). root는 god-file과 동일하게 process.cwd()로, FAILURE_KIND_EDITORIAL_REVIEWABLE
 // 상수는 god-file과 동일한 리터럴로 load 시점에 한 번 파생한다.
-const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { writeJson } = require('../../shared/common/common');
-const {
-  issueTags
-} = require('../render/newsletter-renderer');
+const { issueTags } = require('../render/newsletter-renderer');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { COMPOSITION_MODES } = require('../select/newsroom-selection');
 const {
