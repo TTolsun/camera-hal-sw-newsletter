@@ -204,6 +204,9 @@ function writeSiteFixture(root, {
     md: `newsletters/${date}/newsletter.md`,
     tags: dataTags
   }]);
+  // 발행된 저장소에는 홈·아카이브가 fetch하는 weekly 인덱스도 있고 구조 검증이 둘 다
+  // 스캔한다. 이 fixture는 daily 호만 모델링하므로 weekly는 엔트리 없이 존재만 한다.
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), []);
   writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), newsletterMarkdown(date, count, { todo }));
   writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), newsletterHtml(date, {
     tags: htmlTags,
@@ -309,6 +312,7 @@ function writeFallbackPublicSiteFixture(root, {
     camera_anchor_count: cameraAnchorCount,
     ...(homepageBadge ? { homepage_badge: homepageBadge } : {})
   }]);
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), []);
   writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), fallbackNewsletterMarkdown(date, articleCount, { notice }));
   writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), fallbackNewsletterHtml(date, { tags, notice }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
