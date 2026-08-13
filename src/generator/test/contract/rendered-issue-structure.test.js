@@ -27,6 +27,8 @@ function escapeRegExp(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+// 발행된 저장소에는 인덱스가 둘 다 있다: 품질 재계산이 읽는 daily와 홈·아카이브가 fetch하는
+// weekly. 구조 검증이 둘 다 스캔하므로 fixture도 둘 다 써야 실제 저장소 모양이 된다.
 function writeNewsletterIndex(root, date = '2026-05-09') {
   writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date: '2026-05-08',
@@ -34,6 +36,17 @@ function writeNewsletterIndex(root, date = '2026-05-09') {
     summary: 'Existing issue entry',
     html: 'newsletters/2026-05-08/index.html',
     md: 'newsletters/2026-05-08/newsletter.md',
+    tags: ['camera-hal']
+  }]);
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{
+    weeklyKey: '2026-W19',
+    weekStartDate: '2026-05-04',
+    weekEndDate: '2026-05-10',
+    date: '2026-05-04',
+    title: '2026 W19',
+    summary: 'Existing weekly issue entry',
+    html: 'newsletters/2026-W19/index.html',
+    md: 'newsletters/2026-W19/newsletter.md',
     tags: ['camera-hal']
   }]);
   return date;

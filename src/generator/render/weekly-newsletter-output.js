@@ -25,6 +25,7 @@ const { writeSitemap } = require('./generate-sitemap');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../reporter/weekly-article-limits');
 const { resolveWeeklyArticles, sectionIdentity } = require('../reporter/weekly-duplicate-merge');
+const { indexContractVersionField } = require('../../shared/common/story-contract-version');
 
 // Browser-safe (https) image for a weekly article section, used to show one article image on the
 // homepage Latest card. Returns '' when the section has no usable https image.
@@ -90,6 +91,10 @@ function dedupeReferences(references) {
   return result;
 }
 
+function weeklyIndexPath(root) {
+  return path.join(root, 'articles', 'data', 'newsletters-weekly.json');
+}
+
 function readWeeklyIndex(dataPath) {
   if (!fs.existsSync(dataPath)) return [];
   try {
@@ -100,9 +105,13 @@ function readWeeklyIndex(dataPath) {
   }
 }
 
+function weeklyIndexEntry(root, weeklyKey) {
+  return readWeeklyIndex(weeklyIndexPath(root)).find(item => item && item.weeklyKey === weeklyKey) || null;
+}
+
 function upsertWeeklyIndex(root, entry) {
   const relPath = 'articles/data/newsletters-weekly.json';
-  const dataPath = path.join(root, 'articles', 'data', 'newsletters-weekly.json');
+  const dataPath = weeklyIndexPath(root);
   const updated = readWeeklyIndex(dataPath)
     .filter(item => item && item.weeklyKey !== entry.weeklyKey)
     .concat(entry)
@@ -182,7 +191,7 @@ function syncWeeklyArticleImages({ root = process.cwd(), date, sections } = {}) 
   }
 
   const articleImages = weeklyArticleImages(currentSections);
-  const dataPath = path.join(root, 'articles', 'data', 'newsletters-weekly.json');
+  const dataPath = weeklyIndexPath(root);
   const index = readWeeklyIndex(dataPath);
   const entry = index.find(item => item && item.weeklyKey === weeklyKey);
   if (entry && JSON.stringify(ensureArray(entry.article_images)) !== JSON.stringify(articleImages)) {
@@ -250,7 +259,11 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
     article_count: articles.length,
     // Distinct https article images (section order) so the homepage Latest card can show one
     // article image that is not the headline image.
-    article_images: weeklyArticleImages(page.issue.sections)
+    article_images: weeklyArticleImages(page.issue.sections),
+    // 홈·아카이브가 fetch하는 정본은 이 weekly 인덱스다. daily 인덱스와 같은 판정을 써서
+    // 계약 버전을 기록한다(보존·미지원 거부·강등 거부, v1은 기본값이라 생략).
+    // page.issue는 방금 issue.json으로 디스크에 쓴 바로 그 이슈다.
+    ...indexContractVersionField(page.weeklyKey, page.issue, weeklyIndexEntry(root, page.weeklyKey))
   });
 
   return {

@@ -95,6 +95,9 @@ function writePublicArtifacts(root, date, overrides = {}) {
     md: `newsletters/${date}/newsletter.md`,
     tags: ['Camera HAL']
   }]);
+  // 발행된 저장소에는 홈·아카이브가 fetch하는 weekly 인덱스도 있다. 구조 검증이 둘 다
+  // 스캔한다. 이 fixture는 daily 호만 모델링하므로 weekly는 엔트리 없이 존재만 한다.
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), []);
   writeRootIndex(root);
 }
 

@@ -102,10 +102,18 @@ function hasClassToken(content, className) {
   return false;
 }
 
-function validateNewsletterIndex(root, errors) {
-  const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
+// 발행 인덱스는 둘이고 규칙은 같다. daily는 품질 재계산이 읽는 정본이고, weekly는 홈·아카이브가
+// 실제로 fetch하는 정본이다(index.html / archive.html). 한쪽만 스캔하면 다른 쪽에 미지원 계약
+// 버전이 들어와도 게이트가 통과시킨다.
+const NEWSLETTER_INDEX_PATHS = [
+  'articles/data/newsletters.json',
+  'articles/data/newsletters-weekly.json'
+];
+
+function validateNewsletterIndex(root, relativePath, errors) {
+  const dataPath = path.join(root, ...relativePath.split('/'));
   if (!fs.existsSync(dataPath)) {
-    errors.push('Missing articles/data/newsletters.json');
+    errors.push(`Missing ${relativePath}`);
     return;
   }
 
@@ -113,45 +121,45 @@ function validateNewsletterIndex(root, errors) {
   try {
     newsletters = readJson(dataPath);
   } catch (error) {
-    errors.push(`Invalid JSON in articles/data/newsletters.json: ${error.message}`);
+    errors.push(`Invalid JSON in ${relativePath}: ${error.message}`);
     return;
   }
 
   if (!Array.isArray(newsletters)) {
-    errors.push('articles/data/newsletters.json must contain an array');
+    errors.push(`${relativePath} must contain an array`);
     return;
   }
 
   const seenDates = new Set();
   for (const [index, item] of newsletters.entries()) {
     if (!item || typeof item !== 'object' || Array.isArray(item)) {
-      errors.push(`Newsletter entry ${index} must be an object.`);
+      errors.push(`${relativePath} entry ${index} must be an object.`);
       continue;
     }
     for (const field of REQUIRED_NEWSLETTER_FIELDS) {
       if (!(field in item)) {
-        errors.push(`Newsletter entry ${index} is missing "${field}"`);
+        errors.push(`${relativePath} entry ${index} is missing "${field}"`);
       }
     }
     if (newsletterIndexContractVersion(item) === 0) {
       errors.push(
-        `Newsletter entry ${index} declares an unsupported public_contract_version ` +
+        `${relativePath} entry ${index} declares an unsupported public_contract_version ` +
         `"${item.public_contract_version}" (supported: ${PUBLIC_CONTRACT_VERSIONS.join(', ')})`
       );
     }
     if (!DATE_PATTERN.test(item.date || '')) {
-      errors.push(`Newsletter entry ${index} has invalid date: ${item.date}`);
+      errors.push(`${relativePath} entry ${index} has invalid date: ${item.date}`);
     }
     if (seenDates.has(item.date)) {
-      errors.push(`Duplicate newsletter date: ${item.date}`);
+      errors.push(`${relativePath} entry ${index} duplicates newsletter date: ${item.date}`);
     }
     seenDates.add(item.date);
     if (!Array.isArray(item.tags)) {
-      errors.push(`Newsletter ${item.date} tags must be an array`);
+      errors.push(`${relativePath} entry ${index} tags must be an array`);
     }
     for (const key of ['html', 'md']) {
       if (!repoPath(root, item[key] || '')) {
-        errors.push(`Newsletter ${item.date} ${key} path escapes repository: ${item[key]}`);
+        errors.push(`${relativePath} entry ${index} ${key} path escapes repository: ${item[key]}`);
       }
     }
   }
@@ -351,7 +359,9 @@ function validateRenderedIssueStructure({
   const issueDate = date || editor?.date || 'unknown';
 
   if (validateDataIndex) {
-    validateNewsletterIndex(root, errors);
+    for (const relativePath of NEWSLETTER_INDEX_PATHS) {
+      validateNewsletterIndex(root, relativePath, errors);
+    }
   }
   validateMarkdownStructure(issueDate, markdown, errors);
   validateHtmlStructure(issueDate, html, root, errors, strictArtifactValidation);
