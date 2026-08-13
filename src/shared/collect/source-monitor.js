@@ -224,25 +224,46 @@ function releaseEvidenceKey(anchors = []) {
   return release || '';
 }
 
-function releaseRowsByKey(rows = []) {
-  const map = new Map();
-  for (const row of ensureArray(rows)) {
-    const key = text(row.anchor || row.version);
-    if (key) map.set(key, row);
-  }
-  return map;
-}
-
 function releaseRowKey(row = {}) {
   if (!row) return '';
   return text(row.anchor || row.version);
 }
 
+// 앵커 하나만으로는 릴리스 행의 정체성이 되지 않는다. 실제 CameraX 릴리스 노트 페이지는
+// 같은 id를 단 h3 섹션(camera-view-1.0.0-alpha12)을 두 번 싣고, 그러면 서로 다른 두 구간이
+// 한 열쇠로 겹친다. 겹치면 지도에는 뒤 행만 남아서 앞 행의 해시를 뒤 행의 해시와 비교하게
+// 되고, 둘은 절대 같아지지 않으므로 매 실행마다 2020년 날짜를 단 release_row_changed가
+// 나온다(그 5년 전 이벤트가 이슈로 신고된 증상이다).
+// 그래서 같은 앵커가 두 번째로 나오면 등장 순서를 붙여 행을 갈라 준다. 행 목록의 순서는
+// extractReleaseRows가 확정해 두므로 이 번호도 실행마다 같은 값이 나온다.
+function releaseRowKeys(rows = []) {
+  const occurrenceCount = new Map();
+  return ensureArray(rows).map(row => {
+    const anchorKey = releaseRowKey(row);
+    if (!anchorKey) return '';
+    const occurrence = (occurrenceCount.get(anchorKey) || 0) + 1;
+    occurrenceCount.set(anchorKey, occurrence);
+    return occurrence === 1 ? anchorKey : `${anchorKey}#occurrence-${occurrence}`;
+  });
+}
+
+function releaseRowsByKey(rows = []) {
+  const keys = releaseRowKeys(rows);
+  const map = new Map();
+  ensureArray(rows).forEach((row, index) => {
+    if (keys[index]) map.set(keys[index], row);
+  });
+  return map;
+}
+
 function releaseRowDiff(previousRows = [], currentRows = []) {
   const previousByKey = releaseRowsByKey(previousRows);
-  for (const row of ensureArray(currentRows)) {
-    const key = releaseRowKey(row);
+  const rows = ensureArray(currentRows);
+  const keys = releaseRowKeys(rows);
+  for (let index = 0; index < rows.length; index += 1) {
+    const key = keys[index];
     if (!key) continue;
+    const row = rows[index];
     const previous = previousByKey.get(key);
     if (!previous) {
       return { type: 'added', row };

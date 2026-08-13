@@ -392,6 +392,89 @@ test('release row event date comes from the newest row, not the alphabetically f
   assert.equal(event.effective_date, '2026-07-01');
 });
 
+// 실제 CameraX 릴리스 노트는 같은 id를 단 h3 섹션을 두 번 싣는다(camera-view-1.0.0-alpha12).
+// 두 구간의 본문이 달라 해시도 다른데, 앵커만으로 정체성을 잡으면 둘이 한 열쇠로 겹쳐
+// 앞 구간 해시와 뒤 구간 해시를 맞대 보게 되고 매 실행마다 2020년 이벤트가 나온다.
+const duplicateAnchorReleaseRowHtml = `
+  <html>
+    <body>
+      <h3 id="camera-view-1.0.0-alpha12">Camera-View Version 1.0.0-alpha12</h3>
+      <p>June 10, 2020</p>
+      <p>Bug Fixes: adds PreviewView#getBitmap() to the camera-view artifact.</p>
+      <h3 id="camera-extensions-1.0.0-alpha11">Camera-Extensions Version 1.0.0-alpha11</h3>
+      <p>May 27, 2020</p>
+      <p>androidx.camera:camera-extensions:1.0.0-alpha11 is released.</p>
+      <h3 id="camera-view-1.0.0-alpha12">Camera-View Version 1.0.0-alpha12</h3>
+      <p>June 10, 2020</p>
+      <p>New Features, API Changes, Bug Fixes: adds PreviewView#getBitmap() to the camera-view artifact.</p>
+    </body>
+  </html>
+`;
+
+function androidxObservation(html) {
+  return observationFromHtml({
+    source: androidxSource,
+    url: androidxSource.root_url,
+    html
+  });
+}
+
+test('a repeated release row anchor keeps both rows and stops reporting a phantom change', () => {
+  const observation = androidxObservation(duplicateAnchorReleaseRowHtml);
+  const repeated = observation.release_rows.filter(row => row.anchor.endsWith('#camera-view-1.0.0-alpha12'));
+
+  assert.equal(repeated.length, 2);
+  assert.notEqual(repeated[0].hash, repeated[1].hash);
+
+  const event = classifyObservation({
+    source: androidxSource,
+    previous: observation,
+    current: androidxObservation(duplicateAnchorReleaseRowHtml),
+    snapshot: snapshot({ pages: [observation] }),
+    detectedAt: '2026-08-14T00:00:00.000Z'
+  });
+
+  assert.equal(event.event_type, 'no_meaningful_change');
+});
+
+test('a real body change in the repeated release row is still reported', () => {
+  const previous = androidxObservation(duplicateAnchorReleaseRowHtml);
+  const current = androidxObservation(
+    duplicateAnchorReleaseRowHtml.replace('adds PreviewView#getBitmap() to the camera-view artifact.</p>\n      <h3 id="camera-extensions', 'adds PreviewView#getBitmap() and PreviewView#getScaleType() to the camera-view artifact.</p>\n      <h3 id="camera-extensions')
+  );
+
+  assert.notEqual(previous.release_rows[0].hash, current.release_rows[0].hash);
+
+  const event = classifyObservation({
+    source: androidxSource,
+    previous,
+    current,
+    snapshot: snapshot({ pages: [previous] }),
+    detectedAt: '2026-08-14T00:00:00.000Z'
+  });
+
+  assert.equal(event.event_type, 'release_row_changed');
+});
+
+// 발행 상태로 커밋된 스냅샷 자체를 다시 흘려 보는 회귀 검사. 이 파일의 200개 행 중
+// camera-view-1.0.0-alpha12 앵커가 두 번 들어 있어서, 정체성이 겹치면 소스가 하나도 안
+// 바뀐 실행에서도 5년 전 날짜를 단 release_row_changed가 계속 나왔다.
+test('the committed CameraX snapshot replays through the diff without a spurious change', () => {
+  const snapshotFile = path.join(__dirname, '..', '..', '..', '..', '..', 'state', 'source-snapshots', 'androidx-camerax-release-notes.json');
+  const committed = JSON.parse(fs.readFileSync(snapshotFile, 'utf8'));
+  const committedPage = committed.pages[0];
+
+  const event = classifyObservation({
+    source: androidxSource,
+    previous: committedPage,
+    current: { ...committedPage },
+    snapshot: snapshot({ source_id: androidxSource.source_id, pages: [committedPage] }),
+    detectedAt: '2026-08-14T00:00:00.000Z'
+  });
+
+  assert.equal(event.event_type, 'no_meaningful_change');
+});
+
 test('existing release row body change creates release_row_changed', () => {
   const row = {
     version: '1.6.1',
