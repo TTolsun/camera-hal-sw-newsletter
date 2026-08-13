@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const { validateMergedWeeklyArticle } = require('../../../publish/orchestrator-report-builders');
+const { resolveWeeklyArticles } = require('../../../reporter/weekly-duplicate-merge');
 
 // #870: weekly LLM 병합 결과를 채택하기 전에 "원본의 출처를 그대로 이어받았는가"를 강제한다.
 // 검증기가 LLM 출력 하나만 보면 sources와 public_article.source_links를 같은 모델이 함께
@@ -157,4 +158,83 @@ test('실패 사유는 이슈 타입 문자열과 구조화된 이슈 목록으�
   const validation = validateMergedWeeklyArticle(merged, origins(), STORY_ISSUE_MARKERS);
   assert.equal(validation.reason, 'merged_article_has_no_source');
   assert.doesNotMatch(validation.reason, /\[object Object\]/);
+});
+
+// ── 실제 배선으로 한 번 돌려 본다 ────────────────────────────────────────────────
+// 채택 section을 만드는 쪽(resolveWeeklyArticles)과 그것을 판정하는 쪽
+// (validateMergedWeeklyArticle)은 서로 다른 모듈이다. 인자 모양이 어긋나면 두 모듈의 단위
+// 테스트는 그대로 통과하면서 실제 병합 경로만 조용히 죽는다. 이 경로는 아직 운영에서 한 번도
+// 돈 적이 없으므로 여기서 실물로 한 번 돌린다.
+
+const CAMERAX_V16_URL = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0';
+
+function releaseLinkV16() {
+  return { title: 'CameraX 1.6.0 릴리스 노트', url: CAMERAX_V16_URL };
+}
+
+// 같은 release-note 페이지의 다른 버전이라 near-duplicate로 잡혀 LLM 병합 경로로 들어간다.
+function weeklyOrigins() {
+  const existing = storySection('CameraX 1.6.0 릴리스 노트', [releaseLinkV16()]);
+  existing.selectedImage = 'https://images.example/verified.png';
+  existing.resolvedImage = { url: 'https://images.example/verified.png' };
+  return { existing, incoming: storySection('CameraX 1.7.0 릴리스 노트', [releaseLink()]) };
+}
+
+async function resolveWithRealValidator(mergedPublicArticle) {
+  const { existing, incoming } = weeklyOrigins();
+  const result = await resolveWeeklyArticles({
+    existingArticles: [existing],
+    incomingArticles: [incoming],
+    mergeDuplicate: async () => ({
+      decision: 'merge',
+      reason: 'same release note page',
+      mergedArticle: {
+        headline: 'CameraX 1.6.0/1.7.0 릴리스 노트',
+        selectedImage: 'https://attacker.example/not-validated.png',
+        sources: [{ title: '지어낸 근거', url: 'https://example.invalid/fabricated-evidence' }],
+        public_article: mergedPublicArticle
+      }
+    }),
+    validateMerged: (mergedArticle, mergeOrigins) =>
+      validateMergedWeeklyArticle(mergedArticle, mergeOrigins, STORY_ISSUE_MARKERS)
+  });
+  return { existing, result };
+}
+
+function mergedPublicArticle(sourceLinks) {
+  return { ...storySection('CameraX 1.6.0/1.7.0 릴리스 노트', [releaseLinkV16()]).public_article, source_links: sourceLinks };
+}
+
+test('실제 배선: 두 원본의 인용을 모두 이어받은 병합은 채택되고 결정론 필드는 기존 기사 것이 남는다', async () => {
+  const { result } = await resolveWithRealValidator(mergedPublicArticle([releaseLinkV16(), releaseLink()]));
+  assert.deepEqual(result.warnings, []);
+  assert.deepEqual(result.decisions.map(item => item.decision), ['merge']);
+  const adopted = result.existingArticles[0];
+  assert.deepEqual(adopted.public_article.source_links.map(link => link.url), [CAMERAX_V16_URL, RELEASE_URL]);
+  assert.deepEqual(adopted.sources.map(source => source.url), [CAMERAX_V16_URL, RELEASE_URL]);
+  // LLM이 써 보낸 이미지가 아니라 기존 기사가 이미 검증해 둔 이미지가 남아야 한다.
+  assert.equal(adopted.selectedImage, 'https://images.example/verified.png');
+});
+
+test('실제 배선: 원본 인용을 하나 떨어뜨린 병합은 거부되고 기존 기사가 남는다', async () => {
+  const { existing, result } = await resolveWithRealValidator(mergedPublicArticle([releaseLinkV16()]));
+  assert.equal(result.existingArticles[0], existing);
+  assert.equal(result.appendedArticles.length, 0);
+  assert.deepEqual(
+    result.warnings[0].issues.map(issue => issue.type),
+    ['merged_article_dropped_origin_source']
+  );
+});
+
+// sources를 결정론적으로 만들면 인용 allow-list도 결정론이 되고, 지어낸 인용은 기존 계약
+// 검증기(source_link allow-list 검사)가 그대로 잡는다.
+test('실제 배선: 원본에 없던 URL을 인용한 병합은 거부되고 기존 기사가 남는다', async () => {
+  const { existing, result } = await resolveWithRealValidator(mergedPublicArticle([
+    releaseLinkV16(),
+    releaseLink(),
+    { title: '지어낸 근거', url: 'https://example.invalid/fabricated-evidence' }
+  ]));
+  assert.equal(result.existingArticles[0], existing);
+  assert.deepEqual(result.warnings[0].issues.map(issue => issue.type), ['invalid_source_link']);
+  assert.equal(result.warnings[0].issues[0].reason, 'url_not_in_allowed_source_set');
 });
