@@ -551,7 +551,7 @@
       "source": "curated",
       "allowedUse": "parser-source-html",
       "expectedStatus": "n/a",
-      "protectedPolicy": "AOSP Site Updates month-level camera child rows, including rows whose update cell carries the changed-document link",
+      "protectedPolicy": "AOSP Site Updates month-level camera child rows, including rows whose update cell carries the changed-document link and the mirror rows whose first cell already names the changed document",
       "generatedArtifact": false,
       "relatedRules": [
         "parser_contract"

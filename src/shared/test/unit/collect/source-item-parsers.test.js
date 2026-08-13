@@ -239,8 +239,10 @@ test('AOSP Site updates parser extracts month-level camera child rows only', () 
     assert.equal(item.sourceMonth, 'April 2026');
     assert.match(item.version_or_release, /AOSP Site Updates - April 2026/);
   }
-  // 뒤 두 개는 변경 내용 칸에 자기 앵커를 단 행이다. 섹션 칸("Compatibility")이 아니라
-  // 실제로 바뀐 문서를 제목·URL로 가져와야 한다.
+  // 첫 행은 거울 모양이다. 첫 칸이 이미 바뀐 문서(Camera ITS)를 가리키고 마지막 칸에는 형제
+  // 문서로 가는 참고 링크만 있으므로, 첫 칸 정체성을 그대로 지켜야 한다.
+  // 뒤 두 개는 반대 모양이다. 첫 칸이 섹션 랜딩("Compatibility")이거나 비어 있으므로
+  // 변경 내용 칸에 달린 실제로 바뀐 문서를 제목·URL로 가져와야 한다.
   assert.deepEqual(items.map(item => item.title), [
     'Camera ITS',
     'Camera images automation',

@@ -765,16 +765,35 @@ function parseAospWhatsNew(html, source) {
   }).filter(hasReleaseItemEvidence);
 }
 
-// AOSP Site Updates 표는 첫 칸에 섹션 이름 링크를, 마지막 칸에 "무엇이 어디서 바뀌었는지"를 싣는다.
-// 행 전체에서 첫 앵커를 고르면 그 섹션 랜딩 페이지(/docs/compatibility)가 제목과 URL이 되어,
+// 섹션 랜딩 링크인지 판정한다. 문자열 접두사만 보면 /docs/compatibility/cts/camera-its 가
+// /docs/compatibility/cts/camera-its-box 의 상위로 잘못 잡히므로, 경로 구분자까지 포함해
+// 비교한다(형제 문서는 상위가 아니다).
+function isSectionLandingUrl(sectionUrl = '', changedDocumentUrl = '') {
+  try {
+    const section = new URL(sectionUrl);
+    const changed = new URL(changedDocumentUrl);
+    if (section.origin !== changed.origin) return false;
+    return changed.pathname.startsWith(`${section.pathname.replace(/\/+$/, '')}/`);
+  } catch {
+    return false;
+  }
+}
+
+// AOSP Site Updates 표는 대개 첫 칸에 섹션 이름 링크를, 마지막 칸에 "무엇이 어디서 바뀌었는지"를
+// 싣는다. 행 전체에서 첫 앵커를 고르면 그 섹션 랜딩 페이지(/docs/compatibility)가 제목과 URL이 되어,
 // 독자가 실제로 바뀐 문서 대신 목차로 간다. 그래서 표 행이면 변경 내용 칸의 앵커를 본다.
-// 변경 내용 칸에 앵커가 없는 행(첫 칸에만 링크가 있는 모양)과 표가 아닌 조각은 null을 돌려
-// 기존 경로를 그대로 타게 한다.
+// 다만 첫 칸이 이미 바뀐 문서를 직접 가리키고 마지막 칸에는 참고용 상호 링크만 있는 행도 있다.
+// 그런 행에서 마지막 칸을 택하면 맞는 정체성을 틀린 것으로 바꾼다. 그래서 마지막 칸을 택하는
+// 조건은 두 가지뿐이다. 첫 칸에 앵커가 없거나, 첫 칸 링크가 마지막 칸 링크의 상위 경로일 때.
+// 나머지(표가 아닌 조각 포함)는 null을 돌려 기존 경로를 그대로 타게 한다.
 function aospSiteUpdateCellAnchor(chunk = '', baseUrl = '') {
   const cells = [...String(chunk).matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)].map(match => match[1]);
   if (cells.length < 2) return null;
-  const anchor = firstAnchor(cells[cells.length - 1], baseUrl);
-  return anchor?.title && anchor.url ? anchor : null;
+  const updateAnchor = firstAnchor(cells[cells.length - 1], baseUrl);
+  if (!updateAnchor?.title || !updateAnchor.url) return null;
+  const sectionAnchor = firstAnchor(cells[0], baseUrl);
+  if (!sectionAnchor?.url) return updateAnchor;
+  return isSectionLandingUrl(sectionAnchor.url, updateAnchor.url) ? updateAnchor : null;
 }
 
 function parseAospSiteUpdates(html, source) {
