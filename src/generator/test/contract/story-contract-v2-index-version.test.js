@@ -389,12 +389,21 @@ test('a weekly rerun without the marker keeps the recorded contract version', as
   assert.equal(readWeeklyIndex(root)[0].public_contract_version, 'story-v2');
 });
 
-// 혼합 stamp 정책(#873 작업 범위 3): 거부한다.
+// ---- 거부된 weekly 실행은 발행 상태를 건드리지 않는다 ----
 //
-// 같은 주에 v2 이슈 마커가 이전 실행에서 넘어온 v1 section 위에 씌워지는 상태는 T5(#889)가
-// render 진입에서 이미 hard-fail로 막는다. 낮춰서 발행하지 않고 실패시키는 것이 이 저장소의
-// fail-over-fabricate 방침이고, 두 번째 혼합 탐지기를 새로 만들지 않는다.
-test('a weekly v2 stamp over carried-over v1 sections fails instead of writing a mixed artifact', async () => {
+// weekly 한 회 실행은 페이지 파일 셋(index.html / newsletter.md / issue.json)과 인덱스
+// 엔트리를 같이 쓴다. 거부가 그 사이에서 나면 한쪽만 새 내용이 되어, 홈·아카이브가 fetch하는
+// 공개 정본이 실제 아티팩트와 어긋난다. 거부 지점은 둘 — render 진입의 계약 패밀리
+// 검사(T5/#889)와 인덱스 계약 버전 판정(#873) — 이고 아래 둘이 각각을 잠근다.
+//
+// 범위 주의: 아래 둘은 거부가 writeWeeklyNewsletterArtifacts 호출자까지 **전파된다**는 것만
+// 잠근다. 그 호출자(orchestrator-publish-decision.js:113)는 아직 이 예외를 stderr 로그로만
+// 삼키므로, 거부가 게이트에 관측되는지는 이 파일이 다루지 않는다.
+
+// 같은 주에 v2 이슈 마커가 이전 실행에서 넘어온 v1 section 위에 씌워지는 혼합 stamp는
+// T5(#889)가 render 진입에서 hard-fail로 막는다. 그 판정 자체는 #889의 것이고, 여기서
+// 잠그는 것은 weekly writer가 그 거부를 삼키지 않고 발행 상태를 그대로 둔다는 합성 동작이다.
+test('a weekly run rejected by the render contract check leaves the published state untouched', async () => {
   const root = tempRoot('weekly-index-version-mixed-');
 
   await writeWeeklyNewsletterArtifacts({
@@ -403,6 +412,7 @@ test('a weekly v2 stamp over carried-over v1 sections fails instead of writing a
     editor: weeklyDraft([weeklySection('1.6.0', 'https://example.com/a', 1)], STORY_V1_MARKERS),
     tags: []
   });
+  const before = readWeeklyIndex(root);
 
   await assert.rejects(
     () => writeWeeklyNewsletterArtifacts({
@@ -414,10 +424,11 @@ test('a weekly v2 stamp over carried-over v1 sections fails instead of writing a
     /story_contract_version_family_mismatch\(public_contract_version=2 generation_contract_version=2 story_contract_version=1\)/
   );
 
-  // 실패한 실행이 인덱스에 v2를 남기면 안 된다 — 남으면 공개 정본이 실제 아티팩트와 어긋난다.
-  const index = readWeeklyIndex(root);
-  assert.equal(index.length, 1);
-  assert.equal('public_contract_version' in index[0], false);
+  assert.deepEqual(
+    readWeeklyIndex(root),
+    before,
+    '거부된 weekly 실행이 인덱스 엔트리를 바꿨다 — 공개 정본이 실제 아티팩트와 어긋난다'
+  );
 });
 
 test('a weekly run rejected by the index contract check writes no page files', async () => {
