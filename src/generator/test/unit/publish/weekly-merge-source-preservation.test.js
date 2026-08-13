@@ -18,12 +18,14 @@ const RELEASE_URL = 'https://developer.android.com/jetpack/androidx/releases/cam
 
 // validatePublicArticle을 실제로 통과하는 story 계약 v1 section. 여기서 통과하지 못하면
 // "정상 병합이 채택된다"는 절반을 증명할 수 없다.
-function storySection(headline, sourceLinks) {
+// sources(인용 가능 URL의 allow-list)와 source_links(실제로 발행되는 인용 목록)는 서로 다른
+// 필드다. 기본값은 같게 두되, 둘이 어긋난 병합을 만들 수 있도록 따로 받는다.
+function storySection(headline, sources, sourceLinks = sources) {
   return {
     category: 'Camera HAL',
     headline,
-    sources: sourceLinks,
-    source_candidate_url: sourceLinks[0].url,
+    sources,
+    source_candidate_url: sources[0].url,
     public_article: {
       headline,
       lead: '이번 주 리눅스 미디어 메일링 리스트에 카메라 센서 드라이버 패치가 올라왔습니다. 드라이버 계층에서 확인할 부분을 정리했습니다.',
@@ -100,6 +102,21 @@ test('원본이 발행하던 출처를 떨어뜨린 병합 결과는 거부된�
   const validation = validateMergedWeeklyArticle(merged, origins(), STORY_ISSUE_MARKERS);
   assert.equal(validation.ok, false);
   assert.deepEqual(issueTypes(validation), ['merged_article_dropped_origin_source']);
+});
+
+// 유실 판정을 sources에서 하면 이 모양이 통과한다. sources에는 두 출처가 다 있지만 독자가
+// 보는 인용 목록에서 한쪽이 빠져, 발행 지면에서는 그 근거가 사라진다. 병합 프롬프트가
+// source_links를 sources의 진부분집합으로 허용하므로 이건 규칙을 지킨 정상 응답 모양이다.
+test('sources를 모두 이어받았어도 발행 인용 목록에서 원본 출처를 빼면 거부된다', () => {
+  const merged = storySection(
+    '센서 드라이버 패치와 CameraX 릴리스',
+    [patchLink(), releaseLink()],
+    [patchLink()]
+  );
+  const validation = validateMergedWeeklyArticle(merged, origins(), STORY_ISSUE_MARKERS);
+  assert.equal(validation.ok, false);
+  assert.deepEqual(issueTypes(validation), ['merged_article_dropped_origin_source']);
+  assert.equal(validation.issues[0].url, RELEASE_URL);
 });
 
 // 빈 sources는 allow-list를 비우고, 빈 allow-list는 source_link URL 검사를 통째로
