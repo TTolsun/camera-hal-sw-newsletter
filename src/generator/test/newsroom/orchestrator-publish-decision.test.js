@@ -38,6 +38,9 @@ function withStubbedCollaborators(run) {
     writeGenerationStatus: [],
     writeSelectionDiagnosticsArtifact: 0,
     weekly: 0,
+    // #870: weekly writer에 넘어간 병합 검증 클로저. 이 배선은 writer를 stub으로 갈아끼우면
+    // 보이지 않으므로 클로저 자체를 붙잡아 직접 호출해 확인한다.
+    weeklyValidateMerged: null,
     selectionStatusExtraOptions: []
   };
   const stubs = [
@@ -73,8 +76,9 @@ function withStubbedCollaborators(run) {
       writeSelectionDiagnosticsArtifact: () => { calls.writeSelectionDiagnosticsArtifact += 1; }
     }),
     stubModule(WEEKLY_OUTPUT, {
-      writeWeeklyNewsletterArtifacts: async () => {
+      writeWeeklyNewsletterArtifacts: async (args) => {
         calls.weekly += 1;
+        calls.weeklyValidateMerged = args.validateMerged;
         return { files: ['articles/newsletters/weekly/x/index.html'], mergeWarnings: [], mergeDecisions: [], weeklyKey: 'wk' };
       }
     })
@@ -249,5 +253,60 @@ test('editor가 기록한 hard block을 status coverage 입력으로 넘긴다',
       options.hardBlockedGroups.map(item => item.article_group_key),
       ['group:dropped']
     );
+  });
+});
+
+// #870: weekly 병합 검증기에 (1) 병합 전 원본과 (2) 오늘 editor draft의 계약 마커가 실제로
+// 전달되는지 잠근다. weekly writer는 stub이라 이 배선은 다른 어떤 테스트에도 잡히지 않는다.
+// 원본이 없으면 지어낸 출처를 가려낼 수 없고, 마커가 없으면 story 계약 기사가 항상
+// mismatch로 떨어져 병합 채택 경로가 통째로 닫힌다.
+test('weekly 병합 검증기에 병합 전 원본과 이슈 계약 마커를 넘긴다', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    await decide(baseArgs(newsroomDir, newsletterDir, {
+      editor: {
+        ...baseArgs(newsroomDir, newsletterDir).editor,
+        public_contract_version: 'story-v1',
+        generation_contract_version: 1
+      }
+    }));
+
+    assert.equal(typeof calls.weeklyValidateMerged, 'function');
+    const originArticle = {
+      headline: 'A',
+      sources: [{ title: 'A', url: 'https://example.com/a' }]
+    };
+    const mergedArticle = {
+      headline: 'A merged',
+      sources: [{ title: 'A', url: 'https://example.com/a' }],
+      public_article: {
+        headline: 'A merged',
+        lead: '병합된 기사의 도입 문단입니다. 이번 주 카메라 드라이버 변경을 한 줄로 정리했습니다.',
+        body_paragraphs: [
+          '첫 문단은 드라이버가 무엇을 바꾸는지 설명합니다. 상위 파이프라인이 버퍼를 준비하는 방식에 이어집니다.',
+          '두 번째 문단은 확인할 지점을 정리합니다. 스트림을 길게 돌려 프레임 드롭을 봅니다.'
+        ],
+        camera_hal_takeaway: '드라이버가 선언한 포맷이 실제 스트림에서 유지되는지 확인해야 합니다.',
+        reader_checkpoints: ['MIPI CSI-2 레인 수를 바꿔가며 전송이 끊기지 않는지 확인한다.'],
+        source_links: [{ title: 'A', url: 'https://example.com/a' }]
+      }
+    };
+
+    // 원본이 넘어오지 않으면 이 판정 자체가 불가능하다.
+    const fabricated = calls.weeklyValidateMerged(mergedArticle, {
+      existing: { headline: 'other', sources: [{ title: 'other', url: 'https://example.com/other' }] },
+      incoming: { headline: 'other2', sources: [{ title: 'other2', url: 'https://example.com/other2' }] }
+    });
+    assert.equal(fabricated.ok, false);
+    assert.ok(fabricated.issues.some(issue => issue.type === 'merged_article_source_not_in_origin'));
+
+    // 마커가 넘어오지 않으면 story 계약 마커가 없는 이 기사는 mismatch로 잡히지 않는다.
+    const markerChecked = calls.weeklyValidateMerged(mergedArticle, {
+      existing: originArticle,
+      incoming: originArticle
+    });
+    assert.equal(markerChecked.ok, false);
+    assert.ok(markerChecked.issues.some(issue => issue.type === 'story_contract_version_mismatch'));
   });
 });

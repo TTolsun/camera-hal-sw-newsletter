@@ -93,7 +93,13 @@ async function decidePublishReadinessAndWriteStatus({
     try {
       const weeklyMerge = buildWeeklyMergeResolver({
         callLlmJson,
-        validateMergedArticle: validateMergedWeeklyArticle
+        // #870: 병합 결과는 이 주 issue.json에 실려 나가고, 그 이슈의 계약 마커는 오늘
+        // editor draft의 마커다(weekly issue는 `{...editor}` 위에 만들어진다). 마커를 빼면
+        // story 계약 기사가 항상 mismatch로 떨어져 병합 채택 경로가 통째로 닫힌다.
+        validateMergedArticle: (mergedArticle, origins) => validateMergedWeeklyArticle(mergedArticle, origins, {
+          public_contract_version: editor.public_contract_version,
+          generation_contract_version: editor.generation_contract_version
+        })
       });
       const weeklyResult = await writeWeeklyNewsletterArtifacts({
         root, date, editor, tags: issueTags(editor), ...weeklyMerge

@@ -572,6 +572,9 @@ const editorialPlanSchema = {
 module.exports = {
   reporterSchema,
   editorSchema,
+  // weekly 중복 병합(#870)도 같은 public_article을 요구한다. 모양을 따로 적으면 계약이
+  // 갈라지므로 이 정의를 그대로 쓴다.
+  publicArticleSchema: publicArticle,
   editorCompletionSchema,
   editorRepairPatchSchema,
   factCheckSchema,

@@ -1172,6 +1172,7 @@ module.exports = {
   detectStoryContractMismatch,
   isConcreteCheckpoint,
   issueStoryContractVersion,
+  normalizedSourceUrlKey,
   publicArticleExpectedKeys,
   mergePublicArticleFromLlm,
   mergePublicArticlesFromLlmSections,
