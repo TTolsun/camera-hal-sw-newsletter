@@ -249,7 +249,15 @@ jobs:
         run: npm run report:evidence-pack -- --date "${{ steps.meta.outputs.date }}"
 
       - name: Audit newsletter image lineage
+        id: audit-images
         if: always() && steps.meta.outputs.date != ''
+        # 감사가 job을 죽이면 뒤의 PR 생성 스텝이 통째로 skip돼 그 주 뉴스레터 PR이 아예 생기지
+        # 않는다(#886). 사라지는 것은 발행물이 아니라 사람이 판단할 리뷰 표면이라, 실패는 job이
+        # 아니라 라벨로 드러낸다. 두 지점이 이 강등을 받쳐 준다.
+        #  1) 아래 "Add pull request labels"가 이 스텝의 outcome을 읽어 publish-ready 라벨을 꺾는다.
+        #  2) 머지 경로에서는 validate:images가 PR에 함께 커밋된 image-audit-report.json의
+        #     publish 차단 카운트를 읽어 같은 조건을 차단한다.
+        continue-on-error: true
         run: |
           if [ "${{ steps.meta.outputs.public_newsletter_ready }}" = "true" ]; then
             npm run newsroom:audit-images -- --date "${{ steps.meta.outputs.date }}" --fail-on-publish-blocking
@@ -416,7 +424,8 @@ jobs:
             const issue_number = Number('${{ steps.cpr.outputs.pull-request-number }}');
             const stateLabels = ['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week', 'review-only', 'review-only-publication', 'diagnostics-only', 'failed-repair-reviewable'];
             const labels = ['newsletter', 'aosp-camera'];
-            const hasAiPublishReady = '${{ steps.final-publish-status.outputs.has_ai_publish_ready }}' === 'true';
+            const imageAuditPassed = '${{ steps.audit-images.outcome }}' !== 'failure';
+            const hasAiPublishReady = '${{ steps.final-publish-status.outputs.has_ai_publish_ready }}' === 'true' && imageAuditPassed;
             const compositionMode = '${{ steps.final-publish-status.outputs.composition_mode }}';
             const diagnosticsOnly = '${{ steps.meta.outputs.diagnostics_only }}' === 'true';
             const reviewPublicationReady = '${{ steps.meta.outputs.review_publication_ready }}' === 'true';

@@ -19,6 +19,7 @@ const {
 const {
   toLegacyEditorIssue
 } = require('../../shared/domain/newsletter-domain-normalize');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { strictTargetDates } = require('../reporter/validation-targets');
 
 const root = process.cwd();
@@ -42,6 +43,46 @@ function warn(message) {
 // repo 무결성 문제라 date와 무관하게 그대로 차단한다. 형제 validator와 동일한 validation-targets 스코핑.
 function shouldLiveValidate(date, strictDates) {
   return strictDates.has(date);
+}
+
+// 이미지 계보 감사(newsroom:audit-images)의 publish 차단 판정을 머지 경로에서 강제하는 지점이다(#886).
+// 워크플로 03의 감사 스텝은 실패해도 그 주 뉴스레터 PR이 남도록 강등됐는데, 강등만 하면 머지 전에
+// 이 조건을 강제하는 지점이 하나도 남지 않는다. 그래서 PR에 함께 커밋되는 image-audit-report.json의
+// publish 차단 카운트를 여기서 읽어 같은 조건을 차단한다.
+// 스코핑 규약은 위 shouldLiveValidate와 같다. 리포트가 발행 대상(publish-target)으로 기록됐고 그
+// 날짜가 strict target일 때만 차단한다. 과거 발행물 리포트에 남아 있는 카운트(2026-05-28 리포트가
+// 실제로 그렇다)가 무관한 PR을 막으면 안 되기 때문이다.
+function publishBlockingImageAuditCount(report) {
+  if (!report || report.mode !== 'publish-target') return 0;
+  return Number(report.summary?.publish_blocking_issue_count) || 0;
+}
+
+function failOnPublishBlockingImageAudit(date, strictDates) {
+  if (!strictDates.has(date)) return;
+
+  const relPath = newsroomRelPath(date, 'image-audit-report.json');
+  const auditPath = path.join(newsroomDir(root, date), 'image-audit-report.json');
+  // 리포트가 없으면 건너뛴다. 워크플로 03에서 validate:images는 감사 스텝보다 먼저 돌기 때문에
+  // 정상적인 첫 실행에는 파일이 아직 존재하지 않는다. 존재를 요구하면 매 첫 실행이 붉어진다.
+  if (!fs.existsSync(auditPath)) return;
+
+  let report;
+  try {
+    report = readJson(auditPath);
+  } catch (error) {
+    fail(`Could not parse ${relPath}: ${error.message}`);
+    return;
+  }
+
+  const blockingCount = publishBlockingImageAuditCount(report);
+  if (blockingCount === 0) return;
+
+  fail([
+    `Newsletter image lineage audit reports ${blockingCount} publish-blocking issue(s): newsletter ${date}`,
+    `  report: ${relPath}`,
+    ...ensureArray(report.errors).map(entry =>
+      `  ${entry.type}: ${entry.headline || `article ${entry.index}`}`)
+  ].join('\n'));
 }
 
 function read(filePath) {
@@ -205,6 +246,7 @@ async function main() {
   const images = [];
   for (const item of newsletterItems()) {
     fallbackWarningsFromEditor(item.date, readEditor(item.date));
+    failOnPublishBlockingImageAudit(item.date, strictDates);
 
     for (const key of ['html', 'md']) {
       if (!item[key]) continue;
