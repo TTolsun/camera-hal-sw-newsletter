@@ -229,7 +229,7 @@ test('AOSP Site updates parser extracts month-level camera child rows only', () 
     section: 'Android / AOSP / Camera'
   }));
 
-  assert.equal(items.length, 3);
+  assert.equal(items.length, 5);
   for (const item of items) {
     assertParsedItemContract(item);
     assert.equal(item.publishedAt, '2026-04-01');
@@ -239,10 +239,21 @@ test('AOSP Site updates parser extracts month-level camera child rows only', () 
     assert.equal(item.sourceMonth, 'April 2026');
     assert.match(item.version_or_release, /AOSP Site Updates - April 2026/);
   }
+  // 뒤 두 개는 변경 내용 칸에 자기 앵커를 단 행이다. 섹션 칸("Compatibility")이 아니라
+  // 실제로 바뀐 문서를 제목·URL로 가져와야 한다.
   assert.deepEqual(items.map(item => item.title), [
     'Camera ITS',
     'Camera images automation',
-    'CDD camera orientation'
+    'CDD camera orientation',
+    'Camera ITS overview',
+    'Camera ITS tests'
+  ]);
+  assert.deepEqual(items.map(item => item.url), [
+    'https://source.android.com/docs/compatibility/cts/camera-its',
+    'https://source.android.com/docs/core/camera/camera-images-automation',
+    'https://source.android.com/docs/compatibility/cdd#camera-orientation',
+    'https://source.android.com/docs/compatibility/cts/camera-its-overview',
+    'https://source.android.com/docs/compatibility/cts/camera-its-tests'
   ]);
 });
 

@@ -765,6 +765,18 @@ function parseAospWhatsNew(html, source) {
   }).filter(hasReleaseItemEvidence);
 }
 
+// AOSP Site Updates 표는 첫 칸에 섹션 이름 링크를, 마지막 칸에 "무엇이 어디서 바뀌었는지"를 싣는다.
+// 행 전체에서 첫 앵커를 고르면 그 섹션 랜딩 페이지(/docs/compatibility)가 제목과 URL이 되어,
+// 독자가 실제로 바뀐 문서 대신 목차로 간다. 그래서 표 행이면 변경 내용 칸의 앵커를 본다.
+// 변경 내용 칸에 앵커가 없는 행(첫 칸에만 링크가 있는 모양)과 표가 아닌 조각은 null을 돌려
+// 기존 경로를 그대로 타게 한다.
+function aospSiteUpdateCellAnchor(chunk = '', baseUrl = '') {
+  const cells = [...String(chunk).matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)].map(match => match[1]);
+  if (cells.length < 2) return null;
+  const anchor = firstAnchor(cells[cells.length - 1], baseUrl);
+  return anchor?.title && anchor.url ? anchor : null;
+}
+
 function parseAospSiteUpdates(html, source) {
   const parentUrl = source.url;
   const parentTitle = source.name;
@@ -775,10 +787,11 @@ function parseAospSiteUpdates(html, source) {
     if (!date) continue;
     const sourceMonth = monthLabel(block.title);
     for (const chunk of aospSiteUpdateChunks(block.body)) {
-      const title = childTitle(chunk, parentUrl);
+      const updateCellAnchor = aospSiteUpdateCellAnchor(chunk, parentUrl);
+      const title = updateCellAnchor?.title || childTitle(chunk, parentUrl);
       const evidenceText = `${block.title} ${title} ${clean(chunk)}`;
       if (!isAospSiteCameraUpdateRow(evidenceText)) continue;
-      const anchor = firstAnchor(chunk, parentUrl);
+      const anchor = updateCellAnchor || firstAnchor(chunk, parentUrl);
       const url = anchor?.url || urlWithFragment(parentUrl, `${sourceMonth} ${title}`);
       const component = componentFromText(evidenceText, /CDD/i.test(evidenceText)
         ? 'CDD camera'
