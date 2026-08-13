@@ -399,8 +399,8 @@ function writePublicNewsletterArtifacts(root, date, overrides = {}) {
 // 발행된 저장소에는 인덱스가 둘 다 있다. daily는 품질 재계산이 읽고, weekly는 홈·아카이브가
 // fetch한다. 구조 검증이 둘 다 스캔하므로 daily만 쓰는 fixture는 실제 저장소 모양이 아니다.
 // 이 fixture들은 daily 호를 모델링하므로 weekly 인덱스는 엔트리 없이 존재만 한다.
-function writeWeeklyNewsletterIndex(root, items = []) {
-  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), items);
+function writeWeeklyNewsletterIndex(root) {
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), []);
 }
 
 function writeNewsletterIndex(root, items) {
@@ -1253,6 +1253,5 @@ module.exports = {
   writePr39LikeRegressionFixture,
   writePublicNewsletterArtifacts,
   writeRootIndexContract,
-  writeRun25590436113LikeFallbackFixture,
-  writeWeeklyNewsletterIndex
+  writeRun25590436113LikeFallbackFixture
 };
