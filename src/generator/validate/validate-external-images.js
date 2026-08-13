@@ -19,6 +19,7 @@ const {
 const {
   toLegacyEditorIssue
 } = require('../../shared/domain/newsletter-domain-normalize');
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { strictTargetDates } = require('../reporter/validation-targets');
 
 const root = process.cwd();
@@ -42,6 +43,55 @@ function warn(message) {
 // repo 무결성 문제라 date와 무관하게 그대로 차단한다. 형제 validator와 동일한 validation-targets 스코핑.
 function shouldLiveValidate(date, strictDates) {
   return strictDates.has(date);
+}
+
+// 이미지 계보 감사(newsroom:audit-images)의 publish 차단 판정을 머지 경로에서 강제하는 지점이다(#886).
+// 워크플로 03의 감사 스텝은 실패해도 그 주 뉴스레터 PR이 남도록 강등됐는데, 강등만 하면 머지 전에
+// 이 조건을 강제하는 지점이 하나도 남지 않는다. 그래서 PR에 함께 커밋되는 image-audit-report.json의
+// publish 차단 카운트를 여기서 읽어 같은 조건을 차단한다.
+// 차단 조건은 워크플로가 쓰는 --fail-on-publish-blocking과 같은 식이어야 한다. 그쪽은
+// publish_blocking_issue_count > 0만 보고 mode는 보지 않는다(newsletter-image-audit.js:878).
+// 여기서 mode === 'publish-target'을 한 번 더 요구하면 안 되는 이유는 두 가지다.
+//  1) 카운트는 이미 감사 모듈에서 mode별로 좁혀져 있다. review-or-draft일 때의 카운트는
+//     selected_image_render_mismatch(에디터가 고른 이미지가 공개 산출물에 없음)만 세므로,
+//     소비자가 mode로 다시 걸러 내면 남은 진짜 차단 신호가 통째로 지워진다.
+//  2) 감사 스텝이 무장되는 조건(public_newsletter_ready)은 구조 조건(공개 파일 존재·비어있지 않음·
+//     인덱스 등재·변경)이라 mode를 정하는 publishTarget(issue, status)와 갈린다. 실제로 커밋된
+//     2026-05-11·05-22·05-27은 status가 NEEDS_FIX(=publishTarget false → mode review-or-draft)인데도
+//     공개 파일이 인덱스에 올라 발행됐다. 즉 mode 절은 감사가 여전히 무장되는 주 부류를 정확히 못 본다.
+// 스코핑은 strict target 날짜 하나로 충분하다(위 shouldLiveValidate와 같은 규약). 과거 발행물의
+// 잔존 카운트가 무관한 PR을 막지 못하는 이유는 validation-targets가 image-audit-report 경로를
+// strict target 산정에서 제외하기 때문이다.
+function publishBlockingImageAuditCount(report) {
+  return Number(report?.summary?.publish_blocking_issue_count) || 0;
+}
+
+function failOnPublishBlockingImageAudit(date, strictDates) {
+  if (!strictDates.has(date)) return;
+
+  const relPath = newsroomRelPath(date, 'image-audit-report.json');
+  const auditPath = path.join(newsroomDir(root, date), 'image-audit-report.json');
+  // 리포트가 없으면 건너뛴다. 워크플로 03에서 validate:images는 감사 스텝보다 먼저 돌기 때문에
+  // 정상적인 첫 실행에는 파일이 아직 존재하지 않는다. 존재를 요구하면 매 첫 실행이 붉어진다.
+  if (!fs.existsSync(auditPath)) return;
+
+  let report;
+  try {
+    report = readJson(auditPath);
+  } catch (error) {
+    fail(`Could not parse ${relPath}: ${error.message}`);
+    return;
+  }
+
+  const blockingCount = publishBlockingImageAuditCount(report);
+  if (blockingCount === 0) return;
+
+  fail([
+    `Newsletter image lineage audit reports ${blockingCount} publish-blocking issue(s): newsletter ${date}`,
+    `  report: ${relPath}`,
+    ...ensureArray(report.errors).map(entry =>
+      `  ${entry.type}: ${entry.headline || `article ${entry.index}`}`)
+  ].join('\n'));
 }
 
 function read(filePath) {
@@ -205,6 +255,7 @@ async function main() {
   const images = [];
   for (const item of newsletterItems()) {
     fallbackWarningsFromEditor(item.date, readEditor(item.date));
+    failOnPublishBlockingImageAudit(item.date, strictDates);
 
     for (const key of ['html', 'md']) {
       if (!item[key]) continue;

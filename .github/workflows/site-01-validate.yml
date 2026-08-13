@@ -35,6 +35,9 @@ jobs:
       - name: Validate structural publication artifacts
         run: |
           npm run check:encoding
+          npm run check:repo-hygiene
+          npm run check:artifact-retention
+          npm run check:domain-model-boundary
           npm run validate:policy
           npm run check:policy-docs
           npm run validate:config

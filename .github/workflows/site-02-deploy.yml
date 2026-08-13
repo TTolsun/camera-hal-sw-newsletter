@@ -15,9 +15,15 @@ name: Site 02 - Build & Deploy (GitHub Pages)
 on:
   push:
     branches: ["main"]
+    # 조립기가 _site로 복사하는 서빙 파일(assemble-site.js의 EXTRA_SERVED_FILES)과 그 복사 목록을
+    # 정하는 조립기 스크립트 자체도 트리거에 포함한다. 빠지면 그 파일만 바꾼 머지가 배포를 깨우지
+    # 못해 다음 articles/** 머지(사실상 다음 주 뉴스레터)까지 라이브에 반영되지 않는다.
+    # 이 목록과 EXTRA_SERVED_FILES의 정합성은 site-02-deploy-workflow.test.js가 강제한다.
     paths:
       - "index.html"
       - "articles/**"
+      - "config/subscription.json"
+      - "src/generator/publish/assemble-site.js"
       - ".github/workflows/site-02-deploy.yml"
   workflow_dispatch:
 

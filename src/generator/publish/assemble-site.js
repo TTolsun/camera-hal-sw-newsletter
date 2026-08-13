@@ -19,6 +19,8 @@ const ROOT_INDEX = 'index.html';
 
 // index.html이 fetch하지만 articles/ 밖(저장소 config/)에 있는 서빙 파일.
 // 이동 전 site root에서 /config/subscription.json으로 서빙되었으므로 parity를 위해 함께 복사한다.
+// 항목을 추가하면 .github/workflows/site-02-deploy.yml의 push.paths에도 같이 넣어야 그 파일만
+// 바뀐 머지가 배포를 깨운다. 두 목록의 정합성은 site-02-deploy-workflow.test.js가 강제한다.
 const EXTRA_SERVED_FILES = [
   path.join('config', 'subscription.json')
 ];
@@ -99,4 +101,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { assembleSite };
+module.exports = { assembleSite, EXTRA_SERVED_FILES };

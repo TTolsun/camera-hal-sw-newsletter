@@ -166,7 +166,14 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   // sha256과 어긋난 채 커밋되므로, 플래그를 계약으로 고정한다.
   assert.match(halSignalQualityStep, /npm run report:hal-signal-quality -- --date "\$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}" --skip-if-present/);
   assert.match(imageAuditStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
-  assert.doesNotMatch(imageAuditStep, /continue-on-error:\s*true/);
+  // LOCK FLIPPED (#886). 이전 계약은 이 스텝이 job을 죽이는 하드 블록이어야 한다는 것이었다
+  // (`doesNotMatch(/continue-on-error:\s*true/)`). 그 계약에서는 감사 실패가 곧 PR 생성 스텝
+  // 전체 skip이라, 이미지 계보 문제 하나로 그 주 뉴스레터 PR이 통째로 사라졌다 — 막히는 것은
+  // 발행이 아니라 사람이 판단할 리뷰 표면이었다. 새 계약은 "강등하되 강제 지점은 옮긴다"이며,
+  // 아래 두 assertion이 그 대체 강제 지점을 함께 고정한다. 둘 중 하나라도 빠지면 이 강등은
+  // 게이트 제거가 된다.
+  assert.match(imageAuditStep, /id: audit-images/);
+  assert.match(imageAuditStep, /continue-on-error:\s*true/);
   assert.match(imageAuditStep, /steps\.meta\.outputs\.public_newsletter_ready/);
   assert.match(
     imageAuditStep,
@@ -199,7 +206,12 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /node src\/generator\/publish\/build-newsroom-pr-body\.js > \.tmp\/newsroom-pr-body\.md/);
   assert.match(workflow, /node src\/generator\/validate\/validate-pr-body\.js \.tmp\/newsroom-pr-body\.md --type newsletter --date "\$\{\{ steps\.meta\.outputs\.date \}\}" --require-publish-status-consistency/);
   assert.match(workflow, /cat \.tmp\/newsroom-pr-body\.md/);
-  assert.match(workflow, /const hasAiPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.has_ai_publish_ready \}\}' === 'true';/);
+  // LOCK RETARGETED (#886). 감사 스텝이 강등된 뒤에도 이미지 계보가 깨진 주에 publish-ready
+  // 라벨이 붙으면 안 되므로, 라벨 스크립트가 감사 outcome을 읽어 hasAiPublishReady를 꺾어야 한다
+  // (선례 5f83dd61과 동일 배선). 기존 assertion은 has_ai_publish_ready만 보는 식을 고정했으므로
+  // 새 계약식으로 바꾼다 — 약화가 아니라 조건이 하나 더 붙은 강화다.
+  assert.match(workflow, /const imageAuditPassed = '\$\{\{ steps\.audit-images\.outcome \}\}' !== 'failure';/);
+  assert.match(workflow, /const hasAiPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.has_ai_publish_ready \}\}' === 'true' && imageAuditPassed;/);
   assert.match(workflow, /const diagnosticsOnly = '\$\{\{ steps\.meta\.outputs\.diagnostics_only \}\}' === 'true';/);
   assert.match(workflow, /const reviewPublicationReady = '\$\{\{ steps\.meta\.outputs\.review_publication_ready \}\}' === 'true';/);
   assert.match(workflow, /const compositionMode = '\$\{\{ steps\.final-publish-status\.outputs\.composition_mode \}\}';/);
@@ -453,6 +465,13 @@ test('site validation workflow keeps structural checks blocking and quality anno
     'npm run validate:policy'
   ]);
   assert.match(structuralStep, /npm run check:encoding/);
+  // #885 — committed repo state만 읽는 구조 검사(secret·네트워크·생성 artifact 불요)는 #712 기준상
+  // PR CI에서 blocking이어야 한다. 이 셋은 단위 테스트가 손으로 만든 경로 배열·임시 트리·주입된
+  // 목록만 입력으로 받아 `npm run test`가 실제 트리를 검사하지 않으므로, 워크플로에서 빠지면
+  // 위반이 머지 시점이 아니라 그 주 발행 때 처음 드러나 본문 품질과 무관한 이유로 발행이 강등된다.
+  assert.match(structuralStep, /npm run check:repo-hygiene/);
+  assert.match(structuralStep, /npm run check:artifact-retention/);
+  assert.match(structuralStep, /npm run check:domain-model-boundary/);
   assert.match(structuralStep, /npm run validate:policy/);
   assert.match(structuralStep, /npm run check:policy-docs/);
   assert.match(structuralStep, /npm run validate:config/);
