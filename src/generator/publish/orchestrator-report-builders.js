@@ -6,7 +6,10 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { stringOrEmpty } = require('./orchestrator-shared-helpers');
 const { normalizeUrl } = require('../select/newsroom-selection');
-const { validatePublicArticle } = require('../reporter/public-article-contract');
+const {
+  allowedPublicSourceUrlKeys,
+  validatePublicArticle
+} = require('../reporter/public-article-contract');
 const { renderCandidateSelectionDiagnostics } = require('../select/selection-diagnostics');
 const { explicitDemotedGroups, explicitHardBlockedGroups } = require('../../shared/common/article-groups');
 
@@ -211,14 +214,59 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
   };
 }
 
+// 계약 모듈이 source_link allow-list를 만들 때 쓰는 URL 정규화를 그대로 쓰기 위해, sources만
+// 담은 객체를 넘겨 "실제로 발행되는 출처"의 정규화 키 집합을 얻는다.
+function publishedSourceUrlKeys(article = {}) {
+  return allowedPublicSourceUrlKeys({ sources: ensureArray(article.sources) });
+}
+
+// #870: 병합 결과 하나만 검증기에 넘기면 sources와 public_article.source_links를 같은 LLM이
+// 함께 만든 탓에 서로 맞는 게 당연해진다(자기증명). 지어낸 출처와 보존된 출처는 병합 전
+// 원본과 대조해야만 구분된다. 두 방향을 본다.
+//  - 인용 가능 URL(allow-list)이 원본 두 기사가 가진 범위 밖으로 늘어나면 지어낸 출처다.
+//  - 원본이 발행하던 출처가 병합 결과에서 빠지면 근거가 유실된 것이다.
+// origins가 비어 있으면 대조할 원본이 없어 아무것도 증명할 수 없으므로 거부한다(fail closed).
+function sourcePreservationIssues(mergedArticle, origins = {}) {
+  const originArticles = [origins.existing, origins.incoming].filter(Boolean);
+  const mergedSourceKeys = publishedSourceUrlKeys(mergedArticle);
+  // 출처가 비면 allow-list도 비고, 빈 allow-list는 source_link URL 검사를 통째로 건너뛴다.
+  if (mergedSourceKeys.size === 0) return [{ type: 'merged_article_has_no_source' }];
+
+  const issues = [];
+  const originAllowedKeys = new Set(originArticles.flatMap(article => [...allowedPublicSourceUrlKeys(article)]));
+  for (const key of allowedPublicSourceUrlKeys(mergedArticle)) {
+    if (!originAllowedKeys.has(key)) {
+      issues.push({ type: 'merged_article_source_not_in_origin', url: key });
+    }
+  }
+  const originSourceKeys = new Set(originArticles.flatMap(article => [...publishedSourceUrlKeys(article)]));
+  for (const key of originSourceKeys) {
+    if (!mergedSourceKeys.has(key)) {
+      issues.push({ type: 'merged_article_dropped_origin_source', url: key });
+    }
+  }
+  return issues;
+}
+
 // #490: LLM이 병합한 weekly 기사를 기존 public-article 계약 검증기로 확인한 뒤에만 교체를 허용한다.
 // 검증 이슈나 오류가 있으면 기존 기사를 보존한다(fail closed).
-function validateMergedWeeklyArticle(mergedArticle) {
+// #870: 출처 보존을 먼저 본다. 보존이 증명돼야 병합 결과의 allow-list가 원본에서 온 것이 되고,
+// 그때부터 계약 검증의 source_link 검사가 자기증명이 아니게 된다. issueMarkers는 이 병합
+// 결과가 실려 나갈 이슈의 계약 마커다 — 넘기지 않으면 story 계약 기사는 마커가 모자라
+// 항상 mismatch로 떨어져 병합 채택 경로가 통째로 닫힌다.
+function validateMergedWeeklyArticle(mergedArticle, origins = {}, issueMarkers = {}) {
   try {
-    const issues = validatePublicArticle(mergedArticle, 0, {});
-    return { ok: ensureArray(issues).length === 0, reason: ensureArray(issues).join('; ') };
+    const issues = sourcePreservationIssues(mergedArticle, origins);
+    if (issues.length === 0) {
+      issues.push(...validatePublicArticle(mergedArticle, 0, { issue: issueMarkers }));
+    }
+    return {
+      ok: issues.length === 0,
+      reason: issues.map(issue => issue.type).join('; '),
+      issues
+    };
   } catch (error) {
-    return { ok: false, reason: error.message };
+    return { ok: false, reason: error.message, issues: [] };
   }
 }
 

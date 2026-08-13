@@ -24,7 +24,12 @@ const WEEKLY_MERGE_SYSTEM_INSTRUCTION = [
   '- append: 서로 다른 별개 기사이면 둘 다 유지합니다(예: 같은 release-note 페이지의 서로 다른 버전).',
   '- merge: 같은 주제/사건이면 새 기사의 검증된 새 정보만 기존 기사에 병합한 mergedArticle을 만듭니다.',
   '- reject: 새 정보가 없으면 새 기사를 버립니다.',
-  'merge일 때 mergedArticle은 기존 기사의 올바른 내용을 보존하고, source evidence(sources / public_article.source_links)를 유지하거나 갱신해야 합니다.',
+  'merge일 때 mergedArticle은 기존 기사의 올바른 내용을 보존해야 합니다.',
+  // #870: 채택 전 검증기가 "병합 결과의 출처 = 원본 두 기사 출처의 합집합"을 강제한다.
+  // 지시문이 출처 교체를 허용하면 LLM이 규칙대로 답해도 거부돼 병합 경로가 닫힌다.
+  'source evidence는 existing_article과 new_article의 sources를 모두 그대로 이어받아야 합니다.',
+  'sources에서 URL을 빼거나 두 기사에 없던 URL을 새로 넣으면 그 병합은 거부됩니다.',
+  'public_article.source_links도 그 sources 안의 URL만 인용해야 합니다.',
   '확실하지 않으면 append를 선택하세요. 새로운 사실을 지어내지 마세요.'
 ].join('\n');
 

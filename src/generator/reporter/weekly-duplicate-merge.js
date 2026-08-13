@@ -4,7 +4,9 @@
 // deterministic and scoped to the articles already in the SAME weekly issue. An exact duplicate is
 // skipped. A near-duplicate is, when an LLM merge resolver is supplied, sent to the LLM which returns
 // append | merge | reject; a merged article is replaced only when the injected validator passes,
-// otherwise the existing article is preserved and a warning is recorded. Without an LLM resolver the
+// otherwise the existing article is preserved and a warning is recorded. The validator receives the
+// pre-merge originals alongside the merged article (#870) because the LLM output alone cannot show
+// whether a source was preserved or invented. Without an LLM resolver the
 // deterministic default keeps near-duplicates (append) and only skips exact duplicates, matching the
 // #488 upsert behavior. The LLM and validator are injected so this module stays pure and testable.
 
@@ -100,7 +102,11 @@ async function resolveWeeklyArticles({ existingArticles = [], incomingArticles =
       continue;
     }
     if (decision === 'merge' && outcome.mergedArticle) {
-      const validation = validateMerged ? await validateMerged(outcome.mergedArticle) : { ok: true };
+      // 검증기에는 병합 전 원본 두 기사를 함께 넘긴다. LLM 출력만 보면 지어낸 출처와
+      // 보존된 출처를 구분할 수 없다(#870).
+      const validation = validateMerged
+        ? await validateMerged(outcome.mergedArticle, { existing: duplicate.candidate, incoming })
+        : { ok: true };
       if (validation && validation.ok) {
         replaceInPlace(existing, appended, duplicate.candidate, outcome.mergedArticle);
         decisions.push({ decision: 'merge', reason: outcome.reason || 'llm_merge' });
@@ -108,6 +114,7 @@ async function resolveWeeklyArticles({ existingArticles = [], incomingArticles =
         warnings.push({
           stage: 'validate',
           reason: (validation && validation.reason) || 'merged_article_validation_failed',
+          issues: ensureArray(validation && validation.issues),
           title: sectionTitle(duplicate.candidate)
         });
         decisions.push({ decision: 'merge_rejected_validation', reason: (validation && validation.reason) || 'validation_failed' });

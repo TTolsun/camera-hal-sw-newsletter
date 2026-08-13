@@ -76,6 +76,43 @@ test('resolveWeeklyArticles preserves the existing article when the merged artic
   assert.ok(result.warnings.some(w => w.stage === 'validate'));
 });
 
+// #870: 검증기가 LLM 출력만 보면 지어낸 출처와 보존된 출처를 구분할 수 없다. 병합 전
+// 원본 두 기사를 함께 넘기는 이 배선이 출처 보존 검사의 유일한 입력이다.
+test('resolveWeeklyArticles hands the pre-merge originals to the validator', async () => {
+  const existing = article('CameraX alpha note', 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0');
+  const incoming = article('CameraX alpha note update', 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0');
+  const seenOrigins = [];
+  await resolveWeeklyArticles({
+    existingArticles: [existing],
+    incomingArticles: [incoming],
+    mergeDuplicate: async () => ({ decision: 'merge', mergedArticle: article('merged', 'https://example.com/merged'), reason: 'same topic' }),
+    validateMerged: (mergedArticle, origins) => {
+      seenOrigins.push(origins);
+      return { ok: true };
+    }
+  });
+  assert.equal(seenOrigins.length, 1);
+  assert.ok(seenOrigins[0], 'validator must receive the pre-merge originals');
+  assert.equal(seenOrigins[0].existing, existing);
+  assert.equal(seenOrigins[0].incoming, incoming);
+});
+
+// 실패 사유가 weekly-merge-report.json에서 원인으로 읽혀야 한다.
+test('resolveWeeklyArticles records the structured validation issues in the warning', async () => {
+  const result = await resolveWeeklyArticles({
+    existingArticles: [article('CameraX alpha note', 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0')],
+    incomingArticles: [article('CameraX alpha note update', 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0')],
+    mergeDuplicate: async () => ({ decision: 'merge', mergedArticle: article('bad', 'https://example.com/bad'), reason: 'x' }),
+    validateMerged: () => ({
+      ok: false,
+      reason: 'merged_article_source_not_in_origin',
+      issues: [{ type: 'merged_article_source_not_in_origin', url: 'https://example.com/bad' }]
+    })
+  });
+  const warning = result.warnings.find(item => item.stage === 'validate');
+  assert.deepEqual(warning.issues.map(issue => issue.type), ['merged_article_source_not_in_origin']);
+});
+
 test('resolveWeeklyArticles honours an LLM reject decision', async () => {
   const result = await resolveWeeklyArticles({
     existingArticles: [article('CameraX alpha note', 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0')],
