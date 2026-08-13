@@ -419,3 +419,45 @@ test('a weekly v2 stamp over carried-over v1 sections fails instead of writing a
   assert.equal(index.length, 1);
   assert.equal('public_contract_version' in index[0], false);
 });
+
+test('a weekly run rejected by the index contract check writes no page files', async () => {
+  // 인덱스에 이미 미지원 값이 있으면(버전 표에서 값을 뺀 뒤 backfill 전 상태) 선언 마커와
+  // 무관하게 거부한다. 그 거부는 페이지 파일을 쓰기 전에 나야 한다 — 쓴 뒤에 나면 거부된
+  // 실행이 index.html·newsletter.md·issue.json을 새 내용으로 덮어쓴 채 인덱스 엔트리만
+  // 옛 값으로 남겨, 홈·아카이브가 fetch하는 공개 정본이 실제 아티팩트와 어긋난다.
+  const root = tempRoot('weekly-index-version-carry-');
+  const dataDir = path.join(root, 'articles', 'data');
+  fs.mkdirSync(dataDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(dataDir, 'newsletters-weekly.json'),
+    JSON.stringify([weeklyEntry({
+      weeklyKey: '2026-W23',
+      weekStartDate: '2026-06-01',
+      weekEndDate: '2026-06-07',
+      date: '2026-06-01',
+      title: '2026 W23',
+      html: 'newsletters/2026-W23/index.html',
+      md: 'newsletters/2026-W23/newsletter.md',
+      public_contract_version: 'story-v9'
+    })]),
+    'utf8'
+  );
+
+  await assert.rejects(
+    () => writeWeeklyNewsletterArtifacts({
+      root,
+      date: '2026-06-04',
+      editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/a', 1)], STORY_V1_MARKERS),
+      tags: []
+    }),
+    /recorded public_contract_version "story-v9" is not supported/
+  );
+
+  const pageDir = path.join(root, 'articles', 'newsletters', '2026-W23');
+  assert.equal(
+    fs.existsSync(path.join(pageDir, 'index.html')),
+    false,
+    '거부된 weekly 실행이 index.html을 덮어썼다 — 인덱스는 옛 값이라 공개 정본이 어긋난다'
+  );
+  assert.equal(fs.existsSync(path.join(pageDir, 'issue.json')), false);
+});

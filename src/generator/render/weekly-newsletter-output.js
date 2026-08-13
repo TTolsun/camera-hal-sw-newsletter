@@ -234,6 +234,14 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
   const page = buildWeeklyNewsletterPage(mergedDraft, { date });
   page.issue.tags = mergedTags;
 
+  // 홈·아카이브가 fetch하는 정본은 이 weekly 인덱스다. daily 인덱스와 같은 판정을 써서
+  // 계약 버전을 기록한다(보존·미지원 거부·강등 거부, v1은 기본값이라 생략).
+  //
+  // 이 판정은 거부하면 throw한다. 그래서 페이지 파일을 쓰기 **전에** 부른다 — 쓴 뒤에
+  // 부르면 거부된 실행이 index.html·newsletter.md·issue.json 은 새로 덮어쓴 채 인덱스
+  // 엔트리만 옛 값으로 남겨, 공개 정본과 아티팩트가 어긋난 상태로 끝난다.
+  const contractVersionField = indexContractVersionField(page.weeklyKey, page.issue, weeklyIndexEntry(root, page.weeklyKey));
+
   const dir = path.join(root, 'articles', 'newsletters', weeklyKey);
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), page.html, 'utf8');
@@ -260,10 +268,7 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
     // Distinct https article images (section order) so the homepage Latest card can show one
     // article image that is not the headline image.
     article_images: weeklyArticleImages(page.issue.sections),
-    // 홈·아카이브가 fetch하는 정본은 이 weekly 인덱스다. daily 인덱스와 같은 판정을 써서
-    // 계약 버전을 기록한다(보존·미지원 거부·강등 거부, v1은 기본값이라 생략).
-    // page.issue는 방금 issue.json으로 디스크에 쓴 바로 그 이슈다.
-    ...indexContractVersionField(page.weeklyKey, page.issue, weeklyIndexEntry(root, page.weeklyKey))
+    ...contractVersionField
   });
 
   return {
