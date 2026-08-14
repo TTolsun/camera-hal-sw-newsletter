@@ -131,14 +131,14 @@ test('sources를 비운 병합 결과는 source_link가 남아 있어도 거부�
 });
 
 // 대조할 원본이 없으면 보존을 증명할 수 없다. 호출부가 원본을 빠뜨려도 채택되지 않는다.
-test('원본을 넘기지 않으면 병합 결과를 채택하지 않는다', () => {
+// per-URL 위반("이 URL이 원본에 없다")이 아니라 전용 오류 하나로 남는다 — 원본 자체가 없어
+// 대조하지 못한 상황과 실제 지어낸 출처를 리포트에서 바로 구분하기 위해서다.
+test('원본을 넘기지 않으면 전용 오류 하나로 거부된다', () => {
   const merged = storySection('센서 드라이버 패치와 CameraX 릴리스', [patchLink(), releaseLink()]);
   const validation = validateMergedWeeklyArticle(merged, {}, STORY_ISSUE_MARKERS);
   assert.equal(validation.ok, false);
-  assert.deepEqual(issueTypes(validation), [
-    'merged_article_source_not_in_origin',
-    'merged_article_source_not_in_origin'
-  ]);
+  assert.deepEqual(issueTypes(validation), ['no_origin_articles_provided']);
+  assert.equal(validation.reason, 'no_origin_articles_provided');
 });
 
 // 마커를 넘기지 않으면 story 계약 기사는 섹션 마커 하나만 보여 항상 mismatch가 난다.

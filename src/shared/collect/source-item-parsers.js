@@ -786,6 +786,15 @@ function isSectionLandingUrl(sectionUrl = '', changedDocumentUrl = '') {
 // 그런 행에서 마지막 칸을 택하면 맞는 정체성을 틀린 것으로 바꾼다. 그래서 마지막 칸을 택하는
 // 조건은 두 가지뿐이다. 첫 칸에 앵커가 없거나, 첫 칸 링크가 마지막 칸 링크의 상위 경로일 때.
 // 나머지(표가 아닌 조각 포함)는 null을 돌려 기존 경로를 그대로 타게 한다.
+//
+// 셀 추출은 이 파일의 다른 파서와 같은 정규식 방식이다(repo에 DOM 파서 의존성이 없고, 이
+// 함수 하나를 위해 들이지 않는다). 그래서 지원하는 표 구조를 좁게 가정한다.
+//  - chunk는 aospSiteUpdateChunks가 자른 표 행 하나(<tr> 조각) 수준이며, 셀은 잘 닫힌
+//    같은 층위의 <td>/<th>만 본다.
+//  - 셀 안에 또 표가 중첩되면 안쪽 셀 태그가 같은 층위로 잡혀 칸 배열이 어긋날 수 있다.
+//    AOSP Site Updates 표에는 그런 구조가 없다. 표 구조가 그렇게 바뀌면 이 가정부터 다시
+//    본다 — 마지막 칸을 택하는 두 조건이 좁아서, 어긋난 칸 배열은 대개 null로 떨어져
+//    기존 첫-앵커 경로로 후퇴한다.
 function aospSiteUpdateCellAnchor(chunk = '', baseUrl = '') {
   const cells = [...String(chunk).matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)].map(match => match[1]);
   if (cells.length < 2) return null;

@@ -35,9 +35,10 @@ function buildFixtureRoot({ auditReport, strictTarget }) {
   writeFile(path.join(root, 'articles', 'newsletters', date, 'index.html'), '<html><body></body></html>');
   writeFile(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), '# Camera HAL / SW Newsletter\n');
   if (auditReport) {
+    // 문자열이면 그대로 쓴다 — 깨진 JSON(파싱 불가) 리포트를 만들 때 쓴다.
     writeFile(
       path.join(root, 'articles', 'content', 'newsroom', date, 'image-audit-report.json'),
-      JSON.stringify(auditReport)
+      typeof auditReport === 'string' ? auditReport : JSON.stringify(auditReport)
     );
   }
   // strict target 스코프는 .tmp/newsletter-date.txt(현재 발행 대상)로 준다. fixture 디렉터리는
@@ -135,6 +136,64 @@ test('validate:images ignores a review-or-draft image audit report for a newslet
         0,
         `a historical review-or-draft report must not block an unrelated pull request. stderr=${result.stderr}`
       );
+    }
+  );
+});
+
+test('validate:images fails on an unparsable image audit report', () => {
+  // 깨진 JSON은 readJson의 catch가 이번 변경 전부터 fail로 막고 있었다. 여기서는 그 기존
+  // fail-closed 경로를 회귀 핀으로 고정한다 — 이번에 새로 막은 것(비숫자 카운트 거부)을
+  // 잠그는 테스트는 아래 두 개다.
+  withFixture(
+    { auditReport: 'this is not json {', strictTarget: true },
+    result => {
+      assert.equal(
+        result.status,
+        1,
+        `an unparsable audit report must fail the gate. stdout=${result.stdout} stderr=${result.stderr}`
+      );
+      assert.match(result.stderr, /Could not parse/);
+      assert.match(result.stderr, /image-audit-report\.json/);
+    }
+  );
+});
+
+test('validate:images fails when publish_blocking_issue_count is not a number', () => {
+  // `Number(...) || 0`식 강제는 비숫자 카운트('two' 같은 문자열, null, 누락)를 전부 0으로
+  // 만들어 차단해야 할 발행을 통과시켰다("2" 같은 숫자 문자열은 옛 코드도 차단했다).
+  // 숫자가 아니면 손상으로 취급해 실패시킨다.
+  withFixture(
+    {
+      auditReport: {
+        schemaVersion: 1,
+        date,
+        mode: 'publish-target',
+        summary: { publish_blocking_issue_count: 'two' },
+        errors: []
+      },
+      strictTarget: true
+    },
+    result => {
+      assert.equal(
+        result.status,
+        1,
+        `a non-numeric publish_blocking_issue_count must fail the gate. stdout=${result.stdout} stderr=${result.stderr}`
+      );
+      assert.match(result.stderr, /publish_blocking_issue_count must be a number/);
+    }
+  );
+});
+
+test('validate:images fails when the audit report has no summary at all', () => {
+  withFixture(
+    { auditReport: { schemaVersion: 1, date, mode: 'publish-target' }, strictTarget: true },
+    result => {
+      assert.equal(
+        result.status,
+        1,
+        `an audit report without a summary must fail the gate. stdout=${result.stdout} stderr=${result.stderr}`
+      );
+      assert.match(result.stderr, /publish_blocking_issue_count must be a number/);
     }
   );
 });

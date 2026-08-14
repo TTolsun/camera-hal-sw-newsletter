@@ -15,7 +15,7 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { articleIdentityKey } = require('../../shared/common/article-identity');
 const { normalizeTitle, titleSimilarity } = require('../../shared/common/selection-normalizers');
-const { normalizedSourceUrlKey } = require('./public-article-contract');
+const { sourceEntryUrlKey } = require('./public-article-contract');
 
 const NEAR_DUPLICATE_TITLE_SIMILARITY = 0.82;
 
@@ -60,13 +60,14 @@ function findWeeklyDuplicate(article, existingArticles) {
   return null;
 }
 
-// 두 원본의 sources를 URL 기준으로 합친다. 정규화 키는 계약 모듈이 인용 allow-list를 만들 때
-// 쓰는 것과 같은 것을 쓴다 — 여기서 다른 키로 중복을 지우면 합집합과 allow-list가 어긋난다.
+// 두 원본의 sources를 URL 기준으로 합친다. 키 유도는 계약 모듈이 인용 allow-list를 만들 때
+// 쓰는 sourceEntryUrlKey를 그대로 가져다 쓴다({url} 객체·URL 문자열 항목 모두 그쪽과 동일하게
+// 처리된다) — 여기서 다른 키로 중복을 지우면 합집합과 allow-list가 어긋난다.
 function unionSources(existingSection, incomingSection) {
   const byUrlKey = new Map();
   for (const section of [existingSection, incomingSection]) {
     for (const source of ensureArray(section && section.sources)) {
-      const key = normalizedSourceUrlKey(source && source.url ? source.url : source);
+      const key = sourceEntryUrlKey(source);
       if (!key || byUrlKey.has(key)) continue;
       byUrlKey.set(key, source);
     }

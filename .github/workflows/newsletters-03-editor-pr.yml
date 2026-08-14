@@ -424,7 +424,9 @@ jobs:
             const issue_number = Number('${{ steps.cpr.outputs.pull-request-number }}');
             const stateLabels = ['publish-ready', 'needs-fix', 'fallback-composition', 'thin-week', 'review-only', 'review-only-publication', 'diagnostics-only', 'failed-repair-reviewable'];
             const labels = ['newsletter', 'aosp-camera'];
-            const imageAuditPassed = '${{ steps.audit-images.outcome }}' !== 'failure';
+            // 명시적 success만 통과다. skipped·cancelled를 통과로 치면 감사가 돌지 않은 주에도
+            // publish-ready가 붙을 수 있다.
+            const imageAuditPassed = '${{ steps.audit-images.outcome }}' === 'success';
             const hasAiPublishReady = '${{ steps.final-publish-status.outputs.has_ai_publish_ready }}' === 'true' && imageAuditPassed;
             const compositionMode = '${{ steps.final-publish-status.outputs.composition_mode }}';
             const diagnosticsOnly = '${{ steps.meta.outputs.diagnostics_only }}' === 'true';

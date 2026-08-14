@@ -230,6 +230,10 @@ function publishedSourceLinkUrlKeys(article = {}) {
 // origins가 비어 있으면 대조할 원본이 없어 아무것도 증명할 수 없으므로 거부한다(fail closed).
 function sourcePreservationIssues(mergedArticle, origins = {}) {
   const originArticles = [origins.existing, origins.incoming].filter(Boolean);
+  // 원본이 하나도 없으면 URL별 위반을 나열하지 않고 전용 오류 하나로 거부한다. per-URL
+  // merged_article_source_not_in_origin는 "이 URL이 원본 범위 밖"이라는 판정인데, 원본이 없어
+  // 아예 대조하지 못한 상황은 다른 문제다 — 리포트를 읽는 쪽이 원인을 바로 구분하게 한다.
+  if (originArticles.length === 0) return [{ type: 'no_origin_articles_provided' }];
   const mergedAllowedKeys = allowedPublicSourceUrlKeys(mergedArticle);
   // allow-list가 비면 계약 검증의 source_link URL 검사가 통째로 건너뛰어진다. 그 상태에서는
   // 인용이 어디서 왔는지 아무도 보지 않으므로 여기서 막는다.

@@ -62,8 +62,12 @@ function shouldLiveValidate(date, strictDates) {
 // 스코핑은 strict target 날짜 하나로 충분하다(위 shouldLiveValidate와 같은 규약). 과거 발행물의
 // 잔존 카운트가 무관한 PR을 막지 못하는 이유는 validation-targets가 image-audit-report 경로를
 // strict target 산정에서 제외하기 때문이다.
+// 카운트는 숫자일 때만 신뢰한다. 숫자가 아니면(요약 누락·문자열 오염) null을 돌려 호출부가
+// 손상으로 실패시키게 한다. `Number(...) || 0`처럼 0으로 강제하면 손상된 리포트가 이 게이트를
+// 조용히 꺼 버린다 — 이 값 하나가 머지 경로의 유일한 강제 지점이라 fail-closed여야 한다.
 function publishBlockingImageAuditCount(report) {
-  return Number(report?.summary?.publish_blocking_issue_count) || 0;
+  const count = report?.summary?.publish_blocking_issue_count;
+  return Number.isFinite(count) ? count : null;
 }
 
 function failOnPublishBlockingImageAudit(date, strictDates) {
@@ -84,6 +88,13 @@ function failOnPublishBlockingImageAudit(date, strictDates) {
   }
 
   const blockingCount = publishBlockingImageAuditCount(report);
+  if (blockingCount === null) {
+    fail(
+      `Could not parse ${relPath}: summary.publish_blocking_issue_count must be a number, ` +
+      `got ${JSON.stringify(report?.summary?.publish_blocking_issue_count)}`
+    );
+    return;
+  }
   if (blockingCount === 0) return;
 
   fail([

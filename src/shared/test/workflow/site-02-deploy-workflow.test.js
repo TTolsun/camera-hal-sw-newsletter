@@ -28,12 +28,24 @@ function pushPathFilters(yaml) {
 }
 
 // 직접 경로로 적혀 있거나, `**` glob의 접두사에 걸리면 커버된 것으로 본다.
+// 이 helper는 `prefix/**` 꼴 단순 접두사 글롭만 이해한다. `articles/**/index.html`이나
+// `**/index.html` 같은 꼴에 접두사 비교를 그대로 쓰면 조용히 오판하므로(앞의 것은 과대,
+// 뒤의 것은 전부 통과), 필터 목록이 그 꼴로 진화하면 여기서 바로 깨져 이 helper부터
+// 고치게 한다.
 function isCoveredByPathFilters(relPath, filters) {
   const target = relPath.split(path.sep).join('/');
   return filters.some(filter => {
     if (filter === target) return true;
     const globIndex = filter.indexOf('**');
-    return globIndex !== -1 && target.startsWith(filter.slice(0, globIndex));
+    if (globIndex === -1) return false;
+    // `**`가 정확히 한 번, 맨 끝에만 와야 한다. endsWith 검사만으로는 `a/**/b/**` 같은
+    // 이중 글롭이 통과해 첫 `**` 앞 접두사로 과대 판정한다.
+    assert.equal(
+      globIndex,
+      filter.length - 2,
+      `path filter "${filter}" is not a simple prefix glob; teach isCoveredByPathFilters about it first`
+    );
+    return target.startsWith(filter.slice(0, globIndex));
   });
 }
 

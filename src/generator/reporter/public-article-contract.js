@@ -327,13 +327,20 @@ function normalizedSourceUrlKey(value = '') {
   return normalized.key || compactText(value).toLowerCase();
 }
 
+// sources 항목({url} 객체 또는 URL 문자열)에서 정규화 키를 뽑는다. allow-list(addSourceRole)와
+// weekly 병합의 sources 합집합(unionSources)이 이 한 곳을 같이 써야 한다 — 각자 키를 유도하면
+// 합집합이 지운 중복과 allow-list가 아는 키가 어긋난다.
+function sourceEntryUrlKey(source) {
+  return normalizedSourceUrlKey(source?.url || source);
+}
+
 function sourceEntryRole(source, fallbackRole = 'primary') {
   if (!isPlainObject(source)) return normalizePublicSourceRole(fallbackRole);
   return normalizePublicSourceRole(source.source_role || source.role || source.context_role || fallbackRole);
 }
 
 function addSourceRole(roleMap, source, fallbackRole = 'primary') {
-  const key = normalizedSourceUrlKey(source?.url || source);
+  const key = sourceEntryUrlKey(source);
   if (!key) return;
   const role = sourceEntryRole(source, fallbackRole);
   if (!roleMap.has(key)) roleMap.set(key, new Set());
@@ -1173,6 +1180,7 @@ module.exports = {
   isConcreteCheckpoint,
   issueStoryContractVersion,
   normalizedSourceUrlKey,
+  sourceEntryUrlKey,
   publicArticleExpectedKeys,
   mergePublicArticleFromLlm,
   mergePublicArticlesFromLlmSections,
