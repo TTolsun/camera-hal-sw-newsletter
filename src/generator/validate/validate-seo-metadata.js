@@ -1,14 +1,14 @@
 // SEO / share-metadata 검증 (#51).
-// 정적 public 페이지의 필수 메타 태그(절대 URL 포함)와 정적 sitemap.xml, robots.txt를 점검한다.
-// 메타 점검은 속성 순서에 의존하지 않는다. sitemap은 발행 데이터에 결합하지 않는 정적 진입점
-// 목록이므로 buildStaticSitemap()과 byte 단위로 동기 여부만 본다(데이터 변경에 깨지지 않음).
-// 기사 페이지(renderer) 메타와 issue별 sitemap enumeration은 후속 슬라이스 범위.
+// 정적 public 페이지의 필수 메타 태그(절대 URL 포함)와 sitemap.xml, robots.txt를 점검한다.
+// 메타 점검은 속성 순서에 의존하지 않는다. sitemap은 발행 데이터와 독립적인 stable entry와
+// weekly issue를 함께 담으며, 여기서는 구조와 필수 stable entry를 검증한다.
 
 const fs = require('fs');
 const path = require('path');
 
 const {
   SITE_BASE_URL,
+  AI_ENGINEERING_LEARNING_PATH,
   missingSeoTags,
   seoTagUrl
 } = require('../render/seo-metadata');
@@ -19,12 +19,12 @@ const {
 const root = process.cwd();
 const errors = [];
 
-const STATIC_PAGES = ['index.html', 'archive.html'];
+const STATIC_PAGES = ['index.html', 'archive.html', `${AI_ENGINEERING_LEARNING_PATH}index.html`];
 const ABSOLUTE_URL_TAGS = ['canonical', 'og:image', 'og:url'];
 
 function checkStaticPageMeta() {
   for (const page of STATIC_PAGES) {
-    // index.html은 루트, archive.html은 articles/ 아래에 있다.
+    // index.html은 루트, 그 외 public page는 articles/ 아래에 있다.
     const filePath = publicAssetPath(root, page);
     if (!fs.existsSync(filePath)) {
       errors.push(`${page}: 파일이 없어 SEO 메타를 검증할 수 없습니다.`);
@@ -58,8 +58,15 @@ function checkSitemap() {
     errors.push('sitemap.xml이 유효한 urlset 문서가 아닙니다.');
     return;
   }
-  if (!xml.includes(`<loc>${SITE_BASE_URL}</loc>`) || !xml.includes(`<loc>${SITE_BASE_URL}archive.html</loc>`)) {
-    errors.push('sitemap.xml은 최소한 사이트 루트(/)와 archive.html을 포함해야 합니다.');
+  const requiredEntries = [
+    SITE_BASE_URL,
+    `${SITE_BASE_URL}archive.html`,
+    `${SITE_BASE_URL}${AI_ENGINEERING_LEARNING_PATH}`
+  ];
+  for (const entry of requiredEntries) {
+    if (!xml.includes(`<loc>${entry}</loc>`)) {
+      errors.push(`sitemap.xml은 stable public entry를 포함해야 합니다: ${entry}`);
+    }
   }
   const locs = [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map(match => match[1]);
   for (const loc of locs) {
