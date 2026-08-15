@@ -11,6 +11,11 @@ const { spawnSync } = require('node:child_process');
 // 강등만 하면 머지 전에 publish 차단 조건을 강제하는 지점이 하나도 남지 않으므로, PR에 함께
 // 커밋되는 image-audit-report.json을 validate:images가 읽어 같은 조건을 차단한다.
 // 여기서는 그 강제 지점을 실제 프로세스 종료 코드로 고정한다(스코핑 포함).
+//
+// 리포트가 아예 없는 경우도 같은 게이트가 봐야 한다. 감사 스텝은 continue-on-error라서 리포트를
+// 쓰기 전에 죽으면(예: editor-draft.json JSON.parse 실패 - buildNewsletterImageAuditReport가
+// writeJson 이전에 throw) 리포트가 PR에 커밋되지 않는다. 카운트만 읽는 게이트는 그때 조용히
+// 통과하므로 "감사가 아예 돌지 않은 주"가 기계적 차단 없이 머지된다.
 
 const repoRoot = path.join(__dirname, '..', '..', '..', '..');
 const validateImagesPath = path.join(repoRoot, 'src', 'generator', 'validate', 'validate-external-images.js');
@@ -21,8 +26,27 @@ function writeFile(filePath, value) {
   fs.writeFileSync(filePath, value, 'utf8');
 }
 
+function git(root, args) {
+  const result = spawnSync('git', args, { cwd: root, encoding: 'utf8' });
+  assert.equal(result.status, 0, `git ${args.join(' ')} failed: ${result.stderr}`);
+}
+
+// 발행물을 origin/main 위의 커밋으로 올린다. 머지 경로(site-01-validate)에서 그 주 PR이 공개
+// 산출물을 이미 커밋한 상태를 재현한다. 워크플로 03의 첫 실행은 반대로 공개 산출물이 작업
+// 트리에만 있어 diff에 잡히지 않으므로, 이 커밋 여부가 두 상황을 가르는 구조 조건이다.
+function commitPublicArtifacts(root) {
+  git(root, ['init', '-q']);
+  git(root, ['config', 'user.email', 'newsroom@example.com']);
+  git(root, ['config', 'user.name', 'Newsroom Test']);
+  git(root, ['add', 'articles/data/newsletters.json']);
+  git(root, ['commit', '-q', '-m', 'baseline index']);
+  git(root, ['update-ref', 'refs/remotes/origin/main', 'HEAD']);
+  git(root, ['add', '-A']);
+  git(root, ['commit', '-q', '-m', `publish newsletter ${date}`]);
+}
+
 // 이미지가 하나도 없는 최소 발행물을 만든다. 그래야 종료 코드가 오직 감사 리포트 판정에서만 나온다.
-function buildFixtureRoot({ auditReport, strictTarget }) {
+function buildFixtureRoot({ auditReport, strictTarget, publicArtifactsCommitted }) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'image-audit-gate-'));
   writeFile(
     path.join(root, 'articles', 'data', 'newsletters.json'),
@@ -41,9 +65,10 @@ function buildFixtureRoot({ auditReport, strictTarget }) {
       typeof auditReport === 'string' ? auditReport : JSON.stringify(auditReport)
     );
   }
-  // strict target 스코프는 .tmp/newsletter-date.txt(현재 발행 대상)로 준다. fixture 디렉터리는
-  // git 저장소가 아니므로 changed-file 경로는 빈 목록이 되고, 이 파일만이 유일한 입력이다.
+  // strict target 스코프는 .tmp/newsletter-date.txt(현재 발행 대상)로 준다. 커밋하지 않은
+  // fixture는 git 저장소가 아니므로 changed-file 경로는 빈 목록이 되고, 이 파일만이 유일한 입력이다.
   if (strictTarget) writeFile(path.join(root, '.tmp', 'newsletter-date.txt'), date);
+  if (publicArtifactsCommitted) commitPublicArtifacts(root);
   return root;
 }
 
@@ -223,9 +248,11 @@ test('validate:images fails when the audit report has no summary at all', () => 
   );
 });
 
-test('validate:images stays green when the image audit report has not been written yet', () => {
-  // 워크플로 03에서 validate:images는 감사 스텝보다 먼저 돈다. 리포트 존재를 요구하면 정상적인
-  // 첫 실행이 매번 붉어진다.
+test('validate:images stays green when the image audit report has not been written yet and the public newsletter is not committed', () => {
+  // 계약 변경(리포트 부재를 무조건 통과시키던 이전 버전에서 좁힘): 부재 판정을 "공개 산출물이
+  // 커밋에 존재할 때"로 스코핑한다. 워크플로 03에서 validate:images는 감사 스텝보다 먼저 돌고,
+  // 그때 공개 산출물은 아직 작업 트리에만 있어 커밋 diff에 잡히지 않는다. 그래서 정상적인 첫
+  // 실행은 여기서 계속 초록으로 남는다. 이 경계가 무너지면 매주 뉴스레터 PR이 통째로 막힌다.
   withFixture(
     { auditReport: null, strictTarget: true },
     result => {
@@ -233,6 +260,41 @@ test('validate:images stays green when the image audit report has not been writt
         result.status,
         0,
         `a missing audit report must not fail the first run. stderr=${result.stderr}`
+      );
+    }
+  );
+});
+
+test('validate:images blocks a committed public newsletter that carries no image audit report', () => {
+  // fail-open을 닫는 지점이다. 감사 스텝은 continue-on-error이고 리포트 쓰기는 리포트 조립
+  // 이후에 일어나므로, 조립 중 throw하면 리포트가 없는 채로 PR이 만들어진다. 카운트만 읽는
+  // 게이트는 그때 통과하므로 감사가 아예 돌지 않은 주가 기계적 차단 없이 머지된다.
+  withFixture(
+    { auditReport: null, publicArtifactsCommitted: true },
+    result => {
+      assert.equal(
+        result.status,
+        1,
+        `a committed public newsletter without an audit report must block the merge. stdout=${result.stdout} stderr=${result.stderr}`
+      );
+      assert.match(result.stderr, /image lineage audit report is missing/);
+      assert.match(result.stderr, /articles\/content\/newsroom\/2026-08-10\/image-audit-report\.json/);
+    }
+  );
+});
+
+test('validate:images accepts a committed public newsletter whose image audit report reports no publish-blocking issue', () => {
+  // 매주 정상 발행 경로다. 리포트 존재 요구가 이 경로를 막지 않는다는 것을 고정한다.
+  withFixture(
+    {
+      auditReport: auditReport({ mode: 'publish-target', publishBlockingIssueCount: 0 }),
+      publicArtifactsCommitted: true
+    },
+    result => {
+      assert.equal(
+        result.status,
+        0,
+        `the normal weekly publish path must stay green. stdout=${result.stdout} stderr=${result.stderr}`
       );
     }
   );

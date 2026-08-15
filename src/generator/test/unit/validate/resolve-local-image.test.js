@@ -4,7 +4,11 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 const path = require('path');
 
-const { resolveLocalImage, shouldLiveValidate } = require('../../../validate/validate-external-images');
+const {
+  changedPublicNewsletterDates,
+  resolveLocalImage,
+  shouldLiveValidate
+} = require('../../../validate/validate-external-images');
 
 // 회귀: resolveLocalImage가 서빙 URL relPath(newsletters/<date>/...)를 repo root 기준으로 풀어
 // ../../assets/ fallback 경로가 root/assets/(존재하지 않음)로 잘못 풀리고, 실제로 articles/assets/에
@@ -38,4 +42,29 @@ test('shouldLiveValidate skips a historical newsletter so link rot cannot block 
   assert.equal(shouldLiveValidate('2026-05-05', new Set(['2026-06-24'])), false);
   // strict target이 비어 있으면(예: 이미지/발행물과 무관한 PR) 모든 과거 발행물의 외부 이미지를 건너뛴다.
   assert.equal(shouldLiveValidate('2026-05-05', new Set()), false);
+});
+
+// 이미지 감사 리포트 부재를 차단하는 스코프. 공개 산출물이 변경 집합(=커밋)에 들어온 날짜만
+// 감사가 돌았어야 하는 주로 본다. 워크플로 03의 첫 실행은 공개 산출물이 아직 작업 트리에만
+// 있어 이 집합이 비므로 초록으로 남는다.
+test('changedPublicNewsletterDates picks up committed public newsletter artifacts', () => {
+  const dates = changedPublicNewsletterDates([
+    'articles/newsletters/2026-08-10/index.html',
+    'articles/newsletters/2026-08-03/newsletter.md',
+    'articles\\newsletters\\2026-07-27\\index.html'
+  ]);
+  assert.deepEqual([...dates].sort(), ['2026-07-27', '2026-08-03', '2026-08-10']);
+});
+
+test('changedPublicNewsletterDates ignores non-public artifacts of the same date', () => {
+  // newsroom 증거물만 바뀐 PR은 발행물을 다시 내는 것이 아니므로 감사 리포트를 요구하지 않는다.
+  // 리포트 자신의 변경이 스스로를 요구하게 만드는 순환도 여기서 끊긴다.
+  const dates = changedPublicNewsletterDates([
+    'articles/content/newsroom/2026-08-10/editor-draft.json',
+    'articles/content/newsroom/2026-08-10/image-audit-report.json',
+    'articles/data/newsletters.json',
+    'articles/newsletters/2026-W33/index.html',
+    'src/generator/validate/validate-external-images.js'
+  ]);
+  assert.deepEqual([...dates], []);
 });
