@@ -10,8 +10,7 @@
 //
 // 그래서 판정은 모니터에 두고, 이 모듈은 내용 추출과 섹션 단위 비교만 한다.
 // 순환 의존을 만들지 않도록 모니터·파서 어느 쪽에도 의존하지 않는다.
-const { decodeHtml } = require('../common/common');
-const { hashText } = require('../common/source-identity');
+const { extractHeadingSections, pageTitle, articleBody, text } = require('./document-section-parsing');
 const { normalizeOutgoingLinks } = require('./outgoing-links');
 
 // 자격은 host와 경로로 정한다. 본문에 'Camera ITS'가 있는지로 판정하면 같은 소스의 랜딩
@@ -25,38 +24,11 @@ const RELEASE_TITLE_PATTERN = /\bAndroid\s+\d+\s+Camera\s+Image\s+Test\s+Suite\b
 // devsite 공통 푸터(Build / Connect / Get help)는 이 어휘에 걸리지 않는다.
 const RELEASE_SECTION_PATTERN =
   /\b(?:test|tests|scene|scenes|rig|chart|tablet|activit(?:y|ies)|status|camera|package|version|deprecat|result)\b/i;
-// devsite가 모든 문서 제목 옆에 붙이는 안내 문구. 릴리스 내용이 아니므로 증거에서 뺀다.
-const DEVSITE_BOILERPLATE_PATTERN =
-  /\bStay organized with collections\b[\s\S]*?\bbased on your preferences\.?/i;
-const HEADING_PATTERN = /<(h[1-4])([^>]*)>([\s\S]*?)<\/\1>/gi;
-// 본문 컨테이너. devsite 페이지에는 좌측 book nav와 사이드바 heading이 함께 있어서
-// 문서 전체를 훑으면 내비게이션 문구가 릴리스 섹션 자리를 차지한다.
-const ARTICLE_BODY_PATTERN = /<article\b[^>]*>([\s\S]*?)<\/article>/i;
-const DEVSITE_CONTENT_PATTERN = /<devsite-content\b[^>]*>([\s\S]*?)<\/devsite-content>/i;
 
 // 라이브 its-release-notes-17의 본문 섹션은 11개다. 상한이 그보다 낮으면 뒤쪽 섹션이
 // 조용히 빠진다 — "빌드 승인용 결과 일괄 제출"처럼 인증 워크플로가 통째로 바뀌는 항목이
 // 문서 끝에 온다. 문서 한 장을 덮도록 여유를 둔다.
 const SECTION_LIMIT = 12;
-// 문장을 자르지 않고 통째로 버리는 규칙이라 상한이 낮으면 알맹이가 통째로 사라진다
-// (라이브 실측: 상한 200에서 New tests 210자·Refactored tests 293자·Gen2 rig updates 203자가
-// 제목만 남았다). 실제 릴리스 노트 문장이 들어갈 만큼 잡고, 그보다 긴 비정상 문장만 버린다.
-const SENTENCE_LIMIT = 320;
-const SECTION_HASH_LENGTH = 16;
-
-function text(value = '') {
-  return decodeHtml(
-    String(value)
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/&nbsp;/gi, ' ')
-      .replace(/\s+/g, ' ')
-  )
-    // 공백을 먼저 접은 뒤에 안내 문구를 지운다. 순서가 반대면 문구가 태그로 쪼개져 있을 때
-    // 정규식이 빗나가 devsite 안내 문구가 증거에 남는다.
-    .replace(DEVSITE_BOILERPLATE_PATTERN, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
 
 function isReleaseNotesUrl(pageUrl = '') {
   try {
@@ -66,61 +38,6 @@ function isReleaseNotesUrl(pageUrl = '') {
   } catch {
     return false;
   }
-}
-
-function articleBody(html = '') {
-  const article = ARTICLE_BODY_PATTERN.exec(String(html));
-  if (article) return article[1];
-  const content = DEVSITE_CONTENT_PATTERN.exec(String(html));
-  return content ? content[1] : String(html);
-}
-
-function headingId(attrs = '') {
-  const match = /\bid="([^"]+)"/i.exec(String(attrs));
-  return match ? match[1] : '';
-}
-
-// 상한을 넘는 문장은 자르지 않고 버린다. 중간에서 자르면 조건이나 부정이 잘린 부분 문장이
-// 그대로 증거가 되어 기사에 실린다(짓느니 빠뜨린다).
-function firstSentence(value = '') {
-  const body = text(value);
-  if (!body) return '';
-  const [sentence] = body.split(/(?<=\.)\s+/);
-  const picked = sentence || body;
-  return picked.length > SENTENCE_LIMIT ? '' : picked;
-}
-
-function pageTitle(html = '') {
-  const match = /<title[^>]*>([\s\S]*?)<\/title>/i.exec(String(html));
-  return match ? text(match[1].split('|')[0]) : '';
-}
-
-function releaseSections(html, pageUrl) {
-  const body = articleBody(html);
-  const matches = [...String(body).matchAll(HEADING_PATTERN)];
-  const documentTitle = pageTitle(html);
-  const sections = [];
-  for (let index = 0; index < matches.length; index += 1) {
-    const current = matches[index];
-    const next = matches[index + 1];
-    const start = current.index + current[0].length;
-    const end = next ? next.index : String(body).length;
-    const heading = text(current[3]);
-    // 문서 제목(h1)은 섹션이 아니라 페이지 이름이다. 같은 텍스트를 증거에 또 싣지 않는다.
-    if (!heading || heading === documentTitle) continue;
-    const sectionHtml = String(body).slice(start, Math.min(end, start + 3500));
-    const sectionText = text(sectionHtml);
-    if (!RELEASE_SECTION_PATTERN.test(`${heading} ${sectionText}`)) continue;
-    const id = headingId(current[2]);
-    sections.push({
-      heading,
-      sentence: firstSentence(sectionHtml),
-      hash: hashText(`${heading}\n${sectionText}`, SECTION_HASH_LENGTH),
-      url: id && pageUrl ? `${String(pageUrl).replace(/#.*$/, '')}#${id}` : ''
-    });
-    if (sections.length >= SECTION_LIMIT) break;
-  }
-  return sections;
 }
 
 /**
@@ -135,7 +52,10 @@ function cameraItsReleaseNoteExtract(html = '', pageUrl = '') {
     (text(articleBody(html)).match(RELEASE_TITLE_PATTERN) || [])[0];
   if (!release) return null;
 
-  const sections = releaseSections(html, pageUrl);
+  const sections = extractHeadingSections(html, pageUrl, {
+    sectionPattern: RELEASE_SECTION_PATTERN,
+    sectionLimit: SECTION_LIMIT
+  });
   return sections.length > 0 ? { release, sections } : null;
 }
 
