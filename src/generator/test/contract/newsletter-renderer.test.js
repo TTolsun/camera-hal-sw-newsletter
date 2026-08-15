@@ -239,6 +239,14 @@ test('newsletter renderer structures issue pages as newsroom flow articles', () 
   // mockup: 제로패딩 번호 + 카테고리 눈썹이 카드 프레임 없는 섹션 헤더로 흐른다.
   assert.match(html, /<div class="issue-story-eyebrow">\s*<span class="issue-story-number" aria-label="Article 1">01<\/span>\s*<span class="issue-story-category">Camera<\/span>/);
   assert.match(html, /<section class="section issue-story issue-section article-card[^"]*"/);
+  // 기사 섹션의 class 어휘는 닫혀 있다. article_type(LLM 자유 텍스트)을 클래스로 찍던 시절에는
+  // `article-card has-image Android Camera / Platform API` 처럼 공백·슬래시가 든 값이 들어가
+  // class 토큰이 다섯 개로 쪼개졌다. 해시 잠금은 원인을 안 알려주므로 여기서 직접 잡는다.
+  assert.deepEqual(
+    [...html.matchAll(/<section class="(section issue-story[^"]*)"/g)].map(match => match[1]),
+    ['section issue-story issue-section article-card has-placeholder-image']
+  );
+  assert.doesNotMatch(html, /class="[^"]*\//);
   assert.doesNotMatch(html, /article-feature-row|section-icon-list/);
   assert.match(html, /<h2 id="article-camerax-release-gives-hal-teams-a-target-title" class="article-title">CameraX release gives HAL teams a target<\/h2>/);
   assert.match(html, /<section class="section issue-references" aria-labelledby="issue-references-title">/);
@@ -486,12 +494,15 @@ test('newsletter renderer keeps v1 output byte-identical', () => {
     contextMarkdown: sha256(buildMarkdown(contextIssue)),
     contextHtml: sha256(buildHtml(contextIssue))
   }, {
+    // HTML 3종은 클래스 방출 정리(article_type 자유 텍스트 클래스·placeholder variant 제거)로
+    // 한 번 갱신했다. markdown 3종은 그때도 불변이었다 — 그 대비가 "마크다운 계약은 그대로,
+    // HTML 클래스만 의도적으로 바뀌었다"는 증거다.
     plainMarkdown: 'c48f47e42dc73097',
-    plainHtml: '92cf196be12cfb3d',
+    plainHtml: 'c129549a3f8f9b9f',
     storyMarkdown: 'f3602357add8a9ff',
-    storyHtml: '73f0e99343b11f73',
+    storyHtml: '1449d5904a3e1485',
     contextMarkdown: 'baa3a66bce12cd3b',
-    contextHtml: 'd4b8200319f8c5b9'
+    contextHtml: '7551877b8ad1e56e'
   });
 });
 

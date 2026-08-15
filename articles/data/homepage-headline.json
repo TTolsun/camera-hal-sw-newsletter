@@ -38,7 +38,7 @@
     },
     "snapshot": {
       "category": "camera_driver_image_pipeline",
-      "source_name": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver"
+      "source_name": "lore.kernel.org linux-media list"
     },
     "newsletter_article_url": "newsletters/2026-08-10/index.html#article-onsemi-ar0234-cmos-patch-v2",
     "image_url": "assets/images/fallback/newsletter-default.svg",

@@ -7,7 +7,8 @@ const {
 } = require('../../shared/common/common');
 const {
   articleIdentityKey,
-  normalizeArticleUrl
+  normalizeArticleUrl,
+  sourceUrl
 } = require('../../shared/common/article-identity');
 const {
   uniqueArticleAnchorId
@@ -60,6 +61,8 @@ function readRenderedNewsletterArticles(root, date) {
         matchFirst(block, /<p[^>]*class="[^"]*\barticle-lead\b[^"]*"[^>]*>([\s\S]*?)<\/p>/i) ||
         matchFirst(block, /<p[^>]*>([\s\S]*?)<\/p>/i)
       );
+      // 주의: 이 값은 **앵커 라벨**(문서 제목)이지 발행처 이름이 아니다. 발행처는 수집 단계의
+      // candidate.source 가 정본이라, 홈 헤드라인 스냅샷의 source_name 을 이 값으로 채우면 안 된다.
       const sourceName = stripHtml(
         matchFirst(block, /<figcaption[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/i) ||
         matchFirst(block, /<div class="source-list"[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/i)
@@ -92,10 +95,16 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
     return { state, reconciliation: null };
   }
   const newsletterUrl = `newsletters/${date}/index.html`;
-  const selectedByKey = new Map(ensureArray(shortlist?.selected_articles).map(candidate => [
+  const selectedCandidates = ensureArray(shortlist?.selected_articles);
+  const selectedByKey = new Map(selectedCandidates.map(candidate => [
     articleIdentityKey(candidate),
     candidate
   ]));
+  // 발행처 이름은 후보(shortlist)에만 있다. identity key 가 어긋나 후보를 못 찾으면 그 이름도,
+  // official-source 점수 신호도 함께 사라지므로 URL 로 한 번 더 찾는다.
+  const selectedByUrl = new Map(selectedCandidates
+    .map(candidate => [normalizeArticleUrl(sourceUrl(candidate)), candidate])
+    .filter(([key]) => key));
   const current = state.current_headline;
   const currentSource = normalizeArticleUrl(current.source_url);
   const renderedCurrent = rendered.find(article =>
@@ -116,10 +125,11 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
           newsletter_article_url: renderedCurrent.newsletter_article_url || newsletterUrl,
           image_url: normalizeHeadlineImageUrl(renderedCurrent.image_url || current.image_url || '', newsletterUrl),
           image_alt: renderedCurrent.image_alt || current.image_alt || renderedCurrent.title,
-          snapshot: {
-            ...(current.snapshot || {}),
-            source_name: renderedCurrent.source_name || current.snapshot?.source_name || ''
-          }
+          // source_name 은 렌더 HTML 에서 되읽지 않는다. 발행 페이지의 앵커 라벨은 문서 제목
+          // (예: "[PATCH v2 0/2] media: i2c: Add ...")이라, 그걸로 덮으면 홈 히어로 메타가
+          // "날짜 · 발행처" 대신 기사 제목을 한 번 더 반복한다. 발행처 이름은 수집 단계가 넣은
+          // 후보 값(candidate.source)이 정본이고, 그 값은 이미 이 스냅샷에 들어 있다.
+          snapshot: { ...(current.snapshot || {}) }
         }
       },
       reconciliation: null
@@ -128,7 +138,9 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
 
   const fallback = rendered
     .map(article => {
-      const selected = selectedByKey.get(article.article_identity_key) || {};
+      const selected = selectedByKey.get(article.article_identity_key)
+        || selectedByUrl.get(normalizeArticleUrl(article.source_url))
+        || {};
       const candidate = {
         ...selected,
         article_identity_key: article.article_identity_key,
@@ -145,9 +157,10 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
         image_url: article.image_url || selected.image_url || selected.selectedImage || '',
         image_alt: article.image_alt || selected.image_alt || selected.imageAlt || article.title,
         selected_at: date,
+        // 같은 이유로 fallback 후보도 발행처 이름을 후보 쪽에서만 가져온다.
         snapshot: {
           ...(selected.snapshot || {}),
-          source_name: article.source_name || selected.source_name || selected.source || ''
+          source_name: selected.source || selected.source_name || selected.snapshot?.source_name || ''
         }
       };
       if (!isHeadlineEligible(candidate)) return null;

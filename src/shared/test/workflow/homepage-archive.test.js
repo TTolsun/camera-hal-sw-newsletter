@@ -496,6 +496,7 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   const archivePageGrid = exactSelectorBlock(css, '.archive-page .archive-grid');
   const archivePageCard = exactSelectorBlock(css, '.archive-page .archive-card');
   const archiveFocus = exactSelectorBlock(css, '.archive-card:focus-visible');
+  const cardThumb = exactSelectorBlock(css, '.card-thumb');
   const archivePagination = exactSelectorBlock(css, '.archive-pagination');
   const archivePageButton = exactSelectorBlock(css, '.archive-page-button');
   const archivePageCurrent = exactSelectorBlock(css, '.archive-page-button.is-current');
@@ -509,6 +510,12 @@ test('archive grid CSS caps columns and preserves card interaction layout contra
   assertCssDeclaration(wideGrid, 'grid-template-columns', 'repeat(3, minmax(0, 1fr))');
   assertCssDeclaration(archiveCard, 'display', 'flex');
   assertCssDeclaration(archiveCard, 'flex-direction', 'column');
+  // 카드 프레임은 flat(투명·무테두리), 경계선은 16:9 썸네일에만 둔다. 흰 배경 소셜 카드
+  // 이미지가 흰 캔버스에 묻히지 않게 하는 hairline이라, 둘을 바꿔 다는 회귀를 막는다.
+  assertCssDeclaration(archiveCard, 'border', 'none');
+  assertCssDeclaration(archiveCard, 'background', 'transparent');
+  assertCssDeclaration(cardThumb, 'border', '1px solid var(--line)');
+  assertCssDeclaration(cardThumb, 'aspect-ratio', '16 / 9');
   // mockup 카드 그리드 리듬: 세로 46px / 가로 28px.
   assertCssDeclaration(archivePageGrid, 'gap', '46px 28px');
   assertCssDeclaration(archivePageCard, 'padding', '0');
@@ -557,11 +564,12 @@ test('font weights stay on the DESIGN.md 400/500/600 ramp', () => {
     assertCssDeclaration(exactSelectorBlock(css, heading), 'font-weight', '600');
   }
 
-  // 램프 밖 값은 .section-icon-star 하나뿐이다(텍스트 굵기가 아니라 글리프 아이콘 획 두께).
+  // 램프 밖 값은 이제 하나도 없다. 유일한 예외였던 .section-icon-star(900)는 도달 불가 규칙이라
+  // dead CSS 정리에서 제거했다. 새 예외를 만들려면 DESIGN.md 램프를 먼저 고쳐야 한다.
   const offRamp = [...css.matchAll(/font-weight:\s*([^;]+);/g)]
     .map(match => match[1].trim())
     .filter(value => !['400', '500', '600', 'inherit'].includes(value));
-  assert.deepEqual(offRamp, ['900']);
+  assert.deepEqual(offRamp, []);
 });
 
 test('homepage featured hero and latest grid CSS cover the rebuilt layout', () => {
@@ -576,6 +584,7 @@ test('homepage featured hero and latest grid CSS cover the rebuilt layout', () =
   // live layout so a regression in the new hero is caught, not just the retained dead-CSS pins.
   assertCssDeclaration(featuredHero, 'display', 'grid');
   assertCssDeclaration(featuredThumb, 'aspect-ratio', '16 / 9');
+  assertCssDeclaration(featuredThumb, 'border', '1px solid var(--line)');
   assertCssDeclaration(featuredThumb, 'border-radius', 'var(--radius-lg)');
   assertCssDeclaration(featuredCopy, 'text-align', 'center');
   assertCssDeclaration(featuredTitle, 'font-size', 'clamp(1.9rem, 3.4vw, 2.9rem)');

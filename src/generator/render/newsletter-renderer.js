@@ -78,13 +78,6 @@ function paragraphHtml(value) {
   return `<p>${escapeHtml(value || '')}</p>`;
 }
 
-function slugClass(value) {
-  return String(value || 'generic')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '') || 'generic';
-}
-
 function publicVisualLabel(value) {
   return String(value || 'Article visual')
     .replace(/\bFallback\b/gi, 'Tooling Watch')
@@ -166,8 +159,9 @@ function articleMediaHtml(section, publicArticle = null) {
           </figure>`;
   }
 
-  const variant = slugClass(publicVisualLabel(section.article_type || section.category || 'generic'));
-  return `<div class="article-media article-placeholder-visual article-placeholder-${escapeHtml(variant)}" role="img" aria-label="${escapeHtml(publicVisualLabel(section.category))}">
+  // placeholder 는 패턴 하나다(DESIGN.md). 기사 종류별 variant 클래스는 붙이지 않는다 —
+  // article_type·category 는 LLM 자유 텍스트라 클래스 어휘가 닫히지 않고, 스타일 차이도 없었다.
+  return `<div class="article-media article-placeholder-visual" role="img" aria-label="${escapeHtml(publicVisualLabel(section.category))}">
             <span></span>
           </div>`;
 }
@@ -439,7 +433,6 @@ function normalizedSections(issue) {
       heading: `## ${index + 2}. ${category}${badge}`,
       htmlHeading: `${index + 2}. ${category}${badge}`,
       headingCategory: category,
-      className: section.article_type || (section.is_ai_related ? 'ai' : 'article'),
       anchorId: uniqueArticleAnchorId(category, index, usedAnchors),
       articleNumber: index + 1,
       isCatchUp,
@@ -467,13 +460,13 @@ function sectionsMarkdownWithCatchUpDivider(issue) {
 function sectionsHtmlWithCatchUpDivider(issue) {
   let dividerEmitted = false;
   return normalizedSections(issue)
-    .map(({ htmlHeading, headingCategory, className, anchorId, articleNumber, section, isCatchUp }) => {
+    .map(({ htmlHeading, headingCategory, anchorId, articleNumber, section, isCatchUp }) => {
       let prefix = '';
       if (isCatchUp && !dividerEmitted) {
         prefix = `      <h2 class="catch-up-divider">${escapeHtml(CATCH_UP_DIVIDER_HEADING)}</h2>\n`;
         dividerEmitted = true;
       }
-      return prefix + publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, articleNumber, section);
+      return prefix + publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section);
     })
     .join('\n\n');
 }
@@ -745,7 +738,7 @@ ${sourceListMarkdown(issue.references)}
 
 // mockup 기사 흐름: [번호+카테고리 눈썹] → 제목 → 출처 서브타이틀 → 이미지 → 리드 → 본문 →
 // 관점 박스 → 출처. 카드 프레임 없이 섹션 자체가 hairline 으로 구분된다.
-function publicArticleHtml(issue, htmlHeading, headingCategory, className, anchorId, articleNumber, section) {
+function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section) {
   const storyContractVersion = storyContractRenderVersion(issue, section);
   const publicArticle = publicArticleForSection(section, { issue });
   assertRenderableBody(publicArticle, storyContractVersion);
@@ -775,7 +768,9 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, className, ancho
   const articleImageClass = resolvedArticleImage(section) ? 'has-image' : 'has-placeholder-image';
   const articleTags = articleTagsHtml(section, headingCategory);
   const articleTagsBlock = articleTags ? `\n        ${articleTags}` : '';
-  return `      <section class="section issue-story issue-section article-card${articleTypeClass} ${articleImageClass} ${escapeHtml(className)}" id="${escapeHtml(anchorId)}" aria-labelledby="${escapeHtml(anchorId)}-title">
+  // 클래스는 결정론 훅만 붙인다. article_type(LLM 자유 텍스트)을 클래스로 찍으면
+  // "Android Camera / Platform API" 처럼 공백·슬래시가 든 값이 class 속성에 그대로 들어간다.
+  return `      <section class="section issue-story issue-section article-card${articleTypeClass} ${articleImageClass}" id="${escapeHtml(anchorId)}" aria-labelledby="${escapeHtml(anchorId)}-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article ${escapeHtml(articleNumber)}">${escapeHtml(displayNumber)}</span>
           <span class="issue-story-category">${escapeHtml(articleCategoryLabel(section))}</span>
