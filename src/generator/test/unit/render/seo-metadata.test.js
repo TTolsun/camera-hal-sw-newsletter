@@ -4,6 +4,7 @@ const test = require('node:test');
 const {
   SITE_BASE_URL,
   DEFAULT_OG_IMAGE,
+  AI_ENGINEERING_LEARNING_PATH,
   absoluteUrl,
   buildStaticSitemap,
   buildSitemap,
@@ -33,6 +34,7 @@ function completeHead(overrides = {}) {
 test('site constants are absolute GitHub Pages URLs', () => {
   assert.match(SITE_BASE_URL, /^https:\/\/ttolsun\.github\.io\/camera-hal-sw-newsletter\/$/);
   assert.equal(DEFAULT_OG_IMAGE, SITE_BASE_URL + 'assets/images/brand/HALley.png');
+  assert.equal(AI_ENGINEERING_LEARNING_PATH, 'learning/ai-engineering/');
 });
 
 test('absoluteUrl joins a relative path onto the base without double slashes', () => {
@@ -40,34 +42,36 @@ test('absoluteUrl joins a relative path onto the base without double slashes', (
   assert.equal(absoluteUrl('/archive.html'), SITE_BASE_URL + 'archive.html');
 });
 
-test('buildStaticSitemap lists the two stable entry points and is data-independent', () => {
+test('buildStaticSitemap lists stable entry points and is data-independent', () => {
   const xml = buildStaticSitemap();
   assert.match(xml, /^<\?xml version="1\.0" encoding="UTF-8"\?>/);
   assert.match(xml, /<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
   assert.ok(xml.includes(`<loc>${SITE_BASE_URL}</loc>`));
   assert.ok(xml.includes(`<loc>${SITE_BASE_URL}archive.html</loc>`));
-  assert.equal((xml.match(/<url>/g) || []).length, 2);
+  assert.ok(xml.includes(`<loc>${SITE_BASE_URL}${AI_ENGINEERING_LEARNING_PATH}</loc>`));
+  assert.equal((xml.match(/<url>/g) || []).length, 3);
   assert.ok(xml.endsWith('\n'));
 });
 
-test('buildSitemap enumerates index, archive, and each weekly issue with lastmod', () => {
+test('buildSitemap enumerates stable pages and each weekly issue with lastmod', () => {
   const xml = buildSitemap([
     { weeklyKey: '2026-W23', html: 'newsletters/2026-W23/index.html', weekEndDate: '2026-06-07', date: '2026-06-01' },
     { weeklyKey: '2026-W22', html: 'newsletters/2026-W22/index.html', date: '2026-05-25' }
   ]);
   assert.ok(xml.includes(`<loc>${SITE_BASE_URL}</loc>`));
   assert.ok(xml.includes(`<loc>${SITE_BASE_URL}archive.html</loc>`));
+  assert.ok(xml.includes(`<loc>${SITE_BASE_URL}${AI_ENGINEERING_LEARNING_PATH}</loc>`));
   assert.ok(xml.includes(`<loc>${SITE_BASE_URL}newsletters/2026-W23/index.html</loc>`));
   assert.ok(xml.includes(`<loc>${SITE_BASE_URL}newsletters/2026-W22/index.html</loc>`));
   assert.ok(xml.includes('<lastmod>2026-06-07</lastmod>')); // weekEndDate preferred
   assert.ok(xml.includes('<lastmod>2026-05-25</lastmod>')); // falls back to date
-  assert.equal((xml.match(/<url>/g) || []).length, 4); // index + archive + 2 issues
+  assert.equal((xml.match(/<url>/g) || []).length, 5); // 3 stable pages + 2 issues
   assert.ok(xml.endsWith('\n'));
 });
 
 test('buildSitemap skips entries with no html and equals static sitemap when empty', () => {
   const xml = buildSitemap([{ weeklyKey: '2026-W23' }]);
-  assert.equal((xml.match(/<url>/g) || []).length, 2); // only index + archive
+  assert.equal((xml.match(/<url>/g) || []).length, 3); // stable pages only
   assert.equal(buildSitemap([]), buildStaticSitemap());
 });
 
