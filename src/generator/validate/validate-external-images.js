@@ -20,7 +20,11 @@ const {
   toLegacyEditorIssue
 } = require('../../shared/domain/newsletter-domain-normalize');
 const { ensureArray } = require('../../shared/common/value-coercion');
-const { strictTargetDates } = require('../reporter/validation-targets');
+const {
+  changedFilesFromGit,
+  readNewsletterDate,
+  strictTargetDatesFromInputs
+} = require('../reporter/validation-targets');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
@@ -45,6 +49,22 @@ function shouldLiveValidate(date, strictDates) {
   return strictDates.has(date);
 }
 
+// 이미지 감사 리포트 부재를 차단할 날짜 집합이다. 공개 산출물이 커밋(변경 집합)에 들어온 날짜만
+// "감사가 돌았어야 하는 주"로 본다. 이는 감사 스텝을 무장시키는 public_newsletter_ready와 같은
+// 층의 구조 조건이며, 순서 때문에 필요하다. 워크플로 03에서 validate:images는 감사 스텝보다 먼저
+// 돌고 그 시점의 공개 산출물은 아직 작업 트리에만 있어 커밋 diff에 없다. 반대로 머지 경로
+// (site-01-validate)에서는 그 주 PR이 공개 산출물을 이미 커밋했다. 이 차이가 "첫 실행"과
+// "머지 직전"을 가르므로, 존재 요구를 무조건 켜서 매 첫 실행을 붉히는 일이 없다.
+function changedPublicNewsletterDates(changedFiles = []) {
+  const dates = new Set();
+  for (const file of changedFiles) {
+    const normalized = String(file || '').replace(/\\/g, '/');
+    const match = /^articles\/newsletters\/(\d{4}-\d{2}-\d{2})\/(?:index\.html|newsletter\.md)$/.exec(normalized);
+    if (match) dates.add(match[1]);
+  }
+  return dates;
+}
+
 // 이미지 계보 감사(newsroom:audit-images)의 publish 차단 판정을 머지 경로에서 강제하는 지점이다(#886).
 // 워크플로 03의 감사 스텝은 실패해도 그 주 뉴스레터 PR이 남도록 강등됐는데, 강등만 하면 머지 전에
 // 이 조건을 강제하는 지점이 하나도 남지 않는다. 그래서 PR에 함께 커밋되는 image-audit-report.json의
@@ -62,14 +82,28 @@ function shouldLiveValidate(date, strictDates) {
 // 스코핑은 strict target 날짜 하나로 충분하다(위 shouldLiveValidate와 같은 규약). 과거 발행물의
 // 잔존 카운트가 무관한 PR을 막지 못하는 이유는 validation-targets가 image-audit-report 경로를
 // strict target 산정에서 제외하기 때문이다.
-function failOnPublishBlockingImageAudit(date, strictDates) {
+// 카운트만 보면 fail-open 경로가 남는다. 리포트 쓰기는 리포트 조립이 끝난 뒤에 일어나므로
+// (writeNewsletterImageAuditArtifacts는 buildNewsletterImageAuditReport를 await한 다음 writeJson한다)
+// 조립 중 throw하면(예: editor-draft.json JSON.parse 실패) 리포트가 아예 만들어지지 않는다. 감사
+// 스텝은 continue-on-error라 job은 계속 진행되고, 리포트 없는 PR에서 카운트만 읽는 게이트는 조용히
+// 통과한다. 그러면 "감사가 아예 돌지 않은 주"가 기계적 차단 없이 머지된다(publish-ready 라벨은
+// 라벨일 뿐 머지를 막지 않는다). 그래서 부재도 위 changedPublicNewsletterDates 스코프에서 막는다.
+function failOnPublishBlockingImageAudit(date, strictDates, committedPublicDates) {
   if (!strictDates.has(date)) return;
 
   const relPath = newsroomRelPath(date, 'image-audit-report.json');
   const auditPath = path.join(newsroomDir(root, date), 'image-audit-report.json');
-  // 리포트가 없으면 건너뛴다. 워크플로 03에서 validate:images는 감사 스텝보다 먼저 돌기 때문에
-  // 정상적인 첫 실행에는 파일이 아직 존재하지 않는다. 존재를 요구하면 매 첫 실행이 붉어진다.
-  if (!fs.existsSync(auditPath)) return;
+  if (!fs.existsSync(auditPath)) {
+    if (committedPublicDates.has(date)) {
+      fail([
+        `Newsletter image lineage audit report is missing: newsletter ${date}`,
+        `  expected: ${relPath}`,
+        '  The public newsletter is part of this change, so the audit should have written this report.',
+        `  Run: npm run newsroom:audit-images -- --date ${date} --fail-on-publish-blocking`
+      ].join('\n'));
+    }
+    return;
+  }
 
   let report;
   try {
@@ -259,11 +293,17 @@ function fallbackWarningsFromEditor(date, editor) {
 }
 
 async function main() {
-  const strictDates = strictTargetDates({ root, newsletterDatePath });
+  // changed-file 목록을 한 번만 읽어 strict target 스코프와 커밋 존재 판정에 함께 쓴다.
+  const changedFiles = changedFilesFromGit({ root });
+  const strictDates = strictTargetDatesFromInputs({
+    changedFiles,
+    newsletterDate: readNewsletterDate(newsletterDatePath)
+  });
+  const committedPublicDates = changedPublicNewsletterDates(changedFiles);
   const images = [];
   for (const item of newsletterItems()) {
     fallbackWarningsFromEditor(item.date, readEditor(item.date));
-    failOnPublishBlockingImageAudit(item.date, strictDates);
+    failOnPublishBlockingImageAudit(item.date, strictDates, committedPublicDates);
 
     for (const key of ['html', 'md']) {
       if (!item[key]) continue;
@@ -356,4 +396,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { resolveLocalImage, shouldLiveValidate };
+module.exports = { changedPublicNewsletterDates, resolveLocalImage, shouldLiveValidate };
