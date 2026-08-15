@@ -23,9 +23,13 @@ function featurePageVersion(pageUrl) {
 function devsiteFeaturePageExtract(html = '', pageUrl = '') {
   const version = featurePageVersion(pageUrl);
   if (!version) return null;
+  // heading만 검사한다. 본문까지 보면 무관한 절이 'camera' 한 단어를 스치기만 해도
+  // (예: "unrelated to camera pipeline") 엉뚱한 섹션이 섞여 들어온다 — feature 페이지는
+  // 섹션 제목 자체가 주제를 정확히 담고 있어 heading만으로 충분하다.
   const sections = extractHeadingSections(html, pageUrl, {
     sectionPattern: CAMERA_SECTION_PATTERN,
-    sectionLimit: SECTION_LIMIT
+    sectionLimit: SECTION_LIMIT,
+    sectionPatternScope: 'heading'
   });
   return sections.length > 0 ? { release: `Android ${version} features`, sections } : null;
 }

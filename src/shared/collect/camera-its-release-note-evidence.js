@@ -52,9 +52,12 @@ function cameraItsReleaseNoteExtract(html = '', pageUrl = '') {
     (text(articleBody(html)).match(RELEASE_TITLE_PATTERN) || [])[0];
   if (!release) return null;
 
+  // 섹션 제목이 일반적이어도("Miscellaneous changes" 등) 본문이 테스트/시나리오 어휘를
+  // 담으면 릴리스 내용이 맞다. heading만 보면 그런 섹션을 놓친다 — 원래 루프대로 본문까지 본다.
   const sections = extractHeadingSections(html, pageUrl, {
     sectionPattern: RELEASE_SECTION_PATTERN,
-    sectionLimit: SECTION_LIMIT
+    sectionLimit: SECTION_LIMIT,
+    sectionPatternScope: 'heading_and_text'
   });
   return sections.length > 0 ? { release, sections } : null;
 }

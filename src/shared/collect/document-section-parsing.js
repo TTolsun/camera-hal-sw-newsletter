@@ -60,12 +60,25 @@ function pageTitle(html = '') {
   return match ? text(match[1].split('|')[0]) : '';
 }
 
+// 자격 판정에 어디까지 넣을지는 문서 유형마다 다르다.
+// - 'heading_and_text'(기본): heading과 섹션 본문을 합쳐서 검사한다. ITS 릴리스 노트는 섹션
+//   제목이 일반적이어도("Miscellaneous changes" 등) 본문이 테스트/시나리오 어휘를 담으면
+//   릴리스 내용이 맞다 — 원래 ITS 루프가 하던 대로 본문까지 봐야 그런 섹션을 놓치지 않는다.
+// - 'heading': heading만 검사한다. devsite feature 페이지처럼 무관한 절이 'camera' 같은
+//   단어를 스치기만 해도(예: "unrelated to camera pipeline") 누수되는 문서에서 쓴다 —
+//   feature 페이지는 섹션 제목 자체가 주제를 정확히 담고 있어 heading만으로 충분하다.
+const SECTION_PATTERN_SCOPES = {
+  heading_and_text: (heading, sectionText) => `${heading} ${sectionText}`,
+  heading: (heading) => heading
+};
+
 /**
  * devsite 문서의 본문 컨테이너(article/devsite-content)를 heading 단위로 순회해 섹션을 뽑는다.
  * 문서 제목(h1)은 섹션이 아니라 페이지 이름이므로 건너뛰고, sectionPattern에 걸리는
  * 섹션만 sectionLimit개까지 남긴다.
  */
-function extractHeadingSections(html, pageUrl, { sectionPattern, sectionLimit }) {
+function extractHeadingSections(html, pageUrl, { sectionPattern, sectionLimit, sectionPatternScope = 'heading_and_text' }) {
+  const matchText = SECTION_PATTERN_SCOPES[sectionPatternScope];
   const body = articleBody(html);
   const matches = [...String(body).matchAll(HEADING_PATTERN)];
   const documentTitle = pageTitle(html);
@@ -80,9 +93,7 @@ function extractHeadingSections(html, pageUrl, { sectionPattern, sectionLimit })
     if (!heading || heading === documentTitle) continue;
     const sectionHtml = String(body).slice(start, Math.min(end, start + 3500));
     const sectionText = text(sectionHtml);
-    // heading만으로 자격을 본다. 본문까지 훑으면 무관한 문단이 어휘 하나를 우연히 포함할 때
-    // (예: "unrelated to camera pipeline") 엉뚱한 섹션이 섞여 들어온다.
-    if (!sectionPattern.test(heading)) continue;
+    if (!sectionPattern.test(matchText(heading, sectionText))) continue;
     const id = headingId(current[2]);
     sections.push({
       heading,
