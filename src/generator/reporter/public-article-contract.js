@@ -330,8 +330,12 @@ function normalizedSourceUrlKey(value = '') {
 // sources 항목({url} 객체 또는 URL 문자열)에서 정규화 키를 뽑는다. allow-list(addSourceRole)와
 // weekly 병합의 sources 합집합(unionSources)이 이 한 곳을 같이 써야 한다 — 각자 키를 유도하면
 // 합집합이 지운 중복과 allow-list가 아는 키가 어긋난다.
+// URL 문자열이 아닌 항목은 빈 키다. 객체를 그대로 정규화기에 넘기면 문자열화되어
+// "[object object]"라는 비어있지 않은 키가 나오고, 호출부의 `if (!key)` 스킵 가드가 통째로
+// 무력화된다 — url 없는 서로 다른 항목이 한 키로 뭉쳐 합집합에서 출처가 조용히 사라진다.
 function sourceEntryUrlKey(source) {
-  return normalizedSourceUrlKey(source?.url || source);
+  const url = typeof source === 'string' ? source : source?.url;
+  return typeof url === 'string' ? normalizedSourceUrlKey(url) : '';
 }
 
 function sourceEntryRole(source, fallbackRole = 'primary') {
@@ -394,7 +398,7 @@ function sourceLinkIssues(source = {}, index = 0, options = {}) {
   }
   const allowedKeys = options.allowedSourceUrlKeys;
   const allowedRoles = options.allowedSourceUrlRoles;
-  const key = urlError ? '' : normalizedSourceUrlKey(source.url);
+  const key = urlError ? '' : sourceEntryUrlKey(source);
   if (!urlError && allowedRoles instanceof Map && allowedRoles.size > 0) {
     const roles = allowedRoles.get(key);
     const requestedRole = normalizePublicSourceRole(source.source_role) || 'primary';
@@ -816,14 +820,18 @@ function sectionCandidateHash(section = {}) {
 }
 
 function sectionSourceUrlKeys(section = {}) {
-  const values = [
+  // sources·source_links 항목의 키는 allow-list와 같은 sourceEntryUrlKey로 뽑는다. 섹션 매칭이
+  // 쓰는 키와 인용 allow-list가 갈리면 같은 출처가 한쪽에서만 같은 것으로 보인다.
+  const entryKeys = [
+    ...ensureArray(section.sources),
+    ...ensureArray(section.public_article?.source_links)
+  ].map(sourceEntryUrlKey);
+  const plainUrlKeys = [
     section.source_candidate_url,
     section.sourceCandidateUrl,
-    section.url,
-    ...ensureArray(section.sources).map(source => source?.url || source),
-    ...ensureArray(section.public_article?.source_links).map(source => source?.url || source)
-  ];
-  return [...new Set(values.map(normalizedSourceUrlKey).filter(Boolean))];
+    section.url
+  ].map(normalizedSourceUrlKey);
+  return [...new Set([...plainUrlKeys, ...entryKeys].filter(Boolean))];
 }
 
 function sectionTitleKeys(section = {}) {

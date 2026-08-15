@@ -141,6 +141,18 @@ test('원본을 넘기지 않으면 전용 오류 하나로 거부된다', () =>
   assert.equal(validation.reason, 'no_origin_articles_provided');
 });
 
+// url 없는 sources 항목은 키가 없다. 객체를 그대로 URL 정규화기에 넘기면 문자열화되어
+// "[object object]"라는 비어있지 않은 키가 나오고, 서로 다른 url 없는 항목이 한 키로 뭉쳐
+// 합집합에서 조용히 사라진다. 그 키가 인용 allow-list에도 등록되면 더 나쁘다.
+test('url이 없는 sources 항목은 키를 만들지 않아 서로 뭉치지 않는다', () => {
+  const existing = storySection('센서 드라이버 패치 시리즈', [patchLink(), { title: '메모만 있는 항목' }]);
+  const incoming = storySection('CameraX 1.7.0 릴리스 노트', [releaseLink(), { title: '다른 메모' }]);
+  const merged = storySection('센서 드라이버 패치와 CameraX 릴리스', [patchLink(), releaseLink()]);
+  const validation = validateMergedWeeklyArticle(merged, { existing, incoming }, STORY_ISSUE_MARKERS);
+  assert.deepEqual(issueTypes(validation), []);
+  assert.equal(validation.ok, true);
+});
+
 // 마커를 넘기지 않으면 story 계약 기사는 섹션 마커 하나만 보여 항상 mismatch가 난다.
 // 병합 채택 경로가 통째로 닫혀 있던 원인이다.
 test('이슈 계약 마커 없이는 정상 병합도 계약 불일치로 거부된다', () => {

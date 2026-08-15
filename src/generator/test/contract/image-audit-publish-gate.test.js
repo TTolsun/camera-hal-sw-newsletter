@@ -158,6 +158,31 @@ test('validate:images fails on an unparsable image audit report', () => {
   );
 });
 
+test('validate:images fails when publish_blocking_issue_count is negative', () => {
+  // 감사 모듈의 차단 조건은 `> 0`이다. 음수를 그냥 숫자로 받으면 여기서는 막고 워크플로에서는
+  // 통과하는 리포트가 생겨 두 강제 지점의 판정이 갈린다.
+  withFixture(
+    {
+      auditReport: {
+        schemaVersion: 1,
+        date,
+        mode: 'publish-target',
+        summary: { publish_blocking_issue_count: -3 },
+        errors: []
+      },
+      strictTarget: true
+    },
+    result => {
+      assert.equal(
+        result.status,
+        1,
+        `a negative publish_blocking_issue_count must fail the gate. stdout=${result.stdout} stderr=${result.stderr}`
+      );
+      assert.match(result.stderr, /must be a non-negative integer/);
+    }
+  );
+});
+
 test('validate:images fails when publish_blocking_issue_count is not a number', () => {
   // `Number(...) || 0`식 강제는 비숫자 카운트('two' 같은 문자열, null, 누락)를 전부 0으로
   // 만들어 차단해야 할 발행을 통과시켰다("2" 같은 숫자 문자열은 옛 코드도 차단했다).
@@ -179,7 +204,7 @@ test('validate:images fails when publish_blocking_issue_count is not a number', 
         1,
         `a non-numeric publish_blocking_issue_count must fail the gate. stdout=${result.stdout} stderr=${result.stderr}`
       );
-      assert.match(result.stderr, /publish_blocking_issue_count must be a number/);
+      assert.match(result.stderr, /publish_blocking_issue_count must be a non-negative integer/);
     }
   );
 });
@@ -193,7 +218,7 @@ test('validate:images fails when the audit report has no summary at all', () => 
         1,
         `an audit report without a summary must fail the gate. stdout=${result.stdout} stderr=${result.stderr}`
       );
-      assert.match(result.stderr, /publish_blocking_issue_count must be a number/);
+      assert.match(result.stderr, /publish_blocking_issue_count must be a non-negative integer/);
     }
   );
 });

@@ -62,14 +62,6 @@ function shouldLiveValidate(date, strictDates) {
 // 스코핑은 strict target 날짜 하나로 충분하다(위 shouldLiveValidate와 같은 규약). 과거 발행물의
 // 잔존 카운트가 무관한 PR을 막지 못하는 이유는 validation-targets가 image-audit-report 경로를
 // strict target 산정에서 제외하기 때문이다.
-// 카운트는 숫자일 때만 신뢰한다. 숫자가 아니면(요약 누락·문자열 오염) null을 돌려 호출부가
-// 손상으로 실패시키게 한다. `Number(...) || 0`처럼 0으로 강제하면 손상된 리포트가 이 게이트를
-// 조용히 꺼 버린다 — 이 값 하나가 머지 경로의 유일한 강제 지점이라 fail-closed여야 한다.
-function publishBlockingImageAuditCount(report) {
-  const count = report?.summary?.publish_blocking_issue_count;
-  return Number.isFinite(count) ? count : null;
-}
-
 function failOnPublishBlockingImageAudit(date, strictDates) {
   if (!strictDates.has(date)) return;
 
@@ -87,11 +79,16 @@ function failOnPublishBlockingImageAudit(date, strictDates) {
     return;
   }
 
-  const blockingCount = publishBlockingImageAuditCount(report);
-  if (blockingCount === null) {
+  // 카운트는 감사 모듈이 쓰는 것과 같은 모양(0 이상의 정수)일 때만 신뢰한다. 그 밖의 값은
+  // 손상으로 보고 실패시킨다. `Number(...) || 0`처럼 0으로 강제하면 손상된 리포트가 이 게이트를
+  // 조용히 꺼 버린다 — 이 값 하나가 머지 경로의 유일한 강제 지점이라 fail-closed여야 한다.
+  // 음수·소수까지 그냥 숫자로 받으면 워크플로의 `--fail-on-publish-blocking`(> 0만 본다)과
+  // 판정이 갈려, 한쪽만 막는 리포트가 생긴다.
+  const blockingCount = report?.summary?.publish_blocking_issue_count;
+  if (!Number.isInteger(blockingCount) || blockingCount < 0) {
     fail(
-      `Could not parse ${relPath}: summary.publish_blocking_issue_count must be a number, ` +
-      `got ${JSON.stringify(report?.summary?.publish_blocking_issue_count)}`
+      `Corrupt ${relPath}: summary.publish_blocking_issue_count must be a non-negative integer, ` +
+      `got ${JSON.stringify(blockingCount)}`
     );
     return;
   }

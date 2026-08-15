@@ -184,7 +184,7 @@ repair는 같은 ISO week의 weekly 산출물도 함께 동기화합니다. 동�
 
 발행 상태를 나타내는 값들의 의미는 다음과 같습니다.
 
-- `publish-ready`: AI가 자동으로 발행해도 되는 상태입니다. `has_ai_publish_ready=true`일 때만 씁니다.
+- `publish-ready`: AI가 자동으로 발행해도 되는 상태입니다. `has_ai_publish_ready=true`이고 **이미지 계보 감사 스텝(`audit-images`)이 성공했을 때만** 씁니다(#886). 감사 스텝은 실패해도 그 주 PR이 남도록 강등돼 있어서, 감사가 실패했거나 아예 돌지 않은 주에 이 label이 붙으면 강등이 곧 게이트 제거가 됩니다. 그래서 label 스크립트는 감사 outcome이 `success`인 경우만 통과로 봅니다 — `skipped`·`cancelled`는 통과가 아닙니다.
 - `review_publication_ready=true`: `public_newsletter_ready=true`인 검증된 public issue가 있지만 `final_publish_ready=false`라서, 편집장이 검토한 뒤 merge해야만 공개할 수 있다는 뜻입니다. 이 값은 파일이 존재하는지(raw file existence)가 아니라 `resolve-reviewable-artifacts`의 public newsletter readiness 결과에서만 파생합니다.
 - `diagnostics_only=true`: `review_pr_ready=true && public_newsletter_ready=false`인 진단 전용 PR입니다. merge해도 Newsletter 홈페이지에는 표시되지 않으며, public files가 왜 없는지를 PR body에 남겨야 합니다.
 - `homepage_visible_after_merge=true`: `articles/data/newsletters.json`의 date/html/md entry가 실제 `articles/newsletters/YYYY-MM-DD/index.html` 및 `newsletter.md`와 일치하는 public issue에만 설정합니다. 최종 판단은 `resolve-reviewable-artifacts`가 public files와 index entry를 다시 검증한 결과를 따릅니다.
