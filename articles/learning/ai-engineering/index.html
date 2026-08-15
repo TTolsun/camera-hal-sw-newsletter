@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Camera HAL Newsletter를 실험체로 삼아 Eval, Context Engineering, RAG, Agent, Harness, Loop Engineering, Spec Engineering을 16주 동안 실습하는 AI Engineering 학습 과정." />
+  <title>AI Engineering Lab · Camera SW Newsletter</title>
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/learning/ai-engineering/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="AI Engineering Lab · Camera SW Newsletter" />
+  <meta property="og:description" content="Camera HAL Newsletter를 실제 실험체로 사용해 AI Engineering을 구현·측정·실패 분석까지 학습합니다." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/learning/ai-engineering/" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AI Engineering Lab · Camera SW Newsletter" />
+  <meta name="twitter:description" content="Camera HAL Newsletter를 실제 실험체로 사용해 AI Engineering을 구현·측정·실패 분석까지 학습합니다." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+  <link rel="stylesheet" href="../../css/learning.css" />
+</head>
+<body class="homepage learning-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../index.html">홈</a>
+        <a href="../../archive.html">아카이브</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <div class="learning-shell">
+      <section class="learning-hero" aria-labelledby="learning-title">
+        <p class="learning-kicker">AI Engineering · Hands-on Curriculum</p>
+        <h1 id="learning-title">Camera HAL Newsletter로 배우는 AI Engineering</h1>
+        <p class="learning-hero-lead">강의를 읽고 끝내지 않습니다. 이 뉴스레터 자체를 System Under Test로 사용해 AI 시스템을 만들고, 일부러 망가뜨리고, 측정하고, 실패 원인을 분류하고, 개선 전후를 증명합니다.</p>
+        <div class="learning-hero-meta" aria-label="과정 정보">
+          <span class="learning-chip">16주 + Week 0</span>
+          <span class="learning-chip">주 5–7시간</span>
+          <span class="learning-chip">실습 75–85%</span>
+          <span class="learning-chip">Eval · RAG · Agent · Harness · Loop</span>
+        </div>
+      </section>
+    </div>
+
+    <nav class="learning-nav" aria-label="AI Engineering 학습 목차">
+      <div class="learning-shell learning-nav-inner">
+        <a href="#principle">학습 원칙</a>
+        <a href="#loop">학습 루프</a>
+        <a href="#curriculum">16주 커리큘럼</a>
+        <a href="#weekly-format">주차 자료 포맷</a>
+        <a href="#scoreboard">Scoreboard</a>
+        <a href="#camera-mental-model">Camera HAL 연결</a>
+        <a href="#sources">읽을거리</a>
+      </div>
+    </nav>
+
+    <div class="learning-shell">
+      <section id="principle" class="learning-section" aria-labelledby="principle-title">
+        <div class="learning-section-heading">
+          <p class="learning-label">01 · 학습 철학</p>
+          <h2 id="principle-title">“이해했다”가 아니라 “증명했다”를 완료 조건으로</h2>
+          <p>별도 실험실 repo는 만들지 않습니다. production newsletter를 실험 대상으로 삼되, 실험용 one-off 코드는 저장소에 남기지 않고 기존 코드·테스트·생성 산출물을 이용해 재현 가능한 비교를 만듭니다.</p>
+        </div>
+        <div class="learning-grid">
+          <article class="learning-card">
+            <h3>학습 완료로 인정하지 않는 것</h3>
+            <ul>
+              <li>개념 정의를 읽고 외운다.</li>
+              <li>프레임워크 튜토리얼을 그대로 따라 한다.</li>
+              <li>Agent가 한 번 성공한 결과를 보고 “된다”고 결론낸다.</li>
+            </ul>
+          </article>
+          <article class="learning-card">
+            <h3>학습 완료로 인정하는 것</h3>
+            <ul>
+              <li>직접 만들고 같은 조건으로 반복 실행한다.</li>
+              <li>일부러 실패 조건을 주입해 어디서 깨지는지 본다.</li>
+              <li>결과를 숫자로 비교하고 failure taxonomy로 원인을 분류한다.</li>
+              <li>개선 뒤 동일 eval에서 좋아졌음을 증명한다.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="master-rule"><strong>Master rule.</strong> 이론을 설명할 수 있다 &lt; 직접 만들 수 있다 &lt; 일부러 망가뜨릴 수 있다 &lt; 왜 망가졌는지 측정할 수 있다 &lt; 다른 설계와 비교할 수 있다 &lt; 개선 후 좋아졌음을 증명한다.</div>
+      </section>
+
+      <section id="loop" class="learning-section" aria-labelledby="loop-title">
+        <div class="learning-section-heading">
+          <p class="learning-label">02 · 반복 방식</p>
+          <h2 id="loop-title">모든 주차는 P-B-M-F-I-E Loop로 통일</h2>
+          <p>새 용어마다 다른 공부법을 만들지 않습니다. 예측부터 설명까지 같은 루프를 반복해, 개념이 아니라 문제 해결 습관을 몸에 넣습니다.</p>
+        </div>
+        <div class="loop-flow" aria-label="Predict Build Measure Fail Improve Explain">
+          <div class="loop-step"><strong>Predict</strong><span>먼저 결과를 예상</span></div>
+          <div class="loop-step"><strong>Build</strong><span>직접 구현</span></div>
+          <div class="loop-step"><strong>Measure</strong><span>숫자로 측정</span></div>
+          <div class="loop-step"><strong>Fail</strong><span>일부러 깨뜨림</span></div>
+          <div class="loop-step"><strong>Improve</strong><span>원인 기반 개선</span></div>
+          <div class="loop-step"><strong>Explain</strong><span>내 말로 일반화</span></div>
+        </div>
+        <article class="learning-card" style="margin-top:18px">
+          <h3>예: RAG를 공부할 때</h3>
+          <p>기사 100개를 전부 context에 넣는 방식, keyword retrieval top 10, retrieval + reranking top 5를 같은 query로 비교합니다. 품질·hallucination·evidence correctness·token을 측정하고 “왜 좋아졌는가?”까지 답합니다. Vector DB를 설치했다는 사실은 학습 성과가 아닙니다. 소프트웨어 세계가 늘 그렇듯 설치 성공은 문제의 시작에 더 가깝습니다.</p>
+        </article>
+      </section>
+
+      <section id="curriculum" class="learning-section" aria-labelledby="curriculum-title">
+        <div class="learning-section-heading">
+          <p class="learning-label">03 · Curriculum</p>
+          <h2 id="curriculum-title">Week 0 → Week 16</h2>
+          <p>순서는 의도적입니다. Agent framework부터 달려들지 않고, 먼저 불확실성·eval·error analysis를 경험합니다. 그래야 RAG, Context, Harness, Loop Engineering이 “유행어 컬렉션”이 아니라 필요한 설계 도구로 보입니다.</p>
+        </div>
+
+        <div class="phase-block">
+          <div class="phase-heading">
+            <div><p class="phase-kicker">Phase 0</p><h3>AI 시스템을 먼저 해부한다</h3></div>
+            <p>현재 Newsletter를 deterministic / probabilistic / human gate로 다시 읽습니다.</p>
+          </div>
+          <div class="week-list">
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>00</strong></div>
+              <div class="week-content">
+                <h4>Newsletter Anatomy</h4>
+                <p class="week-goal">목표: 지금 시스템을 AI Engineering 관점에서 다시 모델링한다.</p>
+                <div class="artifact-tree">Sources → Collector → Discovery → Candidate / Evidence → Selection
+→ Reporter LLM → Editor / Fact Check → Quality Gate → Renderer
+→ Validator → PR → Human Review</div>
+                <div class="week-columns">
+                  <div class="week-column"><strong>실습</strong><p>각 component가 deterministic인지 probabilistic인지 표시하고 Agent·Human 판단점, failure point, verifier를 매핑합니다.</p></div>
+                  <div class="week-column"><strong>산출물</strong><p>system map, failure map, baseline metrics. 별도 임시 문서 보존 대신 학습 페이지의 템플릿을 이용해 개인 결과를 기록합니다.</p></div>
+                  <div class="week-column"><strong>통과 조건</strong><p>아무 failure 하나를 주면 “어느 layer에서 막아야 하는가”를 근거와 함께 설명합니다.</p></div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="phase-block">
+          <div class="phase-heading">
+            <div><p class="phase-kicker">Phase 1</p><h3>Building &amp; Evaluating AI Applications</h3></div>
+            <p>LLM output의 불확실성을 직접 보고, deterministic eval과 subjective eval을 분리한 뒤 error-analysis loop를 만듭니다.</p>
+          </div>
+          <div class="week-list">
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>01</strong></div>
+              <div class="week-content">
+                <h4>LLM은 함수가 아니다</h4>
+                <p class="week-goal">Token, Context Window, Sampling, Structured Output, Hallucination, Non-determinism을 Newsletter 출력 변화로 체감합니다.</p>
+                <div class="week-columns">
+                  <div class="week-column"><strong>실험</strong><p>동일 candidate/evidence로 reporter를 여러 번 실행해 headline, main/short 분류, claim, source binding, schema failure, HAL relevance 변화를 기록합니다.</p></div>
+                  <div class="week-column"><strong>Failure injection</strong><p>evidence 제거, irrelevant evidence 추가, context 순서 변경, 지나치게 긴 source 추가.</p></div>
+                  <div class="week-column"><strong>핵심 질문</strong><p>왜 LLM application의 test가 기존 unit test만으로 끝나지 않는가?</p></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>02</strong></div>
+              <div class="week-content">
+                <h4>Deterministic Eval</h4>
+                <p class="week-goal">안전 조건을 prompt가 아니라 executable verifier로 바꿉니다.</p>
+                <div class="week-columns">
+                  <div class="week-column"><strong>대상</strong><p>source 없음, duplicate URL, stale claim, dated evidence 없음, required field 없음, generic AI article, 잘못된 image.</p></div>
+                  <div class="week-column"><strong>패턴</strong><p>Requirement → Acceptance Criteria → Test → PASS/FAIL. 예: main article은 valid evidence_id를 가져야 함.</p></div>
+                  <div class="week-column"><strong>실습</strong><p>stale article, duplicate source, fake evidence를 의도적으로 만들고 verifier가 실제로 잡는지 확인합니다.</p></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>03</strong></div>
+              <div class="week-content">
+                <h4>Subjective Eval + LLM-as-a-Judge</h4>
+                <p class="week-goal">코드로 딱 잘라 판정하기 어려운 “Camera HAL 개발자에게 유용한가?”를 rubric으로 바꿉니다.</p>
+                <div class="week-columns">
+                  <div class="week-column"><strong>Human golden</strong><p>30–50개 기사에 HAL relevance, novelty, technical depth, actionability, evidence quality를 각 0–3점으로 평가합니다.</p></div>
+                  <div class="week-column"><strong>LLM judge</strong><p>같은 rubric으로 자동 평가하고 human 결과와 agreement를 비교합니다.</p></div>
+                  <div class="week-column"><strong>측정</strong><p>Precision, Recall, Agreement, False Positive, False Negative.</p></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>04</strong></div>
+              <div class="week-content">
+                <h4>Error Analysis</h4>
+                <p class="week-goal">Prompt를 감으로 고치는 대신 failure data가 다음 변경을 고르게 합니다.</p>
+                <div class="code-block-light">FAIL 27
+Context 부족         9
+Evidence retrieval   6
+Prompt               4
+Tool                 3
+Judge                2
+Model reasoning      2
+기타                 1</div>
+                <div class="week-columns">
+                  <div class="week-column"><strong>실습</strong><p>Failure taxonomy를 만들고 가장 큰 category 하나만 수정합니다.</p></div>
+                  <div class="week-column"><strong>측정</strong><p>예: Main article precision 76% → 85%.</p></div>
+                  <div class="week-column"><strong>통과 조건</strong><p>“무엇을 고쳤나”보다 “왜 이걸 먼저 고쳤나”를 데이터로 설명합니다.</p></div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="phase-block">
+          <div class="phase-heading">
+            <div><p class="phase-kicker">Phase 2</p><h3>Context Engineering / RAG</h3></div>
+            <p>Context를 많이 넣는 것과 필요한 정보를 잘 선택하는 것은 다른 문제라는 걸 실험으로 확인합니다.</p>
+          </div>
+          <div class="week-list">
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>05</strong></div>
+              <div class="week-content">
+                <h4>Context Engineering</h4>
+                <p class="week-goal">같은 article generation task에 서로 다른 context strategy를 적용합니다.</p>
+                <div class="week-columns">
+                  <div class="week-column"><strong>비교</strong><p>A: 관련 자료 전부, B: candidate만, C: candidate + linked evidence, D: retrieval + rerank + compressed evidence.</p></div>
+                  <div class="week-column"><strong>측정</strong><p>품질, hallucination, evidence correctness, token, latency.</p></div>
+                  <div class="week-column"><strong>핵심 질문</strong><p>Context를 더 넣었는데 왜 더 나빠졌는가? Interference와 context budget 관점에서 설명합니다.</p></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>06</strong></div>
+              <div class="week-content">
+                <h4>RAG</h4>
+                <p class="week-goal">RAG를 Vector DB 제품명과 분리해서 “필요한 정보를 찾아 context에 넣는 시스템”으로 이해합니다.</p>
+                <div class="week-columns">
+                  <div class="week-column"><strong>Step 1</strong><p>keyword, grep, source registry, URL relation, metadata, linked evidence로 retrieval baseline을 만듭니다.</p></div>
+                  <div class="week-column"><strong>Step 2</strong><p>Embedding Search, Hybrid Search, Reranking을 추가합니다.</p></div>
+                  <div class="week-column"><strong>Eval</strong><p>“Android Camera HAL 관련 최신 upstream 변화” query에 Recall@K, Precision@K, final usefulness, token을 비교합니다.</p></div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="phase-block">
+          <div class="phase-heading">
+            <div><p class="phase-kicker">Phase 3</p><h3>Using Coding Agents</h3></div>
+            <p>Agent loop, skill, verifier, harness, observability, multi-agent를 하나씩 쌓습니다. 복잡한 framework는 가장 나중입니다.</p>
+          </div>
+          <div class="week-list">
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>07</strong></div>
+              <div class="week-content">
+                <h4>Agent란 무엇인가</h4>
+                <p class="week-goal">Newsletter 기능 하나를 작은 tool-calling loop로 직접 모델링합니다.</p>
+                <div class="artifact-tree">LLM → Tool → Observation → LLM → Tool → ...
+
+Tools:
+search_sources()
+read_candidate()
+read_evidence()
+validate_source()
+write_article()
+run_validator()</div>
+                <div class="master-rule">처음부터 LangChain 같은 framework를 필수로 두지 않습니다. 단순 loop가 무엇을 책임지는지 먼저 이해한 뒤 abstraction을 얹습니다.</div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>08</strong></div>
+              <div class="week-content">
+                <h4>Skill / Agent Context A/B Test</h4>
+                <p class="week-goal">Skill이 “좋아 보인다”가 아니라 실제 task success를 올리는지 paired evaluation으로 봅니다.</p>
+                <div class="week-columns">
+                  <div class="week-column"><strong>Condition A</strong><p>Agent + repo만 제공.</p></div>
+                  <div class="week-column"><strong>Condition B</strong><p>Agent + repo + AGENTS.md.</p></div>
+                  <div class="week-column"><strong>Condition C</strong><p>Agent + repo + AGENTS.md + 전용 Skill.</p></div>
+                </div>
+                <div class="master-rule">측정: Test Pass Rate, Validation Pass Rate, wrong-file modification, diff size, retry count, token, time. Skill은 문서가 아니라 intervention입니다. 효과를 재야 합니다.</div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>09</strong></div>
+              <div class="week-content">
+                <h4>Verification Loop</h4>
+                <p class="week-goal">One-shot Agent를 없애고 bounded retry를 가진 verification loop를 만듭니다.</p>
+                <div class="artifact-tree">Agent → Implementation → test / validate
+                    ↓ FAIL
+                 Feedback
+                    ↓
+                 Agent retry
+
+attempt_budget = 3</div>
+                <div class="week-columns">
+                  <div class="week-column"><strong>비교</strong><p>One-shot Agent vs Verification Loop Agent.</p></div>
+                  <div class="week-column"><strong>측정</strong><p>Task success, token, latency, retry, regression.</p></div>
+                  <div class="week-column"><strong>판단</strong><p>재시도가 성능을 올렸는지, 단지 token만 태웠는지 구분합니다.</p></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>10</strong></div>
+              <div class="week-content">
+                <h4>Harness Engineering</h4>
+                <p class="week-goal">모델보다 모델 주변의 Controller, State, Timeout, Retry, Permission, Checkpoint, Idempotency, Sandbox, Human Gate를 설계합니다.</p>
+                <div class="week-columns">
+                  <div class="week-column"><strong>Chaos lab</strong><p>network timeout, malformed JSON, GitHub failure, 중복 cron, process crash, validator crash.</p></div>
+                  <div class="week-column"><strong>관찰</strong><p>부분 성공 상태, 중복 side effect, retry 폭주, state corruption이 발생하는지 봅니다.</p></div>
+                  <div class="week-column"><strong>핵심 질문</strong><p>Agent가 이상하게 행동해도 시스템은 안전한 상태로 남는가?</p></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>11</strong></div>
+              <div class="week-content">
+                <h4>Observability</h4>
+                <p class="week-goal">“왜 틀렸지?”를 감상이 아니라 trace로 재현할 수 있게 합니다.</p>
+                <div class="code-block-light">run_id
+model / prompt_version / skill_version
+input / context
+tool_calls
+output
+grader_result
+retry
+token / latency</div>
+                <div class="master-rule">Camera HAL에서 frame drop인데 로그가 하나도 없다면 답이 없듯, Agent도 trace가 없으면 개선이 아니라 추측을 하게 됩니다.</div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>12</strong></div>
+              <div class="week-content">
+                <h4>Multi-Agent</h4>
+                <p class="week-goal">Agent 수를 늘리는 게 아니라 책임 분리가 실제 성능 향상을 만드는지 확인합니다.</p>
+                <div class="week-columns">
+                  <div class="week-column"><strong>A / B</strong><p>Single Agent vs Reporter → Editor → Fact Checker.</p></div>
+                  <div class="week-column"><strong>C / D</strong><p>Agent → Deterministic Verifier vs Reporter → Editor → Verifier → Repair.</p></div>
+                  <div class="week-column"><strong>측정</strong><p>Quality, reliability, token, latency, failure rate.</p></div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="phase-block">
+          <div class="phase-heading">
+            <div><p class="phase-kicker">Phase 4</p><h3>Shaping the Build</h3></div>
+            <p>구현이 싸질수록 무엇을 만들지, 무엇을 검증할지, 어떤 실패를 먼저 줄일지가 senior engineering의 중심이 됩니다.</p>
+          </div>
+          <div class="week-list">
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>13</strong></div>
+              <div class="week-content">
+                <h4>Spec Engineering</h4>
+                <p class="week-goal">“좋은 newsletter 만들어줘”를 Problem / Goal / Constraints / Non-goals / Success Metrics / Acceptance Criteria로 바꿉니다.</p>
+                <div class="code-block-light">Goal
+Camera HAL 엔지니어가 5분 안에 이번 주 중요한 변화를 파악한다.
+
+Constraints
+근거 없는 claim 금지
+source freshness 보장
+generic AI article 제외
+
+Acceptance
+Main article precision >= 90%
+Evidence binding = 100%
+No hard blocker</div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>14</strong></div>
+              <div class="week-content">
+                <h4>Product Sense</h4>
+                <p class="week-goal">기술적으로 완벽한 output과 읽을 가치가 있는 제품을 구분합니다.</p>
+                <div class="week-columns">
+                  <div class="week-column"><strong>독자 질문</strong><p>이걸 왜 읽어야 하지? 내 개발에 영향을 주나?</p></div>
+                  <div class="week-column"><strong>가치 질문</strong><p>내일 코드 볼 때 도움이 되나? 새로운 정보를 줬나?</p></div>
+                  <div class="week-column"><strong>시간 질문</strong><p>5분을 쓸 가치가 있나? AI Eval과 Product Metric을 연결합니다.</p></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>15</strong></div>
+              <div class="week-content">
+                <h4>Hill-Climbing</h4>
+                <p class="week-goal">Production trace 50–100개를 모아 가장 큰 반복 failure를 harness 개선으로 줄입니다.</p>
+                <div class="artifact-tree">Production Traces
+→ Error Analysis
+→ Top Failure
+→ Harness 변경
+→ Regression Eval
+→ Before / After</div>
+                <div class="master-rule">예: Evidence retrieval failure 31% → Context Builder 개선 → 12%. 바깥 loop는 prompt만 고치는 게 아니라 tool, grader, context, state, skill까지 개선 대상으로 봅니다.</div>
+              </div>
+            </article>
+
+            <article class="week-card">
+              <div class="week-index"><span class="week-number">Week</span><strong>16</strong></div>
+              <div class="week-content">
+                <h4>Final Boss · Camera HAL Newsletter AI Engineering v2</h4>
+                <p class="week-goal">지금까지의 구성요소를 하나의 안전하고 관찰 가능한 시스템으로 합칩니다.</p>
+                <div class="artifact-tree">Trigger → Harness → Context Builder → Agent
+                         ↙          ↘
+                      Tools         State
+                         ↘          ↙
+                          Verifier
+                         ↙        ↘
+                      PASS        FAIL
+                       ↓           ↓
+                 Human Review   Feedback → Retry
+                       ↓
+                       PR
+
+Runs → Trace → Eval → Failure Analysis
+→ Harness Improvement → Regression Eval</div>
+                <div class="master-rule">졸업 기준은 “Agent를 만들었다”가 아닙니다. 실패를 관찰하고 분류하고 개선한 뒤 regression eval로 향상을 증명하는 전체 loop가 닫혀 있어야 합니다.</div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="weekly-format" class="learning-section" aria-labelledby="weekly-format-title">
+        <div class="learning-section-heading">
+          <p class="learning-label">04 · Weekly Study Pack</p>
+          <h2 id="weekly-format-title">매 주차 자료는 7개 artifact 역할로 생각한다</h2>
+          <p>실제 repo에 학습용 폴더를 쌓는다는 뜻은 아닙니다. 각 주차를 공부할 때 아래 일곱 역할이 빠지지 않도록 개인 노트나 작업 세션에 적용하는 형식입니다.</p>
+        </div>
+        <div class="artifact-tree">01 concept       10–15분 개념, mental model, 흔한 오해
+02 reading       primary source 2–4개
+03 lab           목표, 가설, 실험, 관찰, 평가, failure injection
+04 starter       최소 실행 입력 / baseline
+05 eval          정답지가 아니라 측정 장치
+06 results       예상, 실제, 차이, failure, 수정, Before/After
+07 master-check  다른 시스템에도 일반화할 수 있는지 확인</div>
+        <div class="learning-grid" style="margin-top:18px">
+          <article class="learning-card">
+            <h3>Results template</h3>
+            <ul>
+              <li>내 예상은 무엇이었나?</li>
+              <li>실제 결과는 무엇이 달랐나?</li>
+              <li>가장 큰 failure는 무엇인가?</li>
+              <li>어떤 변경 하나를 했나?</li>
+              <li>Before / After 수치는 어떻게 달라졌나?</li>
+            </ul>
+          </article>
+          <article class="learning-card">
+            <h3>Master check 예시</h3>
+            <ul>
+              <li>Context와 Prompt의 차이를 설명한다.</li>
+              <li>Context가 많을수록 나빠질 수 있는 이유를 설명한다.</li>
+              <li>동일 task의 context strategy A/B test를 설계한다.</li>
+              <li>Token뿐 아니라 task quality까지 평가한다.</li>
+              <li>Newsletter가 아닌 시스템에도 같은 원리를 적용한다.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="scoreboard" class="learning-section" aria-labelledby="scoreboard-title">
+        <div class="learning-section-heading">
+          <p class="learning-label">05 · Scoreboard</p>
+          <h2 id="scoreboard-title">처음에는 7개 지표만 유지</h2>
+          <p>지표를 많이 만들면 측정 체계가 좋아지는 게 아니라 대시보드가 화려해집니다. 꽤 자주 벌어지는 착시입니다. 첫 단계에서는 아래 7개만 baseline과 experiment에서 동일하게 재면 충분합니다.</p>
+        </div>
+        <div class="scoreboard">
+          <table>
+            <thead><tr><th>#</th><th>Metric</th><th>무엇을 보는가</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Safety Pass Rate</td><td>필수 deterministic gate를 통과한 비율</td></tr>
+              <tr><td>2</td><td>Main Article Precision</td><td>메인으로 선택된 기사 중 실제로 중요한 기사 비율</td></tr>
+              <tr><td>3</td><td>Evidence Binding Pass Rate</td><td>claim과 검증 가능한 source/evidence가 올바르게 연결된 비율</td></tr>
+              <tr><td>4</td><td>Human Override Rate</td><td>사람이 자동 판단을 뒤집어야 한 비율</td></tr>
+              <tr><td>5</td><td>Retry Rate</td><td>첫 시도 실패 후 재시도가 필요한 비율</td></tr>
+              <tr><td>6</td><td>Token / Publishable Article</td><td>실제로 발행 가능한 기사 하나를 얻는 데 드는 token</td></tr>
+              <tr><td>7</td><td>Time to Reviewable PR</td><td>입력부터 사람이 리뷰 가능한 PR까지 걸리는 시간</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="master-rule"><strong>모든 실험의 마지막 형식:</strong> Baseline → Experiment → Score → Comparison. 결과를 보고 “느낌상 좋아졌다”는 문장은 금지합니다.</div>
+      </section>
+
+      <section id="camera-mental-model" class="learning-section" aria-labelledby="camera-model-title">
+        <div class="learning-section-heading">
+          <p class="learning-label">06 · Mental Anchor</p>
+          <h2 id="camera-model-title">새 AI 용어를 Camera HAL 사고방식에 연결</h2>
+          <p>동일한 개념이라는 뜻은 아니고, 역할을 기억하기 위한 mental anchor입니다. 새로운 용어를 볼 때 “Camera HAL에서는 이 역할을 뭐가 하지?”라고 질문합니다.</p>
+        </div>
+        <div class="scoreboard">
+          <table>
+            <thead><tr><th>AI Engineering</th><th>Camera HAL에서 떠올릴 역할</th></tr></thead>
+            <tbody>
+              <tr><td>Eval</td><td>CTS / regression / invariant validation</td></tr>
+              <tr><td>Eval Dataset</td><td>test vector / regression case</td></tr>
+              <tr><td>Context</td><td>문제 frame을 분석하기 위한 log · metadata · pipeline 정보</td></tr>
+              <tr><td>Agent Trace</td><td>per-frame trace / logcat / systrace</td></tr>
+              <tr><td>Harness</td><td>HAL을 둘러싼 framework / test / runtime 환경</td></tr>
+              <tr><td>Tool Contract</td><td>HAL interface contract</td></tr>
+              <tr><td>Retry Budget</td><td>bounded recovery</td></tr>
+              <tr><td>Guardrail</td><td>input / state invariant</td></tr>
+              <tr><td>Human Gate</td><td>review / 승인</td></tr>
+              <tr><td>Error Analysis</td><td>defect taxonomy / root-cause classification</td></tr>
+              <tr><td>Spec</td><td>stream / config / use-case contract</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="learning-section" aria-labelledby="ratio-title">
+        <div class="learning-section-heading">
+          <p class="learning-label">07 · Time Allocation</p>
+          <h2 id="ratio-title">공부 비율</h2>
+          <p>강의 소비보다 실험과 failure analysis에 시간을 더 씁니다. “많이 읽었다”는 아주 편리한 진척 지표지만 실제 capability와의 상관은 놀랄 만큼 애매합니다.</p>
+        </div>
+        <div class="learning-grid">
+          <article class="learning-card"><h3>이론 읽기 · 15%</h3><p>Primary source 중심. 용어와 mental model을 잡는 데 필요한 만큼만 읽습니다.</p></article>
+          <article class="learning-card"><h3>직접 구현 · 35%</h3><p>현재 newsletter 코드와 pipeline에서 작은 단위로 구현하거나 설정을 바꿔봅니다.</p></article>
+          <article class="learning-card"><h3>실험 · 25%</h3><p>같은 입력으로 조건을 바꿔 A/B 비교합니다.</p></article>
+          <article class="learning-card"><h3>Failure 분석 · 15%</h3><p>실패를 분류하고 가장 큰 category를 찾습니다.</p></article>
+          <article class="learning-card"><h3>내 말로 설명 · 10%</h3><p>다른 시스템에 어떻게 적용할지 설명해 개념을 일반화합니다.</p></article>
+        </div>
+      </section>
+
+      <section id="sources" class="learning-section" aria-labelledby="sources-title">
+        <div class="learning-section-heading">
+          <p class="learning-label">08 · Primary Reading</p>
+          <h2 id="sources-title">과정을 설계할 때 참고할 원문</h2>
+          <p>읽을거리 수집 자체가 취미가 되지 않도록 주차별 2–4개만 고릅니다. 아래는 이 커리큘럼의 뼈대가 된 자료입니다.</p>
+        </div>
+        <div class="source-grid">
+          <a class="source-card" href="https://x.com/AndrewYNg/status/2088302050706686198?s=20">
+            <h3>Andrew Ng · AI Engineering Skills Map</h3>
+            <p>Building &amp; deploying AI applications, software engineering fundamentals, using coding agents, shaping the build라는 상위 학습 축의 출발점.</p>
+          </a>
+          <a class="source-card" href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">
+            <h3>Anthropic · Effective context engineering for AI agents</h3>
+            <p>Context를 유한한 자원으로 보고 어떤 정보를 언제 넣을지 최적화하는 관점.</p>
+          </a>
+          <a class="source-card" href="https://www.anthropic.com/engineering/building-effective-agents">
+            <h3>Anthropic · Building effective agents</h3>
+            <p>복잡한 framework보다 simple, composable pattern에서 출발하는 Agent 설계 원칙.</p>
+          </a>
+          <a class="source-card" href="https://www.langchain.com/blog/the-art-of-loop-engineering">
+            <h3>LangChain · The Art of Loop Engineering</h3>
+            <p>Agent loop, verification loop, event-driven loop, hill-climbing loop를 계층으로 보는 방식.</p>
+          </a>
+          <a class="source-card" href="https://arxiv.org/abs/2603.15401">
+            <h3>SWE-Skills-Bench paper</h3>
+            <p>Skill injection의 효과를 fixed repository state와 deterministic verifier로 paired evaluation하는 연구.</p>
+          </a>
+          <a class="source-card" href="https://github.com/GeniusHTX/SWE-Skills-Bench">
+            <h3>SWE-Skills-Bench repository</h3>
+            <p>실제 software engineering task에서 skill 유무를 비교하는 benchmark 구현과 데이터.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="learning-final" aria-labelledby="final-title">
+        <div class="learning-final-panel">
+          <p class="learning-label">Graduation</p>
+          <h2 id="final-title">16주 뒤 목표</h2>
+          <p>RAG, Agent, Eval의 정의를 아는 것이 아니라 다음 흐름을 스스로 설계하고 증명할 수 있어야 합니다.</p>
+          <ol>
+            <li>문제를 정의한다.</li>
+            <li>AI가 필요한 부분을 선택한다.</li>
+            <li>Context를 설계한다.</li>
+            <li>Agent / Tool을 설계한다.</li>
+            <li>Verifier를 만든다.</li>
+            <li>Harness로 감싼다.</li>
+            <li>Trace를 수집한다.</li>
+            <li>Eval한다.</li>
+            <li>Failure를 분류한다.</li>
+            <li>가장 큰 문제를 개선한다.</li>
+            <li>성능 향상을 regression eval로 증명한다.</li>
+          </ol>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">뉴스레터</span>
+          <a class="footer-link" href="../../index.html">홈</a>
+          <a class="footer-link" href="../../archive.html">아카이브</a>
+          <span class="footer-note">구독 (지원예정)</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">주제</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">리소스</span>
+          <a class="footer-link" href="index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (지원예정)</span>
+          <span class="footer-note">편집 정책 (지원예정)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Gemini 뉴스룸이 모아 사람이 검토·발행합니다.</small></div>
+    </div>
+  </footer>
+</body>
+</html>
