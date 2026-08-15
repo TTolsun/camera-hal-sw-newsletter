@@ -3,7 +3,11 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { buildWeeklyNewsletterPage } = require('../../../render/weekly-newsletter-page');
+const {
+  buildWeeklyNewsletterPage,
+  addLearningPageLink,
+  AI_ENGINEERING_LEARNING_HREF
+} = require('../../../render/weekly-newsletter-page');
 
 // A minimal but renderer-valid publish-ready editor draft (mirrors the known-good public issue shape
 // used by tests/helpers/workflow-fixtures.js writePublicNewsletterArtifacts).
@@ -68,6 +72,21 @@ test('buildWeeklyNewsletterPage keys a single publish-ready draft by its ISO wee
   assert.deepEqual(page.issue.briefing, ['CameraX SessionConfig stable API']);
   assert.ok(typeof page.html === 'string' && page.html.length > 0);
   assert.ok(typeof page.markdown === 'string' && page.markdown.length > 0);
+});
+
+test('weekly issue footer links to the AI Engineering learning page exactly once', () => {
+  const page = buildWeeklyNewsletterPage(publishReadyDraft(), { date: '2026-06-04' });
+  const hrefMatches = page.html.match(new RegExp(AI_ENGINEERING_LEARNING_HREF.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || [];
+  assert.equal(hrefMatches.length, 1);
+  assert.match(page.html, /AI Engineering 학습 페이지 →/);
+  assert.match(page.html, /아카이브 전체 보기 →<\/a>\s*<span aria-hidden="true">·<\/span>\s*<a href="\.\.\/\.\.\/learning\/ai-engineering\/index\.html">/);
+});
+
+test('addLearningPageLink fails closed when the issue footer contract drifts', () => {
+  assert.throws(
+    () => addLearningPageLink('<html><body>no issue footer</body></html>'),
+    /issue footer navigation marker not found/
+  );
 });
 
 test('buildWeeklyNewsletterPage accepts an explicit weeklyKey', () => {
