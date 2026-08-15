@@ -166,3 +166,81 @@ test('retained headline that is rendered gets its stale anchor refreshed to the 
     `refreshed anchor "${anchor}" must exist in the rendered index.html`
   );
 });
+
+// 홈 히어로 메타는 `날짜 · 발행처`다. 발행된 이슈 HTML의 앵커 라벨은 문서 제목이라
+// (예: "[PATCH v2 0/2] media: i2c: Add ...") 그 값으로 스냅샷을 덮으면 메타가 기사 제목을
+// 한 번 더 반복한다. 발행처는 수집 단계의 candidate.source가 정본이고, reconcile은 anchor·
+// title·image처럼 렌더에서만 알 수 있는 것만 맞춘다. 두 분기를 모두 잠근다.
+test('retained headline keeps the candidate source name instead of the rendered anchor label', () => {
+  const root = tempRoot();
+  writePublicNewsletterArtifacts(root, DATE);
+
+  const state = staleHeadlineState();
+  state.current_headline.article_identity_key = 'url:' + RENDERED_SOURCE_URL;
+  state.current_headline.source_url = RENDERED_SOURCE_URL;
+
+  const renderedLabel = readRenderedNewsletterArticles(root, DATE)
+    .find(article => article.source_url === RENDERED_SOURCE_URL)?.source_name;
+  assert.ok(renderedLabel, 'precondition: the parser still reads an anchor label');
+  assert.notEqual(
+    renderedLabel,
+    'Android Developers',
+    'precondition: 앵커 라벨과 후보 발행처가 달라야 어느 쪽이 쓰였는지 구분된다'
+  );
+
+  const shortlist = { selected_articles: [selectedRenderedArticle()], homepage_headline_state: state };
+  const { state: reconciled } = renderedHeadlineState({ root, date: DATE, state, shortlist });
+
+  assert.equal(reconciled.current_headline.snapshot.source_name, 'Android Developers');
+});
+
+test('fallback headline takes its source name from the shortlist candidate, not the rendered anchor label', () => {
+  const root = tempRoot();
+  writePublicNewsletterArtifacts(root, DATE);
+
+  // 헤드라인 기사가 이 호에 렌더되지 않아 fallback 분기를 탄다(anchor·url 모두 stale).
+  // 후보의 발행처를 snapshot 에만 둬야 이 분기의 우선순위를 실제로 구분할 수 있다 —
+  // 최상위 source/source_name 이 있으면 headlineSnapshotFromCandidate 가 그쪽을 먼저 읽어
+  // 이 분기가 무엇을 넣든 결과가 같아진다.
+  const state = staleHeadlineState();
+  const candidate = {
+    ...selectedRenderedArticle(),
+    snapshot: { source_name: 'lore.kernel.org linux-media list' }
+  };
+  const shortlist = { selected_articles: [candidate], homepage_headline_state: state };
+
+  const { state: reconciled, reconciliation } = renderedHeadlineState({
+    root,
+    date: DATE,
+    state,
+    shortlist
+  });
+
+  assert.ok(reconciliation?.applied, 'precondition: fallback 분기를 타야 한다');
+  assert.equal(reconciled.current_headline.snapshot.source_name, 'lore.kernel.org linux-media list');
+});
+
+test('fallback headline recovers the shortlist candidate by url when the identity key does not match', () => {
+  const root = tempRoot();
+  writePublicNewsletterArtifacts(root, DATE);
+
+  // 후보의 identity key 가 렌더된 기사와 어긋나는 경우. URL 보조 매칭이 없으면 후보를 못 찾아
+  // 발행처 이름과 official-source 점수 신호가 통째로 사라진다.
+  const state = staleHeadlineState();
+  const candidate = {
+    ...selectedRenderedArticle(),
+    article_identity_key: 'content:legacy-key-mismatch',
+    source: 'lore.kernel.org linux-media list'
+  };
+  const shortlist = { selected_articles: [candidate], homepage_headline_state: state };
+
+  const { state: reconciled, reconciliation } = renderedHeadlineState({
+    root,
+    date: DATE,
+    state,
+    shortlist
+  });
+
+  assert.ok(reconciliation?.applied, 'precondition: fallback 분기를 타야 한다');
+  assert.equal(reconciled.current_headline.snapshot.source_name, 'lore.kernel.org linux-media list');
+});

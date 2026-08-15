@@ -377,20 +377,6 @@ pre code {
   overflow-wrap: anywhere;
 }
 
-.site-hero::before {
-  position: absolute;
-  right: 0;
-  bottom: 8px;
-  z-index: 0;
-  width: min(38vw, 440px);
-  aspect-ratio: 1;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(0, 102, 204, 0.12) 0%, rgba(0, 102, 204, 0.06) 38%, rgba(0, 102, 204, 0) 70%);
-  content: "";
-  pointer-events: none;
-  transform: translateY(10%);
-}
-
 .hero {
   padding: 56px 0 34px;
   border: 0;
@@ -433,14 +419,6 @@ pre code {
 
 .publication-notice p + p {
   margin-top: 8px;
-}
-
-.hero-actions,
-.actions,
-.card-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
 }
 
 .button {
@@ -499,8 +477,7 @@ pre code {
 }
 
 /* mockup: 섹션 사이 구분은 featured 하단 hairline 하나만 — 섹션 자체 border 없음. */
-.homepage .section,
-.homepage .focus-brief {
+.homepage .section {
   margin-top: 0;
   padding-top: 36px;
   padding-bottom: 44px;
@@ -525,14 +502,6 @@ pre code {
   width: 100%;
 }
 
-.section-heading-mark {
-  width: 12px;
-  height: 42px;
-  border-radius: var(--radius-pill);
-  background: var(--primary);
-  box-shadow: 0 0 0 6px rgba(0, 102, 204, 0.08);
-}
-
 .section-heading .eyebrow {
   margin-bottom: var(--space-2);
 }
@@ -555,40 +524,6 @@ pre code {
   position: absolute;
   box-sizing: border-box;
   content: "";
-}
-
-/* 램프의 유일한 예외. 900은 텍스트 굵기가 아니라 글리프 아이콘(★)의 획 두께를 만드는 값이다.
-   현재 이 클래스를 쓰는 마크업은 없다(형제 .section-icon-* 와 함께 남은 dead anchor) — 지울
-   거라면 .section-icon 계열을 통째로 다루는 별도 정리에서 하고, weight 정렬로 섞지 않는다. */
-.section-icon-star {
-  color: #0066cc;
-  font-size: 1.32rem;
-  font-weight: 900;
-}
-
-.section-icon-star::before,
-.section-icon-star::after {
-  content: none;
-}
-
-.section-icon-latest::before {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(0, 102, 204, 0.72);
-  border-radius: 50%;
-  background: rgba(0, 102, 204, 0.07);
-}
-
-.section-icon-latest::after {
-  top: 6px;
-  left: 11px;
-  width: 6px;
-  height: 7px;
-  border-bottom: 2px solid currentColor;
-  border-left: 2px solid currentColor;
-  border-radius: 1px;
-  transform: none;
-  transform-origin: left bottom;
 }
 
 .section-link {
@@ -710,35 +645,6 @@ pre code {
   font-weight: 500;
 }
 
-.tag-more {
-  border-color: rgba(102, 112, 133, 0.18);
-  background: var(--surface-soft);
-  color: var(--muted);
-}
-
-.card-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-9);
-}
-
-.focus-brief {
-  margin-top: var(--space-3);
-}
-
-.focus-band {
-  display: grid;
-  gap: var(--space-5);
-}
-
-.focus-title {
-  margin-bottom: 0;
-  color: var(--text);
-  font-size: 1.02rem;
-  line-height: 1.35;
-}
-
 .keyword-row {
   display: flex;
   flex-wrap: wrap;
@@ -796,11 +702,16 @@ pre code {
   margin: 0 auto;
 }
 
+/* 썸네일 hairline: 실제 기사 이미지는 대부분 흰 배경 소셜 카드라, 테두리가 없으면 흰 캔버스와
+   경계가 사라져 16:9 패널이 안 보인다. 카드 프레임은 계속 flat 이고 테두리는 이미지 컨테이너에만
+   둔다(DESIGN.md elevation: flat = 무테두리·무셰도우 또는 hairline만). border-box 라 16:9
+   바깥 크기는 그대로이고, overflow:hidden 이 padding box 로 잘라 이미지가 선을 덮지 못한다. */
 .featured-thumb {
   display: grid;
   place-items: center;
   overflow: hidden;
   aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface-soft);
 }
@@ -949,29 +860,8 @@ pre code {
   gap: var(--space-5);
 }
 
-.archive-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-5);
-}
-
-.archive-heading .section-heading-row {
-  width: auto;
-}
-
-.archive-controls {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
 .archive-sort-control select {
   min-width: 0;
-}
-
-.archive-controls .section-link {
-  white-space: nowrap;
 }
 
 .subscribe-section[hidden] {
@@ -1038,9 +928,11 @@ pre code {
   box-shadow: none;
 }
 
+/* .featured-thumb 와 같은 이유의 hairline. 카드 자체(.archive-card)는 무테두리·투명을 유지한다. */
 .card-thumb {
   overflow: hidden;
   aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface-soft);
 }
@@ -1390,96 +1282,6 @@ pre code {
    줄어든다. handoff(12px)에 맞춰 부모 크기를 그대로 쓰게 한다. */
 .footer-legal small {
   font-size: inherit;
-}
-
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 28px;
-}
-
-.navlinks {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.navlinks a,
-.pill {
-  display: inline-flex;
-  align-items: center;
-  min-height: 36px;
-  padding: 0 12px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--muted);
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.navlinks a:hover {
-  border-color: rgba(0, 102, 204, 0.35);
-  color: var(--primary);
-}
-
-.chiprow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 18px;
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  min-height: 30px;
-  padding: 0 10px;
-  border: 1px solid rgba(0, 102, 204, 0.16);
-  border-radius: 999px;
-  background: var(--chip);
-  color: #0052a3;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.brief-card,
-.panel {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  padding: 24px;
-}
-
-.hero-grid,
-.grid-2,
-.grid-3 {
-  display: grid;
-  gap: 18px;
-  margin-top: 24px;
-}
-
-.hero-grid,
-.grid-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.grid-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.section-lead {
-  max-width: var(--reading);
-  color: var(--muted);
-}
-
-.ref-list {
-  columns: 2;
-  column-gap: 28px;
 }
 
 .article-page {
@@ -1905,35 +1707,8 @@ pre code {
   opacity: 0.55;
 }
 
-.article-placeholder-ai {
-  background:
-    linear-gradient(135deg, rgba(0, 102, 204, 0.14), rgba(0, 102, 204, 0.12)),
-    repeating-linear-gradient(0deg, rgba(15, 23, 42, 0.05) 0 1px, transparent 1px 38px),
-    var(--surface-soft);
-}
-
-.article-placeholder-camera-hal,
-.article-placeholder-android-camera,
-.article-placeholder-aosp-camera {
-  background:
-    linear-gradient(135deg, rgba(0, 102, 204, 0.15), rgba(0, 102, 204, 0.12)),
-    repeating-linear-gradient(90deg, rgba(15, 23, 42, 0.05) 0 1px, transparent 1px 42px),
-    var(--surface-soft);
-}
-
-.issue-section h3 {
-  margin-bottom: 0;
-  font-size: 1.5rem;
-}
-
 .article-title {
   margin-bottom: 14px;
-}
-
-.newsletter-issue-page .issue-section h3 {
-  color: #111827;
-  font-size: clamp(1.24rem, 2.1vw, 1.62rem);
-  line-height: 1.36;
 }
 
 .newsletter-issue-page .article-title {
@@ -2178,78 +1953,6 @@ pre code {
   text-underline-offset: 3px;
 }
 
-.diagram-block {
-  margin: 20px 0;
-  padding: 20px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  background: var(--surface-soft);
-}
-
-.diagram-title {
-  margin-bottom: 14px;
-  color: var(--text);
-  font-weight: 600;
-}
-
-.diagram-lane {
-  display: grid;
-  grid-template-columns: minmax(150px, 1fr) 42px minmax(150px, 1fr) 42px minmax(150px, 1fr);
-  align-items: center;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-}
-
-.diagram-lane-label {
-  color: var(--primary);
-  font-size: 0.78rem;
-  font-weight: 600;
-}
-
-.diagram-node {
-  min-height: 88px;
-  padding: 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--surface-soft);
-  text-align: center;
-}
-
-.diagram-node strong,
-.diagram-node span {
-  display: block;
-}
-
-.diagram-node strong {
-  color: var(--text);
-}
-
-.diagram-node span {
-  color: var(--muted);
-  font-size: 0.88rem;
-}
-
-.diagram-connector {
-  height: 2px;
-  background: var(--primary);
-}
-
-.diagram-return {
-  display: grid;
-  justify-content: end;
-  padding: 8px 56px;
-}
-
-.diagram-return span {
-  width: 34px;
-  height: 34px;
-  border-right: 2px solid var(--primary);
-  border-bottom: 2px solid var(--primary);
-  border-radius: 0 0 16px 0;
-}
-
 @media (max-width: 860px) {
   .site-nav {
     align-items: flex-start;
@@ -2278,36 +1981,13 @@ pre code {
     padding-bottom: 30px;
   }
 
-  .site-hero::before {
-    right: 50%;
-    bottom: 0;
-    width: min(64vw, 340px);
-    transform: translate(50%, 12%);
-  }
-
   #latest,
   #archive {
     scroll-margin-top: 124px;
   }
 
-  .focus-band,
-  .hero-grid,
-  .grid-2,
-  .grid-3 {
-    grid-template-columns: 1fr;
-  }
-
   .keyword-row {
     justify-content: flex-start;
-  }
-
-  .topbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .ref-list {
-    columns: 1;
   }
 
   .article-header {
@@ -2405,10 +2085,6 @@ pre code {
     font-size: clamp(1.3rem, 5.4vw, 1.6rem);
   }
 
-  .focus-band {
-    padding: var(--card-padding-sm);
-  }
-
   .button {
     width: 100%;
   }
@@ -2433,15 +2109,6 @@ pre code {
 
   .homepage-nav-links a {
     min-height: 34px;
-  }
-
-  .archive-heading {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .archive-controls {
-    width: 100%;
   }
 
   .subscribe-panel {
@@ -2486,12 +2153,6 @@ pre code {
     font-size: 2.22rem;
   }
 
-  .hero-mascot img {
-    width: min(100%, 300px);
-    border-radius: 18px;
-    filter: drop-shadow(0 12px 22px rgba(15, 23, 42, 0.1)) drop-shadow(0 0 14px rgba(0, 102, 204, 0.07));
-  }
-
   .archive-pagination {
     align-items: stretch;
     flex-direction: column;
@@ -2510,17 +2171,6 @@ pre code {
     flex-direction: column;
     justify-content: center;
     padding: 18px 0;
-  }
-
-  .diagram-lane {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .diagram-connector {
-    width: 2px;
-    height: 24px;
-    justify-self: center;
   }
 
 }
