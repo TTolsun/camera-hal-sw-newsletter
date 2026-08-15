@@ -24,10 +24,27 @@ function pushPathFilters(yaml) {
     if (!entry) break;
     filters.push(entry[1]);
   }
+
+  // 아래 isCoveredByPathFilters는 `prefix/**` 꼴 단순 접두사 글롭만 이해한다.
+  // `articles/**/index.html`이나 `**/index.html` 같은 꼴에 접두사 비교를 그대로 쓰면 조용히
+  // 오판하므로(앞의 것은 과대, 뒤의 것은 전부 통과), 필터 목록이 그 꼴로 진화하면 여기서 바로
+  // 깨져 helper부터 고치게 한다. 검사는 목록 전체에 한 번씩 돌린다 — 커버 판정 안에서 하면
+  // `.some`의 단락 평가 때문에 뒤쪽 필터가 검사되지 않고 지나갈 수 있다.
+  for (const filter of filters) {
+    const globIndex = filter.indexOf('**');
+    if (globIndex === -1) continue;
+    // `**`는 비어있지 않은 접두사 뒤 맨 끝에만 와야 한다. 맨 앞(`**/x`, `**`)이면 접두사가
+    // 빈 문자열이라 모든 경로가 커버된 것으로 판정돼 이 테스트가 무조건 초록이 된다.
+    assert.ok(
+      globIndex > 0 && globIndex === filter.length - 2,
+      `path filter "${filter}" is not a simple prefix glob; teach isCoveredByPathFilters about it first`
+    );
+  }
   return filters;
 }
 
 // 직접 경로로 적혀 있거나, `**` glob의 접두사에 걸리면 커버된 것으로 본다.
+// 필터가 단순 접두사 글롭이라는 전제는 pushPathFilters가 이미 강제했다.
 function isCoveredByPathFilters(relPath, filters) {
   const target = relPath.split(path.sep).join('/');
   return filters.some(filter => {

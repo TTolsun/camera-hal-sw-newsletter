@@ -64,6 +64,10 @@ const DEFAULT_PUBLIC_CONTRACT_VERSION = PUBLIC_CONTRACT_VERSIONS[0];
 //    파일을 거부해, 커밋된 인덱스가 오염되고 이후 실행마다 전체 엔트리 스캔이 실패한다.
 //  - 기록된 버전을 더 낮은 버전으로 덮어쓰는 것도 throw한다. 강등은 backfill을 동반한
 //    의도적 작업이지 발행의 부산물이 아니다.
+//
+// newsletterKey는 그 인덱스 엔트리를 사람이 찾아갈 식별자다 — daily 인덱스에서는 날짜
+// (YYYY-MM-DD), weekly 인덱스에서는 weekly 키(YYYY-Wnn). 판정에는 쓰지 않고 throw 메시지
+// 표기에만 쓴다.
 function resolveIndexContractVersion(newsletterKey, issue, previousEntry) {
   const declared = String(issue?.public_contract_version || '').trim();
   const previous = String(previousEntry?.public_contract_version || '').trim();

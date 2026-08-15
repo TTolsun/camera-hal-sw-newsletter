@@ -210,7 +210,9 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   // 라벨이 붙으면 안 되므로, 라벨 스크립트가 감사 outcome을 읽어 hasAiPublishReady를 꺾어야 한다
   // (선례 5f83dd61과 동일 배선). 기존 assertion은 has_ai_publish_ready만 보는 식을 고정했으므로
   // 새 계약식으로 바꾼다 — 약화가 아니라 조건이 하나 더 붙은 강화다.
-  assert.match(workflow, /const imageAuditPassed = '\$\{\{ steps\.audit-images\.outcome \}\}' !== 'failure';/);
+  // LOCK RETARGETED 2차. `!== 'failure'`는 skipped·cancelled까지 통과로 쳤다. 감사가 실제로
+  // 돌아 성공한 outcome('success')만 publish-ready를 허용한다 — 조건이 좁아진 강화다.
+  assert.match(workflow, /const imageAuditPassed = '\$\{\{ steps\.audit-images\.outcome \}\}' === 'success';/);
   assert.match(workflow, /const hasAiPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.has_ai_publish_ready \}\}' === 'true' && imageAuditPassed;/);
   assert.match(workflow, /const diagnosticsOnly = '\$\{\{ steps\.meta\.outputs\.diagnostics_only \}\}' === 'true';/);
   assert.match(workflow, /const reviewPublicationReady = '\$\{\{ steps\.meta\.outputs\.review_publication_ready \}\}' === 'true';/);

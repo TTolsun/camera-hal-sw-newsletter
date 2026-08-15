@@ -131,14 +131,26 @@ test('sources를 비운 병합 결과는 source_link가 남아 있어도 거부�
 });
 
 // 대조할 원본이 없으면 보존을 증명할 수 없다. 호출부가 원본을 빠뜨려도 채택되지 않는다.
-test('원본을 넘기지 않으면 병합 결과를 채택하지 않는다', () => {
+// per-URL 위반("이 URL이 원본에 없다")이 아니라 전용 오류 하나로 남는다 — 원본 자체가 없어
+// 대조하지 못한 상황과 실제 지어낸 출처를 리포트에서 바로 구분하기 위해서다.
+test('원본을 넘기지 않으면 전용 오류 하나로 거부된다', () => {
   const merged = storySection('센서 드라이버 패치와 CameraX 릴리스', [patchLink(), releaseLink()]);
   const validation = validateMergedWeeklyArticle(merged, {}, STORY_ISSUE_MARKERS);
   assert.equal(validation.ok, false);
-  assert.deepEqual(issueTypes(validation), [
-    'merged_article_source_not_in_origin',
-    'merged_article_source_not_in_origin'
-  ]);
+  assert.deepEqual(issueTypes(validation), ['no_origin_articles_provided']);
+  assert.equal(validation.reason, 'no_origin_articles_provided');
+});
+
+// url 없는 sources 항목은 키가 없다. 객체를 그대로 URL 정규화기에 넘기면 문자열화되어
+// "[object object]"라는 비어있지 않은 키가 나오고, 서로 다른 url 없는 항목이 한 키로 뭉쳐
+// 합집합에서 조용히 사라진다. 그 키가 인용 allow-list에도 등록되면 더 나쁘다.
+test('url이 없는 sources 항목은 키를 만들지 않아 서로 뭉치지 않는다', () => {
+  const existing = storySection('센서 드라이버 패치 시리즈', [patchLink(), { title: '메모만 있는 항목' }]);
+  const incoming = storySection('CameraX 1.7.0 릴리스 노트', [releaseLink(), { title: '다른 메모' }]);
+  const merged = storySection('센서 드라이버 패치와 CameraX 릴리스', [patchLink(), releaseLink()]);
+  const validation = validateMergedWeeklyArticle(merged, { existing, incoming }, STORY_ISSUE_MARKERS);
+  assert.deepEqual(issueTypes(validation), []);
+  assert.equal(validation.ok, true);
 });
 
 // 마커를 넘기지 않으면 story 계약 기사는 섹션 마커 하나만 보여 항상 mismatch가 난다.
