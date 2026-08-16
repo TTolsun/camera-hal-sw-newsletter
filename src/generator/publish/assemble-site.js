@@ -9,13 +9,16 @@
 // 결과적으로 서빙 URL(/, /newsletters/..., /content/..., /css/..., /assets/...,
 // /data/newsletters.json, /sitemap.xml, /robots.txt, /archive.html 등)은 이동 전과 동일하다.
 //
-// 순수 파일 복사만 수행한다(네트워크/API 호출 없음). import 가능하며 CLI로도 실행된다.
+// 파일 복사와 배포 셸의 공통 footer 링크 보강만 수행한다(네트워크/API 호출 없음).
+// import 가능하며 CLI로도 실행된다.
 
 const fs = require('fs');
 const path = require('path');
 
 const ARTICLES_DIR = 'articles';
 const ROOT_INDEX = 'index.html';
+const AI_ENGINEERING_PAGE = path.join('learning', 'ai-engineering', 'index.html');
+const AI_ENGINEERING_LABEL = 'AI Engineering Lab';
 
 // index.html이 fetch하지만 articles/ 밖(저장소 config/)에 있는 서빙 파일.
 // 이동 전 site root에서 /config/subscription.json으로 서빙되었으므로 parity를 위해 함께 복사한다.
@@ -39,6 +42,65 @@ function copyDirContents(srcDir, destDir) {
       fs.copyFileSync(srcPath, destPath);
     }
   }
+}
+
+function posixPath(value) {
+  return String(value).split(path.sep).join('/');
+}
+
+// 과거 newsletter HTML은 생성 산출물 보존 정책상 footer 링크 하나를 위해 다시 쓰지 않는다.
+// 대신 배포용 사본에만 공통 리소스 링크를 보강한다. 새 renderer가 이미 링크를 출력하는
+// 페이지는 기대 상대경로로 정규화만 하며 중복 링크를 만들지 않는다.
+function withLearningFooterLink(html, href) {
+  const input = String(html || '');
+  const footerMatch = input.match(/<footer\b[^>]*\bclass=(['"])[^'"]*\bsite-footer\b[^'"]*\1[^>]*>[\s\S]*?<\/footer>/i);
+  if (!footerMatch) return input;
+
+  const newline = input.includes('\r\n') ? '\r\n' : '\n';
+  const link = `<a class="footer-link" href="${href}">${AI_ENGINEERING_LABEL}</a>`;
+  const existingLink = /<a\s+class=(['"])footer-link\1\s+href=(['"])[^'"]*\2>AI Engineering Lab<\/a>/i;
+  const resourceTitle = /^([ \t]*)<span class="footer-col-title">리소스<\/span>/m;
+  const footerOpening = /^<footer\b[^>]*>/i;
+  let footer = footerMatch[0];
+
+  if (existingLink.test(footer)) {
+    footer = footer.replace(existingLink, link);
+  } else if (resourceTitle.test(footer)) {
+    footer = footer.replace(resourceTitle, (line, indent) => `${line}${newline}${indent}${link}`);
+  } else {
+    footer = footer.replace(
+      footerOpening,
+      opening => `${opening}${newline}    <div class="content-wrap legacy-footer-resources">${newline}      ${link}${newline}    </div>`
+    );
+  }
+
+  return `${input.slice(0, footerMatch.index)}${footer}${input.slice(footerMatch.index + footerMatch[0].length)}`;
+}
+
+function addLearningFooterLinks(outDir) {
+  const learningPage = path.join(outDir, AI_ENGINEERING_PAGE);
+  let updated = 0;
+
+  function visit(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const file = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        visit(file);
+        continue;
+      }
+      if (!entry.isFile() || path.extname(entry.name).toLowerCase() !== '.html') continue;
+
+      const before = fs.readFileSync(file, 'utf8');
+      const href = posixPath(path.relative(path.dirname(file), learningPage)) || 'index.html';
+      const after = withLearningFooterLink(before, href);
+      if (after === before) continue;
+      fs.writeFileSync(file, after, 'utf8');
+      updated += 1;
+    }
+  }
+
+  visit(outDir);
+  return updated;
 }
 
 function assembleSite({ root = process.cwd(), out } = {}) {
@@ -75,10 +137,12 @@ function assembleSite({ root = process.cwd(), out } = {}) {
     }
   }
 
+  const footerLinksUpdated = addLearningFooterLinks(outDir);
+
   // GitHub Pages가 _ 로 시작하는 디렉터리/파일을 Jekyll로 처리하지 않도록 한다.
   fs.writeFileSync(path.join(outDir, '.nojekyll'), '', 'utf8');
 
-  return { outDir, copied };
+  return { outDir, copied, footerLinksUpdated };
 }
 
 function parseArgs(argv) {
@@ -101,4 +165,9 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { assembleSite, EXTRA_SERVED_FILES };
+module.exports = {
+  assembleSite,
+  withLearningFooterLink,
+  addLearningFooterLinks,
+  EXTRA_SERVED_FILES
+};

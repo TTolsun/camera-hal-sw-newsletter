@@ -9,10 +9,32 @@ const { tempRoot, writeText, writeJson } = require('../../../../shared/test/help
 
 const SITE_BASE_URL = 'https://ttolsun.github.io/camera-hal-sw-newsletter/';
 
+function fullFooter(learningHref = '') {
+  const learningLink = learningHref
+    ? `\n      <a class="footer-link" href="${learningHref}">AI Engineering Lab</a>`
+    : '';
+  return `<footer class="site-footer">
+  <div class="content-wrap footer-inner">
+    <div class="footer-col">
+      <span class="footer-col-title">리소스</span>${learningLink}
+      <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+    </div>
+  </div>
+</footer>`;
+}
+
+function legacyFooter() {
+  return '<footer class="site-footer"><div class="content-wrap footer-legal"><small>© 2026 Camera SW Newsletter</small></div></footer>';
+}
+
 // 이동 후 레이아웃: root index.html + articles/ 아래 공개 출력물 전체.
 function writePublicLayout(root, { weeklyKey = '2026-W23' } = {}) {
-  writeText(path.join(root, 'index.html'), '<!doctype html><html><body>home</body></html>');
-  writeText(path.join(root, 'articles', 'archive.html'), '<!doctype html><html><body>archive</body></html>');
+  writeText(path.join(root, 'index.html'), `<!doctype html><html><body>home${fullFooter()}</body></html>`);
+  writeText(path.join(root, 'articles', 'archive.html'), `<!doctype html><html><body>archive${fullFooter()}</body></html>`);
+  writeText(
+    path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html'),
+    `<!doctype html><html><body>learning${fullFooter('index.html')}</body></html>`
+  );
   writeText(path.join(root, 'articles', 'robots.txt'), `Sitemap: ${SITE_BASE_URL}sitemap.xml\n`);
   writeText(path.join(root, 'articles', 'css', 'styles.css'), 'body{}');
   writeText(path.join(root, 'articles', 'assets', 'js', 'site-header.js'), '// header');
@@ -22,7 +44,10 @@ function writePublicLayout(root, { weeklyKey = '2026-W23' } = {}) {
   // subscription.json은 저장소 config/에서 assemble-site.js의 EXTRA_SERVED_FILES로 복사된다.
   writeJson(path.join(root, 'articles', 'data', 'homepage-headline.json'), {});
   writeJson(path.join(root, 'config', 'subscription.json'), {});
-  writeText(path.join(root, 'articles', 'newsletters', weeklyKey, 'index.html'), '<!doctype html><html></html>');
+  writeText(
+    path.join(root, 'articles', 'newsletters', weeklyKey, 'index.html'),
+    `<!doctype html><html><body>issue${legacyFooter()}</body></html>`
+  );
   writeText(
     path.join(root, 'articles', 'sitemap.xml'),
     [
@@ -54,8 +79,26 @@ test('assembleSite copies root index.html and articles/ contents to _site root a
   assert.equal(fs.existsSync(path.join(result.outDir, 'data', 'newsletters.json')), true);
   assert.equal(fs.existsSync(path.join(result.outDir, 'newsletters', '2026-W23', 'index.html')), true);
   assert.equal(fs.existsSync(path.join(result.outDir, '.nojekyll')), true);
+  assert.equal(result.footerLinksUpdated, 3);
   // articles/ 디렉터리 자체는 _site 안에 평탄화되어 남지 않는다.
   assert.equal(fs.existsSync(path.join(result.outDir, 'articles')), false);
+
+  const expectedFooterLinks = [
+    ['index.html', 'learning/ai-engineering/index.html'],
+    ['archive.html', 'learning/ai-engineering/index.html'],
+    [path.join('learning', 'ai-engineering', 'index.html'), 'index.html'],
+    [path.join('newsletters', '2026-W23', 'index.html'), '../../learning/ai-engineering/index.html']
+  ];
+  for (const [relPath, href] of expectedFooterLinks) {
+    const html = fs.readFileSync(path.join(result.outDir, relPath), 'utf8');
+    const expectedLink = `<a class="footer-link" href="${href}">AI Engineering Lab</a>`;
+    assert.equal((html.match(/>AI Engineering Lab<\/a>/g) || []).length, 1, relPath);
+    assert.ok(html.includes(expectedLink), relPath);
+  }
+  assert.match(
+    fs.readFileSync(path.join(result.outDir, 'newsletters', '2026-W23', 'index.html'), 'utf8'),
+    /class="content-wrap legacy-footer-resources"/
+  );
 });
 
 test('assembleSite throws when root index.html is missing', () => {

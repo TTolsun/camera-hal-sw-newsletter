@@ -6,6 +6,7 @@ const vm = require('node:vm');
 
 const root = path.join(__dirname, '..', '..', '..', '..');
 const NewsletterArchive = require('../../../../articles/assets/js/newsletter-archive');
+const { withLearningFooterLink } = require('../../../generator/publish/assemble-site');
 
 function extractHomepageScript() {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -476,8 +477,31 @@ test('homepage renders a static brand featured hero and a 최신 소식 grid wit
   assert.match(html, /<a class="section-link" href="archive\.html">전체 아카이브 보기<\/a>/);
   // Shared nav and subscription hooks are preserved.
   assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">홈<\/a>[\s\S]*href="archive\.html">아카이브<\/a>[\s\S]*href="https:\/\/github\.com\/TTolsun\/camera-hal-sw-newsletter">GitHub<\/a>/);
+  assert.match(html, /<footer class="site-footer">[\s\S]*href="learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
   assert.match(html, /<section id="subscribe"[\s\S]*data-subscription-section hidden>/);
   assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search/);
+});
+
+test('site assembly makes every deployed public page footer link to the AI Engineering lab', () => {
+  const newsletterPages = fs.readdirSync(path.join(root, 'articles', 'newsletters'), { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => path.join(root, 'articles', 'newsletters', entry.name, 'index.html'))
+    .filter(file => fs.existsSync(file));
+  const publicPages = [
+    { file: path.join(root, 'index.html'), href: 'learning/ai-engineering/index.html' },
+    { file: path.join(root, 'articles', 'archive.html'), href: 'learning/ai-engineering/index.html' },
+    { file: path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html'), href: 'index.html' },
+    ...newsletterPages.map(file => ({ file, href: '../../learning/ai-engineering/index.html' }))
+  ];
+
+  for (const { file, href } of publicPages) {
+    const html = withLearningFooterLink(fs.readFileSync(file, 'utf8'), href);
+    const footer = html.match(/<footer class="site-footer">[\s\S]*?<\/footer>/)?.[0] || '';
+    assert.ok(
+      footer.includes(`<a class="footer-link" href="${href}">AI Engineering Lab</a>`),
+      path.relative(root, file)
+    );
+  }
 });
 
 test('homepage script fetches the weekly source of truth, headline, and subscription config only', () => {

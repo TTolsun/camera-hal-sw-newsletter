@@ -398,6 +398,7 @@ function siteFooterHtml(rootPath = '') {
         </div>
         <div class="footer-col">
           <span class="footer-col-title">리소스</span>
+          <a class="footer-link" href="${root}learning/ai-engineering/index.html">AI Engineering Lab</a>
           <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
           <span class="footer-note">RSS (지원예정)</span>
           <span class="footer-note">편집 정책 (지원예정)</span>

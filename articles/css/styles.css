@@ -1262,6 +1262,10 @@ pre code {
   text-decoration: none;
 }
 
+.legacy-footer-resources {
+  padding: 28px 0 18px;
+}
+
 .footer-link {
   transition: color 0.18s ease;
 }

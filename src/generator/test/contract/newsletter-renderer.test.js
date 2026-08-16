@@ -172,6 +172,7 @@ test('newsletter renderer keeps generated issue nav labels on the newsroom Korea
   assert.match(html, /<header class="site-header homepage-site-header">/);
   assert.match(html, /<div class="homepage-nav content-wrap">/);
   assert.match(html, /<footer class="site-footer">/);
+  assert.match(html, /<footer class="site-footer">[\s\S]*?<a class="footer-link" href="\.\.\/\.\.\/learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
   assert.match(html, /<span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom<\/span><\/span>/);
   assert.match(html, /<title>Camera SW Newsletter - 2026-05-03<\/title>/);
   assert.doesNotMatch(html, /data-site-header|site-header\.js/);
@@ -494,15 +495,14 @@ test('newsletter renderer keeps v1 output byte-identical', () => {
     contextMarkdown: sha256(buildMarkdown(contextIssue)),
     contextHtml: sha256(buildHtml(contextIssue))
   }, {
-    // HTML 3종은 클래스 방출 정리(article_type 자유 텍스트 클래스·placeholder variant 제거)로
-    // 한 번 갱신했다. markdown 3종은 그때도 불변이었다 — 그 대비가 "마크다운 계약은 그대로,
-    // HTML 클래스만 의도적으로 바뀌었다"는 증거다.
+    // HTML 3종은 공통 footer의 AI Engineering Lab 링크 추가로 갱신했다.
+    // markdown 3종은 불변이므로 본문 발행 계약은 그대로다.
     plainMarkdown: 'c48f47e42dc73097',
-    plainHtml: 'c129549a3f8f9b9f',
+    plainHtml: 'e4cdbf8551a78fb0',
     storyMarkdown: 'f3602357add8a9ff',
-    storyHtml: '1449d5904a3e1485',
+    storyHtml: '4cf8c3765184dd09',
     contextMarkdown: 'baa3a66bce12cd3b',
-    contextHtml: '7551877b8ad1e56e'
+    contextHtml: 'f38a58f02e7566ac'
   });
 });
 

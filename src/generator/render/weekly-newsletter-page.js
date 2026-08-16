@@ -13,24 +13,6 @@ const {
 } = require('../reporter/weekly-newsletter');
 const { findWeeklyDuplicate } = require('../reporter/weekly-duplicate-merge');
 
-const AI_ENGINEERING_LEARNING_HREF = '../../learning/ai-engineering/index.html';
-const AI_ENGINEERING_LEARNING_LABEL = 'AI Engineering 학습 페이지 →';
-
-// The newsletter renderer owns the generic issue shell. The learning page is a newsroom-specific
-// resource, so keep this additive decoration in the weekly page builder instead of teaching the
-// generic renderer about one product link. Exact marker matching makes a renderer drift fail closed:
-// when the footer navigation changes, we do not silently inject the link into an arbitrary location.
-function addLearningPageLink(html = '') {
-  const marker = '        <a href="../../archive.html">아카이브 전체 보기 →</a>';
-  if (!String(html).includes(marker)) {
-    throw new Error('weekly-newsletter-page: issue footer navigation marker not found');
-  }
-  return String(html).replace(
-    marker,
-    `${marker}\n        <span aria-hidden="true">·</span>\n        <a href="${AI_ENGINEERING_LEARNING_HREF}">${AI_ENGINEERING_LEARNING_LABEL}</a>`
-  );
-}
-
 // Keep one article per topic within a weekly issue: drop any section that duplicates an
 // already-kept one (same identity or near-identical headline, per the weekly duplicate rule).
 function dedupeWeeklySections(sections = []) {
@@ -91,7 +73,7 @@ function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
     indexRoute: weeklyNewsletterIndexRoute(bounds.weeklyKey),
     markdownRoute: weeklyNewsletterMarkdownRoute(bounds.weeklyKey),
     issue,
-    html: addLearningPageLink(buildHtml(issue)),
+    html: buildHtml(issue),
     markdown: buildMarkdown(issue)
   };
 }
@@ -101,7 +83,5 @@ module.exports = {
   weeklyDisplayTitle,
   weeklySummaryText,
   articleTitles,
-  dedupeWeeklySections,
-  addLearningPageLink,
-  AI_ENGINEERING_LEARNING_HREF
+  dedupeWeeklySections
 };
