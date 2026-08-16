@@ -77,6 +77,9 @@ const {
   filterSnapshotWritesByIncludedEvidenceIds,
   runSourceMonitor
 } = require('../collect/source-monitor');
+const {
+  accrueDeepDiveTopicsFromCollect
+} = require('../collect/deep-dive-topic-accrual');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -1569,6 +1572,14 @@ async function main() {
   if (candidates.length === 0) {
     throw new Error('No news candidates collected. Check src/shared/data/news-sources.json, docs/NEWS_SOURCES.md, or network access.');
   }
+
+  const deepDiveAccrual = accrueDeepDiveTopicsFromCollect({
+    root,
+    date,
+    candidates,
+    monitorResult: sourceMonitorResult
+  });
+  console.log(`Deep-dive queue: +${deepDiveAccrual.accruedFingerprintCount} fingerprints, ${deepDiveAccrual.queueSize} topics`);
 
   const generatedAt = new Date().toISOString();
   const candidatePayload = {
