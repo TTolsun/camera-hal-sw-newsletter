@@ -6,6 +6,7 @@ const vm = require('node:vm');
 
 const root = path.join(__dirname, '..', '..', '..', '..');
 const NewsletterArchive = require('../../../../articles/assets/js/newsletter-archive');
+const { withLearningFooterLink } = require('../../../generator/publish/assemble-site');
 
 function extractHomepageScript() {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -481,7 +482,7 @@ test('homepage renders a static brand featured hero and a 최신 소식 grid wit
   assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search/);
 });
 
-test('every public page footer links to the AI Engineering lab', () => {
+test('site assembly makes every deployed public page footer link to the AI Engineering lab', () => {
   const newsletterPages = fs.readdirSync(path.join(root, 'articles', 'newsletters'), { withFileTypes: true })
     .filter(entry => entry.isDirectory())
     .map(entry => path.join(root, 'articles', 'newsletters', entry.name, 'index.html'))
@@ -494,7 +495,7 @@ test('every public page footer links to the AI Engineering lab', () => {
   ];
 
   for (const { file, href } of publicPages) {
-    const html = fs.readFileSync(file, 'utf8');
+    const html = withLearningFooterLink(fs.readFileSync(file, 'utf8'), href);
     const footer = html.match(/<footer class="site-footer">[\s\S]*?<\/footer>/)?.[0] || '';
     assert.ok(
       footer.includes(`<a class="footer-link" href="${href}">AI Engineering Lab</a>`),
