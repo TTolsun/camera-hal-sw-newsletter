@@ -1,0 +1,226 @@
+{
+  "note": "human_label is the only ground truth. Fill it by hand: \"yes\" or \"no\".",
+  "label_definition": "lab/label-definition.md",
+  "items": [
+    {
+      "family_key": "article:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "collected_date": "2026-06-04",
+      "title": "Start building today - Build native Android apps in Google AI Studio",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "source_name": "Android Developers Blog",
+      "summary": "Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance.",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "collected_date": "2026-08-03",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "source_name": "CameraX Release Notes",
+      "summary": "CameraXViewfinder now supports built-in gestures for pinch-to-zoom and tap-to-focus, and adds support for screen flash and stream state. FocusState is now public in viewfinder-core to allow monitoring tap-to-focus results. ( I66a17 , b/522549890 )",
+      "pipeline_selection": "main",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "article:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2brpt20260609",
+      "collected_date": "2026-07-13",
+      "title": "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "source_name": "Raspberry Pi libcamera Releases",
+      "summary": "Released v0.7.1+rpt20260609 (Raspberry Pi downstream libcamera).",
+      "pipeline_selection": "main",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "article:https://isocpp.org//blog/2026/04/gcc-16.1",
+      "collected_date": "2026-06-19",
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "source_name": "ISO C++ Blog",
+      "summary": "GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is still experimental and must be enabled by&nbsp; -fmodules . Several C++26 features have been implemented: P2996R13 , Reflection ( PR120775 , enabled by&nbsp; -std=c++26 -freflection ) P3394R4 , Annotations for Reflection P3293R3 , Splicing a base class subobject P3096R",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "collected_date": "2026-06-26",
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "source_name": "ISO C++ Blog",
+      "summary": "GCC 16 is about to be released, so I'm sharing some of the new features I worked on this year. Some changes are visible to users, while others improve the system more subtly. New features in GCC 16: Improved error messages and SARIF output by David Malcolm From the article: A well-known challenge for C++ developers is the readability of template-related error messages. C++ compilers tend to either provide too little information or spew screenfuls of text at you. Either way, the errors can be dif",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/178144969601.60470.9256616923389083658@gmail.com",
+      "collected_date": "2026-06-15",
+      "title": "[BUG] Input: sur40: KASAN slab-use-after-free in v4l2_release",
+      "url": "https://lore.kernel.org/linux-media/178144969601.60470.9256616923389083658@gmail.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "Hi, I hit the following KASAN report while testing current upstream kernel. The issue was reproduced with the sur40 driver. The report shows the object being freed from sur40_disconnect(), then v4l2_release() accesses it when the held V4L2 fd is closed. I have not confirmed whether this is specific to sur40 or a more generic V4L2 lifetime issue. This looks similar to the rmi4_f54 V4L2 fd lifetime report I sent earlier: https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com",
+      "pipeline_selection": "main",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org",
+      "collected_date": "2026-07-06",
+      "title": "[PATCH] media: dw2102: Fix a buffer overflow",
+      "url": "https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "This bug in dw2102_load_firmware() function appears only when building the kernel via LLVM+Clang. Due to reading of 64 bytes chunk, it may happen that there will be an attempt to read a more bytes in chunk than there is left, which is why Kernel oops occurs. At least this bug happens when downloading the firmware for Prof Revolution DVB-S2 7500 USB. Signed-off-by: Maksim Pinigin --- drivers/media/usb/dvb-usb/dw2102.c | 2 +- 1 file changed, 1 insertion(+), 1 deletion(-) diff --git a/drivers/media",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org",
+      "collected_date": "2026-06-06",
+      "title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
+      "url": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "On 05/06/2026 15:47, Michael Srba wrote: >> So, hex values from downstream in this case are acceptable. >> >> OTOH vendors can and should enumerate their registers in an upstream >> submission. > I thought this was the policy indeed, but this made me wonder if ALL the > magic numbers > in that file were added by volunteers. And weirdly I found this: > https://github.com/torvalds/linux/ > commit/7803b63a1640a0a39e3ebad487b33cb2d26e778b > and possibly some other commits look like they were made by",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "article:https://source.android.com/docs/compatibility",
+      "collected_date": "2026-08-10",
+      "title": "Compatibility",
+      "url": "https://source.android.com/docs/compatibility",
+      "source_name": "AOSP Site Updates",
+      "summary": "July 2026 Compatibility Compatibility Updated Camera ITS overview to add guidance on sub-camera testing, multi-camera API links, and splitting tests to reduce test execution time.",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "article:https://youtube.com/playlist",
+      "collected_date": "2026-07-06",
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "source_name": "Android Developers Blog",
+      "summary": "By leveraging Jetpack CameraX and Media3, you can build professional-grade experiences that feel native across the entire ecosystem.&nbsp; It starts with high-fidelity capture using the CameraXViewfinder Composable, which ensures your preview remains perfectly scaled and responsive on any form factor, including foldables and tablets.",
+      "pipeline_selection": "main",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "lore-family:hm1092-driver",
+      "collected_date": "2026-08-03",
+      "title": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "This adds a V4L2 subdev driver and DT binding for the Himax HM1092, a 1 megapixel monochrome near-infrared image sensor. On laptops it sits behind the IR camera used for face unlock. It speaks a single MIPI CSI-2 data lane and outputs 10-bit RAW at 560x360. The driver exposes that one fixed mode, test patterns, exposure, analogue gain and digital gain controls, pixel-array selection targets and the standard fwnode properties. It has been tested on an ASUS Zenbook A14: the sensor probes, streams,",
+      "pipeline_selection": "main",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "lore-family:hm1246",
+      "collected_date": "2026-06-22",
+      "title": "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver",
+      "url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "Hi Matthias, On Fri, Jun 19, 2026 at 02:28:55PM +0200, Matthias Fend wrote: > Add a V4L2 sub-device driver for Himax HM1246 image sensor. > > The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an active > array size of 1296 x 976. It is programmable through an I2C interface and > connected via parallel bus. > > The sensor has an internal ISP with a complete image processing pipeline > including control loops. However, this driver uses the sensor in raw mode > and the entire ISP is b",
+      "pipeline_selection": "main",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "lore-family:imx708",
+      "collected_date": "2026-08-10",
+      "title": "[PATCH v2 1/3] dt-bindings: media: i2c: Add imx708 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260807-imx708-v2-1-7d3d7b57779d@ideasonboard.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "Sony IMX708 is an 11.9 Megapixel CMOS sensor, that can output pixels over MIPI CSI-2 bus. Add bindings for it. Reviewed-by: Krzysztof Kozlowski Signed-off-by: Jai Luthra --- Changes in v2: - Drop the |- before the description - Add Dave as M:, and move kernel-list@raspberrypi.com as R: - Add Krzysztof's R-by tag --- .../devicetree/bindings/media/i2c/sony,imx708.yaml | 120 +++++++++++++++++++++ MAINTAINERS | 8 ++ 2 files changed , 128 insertions(+) diff --git a/Documentation/devicetree/bindings/m",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "lore-series:20260611204148.1423192-niklas.soderlund+renesas@ragnatech.se",
+      "collected_date": "2026-06-12",
+      "title": "[PATCH v10 03/13] media: rppx1: Add framework to support Dreamchip RPPX1 ISP",
+      "url": "https://lore.kernel.org/linux-media/20260611204148.1423192-4-niklas.soderlund+renesas@ragnatech.se/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "Add a framework driver for Dreamchip RPPX1 ISP. The driver aims to provide a framework for other V4L2 based drivers to drive the RPPX1 functionality. The reason for this split is that the RPPX1 IP itself do not provide any DMA engines to drive data to/from the device, instead it depends on other IP blocks to implement these features. While the peripherals around the RPPX1 ISP used in different designs and by different vendors are different the RPPX1 core itself is the same. For this reason the f",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "lore-series:20260612194417.1737009-atanas.filipov@oss.qualcomm.com",
+      "collected_date": "2026-06-15",
+      "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
+      "url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "On Fri, Jun 12, 2026 at 10:44:15PM +0300, Atanas Filipov wrote: > Add the missing JPEG encoder hardware node in SM8550 DTS so the > new qcom-jpeg V4L2 encoder driver can bind and operate on this > platform. > > The node wires the resources expected by the binding and driver, > including clocks, power domain, IOMMUs and interconnect paths. > > Signed-off-by: Atanas Filipov > --- > arch/arm64/boot/dts/qcom/sm8550.dtsi | 42 ++++++++++++++++++++++++++++ > 1 file changed, 42 insertions(+) > > diff --",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "lore-series:20260617021906.2746743-michael.bommarito@gmail.com",
+      "collected_date": "2026-06-17",
+      "title": "[PATCH v3 9/9] media: v4l2-ctrls: add KUnit tests for compound control tile validation",
+      "url": "https://lore.kernel.org/linux-media/20260617021906.2746743-10-michael.bommarito@gmail.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "Add KUnit coverage for the HEVC and AV1 tile-count checks in std_validate_compound(): in-range counts pass, out-of-range per-dimension counts and an AV1 grid whose product exceeds V4L2_AV1_MAX_TILE_COUNT are rejected, and the zero-initialised AV1 frame control that userspace submits still passes. Assisted-by: Claude:claude-opus-4-8 Signed-off-by: Michael Bommarito --- drivers/media/v4l2-core/Kconfig | 12 ++ .../media/v4l2-core/v4l2-ctrls-core-test.c | 145 ++++++++++++++++++ drivers/media/v4l2-co",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "lore-series:20260731073505.2278769-eagle.alexander923@gmail.com",
+      "collected_date": "2026-08-03",
+      "title": "[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "This series adds a driver for the onsemi AR0234 CMOS image sensor. The AR0234 is a 1/2.6-inch global-shutter sensor with a 1940x1220 pixel array, capable of 1920x1200 resolution at up to 120 fps. It supports MIPI CSI-2 output with 1 to 4 data lanes, raw Bayer (8/10-bit) and monochrome formats, as well as DPCM 10->8 compression. The driver has been tested with 2 and 4 lanes on an ARM64 Rockchip RK3568 platform with a 27 MHz external clock. Both 8-bit and 10-bit raw Bayer modes are functional. Not",
+      "pipeline_selection": "main",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "lore-series:20260807102847.1813059-eagle.alexander923@gmail.com",
+      "collected_date": "2026-08-10",
+      "title": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "This series adds a driver for the onsemi AR0234 CMOS image sensor. The AR0234 is a 1/2.6-inch global-shutter sensor with a 1940x1220 pixel array, capable of 1920x1200 resolution at up to 120 fps. It supports MIPI CSI-2 output with 1 to 4 data lanes, raw Bayer (8/10-bit) and monochrome formats, as well as DPCM 10->8 compression. The driver has been tested with 2 and 4 lanes on an ARM64 Rockchip RK3588 platform with a 27 MHz external clock. Both 8-bit and 10-bit raw Bayer modes are functional. Not",
+      "pipeline_selection": "main",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "patchwork-series:6077",
+      "collected_date": "2026-08-03",
+      "title": "libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown",
+      "url": "https://patchwork.libcamera.org/patch/27496/",
+      "source_name": "libcamera Patchwork (patch review)",
+      "summary": "Patch under review on the project patch tracker (submitted by Qi Hou (OSS)); state superseded, a proposed change not yet landed.",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "patchwork-series:6085",
+      "collected_date": "2026-08-03",
+      "title": "[v1] libcamera: v4l2_videodevice: Use `VIDEO_MAX_PLANES`",
+      "url": "https://patchwork.libcamera.org/patch/27510/",
+      "source_name": "libcamera Patchwork (patch review)",
+      "summary": "Patch under review on the project patch tracker (submitted by Barnabás Pőcze); state new, a proposed change not yet landed.",
+      "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    }
+  ]
+}
