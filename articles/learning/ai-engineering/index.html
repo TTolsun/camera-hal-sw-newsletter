@@ -477,7 +477,7 @@ Runs → Trace → Eval → Failure Analysis
           <article class="learning-card">
             <h3>분할 단위는 URL이 아니라 story</h3>
             <p>같은 사건이 여러 URL로 수집기에 들어옵니다. URL 단위로 나누면 한 사건의 양쪽이 dev와 test에 갈라져 앉고, 그건 외워서 맞히는 것과 구별되지 않습니다. 저장소의 <code>candidateGroupKey()</code>를 그대로 씁니다 — lab과 production이 “하나의 사건”을 같은 뜻으로 쓰게 됩니다.</p>
-            <p>실측: <code>main_eligible</code> 후보 330건 → 78 family. 같은 패치 시리즈의 리비전(v7·v8·v9)은 하나로 접습니다.</p>
+            <p>실측: <code>main_eligible</code> 후보 330건 → 71 family. 같은 시리즈의 리비전(v1·v2·v10)은 하나로 접습니다. 접는 방식은 키를 갈아끼우는 게 아니라 합집합입니다 — 메일링 리스트 id 중에는 시리즈 전체를 이미 묶고 있는 것이 있어서, 제목으로 대체하면 그 시리즈가 도리어 쪼개집니다.</p>
           </article>
           <article class="learning-card">
             <h3>배정은 한 번만 계산하고 커밋한다</h3>
@@ -491,7 +491,7 @@ Runs → Trace → Eval → Failure Analysis
             <tbody>
               <tr><td>calibration</td><td>20 family</td><td>Week 01</td><td>자유 재실행. rubric을 여기 보고 고칩니다</td></tr>
               <tr><td>dev</td><td>20 family</td><td>Week 02</td><td>rubric 동결 후 1회. judge를 계속 쓸지 정하는 gate</td></tr>
-              <tr><td>test</td><td>38 family</td><td>Week 08</td><td>1회. 최종 일반화 측정</td></tr>
+              <tr><td>test</td><td>31 family</td><td>Week 08</td><td>1회. 최종 일반화 측정</td></tr>
             </tbody>
           </table>
         </div>

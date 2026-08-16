@@ -30,13 +30,95 @@ const CALIBRATION_PATH = path.join(DATASETS_DIR, 'calibration.json');
 
 const BUCKET_SIZES = { calibration: 20, dev: 20 };
 
-// Patch series arrive once per revision (v7, v8, v9) under distinct group keys.
-// They are one story, so fold the revision suffix away before splitting.
-const LORE_REVISION = /^lore-series:\d{8}-(.+?)-v\d+-[0-9a-f]{12}@/;
+// A patch series is resubmitted as v1, v2, v3 and arrives each time under a
+// different group key, so the revisions have to be folded back together before
+// the split — otherwise two postings of the same driver land on opposite sides
+// of the seal, and the eval measures recall rather than judgement.
+//
+// The mailing list produces two key shapes, and only one of them carries the
+// story. Tooling-generated ids embed a slug:
+//
+//   lore-series:20260619-hm1246-v10-d88e431a6c11@emfend.at
+//
+// while `git send-email` defaults to a bare timestamp and sender:
+//
+//   lore-series:20260731073505.2278769-eagle.alexander923@gmail.com
+//
+// The second shape identifies nothing. Folding it by sender would merge every
+// series that person ever posted, so the subject line is the only signal left,
+// and for a patch series a shared subject is precisely what one story means.
+const LORE_SLUG_ID = /^lore-series:\d{8}-(.+?)-v\d+-[0-9a-f]{12}@/;
+const MAILING_LIST_KEY = /^(?:lore-series|patchwork-series):/;
+const SUBJECT_PREFIX = /^\s*(?:re|fwd)\s*:\s*|^\s*\[[^\]]*\]\s*/i;
 
-function familyKey(groupKey) {
-  const match = LORE_REVISION.exec(groupKey);
-  return match ? `lore-family:${match[1]}` : groupKey;
+function normalizeSubject(title) {
+  let subject = String(title || '');
+  let previous;
+  // Strip repeatedly: a reply to a revision carries both, as in "Re: [PATCH v6 2/2] ...".
+  do {
+    previous = subject;
+    subject = subject.replace(SUBJECT_PREFIX, '');
+  } while (subject !== previous);
+  return subject.replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+// Families are connected components over group keys, not a relabelling of them.
+//
+// Replacing a group key with something derived from the subject would break the
+// grouping that already works: a bare-timestamp series id covers every patch in
+// one submission, and those patches carry different subjects, so keying on the
+// subject alone splits a series that was whole. Union instead — two group keys
+// belong together when they share a revision slug or a normalized subject, and
+// whatever each key already grouped stays grouped.
+function buildFamilyIndex(records) {
+  const parent = new Map();
+
+  function find(key) {
+    if (!parent.has(key)) parent.set(key, key);
+    while (parent.get(key) !== key) {
+      parent.set(key, parent.get(parent.get(key)));
+      key = parent.get(key);
+    }
+    return key;
+  }
+
+  function union(a, b) {
+    const rootA = find(a);
+    const rootB = find(b);
+    if (rootA === rootB) return;
+    // Smaller key wins, so the representative does not depend on input order.
+    if (rootA < rootB) parent.set(rootB, rootA);
+    else parent.set(rootA, rootB);
+  }
+
+  const bySlug = new Map();
+  const bySubject = new Map();
+
+  for (const { candidate } of records) {
+    const groupKey = candidateGroupKey(candidate);
+    find(groupKey);
+
+    const slug = LORE_SLUG_ID.exec(groupKey);
+    if (slug) {
+      const previous = bySlug.get(slug[1]);
+      if (previous) union(previous, groupKey);
+      else bySlug.set(slug[1], groupKey);
+    }
+
+    // Subject matching is limited to mailing-list items. Elsewhere a shared title
+    // is common enough to merge unrelated pages: several sources publish a page
+    // simply called "Compatibility".
+    if (MAILING_LIST_KEY.test(groupKey)) {
+      const subject = normalizeSubject(candidate.title);
+      if (subject) {
+        const previous = bySubject.get(subject);
+        if (previous) union(previous, groupKey);
+        else bySubject.set(subject, groupKey);
+      }
+    }
+  }
+
+  return candidate => find(candidateGroupKey(candidate));
 }
 
 function sha1(value) {
@@ -66,9 +148,10 @@ function readCandidates() {
 }
 
 function groupByFamily(records) {
+  const resolveFamily = buildFamilyIndex(records);
   const families = new Map();
   for (const { date, candidate } of records) {
-    const key = familyKey(candidateGroupKey(candidate));
+    const key = resolveFamily(candidate);
     const family = families.get(key) || { key, records: [] };
     family.records.push({ date, candidate });
     families.set(key, family);
@@ -153,10 +236,34 @@ function writeJson(file, value) {
   fs.writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 }
 
+// Changing familyKey changes which families exist, which changes the allocation.
+// That is safe only while no label has been written: afterwards it would silently
+// move hand-labelled items into a sealed bucket and quietly break the seal the
+// Week 02 and Week 08 gates rest on.
+function assertReallocationAllowed() {
+  if (!fs.existsSync(CALIBRATION_PATH)) return;
+  const items = JSON.parse(fs.readFileSync(CALIBRATION_PATH, 'utf8')).items || [];
+  const labelled = items.filter(item => item.human_label !== null).length;
+  if (labelled > 0) {
+    throw new Error(
+      `${labelled} calibration items are already labelled. Reallocating now would move ` +
+      'labelled items across the seal. Either keep the current split, or delete the labels ' +
+      'and start the week over deliberately.'
+    );
+  }
+}
+
 function main() {
+  const reallocate = process.argv.includes('--reallocate');
   const records = readCandidates();
   const families = groupByFamily(records);
   const computed = allocate([...families.keys()]);
+
+  if (reallocate) {
+    assertReallocationAllowed();
+    fs.rmSync(SPLIT_PATH, { force: true });
+    console.log('reallocating from scratch (no labels recorded yet)');
+  }
 
   const committed = loadCommittedAllocation();
   let allocation = computed;

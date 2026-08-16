@@ -80,6 +80,17 @@
       "human_note": ""
     },
     {
+      "family_key": "article:https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com",
+      "collected_date": "2026-06-26",
+      "title": "Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "url": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "On 6/25/2026 4:55 PM, Krzysztof Kozlowski wrote: > On 25/06/2026 15:38, Atanas Filipov wrote: >> Add device-tree binding for the Qualcomm JPEG encoder hardware block >> present in SM8250 (Kona) SoCs. >> >> The JPEG encoder is a standalone hardware IP within the camera subsystem >> that performs JPEG compression in memory-to-memory fashion. It is >> separate from the CAMSS ISP pipeline and has its own register space, >> interrupt, clocks, power domain, IOMMU streams, and interconnect paths. >> >>",
+      "pipeline_selection": "main",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
       "family_key": "article:https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org",
       "collected_date": "2026-06-06",
       "title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
@@ -113,39 +124,6 @@
       "human_note": ""
     },
     {
-      "family_key": "lore-family:hm1092-driver",
-      "collected_date": "2026-08-03",
-      "title": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver",
-      "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
-      "source_name": "lore.kernel.org linux-media list",
-      "summary": "This adds a V4L2 subdev driver and DT binding for the Himax HM1092, a 1 megapixel monochrome near-infrared image sensor. On laptops it sits behind the IR camera used for face unlock. It speaks a single MIPI CSI-2 data lane and outputs 10-bit RAW at 560x360. The driver exposes that one fixed mode, test patterns, exposure, analogue gain and digital gain controls, pixel-array selection targets and the standard fwnode properties. It has been tested on an ASUS Zenbook A14: the sensor probes, streams,",
-      "pipeline_selection": "main",
-      "human_label": null,
-      "human_note": ""
-    },
-    {
-      "family_key": "lore-family:hm1246",
-      "collected_date": "2026-06-22",
-      "title": "Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver",
-      "url": "https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/",
-      "source_name": "lore.kernel.org linux-media list",
-      "summary": "Hi Matthias, On Fri, Jun 19, 2026 at 02:28:55PM +0200, Matthias Fend wrote: > Add a V4L2 sub-device driver for Himax HM1246 image sensor. > > The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an active > array size of 1296 x 976. It is programmable through an I2C interface and > connected via parallel bus. > > The sensor has an internal ISP with a complete image processing pipeline > including control loops. However, this driver uses the sensor in raw mode > and the entire ISP is b",
-      "pipeline_selection": "main",
-      "human_label": null,
-      "human_note": ""
-    },
-    {
-      "family_key": "lore-family:imx708",
-      "collected_date": "2026-08-10",
-      "title": "[PATCH v2 1/3] dt-bindings: media: i2c: Add imx708 image sensor",
-      "url": "https://lore.kernel.org/linux-media/20260807-imx708-v2-1-7d3d7b57779d@ideasonboard.com/",
-      "source_name": "lore.kernel.org linux-media list",
-      "summary": "Sony IMX708 is an 11.9 Megapixel CMOS sensor, that can output pixels over MIPI CSI-2 bus. Add bindings for it. Reviewed-by: Krzysztof Kozlowski Signed-off-by: Jai Luthra --- Changes in v2: - Drop the |- before the description - Add Dave as M:, and move kernel-list@raspberrypi.com as R: - Add Krzysztof's R-by tag --- .../devicetree/bindings/media/i2c/sony,imx708.yaml | 120 +++++++++++++++++++++ MAINTAINERS | 8 ++ 2 files changed , 128 insertions(+) diff --git a/Documentation/devicetree/bindings/m",
-      "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
-    },
-    {
       "family_key": "lore-series:20260611204148.1423192-niklas.soderlund+renesas@ragnatech.se",
       "collected_date": "2026-06-12",
       "title": "[PATCH v10 03/13] media: rppx1: Add framework to support Dreamchip RPPX1 ISP",
@@ -158,12 +136,34 @@
     },
     {
       "family_key": "lore-series:20260612194417.1737009-atanas.filipov@oss.qualcomm.com",
-      "collected_date": "2026-06-15",
-      "title": "Re: [PATCH v1 2/4] arm64: dts: qcom: sm8550: Add JPEG encoder node",
-      "url": "https://lore.kernel.org/linux-media/t73gjl3mqcp64rddf7yaosmscdpaj5opiiatztd42fmjrxdpta@2fp5mpgn4icb/",
+      "collected_date": "2026-06-26",
+      "title": "[PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-2-atanas.filipov@oss.qualcomm.com/",
       "source_name": "lore.kernel.org linux-media list",
-      "summary": "On Fri, Jun 12, 2026 at 10:44:15PM +0300, Atanas Filipov wrote: > Add the missing JPEG encoder hardware node in SM8550 DTS so the > new qcom-jpeg V4L2 encoder driver can bind and operate on this > platform. > > The node wires the resources expected by the binding and driver, > including clocks, power domain, IOMMUs and interconnect paths. > > Signed-off-by: Atanas Filipov > --- > arch/arm64/boot/dts/qcom/sm8550.dtsi | 42 ++++++++++++++++++++++++++++ > 1 file changed, 42 insertions(+) > > diff --",
+      "summary": "Add device-tree binding for the Qualcomm JPEG encoder hardware block present in SM8250 (Kona) SoCs. The JPEG encoder is a standalone hardware IP within the camera subsystem that performs JPEG compression in memory-to-memory fashion. It is separate from the CAMSS ISP pipeline and has its own register space, interrupt, clocks, power domain, IOMMU streams, and interconnect paths. Properties documented: - compatible: qcom,sm8250-jenc - reg / reg-names: single MMIO region named \"jpeg\" - interrupts: s",
+      "pipeline_selection": "main",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "lore-series:20260616-mali-c55-ccm-gamma-v1-174fe4fedea3@ideasonboard.com",
+      "collected_date": "2026-06-16",
+      "title": "[PATCH 2/2] media: arm: mali-c55: Add support for RGB Gamma",
+      "url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-2-174fe4fedea3@ideasonboard.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "From: Jacopo Mondi Add support for Gamma curve correction for the Mali C55 ISP. Define a new block in the uAPI using the extensible v4l2-isp format and implement support for configuring the RGB Gamma parameters in the mali-c55 parameters handler. Signed-off-by: Jacopo Mondi --- .../media/platform/arm/mali-c55/mali-c55-params.c | 75 ++++++++++++++++++++++ .../platform/arm/mali-c55/mali-c55-registers.h | 5 ++ include/uapi/linux/media/arm/mali-c55-config.h | 46 ++++++++++++- 3 files changed , 125 i",
       "pipeline_selection": "short",
+      "human_label": null,
+      "human_note": ""
+    },
+    {
+      "family_key": "lore-series:20260617-imx8qxp_pcam-v5-7fa6c8e7fba7@nxp.com",
+      "collected_date": "2026-06-18",
+      "title": "[PATCH v5 6/8] media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)",
+      "url": "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "From: Alice Yuan Add a V4L2 sub-device driver for the CPI controller found on i.MX8QXP, i.MX8QM, and i.MX93 SoCs. This controller supports parallel camera sensors and enables image data capture through a parallel interface. Signed-off-by: Alice Yuan Signed-off-by: Robert Chiras Signed-off-by: Zhipeng Wang Signed-off-by: Frank Li --- Change in v5 - Use subdev_1to1 register function - Use v4l2_subdev_get_frame_desc_passthrough - Use dwc csi2 similar logic enable/disable stream - Add route settup a",
+      "pipeline_selection": "main",
       "human_label": null,
       "human_note": ""
     },
@@ -179,18 +179,18 @@
       "human_note": ""
     },
     {
-      "family_key": "lore-series:20260731073505.2278769-eagle.alexander923@gmail.com",
+      "family_key": "lore-series:20260709-hm1092-driver-v5-a1f5baa6fe08@gmail.com",
       "collected_date": "2026-08-03",
-      "title": "[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
-      "url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/",
+      "title": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
       "source_name": "lore.kernel.org linux-media list",
-      "summary": "This series adds a driver for the onsemi AR0234 CMOS image sensor. The AR0234 is a 1/2.6-inch global-shutter sensor with a 1940x1220 pixel array, capable of 1920x1200 resolution at up to 120 fps. It supports MIPI CSI-2 output with 1 to 4 data lanes, raw Bayer (8/10-bit) and monochrome formats, as well as DPCM 10->8 compression. The driver has been tested with 2 and 4 lanes on an ARM64 Rockchip RK3568 platform with a 27 MHz external clock. Both 8-bit and 10-bit raw Bayer modes are functional. Not",
+      "summary": "This adds a V4L2 subdev driver and DT binding for the Himax HM1092, a 1 megapixel monochrome near-infrared image sensor. On laptops it sits behind the IR camera used for face unlock. It speaks a single MIPI CSI-2 data lane and outputs 10-bit RAW at 560x360. The driver exposes that one fixed mode, test patterns, exposure, analogue gain and digital gain controls, pixel-array selection targets and the standard fwnode properties. It has been tested on an ASUS Zenbook A14: the sensor probes, streams,",
       "pipeline_selection": "main",
       "human_label": null,
       "human_note": ""
     },
     {
-      "family_key": "lore-series:20260807102847.1813059-eagle.alexander923@gmail.com",
+      "family_key": "lore-series:20260731073505.2278769-eagle.alexander923@gmail.com",
       "collected_date": "2026-08-10",
       "title": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
       "url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
