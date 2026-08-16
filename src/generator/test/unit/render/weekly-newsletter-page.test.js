@@ -4,9 +4,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
-  buildWeeklyNewsletterPage,
-  addLearningPageLink,
-  AI_ENGINEERING_LEARNING_HREF
+  buildWeeklyNewsletterPage
 } = require('../../../render/weekly-newsletter-page');
 
 // A minimal but renderer-valid publish-ready editor draft (mirrors the known-good public issue shape
@@ -74,19 +72,13 @@ test('buildWeeklyNewsletterPage keys a single publish-ready draft by its ISO wee
   assert.ok(typeof page.markdown === 'string' && page.markdown.length > 0);
 });
 
-test('weekly issue footer links to the AI Engineering learning page exactly once', () => {
+test('weekly issue site footer always links to the AI Engineering learning page exactly once', () => {
   const page = buildWeeklyNewsletterPage(publishReadyDraft(), { date: '2026-06-04' });
-  const hrefMatches = page.html.match(new RegExp(AI_ENGINEERING_LEARNING_HREF.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || [];
+  const hrefMatches = page.html.match(/\.\.\/\.\.\/learning\/ai-engineering\/index\.html/g) || [];
+  const issueFooterNavigation = page.html.match(/<nav class="issue-footer-navigation"[\s\S]*?<\/nav>/)?.[0] || '';
   assert.equal(hrefMatches.length, 1);
-  assert.match(page.html, /AI Engineering 학습 페이지 →/);
-  assert.match(page.html, /아카이브 전체 보기 →<\/a>\s*<span aria-hidden="true">·<\/span>\s*<a href="\.\.\/\.\.\/learning\/ai-engineering\/index\.html">/);
-});
-
-test('addLearningPageLink fails closed when the issue footer contract drifts', () => {
-  assert.throws(
-    () => addLearningPageLink('<html><body>no issue footer</body></html>'),
-    /issue footer navigation marker not found/
-  );
+  assert.match(page.html, /<footer class="site-footer">[\s\S]*?<span class="footer-col-title">리소스<\/span>\s*<a class="footer-link" href="\.\.\/\.\.\/learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
+  assert.doesNotMatch(issueFooterNavigation, /learning\/ai-engineering/);
 });
 
 test('buildWeeklyNewsletterPage accepts an explicit weeklyKey', () => {

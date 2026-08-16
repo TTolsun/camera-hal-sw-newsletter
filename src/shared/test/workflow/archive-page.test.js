@@ -191,6 +191,7 @@ test('archive page uses homepage shell, shared footer, metadata, and stable hook
   assert.doesNotMatch(html, /archive-hero-mascot/);
   assert.doesNotMatch(html, /archive-hero-actions|<a class="button button-primary" href="index\.html">Home<\/a>/);
   assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">홈<\/a>[\s\S]*href="archive\.html">아카이브<\/a>[\s\S]*GitHub/);
+  assert.match(html, /<footer class="site-footer">[\s\S]*href="learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
   for (const hook of [
     'data-page="archive"',
     'data-archive-status',
