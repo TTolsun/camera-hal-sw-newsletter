@@ -38,3 +38,7 @@ articles/content/collected-news/**/gemini-candidates.json
 # TRA (transient_attempt) patterns — scoped to newsroom
 articles/content/newsroom/**/*-attempt-*.json
 articles/content/newsroom/**/*-attempt-*.md
+
+# lab/ experiment outputs (Week 01+ AI engineering learning track)
+/lab/results/
+/lab/tmp/
