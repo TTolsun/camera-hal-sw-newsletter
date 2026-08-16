@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
-const { assembleSite } = require('../../../publish/assemble-site');
+const { assembleSite, withLearningFooterLink } = require('../../../publish/assemble-site');
 const { validateUrlParity, siteFilePath } = require('../../../validate/validate-url-parity');
 const { tempRoot, writeText, writeJson } = require('../../../../shared/test/helpers/fs');
 
@@ -61,6 +61,58 @@ function writePublicLayout(root, { weeklyKey = '2026-W23' } = {}) {
     ].join('\n')
   );
 }
+
+const LEARNING_HREF = '../../learning/ai-engineering/index.html';
+const EXPECTED_LEARNING_LINK = `<a class="footer-link" href="${LEARNING_HREF}">AI Engineering Lab</a>`;
+
+function learningLinkCount(html) {
+  return (html.match(/>AI Engineering Lab<\/a>/g) || []).length;
+}
+
+test('withLearningFooterLink fails closed when a deployed page has no site-footer', () => {
+  assert.throws(
+    () => withLearningFooterLink('<html><body>no footer shell</body></html>', LEARNING_HREF, 'orphan.html'),
+    /orphan\.html has no site-footer/
+  );
+});
+
+test('withLearningFooterLink recognises an existing link written with href before class', () => {
+  const footer = `<footer class="site-footer">
+  <div class="footer-col">
+    <span class="footer-col-title">리소스</span>
+    <a href="learning/ai-engineering/index.html" class="footer-link">AI Engineering Lab</a>
+  </div>
+</footer>`;
+  const html = withLearningFooterLink(`<html><body>${footer}</body></html>`, LEARNING_HREF, 'href-first.html');
+  assert.equal(learningLinkCount(html), 1);
+  assert.ok(html.includes(EXPECTED_LEARNING_LINK));
+});
+
+test('withLearningFooterLink puts the link under the 리소스 column at the column indent', () => {
+  const html = withLearningFooterLink(`<html><body>${fullFooter()}</body></html>`, LEARNING_HREF, 'indented.html');
+  assert.equal(learningLinkCount(html), 1);
+  // fullFooter의 리소스 컬럼은 6칸 들여쓰기다. 링크는 그 바로 아래 같은 깊이로 들어간다.
+  assert.ok(html.includes(`      <span class="footer-col-title">리소스</span>\n      ${EXPECTED_LEARNING_LINK}`));
+});
+
+test('withLearningFooterLink uses the 리소스 column even when the footer is on one line', () => {
+  const footer = '<footer class="site-footer"><div class="footer-col"><span class="footer-col-title">리소스</span><a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a></div></footer>';
+  const html = withLearningFooterLink(`<html><body>${footer}</body></html>`, LEARNING_HREF, 'minified.html');
+  assert.equal(learningLinkCount(html), 1);
+  assert.ok(html.includes(EXPECTED_LEARNING_LINK));
+  assert.doesNotMatch(html, /legacy-footer-resources/);
+});
+
+test('assembleSite names the offending page when a deployed HTML file has no site-footer', () => {
+  const root = tempRoot('assemble-site-footerless-');
+  writePublicLayout(root);
+  writeText(path.join(root, 'articles', 'embed', 'card.html'), '<!doctype html><html><body>fragment</body></html>');
+
+  assert.throws(
+    () => assembleSite({ root, out: path.join(root, '_site_out') }),
+    /embed\/card\.html has no site-footer/
+  );
+});
 
 test('assembleSite copies root index.html and articles/ contents to _site root and writes .nojekyll', () => {
   const root = tempRoot('assemble-site-');

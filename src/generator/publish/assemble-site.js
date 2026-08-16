@@ -20,6 +20,20 @@ const ROOT_INDEX = 'index.html';
 const AI_ENGINEERING_PAGE = path.join('learning', 'ai-engineering', 'index.html');
 const AI_ENGINEERING_LABEL = 'AI Engineering Lab';
 
+function escapeRegExp(value) {
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// footer 보강에 쓰는 pattern들. 모두 global flag가 없어 호출 간에 상태를 남기지 않으므로
+// 파일마다 다시 만들지 않고 module scope에 둔다.
+const SITE_FOOTER = /<footer\b[^>]*\bclass=(['"])[^'"]*\bsite-footer\b[^'"]*\1[^>]*>[\s\S]*?<\/footer>/i;
+// 이미 있는 링크는 attribute 순서가 아니라 label 텍스트로 찾는다. label에 정규식 metacharacter가
+// 들어와도 문자 그대로 비교하도록 escape한다.
+const EXISTING_LEARNING_LINK = new RegExp(`<a\\b[^>]*>${escapeRegExp(AI_ENGINEERING_LABEL)}</a>`, 'i');
+// 리소스 컬럼도 줄 시작 여부에 의존하지 않고 찾는다. 앞의 들여쓰기는 있으면 그대로 물려받는다.
+const FOOTER_RESOURCE_TITLE = /([ \t]*)<span class="footer-col-title">리소스<\/span>/;
+const FOOTER_OPENING = /^<footer\b[^>]*>/i;
+
 // index.html이 fetch하지만 articles/ 밖(저장소 config/)에 있는 서빙 파일.
 // 이동 전 site root에서 /config/subscription.json으로 서빙되었으므로 parity를 위해 함께 복사한다.
 // 항목을 추가하면 .github/workflows/site-02-deploy.yml의 push.paths에도 같이 넣어야 그 파일만
@@ -51,25 +65,30 @@ function posixPath(value) {
 // 과거 newsletter HTML은 생성 산출물 보존 정책상 footer 링크 하나를 위해 다시 쓰지 않는다.
 // 대신 배포용 사본에만 공통 리소스 링크를 보강한다. 새 renderer가 이미 링크를 출력하는
 // 페이지는 기대 상대경로로 정규화만 하며 중복 링크를 만들지 않는다.
-function withLearningFooterLink(html, href) {
+//
+// site-footer를 못 찾으면 던진다(fail closed). 링크가 조용히 빠진 페이지를 배포하는 것보다
+// 배포를 멈추는 쪽이 안전하다. pageLabel은 어느 페이지가 계약을 깼는지 알리는 용도라 필수다.
+//
+// 링크 탐지와 리소스 컬럼 탐지는 둘 중 하나만 어긋나도 같은 링크가 한 번 더 주입되므로,
+// 두 pattern 모두 attribute 순서·줄바꿈에 의존하지 않게 module scope에 정의해 두었다.
+function withLearningFooterLink(html, href, pageLabel) {
   const input = String(html || '');
-  const footerMatch = input.match(/<footer\b[^>]*\bclass=(['"])[^'"]*\bsite-footer\b[^'"]*\1[^>]*>[\s\S]*?<\/footer>/i);
-  if (!footerMatch) return input;
+  const footerMatch = input.match(SITE_FOOTER);
+  if (!footerMatch) {
+    throw new Error(`assemble-site: ${pageLabel} has no site-footer; cannot add the ${AI_ENGINEERING_LABEL} link`);
+  }
 
   const newline = input.includes('\r\n') ? '\r\n' : '\n';
   const link = `<a class="footer-link" href="${href}">${AI_ENGINEERING_LABEL}</a>`;
-  const existingLink = /<a\s+class=(['"])footer-link\1\s+href=(['"])[^'"]*\2>AI Engineering Lab<\/a>/i;
-  const resourceTitle = /^([ \t]*)<span class="footer-col-title">리소스<\/span>/m;
-  const footerOpening = /^<footer\b[^>]*>/i;
   let footer = footerMatch[0];
 
-  if (existingLink.test(footer)) {
-    footer = footer.replace(existingLink, link);
-  } else if (resourceTitle.test(footer)) {
-    footer = footer.replace(resourceTitle, (line, indent) => `${line}${newline}${indent}${link}`);
+  if (EXISTING_LEARNING_LINK.test(footer)) {
+    footer = footer.replace(EXISTING_LEARNING_LINK, link);
+  } else if (FOOTER_RESOURCE_TITLE.test(footer)) {
+    footer = footer.replace(FOOTER_RESOURCE_TITLE, (line, indent) => `${line}${newline}${indent}${link}`);
   } else {
     footer = footer.replace(
-      footerOpening,
+      FOOTER_OPENING,
       opening => `${opening}${newline}    <div class="content-wrap legacy-footer-resources">${newline}      ${link}${newline}    </div>`
     );
   }
@@ -92,7 +111,7 @@ function addLearningFooterLinks(outDir) {
 
       const before = fs.readFileSync(file, 'utf8');
       const href = posixPath(path.relative(path.dirname(file), learningPage)) || 'index.html';
-      const after = withLearningFooterLink(before, href);
+      const after = withLearningFooterLink(before, href, posixPath(path.relative(outDir, file)));
       if (after === before) continue;
       fs.writeFileSync(file, after, 'utf8');
       updated += 1;
