@@ -316,6 +316,7 @@ jobs:
             copy_if_present "articles/data/newsletters.json"
             copy_if_present "articles/data/homepage-headline.json"
             copy_if_present "state/article-exposure-history.json"
+            copy_if_present "state/deep-dive-topic-queue.json"
             copy_tree_if_present "state/source-snapshots"
           else
             echo "No generated date marker found; skipping date-scoped artifact copy."

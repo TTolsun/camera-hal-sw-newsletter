@@ -547,6 +547,8 @@ const DEBUG_RRC_PATHS = new Set([
   'cost-report.md',
   'summary-cache-report.md',
   'summary-cache-report.json',
+  // 심층(deep-dive) shadow report: selection-report.json과 동일하게 REVIEW_REQUIRED_COMPACT로 커밋한다.
+  'deep-dive-report.json',
   'source-change-events.md',
   // collected-news pipeline-input files (workflow handoff state, not pure debug)
   'candidates.json',
@@ -619,6 +621,8 @@ function debugExactCatalog(date) {
     newsroomRelPath(date, 'cost-report.md'),
     newsroomRelPath(date, 'summary-cache-report.md'),
     newsroomRelPath(date, 'summary-cache-report.json'),
+    // 심층(deep-dive) shadow 단계: weekly writer가 매 실행마다 남기는 발동/선정 report
+    newsroomRelPath(date, 'deep-dive-report.json'),
     repoPath('articles', 'content', 'source-events', date, 'source-change-events.md'),
     repoPath('articles', 'content', 'source-events', date, 'source-change-events.json')
   ];
