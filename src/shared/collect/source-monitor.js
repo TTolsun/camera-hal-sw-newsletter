@@ -26,10 +26,12 @@ const {
 } = require('../validate/source-monitor-registry-validator');
 const { CANDIDATE_SCHEMA_VERSION } = require('../common/candidate-artifacts');
 const {
-  cameraItsReleaseNoteEvidence,
-  cameraItsReleaseNoteExtract,
-  cameraItsReleaseNoteFingerprint
+  cameraItsReleaseNoteEvidence
 } = require('./camera-its-release-note-evidence');
+const {
+  documentSectionExtract,
+  documentSectionFingerprint
+} = require('./document-section-extractors');
 
 const SNAPSHOT_SCHEMA_VERSION = 1;
 const PROCESSED_ID_LIMIT = 500;
@@ -373,7 +375,7 @@ function observationFromHtml({ source, url, html, status = 200, headers = {} }) 
   const canonicalUrl = normalizeSourceUrl(url);
   let releaseNoteExtract = null;
   try {
-    releaseNoteExtract = cameraItsReleaseNoteExtract(html, canonicalUrl);
+    releaseNoteExtract = documentSectionExtract(html, canonicalUrl);
   } catch {
     releaseNoteExtract = null;
   }
@@ -398,7 +400,7 @@ function observationFromHtml({ source, url, html, status = 200, headers = {} }) 
     // 추출 결과는 이벤트까지만 들려보낸다(스냅샷에는 저장하지 않는다).
     // 판정(언제 바뀌었나)은 그대로 정규화 본문 해시 비교가 한다.
     // 부가 기능인 내용 추출이 실패해도 핵심인 변화 감지는 계속돼야 하므로 여기서 삼킨다.
-    release_note_sections: cameraItsReleaseNoteFingerprint(releaseNoteExtract),
+    release_note_sections: documentSectionFingerprint(releaseNoteExtract),
     release_note_extract: releaseNoteExtract,
     anchors: meaningfulAnchors(html, canonicalUrl),
     release_row_date: primaryReleaseRow.date || '',
@@ -1048,6 +1050,7 @@ async function collectAndClassifySourceEvents(options = {}) {
   const allDiagnostics = [];
   const snapshotWrites = [];
   const sourceById = new Map();
+  const pageExtracts = [];
 
   for (const source of ensureArray(registry.sources)) {
     sourceById.set(source.source_id, source);
@@ -1072,6 +1075,20 @@ async function collectAndClassifySourceEvents(options = {}) {
       snapshot,
       detectedAt
     }));
+    // 문서 섹션 추출 결과는 스냅샷·이벤트 artifact에는 싣지 않지만(withoutDerivedEvidence),
+    // 이번 실행의 반환값에는 in-memory로 실어 심층 기사 큐 등 호출자가 바로 쓸 수 있게 한다.
+    for (let i = 0; i < collected.observations.length; i += 1) {
+      const current = collected.observations[i];
+      if (!current?.release_note_extract?.sections?.length) continue;
+      pageExtracts.push({
+        source_id: source.source_id,
+        url: current.canonical_url || current.url,
+        title: current.title,
+        release: current.release_note_extract.release,
+        sections: current.release_note_extract.sections,
+        event: events[i]
+      });
+    }
     const currentKeys = new Set(collected.observations.map(observation => observation.source_identity_key));
     for (const previous of snapshot.pages) {
       if (currentKeys.has(previous.source_identity_key)) continue;
@@ -1097,7 +1114,8 @@ async function collectAndClassifySourceEvents(options = {}) {
     events: allEvents,
     diagnostics: allDiagnostics,
     snapshotWrites,
-    sourceById
+    sourceById,
+    pageExtracts
   };
 }
 
@@ -1130,7 +1148,8 @@ async function runSourceMonitor(options = {}) {
   return {
     report,
     candidates: allCandidates,
-    snapshotWrites: collected.snapshotWrites
+    snapshotWrites: collected.snapshotWrites,
+    pageExtracts: collected.pageExtracts
   };
 }
 
