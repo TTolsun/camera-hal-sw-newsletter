@@ -2,6 +2,8 @@
 
 이 문서는 newsroom(기사 생성 자동화)과 발행 artifact(산출물)에서 자주 나오는 용어를 설명합니다. code identifier, JSON key, enum 값, 파일명, URL, 명령어는 원문 그대로 둡니다.
 
+여기는 **code identifier와 artifact 용어를 찾아보는 곳**입니다. "이 시스템이 어떻게 돌아가는가"를 설명하는 개념 사전은 `llm-wiki/concepts/glossary.md`(로컬 전용, gitignored)에 따로 있습니다. 두 문서는 다루는 대상이 달라 일부러 나누어 두었습니다.
+
 | 용어 | 설명 |
 | --- | --- |
 | `scheduled run` | GitHub Actions가 정해진 시간에 자동으로 후보 수집, 생성, 검증, PR 생성을 시도하는 실행입니다. 기본값은 비용 안전성과 review artifact 보존을 우선합니다. |
