@@ -68,14 +68,14 @@
       "selection_lane": "primary_camera_stack",
       "expected_categories": [
         "compatibility",
-        "camera-hal"
+        "camera-api"
       ],
       "date_extractors": [
         "visible_last_updated",
         "structured_date_modified"
       ],
       "content_hash_enabled": true,
-      "main_article_allowed": true,
+      "main_article_allowed": false,
       "fallback_only": false,
       "max_pages_per_run": 5,
       "fetch_timeout_ms": 8000

@@ -74,6 +74,7 @@ function cameraItsReleaseNoteExtract(html = '', pageUrl = '') {
         // 증거 이름표를 extract가 들고 다닌다(문서 유형별 adapter가 유일한 출처).
         version_or_release: `${release} release notes`,
         api_or_component: API_OR_COMPONENT,
+        section_link_source_field: 'release_note_section',
         sections
       }
     : null;

@@ -1,12 +1,13 @@
 // 심층(deep-dive) 주제 큐. 파이프라인이 main으로 못 실은 Android 카메라 신호를 적립해 두고,
 // 조용한 주(direct_aosp_camera ≤ 1)에 심층 기사 주제로 소비한다.
-// 계약(스펙 .tmp/codex/deep-dive-section-design.md):
+// 계약 정본: docs/NEWSROOM_WORKFLOW.md 「심층(deep-dive) 주제 큐」 절.
 // - 적립 쓰기는 01(collect), 상태 전환 쓰기는 03(generator) — 단계별 단일 작성자.
 // - accrual_count는 저장하지 않는다. distinct fingerprint 수로 읽는 시점에 계산한다.
 // - 파일 손상은 빈 큐로 대체하지 않고 throw한다 — 구현 오류를 콘텐츠 실패로 위장하지 않는다.
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { writeJsonAtomic } = require('../common/json');
 
 const DEEP_DIVE_QUEUE_REL_PATH = 'state/deep-dive-topic-queue.json';
 
@@ -46,10 +47,10 @@ function loadDeepDiveTopicQueue(root) {
   return parsed;
 }
 
+// 이 파일이 잘리면 load가 throw해 다음 주 발행 결정이 멈춘다. 그래서 덮어쓰기가 아니라
+// 임시 파일+rename으로 쓴다(같은 성격의 source-snapshots와 동일한 방식).
 function saveDeepDiveTopicQueue(root, queue) {
-  const filePath = queueFilePath(root);
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, `${JSON.stringify(queue, null, 2)}\n`, 'utf8');
+  writeJsonAtomic(queueFilePath(root), queue);
 }
 
 function distinctFingerprintCount(topic) {
@@ -120,6 +121,9 @@ function updateTopic(queue, topicKey, updater) {
   };
 }
 
+// 아래 두 상태 전환은 2단계(생성·검증·렌더)가 호출한다. 1단계(shadow)에는 호출자가 없다 —
+// 재선정 규칙(blocked는 새 fingerprint 전까지 다시 안 뽑힌다)을 적립·선정과 같은 자리에서
+// 확정해 두려고 함께 둔다. 지금 지우면 그 규칙이 큐 밖으로 흩어진다.
 function markTopicBlocked(queue, topicKey, usedFingerprints) {
   return updateTopic(queue, topicKey, topic => {
     topic.status = 'blocked_until_new_evidence';

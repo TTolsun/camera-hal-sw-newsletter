@@ -38,6 +38,15 @@ test('mustNotBeTracked returns false for REVIEW_REQUIRED_COMPACT compact file', 
   assert.equal(mustNotBeTracked(classification), false);
 });
 
+// 심층 리포트는 뉴스레터 PR에 함께 커밋된다. 분류가 빠지거나 DEBUG_HEAVY로 돌아가면
+// mustNotBeTracked가 true가 되어, 커밋된 리포트가 retention 위반으로 잡힌다.
+test('deep-dive-report.json is classified REVIEW_REQUIRED_COMPACT and stays committable', () => {
+  const classification = classifyArtifactPath('articles/content/newsroom/2026-05-05/deep-dive-report.json');
+  assert.ok(classification, 'deep-dive-report.json must be classified');
+  assert.equal(classification.retention_grade, REVIEW_REQUIRED_COMPACT);
+  assert.equal(mustNotBeTracked(classification), false);
+});
+
 test('mustNotBeTracked returns false for unknown_artifacts group', () => {
   assert.equal(mustNotBeTracked({ retention_grade: DEBUG_HEAVY, group: 'unknown_artifacts' }), false);
   assert.equal(mustNotBeTracked({ retention_grade: TRANSIENT_ATTEMPT, group: 'unknown_artifacts' }), false);

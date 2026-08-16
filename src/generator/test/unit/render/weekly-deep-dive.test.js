@@ -49,6 +49,37 @@ test('발동 + 빈 큐는 queue_empty, 발동 + 큐 있음은 shadow_selected다
   assert.equal(readReport(root, '2026-08-17').status, 'shadow_selected');
 });
 
+// queue_size·accrued_this_week는 shadow 단계의 유일한 관측 출력이다. 단언이 없으면 두 값이
+// 항상 0으로 나가도 아무 테스트가 깨지지 않아, 관찰 기간 내내 잘못된 수치를 보게 된다.
+test('shadow report는 큐 크기와 이번 실행 적립 수를 기록한다', () => {
+  const root = makeRoot();
+  const evidence = (fingerprint, detectedAt) => ({
+    topic_key: `https://example.com/${fingerprint}`,
+    title: fingerprint,
+    bucket: 'direct_aosp_camera',
+    evidence: [{
+      url: `https://example.com/${fingerprint}`,
+      excerpt: 'x',
+      fingerprint,
+      effective_date: '2026-08-10',
+      date_source: 'visible_last_updated',
+      date_confidence: 85,
+      origin: 'monitor_event'
+    }],
+    detectedAt
+  });
+  // 지난 주에 쌓인 주제 하나 + 이번 실행 날짜로 쌓인 주제 하나.
+  let queue = accrueDeepDiveTopics({ schemaVersion: 1, topics: [] }, [evidence('old')], { detectedAt: '2026-08-10' }).queue;
+  queue = accrueDeepDiveTopics(queue, [evidence('fresh')], { detectedAt: '2026-08-17' }).queue;
+  saveDeepDiveTopicQueue(root, queue);
+
+  const report = runWeeklyDeepDive({ root, date: '2026-08-17', articles: [DRIVER] });
+
+  assert.equal(report.queue_size, 2);
+  assert.equal(report.accrued_this_week, 1);
+  assert.equal(readReport(root, '2026-08-17').accrued_this_week, 1);
+});
+
 test('큐 손상은 error report를 남기고 다시 throw한다', () => {
   const root = makeRoot();
   const filePath = path.join(root, ...DEEP_DIVE_QUEUE_REL_PATH.split('/'));

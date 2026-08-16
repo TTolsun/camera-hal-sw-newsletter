@@ -159,7 +159,10 @@ function changedSectionEvidence(extract, previousSections = []) {
         .map(section => ({
           url: section.url,
           text: section.heading,
-          source_field: 'release_note_section',
+          // 출처 이름표도 문서 유형을 따른다. 여기서 릴리스 노트로 고정하면 feature 페이지
+          // 섹션 링크가 릴리스 노트 출처로 둔갑한다(version_or_release·api_or_component와
+          // 같은 이유로 adapter가 정한다).
+          source_field: extract.section_link_source_field || 'document_section',
           extraction_method: 'heading_anchor'
         }))
     )

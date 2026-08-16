@@ -121,16 +121,6 @@ async function decidePublishReadinessAndWriteStatus({
     } catch (error) {
       console.error(`weekly newsletter output skipped: ${error.message}`);
     }
-    // 심층(deep-dive)은 선택 부가 기능이라, 그 주의 공개 산출물이 디스크에 기록되고
-    // weeklyArtifactFiles에 등록된 **뒤에** 실행한다. 위 try 안에서 부르면(또는 weekly writer
-    // 안에서 부르면) 실패가 위 catch에 삼켜져 console 한 줄로 사라지거나, 위클리 공개 3종이
-    // 통째로 기록되지 않는 주가 생긴다.
-    // 예상 콘텐츠 실패(미발동·큐 빔)는 여기서도 값으로 돌아온다. 구현 오류(큐 JSON 손상 등)만
-    // throw하고, 그 throw는 위 catch 바깥이라 그대로 전파된다 — 조용한 skip으로 위장하지
-    // 않는다(불변식 3).
-    if (weeklyArtifactFiles.length > 0) {
-      runWeeklyDeepDive({ root, date, articles: weeklyFinalArticles });
-    }
   }
   const headlineArtifactResult = persistHeadlineStateArtifacts({
     date,
@@ -227,6 +217,16 @@ async function decidePublishReadinessAndWriteStatus({
     }
   });
   writeGenerationStatus(generationStatusArtifact);
+  // 심층(deep-dive)은 선택 부가 기능이라 이 함수가 할 일을 **전부 마친 뒤** 마지막에 실행한다.
+  // 앞쪽에서 부르면 여기서 나는 throw 하나가 그 주의 headline state·validate·generation-status
+  // 기록까지 통째로 건너뛰게 하고(워크플로의 이미지 바인딩 스텝도 generate 성공 조건이라 함께
+  // skip된다), weekly writer 안이나 그 catch 안에서 부르면 위클리 공개 3종이 아예 기록되지 않거나
+  // 실패가 console 한 줄로 사라진다.
+  // 예상 콘텐츠 실패(미발동·큐 빔)는 값으로 돌아온다. 구현 오류(큐 JSON 손상 등)만 throw하며,
+  // 그 throw는 여기서 그대로 전파된다 — 조용한 skip으로 위장하지 않는다(불변식 3).
+  if (weeklyArtifactFiles.length > 0) {
+    runWeeklyDeepDive({ root, date, articles: weeklyFinalArticles });
+  }
   return {
     editorialReviewable,
     shouldWritePublicArtifacts,

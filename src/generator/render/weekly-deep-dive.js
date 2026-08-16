@@ -1,11 +1,11 @@
 // 심층(deep-dive) 발동 판정·주제 선정·운영 report. 1단계(shadow) — 렌더/생성 없음.
 // 예상 콘텐츠 실패(미발동·큐 빔)는 skip 값으로, 구현 오류는 error report 기록 후 재-throw.
 //
-// 호출 지점은 orchestrator-publish-decision.js다 — weekly writer 안이 아니다. 위클리 공개
-// 산출물이 기록되고 변경 artifact 목록에 등록된 뒤에 불러야, 여기서 나는 throw가 (1) 그 주의
-// 공개 산출물을 선점하지 않고 (2) weekly writer의 바깥 catch에 삼켜져 console 한 줄로
-// 사라지지도 않는다.
-// 스펙: .tmp/codex/deep-dive-section-design.md (구현 후 docs/NEWSROOM_WORKFLOW.md에 통합).
+// 호출 지점은 orchestrator-publish-decision.js의 **맨 끝**이다 — weekly writer 안이 아니다.
+// 그 함수가 공개 산출물 기록·headline state·validate·generation-status를 전부 마친 뒤에 불러야,
+// 여기서 나는 throw가 (1) 그 주의 발행 산출물을 하나도 선점하지 않고 (2) weekly writer의 바깥
+// catch에 삼켜져 console 한 줄로 사라지지도 않는다.
+// 계약 정본: docs/NEWSROOM_WORKFLOW.md 「심층(deep-dive) 주제 큐」 절.
 const fs = require('fs');
 const path = require('path');
 const { loadDeepDiveTopicQueue, selectDeepDiveTopic } = require('../../shared/collect/deep-dive-topic-queue');

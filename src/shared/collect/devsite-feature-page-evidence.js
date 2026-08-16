@@ -41,6 +41,7 @@ function devsiteFeaturePageExtract(html = '', pageUrl = '') {
     // 증거 이름표를 extract가 들고 다닌다(문서 유형별 adapter가 유일한 출처).
     version_or_release: release,
     api_or_component: API_OR_COMPONENT,
+    section_link_source_field: 'platform_feature_section',
     sections
   };
 }

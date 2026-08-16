@@ -8,6 +8,7 @@ const {
   dateSourceConfidence,
   normalizeDate
 } = require('../common/date-signals');
+const { writeJsonAtomic } = require('../common/json');
 const {
   contentHash,
   evidenceId,
@@ -57,25 +58,6 @@ function unique(values) {
 function writeJson(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
-}
-
-function writeJsonAtomic(filePath, value, options = {}) {
-  const writeFileSync = options.writeFileSync || fs.writeFileSync;
-  const renameSync = options.renameSync || fs.renameSync;
-  const unlinkSync = options.unlinkSync || fs.unlinkSync;
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  const tmpPath = `${filePath}.tmp-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-  try {
-    writeFileSync(tmpPath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
-    renameSync(tmpPath, filePath);
-  } catch (error) {
-    try {
-      if (fs.existsSync(tmpPath)) unlinkSync(tmpPath);
-    } catch {
-      // Preserve the original write/rename failure.
-    }
-    throw error;
-  }
 }
 
 function readJsonIfExists(filePath) {
@@ -1075,8 +1057,8 @@ async function collectAndClassifySourceEvents(options = {}) {
     }));
     // 문서 섹션 추출 결과는 스냅샷·이벤트 artifact에는 싣지 않지만(withoutDerivedEvidence),
     // 이번 실행의 반환값에는 in-memory로 실어 심층 기사 큐 등 호출자가 바로 쓸 수 있게 한다.
-    for (let i = 0; i < collected.observations.length; i += 1) {
-      const current = collected.observations[i];
+    for (let index = 0; index < collected.observations.length; index += 1) {
+      const current = collected.observations[index];
       if (!current?.release_note_extract?.sections?.length) continue;
       pageExtracts.push({
         source_id: source.source_id,
@@ -1084,7 +1066,7 @@ async function collectAndClassifySourceEvents(options = {}) {
         title: current.title,
         release: current.release_note_extract.release,
         sections: current.release_note_extract.sections,
-        event: events[i]
+        event: events[index]
       });
     }
     const currentKeys = new Set(collected.observations.map(observation => observation.source_identity_key));
