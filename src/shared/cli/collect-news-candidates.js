@@ -77,6 +77,9 @@ const {
   filterSnapshotWritesByIncludedEvidenceIds,
   runSourceMonitor
 } = require('../collect/source-monitor');
+const {
+  accrueDeepDiveTopicsFromCollect
+} = require('../collect/deep-dive-topic-accrual');
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -1482,6 +1485,67 @@ function markdown(date, candidates, failures, lookbackDays, options = {}) {
   return lines.join('\n');
 }
 
+// 수집 산출물(후보 artifact·raw 매니페스트·후보 markdown·날짜 파일·모니터 스냅샷)을 전부
+// 디스크에 기록한 뒤에 심층(deep-dive) 주제 큐를 적립한다. 이 순서 자체가 계약이다.
+//
+// 이유: 적립은 선택 부가 기능인데 큐 파일이 손상되면 그대로 throw한다(구현 오류를 콘텐츠
+// 실패로 위장하지 않는다는 불변식 3). 적립을 먼저 부르면 그 throw 하나로 그날의 후보·
+// 매니페스트·진단이 통째로 디스크에 남지 않는다 — 적립과 아무 상관 없는 수집 결과까지
+// 같이 사라진다. 그래서 throw는 그대로 두고(시끄러워야 한다) 순서만 뒤집는다. 산출물이
+// 이미 기록된 뒤라 구현 오류가 그날의 수집 결과를 데려가지 못한다.
+function writeCollectArtifactsThenAccrueDeepDiveTopics({
+  root,
+  date,
+  candidatePayload,
+  failures,
+  lookbackDays,
+  sourceCount,
+  generatedAt,
+  sourceMonitorResult,
+  manualSourceUrls = '',
+  collectionIntentPath = ''
+}) {
+  const candidates = candidatePayload.candidates;
+  const dateNewsroomDir = newsroomDir(root, date);
+  fs.mkdirSync(dateNewsroomDir, { recursive: true });
+  fs.mkdirSync(path.join(root, '.tmp'), { recursive: true });
+
+  writeManualCandidateArtifacts({
+    root,
+    date,
+    payload: candidatePayload,
+    sourceCount,
+    manualSourceUrls,
+    collectionIntentPath,
+    generatedAt,
+    workflow: 'manual-source-collection-pr'
+  });
+  fs.writeFileSync(path.join(dateNewsroomDir, 'news-candidates.md'), markdown(date, candidates, failures, lookbackDays), 'utf8');
+  fs.writeFileSync(path.join(root, '.tmp', 'news-candidate-date.txt'), date, 'utf8');
+  if (sourceMonitorResult) {
+    const includedEvidenceIds = new Set(candidates
+      .filter(isSourceChangeEventCandidate)
+      .map(candidate => candidate.evidence_id)
+      .filter(Boolean));
+    commitSourceSnapshotWrites({
+      root,
+      snapshotWrites: filterSnapshotWritesByIncludedEvidenceIds(
+        sourceMonitorResult.snapshotWrites,
+        includedEvidenceIds
+      )
+    });
+  }
+
+  const deepDiveAccrual = accrueDeepDiveTopicsFromCollect({
+    root,
+    date,
+    candidates,
+    monitorResult: sourceMonitorResult
+  });
+  console.log(`Deep-dive queue: +${deepDiveAccrual.accruedFingerprintCount} fingerprints, ${deepDiveAccrual.queueSize} topics`);
+  return deepDiveAccrual;
+}
+
 async function main() {
   // Fail fast on a malformed manual_source_urls input before doing any
   // collection work, so we never leave a manifest-less candidate artifact.
@@ -1583,31 +1647,18 @@ async function main() {
     candidates,
     failures
   };
-  writeManualCandidateArtifacts({
+  writeCollectArtifactsThenAccrueDeepDiveTopics({
     root,
     date,
-    payload: candidatePayload,
+    candidatePayload,
+    failures,
+    lookbackDays,
     sourceCount: sources.length,
-    manualSourceUrls: process.env.NEWSROOM_MANUAL_SOURCE_URLS || '',
-    collectionIntentPath: process.env.NEWSROOM_COLLECTION_INTENT_PATH || '',
     generatedAt,
-    workflow: 'manual-source-collection-pr'
+    sourceMonitorResult,
+    manualSourceUrls: process.env.NEWSROOM_MANUAL_SOURCE_URLS || '',
+    collectionIntentPath: process.env.NEWSROOM_COLLECTION_INTENT_PATH || ''
   });
-  fs.writeFileSync(path.join(dateNewsroomDir, 'news-candidates.md'), markdown(date, candidates, failures, lookbackDays), 'utf8');
-  fs.writeFileSync(path.join(root, '.tmp', 'news-candidate-date.txt'), date, 'utf8');
-  if (sourceMonitorResult) {
-    const includedEvidenceIds = new Set(candidates
-      .filter(isSourceChangeEventCandidate)
-      .map(candidate => candidate.evidence_id)
-      .filter(Boolean));
-    commitSourceSnapshotWrites({
-      root,
-      snapshotWrites: filterSnapshotWritesByIncludedEvidenceIds(
-        sourceMonitorResult.snapshotWrites,
-        includedEvidenceIds
-      )
-    });
-  }
 
   console.log(`Collected ${candidates.length} candidates for ${date}`);
 }
@@ -1638,5 +1689,6 @@ module.exports = {
   parseRss,
   renderCandidateMarkdown: markdown,
   resolveLinkedReleaseNoteEvidenceItems,
-  withinLookback
+  withinLookback,
+  writeCollectArtifactsThenAccrueDeepDiveTopics
 };

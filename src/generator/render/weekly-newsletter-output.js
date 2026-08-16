@@ -277,6 +277,10 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
     addedArticleCount: resolved.appendedArticles.length,
     mergeWarnings: resolved.warnings,
     mergeDecisions: resolved.decisions,
+    // 이 주의 최종 기사 목록(merge·dedupe·limit 이후). 심층 발동 판정이 "위클리 최종 기사
+    // 기준"이려면 호출자가 이 목록을 그대로 받아야 한다 — 여기서 부가 기능을 실행하면
+    // 그 실패가 공개 산출물 기록보다 앞서 버린다.
+    articles,
     files: [
       // changedArtifacts에 쓰이는 디스크-상대 경로(articles/ 아래).
       `articles/newsletters/${weeklyKey}/index.html`,

@@ -54,6 +54,29 @@ source registry
   -> newsletter/YYYY-MM-DD PR
 ```
 
+## 심층(deep-dive) 주제 큐 — 1단계(shadow)
+
+파이프라인이 main으로 싣지 못한 Android 카메라 신호를 `state/deep-dive-topic-queue.json`에 적립합니다.
+
+- 적립은 수집(01)이 합니다: 강등된 direct_aosp_camera·android_platform_camera_adjacent 후보,
+  primary_camera_stack lane 모니터 이벤트, 감시 문서의 카메라 섹션(ITS 릴리스 노트,
+  `developer.android.com/about/versions/<N>/features` — 새 Android 버전이 나오면 registry seed에
+  feature 페이지를 수동 추가해야 합니다). 적립은 그날의 수집 산출물(후보 artifact·매니페스트·
+  markdown)을 전부 기록한 **뒤에** 실행합니다 — 아래 03과 같은 이유입니다.
+- feature 페이지 소스(`android-version-features`)는 심층 적립 전용입니다(`main_article_allowed: false`).
+  변화 감지가 페이지 전체 해시라, 카메라와 무관한 문단만 바뀐 주에도 이벤트가 생기기 때문입니다.
+  버킷도 앱 개발자용 플랫폼 문서에 맞게 `android_platform_camera_adjacent`입니다.
+- 발행(03)은 최종 기사 중 direct_aosp_camera가 1건 이하인 주에만 큐에서 주제 1개를
+  결정론으로 고르고, 결과를 `articles/content/newsroom/<날짜>/deep-dive-report.json`에 기록합니다.
+- 심층은 발행 결정 단계가 할 일을 **전부 마친 뒤** 맨 마지막에 실행합니다: 위클리 공개 산출물
+  (index.html·newsletter.md·issue.json) 기록, 변경 artifact 목록 등록, headline state, validate,
+  generation-status 기록이 모두 끝난 다음입니다. 선택 부가 기능이 그 주의 발행 산출물을 하나도
+  선점하지 못하게 하기 위해서입니다. 미발동·큐 빔 같은 예상 콘텐츠 실패는 report의 `skip_reason`으로
+  남고 발행은 계속됩니다. 반대로 구현 오류(큐 JSON 손상 등)는 `status: "error"`로 기록한 뒤 다시
+  throw합니다 — 조용한 skip으로 위장하지 않습니다.
+- 현재는 shadow 단계입니다: 선정 결과는 report(`status: shadow_selected`)로만 남고 뉴스레터에는
+  실리지 않습니다. 공개 산출물은 byte 불변입니다. 2단계(생성·검증·렌더)는 별도 계획으로 배선합니다.
+
 ## LLM provider 운영
 
 기본 provider는 `gemini`입니다. 예약 자동 실행(scheduled run)은 `runtime-config.js`의 `DEFAULT_RUNTIME_CONFIG`에 정의된 provider/model/fallback model을 그대로 씁니다. 즉 scheduled run은 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` repo variable을 읽지 않습니다.
