@@ -621,7 +621,8 @@ function debugExactCatalog(date) {
     newsroomRelPath(date, 'cost-report.md'),
     newsroomRelPath(date, 'summary-cache-report.md'),
     newsroomRelPath(date, 'summary-cache-report.json'),
-    // 심층(deep-dive) shadow 단계: weekly writer가 매 실행마다 남기는 발동/선정 report
+    // 심층(deep-dive) shadow 단계: 위클리 공개 산출물을 쓴 뒤 발행 결정 단계
+    // (orchestrator-publish-decision.js)가 매 실행마다 남기는 발동/선정 report
     newsroomRelPath(date, 'deep-dive-report.json'),
     repoPath('articles', 'content', 'source-events', date, 'source-change-events.md'),
     repoPath('articles', 'content', 'source-events', date, 'source-change-events.json')

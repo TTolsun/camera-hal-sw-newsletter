@@ -61,7 +61,8 @@ source registry
 - 적립은 수집(01)이 합니다: 강등된 direct_aosp_camera·android_platform_camera_adjacent 후보,
   primary_camera_stack lane 모니터 이벤트, 감시 문서의 카메라 섹션(ITS 릴리스 노트,
   `developer.android.com/about/versions/<N>/features` — 새 Android 버전이 나오면 registry seed에
-  feature 페이지를 수동 추가해야 합니다).
+  feature 페이지를 수동 추가해야 합니다). 적립은 그날의 수집 산출물(후보 artifact·매니페스트·
+  markdown)을 전부 기록한 **뒤에** 실행합니다 — 아래 03과 같은 이유입니다.
 - 발행(03)은 최종 기사 중 direct_aosp_camera가 1건 이하인 주에만 큐에서 주제 1개를
   결정론으로 고르고, 결과를 `articles/content/newsroom/<날짜>/deep-dive-report.json`에 기록합니다.
 - 심층은 위클리 공개 산출물(index.html·newsletter.md·issue.json)을 기록하고 변경 artifact 목록에
