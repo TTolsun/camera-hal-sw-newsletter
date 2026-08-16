@@ -1,37 +1,68 @@
-# MAIN_USABLE — Week 01 label definition
+# MAIN_USABLE — Week 01 라벨 정의
 
-One binary label per candidate: `yes` or `no`.
+후보 하나당 `yes` 또는 `no` 하나.
 
-Judge each candidate from four fields only: `title`, `url`, `source_name`, `summary`.
-Do not open the URL. The LLM judge sees exactly these four fields, so reading more
-than it can see would measure the wrong thing.
+`title`, `url`, `source_name`, `summary` **네 필드만** 보고 판정한다. URL을 열지 않는다.
+LLM judge가 보는 것이 정확히 이 네 필드이므로, 사람이 그보다 많이 보면 측정 대상이 달라진다.
 
-A candidate is `yes` when all three conditions hold. If any one fails, it is `no`.
+세 조건을 **전부** 만족하면 `yes`, 하나라도 어기면 `no`.
 
-**1. Subject.** The document the URL points at directly covers at least one part of
-the Android or Linux camera stack: camera HAL (HIDL or AIDL), camera2 or CameraX,
-libcamera, V4L2 and the media subsystem, ISP or sensor drivers, CTS or ITS, or
-camera-related SoC and vendor code. A general Android or developer article that
-merely mentions camera once as an example does not qualify.
+## 조건 1 — 대상
 
-**2. Specificity.** At least one of a version or release number, an API or component
-name, or a described behaviour change is present, so that "what changed" can be
-written in one sentence. "Coming soon" or "various improvements" does not qualify.
+URL이 가리키는 문서가 Android 또는 Linux 카메라 스택의 최소 한 부분을 **직접** 다룬다.
 
-**3. Self-containment.** That single URL is enough to check the claim. Playlists,
-landing pages, and roundup hubs whose actual content lives in child links do not
-qualify.
+- camera HAL (HIDL 또는 AIDL)
+- camera2, CameraX
+- libcamera
+- V4L2 및 media subsystem
+- ISP, 이미지 센서 드라이버
+- CTS, ITS
+- 카메라 관련 SoC 및 vendor 코드
 
-When the three conditions do not clearly settle it, label `no`. The tie-break is
-deliberately conservative: this label asks whether one URL can carry the factual
-basis of a main article, not whether the topic is interesting.
+카메라를 예시로 한 번 언급할 뿐인 일반 Android/개발자 기사는 해당하지 않는다.
 
-## Freezing
+## 조건 2 — 구체성
 
-The definition freezes the moment the sixth calibration item is labelled. Changing
-it after that invalidates every label already recorded, so a change means relabelling
-all twenty from scratch.
+버전이나 릴리스 번호, API나 컴포넌트 이름, 동작 변경 중 **최소 하나가 명시**되어 있어서
+"무엇이 바뀌었는가"를 한 문장으로 쓸 수 있다.
 
-Record the reason for any label that felt uncertain in `human_note`. Those notes are
-the input to the disagreement analysis, and they are the only place where "the
-definition was unclear here" can be distinguished from "the judge was wrong here".
+"곧 출시", "여러 개선 사항" 수준은 해당하지 않는다.
+
+## 조건 3 — 자립성
+
+그 URL **하나만** 열어도 근거가 확인된다.
+
+playlist, 랜딩 페이지, roundup 허브처럼 실제 내용이 하위 링크에 있는 페이지는 해당하지 않는다.
+
+## 애매할 때
+
+세 조건으로 명확히 갈리지 않으면 **`no`**로 내린다.
+
+보수적으로 잡은 이유가 있다. 이 라벨은 "흥미로운 기사인가"를 묻지 않는다.
+**"이 URL 하나로 main article 한 편의 사실 근거를 댈 수 있는가"**만 묻는다.
+
+## 동결 규칙
+
+calibration 여섯 번째 항목을 라벨하는 순간 이 정의는 얼어붙는다.
+
+그 뒤에 정의를 고치면 이미 기록한 라벨이 전부 무효가 된다. 즉 정의를 고친다는 것은
+20건을 처음부터 다시 라벨한다는 뜻이다.
+
+## human_note를 채우는 기준
+
+판정이 망설여진 항목은 반드시 `human_note`에 이유를 남긴다.
+
+이 노트가 불일치 분석의 입력이고, **"정의가 불명확했다"와 "judge가 틀렸다"를 구별할 수 있는
+유일한 근거**다. 노트가 없으면 나중에 그 둘이 구별되지 않는다.
+
+## prompts/v1.txt와의 관계
+
+이 문서는 사람이 읽고, `lab/prompts/v1.txt`는 judge가 읽는다. **둘은 같은 기준을 서술한
+거울이어야 한다.**
+
+한쪽만 고치면 사람과 judge가 서로 다른 기준으로 판정하게 되고, 그러면 kappa가 낮게 나와도
+그것이 judge의 한계인지 두 문서가 어긋난 탓인지 알 수 없다. 어느 쪽을 고치든 다른 쪽을 같이
+고친다.
+
+프롬프트를 영어로 두는 이유는 판정 대상인 기사가 대부분 영어라서다. 언어를 섞으면 변수가
+하나 늘어난다.
