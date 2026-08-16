@@ -62,8 +62,13 @@ source registry
   primary_camera_stack lane 모니터 이벤트, 감시 문서의 카메라 섹션(ITS 릴리스 노트,
   `developer.android.com/about/versions/<N>/features` — 새 Android 버전이 나오면 registry seed에
   feature 페이지를 수동 추가해야 합니다).
-- 위클리 작성기(03)는 최종 기사 중 direct_aosp_camera가 1건 이하인 주에만 큐에서 주제 1개를
+- 발행(03)은 최종 기사 중 direct_aosp_camera가 1건 이하인 주에만 큐에서 주제 1개를
   결정론으로 고르고, 결과를 `articles/content/newsroom/<날짜>/deep-dive-report.json`에 기록합니다.
+- 심층은 위클리 공개 산출물(index.html·newsletter.md·issue.json)을 기록하고 변경 artifact 목록에
+  등록한 **뒤에** 실행합니다. 선택 부가 기능이 그 주의 공개 산출물을 선점하지 못하게 하기 위해서입니다.
+  미발동·큐 빔 같은 예상 콘텐츠 실패는 report의 `skip_reason`으로 남고 발행은 계속됩니다. 반대로
+  구현 오류(큐 JSON 손상 등)는 `status: "error"`로 기록한 뒤 다시 throw합니다 — 조용한 skip으로
+  위장하지 않습니다.
 - 현재는 shadow 단계입니다: 선정 결과는 report(`status: shadow_selected`)로만 남고 뉴스레터에는
   실리지 않습니다. 공개 산출물은 byte 불변입니다. 2단계(생성·검증·렌더)는 별도 계획으로 배선합니다.
 

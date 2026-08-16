@@ -20,6 +20,7 @@ const STATUS_BUILDERS = '../../publish/orchestrator-status-builders';
 const ARTIFACT_WRITERS = '../../publish/orchestrator-artifact-writers';
 const RECOVERY_WRITERS = '../../publish/orchestrator-recovery-writers';
 const WEEKLY_OUTPUT = '../../render/weekly-newsletter-output';
+const WEEKLY_DEEP_DIVE = '../../render/weekly-deep-dive';
 
 function stubModule(key, exports) {
   const resolved = require.resolve(key);
@@ -29,7 +30,8 @@ function stubModule(key, exports) {
 }
 
 // 무거운 협력자를 모두 stub으로 교체하고 호출 기록을 모아 control-flow를 고정한다.
-function withStubbedCollaborators(run) {
+// options.weeklyThrows / options.deepDiveThrows로 해당 협력자의 실패를 주입할 수 있다.
+async function withStubbedCollaborators(run, options = {}) {
   const decisionKey = require.resolve(DECISION_MODULE);
   const calls = {
     runValidate: 0,
@@ -41,8 +43,13 @@ function withStubbedCollaborators(run) {
     // #870: weekly writer에 넘어간 병합 검증 클로저. 이 배선은 writer를 stub으로 갈아끼우면
     // 보이지 않으므로 클로저 자체를 붙잡아 직접 호출해 확인한다.
     weeklyValidateMerged: null,
+    // 심층(deep-dive)은 공개 산출물 기록 뒤에 와야 하므로 호출 순서까지 기록한다.
+    deepDive: [],
+    order: [],
     selectionStatusExtraOptions: []
   };
+  const weeklyArticles = [{ headline: 'weekly final A' }, { headline: 'weekly final B' }];
+  calls.weeklyArticles = weeklyArticles;
   const stubs = [
     stubModule(VALIDATE_RUNNER, {
       // 비reviewable 경로에서만 호출되어야 한다. 호출 횟수로 그 분기를 검증한다.
@@ -78,15 +85,31 @@ function withStubbedCollaborators(run) {
     stubModule(WEEKLY_OUTPUT, {
       writeWeeklyNewsletterArtifacts: async (args) => {
         calls.weekly += 1;
+        calls.order.push('weekly');
         calls.weeklyValidateMerged = args.validateMerged;
-        return { files: ['articles/newsletters/weekly/x/index.html'], mergeWarnings: [], mergeDecisions: [], weeklyKey: 'wk' };
+        if (options.weeklyThrows) throw options.weeklyThrows;
+        return {
+          files: ['articles/newsletters/weekly/x/index.html'],
+          mergeWarnings: [],
+          mergeDecisions: [],
+          weeklyKey: 'wk',
+          articles: weeklyArticles
+        };
+      }
+    }),
+    stubModule(WEEKLY_DEEP_DIVE, {
+      runWeeklyDeepDive: (args) => {
+        calls.deepDive.push(args);
+        calls.order.push('deepDive');
+        if (options.deepDiveThrows) throw options.deepDiveThrows;
+        return { status: 'skipped', skip_reason: 'queue_empty', selected_topic_key: null };
       }
     })
   ];
   delete require.cache[decisionKey];
   try {
     const { decidePublishReadinessAndWriteStatus } = require(DECISION_MODULE);
-    return run(decidePublishReadinessAndWriteStatus, calls);
+    return await run(decidePublishReadinessAndWriteStatus, calls);
   } finally {
     delete require.cache[decisionKey];
     for (const { resolved, prev } of stubs) {
@@ -188,10 +211,53 @@ test('비reviewable PASS 입력: 공개 산출물을 쓰고 validate를 돌리�
     assert.ok(out.files.includes('articles/newsletters/2026-05-08/index.html'));
     assert.ok(out.files.includes('articles/data/newsletters.json'));
 
+    // 심층(deep-dive)은 weekly writer 뒤에, 그 주의 최종 기사 목록을 받아 실행된다.
+    assert.deepEqual(calls.order, ['weekly', 'deepDive']);
+    assert.equal(calls.deepDive.length, 1);
+    assert.equal(calls.deepDive[0].date, '2026-05-08');
+    assert.deepEqual(calls.deepDive[0].articles, calls.weeklyArticles);
+
     // generation-status가 정확히 한 번 기록된다.
     assert.equal(calls.writeGenerationStatus.length, 1);
     assert.equal(out.generationStatusArtifact.status, 'PASS');
   });
+});
+
+// 불변식 3: 심층 구현 오류는 weekly writer의 바깥 catch에 삼켜져 console 한 줄이 되면 안 된다.
+// 동시에 그 오류가 그 주의 공개 산출물을 없애서도 안 된다 — 심층은 공개 산출물이 기록되고
+// weeklyArtifactFiles에 등록된 뒤에 돌기 때문이다.
+test('심층 구현 오류는 공개 산출물을 기록한 뒤 그대로 전파된다(조용한 skip이 아니다)', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+
+    await assert.rejects(
+      () => decide(baseArgs(newsroomDir, newsletterDir)),
+      /deep-dive-topic-queue 파일이 손상됐습니다/
+    );
+
+    // 공개 산출물은 심층이 돌기 전에 이미 기록됐다.
+    assert.equal(fs.readFileSync(path.join(newsletterDir, 'newsletter.md'), 'utf8'), '# stub markdown');
+    assert.equal(fs.readFileSync(path.join(newsletterDir, 'index.html'), 'utf8'), '<html>stub</html>');
+    assert.equal(calls.updateNewsletterData.length, 1);
+    assert.deepEqual(calls.order, ['weekly', 'deepDive']);
+  }, { deepDiveThrows: new Error('deep-dive-topic-queue 파일이 손상됐습니다(state/deep-dive-topic-queue.json)') });
+});
+
+// weekly 기록 자체가 실패한 주에는 등록할 위클리 파일이 없다. 그 상태에서 심층까지 돌리면
+// 부가 기능이 실패한 주를 한 번 더 흔든다 — 기존 weekly 실패 처리(데일리 계속)는 그대로 둔다.
+test('weekly 기록이 실패하면 심층을 돌리지 않고 데일리 산출물로 계속 간다', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    const out = await decide(baseArgs(newsroomDir, newsletterDir));
+
+    assert.equal(calls.weekly, 1);
+    assert.equal(calls.deepDive.length, 0);
+    assert.ok(fs.existsSync(path.join(newsletterDir, 'newsletter.md')));
+    assert.ok(out.files.includes('articles/newsletters/2026-05-08/newsletter.md'));
+    assert.equal(out.files.some(file => /newsletters\/weekly/.test(file)), false);
+  }, { weeklyThrows: new Error('weekly writer boom') });
 });
 
 test('reviewable(NEEDS_FIX) 입력: 공개 산출물을 쓰지 않고 validate를 건너뛴다', async () => {

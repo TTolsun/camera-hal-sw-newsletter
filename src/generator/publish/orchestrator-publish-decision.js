@@ -45,6 +45,7 @@ const {
 const {
   writeWeeklyNewsletterArtifacts
 } = require('../render/weekly-newsletter-output');
+const { runWeeklyDeepDive } = require('../render/weekly-deep-dive');
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');
 const { writeGenerationStatus } = require('./orchestrator-artifact-writers');
 const {
@@ -83,6 +84,7 @@ async function decidePublishReadinessAndWriteStatus({
   const newsletterHtml = path.join(newsletterDir, 'index.html');
   const shouldWritePublicArtifacts = !editorialReviewable;
   let weeklyArtifactFiles = [];
+  let weeklyFinalArticles = [];
   if (shouldWritePublicArtifacts) {
     fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');
     fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');
@@ -105,6 +107,7 @@ async function decidePublishReadinessAndWriteStatus({
         root, date, editor, tags: issueTags(editor), ...weeklyMerge
       });
       weeklyArtifactFiles = weeklyResult.files;
+      weeklyFinalArticles = ensureArray(weeklyResult.articles);
       if (ensureArray(weeklyResult.mergeWarnings).length > 0 ||
         ensureArray(weeklyResult.mergeDecisions).some(decision => /merge/.test(decision.decision))) {
         writeJson(path.join(newsroomDir, 'weekly-merge-report.json'), {
@@ -117,6 +120,16 @@ async function decidePublishReadinessAndWriteStatus({
       }
     } catch (error) {
       console.error(`weekly newsletter output skipped: ${error.message}`);
+    }
+    // 심층(deep-dive)은 선택 부가 기능이라, 그 주의 공개 산출물이 디스크에 기록되고
+    // weeklyArtifactFiles에 등록된 **뒤에** 실행한다. 위 try 안에서 부르면(또는 weekly writer
+    // 안에서 부르면) 실패가 위 catch에 삼켜져 console 한 줄로 사라지거나, 위클리 공개 3종이
+    // 통째로 기록되지 않는 주가 생긴다.
+    // 예상 콘텐츠 실패(미발동·큐 빔)는 여기서도 값으로 돌아온다. 구현 오류(큐 JSON 손상 등)만
+    // throw하고, 그 throw는 위 catch 바깥이라 그대로 전파된다 — 조용한 skip으로 위장하지
+    // 않는다(불변식 3).
+    if (weeklyArtifactFiles.length > 0) {
+      runWeeklyDeepDive({ root, date, articles: weeklyFinalArticles });
     }
   }
   const headlineArtifactResult = persistHeadlineStateArtifacts({
