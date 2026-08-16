@@ -495,11 +495,12 @@ test('site assembly makes every deployed public page footer link to the AI Engin
   ];
 
   for (const { file, href } of publicPages) {
-    const html = withLearningFooterLink(fs.readFileSync(file, 'utf8'), href);
+    const pageLabel = path.relative(root, file);
+    const html = withLearningFooterLink(fs.readFileSync(file, 'utf8'), href, pageLabel);
     const footer = html.match(/<footer class="site-footer">[\s\S]*?<\/footer>/)?.[0] || '';
     assert.ok(
       footer.includes(`<a class="footer-link" href="${href}">AI Engineering Lab</a>`),
-      path.relative(root, file)
+      pageLabel
     );
   }
 });
