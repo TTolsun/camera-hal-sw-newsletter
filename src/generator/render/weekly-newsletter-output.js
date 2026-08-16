@@ -26,6 +26,7 @@ const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../reporter/weekly-article-limits');
 const { resolveWeeklyArticles, sectionIdentity } = require('../reporter/weekly-duplicate-merge');
 const { indexContractVersionField } = require('../../shared/common/story-contract-version');
+const { runWeeklyDeepDive } = require('./weekly-deep-dive');
 
 // Browser-safe (https) image for a weekly article section, used to show one article image on the
 // homepage Latest card. Returns '' when the section has no usable https image.
@@ -218,6 +219,9 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
   });
   const { articles } = applyWeeklyArticleLimits({ existing: resolved.existingArticles, incoming: resolved.appendedArticles });
 
+  // 심층 shadow: 발동 판정·선정 결과를 운영 report로만 남긴다(공개 산출물 무변화).
+  const deepDive = runWeeklyDeepDive({ root, date, articles });
+
   // 아카이브/홈 카드의 주제 분류·kicker 는 위클리 tags 로 결정된다. 이슈 레벨 editor.tags(대개
   // ['Camera HAL','Android'] 기본값이라 분류가 단조롭고 Driver/Image Processing/AI/SoC Platform
   // 필터가 비어 버린다) 대신, 그 주 기사(section)들의 relevance bucket 을 topic 태그로 집계한다.
@@ -277,6 +281,8 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
     addedArticleCount: resolved.appendedArticles.length,
     mergeWarnings: resolved.warnings,
     mergeDecisions: resolved.decisions,
+    // orchestrator 로그·2단계 소비용(공개 산출물이 아니므로 files에는 넣지 않는다).
+    deepDive: { status: deepDive.status, selected_topic_key: deepDive.selected_topic_key },
     files: [
       // changedArtifacts에 쓰이는 디스크-상대 경로(articles/ 아래).
       `articles/newsletters/${weeklyKey}/index.html`,
