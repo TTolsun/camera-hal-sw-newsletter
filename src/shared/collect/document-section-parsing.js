@@ -3,6 +3,7 @@
 // 맞는가) 판정은 각 adapter가 URL로 한다. 이 모듈은 본문에서 무엇을 뽑을지만 안다.
 const { decodeHtml } = require('../common/common');
 const { hashText } = require('../common/source-identity');
+const { normalizeOutgoingLinks } = require('./outgoing-links');
 
 // devsite가 모든 문서 제목 옆에 붙이는 안내 문구. 문서 내용이 아니므로 증거에서 뺀다.
 const DEVSITE_BOILERPLATE_PATTERN =
@@ -106,8 +107,69 @@ function extractHeadingSections(html, pageUrl, { sectionPattern, sectionLimit, s
   return sections;
 }
 
+/**
+ * 스냅샷에 저장할 섹션 지문(제목 + 내용 해시). 다음 실행에서 무엇이 바뀌었는지 가리는 데 쓴다.
+ * 문장·링크는 빼서 스냅샷이 커지지 않게 한다. 지문 형태는 문서 유형과 무관하게 동일하다.
+ */
+function headingSectionFingerprint(extract) {
+  return (extract?.sections || []).map(section => ({
+    heading: section.heading,
+    hash: section.hash
+  }));
+}
+
+/**
+ * 직전 관측 대비 새로 생겼거나 내용이 바뀐 섹션만 증거로 만든다.
+ * 바뀐 섹션이 없거나 비교 대상이 없으면 null.
+ *
+ * previousSections가 비어 있으면(최초 관측) 비교 대상이 없으므로 null을 돌려준다 —
+ * 그 상태에서 문서 전체를 "이번 변화"로 싣는 것이 정확히 과다 주장이다.
+ *
+ * 증거의 이름표(version_or_release·api_or_component)는 extract가 들고 온다. 여기서 특정
+ * 문서 유형의 이름을 박으면 다른 유형의 문서 변화가 그 이름으로 잘못 보고된다
+ * (feature 페이지 변화가 'Camera ITS / CTS Verifier'로 나가던 결함).
+ */
+function changedSectionEvidence(extract, previousSections = []) {
+  if (!extract?.release || !Array.isArray(extract.sections)) return null;
+
+  const previousByHeading = new Map(
+    (Array.isArray(previousSections) ? previousSections : [])
+      .filter(section => section && section.heading)
+      .map(section => [section.heading, section.hash])
+  );
+  if (previousByHeading.size === 0) return null;
+
+  const changed = extract.sections
+    .filter(section => previousByHeading.get(section.heading) !== section.hash);
+  if (changed.length === 0) return null;
+
+  return {
+    version_or_release: extract.version_or_release || extract.release,
+    api_or_component: extract.api_or_component || '',
+    // 바뀐 섹션만, 섹션 경계에서만 자른다. 문서 전체를 실으면 이번 주에 바뀌지 않은 섹션까지
+    // 그 주의 변화로 발행된다.
+    behavior_change: changed
+      .map(section => (section.sentence ? `${section.heading}: ${section.sentence}` : section.heading))
+      .join(' '),
+    changed_section_headings: changed.map(section => section.heading),
+    // 링크 레코드는 정본 빌더로 만든다. 손으로 만들면 evidence_role이 빠져 계약이 둘로 갈린다.
+    section_links: normalizeOutgoingLinks(
+      changed
+        .filter(section => section.url)
+        .map(section => ({
+          url: section.url,
+          text: section.heading,
+          source_field: 'release_note_section',
+          extraction_method: 'heading_anchor'
+        }))
+    )
+  };
+}
+
 module.exports = {
+  changedSectionEvidence,
   extractHeadingSections,
+  headingSectionFingerprint,
   pageTitle,
   articleBody,
   text

@@ -56,7 +56,7 @@
     },
     {
       "source_id": "android-version-features",
-      "root_url": "https://developer.android.com/about/versions",
+      "root_url": "https://developer.android.com/about/versions/17/features",
       "url_patterns": [
         "https://developer.android.com/about/versions/**"
       ],

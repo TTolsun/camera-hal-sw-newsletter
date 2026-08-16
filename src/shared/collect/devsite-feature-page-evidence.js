@@ -8,6 +8,9 @@ const FEATURE_PAGE_PATH_PATTERN = /^\/about\/versions\/(\d+)\/features$/;
 const CAMERA_SECTION_PATTERN =
   /\b(camera|camerax|ultra\s?hdr|jpeg[_\s]?r|auto[-\s]?exposure|white\s?balance|color\s(temperature|correction)|raw1[024]|night\smode|motion\sphoto)\b/i;
 const SECTION_LIMIT = 24;
+// 이 문서가 무엇에 대한 변화인지를 가리키는 이름표. feature 페이지는 Camera ITS도
+// CTS Verifier도 아니므로 그 이름을 쓰면 후보가 출처에 없는 주장을 달게 된다.
+const API_OR_COMPONENT = 'Android platform camera features';
 
 function featurePageVersion(pageUrl) {
   try {
@@ -31,7 +34,15 @@ function devsiteFeaturePageExtract(html = '', pageUrl = '') {
     sectionLimit: SECTION_LIMIT,
     sectionPatternScope: 'heading'
   });
-  return sections.length > 0 ? { release: `Android ${version} features`, sections } : null;
+  if (sections.length === 0) return null;
+  const release = `Android ${version} features`;
+  return {
+    release,
+    // 증거 이름표를 extract가 들고 다닌다(문서 유형별 adapter가 유일한 출처).
+    version_or_release: release,
+    api_or_component: API_OR_COMPONENT,
+    sections
+  };
 }
 
-module.exports = { devsiteFeaturePageExtract };
+module.exports = { API_OR_COMPONENT, devsiteFeaturePageExtract };

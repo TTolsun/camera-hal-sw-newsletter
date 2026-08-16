@@ -10,8 +10,14 @@
 //
 // 그래서 판정은 모니터에 두고, 이 모듈은 내용 추출과 섹션 단위 비교만 한다.
 // 순환 의존을 만들지 않도록 모니터·파서 어느 쪽에도 의존하지 않는다.
-const { extractHeadingSections, pageTitle, articleBody, text } = require('./document-section-parsing');
-const { normalizeOutgoingLinks } = require('./outgoing-links');
+const {
+  changedSectionEvidence,
+  extractHeadingSections,
+  headingSectionFingerprint,
+  pageTitle,
+  articleBody,
+  text
+} = require('./document-section-parsing');
 
 // 자격은 host와 경로로 정한다. 본문에 'Camera ITS'가 있는지로 판정하면 같은 소스의 랜딩
 // 페이지나 Camera ITS를 언급하는 다른 감시 문서까지 "릴리스 노트"라고 주장하게 된다.
@@ -24,6 +30,9 @@ const RELEASE_TITLE_PATTERN = /\bAndroid\s+\d+\s+Camera\s+Image\s+Test\s+Suite\b
 // devsite 공통 푸터(Build / Connect / Get help)는 이 어휘에 걸리지 않는다.
 const RELEASE_SECTION_PATTERN =
   /\b(?:test|tests|scene|scenes|rig|chart|tablet|activit(?:y|ies)|status|camera|package|version|deprecat|result)\b/i;
+// 이 문서 유형이 무엇에 대한 변화인지를 가리키는 이름표. 증거 빌더는 이 값을 그대로 쓴다 —
+// 이름표를 빌더에 박아 두면 다른 문서 유형의 변화까지 Camera ITS 변화라고 주장하게 된다.
+const API_OR_COMPONENT = 'Camera ITS / CTS Verifier';
 
 // 라이브 its-release-notes-17의 본문 섹션은 11개다. 상한이 그보다 낮으면 뒤쪽 섹션이
 // 조용히 빠진다 — "빌드 승인용 결과 일괄 제출"처럼 인증 워크플로가 통째로 바뀌는 항목이
@@ -59,66 +68,33 @@ function cameraItsReleaseNoteExtract(html = '', pageUrl = '') {
     sectionLimit: SECTION_LIMIT,
     sectionPatternScope: 'heading_and_text'
   });
-  return sections.length > 0 ? { release, sections } : null;
+  return sections.length > 0
+    ? {
+        release,
+        // 증거 이름표를 extract가 들고 다닌다(문서 유형별 adapter가 유일한 출처).
+        version_or_release: `${release} release notes`,
+        api_or_component: API_OR_COMPONENT,
+        sections
+      }
+    : null;
 }
 
 /**
- * 스냅샷에 저장할 섹션 지문(제목 + 내용 해시). 다음 실행에서 무엇이 바뀌었는지 가리는 데 쓴다.
- * 문장·링크는 빼서 스냅샷이 커지지 않게 한다.
+ * 스냅샷에 저장할 섹션 지문. 형태는 문서 유형과 무관하므로 공용 구현을 그대로 쓴다.
  */
 function cameraItsReleaseNoteFingerprint(extract) {
-  return (extract?.sections || []).map(section => ({
-    heading: section.heading,
-    hash: section.hash
-  }));
+  return headingSectionFingerprint(extract);
 }
 
 /**
- * 직전 관측 대비 새로 생겼거나 내용이 바뀐 섹션만 증거로 만든다.
- * 바뀐 섹션이 없거나 비교 대상이 없으면 null.
- *
- * previousSections가 비어 있으면(최초 관측) 비교 대상이 없으므로 null을 돌려준다 —
- * 그 상태에서 문서 전체를 "이번 변화"로 싣는 것이 정확히 과다 주장이다.
+ * 직전 관측 대비 바뀐 섹션만 증거로 만든다. 판정·형식은 공용 구현이 하고, 이름표는 위 extract가 준다.
  */
 function cameraItsReleaseNoteEvidence(extract, previousSections = []) {
-  if (!extract?.release || !Array.isArray(extract.sections)) return null;
-
-  const previousByHeading = new Map(
-    (Array.isArray(previousSections) ? previousSections : [])
-      .filter(section => section && section.heading)
-      .map(section => [section.heading, section.hash])
-  );
-  if (previousByHeading.size === 0) return null;
-
-  const changed = extract.sections
-    .filter(section => previousByHeading.get(section.heading) !== section.hash);
-  if (changed.length === 0) return null;
-
-  const release = extract.release;
-  return {
-    version_or_release: `${release} release notes`,
-    api_or_component: 'Camera ITS / CTS Verifier',
-    // 바뀐 섹션만, 섹션 경계에서만 자른다. 문서 전체를 실으면 이번 주에 바뀌지 않은 섹션까지
-    // 그 주의 변화로 발행된다.
-    behavior_change: changed
-      .map(section => (section.sentence ? `${section.heading}: ${section.sentence}` : section.heading))
-      .join(' '),
-    changed_section_headings: changed.map(section => section.heading),
-    // 링크 레코드는 정본 빌더로 만든다. 손으로 만들면 evidence_role이 빠져 계약이 둘로 갈린다.
-    section_links: normalizeOutgoingLinks(
-      changed
-        .filter(section => section.url)
-        .map(section => ({
-          url: section.url,
-          text: section.heading,
-          source_field: 'release_note_section',
-          extraction_method: 'heading_anchor'
-        }))
-    )
-  };
+  return changedSectionEvidence(extract, previousSections);
 }
 
 module.exports = {
+  API_OR_COMPONENT,
   SECTION_LIMIT,
   cameraItsReleaseNoteEvidence,
   cameraItsReleaseNoteExtract,

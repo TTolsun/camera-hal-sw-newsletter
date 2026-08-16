@@ -63,6 +63,26 @@ test('선정은 direct 버킷 → fingerprint 수 → 최신 effective_date → 
   assert.equal(selectDeepDiveTopic(queue).topic_key, 'k-two');
 });
 
+// tie-break 4단(topic_key 사전순)이 localeCompare면 정렬 규칙이 실행 환경 로케일을 탄다.
+// topic_key에는 문서 섹션 제목(한글 포함)이 들어가므로, 한국어 로케일 Windows와 Linux CI가
+// 서로 다른 주제를 고르게 된다 — 선정은 결정론이어야 한다.
+test('topic_key tie-break는 로케일이 아니라 코드 유닛 순서를 쓴다', () => {
+  const upper = entry({ topic_key: 'B-결정론' });
+  const lower = entry({ topic_key: 'a-결정론' });
+  lower.evidence = [{ ...lower.evidence[0], fingerprint: 'fp-lower' }];
+
+  // 전제: 로케일 정렬은 코드 유닛 순서와 반대 답을 준다(이 전제가 깨지면 테스트가 무의미해진다).
+  assert.ok('a-결정론'.localeCompare('B-결정론', 'en') < 0);
+  assert.ok('B-결정론' < 'a-결정론');
+
+  const { queue } = accrueDeepDiveTopics(
+    { schemaVersion: 1, topics: [] },
+    [lower, upper],
+    { detectedAt: '2026-08-17' }
+  );
+  assert.equal(selectDeepDiveTopic(queue).topic_key, 'B-결정론');
+});
+
 test('blocked 주제는 새 fingerprint 없이는 재선정되지 않는다', () => {
   let { queue } = accrueDeepDiveTopics({ schemaVersion: 1, topics: [] }, [entry()], { detectedAt: '2026-08-17' });
   queue = markTopicBlocked(queue, entry().topic_key, ['fp-1']);
@@ -94,6 +114,25 @@ test('큐 파일 손상은 조용히 빈 큐로 대체하지 않고 throw한다'
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, '{broken json', 'utf8');
   assert.throws(() => loadDeepDiveTopicQueue(root), /deep-dive-topic-queue/);
+});
+
+// 소비자(선정·발동 report)는 topic.evidence를 바로 읽는다. load가 형태를 검사하지 않으면
+// evidence 없는 토픽이 소비 지점에서 TypeError로 터져 구현 오류의 출처가 흐려진다.
+test('토픽 형태가 계약과 다르면 load가 어디가 깨졌는지 말하며 throw한다', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'deep-dive-queue-'));
+  const filePath = path.join(root, ...DEEP_DIVE_QUEUE_REL_PATH.split('/'));
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+
+  const write = (queue) => fs.writeFileSync(filePath, `${JSON.stringify(queue, null, 2)}\n`, 'utf8');
+
+  write({ schemaVersion: 1, topics: [{ topic_key: 'k', title: 't', bucket: 'direct_aosp_camera', status: 'queued' }] });
+  assert.throws(() => loadDeepDiveTopicQueue(root), /deep-dive-topic-queue.*topics\[0\].*evidence/s);
+
+  write({ schemaVersion: 1, topics: [{ evidence: [] }] });
+  assert.throws(() => loadDeepDiveTopicQueue(root), /deep-dive-topic-queue.*topics\[0\].*topic_key/s);
+
+  write({ schemaVersion: 1, topics: [{ topic_key: 'k', evidence: [null] }] });
+  assert.throws(() => loadDeepDiveTopicQueue(root), /deep-dive-topic-queue.*topics\[0\]/s);
 });
 
 test('load와 save는 왕복 보존이고 파일이 없으면 빈 큐다', () => {

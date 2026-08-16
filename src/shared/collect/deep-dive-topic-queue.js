@@ -14,6 +14,17 @@ function queueFilePath(root) {
   return path.join(root, ...DEEP_DIVE_QUEUE_REL_PATH.split('/'));
 }
 
+// 소비자(선정·적립·발동 report)는 모든 topic이 topic_key와 evidence 배열을 가진다고 전제하고
+// 바로 읽는다. 그 전제를 load에서 검사하지 않으면 손상된 큐가 소비 지점에서 TypeError로 터져
+// "구현 오류"가 엉뚱한 곳의 알 수 없는 오류로 보인다. 여기서 무엇이 어떻게 깨졌는지 말한다.
+function topicShapeProblem(topic) {
+  if (!topic || typeof topic !== 'object' || Array.isArray(topic)) return '토픽이 객체가 아닙니다';
+  if (typeof topic.topic_key !== 'string' || !topic.topic_key.trim()) return 'topic_key가 비어 있습니다';
+  if (!Array.isArray(topic.evidence)) return 'evidence 배열이 없습니다';
+  if (topic.evidence.some(item => !item || typeof item !== 'object')) return 'evidence 항목이 객체가 아닙니다';
+  return '';
+}
+
 function loadDeepDiveTopicQueue(root) {
   const filePath = queueFilePath(root);
   if (!fs.existsSync(filePath)) return { schemaVersion: 1, topics: [] };
@@ -26,6 +37,12 @@ function loadDeepDiveTopicQueue(root) {
   if (!parsed || !Array.isArray(parsed.topics)) {
     throw new Error(`deep-dive-topic-queue 스키마가 아닙니다(${DEEP_DIVE_QUEUE_REL_PATH}): topics 배열이 없습니다.`);
   }
+  parsed.topics.forEach((topic, index) => {
+    const problem = topicShapeProblem(topic);
+    if (problem) {
+      throw new Error(`deep-dive-topic-queue 스키마가 아닙니다(${DEEP_DIVE_QUEUE_REL_PATH}): topics[${index}] ${problem}.`);
+    }
+  });
   return parsed;
 }
 
@@ -77,14 +94,22 @@ function latestEffectiveDate(topic) {
   return (topic.evidence || []).map(item => item.effective_date || '').sort().at(-1) || '';
 }
 
+// localeCompare는 실행 환경의 로케일에 따라 순서가 달라진다. topic_key에는 문서 섹션 제목
+// (한글 포함)이 들어가므로, 한국어 로케일 Windows와 Linux CI의 선정 결과가 갈릴 수 있다.
+// 선정은 결정론이어야 하므로 코드 유닛 비교로 고정한다.
+function compareText(a, b) {
+  if (a === b) return 0;
+  return a < b ? -1 : 1;
+}
+
 function selectDeepDiveTopic(queue) {
   const queued = (queue.topics || []).filter(topic => topic.status === 'queued');
   if (queued.length === 0) return null;
   return [...queued].sort((a, b) =>
     ((a.bucket === 'direct_aosp_camera' ? 0 : 1) - (b.bucket === 'direct_aosp_camera' ? 0 : 1)) ||
     (distinctFingerprintCount(b) - distinctFingerprintCount(a)) ||
-    latestEffectiveDate(b).localeCompare(latestEffectiveDate(a)) ||
-    a.topic_key.localeCompare(b.topic_key)
+    compareText(latestEffectiveDate(b), latestEffectiveDate(a)) ||
+    compareText(a.topic_key, b.topic_key)
   )[0];
 }
 

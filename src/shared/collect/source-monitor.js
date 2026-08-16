@@ -26,9 +26,7 @@ const {
 } = require('../validate/source-monitor-registry-validator');
 const { CANDIDATE_SCHEMA_VERSION } = require('../common/candidate-artifacts');
 const {
-  cameraItsReleaseNoteEvidence
-} = require('./camera-its-release-note-evidence');
-const {
+  documentSectionEvidence,
   documentSectionExtract,
   documentSectionFingerprint
 } = require('./document-section-extractors');
@@ -603,7 +601,7 @@ function buildEvent({ source, previous, current, eventType, dateSource, effectiv
     // 증거는 본문이 실제로 바뀐 이벤트에만 싣는다. anchor_added/page_added는 candidate_allowed
     // 이지만 본문 변경이 아니므로, 문서 내용을 그 주의 변화로 보고하면 과다 주장이 된다.
     release_note_evidence: contentChanged
-      ? cameraItsReleaseNoteEvidence(current?.release_note_extract, previous?.release_note_sections)
+      ? documentSectionEvidence(current?.release_note_extract, previous?.release_note_sections)
       : null,
     release_row_date: releaseRow?.date || current?.release_row_date || '',
     release_row_version: releaseRow?.version || current?.release_row_version || '',
@@ -1161,6 +1159,7 @@ module.exports = {
   SOURCE_EVENTS_ROOT,
   SOURCE_MONITOR_REGISTRY_REL_PATH,
   SOURCE_SNAPSHOT_ROOT,
+  bucketForSource,
   buildNextSnapshotWrites,
   buildSourceEventCandidates,
   candidateFromEvent,
