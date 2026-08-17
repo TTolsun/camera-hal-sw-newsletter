@@ -1,0 +1,383 @@
+{
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "topic_key": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "title": "1.4.0-alpha07",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "excerpt": "1.4.0-alpha07",
+          "fingerprint": "126b8a669e4375b970a508bc",
+          "effective_date": "August 12, 2026",
+          "date_source": "candidate_published_at",
+          "date_confidence": 0,
+          "origin": "demoted_candidate",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://developer.android.com/about/versions/17/features",
+      "title": "Features and APIs | Android Developers",
+      "bucket": "android_platform_camera_adjacent",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://developer.android.com/about/versions/17/features",
+          "excerpt": "New page under monitored source.",
+          "fingerprint": "evidence-479bfe80d01cd17a6eea330469485698",
+          "effective_date": "2026-08-14",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "monitor_event",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://developer.android.com/about/versions/16/features",
+      "title": "Features and APIs | Android Developers",
+      "bucket": "android_platform_camera_adjacent",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://developer.android.com/about/versions/16/features",
+          "excerpt": "New page under monitored source.",
+          "fingerprint": "evidence-3e21051a775864fb3f79c72fcbe64197",
+          "effective_date": "2026-08-14",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "monitor_event",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "title": "CameraX | Jetpack | Android Developers",
+      "bucket": "android_platform_camera_adjacent",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "excerpt": "Release row/version added.",
+          "fingerprint": "evidence-341c97370366bc210723f4c4e52a717d",
+          "effective_date": "2026-08-12",
+          "date_source": "release_row_date",
+          "date_confidence": 95,
+          "origin": "monitor_event",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#package-versions",
+      "title": "Android 17 Camera Image Test Suite — Python and package versions",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#package-versions",
+          "excerpt": "For Android 17 and higher, we strongly recommend using package management software to bundle the correct versions of packages to create a virtual environment for Android release development.",
+          "fingerprint": "eb341c13d07f9fd6",
+          "effective_date": "",
+          "date_source": "missing",
+          "date_confidence": 0,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#new-scenes",
+      "title": "Android 17 Camera Image Test Suite — New or updated scenes",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#new-scenes",
+          "excerpt": "Android 17 introduces the following scenes: Scene Description gen2_chart New scene that uses the test_chart_gen2 paper chart instead of tablet scenes to improve test consistency and reliability .",
+          "fingerprint": "2f11b5e07a6cda27",
+          "effective_date": "",
+          "date_source": "missing",
+          "date_confidence": 0,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#new-tests",
+      "title": "Android 17 Camera Image Test Suite — New tests",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#new-tests",
+          "excerpt": "Android 17 introduces the following tests: Scene Test name Description gen2_chart test_tonemap_sequence Verifies the android.tonemap.mode parameter is applied correctly for uniform and non-uniform distribution.",
+          "fingerprint": "1416e54cb2e51573",
+          "effective_date": "",
+          "date_source": "missing",
+          "date_confidence": 0,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#refactored-tests",
+      "title": "Android 17 Camera Image Test Suite — Refactored tests",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#refactored-tests",
+          "excerpt": "In Android 17, the following tests are refactored to increase test coverage and group tests more logically: Scene Test name Description 1_2 tests_param_tonemap_mode The scene1_2 version of the tests_param_tonemap_mode test is deprecated and is used only on devices running Android 16 or lower.",
+          "fingerprint": "8e3eccd0873a8c20",
+          "effective_date": "",
+          "date_source": "missing",
+          "date_confidence": 0,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#separated-test-activities",
+      "title": "Android 17 Camera Image Test Suite — Separated test activities",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#separated-test-activities",
+          "excerpt": "In Android 17, for parallel testing on separate devices, the camera ITS tests are separated into two CTS Verifier activities, Camera ITS Test and Camera ITS Sensor Fusion Rig Test .",
+          "fingerprint": "021b124196390d1a",
+          "effective_date": "",
+          "date_source": "missing",
+          "date_confidence": 0,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#deprecated-tests",
+      "title": "Android 17 Camera Image Test Suite — Deprecated tests",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#deprecated-tests",
+          "excerpt": "In Android 17, the following tests are deprecated due to test function being covered by other tests: Scene Test name Description sensor_fusion test_video_stabilization This test is deprecated.",
+          "fingerprint": "698f25a29d59a2e8",
+          "effective_date": "",
+          "date_source": "missing",
+          "date_confidence": 0,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#gen2-rig-updates",
+      "title": "Android 17 Camera Image Test Suite — Gen2 rig updates",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#gen2-rig-updates",
+          "excerpt": "Android 17 the following tests have been migrated to the Gen2 rig : Scene Test name Description 7 test_multi_camera_switch Migrated the test to gen2 rig setup to use the Gen2 chart for AE and AWB checks.",
+          "fingerprint": "8c70a6de80098ec1",
+          "effective_date": "",
+          "date_source": "missing",
+          "date_confidence": 0,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#status-pass-star",
+      "title": "Android 17 Camera Image Test Suite — New test status: PASS*",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#status-pass-star",
+          "excerpt": "17 introduces the test status PASS* to detect marginally passing tests.",
+          "fingerprint": "1443f77f39249f36",
+          "effective_date": "",
+          "date_source": "missing",
+          "date_confidence": 0,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#chart-scaling-improvements",
+      "title": "Android 17 Camera Image Test Suite — Chart scaling improvements",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#chart-scaling-improvements",
+          "excerpt": "Android 17 adds the chart_scaling parameter in config.yml for TEST_BED_TABLET_SCENES to handle the chart scaling issues with wider field of view (FoV) tele camera devices.",
+          "fingerprint": "58f82ff9687cf6b7",
+          "effective_date": "",
+          "date_source": "missing",
+          "date_confidence": 0,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#new-tablet-on-allowlist",
+      "title": "Android 17 Camera Image Test Suite — New tablet for wide-gamut testing support",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#new-tablet-on-allowlist",
+          "excerpt": "For Android 17 and higher, the Samsung Galaxy Tab S10 FE (both Wi-Fi and 5G models) is on the tablet allowlist .",
+          "fingerprint": "311eb12952b7abe9",
+          "effective_date": "",
+          "date_source": "missing",
+          "date_confidence": 0,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#aggregated-submission",
+      "title": "Android 17 Camera Image Test Suite — Aggregated result submission for build approvals",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#aggregated-submission",
+          "excerpt": "Android 17 introduces a process for submitting aggregated Camera ITS test results for build approval using the updated CTS Verifier APK.",
+          "fingerprint": "165f5f627e406759",
+          "effective_date": "",
+          "date_source": "missing",
+          "date_confidence": 0,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://developer.android.com/about/versions/16/features#camera",
+      "title": "Android 16 features — Camera",
+      "bucket": "android_platform_camera_adjacent",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://developer.android.com/about/versions/16/features#camera",
+          "excerpt": "Android 16 enhances support for professional camera users, allowing for hybrid auto exposure along with precise color temperature and tint adjustments.",
+          "fingerprint": "329e3c82e3d5364e",
+          "effective_date": "2026-08-14",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://developer.android.com/about/versions/16/features#hybrid-auto-exposure",
+      "title": "Android 16 features — Hybrid auto-exposure",
+      "bucket": "android_platform_camera_adjacent",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://developer.android.com/about/versions/16/features#hybrid-auto-exposure",
+          "excerpt": "Android 16 adds new hybrid auto-exposure modes to Camera2 , allowing you to manually control specific aspects of exposure while letting the auto-exposure (AE) algorithm handle the rest.",
+          "fingerprint": "0a5c4e3e887f59a5",
+          "effective_date": "2026-08-14",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://developer.android.com/about/versions/16/features#color-temperature-tint",
+      "title": "Android 16 features — Precise color temperature and tint adjustments",
+      "bucket": "android_platform_camera_adjacent",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://developer.android.com/about/versions/16/features#color-temperature-tint",
+          "excerpt": "Android 16 adds camera support for fine color temperature and tint adjustments to better support professional video recording applications.",
+          "fingerprint": "18938015eb4e45ea",
+          "effective_date": "2026-08-14",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://developer.android.com/about/versions/16/features#night-mode-scene-detection",
+      "title": "Android 16 features — Camera night mode scene detection",
+      "bucket": "android_platform_camera_adjacent",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://developer.android.com/about/versions/16/features#night-mode-scene-detection",
+          "excerpt": "To help your app know when to switch to and from a night mode camera session, Android 16 adds EXTENSION_NIGHT_MODE_INDICATOR .",
+          "fingerprint": "cbc178405bffb8ae",
+          "effective_date": "2026-08-14",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://developer.android.com/about/versions/16/features#motion-photos",
+      "title": "Android 16 features — Motion photo capture intent actions",
+      "bucket": "android_platform_camera_adjacent",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://developer.android.com/about/versions/16/features#motion-photos",
+          "excerpt": "Android 16 adds standard Intent actions — ACTION_MOTION_PHOTO_CAPTURE , and ACTION_MOTION_PHOTO_CAPTURE_SECURE — which request that the camera application capture a motion photo and return it.",
+          "fingerprint": "07d5f69bdc860a65",
+          "effective_date": "2026-08-14",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://developer.android.com/about/versions/16/features#ultra-hdr",
+      "title": "Android 16 features — UltraHDR image enhancements",
+      "bucket": "android_platform_camera_adjacent",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://developer.android.com/about/versions/16/features#ultra-hdr",
+          "excerpt": "An illustration of Standard Dynamic Range (SDR) versus High Dynamic Range (HDR) image quality.",
+          "fingerprint": "313ead564d58262c",
+          "effective_date": "2026-08-14",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "document_section",
+          "detected_at": "2026-08-17"
+        }
+      ]
+    }
+  ]
+}

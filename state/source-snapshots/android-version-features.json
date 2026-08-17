@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "source_id": "android-version-features",
+  "updated_at": "2026-08-17T00:00:00.000Z",
+  "pages": [
+    {
+      "source_identity_key": "android-version-features:053d08e47e296aef3b799286d58855ac",
+      "url": "https://developer.android.com/about/versions/17/features",
+      "canonical_url": "https://developer.android.com/about/versions/17/features",
+      "title": "Features and APIs | Android Developers",
+      "visible_date": "",
+      "visible_last_updated": "2026-08-14",
+      "structured_date_published": "",
+      "structured_date_modified": "",
+      "sitemap_lastmod": "",
+      "http_last_modified": "2026-08-14",
+      "content_hash": "51adf649857a7f50cf823aa585dea2fe1bfa27e164f798a35a6f12214771ca75",
+      "normalized_content_hash": "fbbe02627f5b05b9b60dcc22e705de6bb98ffec62a5241c9128a1ac5b2d81f0e",
+      "release_note_sections": [],
+      "anchors": [],
+      "release_row_date": "",
+      "release_row_version": "",
+      "release_row_anchor": "",
+      "release_row_hash": "",
+      "release_rows": [],
+      "first_seen_at": "2026-08-17T00:00:00.000Z",
+      "last_seen_at": "2026-08-17T00:00:00.000Z",
+      "seen_count": 1,
+      "status": 200
+    },
+    {
+      "source_identity_key": "android-version-features:825f23e251aa359eb4ed1d283f160c0b",
+      "url": "https://developer.android.com/about/versions/16/features",
+      "canonical_url": "https://developer.android.com/about/versions/16/features",
+      "title": "Features and APIs | Android Developers",
+      "visible_date": "",
+      "visible_last_updated": "2026-08-14",
+      "structured_date_published": "",
+      "structured_date_modified": "",
+      "sitemap_lastmod": "",
+      "http_last_modified": "2026-08-14",
+      "content_hash": "baebb7cfb39bd2a1a5cc3b7100c32bfd4198025bfd259eeeee9464d7fc755333",
+      "normalized_content_hash": "3687fcf33486d74a4bcb4b95a769048fb3d6d71b7ec90a0dcf4748b83dc7ca98",
+      "release_note_sections": [
+        {
+          "heading": "Camera",
+          "hash": "329e3c82e3d5364e"
+        },
+        {
+          "heading": "Hybrid auto-exposure",
+          "hash": "0a5c4e3e887f59a5"
+        },
+        {
+          "heading": "Precise color temperature and tint adjustments",
+          "hash": "18938015eb4e45ea"
+        },
+        {
+          "heading": "Camera night mode scene detection",
+          "hash": "cbc178405bffb8ae"
+        },
+        {
+          "heading": "Motion photo capture intent actions",
+          "hash": "07d5f69bdc860a65"
+        },
+        {
+          "heading": "UltraHDR image enhancements",
+          "hash": "313ead564d58262c"
+        }
+      ],
+      "anchors": [
+        "https://developer.android.com/about/versions/16/features#camera"
+      ],
+      "release_row_date": "",
+      "release_row_version": "",
+      "release_row_anchor": "",
+      "release_row_hash": "",
+      "release_rows": [],
+      "first_seen_at": "2026-08-17T00:00:00.000Z",
+      "last_seen_at": "2026-08-17T00:00:00.000Z",
+      "seen_count": 1,
+      "status": 200
+    }
+  ],
+  "processed_source_event_ids": [
+    "source-event-17f96e563d213d5f06b227abb060a156"
+  ],
+  "processed_evidence_ids": [
+    "evidence-479bfe80d01cd17a6eea330469485698"
+  ]
+}

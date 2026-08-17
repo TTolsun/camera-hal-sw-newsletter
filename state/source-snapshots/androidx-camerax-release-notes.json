@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "androidx-camerax-release-notes",
-  "updated_at": "2026-08-10T00:00:00.000Z",
+  "updated_at": "2026-08-17T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "androidx-camerax-release-notes:49d58944bd3ca26fc6929250597a6e3a",
@@ -9,13 +9,14 @@
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera",
       "title": "CameraX | Jetpack | Android Developers",
       "visible_date": "2024-06-12",
-      "visible_last_updated": "2026-07-01",
+      "visible_last_updated": "2026-08-12",
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-07-01",
-      "content_hash": "9cbc8b33090f725bd6d7c5dd7a149f4534d9d7a865531fc9ca07b14797549869",
-      "normalized_content_hash": "b0bc42c4832c6ff7ee1f536246f97c722de46c138a206ee6f9f8485c78c19ae4",
+      "http_last_modified": "2026-08-11",
+      "content_hash": "529e39903d38ee94bcfbd44ae46191faf4675f1c59f2540399ee8493781ef013",
+      "normalized_content_hash": "81c8a6baa7c75d9928e5af2f4a4c884cf827bde3dc7eedb6d53ec6f5551c5f94",
+      "release_note_sections": [],
       "anchors": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha01",
@@ -119,6 +120,7 @@
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
         "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha07",
         "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha08",
         "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha09",
@@ -234,703 +236,31 @@
         "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha01",
         "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha02"
       ],
-      "release_row_date": "2021-05-05",
-      "release_row_version": "1.0.0",
-      "release_row_anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0",
-      "release_row_hash": "22640ece9b6cb5f3f610ad969756ae9e",
+      "release_row_date": "2026-08-12",
+      "release_row_version": "1.7.0-alpha03",
+      "release_row_anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "release_row_hash": "1c6bda8919b5bffe497a097c966c66f2",
       "release_rows": [
         {
-          "version": "1.0.0",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0",
-          "date": "2021-05-05",
-          "hash": "22640ece9b6cb5f3f610ad969756ae9e",
-          "title": "Version 1.0.0"
+          "version": "1.7.0-alpha03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "date": "2026-08-12",
+          "hash": "1c6bda8919b5bffe497a097c966c66f2",
+          "title": "Version 1.7.0-alpha03"
         },
         {
           "version": "1.0.0-alpha01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha01",
-          "date": "2019-05-07",
-          "hash": "f2a85f368b2fee3f5f95b6d31ab22379",
-          "title": "Camera-Camera2 and Camera-Core 1.0.0-alpha01"
-        },
-        {
-          "version": "1.0.0-alpha02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha02",
-          "date": "2019-06-05",
-          "hash": "69f83613d15c11c4b8b3b1aa86047499",
-          "title": "Camera-Camera2 and Camera-Core Version 1.0.0-alpha02"
-        },
-        {
-          "version": "1.0.0-alpha03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha03",
-          "date": "2019-07-02",
-          "hash": "3274a78714f88c053c1a30ade21973d1",
-          "title": "Camera-Camera2 and Camera-Core Version 1.0.0-alpha03"
-        },
-        {
-          "version": "1.0.0-alpha04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha04",
-          "date": "2019-08-07",
-          "hash": "38d89ffb93cd4498b28cddc27d31ea80",
-          "title": "Camera-Camera2 and Camera-Core Version 1.0.0-alpha04"
-        },
-        {
-          "version": "1.0.0-alpha20",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha20",
-          "date": "2020-12-16",
-          "hash": "94ff7a33118c9dbba1ef0a666fd317f9",
-          "title": "Camera Extensions & View Version 1.0.0-alpha20"
-        },
-        {
-          "version": "1.0.0-alpha24",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha24",
-          "date": "2021-04-21",
-          "hash": "ad8780939deb71ef898f93b77feee570",
-          "title": "Version 1.0.0-alpha24"
-        },
-        {
-          "version": "1.0.0-alpha25",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha25",
-          "date": "2021-06-02",
-          "hash": "940734d4271539a82ccacf895f6eca4a",
-          "title": "Version 1.0.0-alpha25"
-        },
-        {
-          "version": "1.0.0-alpha26",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha26",
-          "date": "2021-06-30",
-          "hash": "e629168ea0f541d3ac4ecc699fdfc079",
-          "title": "Version 1.0.0-alpha26"
-        },
-        {
-          "version": "1.0.0-alpha27",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha27",
-          "date": "2021-07-21",
-          "hash": "31005507ab13545e0e1ac08520b73b0e",
-          "title": "Version 1.0.0-alpha27"
-        },
-        {
-          "version": "1.0.0-alpha29",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha29",
-          "date": "2021-09-29",
-          "hash": "4393e2bc460b327a30d93fd000fdf0bb",
-          "title": "Version 1.0.0-alpha29"
-        },
-        {
-          "version": "1.0.0-alpha30",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha30",
-          "date": "2021-10-13",
-          "hash": "ce16f755f417d2291d269bbd6d68c794",
-          "title": "Version 1.0.0-alpha30"
-        },
-        {
-          "version": "1.0.0-alpha31",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha31",
-          "date": "2021-11-17",
-          "hash": "4b24e8b5dca3e5a6261ebe5d6eccfe35",
-          "title": "Version 1.0.0-alpha31"
-        },
-        {
-          "version": "1.0.0-alpha32",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha32",
-          "date": "2021-12-15",
-          "hash": "93e3489278f3ef89799a81a51444e3a1",
-          "title": "Version 1.0.0-alpha32"
-        },
-        {
-          "version": "1.0.0-rc01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-rc01",
-          "date": "2020-12-16",
-          "hash": "61b7fb18f77261cd107140f28963ba3c",
-          "title": "Version 1.0.0-rc01"
-        },
-        {
-          "version": "1.0.0-rc02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-rc02",
-          "date": "2021-01-27",
-          "hash": "f5418d1de2ad8186119b1cae5ec7a17e",
-          "title": "Version 1.0.0-rc02"
-        },
-        {
-          "version": "1.0.0-rc03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-rc03",
-          "date": "2021-02-24",
-          "hash": "1bb6c17105d9f64dcebece2cb8f30cd0",
-          "title": "Version 1.0.0-rc03"
-        },
-        {
-          "version": "1.0.0-rc04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-rc04",
-          "date": "2021-03-24",
-          "hash": "3863e1a5a81e88c498de7538df86fb96",
-          "title": "Version 1.0.0-rc04"
-        },
-        {
-          "version": "1.0.0-rc05",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-rc05",
-          "date": "2021-04-21",
-          "hash": "52808ff9e770381c761f18549ded10a7",
-          "title": "Version 1.0.0-rc05"
-        },
-        {
-          "version": "1.0.1",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.1",
-          "date": "2021-07-21",
-          "hash": "ab1e40df3bc3d0f75d8cd64d749605cd",
-          "title": "Version 1.0.1"
-        },
-        {
-          "version": "1.0.2",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.2",
-          "date": "2021-09-29",
-          "hash": "edcb2547a494a7cbb5ce3210508ac536",
-          "title": "Version 1.0.2"
-        },
-        {
-          "version": "1.1.0",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0",
-          "date": "2022-06-29",
-          "hash": "f78d4fbb1b6db45780f6bec53ea5a23c",
-          "title": "Version 1.1.0"
-        },
-        {
-          "version": "1.1.0-alpha01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha01",
-          "date": "2021-01-27",
-          "hash": "bafccd8a2ddf79ab2fcca390211311ad",
-          "title": "Version 1.1.0-alpha01"
-        },
-        {
-          "version": "1.1.0-alpha02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha02",
-          "date": "2021-02-24",
-          "hash": "23fae1f9bbf69848b3159a350eeee117",
-          "title": "Version 1.1.0-alpha02"
-        },
-        {
-          "version": "1.1.0-alpha03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha03",
-          "date": "2021-03-24",
-          "hash": "f486dfe9ab0254f7b7adeed79a832c11",
-          "title": "Version 1.1.0-alpha03"
-        },
-        {
-          "version": "1.1.0-alpha04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha04",
-          "date": "2021-04-21",
-          "hash": "1fe770b96a455f452fe24b478b2e8f67",
-          "title": "Version 1.1.0-alpha04"
-        },
-        {
-          "version": "1.1.0-alpha05",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha05",
-          "date": "2021-06-02",
-          "hash": "1c749e1513a1da5bfb4d509a4ab29653",
-          "title": "Version 1.1.0-alpha05"
-        },
-        {
-          "version": "1.1.0-alpha06",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha06",
-          "date": "2021-06-30",
-          "hash": "66a2a4abd5cf1a57ec2f847856c9467b",
-          "title": "Version 1.1.0-alpha06"
-        },
-        {
-          "version": "1.1.0-alpha07",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha07",
-          "date": "2021-07-21",
-          "hash": "e8a706d7a862664da6f22d4d7e5f32db",
-          "title": "Version 1.1.0-alpha07"
-        },
-        {
-          "version": "1.1.0-alpha08",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha08",
-          "date": "2021-08-18",
-          "hash": "03dd94eb1a08d06e58a750c10ae4d5f1",
-          "title": "Version 1.1.0-alpha08"
-        },
-        {
-          "version": "1.1.0-alpha09",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha09",
-          "date": "2021-09-29",
-          "hash": "7ecca01d99470492eb5cbd983029db16",
-          "title": "Version 1.1.0-alpha09"
-        },
-        {
-          "version": "1.1.0-alpha10",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha10",
-          "date": "2021-10-13",
-          "hash": "2d5946e3537878717066ae1145be19ed",
-          "title": "Version 1.1.0-alpha10"
-        },
-        {
-          "version": "1.1.0-alpha11",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha11",
-          "date": "2021-11-17",
-          "hash": "bb279901217cb243ffcd1b660a58e9da",
-          "title": "Version 1.1.0-alpha11"
-        },
-        {
-          "version": "1.1.0-alpha12",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha12",
-          "date": "2021-12-15",
-          "hash": "225830783f7fba117e50959dc8423e32",
-          "title": "Version 1.1.0-alpha12"
-        },
-        {
-          "version": "1.1.0-beta01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-beta01",
-          "date": "2022-01-26",
-          "hash": "a1e010532444b9af3984d8cda9a925fe",
-          "title": "Version 1.1.0-beta01"
-        },
-        {
-          "version": "1.1.0-beta02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-beta02",
-          "date": "2022-02-23",
-          "hash": "89e7f47aa605eaf94865f5b09d313d2c",
-          "title": "Version 1.1.0-beta02"
-        },
-        {
-          "version": "1.1.0-beta03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-beta03",
-          "date": "2022-04-06",
-          "hash": "30274e967727c8624c0b6838ef0e6b25",
-          "title": "Version 1.1.0-beta03"
-        },
-        {
-          "version": "1.1.0-rc01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-rc01",
-          "date": "2022-05-11",
-          "hash": "8476227ebe1456cc91d1331bfa7a19ad",
-          "title": "Version 1.1.0-rc01"
-        },
-        {
-          "version": "1.1.0-rc02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-rc02",
-          "date": "2022-06-01",
-          "hash": "adaf496685cdb364cd004d19e4ac2a0a",
-          "title": "Version 1.1.0-rc02"
-        },
-        {
-          "version": "1.2.0",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0",
-          "date": "2022-12-07",
-          "hash": "73249fd300b4172e2b96f9b19ac413b8",
-          "title": "Version 1.2.0"
-        },
-        {
-          "version": "1.2.0-alpha01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-alpha01",
-          "date": "2022-05-18",
-          "hash": "c1dc6b0c0d8367a360f8b85ac2b18a0a",
-          "title": "Version 1.2.0-alpha01"
-        },
-        {
-          "version": "1.2.0-alpha02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-alpha02",
-          "date": "2022-06-01",
-          "hash": "b2299540f9c325d2a89b1404a29a2314",
-          "title": "Version 1.2.0-alpha02"
-        },
-        {
-          "version": "1.2.0-alpha03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-alpha03",
-          "date": "2022-06-29",
-          "hash": "a896153ae71c1caaeb4e6191845d9152",
-          "title": "Version 1.2.0-alpha03"
-        },
-        {
-          "version": "1.2.0-alpha04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-alpha04",
-          "date": "2022-07-27",
-          "hash": "4efd6ca79af1eb5e2f7776907ddcdfcd",
-          "title": "Version 1.2.0-alpha04"
-        },
-        {
-          "version": "1.2.0-beta01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-beta01",
-          "date": "2022-08-24",
-          "hash": "e1db97ecb53233a9bc8557f8d537971f",
-          "title": "Version 1.2.0-beta01"
-        },
-        {
-          "version": "1.2.0-beta02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-beta02",
-          "date": "2022-09-21",
-          "hash": "26993504e820f6462901567ad2e7ddb8",
-          "title": "Version 1.2.0-beta02"
-        },
-        {
-          "version": "1.2.0-rc01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-rc01",
-          "date": "2022-10-24",
-          "hash": "acc74d54c6a97d81ae50109e9301d098",
-          "title": "Version 1.2.0-rc01"
-        },
-        {
-          "version": "1.2.1",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.1",
-          "date": "2023-01-25",
-          "hash": "6a66c94b64fd53374ec062f0fa6ee8d8",
-          "title": "Version 1.2.1"
-        },
-        {
-          "version": "1.2.2",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.2",
-          "date": "2023-03-22",
-          "hash": "95a6e6da65e8e0b8597c3e64647b8cd1",
-          "title": "Version 1.2.2"
-        },
-        {
-          "version": "1.2.3",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.3",
-          "date": "2023-05-24",
-          "hash": "8e4bd52d5752c12be8577e238d4b19c9",
-          "title": "Version 1.2.3"
-        },
-        {
-          "version": "1.3.0",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0",
-          "date": "2023-10-18",
-          "hash": "63ccdc3f5ac2d08e93fc3c0073fe97db",
-          "title": "Version 1.3.0"
-        },
-        {
-          "version": "1.3.0-alpha01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha01",
-          "date": "2022-11-09",
-          "hash": "f0a6911e0fa770106393cdcf2843592a",
-          "title": "Version 1.3.0-alpha01"
-        },
-        {
-          "version": "1.3.0-alpha02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha02",
-          "date": "2022-12-07",
-          "hash": "f969fb64d7cb6027217be1996d00146a",
-          "title": "Version 1.3.0-alpha02"
-        },
-        {
-          "version": "1.3.0-alpha03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha03",
-          "date": "2023-01-25",
-          "hash": "68bbfa444e32dd29f474f29c1fae80ac",
-          "title": "Version 1.3.0-alpha03"
-        },
-        {
-          "version": "1.3.0-alpha04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha04",
-          "date": "2023-02-22",
-          "hash": "b6e7459d251078d79e1ba451bc8980f2",
-          "title": "Version 1.3.0-alpha04"
-        },
-        {
-          "version": "1.3.0-alpha05",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha05",
-          "date": "2023-03-22",
-          "hash": "ac64706504d8fd0e58f7837f9fc2190a",
-          "title": "Version 1.3.0-alpha05"
-        },
-        {
-          "version": "1.3.0-alpha06",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha06",
-          "date": "2023-04-19",
-          "hash": "5a54ef34805ca812af07837f8fabbb11",
-          "title": "Version 1.3.0-alpha06"
-        },
-        {
-          "version": "1.3.0-alpha07",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha07",
-          "date": "2023-05-24",
-          "hash": "7b94e2253af56417ae7a8dc422138021",
-          "title": "Version 1.3.0-alpha07"
-        },
-        {
-          "version": "1.3.0-beta01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta01",
-          "date": "2023-06-21",
-          "hash": "019ab0338c117dcd4518bc8786b80f4c",
-          "title": "Version 1.3.0-beta01"
-        },
-        {
-          "version": "1.3.0-beta02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "date": "2023-07-26",
-          "hash": "47b955e16991b702843cd491a24e61dd",
-          "title": "Version 1.3.0-beta02"
-        },
-        {
-          "version": "1.3.0-rc01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-rc01",
-          "date": "2023-08-23",
-          "hash": "bb1e26379058512b8c1ebca530483bdd",
-          "title": "Version 1.3.0-rc01"
-        },
-        {
-          "version": "1.3.0-rc02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-rc02",
-          "date": "2023-09-20",
-          "hash": "7f4e20d68b69762595887671f3afafef",
-          "title": "Version 1.3.0-rc02"
-        },
-        {
-          "version": "1.3.1",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.1",
-          "date": "2023-12-13",
-          "hash": "5b3b1fe6c23e686313cfb09de5e77de3",
-          "title": "Version 1.3.1"
-        },
-        {
-          "version": "1.3.2",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.2",
-          "date": "2024-03-06",
-          "hash": "2d3b05af0f42373811db1da13a2f7cc7",
-          "title": "Version 1.3.2"
-        },
-        {
-          "version": "1.3.3",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.3",
-          "date": "2024-04-17",
-          "hash": "b9b4bf10d7befa158cce59c1afaf0e11",
-          "title": "Version 1.3.3"
-        },
-        {
-          "version": "1.3.4",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.4",
-          "date": "2024-06-12",
-          "hash": "8d8bec770707288566430247b8a8a934",
-          "title": "Version 1.3.4"
-        },
-        {
-          "version": "1.4.0",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0",
-          "date": "2024-10-30",
-          "hash": "d047f9534c4e8062c714f4bc4aee625b",
-          "title": "Version 1.4.0"
-        },
-        {
-          "version": "1.4.0-alpha01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha01",
-          "date": "2023-09-20",
-          "hash": "24ddc6d1fe7043be9db9ee75f1697bac",
-          "title": "Version 1.4.0-alpha01"
-        },
-        {
-          "version": "1.4.0-alpha02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha02",
-          "date": "2023-10-18",
-          "hash": "6dd34cc5471bf5be31a8b76db1684a85",
-          "title": "Version 1.4.0-alpha02"
-        },
-        {
-          "version": "1.4.0-alpha03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha03",
-          "date": "2023-12-13",
-          "hash": "7a42bbb2be02499b139bf76b8e40bdae",
-          "title": "Version 1.4.0-alpha03"
-        },
-        {
-          "version": "1.4.0-alpha04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha04",
-          "date": "2024-01-24",
-          "hash": "32e20f00b9b2720b43b1fec291ddbb67",
-          "title": "Version 1.4.0-alpha04"
-        },
-        {
-          "version": "1.4.0-alpha05",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha05",
-          "date": "2024-04-17",
-          "hash": "1961cc7eccdb2b9639360d8828946538",
-          "title": "Version 1.4.0-alpha05"
-        },
-        {
-          "version": "1.4.0-beta01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-beta01",
-          "date": "2024-05-14",
-          "hash": "56ac6efab31eba7d2b38865e5ebb88cd",
-          "title": "Version 1.4.0-beta01"
-        },
-        {
-          "version": "1.4.0-beta02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-beta02",
-          "date": "2024-06-12",
-          "hash": "f639035d5ed31bcf51708381384077ea",
-          "title": "Version 1.4.0-beta02"
-        },
-        {
-          "version": "1.4.0-rc01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-rc01",
-          "date": "2024-08-07",
-          "hash": "380f2f19347040d1b2380ee260ed4f33",
-          "title": "Version 1.4.0-rc01"
-        },
-        {
-          "version": "1.4.0-rc02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-rc02",
-          "date": "2024-09-18",
-          "hash": "f24413d2b6569065cfad1e587560d985",
-          "title": "Version 1.4.0-rc02"
-        },
-        {
-          "version": "1.4.0-rc03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-rc03",
-          "date": "2024-10-02",
-          "hash": "7fa57d596070e9bfcf050e893d2ed38b",
-          "title": "Version 1.4.0-rc03"
-        },
-        {
-          "version": "1.4.0-rc04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-rc04",
-          "date": "2024-10-16",
-          "hash": "3663fad275b2f39f0a057bf9c3a76ed2",
-          "title": "Version 1.4.0-rc04"
-        },
-        {
-          "version": "1.4.1",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.1",
-          "date": "2024-12-11",
-          "hash": "435d8636709bcbe209f04f1e671b8220",
-          "title": "Version 1.4.1"
-        },
-        {
-          "version": "1.4.2",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.2",
-          "date": "2025-03-26",
-          "hash": "b3f397beab67da2ff750baca436bd661",
-          "title": "Version 1.4.2"
-        },
-        {
-          "version": "1.5.0",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0",
-          "date": "2025-09-10",
-          "hash": "0fa492fb3e3fd05be053ecb25914f3e1",
-          "title": "Version 1.5.0"
-        },
-        {
-          "version": "1.5.0-alpha01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha01",
-          "date": "2024-09-04",
-          "hash": "c3ab88ce4b820ec3fefb585289a87e5b",
-          "title": "Version 1.5.0-alpha01"
-        },
-        {
-          "version": "1.5.0-alpha02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha02",
-          "date": "2024-10-02",
-          "hash": "4cecbeeb84d1783cb349192c96163a36",
-          "title": "Version 1.5.0-alpha02"
-        },
-        {
-          "version": "1.5.0-alpha03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha03",
-          "date": "2024-10-30",
-          "hash": "87587fc38496056c06fa79f7a7f58293",
-          "title": "Version 1.5.0-alpha03"
-        },
-        {
-          "version": "1.5.0-alpha04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha04",
-          "date": "2024-12-11",
-          "hash": "46d84f0ba8b822d559ec51e92c08234a",
-          "title": "Version 1.5.0-alpha04"
-        },
-        {
-          "version": "1.5.0-alpha05",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha05",
-          "date": "2025-01-15",
-          "hash": "d65e807d8cb291ff35f38a1658691601",
-          "title": "Version 1.5.0-alpha05"
-        },
-        {
-          "version": "1.5.0-alpha06",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha06",
-          "date": "2025-02-26",
-          "hash": "33ed1f8adb28255e2d8055083b530016",
-          "title": "Version 1.5.0-alpha06"
-        },
-        {
-          "version": "1.5.0-beta01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-beta01",
-          "date": "2025-05-07",
-          "hash": "d6a476505eccf0c994ada581ad89a3d7",
-          "title": "Version 1.5.0-beta01"
-        },
-        {
-          "version": "1.5.0-beta02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-beta02",
-          "date": "2025-07-16",
-          "hash": "03759af503ac23f59fd983c467fe5d6d",
-          "title": "Version 1.5.0-beta02"
-        },
-        {
-          "version": "1.5.0-rc01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-rc01",
-          "date": "2025-08-13",
-          "hash": "8e7730acf84042c999521447bee13cdf",
-          "title": "Version 1.5.0-rc01"
-        },
-        {
-          "version": "1.5.1",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.1",
-          "date": "2025-10-08",
-          "hash": "8e687c735fdde224302bee5574cb008f",
-          "title": "Version 1.5.1"
-        },
-        {
-          "version": "1.5.2",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.2",
-          "date": "2025-12-04",
-          "hash": "44e5931ca241f7e862cfaa1c22d2d4e6",
-          "title": "Version 1.5.2"
-        },
-        {
-          "version": "1.5.3",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.3",
-          "date": "2026-01-28",
-          "hash": "179bec8058f2ebb240fe39f8ca6e0046",
-          "title": "Version 1.5.3"
-        },
-        {
-          "version": "1.6.0",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
-          "date": "2026-03-25",
-          "hash": "edb345e0ef80a4518f6086ee6ac02abf",
-          "title": "Version 1.6.0"
-        },
-        {
-          "version": "1.6.0-alpha01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-alpha01",
-          "date": "2025-10-22",
-          "hash": "e7aca9b0a2e5f758158a6c3497c43ef6",
-          "title": "Version 1.6.0-alpha01"
-        },
-        {
-          "version": "1.6.0-alpha02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-alpha02",
-          "date": "2025-12-17",
-          "hash": "0495f696d655ba31c2b6bd3f1fd62b82",
-          "title": "Version 1.6.0-alpha02"
-        },
-        {
-          "version": "1.6.0-beta01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-beta01",
-          "date": "2026-01-28",
-          "hash": "aa267a6308e57b61234c0ee762c9c061",
-          "title": "Version 1.6.0-beta01"
-        },
-        {
-          "version": "1.6.0-beta02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-beta02",
-          "date": "2026-02-11",
-          "hash": "7462f81eed8368d4d3a01c297f699943",
-          "title": "Version 1.6.0-beta02"
-        },
-        {
-          "version": "1.6.0-rc01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-rc01",
-          "date": "2026-02-25",
-          "hash": "e3e6aa4c374fac708430f5233d05475f",
-          "title": "Version 1.6.0-rc01"
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
+          "date": "2026-08-11",
+          "hash": "823a6a0a7211c147f7160437d853ba81",
+          "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha01"
+        },
+        {
+          "version": "1.7.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "date": "2026-07-01",
+          "hash": "db9437f7e4805c8d2f3da77855f1a871",
+          "title": "Version 1.7.0-alpha02"
         },
         {
           "version": "1.6.1",
@@ -940,6 +270,13 @@
           "title": "Version 1.6.1"
         },
         {
+          "version": "1.6.0",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+          "date": "2026-03-25",
+          "hash": "edb345e0ef80a4518f6086ee6ac02abf",
+          "title": "Version 1.6.0"
+        },
+        {
           "version": "1.7.0-alpha01",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "date": "2026-03-11",
@@ -947,11 +284,1320 @@
           "title": "Version 1.7.0-alpha01"
         },
         {
-          "version": "1.7.0-alpha02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
-          "date": "2026-07-01",
-          "hash": "db9437f7e4805c8d2f3da77855f1a871",
-          "title": "Version 1.7.0-alpha02"
+          "version": "1.6.0-rc01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-rc01",
+          "date": "2026-02-25",
+          "hash": "e3e6aa4c374fac708430f5233d05475f",
+          "title": "Version 1.6.0-rc01"
+        },
+        {
+          "version": "1.6.0-beta02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-beta02",
+          "date": "2026-02-11",
+          "hash": "7462f81eed8368d4d3a01c297f699943",
+          "title": "Version 1.6.0-beta02"
+        },
+        {
+          "version": "1.5.3",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.3",
+          "date": "2026-01-28",
+          "hash": "179bec8058f2ebb240fe39f8ca6e0046",
+          "title": "Version 1.5.3"
+        },
+        {
+          "version": "1.6.0-beta01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-beta01",
+          "date": "2026-01-28",
+          "hash": "aa267a6308e57b61234c0ee762c9c061",
+          "title": "Version 1.6.0-beta01"
+        },
+        {
+          "version": "1.6.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-alpha02",
+          "date": "2025-12-17",
+          "hash": "0495f696d655ba31c2b6bd3f1fd62b82",
+          "title": "Version 1.6.0-alpha02"
+        },
+        {
+          "version": "1.5.2",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.2",
+          "date": "2025-12-04",
+          "hash": "44e5931ca241f7e862cfaa1c22d2d4e6",
+          "title": "Version 1.5.2"
+        },
+        {
+          "version": "1.6.0-alpha01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-alpha01",
+          "date": "2025-10-22",
+          "hash": "e7aca9b0a2e5f758158a6c3497c43ef6",
+          "title": "Version 1.6.0-alpha01"
+        },
+        {
+          "version": "1.5.1",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.1",
+          "date": "2025-10-08",
+          "hash": "8e687c735fdde224302bee5574cb008f",
+          "title": "Version 1.5.1"
+        },
+        {
+          "version": "1.5.0",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0",
+          "date": "2025-09-10",
+          "hash": "0fa492fb3e3fd05be053ecb25914f3e1",
+          "title": "Version 1.5.0"
+        },
+        {
+          "version": "1.5.0-rc01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-rc01",
+          "date": "2025-08-13",
+          "hash": "8e7730acf84042c999521447bee13cdf",
+          "title": "Version 1.5.0-rc01"
+        },
+        {
+          "version": "1.5.0-beta02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-beta02",
+          "date": "2025-07-16",
+          "hash": "03759af503ac23f59fd983c467fe5d6d",
+          "title": "Version 1.5.0-beta02"
+        },
+        {
+          "version": "1.5.0-beta01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-beta01",
+          "date": "2025-05-07",
+          "hash": "d6a476505eccf0c994ada581ad89a3d7",
+          "title": "Version 1.5.0-beta01"
+        },
+        {
+          "version": "1.4.2",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.2",
+          "date": "2025-03-26",
+          "hash": "b3f397beab67da2ff750baca436bd661",
+          "title": "Version 1.4.2"
+        },
+        {
+          "version": "1.5.0-alpha06",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha06",
+          "date": "2025-02-26",
+          "hash": "33ed1f8adb28255e2d8055083b530016",
+          "title": "Version 1.5.0-alpha06"
+        },
+        {
+          "version": "1.5.0-alpha05",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha05",
+          "date": "2025-01-15",
+          "hash": "d65e807d8cb291ff35f38a1658691601",
+          "title": "Version 1.5.0-alpha05"
+        },
+        {
+          "version": "1.4.1",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.1",
+          "date": "2024-12-11",
+          "hash": "435d8636709bcbe209f04f1e671b8220",
+          "title": "Version 1.4.1"
+        },
+        {
+          "version": "1.5.0-alpha04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha04",
+          "date": "2024-12-11",
+          "hash": "46d84f0ba8b822d559ec51e92c08234a",
+          "title": "Version 1.5.0-alpha04"
+        },
+        {
+          "version": "1.4.0",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0",
+          "date": "2024-10-30",
+          "hash": "d047f9534c4e8062c714f4bc4aee625b",
+          "title": "Version 1.4.0"
+        },
+        {
+          "version": "1.5.0-alpha03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha03",
+          "date": "2024-10-30",
+          "hash": "87587fc38496056c06fa79f7a7f58293",
+          "title": "Version 1.5.0-alpha03"
+        },
+        {
+          "version": "1.4.0-rc04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-rc04",
+          "date": "2024-10-16",
+          "hash": "3663fad275b2f39f0a057bf9c3a76ed2",
+          "title": "Version 1.4.0-rc04"
+        },
+        {
+          "version": "1.4.0-rc03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-rc03",
+          "date": "2024-10-02",
+          "hash": "7fa57d596070e9bfcf050e893d2ed38b",
+          "title": "Version 1.4.0-rc03"
+        },
+        {
+          "version": "1.5.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha02",
+          "date": "2024-10-02",
+          "hash": "4cecbeeb84d1783cb349192c96163a36",
+          "title": "Version 1.5.0-alpha02"
+        },
+        {
+          "version": "1.4.0-rc02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-rc02",
+          "date": "2024-09-18",
+          "hash": "f24413d2b6569065cfad1e587560d985",
+          "title": "Version 1.4.0-rc02"
+        },
+        {
+          "version": "1.5.0-alpha01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha01",
+          "date": "2024-09-04",
+          "hash": "c3ab88ce4b820ec3fefb585289a87e5b",
+          "title": "Version 1.5.0-alpha01"
+        },
+        {
+          "version": "1.4.0-rc01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-rc01",
+          "date": "2024-08-07",
+          "hash": "380f2f19347040d1b2380ee260ed4f33",
+          "title": "Version 1.4.0-rc01"
+        },
+        {
+          "version": "1.3.4",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.4",
+          "date": "2024-06-12",
+          "hash": "8d8bec770707288566430247b8a8a934",
+          "title": "Version 1.3.4"
+        },
+        {
+          "version": "1.4.0-beta02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-beta02",
+          "date": "2024-06-12",
+          "hash": "f639035d5ed31bcf51708381384077ea",
+          "title": "Version 1.4.0-beta02"
+        },
+        {
+          "version": "1.4.0-alpha07",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-1.4.0-alpha07",
+          "date": "2024-06-12",
+          "hash": "201283a247d6a2eb172c6cdabcc6181c",
+          "title": "Version 1.4.0-alpha07"
+        },
+        {
+          "version": "1.0.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha02",
+          "date": "2024-06-12",
+          "hash": "a23e3ebbf6066dc31c8e7b50b2faf725",
+          "title": "Version 1.0.0-alpha02"
+        },
+        {
+          "version": "1.4.0-beta01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-beta01",
+          "date": "2024-05-14",
+          "hash": "56ac6efab31eba7d2b38865e5ebb88cd",
+          "title": "Version 1.4.0-beta01"
+        },
+        {
+          "version": "1.4.0-alpha06",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-1.4.0-alpha06",
+          "date": "2024-05-14",
+          "hash": "d3bfe42aa12cff49b2e6eb46808fd11c",
+          "title": "Version 1.4.0-alpha06"
+        },
+        {
+          "version": "1.0.0-alpha01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha01",
+          "date": "2024-05-14",
+          "hash": "bf068640723513dfa7340538a7f94f84",
+          "title": "Version 1.0.0-alpha01"
+        },
+        {
+          "version": "1.3.3",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.3",
+          "date": "2024-04-17",
+          "hash": "b9b4bf10d7befa158cce59c1afaf0e11",
+          "title": "Version 1.3.3"
+        },
+        {
+          "version": "1.4.0-alpha05",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha05",
+          "date": "2024-04-17",
+          "hash": "1961cc7eccdb2b9639360d8828946538",
+          "title": "Version 1.4.0-alpha05"
+        },
+        {
+          "version": "1.3.2",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.2",
+          "date": "2024-03-06",
+          "hash": "2d3b05af0f42373811db1da13a2f7cc7",
+          "title": "Version 1.3.2"
+        },
+        {
+          "version": "1.4.0-alpha04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha04",
+          "date": "2024-01-24",
+          "hash": "32e20f00b9b2720b43b1fec291ddbb67",
+          "title": "Version 1.4.0-alpha04"
+        },
+        {
+          "version": "1.3.1",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.1",
+          "date": "2023-12-13",
+          "hash": "5b3b1fe6c23e686313cfb09de5e77de3",
+          "title": "Version 1.3.1"
+        },
+        {
+          "version": "1.4.0-alpha03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha03",
+          "date": "2023-12-13",
+          "hash": "7a42bbb2be02499b139bf76b8e40bdae",
+          "title": "Version 1.4.0-alpha03"
+        },
+        {
+          "version": "1.3.0",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0",
+          "date": "2023-10-18",
+          "hash": "63ccdc3f5ac2d08e93fc3c0073fe97db",
+          "title": "Version 1.3.0"
+        },
+        {
+          "version": "1.4.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha02",
+          "date": "2023-10-18",
+          "hash": "6dd34cc5471bf5be31a8b76db1684a85",
+          "title": "Version 1.4.0-alpha02"
+        },
+        {
+          "version": "1.3.0-rc02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-rc02",
+          "date": "2023-09-20",
+          "hash": "7f4e20d68b69762595887671f3afafef",
+          "title": "Version 1.3.0-rc02"
+        },
+        {
+          "version": "1.4.0-alpha01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha01",
+          "date": "2023-09-20",
+          "hash": "24ddc6d1fe7043be9db9ee75f1697bac",
+          "title": "Version 1.4.0-alpha01"
+        },
+        {
+          "version": "1.3.0-rc01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-rc01",
+          "date": "2023-08-23",
+          "hash": "bb1e26379058512b8c1ebca530483bdd",
+          "title": "Version 1.3.0-rc01"
+        },
+        {
+          "version": "1.3.0-beta02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "date": "2023-07-26",
+          "hash": "47b955e16991b702843cd491a24e61dd",
+          "title": "Version 1.3.0-beta02"
+        },
+        {
+          "version": "1.3.0-beta01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta01",
+          "date": "2023-06-21",
+          "hash": "019ab0338c117dcd4518bc8786b80f4c",
+          "title": "Version 1.3.0-beta01"
+        },
+        {
+          "version": "1.2.3",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.3",
+          "date": "2023-05-24",
+          "hash": "8e4bd52d5752c12be8577e238d4b19c9",
+          "title": "Version 1.2.3"
+        },
+        {
+          "version": "1.3.0-alpha07",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha07",
+          "date": "2023-05-24",
+          "hash": "7b94e2253af56417ae7a8dc422138021",
+          "title": "Version 1.3.0-alpha07"
+        },
+        {
+          "version": "1.3.0-alpha06",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha06",
+          "date": "2023-04-19",
+          "hash": "5a54ef34805ca812af07837f8fabbb11",
+          "title": "Version 1.3.0-alpha06"
+        },
+        {
+          "version": "1.2.2",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.2",
+          "date": "2023-03-22",
+          "hash": "95a6e6da65e8e0b8597c3e64647b8cd1",
+          "title": "Version 1.2.2"
+        },
+        {
+          "version": "1.3.0-alpha05",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha05",
+          "date": "2023-03-22",
+          "hash": "ac64706504d8fd0e58f7837f9fc2190a",
+          "title": "Version 1.3.0-alpha05"
+        },
+        {
+          "version": "1.3.0-alpha04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha04",
+          "date": "2023-02-22",
+          "hash": "b6e7459d251078d79e1ba451bc8980f2",
+          "title": "Version 1.3.0-alpha04"
+        },
+        {
+          "version": "1.2.1",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.1",
+          "date": "2023-01-25",
+          "hash": "6a66c94b64fd53374ec062f0fa6ee8d8",
+          "title": "Version 1.2.1"
+        },
+        {
+          "version": "1.3.0-alpha03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha03",
+          "date": "2023-01-25",
+          "hash": "68bbfa444e32dd29f474f29c1fae80ac",
+          "title": "Version 1.3.0-alpha03"
+        },
+        {
+          "version": "1.2.0",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0",
+          "date": "2022-12-07",
+          "hash": "73249fd300b4172e2b96f9b19ac413b8",
+          "title": "Version 1.2.0"
+        },
+        {
+          "version": "1.3.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha02",
+          "date": "2022-12-07",
+          "hash": "f969fb64d7cb6027217be1996d00146a",
+          "title": "Version 1.3.0-alpha02"
+        },
+        {
+          "version": "1.3.0-alpha01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-alpha01",
+          "date": "2022-11-09",
+          "hash": "f0a6911e0fa770106393cdcf2843592a",
+          "title": "Version 1.3.0-alpha01"
+        },
+        {
+          "version": "1.2.0-rc01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-rc01",
+          "date": "2022-10-24",
+          "hash": "acc74d54c6a97d81ae50109e9301d098",
+          "title": "Version 1.2.0-rc01"
+        },
+        {
+          "version": "1.2.0-beta02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-beta02",
+          "date": "2022-09-21",
+          "hash": "26993504e820f6462901567ad2e7ddb8",
+          "title": "Version 1.2.0-beta02"
+        },
+        {
+          "version": "1.2.0-beta01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-beta01",
+          "date": "2022-08-24",
+          "hash": "e1db97ecb53233a9bc8557f8d537971f",
+          "title": "Version 1.2.0-beta01"
+        },
+        {
+          "version": "1.2.0-alpha04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-alpha04",
+          "date": "2022-07-27",
+          "hash": "4efd6ca79af1eb5e2f7776907ddcdfcd",
+          "title": "Version 1.2.0-alpha04"
+        },
+        {
+          "version": "1.1.0",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0",
+          "date": "2022-06-29",
+          "hash": "f78d4fbb1b6db45780f6bec53ea5a23c",
+          "title": "Version 1.1.0"
+        },
+        {
+          "version": "1.2.0-alpha03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-alpha03",
+          "date": "2022-06-29",
+          "hash": "a896153ae71c1caaeb4e6191845d9152",
+          "title": "Version 1.2.0-alpha03"
+        },
+        {
+          "version": "1.1.0-rc02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-rc02",
+          "date": "2022-06-01",
+          "hash": "adaf496685cdb364cd004d19e4ac2a0a",
+          "title": "Version 1.1.0-rc02"
+        },
+        {
+          "version": "1.2.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-alpha02",
+          "date": "2022-06-01",
+          "hash": "b2299540f9c325d2a89b1404a29a2314",
+          "title": "Version 1.2.0-alpha02"
+        },
+        {
+          "version": "1.2.0-alpha01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.2.0-alpha01",
+          "date": "2022-05-18",
+          "hash": "c1dc6b0c0d8367a360f8b85ac2b18a0a",
+          "title": "Version 1.2.0-alpha01"
+        },
+        {
+          "version": "1.1.0-rc01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-rc01",
+          "date": "2022-05-11",
+          "hash": "8476227ebe1456cc91d1331bfa7a19ad",
+          "title": "Version 1.1.0-rc01"
+        },
+        {
+          "version": "1.1.0-beta03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-beta03",
+          "date": "2022-04-06",
+          "hash": "30274e967727c8624c0b6838ef0e6b25",
+          "title": "Version 1.1.0-beta03"
+        },
+        {
+          "version": "1.1.0-beta02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-beta02",
+          "date": "2022-02-23",
+          "hash": "89e7f47aa605eaf94865f5b09d313d2c",
+          "title": "Version 1.1.0-beta02"
+        },
+        {
+          "version": "1.1.0-beta01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-beta01",
+          "date": "2022-01-26",
+          "hash": "a1e010532444b9af3984d8cda9a925fe",
+          "title": "Version 1.1.0-beta01"
+        },
+        {
+          "version": "1.0.0-alpha32",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha32",
+          "date": "2021-12-15",
+          "hash": "93e3489278f3ef89799a81a51444e3a1",
+          "title": "Version 1.0.0-alpha32"
+        },
+        {
+          "version": "1.1.0-alpha12",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha12",
+          "date": "2021-12-15",
+          "hash": "225830783f7fba117e50959dc8423e32",
+          "title": "Version 1.1.0-alpha12"
+        },
+        {
+          "version": "1.0.0-alpha31",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha31",
+          "date": "2021-11-17",
+          "hash": "4b24e8b5dca3e5a6261ebe5d6eccfe35",
+          "title": "Version 1.0.0-alpha31"
+        },
+        {
+          "version": "1.1.0-alpha11",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha11",
+          "date": "2021-11-17",
+          "hash": "bb279901217cb243ffcd1b660a58e9da",
+          "title": "Version 1.1.0-alpha11"
+        },
+        {
+          "version": "1.0.0-alpha30",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha30",
+          "date": "2021-10-13",
+          "hash": "ce16f755f417d2291d269bbd6d68c794",
+          "title": "Version 1.0.0-alpha30"
+        },
+        {
+          "version": "1.1.0-alpha10",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha10",
+          "date": "2021-10-13",
+          "hash": "2d5946e3537878717066ae1145be19ed",
+          "title": "Version 1.1.0-alpha10"
+        },
+        {
+          "version": "1.0.0-alpha29",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha29",
+          "date": "2021-09-29",
+          "hash": "4393e2bc460b327a30d93fd000fdf0bb",
+          "title": "Version 1.0.0-alpha29"
+        },
+        {
+          "version": "1.0.2",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.2",
+          "date": "2021-09-29",
+          "hash": "edcb2547a494a7cbb5ce3210508ac536",
+          "title": "Version 1.0.2"
+        },
+        {
+          "version": "1.1.0-alpha09",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha09",
+          "date": "2021-09-29",
+          "hash": "7ecca01d99470492eb5cbd983029db16",
+          "title": "Version 1.1.0-alpha09"
+        },
+        {
+          "version": "1.1.0-alpha08",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha08",
+          "date": "2021-08-18",
+          "hash": "03dd94eb1a08d06e58a750c10ae4d5f1",
+          "title": "Version 1.1.0-alpha08"
+        },
+        {
+          "version": "1.0.0-alpha28",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-view-1.0.0-alpha28",
+          "date": "2021-08-18",
+          "hash": "260ba3251de1550ccfec60c15cafe3f5",
+          "title": "Version 1.0.0-alpha28"
+        },
+        {
+          "version": "1.0.0-alpha27",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha27",
+          "date": "2021-07-21",
+          "hash": "31005507ab13545e0e1ac08520b73b0e",
+          "title": "Version 1.0.0-alpha27"
+        },
+        {
+          "version": "1.0.1",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.1",
+          "date": "2021-07-21",
+          "hash": "ab1e40df3bc3d0f75d8cd64d749605cd",
+          "title": "Version 1.0.1"
+        },
+        {
+          "version": "1.1.0-alpha07",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha07",
+          "date": "2021-07-21",
+          "hash": "e8a706d7a862664da6f22d4d7e5f32db",
+          "title": "Version 1.1.0-alpha07"
+        },
+        {
+          "version": "1.0.0-alpha26",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha26",
+          "date": "2021-06-30",
+          "hash": "e629168ea0f541d3ac4ecc699fdfc079",
+          "title": "Version 1.0.0-alpha26"
+        },
+        {
+          "version": "1.1.0-alpha06",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha06",
+          "date": "2021-06-30",
+          "hash": "66a2a4abd5cf1a57ec2f847856c9467b",
+          "title": "Version 1.1.0-alpha06"
+        },
+        {
+          "version": "1.0.0-alpha25",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha25",
+          "date": "2021-06-02",
+          "hash": "940734d4271539a82ccacf895f6eca4a",
+          "title": "Version 1.0.0-alpha25"
+        },
+        {
+          "version": "1.1.0-alpha05",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha05",
+          "date": "2021-06-02",
+          "hash": "1c749e1513a1da5bfb4d509a4ab29653",
+          "title": "Version 1.1.0-alpha05"
+        },
+        {
+          "version": "1.0.0",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0",
+          "date": "2021-05-05",
+          "hash": "22640ece9b6cb5f3f610ad969756ae9e",
+          "title": "Version 1.0.0"
+        },
+        {
+          "version": "1.0.0-alpha24",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha24",
+          "date": "2021-04-21",
+          "hash": "ad8780939deb71ef898f93b77feee570",
+          "title": "Version 1.0.0-alpha24"
+        },
+        {
+          "version": "1.0.0-rc05",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-rc05",
+          "date": "2021-04-21",
+          "hash": "52808ff9e770381c761f18549ded10a7",
+          "title": "Version 1.0.0-rc05"
+        },
+        {
+          "version": "1.1.0-alpha04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha04",
+          "date": "2021-04-21",
+          "hash": "1fe770b96a455f452fe24b478b2e8f67",
+          "title": "Version 1.1.0-alpha04"
+        },
+        {
+          "version": "1.0.0-rc04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-rc04",
+          "date": "2021-03-24",
+          "hash": "3863e1a5a81e88c498de7538df86fb96",
+          "title": "Version 1.0.0-rc04"
+        },
+        {
+          "version": "1.1.0-alpha03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha03",
+          "date": "2021-03-24",
+          "hash": "f486dfe9ab0254f7b7adeed79a832c11",
+          "title": "Version 1.1.0-alpha03"
+        },
+        {
+          "version": "1.0.0-alpha23",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-view-1.0.0-alpha23",
+          "date": "2021-03-24",
+          "hash": "f79b9569105939384d68a821b9c5c387",
+          "title": "Camera Extensions & View Version 1.0.0-alpha23"
+        },
+        {
+          "version": "1.0.0-rc03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-rc03",
+          "date": "2021-02-24",
+          "hash": "1bb6c17105d9f64dcebece2cb8f30cd0",
+          "title": "Version 1.0.0-rc03"
+        },
+        {
+          "version": "1.1.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha02",
+          "date": "2021-02-24",
+          "hash": "23fae1f9bbf69848b3159a350eeee117",
+          "title": "Version 1.1.0-alpha02"
+        },
+        {
+          "version": "1.0.0-alpha22",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-view-1.0.0-alpha22",
+          "date": "2021-02-24",
+          "hash": "c7dd8be8ec55dfb2786b3735658598a3",
+          "title": "Camera Extensions & View Version 1.0.0-alpha22"
+        },
+        {
+          "version": "1.0.0-rc02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-rc02",
+          "date": "2021-01-27",
+          "hash": "f5418d1de2ad8186119b1cae5ec7a17e",
+          "title": "Version 1.0.0-rc02"
+        },
+        {
+          "version": "1.1.0-alpha01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.1.0-alpha01",
+          "date": "2021-01-27",
+          "hash": "bafccd8a2ddf79ab2fcca390211311ad",
+          "title": "Version 1.1.0-alpha01"
+        },
+        {
+          "version": "1.0.0-alpha21",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-view-1.0.0-alpha21",
+          "date": "2021-01-27",
+          "hash": "66c505dc785b57ee3a38bdc1edf85e05",
+          "title": "Camera Extensions & View Version 1.0.0-alpha21"
+        },
+        {
+          "version": "1.0.0-alpha20",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha20",
+          "date": "2020-12-16",
+          "hash": "94ff7a33118c9dbba1ef0a666fd317f9",
+          "title": "Camera Extensions & View Version 1.0.0-alpha20"
+        },
+        {
+          "version": "1.0.0-rc01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-rc01",
+          "date": "2020-12-16",
+          "hash": "61b7fb18f77261cd107140f28963ba3c",
+          "title": "Version 1.0.0-rc01"
+        },
+        {
+          "version": "1.0.0-beta12",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera2-core-lifecycle-1.0.0-beta12",
+          "date": "2020-11-11",
+          "hash": "84319a6fae1d4ef2c830ebe228459f92",
+          "title": "Camera Camera2, Core, & Lifecycle Version 1.0.0-beta12"
+        },
+        {
+          "version": "1.0.0-alpha19",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-view-1.0.0-alpha19",
+          "date": "2020-11-11",
+          "hash": "7c613fd3c6d7b68097e303f2ee77f11d",
+          "title": "Camera-Extensions & Camera-View Version 1.0.0-alpha19"
+        },
+        {
+          "version": "1.0.0-beta11",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta11",
+          "date": "2020-10-14",
+          "hash": "9f6790ba756f86f4862f689c53297dbf",
+          "title": "Camera-Camera2 Version 1.0.0-beta11"
+        },
+        {
+          "version": "1.0.0-beta11",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta11",
+          "date": "2020-10-14",
+          "hash": "494418303baf61a9edf8a48fa0ab40ac",
+          "title": "Camera-Core Version 1.0.0-beta11"
+        },
+        {
+          "version": "1.0.0-alpha18",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha18",
+          "date": "2020-10-14",
+          "hash": "b38bc6e7052693ac51722b7fe23f9606",
+          "title": "Camera-Extensions Version 1.0.0-alpha18"
+        },
+        {
+          "version": "1.0.0-beta11",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta11",
+          "date": "2020-10-14",
+          "hash": "f9b1881fd7d60a1e812fcae14aea94af",
+          "title": "Camera-Lifecycle Version 1.0.0-beta11"
+        },
+        {
+          "version": "1.0.0-alpha18",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha18",
+          "date": "2020-10-14",
+          "hash": "379eb83ce424732e75a6992e709c6d20",
+          "title": "Camera-View Version 1.0.0-alpha18"
+        },
+        {
+          "version": "1.0.0-beta10",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta10",
+          "date": "2020-09-23",
+          "hash": "b8c3d743559a4795757f468a5d6dea81",
+          "title": "Camera-Camera2 Version 1.0.0-beta10"
+        },
+        {
+          "version": "1.0.0-beta10",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta10",
+          "date": "2020-09-23",
+          "hash": "be979c212f887bcf44e3edd834590abd",
+          "title": "Camera-Core Version 1.0.0-beta10"
+        },
+        {
+          "version": "1.0.0-alpha17",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha17",
+          "date": "2020-09-23",
+          "hash": "f73b65c1081c53a470dd016820a1bd87",
+          "title": "Camera-Extensions Version 1.0.0-alpha17"
+        },
+        {
+          "version": "1.0.0-beta10",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta10",
+          "date": "2020-09-23",
+          "hash": "d7da1b43252deb94dfadea1c93c0180a",
+          "title": "Camera-Lifecycle Version 1.0.0-beta10"
+        },
+        {
+          "version": "1.0.0-alpha17",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha17",
+          "date": "2020-09-23",
+          "hash": "f8fa38c203118238cf746a81f3804cf2",
+          "title": "Camera-View Version 1.0.0-alpha17"
+        },
+        {
+          "version": "1.0.0-beta09",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta09",
+          "date": "2020-09-16",
+          "hash": "84e9d064e6bece20ce6f076b88030245",
+          "title": "Camera-Camera2 Version 1.0.0-beta09"
+        },
+        {
+          "version": "1.0.0-beta09",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta09",
+          "date": "2020-09-16",
+          "hash": "7bf8615bc8df493ede9c6decc91cb18c",
+          "title": "Camera-Core Version 1.0.0-beta09"
+        },
+        {
+          "version": "1.0.0-alpha16",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha16",
+          "date": "2020-09-16",
+          "hash": "68737df2e511476dfa1d8f166d024a95",
+          "title": "Camera-Extensions Version 1.0.0-alpha16"
+        },
+        {
+          "version": "1.0.0-beta09",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta09",
+          "date": "2020-09-16",
+          "hash": "aaf5117d121b8b783d5dc288cb46828a",
+          "title": "Camera-Lifecycle Version 1.0.0-beta09"
+        },
+        {
+          "version": "1.0.0-alpha16",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha16",
+          "date": "2020-09-16",
+          "hash": "0c8b69db92d9b02883405a8225b23004",
+          "title": "Camera-View Version 1.0.0-alpha16"
+        },
+        {
+          "version": "1.0.0-beta08",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta08",
+          "date": "2020-08-19",
+          "hash": "87d2f0d82ae2e5bd77bc9c9fe4a86c72",
+          "title": "Camera-Camera2 Version 1.0.0-beta08"
+        },
+        {
+          "version": "1.0.0-beta08",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta08",
+          "date": "2020-08-19",
+          "hash": "637b37a766124fb9746727ff1033824a",
+          "title": "Camera-Core Version 1.0.0-beta08"
+        },
+        {
+          "version": "1.0.0-alpha15",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha15",
+          "date": "2020-08-19",
+          "hash": "c071e169ffe23df20702e3d7e8ce93ce",
+          "title": "Camera-Extensions Version 1.0.0-alpha15"
+        },
+        {
+          "version": "1.0.0-beta08",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta08",
+          "date": "2020-08-19",
+          "hash": "9f49d58d7353c580f54a8bf582135bd7",
+          "title": "Camera-Lifecycle Version 1.0.0-beta08"
+        },
+        {
+          "version": "1.0.0-alpha15",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha15",
+          "date": "2020-08-19",
+          "hash": "7f85a72af2282e05aefa05d4d7b4fa23",
+          "title": "Camera-View Version 1.0.0-alpha15"
+        },
+        {
+          "version": "1.0.0-beta07",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta07",
+          "date": "2020-07-22",
+          "hash": "1360b8ea494f7e0e2745c41cfa1c213e",
+          "title": "Camera-Camera2 Version 1.0.0-beta07"
+        },
+        {
+          "version": "1.0.0-beta07",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta07",
+          "date": "2020-07-22",
+          "hash": "8f38c60c9220512c6ff4072c8e2f8260",
+          "title": "Camera-Core Version 1.0.0-beta07"
+        },
+        {
+          "version": "1.0.0-alpha14",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha14",
+          "date": "2020-07-22",
+          "hash": "ba60416d24b08240b08273b57ebcfbbf",
+          "title": "Camera-Extensions Version 1.0.0-alpha14"
+        },
+        {
+          "version": "1.0.0-beta07",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta07",
+          "date": "2020-07-22",
+          "hash": "787cd3e588c9c57564cc793f5b992396",
+          "title": "Camera-Lifecycle Version 1.0.0-beta07"
+        },
+        {
+          "version": "1.0.0-alpha14",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha14",
+          "date": "2020-07-22",
+          "hash": "ed2ee82eb24d440d5e630fb780c2f417",
+          "title": "Camera-View Version 1.0.0-alpha14"
+        },
+        {
+          "version": "1.0.0-beta06",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta06",
+          "date": "2020-06-24",
+          "hash": "ec0423842edb64205df25f6cf2e05c51",
+          "title": "Camera-Camera2 Version 1.0.0-beta06"
+        },
+        {
+          "version": "1.0.0-beta06",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta06",
+          "date": "2020-06-24",
+          "hash": "12fd63971849f9f500c8ea7e26f100db",
+          "title": "Camera-Core Version 1.0.0-beta06"
+        },
+        {
+          "version": "1.0.0-alpha13",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha13",
+          "date": "2020-06-24",
+          "hash": "7560c47d8abc1ab0572bced9f41dcf1b",
+          "title": "Camera-Extensions Version 1.0.0-alpha13"
+        },
+        {
+          "version": "1.0.0-beta06",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta06",
+          "date": "2020-06-24",
+          "hash": "47e13436dbfd12438ac426bd8003f5ce",
+          "title": "Camera-Lifecycle Version 1.0.0-beta06"
+        },
+        {
+          "version": "1.0.0-alpha13",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha13",
+          "date": "2020-06-24",
+          "hash": "8e97d2d6884eda0bf5f6b54d81af971a",
+          "title": "Camera-View Version 1.0.0-alpha13"
+        },
+        {
+          "version": "1.0.0-beta05",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta05",
+          "date": "2020-06-10",
+          "hash": "74c30d445feb34284e9f93029bbe8ff2",
+          "title": "Camera-Camera2 Version 1.0.0-beta05"
+        },
+        {
+          "version": "1.0.0-beta05",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta05",
+          "date": "2020-06-10",
+          "hash": "34326e9c0f0b22b12ab6bfb6e4facb03",
+          "title": "Camera-Core Version 1.0.0-beta05"
+        },
+        {
+          "version": "1.0.0-alpha12",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha12",
+          "date": "2020-06-10",
+          "hash": "7b640d3959c66fc3fc5c1d57b36dbd50",
+          "title": "Camera-Extensions Version 1.0.0-alpha12"
+        },
+        {
+          "version": "1.0.0-beta05",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta05",
+          "date": "2020-06-10",
+          "hash": "e77a821b7af099256d7333642576e287",
+          "title": "Camera-Lifecycle Version 1.0.0-beta05"
+        },
+        {
+          "version": "1.0.0-alpha12",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha12",
+          "date": "2020-06-10",
+          "hash": "eb68d3f7ac5d322e5b1ea380557f4a7d",
+          "title": "Camera-View Version 1.0.0-alpha12"
+        },
+        {
+          "version": "1.0.0-alpha12",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha12",
+          "date": "2020-06-10",
+          "hash": "49ec1908451f07828568d5a13c7209bb",
+          "title": "Camera-View Version 1.0.0-alpha12"
+        },
+        {
+          "version": "1.0.0-beta04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta04",
+          "date": "2020-05-27",
+          "hash": "d2698ebb66e61ec105920329050dd398",
+          "title": "Camera-Camera2 Version 1.0.0-beta04"
+        },
+        {
+          "version": "1.0.0-beta04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta04",
+          "date": "2020-05-27",
+          "hash": "4fccef6e2742014ded621dca048b9371",
+          "title": "Camera-Core Version 1.0.0-beta04"
+        },
+        {
+          "version": "1.0.0-alpha11",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha11",
+          "date": "2020-05-27",
+          "hash": "b0044b495b0b553ea6b4692ac7c4aecb",
+          "title": "Camera-Extensions Version 1.0.0-alpha11"
+        },
+        {
+          "version": "1.0.0-beta04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta04",
+          "date": "2020-05-27",
+          "hash": "0d33dc16bb6329dac66070b9a6df440c",
+          "title": "Camera-Lifecycle Version 1.0.0-beta04"
+        },
+        {
+          "version": "1.0.0-alpha11",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha11",
+          "date": "2020-05-27",
+          "hash": "0c02b28d0ed6f60af588930892b6c031",
+          "title": "Camera-View Version 1.0.0-alpha11"
+        },
+        {
+          "version": "1.0.0-beta03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta03",
+          "date": "2020-04-15",
+          "hash": "ce02f545f2b7a93bb2c1fde2e951bf57",
+          "title": "Camera-Camera2 Version 1.0.0-beta03"
+        },
+        {
+          "version": "1.0.0-beta03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta03",
+          "date": "2020-04-15",
+          "hash": "7a32b0944fc90bdd647d52464a203ab4",
+          "title": "Camera-Core Version 1.0.0-beta03"
+        },
+        {
+          "version": "1.0.0-alpha10",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha10",
+          "date": "2020-04-15",
+          "hash": "dfad4a64727f26fbf971916958cfaff5",
+          "title": "Camera-Extensions Version 1.0.0-alpha10"
+        },
+        {
+          "version": "1.0.0-beta03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta03",
+          "date": "2020-04-15",
+          "hash": "31024ebb8fba177f16ff60f89d848cca",
+          "title": "Camera-Lifecycle Version 1.0.0-beta03"
+        },
+        {
+          "version": "1.0.0-alpha10",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha10",
+          "date": "2020-04-15",
+          "hash": "2a972d0333613b113b960fb7a630628a",
+          "title": "Camera-View Version 1.0.0-alpha10"
+        },
+        {
+          "version": "1.0.0-beta02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta02",
+          "date": "2020-04-01",
+          "hash": "d8bde5c8fa8b6d65c70e1acec42cad82",
+          "title": "Camera-Camera2 Version 1.0.0-beta02"
+        },
+        {
+          "version": "1.0.0-beta02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta02",
+          "date": "2020-04-01",
+          "hash": "2f80a79df68d0210182fdf4bed33da39",
+          "title": "Camera-Core Version 1.0.0-beta02"
+        },
+        {
+          "version": "1.0.0-alpha09",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha09",
+          "date": "2020-04-01",
+          "hash": "067d5bd51000d126f45908a312712166",
+          "title": "Camera-Extensions Version 1.0.0-alpha09"
+        },
+        {
+          "version": "1.0.0-beta02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta02",
+          "date": "2020-04-01",
+          "hash": "ce95a863893033c238e5332735263f5b",
+          "title": "Camera-Lifecycle Version 1.0.0-beta02"
+        },
+        {
+          "version": "1.0.0-alpha09",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha09",
+          "date": "2020-04-01",
+          "hash": "70813ddfe41003b1b9e02977cea884e7",
+          "title": "Camera-View Version 1.0.0-alpha09"
+        },
+        {
+          "version": "1.0.0-beta01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta01",
+          "date": "2020-02-26",
+          "hash": "6c331da9a700231a7c01e3afab8a6c1a",
+          "title": "Camera-Camera2 Version 1.0.0-beta01"
+        },
+        {
+          "version": "1.0.0-beta01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta01",
+          "date": "2020-02-26",
+          "hash": "a2fb9053419ef1f00f5001eb791e0060",
+          "title": "Camera-Core Version 1.0.0-beta01"
+        },
+        {
+          "version": "1.0.0-alpha08",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha08",
+          "date": "2020-02-26",
+          "hash": "9973b4486e98462f3f2e29c0b3e99f8b",
+          "title": "Camera-Extensions Version 1.0.0-alpha08"
+        },
+        {
+          "version": "1.0.0-beta01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta01",
+          "date": "2020-02-26",
+          "hash": "66e1219706b1785e0a4b87277706b56e",
+          "title": "Camera-Lifecycle Version 1.0.0-beta01"
+        },
+        {
+          "version": "1.0.0-alpha08",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha08",
+          "date": "2020-02-26",
+          "hash": "c9dd6f01e856ddc4e54247db5d8f0ff3",
+          "title": "Camera-View Version 1.0.0-alpha08"
+        },
+        {
+          "version": "1.0.0-alpha10",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha10",
+          "date": "2020-02-10",
+          "hash": "d49148dcbee5f31b1e8df07dc345c2e1",
+          "title": "Camera-Camera2 Version 1.0.0-alpha10"
+        },
+        {
+          "version": "1.0.0-alpha10",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-alpha10",
+          "date": "2020-02-10",
+          "hash": "13027072ce5df1cea7148e3ac4e08a30",
+          "title": "Camera-Core Version 1.0.0-alpha10"
+        },
+        {
+          "version": "1.0.0-alpha07",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha07",
+          "date": "2020-02-10",
+          "hash": "fa700b249e4a177bdfbcad8203b05910",
+          "title": "Camera-Extensions Version 1.0.0-alpha07"
+        },
+        {
+          "version": "1.0.0-alpha10",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-alpha10",
+          "date": "2020-02-10",
+          "hash": "12f336dcda3b7421462c81df19dfaca1",
+          "title": "Camera-Lifecycle Version 1.0.0-alpha10"
+        },
+        {
+          "version": "1.0.0-alpha07",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha07",
+          "date": "2020-02-10",
+          "hash": "fb7c2d2d3465690607672495b4566b16",
+          "title": "Camera-View Version 1.0.0-alpha07"
+        },
+        {
+          "version": "1.0.0-alpha09",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha09",
+          "date": "2020-01-22",
+          "hash": "585d6edf3570863ebed69eeaa63a2293",
+          "title": "Camera-Camera2 Version 1.0.0-alpha09"
+        },
+        {
+          "version": "1.0.0-alpha09",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-alpha09",
+          "date": "2020-01-22",
+          "hash": "31c317fb0531abd874db63909f364fd4",
+          "title": "Camera-Core Version 1.0.0-alpha09"
+        },
+        {
+          "version": "1.0.0-alpha06",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-ext-1.0.0-alpha06",
+          "date": "2020-01-22",
+          "hash": "1353a1715edbc7014c92d42ef05d99ae",
+          "title": "Camera-Extensions Version 1.0.0-alpha06"
+        },
+        {
+          "version": "1.0.0-alpha03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#lifecycle-1.0.0-alpha03",
+          "date": "2020-01-22",
+          "hash": "83172411a2889e014068e079a7384dc4",
+          "title": "Camera-Lifecycle Version 1.0.0-alpha03"
+        },
+        {
+          "version": "1.0.0-alpha06",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#view-1.0.0-alpha06",
+          "date": "2020-01-22",
+          "hash": "ef27e0ebe667cb45f45f34e15cc5804a",
+          "title": "Camera-View Version 1.0.0-alpha06"
+        },
+        {
+          "version": "1.0.0-alpha08",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha08",
+          "date": "2019-12-18",
+          "hash": "db5bba82e5d0157629c405ba8fe54218",
+          "title": "Camera-Camera2 Version 1.0.0-alpha08"
+        },
+        {
+          "version": "1.0.0-alpha08",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-alpha08",
+          "date": "2019-12-18",
+          "hash": "ac6bac5556335a8cba5de287a80ca9dc",
+          "title": "Camera-Core Version 1.0.0-alpha08"
+        },
+        {
+          "version": "1.0.0-alpha05",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-ext-1.0.0-alpha05",
+          "date": "2019-12-18",
+          "hash": "f58b01629cb0a14bcd51e0fcbadccd7e",
+          "title": "Camera-Extensions Version 1.0.0-alpha05"
+        },
+        {
+          "version": "1.0.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-alpha02",
+          "date": "2019-12-18",
+          "hash": "27b860637b0026b1e410a2388b4b1d81",
+          "title": "Camera-Lifecycle Version 1.0.0-alpha02"
+        },
+        {
+          "version": "1.0.0-alpha05",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha05",
+          "date": "2019-12-18",
+          "hash": "4bbfd094ce5f5bb77d482f453e9fcc56",
+          "title": "Camera-View Version 1.0.0-alpha05"
+        },
+        {
+          "version": "1.0.0-alpha07",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha07",
+          "date": "2019-12-04",
+          "hash": "4078b72b68a5b735bdd7afb97d458b8a",
+          "title": "Camera-Camera2 Version 1.0.0-alpha07"
+        },
+        {
+          "version": "1.0.0-alpha07",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-alpha07",
+          "date": "2019-12-04",
+          "hash": "cecad0428b28afddf3795af735ce9d54",
+          "title": "Camera-Core Version 1.0.0-alpha07"
+        },
+        {
+          "version": "1.0.0-alpha04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-ext-1.0.0-alpha04",
+          "date": "2019-12-04",
+          "hash": "5c3c0a8fda0dd413d578417711564ffe",
+          "title": "Camera-Extensions Version 1.0.0-alpha04"
+        },
+        {
+          "version": "1.0.0-alpha01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-alpha01",
+          "date": "2019-12-04",
+          "hash": "60de2224681d849357a0fbd7c9c8d0fe",
+          "title": "Camera-Lifecycle Version 1.0.0-alpha01"
+        },
+        {
+          "version": "1.0.0-alpha04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha04",
+          "date": "2019-12-04",
+          "hash": "6159aac1b2094cef2d9206162816732f",
+          "title": "Camera-View Version 1.0.0-alpha04"
+        },
+        {
+          "version": "1.0.0-alpha06",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera2-core-1.0.0-alpha06",
+          "date": "2019-10-09",
+          "hash": "095241d0f4e244d3091688f7b85eebb0",
+          "title": "Camera-Camera2 and Camera-Core Version 1.0.0-alpha06"
+        },
+        {
+          "version": "1.0.0-alpha03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#ext-view-1.0.0-alpha03",
+          "date": "2019-10-09",
+          "hash": "8c2cddb6081ac69fcbcbe90fd7ffd6f5",
+          "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha03"
+        },
+        {
+          "version": "1.0.0-alpha05",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera2-core-1.0.0-alpha05",
+          "date": "2019-09-05",
+          "hash": "c2c6771ef58d7c7dd0bdea4806029762",
+          "title": "Camera-Camera2 and Camera-Core Version 1.0.0-alpha05"
+        },
+        {
+          "version": "1.0.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#ext-view-1.0.0-alpha02",
+          "date": "2019-09-05",
+          "hash": "be621d890625f14eaf9ddaa841f2039f",
+          "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha02"
+        },
+        {
+          "version": "1.0.0-alpha04",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha04",
+          "date": "2019-08-07",
+          "hash": "38d89ffb93cd4498b28cddc27d31ea80",
+          "title": "Camera-Camera2 and Camera-Core Version 1.0.0-alpha04"
+        },
+        {
+          "version": "1.0.0-alpha03",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha03",
+          "date": "2019-07-02",
+          "hash": "3274a78714f88c053c1a30ade21973d1",
+          "title": "Camera-Camera2 and Camera-Core Version 1.0.0-alpha03"
+        },
+        {
+          "version": "1.0.0-alpha02",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha02",
+          "date": "2019-06-05",
+          "hash": "69f83613d15c11c4b8b3b1aa86047499",
+          "title": "Camera-Camera2 and Camera-Core Version 1.0.0-alpha02"
+        },
+        {
+          "version": "1.0.0-alpha01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0-alpha01",
+          "date": "2019-05-07",
+          "hash": "f2a85f368b2fee3f5f95b6d31ab22379",
+          "title": "Camera-Camera2 and Camera-Core 1.0.0-alpha01"
         },
         {
           "version": "1.1.0",
@@ -982,237 +1628,6 @@
           "title": "Camera-Camera2, Camera-Core, & Camera-Lifecycle Version 1.0.2"
         },
         {
-          "version": "1.0.0-alpha07",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha07",
-          "date": "2019-12-04",
-          "hash": "4078b72b68a5b735bdd7afb97d458b8a",
-          "title": "Camera-Camera2 Version 1.0.0-alpha07"
-        },
-        {
-          "version": "1.0.0-alpha08",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha08",
-          "date": "2019-12-18",
-          "hash": "db5bba82e5d0157629c405ba8fe54218",
-          "title": "Camera-Camera2 Version 1.0.0-alpha08"
-        },
-        {
-          "version": "1.0.0-alpha09",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha09",
-          "date": "2020-01-22",
-          "hash": "585d6edf3570863ebed69eeaa63a2293",
-          "title": "Camera-Camera2 Version 1.0.0-alpha09"
-        },
-        {
-          "version": "1.0.0-alpha10",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha10",
-          "date": "2020-02-10",
-          "hash": "d49148dcbee5f31b1e8df07dc345c2e1",
-          "title": "Camera-Camera2 Version 1.0.0-alpha10"
-        },
-        {
-          "version": "1.0.0-beta01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta01",
-          "date": "2020-02-26",
-          "hash": "6c331da9a700231a7c01e3afab8a6c1a",
-          "title": "Camera-Camera2 Version 1.0.0-beta01"
-        },
-        {
-          "version": "1.0.0-beta02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta02",
-          "date": "2020-04-01",
-          "hash": "d8bde5c8fa8b6d65c70e1acec42cad82",
-          "title": "Camera-Camera2 Version 1.0.0-beta02"
-        },
-        {
-          "version": "1.0.0-beta03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta03",
-          "date": "2020-04-15",
-          "hash": "ce02f545f2b7a93bb2c1fde2e951bf57",
-          "title": "Camera-Camera2 Version 1.0.0-beta03"
-        },
-        {
-          "version": "1.0.0-beta04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta04",
-          "date": "2020-05-27",
-          "hash": "d2698ebb66e61ec105920329050dd398",
-          "title": "Camera-Camera2 Version 1.0.0-beta04"
-        },
-        {
-          "version": "1.0.0-beta05",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta05",
-          "date": "2020-06-10",
-          "hash": "74c30d445feb34284e9f93029bbe8ff2",
-          "title": "Camera-Camera2 Version 1.0.0-beta05"
-        },
-        {
-          "version": "1.0.0-beta06",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta06",
-          "date": "2020-06-24",
-          "hash": "ec0423842edb64205df25f6cf2e05c51",
-          "title": "Camera-Camera2 Version 1.0.0-beta06"
-        },
-        {
-          "version": "1.0.0-beta07",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta07",
-          "date": "2020-07-22",
-          "hash": "1360b8ea494f7e0e2745c41cfa1c213e",
-          "title": "Camera-Camera2 Version 1.0.0-beta07"
-        },
-        {
-          "version": "1.0.0-beta08",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta08",
-          "date": "2020-08-19",
-          "hash": "87d2f0d82ae2e5bd77bc9c9fe4a86c72",
-          "title": "Camera-Camera2 Version 1.0.0-beta08"
-        },
-        {
-          "version": "1.0.0-beta09",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta09",
-          "date": "2020-09-16",
-          "hash": "84e9d064e6bece20ce6f076b88030245",
-          "title": "Camera-Camera2 Version 1.0.0-beta09"
-        },
-        {
-          "version": "1.0.0-beta10",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta10",
-          "date": "2020-09-23",
-          "hash": "b8c3d743559a4795757f468a5d6dea81",
-          "title": "Camera-Camera2 Version 1.0.0-beta10"
-        },
-        {
-          "version": "1.0.0-beta11",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-beta11",
-          "date": "2020-10-14",
-          "hash": "9f6790ba756f86f4862f689c53297dbf",
-          "title": "Camera-Camera2 Version 1.0.0-beta11"
-        },
-        {
-          "version": "1.0.0-alpha07",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-alpha07",
-          "date": "2019-12-04",
-          "hash": "cecad0428b28afddf3795af735ce9d54",
-          "title": "Camera-Core Version 1.0.0-alpha07"
-        },
-        {
-          "version": "1.0.0-alpha08",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-alpha08",
-          "date": "2019-12-18",
-          "hash": "ac6bac5556335a8cba5de287a80ca9dc",
-          "title": "Camera-Core Version 1.0.0-alpha08"
-        },
-        {
-          "version": "1.0.0-alpha09",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-alpha09",
-          "date": "2020-01-22",
-          "hash": "31c317fb0531abd874db63909f364fd4",
-          "title": "Camera-Core Version 1.0.0-alpha09"
-        },
-        {
-          "version": "1.0.0-alpha10",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-alpha10",
-          "date": "2020-02-10",
-          "hash": "13027072ce5df1cea7148e3ac4e08a30",
-          "title": "Camera-Core Version 1.0.0-alpha10"
-        },
-        {
-          "version": "1.0.0-beta01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta01",
-          "date": "2020-02-26",
-          "hash": "a2fb9053419ef1f00f5001eb791e0060",
-          "title": "Camera-Core Version 1.0.0-beta01"
-        },
-        {
-          "version": "1.0.0-beta02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta02",
-          "date": "2020-04-01",
-          "hash": "2f80a79df68d0210182fdf4bed33da39",
-          "title": "Camera-Core Version 1.0.0-beta02"
-        },
-        {
-          "version": "1.0.0-beta03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta03",
-          "date": "2020-04-15",
-          "hash": "7a32b0944fc90bdd647d52464a203ab4",
-          "title": "Camera-Core Version 1.0.0-beta03"
-        },
-        {
-          "version": "1.0.0-beta04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta04",
-          "date": "2020-05-27",
-          "hash": "4fccef6e2742014ded621dca048b9371",
-          "title": "Camera-Core Version 1.0.0-beta04"
-        },
-        {
-          "version": "1.0.0-beta05",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta05",
-          "date": "2020-06-10",
-          "hash": "34326e9c0f0b22b12ab6bfb6e4facb03",
-          "title": "Camera-Core Version 1.0.0-beta05"
-        },
-        {
-          "version": "1.0.0-beta06",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta06",
-          "date": "2020-06-24",
-          "hash": "12fd63971849f9f500c8ea7e26f100db",
-          "title": "Camera-Core Version 1.0.0-beta06"
-        },
-        {
-          "version": "1.0.0-beta07",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta07",
-          "date": "2020-07-22",
-          "hash": "8f38c60c9220512c6ff4072c8e2f8260",
-          "title": "Camera-Core Version 1.0.0-beta07"
-        },
-        {
-          "version": "1.0.0-beta08",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta08",
-          "date": "2020-08-19",
-          "hash": "637b37a766124fb9746727ff1033824a",
-          "title": "Camera-Core Version 1.0.0-beta08"
-        },
-        {
-          "version": "1.0.0-beta09",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta09",
-          "date": "2020-09-16",
-          "hash": "7bf8615bc8df493ede9c6decc91cb18c",
-          "title": "Camera-Core Version 1.0.0-beta09"
-        },
-        {
-          "version": "1.0.0-beta10",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta10",
-          "date": "2020-09-23",
-          "hash": "be979c212f887bcf44e3edd834590abd",
-          "title": "Camera-Core Version 1.0.0-beta10"
-        },
-        {
-          "version": "1.0.0-beta11",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-core-1.0.0-beta11",
-          "date": "2020-10-14",
-          "hash": "494418303baf61a9edf8a48fa0ab40ac",
-          "title": "Camera-Core Version 1.0.0-beta11"
-        },
-        {
-          "version": "1.0.0-alpha04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-ext-1.0.0-alpha04",
-          "date": "2019-12-04",
-          "hash": "5c3c0a8fda0dd413d578417711564ffe",
-          "title": "Camera-Extensions Version 1.0.0-alpha04"
-        },
-        {
-          "version": "1.0.0-alpha05",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-ext-1.0.0-alpha05",
-          "date": "2019-12-18",
-          "hash": "f58b01629cb0a14bcd51e0fcbadccd7e",
-          "title": "Camera-Extensions Version 1.0.0-alpha05"
-        },
-        {
-          "version": "1.0.0-alpha06",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-ext-1.0.0-alpha06",
-          "date": "2020-01-22",
-          "hash": "1353a1715edbc7014c92d42ef05d99ae",
-          "title": "Camera-Extensions Version 1.0.0-alpha06"
-        },
-        {
           "version": "1.0.0",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions_and_camera-view_version_100_2",
           "date": "",
@@ -1220,429 +1635,23 @@
           "title": "Camera-Extensions and Camera-View Version 1.0.0"
         },
         {
-          "version": "1.0.0-alpha07",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha07",
-          "date": "2020-02-10",
-          "hash": "fa700b249e4a177bdfbcad8203b05910",
-          "title": "Camera-Extensions Version 1.0.0-alpha07"
-        },
-        {
-          "version": "1.0.0-alpha08",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha08",
-          "date": "2020-02-26",
-          "hash": "9973b4486e98462f3f2e29c0b3e99f8b",
-          "title": "Camera-Extensions Version 1.0.0-alpha08"
-        },
-        {
-          "version": "1.0.0-alpha09",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha09",
-          "date": "2020-04-01",
-          "hash": "067d5bd51000d126f45908a312712166",
-          "title": "Camera-Extensions Version 1.0.0-alpha09"
-        },
-        {
-          "version": "1.0.0-alpha10",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha10",
-          "date": "2020-04-15",
-          "hash": "dfad4a64727f26fbf971916958cfaff5",
-          "title": "Camera-Extensions Version 1.0.0-alpha10"
-        },
-        {
-          "version": "1.0.0-alpha11",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha11",
-          "date": "2020-05-27",
-          "hash": "b0044b495b0b553ea6b4692ac7c4aecb",
-          "title": "Camera-Extensions Version 1.0.0-alpha11"
-        },
-        {
-          "version": "1.0.0-alpha12",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha12",
-          "date": "2020-06-10",
-          "hash": "7b640d3959c66fc3fc5c1d57b36dbd50",
-          "title": "Camera-Extensions Version 1.0.0-alpha12"
-        },
-        {
-          "version": "1.0.0-alpha13",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha13",
-          "date": "2020-06-24",
-          "hash": "7560c47d8abc1ab0572bced9f41dcf1b",
-          "title": "Camera-Extensions Version 1.0.0-alpha13"
-        },
-        {
-          "version": "1.0.0-alpha14",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha14",
-          "date": "2020-07-22",
-          "hash": "ba60416d24b08240b08273b57ebcfbbf",
-          "title": "Camera-Extensions Version 1.0.0-alpha14"
-        },
-        {
-          "version": "1.0.0-alpha15",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha15",
-          "date": "2020-08-19",
-          "hash": "c071e169ffe23df20702e3d7e8ce93ce",
-          "title": "Camera-Extensions Version 1.0.0-alpha15"
-        },
-        {
-          "version": "1.0.0-alpha16",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha16",
-          "date": "2020-09-16",
-          "hash": "68737df2e511476dfa1d8f166d024a95",
-          "title": "Camera-Extensions Version 1.0.0-alpha16"
-        },
-        {
-          "version": "1.0.0-alpha17",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha17",
-          "date": "2020-09-23",
-          "hash": "f73b65c1081c53a470dd016820a1bd87",
-          "title": "Camera-Extensions Version 1.0.0-alpha17"
-        },
-        {
-          "version": "1.0.0-alpha18",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-extensions-1.0.0-alpha18",
-          "date": "2020-10-14",
-          "hash": "b38bc6e7052693ac51722b7fe23f9606",
-          "title": "Camera-Extensions Version 1.0.0-alpha18"
-        },
-        {
-          "version": "1.0.0-alpha01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-alpha01",
-          "date": "2019-12-04",
-          "hash": "60de2224681d849357a0fbd7c9c8d0fe",
-          "title": "Camera-Lifecycle Version 1.0.0-alpha01"
-        },
-        {
-          "version": "1.0.0-alpha02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-alpha02",
-          "date": "2019-12-18",
-          "hash": "27b860637b0026b1e410a2388b4b1d81",
-          "title": "Camera-Lifecycle Version 1.0.0-alpha02"
-        },
-        {
-          "version": "1.0.0-alpha10",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-alpha10",
-          "date": "2020-02-10",
-          "hash": "12f336dcda3b7421462c81df19dfaca1",
-          "title": "Camera-Lifecycle Version 1.0.0-alpha10"
-        },
-        {
-          "version": "1.0.0-beta01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta01",
-          "date": "2020-02-26",
-          "hash": "66e1219706b1785e0a4b87277706b56e",
-          "title": "Camera-Lifecycle Version 1.0.0-beta01"
-        },
-        {
-          "version": "1.0.0-beta02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta02",
-          "date": "2020-04-01",
-          "hash": "ce95a863893033c238e5332735263f5b",
-          "title": "Camera-Lifecycle Version 1.0.0-beta02"
-        },
-        {
-          "version": "1.0.0-beta03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta03",
-          "date": "2020-04-15",
-          "hash": "31024ebb8fba177f16ff60f89d848cca",
-          "title": "Camera-Lifecycle Version 1.0.0-beta03"
-        },
-        {
-          "version": "1.0.0-beta04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta04",
-          "date": "2020-05-27",
-          "hash": "0d33dc16bb6329dac66070b9a6df440c",
-          "title": "Camera-Lifecycle Version 1.0.0-beta04"
-        },
-        {
-          "version": "1.0.0-beta05",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta05",
-          "date": "2020-06-10",
-          "hash": "e77a821b7af099256d7333642576e287",
-          "title": "Camera-Lifecycle Version 1.0.0-beta05"
-        },
-        {
-          "version": "1.0.0-beta06",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta06",
-          "date": "2020-06-24",
-          "hash": "47e13436dbfd12438ac426bd8003f5ce",
-          "title": "Camera-Lifecycle Version 1.0.0-beta06"
-        },
-        {
-          "version": "1.0.0-beta07",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta07",
-          "date": "2020-07-22",
-          "hash": "787cd3e588c9c57564cc793f5b992396",
-          "title": "Camera-Lifecycle Version 1.0.0-beta07"
-        },
-        {
-          "version": "1.0.0-beta08",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta08",
-          "date": "2020-08-19",
-          "hash": "9f49d58d7353c580f54a8bf582135bd7",
-          "title": "Camera-Lifecycle Version 1.0.0-beta08"
-        },
-        {
-          "version": "1.0.0-beta09",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta09",
-          "date": "2020-09-16",
-          "hash": "aaf5117d121b8b783d5dc288cb46828a",
-          "title": "Camera-Lifecycle Version 1.0.0-beta09"
-        },
-        {
-          "version": "1.0.0-beta10",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta10",
-          "date": "2020-09-23",
-          "hash": "d7da1b43252deb94dfadea1c93c0180a",
-          "title": "Camera-Lifecycle Version 1.0.0-beta10"
-        },
-        {
-          "version": "1.0.0-beta11",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-lifecycle-1.0.0-beta11",
-          "date": "2020-10-14",
-          "hash": "f9b1881fd7d60a1e812fcae14aea94af",
-          "title": "Camera-Lifecycle Version 1.0.0-beta11"
-        },
-        {
-          "version": "1.0.0-alpha04",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha04",
-          "date": "2019-12-04",
-          "hash": "6159aac1b2094cef2d9206162816732f",
-          "title": "Camera-View Version 1.0.0-alpha04"
-        },
-        {
-          "version": "1.0.0-alpha05",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha05",
-          "date": "2019-12-18",
-          "hash": "4bbfd094ce5f5bb77d482f453e9fcc56",
-          "title": "Camera-View Version 1.0.0-alpha05"
-        },
-        {
-          "version": "1.0.0-alpha07",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha07",
-          "date": "2020-02-10",
-          "hash": "fb7c2d2d3465690607672495b4566b16",
-          "title": "Camera-View Version 1.0.0-alpha07"
-        },
-        {
-          "version": "1.0.0-alpha08",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha08",
-          "date": "2020-02-26",
-          "hash": "c9dd6f01e856ddc4e54247db5d8f0ff3",
-          "title": "Camera-View Version 1.0.0-alpha08"
-        },
-        {
-          "version": "1.0.0-alpha09",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha09",
-          "date": "2020-04-01",
-          "hash": "70813ddfe41003b1b9e02977cea884e7",
-          "title": "Camera-View Version 1.0.0-alpha09"
-        },
-        {
-          "version": "1.0.0-alpha10",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha10",
-          "date": "2020-04-15",
-          "hash": "2a972d0333613b113b960fb7a630628a",
-          "title": "Camera-View Version 1.0.0-alpha10"
-        },
-        {
-          "version": "1.0.0-alpha11",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha11",
-          "date": "2020-05-27",
-          "hash": "0c02b28d0ed6f60af588930892b6c031",
-          "title": "Camera-View Version 1.0.0-alpha11"
-        },
-        {
-          "version": "1.0.0-alpha12",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha12",
-          "date": "2020-06-10",
-          "hash": "eb68d3f7ac5d322e5b1ea380557f4a7d",
-          "title": "Camera-View Version 1.0.0-alpha12"
-        },
-        {
-          "version": "1.0.0-alpha12",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha12",
-          "date": "2020-06-10",
-          "hash": "49ec1908451f07828568d5a13c7209bb",
-          "title": "Camera-View Version 1.0.0-alpha12"
-        },
-        {
-          "version": "1.0.0-alpha13",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha13",
-          "date": "2020-06-24",
-          "hash": "8e97d2d6884eda0bf5f6b54d81af971a",
-          "title": "Camera-View Version 1.0.0-alpha13"
-        },
-        {
-          "version": "1.0.0-alpha14",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha14",
-          "date": "2020-07-22",
-          "hash": "ed2ee82eb24d440d5e630fb780c2f417",
-          "title": "Camera-View Version 1.0.0-alpha14"
-        },
-        {
-          "version": "1.0.0-alpha15",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha15",
-          "date": "2020-08-19",
-          "hash": "7f85a72af2282e05aefa05d4d7b4fa23",
-          "title": "Camera-View Version 1.0.0-alpha15"
-        },
-        {
-          "version": "1.0.0-alpha16",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha16",
-          "date": "2020-09-16",
-          "hash": "0c8b69db92d9b02883405a8225b23004",
-          "title": "Camera-View Version 1.0.0-alpha16"
-        },
-        {
-          "version": "1.0.0-alpha17",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha17",
-          "date": "2020-09-23",
-          "hash": "f8fa38c203118238cf746a81f3804cf2",
-          "title": "Camera-View Version 1.0.0-alpha17"
-        },
-        {
-          "version": "1.0.0-alpha18",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha18",
-          "date": "2020-10-14",
-          "hash": "379eb83ce424732e75a6992e709c6d20",
-          "title": "Camera-View Version 1.0.0-alpha18"
-        },
-        {
-          "version": "1.0.0-alpha05",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera2-core-1.0.0-alpha05",
-          "date": "2019-09-05",
-          "hash": "c2c6771ef58d7c7dd0bdea4806029762",
-          "title": "Camera-Camera2 and Camera-Core Version 1.0.0-alpha05"
-        },
-        {
-          "version": "1.0.0-alpha06",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera2-core-1.0.0-alpha06",
-          "date": "2019-10-09",
-          "hash": "095241d0f4e244d3091688f7b85eebb0",
-          "title": "Camera-Camera2 and Camera-Core Version 1.0.0-alpha06"
-        },
-        {
-          "version": "1.0.0-beta12",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#camera2-core-lifecycle-1.0.0-beta12",
-          "date": "2020-11-11",
-          "hash": "84319a6fae1d4ef2c830ebe228459f92",
-          "title": "Camera Camera2, Core, & Lifecycle Version 1.0.0-beta12"
-        },
-        {
-          "version": "1.0.0-alpha02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#ext-view-1.0.0-alpha02",
-          "date": "2019-09-05",
-          "hash": "be621d890625f14eaf9ddaa841f2039f",
-          "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha02"
-        },
-        {
-          "version": "1.0.0-alpha03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#ext-view-1.0.0-alpha03",
-          "date": "2019-10-09",
-          "hash": "8c2cddb6081ac69fcbcbe90fd7ffd6f5",
-          "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha03"
-        },
-        {
-          "version": "1.0.0-alpha01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
-          "date": "2026-07-01",
-          "hash": "e25bfee0555cf529aa00d95039d8c878",
-          "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha01"
-        },
-        {
-          "version": "1.0.0-alpha19",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-view-1.0.0-alpha19",
-          "date": "2020-11-11",
-          "hash": "7c613fd3c6d7b68097e303f2ee77f11d",
-          "title": "Camera-Extensions & Camera-View Version 1.0.0-alpha19"
-        },
-        {
-          "version": "1.0.0-alpha21",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-view-1.0.0-alpha21",
-          "date": "2021-01-27",
-          "hash": "66c505dc785b57ee3a38bdc1edf85e05",
-          "title": "Camera Extensions & View Version 1.0.0-alpha21"
-        },
-        {
-          "version": "1.0.0-alpha22",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-view-1.0.0-alpha22",
-          "date": "2021-02-24",
-          "hash": "c7dd8be8ec55dfb2786b3735658598a3",
-          "title": "Camera Extensions & View Version 1.0.0-alpha22"
-        },
-        {
-          "version": "1.0.0-alpha23",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-view-1.0.0-alpha23",
-          "date": "2021-03-24",
-          "hash": "f79b9569105939384d68a821b9c5c387",
-          "title": "Camera Extensions & View Version 1.0.0-alpha23"
-        },
-        {
-          "version": "1.0.0-alpha28",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-view-1.0.0-alpha28",
-          "date": "2021-08-18",
-          "hash": "260ba3251de1550ccfec60c15cafe3f5",
-          "title": "Version 1.0.0-alpha28"
-        },
-        {
-          "version": "1.7.0-alpha02",
+          "version": "1.7.0-alpha03",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#groovy",
           "date": "",
-          "hash": "a1b65af737bae98586390a66fb5a61e8",
+          "hash": "a0a8fbb786e6694f0309085b921a9123",
           "title": "Groovy"
         },
         {
-          "version": "1.7.0-alpha02",
+          "version": "1.7.0-alpha03",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#kts",
           "date": "",
-          "hash": "6328599e126bc670ec1a372a447faef0",
+          "hash": "8a705c37713edde89b6efa508df25938",
           "title": "Kotlin"
-        },
-        {
-          "version": "1.0.0-alpha03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#lifecycle-1.0.0-alpha03",
-          "date": "2020-01-22",
-          "hash": "83172411a2889e014068e079a7384dc4",
-          "title": "Camera-Lifecycle Version 1.0.0-alpha03"
-        },
-        {
-          "version": "1.0.0-alpha06",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#view-1.0.0-alpha06",
-          "date": "2020-01-22",
-          "hash": "ef27e0ebe667cb45f45f34e15cc5804a",
-          "title": "Camera-View Version 1.0.0-alpha06"
-        },
-        {
-          "version": "1.4.0-alpha06",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-1.4.0-alpha06",
-          "date": "2024-05-14",
-          "hash": "d3bfe42aa12cff49b2e6eb46808fd11c",
-          "title": "Version 1.4.0-alpha06"
-        },
-        {
-          "version": "1.4.0-alpha07",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-1.4.0-alpha07",
-          "date": "2024-06-12",
-          "hash": "201283a247d6a2eb172c6cdabcc6181c",
-          "title": "Version 1.4.0-alpha07"
-        },
-        {
-          "version": "1.0.0-alpha01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha01",
-          "date": "2024-05-14",
-          "hash": "bf068640723513dfa7340538a7f94f84",
-          "title": "Version 1.0.0-alpha01"
-        },
-        {
-          "version": "1.0.0-alpha02",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha02",
-          "date": "2024-06-12",
-          "hash": "a23e3ebbf6066dc31c8e7b50b2faf725",
-          "title": "Version 1.0.0-alpha02"
         }
       ],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-08-10T00:00:00.000Z",
-      "seen_count": 103,
+      "last_seen_at": "2026-08-17T00:00:00.000Z",
+      "seen_count": 104,
       "status": 200
     }
   ],
@@ -1650,12 +1659,14 @@
     "source-event-a593b0187b96e7638fe4af9fb327f9f8",
     "source-event-3616a9f0c9e81670bcd09140c52b6f04",
     "source-event-aafc952ea6e65f65d2cbacbfa9ee38c8",
-    "source-event-da02771cf7d01aa9856b8802b7959b95"
+    "source-event-da02771cf7d01aa9856b8802b7959b95",
+    "source-event-27abf06628060e55e4157d18384410da"
   ],
   "processed_evidence_ids": [
     "evidence-d134d45807b498f036b07fa3d599ac42",
     "evidence-ac4c255a57a844d0e96a9da7336ad513",
     "evidence-64bd9749c37789e74a4690ca8c029bfa",
-    "evidence-e3847bbdd6a264f2cec103284d7e1ce3"
+    "evidence-e3847bbdd6a264f2cec103284d7e1ce3",
+    "evidence-341c97370366bc210723f4c4e52a717d"
   ]
 }
