@@ -28,6 +28,15 @@ MAIN_USABLE is "yes" only when all three conditions hold:
    landing pages, and roundup hubs whose real content lives in child links do not
    qualify.
 
+   One patch from the middle of a series does qualify. A URL like "[PATCH v10 03/13]"
+   points at a complete document: the commit message states what is being changed and
+   why, the diff is attached, and opening that URL alone shows the change. The wider
+   context sits in the cover letter, but this condition asks whether the claim can be
+   checked, not whether the whole series can be understood. The distinction from a hub
+   page is where the content lives: a hub has none at its own URL, while a mid-series
+   patch has the content and only the context elsewhere. Passing here says nothing
+   about conditions 1 and 2, which are judged separately.
+
 If any condition fails, answer "no". When the three conditions do not clearly settle
 it, answer "no". The question is not whether the item is interesting; it is whether
 this one URL can carry the factual basis of a main article.
