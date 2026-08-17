@@ -14,12 +14,30 @@ URL이 가리키는 문서가 Android 또는 Linux 카메라 스택의 최소 �
 - camera HAL (HIDL 또는 AIDL)
 - camera2, CameraX
 - libcamera
-- V4L2 및 media subsystem
+- **V4L2 및 media subsystem — 단 카메라 경로에 한한다**
 - ISP, 이미지 센서 드라이버
 - CTS, ITS
 - 카메라 관련 SoC 및 vendor 코드
 
 카메라를 예시로 한 번 언급할 뿐인 일반 Android/개발자 기사는 해당하지 않는다.
+
+### media subsystem은 카메라 경로만
+
+`drivers/media` 안에 있다는 사실만으로는 조건 1을 통과하지 못한다.
+**그 코드가 카메라 경로 위에 있어야 한다.**
+
+media subsystem은 카메라 말고도 많은 것을 담고 있다. 터치스크린이 쓰는 V4L2 경로,
+DVB 튜너, 비디오 코덱 컨트롤 같은 것들이다. 이것들은 `drivers/media`에 있고 V4L2 API를
+쓰지만 카메라와 무관하다.
+
+V4L2를 조건 1에 넣은 이유는 **카메라가 V4L2를 타고 올라오기 때문**이지 media subsystem
+전체가 이 뉴스레터의 관심사라서가 아니다. 이건 카메라 HAL 뉴스레터다.
+
+판정 기준: 그 변경이 카메라 캡처 경로(센서 → CSI/MIPI → ISP → V4L2 노드 → HAL)의
+어딘가에 닿는가. 닿으면 통과, 안 닿으면 `no`.
+
+애매하면 `no`다. 예를 들어 v4l2-core의 공통 코드 변경이 카메라에도 영향을 주는지
+네 필드만으로 판단이 안 되면 `no`로 내린다.
 
 ## 조건 2 — 구체성
 

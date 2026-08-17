@@ -8,9 +8,17 @@ MAIN_USABLE is "yes" only when all three conditions hold:
 
 1. Subject. The document directly covers at least one part of the Android or Linux
    camera stack: camera HAL (HIDL or AIDL), camera2 or CameraX, libcamera, V4L2 and
-   the media subsystem, ISP or sensor drivers, CTS or ITS, or camera-related SoC and
-   vendor code. A general Android or developer item that mentions camera once as an
-   example does not qualify.
+   the media subsystem where it lies on the camera path, ISP or sensor drivers, CTS or
+   ITS, or camera-related SoC and vendor code. A general Android or developer item
+   that mentions camera once as an example does not qualify.
+
+   Sitting under drivers/media is not by itself enough. The media subsystem also holds
+   touchscreen V4L2 paths, DVB tuners, and video codec controls, which use the same
+   API and have nothing to do with cameras. V4L2 is listed because cameras reach
+   userspace through it, not because the whole subsystem is the subject here. Ask
+   whether the change touches the capture path anywhere along sensor, CSI or MIPI,
+   ISP, V4L2 node, HAL. If it does not, or if the four fields do not settle it — a
+   change to shared v4l2-core code, say — answer "no".
 
 2. Specificity. At least one of a version or release number, an API or component
    name, or a described behaviour change is present, so that "what changed" could be
