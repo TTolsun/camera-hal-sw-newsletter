@@ -156,8 +156,15 @@ function headlineSourceTimestamp(candidate = {}) {
   return Date.parse(date);
 }
 
+// 홈 히어로 lead 로 실제 보여줄 수 있는 문장. 독자용 문장(summary/description)만 인정한다.
+// 후보별로 먼저 trim 하므로 공백만 있는 summary 가 description 을 가로채지 못한다.
+// 이 함수가 "표시 가능한 lead"의 단일 정의다. 스냅샷 생성과 자격 판정이 같은 기준을 쓴다.
+function headlineLeadText(candidate = {}) {
+  return text(candidate.summary) || text(candidate.description);
+}
+
 // 헤드라인이 될 수 있는 유효한 기사: 소스 URL 있음, 재생목록 아님, Camera HAL 연관,
-// 비교 가능한 소스 날짜 있음, blocked source 아님.
+// 비교 가능한 소스 날짜 있음, blocked source 아님, 표시할 lead 문장 있음.
 function isEligibleHeadlineArticle(candidate = {}) {
   const url = sourceUrl(candidate);
   if (!url) return false;
@@ -165,6 +172,9 @@ function isEligibleHeadlineArticle(candidate = {}) {
   if (!isCameraHalRelatedHeadline(candidate)) return false;
   if (Number.isNaN(headlineSourceTimestamp(candidate))) return false;
   if (candidateQualityFlags(candidate).blocked_source === true) return false;
+  // 표시 문장이 없으면 스냅샷 summary 가 빈 문자열이 되고, 그 상태는
+  // validateHomepageHeadlineState 가 required 로 거부한다(발행 게이트 차단). 생산 쪽에서 막는다.
+  if (!headlineLeadText(candidate)) return false;
   return true;
 }
 
@@ -268,6 +278,9 @@ function headlineEligibilityRejection(candidate = {}, { policy = getHeadlinePoli
   if (qualityFlags.source_gap_risk === true) return 'source_gap_risk';
   if (qualityFlags.fact_check_must_fix_unresolved === true) return 'fact_check_must_fix_unresolved';
   if (qualityFlags.stale_claim_hard_failure === true) return 'stale_claim_hard_failure';
+  // 안전 게이트 다음에 둔다. 앞 검사에서 걸리는 후보의 사유는 그대로 유지하고, 통과했을 후보만
+  // 이 사유로 바뀐다. 표시 문장 없는 헤드라인은 렌더할 lead 가 없다.
+  if (!headlineLeadText(candidate)) return 'missing_summary_text';
   if (candidate.reference_only === true) return 'reference_only';
   if (candidate.fallback_only === true) return 'fallback_only';
   if (isGenericTopic(candidate)) return 'generic_tech_watchlist';
@@ -328,7 +341,11 @@ function headlineSnapshotFromCandidate(candidate = {}, {
   const snapshot = {
     article_identity_key: articleKey,
     title: text(candidate.title),
-    summary: text(candidate.summary || candidate.description || candidate.reason),
+    // 독자에게 보이는 lead 는 실제 기사 문장(summary/description)만 쓴다. candidate.reason 은
+    // 수집기가 만든 내부 판단 문자열이라 fallback 으로 쓰면 홈 히어로에 그대로 노출된다.
+    // 표시 문장이 없는 후보는 isEligibleHeadlineArticle 이 선정에서 먼저 배제하므로 여기서
+    // 빈 summary 가 나오는 경로는 남지 않는다.
+    summary: headlineLeadText(candidate),
     source_url: sourceUrl(candidate),
     newsletter_date: text(candidate.newsletter_date || date),
     newsletter_url: text(candidate.newsletter_url || newsletterUrl),
