@@ -397,7 +397,9 @@ function reconciliationDemotionLines(diagnostics) {
   // 적재와 조회가 같은 정규화를 써야 한다. 한쪽만 `|| ''`를 쓰면 falsy 키가 `''`로 적재되고
   // `'null'`로 조회돼, 기록된 사유가 있는데도 "no per-candidate reason recorded"가 찍힌다 —
   // 이 이슈가 없애려는 바로 그 실패다.
-  const lookupGroupKey = (value) => String(value || '');
+  // `|| ''`로 접지도 않는다. 그러면 `null`과 `''`가 같은 칸을 쓰게 되어, 서로 다른 두 그룹이
+  // 한쪽 사유로 덮여 남의 사유가 찍힌다. 사유를 잃는 것보다 나쁘다.
+  const lookupGroupKey = (value) => String(value);
   const candidatesByGroupKey = new Map(demotedGroups.map(group => [
     lookupGroupKey(group?.article_group_key),
     ensureArray(group?.demoted_candidates)

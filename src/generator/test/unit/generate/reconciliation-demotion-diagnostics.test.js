@@ -266,3 +266,34 @@ test('그룹 키가 falsy여도 기록된 후보 사유를 잃지 않는다', ()
   );
   assert.doesNotMatch(markdown, /no per-candidate reason recorded/);
 });
+
+test('서로 다른 falsy 그룹 키가 한 칸을 공유해 남의 사유를 뒤집어쓰지 않는다', () => {
+  // `String(value || '')`로 접으면 null과 ''가 같은 Map 키가 되어 뒤 그룹이 앞 그룹을 덮는다.
+  // 그러면 앞 그룹의 사유가 사라지는 데서 끝나지 않고, 두 그룹 모두에 뒤 그룹의 사유가 찍힌다 —
+  // 기록을 잃는 것보다 나쁘다.
+  const markdown = renderCandidateSelectionDiagnostics({
+    reconciliation_demoted_groups: [
+      {
+        article_group_key: null,
+        demoted_candidates: [{ candidate_key: 'first', coverage_decision: 'cd1', reason_code: 'rc1' }]
+      },
+      {
+        article_group_key: '',
+        demoted_candidates: [{ candidate_key: 'second', coverage_decision: 'cd2', reason_code: 'rc2' }]
+      }
+    ]
+  });
+
+  assert.match(markdown, /^- Reconciliation-demoted groups: 2$/m);
+  assert.match(
+    markdown,
+    /^ {4}- first: coverage_decision=cd1, reason_code=rc1$/m,
+    '앞 그룹의 사유가 남아야 한다'
+  );
+  assert.match(
+    markdown,
+    /^ {4}- second: coverage_decision=cd2, reason_code=rc2$/m,
+    '뒤 그룹의 사유도 남아야 한다'
+  );
+  assert.equal(markdown.match(/- second: coverage_decision=cd2/g).length, 1, '남의 그룹에 복제되지 않아야 한다');
+});
