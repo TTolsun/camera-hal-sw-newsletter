@@ -66,8 +66,12 @@ source registry
 - feature 페이지 소스(`android-version-features`)는 심층 적립 전용입니다(`main_article_allowed: false`).
   변화 감지가 페이지 전체 해시라, 카메라와 무관한 문단만 바뀐 주에도 이벤트가 생기기 때문입니다.
   버킷도 앱 개발자용 플랫폼 문서에 맞게 `android_platform_camera_adjacent`입니다.
-- 발행(03)은 최종 기사 중 direct_aosp_camera가 1건 이하인 주에만 큐에서 주제 1개를
+- 발행(03)은 최종 기사 중 direct_aosp_camera가 발동 임계값 이하인 주에만 큐에서 주제 1개를
   결정론으로 고르고, 결과를 `articles/content/newsroom/<날짜>/deep-dive-report.json`에 기록합니다.
+  임계값의 정본은 `src/shared/config/newsletter-policy.json`의
+  `deepDivePolicy.directAospCameraMaxForActivation`이며, 현재 값은 이 문서 아래쪽
+  「뉴스레터 정책 (Newsletter Policy)」 생성 블록에 있습니다. 여기에 숫자를 다시 적지 마세요 —
+  생성 블록 밖의 숫자는 `check:policy-docs`가 보지 못해 코드와 조용히 갈라집니다.
 - 심층은 발행 결정 단계가 할 일을 **전부 마친 뒤** 맨 마지막에 실행합니다: 위클리 공개 산출물
   (index.html·newsletter.md·issue.json) 기록, 변경 artifact 목록 등록, headline state, validate,
   generation-status 기록이 모두 끝난 다음입니다. 선택 부가 기능이 그 주의 발행 산출물을 하나도
@@ -76,6 +80,22 @@ source registry
   throw합니다 — 조용한 skip으로 위장하지 않습니다.
 - 현재는 shadow 단계입니다: 선정 결과는 report(`status: shadow_selected`)로만 남고 뉴스레터에는
   실리지 않습니다. 공개 산출물은 byte 불변입니다. 2단계(생성·검증·렌더)는 별도 계획으로 배선합니다.
+
+2단계 진입 조건은 아래 두 가지이며, 둘 다 갖춰지기 전에는 배선하지 않습니다. 두 조건이 요구하는
+구체적인 수치는 수집(01)이 두세 번 실제로 돌아 적립 속도가 관측된 뒤에 정합니다. 관측 없이 숫자를
+먼저 박는 것은 근거 없는 추측이므로, 지금은 조건만 남기고 값은 비워 둡니다.
+
+1. **보존 정책(retention policy)이 있어야 합니다.** 지금 큐에는 적립 경로만 있고 제거 경로가
+   없습니다. `markTopicCovered`는 상태 문자열과 `covered_*` 필드를 더할 뿐 evidence를 그대로 두고,
+   모듈 export에도 prune/expire/compact가 없습니다. `check:artifact-retention`은
+   `articles/content/` 아래만 보므로 이 파일을 덮는 기존 안전망도 없습니다. 이대로 2단계를 켜면
+   상한 없는 state 파일이 하나 더 커밋됩니다. 정해야 할 값: 보존 상한(주제 수 또는 evidence 수)과
+   만료 기준.
+2. **선정에 최신성 하한(freshness floor)이 있어야 합니다.** `selectDeepDiveTopic`은 `queued` 상태
+   주제를 전부 후보로 보고, `latestEffectiveDate`는 세 번째 tiebreaker로만 씁니다. 즉 나이 상한이
+   없어서 오래된 주제가 무기한 후보로 남습니다. 다른 선정 레인은 모두 정책 파일의 일수 상한
+   (`primarySelectionDays`, `fallbackSelectionDays`, catch-up `maxAgeDays`)을 지킵니다. 정해야 할
+   값: 심층 후보로 인정할 최대 나이(일).
 
 ## LLM provider 운영
 
@@ -491,6 +511,7 @@ PR에서 다음 항목을 확인합니다.
 - 선정 기간 적용(selection window enforcement): 주요 선정은 강제 적용되며, fallback 기간 후보는 primary 기간 선정이 부족할 때에만 승격됩니다.
 - 지난 소식(Catch-up) 레인: 신규 선정이 3개 미만이면, 비어 있는 주요 슬롯을 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent` 버킷에서 최대 35일 이내의 미게재 릴리스로 채웁니다. 호당 최대 2개이며 각각 한 번씩만 게재하고, 신규 콘텐츠를 밀어내지 않습니다.
 - 릴리스 캐치업(release-class) 레인: 릴리스 채널(collectionModeHint `release-note-watch`) 소스의 미게재 릴리스는, 신규 선정이 목표를 채운 주에도 주요 기사 최대치 아래 여유 슬롯을 호당 최대 1개까지 쓸 수 있습니다. 같은 품질 하한·중복·게재 이력 검사를 그대로 통과해야 하며, 신규 콘텐츠를 밀어내지 않습니다.
+- 심층(deep-dive) 발동 조건(파이프라인 내부 판정 — 편집 지시가 아닙니다): 위클리 발행이 모두 끝난 뒤, 그 주 최종 기사 중 `direct_aosp_camera` 버킷 수가 1 이하이면 심층 주제 큐에서 주제 하나를 고릅니다. 이 숫자는 기사 수 상한도, 버킷 구성 제한도 아닙니다 — 기사 수와 버킷 구성은 위의 주요 기사 수와 발행 가능 구성 규칙만 따릅니다. 1단계는 shadow라 결과는 report로만 남고 뉴스레터에는 실리지 않으므로, 편집 단계에서는 이 항목을 고려하지 마세요.
 - 홈페이지 헤드라인 정책(homepage headline policy): linear decay; 일별 감쇠 2 point(s)/day; 교체 마진(replacement margin) 5; 최소 헤드라인 점수(minimum headline score) 40; 최신호 포함 필수(latest inclusion required) true; 이력 최대(history max) 50
 - 발행 게이트(publish gate): PASS는 source gap이 없고, fact-check must_fix가 없으며, 차단성 감점(blocking deduction)이 없고, 모든 기사가 fact-checker에 의해 발행 가능으로 표시되어야 합니다. 수치 기반 품질 임계값은 없습니다.
 - 편집 품질(editorial quality): fact-checker(LLM)가 각 기사를 Camera HAL SW 엔지니어에게 유용한지 기준으로 판정합니다(주제 무관 — C++, AI, Linux 기사라도 해당 엔지니어에게 도움이 되면 자격이 있습니다). 주제/깊이 휴리스틱은 결정론적 발행 게이트로 사용하지 않습니다.

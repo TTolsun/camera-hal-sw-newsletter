@@ -9,15 +9,20 @@
 const fs = require('fs');
 const path = require('path');
 const { loadDeepDiveTopicQueue, selectDeepDiveTopic } = require('../../shared/collect/deep-dive-topic-queue');
+const { getDeepDivePolicy, getDefaultNewsletterPolicy } = require('../../shared/common/newsletter-policy');
 const { sectionRelevanceBucket } = require('./newsletter-renderer');
 
 const DEEP_DIVE_ROLLOUT_STAGE = 'shadow';
 
-function weeklyDeepDiveTrigger(articles) {
+// 임계값은 newsletter-policy.json(`deepDivePolicy.directAospCameraMaxForActivation`)이 정본이다.
+// 여기에 숫자를 적어 두면 정책 파일을 바꿔도 동작이 따라오지 않고, 생성 문서 블록만 갱신돼
+// check:policy-docs가 통과하는 채로 코드와 문서가 갈라진다.
+function weeklyDeepDiveTrigger(articles, policy = getDefaultNewsletterPolicy()) {
+  const maxForActivation = getDeepDivePolicy(policy).directAospCameraMaxForActivation;
   const count = (articles || [])
     .filter(section => sectionRelevanceBucket(section) === 'direct_aosp_camera')
     .length;
-  return { direct_aosp_camera_weekly_final_count: count, activated: count <= 1 };
+  return { direct_aosp_camera_weekly_final_count: count, activated: count <= maxForActivation };
 }
 
 function writeDeepDiveReport(root, date, report) {
