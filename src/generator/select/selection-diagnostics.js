@@ -333,17 +333,43 @@ function formatCount(value) {
   return value === null || value === undefined ? 'unknown' : String(value);
 }
 
-// #914: coverage_decision은 editorial-plan LLM이 쓴 자유 문자열이라(스키마에 enum이 없다)
-// markdown 제어문자가 그대로 들어온다. 이 렌더는 표가 아니라 목록이므로 표 전용
+// #914: coverage_decision은 editorial-plan LLM이 쓴 자유 문자열이라(스키마에 enum도 maxLength도
+// 없다) markdown 제어문자가 그대로 들어온다. 이 렌더는 표가 아니라 목록이므로 표 전용
 // escapeMarkdownCell(파이프와 개행만 다룬다)로는 부족하다. 개행 하나면 목록 항목이 끊기고,
-// 백틱·링크·raw HTML은 그대로 재해석돼 원문이 눈에서 사라진다. 값은 한 줄로 접고 구조를
-// 바꾸는 문자만 escape한다. `_`와 `#`는 escape하지 않는다 — 단어 안에서는 markdown 구조를
-// 바꾸지 않는데 escape하면 snake_case인 reason_code가 매 줄 읽기 어려워진다.
+// 백틱·링크·raw HTML은 그대로 재해석돼 원문이 눈에서 사라진다.
+//
+// 값은 잘라내지 않는다. 진단 artifact에서 LLM 설명의 뒷부분을 조용히 버리는 것이 긴 줄보다
+// 나쁘다. 대신 공백을 접어 한 줄로 만들고 구조를 바꾸는 문자만 escape한다.
+
+// 값 안 어디에서든 구조를 바꾸거나 내용을 숨기는 문자.
+const MARKDOWN_INLINE_SPECIALS = /[\\`*[\]()<>|~]/g;
+
+// `_`는 단어 안에서는 강조가 되지 않는다(CommonMark는 intraword `_`를 강조로 열지 않는다).
+// 그래서 양옆이 모두 문자/숫자인 `_`만 남기고, 그 밖의 `_`는 escape한다. 이러면
+// `editorial_plan_reference_only`는 그대로 읽히면서 `demoted _because_ of cap` 같은 산문에서
+// 밑줄이 사라지는 재해석은 막는다.
+const MARKDOWN_FLANKING_UNDERSCORE = /(?<![\p{L}\p{N}])_|_(?![\p{L}\p{N}])/gu;
+
+// 값은 `- ` / `    - ` 바로 뒤에 놓여 목록 항목 본문으로 파싱된다. 그래서 값의 첫 문자는
+// 줄머리 블록 마커가 될 수 있다: `# 1/3 media: ...`는 heading, `- v2 patch`는 한 단계 더 깊은
+// 중첩 목록, `1. intro`는 번호 목록이 된다. candidate_key는 url_hash || url || title이라
+// (coverage-reconciliation.js) 둘이 모두 없으면 기사 제목이 이 자리에 온다 — 실제 도달 경로다.
+//
+// `#`는 줄머리에서만 escape한다. ATX heading은 블록 요소라 줄 중간의 `#`는 아무 의미가 없는데,
+// candidate_key의 url 폴백은 fragment(`...releases/camera#camera-1.5.0`)를 담을 수 있어
+// 무조건 escape하면 안전 이득 없이 매 줄에 `\#`만 늘어난다.
+const MARKDOWN_LEADING_BLOCK_MARKER = /^[#+-]/;
+const MARKDOWN_LEADING_ORDERED_MARKER = /^(\d{1,9})([.)])/;
+
 function markdownSafeInline(value) {
   if (value === null || value === undefined) return 'unknown';
   const collapsed = String(value).replace(/\s+/g, ' ').trim();
   if (!collapsed) return 'none';
-  return collapsed.replace(/[\\`*[\]()<>|~]/g, '\\$&');
+  const escaped = collapsed
+    .replace(MARKDOWN_INLINE_SPECIALS, '\\$&')
+    .replace(MARKDOWN_FLANKING_UNDERSCORE, '\\$&');
+  if (MARKDOWN_LEADING_BLOCK_MARKER.test(escaped)) return `\\${escaped}`;
+  return escaped.replace(MARKDOWN_LEADING_ORDERED_MARKER, '$1\\$2');
 }
 
 // #914: 재조정 강등은 editor가 선언한 강등과 원인이 다르다(전자는 결정론 재조정의 cap clamp나

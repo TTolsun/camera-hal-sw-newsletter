@@ -163,3 +163,75 @@ test('LLM이 쓴 coverage_decision이 markdown 구조를 깨거나 재해석되�
   }
   assert.equal(markdown.split('\n').filter(line => line.includes('example.com')).length, 1);
 });
+
+test('값 첫머리의 블록 마커가 목록 항목을 heading·중첩목록·번호목록으로 바꾸지 않는다', () => {
+  // 값은 `    - ` 바로 뒤에 놓여 목록 항목 본문으로 파싱되므로 첫 문자가 줄머리 마커가 된다.
+  // candidate_key는 url_hash || url || title이라 둘이 모두 없으면 기사 제목이 이 자리에 온다.
+  const markdown = renderCandidateSelectionDiagnostics({
+    reconciliation_demoted_group_keys: ['# heading group', '- nested group', '1. ordered group'],
+    reconciliation_demoted_groups: [
+      { article_group_key: '# heading group', demoted_candidates: [{ candidate_key: '# 1/3 media: fix uvc', coverage_decision: '- dash lead', reason_code: 'cap_clamp' }] },
+      { article_group_key: '- nested group', demoted_candidates: [{ candidate_key: '+ plus lead', coverage_decision: '1) paren lead', reason_code: 'cap_clamp' }] },
+      { article_group_key: '1. ordered group', demoted_candidates: [{ candidate_key: '1. intro', coverage_decision: '> quote lead', reason_code: 'unknown' }] }
+    ]
+  });
+
+  assert.match(markdown, /^ {2}- \\# heading group$/m);
+  assert.match(markdown, /^ {2}- \\- nested group$/m);
+  assert.match(markdown, /^ {2}- 1\\\. ordered group$/m);
+  assert.match(markdown, /^ {4}- \\# 1\/3 media: fix uvc: coverage_decision=\\- dash lead, /m);
+  assert.match(markdown, /^ {4}- \\\+ plus lead: coverage_decision=1\\\) paren lead, /m);
+  assert.match(markdown, /^ {4}- 1\\\. intro: coverage_decision=\\> quote lead, /m);
+});
+
+test('밑줄은 강조로 재해석될 때만 escape하고 snake_case는 그대로 읽힌다', () => {
+  // coverage_decision은 enum 없는 자유 문자열이라 LLM이 산문을 쓸 수 있다. `_because_`가
+  // 기울임으로 바뀌면 사람이 읽는 artifact에서 밑줄 자체가 사라진다.
+  const markdown = renderCandidateSelectionDiagnostics({
+    reconciliation_demoted_group_keys: ['group:a'],
+    reconciliation_demoted_groups: [{
+      article_group_key: 'group:a',
+      demoted_candidates: [{
+        candidate_key: 'a',
+        coverage_decision: 'demoted _because_ of cap',
+        reason_code: 'editorial_plan_unrecognized'
+      }]
+    }]
+  });
+
+  const candidateLine = lineStartingWith(markdown, '    - a:');
+  assert.match(candidateLine, /coverage_decision=demoted \\_because\\_ of cap,/);
+  assert.match(candidateLine, /reason_code=editorial_plan_unrecognized$/, 'snake_case는 escape하지 않는다');
+});
+
+test('사유가 빈 문자열이면 none, 필드가 없으면 unknown으로 갈라 적는다', () => {
+  // 편집 계획이 언급하지 않은 후보가 cap clamp로 빠지면 coverage_decision은 빈 문자열이다
+  // (coverage-reconciliation.js의 `entryFor(candidate)?.coverage_decision || ''`).
+  // 이 어휘가 LLM이 실제로 "none"이라고 답한 것과 구분되지 않으면 사후 판독이 불가능하다.
+  const planned = ['a1', 'a2', 'a3', 'a4', 'a5'];
+  const shortlistReport = deterministicReport([...planned, 'unplanned']);
+  applyReconciliation(shortlistReport, {
+    // impact가 없는 후보(계획 미등재)가 clamp 순서에서 마지막이라 cap max=5에 밀린다.
+    editorial_plans: planned.map(url => ({ url, coverage_decision: 'main_article', impact_level: 'high' }))
+  });
+
+  const markdown = renderCandidateSelectionDiagnostics(selectionStatusExtra(shortlistReport, {
+    renderedGroupKeys: planned.map(url => `group:${url}`),
+    explicitlyDemotedGroups: [],
+    hardBlockedGroups: []
+  }));
+
+  assert.match(markdown, /^- Reconciliation-demoted groups: 1$/m);
+  assert.match(
+    markdown,
+    /^ {4}- unplanned: coverage_decision=none, reason_code=cap_clamp$/m,
+    '빈 사유는 none이고, main 제안까지 갔다가 빠진 원인은 cap이다'
+  );
+
+  // 필드 자체가 없는 레코드는 none이 아니라 unknown이다.
+  const missing = renderCandidateSelectionDiagnostics({
+    reconciliation_demoted_group_keys: ['group:a'],
+    reconciliation_demoted_groups: [{ article_group_key: 'group:a', demoted_candidates: [{ candidate_key: 'a' }] }]
+  });
+  assert.match(missing, /^ {4}- a: coverage_decision=unknown, reason_code=unknown$/m);
+});
