@@ -7,7 +7,8 @@
   "counts": {
     "calibration": 20,
     "dev": 20,
-    "test": 31
+    "test": 31,
+    "unassigned": 5
   },
   "allocation": {
     "lore-series:20260612194417.1737009-atanas.filipov@oss.qualcomm.com": "calibration",
@@ -80,6 +81,11 @@
     "lore-series:20260708-og0va1b-v3-de8e44455a42@oss.qualcomm.com": "test",
     "patchwork-series:6076": "test",
     "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1": "test",
-    "lore-series:20260616134319.3969928-dawei.feng@seu.edu.cn": "test"
+    "lore-series:20260616134319.3969928-dawei.feng@seu.edu.cn": "test",
+    "lore-series:20260813-uvc-status-11-v1-2cf43e9590b0@chromium.org": "unassigned",
+    "lore-series:20260815193839.141406-devnexen@gmail.com": "unassigned",
+    "lore-series:20260812105305.32447-nicfio@gmail.com": "unassigned",
+    "article:https://source.android.com/docs/compatibility/cts/camera-its": "unassigned",
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03": "unassigned"
   }
 }
