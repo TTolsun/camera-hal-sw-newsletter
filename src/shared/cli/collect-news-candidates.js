@@ -1212,7 +1212,24 @@ function withinLookback(candidate, now, lookbackDays) {
 // 그중 3건이 07-24~07-26 항목, 그 결과 R-Car ISP 확장 uAPI·CAMSS 하드웨어 버전 보고·uvcvideo quirk가
 // 통째로 잘렸다). 같은 우선순위/신뢰도 안에서 primary selection window 후보를 앞세워 캡이 이번 주
 // 신호부터 채우게 한다. 창 밖 후보를 버리지는 않으므로 catch-up lane이 쓸 재고는 그대로 남는다.
+//
+// 읽을 날짜가 없는 후보는 이 가점에서 제외한다. withinLookback은 날짜를 못 읽으면 true를
+// 돌려주는데, 그건 수집 풀 필터(35일)에서 "날짜 없다고 버리지는 않는다"는 뜻이지 "이번 주
+// 신호다"라는 뜻이 아니다. 그대로 랭킹에 쓰면 문서형 소스가 만든 nodate 페이지-제목 후보가
+// 창 안 후보와 같은 등급을 받아, priority/reliability가 같은 dated 카메라 신호를 앞선다.
+//
+// source_change_event 후보는 가드 밖에 둔다. 이 lane은 날짜를 publishedAt이 아니라
+// effective_date에 담아서(source-monitor.js: publishedAt은 항상 '', datePrecision은
+// effective_date가 있을 때만 'day') publishedAt만 보면 "날짜 없음"으로 오판한다. 게다가 최종
+// 후보로 살아남은 source_change_event의 evidence_id만 처리됨으로 적립되므로(아래 스냅샷 커밋
+// 참조), 여기서 강등돼 전역 캡에 잘리면 같은 문서 변경 이벤트가 매주 재발화하면서 매주 다시
+// 잘리는 기아 루프가 된다. 이 lane의 순위는 이번 변경으로 달라지지 않는다.
+//
+// 가점만 빼고 후보는 풀에 그대로 남는다 — 35일 풀 필터(아래 withinLookback 호출)는 건드리지
+// 않는다. 다만 전역 캡(MAX_FINAL_CANDIDATES)은 그 뒤에 한 번 더 걸리므로, 순위가 밀린 nodate
+// 후보가 최종 후보 파일에서 빠질 수는 있다.
 function withinPrimarySelectionWindow(candidate, now) {
+  if (!isSourceChangeEventCandidate(candidate) && !parseDate(candidate.publishedAt)) return false;
   return withinLookback(candidate, now, getSelectionWindowPolicy().primarySelectionDays);
 }
 
