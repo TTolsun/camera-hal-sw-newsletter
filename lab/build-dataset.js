@@ -28,6 +28,11 @@ const DATASETS_DIR = path.join(__dirname, 'datasets');
 const SPLIT_PATH = path.join(DATASETS_DIR, 'split.json');
 const CALIBRATION_PATH = path.join(DATASETS_DIR, 'calibration.json');
 
+// Only calibration is written by default. dev and test stay as bare keys in split.json
+// until someone asks for them by name, so that opening a sealed split is a decision
+// rather than something that happens because a script was re-run.
+const bucketPath = bucket => path.join(DATASETS_DIR, `${bucket}.json`);
+
 const BUCKET_SIZES = { calibration: 20, dev: 20 };
 
 // A patch series is resubmitted as v1, v2, v3 and arrives each time under a
@@ -210,9 +215,9 @@ function reconcile(committed, computed) {
 // written rationales that the Week 02 and Week 08 gates rest on. Rebuilding the item
 // list must carry them across, or a re-run silently destroys the week's work while
 // reporting success.
-function existingLabels() {
-  if (!fs.existsSync(CALIBRATION_PATH)) return new Map();
-  const previous = JSON.parse(fs.readFileSync(CALIBRATION_PATH, 'utf8')).items || [];
+function existingLabels(file) {
+  if (!fs.existsSync(file)) return new Map();
+  const previous = JSON.parse(fs.readFileSync(file, 'utf8')).items || [];
   return new Map(
     previous
       .filter(item => item.human_label !== null || item.human_note)
@@ -220,12 +225,12 @@ function existingLabels() {
   );
 }
 
-function calibrationItems(families, allocation) {
+function bucketItems(families, allocation, wanted) {
   const items = [];
   for (const [key, bucket] of Object.entries(allocation)) {
-    if (bucket !== 'calibration') continue;
+    if (bucket !== wanted) continue;
     const family = families.get(key);
-    assert.ok(family, `calibration family ${key} is not in the current pool`);
+    assert.ok(family, `${wanted} family ${key} is not in the current pool`);
 
     const { date, candidate } = family.records[0];
     items.push({
@@ -243,11 +248,11 @@ function calibrationItems(families, allocation) {
   }
   items.sort((a, b) => a.family_key.localeCompare(b.family_key));
 
-  const carried = existingLabels();
+  const carried = existingLabels(bucketPath(wanted));
   const orphaned = [...carried.keys()].filter(key => !items.some(item => item.family_key === key));
   if (orphaned.length > 0) {
     throw new Error(
-      `${orphaned.length} labelled families have no home in the rebuilt calibration set, so ` +
+      `${orphaned.length} labelled families have no home in the rebuilt ${wanted} set, so ` +
       `their labels would be lost:\n  ${orphaned.join('\n  ')}\n` +
       'Refusing to write. Reconcile split.json against the current pool first.'
     );
@@ -322,7 +327,7 @@ function main() {
     'duplicate family key in allocation'
   );
 
-  const items = calibrationItems(families, allocation);
+  const items = bucketItems(families, allocation, 'calibration');
   assert.strictEqual(items.length, BUCKET_SIZES.calibration, `calibration items=${items.length}`);
   assert.strictEqual(
     new Set(items.map(item => item.family_key)).size,
@@ -351,6 +356,30 @@ function main() {
 
   const labelled = items.filter(item => item.human_label !== null).length;
   console.log(`calibration labelled: ${labelled}/${items.length}`);
+
+  const openAt = process.argv.indexOf('--open');
+  const opening = openAt === -1 ? null : process.argv[openAt + 1];
+  if (!opening) return;
+
+  if (!['dev', 'test'].includes(opening)) {
+    throw new Error(`--open takes dev or test, got "${opening}"`);
+  }
+  const openedItems = bucketItems(families, allocation, opening);
+  const openedFile = bucketPath(opening);
+  const alreadyLabelled = openedItems.filter(item => item.human_label !== null).length;
+
+  writeJson(openedFile, {
+    note: `${opening} split. Opened deliberately — this bucket answers a one-shot gate. ` +
+      'human_label is the only ground truth; fill it by hand before running the judge.',
+    label_definition: 'lab/label-definition.md',
+    items: openedItems
+  });
+
+  console.log(`\nopened ${opening}: ${openedItems.length} items -> ${path.relative(REPO_ROOT, openedFile)}`);
+  console.log(`${opening} labelled: ${alreadyLabelled}/${openedItems.length}`);
+  if (alreadyLabelled < openedItems.length) {
+    console.log('The judge cannot be scored against this split until every item carries a hand label.');
+  }
 }
 
 main();

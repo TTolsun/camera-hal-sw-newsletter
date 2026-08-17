@@ -12,8 +12,13 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const DATASET = path.join(__dirname, 'datasets', 'calibration.json');
 const WIDTH = 78;
+
+function datasetPath(argv) {
+  const at = argv.indexOf('--set');
+  const set = at === -1 ? 'calibration' : argv[at + 1];
+  return { set, file: path.join(__dirname, 'datasets', `${set}.json`) };
+}
 
 const CONDITIONS = [
   '조건 1  카메라 프레임이 지나가는가',
@@ -42,11 +47,12 @@ function wrap(text, indent) {
   return lines.map(l => ' '.repeat(indent) + l).join('\n');
 }
 
-function load() {
-  return JSON.parse(fs.readFileSync(DATASET, 'utf8'));
+function load(file) {
+  if (!fs.existsSync(file)) throw new Error(`${path.basename(file)} does not exist yet`);
+  return JSON.parse(fs.readFileSync(file, 'utf8'));
 }
 
-function render(item, index, total) {
+function render(item, index, total, setName) {
   const done = item.human_label !== null;
   const bar = '─'.repeat(WIDTH);
 
@@ -73,15 +79,16 @@ function render(item, index, total) {
   console.log(`\n${bar}`);
   for (const line of CONDITIONS) console.log(line ? ` ${line}` : '');
   console.log(bar);
-  console.log(`\n  기록할 곳: calibration.json 의 ${index + 1}번째 항목`);
+  console.log(`\n  기록할 곳: ${setName}.json 의 ${index + 1}번째 항목`);
   console.log('    "human_label": "yes" 또는 "no"');
   console.log('    "human_note":  망설였다면 그 이유 한 줄\n');
 }
 
 function main() {
-  const data = load();
-  const items = data.items;
   const args = process.argv.slice(2);
+  const { set, file } = datasetPath(args);
+  const data = load(file);
+  const items = data.items;
 
   if (args.includes('--left')) {
     const left = items
@@ -92,7 +99,7 @@ function main() {
     return;
   }
 
-  const requested = Number(args[0]);
+  const requested = Number(args.find(a => /^\d+$/.test(a)));
   let index;
   if (Number.isInteger(requested) && requested >= 1 && requested <= items.length) {
     index = requested - 1;
@@ -104,7 +111,7 @@ function main() {
     }
   }
 
-  render(items[index], index, items.length);
+  render(items[index], index, items.length, set);
 }
 
 main();

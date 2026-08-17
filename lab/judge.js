@@ -89,15 +89,26 @@ function assertSplitAllowed(splitName, unseal) {
 }
 
 function loadItems(splitName) {
-  if (splitName === 'calibration') {
-    const file = path.join(DATASETS_DIR, 'calibration.json');
-    if (!fs.existsSync(file)) throw new Error(`${file} is missing. Run: node lab/build-dataset.js`);
-    return JSON.parse(fs.readFileSync(file, 'utf8')).items;
+  const file = path.join(DATASETS_DIR, `${splitName}.json`);
+  if (!fs.existsSync(file)) {
+    throw new Error(
+      `${path.basename(file)} does not exist. Sealed splits are not written until they are ` +
+      `opened on purpose: node lab/build-dataset.js --open ${splitName}`
+    );
   }
-  throw new Error(
-    `${splitName} items are not materialised on disk. build-dataset.js writes only calibration ` +
-    'contents; extend it deliberately when the split is genuinely being opened.'
-  );
+  const items = JSON.parse(fs.readFileSync(file, 'utf8')).items;
+
+  // A gate run costs its split's one shot. Spending it on unlabelled items would burn
+  // the seal and produce nothing, since kappa needs both raters.
+  const unlabelled = items.filter(item => item.human_label === null).length;
+  if (splitName !== 'calibration' && unlabelled > 0) {
+    throw new Error(
+      `${unlabelled} of ${items.length} ${splitName} items have no hand label. This split is a ` +
+      'one-shot measurement, so running it now would spend that shot on a set that cannot be ' +
+      'scored. Label them first.'
+    );
+  }
+  return items;
 }
 
 // The judge sees the same four fields the human labeller saw. pipeline_selection and
