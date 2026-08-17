@@ -12,13 +12,18 @@ MAIN_USABLE is "yes" only when all three conditions hold:
    ITS, or camera-related SoC and vendor code. A general Android or developer item
    that mentions camera once as an example does not qualify.
 
-   Sitting under drivers/media is not by itself enough. The media subsystem also holds
-   touchscreen V4L2 paths, DVB tuners, and video codec controls, which use the same
-   API and have nothing to do with cameras. V4L2 is listed because cameras reach
-   userspace through it, not because the whole subsystem is the subject here. Ask
-   whether the change touches the capture path anywhere along sensor, CSI or MIPI,
-   ISP, V4L2 node, HAL. If it does not, or if the four fields do not settle it — a
-   change to shared v4l2-core code, say — answer "no".
+   Sitting under drivers/media is not by itself enough. Ask instead whether camera
+   frames pass through the code being changed. The path runs sensor, CSI or MIPI, ISP,
+   V4L2 node, HAL, and onward into the media layers that receive those frames — codec,
+   JPEG, display, image processing. A JPEG encoder node or a display pipe change is on
+   that path and qualifies, because camera output does not stop at the HAL; it gets
+   encoded or put on screen.
+
+   What fails is media code that no camera frame reaches: touchscreen V4L2 paths, DVB
+   tuners, and anything else whose input is not a camera. They live under drivers/media
+   and use the same API, which is why the test is the frame path and not the directory.
+   If the four fields do not settle it — a change to shared v4l2-core code, say —
+   answer "no".
 
 2. Specificity. At least one of a version or release number, an API or component
    name, or a described behaviour change is present, so that "what changed" could be
