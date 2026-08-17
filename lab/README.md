@@ -81,7 +81,11 @@ values are recorded, and every disagreement carries a category. `kappa_post >= 0
 is the target, not the pass condition.
 
 The judge's viability gate is Week 02: the untouched 20 dev families, rubric frozen,
-one run, `kappa >= 0.40`. The test families stay sealed until Week 08.
+one run. At or above 0.60 the judge is adopted; between 0.40 and 0.60 it keeps being
+refined while experiments continue on its verdicts; below 0.40 the definition is rewritten.
+The two tiers exist because one item moves kappa by 0.133 at n=20, so a single cut line
+would turn one item into fifteen weeks of direction. The test families stay sealed until
+Week 08.
 
 ## Metrics to record every run
 

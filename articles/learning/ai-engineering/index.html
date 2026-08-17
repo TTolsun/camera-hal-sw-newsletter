@@ -173,7 +173,7 @@
                       <tr><td>judge yes 비율</td><td>0.65</td><td>0.75 (사람과 동일)</td></tr>
                     </tbody>
                   </table>
-                  <p>calibration 20건, 실패 0건, 총 $0.016. 목표값 <code>kappa &gt;= 0.40</code>은 v1 단계에서 이미 넘었습니다. <strong>다만 v2 값은 게이트가 아닙니다</strong> — 같은 20건을 보고 규칙을 고친 뒤 다시 잰 값이라 오르는 것이 정상입니다. 판정은 Week 02의 손대지 않은 dev 20건에서 합니다.</p>
+                  <p>calibration 20건, 실패 0건, 총 $0.016. 당시 목표값이던 <code>kappa &gt;= 0.40</code>은 v1 단계에서 이미 넘었습니다(이후 게이트를 0.60으로 올렸습니다). <strong>다만 v2 값은 게이트가 아닙니다</strong> — 같은 20건을 보고 규칙을 고친 뒤 다시 잰 값이라 오르는 것이 정상입니다. 판정은 Week 02의 손대지 않은 dev 20건에서 합니다.</p>
 
                   <p><strong>예측은 방향이 틀렸습니다.</strong> 라벨링 전에 “judge가 더 관대할 것”이라고 적었는데 실제로는 judge가 더 엄격했습니다(사람 0.75 vs judge 0.65). 미리 적어둔 반증 조건이 그대로 발동했습니다. 근거였던 “부정형 규칙은 늦게 나오면 덜 지켜진다”는 가정이 이 과제에서는 성립하지 않았습니다. 규칙을 좁고 충실하게 적용한 쪽은 judge였고, 정의에 없는 논리를 쓴 쪽은 사람이었습니다.</p>
 
@@ -193,7 +193,7 @@
                 <p class="week-goal">Week 01에서 고친 판정 기준을 손대지 않은 dev 20건에 1회 적용합니다. 이것이 judge를 계속 쓸지 정하는 진짜 게이트입니다.</p>
                 <div class="week-columns">
                   <div class="week-column"><strong>남은 구멍 둘</strong><p><code>0/N</code> cover letter를 자립으로 볼지 정의가 침묵합니다(원인: 정의 누락). 그리고 <code>v4l2</code> 어휘는 있지만 카메라 프레임이 안 지나가는 항목을 judge가 통과시킵니다(원인: 읽기).</p></div>
-                  <div class="week-column"><strong>게이트</strong><p>dev 20 family, 프롬프트 동결, <strong>1회 실행</strong>, <code>kappa &gt;= 0.40</code>. 미달이면 다음 주도 judge 수리에 씁니다.</p></div>
+                  <div class="week-column"><strong>게이트</strong><p>dev 20 family, 프롬프트 동결, <strong>1회 실행</strong>, <code>0.60</code> 이상 통과, <code>0.40~0.60</code> 조건부, <code>0.40</code> 미만 탈락. 두 단인 이유는 아래 Eval 분할 절에 있습니다.</p></div>
                   <div class="week-column"><strong>왜 여기서 끝내나</strong><p>이후 모든 주차가 “고쳤더니 좋아졌나”를 이 judge로 측정합니다. 자가 부정확하면 그 뒤 15주의 숫자가 전부 무의미해집니다.</p></div>
                 </div>
                 <p class="week-goal"><strong>원래 계획과 달라진 점.</strong> Week 02는 deterministic verifier 구현이었습니다. Week 01 결과가 측정 도구를 아직 못 닫았다고 말하므로 그것을 먼저 끝냅니다. verifier 구현과 reporter seam extraction은 그 뒤로 밀립니다. <strong>계획이 데이터를 이긴 것이 아니라 데이터가 계획을 고친 것</strong>이고, 이 과정 자체가 이 커리큘럼이 가르치려는 것입니다.</p>
@@ -522,12 +522,34 @@ Runs → Trace → Eval → Failure Analysis
           <article class="learning-card">
             <h3>Week 01의 kappa는 통과 기준이 아니다</h3>
             <p>calibration 20건을 보고 rubric을 고친 뒤 같은 20건으로 잰 kappa는 당연히 올라갑니다. 안 오르면 그게 이상한 겁니다. 기록은 하되 합격선으로 쓰지 않습니다.</p>
-            <p>Week 01 완료 조건은 <code>failed_cases</code> 0, <code>routing_warning</code> 빈 문자열, kappa 개선 전후 둘 다 기록, 불일치 전건에 원인 분류 부착입니다. <code>kappa ≥ 0.40</code>은 목표값입니다.</p>
+            <p>Week 01 완료 조건은 <code>failed_cases</code> 0, <code>routing_warning</code> 빈 문자열, kappa 개선 전후 둘 다 기록, 불일치 전건에 원인 분류 부착입니다. 당시 목표값은 <code>kappa ≥ 0.40</code>이었습니다.</p>
           </article>
           <article class="learning-card">
             <h3>진짜 gate는 Week 02</h3>
-            <p>손대지 않은 dev 20 family에 Week 01에서 고친 rubric을 그대로 1회 적용합니다. 여기서 <code>kappa ≥ 0.40</code>이면 judge를 도구로 계속 씁니다. 미달이면 다음 주도 judge 수리에 씁니다.</p>
+            <p>손대지 않은 dev 20 family에 Week 01에서 고친 rubric을 그대로 1회 적용합니다. 판정은 한 줄이 아니라 <strong>두 단</strong>입니다.</p>
+            <table>
+              <thead><tr><th>dev kappa</th><th>판정</th><th>하는 일</th></tr></thead>
+              <tbody>
+                <tr><td>0.60 이상</td><td>통과</td><td>judge를 측정 도구로 채택하고 다음 주차로</td></tr>
+                <tr><td>0.40 ~ 0.60</td><td>조건부</td><td>judge를 계속 다듬되, 그 판정으로 실험은 진행</td></tr>
+                <tr><td>0.40 미만</td><td>탈락</td><td>기준 정의부터 다시</td></tr>
+              </tbody>
+            </table>
             <p>Week 01 kappa와 Week 02 kappa가 크게 벌어지면 rubric이 20건에 과적합된 것이고, 그 관찰 자체가 좋은 실패 사례입니다.</p>
+          </article>
+
+          <article class="learning-card">
+            <h3>왜 0.60이고, 왜 두 단인가</h3>
+            <p>처음에는 0.40으로 잡았습니다. 그런데 0.40~0.60은 “보통 일치” 구간입니다. 앞으로 15주 동안 모든 before/after 비교를 이 judge로 재기 때문에, 보통 수준으로 일치하는 자를 쓰면 그 노이즈가 이후 모든 숫자에 상속됩니다. 대체 평가자로 쓸 만하다고 보는 통상적 선인 0.60으로 올렸습니다.</p>
+            <p>단일 절선으로 자르지 않는 이유는 <strong>계측 해상도</strong>입니다. n=20에서 불일치 1건이 kappa를 <strong>0.133</strong> 움직입니다.</p>
+            <div class="scoreboard">
+              <table>
+                <thead><tr><th>불일치</th><th>2건</th><th>3건</th><th>4건</th></tr></thead>
+                <tbody><tr><td>kappa</td><td>0.733</td><td><strong>0.600</strong></td><td>0.467</td></tr></tbody>
+              </table>
+            </div>
+            <p>0.58과 0.62의 차이는 항목 1건도 되지 않습니다. 게다가 judge의 temperature가 0.20이라 재실행만으로 1건 안팎이 뒤집힙니다. 통계적으로 구별되지 않는 두 값을 하나의 절선으로 가르면, 그 1건이 15주의 진로를 정하게 됩니다.</p>
+            <p>두 단으로 두면 경계에 떨어졌을 때 <strong>“자를 더 다듬으면서 실험도 계속한다”</strong>는 제3의 선택지가 생깁니다. 기준을 무르게 만든 것이 아니라 계측기의 해상도에 맞춘 것입니다.</p>
           </article>
         </div>
       </section>
