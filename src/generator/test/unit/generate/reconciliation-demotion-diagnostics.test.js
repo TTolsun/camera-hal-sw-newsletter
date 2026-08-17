@@ -139,7 +139,7 @@ test('그룹 키만 남은 실행에서도 개수를 세고 사유 없음을 명
 test('LLM이 쓴 coverage_decision이 markdown 구조를 깨거나 재해석되지 않는다', () => {
   // coverage_decision은 스키마상 자유 문자열이다(enum 없음). 개행 하나면 목록이 끊기고,
   // 백틱·링크 문법은 그대로 재해석된다.
-  const hostile = 'main | `code`\n[link](https://example.com) <b>x</b> *em*';
+  const hostile = 'main | `code`\n[link](https://example.com) <b>x</b> *em* ~~strike~~ a&amp;b trail\\';
   const shortlistReport = deterministicReport(['a', 'sony']);
   applyReconciliation(shortlistReport, {
     editorial_plans: [plan('a', 'main_article'), plan('sony', hostile)]
@@ -156,11 +156,20 @@ test('LLM이 쓴 coverage_decision이 markdown 구조를 깨거나 재해석되�
   // 개행이 접혀 한 줄로 남고, 사유 코드까지 같은 줄에 붙어 있다.
   assert.match(candidateLine, /reason_code=editorial_plan_unrecognized$/);
   assert.match(candidateLine, /\\\[link\\\]/, '링크 문법은 escape된 문자로 남는다');
-  for (const char of ['`', '|', '[', ']', '(', ')', '<', '>', '*']) {
+  for (const char of ['`', '|', '[', ']', '(', ')', '<', '>', '*', '~', '&']) {
     const index = candidateLine.indexOf(char);
     assert.notEqual(index, -1, `원문 문자 ${char}는 보존한다`);
     assert.equal(candidateLine[index - 1], '\\', `${char}는 escape돼야 한다`);
   }
+  // `~~`는 취소선, `&amp;`는 HTML entity로 디코딩된다. 둘 다 LLM이 쓰지 않은 것을 보여준다.
+  assert.match(candidateLine, /\\~\\~strike\\~\\~/, '취소선으로 재해석되지 않는다');
+  assert.match(candidateLine, /a\\&amp;b/, 'entity가 `a&b`로 디코딩되지 않는다');
+  // 값 끝의 backslash를 escape하지 않으면 뒤따르는 구분자가 escape 대상이 돼 사라진다.
+  assert.match(
+    candidateLine,
+    /trail\\\\, reason_code=/,
+    'backslash 자신이 escape돼야 뒤의 구분자를 삼키지 않는다'
+  );
   assert.equal(markdown.split('\n').filter(line => line.includes('example.com')).length, 1);
 });
 
@@ -180,6 +189,7 @@ test('값 첫머리의 블록 마커가 목록 항목을 heading·중첩목록·
   assert.match(markdown, /^ {2}- \\- nested group$/m);
   assert.match(markdown, /^ {2}- 1\\\. ordered group$/m);
   assert.match(markdown, /^ {4}- \\# 1\/3 media: fix uvc: coverage_decision=\\- dash lead, /m);
+  // `1)`은 줄머리 규칙이 아니라 전역 pass가 막는다(`)`가 escape 대상이라 `1\)`가 된다).
   assert.match(markdown, /^ {4}- \\\+ plus lead: coverage_decision=1\\\) paren lead, /m);
   assert.match(markdown, /^ {4}- 1\\\. intro: coverage_decision=\\> quote lead, /m);
 });
@@ -234,4 +244,25 @@ test('사유가 빈 문자열이면 none, 필드가 없으면 unknown으로 갈�
     reconciliation_demoted_groups: [{ article_group_key: 'group:a', demoted_candidates: [{ candidate_key: 'a' }] }]
   });
   assert.match(missing, /^ {4}- a: coverage_decision=unknown, reason_code=unknown$/m);
+});
+
+test('그룹 키가 falsy여도 기록된 후보 사유를 잃지 않는다', () => {
+  // 적재(`|| ''`)와 조회(`String(null)` -> `'null'`)의 정규화가 어긋나면 사유가 있는데도
+  // "no per-candidate reason recorded"가 찍힌다. 오늘의 생산자는 falsy 키를 걸러내지만
+  // (coverage-reconciliation.js), 렌더가 기록을 버리는 방향으로 틀리면 안 된다.
+  const markdown = renderCandidateSelectionDiagnostics({
+    reconciliation_demoted_groups: [{
+      article_group_key: null,
+      demoted_candidates: [{ candidate_key: 'k1', coverage_decision: 'main_article', reason_code: 'cap_clamp' }]
+    }]
+  });
+
+  assert.match(markdown, /^- Reconciliation-demoted groups: 1$/m);
+  assert.match(markdown, /^ {2}- unknown$/m, '키는 unknown으로 적되');
+  assert.match(
+    markdown,
+    /^ {4}- k1: coverage_decision=main_article, reason_code=cap_clamp$/m,
+    '사유는 그대로 남아야 한다'
+  );
+  assert.doesNotMatch(markdown, /no per-candidate reason recorded/);
 });
