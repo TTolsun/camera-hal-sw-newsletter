@@ -463,20 +463,43 @@ function explicitHardBlockedGroups(editor = {}) {
     .filter(item => item.article_group_key);
 }
 
+// 회계의 권위 집합은 결정론 선정 집합 S 하나다. editor 출력은 신뢰할 수 없는 입력이라 S를 넓히지
+// 못한다. 그래서 S 안의 것만 회계에 넣고, S 밖 기록은 진단으로만 남긴다.
+//
+//   회계        S = (R∩S) ⊎ (D∩S) ⊎ (H∩S)
+//   치명        R−S 가 비어 있지 않음 — 선택되지 않은 소재로 기사를 만든 것이라 발행 안전 문제다
+//   진단 전용   D−S, H−S — 이미 main에서 빠진 그룹에 대한 기록이라 선택 그룹의 처리와 무관하다
+//
+// 옛 회계는 `selected.size === rendered.size + demoted.size + hardBlocked.size` 한 줄로 위 셋을
+// 뭉뚱그려, editor가 지어낸 키로 강등을 선언하기만 해도 발행 전체가 막혔다(2026-08-17 실측:
+// 재조정이 5그룹을 1그룹으로 줄인 주에 editor가 `patch:uvcvideo_memory_safety` 같은 키 4개를
+// 선언 → selected 1 !== rendered 1 + demoted 4). 지어낸 키는 어떤 매칭으로도 S와 이어지지 않는다.
 function groupCoverageSummary({ selectedGroupKeys = [], renderedGroupKeys = [], demotedGroups = [], hardBlockedGroups = [] } = {}) {
   const selected = new Set(ensureArray(selectedGroupKeys).filter(Boolean));
   const renderedList = ensureArray(renderedGroupKeys).filter(Boolean);
   const rendered = new Set(renderedList);
   const demoted = new Set(ensureArray(demotedGroups).map(item => text(item.article_group_key || item)).filter(Boolean));
   const hardBlocked = new Set(ensureArray(hardBlockedGroups).map(item => text(item.article_group_key || item)).filter(Boolean));
+
+  // 회계 집합(∩S)과 선택 밖 기록을 처음부터 갈라 둔다. 이렇게 해야 리포트에
+  // "selected 1 / rendered 1 / demoted 4 / ok true" 같은 혼란스러운 출력이 남지 않는다.
+  const renderedAccounted = [...rendered].filter(key => selected.has(key));
+  const demotedAccounted = [...demoted].filter(key => selected.has(key));
+  const hardBlockedAccounted = [...hardBlocked].filter(key => selected.has(key));
+  const renderedOutside = [...rendered].filter(key => !selected.has(key));
+  const demotedOutside = [...demoted].filter(key => !selected.has(key));
+  const hardBlockedOutside = [...hardBlocked].filter(key => !selected.has(key));
+
   const renderedCounts = renderedList.reduce((counts, key) => counts.set(key, (counts.get(key) || 0) + 1), new Map());
   const duplicateRendered = [...renderedCounts.entries()]
     .filter(([, count]) => count > 1)
     .map(([key]) => key);
   const missing = [...selected].filter(key => !rendered.has(key) && !demoted.has(key) && !hardBlocked.has(key));
-  const overlap = [...rendered].filter(key => demoted.has(key));
-  const hardBlockedRenderedOverlap = [...rendered].filter(key => hardBlocked.has(key));
-  const hardBlockedDemotedOverlap = [...demoted].filter(key => hardBlocked.has(key));
+  // 겹침은 선택된 그룹에 대해서만 본다 — S 밖 기록끼리의 겹침은 발행 결과를 바꾸지 않는다.
+  const overlap = renderedAccounted.filter(key => demoted.has(key));
+  const hardBlockedRenderedOverlap = renderedAccounted.filter(key => hardBlocked.has(key));
+  const hardBlockedDemotedOverlap = demotedAccounted.filter(key => hardBlocked.has(key));
+  // 사유 코드도 같은 계약을 따른다: S 안의 기록에만 요구하고, S 밖 기록의 사유 누락은 진단이다.
   const demotionMissingReason = ensureArray(demotedGroups)
     .filter(item => selected.has(text(item.article_group_key || item)) && !text(item.demotion_reason) && !text(item.reason_code))
     .map(item => text(item.article_group_key || item));
@@ -485,14 +508,20 @@ function groupCoverageSummary({ selectedGroupKeys = [], renderedGroupKeys = [], 
     .map(item => text(item.article_group_key || item));
   return {
     selected_group_count: selected.size,
-    rendered_group_count: rendered.size,
-    explicitly_demoted_group_count: demoted.size,
-    hard_blocked_group_count: hardBlocked.size,
+    rendered_group_count: renderedAccounted.length,
+    explicitly_demoted_group_count: demotedAccounted.length,
+    hard_blocked_group_count: hardBlockedAccounted.length,
+    rendered_outside_selection_count: renderedOutside.length,
+    explicitly_demoted_outside_selection_count: demotedOutside.length,
+    hard_blocked_outside_selection_count: hardBlockedOutside.length,
     selected_representative_group_keys: [...selected],
-    rendered_group_keys: [...rendered],
+    rendered_group_keys: renderedAccounted,
     duplicate_rendered_group_keys: duplicateRendered,
-    explicitly_demoted_group_keys: [...demoted],
-    hard_blocked_group_keys: [...hardBlocked],
+    explicitly_demoted_group_keys: demotedAccounted,
+    hard_blocked_group_keys: hardBlockedAccounted,
+    rendered_outside_selection_group_keys: renderedOutside,
+    explicitly_demoted_outside_selection_group_keys: demotedOutside,
+    hard_blocked_outside_selection_group_keys: hardBlockedOutside,
     missing_group_keys: missing,
     overlapping_group_keys: overlap,
     hard_blocked_rendered_overlap_group_keys: hardBlockedRenderedOverlap,
@@ -500,13 +529,14 @@ function groupCoverageSummary({ selectedGroupKeys = [], renderedGroupKeys = [], 
     demotion_missing_reason_group_keys: demotionMissingReason,
     hard_block_missing_reason_group_keys: hardBlockedMissingReason,
     ok: missing.length === 0 &&
+      renderedOutside.length === 0 &&
       overlap.length === 0 &&
       hardBlockedRenderedOverlap.length === 0 &&
       hardBlockedDemotedOverlap.length === 0 &&
       duplicateRendered.length === 0 &&
       demotionMissingReason.length === 0 &&
       hardBlockedMissingReason.length === 0 &&
-      selected.size === rendered.size + demoted.size + hardBlocked.size
+      selected.size === renderedAccounted.length + demotedAccounted.length + hardBlockedAccounted.length
   };
 }
 
