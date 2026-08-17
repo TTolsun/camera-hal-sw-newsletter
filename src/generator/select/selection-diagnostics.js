@@ -333,6 +333,56 @@ function formatCount(value) {
   return value === null || value === undefined ? 'unknown' : String(value);
 }
 
+// #914: coverage_decision은 editorial-plan LLM이 쓴 자유 문자열이라(스키마에 enum이 없다)
+// markdown 제어문자가 그대로 들어온다. 이 렌더는 표가 아니라 목록이므로 표 전용
+// escapeMarkdownCell(파이프와 개행만 다룬다)로는 부족하다. 개행 하나면 목록 항목이 끊기고,
+// 백틱·링크·raw HTML은 그대로 재해석돼 원문이 눈에서 사라진다. 값은 한 줄로 접고 구조를
+// 바꾸는 문자만 escape한다. `_`와 `#`는 escape하지 않는다 — 단어 안에서는 markdown 구조를
+// 바꾸지 않는데 escape하면 snake_case인 reason_code가 매 줄 읽기 어려워진다.
+function markdownSafeInline(value) {
+  if (value === null || value === undefined) return 'unknown';
+  const collapsed = String(value).replace(/\s+/g, ' ').trim();
+  if (!collapsed) return 'none';
+  return collapsed.replace(/[\\`*[\]()<>|~]/g, '\\$&');
+}
+
+// #914: 재조정 강등은 editor가 선언한 강등과 원인이 다르다(전자는 결정론 재조정의 cap clamp나
+// 편집 계획 등급, 후자는 editor 산출물의 선언). 같은 줄로 접으면 리뷰가 "editor 강등 0건"만
+// 읽고 재조정이 내린 그룹을 통째로 놓친다 — 2026-08-17이 정확히 그 실행이었다.
+function reconciliationDemotionLines(diagnostics) {
+  const demotedGroupKeys = ensureArray(diagnostics.reconciliation_demoted_group_keys);
+  const demotedGroups = ensureArray(diagnostics.reconciliation_demoted_groups);
+  // 관측하지 않은 실행(unknown)과 강등이 없던 실행(0)은 서로 다른 사실이다.
+  const observed = diagnostics.reconciliation_demoted_group_keys !== undefined ||
+    diagnostics.reconciliation_demoted_groups !== undefined;
+  const candidatesByGroupKey = new Map(demotedGroups.map(group => [
+    String(group?.article_group_key || ''),
+    ensureArray(group?.demoted_candidates)
+  ]));
+  // 키 목록이 개수를 가진 정본이다. #909 이전 실행은 키만 남겼으므로 그때도 그룹을 세야 한다.
+  const orderedGroupKeys = demotedGroupKeys.length > 0
+    ? demotedGroupKeys
+    : demotedGroups.map(group => group?.article_group_key);
+  const lines = [`- Reconciliation-demoted groups: ${observed ? orderedGroupKeys.length : 'unknown'}`];
+  for (const groupKey of orderedGroupKeys) {
+    lines.push(`  - ${markdownSafeInline(groupKey)}`);
+    const demotedCandidates = candidatesByGroupKey.get(String(groupKey)) || [];
+    if (demotedCandidates.length === 0) {
+      // 사유가 기록되지 않은 것을 빈 줄로 두면 markdown이 다시 "강등 없음"으로 읽힌다.
+      lines.push('    - no per-candidate reason recorded');
+      continue;
+    }
+    for (const demoted of demotedCandidates) {
+      lines.push([
+        `    - ${markdownSafeInline(demoted?.candidate_key)}:`,
+        `coverage_decision=${markdownSafeInline(demoted?.coverage_decision)},`,
+        `reason_code=${markdownSafeInline(demoted?.reason_code)}`
+      ].join(' '));
+    }
+  }
+  return lines;
+}
+
 function renderCandidateSelectionDiagnostics(diagnostics = {}) {
   const composition = diagnostics.composition_summary || {};
   const headline = diagnostics.headline_decision || {};
@@ -358,7 +408,8 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- Deterministic primary articles: ${formatCount(diagnostics.primary_selected_article_count ?? diagnostics.deterministic_selected_count)}`,
     `- Selected representative groups: ${formatCount(diagnostics.selected_group_count)}`,
     `- Rendered groups: ${formatCount(diagnostics.rendered_group_count)}`,
-    `- Explicitly demoted groups: ${formatCount(diagnostics.explicitly_demoted_group_count)}`,
+    `- Explicitly demoted groups (editor): ${formatCount(diagnostics.explicitly_demoted_group_count)}`,
+    ...reconciliationDemotionLines(diagnostics),
     `- Reserve candidates: ${formatCount(diagnostics.reserve_candidate_count)}`,
     `- Demoted candidates: ${formatCount(diagnostics.demoted_candidate_count)}`,
     `- Composition mode: ${formatCount(diagnostics.composition_mode)}`,
