@@ -16,6 +16,14 @@ MAIN_USABLE is "yes" only when all three conditions hold:
    name, or a described behaviour change is present, so that "what changed" could be
    written in one sentence. "Coming soon" or "various improvements" does not qualify.
 
+   A patch revision number does not count as a version. "[PATCH v6]" or "[v2]" means
+   the sixth posting of that patch, and says nothing about what changed in the
+   product; two patches both marked v6 change entirely different things. This closes
+   only the first of the three routes: a patch whose title or summary names an API,
+   a component, a driver, or a subsystem path, or describes a behaviour change, still
+   satisfies this condition by one of the other two. A release number of the form
+   x.y ("1.7.0-alpha02", "v0.7.1") is a version.
+
 3. Self-containment. That single URL is enough to check the claim. Playlists,
    landing pages, and roundup hubs whose real content lives in child links do not
    qualify.
