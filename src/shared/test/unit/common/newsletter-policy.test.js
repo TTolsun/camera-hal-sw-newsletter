@@ -122,7 +122,29 @@ test('getDeepDivePolicy returns normalized immutable policy', () => {
 test('generated policy docs carry the deep-dive activation threshold', () => {
   const block = renderNewsletterPolicyBlock();
 
-  assert.match(block, /심층\(deep-dive\) 발동 임계값: 위클리 최종 기사 중 `direct_aosp_camera` 버킷이 1건 이하/);
+  assert.match(block, /`direct_aosp_camera` 버킷 수가 1 이하이면 심층 주제 큐에서 주제 하나를 고릅니다/);
+});
+
+// 79행과 같은 계열의 회귀 방지: 이 블록은 EDITORIAL_POLICY.md로 생성되고, 생성기가 그 문서 전문을
+// 읽어 commonContext에 붙여 editorial-plan·editor·background-context·fact-check·judge·repair prompt로
+// 보낸다(gemini-newsroom-newsletter.js -> buildPromptContexts). 심층 발동 조건은 발행이 끝난 뒤 도는
+// 사후 판정인데, 렌더된 블록에서 이 줄은 direct_aosp_camera 버킷 수에 붙은 유일한 숫자다 — 실제
+// 구성 하한 세 줄은 전부 "단일 기사 정책으로 비활성화됨"으로 렌더되기 때문이다. 그래서 이 문장이
+// 상한처럼 읽히면 editor가 그 버킷 기사를 스스로 강등한다(2026-08-03에는 그렇게 4개가 강등돼
+// 발행이 막혔다). 값은 정책에서 오되 문장은 상한으로 읽히면 안 된다.
+test('deep-dive activation reads as a pipeline-internal condition, never as a bucket cap', () => {
+  const deepDiveLine = renderNewsletterPolicyBlock()
+    .split('\n')
+    .find(line => line.includes('심층(deep-dive)'));
+
+  assert.ok(deepDiveLine, '생성 블록에 심층 발동 조건 줄이 있어야 합니다.');
+  assert.match(deepDiveLine, /파이프라인 내부 판정 — 편집 지시가 아닙니다/);
+  assert.match(deepDiveLine, /이 숫자는 기사 수 상한도, 버킷 구성 제한도 아닙니다/);
+  assert.match(deepDiveLine, /편집 단계에서는 이 항목을 고려하지 마세요/);
+  // 상한으로 읽히는 표현이 이 줄에 다시 들어오면 실패한다.
+  assert.equal(/버킷이 \d+건 이하인 주에만/.test(deepDiveLine), false);
+  assert.equal(/최대 \d+개/.test(deepDiveLine), false);
+  assert.equal(/이하로 유지/.test(deepDiveLine), false);
 });
 
 test('generated policy docs include headline policy summary', () => {
