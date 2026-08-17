@@ -7,6 +7,7 @@ const vm = require('node:vm');
 const root = path.join(__dirname, '..', '..', '..', '..');
 const NewsletterArchive = require('../../../../articles/assets/js/newsletter-archive');
 const { withLearningFooterLink } = require('../../../generator/publish/assemble-site');
+const { headlineSnapshotFromCandidate } = require('../../../generator/reporter/homepage-headline');
 
 function extractHomepageScript() {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -315,6 +316,48 @@ test('featured hero ignores a null headline while keeping the grid working', asy
   });
   assert.equal(elements['featured-card'].innerHTML, '');
   assert.match(elements['latest-grid'].innerHTML, /Current issue/);
+});
+
+test('featured hero emits no lead paragraph when the headline has no summary', async () => {
+  // summary 가 없으면 lead 문단을 만들지 않는다. 빈 문단이나 대체 문구를 채우지 않는 것이 계약이다.
+  const { elements, errors } = await renderHomepage(
+    [newsletter('2026-05-23', 'Current issue')],
+    validHeadlineState({ summary: '' })
+  );
+
+  assert.doesNotMatch(elements['featured-card'].innerHTML, /featured-lead/);
+  assert.equal(errors.length, 0);
+});
+
+test('featured hero never renders the collector rationale as the headline lead', async () => {
+  // 수집기 내부 판단 문자열(candidate.reason)이 스냅샷 -> homepage-headline.json -> 히어로 lead 로
+  // 승격되던 경로를 스냅샷 생성부터 렌더까지 이어서 막는다.
+  const collectorReason = 'LWN.net (high, p1, score 74): camera_driver_image_pipeline (camera pipeline signal detected)';
+  const snapshot = headlineSnapshotFromCandidate({
+    title: 'Camera HAL 이미지 파이프라인 드라이버 패치 제안',
+    summary: '',
+    description: '',
+    reason: collectorReason,
+    collection_reason: collectorReason,
+    source_url: 'https://lwn.net/Articles/1000001/',
+    source: 'LWN.net',
+    published_date: '2026-05-23',
+    hasDatedEvidence: true,
+    relevance_bucket: 'camera_driver_image_pipeline'
+  }, { date: '2026-05-23', newsletterUrl: 'newsletters/2026-05-23/index.html', scoredAt: '2026-05-23' });
+
+  assert.equal(snapshot.summary, '');
+
+  const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], {
+    schemaVersion: 1,
+    current_headline: snapshot,
+    headline_history: []
+  });
+
+  const html = elements['featured-card'].innerHTML;
+  assert.doesNotMatch(html, /featured-lead/);
+  assert.doesNotMatch(html, /score 74/);
+  assert.doesNotMatch(html, /LWN\.net \(/);
 });
 
 test('featured hero falls back to the external source link when no internal URL exists', async () => {

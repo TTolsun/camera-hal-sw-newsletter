@@ -60,6 +60,43 @@ test('a single YouTube watch video headline is not rejected as a playlist collec
   assert.notEqual(headlineEligibilityRejection(watch, { policy }), 'playlist_collection_url');
 });
 
+test('collector rationale never becomes the homepage headline summary', () => {
+  // candidate.reason 은 수집기가 만든 내부 판단 문자열("<소스> (<신뢰도>, <우선순위>, score N): ...")이다.
+  // 독자용 문장이 아니므로 summary/description 이 없을 때 홈 히어로 lead 자리를 대신 채우면 안 된다.
+  const collectorReason = 'LWN.net (high, p1, score 74): camera_driver_image_pipeline (camera pipeline signal detected)';
+  const snapshot = headlineSnapshotFromCandidate(headlineCandidate({
+    summary: '',
+    description: '',
+    reason: collectorReason,
+    collection_reason: collectorReason
+  }), { date: '2026-05-23', policy, scoredAt: '2026-05-23' });
+
+  assert.equal(snapshot.summary, '');
+  assert.doesNotMatch(JSON.stringify(snapshot), /LWN\.net \(high/);
+  assert.doesNotMatch(JSON.stringify(snapshot), /score 74/);
+});
+
+test('headline summary still falls back to the candidate description', () => {
+  // reason 만 제거한다. 실제 기사 문장인 description fallback 은 그대로 살아 있어야 한다.
+  const snapshot = headlineSnapshotFromCandidate(headlineCandidate({
+    summary: '',
+    description: 'Camera HAL 스트림 메타데이터 검증 절차가 바뀌었습니다.'
+  }), { date: '2026-05-23', policy, scoredAt: '2026-05-23' });
+
+  assert.equal(snapshot.summary, 'Camera HAL 스트림 메타데이터 검증 절차가 바뀌었습니다.');
+});
+
+test('a whitespace-only summary falls through to the description instead of blanking the lead', () => {
+  // 공백만 있는 summary 도 truthy 다. fallback 판단 전에 후보별로 trim 하지 않으면 그 공백이
+  // description 을 가로채 lead 가 통째로 사라진다. reason 제거 후 description 이 마지막 방어선이다.
+  const snapshot = headlineSnapshotFromCandidate(headlineCandidate({
+    summary: '   \n\t ',
+    description: 'Camera HAL 버퍼 검증 경로가 정리되었습니다.'
+  }), { date: '2026-05-23', policy, scoredAt: '2026-05-23' });
+
+  assert.equal(snapshot.summary, 'Camera HAL 버퍼 검증 경로가 정리되었습니다.');
+});
+
 test('KST age day calculation uses KST date boundary and clamps future dates', () => {
   assert.equal(computeKstAgeDays('2026-05-22', '2026-05-23'), 1);
   assert.equal(computeKstAgeDays('2026-05-22', '2026-05-22T16:00:00Z'), 1);

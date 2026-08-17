@@ -328,7 +328,12 @@ function headlineSnapshotFromCandidate(candidate = {}, {
   const snapshot = {
     article_identity_key: articleKey,
     title: text(candidate.title),
-    summary: text(candidate.summary || candidate.description || candidate.reason),
+    // 독자에게 보이는 lead 는 실제 기사 문장(summary/description)만 쓴다. candidate.reason 은
+    // 수집기가 만든 내부 판단 문자열이라 fallback 으로 쓰면 홈 히어로에 그대로 노출된다.
+    // 둘 다 없으면 빈 값으로 두고, lead 는 렌더하지 않는다.
+    // 각 후보를 fallback 판단 전에 trim 한다. 공백만 있는 summary 도 truthy 라서, 한 번에
+    // 묶어 trim 하면 그 공백이 description 을 가로채고 lead 가 통째로 사라진다.
+    summary: text(candidate.summary) || text(candidate.description),
     source_url: sourceUrl(candidate),
     newsletter_date: text(candidate.newsletter_date || date),
     newsletter_url: text(candidate.newsletter_url || newsletterUrl),
