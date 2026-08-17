@@ -43,6 +43,7 @@ function applyReconciliation(shortlistReport, editorialPlanReport) {
   Object.assign(shortlistReport, result.selection_summary, {
     selected_articles: result.selected,
     reconciliation_demoted_group_keys: result.diff.demoted_group_keys,
+    reconciliation_demoted_groups: result.diff.demoted_groups,
     reconciliation_promoted_group_keys: result.diff.promoted_group_keys,
     deterministic_selected_representative_group_keys: result.diff.deterministic_selected_group_keys
   });
@@ -272,4 +273,35 @@ test('렌더 관측이 없는 실행에서는 선택 밖 렌더 카운트도 판
   assert.equal(status.group_coverage_ok, null, '관측이 없으면 판정도 없다');
   assert.equal(status.rendered_outside_selection_count, null);
   assert.equal(status.rendered_outside_selection_group_keys, null);
+});
+
+test('#909: 그룹 강등 사유가 status까지 남고 candidate 단위와 섞이지 않는다', () => {
+  // 결정론 3그룹 중 sony는 편집 계획이 reference_only로 내리고, twin은 같은 그룹의 sibling만
+  // 빠진다. status에는 실제로 사라진 그룹만, 그 사유와 함께 남아야 한다.
+  const shortlistReport = deterministicReport(['a', 'sony']);
+  const twin = candidate('a-twin', { article_group_key: 'group:a' });
+  shortlistReport.selected_articles.push(twin);
+  shortlistReport.primary_selected_articles = shortlistReport.selected_articles;
+
+  const editorialPlanReport = {
+    editorial_plans: [
+      plan('a', 'main_article'),
+      plan('a-twin', 'reference_only'),
+      plan('sony', 'reference_only')
+    ]
+  };
+
+  applyReconciliation(shortlistReport, editorialPlanReport);
+
+  const status = selectionStatusExtra(shortlistReport, {
+    renderedGroupKeys: ['group:a'],
+    explicitlyDemotedGroups: [],
+    hardBlockedGroups: []
+  });
+
+  assert.deepEqual(status.reconciliation_demoted_group_keys, ['group:sony']);
+  assert.deepEqual(status.reconciliation_demoted_groups, [{
+    article_group_key: 'group:sony',
+    demoted_candidates: [{ candidate_key: 'sony', coverage_decision: 'reference_only', reason_code: 'editorial_plan_reference_only' }]
+  }], '사라진 그룹만, 사유와 함께 남는다');
 });

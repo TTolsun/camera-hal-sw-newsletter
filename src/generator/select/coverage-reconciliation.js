@@ -20,6 +20,19 @@ const { candidateGroupKey } = require('../../shared/common/article-groups');
 const COVERAGE_MAIN = 'main_article';
 const IMPACT_RANK = { high: 3, medium: 2, low: 1 };
 
+// #909: reason_code는 기계가 읽는 값이라 LLM 원문을 그대로 이어붙이면 안 된다.
+// coverage_decision은 스키마상 자유 문자열이고(enum 없음) 프롬프트 문장만이 값을 제한하므로,
+// 모르는 값은 `editorial_plan_unrecognized`로 접고 원문은 coverage_decision에 그대로 남긴다.
+const KNOWN_COVERAGE_DECISIONS = new Set(['main_article', 'short_mention', 'reference_only', 'exclude']);
+
+function demotionReasonCode({ proposedMain, coverageDecision }) {
+  // main 제안까지 갔다가 빠졌으면 원인은 cap이다. 편집 계획 등급이 무엇이었든 마찬가지다.
+  if (proposedMain) return 'cap_clamp';
+  if (!coverageDecision) return 'unknown';
+  if (!KNOWN_COVERAGE_DECISIONS.has(coverageDecision)) return 'editorial_plan_unrecognized';
+  return `editorial_plan_${coverageDecision}`;
+}
+
 function forbiddenBuckets() {
   return new Set(ensureArray(articlePolicy.forbiddenMainBuckets));
 }
@@ -55,8 +68,9 @@ function buildCoverageLookup(editorialPlanReport) {
   const byHash = new Map();
   for (const plan of ensureArray(editorialPlanReport?.editorial_plans)) {
     const entry = {
-      coverage_decision: String(plan?.coverage_decision || ''),
-      impact_level: String(plan?.impact_level || '')
+      // trim 없이 두면 " main_article"이 COVERAGE_MAIN과 안 맞아 main 제안이 조용히 강등된다.
+      coverage_decision: String(plan?.coverage_decision || '').trim(),
+      impact_level: String(plan?.impact_level || '').trim()
     };
     const url = String(plan?.url || '').trim();
     const hash = String(plan?.source_candidate_hash || '').trim();
@@ -137,6 +151,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   }
 
   // 3. cap clamp.
+  const proposedMainKeys = new Set(proposedMain.map(candidateKey));
   const clamped = applyCaps(proposedMain, entryFor);
   const clampedKeys = new Set(clamped.map(candidateKey));
 
@@ -158,10 +173,24 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   }
 
   // 결정론 baseline 대비 강등/승급 기록.
+  //
+  // #909: 강등에는 원본 판단과 실제 전환 원인을 **따로** 남긴다. LLM이 main_article로 제안한
+  // 후보도 cap clamp에 밀리면 강등되므로, 제안(coverage_decision)을 그대로 사유로 복사하면
+  // "왜 빠졌나"에 답하지 못한다(reason_code=main_article 같은 무의미한 기록이 남는다).
   for (const candidate of deterministicSelected) {
-    if (!clampedKeys.has(candidateKey(candidate))) {
-      changes.push({ key: candidateKey(candidate), action: 'demoted' });
-    }
+    const key = candidateKey(candidate);
+    if (clampedKeys.has(key)) continue;
+    const coverageDecision = entryFor(candidate)?.coverage_decision || '';
+    changes.push({
+      key,
+      article_group_key: candidateGroupKey(candidate),
+      action: 'demoted',
+      coverage_decision: coverageDecision,
+      reason_code: demotionReasonCode({
+        proposedMain: proposedMainKeys.has(key),
+        coverageDecision
+      })
+    });
   }
   for (const candidate of clamped) {
     if (!deterministicKeys.has(candidateKey(candidate))) {
@@ -178,6 +207,30 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   const reconciledGroupKeys = uniqueGroupKeys(clamped);
   const reconciledGroupKeySet = new Set(reconciledGroupKeys);
   const deterministicGroupKeySet = new Set(deterministicGroupKeys);
+  const demotedGroupKeys = deterministicGroupKeys.filter(key => !reconciledGroupKeySet.has(key));
+
+  // #909: 리뷰가 읽는 정본은 그룹 단위다. candidate 단위 changes를 그대로 올리면 같은 그룹의
+  // 후보 하나만 빠진 경우까지 "그룹 강등"으로 읽혀 진단이 왜곡된다. 그래서 그룹이 실제로
+  // 사라진 경우(demotedGroupKeys)에만, 그 그룹에서 빠진 후보들의 사유를 모아 싣는다.
+  const demotedChangesByGroup = new Map();
+  for (const change of changes) {
+    if (change.action !== 'demoted') continue;
+    const groupKey = change.article_group_key;
+    if (!groupKey) continue;
+    if (!demotedChangesByGroup.has(groupKey)) demotedChangesByGroup.set(groupKey, []);
+    demotedChangesByGroup.get(groupKey).push(change);
+  }
+  const demotedGroups = demotedGroupKeys.map(groupKey => ({
+    article_group_key: groupKey,
+    // 후보별 레코드를 그대로 싣는다. 사유·판단·후보를 각각 배열로 쪼개면 서로 독립적으로
+    // dedup·필터링돼 짝이 어긋나고(빈 coverage_decision 하나면 인덱스가 밀린다), 길이가 우연히
+    // 맞는 경우에는 뒤집힌 짝이 조용히 남는다. 단위는 그룹이되 짝은 후보 안에서 보존한다.
+    demoted_candidates: (demotedChangesByGroup.get(groupKey) || []).map(change => ({
+      candidate_key: change.key,
+      coverage_decision: change.coverage_decision,
+      reason_code: change.reason_code
+    }))
+  }));
 
   return {
     selected: clamped,
@@ -195,7 +248,8 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
       // 그룹키와 네임스페이스가 달라 그대로 쓰면 selected와 매칭되지 않는다. 또 같은
       // 그룹의 다른 후보가 살아남았으면 그룹이 강등된 게 아니므로 집합 차집합으로 센다.
       deterministic_selected_group_keys: deterministicGroupKeys,
-      demoted_group_keys: deterministicGroupKeys.filter(key => !reconciledGroupKeySet.has(key)),
+      demoted_group_keys: demotedGroupKeys,
+      demoted_groups: demotedGroups,
       promoted_group_keys: reconciledGroupKeys.filter(key => !deterministicGroupKeySet.has(key))
     }
   };
