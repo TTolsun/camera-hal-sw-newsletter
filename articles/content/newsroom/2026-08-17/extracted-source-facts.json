@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "16ab7df7ad3c9170",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "published_at": "August 12, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Deprecated legacy Camera2Interop APIs ( Camera2Interop.Extender , Camera2CameraControl , Camera2CameraInfo , and CaptureRequestOptions ) in favor of Camera2Interop configurator factory methods and Kotlin extension functions. ( Ib0845 , b/529609261 )",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
+      "warnings": []
+    },
+    {
+      "id": "gemini-cccc738d72208e4c",
+      "url": "https://lore.kernel.org/linux-media/20260815193839.141406-1-devnexen@gmail.com/",
+      "title": "[PATCH] media: v4l2-isp: reject zero-sized parameter blocks - David Carlier",
+      "published_at": "2026-08-15",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH] media: v4l2-isp: reject zero-sized parameter blocks - David Carlier",
+          "evidence_text": "<html><head><title>[PATCH] media: v4l2-isp: reject zero-sized parameter blocks - David Carlier</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhre",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-f4d6aa1f5b63ee45",
+      "url": "https://lore.kernel.org/linux-media/20260812105305.32447-1-nicfio@gmail.com/",
+      "title": "[PATCH 0/3] media: Two oopses and a hang when unbinding a streaming sensor - Nicola Fiorillo",
+      "published_at": "2026-08-12",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH 0/3] media: Two oopses and a hang when unbinding a streaming sensor - Nicola Fiorillo",
+          "evidence_text": "<html><head><title>[PATCH 0/3] media: Two oopses and a hang when unbinding a streaming sensor - Nicola Fiorillo</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "8d1fc2e87d4df6cf",
+      "url": "https://lore.kernel.org/linux-media/20260815193839.141406-1-devnexen@gmail.com/",
+      "title": "[PATCH] media: v4l2-isp: reject zero-sized parameter blocks",
+      "published_at": "2026-08-15T19:38:44Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "v4l2_isp_params_validate_buffer() advances by block->size but never bounds it from below. A block with size 0 passes both the block->size > buffer_size test and the comparison against info->size whenever the driver's type_info[] entry is an uninitialised hole, so the walk makes no forward progress and loops forever. Drivers call this from vb2 .buf_prepare, so VIDIOC_QBUF on the parameters video device hangs the calling task with the queue mutex held. rppx1 has such a hole today; fix the core so",
+          "evidence_text": "<html><head><title>[PATCH] media: v4l2-isp: reject zero-sized parameter blocks - David Carlier</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhre",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.806,
+      "warnings": []
+    },
+    {
+      "id": "80bd254ade1452d3",
+      "url": "https://lore.kernel.org/linux-media/20260812105305.32447-1-nicfio@gmail.com/",
+      "title": "[PATCH 0/3] media: Two oopses and a hang when unbinding a streaming sensor",
+      "published_at": "2026-08-12T10:53:25Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Unbinding a camera sensor while a capture is running is a scenario that nothing in the IPU6 path handles: the kernel oopses twice, corrupts memory once, and leaves the application blocked forever. None of this is caused by the sensor drivers themselves, and all four failures are present in mainline today. They were found while testing two new sensor drivers on a CHUWI Hi10 X1 (Intel N100, Alder Lake-N, IPU6) on a kernel built with KASAN, UBSAN, KMEMLEAK, PROVE_LOCKING and DETECT_HUNG_TASK. Three",
+          "evidence_text": "<html><head><title>[PATCH 0/3] media: Two oopses and a hang when unbinding a streaming sensor - Nicola Fiorillo</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.806,
+      "warnings": []
+    },
+    {
+      "id": "5212cf158436658d",
+      "url": "https://patchwork.libcamera.org/patch/27742/",
+      "title": "[v13,1/7] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "published_at": "2026-08-10",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Milan Zamazal); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v13,1/7] libcamera: software_isp: egl: Add filter parameter to createTexture2D() - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/cs",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "2e806e0c24fb0f71",
+      "url": "https://lore.kernel.org/linux-media/20260813-uvc-status-11-v1-1-2cf43e9590b0@chromium.org/",
+      "title": "[PATCH] media: uvcvideo: Do not read beyond the uvc_status_control memory",
+      "published_at": "2026-08-13T20:43:32Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "When we receive an event from the camera we only receive 11 bytes. If a v4l2 control is mapped into a UVC control beyond those 11 bytes, right now the code is blindly reading those. Add a check in the event handler to ignore controls that are not available in those 11 bytes. Cc: stable@vger.kernel.org Closes: https://sashiko.dev/#/patchset/F0F008459FFA835D%2B20260813074632.2021311-1-raoxu%40uniontech.com Fixes: e5225c820c05 (\"media: uvcvideo: Send a control event when a Control Change interrupt",
+          "evidence_text": "<html><head><title>[PATCH] media: uvcvideo: Do not read beyond the uvc_status_control memory - Ricardo Ribalda</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.51,
+      "android_hal_relevance": 0.51,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.734,
+      "warnings": []
+    },
+    {
+      "id": "gemini-73b30675f2079c5c",
+      "url": "https://lore.kernel.org/linux-media/20260813-uvc-status-11-v1-1-2cf43e9590b0@chromium.org/",
+      "title": "[PATCH] media: uvcvideo: Do not read beyond the uvc_status_control memory - Ricardo Ribalda",
+      "published_at": "2026-08-13",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH] media: uvcvideo: Do not read beyond the uvc_status_control memory - Ricardo Ribalda",
+          "evidence_text": "<html><head><title>[PATCH] media: uvcvideo: Do not read beyond the uvc_status_control memory - Ricardo Ribalda</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "9fdf55e2bd248744",
+      "url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "title": "Media3 1.11 - What's new?",
+      "published_at": "Tue, 11 Aug 2026 16:00:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Toni Heidenreich, Software Engineer, Android Media3 1.11 is out. Powering the vast majority of top Android media apps, this release brings new features, bug fixes, and improvements across playback, editing, and UI components. We're expanding our Jetpack Compose UI modules with customizable Player slots and easy to use defaults, interactive gestures, state observers, and short-form video preloading using PlayerPool . We also modernized the Media3 Cast integration with SystemUI Output Sw",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.72,
+      "android_hal_relevance": 0.72,
+      "ai_relevance": 0,
+      "technical_depth": 0.646,
+      "warnings": []
+    },
+    {
+      "id": "gemini-5a9ed187158268c9",
+      "url": "https://patchwork.libcamera.org/patch/27742/",
+      "title": "[v13,1/7] libcamera: software_isp: egl: Add filter parameter to createTexture2D() - Patchwork",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[v13,1/7] libcamera: software_isp: egl: Add filter parameter to createTexture2D() - Patchwork",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v13,1/7] libcamera: software_isp: egl: Add filter parameter to createTexture2D() - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/cs",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.545,
+      "warnings": []
+    },
+    {
+      "id": "gemini-7a9bb39859027801",
+      "url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "title": "Android Developers Blog: Media3 1.11 - What's new?",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Developers Blog: Media3 1.11 - What's new?",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.492,
+      "warnings": []
+    },
+    {
+      "id": "d8acdcb5457608e9",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260807",
+      "published_at": "2026-08-07",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Released v0.7.2+rpt20260807 (Raspberry Pi downstream libcamera).",
+          "evidence_text": "<!DOCTYPE html>\n<html\n  lang=\"en\"\n  \n  data-color-mode=\"auto\" data-light-theme=\"light\" data-dark-theme=\"dark\"\n  data-a11y-animated-images=\"system\" data-a11y-link-underlines=\"true\"\n  \n  >\n\n\n\n\n  <head>\n    <meta charset=\"utf-8\">\n  <link rel=\"dns-prefetch\" href=\"https://github.githubassets.com\">\n  <link rel=\"dns-prefetch\" href=\"https://avatars.githubusercontent.com\">\n  <link rel=\"dns-prefetch\" href=\"https://github-cloud.s3.amazonaws.com\">\n  <link rel=\"dns-prefetch\" href=\"https://user-images.githubu",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.81,
+      "android_hal_relevance": 0.81,
+      "ai_relevance": 0,
+      "technical_depth": 0.834,
+      "warnings": []
+    }
+  ]
+}
