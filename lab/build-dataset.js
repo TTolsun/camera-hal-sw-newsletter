@@ -206,6 +206,20 @@ function reconcile(committed, computed) {
   return { merged, drifted, added };
 }
 
+// Hand labels are the only irreproducible artifact here — twenty verdicts and twenty
+// written rationales that the Week 02 and Week 08 gates rest on. Rebuilding the item
+// list must carry them across, or a re-run silently destroys the week's work while
+// reporting success.
+function existingLabels() {
+  if (!fs.existsSync(CALIBRATION_PATH)) return new Map();
+  const previous = JSON.parse(fs.readFileSync(CALIBRATION_PATH, 'utf8')).items || [];
+  return new Map(
+    previous
+      .filter(item => item.human_label !== null || item.human_note)
+      .map(item => [item.family_key, { human_label: item.human_label, human_note: item.human_note || '' }])
+  );
+}
+
 function calibrationItems(families, allocation) {
   const items = [];
   for (const [key, bucket] of Object.entries(allocation)) {
@@ -228,6 +242,20 @@ function calibrationItems(families, allocation) {
     });
   }
   items.sort((a, b) => a.family_key.localeCompare(b.family_key));
+
+  const carried = existingLabels();
+  const orphaned = [...carried.keys()].filter(key => !items.some(item => item.family_key === key));
+  if (orphaned.length > 0) {
+    throw new Error(
+      `${orphaned.length} labelled families have no home in the rebuilt calibration set, so ` +
+      `their labels would be lost:\n  ${orphaned.join('\n  ')}\n` +
+      'Refusing to write. Reconcile split.json against the current pool first.'
+    );
+  }
+  for (const item of items) {
+    const previous = carried.get(item.family_key);
+    if (previous) Object.assign(item, previous);
+  }
   return items;
 }
 

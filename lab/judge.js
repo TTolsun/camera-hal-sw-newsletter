@@ -19,6 +19,15 @@ process.env.GEMINI_MAX_RETRIES = process.env.GEMINI_MAX_RETRIES || '1';
 process.env.GEMINI_CALL_TIMEOUT_MS = process.env.GEMINI_CALL_TIMEOUT_MS || '60000';
 process.env.LLM_RAW_OUTPUT_DIR = process.env.LLM_RAW_OUTPUT_DIR || 'lab/tmp/gemini-raw';
 
+// --model has to be read here rather than in main(). llm-client resolves its stage
+// model policy when the module loads, so an override set after the require below is
+// accepted without complaint and then ignored.
+{
+  const argv = process.argv.slice(2);
+  const at = argv.indexOf('--model');
+  if (at !== -1 && argv[at + 1]) process.env.NEWSROOM_JUDGE_MODEL = argv[at + 1];
+}
+
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -58,6 +67,7 @@ function parseArgs(argv) {
   for (let i = 0; i < argv.length; i += 1) {
     if (argv[i] === '--set') args.set = argv[i + 1];
     if (argv[i] === '--prompt') args.prompt = argv[i + 1];
+    if (argv[i] === '--model') args.model = argv[i + 1];
   }
   return args;
 }
@@ -171,6 +181,9 @@ function summarise(rows, args, diagnostics) {
     stage: STAGE,
     split: args.set,
     prompt: args.prompt,
+    // Recorded rather than inferred from model_usage, which only shows what answered.
+    // Comparing two runs is meaningless without knowing which knob each one turned.
+    model_override: process.env.NEWSROOM_JUDGE_MODEL || '(stage default)',
     dry_run: args.dryRun,
     logical_cases: rows.length,
     // Requests actually issued, including ones that failed. buildCostReport counts
