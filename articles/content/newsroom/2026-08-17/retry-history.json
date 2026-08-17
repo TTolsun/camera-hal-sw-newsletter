@@ -1,0 +1,159 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 94,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 1,
+    "locked_article_count": 1,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 대대적 개편 및 멀티 카메라 ZSL HAL 충돌 수정",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 대대적 개편 및 멀티 카메라 ZSL HAL 충돌 수정",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "CameraX 1.7.0-alpha03 출시: Camera2Interop API 대대적 개편 및 멀티 카메라 ZSL HAL 충돌 수정"
+    ],
+    "locked_article_headlines": [
+      "CameraX 1.7.0-alpha03 출시: Camera2Interop API 대대적 개편 및 멀티 카메라 ZSL HAL 충돌 수정"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 대대적 개편 및 멀티 카메라 ZSL HAL 충돌 수정",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+        ],
+        "source_titles": [
+          "CameraX Release Notes - CameraX 1.7.0-alpha03"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 대대적 개편 및 멀티 카메라 ZSL HAL 충돌 수정",
+        "sources": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+        ],
+        "action": "repair-section",
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "location": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 대대적 개편 및 멀티 카메라 ZSL HAL 충돌 수정"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 대대적 개편 및 멀티 카메라 ZSL HAL 충돌 수정"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 대대적 개편 및 멀티 카메라 ZSL HAL 충돌 수정",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+        ],
+        "source_titles": [
+          "CameraX Release Notes - CameraX 1.7.0-alpha03"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 0,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

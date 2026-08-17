@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-17",
+  "rollout_stage": "shadow",
+  "status": "shadow_selected",
+  "activated": true,
+  "trigger": {
+    "direct_aosp_camera_weekly_final_count": 1,
+    "activated": true
+  },
+  "selected_topic_key": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+  "skip_reason": null,
+  "error": null,
+  "queue_size": 21,
+  "accrued_this_week": 21,
+  "evidence_used": []
+}

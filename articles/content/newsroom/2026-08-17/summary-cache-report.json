@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-17",
+  "generated_at": "2026-08-17T04:02:35.357Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 7,
+    "hit_count": 2,
+    "miss_count": 5,
+    "by_url_hit_count": 2,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 5
+    },
+    {
+      "reason": "url-hit",
+      "count": 2
+    }
+  ],
+  "entries": [
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "source": "CameraX Release Notes",
+      "published_date": "August 12, 2026",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+        "url_hash": "69a4ac973b5e163eb095357dd7271ed1d7a44339b828c78660c473d743bd8a82",
+        "published_date": "August 12, 2026",
+        "content_hash": "ce4b09fba6b5baef54f077c0371f839089c4e7abb9ebc1021616847917e8e9b2"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/3] media: Two oopses and a hang when unbinding a streaming sensor",
+      "url": "https://lore.kernel.org/linux-media/20260812105305.32447-1-nicfio@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-12T10:53:25Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260812105305.32447-1-nicfio@gmail.com",
+        "url_hash": "960a2bffda499173581871cb650a3de71b653dbf4fc1be3bc6a4193c6d723d9b",
+        "published_date": "2026-08-12T10:53:25Z",
+        "content_hash": "9b7cb619e6ea49b645419e8606b10c63f93cc0ba0d0c271e1d8175138d26ac09"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH] media: v4l2-isp: reject zero-sized parameter blocks",
+      "url": "https://lore.kernel.org/linux-media/20260815193839.141406-1-devnexen@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-15T19:38:44Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260815193839.141406-1-devnexen@gmail.com",
+        "url_hash": "c1f5e4dd084b0e9440c04f195ba2e40b5befc1d57b875e7cc1f6bd4b081ec7f0",
+        "published_date": "2026-08-15T19:38:44Z",
+        "content_hash": "df576e0da0adc178fe41d4094dad0d4c1fcbbce1930421f7cd4346a046312717"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH] media: uvcvideo: Do not read beyond the uvc_status_control memory",
+      "url": "https://lore.kernel.org/linux-media/20260813-uvc-status-11-v1-1-2cf43e9590b0@chromium.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-13T20:43:32Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260813-uvc-status-11-v1-1-2cf43e9590b0@chromium.org",
+        "url_hash": "fdf06a5f0575b77f41a24ca9c99002d1922511f04320b5d27f137c31a3bbf16a",
+        "published_date": "2026-08-13T20:43:32Z",
+        "content_hash": "d451420026b20fd8c78f255e22f36839f2e6febea199cf1e473d38e48825d7cc"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[v13,1/7] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "url": "https://patchwork.libcamera.org/patch/27742/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-08-10",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27742",
+        "url_hash": "9318042bc8e866feeb100a2d6107e4a8b9b529664794c98825ad5eff53a314b6",
+        "published_date": "2026-08-10",
+        "content_hash": "797e3f8e7c35d6160c189e340f7efc9bd7a138486870290ad0455d6ca15ee29a"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "CameraX | Jetpack | Android Developers",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "source": "androidx-camerax-release-notes",
+      "published_date": "",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+        "url_hash": "49d58944bd3ca26fc6929250597a6e3ac743d90f600cd01698fcbefbe1b6c83f",
+        "published_date": "",
+        "content_hash": "2e6bee9948d0473eaa18a043299c11549447523f18833a301c6c96b882645345"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/49d58944bd3ca26fc6929250597a6e3ac743d90f600cd01698fcbefbe1b6c83f.json"
+    },
+    {
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260807",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "source": "Raspberry Pi libcamera Releases",
+      "published_date": "2026-08-07",
+      "cache_key": {
+        "normalized_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20260807",
+        "url_hash": "635a6e61ae048b20672875bec4f3c88042c341311d9f6fe8ad8859c382c4f9fb",
+        "published_date": "2026-08-07",
+        "content_hash": "e34203b76ef7a867a601467de12324f354870c0148d6de8a6b3f466cf4c3337b"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/635a6e61ae048b20672875bec4f3c88042c341311d9f6fe8ad8859c382c4f9fb.json"
+    }
+  ]
+}
