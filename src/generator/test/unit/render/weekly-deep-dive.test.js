@@ -5,9 +5,18 @@ const os = require('os');
 const path = require('path');
 const { runWeeklyDeepDive, weeklyDeepDiveTrigger } = require('../../../render/weekly-deep-dive');
 const { accrueDeepDiveTopics, saveDeepDiveTopicQueue, DEEP_DIVE_QUEUE_REL_PATH } = require('../../../../shared/collect/deep-dive-topic-queue');
+const { loadNewsletterPolicy, readPolicyConfig } = require('../../../../shared/common/newsletter-policy');
 
 function makeRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'weekly-deep-dive-'));
+}
+
+function policyWithActivationMax(max) {
+  const config = JSON.parse(JSON.stringify(readPolicyConfig()));
+  config.deepDivePolicy = { directAospCameraMaxForActivation: max };
+  const filePath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'deep-dive-policy-')), 'newsletter-policy.json');
+  fs.writeFileSync(filePath, `${JSON.stringify(config, null, 2)}\n`, 'utf8');
+  return loadNewsletterPolicy(filePath);
 }
 
 function readReport(root, date) {
@@ -21,6 +30,16 @@ test('발동 판정은 위클리 최종 기사의 direct_aosp_camera 수 기준�
   assert.equal(weeklyDeepDiveTrigger([DRIVER, DRIVER, DRIVER]).activated, true);
   assert.equal(weeklyDeepDiveTrigger([DIRECT]).activated, true);
   assert.equal(weeklyDeepDiveTrigger([DIRECT, DIRECT]).activated, false);
+});
+
+// 임계값의 정본은 newsletter-policy.json이다. 여기에 숫자를 다시 적어 두면 정책 파일을 바꿔도
+// 동작이 따라오지 않고, 생성 블록(문서)만 새 값으로 갱신돼 코드와 문서가 조용히 갈라진다.
+test('발동 임계값은 newsletter-policy.json의 deepDivePolicy 값을 따른다', () => {
+  const relaxed = policyWithActivationMax(2);
+
+  assert.equal(weeklyDeepDiveTrigger([DIRECT, DIRECT]).activated, false);
+  assert.equal(weeklyDeepDiveTrigger([DIRECT, DIRECT], relaxed).activated, true);
+  assert.equal(weeklyDeepDiveTrigger([DIRECT, DIRECT, DIRECT], relaxed).activated, false);
 });
 
 test('미발동 주는 not_activated report를 남긴다', () => {

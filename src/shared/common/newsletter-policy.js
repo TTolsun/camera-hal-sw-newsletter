@@ -246,6 +246,7 @@ function validateNewsletterPolicyConfig(config) {
   validateSelectionScoringPolicy(config.selectionScoringPolicy, errors);
   validateCatchUpPolicy(config.catchUpPolicy, config, errors);
   validateWeeklyArticlePolicy(config.weeklyArticlePolicy, errors);
+  validateDeepDivePolicy(config.deepDivePolicy, errors);
   validateSourceEligibilityPolicy(config.sourceEligibilityPolicy, errors);
   validateHeadlinePolicy(config.headlinePolicy, errors);
   if (config.publishModePolicy !== undefined) {
@@ -402,6 +403,31 @@ function validateSelectionScoringPolicy(value, errors) {
   }
 }
 
+// 심층(deep-dive) 발동 임계값. 이 값이 정본이고, weekly-deep-dive.js와 생성 문서 블록이 모두
+// 여기서 읽는다. 코드에 숫자를 다시 적으면 check:policy-docs가 drift를 볼 수 없다.
+// 0은 "direct_aosp_camera가 한 건도 없는 주에만 발동"이라는 유효한 설정이므로 허용한다.
+const DEFAULT_DEEP_DIVE_POLICY = {
+  directAospCameraMaxForActivation: 1
+};
+
+function normalizeDeepDivePolicy(raw) {
+  const source = raw && typeof raw === 'object' ? raw : {};
+  return {
+    directAospCameraMaxForActivation: Number.isInteger(source.directAospCameraMaxForActivation)
+      ? source.directAospCameraMaxForActivation
+      : DEFAULT_DEEP_DIVE_POLICY.directAospCameraMaxForActivation
+  };
+}
+
+function validateDeepDivePolicy(value, errors) {
+  if (value === undefined) return; // optional; normalized to a default when absent
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push('deepDivePolicy must be an object.');
+    return;
+  }
+  validateInteger(value.directAospCameraMaxForActivation, 'deepDivePolicy.directAospCameraMaxForActivation', errors, { min: 0 });
+}
+
 const DEFAULT_MAILING_LIST_PATCH_MAIN_ARTICLE = {
   enabled: false,
   sourceRole: 'project_mailing_list_source',
@@ -501,6 +527,7 @@ function normalizeNewsletterPolicyConfig(config) {
       threshold: quality.threshold,
       hardFailConditions: [...quality.hardFailConditions]
     },
+    deepDivePolicy: normalizeDeepDivePolicy(config.deepDivePolicy),
     sourceEligibilityPolicy: normalizeSourceEligibilityPolicy(config.sourceEligibilityPolicy)
   });
 }
@@ -568,6 +595,10 @@ function getHeadlinePolicy(policy = getDefaultNewsletterPolicy()) {
   return policy.headlinePolicy;
 }
 
+function getDeepDivePolicy(policy = getDefaultNewsletterPolicy()) {
+  return policy.deepDivePolicy;
+}
+
 function getPublishModePolicy(policy = getDefaultNewsletterPolicy()) {
   return policy.publishModePolicy;
 }
@@ -633,6 +664,7 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
   const headlinePolicy = getHeadlinePolicy(policy);
   const qualityGatePolicy = getQualityGatePolicy(policy);
   const catchUpPolicy = getCatchUpPolicy(policy);
+  const deepDivePolicy = getDeepDivePolicy(policy);
   const oneArticlePolicyEnabled = articlePolicy.mainArticleCount.min === 1;
   const reserveRequirementText = policy.candidatePoolPreflight.reserveMin === 0
     ? '예비 후보는 진단용으로만 사용'
@@ -672,6 +704,7 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
     ...(catchUpPolicy.enabled && catchUpPolicy.maxReleaseClassArticles > 0
       ? [`- 릴리스 캐치업(release-class) 레인: 릴리스 채널(collectionModeHint \`release-note-watch\`) 소스의 미게재 릴리스는, 신규 선정이 목표를 채운 주에도 주요 기사 최대치 아래 여유 슬롯을 호당 최대 ${catchUpPolicy.maxReleaseClassArticles}개까지 쓸 수 있습니다. 같은 품질 하한·중복·게재 이력 검사를 그대로 통과해야 하며, 신규 콘텐츠를 밀어내지 않습니다.`]
       : []),
+    `- 심층(deep-dive) 발동 임계값: 위클리 최종 기사 중 \`direct_aosp_camera\` 버킷이 ${deepDivePolicy.directAospCameraMaxForActivation}건 이하인 주에만 심층 주제를 고릅니다. 1단계는 shadow이므로 선정 결과는 report로만 남고 뉴스레터에는 싣지 않습니다.`,
     `- 홈페이지 헤드라인 정책(homepage headline policy): ${headlinePolicy.decayModel} decay; 일별 감쇠 ${headlinePolicy.decayRatePerDay} point(s)/day; 교체 마진(replacement margin) ${headlinePolicy.replacementMargin}; 최소 헤드라인 점수(minimum headline score) ${headlinePolicy.minimumHeadlineScore}; 최신호 포함 필수(latest inclusion required) ${headlinePolicy.latestInclusionRequired}; 이력 최대(history max) ${headlinePolicy.historyMaxEntries}`,
     '- 발행 게이트(publish gate): PASS는 source gap이 없고, fact-check must_fix가 없으며, 차단성 감점(blocking deduction)이 없고, 모든 기사가 fact-checker에 의해 발행 가능으로 표시되어야 합니다. 수치 기반 품질 임계값은 없습니다.',
     '- 편집 품질(editorial quality): fact-checker(LLM)가 각 기사를 Camera HAL SW 엔지니어에게 유용한지 기준으로 판정합니다(주제 무관 — C++, AI, Linux 기사라도 해당 엔지니어에게 도움이 되면 자격이 있습니다). 주제/깊이 휴리스틱은 결정론적 발행 게이트로 사용하지 않습니다.',
@@ -780,6 +813,9 @@ module.exports = {
   get headlinePolicy() {
     return getHeadlinePolicy();
   },
+  get deepDivePolicy() {
+    return getDeepDivePolicy();
+  },
   // Legacy compatibility exports only. New code should prefer articlePolicy and qualityGatePolicy.
   get MIN_MAIN_ARTICLES() {
     return getArticlePolicy().mainArticleCount.min;
@@ -794,6 +830,7 @@ module.exports = {
   articleCountRangeText,
   getCandidatePoolPreflightPolicy,
   getCatchUpPolicy,
+  getDeepDivePolicy,
   getPublishModePolicy,
   getDefaultNewsletterPolicy,
   getHeadlinePolicy,

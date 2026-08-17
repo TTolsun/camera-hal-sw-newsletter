@@ -147,6 +147,7 @@ Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합�
 - 선정 기간 적용(selection window enforcement): 주요 선정은 강제 적용되며, fallback 기간 후보는 primary 기간 선정이 부족할 때에만 승격됩니다.
 - 지난 소식(Catch-up) 레인: 신규 선정이 3개 미만이면, 비어 있는 주요 슬롯을 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent` 버킷에서 최대 35일 이내의 미게재 릴리스로 채웁니다. 호당 최대 2개이며 각각 한 번씩만 게재하고, 신규 콘텐츠를 밀어내지 않습니다.
 - 릴리스 캐치업(release-class) 레인: 릴리스 채널(collectionModeHint `release-note-watch`) 소스의 미게재 릴리스는, 신규 선정이 목표를 채운 주에도 주요 기사 최대치 아래 여유 슬롯을 호당 최대 1개까지 쓸 수 있습니다. 같은 품질 하한·중복·게재 이력 검사를 그대로 통과해야 하며, 신규 콘텐츠를 밀어내지 않습니다.
+- 심층(deep-dive) 발동 임계값: 위클리 최종 기사 중 `direct_aosp_camera` 버킷이 1건 이하인 주에만 심층 주제를 고릅니다. 1단계는 shadow이므로 선정 결과는 report로만 남고 뉴스레터에는 싣지 않습니다.
 - 홈페이지 헤드라인 정책(homepage headline policy): linear decay; 일별 감쇠 2 point(s)/day; 교체 마진(replacement margin) 5; 최소 헤드라인 점수(minimum headline score) 40; 최신호 포함 필수(latest inclusion required) true; 이력 최대(history max) 50
 - 발행 게이트(publish gate): PASS는 source gap이 없고, fact-check must_fix가 없으며, 차단성 감점(blocking deduction)이 없고, 모든 기사가 fact-checker에 의해 발행 가능으로 표시되어야 합니다. 수치 기반 품질 임계값은 없습니다.
 - 편집 품질(editorial quality): fact-checker(LLM)가 각 기사를 Camera HAL SW 엔지니어에게 유용한지 기준으로 판정합니다(주제 무관 — C++, AI, Linux 기사라도 해당 엔지니어에게 도움이 되면 자격이 있습니다). 주제/깊이 휴리스틱은 결정론적 발행 게이트로 사용하지 않습니다.
