@@ -289,12 +289,40 @@ Explain 15 = **240분**으로 5시간 안에 들어간다.
 
 ## Measure (실행 후)
 
-kappa (수정 전):
+**kappa (수정 전): 0.529** — 목표선 0.40 통과
 kappa (수정 후):
-confusion matrix:
-사람 yes 비율 / judge yes 비율:
-provider_requests / amplification:
-비용:
+
+```
+raw agreement   0.80   (불일치 4건)
+confusion       tp 12 / fn 3 / fp 1 / tn 4
+사람 yes 비율   0.75
+judge yes 비율  0.65
+provider_requests 20 / amplification 1.0 / failed 0 / routing_warning ""
+비용            $0.0074
+```
+
+### 예측 대조
+
+| | 당신 | Claude | 실제 |
+|---|---|---|---|
+| 방향 | judge 관대 | judge 관대 | **judge 엄격** |
+| 건수 | 6 ± 1 | 5 ± 1 | **4** |
+| 유형 1 | v4l2 토큰만 봄 (c) 3건 | 프레임 안 지나감 (c) 3~4건 | 1건 |
+| 유형 2 | 조건 1 회색지대 (a) 3건 | 공통 코드 판단 불가 | 0건 |
+
+**둘 다 방향이 틀렸다.** 당신 반증 조건 1번(`judge_yes_rate <= human_yes_rate`)이 발동했다.
+
+건수는 Claude 밴드(4~6)에 들어왔고 당신 밴드(5~7)는 벗어났다. 다만 방향이 틀린 상태의
+건수 적중은 큰 의미가 없다 — 맞은 건 숫자고 틀린 건 모델이다.
+
+### 불일치 4건
+
+| # | 항목 | 사람 | judge | judge 근거 |
+|---|---|---|---|---|
+| 4 | GCC 16.1 | yes | no | 카메라 스택을 다루지 않음 |
+| 5 | GCC 16 error messages | yes | no | 카메라 스택을 직접 다루지 않음 |
+| 6 | `sur40` KASAN | no | yes | V4L2 subsystem과 특정 드라이버를 다룸 |
+| 18 | AR0234 cover letter | yes | no | `0/2` cover letter라 자립하지 않음 |
 
 ---
 
