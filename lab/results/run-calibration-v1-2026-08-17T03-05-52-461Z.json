@@ -1,0 +1,484 @@
+{
+  "summary": {
+    "stage": "week01 judge agreement",
+    "split": "calibration",
+    "prompt": "v1",
+    "dry_run": false,
+    "logical_cases": 20,
+    "provider_requests": 20,
+    "responded_calls": 20,
+    "amplification": 1,
+    "failed_cases": 0,
+    "unlabelled_cases": 0,
+    "invalid_json_count": 0,
+    "quota_error_count": 0,
+    "routing_warning": "",
+    "stage_group": "judge",
+    "model_usage": {
+      "gemini-2.5-flash-lite": {
+        "requests": 20,
+        "successes": 20,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 0
+      }
+    },
+    "totals": {
+      "request_count": 20,
+      "prompt_tokens": 21162,
+      "output_tokens": 938,
+      "thinking_tokens": 13695,
+      "cached_tokens": 6630,
+      "total_tokens": 35795,
+      "billable_input_tokens": 14532,
+      "billable_output_tokens": 14633,
+      "estimated_cost_usd": 0.0073727
+    },
+    "knobs": {
+      "max_retries": "1",
+      "call_timeout_ms": "60000"
+    }
+  },
+  "rows": [
+    {
+      "family_key": "article:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
+      "title": "Start building today - Build native Android apps in Google AI Studio",
+      "human_label": "no",
+      "judge_label": "no",
+      "judge_reason": "The subject does not directly cover the Android or Linux camera engineering stack, but rather general Android app development leveraging device features.",
+      "error": null,
+      "wall_ms": 4056,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 981,
+      "output_tokens": 41,
+      "thinking_tokens": 693,
+      "estimated_cost_usd": 0.0003917
+    },
+    {
+      "family_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The candidate meets all three conditions: it covers the Android camera stack (CameraX), has specific version and behavior details, and the URL points to self-contained release notes for that version.",
+      "error": null,
+      "wall_ms": 4273,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 997,
+      "output_tokens": 55,
+      "thinking_tokens": 753,
+      "estimated_cost_usd": 0.0004229
+    },
+    {
+      "family_key": "article:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2brpt20260609",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+      "title": "Raspberry Pi libcamera Releases - v0.7.1+rpt20260609",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The subject directly covers the libcamera component of the Linux camera stack.",
+      "error": null,
+      "wall_ms": 2841,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 964,
+      "output_tokens": 31,
+      "thinking_tokens": 517,
+      "estimated_cost_usd": 0.0003156
+    },
+    {
+      "family_key": "article:https://isocpp.org//blog/2026/04/gcc-16.1",
+      "url": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "human_label": "yes",
+      "judge_label": "no",
+      "judge_reason": "The subject matter does not cover any part of the Android or Linux camera stack.",
+      "error": null,
+      "wall_ms": 3182,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1092,
+      "output_tokens": 33,
+      "thinking_tokens": 671,
+      "estimated_cost_usd": 0.0003908
+    },
+    {
+      "family_key": "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "title": "New features in GCC 16: Improved error messages and SARIF output -- David Malcolm",
+      "human_label": "yes",
+      "judge_label": "no",
+      "judge_reason": "The subject matter does not directly cover the Android or Linux camera stack.",
+      "error": null,
+      "wall_ms": 2888,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1057,
+      "output_tokens": 31,
+      "thinking_tokens": 601,
+      "estimated_cost_usd": 0.0003585
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/178144969601.60470.9256616923389083658@gmail.com",
+      "url": "https://lore.kernel.org/linux-media/178144969601.60470.9256616923389083658@gmail.com/",
+      "title": "[BUG] Input: sur40: KASAN slab-use-after-free in v4l2_release",
+      "human_label": "no",
+      "judge_label": "yes",
+      "judge_reason": "The candidate covers the V4L2 subsystem and a specific driver, details a specific bug, and the URL points to a self-contained report.",
+      "error": null,
+      "wall_ms": 4036,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1129,
+      "output_tokens": 47,
+      "thinking_tokens": 789,
+      "estimated_cost_usd": 0.0004473
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org",
+      "url": "https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org/",
+      "title": "[PATCH] media: dw2102: Fix a buffer overflow",
+      "human_label": "no",
+      "judge_label": "no",
+      "judge_reason": "The subject matter does not cover the Android or Linux camera stack, as it pertains to a DVB tuner.",
+      "error": null,
+      "wall_ms": 2537,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1093,
+      "output_tokens": 39,
+      "thinking_tokens": 454,
+      "estimated_cost_usd": 0.0003065
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com",
+      "url": "https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com/",
+      "title": "Re: [PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The subject clearly covers the camera path by describing a JPEG encoder, which is part of the media subsystem that processes camera output.",
+      "error": null,
+      "wall_ms": 3430,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1106,
+      "output_tokens": 42,
+      "thinking_tokens": 804,
+      "estimated_cost_usd": 0.000449
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org",
+      "url": "https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org/",
+      "title": "Re: [PATCH v6 5/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 C-PHY init",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The document directly covers the Linux camera stack by modifying the MIPI CSI-2 C-PHY driver for Qualcomm's camera subsystem.",
+      "error": null,
+      "wall_ms": 3941,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1130,
+      "output_tokens": 44,
+      "thinking_tokens": 752,
+      "estimated_cost_usd": 0.0004314
+    },
+    {
+      "family_key": "article:https://source.android.com/docs/compatibility",
+      "url": "https://source.android.com/docs/compatibility",
+      "title": "Compatibility",
+      "human_label": "no",
+      "judge_label": "no",
+      "judge_reason": "The URL points to a general documentation page, and the summary describes updates to an overview, suggesting the specific content might not be self-contained within this single URL.",
+      "error": null,
+      "wall_ms": 3605,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 930,
+      "output_tokens": 50,
+      "thinking_tokens": 666,
+      "estimated_cost_usd": 0.0003794
+    },
+    {
+      "family_key": "article:https://youtube.com/playlist",
+      "url": "https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+      "title": "Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26",
+      "human_label": "no",
+      "judge_label": "no",
+      "judge_reason": "The URL is a YouTube playlist, which is not self-contained as the content lives in child links.",
+      "error": null,
+      "wall_ms": 2022,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1023,
+      "output_tokens": 38,
+      "thinking_tokens": 344,
+      "estimated_cost_usd": 0.00018094
+    },
+    {
+      "family_key": "lore-series:20260611204148.1423192-niklas.soderlund+renesas@ragnatech.se",
+      "url": "https://lore.kernel.org/linux-media/20260611204148.1423192-4-niklas.soderlund+renesas@ragnatech.se/",
+      "title": "[PATCH v10 03/13] media: rppx1: Add framework to support Dreamchip RPPX1 ISP",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The candidate meets all three conditions: it covers the Linux camera stack (ISP, V4L2 drivers), it is specific (component names like RPPX1 ISP and V4L2, and a described framework purpose), and the URL points to a self-contained patch.",
+      "error": null,
+      "wall_ms": 3901,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1085,
+      "output_tokens": 74,
+      "thinking_tokens": 758,
+      "estimated_cost_usd": 0.00036624
+    },
+    {
+      "family_key": "lore-series:20260612194417.1737009-atanas.filipov@oss.qualcomm.com",
+      "url": "https://lore.kernel.org/linux-media/20260625133828.3221781-2-atanas.filipov@oss.qualcomm.com/",
+      "title": "[PATCH v2 1/3] dt-bindings: media: qcom: Add JPEG encoder binding",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The candidate satisfies all three conditions: it covers the camera path (JPEG encoder), is specific (Qualcomm JPEG encoder, SM8250, device-tree binding), and is self-contained (direct link to a patch).",
+      "error": null,
+      "wall_ms": 3756,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1078,
+      "output_tokens": 64,
+      "thinking_tokens": 735,
+      "estimated_cost_usd": 0.00035243
+    },
+    {
+      "family_key": "lore-series:20260616-mali-c55-ccm-gamma-v1-174fe4fedea3@ideasonboard.com",
+      "url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-2-174fe4fedea3@ideasonboard.com/",
+      "title": "[PATCH 2/2] media: arm: mali-c55: Add support for RGB Gamma",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The document directly covers the Linux camera stack (ISP, v4l2-isp) and describes a specific behavior change (adding RGB Gamma support) in a self-contained patch.",
+      "error": null,
+      "wall_ms": 3773,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1130,
+      "output_tokens": 54,
+      "thinking_tokens": 760,
+      "estimated_cost_usd": 0.000363
+    },
+    {
+      "family_key": "lore-series:20260617-imx8qxp_pcam-v5-7fa6c8e7fba7@nxp.com",
+      "url": "https://lore.kernel.org/linux-media/20260617-imx8qxp_pcam-v5-6-7fa6c8e7fba7@nxp.com/",
+      "title": "[PATCH v5 6/8] media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The candidate satisfies all three conditions: it covers the Linux camera stack (V4L2 subdev driver for camera interface), it is specific with component names and described changes, and the URL points to a self-contained patch commit.",
+      "error": null,
+      "wall_ms": 2623,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1112,
+      "output_tokens": 64,
+      "thinking_tokens": 736,
+      "estimated_cost_usd": 0.0004312
+    },
+    {
+      "family_key": "lore-series:20260617021906.2746743-michael.bommarito@gmail.com",
+      "url": "https://lore.kernel.org/linux-media/20260617021906.2746743-10-michael.bommarito@gmail.com/",
+      "title": "[PATCH v3 9/9] media: v4l2-ctrls: add KUnit tests for compound control tile validation",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The document directly covers the V4L2 media subsystem, a core part of the Linux camera stack.",
+      "error": null,
+      "wall_ms": 2874,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1126,
+      "output_tokens": 38,
+      "thinking_tokens": 741,
+      "estimated_cost_usd": 0.0004242
+    },
+    {
+      "family_key": "lore-series:20260709-hm1092-driver-v5-a1f5baa6fe08@gmail.com",
+      "url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+      "title": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The subject covers the Linux camera stack by adding a V4L2 subdev driver for an image sensor, and the specificity is met by naming the component and describing its functionality and tested behavior.",
+      "error": null,
+      "wall_ms": 3236,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1090,
+      "output_tokens": 56,
+      "thinking_tokens": 730,
+      "estimated_cost_usd": 0.00034834
+    },
+    {
+      "family_key": "lore-series:20260731073505.2278769-eagle.alexander923@gmail.com",
+      "url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+      "title": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "human_label": "yes",
+      "judge_label": "no",
+      "judge_reason": "The URL points to a cover letter for a patch series (0/2), which is not self-contained enough to check the claim.",
+      "error": null,
+      "wall_ms": 3284,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1133,
+      "output_tokens": 45,
+      "thinking_tokens": 728,
+      "estimated_cost_usd": 0.0003469
+    },
+    {
+      "family_key": "patchwork-series:6077",
+      "url": "https://patchwork.libcamera.org/patch/27496/",
+      "title": "libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The change is specific, mentioning the libcamera and EGL components and describing a behavior change to cache EGLDisplay.",
+      "error": null,
+      "wall_ms": 2640,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 949,
+      "output_tokens": 39,
+      "thinking_tokens": 705,
+      "estimated_cost_usd": 0.00031942
+    },
+    {
+      "family_key": "patchwork-series:6085",
+      "url": "https://patchwork.libcamera.org/patch/27510/",
+      "title": "[v1] libcamera: v4l2_videodevice: Use `VIDEO_MAX_PLANES`",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "All three conditions are met: the subject covers the Linux camera stack, the title and summary provide specific details about the change, and the URL points to a self-contained patch.",
+      "error": null,
+      "wall_ms": 3713,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 957,
+      "output_tokens": 53,
+      "thinking_tokens": 758,
+      "estimated_cost_usd": 0.00034693
+    }
+  ]
+}

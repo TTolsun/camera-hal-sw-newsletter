@@ -1,0 +1,485 @@
+{
+  "summary": {
+    "stage": "week01 judge agreement",
+    "split": "dev",
+    "prompt": "v3",
+    "model_override": "(stage default)",
+    "dry_run": false,
+    "logical_cases": 20,
+    "provider_requests": 20,
+    "responded_calls": 20,
+    "amplification": 1,
+    "failed_cases": 0,
+    "unlabelled_cases": 0,
+    "invalid_json_count": 0,
+    "quota_error_count": 0,
+    "routing_warning": "",
+    "stage_group": "judge",
+    "model_usage": {
+      "gemini-2.5-flash-lite": {
+        "requests": 20,
+        "successes": 20,
+        "invalid_json": 0,
+        "quota_errors": 0,
+        "api_errors": 0
+      }
+    },
+    "totals": {
+      "request_count": 20,
+      "prompt_tokens": 32263,
+      "output_tokens": 1034,
+      "thinking_tokens": 14923,
+      "cached_tokens": 6215,
+      "total_tokens": 48220,
+      "billable_input_tokens": 26048,
+      "billable_output_tokens": 15957,
+      "estimated_cost_usd": 0.00904975
+    },
+    "knobs": {
+      "max_retries": "1",
+      "call_timeout_ms": "60000"
+    }
+  },
+  "rows": [
+    {
+      "family_key": "article:https://developer.android.com/jetpack/androidx/releases/camera",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "title": "CameraX | Jetpack | Android Developers",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The subject is CameraX, an Android camera library, and the URL points to release notes which contain specific version and change information.",
+      "error": null,
+      "wall_ms": 2790,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1461,
+      "output_tokens": 43,
+      "thinking_tokens": 740,
+      "estimated_cost_usd": 0.0004593
+    },
+    {
+      "family_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "All three conditions are met: the subject is Android camera stack (CameraX), there is a specific version number (1.6.0) and described behavior change, and the URL is self-contained for checking the claim.",
+      "error": null,
+      "wall_ms": 2923,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1504,
+      "output_tokens": 63,
+      "thinking_tokens": 500,
+      "estimated_cost_usd": 0.0003756
+    },
+    {
+      "family_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha01",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The subject clearly covers the Android camera stack via the CameraX library and its APIs.",
+      "error": null,
+      "wall_ms": 3826,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1527,
+      "output_tokens": 34,
+      "thinking_tokens": 751,
+      "estimated_cost_usd": 0.0004667
+    },
+    {
+      "family_key": "article:https://developer.android.com/tools/agents/android-cli#skills-add",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "human_label": "no",
+      "judge_label": "no",
+      "judge_reason": "Condition 3 fails because the URL appears to be a hub page for Android CLI skills, and the specific claim about CameraX migration is unlikely to be fully detailed on this single page.",
+      "error": null,
+      "wall_ms": 3122,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1549,
+      "output_tokens": 54,
+      "thinking_tokens": 777,
+      "estimated_cost_usd": 0.0004873
+    },
+    {
+      "family_key": "article:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2",
+      "title": "Raspberry Pi libcamera Releases - libcamera v0.7.2",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The document directly covers the Linux camera stack (libcamera).",
+      "error": null,
+      "wall_ms": 4252,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1474,
+      "output_tokens": 29,
+      "thinking_tokens": 882,
+      "estimated_cost_usd": 0.00043287
+    },
+    {
+      "family_key": "article:https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "title": "v0.7.2",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "All three conditions are met: the subject is the libcamera stack, the release version v0.7.2 and specific bug fixes are mentioned, and the URL points to a self-contained release tag.",
+      "error": null,
+      "wall_ms": 3344,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1553,
+      "output_tokens": 59,
+      "thinking_tokens": 719,
+      "estimated_cost_usd": 0.0004665
+    },
+    {
+      "family_key": "article:https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "human_label": "yes",
+      "judge_label": "no",
+      "judge_reason": "Condition 1 fails because the subject is a general C++ serialization library and language features, not directly related to the Android or Linux camera stack or tools specifically used for camera development.",
+      "error": null,
+      "wall_ms": 4195,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1617,
+      "output_tokens": 53,
+      "thinking_tokens": 807,
+      "estimated_cost_usd": 0.0005057
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com",
+      "url": "https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com/",
+      "title": "[BUG] Input: rmi4: KASAN slab-use-after-free in v4l2_release",
+      "human_label": "no",
+      "judge_label": "yes",
+      "judge_reason": "The subject covers the V4L2 subsystem, which is on the camera frame path, and the bug is specific to a V4L2 release function.",
+      "error": null,
+      "wall_ms": 2848,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1675,
+      "output_tokens": 49,
+      "thinking_tokens": 745,
+      "estimated_cost_usd": 0.00040482
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan",
+      "url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+      "title": "[GIT PULL for v7.2] media updates",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The candidate covers the Linux camera stack (v4l2, media subsystem, sensor drivers) and includes specific version numbers and described behavior changes, with the content contained within the provided URL.",
+      "error": null,
+      "wall_ms": 2718,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1636,
+      "output_tokens": 55,
+      "thinking_tokens": 759,
+      "estimated_cost_usd": 0.0004892
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/202606291022.4zxe8dz4-lkp@intel.com",
+      "url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/",
+      "title": "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The document covers the Linux camera stack by discussing a warning in the v4l2 subsystem related to CSI format setting, which is specific enough with the function name and file path.",
+      "error": null,
+      "wall_ms": 2948,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1785,
+      "output_tokens": 53,
+      "thinking_tokens": 738,
+      "estimated_cost_usd": 0.0004949
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/aketov7zdedape15@kekkonen.localdomain",
+      "url": "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/",
+      "title": "Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The candidate meets all three conditions: it covers the V4L2 subsystem (Subject), describes a specific change to pad operations (Specificity), and is a self-contained patch commit (Self-containment).",
+      "error": null,
+      "wall_ms": 3118,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1666,
+      "output_tokens": 59,
+      "thinking_tokens": 733,
+      "estimated_cost_usd": 0.0004834
+    },
+    {
+      "family_key": "lore-series:20260409201501.975242-sakari.ailus@linux.intel.com",
+      "url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+      "title": "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns",
+      "human_label": "yes",
+      "judge_label": "no",
+      "judge_reason": "The URL points to a patch within a series ([PATCH v12 05/86]), and the cover letter or the full context of the series is not contained within this single URL, failing the self-containment condition.",
+      "error": null,
+      "wall_ms": 3545,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1721,
+      "output_tokens": 65,
+      "thinking_tokens": 743,
+      "estimated_cost_usd": 0.0004953
+    },
+    {
+      "family_key": "lore-series:20260605-qcom-cphy-v7-426c37e9008f@ixit.cz",
+      "url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
+      "title": "[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+      "human_label": "no",
+      "judge_label": "no",
+      "judge_reason": "Condition 3 fails because the URL points to a cover letter for a patch series, not a specific patch with its diff.",
+      "error": null,
+      "wall_ms": 3718,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1606,
+      "output_tokens": 40,
+      "thinking_tokens": 758,
+      "estimated_cost_usd": 0.0004798
+    },
+    {
+      "family_key": "lore-series:20260606-spu-rga3multicore-v1-3ec2b15675f7@pengutronix.de",
+      "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
+      "title": "[PATCH 05/17] media: v4l2-mem2mem: support running multiple jobs in parallel",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The candidate covers the v4l2-mem2mem component and describes a specific behavior change for handling multiple jobs in parallel, and the URL points to a single patch commit.",
+      "error": null,
+      "wall_ms": 3632,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1614,
+      "output_tokens": 53,
+      "thinking_tokens": 713,
+      "estimated_cost_usd": 0.0004678
+    },
+    {
+      "family_key": "lore-series:20260606-submit-media-mt9m113-v5-2088c7358e11@herrie.org",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-2-8f6d0f79f4d1@herrie.org/",
+      "title": "[PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The document directly covers the Aptina MT9M113 image sensor driver, which is part of the Android/Linux camera stack.",
+      "error": null,
+      "wall_ms": 3825,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1679,
+      "output_tokens": 45,
+      "thinking_tokens": 827,
+      "estimated_cost_usd": 0.00043642
+    },
+    {
+      "family_key": "lore-series:20260612-shikra_vpu-v2-bf8727370a1e@oss.qualcomm.com",
+      "url": "https://lore.kernel.org/linux-media/20260612-shikra_vpu-v2-0-bf8727370a1e@oss.qualcomm.com/",
+      "title": "[PATCH v2 0/3] media: qcom: Add support for the iris codec on shikra",
+      "human_label": "no",
+      "judge_label": "no",
+      "judge_reason": "Condition 3 fails because the URL points to the cover letter of a patch series (0/3), which does not contain the actual code changes or diffs needed to check the claim.",
+      "error": null,
+      "wall_ms": 3577,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1688,
+      "output_tokens": 55,
+      "thinking_tokens": 713,
+      "estimated_cost_usd": 0.000476
+    },
+    {
+      "family_key": "lore-series:20260613152655.212490-paulk@sys-base.io",
+      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-7-paulk@sys-base.io/",
+      "title": "[PATCH v10 6/6] ARM: dts: sun8i: v3s: Add support for the ISP",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The candidate satisfies all three conditions: it covers the camera ISP which is part of the Android/Linux camera stack, it specifies a particular patch and describes a concrete change, and the URL points to a self-contained commit message detailing the change.",
+      "error": null,
+      "wall_ms": 4333,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1615,
+      "output_tokens": 66,
+      "thinking_tokens": 754,
+      "estimated_cost_usd": 0.00040958
+    },
+    {
+      "family_key": "lore-series:20260625160228.59672-tharitt97@gmail.com",
+      "url": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/",
+      "title": "[PATCH] media: imx219: fix test pattern ordering and add patterns",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The document directly covers the imx219 image sensor, a specific component on the camera frame path, and describes a clear behavior change related to test patterns.",
+      "error": null,
+      "wall_ms": 3731,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1618,
+      "output_tokens": 50,
+      "thinking_tokens": 755,
+      "estimated_cost_usd": 0.00040388
+    },
+    {
+      "family_key": "lore-series:20260726214401.19042-j@metarealtyinc.ca",
+      "url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+      "title": "[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support",
+      "human_label": "no",
+      "judge_label": "no",
+      "judge_reason": "Condition 3 fails because the URL points to the cover letter of a patch series (indicated by '[PATCH 0/2]') which does not contain the actual code changes.",
+      "error": null,
+      "wall_ms": 2536,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1649,
+      "output_tokens": 52,
+      "thinking_tokens": 756,
+      "estimated_cost_usd": 0.000408
+    },
+    {
+      "family_key": "lore-series:20260809180105.58428-mishraloopmohit@gmail.com",
+      "url": "https://lore.kernel.org/linux-media/20260809180105.58428-1-mishraloopmohit@gmail.com/",
+      "title": "[PATCH] [RFC PATCH] staging: media: atomisp: remove redundant ov2722_startup() helper",
+      "human_label": "yes",
+      "judge_label": "yes",
+      "judge_reason": "The candidate passes all three conditions: it covers the Linux camera stack (sensor driver, media subsystem), it describes a specific behavior change and component, and the URL points to a self-contained patch.",
+      "error": null,
+      "wall_ms": 3038,
+      "provider_requests": 1,
+      "responded_calls": 1,
+      "models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "attempts": [
+        1
+      ],
+      "prompt_tokens": 1626,
+      "output_tokens": 57,
+      "thinking_tokens": 753,
+      "estimated_cost_usd": 0.00040668
+    }
+  ]
+}

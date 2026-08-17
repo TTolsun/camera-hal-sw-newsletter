@@ -17,12 +17,24 @@ collection artifacts and calls the shared LLM client directly.
 | `datasets/calibration.json` | yes | The 20 calibration items and their hand labels |
 | `label-definition.md` | yes | What `yes` and `no` mean |
 | `prompts/` | yes | Judge rubrics, one file per version |
-| `results/` | no | Run output. Ignored |
-| `tmp/` | no | Scratch, including raw LLM dumps. Ignored |
+| `results/` | yes | Run output, one file per run. The measurement record |
+| `tmp/` | no | Scratch, dry runs, raw LLM dumps. Ignored |
 
-`results/` and `tmp/` are ignored for a reason beyond tidiness: `check:domain-model-boundary`
-scans untracked files as well as tracked ones, and a judge's free-text `reason` that
-happens to contain one of its forbidden provider-shape tokens would fail `npm run validate`.
+`results/` is committed because a gate is answered once. The dev run cannot be repeated
+without spending a split that no longer exists, so its verdicts and per-item reasons are
+the only surviving evidence for the number in the journal.
+
+The cost of committing it is that `check:domain-model-boundary` scans these files. A
+judge's free-text `reason` containing one of the provider-shape markers that check
+forbids would fail `npm run validate`. Those markers are JavaScript identifiers and the
+reasons are prose about camera drivers, so the collision is unlikely rather than
+impossible — if it happens, quote the reason in the journal and drop that one file
+rather than weakening the check. Run `node src/shared/tooling/check-domain-model-boundary.js`
+to see the current list; do not copy it into a file under this directory, because listing
+the markers is itself enough to trip the check.
+
+`tmp/` stays ignored. Dry runs carry stub verdicts and raw dumps carry provider-shaped
+payloads by definition, so neither belongs in history.
 
 ## Conventions
 
