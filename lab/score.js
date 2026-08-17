@@ -11,6 +11,7 @@
 // collapsed judge is visible even to someone skimming.
 
 const fs = require('node:fs');
+const path = require('node:path');
 
 function confusion(rows) {
   const cells = { tp: 0, fn: 0, fp: 0, tn: 0 };
@@ -43,8 +44,26 @@ function main() {
   if (!file) throw new Error('usage: node lab/score.js <run file>');
 
   const run = JSON.parse(fs.readFileSync(file, 'utf8'));
+
+  // A dry run carries stub verdicts, so every number derived from it is fiction
+  // that happens to be shaped like a measurement. Refuse rather than print it.
+  if (run.summary.dry_run && !process.argv.includes('--force')) {
+    throw new Error(
+      `${path.basename(file)} is a dry run: its verdicts are stubs, not judgements. ` +
+      'Run "node lab/judge.js" with GEMINI_API_KEY set, then score that file. ' +
+      'Pass --force only to inspect the wiring.'
+    );
+  }
+
   const scored = run.rows.filter(row => !row.error && row.human_label !== null && row.judge_label !== null);
   const skipped = run.rows.length - scored.length;
+
+  if (scored.length === 0) {
+    throw new Error(
+      `nothing to score: ${run.rows.length} rows, none with both a human and a judge label. ` +
+      'Either the run predates the hand labels, or the labels are still empty.'
+    );
+  }
 
   const cells = confusion(scored);
   const total = scored.length;

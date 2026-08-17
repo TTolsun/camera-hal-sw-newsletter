@@ -232,9 +232,14 @@ async function main() {
 
   const summary = summarise(rows, args, getLlmDiagnostics());
 
-  fs.mkdirSync(RESULTS_DIR, { recursive: true });
+  // Dry runs are written somewhere else on purpose. They used to land in results/
+  // alongside real runs, and since the obvious way to find a run is to take the
+  // newest file, a stub could be scored as though it were a measurement.
+  const outDir = args.dryRun ? path.join(__dirname, 'tmp') : RESULTS_DIR;
+  fs.mkdirSync(outDir, { recursive: true });
   const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const outFile = path.join(RESULTS_DIR, `run-${args.set}-${args.prompt}-${stamp}.json`);
+  const prefix = args.dryRun ? 'DRYRUN' : 'run';
+  const outFile = path.join(outDir, `${prefix}-${args.set}-${args.prompt}-${stamp}.json`);
   fs.writeFileSync(outFile, `${JSON.stringify({ summary, rows }, null, 2)}\n`, 'utf8');
 
   console.log(JSON.stringify(summary, null, 2));
