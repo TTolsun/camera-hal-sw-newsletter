@@ -5,7 +5,9 @@ const {
   candidateRankOrder,
   capPerSource,
   collapseSeriesRepresentatives,
-  MAX_CANDIDATES_PER_SOURCE
+  withinLookback,
+  MAX_CANDIDATES_PER_SOURCE,
+  MAX_FINAL_CANDIDATES
 } = require('../../../cli/collect-news-candidates');
 
 function item(sourceId, title) {
@@ -37,7 +39,7 @@ test('a single roundup source cannot evict other sources before the final slice'
     ...Array.from({ length: 28 }, (_, i) => item('android-developers-blog', `android-${i}`)),
     ...Array.from({ length: 22 }, (_, i) => item('lore-linux-media-list', `lore-${i}`))
   ];
-  const capped = capPerSource(ranked, MAX_CANDIDATES_PER_SOURCE).slice(0, 40);
+  const capped = capPerSource(ranked, MAX_CANDIDATES_PER_SOURCE).slice(0, MAX_FINAL_CANDIDATES);
   assert.ok(
     capped.some(c => c.source_id === 'lore-linux-media-list'),
     'driver content reaches the final pool instead of being crowded out'
@@ -118,6 +120,116 @@ test('primary-window preference never overrides source priority or reliability',
 
   assert.deepEqual([fresh, stale].sort(candidateRankOrder(now)).map(c => c.title),
     ['stale-but-official', 'fresh-but-low-priority']);
+});
+
+// 2026-08-17(W34) 회귀: primary-window 가점이 withinLookback을 그대로 썼는데, 그 함수는 날짜를
+// 못 읽으면 true를 돌려준다. 그건 수집 풀 필터에서 "날짜 없다고 버리지 않는다"는 뜻이지 "이번
+// 주 신호다"라는 뜻이 아니다. 그 결과 문서형 소스의 nodate 페이지-제목 후보가 창 안 후보와 같은
+// 등급을 받아, priority/reliability가 같은 dated 카메라 신호를 랭킹에서 밀어냈다.
+function undatedItem(sourceId, title, relevanceScore = 50, publishedAt = '') {
+  return {
+    source_id: sourceId,
+    source: sourceId,
+    title,
+    publishedAt,
+    relevanceScore,
+    source_priority: 'medium',
+    source_reliability: 'official'
+  };
+}
+
+function sameTierDatedItem(sourceId, title, publishedAt, relevanceScore) {
+  const candidate = datedItem(sourceId, title, publishedAt, relevanceScore);
+  candidate.source_priority = 'medium';
+  candidate.source_reliability = 'official';
+  return candidate;
+}
+
+// source-monitor가 만드는 후보. publishedAt은 항상 비어 있고 날짜는 effective_date에 담긴다.
+function sourceChangeEventItem(sourceId, title, effectiveDate, relevanceScore = 85) {
+  return {
+    source_id: sourceId,
+    source: sourceId,
+    title,
+    publishedAt: '',
+    published_date: '',
+    source_kind: 'source_change_event',
+    collection_mode: 'source-change-event',
+    effective_date: effectiveDate,
+    date_precision: 'day',
+    datePrecision: 'day',
+    has_dated_evidence: true,
+    main_eligible: true,
+    relevanceScore,
+    source_priority: 'medium',
+    source_reliability: 'official'
+  };
+}
+
+test('an in-window dated candidate outranks a higher-scoring undated one', () => {
+  const now = new Date('2026-08-17T23:59:59.999Z');
+  const undated = undatedItem('claude-code-changelog', 'undated-page-title', 90);
+  const dated = sameTierDatedItem('vendor-security-bulletin', 'in-window-camera-cve', '2026-08-15T00:00:00Z', 10);
+
+  assert.deepEqual([undated, dated].sort(candidateRankOrder(now)).map(c => c.title),
+    ['in-window-camera-cve', 'undated-page-title'],
+    'an undated page-title candidate no longer claims the primary-window bonus');
+});
+
+test('an unparseable published date is treated the same as a missing one', () => {
+  // 가드가 `!candidate.publishedAt`으로 좁아지면 이 케이스가 통과해 버린다.
+  const now = new Date('2026-08-17T23:59:59.999Z');
+  const unparseable = undatedItem('claude-code-changelog', 'unparseable-date', 90, 'unknown');
+  const dated = sameTierDatedItem('vendor-security-bulletin', 'in-window-camera-cve', '2026-08-15T00:00:00Z', 10);
+
+  assert.deepEqual([unparseable, dated].sort(candidateRankOrder(now)).map(c => c.title),
+    ['in-window-camera-cve', 'unparseable-date']);
+});
+
+test('an undated candidate no longer beats an out-of-window dated one on the window key alone', () => {
+  // 창 밖 dated 후보와 nodate 후보는 이제 둘 다 가점이 없으므로 relevanceScore가 정한다.
+  // 이전에는 nodate가 창 안으로 취급돼 점수와 무관하게 앞섰다.
+  const now = new Date('2026-08-17T23:59:59.999Z');
+  const undated = undatedItem('claude-code-changelog', 'undated-page-title', 38);
+  const dated = sameTierDatedItem('vendor-security-bulletin', 'out-of-window-camera-cve', '2026-08-03T00:00:00Z', 60);
+
+  assert.deepEqual([undated, dated].sort(candidateRankOrder(now)).map(c => c.title),
+    ['out-of-window-camera-cve', 'undated-page-title']);
+});
+
+test('a source_change_event candidate keeps its rank even though publishedAt is empty', () => {
+  // 이 lane은 날짜를 effective_date에 담고, 최종 후보로 살아남아야 evidence_id 스냅샷이
+  // 처리됨으로 적립된다. 랭킹에서 강등되면 매주 재발화하고 매주 잘리는 기아 루프가 된다.
+  const now = new Date('2026-08-17T23:59:59.999Z');
+  const event = sourceChangeEventItem('aosp-site-updates', 'camera-its-page-changed', '2026-08-14');
+  const undated = undatedItem('claude-code-changelog', 'undated-page-title', 90);
+  const staleDated = sameTierDatedItem('vendor-security-bulletin', 'out-of-window-cve', '2026-08-03T00:00:00Z', 95);
+
+  assert.deepEqual([undated, staleDated, event].sort(candidateRankOrder(now)).map(c => c.title),
+    ['camera-its-page-changed', 'out-of-window-cve', 'undated-page-title'],
+    'the monitor lane still receives the primary-window bonus');
+});
+
+test('the 35-day pool filter keeps undated candidates', () => {
+  // 가점 제거가 수집 풀 필터까지 좁히지 않았는지 직접 확인한다(:1624의 withinLookback 호출 경로).
+  const now = new Date('2026-08-17T23:59:59.999Z');
+  assert.equal(withinLookback(undatedItem('photo-picker-documentation', 'undated-doc'), now, 35), true);
+  assert.equal(withinLookback(undatedItem('claude-code-changelog', 'unparseable', 50, 'unknown'), now, 35), true);
+});
+
+test('a dated camera signal survives the global slice that undated page titles used to fill', () => {
+  // 실측 형태 재현: 같은 medium/official 등급의 nodate 페이지 제목들이 전역 캡 꼬리를 채우고,
+  // 그 뒤로 dated 카메라 신호가 밀려 잘리던 배치. 절단 폭은 프로덕션 상수를 그대로 쓴다.
+  const now = new Date('2026-08-17T23:59:59.999Z');
+  const ranked = [
+    ...Array.from({ length: MAX_FINAL_CANDIDATES }, (_, i) =>
+      undatedItem(`documentation-source-${i}`, `undated-${i}`, 90)),
+    sameTierDatedItem('vendor-security-bulletin', 'in-window-camera-cve', '2026-08-15T00:00:00Z', 10)
+  ].sort(candidateRankOrder(now));
+  const finalPool = capPerSource(ranked, MAX_CANDIDATES_PER_SOURCE).slice(0, MAX_FINAL_CANDIDATES);
+
+  assert.ok(finalPool.some(c => c.title === 'in-window-camera-cve'),
+    'the dated camera signal is inside the final pool instead of being cut by undated page titles');
 });
 
 test('candidates from before the selection window stay in the pool for the catch-up lane', () => {
