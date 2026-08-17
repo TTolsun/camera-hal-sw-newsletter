@@ -320,6 +320,8 @@ test('featured hero ignores a null headline while keeping the grid working', asy
 
 test('featured hero emits no lead paragraph when the headline has no summary', async () => {
   // summary 가 없으면 lead 문단을 만들지 않는다. 빈 문단이나 대체 문구를 채우지 않는 것이 계약이다.
+  // 선정 쪽 자격 조건(isEligibleHeadlineArticle 의 표시 문장 검사)이 생긴 뒤로 파이프라인은 이
+  // 상태를 만들지 않는다. 손으로 편집된 상태 파일이나 옛 스냅샷을 대비한 렌더 계층 방어선으로 남긴다.
   const { elements, errors } = await renderHomepage(
     [newsletter('2026-05-23', 'Current issue')],
     validHeadlineState({ summary: '' })
