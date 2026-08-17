@@ -195,6 +195,12 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     rendered_group_keys: groupCoverage.rendered_group_keys,
     explicitly_demoted_group_keys: groupCoverage.explicitly_demoted_group_keys,
     hard_blocked_group_keys: groupCoverage.hard_blocked_group_keys,
+    // 선택 집합 밖 기록은 회계에 넣지 않되 버리지도 않는다. editor가 지어낸 키로 강등을 선언한
+    // 주에 그 사실이 어디에도 남지 않으면, 통과한 발행과 "editor가 무엇을 선언했는지"를 잇는
+    // 실마리가 사라진다. 렌더 쪽은 치명이라 검증기가 먼저 막지만 기록은 같은 자리에 둔다.
+    rendered_outside_selection_group_keys: groupCoverage.rendered_outside_selection_group_keys,
+    explicitly_demoted_outside_selection_group_keys: groupCoverage.explicitly_demoted_outside_selection_group_keys,
+    hard_blocked_outside_selection_group_keys: groupCoverage.hard_blocked_outside_selection_group_keys,
     group_coverage_ok: hasRenderedGroupObservation ? groupCoverage.ok : null,
     // #837: 재조정 provenance. coverage 등식에는 참여하지 않는 순수 기록이다.
     // 이게 없으면 "결정론 N건이 왜 M건이 됐는지"를 발행 후에 알 방법이 없다
