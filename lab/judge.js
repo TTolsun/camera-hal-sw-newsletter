@@ -38,6 +38,7 @@ const {
   getLlmCostCalls,
   buildCostReport
 } = require('../src/shared/llm/llm-client');
+const { assertLabelsWellFormed } = require('./label-schema');
 
 // The stage name must contain "judge" as a standalone word. An unrecognised stage
 // falls back to the reporter model group — the expensive one — and says so only in
@@ -97,10 +98,11 @@ function loadItems(splitName) {
     );
   }
   const items = JSON.parse(fs.readFileSync(file, 'utf8')).items;
+  const labelled = assertLabelsWellFormed(items, path.basename(file));
 
   // A gate run costs its split's one shot. Spending it on unlabelled items would burn
   // the seal and produce nothing, since kappa needs both raters.
-  const unlabelled = items.filter(item => item.human_label === null).length;
+  const unlabelled = items.length - labelled;
   if (splitName !== 'calibration' && unlabelled > 0) {
     throw new Error(
       `${unlabelled} of ${items.length} ${splitName} items have no hand label. This split is a ` +

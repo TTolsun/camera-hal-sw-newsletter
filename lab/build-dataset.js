@@ -21,6 +21,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const { candidateGroupKey } = require('../src/shared/common/article-groups');
+const { assertLabelsWellFormed } = require('./label-schema');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const COLLECTED_NEWS_DIR = path.join(REPO_ROOT, 'articles', 'content', 'collected-news');
@@ -218,6 +219,7 @@ function reconcile(committed, computed) {
 function existingLabels(file) {
   if (!fs.existsSync(file)) return new Map();
   const previous = JSON.parse(fs.readFileSync(file, 'utf8')).items || [];
+  assertLabelsWellFormed(previous, path.basename(file));
   return new Map(
     previous
       .filter(item => item.human_label !== null || item.human_note)

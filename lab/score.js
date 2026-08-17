@@ -12,6 +12,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { assertLabelsWellFormed } = require('./label-schema');
 
 function confusion(rows) {
   const cells = { tp: 0, fn: 0, fp: 0, tn: 0 };
@@ -54,6 +55,8 @@ function main() {
       'Pass --force only to inspect the wiring.'
     );
   }
+
+  assertLabelsWellFormed(run.rows, path.basename(file));
 
   const scored = run.rows.filter(row => !row.error && row.human_label !== null && row.judge_label !== null);
   const skipped = run.rows.length - scored.length;

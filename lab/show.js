@@ -11,6 +11,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { assertLabelsWellFormed } = require('./label-schema');
 
 const WIDTH = 78;
 
@@ -89,6 +90,7 @@ function main() {
   const { set, file } = datasetPath(args);
   const data = load(file);
   const items = data.items;
+  assertLabelsWellFormed(items, path.basename(file));
 
   if (args.includes('--left')) {
     const left = items
