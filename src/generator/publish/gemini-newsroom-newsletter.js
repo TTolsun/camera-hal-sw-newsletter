@@ -446,6 +446,11 @@ async function main() {
 
   for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
     generationRunState.currentQualityAttempt = attempt;
+    // #909: 재조정 provenance는 이번 attempt의 사실이다. attempt가 재조정 전에 죽으면 직전
+    // attempt의 강등 기록이 그대로 status에 실려 다른 편성의 사유를 이번 실행 것으로 읽게 된다.
+    // 그래서 attempt 시작마다 비우고, 재조정이 실제로 돈 뒤에만 다시 채운다.
+    shortlistReport.reconciliation_demoted_group_keys = [];
+    shortlistReport.reconciliation_demoted_groups = [];
     const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
     const reporterStage = `reporter attempt ${attempt}/${totalAttempts}`;
     const editorStage = `editor attempt ${attempt}/${totalAttempts}`;
@@ -543,6 +548,9 @@ async function main() {
     shortlistReport.deterministic_selected_representative_group_keys =
       coverageReconciliation.diff.deterministic_selected_group_keys;
     shortlistReport.reconciliation_demoted_group_keys = coverageReconciliation.diff.demoted_group_keys;
+    // #909: 키 옆에 사유를 함께 남긴다. 원본 판단(coverage_decision)과 실제 전환 원인
+    // (reason_code=cap_clamp | editorial_plan_*)이 갈라져 있어야 "왜 빠졌나"에 답할 수 있다.
+    shortlistReport.reconciliation_demoted_groups = coverageReconciliation.diff.demoted_groups;
     shortlistReport.reconciliation_promoted_group_keys = coverageReconciliation.diff.promoted_group_keys;
     shortlistReport.publish_ready = deterministicPublishReady
       && reviewCompositionGatePasses(reconciledSummary)

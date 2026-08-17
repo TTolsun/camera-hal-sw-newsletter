@@ -218,6 +218,9 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     deterministic_selected_representative_group_keys:
       ensureArray(report.deterministic_selected_representative_group_keys),
     reconciliation_demoted_group_keys: ensureArray(report.reconciliation_demoted_group_keys),
+    // #909: 키만으로는 "왜 빠졌나"에 답하지 못한다. 사유가 담긴 coverage-reconciliation.json은
+    // 커밋되지 않으므로(보존 등급 debug_heavy), 그룹 단위 사유는 여기서 커밋되는 status로 올린다.
+    reconciliation_demoted_groups: ensureArray(report.reconciliation_demoted_groups),
     reconciliation_promoted_group_keys: ensureArray(report.reconciliation_promoted_group_keys),
     reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,
     demoted_article_count: options.demotedArticleCount ?? diagnostics.demoted_candidate_count ?? report.demoted_candidate_count ?? null,

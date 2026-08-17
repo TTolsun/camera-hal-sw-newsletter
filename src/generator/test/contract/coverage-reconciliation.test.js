@@ -110,3 +110,132 @@ test('ungraded candidate keeps its deterministic tier', () => {
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport: { editorial_plans: [] } });
   assert.deepEqual(out.selected.map(x => x.url), ['a']);
 });
+
+// #909: 강등 사유를 기록한다. 원본 판단(coverage_decision)과 실제 전환 원인(reason_code)은
+// 다르다 — main_article 제안이 cap clamp에 밀려도 강등되므로, 제안을 그대로 사유로 복사하면
+// "왜 빠졌나"에 답하지 못한다. 단위도 갈라 둔다: changes[]는 candidate 단위이고,
+// 그룹 강등(demoted_groups)은 그룹의 후보가 전부 빠졌을 때만 성립한다.
+
+test('reference_only 제안으로 빠진 그룹은 그 제안을 사유로 남긴다', () => {
+  const a = mainEligible({ url: 'a', article_group_key: 'group:a' });
+  const b = mainEligible({ url: 'b', article_group_key: 'group:b' });
+  const shortlistReport = { selected_articles: [a, b], reserve_candidates: [] };
+  const editorialPlanReport = {
+    editorial_plans: [plan(a, 'main_article'), plan(b, 'reference_only')]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  const demotion = out.diff.changes.find(change => change.action === 'demoted');
+  assert.equal(demotion.key, 'b');
+  assert.equal(demotion.article_group_key, 'group:b');
+  assert.equal(demotion.coverage_decision, 'reference_only');
+  assert.equal(demotion.reason_code, 'editorial_plan_reference_only');
+
+  assert.deepEqual(out.diff.demoted_groups, [{
+    article_group_key: 'group:b',
+    demoted_candidates: [{ candidate_key: 'b', coverage_decision: 'reference_only', reason_code: 'editorial_plan_reference_only' }]
+  }]);
+});
+
+test('main_article 제안이 cap clamp로 빠지면 사유는 제안이 아니라 cap_clamp다', () => {
+  // mainArticleCount.max=5. main 제안 6건 중 impact/score 최하위 하나가 밀린다.
+  const candidates = ['a', 'b', 'c', 'd', 'e', 'f'].map((url, index) => mainEligible({
+    url,
+    article_group_key: `group:${url}`,
+    deterministic_score: 90 - index
+  }));
+  const shortlistReport = { selected_articles: candidates, reserve_candidates: [] };
+  const editorialPlanReport = {
+    editorial_plans: candidates.map(candidate => plan(candidate, 'main_article'))
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  const demotion = out.diff.changes.find(change => change.action === 'demoted');
+  assert.equal(demotion.key, 'f', '점수 최하위가 밀린다');
+  assert.equal(demotion.coverage_decision, 'main_article', '원본 판단은 그대로 남는다');
+  assert.equal(demotion.reason_code, 'cap_clamp', '실제 전환 원인은 cap이다');
+  assert.deepEqual(out.diff.demoted_groups, [{
+    article_group_key: 'group:f',
+    demoted_candidates: [{ candidate_key: 'f', coverage_decision: 'main_article', reason_code: 'cap_clamp' }]
+  }]);
+});
+
+test('같은 그룹의 sibling 하나만 빠지면 그룹 강등 사유에 나타나지 않는다', () => {
+  const a = mainEligible({ url: 'a', article_group_key: 'group:a' });
+  const twin = mainEligible({ url: 'a-twin', article_group_key: 'group:a' });
+  const shortlistReport = { selected_articles: [a, twin], reserve_candidates: [] };
+  const editorialPlanReport = {
+    editorial_plans: [plan(a, 'main_article'), plan(twin, 'reference_only')]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.ok(
+    out.diff.changes.some(change => change.action === 'demoted' && change.key === 'a-twin'),
+    'candidate 단위로는 빠진 사실이 남는다'
+  );
+  assert.deepEqual(out.diff.demoted_group_keys, [], '그룹은 살아 있다');
+  assert.deepEqual(out.diff.demoted_groups, [], '그룹 강등 사유에도 나타나지 않는다');
+});
+
+test('한 그룹에서 사유가 갈려도 후보와 사유의 짝이 보존된다', () => {
+  // 적대적 리뷰가 실증한 케이스다. 사유·판단·후보를 각각 배열로 쪼개 dedup하면
+  // 빈 coverage_decision 하나에 인덱스가 밀리고, 길이가 우연히 맞으면 뒤집힌 짝이 조용히 남는다.
+  // 등급 없는 후보(cap clamp로 탈락)와 exclude 후보가 같은 그룹에서 함께 빠지는 구성.
+  const ungraded = mainEligible({ url: 'p', article_group_key: 'group:m', deterministic_score: 10 });
+  const excluded = mainEligible({ url: 'q', article_group_key: 'group:m', deterministic_score: 20 });
+  const others = ['a', 'b', 'c', 'd', 'e'].map(url => mainEligible({
+    url,
+    article_group_key: `group:${url}`,
+    deterministic_score: 90
+  }));
+  const shortlistReport = {
+    selected_articles: [...others, ungraded, excluded],
+    reserve_candidates: []
+  };
+  const editorialPlanReport = {
+    editorial_plans: [
+      ...others.map(candidate => plan(candidate, 'main_article')),
+      plan(excluded, 'exclude')
+    ]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  const group = out.diff.demoted_groups.find(item => item.article_group_key === 'group:m');
+  assert.deepEqual(group.demoted_candidates, [
+    { candidate_key: 'p', coverage_decision: '', reason_code: 'cap_clamp' },
+    { candidate_key: 'q', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' }
+  ]);
+});
+
+test('편집 계획이 모르는 등급을 보내도 reason_code에 원문을 이어붙이지 않는다', () => {
+  const a = mainEligible({ url: 'a', article_group_key: 'group:a' });
+  const weird = mainEligible({ url: 'b', article_group_key: 'group:b' });
+  const shortlistReport = { selected_articles: [a, weird], reserve_candidates: [] };
+  const editorialPlanReport = {
+    editorial_plans: [plan(a, 'main_article'), plan(weird, 'maybe later?')]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  const demotion = out.diff.changes.find(change => change.action === 'demoted');
+  assert.equal(demotion.reason_code, 'editorial_plan_unrecognized', '모르는 값은 접는다');
+  assert.equal(demotion.coverage_decision, 'maybe later?', '원문은 판단 필드에 그대로 남긴다');
+});
+
+test('등급 앞뒤 공백 때문에 main 제안이 강등되지 않는다', () => {
+  const a = mainEligible({ url: 'a', article_group_key: 'group:a' });
+  const padded = mainEligible({ url: 'b', article_group_key: 'group:b' });
+  const shortlistReport = { selected_articles: [a, padded], reserve_candidates: [] };
+  const editorialPlanReport = {
+    editorial_plans: [plan(a, 'main_article'), plan(padded, '  main_article  ')]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.deepEqual(out.selected.map(item => item.url), ['a', 'b']);
+  assert.deepEqual(out.diff.demoted_groups, []);
+});

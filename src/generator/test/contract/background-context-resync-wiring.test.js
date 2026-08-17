@@ -63,3 +63,18 @@ test('the narrowing happens after reconciliation resolves the main set', () => {
     '좁히기는 runEditorStage 인자 안에 있다'
   );
 });
+
+// #909: 재조정 provenance는 attempt 단위 사실이다. attempt가 재조정 전에 죽으면 직전 attempt의
+// 강등 기록이 그대로 커밋되는 status에 실린다(shortlistReport는 attempt 사이에 살아 있다).
+// 모듈 테스트로는 잡히지 않는 호출부 계약이라 소스로 고정한다.
+test('the publish host clears the reconciliation provenance at the start of each attempt', () => {
+  const source = publishHostSource();
+
+  const loopIndex = source.indexOf('for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {');
+  const resetIndex = source.indexOf('shortlistReport.reconciliation_demoted_groups = [];');
+  const assignIndex = source.indexOf('shortlistReport.reconciliation_demoted_groups = coverageReconciliation.diff.demoted_groups;');
+
+  assert.ok(loopIndex > 0, 'attempt 루프를 찾지 못했다');
+  assert.ok(resetIndex > loopIndex, '초기화는 attempt 루프 안에서 일어난다');
+  assert.ok(resetIndex < assignIndex, '초기화는 재조정 대입보다 앞이어야 한다');
+});
