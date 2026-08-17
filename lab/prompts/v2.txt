@@ -13,10 +13,12 @@ MAIN_USABLE is "yes" only when all three conditions hold:
    that mentions camera once as an example does not qualify.
 
    Tools used to build camera code do qualify: compilers, language standards, build
-   systems, static analysers. Camera HAL is written in C++ and kernel drivers are built
-   with a particular toolchain, so a compiler release or a language standard change
-   reaches this audience's work as directly as a driver change does. A GCC release, a
-   C++ standard change, or a toolchain change passes this condition.
+   systems, static analysers. This condition asks whether the document is about the
+   reader's subject, and the reader is an engineer who writes camera software, so the
+   tools that engineer works with are part of that subject. Camera HAL is written in
+   C++ and kernel drivers are built with a particular toolchain, so a compiler release
+   changes their work directly. A GCC release, a C++ standard change, or a toolchain
+   change passes this condition.
 
    Conditions 2 and 3 still apply in full to such items. A tool article with no version
    number and no specific change fails condition 2, and a hub page fails condition 3.
