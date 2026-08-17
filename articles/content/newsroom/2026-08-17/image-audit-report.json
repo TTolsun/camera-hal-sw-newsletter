@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-17",
+  "source_of_truth": "articles/content/newsroom/2026-08-17/editor-draft.json",
+  "public_artifacts": {
+    "markdown": "newsletters/2026-08-17/newsletter.md",
+    "html": "newsletters/2026-08-17/index.html"
+  },
+  "mode": "publish-target",
+  "render_consistency_scope": "editor_draft",
+  "summary": {
+    "article_count": 1,
+    "rendered_image_count": 1,
+    "markdown_image_count": 1,
+    "fallback_visual_count": 0,
+    "image_candidates_count": 3,
+    "valid_image_candidate_count": 2,
+    "selected_image_count": 1,
+    "empty_selected_with_candidates_count": 0,
+    "selected_image_without_valid_candidate_count": 0,
+    "selected_image_not_in_candidates_count": 0,
+    "repairable_article_count": 0,
+    "selected_by_image_selection_count": 1,
+    "repaired_in_this_run_count": 0,
+    "repaired_article_count": 0,
+    "unrepairable_no_candidate_count": 0,
+    "excluded_validator_failed_count": 0,
+    "excluded_attribution_missing_count": 0,
+    "selected_image_render_mismatch_count": 0,
+    "publish_blocking_issue_count": 0
+  },
+  "repairable": false,
+  "repairable_articles": [],
+  "articles": [
+    {
+      "index": 1,
+      "headline": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결",
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+      "image_candidate_count": 3,
+      "valid_image_candidate_count": 2,
+      "selected_image_is_fallback": false,
+      "selected_image_in_candidates": true,
+      "selected_image_has_valid_candidate": true,
+      "selected_image_not_in_candidates": false,
+      "selected_image_without_valid_candidate": false,
+      "selected_image_evidence": null,
+      "repairable": false,
+      "reasonCode": "selected",
+      "reasonLabel": "대표 이미지 선택됨",
+      "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "selected_candidate_url": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+      "candidate_evidence": [
+        {
+          "candidate_url": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 130,
+          "sourceKind": "og",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        },
+        {
+          "candidate_url": "https://www.gstatic.com/devrel-devsite/prod/vfaab1c846319b03545a380628f94a5f2242cc1b4a1f651e46c0205139cef731f/android/images/lockup.png",
+          "reasonCode": "selected",
+          "reasonLabel": "대표 이미지 선택됨",
+          "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+          "valid": true,
+          "score": 70,
+          "sourceKind": "article-img",
+          "contentType": "image/png",
+          "validationStatus": "ok",
+          "validationSource": "candidate_metadata"
+        },
+        {
+          "candidate_url": "https://developer.android._static/images/translated.svg?hl=ar",
+          "reasonCode": "svg_rejected",
+          "reasonLabel": "SVG 이미지 제외",
+          "reasonText": "SVG 후보는 원문 대표 이미지 조건을 명확히 만족하지 않아 제외했습니다.",
+          "sourceKind": "article-img",
+          "contentType": "image/svg+xml",
+          "validationStatus": "ok",
+          "valid": false
+        }
+      ]
+    }
+  ],
+  "consistency": {
+    "selected_image_render_mismatches": [],
+    "selected_image_without_valid_candidate_articles": []
+  },
+  "warnings": [],
+  "errors": []
+}

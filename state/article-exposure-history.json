@@ -7,6 +7,23 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "title": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "newsletter_date": "2026-08-17",
+      "newsletter_url": "newsletters/2026-08-17/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-08-17",
+      "first_exposed_at": "2026-08-17",
+      "last_exposed_at": "2026-08-17",
+      "exposure_count": 1,
+      "exposure_types": [
+        "homepage_headline"
+      ]
+    },
+    {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com",
       "title": "글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)",
       "source_url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
@@ -231,16 +248,16 @@
       "article_identity_key": "content:2dca6397f6798483d79ea9e0",
       "title": "",
       "source_url": "",
-      "newsletter_date": "2026-08-10",
-      "newsletter_url": "newsletters/2026-08-10/index.html",
+      "newsletter_date": "2026-08-17",
+      "newsletter_url": "newsletters/2026-08-17/index.html",
       "exposure_type": "newsletter_article",
       "headline_score": null,
       "reuse_reason": "",
-      "exposed_at": "2026-08-10",
-      "cooldown_until": "2026-08-31",
+      "exposed_at": "2026-08-17",
+      "cooldown_until": "2026-09-07",
       "first_exposed_at": "2026-06-03",
-      "last_exposed_at": "2026-08-10",
-      "exposure_count": 15,
+      "last_exposed_at": "2026-08-17",
+      "exposure_count": 16,
       "exposure_types": [
         "newsletter_article"
       ]

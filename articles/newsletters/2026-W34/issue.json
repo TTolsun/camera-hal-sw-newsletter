@@ -1,0 +1,435 @@
+{
+  "date": "2026-08-17",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "2026 W34 (08.17 ~ 08.23)",
+  "summary": "이번 주에는 ‘CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결’ 소식을 다룹니다.",
+  "briefing": [
+    "CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결"
+  ],
+  "sections": [
+    {
+      "category": "direct_aosp_camera",
+      "headline": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 대대적 개편 및 멀티 카메라 ZSL HAL 충돌 수정",
+      "what_changed": "CameraX 1.7.0-alpha03 릴리스에서 레거시 Camera2Interop API가 Deprecated되고 Kotlin DSL 및 새로운 configurator factory 메서드로 대체되었습니다. 또한 멀티 카메라 기기에서 ZSL 사용 중 줌 경계를 넘을 때 발생하던 HAL 충돌과 삼성 Galaxy S25, S26, Fold 7 기기의 HDR 비디오 녹화 실패 등 치명적인 버그들이 수정되었습니다.",
+      "confirmed_facts": [
+        "2026년 8월 12일 CameraX 1.7.0-alpha03 버전이 출시되었습니다.",
+        "레거시 Camera2Interop API(Camera2Interop.Extender, Camera2CameraControl, Camera2CameraInfo, CaptureRequestOptions)가 Deprecated되고, 새로운 configurator factory 메서드(forUseCase, forImageCapture 등) 및 Kotlin DSL 확장 함수로 대체되었습니다.",
+        "Preview, ImageAnalysis, VideoCapture, ImageCapture, SessionConfig.Builder용 Kotlin DSL camera2Interop 확장 블록과 CameraControl.applyCamera2InteropAsync 확장 함수가 추가되었습니다.",
+        "CameraInfo에서 Camera2 카메라 ID 및 Characteristics를 가져오는 헬퍼 메서드와 Kotlin 확장 프로퍼티(CameraInfo.cameraId, CameraInfo.cameraCharacteristics, String.toCameraSelector())가 도입되었습니다.",
+        "Preview.setMirrorMode, Preview.getMirrorMode, VideoCapture.setMirrorMode API가 추가되고 ExperimentalMirrorMode 어노테이션이 제거되었습니다.",
+        "ImagePlane.buffer가 non-nullable ByteBuffer로 변경되었습니다.",
+        "멀티 카메라 장치에서 ZSL(Zero-Shutter Lag)을 사용해 물리 카메라 경계를 넘나들며 줌을 조절할 때 발생하던 HAL 충돌 문제가 해결되었습니다.",
+        "삼성 Galaxy S25, S26, Fold 7 기기에서 HDR 비디오 녹화가 실패할 수 있는 문제가 수정되었습니다.",
+        "OverlayEffect와 함께 여러 Preview Use Case를 바인딩할 때 하나의 Preview 스트림 전달이 실패하는 현상이 수정되었습니다.",
+        "지속적인 비디오 녹화 중 카메라를 전환할 때 Recording.pause() 및 Recording.resume()이 실패하는 문제가 해결되었습니다."
+      ],
+      "evidence_summary": "CameraX 1.7.0-alpha03 공식 릴리스 노트를 통해 Camera2Interop API의 대대적인 Deprecated 및 Kotlin DSL 전환, 미러 모드 정식 API 승격, ImagePlane.buffer의 non-nullable 변경이 확인되었습니다. 또한 멀티 카메라 ZSL 줌 시 HAL 충돌, 삼성 특정 기기 HDR 녹화 실패, 멀티 Preview 바인딩 스트림 실패 등 프레임워크 및 HAL 접점의 핵심 버그 수정 내역이 구체적인 Issue ID(b/527782712, b/529618629 등)와 함께 제공되었습니다.",
+      "specificity_checks": [
+        "Release Version: CameraX 1.7.0-alpha03",
+        "Release Date: August 12, 2026",
+        "Component: CameraX / androidx.camera",
+        "Key Changes: Deprecation of Camera2Interop.Extender, addition of Kotlin DSL, non-nullable ImagePlane.buffer, ZSL multi-camera zoom HAL crash fix (b/527782712), Samsung Galaxy S25/S26/Fold 7 HDR video fix (b/529618629)"
+      ],
+      "source_verification_notes": [
+        "공식 Android Jetpack CameraX 릴리스 노트를 기반으로 작성되었으며, 제공된 모든 API 변경 사항 및 버그 수정 내역은 소스 텍스트와 일치합니다.",
+        "ZSL HAL 충돌 수정 및 삼성 특정 기기 HDR 비디오 녹화 수정 등 HAL/드라이버 수준의 영향을 미치는 버그 수정 항목이 소스에 명시되어 있음을 검증했습니다."
+      ],
+      "public_article": {
+        "headline": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결",
+        "lead": "최근 공개된 Android Jetpack CameraX 1.7.0-alpha03 릴리스에서는 앱 개발자가 하위 Camera2 및 HAL 계층과 상호작용하는 핵심 통로인 Camera2Interop API가 대대적으로 개편되었습니다. 이와 함께 멀티 카메라 기기에서 ZSL(Zero-Shutter Lag)을 활성화한 채 물리 카메라 경계를 넘나들며 줌을 조작할 때 발생하던 치명적인 HAL 충돌 버그가 수정되어, 시스템 안정성이 크게 개선되었습니다.",
+        "body_paragraphs": [
+          "이번 CameraX 1.7.0-alpha03 업데이트의 가장 큰 변화는 Camera2Interop API의 현대화입니다. 기존의 레거시 API인 Camera2Interop.Extender, Camera2CameraControl, Camera2CameraInfo, CaptureRequestOptions가 모두 Deprecated 처리되었습니다. 대신 더욱 직관적이고 안전한 설정을 지원하는 Camera2Interop configurator factory 메서드(forUseCase, forImageCapture, forSessionConfig, forCameraControl)와 Kotlin DSL 확장 함수가 도입되었습니다. 이를 통해 개발자는 Use Case 빌더 단계에서 setInterop 또는 applyInteropAsync 메서드를 활용해 하위 Camera2 파라미터를 손쉽게 주입할 수 있게 되었습니다.",
+          "또한, Preview와 VideoCapture에 미러 모드를 제어할 수 있는 setMirrorMode 및 getMirrorMode API가 정식 추가되면서 기존의 ExperimentalMirrorMode 어노테이션이 제거되었습니다. 이미지 처리 파이프라인 관점에서는 ImagePlane.buffer의 반환 타입이 non-nullable ByteBuffer로 변경되어, 프레임 분석(ImageAnalysis) 시 발생할 수 있는 NullPointerException 위험을 원천적으로 차단했습니다. SessionConfig.Builder 등의 프로퍼티 게터 역시 Kotlin DSL에서 쓰기 전용(write-only)으로 제한되어 설정 오용을 방지합니다.",
+          "하위 HAL 및 드라이버 레이어에서 가장 주목해야 할 부분은 멀티 카메라 기기에서의 ZSL(Zero-Shutter Lag) 안정성 개선입니다. 기존에는 멀티 카메라 환경에서 ZSL을 활성화한 상태로 물리 카메라 간의 경계를 넘나들며 줌을 변경할 때, 프레임워크와 HAL 간의 스트림 제어 불일치로 인해 HAL 충돌(HAL crash)이 발생하는 문제가 있었습니다. 이번 릴리스에서는 이 충돌 문제를 해결하여 줌 동작 중에도 안정적인 프레임 캡처가 가능하도록 보장합니다. 추가적으로 삼성 Galaxy S25, S26, Fold 7 기기에서 발생하던 HDR 비디오 녹화 실패 현상과, OverlayEffect 사용 시 멀티 Preview 스트림 중 하나가 전달되지 않던 버그도 함께 수정되었습니다."
+        ],
+        "camera_hal_takeaway": "이번 변경은 직접적인 HAL3 규격 변경은 아니지만, 상위 프레임워크가 HAL에 요청을 전달하는 방식과 밀접하게 연계되어 있습니다. 특히 ZSL 활성화 상태에서 물리 카메라 간 줌 전환 시 발생하는 HAL 충돌 수정(b/527782712)은 멀티 카메라 스트림 구성 및 버퍼 수명 주기 제어 로직을 점검해야 함을 시사합니다. 또한 삼성 Galaxy S25/S26/Fold 7 등 특정 벤더 기기 대상의 HDR 비디오 녹화 실패 수정(b/529618629) 사례처럼, 벤더 고유의 HDR 메타데이터 처리 및 코덱 연동부에서 예외가 발생하지 않는지 VTS 및 자체 시나리오 테스트를 통해 검증해야 합니다.",
+        "reader_checkpoints": [
+          "멀티 카메라 디바이스에서 ZSL 모드를 활성화하고 물리 카메라 간 줌 전환(물리 카메라 경계 교차) 시 HAL이 비정상 종료되거나 프레임 드롭이 발생하는지 검증하십시오.",
+          "자사 플랫폼의 HDR 비디오 녹화 파이프라인에서 CameraX의 VideoCapture 및 코덱 설정 변경으로 인한 레그레이션이 없는지, 특히 삼성 S25/S26 등 유사 칩셋 환경에서 CTS/VTS 테스트를 수행하십시오.",
+          "앱 계층에서 새로운 Camera2Interop configurator 및 Kotlin DSL을 통해 하위 CaptureRequest 파라미터를 주입할 때, HAL이 vendor tag 및 메타데이터를 누락 없이 올바르게 수신하고 처리하는지 확인하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+            "publisher": "Google Developers",
+            "source_role": "primary",
+            "checked_at": "2026-08-17"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "Android Jetpack CameraX 공식 릴리스 노트 분석",
+        "editorial_story": {
+          "reader_scenario": "멀티 카메라가 탑재된 신규 플래그십 디바이스 개발 중, 사용자가 카메라 앱에서 줌을 빠르게 조절할 때 간헐적으로 Camera HAL이 죽는 현상이 발생해 원인을 추적하고 있습니다.",
+          "what_happened": "CameraX 1.7.0-alpha03에서 멀티 카메라 환경의 ZSL 활성화 상태 줌 조작 시 발생하던 HAL 충돌 버그(b/527782712)가 공식 수정되었습니다.",
+          "why_it_matters": "상위 프레임워크의 스트림 바인딩 및 줌 제어 로직 변화가 하위 HAL의 버퍼 수명 주기 및 논리/물리 카메라 메타데이터 처리 안정성에 직접적인 영향을 미치기 때문입니다.",
+          "field_scenario": "ZSL이 켜진 상태에서 광각에서 망원 카메라로 물리 렌즈가 전환되는 순간, HAL에 전달되는 CaptureRequest 메타데이터와 버퍼 요청 흐름을 분석하여 충돌이 발생하지 않는지 디버깅합니다.",
+          "not_to_overclaim": "이 수정 사항이 모든 벤더의 독자적인 멀티 카메라 줌 알고리즘 오류나 하드웨어 드라이버 자체의 결함을 완전히 해결해 주는 것은 아닙니다.",
+          "editor_take": "CameraX의 상위 스트림 제어 안정화 패치는 HAL 개발팀의 디버깅 리소스를 크게 줄여주므로, 신규 릴리스의 버그 수정 내역을 자사 플랫폼 검증 항목에 즉시 반영해야 합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Framework"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 8월 12일 배포된 CameraX 1.7.0-alpha03에서 레거시 Camera2Interop API가 Deprecated되고 새로운 configurator factory 메서드로 대체되었습니다.",
+          "Preview와 VideoCapture에 정식 미러 모드 제어 API(setMirrorMode, getMirrorMode)가 추가되었습니다.",
+          "ImagePlane.buffer의 반환 타입이 non-nullable ByteBuffer로 변경되었습니다.",
+          "멀티 카메라 기기에서 ZSL(Zero-Shutter Lag) 사용 중 물리 카메라 경계를 넘나들며 줌을 조절할 때 발생하던 HAL 충돌 버그(b/527782712)가 수정되었습니다.",
+          "삼성 Galaxy S25, S26, Fold 7 기기에서 HDR 비디오 녹화가 실패할 수 있는 버그(b/529618629)가 수정되었습니다.",
+          "OverlayEffect 사용 시 멀티 Preview 중 하나가 스트림 전달에 실패하는 버그(b/532577546)가 수정되었습니다."
+        ],
+        "background_context": "CameraX는 Android Camera Framework 위에 구축된 Jetpack 라이브러리로, 카메라 앱 개발을 간소화합니다. Camera2 API의 복잡성을 추상화하여 Preview, ImageCapture, ImageAnalysis, VideoCapture와 같은 Use Case를 제공합니다. Camera2Interop은 CameraX 앱에서 Camera2 API의 저수준 기능에 접근할 수 있도록 하는 인터페이스입니다. 이 변경은 CameraX 앱이 Camera2 기능을 연동하는 방식에 영향을 미치며, 특히 Kotlin DSL을 사용하는 개발자에게 새로운 접근 방식을 제공합니다. HAL 충돌 수정은 멀티 카메라 기기에서 ZSL(Zero-Shutter Lag) 사용 시 물리 카메라 경계를 넘나드는 줌 동작과 관련된 HAL 계층의 안정성 문제를 해결합니다. 이는 Camera HAL 구현의 견고성과 직접적인 관련이 있습니다.",
+        "hal_driver_impact": "CameraX의 이번 업데이트는 상위 프레임워크 계층의 변경이지만, HAL 및 드라이버 개발자에게도 중요한 의미를 가집니다. 특히 ZSL 모드에서 물리 카메라 간 줌 전환 시 발생하는 HAL 충돌 수정은 프레임워크가 하위 HAL에 요청하는 CaptureRequest 및 스트림 재구성(stream reconfiguration) 타이밍의 안정성을 보장합니다. 또한, 특정 벤더 기기(삼성 S25/S26/Fold 7)의 HDR 녹화 실패 수정 사례는 프레임워크의 비디오 레코딩 세션 구성과 HAL의 HDR 메타데이터 처리 간의 호환성 검증이 필수적임을 보여줍니다. ImagePlane.buffer의 non-nullable 변경은 프레임 분석 파이프라인에서 버퍼 획득 실패로 인한 예외 처리를 단순화하여 안정성을 높입니다.",
+        "action_items": [
+          "멀티 카메라 디바이스에서 ZSL 모드를 활성화하고 물리 카메라 경계를 넘나드는 줌 전환 시나리오를 반복 실행하여 HAL 충돌(b/527782712 관련)이 재발하는지 검증하십시오.",
+          "삼성 Galaxy S25, S26, Fold 7 등 플래그십 디바이스 및 유사 AP 탑재 기기에서 HDR 비디오 녹화 기능의 정상 동작 여부(b/529618629 관련)를 CTS/VTS 테스트를 통해 확인하십시오.",
+          "앱 개발팀과 협력하여 기존 Camera2Interop.Extender 기반 코드를 새로운 configurator factory 메서드로 전환하도록 가이드하고, 주입된 CaptureRequestOptions가 HAL 수준에서 누락 없이 수신되는지 메타데이터 로그를 확인하십시오."
+        ],
+        "team_share_points": "CameraX 1.7.0-alpha03에서 멀티 카메라 ZSL 줌 시 HAL 충돌 버그와 특정 기기 HDR 비디오 녹화 실패가 수정되었습니다. 우리 플랫폼에서도 유사한 멀티 카메라 스트림 전환 및 HDR 메타데이터 처리 시 충돌이나 오동작이 없는지 검증 시나리오를 즉시 점검해야 합니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 8월 12일 배포된 최신 CameraX 1.7.0-alpha03 릴리스에서 멀티 카메라 ZSL 줌 시 발생하는 치명적인 HAL 충돌 버그 수정 사항이 포함되어 있어, 즉각적인 플랫폼 검증이 요구됩니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "ZSL 모드 활성화 상태에서 멀티 카메라 간 줌 전환 시 HAL crash 여부 검증 및 HDR 비디오 녹화 세션 안정성 테스트",
+        "impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "이 릴리스가 Camera HAL3 AIDL/HIDL 인터페이스 자체의 규격 변경을 의미하는 것은 아닙니다.",
+          "특정 삼성 기기의 HDR 녹화 수정 사항이 타사 SoC나 독자적인 HDR 구현체의 모든 문제를 해결해 주지는 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:camerax_1.7.0-alpha03_release_date",
+          "text": "2026년 8월 12일 CameraX 1.7.0-alpha03 버전이 공식 출시되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:69a4ac973b5e163e:e77a822e354a:01c4048ce3160b52"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:camerax_interop_deprecation",
+          "text": "레거시 Camera2Interop API가 Deprecated되고 새로운 configurator factory 메서드 및 Kotlin DSL 확장 함수로 대체되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:69a4ac973b5e163e:e77a822e354a:01c4048ce3160b52",
+            "sx:69a4ac973b5e163e:e77a822e354a:88cb879d598c2d63",
+            "sx:69a4ac973b5e163e:e77a822e354a:94c90cf3431d97ef"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:camerax_mirror_mode",
+          "text": "Preview 및 VideoCapture에 정식 미러 모드 제어 API가 추가되고 ExperimentalMirrorMode 어노테이션이 제거되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:69a4ac973b5e163e:e77a822e354a:3c9795b39d050437"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:camerax_non_nullable_buffer",
+          "text": "ImagePlane.buffer의 반환 타입이 non-nullable ByteBuffer로 변경되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:69a4ac973b5e163e:e77a822e354a:c9088b11603c6b95"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:camerax_zsl_hal_crash_fix",
+          "text": "멀티 카메라 기기에서 ZSL 사용 중 물리 카메라 경계를 넘나들며 줌을 조절할 때 발생하던 HAL 충돌 버그가 수정되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:69a4ac973b5e163e:bd2475e092ae:c11d01a4f47c6f84"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:camerax_samsung_hdr_fix",
+          "text": "삼성 Galaxy S25, S26, Fold 7 기기에서 HDR 비디오 녹화가 실패할 수 있는 버그가 수정되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:69a4ac973b5e163e:bd2475e092ae:35a21f1ff97b15c6"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:camerax_overlay_effect_fix",
+          "text": "OverlayEffect 사용 시 멀티 Preview 중 하나가 스트림 전달에 실패하는 버그가 수정되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:69a4ac973b5e163e:bd2475e092ae:819c1a62891d7e65"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:camerax_recording_pause_resume_fix",
+          "text": "지속적인 비디오 녹화 중 카메라를 전환할 때 Recording.pause() 및 Recording.resume()이 실패하는 문제가 해결되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:69a4ac973b5e163e:bd2475e092ae:f3aa348c8e867e61"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "ZSL 활성화 상태에서 멀티 카메라 물리 경계 줌 전환 시 HAL 안정성 검증",
+        "삼성 S25/S26/Fold 7 및 유사 칩셋 플랫폼에서 HDR 비디오 녹화 파이프라인 검증",
+        "새로운 Camera2Interop API를 통한 CaptureRequest 메타데이터 전달 무결성 검증"
+      ],
+      "action_hints": [
+        "ZSL 줌 시나리오에서 HAL 버퍼 수명 주기 로그를 집중 모니터링하십시오.",
+        "HDR 녹화 시 MediaCodec과 HAL 간의 메타데이터 및 포맷 매핑을 점검하십시오."
+      ],
+      "action_items": [
+        "멀티 카메라 디바이스에서 ZSL 모드를 활성화하고 물리 카메라 경계를 넘나드는 줌 전환 시나리오를 반복 실행하여 HAL 충돌(b/527782712 관련)이 재발하는지 검증하십시오.",
+        "삼성 Galaxy S25, S26, Fold 7 등 플래그십 디바이스 및 유사 AP 탑재 기기에서 HDR 비디오 녹화 기능의 정상 동작 여부(b/529618629 관련)를 CTS/VTS 테스트를 통해 확인하십시오.",
+        "앱 개발팀과 협력하여 기존 Camera2Interop.Extender 기반 코드를 새로운 configurator factory 메서드로 전환하도록 가이드하고, 주입된 CaptureRequestOptions가 HAL 수준에서 누락 없이 수신되는지 메타데이터 로그를 확인하십시오."
+      ],
+      "is_ai_related": false,
+      "article_type": "direct_aosp_camera",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentType": "image/png",
+          "height": 0,
+          "width": 0,
+          "alt": ""
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vfaab1c846319b03545a380628f94a5f2242cc1b4a1f651e46c0205139cef731f/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentType": "image/png",
+          "height": 0,
+          "width": 0,
+          "alt": "Android Developers"
+        },
+        {
+          "url": "https://developer.android._static/images/translated.svg?hl=ar",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "sourceKind": "article-img",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentType": "image/svg+xml",
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+      "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "imageAttribution": "CameraX Release Notes",
+      "imageAlt": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+        }
+      ],
+      "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "source_candidate_hash": "69a4ac973b5e163eb095357dd7271ed1d7a44339b828c78660c473d743bd8a82",
+      "article_group_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1,
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "CameraX API, compatibility workaround, app-side camera behavior change 확인",
+      "resolvedImage": {
+        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+        "src": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": "selected image candidate"
+      },
+      "coverage_type": "fresh",
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+        "attribution": "CameraX Release Notes",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+        "exclusionEvidence": [
+          {
+            "candidate_url": "https://developer.android._static/images/translated.svg?hl=ar",
+            "reasonCode": "svg_rejected",
+            "reasonLabel": "SVG 이미지 제외",
+            "reasonText": "SVG 후보는 원문 대표 이미지 조건을 명확히 만족하지 않아 제외했습니다.",
+            "sourceKind": "article-img",
+            "contentType": "image/svg+xml",
+            "validationStatus": "ok",
+            "valid": false
+          }
+        ]
+      }
+    }
+  ],
+  "action_items": [
+    "멀티 카메라 디바이스에서 ZSL 모드를 활성화하고 물리 카메라 경계를 넘나드는 줌 전환 시나리오를 반복 실행하여 HAL 충돌(b/527782712 관련)이 재발하는지 검증하십시오.",
+    "삼성 Galaxy S25, S26, Fold 7 등 플래그십 디바이스 및 유사 AP 탑재 기기에서 HDR 비디오 녹화 기능의 정상 동작 여부(b/529618629 관련)를 CTS/VTS 테스트를 통해 확인하십시오.",
+    "OverlayEffect를 사용하는 멀티 Preview 스트림 시나리오에서 프레임 드롭이나 스트림 전달 실패가 발생하지 않는지 검증하십시오.",
+    "앱 개발팀과 협력하여 기존 Camera2Interop.Extender 기반 코드를 새로운 configurator factory 메서드로 전환하도록 가이드하고, 주입된 CaptureRequestOptions가 HAL 수준에서 누락 없이 수신되는지 메타데이터 로그를 확인하십시오."
+  ],
+  "references": [
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+    }
+  ],
+  "explicitly_demoted_groups": [
+    {
+      "article_group_key": "article:960a2bffda499173581871cb650a3de71b653dbf4fc1be3bc6a4193c6d723d9b",
+      "demotion_reason": "Not included in the primary selected candidates list.",
+      "reason_code": "explicit_editor_hold"
+    },
+    {
+      "article_group_key": "article:c1f5e4dd084b0e9440c04f195ba2e40b5befc1d57b875e7cc1f6bd4b081ec7f0",
+      "demotion_reason": "Not included in the primary selected candidates list.",
+      "reason_code": "explicit_editor_hold"
+    },
+    {
+      "article_group_key": "article:fdf06a5f0575b77f41a24ca9c99002d1922511f04320b5d27f137c31a3bbf16a",
+      "demotion_reason": "Not included in the primary selected candidates list.",
+      "reason_code": "explicit_editor_hold"
+    },
+    {
+      "article_group_key": "article:9318042bc8e866feeb100a2d6107e4a8b9b529664794c98825ad5eff53a314b6",
+      "demotion_reason": "Not included in the primary selected candidates list.",
+      "reason_code": "explicit_editor_hold"
+    }
+  ],
+  "hard_blocked_groups": [],
+  "selected_group_count": 1,
+  "rendered_group_count": 1,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+  ],
+  "rendered_group_keys": [
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "Camera ITS tests",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+      "source": "AOSP Site Updates",
+      "published_date": "2026-07",
+      "note": "AOSP Camera 프레임워크 관련 참고"
+    },
+    {
+      "title": "Camera ITS overview",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its",
+      "source": "AOSP Site Updates",
+      "published_date": "2026-07",
+      "note": "AOSP Camera 프레임워크 관련 참고"
+    },
+    {
+      "title": "[PATCH] media: v4l2-isp: reject zero-sized parameter blocks",
+      "url": "https://lore.kernel.org/linux-media/20260815193839.141406-1-devnexen@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-15",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    },
+    {
+      "title": "[PATCH] media: uvcvideo: Do not read beyond the uvc_status_control memory",
+      "url": "https://lore.kernel.org/linux-media/20260813-uvc-status-11-v1-1-2cf43e9590b0@chromium.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-13",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    }
+  ],
+  "weekly_key": "2026-W34",
+  "week_start_date": "2026-08-17",
+  "week_end_date": "2026-08-23",
+  "tags": [
+    "Camera HAL",
+    "Android"
+  ]
+}

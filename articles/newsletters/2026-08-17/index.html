@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Camera SW Newsletter - 2026-08-17</title>
+  <meta name="description" content="이번 주 뉴스레터에서는 2026년 8월 12일 배포된 CameraX 1.7.0-alpha03 릴릴스 핵심 변경 사항을 다룹니다. 레거시 Camera2Interop API의 Deprecated 조치와 Kotlin DSL 확장 기능 도입, 그리고 멀티 카메라 환경에서 ZSL(Zero-Shutter Lag) 사용 시 발생하는 HAL 충돌 수정 등 실무 개발 및 검증에 직결되는 주요 업데이트를 상세히 분석합니다." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-08-17/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="Camera SW Newsletter - 2026-08-17" />
+  <meta property="og:description" content="이번 주 뉴스레터에서는 2026년 8월 12일 배포된 CameraX 1.7.0-alpha03 릴릴스 핵심 변경 사항을 다룹니다. 레거시 Camera2Interop API의 Deprecated 조치와 Kotlin DSL 확장 기능 도입, 그리고 멀티 카메라 환경에서 ZSL(Zero-Shutter Lag) 사용 시 발생하는 HAL 충돌 수정 등 실무 개발 및 검증에 직결되는 주요 업데이트를 상세히 분석합니다." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-08-17/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Camera SW Newsletter - 2026-08-17" />
+  <meta name="twitter:description" content="이번 주 뉴스레터에서는 2026년 8월 12일 배포된 CameraX 1.7.0-alpha03 릴릴스 핵심 변경 사항을 다룹니다. 레거시 Camera2Interop API의 Deprecated 조치와 Kotlin DSL 확장 기능 도입, 그리고 멀티 카메라 환경에서 ZSL(Zero-Shutter Lag) 사용 시 발생하는 HAL 충돌 수정 등 실무 개발 및 검증에 직결되는 주요 업데이트를 상세히 분석합니다." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../index.html">홈</a>
+        <a href="../../archive.html">아카이브</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← 뉴스룸</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">주간 뉴스레터 2026-08-17</span>
+        </div>
+        <h1 class="issue-title"><span>Camera SW</span><span>Newsletter - 2026-08-17</span></h1>
+        <p class="subtitle">이번 주 뉴스레터에서는 2026년 8월 12일 배포된 CameraX 1.7.0-alpha03 릴릴스 핵심 변경 사항을 다룹니다. 레거시 Camera2Interop API의 Deprecated 조치와 Kotlin DSL 확장 기능 도입, 그리고 멀티 카메라 환경에서 ZSL(Zero-Shutter Lag) 사용 시 발생하는 HAL 충돌 수정 등 실무 개발 및 검증에 직결되는 주요 업데이트를 상세히 분석합니다.</p>
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">이번 주 3줄 브리핑</h2>
+          <ul><li>CameraX 1.7.0-alpha03에서 레거시 Camera2Interop API가 Deprecated되고 새로운 configurator factory 메서드 및 Kotlin DSL 확장 기능으로 대체되었습니다.</li><li>멀티 카메라 기기에서 ZSL(Zero-Shutter Lag)을 사용해 물리 카메라 경계를 넘나들며 줌을 조절할 때 발생하던 HAL 충돌 버그가 수정되었습니다.</li><li>Preview 및 VideoCapture에 미러 모드 API가 추가되었으며, ImagePlane.buffer가 non-nullable ByteBuffer로 변경되어 이미지 처리 안정성이 향상되었습니다.</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-1-7-0-alpha03-camera2interop-api-zsl-hal" aria-labelledby="article-camerax-1-7-0-alpha03-camera2interop-api-zsl-hal-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerax-1-7-0-alpha03-camera2interop-api-zsl-hal-title" class="article-title">CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결</h2>
+        <p class="article-source-subtitle">Android Jetpack CameraX 공식 릴리스 노트 분석</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=ar" alt="CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03">CameraX Release Notes</a></figcaption>
+        </figure>
+        <p class="article-lead">최근 공개된 Android Jetpack CameraX 1.7.0-alpha03 릴리스에서는 앱 개발자가 하위 Camera2 및 HAL 계층과 상호작용하는 핵심 통로인 Camera2Interop API가 대대적으로 개편되었습니다. 이와 함께 멀티 카메라 기기에서 ZSL(Zero-Shutter Lag)을 활성화한 채 물리 카메라 경계를 넘나들며 줌을 조작할 때 발생하던 치명적인 HAL 충돌 버그가 수정되어, 시스템 안정성이 크게 개선되었습니다.</p>
+        <p>이번 CameraX 1.7.0-alpha03 업데이트의 가장 큰 변화는 Camera2Interop API의 현대화입니다. 기존의 레거시 API인 Camera2Interop.Extender, Camera2CameraControl, Camera2CameraInfo, CaptureRequestOptions가 모두 Deprecated 처리되었습니다. 대신 더욱 직관적이고 안전한 설정을 지원하는 Camera2Interop configurator factory 메서드(forUseCase, forImageCapture, forSessionConfig, forCameraControl)와 Kotlin DSL 확장 함수가 도입되었습니다. 이를 통해 개발자는 Use Case 빌더 단계에서 setInterop 또는 applyInteropAsync 메서드를 활용해 하위 Camera2 파라미터를 손쉽게 주입할 수 있게 되었습니다.</p>
+        <p>또한, Preview와 VideoCapture에 미러 모드를 제어할 수 있는 setMirrorMode 및 getMirrorMode API가 정식 추가되면서 기존의 ExperimentalMirrorMode 어노테이션이 제거되었습니다. 이미지 처리 파이프라인 관점에서는 ImagePlane.buffer의 반환 타입이 non-nullable ByteBuffer로 변경되어, 프레임 분석(ImageAnalysis) 시 발생할 수 있는 NullPointerException 위험을 원천적으로 차단했습니다. SessionConfig.Builder 등의 프로퍼티 게터 역시 Kotlin DSL에서 쓰기 전용(write-only)으로 제한되어 설정 오용을 방지합니다.</p>
+        <p>하위 HAL 및 드라이버 레이어에서 가장 주목해야 할 부분은 멀티 카메라 기기에서의 ZSL(Zero-Shutter Lag) 안정성 개선입니다. 기존에는 멀티 카메라 환경에서 ZSL을 활성화한 상태로 물리 카메라 간의 경계를 넘나들며 줌을 변경할 때, 프레임워크와 HAL 간의 스트림 제어 불일치로 인해 HAL 충돌(HAL crash)이 발생하는 문제가 있었습니다. 이번 릴리스에서는 이 충돌 문제를 해결하여 줌 동작 중에도 안정적인 프레임 캡처가 가능하도록 보장합니다. 추가적으로 삼성 Galaxy S25, S26, Fold 7 기기에서 발생하던 HDR 비디오 녹화 실패 현상과, OverlayEffect 사용 시 멀티 Preview 스트림 중 하나가 전달되지 않던 버그도 함께 수정되었습니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>이번 변경은 직접적인 HAL3 규격 변경은 아니지만, 상위 프레임워크가 HAL에 요청을 전달하는 방식과 밀접하게 연계되어 있습니다. 특히 ZSL 활성화 상태에서 물리 카메라 간 줌 전환 시 발생하는 HAL 충돌 수정(b/527782712)은 멀티 카메라 스트림 구성 및 버퍼 수명 주기 제어 로직을 점검해야 함을 시사합니다. 또한 삼성 Galaxy S25/S26/Fold 7 등 특정 벤더 기기 대상의 HDR 비디오 녹화 실패 수정(b/529618629) 사례처럼, 벤더 고유의 HDR 메타데이터 처리 및 코덱 연동부에서 예외가 발생하지 않는지 VTS 및 자체 시나리오 테스트를 통해 검증해야 합니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03">CameraX Release Notes - CameraX 1.7.0-alpha03</a></li></ul></div>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">참고자료</h2>
+        <div class="reference-list"><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03">CameraX Release Notes - CameraX 1.7.0-alpha03</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="이슈 하단 이동">
+        <a href="../../index.html">← 뉴스룸으로</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">아카이브 전체 보기 →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">뉴스레터</span>
+          <a class="footer-link" href="../../index.html">홈</a>
+          <a class="footer-link" href="../../archive.html">아카이브</a>
+          <span class="footer-note">구독 (지원예정)</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">주제</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">리소스</span>
+          <a class="footer-link" href="../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (지원예정)</span>
+          <span class="footer-note">편집 정책 (지원예정)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Gemini 뉴스룸이 모아 사람이 검토·발행합니다.</small></div>
+    </div>
+  </footer>
+</body>
+</html>
