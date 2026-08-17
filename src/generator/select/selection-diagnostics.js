@@ -333,6 +333,101 @@ function formatCount(value) {
   return value === null || value === undefined ? 'unknown' : String(value);
 }
 
+// #914: coverage_decision은 editorial-plan LLM이 쓴 자유 문자열이라(스키마에 enum도 maxLength도
+// 없다) markdown 제어문자가 그대로 들어온다. 이 렌더는 표가 아니라 목록이므로 표 전용
+// escapeMarkdownCell(파이프와 개행만 다룬다)로는 부족하다. 개행 하나면 목록 항목이 끊기고,
+// 백틱·링크·raw HTML은 그대로 재해석돼 원문이 눈에서 사라진다.
+//
+// 값은 잘라내지 않는다. 진단 artifact에서 LLM 설명의 뒷부분을 조용히 버리는 것이 긴 줄보다
+// 나쁘다. 대신 공백을 접어 한 줄로 만들고 구조를 바꾸는 문자만 escape한다.
+
+// 값 안 어디에서든 구조를 바꾸거나 내용을 숨기는 문자. `&`도 포함한다 — escape하지 않으면
+// `a &amp; b`가 `a & b`로 디코딩돼 LLM이 쓰지 않은 문자열이 진단에 남는다.
+const MARKDOWN_INLINE_SPECIALS = /[\\`*[\]()<>|~&]/g;
+
+// `_`는 단어 안에서는 강조가 되지 않는다(CommonMark는 intraword `_`를 강조로 열지 않는다).
+// 그래서 양옆이 모두 문자/숫자인 `_`만 남기고, 그 밖의 `_`는 escape한다. 이러면
+// `editorial_plan_reference_only`는 그대로 읽히면서 `demoted _because_ of cap` 같은 산문에서
+// 밑줄이 사라지는 재해석은 막는다.
+const MARKDOWN_FLANKING_UNDERSCORE = /(?<![\p{L}\p{N}])_|_(?![\p{L}\p{N}])/gu;
+
+// 값은 `- ` / `    - ` 바로 뒤에 놓여 목록 항목 본문으로 파싱된다. 그래서 값의 첫 문자는
+// 줄머리 블록 마커가 될 수 있다: `# 1/3 media: ...`는 heading, `- v2 patch`는 한 단계 더 깊은
+// 중첩 목록, `1. intro`는 번호 목록이 된다.
+//
+// 오늘의 프로덕션 writer로는 이 모양이 나오지 않는다. candidate_key는 url_hash || url || title
+// 인데(coverage-reconciliation.js) newsroom-selection.js가 url_hash에 normalizedUrlHash를
+// 넣고 그 값은 빈 URL에도 sha256 hex 64자라(selection-normalizers.js) 항상 truthy다. 즉 제목
+// 폴백까지 내려가지 않고, 키는 hex 64자뿐이라 `#`도 `-`도 앞자리 숫자도 없다. 이 규칙은 손으로
+// 만든 diagnostics 객체와 예전 형식의 status를 위한 방어다 —
+// write-generation-status-output.js:187은 이미 기록된 status 파일의 내용을 그대로 렌더한다.
+//
+// `#`는 줄머리에서만 escape한다. ATX heading은 블록 요소라 줄 중간의 `#`는 아무 의미가 없다.
+// 그리고 실제 데이터에서 `#`가 나오는 자리는 candidate_key가 아니라 article_group_key다:
+// fallbackGroupKey가 `article:${normalizeUrl(url)}`를 만들고 그 normalizeUrl은 anchor를
+// 보존하는 normalizeSourceUrlPreserveAnchor다(article-groups.js). 최근 8주 수집분에도
+// `article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02`
+// 같은 키가 남아 있다. 이 `#`는 언제나 `article:` 접두사 뒤라 0번째 자리가 아니므로 줄머리
+// 규칙이 건드리지 않는다. 무조건 escape하면 안전 이득 없이 매 줄에 `\#`만 늘어난다.
+const MARKDOWN_LEADING_BLOCK_MARKER = /^[#+-]/;
+// `)`는 MARKDOWN_INLINE_SPECIALS가 이미 escape하므로(전역 pass 뒤에는 `1\)`) 여기서는
+// `.`만 남는다. 숫자 자체에는 backslash를 붙일 수 없어 구분자를 escape한다.
+const MARKDOWN_LEADING_ORDERED_MARKER = /^(\d{1,9})\./;
+
+function markdownSafeInline(value) {
+  if (value === null || value === undefined) return 'unknown';
+  const collapsed = String(value).replace(/\s+/g, ' ').trim();
+  if (!collapsed) return 'none';
+  const escaped = collapsed
+    .replace(MARKDOWN_INLINE_SPECIALS, '\\$&')
+    .replace(MARKDOWN_FLANKING_UNDERSCORE, '\\$&');
+  if (MARKDOWN_LEADING_BLOCK_MARKER.test(escaped)) return `\\${escaped}`;
+  return escaped.replace(MARKDOWN_LEADING_ORDERED_MARKER, '$1\\.');
+}
+
+// #914: 재조정 강등은 editor가 선언한 강등과 원인이 다르다(전자는 결정론 재조정의 cap clamp나
+// 편집 계획 등급, 후자는 editor 산출물의 선언). 같은 줄로 접으면 리뷰가 "editor 강등 0건"만
+// 읽고 재조정이 내린 그룹을 통째로 놓친다 — 2026-08-17이 정확히 그 실행이었다.
+function reconciliationDemotionLines(diagnostics) {
+  const demotedGroupKeys = ensureArray(diagnostics.reconciliation_demoted_group_keys);
+  const demotedGroups = ensureArray(diagnostics.reconciliation_demoted_groups);
+  // 관측하지 않은 실행(unknown)과 강등이 없던 실행(0)은 서로 다른 사실이다.
+  const observed = diagnostics.reconciliation_demoted_group_keys !== undefined ||
+    diagnostics.reconciliation_demoted_groups !== undefined;
+  // 적재와 조회가 같은 정규화를 써야 한다. 한쪽만 `|| ''`를 쓰면 falsy 키가 `''`로 적재되고
+  // `'null'`로 조회돼, 기록된 사유가 있는데도 "no per-candidate reason recorded"가 찍힌다 —
+  // 이 이슈가 없애려는 바로 그 실패다.
+  // `|| ''`로 접지도 않는다. 그러면 `null`과 `''`가 같은 칸을 쓰게 되어, 서로 다른 두 그룹이
+  // 한쪽 사유로 덮여 남의 사유가 찍힌다. 사유를 잃는 것보다 나쁘다.
+  const lookupGroupKey = (value) => String(value);
+  const candidatesByGroupKey = new Map(demotedGroups.map(group => [
+    lookupGroupKey(group?.article_group_key),
+    ensureArray(group?.demoted_candidates)
+  ]));
+  // 키 목록이 개수를 가진 정본이다. #909 이전 실행은 키만 남겼으므로 그때도 그룹을 세야 한다.
+  const orderedGroupKeys = demotedGroupKeys.length > 0
+    ? demotedGroupKeys
+    : demotedGroups.map(group => group?.article_group_key);
+  const lines = [`- Reconciliation-demoted groups: ${observed ? orderedGroupKeys.length : 'unknown'}`];
+  for (const groupKey of orderedGroupKeys) {
+    lines.push(`  - ${markdownSafeInline(groupKey)}`);
+    const demotedCandidates = candidatesByGroupKey.get(lookupGroupKey(groupKey)) || [];
+    if (demotedCandidates.length === 0) {
+      // 사유가 기록되지 않은 것을 빈 줄로 두면 markdown이 다시 "강등 없음"으로 읽힌다.
+      lines.push('    - no per-candidate reason recorded');
+      continue;
+    }
+    for (const demoted of demotedCandidates) {
+      lines.push([
+        `    - ${markdownSafeInline(demoted?.candidate_key)}:`,
+        `coverage_decision=${markdownSafeInline(demoted?.coverage_decision)},`,
+        `reason_code=${markdownSafeInline(demoted?.reason_code)}`
+      ].join(' '));
+    }
+  }
+  return lines;
+}
+
 function renderCandidateSelectionDiagnostics(diagnostics = {}) {
   const composition = diagnostics.composition_summary || {};
   const headline = diagnostics.headline_decision || {};
@@ -358,7 +453,8 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- Deterministic primary articles: ${formatCount(diagnostics.primary_selected_article_count ?? diagnostics.deterministic_selected_count)}`,
     `- Selected representative groups: ${formatCount(diagnostics.selected_group_count)}`,
     `- Rendered groups: ${formatCount(diagnostics.rendered_group_count)}`,
-    `- Explicitly demoted groups: ${formatCount(diagnostics.explicitly_demoted_group_count)}`,
+    `- Explicitly demoted groups (editor): ${formatCount(diagnostics.explicitly_demoted_group_count)}`,
+    ...reconciliationDemotionLines(diagnostics),
     `- Reserve candidates: ${formatCount(diagnostics.reserve_candidate_count)}`,
     `- Demoted candidates: ${formatCount(diagnostics.demoted_candidate_count)}`,
     `- Composition mode: ${formatCount(diagnostics.composition_mode)}`,
