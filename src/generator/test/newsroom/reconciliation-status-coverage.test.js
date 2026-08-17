@@ -228,3 +228,48 @@ test('같은 그룹의 다른 후보가 살아남으면 그룹 강등으로 세�
     '그룹은 여전히 살아 있으므로 그룹 강등이 아니다'
   );
 });
+
+test('editor가 지어낸 강등 키는 status에 개수와 목록 둘 다로 남는다', () => {
+  // 2026-08-17 실측: 재조정이 4그룹을 내린 주에 editor가 그 기사들을
+  // `patch:uvcvideo_memory_safety` 같은 지어낸 키로 강등 선언했다. 회계에서는 빠지지만
+  // 기록은 남아야 한다 — 목록만 있고 개수가 없으면 리포트를 읽는 쪽이 "0건"으로 읽는다.
+  const shortlistReport = deterministicReport(['a']);
+
+  const status = selectionStatusExtra(shortlistReport, {
+    renderedGroupKeys: ['group:a'],
+    explicitlyDemotedGroups: [
+      { article_group_key: 'patch:uvcvideo_memory_safety', demotion_reason: '', reason_code: '' },
+      { article_group_key: 'patch:v4l2_isp_zero_size', demotion_reason: '', reason_code: '' }
+    ],
+    hardBlockedGroups: [
+      { article_group_key: 'patch:libcamera_software_isp_egl', hard_block_reason: '', reason_code: '' }
+    ]
+  });
+
+  assert.equal(status.group_coverage_ok, true, '선택 그룹을 전부 처리했으면 통과한다');
+  assert.equal(status.explicitly_demoted_group_count, 0, '회계는 선택 집합 안만 센다');
+  assert.equal(status.hard_blocked_group_count, 0);
+  assert.equal(status.explicitly_demoted_outside_selection_count, 2);
+  assert.equal(status.hard_blocked_outside_selection_count, 1);
+  assert.equal(status.rendered_outside_selection_count, 0);
+  assert.deepEqual(status.explicitly_demoted_outside_selection_group_keys, [
+    'patch:uvcvideo_memory_safety',
+    'patch:v4l2_isp_zero_size'
+  ]);
+  assert.deepEqual(status.hard_blocked_outside_selection_group_keys, ['patch:libcamera_software_isp_egl']);
+});
+
+test('렌더 관측이 없는 실행에서는 선택 밖 렌더 카운트도 판정하지 않는다', () => {
+  // group_coverage_ok가 null인 실행(editor가 섹션을 만들지 못한 경우)에서 0을 찍으면
+  // "확인해 보니 없었다"로 읽힌다. 판정하지 않았다는 사실은 null로 남겨야 한다.
+  const shortlistReport = deterministicReport(['a']);
+
+  const status = selectionStatusExtra(shortlistReport, {
+    explicitlyDemotedGroups: [],
+    hardBlockedGroups: []
+  });
+
+  assert.equal(status.group_coverage_ok, null, '관측이 없으면 판정도 없다');
+  assert.equal(status.rendered_outside_selection_count, null);
+  assert.equal(status.rendered_outside_selection_group_keys, null);
+});

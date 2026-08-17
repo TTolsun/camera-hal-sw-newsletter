@@ -259,6 +259,68 @@
   margin-top: 16px;
 }
 
+/* 실행이 끝난 주차에만 붙는 결과 블록. 계획 서술과 구별되어야 하므로
+   왼쪽 선과 배경으로 분리한다. */
+.week-result {
+  margin-top: 20px;
+  padding: 18px 20px;
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+}
+
+.week-result-label {
+  margin: 0 0 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.week-result table {
+  width: 100%;
+  margin-bottom: 14px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.week-result th,
+.week-result td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.week-result th {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.week-result td:first-child {
+  color: var(--muted);
+}
+
+.week-result-lesson {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 720px) {
+  .week-result {
+    padding: 14px;
+  }
+
+  .week-result table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
 .week-column {
   padding: 16px;
   border-radius: var(--radius-md);

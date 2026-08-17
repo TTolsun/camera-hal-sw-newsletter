@@ -191,6 +191,14 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     rendered_group_count: hasRenderedGroupObservation ? groupCoverage.rendered_group_count : report.rendered_group_count ?? null,
     explicitly_demoted_group_count: groupCoverage.explicitly_demoted_group_count,
     hard_blocked_group_count: groupCoverage.hard_blocked_group_count,
+    // 선택 밖 기록은 개수도 함께 싣는다. 목록만 있으면 카운트를 읽는 쪽(리포트·PR 본문)이
+    // 회계 0건을 "아무 일도 없었다"로 읽는다. 단 렌더 쪽은 group_coverage_ok와 같은 게이트를
+    // 쓴다 — 관측이 없는 실행에서 0을 찍으면 "확인해 보니 없었다"로 읽힌다.
+    rendered_outside_selection_count: hasRenderedGroupObservation
+      ? groupCoverage.rendered_outside_selection_count
+      : null,
+    explicitly_demoted_outside_selection_count: groupCoverage.explicitly_demoted_outside_selection_count,
+    hard_blocked_outside_selection_count: groupCoverage.hard_blocked_outside_selection_count,
     selected_representative_group_keys: groupCoverage.selected_representative_group_keys,
     rendered_group_keys: groupCoverage.rendered_group_keys,
     explicitly_demoted_group_keys: groupCoverage.explicitly_demoted_group_keys,
@@ -198,7 +206,9 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // 선택 집합 밖 기록은 회계에 넣지 않되 버리지도 않는다. editor가 지어낸 키로 강등을 선언한
     // 주에 그 사실이 어디에도 남지 않으면, 통과한 발행과 "editor가 무엇을 선언했는지"를 잇는
     // 실마리가 사라진다. 렌더 쪽은 치명이라 검증기가 먼저 막지만 기록은 같은 자리에 둔다.
-    rendered_outside_selection_group_keys: groupCoverage.rendered_outside_selection_group_keys,
+    rendered_outside_selection_group_keys: hasRenderedGroupObservation
+      ? groupCoverage.rendered_outside_selection_group_keys
+      : null,
     explicitly_demoted_outside_selection_group_keys: groupCoverage.explicitly_demoted_outside_selection_group_keys,
     hard_blocked_outside_selection_group_keys: groupCoverage.hard_blocked_outside_selection_group_keys,
     group_coverage_ok: hasRenderedGroupObservation ? groupCoverage.ok : null,

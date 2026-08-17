@@ -1,0 +1,226 @@
+{
+  "note": "dev split. Opened deliberately — this bucket answers a one-shot gate. human_label is the only ground truth; fill it by hand before running the judge.",
+  "label_definition": "lab/label-definition.md",
+  "items": [
+    {
+      "family_key": "article:https://developer.android.com/jetpack/androidx/releases/camera",
+      "collected_date": "2026-07-06",
+      "title": "CameraX | Jetpack | Android Developers",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "source_name": "androidx-camerax-release-notes",
+      "summary": "release_row_added: Release row/version added.",
+      "pipeline_selection": "main",
+      "human_label": "yes",
+      "human_note": "CameraX release-note page가 release row/version 추가를 직접 알리고, CameraX component와 변경 유형이 명시되며 같은 URL에서 release notes를 확인할 수 있어 세 조건을 충족한다."
+    },
+    {
+      "family_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "collected_date": "2026-06-19",
+      "title": "CameraX Release Notes - CameraX 1.6.0",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+      "source_name": "CameraX Release Notes",
+      "summary": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
+      "pipeline_selection": "main",
+      "human_label": "yes",
+      "human_note": "CameraX 1.6.0에서 HDR·stabilization·Extensions 등을 포함한 use-case/feature 조합의 지원 여부를 binding 전에 조회하는 동작이 구체적이고, 해당 release-note anchor가 근거다."
+    },
+    {
+      "family_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+      "collected_date": "2026-06-08",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
+      "source_name": "CameraX Release Notes",
+      "summary": "Exposed the CameraController.setSessionConfig() API. This allows providing a custom SessionConfig for advanced UseCase configurations not directly exposed by CameraController . When a SessionConfig is active, other configuration methods on CameraController are disabled.( I35cf1 , b/448525636 )",
+      "pipeline_selection": "main",
+      "human_label": "yes",
+      "human_note": "CameraX 1.7.0-alpha01의 CameraController.setSessionConfig() 공개와 활성화 시 다른 설정 method가 비활성화되는 동작이 구체적이며, 해당 release-note anchor가 근거다."
+    },
+    {
+      "family_key": "article:https://developer.android.com/tools/agents/android-cli#skills-add",
+      "collected_date": "2026-07-13",
+      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
+      "source_name": "Android Developers Blog",
+      "summary": "We’ve shipped a fresh new batch of skills, with now more than 17 skills for areas such as: Adaptive UI Display Glasses and Jetpack Compose Glimmer for XR Migration to CameraX Perfetto SQL and Trace Analysis Jetpack Compose Styles API AppFunctions Verified email retrieval with Android Credential Manager Engage SDK integration Testing setup Wear OS Jetpack Compose Material3 Android skills keep growing You can browse skills and install using the Android CLI commands: android skills list android ski",
+      "pipeline_selection": "main",
+      "human_label": "no",
+      "human_note": "일반 Android 개발 생산성 기사에서 Migration to CameraX를 여러 skill area 중 하나로만 언급하므로 CameraX를 직접 다루는 문서가 아니어서 조건 1을 충족하지 않는다."
+    },
+    {
+      "family_key": "article:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2",
+      "collected_date": "2026-08-10",
+      "title": "Raspberry Pi libcamera Releases - libcamera v0.7.2",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2",
+      "source_name": "Raspberry Pi libcamera Releases",
+      "summary": "Released libcamera v0.7.2 (Raspberry Pi downstream libcamera).",
+      "pipeline_selection": "main",
+      "human_label": "yes",
+      "human_note": "Raspberry Pi downstream libcamera의 v0.7.2 릴리스를 직접 가리키며, 명시된 릴리스 번호와 단일 release URL로 세 조건을 충족한다."
+    },
+    {
+      "family_key": "article:https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "collected_date": "2026-08-10",
+      "title": "v0.7.2",
+      "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "source_name": "libcamera Upstream Releases",
+      "summary": "libcamera v0.7.2 This release brings 113 commits, and interestingly fixes two separate saturation handling bugs in both the SoftISP and the Raspberry Pi IPA independently. In particular the fixes to the SoftISP mean we can look forward to tuning cameras on laptops and mobile phones with real CCMs now. Also on the SoftISP 12-bit formats are now supported, black level correction is 'fixed' and there are interesting performance improvements with eGL buffer caching. Within the IPA handling, we have ",
+      "pipeline_selection": "main",
+      "human_label": "yes",
+      "human_note": "upstream libcamera v0.7.2의 SoftISP saturation·12-bit format·black level correction·EGL buffer caching 변경을 구체적으로 요약하며, 해당 tag URL이 근거다."
+    },
+    {
+      "family_key": "article:https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "collected_date": "2026-06-15",
+      "title": "Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+      "url": "https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+      "source_name": "ISO C++ Blog",
+      "summary": "Glaze is a high-performance C++23 serialization library with compile-time reflection. It has grown to support many more formats and features, and in v7.2.0 C++26 Reflection support has been merged! Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more From the article: Glaze now supports C++26 reflection with experimental GCC and Clang compilers. GCC 16 will soon be released with this support. When enabled, Glaze replaces the traditional&nbsp; __PRETTY_FUNCTION__ &nbsp;parsing an",
+      "pipeline_selection": "short",
+      "human_label": "yes",
+      "human_note": "Camera HAL 개발자가 쓰는 C++ 도구 기사로서 Glaze 7.2.0의 C++26 reflection 지원이라는 버전과 기능 변경이 구체적이고, 개별 article URL이 근거다."
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com",
+      "collected_date": "2026-06-15",
+      "title": "[BUG] Input: rmi4: KASAN slab-use-after-free in v4l2_release",
+      "url": "https://lore.kernel.org/linux-media/178144969601.60470.13645789994911690209@gmail.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "Hi input and media maintainers, I hit the following report while testing current upstream kernel: Input: rmi4: KASAN slab-use-after-free in v4l2_release The issue was reproduced by holding an rmi4_f54 /dev/v4l-touch node open, unbinding the rmi4_f54 function, and then closing the held fd. I am not sure whether this is specific to rmi_f54 or a more generic V4L2 lifetime issue. I reproduced this on commit: e8c2f9fdadee7cbc75134dc463c1e0d856d6e5c7 (May 25 2026) To help trigger the bug more reliably",
+      "pipeline_selection": "main",
+      "human_label": "no",
+      "human_note": "rmi4_f54의 /dev/v4l-touch node는 touchscreen 입력 경로로 카메라 프레임이 지나가지 않으므로, V4L2 lifetime bug가 구체적이어도 조건 1에서 탈락한다."
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan",
+      "collected_date": "2026-06-19",
+      "title": "[GIT PULL for v7.2] media updates",
+      "url": "https://lore.kernel.org/linux-media/20260618233827.582d50a8@foz.lan/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "Hi Linus, Please pull from: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media.git media/v7.2-1 For: - v4l2 core: fix subdev sensor ownership; - v4l2-subdev: Allow accessing routes with STREAMS client capability; - v4l2-ctrls: Add validation for HEVC active reference counts and background detection control; - vb2: Change vb2_read() and vb2_write() return types to ssize_t; - v4l2-common: Add YUV24 format info and has_alpha helper; - i2c: cvs: Add driver of Intel Computer Vision Sen",
+      "pipeline_selection": "short",
+      "human_label": "yes",
+      "human_note": "Linux media v7.2 pull request가 sensor ownership, V4L2 subdev route, CVS driver 등 카메라 경로의 구체적 변경을 같은 메일에 열거하므로 단일 URL로 세 조건을 충족한다."
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/202606291022.4zxe8dz4-lkp@intel.com",
+      "collected_date": "2026-06-29",
+      "title": "[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'",
+      "url": "https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "tree: git://linuxtv.org/sailus/media_tree.git metadata-pre head: 66c090febbc3c412ced4e71cb69f47b05eea0331 commit: 66c090febbc3c412ced4e71cb69f47b05eea0331 [17/17] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops config: x86_64-allmodconfig ( https://download.01.org/0day-ci/archive/20260629/202606291022.4ZXe8Dz4-lkp@intel.com/config ) compiler: clang version 22.1.3 ( https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211) reproduce (this is a W=1 bu",
+      "pipeline_selection": "short",
+      "human_label": "yes",
+      "human_note": "Intel Computer Vision Sensor의 cvs_csi_set_fmt()와 v4l2_subdev_client_info 관련 문서화 warning을 구체적으로 재현한 카메라 sensor-path 항목이며, 해당 메일 URL이 근거다."
+    },
+    {
+      "family_key": "article:https://lore.kernel.org/linux-media/aketov7zdedape15@kekkonen.localdomain",
+      "collected_date": "2026-06-29",
+      "title": "Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops",
+      "url": "https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "Hi Laurent, Thanks for the review. On Mon, Jun 08, 2026 at 01:16:52PM +0300, Laurent Pinchart wrote: > Hi Sakari, > > Thank you for the patch. > > CC'ing Bryan, Vladimir and Loic for the camss driver (please see below > for a dedicated comment). > > On Mon, Jun 08, 2026 at 12:53:56AM +0300, Sakari Ailus wrote: > > Add a pointer to const struct v4l2_subdev_client_info to the set_fmt, > > get_selection and set_selection sub-device pad ops. The client info struct > > will soon be used to differenti",
+      "pipeline_selection": "short",
+      "human_label": "yes",
+      "human_note": "CAMSS를 포함한 카메라 subdev 경로의 pad ops에 v4l2_subdev_client_info pointer를 추가하는 API 변경이 인용문에 구체적으로 제시되어 있고, 해당 reply URL에서 근거를 확인할 수 있다."
+    },
+    {
+      "family_key": "lore-series:20260409201501.975242-sakari.ailus@linux.intel.com",
+      "collected_date": "2026-06-26",
+      "title": "Re: [PATCH v12 05/86] media: uapi: Add V4L2_CID_CFA_PATTERN for describing color patterns",
+      "url": "https://lore.kernel.org/linux-media/178240963924.1799417.13645477490024464265@freya/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "Hi Sakari, Thank you for the patch. Quoting Sakari Ailus (2026-04-10 01:43:40) > Add V4L2_CID_CFA_PATTERN to tell the camera sensor's native Color Filter > Array (CFA) pattern. > > Signed-off-by: Sakari Ailus > Reviewed-by: Jacopo Mondi > Reviewed-by: Mirela Rabulea > --- > .../media/v4l/ext-ctrls-image-source.rst | 43 +++++++++++++++++++ > .../media/v4l/subdev-formats.rst | 2 + > drivers/media/v4l2-core/v4l2-ctrls-defs.c | 1 + > include/uapi/linux/v4l2-controls.h | 6 +++ > 4 files changed, 52 i",
+      "pipeline_selection": "short",
+      "human_label": "yes",
+      "human_note": "카메라 sensor의 native CFA pattern을 표현하는 V4L2_CID_CFA_PATTERN uAPI 추가가 구체적이며, 인용된 변경 설명과 file 통계가 있는 해당 reply URL로 근거를 확인할 수 있다."
+    },
+    {
+      "family_key": "lore-series:20260605-qcom-cphy-v7-426c37e9008f@ixit.cz",
+      "collected_date": "2026-08-03",
+      "title": "[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+      "url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "Note: WIP tag added, as not everything from the previous review round has been addressed. This patch series extends the Qualcomm CAMSS (Camera Subsystem), including CSID and CSIPHY components, to support C-PHY mode configuration. Modern smartphone cameras increasingly rely on MIPI C-PHY rather than D-PHY, thanks to its higher data throughput and signal efficiency. As a result, many OEMs adopt C-PHY interfaces for main (rear) cameras on Qualcomm-based devices. Until now, mainline Linux lacked C-P",
+      "pipeline_selection": "main",
+      "human_label": "no",
+      "human_note": "Qualcomm CAMSS의 C-PHY 지원은 대상과 구체성을 충족하지만 [PATCH RESEND v9 0/9] cover letter라 실제 diff가 하위 패치에 있어 조건 3의 자립성을 충족하지 않는다."
+    },
+    {
+      "family_key": "lore-series:20260606-spu-rga3multicore-v1-3ec2b15675f7@pengutronix.de",
+      "collected_date": "2026-06-06",
+      "title": "[PATCH 05/17] media: v4l2-mem2mem: support running multiple jobs in parallel",
+      "url": "https://lore.kernel.org/linux-media/20260606-spu-rga3multicore-v1-5-3ec2b15675f7@pengutronix.de/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "Add support for running multiple jobs in parallel for SoCs containing multiple identical devices. An example is the Rockchip RK3588 SoC, which contains two identical RGA3 devices. Therefore it is desirable to have the kernel schedule the work across all available devices and only expose one video device to the userspace. Previously the curr_ctx member of a v4l2_m2m_dev was used to track the currently running context. But the currently running context will always be at the top of the job_queue. A",
+      "pipeline_selection": "short",
+      "human_label": "yes",
+      "human_note": "카메라 출력이 거치는 RGA3 image-processing 경로에서 v4l2-mem2mem job을 여러 device에 병렬 scheduling하도록 바꾸는 구체적 중간 패치이며, diff가 붙은 단일 URL이 근거다."
+    },
+    {
+      "family_key": "lore-series:20260606-submit-media-mt9m113-v5-2088c7358e11@herrie.org",
+      "collected_date": "2026-06-07",
+      "title": "[PATCH v6 2/2] media: i2c: add Aptina MT9M113 1.3 Mpx SoC sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260606-submit-media-mt9m113-v6-2-8f6d0f79f4d1@herrie.org/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "From: Herman van Hazendonk Add a V4L2 subdev driver for the Aptina MT9M113 1.3 Megapixel SoC image sensor (1280x1024 active pixel array) with on-chip ISP. The sensor exposes: - dual context operation: Context A (640x480 preview, binned) and Context B (1280x1024 capture) selectable at runtime; - single-lane MIPI CSI-2 output, YUV422 in UYVY or YUYV byte order (the byte order is selected via the chroma/luma swap bit in MODE_OUTPUT_FORMAT_{A,B}); - I2C MCU-indirect register access through the 0x098",
+      "pipeline_selection": "main",
+      "human_label": "yes",
+      "human_note": "Aptina MT9M113 image sensor용 V4L2 subdev driver와 dual context, MIPI CSI-2, YUV422 동작을 구체적으로 설명하는 중간 패치라 세 조건을 충족한다."
+    },
+    {
+      "family_key": "lore-series:20260612-shikra_vpu-v2-bf8727370a1e@oss.qualcomm.com",
+      "collected_date": "2026-06-12",
+      "title": "[PATCH v2 0/3] media: qcom: Add support for the iris codec on shikra",
+      "url": "https://lore.kernel.org/linux-media/20260612-shikra_vpu-v2-0-bf8727370a1e@oss.qualcomm.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "The shikra platform uses AR50_LITE IP core as video en/decoder codec block (the same as agatti platform). Extend iris driver to support this platform. This has been tested on the Qualcomm shikra boards, shikra-cqm-evk, shikra-cqs-evk and shikra-iqs-evk boards with HFI Gen2 firmware. v4l2-compliance results: v4l2-compliance -d /dev/video1 -s v4l2-compliance 1.31.0-5396, 64 bits, 64-bit time_t v4l2-compliance SHA: 3f22c6fcee75 2025-09-18 09:49:23 Compliance test for iris_driver device /dev/video1:",
+      "pipeline_selection": "short",
+      "human_label": "no",
+      "human_note": "Shikra의 iris codec 지원은 카메라 출력의 하위 media layer와 구체적 component를 다루지만 [PATCH v2 0/3] cover letter라 조건 3의 자립성을 충족하지 않는다."
+    },
+    {
+      "family_key": "lore-series:20260613152655.212490-paulk@sys-base.io",
+      "collected_date": "2026-06-14",
+      "title": "[PATCH v10 6/6] ARM: dts: sun8i: v3s: Add support for the ISP",
+      "url": "https://lore.kernel.org/linux-media/20260613152655.212490-7-paulk@sys-base.io/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "From: Paul Kocialkowski The V3s (and related platforms) come with an instance of the A31 ISP. Even though it is very close to the A31 ISP, it is not exactly register-compatible and a dedicated compatible only is used as a result. Just like most other blocks of the camera pipeline, the ISP uses the common CSI bus, module and ram clock as well as reset. A port connection to the ISP is added to CSI0 for convenience since CSI0 serves for MIPI CSI-2 interface support, which is likely to receive raw d",
+      "pipeline_selection": "main",
+      "human_label": "yes",
+      "human_note": "sun8i V3s의 A31 ISP instance와 CSI0 연결을 추가하는 구체적 DTS 중간 패치이며, 카메라 frame path와 단일 patch URL이 명확해 세 조건을 충족한다."
+    },
+    {
+      "family_key": "lore-series:20260625160228.59672-tharitt97@gmail.com",
+      "collected_date": "2026-06-26",
+      "title": "[PATCH] media: imx219: fix test pattern ordering and add patterns",
+      "url": "https://lore.kernel.org/linux-media/20260625160228.59672-1-tharitt97@gmail.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "The test pattern menu currently maps 0 to color bars and 1 to a solid color, whereas the imx219 datasheet specifies the reverse layout. fix the ordering to align with the hardware specification. Additionally, add 5 missing test patterns to complete the available hardware test patterns. The changes were validated on a raspberry pi 5 with an imx219 sensor using v4l2-ctl and rpicam-still. Signed-off-by: Tharit Tangkijwanichakul --- drivers/media/i2c/imx219.c | 31 +++++++++++++++++++++++-------- 1 f",
+      "pipeline_selection": "short",
+      "human_label": "yes",
+      "human_note": "imx219 image sensor의 test-pattern 순서를 hardware specification에 맞게 고치고 5개 pattern을 추가한 구체적 개별 패치이며, 검증 내용과 diff가 같은 URL에 있다."
+    },
+    {
+      "family_key": "lore-series:20260726214401.19042-j@metarealtyinc.ca",
+      "collected_date": "2026-08-03",
+      "title": "[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support",
+      "url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "This series adds support for the Himax HM1092, a monochrome infrared image sensor. It has a 1280x720 pixel array and a single usable mode: 648x368 at 30fps, 10-bit raw (MEDIA_BUS_FMT_SGRBG10_1X10) over one MIPI CSI-2 data lane. It is ACPI-enumerated with HID HIMX1092, sits on I2C, and on the machines that carry it provides the infrared stream used for face authentication. Patch 1 adds the sensor driver, its Kconfig and Makefile entries and a MAINTAINERS entry. Patch 2 adds the sensor to ipu-brid",
+      "pipeline_selection": "main",
+      "human_label": "no",
+      "human_note": "Himax HM1092 IR image sensor 지원은 대상과 구체성을 충족하지만 [PATCH 0/2] cover letter라 실제 driver와 binding diff가 하위 패치에 있어 조건 3에서 탈락한다."
+    },
+    {
+      "family_key": "lore-series:20260809180105.58428-mishraloopmohit@gmail.com",
+      "collected_date": "2026-08-10",
+      "title": "[PATCH] [RFC PATCH] staging: media: atomisp: remove redundant ov2722_startup() helper",
+      "url": "https://lore.kernel.org/linux-media/20260809180105.58428-1-mishraloopmohit@gmail.com/",
+      "source_name": "lore.kernel.org linux-media list",
+      "summary": "In atomisp-ov2722.c, ov2722_startup() was invoked inside ov2722_set_fmt() to program sensor hardware registers during format negotiation, accompanied by a \"TODO: remove it\" comment. Standard V4L2 subdevice drivers do not program hardware registers during .set_fmt(), but defer hardware register configuration to stream start (.s_stream(1)). This patch: 1. Removes the ov2722_startup() helper function and its TODO comment. 2. Refactors register initialization into a static ov2722_startup_registers()",
+      "pipeline_selection": "short",
+      "human_label": "yes",
+      "human_note": "atomisp의 OV2722 camera sensor에서 format negotiation 중 register programming을 제거하고 stream start로 미루는 구체적 개별 패치라 세 조건을 충족한다."
+    }
+  ]
+}
