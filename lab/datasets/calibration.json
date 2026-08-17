@@ -186,8 +186,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "This adds a V4L2 subdev driver and DT binding for the Himax HM1092, a 1 megapixel monochrome near-infrared image sensor. On laptops it sits behind the IR camera used for face unlock. It speaks a single MIPI CSI-2 data lane and outputs 10-bit RAW at 560x360. The driver exposes that one fixed mode, test patterns, exposure, analogue gain and digital gain controls, pixel-array selection targets and the standard fwnode properties. It has been tested on an ASUS Zenbook A14: the sensor probes, streams,",
       "pipeline_selection": "main",
-      "human_label": "yes",
-      "human_note": "Himax HM1092 NIR 이미지 센서의 V4L2 subdev 드라이버와 DT binding 추가를 직접 설명하는 자립적인 시리즈 문서다."
+      "human_label": "no",
+      "human_note": "[Week02 재라벨] cover letter(0/N)는 자립 아님으로 규칙 확정. 실제 diff가 하위 패치에 있어 이 URL 하나로 근거 확인 불가. 원래 yes였음. Himax HM1092 NIR 이미지 센서의 V4L2 subdev 드라이버와 DT binding 추가를 직접 설명하는 자립적인 시리즈 문서다."
     },
     {
       "family_key": "lore-series:20260731073505.2278769-eagle.alexander923@gmail.com",
@@ -197,8 +197,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "This series adds a driver for the onsemi AR0234 CMOS image sensor. The AR0234 is a 1/2.6-inch global-shutter sensor with a 1940x1220 pixel array, capable of 1920x1200 resolution at up to 120 fps. It supports MIPI CSI-2 output with 1 to 4 data lanes, raw Bayer (8/10-bit) and monochrome formats, as well as DPCM 10->8 compression. The driver has been tested with 2 and 4 lanes on an ARM64 Rockchip RK3588 platform with a 27 MHz external clock. Both 8-bit and 10-bit raw Bayer modes are functional. Not",
       "pipeline_selection": "main",
-      "human_label": "yes",
-      "human_note": "onsemi AR0234 카메라 센서 드라이버 추가와 지원 포맷·lane·해상도·검증 플랫폼이 구체적으로 제시되어 있다."
+      "human_label": "no",
+      "human_note": "[Week02 재라벨] cover letter(0/N)는 자립 아님으로 규칙 확정. 실제 diff가 하위 패치에 있어 이 URL 하나로 근거 확인 불가. 원래 yes였음. onsemi AR0234 카메라 센서 드라이버 추가와 지원 포맷·lane·해상도·검증 플랫폼이 구체적으로 제시되어 있다."
     },
     {
       "family_key": "patchwork-series:6077",

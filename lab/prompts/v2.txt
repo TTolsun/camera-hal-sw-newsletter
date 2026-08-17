@@ -61,6 +61,12 @@ MAIN_USABLE is "yes" only when all three conditions hold:
    patch has the content and only the context elsewhere. Passing here says nothing
    about conditions 1 and 2, which are judged separately.
 
+   A cover letter does not qualify. "[PATCH v10 0/13]" — the zero of the series —
+   carries a summary, the motivation, and a list of the patches, but no diff. Checking
+   what actually changed means opening every patch under it, so that one URL does not
+   carry the claim. Same test as above, opposite answer: a mid-series patch has the
+   content at its own URL, a cover letter has it scattered across the others.
+
 If any condition fails, answer "no". When the three conditions do not clearly settle
 it, answer "no". The question is not whether the item is interesting; it is whether
 this one URL can carry the factual basis of a main article.
