@@ -1,5 +1,7 @@
 // 심층(deep-dive) 주제 큐. 파이프라인이 main으로 못 실은 Android 카메라 신호를 적립해 두고,
-// 조용한 주(direct_aosp_camera ≤ 1)에 심층 기사 주제로 소비한다.
+// 조용한 주에 심층 기사 주제로 소비한다. "조용한 주"의 기준은 최종 direct_aosp_camera 수가
+// newsletter-policy.json의 `deepDivePolicy.directAospCameraMaxForActivation` 이하인 주다 —
+// 그 값이 정본이므로 여기에 숫자를 다시 적지 않는다.
 // 계약 정본: docs/NEWSROOM_WORKFLOW.md 「심층(deep-dive) 주제 큐」 절.
 // - 적립 쓰기는 01(collect), 상태 전환 쓰기는 03(generator) — 단계별 단일 작성자.
 // - accrual_count는 저장하지 않는다. distinct fingerprint 수로 읽는 시점에 계산한다.
