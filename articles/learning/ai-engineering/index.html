@@ -161,19 +161,42 @@
                   <div class="week-column"><strong>핵심 질문</strong><p>내가 만든 평가 기준이 실제로 재현 가능한가? 재현 안 되면 이후 모든 before/after 비교가 무의미해집니다.</p></div>
                 </div>
                 <p class="week-goal"><strong>왜 순서가 바뀌었나.</strong> 원래 Week 01은 reporter를 반복 실행해 비결정성을 관찰하는 것이었습니다. 그런데 <code>runReporterStage()</code>가 존재하지 않습니다 — reporter 호출은 <code>gemini-newsroom-newsletter.js</code>의 attempt loop 안에 inline이고, 그 스테이지를 덮는 행위 테스트도 없습니다. 즉 첫 주가 production 리팩터링으로 시작되고 측정값은 0개가 됩니다. 반면 <code>src/shared/llm/llm-client.js</code>는 이미 공개 seam이라 judge 실험은 <code>src/</code>를 한 줄도 안 고치고 가능합니다. 비결정성 관찰은 seam이 생긴 뒤로 미룹니다.</p>
+
+                <div class="week-result">
+                  <p class="week-result-label">완료 · 2026-08-17</p>
+                  <table>
+                    <thead><tr><th></th><th>prompt v1</th><th>prompt v2</th></tr></thead>
+                    <tbody>
+                      <tr><td>Cohen's kappa</td><td>0.529</td><td><strong>0.733</strong></td></tr>
+                      <tr><td>raw agreement</td><td>0.80</td><td>0.90</td></tr>
+                      <tr><td>불일치</td><td>4건</td><td>2건</td></tr>
+                      <tr><td>judge yes 비율</td><td>0.65</td><td>0.75 (사람과 동일)</td></tr>
+                    </tbody>
+                  </table>
+                  <p>calibration 20건, 실패 0건, 총 $0.016. 목표값 <code>kappa &gt;= 0.40</code>은 v1 단계에서 이미 넘었습니다. <strong>다만 v2 값은 게이트가 아닙니다</strong> — 같은 20건을 보고 규칙을 고친 뒤 다시 잰 값이라 오르는 것이 정상입니다. 판정은 Week 02의 손대지 않은 dev 20건에서 합니다.</p>
+
+                  <p><strong>예측은 방향이 틀렸습니다.</strong> 라벨링 전에 “judge가 더 관대할 것”이라고 적었는데 실제로는 judge가 더 엄격했습니다(사람 0.75 vs judge 0.65). 미리 적어둔 반증 조건이 그대로 발동했습니다. 근거였던 “부정형 규칙은 늦게 나오면 덜 지켜진다”는 가정이 이 과제에서는 성립하지 않았습니다. 규칙을 좁고 충실하게 적용한 쪽은 judge였고, 정의에 없는 논리를 쓴 쪽은 사람이었습니다.</p>
+
+                  <p>불일치 원인도 비율이 뒤집혔습니다. 예측은 “같은 정보를 다르게 읽음” 3건 + “정의가 느슨함” 3건이었는데, 실제는 정의 문제 3건 + 읽기 문제 1건이었습니다. 그래서 개선도 프롬프트 문구가 아니라 <strong>정의를 고치는 쪽</strong>으로 갔습니다.</p>
+
+                  <p class="week-result-lesson">이번 주 결론 — 이 judge는 규칙을 좁고 충실하게 적용합니다. 성능의 상한은 judge의 읽기 능력이 아니라 <strong>내가 쓴 정의의 정밀도</strong>입니다.</p>
+
+                  <p>기록: <code>lab/journal/week-01.md</code>. 예측·측정·실패 분류·개선·결론이 전부 그 파일 하나에 있습니다.</p>
+                </div>
               </div>
             </article>
 
             <article class="week-card">
               <div class="week-index"><span class="week-number">Week</span><strong>02</strong></div>
               <div class="week-content">
-                <h4>Deterministic Eval</h4>
-                <p class="week-goal">안전 조건을 prompt가 아니라 executable verifier로 바꿉니다.</p>
+                <h4>측정 도구를 닫는다 — Held-out 검증</h4>
+                <p class="week-goal">Week 01에서 고친 판정 기준을 손대지 않은 dev 20건에 1회 적용합니다. 이것이 judge를 계속 쓸지 정하는 진짜 게이트입니다.</p>
                 <div class="week-columns">
-                  <div class="week-column"><strong>대상</strong><p>source 없음, duplicate URL, stale claim, dated evidence 없음, required field 없음, generic AI article, 잘못된 image.</p></div>
-                  <div class="week-column"><strong>패턴</strong><p>Requirement → Acceptance Criteria → Test → PASS/FAIL. 예: main article은 valid evidence_id를 가져야 함.</p></div>
-                  <div class="week-column"><strong>실습</strong><p>stale article, duplicate source, fake evidence를 의도적으로 만들고 verifier가 실제로 잡는지 확인합니다.</p></div>
+                  <div class="week-column"><strong>남은 구멍 둘</strong><p><code>0/N</code> cover letter를 자립으로 볼지 정의가 침묵합니다(원인: 정의 누락). 그리고 <code>v4l2</code> 어휘는 있지만 카메라 프레임이 안 지나가는 항목을 judge가 통과시킵니다(원인: 읽기).</p></div>
+                  <div class="week-column"><strong>게이트</strong><p>dev 20 family, 프롬프트 동결, <strong>1회 실행</strong>, <code>kappa &gt;= 0.40</code>. 미달이면 다음 주도 judge 수리에 씁니다.</p></div>
+                  <div class="week-column"><strong>왜 여기서 끝내나</strong><p>이후 모든 주차가 “고쳤더니 좋아졌나”를 이 judge로 측정합니다. 자가 부정확하면 그 뒤 15주의 숫자가 전부 무의미해집니다.</p></div>
                 </div>
+                <p class="week-goal"><strong>원래 계획과 달라진 점.</strong> Week 02는 deterministic verifier 구현이었습니다. Week 01 결과가 측정 도구를 아직 못 닫았다고 말하므로 그것을 먼저 끝냅니다. verifier 구현과 reporter seam extraction은 그 뒤로 밀립니다. <strong>계획이 데이터를 이긴 것이 아니라 데이터가 계획을 고친 것</strong>이고, 이 과정 자체가 이 커리큘럼이 가르치려는 것입니다.</p>
               </div>
             </article>
 
