@@ -24,7 +24,7 @@
 먼저 저장소 루트로 한 번만 이동한다. 세션 내내 유지된다.
 
 ```powershell
-Set-Location C:\Users\baboe\git\camera-hal-sw-newsletter
+Set-Location <저장소 루트>
 ```
 
 > PowerShell 5.1에는 `&&`가 없다. 두 명령을 한 줄에 붙이려면 `;`를 쓴다.

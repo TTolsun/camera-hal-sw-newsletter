@@ -302,6 +302,30 @@
   color: var(--muted);
 }
 
+/* 결과 블록 안의 소제목. 카드 h4보다 작고, 문단 사이 리듬을 끊는 역할만 한다. */
+.week-result h5 {
+  margin: 18px 0 6px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.week-result h5:first-of-type {
+  margin-top: 0;
+}
+
+.week-result ul,
+.week-result ol {
+  margin: 6px 0 10px;
+  padding-left: 20px;
+}
+
+.week-result li {
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
 .week-result-lesson {
   margin-top: 14px;
   padding: 12px 14px;
