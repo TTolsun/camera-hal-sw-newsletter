@@ -10,8 +10,8 @@
       "source_name": "Android Developers Blog",
       "summary": "Hardware-enabled experiences: Because you are building native apps, you can leverage device features like the Camera, GPS/Location, Accelerometer and Bluetooth using the native Android APIs, letting you optimize hardware-level performance.",
       "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "no",
+      "human_note": "일반적인 Google AI Studio 네이티브 앱 개발 기사에서 Camera를 GPS·가속도계·Bluetooth와 함께 예시로만 언급하므로 조건 1을 충족하지 않는다."
     },
     {
       "family_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
@@ -21,8 +21,8 @@
       "source_name": "CameraX Release Notes",
       "summary": "CameraXViewfinder now supports built-in gestures for pinch-to-zoom and tap-to-focus, and adds support for screen flash and stream state. FocusState is now public in viewfinder-core to allow monitoring tap-to-focus results. ( I66a17 , b/522549890 )",
       "pipeline_selection": "main",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "CameraX 1.7.0-alpha02의 CameraXViewfinder gesture·screen flash·stream state와 공개 FocusState 변경이 구체적이며, 해당 release-note anchor가 근거다."
     },
     {
       "family_key": "article:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2brpt20260609",
@@ -32,8 +32,8 @@
       "source_name": "Raspberry Pi libcamera Releases",
       "summary": "Released v0.7.1+rpt20260609 (Raspberry Pi downstream libcamera).",
       "pipeline_selection": "main",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "Raspberry Pi downstream libcamera의 v0.7.1+rpt20260609 릴리스를 직접 가리키며, 명시된 릴리스 번호로 조건 2를 충족한다."
     },
     {
       "family_key": "article:https://isocpp.org//blog/2026/04/gcc-16.1",
@@ -43,8 +43,8 @@
       "source_name": "ISO C++ Blog",
       "summary": "GCC 16.1 has been released! Lots of good C++26 material including reflection and contracts. GCC 16 Release Series: Changes, New Features, and Fixes From the announcement: C++20 by default: [...]&nbsp; N.B. C++20 modules support is still experimental and must be enabled by&nbsp; -fmodules . Several C++26 features have been implemented: P2996R13 , Reflection ( PR120775 , enabled by&nbsp; -std=c++26 -freflection ) P3394R4 , Annotations for Reflection P3293R3 , Splicing a base class subobject P3096R",
       "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "GCC와 일반 C++ 언어 기능이지만 Camera HAL이 C++로 구성되어 있기에 필요한 기사로 취급한다."
     },
     {
       "family_key": "article:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
@@ -54,8 +54,8 @@
       "source_name": "ISO C++ Blog",
       "summary": "GCC 16 is about to be released, so I'm sharing some of the new features I worked on this year. Some changes are visible to users, while others improve the system more subtly. New features in GCC 16: Improved error messages and SARIF output by David Malcolm From the article: A well-known challenge for C++ developers is the readability of template-related error messages. C++ compilers tend to either provide too little information or spew screenfuls of text at you. Either way, the errors can be dif",
       "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "GCC와 일반 C++ 언어 기능이지만 Camera HAL이 C++로 구성되어 있기에 필요한 기사로 취급한다."
     },
     {
       "family_key": "article:https://lore.kernel.org/linux-media/178144969601.60470.9256616923389083658@gmail.com",
@@ -65,8 +65,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "Hi, I hit the following KASAN report while testing current upstream kernel. The issue was reproduced with the sur40 driver. The report shows the object being freed from sur40_disconnect(), then v4l2_release() accesses it when the held V4L2 fd is closed. I have not confirmed whether this is specific to sur40 or a more generic V4L2 lifetime issue. This looks similar to the rmi4_f54 V4L2 fd lifetime report I sent earlier: https://lore.kernel.org/all/178144969601.60470.13645789994911690209@gmail.com",
       "pipeline_selection": "main",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "no",
+      "human_note": "sur40 입력 장치가 V4L2 API를 사용해도 카메라 프레임 경로가 아니며, 정의가 명시적으로 제외하는 touchscreen 계열 사례라 조건 1에서 탈락한다."
     },
     {
       "family_key": "article:https://lore.kernel.org/linux-media/19e4a6eefaf3911f439ef565d8ac191b@mapicom.org",
@@ -76,8 +76,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "This bug in dw2102_load_firmware() function appears only when building the kernel via LLVM+Clang. Due to reading of 64 bytes chunk, it may happen that there will be an attempt to read a more bytes in chunk than there is left, which is why Kernel oops occurs. At least this bug happens when downloading the firmware for Prof Revolution DVB-S2 7500 USB. Signed-off-by: Maksim Pinigin --- drivers/media/usb/dvb-usb/dw2102.c | 2 +- 1 file changed, 1 insertion(+), 1 deletion(-) diff --git a/drivers/media",
       "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "no",
+      "human_note": "DVB-S2 USB 튜너의 firmware buffer overflow 수정으로 카메라 입력이나 카메라 프레임 경로가 아니므로 조건 1을 충족하지 않는다."
     },
     {
       "family_key": "article:https://lore.kernel.org/linux-media/560888a5-fc36-4495-b8c3-66edc3f126f2@oss.qualcomm.com",
@@ -87,8 +87,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "On 6/25/2026 4:55 PM, Krzysztof Kozlowski wrote: > On 25/06/2026 15:38, Atanas Filipov wrote: >> Add device-tree binding for the Qualcomm JPEG encoder hardware block >> present in SM8250 (Kona) SoCs. >> >> The JPEG encoder is a standalone hardware IP within the camera subsystem >> that performs JPEG compression in memory-to-memory fashion. It is >> separate from the CAMSS ISP pipeline and has its own register space, >> interrupt, clocks, power domain, IOMMU streams, and interconnect paths. >> >>",
       "pipeline_selection": "main",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "SM8250 카메라 subsystem의 JPEG encoder binding을 직접 다루고 구체적 hardware block과 자원이 인용되어 있으며, 해당 메일 URL에서 근거를 확인할 수 있다."
     },
     {
       "family_key": "article:https://lore.kernel.org/linux-media/87ed4bcc-aa66-4a1f-becc-7fce1fe795c1@linaro.org",
@@ -98,8 +98,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "On 05/06/2026 15:47, Michael Srba wrote: >> So, hex values from downstream in this case are acceptable. >> >> OTOH vendors can and should enumerate their registers in an upstream >> submission. > I thought this was the policy indeed, but this made me wonder if ALL the > magic numbers > in that file were added by volunteers. And weirdly I found this: > https://github.com/torvalds/linux/ > commit/7803b63a1640a0a39e3ebad487b33cb2d26e778b > and possibly some other commits look like they were made by",
       "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "Qualcomm CAMSS의 Gen2 v1.1 MIPI CSI-2 C-PHY 초기화라는 카메라 경로의 구체적 변경을 제목이 명시하며, URL은 해당 논의를 담은 단일 메일 문서다."
     },
     {
       "family_key": "article:https://source.android.com/docs/compatibility",
@@ -109,8 +109,8 @@
       "source_name": "AOSP Site Updates",
       "summary": "July 2026 Compatibility Compatibility Updated Camera ITS overview to add guidance on sub-camera testing, multi-camera API links, and splitting tests to reduce test execution time.",
       "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "no",
+      "human_note": "Camera ITS 변경 자체는 대상과 구체성을 충족하지만 URL이 Compatibility landing page이고 실제 overview가 하위 문서에 있으므로 조건 3의 자립성을 충족하지 않는다."
     },
     {
       "family_key": "article:https://youtube.com/playlist",
@@ -120,8 +120,8 @@
       "source_name": "Android Developers Blog",
       "summary": "By leveraging Jetpack CameraX and Media3, you can build professional-grade experiences that feel native across the entire ecosystem.&nbsp; It starts with high-fidelity capture using the CameraXViewfinder Composable, which ensures your preview remains perfectly scaled and responsive on any form factor, including foldables and tablets.",
       "pipeline_selection": "main",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "no",
+      "human_note": "CameraXViewfinder 내용은 대상과 구체성을 충족하지만 URL이 개별 영상이 아닌 YouTube playlist이므로 조건 3의 자립성을 충족하지 않는다."
     },
     {
       "family_key": "lore-series:20260611204148.1423192-niklas.soderlund+renesas@ragnatech.se",
@@ -131,8 +131,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "Add a framework driver for Dreamchip RPPX1 ISP. The driver aims to provide a framework for other V4L2 based drivers to drive the RPPX1 functionality. The reason for this split is that the RPPX1 IP itself do not provide any DMA engines to drive data to/from the device, instead it depends on other IP blocks to implement these features. While the peripherals around the RPPX1 ISP used in different designs and by different vendors are different the RPPX1 core itself is the same. For this reason the f",
       "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "Dreamchip RPPX1 ISP용 V4L2 framework driver 추가를 직접 설명하며, 시리즈 중간 패치도 정의상 자립적인 문서로 인정된다."
     },
     {
       "family_key": "lore-series:20260612194417.1737009-atanas.filipov@oss.qualcomm.com",
@@ -142,8 +142,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "Add device-tree binding for the Qualcomm JPEG encoder hardware block present in SM8250 (Kona) SoCs. The JPEG encoder is a standalone hardware IP within the camera subsystem that performs JPEG compression in memory-to-memory fashion. It is separate from the CAMSS ISP pipeline and has its own register space, interrupt, clocks, power domain, IOMMU streams, and interconnect paths. Properties documented: - compatible: qcom,sm8250-jenc - reg / reg-names: single MMIO region named \"jpeg\" - interrupts: s",
       "pipeline_selection": "main",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "SM8250 카메라 subsystem의 JPEG encoder DT binding 추가와 주요 property를 구체적으로 설명하는 개별 패치라 세 조건을 모두 충족한다."
     },
     {
       "family_key": "lore-series:20260616-mali-c55-ccm-gamma-v1-174fe4fedea3@ideasonboard.com",
@@ -153,8 +153,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "From: Jacopo Mondi Add support for Gamma curve correction for the Mali C55 ISP. Define a new block in the uAPI using the extensible v4l2-isp format and implement support for configuring the RGB Gamma parameters in the mali-c55 parameters handler. Signed-off-by: Jacopo Mondi --- .../media/platform/arm/mali-c55/mali-c55-params.c | 75 ++++++++++++++++++++++ .../platform/arm/mali-c55/mali-c55-registers.h | 5 ++ include/uapi/linux/media/arm/mali-c55-config.h | 46 ++++++++++++- 3 files changed , 125 i",
       "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "Mali C55 ISP의 RGB Gamma 보정 지원과 v4l2-isp uAPI 변경을 직접 다루며, 개별 패치 URL에서 근거를 확인할 수 있다."
     },
     {
       "family_key": "lore-series:20260617-imx8qxp_pcam-v5-7fa6c8e7fba7@nxp.com",
@@ -164,8 +164,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "From: Alice Yuan Add a V4L2 sub-device driver for the CPI controller found on i.MX8QXP, i.MX8QM, and i.MX93 SoCs. This controller supports parallel camera sensors and enables image data capture through a parallel interface. Signed-off-by: Alice Yuan Signed-off-by: Robert Chiras Signed-off-by: Zhipeng Wang Signed-off-by: Frank Li --- Change in v5 - Use subdev_1to1 register function - Use v4l2_subdev_get_frame_desc_passthrough - Use dwc csi2 similar logic enable/disable stream - Add route settup a",
       "pipeline_selection": "main",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "카메라 센서의 병렬 입력을 받는 CPI용 V4L2 subdev 드라이버 추가로, 카메라 경로와 구체적 변경이 모두 명확하다."
     },
     {
       "family_key": "lore-series:20260617021906.2746743-michael.bommarito@gmail.com",
@@ -175,8 +175,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "Add KUnit coverage for the HEVC and AV1 tile-count checks in std_validate_compound(): in-range counts pass, out-of-range per-dimension counts and an AV1 grid whose product exceeds V4L2_AV1_MAX_TILE_COUNT are rejected, and the zero-initialised AV1 frame control that userspace submits still passes. Assisted-by: Claude:claude-opus-4-8 Signed-off-by: Michael Bommarito --- drivers/media/v4l2-core/Kconfig | 12 ++ .../media/v4l2-core/v4l2-ctrls-core-test.c | 145 ++++++++++++++++++ drivers/media/v4l2-co",
       "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "HEVC/AV1 V4L2 codec control은 정의가 포함하는 카메라 출력의 하위 media layer이며, tile validation KUnit 변경도 구체적이다."
     },
     {
       "family_key": "lore-series:20260709-hm1092-driver-v5-a1f5baa6fe08@gmail.com",
@@ -186,8 +186,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "This adds a V4L2 subdev driver and DT binding for the Himax HM1092, a 1 megapixel monochrome near-infrared image sensor. On laptops it sits behind the IR camera used for face unlock. It speaks a single MIPI CSI-2 data lane and outputs 10-bit RAW at 560x360. The driver exposes that one fixed mode, test patterns, exposure, analogue gain and digital gain controls, pixel-array selection targets and the standard fwnode properties. It has been tested on an ASUS Zenbook A14: the sensor probes, streams,",
       "pipeline_selection": "main",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "Himax HM1092 NIR 이미지 센서의 V4L2 subdev 드라이버와 DT binding 추가를 직접 설명하는 자립적인 시리즈 문서다."
     },
     {
       "family_key": "lore-series:20260731073505.2278769-eagle.alexander923@gmail.com",
@@ -197,8 +197,8 @@
       "source_name": "lore.kernel.org linux-media list",
       "summary": "This series adds a driver for the onsemi AR0234 CMOS image sensor. The AR0234 is a 1/2.6-inch global-shutter sensor with a 1940x1220 pixel array, capable of 1920x1200 resolution at up to 120 fps. It supports MIPI CSI-2 output with 1 to 4 data lanes, raw Bayer (8/10-bit) and monochrome formats, as well as DPCM 10->8 compression. The driver has been tested with 2 and 4 lanes on an ARM64 Rockchip RK3588 platform with a 27 MHz external clock. Both 8-bit and 10-bit raw Bayer modes are functional. Not",
       "pipeline_selection": "main",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "onsemi AR0234 카메라 센서 드라이버 추가와 지원 포맷·lane·해상도·검증 플랫폼이 구체적으로 제시되어 있다."
     },
     {
       "family_key": "patchwork-series:6077",
@@ -208,8 +208,8 @@
       "source_name": "libcamera Patchwork (patch review)",
       "summary": "Patch under review on the project patch tracker (submitted by Qi Hou (OSS)); state superseded, a proposed change not yet landed.",
       "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "libcamera의 EGLDisplay 초기화·해제를 줄이기 위한 cache 동작 변경이 제목에 명시되고, URL은 해당 개별 패치를 가리킨다."
     },
     {
       "family_key": "patchwork-series:6085",
@@ -219,8 +219,8 @@
       "source_name": "libcamera Patchwork (patch review)",
       "summary": "Patch under review on the project patch tracker (submitted by Barnabás Pőcze); state new, a proposed change not yet landed.",
       "pipeline_selection": "short",
-      "human_label": null,
-      "human_note": ""
+      "human_label": "yes",
+      "human_note": "libcamera v4l2_videodevice가 VIDEO_MAX_PLANES를 사용하도록 바꾸는 구체적 패치이며, 개별 patch URL이라 자립성을 충족한다."
     }
   ]
 }
