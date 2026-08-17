@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "aosp-camera-its-release-notes",
-  "updated_at": "2026-08-10T00:00:00.000Z",
+  "updated_at": "2026-08-17T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "aosp-camera-its-release-notes:a67cc111aac23254e453759a5bae82dc",
@@ -16,6 +16,7 @@
       "http_last_modified": "2026-07-23",
       "content_hash": "ad269ac74082649ae23a9f5a72f9d8b7e42dce096b001a6d666aa015bb215ebf",
       "normalized_content_hash": "d5726d61fe18159b7374c2a2db47c2b8fe34e000e117f745bdf14636f122c41d",
+      "release_note_sections": [],
       "anchors": [
         "https://source.android.com/docs/compatibility/cts/camera-its#benefits-marginal-pass",
         "https://source.android.com/docs/compatibility/cts/camera-its#running-its-tests",
@@ -27,8 +28,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-08-10T00:00:00.000Z",
-      "seen_count": 2,
+      "last_seen_at": "2026-08-17T00:00:00.000Z",
+      "seen_count": 3,
       "status": 200
     },
     {
@@ -44,6 +45,52 @@
       "http_last_modified": "2026-08-06",
       "content_hash": "24bb009cbfffd0818056af4b4db1cc633c580e57ac6e93a45dee6289c28c038f",
       "normalized_content_hash": "e0fdc28bf02ba5939f744dc82594f30d7d55de3e609d1d378de5a4af990108e0",
+      "release_note_sections": [
+        {
+          "heading": "Python and package versions",
+          "hash": "eb341c13d07f9fd6"
+        },
+        {
+          "heading": "New or updated scenes",
+          "hash": "2f11b5e07a6cda27"
+        },
+        {
+          "heading": "New tests",
+          "hash": "1416e54cb2e51573"
+        },
+        {
+          "heading": "Refactored tests",
+          "hash": "8e3eccd0873a8c20"
+        },
+        {
+          "heading": "Separated test activities",
+          "hash": "021b124196390d1a"
+        },
+        {
+          "heading": "Deprecated tests",
+          "hash": "698f25a29d59a2e8"
+        },
+        {
+          "heading": "Gen2 rig updates",
+          "hash": "8c70a6de80098ec1"
+        },
+        {
+          "heading": "New test status: PASS*",
+          "hash": "1443f77f39249f36"
+        },
+        {
+          "heading": "Chart scaling improvements",
+          "hash": "58f82ff9687cf6b7"
+        },
+        {
+          "heading": "New tablet for wide-gamut testing support",
+          "hash": "311eb12952b7abe9"
+        },
+        {
+          "heading": "Aggregated result submission for build approvals",
+          "hash": "165f5f627e406759"
+        }
+      ],
       "anchors": [],
       "release_row_date": "",
       "release_row_version": "7.0.2",
@@ -59,8 +106,8 @@
         }
       ],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-08-10T00:00:00.000Z",
-      "seen_count": 2,
+      "last_seen_at": "2026-08-17T00:00:00.000Z",
+      "seen_count": 3,
       "status": 200
     }
   ],

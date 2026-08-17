@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-08-17",
+  "proposals": [
+    {
+      "proposal_id": "proposal_1",
+      "topic_gap": "CameraX 1.7.0-alpha03 release notes and its impact on camera output.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX 1.7.0-alpha03",
+        "CameraX release notes",
+        "camera output changes"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+      ],
+      "expected_evidence": [
+        "CameraX release notes",
+        "camera output changes",
+        "new features or bug fixes related to camera capture or processing"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal_2",
+      "topic_gap": "Media3 1.11 release notes and its impact on camera-generated media playback.",
+      "source_family": "androidx-media3-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3 1.11",
+        "Media3 release notes",
+        "camera playback",
+        "A/V sync"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html"
+      ],
+      "expected_evidence": [
+        "Media3 release notes",
+        "camera-generated media playback",
+        "A/V sync improvements",
+        "new codecs or format support"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal_3",
+      "topic_gap": "Recent changes in the Linux kernel's media subsystem related to camera drivers and V4L2.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux-media",
+        "V4L2",
+        "camera driver",
+        "kernel patch"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260815193839.141406-1-devnexen@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260812105305.32447-1-nicfio@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260813-uvc-status-11-v1-1-2cf43e9590b0@chromium.org/"
+      ],
+      "expected_evidence": [
+        "Linux kernel patches",
+        "V4L2 driver updates",
+        "camera subsystem changes",
+        "bug fixes or new features for camera hardware"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal_4",
+      "topic_gap": "Updates and improvements in the libcamera project, specifically focusing on camera pipeline and ISP handling.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "camera pipeline",
+        "ISP",
+        "egl",
+        "patch"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/27742/"
+      ],
+      "expected_evidence": [
+        "libcamera patches",
+        "camera pipeline changes",
+        "ISP (Image Signal Processor) handling",
+        "EGL integration for camera output"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "proposal_5",
+      "topic_gap": "New releases or updates for Raspberry Pi's libcamera, and their implications for embedded camera systems.",
+      "source_family": "raspberrypi-libcamera-releases",
+      "allowed_domains": [],
+      "search_keywords": [
+        "raspberrypi libcamera",
+        "libcamera release",
+        "embedded camera"
+      ],
+      "candidate_urls": [
+        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807"
+      ],
+      "expected_evidence": [
+        "Raspberry Pi libcamera releases",
+        "embedded camera system updates",
+        "new features or bug fixes for camera hardware"
+      ],
+      "risk_notes": []
+    }
+  ]
+}

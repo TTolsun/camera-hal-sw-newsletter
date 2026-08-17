@@ -60,7 +60,8 @@ const {
   compactSelectionContext
 } = require('../select/article-capsules');
 const {
-  buildStaticBackgroundContextReport
+  buildStaticBackgroundContextReport,
+  filterBackgroundContextToSelected
 } = require('../reporter/background-context');
 const {
   annotateCandidatesWithCache,
@@ -589,7 +590,15 @@ async function main() {
       excludedSections,
       newsroomDir,
       articleCapsuleReport,
-      backgroundContextReport,
+      // #908: background context는 재조정 前 selected 뷰로 만들어졌다(위 buildBackgroundContextReport).
+      // 재조정이 main에서 뺀 기사의 배경 설명까지 editor에 넘기면 editor가 그 기사도 다뤄야 할 대상으로
+      // 보고 explicitly_demoted_groups에 선언하고, 그 선언은 선택 집합 밖이라 커버리지 등식을 깨뜨린다
+      // (2026-08-17 실측: selected 1 !== rendered 1 + demoted 4라 발행 전체가 diagnostics-only).
+      // 좁히기는 이 인자에만 건다 — 공유 변수를 덮어쓰면 completion 단계까지 좁혀져 reserve 후보를
+      // 추가 기사로 승격할 때 그 후보의 배경이 사라진다. artifact도 원본을 그대로 남긴다.
+      // editorialPlanReport는 거르지 않는다 — 설계상 shortlisted(후보 풀) 뷰이고(#724) editor용 사본은
+      // coverage_decision/impact_level이 제거된다(#700). 거르면 reserve 승급 등급이 사라진다.
+      backgroundContextReport: filterBackgroundContextToSelected(backgroundContextReport, reconciledSelected),
       editorialPlanReport,
       shortlistReport,
       seedEvidencePack,
