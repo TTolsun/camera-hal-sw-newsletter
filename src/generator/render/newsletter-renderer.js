@@ -638,7 +638,17 @@ ${sourceListMarkdown(publicArticle.source_links)}
 `;
 }
 
-const QUIET_CORE_CONTEXT_NOTE = '이번 기간 카메라 코어 직접 변경은 없었습니다. 아래는 실무 레이더 관점의 맥락입니다.';
+// CONTEXT 모드 표시는 라벨이지 문장이 아니다(#856).
+//
+// publish_mode 는 compositionSummary 카운트만 보고 정해지는 파이프라인 내부 판정이라, 그 값이
+// 그 기간에 실제로 무슨 일이 있었는지를 보증하지 못한다. 예전에는 이 자리에서 "이번 기간 카메라
+// 코어 직접 변경은 없었습니다" 라는 기간-수준 사실 주장을 인쇄했고, 2026-W26 은 V4L2 이미지 센서
+// 드라이버 기사(정확히 카메라 코어 변경) 바로 위에 그 문장을 실었다. LLM 이 쓴 적도 팩트체커가
+// 검증한 적도 없는 문장이었다.
+//
+// 그래서 코드가 직접 쓰는 문자열은 참/거짓을 가릴 수 있는 명제가 아니라, 그 호를 어떤 관점으로
+// 읽는지만 알리는 관점 라벨로 제한한다. 사실 주장은 LLM 이 쓰고 팩트체커가 검증하는 본문 몫이다.
+const CONTEXT_LENS_LABEL = '실무 레이더 관점';
 const WATCH_POINTS_HEADING = '다음 관전 포인트';
 
 function hasWatchPoints(issue) {
@@ -649,9 +659,9 @@ function isContextPublishMode(issue) {
   return issue?.publish_mode === 'CONTEXT';
 }
 
-function quietCoreNoteMarkdown(issue) {
+function contextLensLabelMarkdown(issue) {
   if (!isContextPublishMode(issue)) return '';
-  return `\n${QUIET_CORE_CONTEXT_NOTE}\n`;
+  return `\n**${CONTEXT_LENS_LABEL}**\n`;
 }
 
 function watchPointsMarkdown(issue) {
@@ -663,12 +673,10 @@ ${bulletsMarkdown(issue.watch_points)}
 `;
 }
 
-function quietCoreNoteHtml(issue) {
+function contextLensLabelHtml(issue) {
   if (!isContextPublishMode(issue)) return '';
-  return `\n      <section class="section issue-quiet-core-note" role="note">
-        <div class="card issue-quiet-core-note-card">
-          <p>${escapeHtml(QUIET_CORE_CONTEXT_NOTE)}</p>
-        </div>
+  return `\n      <section class="section issue-context-lens-label" role="note">
+        <p class="issue-context-lens-label-text">${escapeHtml(CONTEXT_LENS_LABEL)}</p>
       </section>\n`;
 }
 
@@ -728,7 +736,7 @@ ${publicationNoticeMarkdown(issue)}
 ## 1. ${briefingHeading(issue)}
 
 ${bulletsMarkdown(issue.briefing)}
-${quietCoreNoteMarkdown(issue)}
+${contextLensLabelMarkdown(issue)}
 ${sectionsMarkdownWithCatchUpDivider(issue)}
 
 ${watchPointsMarkdown(issue)}${referenceArticlesMarkdown(issue)}## 참고자료
@@ -856,7 +864,7 @@ ${articleSeoHead(issue)}
       ${issueHeroHtml(issue)}
 
 ${publicationNoticeBlock}      ${issueBriefingHtml(issue)}
-${quietCoreNoteHtml(issue)}
+${contextLensLabelHtml(issue)}
 ${sectionsHtmlWithCatchUpDivider(issue)}
 ${watchPointsHtml(issue)}${referenceArticlesHtml(issue)}
       <section class="section issue-references" aria-labelledby="issue-references-title">
