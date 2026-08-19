@@ -49,14 +49,17 @@ function finalNewsletterHardBlockers(status = {}) {
   return blockers;
 }
 
-// 이미지 계보 감사 실패는 라벨(publish-ready 차단)과 머지 경로(validate:images) 양쪽에서 이미
-// 강제된다. 본문도 같은 사실을 말해야 편집장이 읽는 면과 라벨이 어긋나지 않는다(#896).
+// 이미지 계보 감사 실패는 라벨(publish-ready 차단)에서 이미 강제된다. 본문도 같은 사실을 말해야
+// 편집장이 읽는 면과 라벨이 어긋나지 않는다(#896).
 function imageAuditDemoted(status = {}) {
   return status.image_audit_gate_passed === false;
 }
 
+// PR의 validate:images는 검사 결과를 실패로 표시할 뿐, merge 버튼 자체를 막지는 않는다.
+// (main에 branch protection/ruleset이 없다.) 막는다고 단정하면 편집장이 사실과 다른 안전장치를
+// 믿게 되므로, 확인된 사실만 쓴다.
 function imageAuditDemotionReason(status = {}) {
-  return `이미지 계보 감사 결과가 ${valueOrUnknown(status.image_audit_outcome)}이므로 final_publish_ready를 강등했습니다. 머지 경로의 validate:images도 같은 조건을 차단합니다. publish-ready label 금지.`;
+  return `이미지 계보 감사 결과가 ${valueOrUnknown(status.image_audit_outcome)}이므로 final_publish_ready를 강등했습니다. PR의 validate:images 검사도 같은 조건을 실패로 표시합니다. 사람이 판단해 merge하면 그대로 공개되므로 publish-ready label 금지.`;
 }
 
 function finalNewsletterHandoff(status = {}, handoff = null) {

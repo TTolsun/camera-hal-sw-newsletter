@@ -501,9 +501,11 @@ jobs:
           REVIEW_PR_READY: ${{ steps.meta.outputs.review_pr_ready }}
           REVIEWABLE_ARTIFACT_REASON: ${{ steps.meta.outputs.reviewable_artifact_reason }}
           DIAGNOSTICS_ONLY: ${{ steps.meta.outputs.diagnostics_only }}
-          REVIEW_PUBLICATION_READY: ${{ steps.meta.outputs.review_publication_ready }}
           GENERATION_STATUS: ${{ steps.generation-status.outputs.status }}
           HAS_AI_PUBLISH_READY: ${{ steps.final-publish-status.outputs.has_ai_publish_ready }}
+          # has_ai_publish_ready는 audit-images보다 먼저 도는 스텝 출력이라 감사를 모른다. 라벨
+          # 스텝과 같은 신호를 줘야 summary·라벨·PR 본문 세 표면이 같은 말을 한다(#896).
+          IMAGE_AUDIT_OUTCOME: ${{ steps.audit-images.outcome || 'skipped' }}
           COMPOSITION_MODE: ${{ steps.final-publish-status.outputs.composition_mode }}
           PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
           NEWSLETTER_DATE: ${{ steps.meta.outputs.date }}

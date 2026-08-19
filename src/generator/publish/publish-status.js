@@ -8,10 +8,13 @@ const {
 const {
   readJsonIfExists
 } = require('../../shared/common/json');
+const {
+  IMAGE_AUDIT_OUTCOME_NOT_REPORTED,
+  imageAuditGatePassed
+} = require('../../shared/common/publication-mode');
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const COMPOSITION_MODE_NEEDS_FIX = 'NEEDS_FIX';
-const IMAGE_AUDIT_OUTCOME_NOT_REPORTED = 'not_reported';
 
 const DEFAULT_STATUS = {
   status: 'UNKNOWN',
@@ -73,20 +76,12 @@ function resolveValidateOutcome(status = {}, options = {}) {
 }
 
 // 이미지 계보 감사는 site 검증과 같은 층의 발행 게이트다(#896). 03 workflow가 감사 outcome을
-// 넘겨준 실행에서만 판정에 쓴다. outcome을 넘기지 않는 실행(로컬 렌더, 다른 CLI)은 감사를 돌린
-// 적이 없으므로 게이트 대상이 아니며, 여기서 기본 강등을 걸면 감사와 무관한 경로가 모두
-// publish-ready를 잃는다.
+// 넘겨준 실행에서만 판정에 쓴다. 통과 규칙 자체는 라벨·run summary와 공유하는
+// publication-mode.imageAuditGatePassed가 정본이다.
 function resolveImageAuditOutcome(options = {}) {
   if (options.imageAuditOutcome) return options.imageAuditOutcome;
   if (process.env.IMAGE_AUDIT_OUTCOME) return process.env.IMAGE_AUDIT_OUTCOME;
   return IMAGE_AUDIT_OUTCOME_NOT_REPORTED;
-}
-
-// 감사가 실제로 돌아 성공한 outcome만 통과다. skipped·cancelled를 통과로 치면 감사가 돌지 않은
-// 주에도 본문이 publish-ready로 읽힌다(03 workflow의 라벨 스크립트와 같은 규칙).
-function resolveImageAuditGatePassed(outcome) {
-  if (outcome === IMAGE_AUDIT_OUTCOME_NOT_REPORTED) return true;
-  return outcome === 'success';
 }
 
 function resolveStatusInput(root, options = {}) {
@@ -320,7 +315,7 @@ function computeFinalPublishReady({
   failedRepairReviewableStatus
 }) {
   const validationPassed = validateOutcome === 'success';
-  const imageAuditPassed = resolveImageAuditGatePassed(imageAuditOutcome);
+  const imageAuditPassed = imageAuditGatePassed(imageAuditOutcome);
   const conditions = {
     artifact_final_publish_ready: artifactFinalPublishReady,
     validate_outcome_success: validationPassed,

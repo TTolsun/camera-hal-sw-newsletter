@@ -10,6 +10,7 @@
 // 읽고 쓴다. 시크릿, raw LLM 응답, 기사 본문은 출력하지 않는다.
 
 const { ensureArray } = require('../../common/value-coercion');
+const { imageAuditGatePassed } = require('../../common/publication-mode');
 const fs = require('fs');
 const path = require('path');
 
@@ -146,10 +147,15 @@ function resolveNodes(profile, input) {
     : resolveStepNodes(profile, input);
 }
 
-// 03 label step과 동일한 우선순위 (summary와 PR label이 어긋나지 않도록).
+// 03 label step과 동일한 입력·우선순위 (summary와 PR label이 어긋나지 않도록).
+// has_ai_publish_ready는 audit-images보다 먼저 도는 final-publish-status 스텝 출력이라 감사를
+// 모른다. 라벨 스텝이 감사 outcome으로 이 값을 꺾듯 여기서도 같이 꺾는다(#896).
+// 2번째 분기도 라벨과 같은 입력(public_newsletter_ready)을 본다. review_publication_ready는
+// 감사 전에 계산되고 final_publish_ready=false까지 요구해서 강등 주를 놓쳤다.
 function classifyPublication(meta = {}) {
-  if (text(meta.has_ai_publish_ready) === 'true') return 'publish-ready';
-  if (text(meta.review_publication_ready) === 'true') return 'review-only-publication';
+  const auditPassed = imageAuditGatePassed(meta.image_audit_outcome);
+  if (text(meta.has_ai_publish_ready) === 'true' && auditPassed) return 'publish-ready';
+  if (text(meta.public_newsletter_ready) === 'true') return 'review-only-publication';
   if (text(meta.diagnostics_only) === 'true') {
     return text(meta.generation_status) === 'FAILED_REPAIR_REVIEWABLE'
       ? 'diagnostics-only (failed-repair-reviewable)'
@@ -289,9 +295,9 @@ function buildInputFromEnv(args, env) {
       review_pr_ready: env.REVIEW_PR_READY,
       reviewable_artifact_reason: env.REVIEWABLE_ARTIFACT_REASON,
       diagnostics_only: env.DIAGNOSTICS_ONLY,
-      review_publication_ready: env.REVIEW_PUBLICATION_READY,
       generation_status: env.GENERATION_STATUS || status.status,
       has_ai_publish_ready: env.HAS_AI_PUBLISH_READY,
+      image_audit_outcome: env.IMAGE_AUDIT_OUTCOME,
       composition_mode: env.COMPOSITION_MODE
     },
     artifact: {
