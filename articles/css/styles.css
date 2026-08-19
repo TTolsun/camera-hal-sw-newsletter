@@ -1942,13 +1942,25 @@ pre code {
   color: #d2d2d7;
 }
 
-/* 운영 안내 블록(quiet-core/watch-points)도 같은 파치먼트 언어로. */
+/* 운영 안내 블록(watch-points)도 같은 파치먼트 언어로.
+   issue-quiet-core-note-card 는 이미 발행된 호(2026-06-02, 2026-W26)의 HTML 이 그대로 쓰고
+   있어 남겨 둔다. 새로 렌더되는 호는 이 카드를 만들지 않는다(#856). */
 .newsletter-issue-page .issue-quiet-core-note-card,
 .newsletter-issue-page .issue-watch-points-card {
   border: none;
   border-radius: var(--radius-lg);
   background: var(--bg);
   box-shadow: none;
+}
+
+/* CONTEXT 모드 관점 라벨(#856). 문장이 아니라 눈썹 라벨이므로 기사 카테고리 눈썹과 같은
+   타이포로 둔다 — 본문으로 읽혀 사실 주장처럼 보이면 안 된다. */
+.newsletter-issue-page .issue-context-lens-label-text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
 }
 
 .source-list a,

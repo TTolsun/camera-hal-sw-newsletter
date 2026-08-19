@@ -495,14 +495,15 @@ test('newsletter renderer keeps v1 output byte-identical', () => {
     contextMarkdown: sha256(buildMarkdown(contextIssue)),
     contextHtml: sha256(buildHtml(contextIssue))
   }, {
-    // HTML 3종은 공통 footer의 AI Engineering Lab 링크 추가로 갱신했다.
-    // markdown 3종은 불변이므로 본문 발행 계약은 그대로다.
+    // context 2종은 #856 에서 갱신했다. 기간-수준 사실 주장이던 quiet-core 문장을 관점 라벨로
+    // 바꾼 결과이므로, CONTEXT 분기 밖 4종이 그대로인 것이 이 변경이 좁다는 증거다.
+    // plain/story HTML 2종은 그 전 공통 footer의 AI Engineering Lab 링크 추가로 갱신한 값이다.
     plainMarkdown: 'c48f47e42dc73097',
     plainHtml: 'e4cdbf8551a78fb0',
     storyMarkdown: 'f3602357add8a9ff',
     storyHtml: '4cf8c3765184dd09',
-    contextMarkdown: 'baa3a66bce12cd3b',
-    contextHtml: 'f38a58f02e7566ac'
+    contextMarkdown: 'e754eef59b3f0cff',
+    contextHtml: 'a5b3984a6bb2893e'
   });
 });
 
