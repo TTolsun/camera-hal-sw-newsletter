@@ -939,6 +939,62 @@ function sectionGroupKey(section = {}, candidate = null) {
     (candidate ? candidateGroupKey(candidate) : '');
 }
 
+// editor가 커버리지 상태를 선언할 수 있는 대상은 선정 캡슐에 실린 그룹뿐이다. editor는 같은
+// 프롬프트에서 편집 계획도 받는데(#700의 작성 안내용 입력이라 선정되지 않은 후보도 남아 있다),
+// 그 항목의 source_candidate_hash에 접두어를 붙인 `article:<hash>` 키로 강등을 선언한 실측이
+// 있다(2026-08-17 발행분 issue.json에 4건). 코드가 만들지 않는 키라 어떤 매칭으로도 선정 집합과
+// 이어지지 않고, 사유도 편집 판단이 아니라 선정 결과의 재진술이다. 그대로 두면 발행 산출물에
+// 그 레코드가 쌓여 explicitly_demoted_group_count가 "editor가 선정 집합에 대해 내린 판단"이라는
+// 뜻을 잃는다(#918).
+//
+// 그래서 정규화 단계에서 결정론적으로 떨어내되, 조용히 버리지 않고 무엇을 떨어냈는지 남긴다.
+// publish_mode와 무관하게 항상 돌아야 하므로 validateSelectedGroupCoverage 안이 아니라 그 앞에서
+// 호출한다(그 검증기는 CONTEXT/QUIET에서 early return 한다).
+const GROUP_DECLARATION_FIELDS = [
+  { field: 'explicitly_demoted_groups', declarationType: 'explicitly_demoted' },
+  { field: 'demoted_groups', declarationType: 'explicitly_demoted' },
+  { field: 'hard_blocked_groups', declarationType: 'hard_blocked' }
+];
+
+function declarationGroupKey(item) {
+  return typeof item === 'string'
+    ? text(item)
+    : text(item?.article_group_key || item?.group_key || item?.key);
+}
+
+function pruneGroupDeclarationsOutsideSelection(value, reporter = {}) {
+  const selectedGroupKeys = new Set(selectedReporterCandidates(reporter).map(candidateGroupKey).filter(Boolean));
+  // 선정 집합을 모르면 무엇이 그 밖인지도 판단할 수 없다. 커버리지 검증도 같은 조건에서 멈춘다.
+  if (selectedGroupKeys.size === 0) return;
+  const dropped = [];
+  for (const { field, declarationType } of GROUP_DECLARATION_FIELDS) {
+    if (!Array.isArray(value[field])) continue;
+    value[field] = value[field].filter(item => {
+      const key = declarationGroupKey(item);
+      if (!key || selectedGroupKeys.has(key)) return true;
+      dropped.push({
+        article_group_key: key,
+        declaration_type: declarationType,
+        reason_code: typeof item === 'string' ? '' : text(item?.reason_code)
+      });
+      return false;
+    });
+  }
+  // repair/completion은 이미 정리된 draft로 이 경로에 다시 들어온다. 그때 이번 실행에서 떨어낸
+  // 것이 없다고 기록을 덮어쓰면 앞선 진단이 사라지므로 기존 기록과 합집합으로 둔다(멱등).
+  const seen = new Set();
+  const declarations = [...ensureArray(value.dropped_outside_selection_group_declarations), ...dropped]
+    .filter(item => {
+      const marker = `${item.declaration_type}\n${item.article_group_key}`;
+      if (seen.has(marker)) return false;
+      seen.add(marker);
+      return true;
+    });
+  if (declarations.length === 0) return;
+  value.dropped_outside_selection_group_declarations = declarations;
+  value.dropped_outside_selection_group_declaration_count = declarations.length;
+}
+
 function validateSelectedGroupCoverage(value, reporter = {}, publishMode = 'DEEP') {
   const selectedGroupKeys = [...new Set(selectedReporterCandidates(reporter).map(candidateGroupKey).filter(Boolean))];
   if (selectedGroupKeys.length === 0) return null;
@@ -1109,6 +1165,8 @@ function validateEditorOutputContract(value, date, options = {}) {
   validateClaimBindingContract(value, reporter, options.strictClaims === true, options.seedEvidencePack || null);
   validateEditorArticlePolicy(value, reporter);
   validateBlockedContextUsage(value, reporter);
+  // #918: publish_mode와 무관하게 항상 돌아야 하므로 커버리지 검증보다 앞이다.
+  pruneGroupDeclarationsOutsideSelection(value, reporter);
   validateSelectedGroupCoverage(value, reporter, options.publishMode);
 
   const emptySourceSections = value.sections

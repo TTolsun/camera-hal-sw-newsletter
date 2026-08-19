@@ -69,6 +69,10 @@ function editorSystemPrompt({ editorRetryContract = null, publishMode, hasLocked
     'related_context_candidates는 selected representative article 안에서만 사용하세요. related_context_candidates로 별도 main article을 만들지 마세요.',
     'context_usage_allowed=true인 related_context_candidates만 supporting context로 사용하세요. blocked_context_candidates, blocked_context_reference, parent_roundup_context_only, dedupe_shadow_context를 article source로 cite하지 마세요.',
     'article_group_key가 있으면 보존하세요. Selected group은 article 1개로 render하거나, explicitly_demoted_groups에 reason_code=duplicate_or_near_duplicate|forbidden_bucket|explicit_editor_hold 중 하나로 기록하거나, hard_blocked_groups에 reason_code=source_gap_risk|missing_dated_evidence|blocked_source_quality|fact_check_must_fix|quality_hard_blocker 중 하나로 기록해야 합니다.',
+    // #918: editor가 편집 계획 항목의 source_candidate_hash로 `article:<hash>` 키를 조립해
+    // 강등을 선언한 실측(2026-08-17)이 있어, 선언 대상과 키 출처를 명시한다.
+    'explicitly_demoted_groups와 hard_blocked_groups의 선언 대상은 primary selected article capsule에 실린 그룹뿐입니다. Internal editorial plan 항목은 작성 안내용 입력이지 커버리지 선언 대상이 아니므로, capsule에 행이 없는 그룹은 두 목록 어디에도 넣지 마세요.',
+    'article_group_key는 capsule에 있는 값을 그대로 복사하세요. source_candidate_hash 같은 다른 식별자로 키를 직접 조립하거나 접두어를 붙이지 마세요.',
     'source-ready cpp_ai_tooling_fallback native_tooling_workflow group을 primary Camera runtime stack article이 아니라는 이유만으로 demote하지 마세요.',
     linkedEvidencePromptGuardrails(),
     sourceExtractionPromptGuardrails(),
