@@ -61,6 +61,11 @@ test('final newsroom workflow separates review PR success from publish-ready gat
     '- name: Audit newsletter image lineage',
     '- name: Snapshot newsroom debug artifacts'
   ]);
+  // 감사 outcome을 PR 본문 생성에 넘기려면 감사가 먼저 끝나 있어야 한다(#896).
+  assertTextInOrder(workflow, [
+    '- name: Audit newsletter image lineage',
+    '- name: Prepare pull request body'
+  ]);
   const summaryStep = workflowStep(workflow, 'Write workflow run summary');
   assert.match(summaryStep, /if: always\(\)/);
   assert.match(summaryStep, /continue-on-error:\s*true/);
@@ -199,6 +204,10 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   // 폴백). 회귀를 막기 위해 token 라인을 테스트로 고정한다.
   assert.match(createPrStep, /token: \$\{\{ secrets\.NEWSROOM_PR_TOKEN \|\| github\.token \}\}/);
   assert.match(preparePrBodyStep, /VALIDATE_OUTCOME: \$\{\{ steps\.validate\.outcome \|\| 'skipped' \}\}/);
+  // LOCK ADDED (#896). #886의 강등은 라벨 절반에만 배선돼 있었고, 같은 리뷰 표면의 다른 절반인 PR
+  // 본문은 감사 결과를 몰라 needs-fix 라벨 밑에 publish-ready 판정 본문이 달렸다. 편집장이 실제로
+  // 읽는 것은 본문이므로, 본문 생성이 감사 outcome을 받아야 두 절반이 같은 말을 한다.
+  assert.match(preparePrBodyStep, /IMAGE_AUDIT_OUTCOME: \$\{\{ steps\.audit-images\.outcome \|\| 'skipped' \}\}/);
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_FIGMA_URL: https:\/\/www\.figma\.com\/design\/EWJMa8vjfZLjdn9a7s3Kzs/);
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_DESKTOP_COVERAGE: covered/);
   assert.match(preparePrBodyStep, /HOMEPAGE_HEADLINE_MOBILE_COVERAGE: covered/);
@@ -215,7 +224,12 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(workflow, /const imageAuditPassed = '\$\{\{ steps\.audit-images\.outcome \}\}' === 'success';/);
   assert.match(workflow, /const hasAiPublishReady = '\$\{\{ steps\.final-publish-status\.outputs\.has_ai_publish_ready \}\}' === 'true' && imageAuditPassed;/);
   assert.match(workflow, /const diagnosticsOnly = '\$\{\{ steps\.meta\.outputs\.diagnostics_only \}\}' === 'true';/);
-  assert.match(workflow, /const reviewPublicationReady = '\$\{\{ steps\.meta\.outputs\.review_publication_ready \}\}' === 'true';/);
+  // LOCK RETARGETED (#896). 이전 계약은 라벨 분기가 meta의 review_publication_ready만 읽는 것이었다.
+  // meta는 감사 스텝보다 먼저 계산되고 review_publication_ready는 final_publish_ready=false를 요구하므로,
+  // 감사 강등 주에는 이 분기가 통째로 빠져 review-only-publication이 붙지 않았다. 이 라벨의 정의 자체가
+  // "공개 파일이 준비돼 있어 merge하면 Pages에 뜬다"이므로(.github/workflows/AGENTS.md) 정의 그대로
+  // public_newsletter_ready로 판정한다 — 약화가 아니라 누락 복구다.
+  assert.match(workflow, /const publicNewsletterReady = '\$\{\{ steps\.meta\.outputs\.public_newsletter_ready \}\}' === 'true';/);
   assert.match(workflow, /const compositionMode = '\$\{\{ steps\.final-publish-status\.outputs\.composition_mode \}\}';/);
   assert.doesNotMatch(workflow, /steps\.meta\.outputs\.has_publish_candidate/);
   assert.doesNotMatch(workflow, /if: steps\.meta\.outputs\.has_reviewable_artifacts == 'true'/);
@@ -239,7 +253,7 @@ test('final newsroom workflow labels review publication and diagnostics-only mut
   const workflowPath = path.join(__dirname, '..', '..', '..', '..', '.github', 'workflows', 'newsletters-03-editor-pr.yml');
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   const labelStep = workflowStep(workflow, 'Add pull request labels');
-  const reviewPublicationStart = labelStep.indexOf('} else if (reviewPublicationReady) {');
+  const reviewPublicationStart = labelStep.indexOf('} else if (publicNewsletterReady) {');
   const diagnosticsStart = labelStep.indexOf('} else if (diagnosticsOnly) {');
   const fallbackStart = labelStep.indexOf('} else {', diagnosticsStart);
 

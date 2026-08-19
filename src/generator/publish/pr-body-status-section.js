@@ -33,6 +33,9 @@ function recommendedEditorAction(status) {
   if (status.final_publish_ready === true && status.validate_outcome === 'success') {
     return '최종 발행 조건이 모두 통과했습니다. 편집 검토를 마친 뒤 병합할 수 있습니다.';
   }
+  if (status.image_audit_gate_passed === false) {
+    return '이미지 계보 감사가 통과하지 못했습니다. image-audit-report.json의 발행 차단 항목을 고친 뒤 다시 실행하세요.';
+  }
   if (status.stale_claim_hard_failure_count > 0 || status.stale_claim_status === 'NEEDS_FIX') {
     return '발행 전에 stale-claim hard failure를 제거하거나 문장을 다시 작성하고 stale-claim-report를 다시 확인하세요.';
   }
@@ -83,6 +86,8 @@ function renderStatusSection(status, handoff = null) {
     `건너뛴 repair section 수: ${valueOrUnknown(status.skipped_repair_section_count ?? 0)}`,
     `검증 결과: ${valueOrUnknown(status.validate_outcome)}`,
     `validate_ok=${booleanText(status.validate_ok)}`,
+    `이미지 계보 감사 결과: ${valueOrUnknown(status.image_audit_outcome)}`,
+    `image_audit_gate_passed=${booleanText(status.image_audit_gate_passed)}`,
     `selection_publish_ready: ${booleanText(status.selection_publish_ready)}`,
     `최종 발행 가능 여부: ${booleanText(status.final_publish_ready)} (final_publish_ready: ${booleanText(status.final_publish_ready)})`,
     `정책상 발행 조건: ${booleanText(status.publish_gate_passed)} (publish_gate_passed: ${booleanText(status.publish_gate_passed)}; ${publishGateCriteriaText()})`,

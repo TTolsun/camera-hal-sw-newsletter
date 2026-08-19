@@ -11,6 +11,7 @@ const {
 
 const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 const COMPOSITION_MODE_NEEDS_FIX = 'NEEDS_FIX';
+const IMAGE_AUDIT_OUTCOME_NOT_REPORTED = 'not_reported';
 
 const DEFAULT_STATUS = {
   status: 'UNKNOWN',
@@ -69,6 +70,23 @@ function resolveValidateOutcome(status = {}, options = {}) {
   if (status.validate_ok === true) return 'success';
   if (status.validate_ok === false) return 'failure';
   return 'unknown';
+}
+
+// 이미지 계보 감사는 site 검증과 같은 층의 발행 게이트다(#896). 03 workflow가 감사 outcome을
+// 넘겨준 실행에서만 판정에 쓴다. outcome을 넘기지 않는 실행(로컬 렌더, 다른 CLI)은 감사를 돌린
+// 적이 없으므로 게이트 대상이 아니며, 여기서 기본 강등을 걸면 감사와 무관한 경로가 모두
+// publish-ready를 잃는다.
+function resolveImageAuditOutcome(options = {}) {
+  if (options.imageAuditOutcome) return options.imageAuditOutcome;
+  if (process.env.IMAGE_AUDIT_OUTCOME) return process.env.IMAGE_AUDIT_OUTCOME;
+  return IMAGE_AUDIT_OUTCOME_NOT_REPORTED;
+}
+
+// 감사가 실제로 돌아 성공한 outcome만 통과다. skipped·cancelled를 통과로 치면 감사가 돌지 않은
+// 주에도 본문이 publish-ready로 읽힌다(03 workflow의 라벨 스크립트와 같은 규칙).
+function resolveImageAuditGatePassed(outcome) {
+  if (outcome === IMAGE_AUDIT_OUTCOME_NOT_REPORTED) return true;
+  return outcome === 'success';
 }
 
 function resolveStatusInput(root, options = {}) {
@@ -294,15 +312,22 @@ function computeArtifactFinalPublishReady({
   return { conditions, ready };
 }
 
-// 최종 발행 준비: artifact 준비 상태에 site 검증 결과를 결합한다.
-function computeFinalPublishReady({ artifactFinalPublishReady, validateOutcome, failedRepairReviewableStatus }) {
+// 최종 발행 준비: artifact 준비 상태에 site 검증과 이미지 계보 감사 결과를 결합한다.
+function computeFinalPublishReady({
+  artifactFinalPublishReady,
+  validateOutcome,
+  imageAuditOutcome,
+  failedRepairReviewableStatus
+}) {
   const validationPassed = validateOutcome === 'success';
+  const imageAuditPassed = resolveImageAuditGatePassed(imageAuditOutcome);
   const conditions = {
     artifact_final_publish_ready: artifactFinalPublishReady,
-    validate_outcome_success: validationPassed
+    validate_outcome_success: validationPassed,
+    image_audit_gate_passed: imageAuditPassed
   };
   const ready = !failedRepairReviewableStatus && Object.values(conditions).every(Boolean);
-  return { conditions, ready, validationPassed };
+  return { conditions, ready, validationPassed, imageAuditPassed };
 }
 
 // status.final_publish_ready 플래그가 재계산 결과와 불일치하는지 감지한다.
@@ -339,6 +364,8 @@ function buildResolvedStatus({
   selection,
   validateOutcome,
   validationPassed,
+  imageAuditOutcome,
+  imageAuditPassed,
   artifactFinalPublishReady,
   finalPublishReady,
   statusFinalPublishReady,
@@ -381,6 +408,8 @@ function buildResolvedStatus({
     stale_claim_removed_count: staleClaim.removedCount,
     stale_claim_hard_failure_count: staleClaim.hardFailureCount,
     validate_outcome: validateOutcome,
+    image_audit_outcome: imageAuditOutcome,
+    image_audit_gate_passed: imageAuditPassed,
     artifact_final_publish_ready_conditions: artifactFinalPublishReadyConditions,
     final_publish_ready_conditions: finalPublishReadyConditions,
     consistency_errors: consistencyErrors
@@ -401,6 +430,7 @@ function resolvePublishStatus(options = {}) {
   const staleClaim = staleClaimSummary(status, inputs.staleClaim.value);
   const selection = selectionSummary(status, inputs.shortlist.value);
   const validateOutcome = resolveValidateOutcome(status, options);
+  const imageAuditOutcome = resolveImageAuditOutcome(options);
   const explicitStatusInput = inputs.statusInput.sourcePath === null;
 
   const artifactReadiness = computeArtifactFinalPublishReady({
@@ -415,6 +445,7 @@ function resolvePublishStatus(options = {}) {
   const finalReadiness = computeFinalPublishReady({
     artifactFinalPublishReady: artifactReadiness.ready,
     validateOutcome,
+    imageAuditOutcome,
     failedRepairReviewableStatus
   });
   const mismatch = detectFinalPublishReadyMismatch({
@@ -437,6 +468,8 @@ function resolvePublishStatus(options = {}) {
     selection,
     validateOutcome,
     validationPassed: finalReadiness.validationPassed,
+    imageAuditOutcome,
+    imageAuditPassed: finalReadiness.imageAuditPassed,
     artifactFinalPublishReady: artifactReadiness.ready,
     finalPublishReady: finalReadiness.ready,
     statusFinalPublishReady: mismatch.statusFinalPublishReady,
@@ -459,9 +492,11 @@ function resolvePublishStatus(options = {}) {
     staleClaim,
     selection,
     validateOutcome,
+    imageAuditOutcome,
     artifactFinalPublishReady: artifactReadiness.ready,
     finalPublishReady: finalReadiness.ready,
     validationPassed: finalReadiness.validationPassed,
+    imageAuditPassed: finalReadiness.imageAuditPassed,
     artifactFinalPublishReadyConditions: artifactReadiness.conditions,
     finalPublishReadyConditions: finalReadiness.conditions,
     consistencyErrors

@@ -343,6 +343,51 @@ test('publish status resolver keeps site validation failure out of consistency e
   assert.equal(resolved.status.final_publish_ready_conditions.validate_outcome_success, false);
 });
 
+// #896: 이미지 계보 감사는 site 검증과 같은 층의 발행 게이트다. 03 workflow가 감사 outcome을
+// 넘겨주면 artifact 준비 상태는 그대로 두고 최종 발행 판정만 강등해야 한다. 이 강등이 없으면
+// 라벨은 needs-fix인데 PR 본문은 publish-ready로 읽히는 표시 모순이 남는다.
+test('publish status resolver demotes final publish when the image lineage audit failed', () => {
+  const root = fsTempRoot('newsroom-pr-body-');
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true
+  });
+
+  const demoted = resolvePublishStatus({
+    root,
+    date,
+    validateOutcome: 'success',
+    imageAuditOutcome: 'failure'
+  });
+
+  assert.equal(demoted.status.artifact_final_publish_ready, true);
+  assert.equal(demoted.status.final_publish_ready, false);
+  assert.equal(demoted.status.status, 'NEEDS_FIX');
+  assert.equal(demoted.status.image_audit_outcome, 'failure');
+  assert.equal(demoted.status.image_audit_gate_passed, false);
+  assert.equal(demoted.status.final_publish_ready_conditions.image_audit_gate_passed, false);
+  // 강등은 status artifact와 재계산 결과의 불일치가 아니다. 여기서 consistency error가 생기면
+  // 03 workflow의 pr-body 검증이 죽는다.
+  assert.deepEqual(demoted.status.consistency_errors, []);
+});
+
+// 감사 outcome을 넘기지 않는 실행(로컬 렌더, 다른 CLI)은 감사를 돌린 적이 없으므로 게이트
+// 대상이 아니다. 여기서 기본 강등을 걸면 감사와 무관한 모든 경로가 publish-ready를 잃는다.
+test('publish status resolver leaves final publish alone when no image audit outcome was reported', () => {
+  const root = fsTempRoot('newsroom-pr-body-');
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true
+  });
+
+  const resolved = resolvePublishStatus({ root, date, validateOutcome: 'success' });
+
+  assert.equal(resolved.status.final_publish_ready, true);
+  assert.equal(resolved.status.image_audit_outcome, 'not_reported');
+  assert.equal(resolved.status.image_audit_gate_passed, true);
+  assert.equal(resolved.status.final_publish_ready_conditions.image_audit_gate_passed, true);
+});
+
 test('publish status resolver ignores status final mismatch caused only by validation failure', () => {
   const root = fsTempRoot('newsroom-pr-body-');
   const date = '2026-05-08';

@@ -34,6 +34,9 @@ function finalNewsletterHardBlockers(status = {}) {
   if (status.validate_outcome && status.validate_outcome !== 'success') {
     blockers.push(`validate_outcome=${status.validate_outcome}`);
   }
+  if (status.image_audit_gate_passed === false) {
+    blockers.push(`image_audit_outcome=${valueOrUnknown(status.image_audit_outcome)}`);
+  }
   if (ensureArray(status.consistency_errors).length > 0) {
     blockers.push(`consistency_errors ${ensureArray(status.consistency_errors).length}건`);
   }
@@ -46,12 +49,29 @@ function finalNewsletterHardBlockers(status = {}) {
   return blockers;
 }
 
+// 이미지 계보 감사 실패는 라벨(publish-ready 차단)과 머지 경로(validate:images) 양쪽에서 이미
+// 강제된다. 본문도 같은 사실을 말해야 편집장이 읽는 면과 라벨이 어긋나지 않는다(#896).
+function imageAuditDemoted(status = {}) {
+  return status.image_audit_gate_passed === false;
+}
+
+function imageAuditDemotionReason(status = {}) {
+  return `이미지 계보 감사 결과가 ${valueOrUnknown(status.image_audit_outcome)}이므로 final_publish_ready를 강등했습니다. 머지 경로의 validate:images도 같은 조건을 차단합니다. publish-ready label 금지.`;
+}
+
 function finalNewsletterHandoff(status = {}, handoff = null) {
   if (handoff?.diagnosticsOnly) {
     return {
       nextStep: 'blocked',
       label: '진단 전용',
       reason: 'diagnostics_only=true이고 public_newsletter_ready=false입니다. merge해도 홈페이지에 표시되지 않습니다.'
+    };
+  }
+  if (imageAuditDemoted(status)) {
+    return {
+      nextStep: 'rerun_required',
+      label: '이미지 계보 감사 실패로 강등',
+      reason: imageAuditDemotionReason(status)
     };
   }
   if (status.final_publish_ready === true && status.validate_outcome === 'success') {
@@ -81,6 +101,13 @@ function finalNewsletterVerdict(status = {}, handoff = null) {
       label: '진단 전용',
       action: 'merge하지 말고 failure diagnostics와 repair artifact를 확인하세요.',
       firstLook: 'public_newsletter_ready=false입니다. merge해도 홈페이지에 표시되지 않습니다.'
+    };
+  }
+  if (imageAuditDemoted(status)) {
+    return {
+      label: '이미지 계보 감사 실패로 강등',
+      action: 'image-audit-report.json의 발행 차단 항목을 고친 뒤 다시 실행하세요. AI 자동 발행 기준을 통과한 PR이 아니므로 publish-ready label 금지.',
+      firstLook: imageAuditDemotionReason(status)
     };
   }
   if (status.final_publish_ready === true && status.validate_outcome === 'success') {
@@ -163,6 +190,7 @@ function renderPublicationDecisionSummary(status, handoff) {
     `| Merge 후 홈페이지 표시 여부 | ${homepage} |`,
     `| publish-ready label | ${publishReadyLabel} |`,
     '',
+    `- image_audit_outcome: ${valueOrUnknown(status.image_audit_outcome)}`,
     `- review_publication_ready: ${booleanText(handoff.reviewPublicationReady)}`,
     `- diagnostics_only: ${booleanText(handoff.diagnosticsOnly)}`,
     `- homepage_visible_after_merge: ${booleanText(handoff.homepageVisibleAfterMerge)}`,
@@ -177,6 +205,7 @@ function renderPublicationDecisionSummary(status, handoff) {
 
 module.exports = {
   numericStatusValue,
+  imageAuditDemoted,
   finalNewsletterHardBlockers,
   finalNewsletterHandoff,
   finalNewsletterVerdict,
