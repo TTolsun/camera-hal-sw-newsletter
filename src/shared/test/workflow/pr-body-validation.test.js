@@ -720,3 +720,46 @@ function traceStatus(overrides = {}) {
     ...overrides
   };
 }
+
+// #896의 진짜 난이도는 본문 자기일관성이다. 감사 강등을 본문 전체에 일관되게 반영하지 못하면
+// 03 workflow가 PR 생성 전에 pr-body 검증에서 죽어, 그 주 리뷰 표면이 통째로 사라진다.
+test('validate-pr-body accepts an image-audit demoted newsletter body', () => {
+  const root = fsTempRoot('newsroom-pr-body-');
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true
+  });
+  writePublicNewsletterArtifacts(root, date);
+  const changedArtifacts = [
+    `articles/newsletters/${date}/newsletter.md`,
+    `articles/newsletters/${date}/index.html`,
+    'articles/data/newsletters.json',
+    `articles/content/newsroom/${date}/quality-report.json`
+  ];
+  const filePath = path.join(root, '.tmp', 'newsroom-pr-body.md');
+  const body = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'success',
+    imageAuditOutcome: 'failure',
+    changedArtifacts
+  });
+  writeText(filePath, body);
+
+  // 검증기가 통과했다는 사실만으로는 부족하다. 강등되지 않은 본문도 통과하기 때문에, 검증 대상이
+  // 실제로 강등된 본문인지 먼저 확인한다.
+  assert.match(body, /^\| 자동 발행 기준 \| 실패 \|$/m);
+
+  const result = validatePrBodyFile(filePath, {
+    root,
+    date,
+    type: 'newsletter',
+    validateOutcome: 'success',
+    imageAuditOutcome: 'failure',
+    requirePublishStatusConsistency: true,
+    requireHomepageHeadlineDesignReview: false
+  });
+
+  assert.equal(result.ok, true, result.errors.join('\n'));
+  assert.equal(result.bodyKind, 'generated-newsletter');
+});

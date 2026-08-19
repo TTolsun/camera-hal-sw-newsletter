@@ -1742,3 +1742,53 @@ test('candidate trace table does not produce broken Markdown links when title co
   assert.deepEqual(brokenLinkRows, [], `broken link rows found:\n${brokenLinkRows.join('\n')}`);
   assert.doesNotMatch(traceSection, /\[\[PATCH/);
 });
+
+// #896: 이미지 계보 감사가 실패한 주의 본문은 publish-ready로 읽히면 안 된다. 라벨만 꺾이고
+// 본문이 그대로면 편집장이 실제로 읽는 쪽은 여전히 "AI 자동 발행 가능"이라, 표시 모순이 그대로
+// 사람의 merge 판단으로 이어진다.
+test('newsroom PR body demotes the publication verdict when the image lineage audit failed', () => {
+  const root = fsTempRoot('newsroom-pr-body-');
+  const date = '2026-05-08';
+  writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true
+  });
+  writePublicNewsletterArtifacts(root, date);
+  const changedArtifacts = [
+    `articles/newsletters/${date}/newsletter.md`,
+    `articles/newsletters/${date}/index.html`,
+    'articles/data/newsletters.json',
+    `articles/content/newsroom/${date}/quality-report.json`
+  ];
+
+  const demoted = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'success',
+    imageAuditOutcome: 'failure',
+    changedArtifacts
+  });
+  const demotedTop = demoted.slice(0, demoted.indexOf('## 상세 report'));
+
+  assert.doesNotMatch(demotedTop, /AI 자동 발행 가능/);
+  assert.match(demotedTop, /이미지 계보 감사 실패로 강등/);
+  assert.match(demotedTop, /image_audit_outcome=failure/);
+  assert.match(demotedTop, /final_publish_ready \| false/);
+  assert.match(demoted, /^\| 자동 발행 기준 \| 실패 \|$/m);
+  assert.match(demoted, /^\| publish-ready label \| 붙이지 않음 \|$/m);
+  assert.match(demoted, /^이미지 계보 감사 결과: failure$/m);
+  assert.match(demoted, /자동 발행 금지 \/ Review-only/);
+  assert.equal(validatePrBodyText(demoted, { date }).ok, true);
+
+  // 같은 주라도 감사가 성공하면 그대로 publish-ready로 읽힌다. 이 변경은 게이트를 넓히지도
+  // 좁히지도 않고 감사 결과를 본문에 전달할 뿐이다.
+  const passing = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'success',
+    imageAuditOutcome: 'success',
+    changedArtifacts
+  });
+
+  assert.match(passing.slice(0, passing.indexOf('## 상세 report')), /AI 자동 발행 가능/);
+  assert.doesNotMatch(passing, /이미지 계보 감사 실패로 강등/);
+});

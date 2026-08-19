@@ -19,6 +19,9 @@ const HOMEPAGE_VISIBILITY = Object.freeze({
 const FALLBACK_HOMEPAGE_BADGE = 'Tooling Watch Edition';
 const FALLBACK_TAGS = ['Tooling Watch Edition', 'Tooling Watch'];
 
+// 실행이 이미지 계보 감사 outcome을 보고하지 않았음을 뜻하는 sentinel.
+const IMAGE_AUDIT_OUTCOME_NOT_REPORTED = 'not_reported';
+
 const CAMERA_ANCHOR_BUCKETS = new Set([
   BUCKETS.DIRECT_AOSP_CAMERA,
   BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
@@ -28,6 +31,17 @@ const CAMERA_ANCHOR_BUCKETS = new Set([
 
 function text(value) {
   return String(value ?? '').trim();
+}
+
+// 이미지 계보 감사 게이트 판정의 단일 정본이다(#896). 03 workflow의 라벨 스텝, PR 본문
+// (publish-status), Actions run summary 세 표면이 모두 이 규칙을 써야 서로 다른 말을 하지 않는다.
+// 감사가 실제로 돌아 성공한 outcome만 통과다. skipped·cancelled를 통과로 치면 감사가 돌지 않은
+// 주에도 publish-ready로 읽힌다. outcome을 아예 보고하지 않는 실행(로컬 렌더, 다른 CLI)은 감사
+// 대상이 아니므로 게이트를 적용하지 않는다.
+function imageAuditGatePassed(outcome) {
+  const value = text(outcome);
+  if (!value || value === IMAGE_AUDIT_OUTCOME_NOT_REPORTED) return true;
+  return value === 'success';
 }
 
 function candidateBucket(candidate = {}) {
@@ -147,8 +161,10 @@ module.exports = {
   FALLBACK_HOMEPAGE_BADGE,
   FALLBACK_TAGS,
   HOMEPAGE_VISIBILITY,
+  IMAGE_AUDIT_OUTCOME_NOT_REPORTED,
   PUBLICATION_MODES,
   applyPublicationDecision,
+  imageAuditGatePassed,
   fallbackEditionNoticeLines,
   fallbackIssueTags,
   finalPublicComposition,

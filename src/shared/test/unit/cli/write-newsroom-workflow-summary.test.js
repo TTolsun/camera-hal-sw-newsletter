@@ -26,15 +26,44 @@ test('statusFromOutcome maps GitHub outcomes', () => {
   assert.equal(statusFromOutcome(''), 'pending');
 });
 
+// LOCK RETARGETED (#896). 이전 계약은 2번째 분기가 review_publication_ready를 읽는 것이었다.
+// 03 라벨 스텝이 라벨 정의(공개 파일 존재 = public_newsletter_ready)로 판정하도록 바뀌었으므로,
+// summary도 같은 입력을 봐야 한다. 이 파일의 계약이 존재하는 이유가 "summary와 PR label이
+// 어긋나지 않도록"이니, 입력이 갈라지는 순간 계약 자체가 무의미해진다.
 test('classifyPublication follows the workflow label precedence', () => {
   assert.equal(classifyPublication({ has_ai_publish_ready: 'true' }), 'publish-ready');
-  assert.equal(classifyPublication({ review_publication_ready: 'true' }), 'review-only-publication');
+  assert.equal(classifyPublication({ public_newsletter_ready: 'true' }), 'review-only-publication');
   assert.equal(classifyPublication({ diagnostics_only: 'true' }), 'diagnostics-only');
   assert.equal(
     classifyPublication({ diagnostics_only: 'true', generation_status: 'FAILED_REPAIR_REVIEWABLE' }),
     'diagnostics-only (failed-repair-reviewable)'
   );
   assert.equal(classifyPublication({}), 'needs-fix');
+});
+
+// #896: has_ai_publish_ready는 audit-images보다 먼저 도는 스텝의 출력이라 감사를 모른다. summary가
+// 그 값을 그대로 믿으면 감사 강등 주에 라벨은 review-only-publication, 본문은 "강등", summary는
+// publish-ready라고 찍혀 세 리뷰 표면이 서로 다른 말을 한다.
+test('classifyPublication demotes publish-ready when the image lineage audit failed', () => {
+  assert.equal(
+    classifyPublication({
+      has_ai_publish_ready: 'true',
+      public_newsletter_ready: 'true',
+      image_audit_outcome: 'failure'
+    }),
+    'review-only-publication'
+  );
+  // 감사가 돌지 않은 outcome(skipped·cancelled)도 통과로 치지 않는다. 라벨 스텝과 같은 규칙이다.
+  assert.equal(
+    classifyPublication({ has_ai_publish_ready: 'true', image_audit_outcome: 'skipped' }),
+    'needs-fix'
+  );
+  // 감사가 성공했거나 outcome을 보고하지 않은 실행은 그대로 publish-ready다.
+  assert.equal(
+    classifyPublication({ has_ai_publish_ready: 'true', image_audit_outcome: 'success' }),
+    'publish-ready'
+  );
+  assert.equal(classifyPublication({ has_ai_publish_ready: 'true' }), 'publish-ready');
 });
 
 test('success run renders all-passed pipeline, publish-ready, and PR link', () => {
