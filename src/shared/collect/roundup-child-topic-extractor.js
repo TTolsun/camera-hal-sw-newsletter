@@ -161,6 +161,9 @@ function bucketHintFor(value = '') {
 // 단어를 하나 붙이면 유사도가 항상 올라간다. 그러면 한 묶음글의 서로 다른 섹션이 중복 판정
 // 임계(같은 소스·같은 날짜 0.68)를 넘겨 조용히 하나로 합쳐진다. normalizeTitle이 지우는
 // 구두점(『 』 ( ) …)만 쓰면 토큰 집합이 예전과 같아 이 밴드가 생기지 않는다.
+// 단 이 동일성은 제목이 TITLE_MAX_LENGTH 안에 들어올 때만 성립한다. 마커가 예전 구분자보다
+// 두 글자 길어서 부모 제목이 잘리는 영역에서는 절단 지점이 달라져 유사도도 갈린다. 그 영역은
+// 부모 제목 144자 이상을 요구해 실제 묶음글 제목(40~70자)에서는 닿지 않는다.
 const TITLE_MAX_LENGTH = 180;
 const SECTION_HEADING_MAX_LENGTH = 120;
 const SECTION_MARKER_LENGTH = ' (『』)'.length;
