@@ -283,7 +283,11 @@ test('혼합 stamp로 거부된 weekly 기록의 사유가 generation-status에 
     const recorded = calls.writeGenerationStatus[0];
     assert.equal(recorded.weekly_output_status, 'failed');
     assert.equal(recorded.weekly_output_failure_reason, mixedStampRejection);
-    assert.deepEqual(recorded, out.generationStatusArtifact);
+
+    // 이 PR의 핵심 주장을 직접 잠근다: weekly 거부가 발행 게이트 판정에 새지 않는다.
+    // finalPublishReady는 selectionStatusExtra 스텁이 {}를 돌려주는 탓에 artifact에는
+    // 실리지 않아, 그 협력자에 넘어간 입력으로만 관측할 수 있다.
+    assert.equal(calls.selectionStatusExtraOptions[0].finalPublishReady, true);
 
     // 게이트 판정은 불변이다 — 무관한 이유로 실패한 weekly 출력이 실행 전체를 죽이면 안 된다.
     assert.equal(out.generationStatus, 'PASS');

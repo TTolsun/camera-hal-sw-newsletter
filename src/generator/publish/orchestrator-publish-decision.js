@@ -125,12 +125,15 @@ async function decidePublishReadinessAndWriteStatus({
           warnings: weeklyResult.mergeWarnings
         });
       }
-      weeklyOutputStatus = 'written';
     } catch (error) {
-      weeklyOutputStatus = 'failed';
-      weeklyOutputFailureReason = error.message;
-      console.error(`weekly newsletter output skipped: ${error.message}`);
+      weeklyOutputFailureReason = String(error?.message || error || 'Unknown weekly output failure.');
+      console.error(`weekly newsletter output skipped: ${weeklyOutputFailureReason}`);
     }
+    // 상태는 files와 같은 값에서 파생한다. try 끝에서 따로 마킹하면, weekly 3종과 인덱스를
+    // 이미 기록한 뒤 부가 산출물(weekly-merge-report.json) 쓰기가 실패했을 때 catch가
+    // 'failed'로 덮어, 같은 PR의 변경 파일 목록에는 weekly 4종이 있는데 상태만 실패로 남는
+    // 모순이 생긴다. 파생시키면 "files에 weekly가 있다 == written"이 불변식이 된다.
+    weeklyOutputStatus = weeklyArtifactFiles.length > 0 ? 'written' : 'failed';
   }
   const headlineArtifactResult = persistHeadlineStateArtifacts({
     date,
