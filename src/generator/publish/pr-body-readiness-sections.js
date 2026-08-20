@@ -18,6 +18,19 @@ const {
   booleanText
 } = require('./pr-body-format');
 
+// publish-status가 해석한 status와 resolveReviewableArtifacts가 기대하는 status는 `status` 필드의
+// 의미가 다르다. 해석된 status의 `status`는 표시용 라벨(PASS/NEEDS_FIX/FAILED)이고, 원본 생성 실행
+// 상태는 `generation_status`로 옮겨져 있다. 반면 resolver는 `status`를 생성 실행 상태로 읽어
+// FAILED_EDITOR_REVIEWABLE 같은 값으로 diagnostics-only를 판정한다. 그대로 넘기면 그 세 FAILED_*
+// 상태가 NEEDS_FIX로 접혀 분류가 뒤집히므로, 넘기기 전에 생성 실행 상태를 되돌린다.
+function resolverStatusInput(status) {
+  if (!status.generation_status) return status;
+  return { ...status, status: status.generation_status };
+}
+
+// handoff는 해석된 status(강등 반영본)를 받아야 한다. 받지 못하면 resolver가 원본 status 파일을
+// 다시 읽어 강등 이전 final_publish_ready를 보고, 같은 PR body 안에서 최상단 판정과 아래 readiness
+// 섹션이 서로 다른 말을 한다(#924).
 function resolveReviewHandoff(options = {}) {
   if (!options.date) return null;
   try {
@@ -25,6 +38,9 @@ function resolveReviewHandoff(options = {}) {
       root: options.root,
       date: options.date
     };
+    if (options.status) {
+      resolverOptions.status = resolverStatusInput(options.status);
+    }
     if (Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')) {
       resolverOptions.changedArtifacts = options.changedArtifacts;
     }
