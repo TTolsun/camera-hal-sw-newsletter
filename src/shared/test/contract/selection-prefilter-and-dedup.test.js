@@ -11,6 +11,9 @@ const {
   summarizeExclusionReasons
 } = require('../../../generator/select/newsroom-selection');
 const {
+  extractRoundupChildTopics
+} = require('../../collect/roundup-child-topic-extractor');
+const {
   articlePolicy
 } = require('../../common/newsletter-policy');
 const {
@@ -97,6 +100,39 @@ test('near-duplicate titles are prevented', () => {
 
   assert.equal(report.shortlisted_candidates.length, 1);
   assert.equal(report.excluded_candidates[0].exclusion_reasons[0], 'duplicate URL or near-duplicate title');
+});
+
+test('two camera sections of one roundup stay separate candidates after the honest title change', () => {
+  // #857 제목 형식이 후보마다 같은 상용구 토큰을 많이 붙이면, 한 묶음글의 서로 다른 섹션이
+  // 제목 유사도(같은 소스·같은 날짜일 때 기준 0.68)를 넘겨 하나로 합쳐진다. 각 섹션이 바깥 링크를
+  // 들고 있으면 URL이 서로 달라 URL 중복으로 걸러지지 않으므로(라이브 goo.gle 링크가 이 경우다)
+  // 제목 유사도가 유일한 판정 기준이 된다.
+  const html = [
+    '<h2>Advanced Professional Video</h2>',
+    '<p>Android introduces a new media framework format for professional capture. <a href="https://goo.gle/APV_IO26">Learn more</a></p>',
+    '<p>Developers can review the format in Android creator workflows and camera output tests.</p>',
+    '<h2>Ultra HDR image capture in CameraX</h2>',
+    '<p>CameraX adds Ultra HDR image capture support for preview and capture streams. <a href="https://goo.gle/UltraHDR_IO26">Learn more</a></p>',
+    '<p>Developers can enable the capture path in Android camera output tests.</p>'
+  ].join('');
+  const children = extractRoundupChildTopics({
+    source: { id: 'android-developers-blog', name: 'Android Developers Blog' },
+    parentTitle: '17 Things to know for Android developers at Google I/O',
+    parentUrl: 'https://android-developers.googleblog.com/2026/05/17-things-google-io.html',
+    publishedAt: 'Wed, 20 May 2026 10:00:00 GMT',
+    html,
+    rawText: html
+  });
+  assert.equal(children.length, 2);
+
+  const report = buildShortlistReport('2026-05-21', children.map(child => candidate({
+    title: child.title,
+    url: child.url,
+    source: 'Android Developers Blog',
+    published_date: '2026-05-20T00:00:00Z'
+  })), { minArticles: 1 });
+
+  assert.equal(report.shortlisted_candidates.length, 2);
 });
 
 test('URL normalization removes tracking query and hash', () => {

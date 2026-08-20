@@ -11,11 +11,13 @@
 // 어긋난다 — 실측).
 const GITILES_ORIGIN = 'https://android.googlesource.com';
 
-// Camera HAL 뉴스레터가 읽을 가치가 있는 AOSP 저장소. label은 후보 제목에 들어가는 사람용 설명이다.
-const WATCHED_REPOSITORIES = [
-  { path: 'platform/hardware/interfaces', label: 'Camera HAL interface (AIDL)' },
-  { path: 'platform/frameworks/av', label: 'camera framework / cameraserver' },
-  { path: 'platform/hardware/google/camera', label: 'Google Camera HAL (GCH)' }
+// Camera HAL 뉴스레터가 읽을 가치가 있는 AOSP 저장소 경로. 후보 제목에는 이 경로를 그대로 쓴다 —
+// 바인딩된 gitiles URL에서 그대로 확인되는 값만 제목에 남긴다(#857). 예전에는 저장소마다 코드에
+// 적어 둔 사람용 설명(label)을 제목에 넣었는데, 출처가 아니라 우리 코드가 쓴 편집 문구였다.
+const WATCHED_REPOSITORY_PATHS = [
+  'platform/hardware/interfaces',
+  'platform/frameworks/av',
+  'platform/hardware/google/camera'
 ];
 
 // 릴리스 델타는 저장소에 따라 수천 커밋이라 전량 조회가 비싸다. 최신 쪽부터 이만큼만 읽고,
@@ -183,7 +185,7 @@ async function collectCameraCommits(repositoryPath, previousTag, tag, fetchTextI
   return { cameraCommits, scannedCommits, truncated };
 }
 
-function buildSummary(repository, release, cameraCommits, scannedCommits, truncated, source) {
+function buildSummary(repositoryPath, release, cameraCommits, scannedCommits, truncated, source) {
   const scope = truncated
     ? `at least ${cameraCommits.length}, counted within the ${scannedCommits} newest commits of the ${release.previousTag}..${release.tag} range`
     : `${cameraCommits.length}, counted across the full ${release.previousTag}..${release.tag} range`;
@@ -197,18 +199,18 @@ function buildSummary(repository, release, cameraCommits, scannedCommits, trunca
   // 직접 들고 있어야 사실 확인이 바인딩된 URL 하나로 끝나지 않는다.
   const dateCitation = dateSource ? ` Security patch level per the AOSP build-numbers table (${dateSource}).` : '';
   return `AOSP source release ${release.tag} (security patch level ${release.releaseDate}) carries `
-    + `${scope} commit(s) touching camera paths in ${repository.path}.${examples}${dateCitation}`;
+    + `${scope} commit(s) touching camera paths in ${repositoryPath}.${examples}${dateCitation}`;
 }
 
-function buildCandidate(repository, release, cameraCommits, scannedCommits, truncated, source) {
-  const summary = buildSummary(repository, release, cameraCommits, scannedCommits, truncated, source);
-  // 끝까지 읽지 못했으면 제목의 수치도 하한으로 말한다(제목만 확정 건수처럼 남으면 바인딩된 URL로
-  // 세었을 때 값이 달라진다).
-  const count = truncated ? `at least ${cameraCommits.length}` : `${cameraCommits.length}`;
+function buildCandidate(repositoryPath, release, cameraCommits, scannedCommits, truncated, source) {
+  const summary = buildSummary(repositoryPath, release, cameraCommits, scannedCommits, truncated, source);
   return {
     source,
-    title: `AOSP ${release.tag} source release — ${count} camera change(s) in ${repository.label}`,
-    url: `${GITILES_ORIGIN}/${repository.path}/+log/${release.previousTag}..${release.tag}`,
+    // 제목에는 릴리스 태그와 저장소 경로만 남긴다. 둘 다 바인딩된 gitiles URL에서 그대로 확인된다.
+    // 건수는 이 코드의 경로 정규식과 페이지 상한에서 파생된 값이라 제목이 아니라 메타데이터로 둔다.
+    // 세는 방법과 하한 여부는 요약문이 문장으로 설명한다(#857).
+    title: `AOSP ${release.tag} source release — camera path changes in ${repositoryPath}`,
+    url: `${GITILES_ORIGIN}/${repositoryPath}/+log/${release.previousTag}..${release.tag}`,
     publishedAt: release.releaseDate,
     summary,
     sourceKind: 'release_note_item',
@@ -216,9 +218,11 @@ function buildCandidate(repository, release, cameraCommits, scannedCommits, trun
     parentUrl: source.sourceUrl || source.url,
     parentTitle: source.name,
     version_or_release: release.tag,
-    api_or_component: `AOSP ${repository.path} / camera`,
+    api_or_component: `AOSP ${repositoryPath} / camera`,
     behavior_change: summary,
-    relevanceBucketHint: 'direct_aosp_camera'
+    relevanceBucketHint: 'direct_aosp_camera',
+    camera_path_commit_count: cameraCommits.length,
+    camera_path_commit_count_is_lower_bound: truncated
   };
 }
 
@@ -248,11 +252,11 @@ async function resolveAospReleaseCameraChangeItems(text = '', source = {}, optio
   if (!isWithinCollectionWindow(release.releaseDate, now, lookbackDays)) return [];
 
   const candidates = [];
-  for (const repository of WATCHED_REPOSITORIES) {
+  for (const repositoryPath of WATCHED_REPOSITORY_PATHS) {
     const { cameraCommits, scannedCommits, truncated } =
-      await collectCameraCommits(repository.path, release.previousTag, release.tag, fetchTextImpl);
+      await collectCameraCommits(repositoryPath, release.previousTag, release.tag, fetchTextImpl);
     if (cameraCommits.length === 0) continue;
-    candidates.push(buildCandidate(repository, release, cameraCommits, scannedCommits, truncated, source));
+    candidates.push(buildCandidate(repositoryPath, release, cameraCommits, scannedCommits, truncated, source));
   }
 
   return candidates;

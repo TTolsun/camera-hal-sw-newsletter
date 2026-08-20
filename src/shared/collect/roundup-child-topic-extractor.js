@@ -152,6 +152,25 @@ function bucketHintFor(value = '') {
   return 'android_platform_camera_adjacent';
 }
 
+// heading과 부모 문서 제목은 각각 페이지에 실재하는 문자열이지만, 둘을 그대로 이어 붙이면
+// 어느 페이지에도 없는 제목이 만들어져 라이브 링크 텍스트로 나갔다(#857). 대신 두 문자열이
+// 각각 무엇인지 드러내는 "섹션 이름 (『부모 문서 제목』 섹션)" 형태로 적는다.
+// 두 요소를 모두 남기는 이유: title은 선정 스코어러의 키워드 입력이기도 해서, 한쪽을 빼면 점수가
+// 떨어져 선정 결과가 바뀐다.
+const TITLE_MAX_LENGTH = 180;
+const SECTION_HEADING_MAX_LENGTH = 120;
+const SECTION_MARKER_LENGTH = ' (『』 섹션)'.length;
+
+function roundupChildTitle(heading = '', parentTitle = '') {
+  const section = clean(heading).slice(0, SECTION_HEADING_MAX_LENGTH);
+  const parent = clean(parentTitle);
+  if (!parent) return section;
+  // 합쳐 놓고 통째로 자르면 닫는 표기가 사라져 다시 페이지 제목처럼 읽힌다. 부모 제목만 줄인다.
+  const room = TITLE_MAX_LENGTH - section.length - SECTION_MARKER_LENGTH;
+  const shownParent = parent.length <= room ? parent : `${parent.slice(0, room - 1)}…`;
+  return `${section} (『${shownParent}』 섹션)`;
+}
+
 function childUrl(parentUrl = '', block = {}) {
   if (block.anchorId) {
     try {
@@ -211,7 +230,7 @@ function extractRoundupChildTopics({
     };
     items.push({
       source,
-      title: `${block.heading} - ${parentTitle}`.slice(0, 180),
+      title: roundupChildTitle(block.heading, parentTitle),
       url,
       publishedAt,
       summary: behavior,

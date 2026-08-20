@@ -7,11 +7,25 @@ const {
   resolveAospReleaseCameraChangeItems,
   selectReleasePair
 } = require('../../../collect/aosp-release-camera-changes');
+const { normalizeCandidate } = require('../../../cli/collect-news-candidates');
 
 const SOURCE = {
   id: 'aosp-release-camera-changes',
   name: 'AOSP Release Source Drop (camera changes)',
   sourceUrl: 'https://source.android.com/docs/setup/reference/build-numbers?hl=en'
+};
+
+// normalizeCandidate는 registry entry 수준의 source 필드를 읽는다.
+const REGISTRY_SOURCE = {
+  ...SOURCE,
+  url: SOURCE.sourceUrl,
+  category: 'camera-hal',
+  section: 'Android / AOSP / Camera',
+  priority: 'high',
+  reliability: 'official',
+  candidateOnly: false,
+  requiresCrossCheck: false,
+  keywords: ['AOSP', 'Camera HAL', 'AIDL', 'cameraserver']
 };
 
 // android-17.0.0_r1의 보안 패치 레벨(2026-06-05) 직후를 가정한 고정 시각.
@@ -166,8 +180,15 @@ test('emits one candidate per repository that has camera commits in the release 
     halInterface.url,
     'https://android.googlesource.com/platform/hardware/interfaces/+log/android-16.0.0_r4..android-17.0.0_r1'
   );
-  // camera 경로를 건드리지 않은 커밋은 세지 않는다.
-  assert.match(halInterface.title, /— 1 camera change\(s\)/);
+  // 제목에는 바인딩된 URL에서 그대로 확인되는 값만 남는다: 릴리스 태그와 저장소 경로(#857).
+  assert.equal(
+    halInterface.title,
+    'AOSP android-17.0.0_r1 source release — camera path changes in platform/hardware/interfaces'
+  );
+  // camera 경로를 건드리지 않은 커밋은 세지 않는다. 코드 파생 건수는 제목이 아니라 메타데이터에 둔다.
+  assert.doesNotMatch(halInterface.title, /camera change\(s\)/);
+  assert.equal(halInterface.camera_path_commit_count, 1);
+  assert.equal(halInterface.camera_path_commit_count_is_lower_bound, false);
   assert.match(halInterface.summary, /Freeze android\.hardware\.camera\.metadata/);
   assert.ok(!halInterface.summary.includes('Add OWNERS for nfc'));
 });
@@ -218,7 +239,7 @@ test('counts camera files that a commit renames away or deletes', async () => {
   });
 
   assert.equal(items.length, 1);
-  assert.match(items[0].title, /— 1 camera change\(s\)/);
+  assert.equal(items[0].camera_path_commit_count, 1);
 });
 
 test('skips repositories whose release delta has no camera commits', async () => {
@@ -235,7 +256,7 @@ test('skips repositories whose release delta has no camera commits', async () =>
   });
 
   assert.equal(items.length, 1);
-  assert.match(items[0].title, /camera framework \/ cameraserver/);
+  assert.match(items[0].title, /platform\/frameworks\/av/);
 });
 
 test('states the count as a lower bound when paging stops at the page cap', async () => {
@@ -256,8 +277,13 @@ test('states the count as a lower bound when paging stops at the page cap', asyn
   });
 
   assert.equal(items.length, 1);
-  // 끝까지 읽지 못했으면 제목과 요약 모두 하한으로 말한다.
-  assert.match(items[0].title, /— at least \d+ camera change\(s\)/);
+  // 끝까지 읽지 못했으면 요약이 하한으로 말하고, 메타데이터가 하한임을 표시한다.
+  // 제목은 건수를 아예 말하지 않으므로 하한 여부와 무관하게 같은 문장이다(#857).
+  assert.equal(
+    items[0].title,
+    'AOSP android-17.0.0_r1 source release — camera path changes in platform/frameworks/av'
+  );
+  assert.equal(items[0].camera_path_commit_count_is_lower_bound, true);
   assert.match(items[0].summary, /at least \d+, counted within the \d+ newest commits/);
   assert.equal(requested.filter(url => url.includes('platform/frameworks/av')).length, MAX_LOG_PAGES);
 });
@@ -279,7 +305,8 @@ test('states the full range when a next token is followed by an empty page', asy
   });
 
   // 델타를 다 읽었으므로 하한이 아니라 확정 건수로 말해야 한다.
-  assert.match(items[0].title, /— 1 camera change\(s\)/);
+  assert.equal(items[0].camera_path_commit_count, 1);
+  assert.equal(items[0].camera_path_commit_count_is_lower_bound, false);
   assert.match(items[0].summary, /counted across the full android-16\.0\.0_r4\.\.android-17\.0\.0_r1 range/);
 });
 
@@ -297,7 +324,7 @@ test('one repository failing its fetch does not drop the others', async () => {
   });
 
   assert.equal(items.length, 1);
-  assert.match(items[0].title, /camera framework \/ cameraserver/);
+  assert.match(items[0].title, /platform\/frameworks\/av/);
 });
 
 test('survives a gitiles response that is not parseable', async () => {
@@ -423,4 +450,29 @@ test('returns [] when the table has no previous release to diff against', async 
 
   assert.deepEqual(items, []);
   assert.equal(fetchCount, 0);
+});
+
+test('the derived camera commit count survives candidate normalization as metadata', async () => {
+  // normalizeCandidate는 whitelist다. 여기에 없는 필드는 candidates.json에서 사라지므로,
+  // "제목에서 건수를 빼고 메타데이터로 옮겼다"는 말이 산출물에서도 참이어야 한다(#857).
+  const { fetchTextImpl } = gitilesStub({
+    'platform/hardware/interfaces': [gitilesPayload(
+      [commit('Camera: Enable surface id queries', modified('camera/metadata/aidl/Android.bp'))],
+      'next-page-token'
+    )],
+    'platform/frameworks/av': EMPTY,
+    'platform/hardware/google/camera': EMPTY
+  });
+
+  const [item] = await resolveAospReleaseCameraChangeItems(DEFAULT_HTML, REGISTRY_SOURCE, {
+    fetchTextImpl,
+    now: NOW,
+    lookbackDays: LOOKBACK_DAYS
+  });
+  const normalized = normalizeCandidate(item);
+
+  assert.equal(normalized.title, item.title);
+  assert.doesNotMatch(normalized.title, /camera change\(s\)/);
+  assert.equal(normalized.camera_path_commit_count, MAX_LOG_PAGES);
+  assert.equal(normalized.camera_path_commit_count_is_lower_bound, true);
 });
