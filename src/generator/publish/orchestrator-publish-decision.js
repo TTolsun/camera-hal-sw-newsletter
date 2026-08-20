@@ -85,6 +85,13 @@ async function decidePublishReadinessAndWriteStatus({
   const shouldWritePublicArtifacts = !editorialReviewable;
   let weeklyArtifactFiles = [];
   let weeklyFinalArticles = [];
+  // #873: 아래 catch는 데일리 발행을 지키려고 실행을 계속시킨다. 그래서 weekly 계약 거부
+  // (혼합 stamp를 막는 render 패밀리 검사, 인덱스 계약 버전 판정)가 stderr 한 줄로 사라지고,
+  // 커밋되는 산출물에는 weekly가 왜 빠졌는지가 남지 않았다. 결과를 값으로 들고 나가
+  // generation-status에 기록한다. 'not_attempted'(reviewable이라 weekly를 아예 안 씀)와
+  // 'failed'(쓰려다 거부됨)를 구분해야 "이번 주는 원래 없다"와 "빠졌다"가 갈린다.
+  let weeklyOutputStatus = 'not_attempted';
+  let weeklyOutputFailureReason = '';
   if (shouldWritePublicArtifacts) {
     fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');
     fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');
@@ -118,7 +125,10 @@ async function decidePublishReadinessAndWriteStatus({
           warnings: weeklyResult.mergeWarnings
         });
       }
+      weeklyOutputStatus = 'written';
     } catch (error) {
+      weeklyOutputStatus = 'failed';
+      weeklyOutputFailureReason = error.message;
       console.error(`weekly newsletter output skipped: ${error.message}`);
     }
   }
@@ -192,6 +202,10 @@ async function decidePublishReadinessAndWriteStatus({
       validate_ok: validateResult.ok,
       failure_kind: failureKind,
       public_output_expected: shouldWritePublicArtifacts,
+      // #873: weekly 기록 결과와 거부 사유. 관측용 값이라 발행 게이트 판정
+      // (finalPublishReady/failureKind/files)에는 들어가지 않는다.
+      weekly_output_status: weeklyOutputStatus,
+      weekly_output_failure_reason: weeklyOutputFailureReason,
       todo_found: todoFound,
       empty_source_sections: emptySourceSections,
       source_gap_count: factCheck.source_gap_count,

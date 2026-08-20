@@ -397,8 +397,9 @@ test('a weekly rerun without the marker keeps the recorded contract version', as
 // 검사(T5/#889)와 인덱스 계약 버전 판정(#873) — 이고 아래 둘이 각각을 잠근다.
 //
 // 범위 주의: 아래 둘은 거부가 writeWeeklyNewsletterArtifacts 호출자까지 **전파된다**는 것만
-// 잠근다. 그 호출자(orchestrator-publish-decision.js:113)는 아직 이 예외를 stderr 로그로만
-// 삼키므로, 거부가 게이트에 관측되는지는 이 파일이 다루지 않는다.
+// 잠근다. 그 호출자는 데일리 발행을 지키려고 예외를 잡고 실행을 계속하되, 사유를
+// generation-status의 weekly_output_status/weekly_output_failure_reason에 값으로 남긴다.
+// 그 기록은 orchestrator-publish-decision.test.js가 잠근다.
 
 // 같은 주에 v2 이슈 마커가 이전 실행에서 넘어온 v1 section 위에 씌워지는 혼합 stamp는
 // T5(#889)가 render 진입에서 hard-fail로 막는다. 그 판정 자체는 #889의 것이고, 여기서
