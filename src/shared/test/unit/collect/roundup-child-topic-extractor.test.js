@@ -63,7 +63,7 @@ test('roundup child title marks a parent-document section instead of inventing a
   // 어느 페이지에도 없는 제목이었다(#857). 제목은 두 문자열이 어디서 왔는지 드러내야 한다.
   assert.equal(
     children[0].title,
-    'Advanced Professional Video (『Google I/O recap for Android developers』 섹션)'
+    'Advanced Professional Video (『Google I/O recap for Android developers』)'
   );
   assert.notEqual(
     children[0].title,
@@ -87,8 +87,24 @@ test('a long parent title is shortened inside the section marker, not cut into a
   assert.ok(title.length <= 180, title);
   // 합쳐 놓고 통째로 자르면 닫는 표기가 사라져 다시 페이지 제목처럼 읽힌다. 부모 제목만 줄인다.
   assert.ok(title.startsWith('Advanced Professional Video (『'), title);
-  assert.ok(title.endsWith('』 섹션)'), title);
+  assert.ok(title.endsWith('』)'), title);
   assert.ok(title.includes('…'), title);
+});
+
+test('a long section heading is shortened with an ellipsis, not silently cut mid-word', () => {
+  // h2~h4가 없는 묶음글은 <li> 첫 문장을 heading으로 쓴다. 표시 없이 자르면 페이지 어디에도 없는
+  // 문자열이 "이 문서의 정확한 섹션 이름"으로 발행돼 #857이 고치려는 결함을 heading 쪽에서 반복한다.
+  const longHeading = `Android introduces ${'a reworked camera output and video capture pipeline '.repeat(3)}for creators`;
+  const children = extract(`
+    <ul>
+      <li>${longHeading}. Developers can use the Ultra HDR capture path in Android camera output tests.</li>
+    </ul>
+  `);
+
+  const { title } = children[0];
+  assert.ok(title.startsWith('Android introduces a reworked camera output'), title);
+  assert.ok(title.includes('… (『'), title);
+  assert.ok(title.endsWith('』)'), title);
 });
 
 test('roundup extractor rejects audio-only child topics', () => {

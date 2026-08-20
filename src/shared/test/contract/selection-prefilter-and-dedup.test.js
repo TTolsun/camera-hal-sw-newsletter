@@ -103,22 +103,24 @@ test('near-duplicate titles are prevented', () => {
 });
 
 test('two camera sections of one roundup stay separate candidates after the honest title change', () => {
-  // #857 제목 형식이 후보마다 같은 상용구 토큰을 많이 붙이면, 한 묶음글의 서로 다른 섹션이
-  // 제목 유사도(같은 소스·같은 날짜일 때 기준 0.68)를 넘겨 하나로 합쳐진다. 각 섹션이 바깥 링크를
-  // 들고 있으면 URL이 서로 달라 URL 중복으로 걸러지지 않으므로(라이브 goo.gle 링크가 이 경우다)
-  // 제목 유사도가 유일한 판정 기준이 된다.
+  // titleSimilarity는 토큰 집합 겹침/max라, 제목 형식이 후보마다 같은 단어를 하나라도 더 붙이면
+  // 유사도가 항상 올라간다. 그러면 한 묶음글의 서로 다른 섹션이 중복 판정 임계(같은 소스·같은 날짜
+  // 0.68)를 넘겨 조용히 하나로 합쳐진다. 각 섹션이 바깥 링크를 들고 있으면 URL이 서로 달라 URL
+  // 중복으로는 걸러지지 않으므로(라이브 goo.gle 링크가 이 경우다) 제목 유사도가 유일한 판정 기준이다.
+  // fixture는 그 밴드 안(부모 8토큰, heading 3·4토큰)으로 골랐다 — 상용구 단어를 하나만 붙여도
+  // 0.6667에서 0.6923으로 올라 이 테스트가 실패한다.
   const html = [
     '<h2>Advanced Professional Video</h2>',
     '<p>Android introduces a new media framework format for professional capture. <a href="https://goo.gle/APV_IO26">Learn more</a></p>',
     '<p>Developers can review the format in Android creator workflows and camera output tests.</p>',
-    '<h2>Ultra HDR image capture in CameraX</h2>',
+    '<h2>Ultra HDR image capture</h2>',
     '<p>CameraX adds Ultra HDR image capture support for preview and capture streams. <a href="https://goo.gle/UltraHDR_IO26">Learn more</a></p>',
     '<p>Developers can enable the capture path in Android camera output tests.</p>'
   ].join('');
   const children = extractRoundupChildTopics({
     source: { id: 'android-developers-blog', name: 'Android Developers Blog' },
-    parentTitle: '17 Things to know for Android developers at Google I/O',
-    parentUrl: 'https://android-developers.googleblog.com/2026/05/17-things-google-io.html',
+    parentTitle: 'Google I/O 2026 recap for Android developers',
+    parentUrl: 'https://android-developers.googleblog.com/2026/05/io-2026-recap.html',
     publishedAt: 'Wed, 20 May 2026 10:00:00 GMT',
     html,
     rawText: html
