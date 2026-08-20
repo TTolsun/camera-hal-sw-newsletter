@@ -162,8 +162,9 @@ function bucketHintFor(value = '') {
 // 임계(같은 소스·같은 날짜 0.68)를 넘겨 조용히 하나로 합쳐진다. normalizeTitle이 지우는
 // 구두점(『 』 ( ) …)만 쓰면 토큰 집합이 예전과 같아 이 밴드가 생기지 않는다.
 // 단 이 동일성은 제목이 TITLE_MAX_LENGTH 안에 들어올 때만 성립한다. 마커가 예전 구분자보다
-// 두 글자 길어서 부모 제목이 잘리는 영역에서는 절단 지점이 달라져 유사도도 갈린다. 그 영역은
-// 부모 제목 144자 이상을 요구해 실제 묶음글 제목(40~70자)에서는 닿지 않는다.
+// 두 글자 길어서, 절단이 일어나는 영역(heading + SECTION_MARKER_LENGTH + 부모 제목 > 180)에서는
+// 절단 지점이 달라져 유사도도 갈린다. 전수 스캔(9500쌍) 결과 절단이 없는 2264쌍은 유사도 차이가
+// 0이고, 절단 영역에서만 신규 병합 36건(전부 heading 106자 이상)·병합 회피 396건이 나온다.
 const TITLE_MAX_LENGTH = 180;
 const SECTION_HEADING_MAX_LENGTH = 120;
 const SECTION_MARKER_LENGTH = ' (『』)'.length;
