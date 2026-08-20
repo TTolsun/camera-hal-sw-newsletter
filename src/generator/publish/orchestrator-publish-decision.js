@@ -207,6 +207,8 @@ async function decidePublishReadinessAndWriteStatus({
       public_output_expected: shouldWritePublicArtifacts,
       // #873: weekly 기록 결과와 거부 사유. 관측용 값이라 발행 게이트 판정
       // (finalPublishReady/failureKind/files)에는 들어가지 않는다.
+      // 사유는 status와 독립이다: 'written'이어도 부가 산출물 실패가 실릴 수 있으므로,
+      // 실패 판정은 항상 weekly_output_status로 한다.
       weekly_output_status: weeklyOutputStatus,
       weekly_output_failure_reason: weeklyOutputFailureReason,
       todo_found: todoFound,

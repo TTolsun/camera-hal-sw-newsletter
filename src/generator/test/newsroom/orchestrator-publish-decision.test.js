@@ -30,7 +30,8 @@ function stubModule(key, exports) {
 }
 
 // 무거운 협력자를 모두 stub으로 교체하고 호출 기록을 모아 control-flow를 고정한다.
-// options.weeklyThrows / options.deepDiveThrows로 해당 협력자의 실패를 주입할 수 있다.
+// options.weeklyThrows / options.deepDiveThrows로 해당 협력자의 실패를 주입할 수 있고,
+// options.weeklyMergeWarnings로 weekly 병합 경고를 실어 부가 산출물 기록 경로를 켤 수 있다.
 async function withStubbedCollaborators(run, options = {}) {
   const decisionKey = require.resolve(DECISION_MODULE);
   const calls = {
@@ -90,7 +91,7 @@ async function withStubbedCollaborators(run, options = {}) {
         if (options.weeklyThrows) throw options.weeklyThrows;
         return {
           files: ['articles/newsletters/weekly/x/index.html'],
-          mergeWarnings: [],
+          mergeWarnings: options.weeklyMergeWarnings || [],
           mergeDecisions: [],
           weeklyKey: 'wk',
           articles: weeklyArticles
@@ -303,6 +304,30 @@ test('혼합 stamp로 거부된 weekly 기록의 사유가 generation-status에 
       'articles/state/article-exposure-history.json'
     ]);
   }, { weeklyThrows: new Error(mixedStampRejection) });
+});
+
+// weekly 3종과 인덱스는 정상 기록됐는데 부가 산출물(weekly-merge-report.json) 쓰기만 실패한 주.
+// 상태 마킹을 try 끝으로 되돌리면 catch가 'failed'로 덮어, 커밋된 generation-status는 실패인데
+// 같은 PR 변경 파일 목록에는 weekly가 들어 있는 상태가 된다 — 새 필드가 만들려던 구분이 정확히
+// 뒤집힌다. 상태를 files와 같은 값에서 파생시킨다는 불변식을 여기서 집행한다.
+test('weekly가 기록된 주는 부가 산출물이 실패해도 written으로 남고 사유만 실린다', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    // newsroomDir 자리에 디렉터리가 아닌 파일을 넘겨 weekly-merge-report.json 쓰기만 실패시킨다
+    // (writeJson의 mkdirSync가 EEXIST로 throw). weekly writer 자체는 성공한 상태다.
+    const newsroomFile = path.join(tempRoot('publish-decision-newsroom-'), 'not-a-directory');
+    fs.writeFileSync(newsroomFile, '', 'utf8');
+
+    const out = await decide(baseArgs(newsroomFile, newsletterDir));
+
+    const recorded = calls.writeGenerationStatus[0];
+    assert.equal(recorded.weekly_output_status, 'written');
+    assert.notEqual(recorded.weekly_output_failure_reason, '');
+
+    // weekly가 실제로 기록됐다는 증거 — 상태는 바로 이 값에서 파생돼야 한다.
+    assert.ok(out.files.includes('articles/newsletters/weekly/x/index.html'));
+    assert.equal(calls.deepDive.length, 1);
+  }, { weeklyMergeWarnings: ['weekly merge warning'] });
 });
 
 test('reviewable(NEEDS_FIX) 입력: 공개 산출물을 쓰지 않고 validate를 건너뛴다', async () => {
