@@ -151,12 +151,21 @@
   // 각자 따로 하면 하나만 채워진 경우(예: week_key만 있고 날짜가 없음) 라벨은 대상 주, range는
   // 발행 주를 가리키는 화면 불일치가 생긴다 — 한 함수로 모아 항상 같은 소스를 쓰게 한다. 라우팅용
   // weeklyKey(발행 identity)는 이 판정과 무관하게 그대로 둔다.
+  //
+  // coverage_mode는 discriminated union이다(리뷰 fix 3). legacy_rolling은 실제 ISO 주가 아닌
+  // rolling 조회 범위일 뿐이라 주 라벨을 붙일 근거가 없다 — key: null을 돌려주고 날짜만 채운다.
+  // cardKeyLabel이 key가 없으면 발행 주(weeklyKey)로 폴백하고, weekRangeText는 그대로 rolling
+  // 범위를 쓴다.
   function entryCoverageDisplay(entry) {
     const key = String(entry && entry.coverage_week_key || '').trim();
     const start = String(entry && entry.coverage_start_date || '').trim();
     const end = String(entry && entry.coverage_end_date || '').trim();
-    const valid = WEEKLY_KEY_PATTERN.test(key) && DATE_PATTERN.test(start) && DATE_PATTERN.test(end);
-    return valid ? { key, start, end } : null;
+    const datesValid = DATE_PATTERN.test(start) && DATE_PATTERN.test(end);
+    if (entry && entry.coverage_mode === 'legacy_rolling') {
+      return datesValid ? { key: null, start, end } : null;
+    }
+    const keyValid = WEEKLY_KEY_PATTERN.test(key);
+    return (keyValid && datesValid) ? { key, start, end } : null;
   }
 
   // Card date label prefers the coverage ISO week, then the published ISO week ("2026-W28" ->
@@ -164,7 +173,7 @@
   // shows) so the meta line never duplicates it.
   function cardKeyLabel(entry) {
     const coverage = entryCoverageDisplay(entry);
-    const key = coverage ? coverage.key : weeklyKeyOf(entry);
+    const key = (coverage && coverage.key) || weeklyKeyOf(entry);
     if (key) return key.slice(5);
     return sortableDate(entry);
   }

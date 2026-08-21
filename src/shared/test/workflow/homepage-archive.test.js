@@ -538,6 +538,31 @@ test('renderArchiveCard falls back to the published week label and range when co
   assert.match(html, /<div class="card-meta archive-card-meta"><span class="issue-date">W34<\/span> · 2026\.08\.17 – 08\.23 · 총 2건<\/div>/);
 });
 
+// 리뷰 fix 3: legacy_rolling은 ISO 주 라벨을 붙일 근거가 없다(실제 rolling 조회 범위일 뿐이라).
+// 카드 라벨은 발행 주(weeklyKey)를 그대로 쓰고, range만 실제 rolling 범위로 바꾼다 — iso_week
+// 케이스(라벨·range 모두 대상 주로 교체)와 다른 discriminated union 분기다.
+test('renderArchiveCard shows the published week label with the rolling date range when coverage_mode is legacy_rolling', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    weeklyKey: '2026-W34',
+    date: '2026-08-17',
+    title: '2026 W34',
+    weekStartDate: '2026-08-17',
+    weekEndDate: '2026-08-23',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-17',
+    coverage_mode: 'legacy_rolling',
+    // coverage_week_key 없음 — legacy_rolling은 의도적으로 기록하지 않는다.
+    article_count: 2,
+    summary: '기사 C\n기사 D',
+    tags: ['Camera HAL', 'Android'],
+    html: 'newsletters/2026-W34/index.html',
+    article_images: ['https://example.com/thumb2.png']
+  });
+
+  assert.match(html, /<div class="card-meta archive-card-meta"><span class="issue-date">W34<\/span> · 2026\.08\.10 – 08\.17 · 총 2건<\/div>/);
+  assert.match(html, /href="newsletters\/2026-W34\/index\.html"/);
+});
+
 test('renderArchiveCard falls back to the site newsletter image and a kicker when data is sparse', () => {
   const html = NewsletterArchive.renderArchiveCard({
     date: '2026-06-03',

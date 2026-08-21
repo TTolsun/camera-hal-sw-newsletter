@@ -7,15 +7,27 @@
 // pass-through 값이다(Task 1~3, src/shared/common/coverage-week.js 참고).
 //
 // 판정 규칙(이 태스크의 불변식):
-//   이슈의 sections 중 coverage_type이 'catch_up'이 아닌 것들의 날짜 증거
-//   (section.date / section.published_date / section.sources[].date 중 파싱 가능한 값)를 모두
-//   모아, coverage_end_exclusive_at(E) 이상인 것이 하나라도 있으면 그 이슈는 "다음 실행일(run-day)
+//   이슈의 sections 중 coverage_type이 'catch_up'이 아닌 것들의 날짜 증거를 모두 모아,
+//   coverage_end_exclusive_at(E) 이상인 것이 하나라도 있으면 그 이슈는 "다음 실행일(run-day)
 //   기사가 섞여 들어온" 것이므로 legacy_rolling으로 분류한다. 전부 E 미만이면 iso_week이다.
 //   날짜 값이 존재하는데(값은 비어있지 않은데) 날짜로 파싱되지 않으면 "손상된 증거"로 보고,
 //   그 경우 다른 증거가 legacy_rolling을 시사하더라도 판정을 내리지 않고 fail로 보고한다
-//   (안전 기본값: 데이터가 의심스러우면 추측하지 않는다). 값이 아예 없는 필드는 "증거 없음"일
-//   뿐 손상이 아니므로 조용히 건너뛴다 — 실제 커밋된 발행분은 이 3개 필드를 채운 적이 없어서,
-//   증거가 전혀 없는 이슈는 (반증이 없으므로) iso_week으로 분류된다.
+//   (안전 기본값: 데이터가 의심스러우면 추측하지 않는다).
+//
+//   날짜 증거는 2단계로 찾는다(리뷰 fix 1 — 1차 소스가 실제 커밋된 발행분에 전혀 채워진 적이
+//   없다는 것이 실측으로 확인됨, W19~W34 전수 스캔에서 하나도 없었다):
+//     1차: section.date / section.published_date / section.sources[].date.
+//     2차(1차가 전부 비어 있을 때만): articles/content/newsroom/<anchor>/summary-cache-report.json
+//       의 entries[]를 section.source_candidate_hash(우선) 또는 section.source_candidate_url /
+//       section.sources[].url 로 대조해 그 항목의 published_date를 쓴다. 이 파일은 후보 URL마다
+//       실제 방문 시점의 published_date를 담고 있어(gemini-source-discovery 단계 산출물), 실제
+//       저장소 W20~W34 evidence 보유 주 30/31 section에서 매칭이 확인됐다.
+//   두 단계 모두 값을 하나도 못 찾으면 "증거 없음"으로 iso_week 처리하되(반증이 없으므로),
+//   판정 표에 evidence: none을 남겨 사용자가 Task 5 승인 때 그 사실을 알 수 있게 한다.
+//
+//   날짜 후보가 여러 개(같은 섹션에 date와 published_date가 둘 다 있거나, sources[]가 여러 개)면
+//   첫 파싱 성공값만 보지 않고 전부 파싱해 전부 대조한다(리뷰 fix 2 — first-wins였다면 뒤쪽의
+//   창 밖 날짜나 손상된 날짜를 조용히 놓친다).
 //
 // legacy_rolling일 때 coverage_week_key는 기록하지 않는다. ISO 주 라벨을 붙일 근거가 없는데
 // 라벨만 붙이면 잘못된 주를 보여주는 셈이라, 표시 계층(coverageDisplayBounds, Task 2/3)의
@@ -87,42 +99,109 @@ function daysBeforeUtc(dateText, days) {
   return formatUtcDate(new Date(Date.UTC(year, month - 1, day) - days * DAY_MS));
 }
 
-// 섹션 하나의 날짜 증거. 증거가 아예 없으면 damaged:false, ms:null.
-// 값이 있는데(비어있지 않은데) 날짜로 파싱되지 않으면 damaged:true.
-function sectionDateEvidence(section = {}) {
-  const candidates = [
+function readJsonSafe(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch (_) {
+    return null;
+  }
+}
+
+// 2차 증거 소스: articles/content/newsroom/<anchor>/summary-cache-report.json의 entries[]를
+// url_hash와 url 두 키로 색인한다(section.source_candidate_hash 우선, 없으면
+// section.source_candidate_url/sources[].url로 대조). 파일이 없거나 깨져 있으면 빈 색인을
+// 돌려준다 — 2차 증거가 없을 뿐 도구가 멈추면 안 된다.
+function buildNewsroomDateIndex(root, anchor) {
+  const byHash = new Map();
+  const byUrl = new Map();
+  const cache = readJsonSafe(path.join(root, 'articles', 'content', 'newsroom', anchor, 'summary-cache-report.json'));
+  for (const entry of ensureArray(cache && cache.entries)) {
+    const publishedDate = entry && entry.published_date;
+    if (!publishedDate) continue;
+    const hash = entry.cache_key && entry.cache_key.url_hash;
+    if (hash) byHash.set(hash, publishedDate);
+    if (entry.url) byUrl.set(entry.url, publishedDate);
+  }
+  return { byHash, byUrl };
+}
+
+const EMPTY_NEWSROOM_INDEX = { byHash: new Map(), byUrl: new Map() };
+
+// 값이 있는(비어있지 않은) 원본 문자열만 남긴다 — 필드가 비어있음은 증거 없음이지 손상이 아니다.
+function nonEmptyStrings(values) {
+  return values
+    .map(raw => (raw === undefined || raw === null ? '' : String(raw).trim()))
+    .filter(Boolean);
+}
+
+// 1차: 이슈 section 자체에 기록된 날짜 필드.
+function fieldEvidenceRaw(section = {}) {
+  return nonEmptyStrings([
     section.date,
     section.published_date,
     ...ensureArray(section.sources).map(source => source && source.date)
-  ];
-  let ms = null;
-  for (const raw of candidates) {
-    const text = raw === undefined || raw === null ? '' : String(raw).trim();
-    if (!text) continue; // 필드가 비어있음 = 증거 없음(손상 아님) — 조용히 건너뛴다.
-    const parsed = Date.parse(text);
-    if (!Number.isFinite(parsed)) {
-      return { damaged: true, raw: text };
-    }
-    if (ms === null) ms = parsed;
-  }
-  return { damaged: false, ms };
+  ]);
 }
 
-// 불변식 판정: { ok: true, mode } 또는 { ok: false, reason }.
-function classifyIssueCoverage({ sections, coverageEndExclusiveAt }) {
+// 2차: newsroom summary-cache-report.json 대조. hash 매칭을 우선하고, hash가 없거나 안 맞으면
+// url로도 대조한다(같은 값이 중복 매칭되어도 evaluateDateList가 전부 같은 결과를 내므로 무해하다).
+function newsroomEvidenceRaw(section = {}, newsroomIndex) {
+  const urls = nonEmptyStrings([section.source_candidate_url, ...ensureArray(section.sources).map(source => source && source.url)]);
+  const raw = [];
+  const hash = section.source_candidate_hash;
+  if (hash && newsroomIndex.byHash.has(hash)) raw.push(newsroomIndex.byHash.get(hash));
+  for (const url of urls) {
+    if (newsroomIndex.byUrl.has(url)) raw.push(newsroomIndex.byUrl.get(url));
+  }
+  return nonEmptyStrings(raw);
+}
+
+// 후보 문자열 목록을 전부 파싱한다(첫 값만 보지 않는다 — 리뷰 fix 2). 값이 있는데 파싱이 안 되면
+// 그 즉시 손상으로 보고한다.
+function evaluateDateList(rawList) {
+  const dates = [];
+  for (const raw of rawList) {
+    const parsed = Date.parse(raw);
+    if (!Number.isFinite(parsed)) {
+      return { damaged: true, raw };
+    }
+    dates.push(parsed);
+  }
+  return { damaged: false, dates };
+}
+
+// 섹션 하나의 날짜 증거. 1차(이슈 필드)가 하나라도 있으면 그것만 쓰고, 전부 비어 있을 때만
+// 2차(newsroom 대조)로 넘어간다. 둘 다 없으면 source: 'none'(증거 없음, 손상 아님).
+function sectionDateEvidence(section = {}, newsroomIndex = EMPTY_NEWSROOM_INDEX) {
+  const fieldRaw = fieldEvidenceRaw(section);
+  if (fieldRaw.length > 0) return { ...evaluateDateList(fieldRaw), source: 'issue_field' };
+  const newsroomRaw = newsroomEvidenceRaw(section, newsroomIndex);
+  if (newsroomRaw.length > 0) return { ...evaluateDateList(newsroomRaw), source: 'newsroom_artifact' };
+  return { damaged: false, dates: [], source: 'none' };
+}
+
+// 불변식 판정: { ok: true, mode, evidenceSources } 또는 { ok: false, reason }.
+// evidenceSources는 실제로 증거를 찾아낸 소스 태그 집합이다('issue_field'/'newsroom_artifact') —
+// 하나도 없으면 빈 배열이고, 이는 "증거 없음(반증 없음 → iso_week)" 상태를 보고용으로 남긴다.
+function classifyIssueCoverage({ sections, coverageEndExclusiveAt, newsroomIndex = EMPTY_NEWSROOM_INDEX }) {
   const endExclusiveMs = Date.parse(coverageEndExclusiveAt);
   let sawForwardDatedEvidence = false;
+  const sourcesSeen = new Set();
   for (const section of ensureArray(sections)) {
     if (!section || section.coverage_type === 'catch_up') continue;
-    const evidence = sectionDateEvidence(section);
+    const evidence = sectionDateEvidence(section, newsroomIndex);
     if (evidence.damaged) {
       return { ok: false, reason: `날짜 증거 손상(파싱 불가): "${evidence.raw}"` };
     }
-    if (evidence.ms !== null && evidence.ms >= endExclusiveMs) {
-      sawForwardDatedEvidence = true;
-    }
+    if (evidence.source !== 'none') sourcesSeen.add(evidence.source);
+    if (evidence.dates.some(ms => ms >= endExclusiveMs)) sawForwardDatedEvidence = true;
   }
-  return { ok: true, mode: sawForwardDatedEvidence ? 'legacy_rolling' : 'iso_week' };
+  return {
+    ok: true,
+    mode: sawForwardDatedEvidence ? 'legacy_rolling' : 'iso_week',
+    evidenceSources: [...sourcesSeen]
+  };
 }
 
 function isoWeekFields(coverage, anchor) {
@@ -176,7 +255,7 @@ function planIssueBackfill({ root, weeklyKey }) {
   const dir = issueDir(root, weeklyKey);
   const issue = JSON.parse(fs.readFileSync(path.join(dir, 'issue.json'), 'utf8'));
   const anchor = issue.date;
-  const base = { weeklyKey, anchor, coverageLabel: '-', mode: '-', reason: '' };
+  const base = { weeklyKey, anchor, coverageLabel: '-', mode: '-', evidence: '-', reason: '' };
 
   if (!fs.existsSync(evidencePath(root, anchor))) {
     return { ...base, verdict: 'skipped_no_evidence' };
@@ -189,13 +268,16 @@ function planIssueBackfill({ root, weeklyKey }) {
     return { ...base, verdict: 'fail', reason: `anchor 날짜가 무효합니다: ${error.message}` };
   }
 
+  const newsroomIndex = buildNewsroomDateIndex(root, anchor);
   const classification = classifyIssueCoverage({
     sections: issue.sections,
-    coverageEndExclusiveAt: coverage.coverage_end_exclusive_at
+    coverageEndExclusiveAt: coverage.coverage_end_exclusive_at,
+    newsroomIndex
   });
   if (!classification.ok) {
     return { ...base, verdict: 'fail', reason: classification.reason };
   }
+  const evidence = classification.evidenceSources.length ? classification.evidenceSources.join('+') : 'none';
 
   const fields = classification.mode === 'iso_week' ? isoWeekFields(coverage, anchor) : legacyRollingFields(anchor);
   const mutatedIssue = { ...issue, ...fields };
@@ -212,6 +294,7 @@ function planIssueBackfill({ root, weeklyKey }) {
   return {
     ...base,
     mode: classification.mode,
+    evidence,
     coverageLabel: `${fields.coverage_start_date}~${fields.coverage_end_date}`,
     fields,
     page,
@@ -291,10 +374,10 @@ function verdictLabel(row) {
 }
 
 function formatReportTable(rows) {
-  const header = ['weeklyKey', 'anchor', 'coverage', 'mode', '판정'];
+  const header = ['weeklyKey', 'anchor', 'coverage', 'mode', 'evidence', '판정'];
   const lines = [header.join(' | '), header.map(() => '---').join(' | ')];
   for (const row of rows) {
-    lines.push([row.weeklyKey, row.anchor, row.coverageLabel, row.mode, verdictLabel(row)].join(' | '));
+    lines.push([row.weeklyKey, row.anchor, row.coverageLabel, row.mode, row.evidence, verdictLabel(row)].join(' | '));
   }
   return lines.join('\n');
 }

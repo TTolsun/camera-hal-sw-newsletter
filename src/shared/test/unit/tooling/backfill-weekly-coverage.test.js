@@ -87,6 +87,26 @@ function readWeeklyIndex(root) {
   return JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), 'utf8'));
 }
 
+function writeNewsroomCacheReport(root, anchor, entries) {
+  const dir = path.join(root, 'articles', 'content', 'newsroom', anchor);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(
+    path.join(dir, 'summary-cache-report.json'),
+    `${JSON.stringify({ schema_version: 1, date: anchor, entries }, null, 2)}\n`,
+    'utf8'
+  );
+}
+
+function newsroomIndexFixture(entries) {
+  const byHash = new Map();
+  const byUrl = new Map();
+  for (const entry of entries) {
+    if (entry.hash) byHash.set(entry.hash, entry.publishedDate);
+    if (entry.url) byUrl.set(entry.url, entry.publishedDate);
+  }
+  return { byHash, byUrl };
+}
+
 // --- classifyIssueCoverage 단위 테스트 (파일 없이 순수 함수만) ---
 
 test('classifyIssueCoverage: catch_up 아닌 기사 날짜가 전부 창 안이면 iso_week', () => {
@@ -97,7 +117,7 @@ test('classifyIssueCoverage: catch_up 아닌 기사 날짜가 전부 창 안이�
     ],
     coverageEndExclusiveAt: '2026-08-17T00:00:00.000Z'
   });
-  assert.deepEqual(result, { ok: true, mode: 'iso_week' });
+  assert.deepEqual(result, { ok: true, mode: 'iso_week', evidenceSources: ['issue_field'] });
 });
 
 test('classifyIssueCoverage: catch_up 기사는 날짜 증거 검사에서 제외된다', () => {
@@ -107,7 +127,15 @@ test('classifyIssueCoverage: catch_up 기사는 날짜 증거 검사에서 제�
     ],
     coverageEndExclusiveAt: '2026-08-17T00:00:00.000Z'
   });
-  assert.deepEqual(result, { ok: true, mode: 'iso_week' });
+  assert.deepEqual(result, { ok: true, mode: 'iso_week', evidenceSources: [] });
+});
+
+test('classifyIssueCoverage: 증거가 전혀 없으면(반증 없음) iso_week이고 evidenceSources는 비어 있다', () => {
+  const result = classifyIssueCoverage({
+    sections: [{ coverage_type: 'fresh', headline: '증거 없는 기사' }],
+    coverageEndExclusiveAt: '2026-08-17T00:00:00.000Z'
+  });
+  assert.deepEqual(result, { ok: true, mode: 'iso_week', evidenceSources: [] });
 });
 
 test('classifyIssueCoverage: 하나라도 coverage_end_exclusive_at 이후면 legacy_rolling', () => {
@@ -118,7 +146,7 @@ test('classifyIssueCoverage: 하나라도 coverage_end_exclusive_at 이후면 le
     ],
     coverageEndExclusiveAt: '2026-08-17T00:00:00.000Z'
   });
-  assert.deepEqual(result, { ok: true, mode: 'legacy_rolling' });
+  assert.deepEqual(result, { ok: true, mode: 'legacy_rolling', evidenceSources: ['issue_field'] });
 });
 
 test('classifyIssueCoverage: 날짜가 손상되어 파싱 불가하면 legacy 판정도 하지 않고 fail을 보고한다', () => {
@@ -128,6 +156,91 @@ test('classifyIssueCoverage: 날짜가 손상되어 파싱 불가하면 legacy �
       freshSection({ date: 'not-a-real-date' }) // 손상된 날짜가 섞이면 전체 판정 불가
     ],
     coverageEndExclusiveAt: '2026-08-17T00:00:00.000Z'
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.reason, /손상|파싱/);
+});
+
+// 리뷰 fix 2: 후보가 여럿이면 첫 파싱 성공값만 보지 않고 전부 대조한다. section.date는 창 안이지만
+// published_date가 창 밖(>=E)이다 — first-wins였다면 published_date를 조용히 무시하고 iso_week으로
+// 잘못 판정했을 것이다.
+test('classifyIssueCoverage: 한 섹션에 날짜 후보가 여럿이면 첫 값만 보지 않고 전부 대조한다(first-wins 회귀 방지)', () => {
+  const result = classifyIssueCoverage({
+    sections: [
+      { coverage_type: 'fresh', date: '2026-08-12', published_date: '2026-08-19' }
+    ],
+    coverageEndExclusiveAt: '2026-08-17T00:00:00.000Z'
+  });
+  assert.deepEqual(result, { ok: true, mode: 'legacy_rolling', evidenceSources: ['issue_field'] });
+});
+
+// 리뷰 fix 2: sources[].date 여러 개 중 뒤쪽 값이 손상되어 있어도 앞쪽 값만 보고 넘어가면 안 된다.
+test('classifyIssueCoverage: sources[] 여러 항목 중 뒤쪽 날짜가 손상되어도 감지한다', () => {
+  const result = classifyIssueCoverage({
+    sections: [
+      { coverage_type: 'fresh', sources: [{ date: '2026-08-12' }, { date: 'garbage' }] }
+    ],
+    coverageEndExclusiveAt: '2026-08-17T00:00:00.000Z'
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.reason, /손상|파싱/);
+});
+
+// --- 리뷰 fix 1: newsroom artifact(2차 증거) 단위 테스트 ---
+
+test('classifyIssueCoverage: 이슈 필드에 날짜가 없으면 newsroom 대조(2차)로 넘어간다 — hash 매칭', () => {
+  const newsroomIndex = newsroomIndexFixture([
+    { hash: 'hash-a', publishedDate: '2026-08-19' } // 창 밖(>=E)
+  ]);
+  const result = classifyIssueCoverage({
+    sections: [
+      { coverage_type: 'fresh', source_candidate_hash: 'hash-a', sources: [{ title: 'x', url: 'https://example.com/a' }] }
+    ],
+    coverageEndExclusiveAt: '2026-08-17T00:00:00.000Z',
+    newsroomIndex
+  });
+  assert.deepEqual(result, { ok: true, mode: 'legacy_rolling', evidenceSources: ['newsroom_artifact'] });
+});
+
+test('classifyIssueCoverage: hash가 없으면 source_candidate_url/sources[].url로 newsroom을 대조한다', () => {
+  const newsroomIndex = newsroomIndexFixture([
+    { url: 'https://example.com/b', publishedDate: '2026-08-12' } // 창 안
+  ]);
+  const result = classifyIssueCoverage({
+    sections: [
+      { coverage_type: 'fresh', sources: [{ title: 'x', url: 'https://example.com/b' }] }
+    ],
+    coverageEndExclusiveAt: '2026-08-17T00:00:00.000Z',
+    newsroomIndex
+  });
+  assert.deepEqual(result, { ok: true, mode: 'iso_week', evidenceSources: ['newsroom_artifact'] });
+});
+
+test('classifyIssueCoverage: 이슈 필드 날짜가 있으면 newsroom 대조로 넘어가지 않는다(1차 우선)', () => {
+  // newsroom에는 창 밖 날짜가 있지만, 이슈 필드(1차)에 창 안 날짜가 있으므로 1차만 쓴다.
+  const newsroomIndex = newsroomIndexFixture([
+    { hash: 'hash-c', publishedDate: '2026-08-19' }
+  ]);
+  const result = classifyIssueCoverage({
+    sections: [
+      { coverage_type: 'fresh', date: '2026-08-12', source_candidate_hash: 'hash-c' }
+    ],
+    coverageEndExclusiveAt: '2026-08-17T00:00:00.000Z',
+    newsroomIndex
+  });
+  assert.deepEqual(result, { ok: true, mode: 'iso_week', evidenceSources: ['issue_field'] });
+});
+
+test('classifyIssueCoverage: newsroom 대조 값이 손상되어 있으면 fail을 보고한다', () => {
+  const newsroomIndex = newsroomIndexFixture([
+    { hash: 'hash-d', publishedDate: 'not-a-real-date' }
+  ]);
+  const result = classifyIssueCoverage({
+    sections: [
+      { coverage_type: 'fresh', source_candidate_hash: 'hash-d' }
+    ],
+    coverageEndExclusiveAt: '2026-08-17T00:00:00.000Z',
+    newsroomIndex
   });
   assert.equal(result.ok, false);
   assert.match(result.reason, /손상|파싱/);
@@ -303,16 +416,73 @@ test('planIssueBackfill: 기존 index.html의 태그 행이 재렌더 결과와 
   assert.equal(plan.tagsChanged, true);
 });
 
-test('formatReportTable: weeklyKey | anchor | coverage | mode | 판정 열을 포함한다', () => {
+test('formatReportTable: weeklyKey | anchor | coverage | mode | evidence | 판정 열을 포함한다', () => {
   const rows = [
-    { weeklyKey: '2026-W34', anchor: '2026-08-17', coverageLabel: '2026-08-10~2026-08-16', mode: 'iso_week', verdict: 'would_update', reason: '', tagsChanged: false }
+    {
+      weeklyKey: '2026-W34',
+      anchor: '2026-08-17',
+      coverageLabel: '2026-08-10~2026-08-16',
+      mode: 'iso_week',
+      evidence: 'newsroom_artifact',
+      verdict: 'would_update',
+      reason: '',
+      tagsChanged: false
+    }
   ];
   const table = formatReportTable(rows);
   assert.match(table, /weeklyKey/);
   assert.match(table, /anchor/);
   assert.match(table, /coverage/);
   assert.match(table, /mode/);
+  assert.match(table, /evidence/);
   assert.match(table, /판정/);
   assert.match(table, /2026-W34/);
   assert.match(table, /would_update/);
+  assert.match(table, /newsroom_artifact/);
+});
+
+// --- 리뷰 fix 1 통합 테스트: 실제 파일 흐름에서 newsroom summary-cache-report.json을 2차 증거로 쓴다 ---
+
+test('실제 파일 흐름: 이슈 필드에 날짜가 없어도 newsroom summary-cache-report.json으로 legacy_rolling을 판정한다', () => {
+  const root = tempRoot('backfill-newsroom-evidence-');
+  const anchor = '2026-08-17';
+  writeEvidence(root, anchor);
+  // 실제 저장소 관측값과 같은 모양: 섹션 자체엔 date/published_date가 없고, source_candidate_hash로
+  // summary-cache-report.json의 published_date를 대조해야만 증거를 찾을 수 있다.
+  const section = freshSection({ date: undefined });
+  delete section.date;
+  section.source_candidate_hash = 'hash-real';
+  section.source_candidate_url = 'https://example.com/test';
+  writeIssueFixture(root, '2026-W34', baseIssue({ date: anchor, sections: [section] }));
+  writeNewsroomCacheReport(root, anchor, [
+    {
+      title: '테스트 소스',
+      url: 'https://example.com/test',
+      published_date: '2026-08-17T09:00:00Z', // anchor 당일 = E, 창 밖(>=E) -> legacy_rolling
+      cache_key: { url_hash: 'hash-real', published_date: '2026-08-17T09:00:00Z' }
+    }
+  ]);
+
+  const rows = runBackfill({ root, dryRun: false, weeklyKey: '2026-W34' });
+  assert.equal(rows[0].mode, 'legacy_rolling');
+  assert.match(rows[0].evidence, /newsroom_artifact/);
+
+  const issue = readIssue(root, '2026-W34');
+  assert.equal(issue.coverage_mode, 'legacy_rolling');
+  assert.equal(issue.coverage_week_key, undefined);
+});
+
+test('실제 파일 흐름: 이슈 필드도 newsroom 대조도 증거가 없으면 iso_week + evidence: none으로 보고한다', () => {
+  const root = tempRoot('backfill-no-evidence-');
+  const anchor = '2026-08-17';
+  writeEvidence(root, anchor);
+  const section = freshSection({ date: undefined });
+  delete section.date;
+  section.sources = [{ title: '테스트 소스', url: 'https://example.com/no-cache-entry' }];
+  writeIssueFixture(root, '2026-W34', baseIssue({ date: anchor, sections: [section] }));
+  // summary-cache-report.json 자체를 쓰지 않는다 — newsroom 2차 증거도 없는 상태.
+
+  const rows = runBackfill({ root, dryRun: false, weeklyKey: '2026-W34' });
+  assert.equal(rows[0].mode, 'iso_week');
+  assert.equal(rows[0].evidence, 'none');
 });

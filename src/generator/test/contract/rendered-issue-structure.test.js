@@ -395,6 +395,92 @@ test('newsletter index rejects malformed optional coverage field values', () => 
   }
 });
 
+// 리뷰 fix 3: coverage_mode는 discriminated union이다. legacy_rolling은 ISO 주 라벨을 붙일
+// 근거가 없어(실제 rolling 조회 범위일 뿐) coverage_week_key가 있으면 안 되고, 대신 날짜
+// 2개(coverage_start_date/coverage_end_date)는 반드시 있어야 한다. 그 외(iso_week 또는
+// coverage_mode 부재)는 기존 3필드 원자 규칙을 그대로 유지한다.
+test('newsletter index accepts a legacy_rolling entry with only the rolling date range (no coverage_week_key)', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-17',
+    coverage_mode: 'legacy_rolling',
+    generation_anchor_date: '2026-08-17'
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, true, result.text);
+});
+
+test('newsletter index rejects a legacy_rolling entry that also carries coverage_week_key', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-17',
+    coverage_mode: 'legacy_rolling'
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.text, /legacy_rolling must not include coverage_week_key/);
+});
+
+test('newsletter index rejects a legacy_rolling entry missing the rolling date range', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_start_date: '2026-08-10',
+    coverage_mode: 'legacy_rolling'
+    // coverage_end_date 누락 — legacy_rolling도 날짜 2개는 필수다.
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.text, /legacy_rolling requires coverage_start_date and coverage_end_date/);
+});
+
+test('newsletter index still enforces the atomic 3-field rule when coverage_mode is iso_week', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_mode: 'iso_week'
+    // coverage_end_date 누락 — iso_week(또는 mode 부재)은 3필드 원자 규칙 그대로다.
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.text, /partial coverage display fields/);
+});
+
 test('rendered issue structure does not enforce non-structural quality gates', () => {
   const { result } = validateFixture({
     sections: validSections(1).map(section => ({

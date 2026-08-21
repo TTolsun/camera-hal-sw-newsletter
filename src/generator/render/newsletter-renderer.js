@@ -333,22 +333,30 @@ function briefingHeadingHtml(issue = {}) {
 // 하나만 채워진 경우(예: week_key만 있고 날짜가 없음) 라벨은 대상 주, range는 발행 주를 가리키는
 // 화면 불일치가 생긴다 — 한 함수로 모아 라벨·range가 항상 같은 소스(coverage 전체 또는 발행 주
 // 전체)를 쓰게 한다.
+//
+// coverage_mode는 discriminated union이다(리뷰 fix 3). legacy_rolling은 실제 ISO 주가 아닌
+// rolling 조회 범위일 뿐이라 주 라벨을 붙일 근거가 없다 — key: null로 돌려주고 날짜만 채운다.
+// 호출부(issueWeekLabel)가 key가 없으면 발행 주(weekly_key)로 폴백하고, 날짜(issueKickerText)는
+// 그대로 rolling 범위를 쓴다.
 function issueCoverageDisplay(issue = {}) {
   const key = String(issue.coverage_week_key || '').trim();
   const start = String(issue.coverage_start_date || '').trim();
   const end = String(issue.coverage_end_date || '').trim();
-  const valid = /^\d{4}-W\d{2}$/.test(key)
-    && /^\d{4}-\d{2}-\d{2}$/.test(start)
-    && /^\d{4}-\d{2}-\d{2}$/.test(end);
-  return valid ? { key, start, end } : null;
+  const datesValid = /^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end);
+  if (issue.coverage_mode === 'legacy_rolling') {
+    return datesValid ? { key: null, start, end } : null;
+  }
+  const keyValid = /^\d{4}-W\d{2}$/.test(key);
+  return (keyValid && datesValid) ? { key, start, end } : null;
 }
 
 // Weekly issues are labeled by ISO week ("2026-W22" -> "2026 W22"); daily issues fall back to date.
 // coverage(대상 주)가 유효하면 그것을 우선 쓴다 — 발행 identity(weekly_key)는 그대로 두고 표시만
-// 대상 주로 바꾼다. 없으면(과거호·전환 전) 기존 weekly_key 표시를 그대로 유지한다.
+// 대상 주로 바꾼다. 없으면(과거호·전환 전, 또는 legacy_rolling이라 key가 없으면) 기존 weekly_key
+// 표시를 그대로 유지한다.
 function issueWeekLabel(issue = {}) {
   const coverage = issueCoverageDisplay(issue);
-  const key = coverage ? coverage.key : String(issue.weekly_key || '').trim();
+  const key = (coverage && coverage.key) || String(issue.weekly_key || '').trim();
   return /^\d{4}-W\d{2}$/.test(key) ? key.replace('-W', ' W') : '';
 }
 
