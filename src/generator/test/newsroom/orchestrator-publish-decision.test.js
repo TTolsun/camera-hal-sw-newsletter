@@ -30,7 +30,8 @@ function stubModule(key, exports) {
 }
 
 // 무거운 협력자를 모두 stub으로 교체하고 호출 기록을 모아 control-flow를 고정한다.
-// options.weeklyThrows / options.deepDiveThrows로 해당 협력자의 실패를 주입할 수 있다.
+// options.weeklyThrows / options.deepDiveThrows로 해당 협력자의 실패를 주입할 수 있고,
+// options.weeklyMergeWarnings로 weekly 병합 경고를 실어 부가 산출물 기록 경로를 켤 수 있다.
 async function withStubbedCollaborators(run, options = {}) {
   const decisionKey = require.resolve(DECISION_MODULE);
   const calls = {
@@ -90,7 +91,7 @@ async function withStubbedCollaborators(run, options = {}) {
         if (options.weeklyThrows) throw options.weeklyThrows;
         return {
           files: ['articles/newsletters/weekly/x/index.html'],
-          mergeWarnings: [],
+          mergeWarnings: options.weeklyMergeWarnings || [],
           mergeDecisions: [],
           weeklyKey: 'wk',
           articles: weeklyArticles
@@ -211,6 +212,10 @@ test('비reviewable PASS 입력: 공개 산출물을 쓰고 validate를 돌리�
     assert.ok(out.files.includes('articles/newsletters/2026-05-08/index.html'));
     assert.ok(out.files.includes('articles/data/newsletters.json'));
 
+    // #873: 정상 주에는 성공 상태가 같은 필드에 남아야 "기록 실패"와 "애초에 안 씀"이 구분된다.
+    assert.equal(out.generationStatusArtifact.weekly_output_status, 'written');
+    assert.equal(out.generationStatusArtifact.weekly_output_failure_reason, '');
+
     // 심층(deep-dive)은 weekly writer 뒤에, 그 주의 최종 기사 목록을 받아 실행된다.
     assert.deepEqual(calls.order, ['weekly', 'deepDive']);
     assert.equal(calls.deepDive.length, 1);
@@ -260,6 +265,71 @@ test('weekly 기록이 실패하면 심층을 돌리지 않고 데일리 산출�
   }, { weeklyThrows: new Error('weekly writer boom') });
 });
 
+// #873 작업 범위 3: 혼합 stamp(이번 실행의 v2 이슈 마커가 이월된 v1 section 위에 씌워지는 상태)
+// 정책은 "거부"다. 그 거부는 render 진입의 계약 패밀리 검사(T5/#889)가 내리고 weekly writer가
+// 그대로 전파한다. 문제는 아래 catch가 실행을 계속시키느라 사유를 stderr 한 줄로만 남겨,
+// 커밋되는 산출물에는 "weekly가 왜 빠졌는지"가 전혀 남지 않았다는 것이다.
+// 발행 실패 의미론은 그대로 둔 채(계속 진행, 게이트 판정 불변) 사유만 값으로 남긴다.
+test('혼합 stamp로 거부된 weekly 기록의 사유가 generation-status에 값으로 남는다', async () => {
+  const mixedStampRejection = 'newsletter-renderer: refusing to render an unsupported story contract — '
+    + 'story_contract_version_family_mismatch(public_contract_version=2 generation_contract_version=2 story_contract_version=1)';
+
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    const out = await decide(baseArgs(newsroomDir, newsletterDir));
+
+    // 거부 사유가 커밋되는 generation-status.json 값으로 남는다.
+    assert.equal(calls.writeGenerationStatus.length, 1);
+    const recorded = calls.writeGenerationStatus[0];
+    assert.equal(recorded.weekly_output_status, 'failed');
+    assert.equal(recorded.weekly_output_failure_reason, mixedStampRejection);
+
+    // 이 PR의 핵심 주장을 직접 잠근다: weekly 거부가 발행 게이트 판정에 새지 않는다.
+    // finalPublishReady는 selectionStatusExtra 스텁이 {}를 돌려주는 탓에 artifact에는
+    // 실리지 않아, 그 협력자에 넘어간 입력으로만 관측할 수 있다.
+    assert.equal(calls.selectionStatusExtraOptions[0].finalPublishReady, true);
+
+    // 게이트 판정은 불변이다 — 무관한 이유로 실패한 weekly 출력이 실행 전체를 죽이면 안 된다.
+    assert.equal(out.generationStatus, 'PASS');
+    assert.equal(out.failureKind, '');
+    assert.equal(out.validateResult.ok, true);
+    assert.equal(recorded.validate_ok, true);
+    assert.equal(recorded.public_output_expected, true);
+    assert.deepEqual(out.files, [
+      'articles/content/newsroom/2026-05-08/shortlisted-candidates.json',
+      'articles/newsletters/2026-05-08/newsletter.md',
+      'articles/newsletters/2026-05-08/index.html',
+      'articles/data/newsletters.json',
+      'articles/state/article-exposure-history.json'
+    ]);
+  }, { weeklyThrows: new Error(mixedStampRejection) });
+});
+
+// weekly 3종과 인덱스는 정상 기록됐는데 부가 산출물(weekly-merge-report.json) 쓰기만 실패한 주.
+// 상태 마킹을 try 끝으로 되돌리면 catch가 'failed'로 덮어, 커밋된 generation-status는 실패인데
+// 같은 PR 변경 파일 목록에는 weekly가 들어 있는 상태가 된다 — 새 필드가 만들려던 구분이 정확히
+// 뒤집힌다. 상태를 files와 같은 값에서 파생시킨다는 불변식을 여기서 집행한다.
+test('weekly가 기록된 주는 부가 산출물이 실패해도 written으로 남고 사유만 실린다', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    // newsroomDir 자리에 디렉터리가 아닌 파일을 넘겨 weekly-merge-report.json 쓰기만 실패시킨다
+    // (writeJson의 mkdirSync가 EEXIST로 throw). weekly writer 자체는 성공한 상태다.
+    const newsroomFile = path.join(tempRoot('publish-decision-newsroom-'), 'not-a-directory');
+    fs.writeFileSync(newsroomFile, '', 'utf8');
+
+    const out = await decide(baseArgs(newsroomFile, newsletterDir));
+
+    const recorded = calls.writeGenerationStatus[0];
+    assert.equal(recorded.weekly_output_status, 'written');
+    assert.notEqual(recorded.weekly_output_failure_reason, '');
+
+    // weekly가 실제로 기록됐다는 증거 — 상태는 바로 이 값에서 파생돼야 한다.
+    assert.ok(out.files.includes('articles/newsletters/weekly/x/index.html'));
+    assert.equal(calls.deepDive.length, 1);
+  }, { weeklyMergeWarnings: ['weekly merge warning'] });
+});
+
 test('reviewable(NEEDS_FIX) 입력: 공개 산출물을 쓰지 않고 validate를 건너뛴다', async () => {
   await withStubbedCollaborators(async (decide, calls) => {
     const newsroomDir = tempRoot('publish-decision-newsroom-');
@@ -292,6 +362,10 @@ test('reviewable(NEEDS_FIX) 입력: 공개 산출물을 쓰지 않고 validate�
     // generation-status는 여전히 한 번 기록된다(reviewable diagnostics 경로).
     assert.equal(calls.writeGenerationStatus.length, 1);
     assert.equal(out.generationStatusArtifact.status, 'NEEDS_FIX');
+
+    // #873: weekly를 애초에 시도하지 않은 주는 "기록 실패"와 구분돼야 한다.
+    assert.equal(out.generationStatusArtifact.weekly_output_status, 'not_attempted');
+    assert.equal(out.generationStatusArtifact.weekly_output_failure_reason, '');
   });
 });
 

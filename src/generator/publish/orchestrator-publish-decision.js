@@ -85,6 +85,13 @@ async function decidePublishReadinessAndWriteStatus({
   const shouldWritePublicArtifacts = !editorialReviewable;
   let weeklyArtifactFiles = [];
   let weeklyFinalArticles = [];
+  // #873: 아래 catch는 데일리 발행을 지키려고 실행을 계속시킨다. 그래서 weekly 계약 거부
+  // (혼합 stamp를 막는 render 패밀리 검사, 인덱스 계약 버전 판정)가 stderr 한 줄로 사라지고,
+  // 커밋되는 산출물에는 weekly가 왜 빠졌는지가 남지 않았다. 결과를 값으로 들고 나가
+  // generation-status에 기록한다. 'not_attempted'(reviewable이라 weekly를 아예 안 씀)와
+  // 'failed'(쓰려다 거부됨)를 구분해야 "이번 주는 원래 없다"와 "빠졌다"가 갈린다.
+  let weeklyOutputStatus = 'not_attempted';
+  let weeklyOutputFailureReason = '';
   if (shouldWritePublicArtifacts) {
     fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');
     fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');
@@ -119,8 +126,14 @@ async function decidePublishReadinessAndWriteStatus({
         });
       }
     } catch (error) {
-      console.error(`weekly newsletter output skipped: ${error.message}`);
+      weeklyOutputFailureReason = String(error?.message || error || 'Unknown weekly output failure.');
+      console.error(`weekly newsletter output skipped: ${weeklyOutputFailureReason}`);
     }
+    // 상태는 files와 같은 값에서 파생한다. try 끝에서 따로 마킹하면, weekly 3종과 인덱스를
+    // 이미 기록한 뒤 부가 산출물(weekly-merge-report.json) 쓰기가 실패했을 때 catch가
+    // 'failed'로 덮어, 같은 PR의 변경 파일 목록에는 weekly 4종이 있는데 상태만 실패로 남는
+    // 모순이 생긴다. 파생시키면 "files에 weekly가 있다 == written"이 불변식이 된다.
+    weeklyOutputStatus = weeklyArtifactFiles.length > 0 ? 'written' : 'failed';
   }
   const headlineArtifactResult = persistHeadlineStateArtifacts({
     date,
@@ -192,6 +205,12 @@ async function decidePublishReadinessAndWriteStatus({
       validate_ok: validateResult.ok,
       failure_kind: failureKind,
       public_output_expected: shouldWritePublicArtifacts,
+      // #873: weekly 기록 결과와 거부 사유. 관측용 값이라 발행 게이트 판정
+      // (finalPublishReady/failureKind/files)에는 들어가지 않는다.
+      // 사유는 status와 독립이다: 'written'이어도 부가 산출물 실패가 실릴 수 있으므로,
+      // 실패 판정은 항상 weekly_output_status로 한다.
+      weekly_output_status: weeklyOutputStatus,
+      weekly_output_failure_reason: weeklyOutputFailureReason,
       todo_found: todoFound,
       empty_source_sections: emptySourceSections,
       source_gap_count: factCheck.source_gap_count,
