@@ -43,6 +43,21 @@ test('resolveWeeklyArticles skips an exact duplicate without an LLM', async () =
   assert.equal(result.existingArticles.length, 1);
 });
 
+test('resolveWeeklyArticles rejects an exact duplicate arriving twice in the same run', async () => {
+  // 같은 실행의 incomingArticles 안에서 생기는 exact duplicate는 [...existing, ...appended]
+  // 스캔의 appended 쪽이 잡는다. 렌더 단계 dedupe가 없으므로 이 스캔이 유일한 방어선이다.
+  const url = 'https://example.com/same';
+  const result = await resolveWeeklyArticles({
+    existingArticles: [],
+    incomingArticles: [article('A', url), article('A again', url)]
+  });
+  assert.deepEqual(result.appendedArticles.map(a => a.headline), ['A']);
+  assert.deepEqual(result.decisions, [
+    { decision: 'append', reason: 'no_duplicate' },
+    { decision: 'reject', reason: 'exact_duplicate' }
+  ]);
+});
+
 test('resolveWeeklyArticles keeps both near-duplicates when no LLM merge is provided', async () => {
   const result = await resolveWeeklyArticles({
     existingArticles: [article('CameraX 1.6.0 release', 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0')],
