@@ -127,7 +127,7 @@ function queuedTopicQueue() {
 // 실제 배선 순서(orchestrator-publish-decision.js)를 그대로 재현한다: 위클리 공개 산출물을
 // 먼저 쓰고, 그 결과의 최종 기사 목록으로 심층을 돌린다.
 async function writeWeeklyThenDeepDive(root) {
-  const weekly = await writeWeeklyNewsletterArtifacts({ root, date: DATE, editor: editorFixture(), tags: [] });
+  const weekly = await writeWeeklyNewsletterArtifacts({ root, date: DATE, editor: editorFixture() });
   const afterWeekly = readWeeklyArtifacts(root);
   const report = runWeeklyDeepDive({ root, date: DATE, articles: weekly.articles });
   return { weekly, afterWeekly, report };
@@ -188,7 +188,7 @@ test('a deep-dive implementation error keeps the weekly public artifacts and pro
   const baseline = await writeWeeklyThenDeepDive(rootBaseline);
 
   const weekly = await writeWeeklyNewsletterArtifacts({
-    root: rootCorrupt, date: DATE, editor: editorFixture(), tags: []
+    root: rootCorrupt, date: DATE, editor: editorFixture()
   });
   // 공개 3종은 심층이 돌기 전에 이미 기록되고, 변경 artifact 목록에도 등록된다.
   for (const filePath of Object.values(weeklyArtifactPaths(rootCorrupt))) {

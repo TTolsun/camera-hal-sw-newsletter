@@ -60,7 +60,7 @@ function readIssue(root, weeklyKey) {
 test('a single publish-ready run writes the weekly page, issue.json, and a weekly index entry', async () => {
   const root = tempRoot();
   const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0';
-  const result = await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', url)]), tags: ['Camera HAL'] });
+  const result = await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', url)]) });
 
   assert.equal(result.weeklyKey, '2026-W23');
   assert.ok(result.files.includes('articles/newsletters/2026-W23/index.html'));
@@ -74,7 +74,7 @@ test('weekly tags derive archive topics and kicker from article relevance bucket
   const root = tempRoot();
   const driver = { ...section('driver', 'https://example.com/driver'), relevance_bucket: 'camera_driver_image_pipeline' };
   const ai = { ...section('ai', 'https://example.com/ai'), relevance_bucket: 'cpp_ai_tooling_fallback' };
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([driver, ai]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([driver, ai]) });
 
   // 위클리 tags 는 이슈 기본값이 아니라 그 주 기사 버킷에서 나온다: lead(camera_driver) topic 이
   // 맨 앞이라 카드 kicker 가 되고, AI 도 채워지며 baseline(Camera HAL/Android)이 뒤에 붙는다.
@@ -86,7 +86,7 @@ test('weekly tags derive archive topics and kicker from article relevance bucket
 test('written index.html carries the merged weekly tags and re-renders byte-identically from issue.json', async () => {
   const root = tempRoot();
   const driver = { ...section('driver', 'https://example.com/driver'), relevance_bucket: 'camera_driver_image_pipeline' };
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([driver]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([driver]) });
 
   const issue = readIssue(root, '2026-W23');
   const html = fs.readFileSync(path.join(root, 'articles', 'newsletters', '2026-W23', 'index.html'), 'utf8');
@@ -105,7 +105,7 @@ test('written index.html carries the merged weekly tags and re-renders byte-iden
 
 test('publishing a weekly issue regenerates sitemap.xml with the issue URL', async () => {
   const root = tempRoot();
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', 'https://example.com/a')]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', 'https://example.com/a')]) });
 
   const sitemap = fs.readFileSync(path.join(root, 'articles', 'sitemap.xml'), 'utf8');
   assert.ok(sitemap.includes('https://ttolsun.github.io/camera-hal-sw-newsletter/'));
@@ -115,8 +115,8 @@ test('publishing a weekly issue regenerates sitemap.xml with the issue URL', asy
 
 test('multiple runs in the same ISO week accumulate distinct articles into one weekly issue', async () => {
   const root = tempRoot();
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', 'https://example.com/a')]), tags: [] });
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', 'https://example.com/b')]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', 'https://example.com/a')]) });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', 'https://example.com/b')]) });
 
   const issue = readIssue(root, '2026-W23');
   assert.equal(issue.sections.length, 2);
@@ -129,16 +129,16 @@ test('multiple runs in the same ISO week accumulate distinct articles into one w
 test('a duplicate article in the same week is not added twice', async () => {
   const root = tempRoot();
   const url = 'https://example.com/same';
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', url)]), tags: [] });
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.6.0-again', url)]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', url)]) });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.6.0-again', url)]) });
 
   assert.equal(readIssue(root, '2026-W23').sections.length, 1);
 });
 
 test('a run in a new ISO week creates a separate weekly issue', async () => {
   const root = tempRoot();
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('w23', 'https://example.com/a')]), tags: [] });
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-11', editor: draft([section('w24', 'https://example.com/b')]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('w23', 'https://example.com/a')]) });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-11', editor: draft([section('w24', 'https://example.com/b')]) });
 
   assert.equal(readIssue(root, '2026-W23').sections.length, 1);
   assert.equal(readIssue(root, '2026-W24').sections.length, 1);
@@ -149,7 +149,7 @@ test('a run in a new ISO week creates a separate weekly issue', async () => {
 test('a single run cannot add more than the daily intake limit of new articles', async () => {
   const root = tempRoot();
   const sections = [1, 2, 3, 4, 5, 6, 7].map(n => section(`v${n}`, `https://example.com/${n}`, n));
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft(sections), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft(sections) });
   // dailyNewArticleLimit default is 5
   assert.equal(readIssue(root, '2026-W23').sections.length, 5);
 });
@@ -214,8 +214,7 @@ test('article_images falls back to one site-root-relative fallback path when no 
   await writeWeeklyNewsletterArtifacts({
     root,
     date: '2026-06-04',
-    editor: draft([fallbackImageSection('1.7.0', 'https://example.com/a')]),
-    tags: []
+    editor: draft([fallbackImageSection('1.7.0', 'https://example.com/a')])
   });
 
   assert.deepEqual(readWeeklyIndexFile(root)[0].article_images, ['assets/images/fallback/android.svg']);
@@ -228,7 +227,7 @@ test('article_images stays empty when sections have neither https nor fallback-a
     selectedImage: '',
     resolvedImage: { url: '../../some/other/local.png', src: '../../some/other/local.png', usedFallback: true }
   };
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([local]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([local]) });
 
   assert.deepEqual(readWeeklyIndexFile(root)[0].article_images, []);
 });
@@ -237,7 +236,7 @@ test('syncWeeklyArticleImages patches the matching weekly section, rewrites week
   const root = tempRoot();
   const url = 'https://example.com/camerax-release';
   const imageUrl = 'https://publisher.example.com/images/camera-card.png';
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]) });
   const sitemapBefore = fs.readFileSync(path.join(root, 'articles', 'sitemap.xml'), 'utf8');
 
   const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repairedImageSection('1.7.0', url, imageUrl)] });
@@ -274,7 +273,7 @@ test('syncWeeklyArticleImages is a no-op when the weekly issue.json is missing',
 
 test('syncWeeklyArticleImages is a no-op for missing daily sections and non-matching identity', async () => {
   const root = tempRoot();
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', 'https://example.com/a')]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', 'https://example.com/a')]) });
   const snapshot = snapshotFiles(weeklyArtifactPaths(root, '2026-W23'));
 
   const emptyResult = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [] });
@@ -298,7 +297,7 @@ test('syncWeeklyArticleImages does not downgrade a bound weekly image to a daily
   const root = tempRoot();
   const url = 'https://example.com/camerax-release';
   const imageUrl = 'https://publisher.example.com/images/camera-card.png';
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([repairedImageSection('1.7.0', url, imageUrl)]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([repairedImageSection('1.7.0', url, imageUrl)]) });
   const snapshot = snapshotFiles(weeklyArtifactPaths(root, '2026-W23'));
 
   const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [fallbackImageSection('1.7.0', url)] });
@@ -314,7 +313,7 @@ test('syncWeeklyArticleImages is idempotent', async () => {
   const root = tempRoot();
   const url = 'https://example.com/camerax-release';
   const repaired = repairedImageSection('1.7.0', url, 'https://publisher.example.com/images/camera-card.png');
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]), tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]) });
 
   const first = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repaired] });
   assert.equal(first.patchedSectionCount, 1);

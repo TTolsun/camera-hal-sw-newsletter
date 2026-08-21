@@ -18,7 +18,6 @@ const fs = require('fs');
 const path = require('path');
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { writeJson } = require('../../shared/common/common');
-const { issueTags } = require('../render/newsletter-renderer');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { COMPOSITION_MODES } = require('../select/newsroom-selection');
 const {
@@ -111,7 +110,7 @@ async function decidePublishReadinessAndWriteStatus({
         })
       });
       const weeklyResult = await writeWeeklyNewsletterArtifacts({
-        root, date, editor, tags: issueTags(editor), ...weeklyMerge
+        root, date, editor, ...weeklyMerge
       });
       weeklyArtifactFiles = weeklyResult.files;
       weeklyFinalArticles = ensureArray(weeklyResult.articles);

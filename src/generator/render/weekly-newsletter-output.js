@@ -205,7 +205,7 @@ function syncWeeklyArticleImages({ root = process.cwd(), date, sections } = {}) 
   return result;
 }
 
-async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, editor, tags = [], mergeDuplicate, validateMerged } = {}) {
+async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, editor, mergeDuplicate, validateMerged } = {}) {
   const weeklyKey = weeklyKeyForDate(date);
   const existingIssue = loadExistingWeeklyIssue(root, weeklyKey);
   const existingSections = existingIssue ? ensureArray(existingIssue.sections) : [];

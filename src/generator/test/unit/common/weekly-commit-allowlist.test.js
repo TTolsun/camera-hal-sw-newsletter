@@ -31,7 +31,7 @@ function draft() {
 
 test('retentionCommitAllowlist includes the weekly artifacts when they are present', async () => {
   const root = tempRoot();
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft(), tags: ['Camera HAL'] });
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft() });
   const allow = retentionCommitAllowlist({ root, date: '2026-06-04', runContext: { publicOutputExpected: true } });
   assert.ok(allow.includes('articles/newsletters/2026-W23/index.html'), allow.join('\n'));
   assert.ok(allow.includes('articles/newsletters/2026-W23/newsletter.md'));

@@ -142,7 +142,7 @@ test('repair binds the selected image into the date\'s weekly issue and weekly i
   const date = '2026-05-30';
   const fixture = issue(date, { imageCandidates: [validImage()] });
   writeIssue(root, fixture);
-  await writeWeeklyNewsletterArtifacts({ root, date, editor: fixture, tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: fixture });
 
   const repairs = await repairNewsletterImages({ root, date });
 
@@ -167,7 +167,7 @@ test('repair with zero repairable articles still converges a stale weekly issue'
   const selectedImage = 'https://publisher.example.com/images/camera-card.png';
   // Weekly는 repair 이전(이미지 미바인딩) 상태로 작성되었고,
   const staleFixture = issue(date, { imageCandidates: [validImage()] });
-  await writeWeeklyNewsletterArtifacts({ root, date, editor: staleFixture, tags: [] });
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: staleFixture });
   // daily editor-draft는 이미 바인딩 완료(repairable 0) 상태인 시나리오: 재실행으로 weekly만 수렴해야 한다.
   writeIssue(root, issue(date, {
     imageCandidates: [validImage()],
