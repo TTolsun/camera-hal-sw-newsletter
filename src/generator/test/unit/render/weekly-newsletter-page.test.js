@@ -87,11 +87,17 @@ test('buildWeeklyNewsletterPage accepts an explicit weeklyKey', () => {
   assert.equal(page.indexRoute, 'newsletters/2026-W23/index.html');
 });
 
-test('buildWeeklyNewsletterPage drops duplicate-topic articles within the issue, keeping one', () => {
+test('buildWeeklyNewsletterPage renders the draft sections verbatim, including near-duplicates', () => {
   const draft = publishReadyDraft();
-  // Same article appended twice (duplicate topic): only one copy must survive.
-  draft.sections = [draft.sections[0], JSON.parse(JSON.stringify(draft.sections[0]))];
+  // 같은 release-note 페이지의 다른 버전 두 건: LLM merge 계약(#489)의 append 예시 그대로다.
+  // dedupe 권한은 resolveWeeklyArticles 한 곳에 있다 — 렌더러가 여기서 다시 떨구면
+  // append 결정이 issue.json에 영속되지 않아 tags·article_count·기사 목록이 페이지와 어긋난다.
+  const second = JSON.parse(JSON.stringify(draft.sections[0]));
+  second.headline = 'CameraX 1.8.0 alpha SessionProcessor';
+  second.public_article.headline = second.headline;
+  second.sources[0].url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.8.0';
+  draft.sections = [draft.sections[0], second];
   const page = buildWeeklyNewsletterPage(draft, { weeklyKey: '2026-W23' });
-  assert.equal(page.issue.sections.length, 1);
-  assert.deepEqual(page.issue.briefing, ['CameraX SessionConfig stable API']);
+  assert.equal(page.issue.sections.length, 2);
+  assert.deepEqual(page.issue.briefing, ['CameraX SessionConfig stable API', 'CameraX 1.8.0 alpha SessionProcessor']);
 });

@@ -2,7 +2,10 @@
 
 // Pure weekly newsletter page builder (#486, additive). Renders exactly ONE publish-ready editor
 // draft as a weekly issue via the existing renderer. There is no cross-run aggregation, dedup, or
-// merge here — that is #488/#489. Nothing in the daily pipeline calls this yet (PR2 wires it in).
+// merge here — that is #488/#489: 중복 판정 권한은 resolveWeeklyArticles 한 곳에 있고, 이
+// 빌더는 받은 sections를 그대로 렌더한다. 렌더 단계에서 near-duplicate를 다시 떨구면 LLM의
+// append("둘 다 유지") 결정이 issue.json에 영속되지 않아 tags·article_count·반환 기사 목록이
+// 발행 페이지와 어긋나고, 다음 실행이 같은 기사를 LLM에 재질의한다.
 
 const { buildHtml, buildMarkdown } = require('./newsletter-renderer');
 const {
@@ -11,18 +14,6 @@ const {
   weeklyNewsletterIndexRoute,
   weeklyNewsletterMarkdownRoute
 } = require('../reporter/weekly-newsletter');
-const { findWeeklyDuplicate } = require('../reporter/weekly-duplicate-merge');
-
-// Keep one article per topic within a weekly issue: drop any section that duplicates an
-// already-kept one (same identity or near-identical headline, per the weekly duplicate rule).
-function dedupeWeeklySections(sections = []) {
-  const kept = [];
-  for (const section of Array.isArray(sections) ? sections : []) {
-    if (kept.length && findWeeklyDuplicate(section, kept)) continue;
-    kept.push(section);
-  }
-  return kept;
-}
 
 // "2026-W22" + bounds -> "2026 W22 (05.25 ~ 05.31)".
 function weeklyDisplayTitle(bounds) {
@@ -50,7 +41,7 @@ function weeklySummaryText(titles = []) {
 
 function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
   const bounds = date ? weekBoundsForDate(date) : weekBoundsForKey(weeklyKey);
-  const sections = dedupeWeeklySections(draft.sections);
+  const sections = Array.isArray(draft.sections) ? draft.sections : [];
   const titles = articleTitles(sections);
   const issue = {
     ...draft,
@@ -82,6 +73,5 @@ module.exports = {
   buildWeeklyNewsletterPage,
   weeklyDisplayTitle,
   weeklySummaryText,
-  articleTitles,
-  dedupeWeeklySections
+  articleTitles
 };
