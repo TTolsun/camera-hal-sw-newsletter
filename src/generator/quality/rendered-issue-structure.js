@@ -35,6 +35,19 @@ function newsletterIndexContractVersion(entry = {}) {
 }
 const REQUIRED_ISSUE_CLASSES = ['issue-briefing', 'issue-section', 'source-list', 'reference-list'];
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+// coverage(대상 주) 필드는 이 이슈들에서 optional이다 — hard fail(모두 필수화)은 이 태스크가
+// 아니라 phase 3(#11)이다. 값이 있을 때만 형식을 본다.
+//
+// coverage_week_key/coverage_start_date/coverage_end_date 셋은 표시 계층(weekly-newsletter-page.js
+// coverageDisplayBounds)이 원자적으로 판단한다 — 셋 다 유효할 때만 대상 주를 보여주고, 하나라도
+// 무효하면 통째로 기존 표시로 폴백한다. 그 폴백이 데이터 결손을 조용히 감추지 않도록, 검증도
+// 같은 단위로 본다: 셋 중 하나라도 있으면 셋 다 있어야 valid.
+const COVERAGE_DISPLAY_FIELDS = ['coverage_week_key', 'coverage_start_date', 'coverage_end_date'];
+const COVERAGE_WEEK_KEY_PATTERN = /^\d{4}-W\d{2}$/;
+// coverage_mode·generation_anchor_date는 표시 3필드와 독립적인 optional 필드라, 있을 때만
+// 각자 형식을 본다.
+const COVERAGE_MODE_VALUES = ['iso_week', 'legacy_rolling'];
 const LEGACY_SOURCE_LABEL = '\u7570\uc496\ucfc2';
 const LEGACY_REFERENCES_LABEL = '\uf9e1\uba78\ud02c\u003f\uba2e\uc9ba';
 const LEGACY_REFERENCES_PREFIX = '\uf9e1\uba78\ud02c';
@@ -161,6 +174,32 @@ function validateNewsletterIndex(root, relativePath, errors) {
       if (!repoPath(root, item[key] || '')) {
         errors.push(`${relativePath} entry ${index} ${key} path escapes repository: ${item[key]}`);
       }
+    }
+
+    const hasAnyCoverageDisplayField = COVERAGE_DISPLAY_FIELDS.some(field => item[field] !== undefined);
+    if (hasAnyCoverageDisplayField) {
+      const missingCoverageDisplayFields = COVERAGE_DISPLAY_FIELDS.filter(field => item[field] === undefined);
+      if (missingCoverageDisplayFields.length) {
+        errors.push(
+          `${relativePath} entry ${index} has partial coverage display fields ` +
+          `(missing ${missingCoverageDisplayFields.join(', ')})`
+        );
+      }
+      if (item.coverage_week_key !== undefined && !COVERAGE_WEEK_KEY_PATTERN.test(item.coverage_week_key)) {
+        errors.push(`${relativePath} entry ${index} has invalid coverage_week_key: ${item.coverage_week_key}`);
+      }
+      if (item.coverage_start_date !== undefined && !DATE_PATTERN.test(item.coverage_start_date)) {
+        errors.push(`${relativePath} entry ${index} has invalid coverage_start_date: ${item.coverage_start_date}`);
+      }
+      if (item.coverage_end_date !== undefined && !DATE_PATTERN.test(item.coverage_end_date)) {
+        errors.push(`${relativePath} entry ${index} has invalid coverage_end_date: ${item.coverage_end_date}`);
+      }
+    }
+    if (item.coverage_mode !== undefined && !COVERAGE_MODE_VALUES.includes(item.coverage_mode)) {
+      errors.push(`${relativePath} entry ${index} has invalid coverage_mode: ${item.coverage_mode}`);
+    }
+    if (item.generation_anchor_date !== undefined && !DATE_PATTERN.test(item.generation_anchor_date)) {
+      errors.push(`${relativePath} entry ${index} has invalid generation_anchor_date: ${item.generation_anchor_date}`);
     }
   }
 }
