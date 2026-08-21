@@ -7,6 +7,7 @@
 // append("둘 다 유지") 결정이 issue.json에 영속되지 않아 tags·article_count·반환 기사 목록이
 // 발행 페이지와 어긋나고, 다음 실행이 같은 기사를 LLM에 재질의한다.
 
+const { ensureArray } = require('../../shared/common/value-coercion');
 const { buildHtml, buildMarkdown } = require('./newsletter-renderer');
 const {
   weekBoundsForDate,
@@ -41,7 +42,7 @@ function weeklySummaryText(titles = []) {
 
 function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
   const bounds = date ? weekBoundsForDate(date) : weekBoundsForKey(weeklyKey);
-  const sections = Array.isArray(draft.sections) ? draft.sections : [];
+  const sections = ensureArray(draft.sections);
   const titles = articleTitles(sections);
   const issue = {
     ...draft,

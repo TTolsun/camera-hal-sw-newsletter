@@ -135,18 +135,27 @@ test('a duplicate article in the same week is not added twice', async () => {
   assert.equal(readIssue(root, '2026-W23').sections.length, 1);
 });
 
-test('an LLM append decision for a near-duplicate persists to the page, index, and returned articles', async () => {
-  const root = tempRoot();
-  // 같은 release-note 페이지의 다른 버전(fragment만 다름): findWeeklyDuplicate가 same_source_page
-  // near-duplicate로 잡고, LLM resolver가 append("서로 다른 별개 기사이면 둘 다 유지")를 결정한다.
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0')]), tags: [] });
-  const result = await writeWeeklyNewsletterArtifacts({
+// 같은 release-note 페이지의 다른 버전(fragment만 다름) 쌍: findWeeklyDuplicate가
+// same_source_page near-duplicate로 잡는 관계가 아래 두 테스트의 공통 전제다.
+const NEAR_DUPLICATE_SEED_URL = 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0';
+const NEAR_DUPLICATE_APPEND_URL = 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0';
+
+// seed(1.6.0)를 발행한 뒤 near-duplicate(1.7.0)를 LLM append("서로 다른 별개 기사이면
+// 둘 다 유지") 결정으로 넣는다. 두 번째 실행의 결과를 반환한다.
+async function seedAppendedNearDuplicate(root) {
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', NEAR_DUPLICATE_SEED_URL)]), tags: [] });
+  return writeWeeklyNewsletterArtifacts({
     root,
-    date: '2026-06-04',
-    editor: draft([section('1.7.0', 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0')]),
+    date: '2026-06-02',
+    editor: draft([section('1.7.0', NEAR_DUPLICATE_APPEND_URL)]),
     tags: [],
     mergeDuplicate: async () => ({ decision: 'append', reason: 'different versions' })
   });
+}
+
+test('an LLM append decision for a near-duplicate persists to the page, index, and returned articles', async () => {
+  const root = tempRoot();
+  const result = await seedAppendedNearDuplicate(root);
 
   // append 결정은 발행 페이지·인덱스·반환 목록 세 곳 모두에 같은 기사 집합으로 나타나야 한다.
   const issue = readIssue(root, '2026-W23');
@@ -157,14 +166,7 @@ test('an LLM append decision for a near-duplicate persists to the page, index, a
 
 test('a persisted LLM append is not re-asked on the next run for the same article', async () => {
   const root = tempRoot();
-  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-01', editor: draft([section('1.6.0', 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0')]), tags: [] });
-  await writeWeeklyNewsletterArtifacts({
-    root,
-    date: '2026-06-02',
-    editor: draft([section('1.7.0', 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0')]),
-    tags: [],
-    mergeDuplicate: async () => ({ decision: 'append', reason: 'different versions' })
-  });
+  await seedAppendedNearDuplicate(root);
 
   // append된 기사가 issue.json에 남아 있으면 재실행은 exact duplicate로 결정론 거부된다.
   // (영속되지 않으면 같은 near-duplicate를 매 실행 LLM에 재질의하는 결정 flapping이 된다.)
@@ -172,7 +174,7 @@ test('a persisted LLM append is not re-asked on the next run for the same articl
   const rerun = await writeWeeklyNewsletterArtifacts({
     root,
     date: '2026-06-03',
-    editor: draft([section('1.7.0', 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0')]),
+    editor: draft([section('1.7.0', NEAR_DUPLICATE_APPEND_URL)]),
     tags: [],
     mergeDuplicate: async () => { llmCalls += 1; return { decision: 'append', reason: 'again' }; }
   });
