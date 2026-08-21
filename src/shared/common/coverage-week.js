@@ -11,8 +11,20 @@ const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 function parseUtcDayStart(dateText) {
   if (!DATE_PATTERN.test(String(dateText || ''))) return null;
-  const date = new Date(`${dateText}T00:00:00Z`);
-  return Number.isNaN(date.getTime()) ? null : date;
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateText || ''));
+  if (!match) return null;
+  const [, year, month, day] = match;
+  // Date.UTC로 날짜를 만든 후 getUTC* 메서드로 입력과 재비교하여
+  // 자동 보정(2026-02-30 → 2026-03-02)되는 invalid 날짜를 거부한다.
+  const date = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
+  if (
+    date.getUTCFullYear() !== Number(year) ||
+    date.getUTCMonth() !== Number(month) - 1 ||
+    date.getUTCDate() !== Number(day)
+  ) {
+    return null;
+  }
+  return date;
 }
 
 function formatUtcDate(date) {

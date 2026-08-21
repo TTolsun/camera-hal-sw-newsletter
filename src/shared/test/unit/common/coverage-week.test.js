@@ -36,6 +36,10 @@ test('잘못된 anchor/override는 throw', () => {
   assert.throws(() => coverageForAnchorDate('2026-08-17', 'W33'));
 });
 
+test('invalid 달력 날짜(2026-02-30)는 throw', () => {
+  assert.throws(() => coverageForAnchorDate('2026-02-30'));
+});
+
 test('previousCoverageWeekKey는 연도 경계를 넘는다', () => {
   assert.equal(previousCoverageWeekKey('2026-W01'), '2025-W52');
 });
