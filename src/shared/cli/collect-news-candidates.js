@@ -1061,6 +1061,11 @@ function normalizeCandidate(raw) {
     // 무효가 된다(#795 후속: 필드가 정규화에서 누락돼 프로덕션에서 시리즈가 collapse되지 않던 갭 수정).
     seriesId: raw.seriesId ?? raw.series_id ?? null,
     series_id: raw.seriesId ?? raw.series_id ?? null,
+    // AOSP 릴리스 드롭에서 camera 경로를 건드린 커밋 수. 코드의 경로 정규식과 페이지 상한에서
+    // 파생된 값이라 후보 제목에 넣지 않고 여기에 둔다(#857). whitelist에 없으면 candidates.json에서
+    // 사라져 "제목이 아니라 메타데이터로 옮겼다"는 말이 산출물에서 거짓이 된다.
+    camera_path_commit_count: raw.camera_path_commit_count ?? null,
+    camera_path_commit_count_is_lower_bound: raw.camera_path_commit_count_is_lower_bound ?? null,
     parentTitle: raw.parentTitle || raw.parent_title || '',
     parent_title: raw.parentTitle || raw.parent_title || '',
     parentCanonicalUrl: canonicalContentUrl(raw.parentCanonicalUrl || raw.parent_canonical_url || parentUrl || ''),

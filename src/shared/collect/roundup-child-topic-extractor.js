@@ -152,6 +152,37 @@ function bucketHintFor(value = '') {
   return 'android_platform_camera_adjacent';
 }
 
+// heading과 부모 문서 제목은 각각 페이지에 실재하는 문자열이지만, 둘을 그대로 이어 붙이면
+// 어느 페이지에도 없는 제목이 만들어져 라이브 링크 텍스트로 나갔다(#857). 대신 부모 문서 제목을
+// 『』로 묶어 괄호 안에 넣어, 앞의 섹션 이름과 별개의 문자열임을 드러낸다.
+// 두 요소를 모두 남기는 이유: title은 선정 스코어러의 키워드 입력이기도 해서, 한쪽을 빼면 점수가
+// 떨어져 선정 결과가 바뀐다.
+// 표기에 한글 단어를 쓰지 않는 이유: titleSimilarity는 토큰 집합 겹침/max라서 모든 후보에 같은
+// 단어를 하나 붙이면 유사도가 항상 올라간다. 그러면 한 묶음글의 서로 다른 섹션이 중복 판정
+// 임계(같은 소스·같은 날짜 0.68)를 넘겨 조용히 하나로 합쳐진다. normalizeTitle이 지우는
+// 구두점(『 』 ( ) …)만 쓰면 토큰 집합이 예전과 같아 이 밴드가 생기지 않는다.
+// 단 이 동일성은 제목이 TITLE_MAX_LENGTH 안에 들어올 때만 성립한다. 마커가 예전 구분자보다
+// 두 글자 길어서, 절단이 일어나는 영역(heading + SECTION_MARKER_LENGTH + 부모 제목 > 180)에서는
+// 절단 지점이 달라져 유사도도 갈린다. 전수 스캔(9500쌍) 결과 절단이 없는 2264쌍은 유사도 차이가
+// 0이고, 절단 영역에서만 신규 병합 36건(전부 heading 106자 이상)·병합 회피 396건이 나온다.
+const TITLE_MAX_LENGTH = 180;
+const SECTION_HEADING_MAX_LENGTH = 120;
+const SECTION_MARKER_LENGTH = ' (『』)'.length;
+
+// 잘린 자리에 말줄임을 남긴다. 표시 없이 자르면 페이지 어디에도 없는 문자열이 정확한 이름인 척한다.
+function shortenWithEllipsis(value, maxLength) {
+  return value.length <= maxLength ? value : `${value.slice(0, maxLength - 1)}…`;
+}
+
+function roundupChildTitle(heading = '', parentTitle = '') {
+  const section = shortenWithEllipsis(clean(heading), SECTION_HEADING_MAX_LENGTH);
+  const parent = clean(parentTitle);
+  if (!parent) return section;
+  // 합쳐 놓고 통째로 자르면 닫는 표기가 사라져 다시 페이지 제목처럼 읽힌다. 남는 자리에 맞춰 줄인다.
+  const room = TITLE_MAX_LENGTH - section.length - SECTION_MARKER_LENGTH;
+  return `${section} (『${shortenWithEllipsis(parent, room)}』)`;
+}
+
 function childUrl(parentUrl = '', block = {}) {
   if (block.anchorId) {
     try {
@@ -211,7 +242,7 @@ function extractRoundupChildTopics({
     };
     items.push({
       source,
-      title: `${block.heading} - ${parentTitle}`.slice(0, 180),
+      title: roundupChildTitle(block.heading, parentTitle),
       url,
       publishedAt,
       summary: behavior,

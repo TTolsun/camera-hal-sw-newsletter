@@ -52,6 +52,61 @@ test('roundup extractor accepts heading topic plus body introduce wording', () =
   assert.equal(Object.prototype.hasOwnProperty.call(children[0], 'source_gap_risk'), false);
 });
 
+test('roundup child title marks a parent-document section instead of inventing a page title', () => {
+  const children = extract(`
+    <h2>Advanced Professional Video</h2>
+    <p>Android introduces a new media framework format for professional capture.</p>
+    <p>Developers can review the format in Android creator workflows and camera output tests.</p>
+  `);
+
+  // heading과 부모 문서 제목은 각각 실존 문자열이지만, 둘을 이어 붙인 "heading - parentTitle"은
+  // 어느 페이지에도 없는 제목이었다(#857). 제목은 두 문자열이 어디서 왔는지 드러내야 한다.
+  assert.equal(
+    children[0].title,
+    'Advanced Professional Video (『Google I/O recap for Android developers』)'
+  );
+  assert.notEqual(
+    children[0].title,
+    'Advanced Professional Video - Google I/O recap for Android developers'
+  );
+  // title은 선정 스코어러의 키워드 입력이기도 하다. 두 실존 문자열이 모두 남아야 점수가 유지된다.
+  assert.ok(children[0].title.includes('Advanced Professional Video'));
+  assert.ok(children[0].title.includes('Google I/O recap for Android developers'));
+});
+
+test('a long parent title is shortened inside the section marker, not cut into a bare concatenation', () => {
+  const longParentTitle =
+    `Google I/O recap for Android developers ${'covering camera media and platform announcements '.repeat(4)}`.trim();
+  const children = extract(`
+    <h2>Advanced Professional Video</h2>
+    <p>Android introduces a new media framework format for professional capture.</p>
+    <p>Developers can review the format in Android creator workflows and camera output tests.</p>
+  `, { parentTitle: longParentTitle });
+
+  const { title } = children[0];
+  assert.ok(title.length <= 180, title);
+  // 합쳐 놓고 통째로 자르면 닫는 표기가 사라져 다시 페이지 제목처럼 읽힌다. 부모 제목만 줄인다.
+  assert.ok(title.startsWith('Advanced Professional Video (『'), title);
+  assert.ok(title.endsWith('』)'), title);
+  assert.ok(title.includes('…'), title);
+});
+
+test('a long section heading is shortened with an ellipsis, not silently cut mid-word', () => {
+  // h2~h4가 없는 묶음글은 <li> 첫 문장을 heading으로 쓴다. 표시 없이 자르면 페이지 어디에도 없는
+  // 문자열이 "이 문서의 정확한 섹션 이름"으로 발행돼 #857이 고치려는 결함을 heading 쪽에서 반복한다.
+  const longHeading = `Android introduces ${'a reworked camera output and video capture pipeline '.repeat(3)}for creators`;
+  const children = extract(`
+    <ul>
+      <li>${longHeading}. Developers can use the Ultra HDR capture path in Android camera output tests.</li>
+    </ul>
+  `);
+
+  const { title } = children[0];
+  assert.ok(title.startsWith('Android introduces a reworked camera output'), title);
+  assert.ok(title.includes('… (『'), title);
+  assert.ok(title.endsWith('』)'), title);
+});
+
 test('roundup extractor rejects audio-only child topics', () => {
   const children = extract(`
     <h2>Android audio routing</h2>
