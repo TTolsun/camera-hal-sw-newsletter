@@ -116,3 +116,14 @@ test('coverage 필드가 없으면 기존 출력과 동일하다', () => {
   const before = buildWeeklyNewsletterPage({ sections: [] }, { date: '2026-08-17' });
   assert.equal(before.issue.title, '2026 W34 (08.17 ~ 08.23)');
 });
+
+test('coverage_week_key만 있고 날짜가 없으면 깨진 문자열 없이 발행 주 표시로 폴백한다', () => {
+  const page = buildWeeklyNewsletterPage({
+    sections: [],
+    coverage_week_key: '2026-W33'
+    // coverage_start_date/coverage_end_date 누락
+  }, { date: '2026-08-17' });
+  assert.equal(page.issue.title, '2026 W34 (08.17 ~ 08.23)');
+  assert.doesNotMatch(page.issue.title, /ined/);
+  assert.doesNotMatch(page.html, /ined/);
+});

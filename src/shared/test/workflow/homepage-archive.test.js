@@ -516,6 +516,28 @@ test('renderArchiveCard prefers coverage week and range over the published week 
   assert.match(html, /href="newsletters\/2026-W34\/index\.html"/);
 });
 
+// coverage_week_key만 있고 날짜가 없는 부분 누락 상태에서는 라벨(coverage 33)과 range(발행 주
+// 17~23)가 서로 다른 주를 가리키는 화면 불일치가 생길 수 있었다 — 셋 다 유효할 때만 통째로 쓰고,
+// 하나라도 빠지면 라벨·range 모두 발행 주로 폴백해야 한다.
+test('renderArchiveCard falls back to the published week label and range when coverage dates are missing', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    weeklyKey: '2026-W34',
+    date: '2026-08-17',
+    title: '2026 W34',
+    weekStartDate: '2026-08-17',
+    weekEndDate: '2026-08-23',
+    // coverage_week_key만 있고 coverage_start_date/coverage_end_date는 누락된 상태.
+    coverage_week_key: '2026-W33',
+    article_count: 2,
+    summary: '기사 C\n기사 D',
+    tags: ['Camera HAL', 'Android'],
+    html: 'newsletters/2026-W34/index.html',
+    article_images: ['https://example.com/thumb2.png']
+  });
+
+  assert.match(html, /<div class="card-meta archive-card-meta"><span class="issue-date">W34<\/span> · 2026\.08\.17 – 08\.23 · 총 2건<\/div>/);
+});
+
 test('renderArchiveCard falls back to the site newsletter image and a kicker when data is sparse', () => {
   const html = NewsletterArchive.renderArchiveCard({
     date: '2026-06-03',

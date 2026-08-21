@@ -328,25 +328,38 @@ function briefingHeadingHtml(issue = {}) {
   return issue.weekly_key ? '이번 호 기사' : briefingHeading(issue);
 }
 
+// coverage 필드 3개(coverage_week_key/coverage_start_date/coverage_end_date, optional)가 모두
+// 유효할 때만 coverage 표시를 쓴다. issueWeekLabel과 issueKickerText가 이 판정을 각자 따로 하면
+// 하나만 채워진 경우(예: week_key만 있고 날짜가 없음) 라벨은 대상 주, range는 발행 주를 가리키는
+// 화면 불일치가 생긴다 — 한 함수로 모아 라벨·range가 항상 같은 소스(coverage 전체 또는 발행 주
+// 전체)를 쓰게 한다.
+function issueCoverageDisplay(issue = {}) {
+  const key = String(issue.coverage_week_key || '').trim();
+  const start = String(issue.coverage_start_date || '').trim();
+  const end = String(issue.coverage_end_date || '').trim();
+  const valid = /^\d{4}-W\d{2}$/.test(key)
+    && /^\d{4}-\d{2}-\d{2}$/.test(start)
+    && /^\d{4}-\d{2}-\d{2}$/.test(end);
+  return valid ? { key, start, end } : null;
+}
+
 // Weekly issues are labeled by ISO week ("2026-W22" -> "2026 W22"); daily issues fall back to date.
-// coverage_week_key(대상 주, optional)가 유효하면 그것을 우선 쓴다 — 발행 identity(weekly_key)는
-// 그대로 두고 표시만 대상 주로 바꾼다. 없으면(과거호·전환 전) 기존 weekly_key 표시를 그대로 유지한다.
+// coverage(대상 주)가 유효하면 그것을 우선 쓴다 — 발행 identity(weekly_key)는 그대로 두고 표시만
+// 대상 주로 바꾼다. 없으면(과거호·전환 전) 기존 weekly_key 표시를 그대로 유지한다.
 function issueWeekLabel(issue = {}) {
-  const coverageKey = String(issue.coverage_week_key || '').trim();
-  const key = /^\d{4}-W\d{2}$/.test(coverageKey) ? coverageKey : String(issue.weekly_key || '').trim();
+  const coverage = issueCoverageDisplay(issue);
+  const key = coverage ? coverage.key : String(issue.weekly_key || '').trim();
   return /^\d{4}-W\d{2}$/.test(key) ? key.replace('-W', ' W') : '';
 }
 
 // Weekly issue hero kicker shows the week's date range in the mockup format ("2026.05.25 – 05.31").
 // 연말처럼 주가 연도를 걸치면 끝 날짜의 연도를 생략하지 않는다.
-// coverage_start_date/coverage_end_date가 둘 다 유효하면 그것으로 range를 만든다(대상 주 표시).
+// coverage(대상 주)가 유효하면 그것으로 range를 만든다 — issueWeekLabel과 같은 판정을 쓴다.
 function issueKickerText(issue = {}) {
   const dot = value => String(value).replace(/-/g, '.');
-  const coverageStart = String(issue.coverage_start_date || '').trim();
-  const coverageEnd = String(issue.coverage_end_date || '').trim();
-  const useCoverage = /^\d{4}-\d{2}-\d{2}$/.test(coverageStart) && /^\d{4}-\d{2}-\d{2}$/.test(coverageEnd);
-  const start = useCoverage ? coverageStart : String(issue.week_start_date || '').trim();
-  const end = useCoverage ? coverageEnd : String(issue.week_end_date || '').trim();
+  const coverage = issueCoverageDisplay(issue);
+  const start = coverage ? coverage.start : String(issue.week_start_date || '').trim();
+  const end = coverage ? coverage.end : String(issue.week_end_date || '').trim();
   if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
     const sameYear = start.slice(0, 4) === end.slice(0, 4);
     return `${dot(start)} – ${sameYear ? dot(end).slice(5) : dot(end)}`;

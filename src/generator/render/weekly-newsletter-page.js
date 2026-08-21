@@ -33,14 +33,17 @@ function weeklyDisplayTitle(bounds) {
 
 // coverage 필드는 optional이다(Task 3·11이 채움) — 없으면(과거호·전환 전) 기존 발행 주 표시를
 // 그대로 유지한다. 있으면 발행 identity(weekly_key)는 그대로 두고 표시(title)만 대상 주로 바꾼다.
+// 3필드(week_key/start_date/end_date) 중 하나라도 무효면 "2026 W33 (ined ~ ined)"처럼 깨진
+// 문자열이 나올 수 있으므로, 셋 다 유효할 때만 쓰고 하나라도 빠지면 통째로 폴백한다.
 function coverageDisplayBounds(draft = {}) {
   const key = String(draft.coverage_week_key || '');
-  if (!/^\d{4}-W\d{2}$/.test(key)) return null;
-  return {
-    weeklyKey: key,
-    weekStartDate: draft.coverage_start_date,
-    weekEndDate: draft.coverage_end_date
-  };
+  const weekStartDate = String(draft.coverage_start_date || '');
+  const weekEndDate = String(draft.coverage_end_date || '');
+  const valid = /^\d{4}-W\d{2}$/.test(key)
+    && /^\d{4}-\d{2}-\d{2}$/.test(weekStartDate)
+    && /^\d{4}-\d{2}-\d{2}$/.test(weekEndDate);
+  if (!valid) return null;
+  return { weeklyKey: key, weekStartDate, weekEndDate };
 }
 
 function articleTitles(sections = []) {

@@ -146,30 +146,35 @@
     return WEEKLY_KEY_PATTERN.test(key) ? key : '';
   }
 
-  // 대상 주(coverage_week_key, optional, Task 3·11이 채움). 있으면 라우팅용 weeklyKey(발행
-  // identity)는 그대로 두고 카드 라벨만 대상 주로 바꾼다.
-  function coverageWeeklyKeyOf(entry) {
+  // coverage 필드 3개(coverage_week_key/coverage_start_date/coverage_end_date, optional, Task
+  // 3·11이 채움)가 모두 유효할 때만 coverage 표시를 쓴다. cardKeyLabel과 weekRangeText가 이 판정을
+  // 각자 따로 하면 하나만 채워진 경우(예: week_key만 있고 날짜가 없음) 라벨은 대상 주, range는
+  // 발행 주를 가리키는 화면 불일치가 생긴다 — 한 함수로 모아 항상 같은 소스를 쓰게 한다. 라우팅용
+  // weeklyKey(발행 identity)는 이 판정과 무관하게 그대로 둔다.
+  function entryCoverageDisplay(entry) {
     const key = String(entry && entry.coverage_week_key || '').trim();
-    return WEEKLY_KEY_PATTERN.test(key) ? key : '';
+    const start = String(entry && entry.coverage_start_date || '').trim();
+    const end = String(entry && entry.coverage_end_date || '').trim();
+    const valid = WEEKLY_KEY_PATTERN.test(key) && DATE_PATTERN.test(start) && DATE_PATTERN.test(end);
+    return valid ? { key, start, end } : null;
   }
 
   // Card date label prefers the coverage ISO week, then the published ISO week ("2026-W28" ->
   // "W28"), then a daily date. Falls back to empty (never the title, which the headline already
   // shows) so the meta line never duplicates it.
   function cardKeyLabel(entry) {
-    const key = coverageWeeklyKeyOf(entry) || weeklyKeyOf(entry);
+    const coverage = entryCoverageDisplay(entry);
+    const key = coverage ? coverage.key : weeklyKeyOf(entry);
     if (key) return key.slice(5);
     return sortableDate(entry);
   }
 
   // Full "YYYY.MM.DD – MM.DD" range shown after the week label when week bounds are known.
-  // coverage_start_date/coverage_end_date(대상 주, optional)가 둘 다 유효하면 그것을 우선 쓴다.
+  // coverage(대상 주)가 유효하면 그것으로 range를 만든다 — cardKeyLabel과 같은 판정을 쓴다.
   function weekRangeText(entry) {
-    const coverageStart = String((entry && entry.coverage_start_date) || '').trim();
-    const coverageEnd = String((entry && entry.coverage_end_date) || '').trim();
-    const useCoverage = DATE_PATTERN.test(coverageStart) && DATE_PATTERN.test(coverageEnd);
-    const start = useCoverage ? coverageStart : String((entry && (entry.weekStartDate || entry.week_start_date)) || '').trim();
-    const end = useCoverage ? coverageEnd : String((entry && (entry.weekEndDate || entry.week_end_date)) || '').trim();
+    const coverage = entryCoverageDisplay(entry);
+    const start = coverage ? coverage.start : String((entry && (entry.weekStartDate || entry.week_start_date)) || '').trim();
+    const end = coverage ? coverage.end : String((entry && (entry.weekEndDate || entry.week_end_date)) || '').trim();
     if (DATE_PATTERN.test(start) && DATE_PATTERN.test(end)) {
       return `${start.replace(/-/g, '.')} – ${end.slice(5).replace('-', '.')}`;
     }
