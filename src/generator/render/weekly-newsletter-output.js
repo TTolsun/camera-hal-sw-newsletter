@@ -226,13 +226,16 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
   const mergedDraft = {
     ...editor,
     sections: articles,
+    // 병합된 위클리 tags 를 렌더 **전에** draft 에 넣는다. 렌더 후 page.issue.tags 를 덮어쓰면
+    // index.html(병합 전 editor tags)과 issue.json(병합 tags)이 서로 다른 tag 집합으로 커밋되어
+    // issue.json 재렌더가 발행 페이지를 재현하지 못한다(2026-W30~W33에서 실측).
+    tags: mergedTags,
     references: dedupeReferences([
       ...ensureArray(existingIssue && existingIssue.references),
       ...ensureArray(editor && editor.references)
     ])
   };
   const page = buildWeeklyNewsletterPage(mergedDraft, { date });
-  page.issue.tags = mergedTags;
 
   // 홈·아카이브가 fetch하는 정본은 이 weekly 인덱스다. daily 인덱스와 같은 판정을 써서
   // 계약 버전을 기록한다(보존·미지원 거부·강등 거부, v1은 기본값이라 생략).

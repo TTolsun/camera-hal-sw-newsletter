@@ -10,6 +10,7 @@ const {
   syncWeeklyArticleImages,
   writeWeeklyNewsletterArtifacts
 } = require('../../../render/weekly-newsletter-output');
+const { buildWeeklyNewsletterPage } = require('../../../render/weekly-newsletter-page');
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'weekly-output-'));
@@ -80,6 +81,26 @@ test('weekly tags derive archive topics and kicker from article relevance bucket
   const issue = readIssue(root, '2026-W23');
   assert.deepEqual(issue.tags, ['Driver', 'Image Processing', 'AI', 'Camera HAL', 'Android']);
   assert.equal(issue.tags[0], 'Driver');
+});
+
+test('written index.html carries the merged weekly tags and re-renders byte-identically from issue.json', async () => {
+  const root = tempRoot();
+  const driver = { ...section('driver', 'https://example.com/driver'), relevance_bucket: 'camera_driver_image_pipeline' };
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([driver]), tags: [] });
+
+  const issue = readIssue(root, '2026-W23');
+  const html = fs.readFileSync(path.join(root, 'articles', 'newsletters', '2026-W23', 'index.html'), 'utf8');
+  // html 히어로 tag row 는 issue.json 의 병합된 위클리 tags 와 같아야 한다. (병합 전 editor tags 로
+  // 렌더된 html 을 쓰면 같은 실행이 만든 두 산출물이 서로 다른 tag 집합을 갖는다.) 이 동등식은
+  // 일반 발행 기준이다 — fallback_public 모드는 issueTags 가 렌더 시 tag 를 변환하므로 성립하지
+  // 않고, 그 모드까지 지키는 불변식은 아래 byte 동일 재렌더 검사다.
+  const tagRowMatch = html.match(/<div class="tag-row issue-tags">(.*?)<\/div>/);
+  assert.ok(tagRowMatch, 'index.html 에 issue-tags tag row 가 없습니다');
+  const htmlTags = [...tagRowMatch[1].matchAll(/<span class="tag">([^<]*)<\/span>/g)].map(m => m[1]);
+  assert.deepEqual(htmlTags, issue.tags);
+  // issue.json 은 발행 페이지의 정본이다: 재렌더가 커밋된 html 을 바이트 동일하게 재현해야 한다.
+  const rerendered = buildWeeklyNewsletterPage(issue, { weeklyKey: '2026-W23' });
+  assert.equal(rerendered.html, html);
 });
 
 test('publishing a weekly issue regenerates sitemap.xml with the issue URL', async () => {
