@@ -346,8 +346,7 @@ test('the weekly index records the contract version the issue declared', async (
   await writeWeeklyNewsletterArtifacts({
     root,
     date: '2026-06-04',
-    editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/a', 2)], STORY_V2_MARKERS),
-    tags: []
+    editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/a', 2)], STORY_V2_MARKERS)
   });
 
   assert.equal(readWeeklyIndex(root)[0].public_contract_version, 'story-v2');
@@ -359,8 +358,7 @@ test('the weekly index omits the version field for a v1 issue', async () => {
   await writeWeeklyNewsletterArtifacts({
     root,
     date: '2026-06-04',
-    editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/a', 1)], STORY_V1_MARKERS),
-    tags: []
+    editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/a', 1)], STORY_V1_MARKERS)
   });
 
   // v1은 기본값이라 적지 않는다. 적으면 커밋된 weekly 엔트리 15개와 모양이 갈린다.
@@ -376,14 +374,12 @@ test('a weekly rerun without the marker keeps the recorded contract version', as
   await writeWeeklyNewsletterArtifacts({
     root,
     date: '2026-06-01',
-    editor: weeklyDraft([weeklySection('1.7.0', url, 2)], STORY_V2_MARKERS),
-    tags: []
+    editor: weeklyDraft([weeklySection('1.7.0', url, 2)], STORY_V2_MARKERS)
   });
   await writeWeeklyNewsletterArtifacts({
     root,
     date: '2026-06-04',
-    editor: weeklyDraft([weeklySection('1.7.0', url, 2)]),
-    tags: []
+    editor: weeklyDraft([weeklySection('1.7.0', url, 2)])
   });
 
   assert.equal(readWeeklyIndex(root)[0].public_contract_version, 'story-v2');
@@ -410,8 +406,7 @@ test('a weekly run rejected by the render contract check leaves the published st
   await writeWeeklyNewsletterArtifacts({
     root,
     date: '2026-06-01',
-    editor: weeklyDraft([weeklySection('1.6.0', 'https://example.com/a', 1)], STORY_V1_MARKERS),
-    tags: []
+    editor: weeklyDraft([weeklySection('1.6.0', 'https://example.com/a', 1)], STORY_V1_MARKERS)
   });
   const before = readWeeklyIndex(root);
 
@@ -419,8 +414,7 @@ test('a weekly run rejected by the render contract check leaves the published st
     () => writeWeeklyNewsletterArtifacts({
       root,
       date: '2026-06-04',
-      editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/b', 2)], STORY_V2_MARKERS),
-      tags: []
+      editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/b', 2)], STORY_V2_MARKERS)
     }),
     /story_contract_version_family_mismatch\(public_contract_version=2 generation_contract_version=2 story_contract_version=1\)/
   );
@@ -459,8 +453,7 @@ test('a weekly run rejected by the index contract check writes no page files', a
     () => writeWeeklyNewsletterArtifacts({
       root,
       date: '2026-06-04',
-      editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/a', 1)], STORY_V1_MARKERS),
-      tags: []
+      editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/a', 1)], STORY_V1_MARKERS)
     }),
     /recorded public_contract_version "story-v9" is not supported/
   );
