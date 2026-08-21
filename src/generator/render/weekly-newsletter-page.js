@@ -31,6 +31,18 @@ function weeklyDisplayTitle(bounds) {
   return `${year} W${week} (${monthDay(bounds.weekStartDate)} ~ ${monthDay(bounds.weekEndDate)})`;
 }
 
+// coverage 필드는 optional이다(Task 3·11이 채움) — 없으면(과거호·전환 전) 기존 발행 주 표시를
+// 그대로 유지한다. 있으면 발행 identity(weekly_key)는 그대로 두고 표시(title)만 대상 주로 바꾼다.
+function coverageDisplayBounds(draft = {}) {
+  const key = String(draft.coverage_week_key || '');
+  if (!/^\d{4}-W\d{2}$/.test(key)) return null;
+  return {
+    weeklyKey: key,
+    weekStartDate: draft.coverage_start_date,
+    weekEndDate: draft.coverage_end_date
+  };
+}
+
 function articleTitles(sections = []) {
   return sections
     .map(section => (section && (section.public_article?.headline || section.headline)) || '')
@@ -52,6 +64,7 @@ function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
   const bounds = date ? weekBoundsForDate(date) : weekBoundsForKey(weeklyKey);
   const sections = dedupeWeeklySections(draft.sections);
   const titles = articleTitles(sections);
+  const coverageBounds = coverageDisplayBounds(draft);
   const issue = {
     ...draft,
     sections,
@@ -59,7 +72,7 @@ function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
     weekly_key: bounds.weeklyKey,
     week_start_date: bounds.weekStartDate,
     week_end_date: bounds.weekEndDate,
-    title: weeklyDisplayTitle(bounds),
+    title: weeklyDisplayTitle(coverageBounds || bounds),
     // The hero subtitle describes this week's coverage from the real article headlines so it
     // matches the content; fall back to the per-run draft summary when there are no titles.
     summary: weeklySummaryText(titles) || draft.summary,

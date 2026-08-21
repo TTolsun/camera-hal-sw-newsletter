@@ -146,19 +146,31 @@
     return WEEKLY_KEY_PATTERN.test(key) ? key : '';
   }
 
-  // Card date label prefers the ISO week ("2026-W28" -> "W28"), then a daily date. Falls back to
-  // empty (never the title, which the headline already shows) so the meta line never duplicates it.
+  // 대상 주(coverage_week_key, optional, Task 3·11이 채움). 있으면 라우팅용 weeklyKey(발행
+  // identity)는 그대로 두고 카드 라벨만 대상 주로 바꾼다.
+  function coverageWeeklyKeyOf(entry) {
+    const key = String(entry && entry.coverage_week_key || '').trim();
+    return WEEKLY_KEY_PATTERN.test(key) ? key : '';
+  }
+
+  // Card date label prefers the coverage ISO week, then the published ISO week ("2026-W28" ->
+  // "W28"), then a daily date. Falls back to empty (never the title, which the headline already
+  // shows) so the meta line never duplicates it.
   function cardKeyLabel(entry) {
-    const key = weeklyKeyOf(entry);
+    const key = coverageWeeklyKeyOf(entry) || weeklyKeyOf(entry);
     if (key) return key.slice(5);
     return sortableDate(entry);
   }
 
   // Full "YYYY.MM.DD – MM.DD" range shown after the week label when week bounds are known.
+  // coverage_start_date/coverage_end_date(대상 주, optional)가 둘 다 유효하면 그것을 우선 쓴다.
   function weekRangeText(entry) {
-    const start = String((entry && (entry.weekStartDate || entry.week_start_date)) || '').trim();
-    const end = String((entry && (entry.weekEndDate || entry.week_end_date)) || '').trim();
-    if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
+    const coverageStart = String((entry && entry.coverage_start_date) || '').trim();
+    const coverageEnd = String((entry && entry.coverage_end_date) || '').trim();
+    const useCoverage = DATE_PATTERN.test(coverageStart) && DATE_PATTERN.test(coverageEnd);
+    const start = useCoverage ? coverageStart : String((entry && (entry.weekStartDate || entry.week_start_date)) || '').trim();
+    const end = useCoverage ? coverageEnd : String((entry && (entry.weekEndDate || entry.week_end_date)) || '').trim();
+    if (DATE_PATTERN.test(start) && DATE_PATTERN.test(end)) {
       return `${start.replace(/-/g, '.')} – ${end.slice(5).replace('-', '.')}`;
     }
     return '';

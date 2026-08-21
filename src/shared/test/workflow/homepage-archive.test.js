@@ -491,6 +491,31 @@ test('renderArchiveCard builds an image-forward card with kicker, headline, and 
   assert.doesNotMatch(html, /card-summary|tag-row/);
 });
 
+// coverage 필드(coverage_week_key/coverage_start_date/coverage_end_date, optional, Task 3, 11이
+// 채움)가 있으면 카드 라벨과 range는 대상 주 기준으로 바뀐다. 발행 identity(weeklyKey)는 라우팅에만
+// 쓰이고 표시에는 영향을 주지 않는다.
+test('renderArchiveCard prefers coverage week and range over the published week when coverage fields are present', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    weeklyKey: '2026-W34',
+    date: '2026-08-17',
+    title: '2026 W34',
+    weekStartDate: '2026-08-17',
+    weekEndDate: '2026-08-23',
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-16',
+    article_count: 2,
+    summary: '기사 C\n기사 D',
+    tags: ['Camera HAL', 'Android'],
+    html: 'newsletters/2026-W34/index.html',
+    article_images: ['https://example.com/thumb2.png']
+  });
+
+  assert.match(html, /<div class="card-meta archive-card-meta"><span class="issue-date">W33<\/span> · 2026\.08\.10 – 08\.16 · 총 2건<\/div>/);
+  // 발행 identity(2026-W34)는 라우팅에만 쓰인다. URL은 변하지 않는다.
+  assert.match(html, /href="newsletters\/2026-W34\/index\.html"/);
+});
+
 test('renderArchiveCard falls back to the site newsletter image and a kicker when data is sparse', () => {
   const html = NewsletterArchive.renderArchiveCard({
     date: '2026-06-03',

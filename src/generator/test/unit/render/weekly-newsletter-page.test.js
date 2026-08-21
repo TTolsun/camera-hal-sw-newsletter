@@ -95,3 +95,24 @@ test('buildWeeklyNewsletterPage drops duplicate-topic articles within the issue,
   assert.equal(page.issue.sections.length, 1);
   assert.deepEqual(page.issue.briefing, ['CameraX SessionConfig stable API']);
 });
+
+test('coverage 필드가 있으면 제목·표시가 대상 주 기준이 된다', () => {
+  const page = buildWeeklyNewsletterPage({
+    sections: [],
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-16',
+    coverage_mode: 'iso_week',
+    generation_anchor_date: '2026-08-17'
+  }, { date: '2026-08-17' });
+  assert.equal(page.weeklyKey, '2026-W34');                       // 발행 identity 불변
+  assert.equal(page.issue.title, '2026 W33 (08.10 ~ 08.16)');     // 표시는 coverage
+  assert.equal(page.issue.coverage_week_key, '2026-W33');
+  assert.match(page.html, /2026\.08\.10 – 08\.16/);
+  assert.doesNotMatch(page.html, /08\.17 ~ 08\.23/);              // 미래 기간 표시 제거
+});
+
+test('coverage 필드가 없으면 기존 출력과 동일하다', () => {
+  const before = buildWeeklyNewsletterPage({ sections: [] }, { date: '2026-08-17' });
+  assert.equal(before.issue.title, '2026 W34 (08.17 ~ 08.23)');
+});

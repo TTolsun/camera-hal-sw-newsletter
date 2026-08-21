@@ -329,17 +329,24 @@ function briefingHeadingHtml(issue = {}) {
 }
 
 // Weekly issues are labeled by ISO week ("2026-W22" -> "2026 W22"); daily issues fall back to date.
+// coverage_week_key(대상 주, optional)가 유효하면 그것을 우선 쓴다 — 발행 identity(weekly_key)는
+// 그대로 두고 표시만 대상 주로 바꾼다. 없으면(과거호·전환 전) 기존 weekly_key 표시를 그대로 유지한다.
 function issueWeekLabel(issue = {}) {
-  const key = String(issue.weekly_key || '').trim();
+  const coverageKey = String(issue.coverage_week_key || '').trim();
+  const key = /^\d{4}-W\d{2}$/.test(coverageKey) ? coverageKey : String(issue.weekly_key || '').trim();
   return /^\d{4}-W\d{2}$/.test(key) ? key.replace('-W', ' W') : '';
 }
 
 // Weekly issue hero kicker shows the week's date range in the mockup format ("2026.05.25 – 05.31").
 // 연말처럼 주가 연도를 걸치면 끝 날짜의 연도를 생략하지 않는다.
+// coverage_start_date/coverage_end_date가 둘 다 유효하면 그것으로 range를 만든다(대상 주 표시).
 function issueKickerText(issue = {}) {
   const dot = value => String(value).replace(/-/g, '.');
-  const start = String(issue.week_start_date || '').trim();
-  const end = String(issue.week_end_date || '').trim();
+  const coverageStart = String(issue.coverage_start_date || '').trim();
+  const coverageEnd = String(issue.coverage_end_date || '').trim();
+  const useCoverage = /^\d{4}-\d{2}-\d{2}$/.test(coverageStart) && /^\d{4}-\d{2}-\d{2}$/.test(coverageEnd);
+  const start = useCoverage ? coverageStart : String(issue.week_start_date || '').trim();
+  const end = useCoverage ? coverageEnd : String(issue.week_end_date || '').trim();
   if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
     const sameYear = start.slice(0, 4) === end.slice(0, 4);
     return `${dot(start)} – ${sameYear ? dot(end).slice(5) : dot(end)}`;
