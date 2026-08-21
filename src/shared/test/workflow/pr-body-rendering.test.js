@@ -31,8 +31,16 @@ const {
 const {
   REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS,
   REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS,
+  REQUIRED_FAILED_EDITOR_REVIEWABLE_ARTIFACTS,
+  REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS,
   REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
 } = require('../../../generator/publish/resolve-reviewable-artifacts');
+const {
+  resolveReviewHandoff
+} = require('../../../generator/publish/pr-body-readiness-sections');
+const {
+  resolvePublishStatus
+} = require('../../../generator/publish/publish-status');
 const {
   tempRoot: fsTempRoot,
   writeJson,
@@ -45,6 +53,7 @@ const {
 const {
   writeCandidateShortageReviewableArtifacts,
   writeEditorialReviewableArtifacts,
+  writeFailedRawArtifactValidationArtifacts,
   writeFailedRepairReviewableArtifacts,
   writeMinimalEvidencePackSummary,
   writeMinimalPublishArtifacts,
@@ -776,7 +785,13 @@ test('newsroom PR body keeps editorial summary section order by publication stat
     root: reviewRoot,
     date: reviewDate,
     validateOutcome: 'failure',
-    status: traceStatus({ review_publication_ready: true, final_publish_ready: false }),
+    // editor_review_required는 review publication 판정의 필수 조건이다. handoff가 이제 해석된
+    // status를 그대로 보므로, 이 값도 disk의 generation status와 같은 값이어야 한다.
+    status: traceStatus({
+      review_publication_ready: true,
+      final_publish_ready: false,
+      editor_review_required: true
+    }),
     changedArtifacts: REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
       .map(file => `articles/content/newsroom/${reviewDate}/${file}`)
       .concat([
@@ -1791,4 +1806,105 @@ test('newsroom PR body demotes the publication verdict when the image lineage au
 
   assert.match(passing.slice(0, passing.indexOf('## 상세 report')), /AI 자동 발행 가능/);
   assert.doesNotMatch(passing, /이미지 계보 감사 실패로 강등/);
+});
+
+// #924: #896 후속. 강등 판정은 최상단에만 반영되고, 아래 Readiness 섹션과 요약 표는 강등 전
+// 원본 status 파일을 다시 읽어 normal_public / automatic_publish_ready=true라고 말했다.
+// 같은 본문의 두 부분이 서로 다른 말을 하면 편집장이 어느 쪽을 믿을지 알 수 없다.
+test('newsroom PR body readiness sections read the demoted publish status instead of the raw status file', () => {
+  const root = fsTempRoot('newsroom-pr-body-');
+  const date = '2026-05-08';
+  // 원본 status 파일은 이미지 계보 감사 이전 값(final_publish_ready=true)을 그대로 갖고 있다.
+  const { status: rawStatus } = writeMinimalPublishArtifacts(root, date, {
+    finalPublishReady: true
+  });
+  assert.equal(rawStatus.final_publish_ready, true);
+  writePublicNewsletterArtifacts(root, date);
+  const changedArtifacts = [
+    `articles/newsletters/${date}/newsletter.md`,
+    `articles/newsletters/${date}/index.html`,
+    'articles/data/newsletters.json',
+    `articles/content/newsroom/${date}/quality-report.json`
+  ];
+
+  const body = buildNewsroomPrBody({
+    root,
+    date,
+    validateOutcome: 'success',
+    imageAuditOutcome: 'failure',
+    changedArtifacts
+  });
+
+  assert.match(body, /^- normal_public_ready: false$/m);
+  assert.match(body, /^- automatic_publish_ready: false$/m);
+  assert.match(body, /^- publication_mode: review_only$/m);
+  assert.match(body, /^\| publication_mode \| review_only \|$/m);
+  assert.doesNotMatch(body, /^- normal_public_ready: true$/m);
+  assert.doesNotMatch(body, /^- automatic_publish_ready: true$/m);
+  assert.doesNotMatch(body, /^- publication_mode: normal_public$/m);
+  assert.doesNotMatch(body, /^\| publication_mode \| normal_public \|$/m);
+
+  // merge하면 공개된다는 사실 자체는 강등과 무관하게 참이다. 강등을 이유로 이 값을 숨기면
+  // 편집장이 merge 결과를 잘못 알게 된다.
+  assert.match(body, /^- homepage_visible_after_merge: true$/m);
+  assert.match(body, /^- homepage_visibility: normal$/m);
+
+  // 정상 주는 editor_review_required=false라 강등해도 review_publication_ready는 켜질 수 없다.
+  // diagnostics-only와 review-only-publication 동시 부착 금지 규칙도 그대로다.
+  assert.match(body, /^- review_publication_ready: false$/m);
+  assert.match(body, /^- diagnostics_only: false$/m);
+
+  const validation = validatePrBodyText(body, { date });
+  assert.equal(validation.ok, true, validation.errors.join('\n'));
+});
+
+// #924: handoff에 해석된 status를 넘길 때의 함정. publish-status는 status.status를 표시용
+// 라벨(displayStatus)로 덮어쓰면서 원본 생성 실행 상태를 generation_status로 옮긴다. 해석된
+// status를 그대로 넘기면 아래 세 FAILED_* 상태가 전부 NEEDS_FIX로 접혀 diagnostics-only 분류가
+// 조용히 뒤집힌다(review PR이 public 산출물이 있는 것처럼 읽힌다).
+test('review handoff keeps the diagnostics-only classification for every FAILED_ generation status', () => {
+  const failedGenerationStatusCases = [
+    {
+      generationStatus: 'FAILED_EDITOR_REVIEWABLE',
+      writeArtifacts: (root, date) => writeCandidateShortageReviewableArtifacts(root, date, {
+        status: { status: 'FAILED_EDITOR_REVIEWABLE', failure_kind: 'editor_failed_reviewable' }
+      }),
+      artifacts: REQUIRED_FAILED_EDITOR_REVIEWABLE_ARTIFACTS
+    },
+    {
+      generationStatus: 'FAILED_RAW_ARTIFACT_VALIDATION',
+      writeArtifacts: (root, date) => writeFailedRawArtifactValidationArtifacts(root, date),
+      artifacts: REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS
+    },
+    {
+      generationStatus: 'FAILED_REPAIR_REVIEWABLE',
+      writeArtifacts: (root, date) => writeFailedRepairReviewableArtifacts(root, date),
+      artifacts: REQUIRED_FAILED_REPAIR_REVIEWABLE_ARTIFACTS
+    }
+  ];
+
+  for (const testCase of failedGenerationStatusCases) {
+    const root = fsTempRoot('newsroom-pr-body-');
+    const date = '2026-05-08';
+    testCase.writeArtifacts(root, date);
+    const changedArtifacts = testCase.artifacts.map(file => `articles/content/newsroom/${date}/${file}`);
+
+    const resolvedPublishStatus = resolvePublishStatus({ root, date });
+    assert.equal(resolvedPublishStatus.status.generation_status, testCase.generationStatus);
+    assert.notEqual(resolvedPublishStatus.status.status, testCase.generationStatus);
+
+    const rawFileHandoff = resolveReviewHandoff({ root, date, changedArtifacts });
+    const resolvedStatusHandoff = resolveReviewHandoff({
+      root,
+      date,
+      changedArtifacts,
+      status: resolvedPublishStatus.status
+    });
+
+    assert.equal(rawFileHandoff.diagnosticsOnly, true, testCase.generationStatus);
+    assert.equal(resolvedStatusHandoff.diagnosticsOnly, rawFileHandoff.diagnosticsOnly, testCase.generationStatus);
+    assert.equal(resolvedStatusHandoff.reviewPrReady, rawFileHandoff.reviewPrReady, testCase.generationStatus);
+    assert.equal(resolvedStatusHandoff.hasReviewableArtifacts, rawFileHandoff.hasReviewableArtifacts, testCase.generationStatus);
+    assert.equal(resolvedStatusHandoff.publicNewsletterReady, false, testCase.generationStatus);
+  }
 });
