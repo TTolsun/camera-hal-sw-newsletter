@@ -104,8 +104,6 @@ Firebase AI Logic은 HAL 변경 근거가 아니라 camera-frame AI 기능이 �
 
 ![Sandor Dargo](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [ISO C++ Blog](https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo)_
-
 
 C++26 assert 개선은 실패 시 더 풍부한 context를 남기는 language/toolchain 동향입니다. Camera HAL 제품 동작을 바꾸는 내용은 아니지만 debug-build와 host utility의 진단 품질을 높일 후보입니다.
 

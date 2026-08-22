@@ -63,7 +63,6 @@
         <p class="article-source-subtitle">V4L2 subdev pad ops에 const struct v4l2_subdev_client_info 포인터 추가 제안</p>
         <figure class="article-media">
         <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="V4L2 서브디바이스 패드 작업의 새로운 변화: v4l2_subdev_client_info 포인터 도입 제안 image" loading="lazy" decoding="async">
-        <figcaption class="article-image-caption">이미지: <a href="https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/">Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops</a></figcaption>
         </figure>
         <p class="article-lead">Linux 커널의 V4L2 서브디바이스 프레임워크에서 패드 작업(pad ops)의 정보 교환 방식을 개선하기 위해 v4l2_subdev_client_info 포인터를 추가하는 패치 제안이 공개되었습니다.</p>
         <p>Linux 커널의 V4L2(Video for Linux Two) 서브디바이스는 카메라 센서, ISP(Image Signal Processor) 등 미디어 파이프라인의 개별 구성 요소를 추상화하는 핵심 프레임워크입니다. 이번에 제안된 v5 10/10 패치 시리즈는 서브디바이스 간의 데이터 흐름 및 속성 협상을 정의하는 패드 작업(pad ops)에 const struct v4l2_subdev_client_info 포인터를 도입하는 것을 골자로 합니다.</p>
@@ -82,7 +81,6 @@
         <p class="article-source-subtitle">sailus-media-tree metadata-pre 브랜치에서 cvs_csi_set_fmt 함수 파라미터 &#39;ci&#39; 설명 누락 경고</p>
         <figure class="article-media">
         <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="V4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락 image" loading="lazy" decoding="async">
-        <figcaption class="article-image-caption">이미지: <a href="https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/">[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter &#39;ci&#39; not described in &#39;cvs_csi_set_fmt&#39;</a></figcaption>
         </figure>
         <p class="article-lead">Linux 커널의 V4L2 드라이버 개발 브랜치인 sailus-media-tree에서 빌드 중 cvs_csi_set_fmt 함수의 파라미터 설명이 누락되어 컴파일러 경고가 발생한 것으로 확인되었습니다.</p>
         <p>Linux 커널의 V4L2(Video for Linux Two) 서브디바이스 프레임워크는 카메라 센서 및 ISP 등 미디어 파이프라인의 개별 구성 요소를 추상화합니다. 최근 sailus-media-tree의 metadata-pre 개발 브랜치(head: 66c090febbc3c412ced4e71cb69f47b05eea0331)를 Clang 22.1.3 환경에서 빌드하는 과정에서 드라이버 코드 내 컴파일러 경고가 보고되었습니다.</p>

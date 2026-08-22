@@ -15,8 +15,6 @@
 
 ![Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [[PATCH v10 0/2] media: add Himax HM1246 image sensor](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/)_
-
 
 _lore.kernel.org linux-media list (2026-06-19)_
 
@@ -42,8 +40,6 @@ Himax HM1246 드라이버는 Native RAW 모드만 지원하므로, Android Camer
 
 
 ![Red Hat graphic shown on ISO C++ Blog](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [ISO C++ Blog](https://isocpp.org/blog)_
 
 
 _ISO C++ Blog (2026-06-15)_

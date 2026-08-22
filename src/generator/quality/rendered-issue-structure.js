@@ -270,7 +270,7 @@ function validateMarkdownStructure(date, markdown, errors) {
   }
 }
 
-function validateArticleImages(relPath, html, root, errors, strictArtifactValidation) {
+function validateArticleImages(relPath, html, root, errors) {
   const imageTags = String(html || '').match(/<img\b(?=[^>]*class=["'][^"']*\barticle-image\b)[^>]*>/gi) || [];
   for (const tag of imageTags) {
     const src = htmlAttr(tag, 'src');
@@ -315,10 +315,11 @@ function validateArticleImages(relPath, html, root, errors, strictArtifactValida
     const hasCaption = /article-image-caption/.test(nearby);
     const hasCaptionSourceLink = /<a\s+[^>]*href=["']https:\/\//i.test(nearby);
     if (isFallbackImagePath(src)) {
-      // 가짜 출처 캡션 금지는 발행 대상 호에만 적용합니다. 이 규칙이 생기기 전에 발행된 호에는
-      // 이미 이 캡션이 들어 있어서, 전체에 적용하면 내용과 무관한 PR까지 전부 막힙니다.
-      // 형제 validator들이 이미 쓰는 정책과 같습니다(과거 산출물은 검사 대상 밖).
-      if (strictArtifactValidation && hasCaption && hasCaptionSourceLink) {
+      // 가짜 출처 캡션 금지는 발행 대상 호만이 아니라 모든 호에 적용합니다. 예전에는 이 규칙이
+      // 생기기 전에 발행된 호 53건이 이미 이 캡션을 달고 있어서 발행 대상 호에만 적용했지만,
+      // #863에서 그 53건을 지웠으므로 더 이상 예외를 둘 이유가 없습니다. 예외를 되살리면
+      // 과거 호에 가짜 출처 캡션이 다시 들어가도 게이트가 통과시킵니다.
+      if (hasCaption && hasCaptionSourceLink) {
         errors.push(`Newsletter fallback article image must not carry a source attribution caption: ${relPath}`);
       }
     } else if (!hasCaption || !hasCaptionSourceLink) {
@@ -327,7 +328,7 @@ function validateArticleImages(relPath, html, root, errors, strictArtifactValida
   }
 }
 
-function validateHtmlStructure(date, html, root, errors, strictArtifactValidation) {
+function validateHtmlStructure(date, html, root, errors) {
   const content = String(html || '');
   const relPath = `newsletters/${date}/index.html`;
   if (!/<!doctype html>/i.test(content) || !/<html\b/i.test(content) || !/<\/html>/i.test(content)) {
@@ -364,7 +365,7 @@ function validateHtmlStructure(date, html, root, errors, strictArtifactValidatio
     }
   }
 
-  validateArticleImages(relPath, content, root, errors, strictArtifactValidation);
+  validateArticleImages(relPath, content, root, errors);
 }
 
 function validateSelectedImageContract(date, editor, root, errors) {
@@ -424,8 +425,7 @@ function validateRenderedIssueStructure({
   markdown = '',
   html = '',
   root = process.cwd(),
-  validateDataIndex = true,
-  strictArtifactValidation = true
+  validateDataIndex = true
 } = {}) {
   editor = toLegacyEditorIssue(editor, { date });
   const errors = [];
@@ -437,7 +437,7 @@ function validateRenderedIssueStructure({
     }
   }
   validateMarkdownStructure(issueDate, markdown, errors);
-  validateHtmlStructure(issueDate, html, root, errors, strictArtifactValidation);
+  validateHtmlStructure(issueDate, html, root, errors);
   validateSelectedImageContract(issueDate, editor, root, errors);
 
   return {

@@ -43,8 +43,6 @@ Camera HAL에 직접적인 API나 메타데이터 변경을 가져오지는 않�
 
 ![redhatgraphic.png](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [ISO C++ Blog](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)_
-
 
 _ISO C++ Blog (2026-06-15)_
 

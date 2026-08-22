@@ -15,8 +15,6 @@
 
 ![Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver](https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/)_
-
 
 _Linux Media Mailing List Patch v10_
 
@@ -43,8 +41,6 @@ Himax HM1246은 I2C 인터페이스를 통해 제어 및 프로그래밍이 수�
 
 ![Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver](https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/)_
-
 
 _Linux Media Mailing List Patch v2_
 
@@ -70,8 +66,6 @@ Sony IMX576 고해상도 이미지 센서를 지원하기 위한 V4L2 서브디�
 
 
 ![Red Hat Graphic on ISO C++ Blog](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [ISO C++ Blog](https://isocpp.org/blog)_
 
 
 _ISO C++ Blog Release Preview_

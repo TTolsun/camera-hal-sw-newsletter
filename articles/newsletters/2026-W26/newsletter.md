@@ -11,14 +11,12 @@
 - GCC 16 릴리스 예정: 템플릿 오류 메시지 개선 및 SARIF 정적 분석 출력 지원
 - Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장
 
-이번 기간 카메라 코어 직접 변경은 없었습니다. 아래는 실무 레이더 관점의 맥락입니다.
+**실무 레이더 관점**
 
 ## 2. Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안
 
 
 ![Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안 image](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver](https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/)_
 
 
 _Linux Media Mailing List Patch v10_
@@ -46,8 +44,6 @@ Himax HM1246은 I2C 인터페이스를 통해 제어 및 프로그래밍이 수�
 
 ![Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver](https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/)_
-
 
 _Linux Media Mailing List Patch v2_
 
@@ -73,8 +69,6 @@ Sony IMX576 고해상도 이미지 센서를 지원하기 위한 V4L2 서브디�
 
 
 ![redhatgraphic.png](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [ISO C++ Blog](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)_
 
 
 _ISO C++ Blog Release Preview_

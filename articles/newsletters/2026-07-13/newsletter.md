@@ -15,8 +15,6 @@
 
 ![Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안 image](../../assets/images/fallback/android.svg)
 
-_이미지: [Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver](https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/)_
-
 
 _lore.kernel.org linux-media 메일링 리스트 패치 분석_
 
@@ -42,8 +40,6 @@ Android Camera HAL에 직접적인 API 변경을 주지는 않으나, 하위 드
 
 
 ![libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 강화를 위한 EGL 텍스처 필터 파라미터 도입 image](../../assets/images/fallback/android.svg)
-
-_이미지: [[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()](https://patchwork.libcamera.org/patch/27346/)_
 
 
 _libcamera Patchwork RFC v7 패치 검토_

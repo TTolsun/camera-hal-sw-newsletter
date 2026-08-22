@@ -13,8 +13,6 @@
 
 ![libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [libcamera: camera_sensor: Add IMX335 test pattern sensor properties](https://patchwork.libcamera.org/patch/27362/)_
-
 
 _libcamera 패치워크를 통한 IMX335 센서 속성 검토_
 

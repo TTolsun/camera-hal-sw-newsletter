@@ -43,8 +43,6 @@ AndroidX CameraX 라이브러리의 최신 알파 버전인 1.7.0-alpha02가 202
 
 ![libcamera, 센서 프레임 추적을 위한 SensorSequence 메타데이터 컨트롤 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [[v2,1/2] libcamera: Add SensorSequence metadata control](https://patchwork.libcamera.org/patch/27198/)_
-
 
 _libcamera Patchwork (patch review)_
 
@@ -70,8 +68,6 @@ _libcamera Patchwork (patch review)_
 
 
 ![LLVM/Clang 빌드 환경에서 발생하는 미디어 드라이버 버퍼 오버플로우 수정 패치 분석 image](../../assets/images/fallback/cpp.svg)
-
-_이미지: [[PATCH v2] media: dw2102: Fix a buffer overflow](https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/)_
 
 
 _lore.kernel.org linux-media list_

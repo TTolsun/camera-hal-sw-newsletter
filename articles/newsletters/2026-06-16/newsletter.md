@@ -15,8 +15,6 @@
 
 ![ARM Mali-C55 ISP, CCM 지원 패치 제안으로 이미지 색상 처리 강화 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/)_
-
 
 _Linux 미디어 메일링 리스트에서 Mali-C55 ISP 드라이버의 색상 보정 기능 확장 논의_
 
@@ -70,8 +68,6 @@ Android 개발자 생산성 향상을 위한 노력의 일환으로, Android ski
 
 
 ![GCC 16 출시 임박: 향상된 오류 메시지 및 SARIF 출력으로 개발 경험 개선 image](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)_
 
 
 _ISO C++ 블로그, GCC 16의 주요 기능 발표_
