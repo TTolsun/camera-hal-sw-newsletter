@@ -101,6 +101,31 @@ test('목록 fallback 후보의 날짜 provenance가 정규화를 통과한다',
   assert.equal(candidate.date_evidence_url, 'https://claude.com/blog');
 });
 
+// sourceExtractionBackfill(:847)은 release.date를 publishedAt으로, 첫 bullet을
+// summary/behavior_change로 승격시킨다. workflow branch(Task 6이 채우는 근거)가 이
+// 승격 경로를 타면 목록 날짜의 publishedAt 위장과 필드 분리 무효화가 재발한다.
+// sourceExtractionSections(:830)이 release/minor_line_context만 모으므로 지금은 안전하지만,
+// 나중에 탐색 범위를 넓히면 다시 깨질 수 있어 회귀를 여기 잠근다.
+test('release-only backfill never reads the workflow branch', () => {
+  const candidate = normalizeCandidate({
+    source,
+    title: 'Claude on call',
+    url: 'https://claude.com/blog/ai-ci-cd-on-call',
+    sourceKind: 'blog_post_item',
+    publishedAt: '',
+    effective_date: '2026-08-18',
+    date_source: 'release_row_date',
+    date_confidence: 95,
+    summary: 'Real summary.',
+    api_or_component: 'Claude Code',
+    behavior_change: 'Real behavior change.',
+    source_extraction: { workflow: { sections: [{ items: [{ text: 'Workflow paragraph.' }] }] } }
+  });
+  assert.equal(candidate.publishedAt, '', 'workflow 날짜가 publishedAt으로 승격되면 안 된다');
+  assert.equal(candidate.summary, 'Real summary.');
+  assert.equal(candidate.behavior_change, 'Real behavior change.');
+});
+
 test('근거 URL이 http(s)가 아니면 버린다', () => {
   for (const bad of ['/blog', 'javascript:alert(1)', 'data:text/html,x']) {
     const candidate = normalizeCandidate(raw({ date_evidence_url: bad }));

@@ -478,6 +478,36 @@ test('compact selection context omits full candidate arrays', () => {
   assert.equal(context.excluded_candidates, undefined);
 });
 
+// Task 6의 dated-article resolver가 release/minor_line_context와 분리해 워크플로 서술을
+// source_extraction.workflow.sections에 담는다. compactSourceExtraction이 이 branch를
+// 통과시키지 않으면 캡슐 단계에서 유실된다.
+test('the workflow branch survives capsule compaction', () => {
+  const candidate = {
+    source_extraction: {
+      workflow: {
+        sections: [
+          {
+            category: 'ci',
+            heading: 'CI triage',
+            items: [{ text: 'Claude gathers evidence from GitHub, Grafana and PagerDuty before a human approval gate.' }]
+          }
+        ]
+      }
+    }
+  };
+  const capsule = buildArticleCapsule(candidate, []);
+  assert.equal(capsule.source_extraction.workflow.sections.length, 1);
+  assert.match(capsule.source_extraction.workflow.sections[0].items[0].text, /human approval/i);
+});
+
+test('caps how many workflow sections reach the capsule', () => {
+  const sections = Array.from({ length: 8 }, (unused, index) => ({
+    category: 'ci', heading: `Section ${index}`, items: [{ text: 'x'.repeat(400) }]
+  }));
+  const capsule = buildArticleCapsule({ source_extraction: { workflow: { sections } } }, []);
+  assert.equal(capsule.source_extraction.workflow.sections.length, 2);
+});
+
 test('article capsule prompt input omits linked evidence diagnostics fields', () => {
   const report = buildArticleCapsuleReport('2026-05-03', {
     date: '2026-05-03',
