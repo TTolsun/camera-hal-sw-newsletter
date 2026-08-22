@@ -223,6 +223,16 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
   // 필터가 비어 버린다) 대신, 그 주 기사(section)들의 relevance bucket 을 topic 태그로 집계한다.
   const mergedTags = weeklyTopicTags(articles);
 
+  // coverage(대상 주) 5필드는 이 태스크에서 생산하지 않고 있으면 그대로 옮기기만 한다(pass-through).
+  // 새 draft(editor)가 가진 값을 우선하고, 없으면 기존 이슈에 이미 실린 값을 보존한다 — 그래야
+  // coverage 필드가 없는 draft로 같은 주를 재-upsert해도(과거호, 전환 전 실행 등) 앞서 실린
+  // coverage 표시가 지워지지 않는다.
+  const coverageCarryFields = {};
+  for (const field of ['coverage_week_key', 'coverage_start_date', 'coverage_end_date', 'coverage_mode', 'generation_anchor_date']) {
+    const value = (editor && editor[field]) || (existingIssue && existingIssue[field]);
+    if (value) coverageCarryFields[field] = value;
+  }
+
   const mergedDraft = {
     ...editor,
     sections: articles,
@@ -233,7 +243,8 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
     references: dedupeReferences([
       ...ensureArray(existingIssue && existingIssue.references),
       ...ensureArray(editor && editor.references)
-    ])
+    ]),
+    ...coverageCarryFields
   };
   const page = buildWeeklyNewsletterPage(mergedDraft, { date });
 
@@ -271,7 +282,10 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
     // Distinct https article images (section order) so the homepage Latest card can show one
     // article image that is not the headline image.
     article_images: weeklyArticleImages(page.issue.sections),
-    ...contractVersionField
+    ...contractVersionField,
+    // issue.json과 동일한 pass-through: 있으면 index entry에도 싣는다(홈·아카이브가 fetch하는
+    // 정본은 이 index이기 때문에 여기 없으면 coverage 표시를 만들 수 없다).
+    ...coverageCarryFields
   });
 
   return {

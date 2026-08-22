@@ -101,3 +101,86 @@ test('buildWeeklyNewsletterPage renders the draft sections verbatim, including n
   assert.equal(page.issue.sections.length, 2);
   assert.deepEqual(page.issue.briefing, ['CameraX SessionConfig stable API', 'CameraX 1.8.0 alpha SessionProcessor']);
 });
+
+test('coverage 필드가 있으면 제목·표시가 대상 주 기준이 된다', () => {
+  const page = buildWeeklyNewsletterPage({
+    sections: [],
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-16',
+    coverage_mode: 'iso_week',
+    generation_anchor_date: '2026-08-17'
+  }, { date: '2026-08-17' });
+  assert.equal(page.weeklyKey, '2026-W34');                       // 발행 identity 불변
+  assert.equal(page.issue.title, '2026 W33 (08.10 ~ 08.16)');     // 표시는 coverage
+  assert.equal(page.issue.coverage_week_key, '2026-W33');
+  assert.match(page.html, /2026\.08\.10 – 08\.16/);
+  assert.doesNotMatch(page.html, /08\.17 ~ 08\.23/);              // 미래 기간 표시 제거
+  // 표시 계약 v2: 대상 주(W33)와 발행 주(W34)가 다르므로 h1 아래 발행 배지와 SEO 접미를 둘 다 붙인다.
+  assert.match(page.html, /<h1 class="issue-title"><span>2026 W33<\/span><\/h1>\s*<p class="issue-publish-badge">발행 W34<\/p>/);
+  assert.match(page.html, /<title>2026 W33 Camera SW Newsletter \(발행 W34\)<\/title>/);
+  assert.match(page.html, /<meta property="og:title" content="2026 W33 Camera SW Newsletter \(발행 W34\)" \/>/);
+  assert.match(page.html, /<meta name="twitter:title" content="2026 W33 Camera SW Newsletter \(발행 W34\)" \/>/);
+});
+
+test('coverage 필드가 없으면 markdown 제목(issue.title)은 기존 출력과 바이트가 같다', () => {
+  const before = buildWeeklyNewsletterPage({ sections: [] }, { date: '2026-08-17' });
+  assert.equal(before.issue.title, '2026 W34 (08.17 ~ 08.23)');
+});
+
+// 표시 계약 v2: coverage 필드가 통째로 없는 weekly issue는 발행 주의 실제 달력 날짜를 대상
+// 기간인 것처럼 보여주지 않는다(예전엔 kicker가 발행 주 range를 그대로 보여줬다 — 실제로는 모르는
+// 기간을 아는 것처럼 꾸미는 셈이었다). markdown(issue.title)은 위 테스트대로 바이트 불변이다 —
+// 이 변경은 HTML 페이지(kicker·h1)에만 적용된다.
+test('coverage 필드가 없으면 HTML 페이지는 대상 기간을 미확인으로 보여준다', () => {
+  const page = buildWeeklyNewsletterPage({ sections: [] }, { date: '2026-08-17' });
+  assert.match(page.html, /<span class="issue-kicker">대상 기간 미확인<\/span>/);
+  assert.match(page.html, /<h1 class="issue-title"><span>2026 W34 \(대상 기간 미확인\)<\/span><\/h1>/);
+  assert.doesNotMatch(page.html, /issue-publish-badge/);          // unverified는 별도 배지가 없다
+  assert.doesNotMatch(page.html, /08\.17 – 08\.23/);               // 잘못된 기간 range 제거
+  assert.match(page.html, /<title>2026 W34 Camera SW Newsletter<\/title>/); // SEO 제목은 그대로
+});
+
+test('coverage_week_key만 있고 날짜가 없으면 깨진 문자열 없이 발행 주 표시로 폴백한다', () => {
+  const page = buildWeeklyNewsletterPage({
+    sections: [],
+    coverage_week_key: '2026-W33'
+    // coverage_start_date/coverage_end_date 누락
+  }, { date: '2026-08-17' });
+  assert.equal(page.issue.title, '2026 W34 (08.17 ~ 08.23)');
+  assert.doesNotMatch(page.issue.title, /ined/);
+  assert.doesNotMatch(page.html, /ined/);
+});
+
+// 리뷰 fix 3: legacy_rolling은 ISO 주 라벨을 붙일 근거가 없다(실제 rolling 조회 범위일 뿐이라).
+// 주 라벨(및 발행 identity)은 발행 주(2026-W34)를 그대로 쓰고, 괄호 안 날짜 range만 실제 rolling
+// 범위(coverage_start_date~coverage_end_date)로 바꾼다 — 라벨과 range가 서로 다른 근거의
+// 날짜를 섞어 보여주지 않는다.
+test('coverage_mode가 legacy_rolling이면 주 라벨은 발행 주, range만 rolling 범위로 표시한다', () => {
+  const page = buildWeeklyNewsletterPage({
+    sections: [],
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-17',
+    coverage_mode: 'legacy_rolling',
+    generation_anchor_date: '2026-08-17'
+    // coverage_week_key 없음 — legacy_rolling은 의도적으로 기록하지 않는다.
+  }, { date: '2026-08-17' });
+  assert.equal(page.weeklyKey, '2026-W34');                       // 발행 identity 불변
+  assert.equal(page.issue.title, '2026 W34 (08.10 ~ 08.17)');     // 라벨=발행 주, range=rolling
+  assert.match(page.html, /2026\.08\.10 – 08\.17/);
+  assert.match(page.html, />2026 W34</);
+  assert.doesNotMatch(page.html, /08\.17 ~ 08\.23/);
+  // 표시 계약 v2: legacy_rolling은 실제 ISO 주가 아니므로 kicker에 "대상 " 접두를 붙여 밝힌다.
+  // h1은 그대로 발행 주 라벨이라(대상 주가 따로 없음) 별도 배지는 붙지 않는다.
+  assert.match(page.html, /<span class="issue-kicker">대상 2026\.08\.10 – 08\.17<\/span>/);
+  assert.doesNotMatch(page.html, /issue-publish-badge/);
+});
+
+test('coverage_mode가 legacy_rolling인데 날짜가 없으면 완전히 발행 주 표시로 폴백한다(추측하지 않는다)', () => {
+  const page = buildWeeklyNewsletterPage({
+    sections: [],
+    coverage_mode: 'legacy_rolling'
+    // coverage_start_date/coverage_end_date 누락
+  }, { date: '2026-08-17' });
+  assert.equal(page.issue.title, '2026 W34 (08.17 ~ 08.23)');
+});

@@ -52,6 +52,31 @@ function writeNewsletterIndex(root, date = '2026-05-09') {
   return date;
 }
 
+// coverage 필드 검증 전용 fixture: daily 인덱스는 그대로 두고 weekly 인덱스 entry에만
+// coverage 값을 얹는다(validateNewsletterIndex는 두 인덱스를 모두 스캔한다).
+function writeWeeklyIndexWithCoverage(root, coverageOverrides = {}) {
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
+    date: '2026-05-08',
+    title: 'Existing published issue',
+    summary: 'Existing issue entry',
+    html: 'newsletters/2026-05-08/index.html',
+    md: 'newsletters/2026-05-08/newsletter.md',
+    tags: ['camera-hal']
+  }]);
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{
+    weeklyKey: '2026-W19',
+    weekStartDate: '2026-05-04',
+    weekEndDate: '2026-05-10',
+    date: '2026-05-04',
+    title: '2026 W19',
+    summary: 'Existing weekly issue entry',
+    html: 'newsletters/2026-W19/index.html',
+    md: 'newsletters/2026-W19/newsletter.md',
+    tags: ['camera-hal'],
+    ...coverageOverrides
+  }]);
+}
+
 function issue(overrides = {}) {
   const date = overrides.date || '2026-05-09';
   return {
@@ -300,6 +325,203 @@ test('rendered issue structure rejects selectedImage and newsletter index contra
   });
   assert.equal(result.ok, false);
   assert.match(result.text, /Invalid JSON in articles\/data\/newsletters\.json/);
+});
+
+test('newsletter index accepts an entry with all optional coverage fields valid', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-16',
+    coverage_mode: 'iso_week',
+    generation_anchor_date: '2026-08-17'
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, true, result.text);
+});
+
+test('newsletter index rejects an entry with a partial coverage display field set', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  // coverage_end_date만 빠졌다 — 표시 계층이 셋 다 유효할 때만 원자적으로 보여주므로,
+  // 검증도 하나만 있고 나머지가 없는 상태를 오류로 잡아야 한다.
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10'
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.text, /partial coverage display fields/);
+});
+
+test('newsletter index rejects malformed optional coverage field values', () => {
+  const cases = [
+    [{ coverage_week_key: '2026-33', coverage_start_date: '2026-08-10', coverage_end_date: '2026-08-16' }, /invalid coverage_week_key/],
+    [{ coverage_week_key: '2026-W33', coverage_start_date: '2026/08/10', coverage_end_date: '2026-08-16' }, /invalid coverage_start_date/],
+    [{ coverage_week_key: '2026-W33', coverage_start_date: '2026-08-10', coverage_end_date: '16-08-2026' }, /invalid coverage_end_date/],
+    [{ coverage_mode: 'weekly' }, /invalid coverage_mode/],
+    [{ generation_anchor_date: 'not-a-date' }, /invalid generation_anchor_date/]
+  ];
+
+  for (const [coverageOverrides, pattern] of cases) {
+    const root = tempRoot('rendered-issue-structure-');
+    const date = '2026-05-09';
+    writeWeeklyIndexWithCoverage(root, coverageOverrides);
+    const editor = issue({ date });
+    const result = validateRenderedIssueStructure({
+      root,
+      date,
+      editor,
+      markdown: buildMarkdown(editor),
+      html: buildHtml(editor)
+    });
+    assert.equal(result.ok, false, JSON.stringify(coverageOverrides));
+    assert.match(result.text, pattern, JSON.stringify(coverageOverrides));
+  }
+});
+
+// 리뷰 fix 3: coverage_mode는 discriminated union이다. legacy_rolling은 ISO 주 라벨을 붙일
+// 근거가 없어(실제 rolling 조회 범위일 뿐) coverage_week_key가 있으면 안 되고, 대신 날짜
+// 2개(coverage_start_date/coverage_end_date)는 반드시 있어야 한다. 그 외(iso_week 또는
+// coverage_mode 부재)는 기존 3필드 원자 규칙을 그대로 유지한다.
+test('newsletter index accepts a legacy_rolling entry with only the rolling date range (no coverage_week_key)', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-17',
+    coverage_mode: 'legacy_rolling',
+    generation_anchor_date: '2026-08-17'
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, true, result.text);
+});
+
+test('newsletter index rejects a legacy_rolling entry that also carries coverage_week_key', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-17',
+    coverage_mode: 'legacy_rolling'
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.text, /legacy_rolling must not include coverage_week_key/);
+});
+
+test('newsletter index rejects a legacy_rolling entry missing the rolling date range', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_start_date: '2026-08-10',
+    coverage_mode: 'legacy_rolling'
+    // coverage_end_date 누락 — legacy_rolling도 날짜 2개는 필수다.
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.text, /legacy_rolling requires coverage_start_date and coverage_end_date/);
+});
+
+test('newsletter index still enforces the atomic 3-field rule when coverage_mode is iso_week', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_mode: 'iso_week'
+    // coverage_end_date 누락 — iso_week(또는 mode 부재)은 3필드 원자 규칙 그대로다.
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, false);
+  assert.match(result.text, /partial coverage display fields/);
+});
+
+// 표시 계약 v2: coverage_mode는 unverified variant를 추가한다. "대상 기간을 모른다"는 것 자체가
+// 값이므로 coverage_week_key/날짜 3필드를 하나라도 실으면(대상 기간을 안다는 뜻이 되어) 모순이다.
+test('newsletter index accepts a coverage_mode=unverified entry with no coverage display fields', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_mode: 'unverified'
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, true, result.text);
+});
+
+test('newsletter index rejects a coverage_mode=unverified entry that also carries any coverage display field', () => {
+  const cases = [
+    { coverage_mode: 'unverified', coverage_week_key: '2026-W33' },
+    { coverage_mode: 'unverified', coverage_start_date: '2026-08-10' },
+    { coverage_mode: 'unverified', coverage_end_date: '2026-08-16' }
+  ];
+
+  for (const coverageOverrides of cases) {
+    const root = tempRoot('rendered-issue-structure-');
+    const date = '2026-05-09';
+    writeWeeklyIndexWithCoverage(root, coverageOverrides);
+    const editor = issue({ date });
+    const result = validateRenderedIssueStructure({
+      root,
+      date,
+      editor,
+      markdown: buildMarkdown(editor),
+      html: buildHtml(editor)
+    });
+    assert.equal(result.ok, false, JSON.stringify(coverageOverrides));
+    assert.match(result.text, /coverage_mode=unverified must not include/, JSON.stringify(coverageOverrides));
+  }
 });
 
 test('rendered issue structure does not enforce non-structural quality gates', () => {

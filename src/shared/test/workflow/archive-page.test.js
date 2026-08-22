@@ -399,7 +399,10 @@ test('archive page shows fetch error state without exposing controls', async () 
   assert.equal(errors.length, 1);
 });
 
-test('archive card date chip shows the ISO week label (W##) for weekly entries', () => {
+// 표시 계약 v2: coverage 필드가 전혀 없는 weekly entry는 발행 주 라벨만 단독으로 보여주지
+// 않는다 — "발행 WNN · 대상 기간 미확인"으로 대상 기간을 모른다는 사실 자체를 알린다(발행 주의
+// 실제 달력 날짜를 대상 기간인 것처럼 꾸미지 않는다, 의도된 변경).
+test('archive card date chip shows the published ISO week label (W##) plus an unconfirmed coverage note for weekly entries', () => {
   const html = NewsletterArchive.renderArchiveCard({
     weeklyKey: '2026-W22',
     date: '2026-05-25',
@@ -407,8 +410,9 @@ test('archive card date chip shows the ISO week label (W##) for weekly entries',
     summary: '기사 A · 기사 B',
     tags: []
   });
-  assert.match(html, /class="issue-date">W22</);
+  assert.match(html, /class="issue-date">발행 W22</);
   // The visible date chip shows the week label, not the raw start date.
   assert.doesNotMatch(html, /class="issue-date">2026-05-25</);
+  assert.match(html, /대상 기간 미확인/);
   assert.match(html, /2026 W22 \(05\.25 ~ 05\.31\)/);
 });

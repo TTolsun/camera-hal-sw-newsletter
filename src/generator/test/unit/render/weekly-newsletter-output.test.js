@@ -195,6 +195,62 @@ test('a run in a new ISO week creates a separate weekly issue', async () => {
   assert.deepEqual(index.map(i => i.weeklyKey), ['2026-W24', '2026-W23']);
 });
 
+test('coverage 필드는 upsert를 통과해 issue.json과 index entry에 남는다', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/coverage';
+  const editorDraft = {
+    ...draft([section('coverage', url)]),
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-16',
+    coverage_mode: 'iso_week',
+    generation_anchor_date: '2026-08-17'
+  };
+
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: editorDraft, tags: [] });
+
+  const issue = readIssue(root, '2026-W23');
+  assert.equal(issue.coverage_week_key, '2026-W33');
+  assert.equal(issue.coverage_start_date, '2026-08-10');
+  assert.equal(issue.coverage_end_date, '2026-08-16');
+  assert.equal(issue.coverage_mode, 'iso_week');
+  assert.equal(issue.generation_anchor_date, '2026-08-17');
+
+  const indexEntry = readWeeklyIndexFile(root)[0];
+  assert.equal(indexEntry.coverage_week_key, '2026-W33');
+  assert.equal(indexEntry.coverage_start_date, '2026-08-10');
+  assert.equal(indexEntry.coverage_end_date, '2026-08-16');
+  assert.equal(indexEntry.coverage_mode, 'iso_week');
+  assert.equal(indexEntry.generation_anchor_date, '2026-08-17');
+});
+
+test('coverage 필드가 없는 draft로 같은 주에 재실행해도 기존 이슈의 coverage 값이 보존된다', async () => {
+  const root = tempRoot();
+  const editorDraft = {
+    ...draft([section('coverage-first', 'https://example.com/coverage-first')]),
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-16',
+    coverage_mode: 'iso_week',
+    generation_anchor_date: '2026-08-17'
+  };
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: editorDraft, tags: [] });
+
+  // 두 번째 실행의 draft에는 coverage 필드가 전혀 없다(예: 과거호 재-upsert). 기존 이슈에
+  // 이미 실린 coverage 값이 지워지지 않고 그대로 남아야 한다.
+  await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-01',
+    editor: draft([section('coverage-second', 'https://example.com/coverage-second')]),
+    tags: []
+  });
+
+  const issue = readIssue(root, '2026-W23');
+  assert.equal(issue.coverage_week_key, '2026-W33');
+  const indexEntry = readWeeklyIndexFile(root)[0];
+  assert.equal(indexEntry.coverage_week_key, '2026-W33');
+});
+
 test('a single run cannot add more than the daily intake limit of new articles', async () => {
   const root = tempRoot();
   const sections = [1, 2, 3, 4, 5, 6, 7].map(n => section(`v${n}`, `https://example.com/${n}`, n));

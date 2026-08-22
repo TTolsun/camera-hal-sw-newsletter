@@ -487,8 +487,112 @@ test('renderArchiveCard builds an image-forward card with kicker, headline, and 
   assert.match(html, /<div class="card-kicker">Camera HAL<\/div>/);
   // Headline is the issue's top article title (first summary line), not the issue label.
   assert.match(html, /<h3 class="card-title clamp-2 nc-h">기사 A<\/h3>/);
-  assert.match(html, /<div class="card-meta archive-card-meta"><span class="issue-date">W28<\/span> · 2026\.07\.06 – 07\.12 · 총 3건<\/div>/);
+  // 표시 계약 v2: coverage 필드가 전혀 없는 weekly entry는 "발행 WNN · 대상 기간 미확인"으로
+  // 보여준다(발행 주의 실제 달력 날짜를 대상 기간인 것처럼 꾸미지 않는다 — 의도된 변경).
+  assert.match(html, /<div class="card-meta archive-card-meta"><span class="issue-date">발행 W28<\/span> · 대상 기간 미확인 · 총 3건<\/div>/);
   assert.doesNotMatch(html, /card-summary|tag-row/);
+});
+
+// 표시 계약 v2: coverage 필드(coverage_week_key/coverage_start_date/coverage_end_date, optional,
+// Task 3, 11이 채움)가 있으면 카드는 대상 주(coverage)와 발행 주(weeklyKey)를 항상 함께 보여준다
+// (서로 다른 두 identity를 하나만 보여주면 다른 기사가 같은 카드로 겹쳐 보이는 아카이브 중복
+// 문제가 생긴다). 발행 identity(weeklyKey)는 라우팅에도 쓰인다.
+test('renderArchiveCard shows both the coverage week and the published week when coverage fields are present', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    weeklyKey: '2026-W34',
+    date: '2026-08-17',
+    title: '2026 W34',
+    weekStartDate: '2026-08-17',
+    weekEndDate: '2026-08-23',
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-16',
+    article_count: 2,
+    summary: '기사 C\n기사 D',
+    tags: ['Camera HAL', 'Android'],
+    html: 'newsletters/2026-W34/index.html',
+    article_images: ['https://example.com/thumb2.png']
+  });
+
+  assert.match(
+    html,
+    /<div class="card-meta archive-card-meta"><span class="issue-date">대상 W33<\/span> · 2026\.08\.10 – 08\.16 · <span class="issue-publish-badge">발행 W34<\/span> · 총 2건<\/div>/
+  );
+  // 발행 identity(2026-W34)는 라우팅에도 쓰인다. URL은 변하지 않는다.
+  assert.match(html, /href="newsletters\/2026-W34\/index\.html"/);
+});
+
+// coverage_week_key만 있고 날짜가 없는 부분 누락 상태에서는 라벨(coverage 33)과 range(발행 주
+// 17~23)가 서로 다른 주를 가리키는 화면 불일치가 생길 수 있었다 — 셋 다 유효할 때만 통째로 쓰고,
+// 하나라도 빠지면 라벨·range 모두 발행 주로 폴백해야 한다.
+test('renderArchiveCard falls back to the published week label and range when coverage dates are missing', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    weeklyKey: '2026-W34',
+    date: '2026-08-17',
+    title: '2026 W34',
+    weekStartDate: '2026-08-17',
+    weekEndDate: '2026-08-23',
+    // coverage_week_key만 있고 coverage_start_date/coverage_end_date는 누락된 상태.
+    coverage_week_key: '2026-W33',
+    article_count: 2,
+    summary: '기사 C\n기사 D',
+    tags: ['Camera HAL', 'Android'],
+    html: 'newsletters/2026-W34/index.html',
+    article_images: ['https://example.com/thumb2.png']
+  });
+
+  assert.match(html, /<div class="card-meta archive-card-meta"><span class="issue-date">W34<\/span> · 2026\.08\.17 – 08\.23 · 총 2건<\/div>/);
+});
+
+// 리뷰 fix 3 + 표시 계약 v2: legacy_rolling은 ISO 주 라벨을 붙일 근거가 없다(실제 rolling 조회
+// 범위일 뿐이라). 대상(coverage)은 날짜 range만("대상 2026.08.10 – 08.17")으로 보여주고, 발행
+// 주(weeklyKey)는 별도 배지("발행 W34")로 함께 보여준다 — iso_week 케이스와 다른 discriminated
+// union 분기지만 두 identity를 항상 같이 보여준다는 원칙은 같다.
+test('renderArchiveCard shows the rolling date range as the coverage identity alongside the published week badge when coverage_mode is legacy_rolling', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    weeklyKey: '2026-W34',
+    date: '2026-08-17',
+    title: '2026 W34',
+    weekStartDate: '2026-08-17',
+    weekEndDate: '2026-08-23',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-17',
+    coverage_mode: 'legacy_rolling',
+    // coverage_week_key 없음 — legacy_rolling은 의도적으로 기록하지 않는다.
+    article_count: 2,
+    summary: '기사 C\n기사 D',
+    tags: ['Camera HAL', 'Android'],
+    html: 'newsletters/2026-W34/index.html',
+    article_images: ['https://example.com/thumb2.png']
+  });
+
+  assert.match(
+    html,
+    /<div class="card-meta archive-card-meta"><span class="issue-date">대상 2026\.08\.10 – 08\.17<\/span> · <span class="issue-publish-badge">발행 W34<\/span> · 총 2건<\/div>/
+  );
+  assert.match(html, /href="newsletters\/2026-W34\/index\.html"/);
+});
+
+// 표시 계약 v2: coverage_mode가 명시적으로 unverified면 필드가 남아 있어도(검증기가 막지만,
+// 렌더 계층은 방어적으로) 대상 기간을 모른다고 보여준다.
+test('renderArchiveCard shows the published week and an unconfirmed coverage period when coverage_mode is unverified', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    weeklyKey: '2026-W19',
+    date: '2026-05-04',
+    title: '2026 W19',
+    weekStartDate: '2026-05-04',
+    weekEndDate: '2026-05-10',
+    coverage_mode: 'unverified',
+    article_count: 1,
+    summary: '기사 E',
+    tags: ['Camera HAL'],
+    html: 'newsletters/2026-W19/index.html'
+  });
+
+  assert.match(
+    html,
+    /<div class="card-meta archive-card-meta"><span class="issue-date">발행 W19<\/span> · 대상 기간 미확인 · 총 1건<\/div>/
+  );
 });
 
 test('renderArchiveCard falls back to the site newsletter image and a kicker when data is sparse', () => {

@@ -582,6 +582,7 @@ pre code {
 }
 
 .issue-date,
+.issue-publish-badge,
 .status-chip,
 .category-label,
 .issue-kicker,
@@ -595,7 +596,8 @@ pre code {
   font-weight: 600;
 }
 
-.issue-date {
+.issue-date,
+.issue-publish-badge {
   background: var(--surface-soft);
   color: var(--muted);
 }
@@ -992,7 +994,8 @@ pre code {
   letter-spacing: -0.01em;
 }
 
-.archive-card .card-meta .issue-date {
+.archive-card .card-meta .issue-date,
+.archive-card .card-meta .issue-publish-badge {
   min-height: 0;
   padding: 0;
   background: transparent;
@@ -1377,6 +1380,11 @@ pre code {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+/* 표시 계약 v2: 대상 주(제목)와 발행 주가 다를 때 h1 아래 보조 배지로 발행 주를 알린다. */
+.newsletter-issue-page .issue-hero .issue-publish-badge {
+  margin-top: 10px;
 }
 
 /* mockup: 이슈 태그는 무채색 파치먼트 알약. */
