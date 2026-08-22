@@ -8,8 +8,6 @@
 // 목록 URL 자체는 절대 후보가 되지 않는다. followed-source 레지스트리(followed-source-item-resolvers.js)에
 // 등록되면 shouldSuppressGenericFallback이 켜져서, 이 함수가 빈 배열을 돌려줘도 인덱스 나비링크가
 // 후보로 새지 않는다(collect-news-candidates.js의 generic 폴백 억제 지점).
-//
-// 설계 근거: docs/superpowers/specs/2026-08-22-dated-article-resolver-design.md
 const {
   parseDatedArticleCards,
   datedArticleCardCollectionFailure,
@@ -22,7 +20,7 @@ const { dateSourceConfidence } = require('../common/date-signals');
 const DAY_MS = 24 * 60 * 60 * 1000;
 const RECENT_WINDOW_DAYS = 7;
 const DEFAULT_LOOKBACK_DAYS = 21;
-// 설계서 §4.4 운영 기본값. bootstrap(과거 글 일괄 확보)은 이 상수를 올리지 않고 별도 1회성
+// 운영 기본값. bootstrap(과거 글 일괄 확보)은 이 상수를 올리지 않고 별도 1회성
 // 실행으로 분리한다(§4.4) — 이 resolver는 그 분리를 몰라도 된다, 그냥 매 실행 상한만 지킨다.
 const MAX_ARTICLES_PER_RUN = 8;
 
@@ -44,7 +42,7 @@ const SUMMARY_LIMIT = 500;
 // (Anthropic News에는 이 구간 자체가 없다) — 없다고 실패로 닫지 않는다.
 const ARTICLE_BODY_END_MARKERS = ['blog_related_section_wrap', 'data-cta-position="Related articles"'];
 
-// 설계서 §4.5. 넓게 잡으면(bucket 패턴 전부의 합집합) 추출이 오탐 토큰을 오히려 농축한다는 것이
+// 넓게 잡으면(bucket 패턴 전부의 합집합) 추출이 오탐 토큰을 오히려 농축한다는 것이
 // 별도 조사에서 확인됐다 — 그래서 workflow 신호로만 좁힌다.
 const WORKFLOW_ANCHORS = [
   /\b(?:build|test|CI|CD|debug)\b/i,
@@ -55,17 +53,17 @@ const WORKFLOW_ANCHORS = [
 ];
 
 // api_or_component은 본문에서 실제 도구·서비스 이름을 뽑는다. 못 찾으면 config.componentLabel로
-// 물러선다. 이 목록은 설계서 §4.5가 예시로 든 다섯 개로 좁힌다 — 임의로 늘리면 근거 없는 라벨을
+// 물러선다. 이 목록은 아래 다섯 개로 좁힌다 — 임의로 늘리면 근거 없는 라벨을
 // 만들 위험이 있다.
 const KNOWN_COMPONENT_PATTERN = /\b(?:Claude Code|GitHub Actions|GitHub|PagerDuty|Grafana|Kubernetes)\b/;
 
 // 마침표 또는 불릿 뒤 공백을 문장 경계로 본다.
 const SENTENCE_BOUNDARY_PATTERN = /[.•]\s+/;
 
-// 사유를 자유 문자열로 두면 설계서 §4.12의 "사유별 건수"가 집계되지 않는다.
+// 사유를 자유 문자열로 두면 "사유별 건수"가 집계되지 않는다.
 // card_link_mismatch·card_link_ambiguous·month_precision은 Task 1의 카드 파서가 이미
 // fail-closed로 걸러서 이 resolver에 도달하지 않는다(카드 하나당 slug 정확히 1개·날짜 정확히
-// 1개만 통과시킨다). 그래도 어휘 자체는 설계서 §4.3의 다섯 사유를 그대로 굳혀 exports한다 —
+// 1개만 통과시킨다). 그래도 어휘 자체는 다섯 사유를 그대로 굳혀 exports한다 —
 // 이 resolver가 실제로 내는 것은 canonical_mismatch·date_conflict 둘뿐이다.
 const FAIL_CLOSED_REASONS = [
   'card_link_mismatch',
@@ -258,7 +256,7 @@ async function resolveDatedArticleIndexItems({
 
   const cards = parseDatedArticleCards(html, { pathPrefix });
 
-  // fetch 우선순위(설계서 §4.8, 2026-08-23 fix round 1로 6번 구현):
+  // fetch 우선순위(2026-08-23 fix round 1로 6번 구현):
   // 1. canonical dedupe — Task 1의 parseDatedArticleCards가 이미 slug당 카드 1개만 돌려주므로
   //    여기서 다시 할 일이 없다.
   // 2~3. 목록 날짜 기준 window 분류 후 최근 7일을 먼저 큐에 넣는다.
@@ -342,7 +340,7 @@ async function resolveDatedArticleIndexItems({
       continue;
     }
 
-    // 날짜 2단계(설계서 §4.3).
+    // 날짜 2단계.
     // 1) 개별 페이지가 날짜를 주면 그것을 쓴다 — 단, 목록 날짜와 다르면 무엇을 믿을지 정할
     //    근거가 없으므로 fail-closed(date_conflict)다.
     // 2) 개별 페이지가 날짜를 못 주면(canonical은 이미 확인됐다) 목록 날짜로 보완한다

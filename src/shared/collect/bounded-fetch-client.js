@@ -258,6 +258,5 @@ module.exports = {
   createBoundedFetchClient,
   MAX_BYTES_PER_ARTICLE,
   MAX_BYTES_PER_INDEX_PAGE,
-  MAX_BYTES_PER_SOURCE_RUN,
-  MAX_ATTEMPTS
+  MAX_BYTES_PER_SOURCE_RUN
 };

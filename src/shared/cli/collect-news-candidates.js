@@ -19,7 +19,6 @@ const { readRuntimeConfig, resolveRunMode } = require('../common/runtime-config'
 const {
   dateSourceConfidence,
   displayDate,
-  isKnownDateSource,
   monthRangeOverlapsWindow,
   resolveCandidateDateEvidence
 } = require('../common/date-signals');
