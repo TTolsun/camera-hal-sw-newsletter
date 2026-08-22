@@ -101,7 +101,8 @@ const {
 } = require('../shared/common/coverage-week');
 const {
   capNotYetEligible,
-  urlDedupeKey
+  urlDedupeKey,
+  writeNotYetEligibleOverflowIfNeeded
 } = require('../shared/cli/collect-news-candidates');
 
 const FAILED_LLM_CREDENTIALS = 'FAILED_LLM_CREDENTIALS';
@@ -1334,6 +1335,12 @@ async function runEnabled({
   const notYetEligibleCap = capNotYetEligible(notYetEligibleMerged);
   mergedPayload.not_yet_eligible = notYetEligibleCap.committed;
   mergedPayload.not_yet_eligible_overflow = notYetEligibleCap.overflow;
+  // fix round 1: 상한을 넘기면 stage 1과 같은 규칙으로 전체 목록을 .tmp에 남긴다 — 안 그러면
+  // stage 2 신규 후보가 합류하며 상한을 넘긴 항목이 committed에도 진단 파일에도 없이 완전히
+  // 사라진다(silent truncate 금지 계약 위반). stage 1이 이미 이번 run에서 같은 파일을 썼어도
+  // 이 합산 전체 목록(stage 1 목록 ∪ 병합 단계 신규분)이 항상 상위 집합이므로 덮어써도 정보
+  // 유실이 없다.
+  writeNotYetEligibleOverflowIfNeeded(root, notYetEligibleCap);
   const geminiPayload = candidatePayload(date, geminiAnnotatedCandidates, {
     failures: discovery.rejectedProposals
   });

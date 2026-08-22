@@ -1144,6 +1144,126 @@ test('Stage 2 enabled merge excludes not-yet-eligible Gemini candidates and carr
   assert.equal(validated.validation_status, 'validated');
 });
 
+test('Stage 2 enabled merge caps a combined not_yet_eligible over the limit and preserves the full list in .tmp', async () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  // fixture의 Version 1.6.1 릴리스 날짜는 2026-05-06이다. coverage_end_date를 그보다
+  // 앞선 2026-04-26으로 두면 [E, U) 밖(= not_yet_eligible)이 된다.
+  const coverage = {
+    coverage_week_key: '2026-W17',
+    coverage_start_date: '2026-04-20',
+    coverage_end_date: '2026-04-26',
+    coverage_end_exclusive_at: '2026-04-27T00:00:00.000Z'
+  };
+  // stage 1이 이미 상한(60건)만큼 넘겨준 상황을 재현한다 — 전부 같은 날짜라 정렬 동률이면
+  // URL 사전순으로 먼저 온다. 이번 병합 단계가 걸러낼 신규 후보(2026-05-06, 더 최신)는
+  // 오름차순 정렬에서 항상 이 60건 뒤로 밀려나므로, 상한을 넘기면 신규 후보 쪽이 committed
+  // 에서 잘려나간다 — 그 사실 자체가 이 테스트가 검증하려는 silent truncate 시나리오다.
+  const stage1AtCap = Array.from({ length: 60 }, (_, index) => ({
+    url: `https://example.com/carried-${String(index).padStart(2, '0')}`,
+    title: `Carried candidate ${index}`,
+    publishedAt: '2026-04-01T00:00:00.000Z'
+  }));
+  const payload = {
+    ...candidatePayload(),
+    coverage,
+    not_yet_eligible: stage1AtCap,
+    not_yet_eligible_overflow: false,
+    carry_forward_status: 'loaded'
+  };
+  writeJson(path.join(root, 'src', 'shared', 'data', 'news-sources.json'), {
+    schemaVersion: 2,
+    sources: [{
+      id: 'android',
+      name: 'Android Developers',
+      sourceUrl: 'https://developer.android.com/',
+      rssUrl: null,
+      category: 'android',
+      priority: 'high',
+      reliability: 'official',
+      enabled: true,
+      candidateOnly: false,
+      requiresCrossCheck: false,
+      usageHint: 'Android Camera',
+      keywords: ['CameraX'],
+      linkedEvidencePolicy: {
+        enabled: true,
+        allowedDomains: ['developer.android.com']
+      }
+    }]
+  });
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+
+  const overflowPath = path.join(root, '.tmp', 'not-yet-eligible-full.json');
+  assert.equal(fs.existsSync(overflowPath), false);
+
+  const result = await runSourceDiscoveryBoundary({
+    root,
+    date,
+    env: {
+      NEWSLETTER_DATE: date,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true',
+      GEMINI_API_KEY: 'test-key',
+      GEMINI_RETRY_DELAYS_MS: '0'
+    },
+    callLlmJsonBudgetedImpl: async (_stage, _system, _prompt, _schema, options = {}) => {
+      options.budget.mergeDiagnostics({
+        model_usage: { sourceDiscovery: { fake: { requests: 1, successes: 1 } } },
+        cost_report: { calls: [{ stage: 'sourceDiscovery', model: 'fake' }] }
+      });
+      return {
+        schema_version: 1,
+        proposal_type: 'gemini_source_discovery',
+        newsletter_date: date,
+        proposals: [{
+          proposal_id: 'p1',
+          topic_gap: 'CameraX release notes',
+          source_family: 'official_android',
+          search_keywords: ['CameraX release notes'],
+          candidate_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
+          expected_evidence: ['published date'],
+          risk_notes: []
+        }]
+      };
+    },
+    fetchImpl: async (url) => {
+      if (url.includes('developer.android.com')) {
+        return {
+          ok: true,
+          text: async () => readTextFixture('source-html/camerax-release-notes-live-structure.html')
+        };
+      }
+      return { ok: false, status: 404, text: async () => '' };
+    }
+  });
+
+  assert.equal(result.status, 'PASS');
+
+  const merged = readJson(mergedCandidatesPath(root, date));
+  // stage 1의 60건 + 이번 병합 단계가 새로 걸러낸 1건 = 61건이 상한(60)을 넘긴다.
+  assert.equal(merged.not_yet_eligible.length, 60);
+  assert.equal(merged.not_yet_eligible_overflow, true);
+  // 더 최신(2026-05-06)인 신규 후보가 오름차순 정렬에서 committed 60건 밖으로 밀려난다.
+  assert.equal(
+    merged.not_yet_eligible.some(item => item.url === 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'),
+    false
+  );
+
+  const manifest = readJson(mergedCandidateManifestPath(root, date));
+  assert.equal(manifest.not_yet_eligible_count, 60);
+  assert.equal(manifest.not_yet_eligible_overflow, true);
+
+  // silent truncate 금지: 잘려나간 신규 후보가 .tmp 전체 목록 diagnostics artifact에 남아있어야
+  // 한다.
+  assert.equal(fs.existsSync(overflowPath), true);
+  const overflowFull = readJson(overflowPath);
+  assert.equal(overflowFull.length, 61);
+  assert.equal(
+    overflowFull.some(item => item.url === 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'),
+    true
+  );
+});
+
 test('merged candidate manifest schema_version 3 requires not_yet_eligible, coverage, and carry_forward_status', () => {
   const root = tempRoot();
   const date = '2026-05-16';
