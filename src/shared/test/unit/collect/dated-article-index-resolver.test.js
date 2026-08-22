@@ -198,6 +198,25 @@ async function resolveWithExhaustedSourceBudget(over = {}) {
   return runResolver({ html: INDEX_HTML, fetchClient, over });
 }
 
+// 9장 모두 같은 날짜(같은 tier)로 둔다 — parseDatedArticleCards는 날짜가 같으면 문서 위치로
+// 안정 정렬하므로, filler 8장을 앞에 두고 신호 있는 카드를 맨 뒤(9번째)에 두면 tie-break 없이는
+// 그 카드가 8건 컷 밖으로 밀려난다는 것을 결정론적으로 만들 수 있다.
+const WORKFLOW_SIGNAL_FILLER_SLUGS = [
+  'company-milestone-one', 'design-partner-story', 'customer-spotlight-retail',
+  'product-launch-recap', 'team-offsite-recap', 'partnership-announcement',
+  'brand-refresh-notes', 'holiday-schedule-update'
+];
+const WORKFLOW_SIGNAL_SLUG = 'nightly-ci-build-debug-report'; // -> 'nightly ci build debug report'
+
+function workflowSignalIndexHtml() {
+  const dateText = 'Aug 20, 2026'; // now(2026-08-22) 기준 2일 전 — 전부 recent tier
+  const cards = [
+    ...WORKFLOW_SIGNAL_FILLER_SLUGS.map(slug => oneCardHtml({ slug, dateText, title: 'Filler post' })),
+    oneCardHtml({ slug: WORKFLOW_SIGNAL_SLUG, dateText, title: 'Signal post' })
+  ];
+  return cards.join('');
+}
+
 // ---- 테스트 ----
 
 test('anchor-extracted workflow evidence reaches the article capsule', async () => {
@@ -336,4 +355,27 @@ test('reports when the source budget runs out with recent articles still queued'
   const exhausted = seen.find(event => event.kind === 'recent_window_budget_exhausted');
   assert.ok(exhausted, '최근 7일 기사가 예산 때문에 생략되면 진단이 남아야 한다');
   assert.match(exhausted.detail, /\d+/, '남은 건수를 적는다');
+});
+
+test('prioritizes a workflow-signal slug within its window tier even when the article cap would otherwise cut it', async () => {
+  // 9장 전부 같은 tier(recent)에 있고, 신호 있는 카드는 문서 순서상 9번째다.
+  // MAX_ARTICLES_PER_RUN=8이므로 tie-break가 없으면 이 카드는 절대 fetch되지 않는다.
+  const indexHtml = workflowSignalIndexHtml();
+  const fetched = [];
+  await runResolver({
+    html: indexHtml,
+    fetchClient: withOnFetch(makeClient({ indexHtml }), url => fetched.push(url)),
+    over: {}
+  });
+
+  assert.equal(fetched.length, 8, 'maxArticlesPerRun 상한(8)까지만 fetch한다');
+
+  const signalUrl = `${ORIGIN}${PATH_PREFIX}/${WORKFLOW_SIGNAL_SLUG}`;
+  assert.ok(fetched.includes(signalUrl),
+    'slug에 CI/CD/debug 신호가 있으면 문서 순서상 9번째라도 tie-break가 상위 8건 안으로 끌어올려야 한다');
+
+  const fetchedFillerCount = WORKFLOW_SIGNAL_FILLER_SLUGS
+    .filter(slug => fetched.includes(`${ORIGIN}${PATH_PREFIX}/${slug}`)).length;
+  assert.ok(fetchedFillerCount < WORKFLOW_SIGNAL_FILLER_SLUGS.length,
+    '신호 없는 filler 슬러그 중 최소 1건은 8건 컷 밖으로 밀려야 tie-break가 실제로 순서를 바꿨다고 말할 수 있다');
 });

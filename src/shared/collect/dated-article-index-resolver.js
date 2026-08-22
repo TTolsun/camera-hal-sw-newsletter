@@ -208,6 +208,23 @@ function windowTier(cardDate, now, lookbackDays) {
   return ageMs <= RECENT_WINDOW_DAYS * DAY_MS ? 'recent' : 'mid';
 }
 
+// Task 1의 카드는 title·category를 노출하지 않으므로 slug를 신호원으로 쓴다. hyphen을 공백으로
+// 바꾸면('nightly-ci-build-debug-report' -> 'nightly ci build debug report') WORKFLOW_ANCHORS의
+// \b 경계 매치가 그대로 작동한다.
+function slugWorkflowSignalScore(card) {
+  return countAnchorHits(String(card.slug || '').replace(/-/g, ' '));
+}
+
+/**
+ * 한 window 구간(recent 또는 mid) 안에서만 workflow 신호 점수로 재정렬한다. 구간을 넘나드는
+ * 재정렬은 하지 않는다 — 오래된 구간의 신호 강한 글이 최신 구간 글보다 앞서면 안 된다.
+ * 동점(대부분의 카드는 slug에 신호가 없어 점수 0으로 동점)이면 Array.prototype.sort의 안정성이
+ * Task 1이 이미 보장한 최신순 문서 순서를 그대로 유지한다.
+ */
+function prioritizeByWorkflowSignal(tierCards) {
+  return [...tierCards].sort((left, right) => slugWorkflowSignalScore(right) - slugWorkflowSignalScore(left));
+}
+
 /**
  * 목록 페이지 html에서 날짜가 결속된 개별 기사 후보를 만든다. 인덱스 URL 자체는 절대
  * 후보가 되지 않는다(카드가 0건이어도 그냥 빈 배열).
@@ -241,7 +258,7 @@ async function resolveDatedArticleIndexItems({
 
   const cards = parseDatedArticleCards(html, { pathPrefix });
 
-  // fetch 우선순위(설계서 §4.8):
+  // fetch 우선순위(설계서 §4.8, 2026-08-23 fix round 1로 6번 구현):
   // 1. canonical dedupe — Task 1의 parseDatedArticleCards가 이미 slug당 카드 1개만 돌려주므로
   //    여기서 다시 할 일이 없다.
   // 2~3. 목록 날짜 기준 window 분류 후 최근 7일을 먼저 큐에 넣는다.
@@ -249,9 +266,16 @@ async function resolveDatedArticleIndexItems({
   //    도달하지 않는다(카드가 존재한다는 것 자체가 날짜가 확정됐다는 뜻이다) — 그래서 이 구간은
   //    비어 있는 채로 우선순위에서 자연히 빠진다.
   // 5. 그다음 8~lookbackDays일 구간.
-  // 6. 구간 안 "미수집 -> workflow 신호(category·title) 순" tie-break는 생략한다 — Task 1의
-  //    카드 구조가 slug/날짜/위치만 주고 title·category 텍스트를 노출하지 않는다. 대신 Task 1이
-  //    이미 보장하는 최신순 문서 순서를 tie-break로 쓴다(각 구간 안에서 배열 순서가 유지된다).
+  // 6. 구간 안 "미수집 -> workflow 신호(category·title) 순" tie-break: Task 1의 카드
+  //    ({slug, publishedAt, path, blockStart, blockBytes})는 title·category 텍스트를 노출하지
+  //    않는다. 그래서 신호원으로 slug를 쓴다 — hyphen을 공백으로 바꾸면('ai-ci-cd-on-call' ->
+  //    'ai ci cd on call') 이미 갖고 있는 WORKFLOW_ANCHORS 정규식이 그대로 매치된다(새 어휘 없음).
+  //    이 tie-break가 없으면 안 되는 이유: MAX_ARTICLES_PER_RUN=8은 실제 라이브 인덱스의 창 안
+  //    기사 수(25건 중 21건이 21일 창 안)보다 훨씬 작다. 문서 순서(최신순)만 쓰면 8건 컷 바로
+  //    밖에 있는 workflow 신호 강한 글이 매주 조용히 사라진다 — 이 PR이 없애려는 바로 그 맹점이
+  //    신호원만 바뀐 채 재발한다. tie-break는 구간(recent/mid) 안에서만 적용한다 — 최신 기사가
+  //    신호 점수 때문에 오래된 구간 기사에 밀리면 안 된다. 동점이면 문서 순서(Task 1이 보장하는
+  //    최신순, 배열 안정 정렬로 유지)를 따른다.
   const recentCards = [];
   const midCards = [];
   for (const card of cards) {
@@ -259,7 +283,8 @@ async function resolveDatedArticleIndexItems({
     if (tier === 'recent') recentCards.push(card);
     else if (tier === 'mid') midCards.push(card);
   }
-  const orderedQueue = [...recentCards, ...midCards].slice(0, MAX_ARTICLES_PER_RUN);
+  const orderedQueue = [...prioritizeByWorkflowSignal(recentCards), ...prioritizeByWorkflowSignal(midCards)]
+    .slice(0, MAX_ARTICLES_PER_RUN);
 
   const results = [];
   const recentBudgetSkips = [];
