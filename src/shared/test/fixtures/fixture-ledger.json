@@ -769,6 +769,57 @@
       "minimizedFrom": {
         "note": "synthetic: hand-authored negative cases, not sliced from a real capture"
       }
+    },
+    {
+      "path": "source-html/claude-blog-ai-ci-cd-on-call.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Claude Blog dated article page parsing resolves canonical url and structured/visible publish date; body text preserved through the article's own content and cut before the related-articles card list so downstream summary/anchor extraction cannot read another article's title or date",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ],
+      "minimizedFrom": {
+        "url": "https://claude.com/blog/ai-ci-cd-on-call",
+        "capturedAt": "2026-08-22",
+        "originalCharacters": 557741,
+        "originalBytes": 557949
+      }
+    },
+    {
+      "path": "source-html/claude-blog-post-no-date.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Claude Blog dated article page with the visible date and JSON-LD datePublished removed, so date backfill from the index card date can be exercised against the same canonical url",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ],
+      "minimizedFrom": {
+        "url": "https://claude.com/blog/ai-ci-cd-on-call",
+        "capturedAt": "2026-08-22",
+        "originalCharacters": 557741,
+        "originalBytes": 557949
+      }
+    },
+    {
+      "path": "source-html/anthropic-news-claude-opus-5.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Anthropic News dated article page parsing falls back to the header visible date when the page carries no JSON-LD block and no date meta at all",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ],
+      "minimizedFrom": {
+        "url": "https://www.anthropic.com/news/claude-opus-5",
+        "capturedAt": "2026-08-22",
+        "originalCharacters": 323122,
+        "originalBytes": 323351
+      }
     }
   ]
 }

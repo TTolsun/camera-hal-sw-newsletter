@@ -1,0 +1,45 @@
+<link href="https://claude.com/blog/ai-ci-cd-on-call" rel="canonical"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Claude on call: How Claude Tag serves as Anthropic’s first responder for CI/CD failures",
+  "description": "How Anthropic runs AI incident response for CI/CD: an engineer on our Continuous Integration team walks through the Claude Tag agent that detects, triages, and resolves CI failures.",
+  "image": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6a84a8dee0d08841721bbc53_og_ai-ci-cd-on-call.jpg",
+  "publisher": {
+    "@id": "https://claude.com/#organization"
+  },
+  "dateModified": "Aug 20, 2026",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://claude.com/blog/ai-ci-cd-on-call"
+  }
+}
+</script>
+<h1 data-animate-hero-heading="" class="u-text-style-h1">Claude on call: How Claude Tag serves as Anthropic’s first responder for CI/CD failures</h1><div data-animate-hero-text="" class="hero_blog_description_wrap"><div data-wf--typography-paragraph--font-style="body-large-2-sans" class="c-paragraph w-variant-a8a1af09-b22b-0ee5-ee77-23c3e377a779 u-text-wrap-pretty w-richtext u-rich-text u-max-width-60ch u-mt-2"><p>An engineer on our Continuous Integration team walks through the agent he built that powers CI incident response at Anthropic.</p></div></div><div data-animate-hero-cta="" class="u-button-group u-hide-if-empty"><div class="header_stories_cta_wrap w-condition-invisible"><div data-wf--button-main--style="primary" class="button_main_wrap"><div class="u-embed-css w-embed"><style>
+.button_main_icon {
+  transition: color 300ms ease;
+}
+.button_main_wrap:hover .button_main_icon {
+  color: var(--_button-style---icon-hover); 
+}
+.button_main_wrap:focus-within .button_main_icon {
+  color: var(--_button-style---text-hover) !important;
+}
+.button_main_wrap:focus-within {
+  color: var(--_button-style---text-hover) !important;
+}
+</style></div><div aria-hidden="true" class="button_main_text u-text-style-body-2"></div><div class="clickable_wrap u-cover-absolute"><a data-cta-copy="" target="" data-cta="Claude on call: How Claude Tag serves as Anthropic’s first responder for CI/CD failures" data-cta-position="Hero section" href="#" data-wf-event-ids="157059830" class="clickable_link w-inline-block"><span class="clickable_text u-sr-only"></span></a><button type="button" class="clickable_btn"><span class="clickable_text u-sr-only"></span></button></div></div></div><div class="header_stories_cta_wrap w-condition-invisible"><div data-wf--button-main--style="secondary" class="button_main_wrap w-variant-5df310d1-d3c2-0e0b-6186-54a1fb3311b6"><div class="u-embed-css w-embed"><style>
+.button_main_icon {
+  transition: color 300ms ease;
+}
+.button_main_wrap:hover .button_main_icon {
+  color: var(--_button-style---icon-hover); 
+}
+.button_main_wrap:focus-within .button_main_icon {
+  color: var(--_button-style---text-hover) !important;
+}
+.button_main_wrap:focus-within {
+  color: var(--_button-style---text-hover) !important;
+}
+</style></div><div aria-hidden="true" class="button_main_text u-text-style-body-2"></div><div class="clickable_wrap u-cover-absolute"><a data-cta-copy="" target="" data-cta="Claude on call: How Claude Tag serves as Anthropic’s first responder for CI/CD failures" data-cta-position="Hero section" href="#" data-wf-event-ids="157059830" class="clickable_link w-inline-block"><span class="clickable_text u-sr-only"></span></a><button type="button" class="clickable_btn"><span class="clickable_text u-sr-only"></span></button></div></div></div></div></div></div></div><div id="w-node-_512c3258-1b20-382a-88d4-7eab7cbdc3ec-b08de180" class="hero_blog_post_details u-column-custom"><ul role="list" class="hero_blog_post_details_list"><li class="hero_blog_post_details_item u-hide-if-empty-cms"><div class="hero_blog_post_details_icon"><div class="icon_wrap"></div></div><div class="hero_blog_post_details_content"><div class="u-text-style-caption u-foreground-tertiary">Category</div><div class="w-dyn-list"><div role="list" class="u-flex-vertical-nowrap u-gap-0-75 w-dyn-items"><div role="listitem" class="w-dyn-item"><a href="https://claude.com/blog/category/enterprise-ai" class="u-text-style-body-3 u-rich-text">Enterprise AI</a></div><div role="listitem" class="w-dyn-item"><a href="https://claude.com/blog/category/agents" class="u-text-style-body-3 u-rich-text">Agents</a></div><div role="listitem" class="w-dyn-item"><a href="https://claude.com/blog/category/claude-code" class="u-text-style-body-3 u-rich-text">Claude Code</a></div></div></div></div></li><li class="hero_blog_post_details_item u-hide-if-empty-cms"><div class="hero_blog_post_details_icon"><div class="icon_wrap"></div></div><div class="hero_blog_post_details_content"><div class="u-text-style-caption u-foreground-tertiary">Product</div><div class="w-dyn-list"><div role="list" class="u-flex-vertical-wrap u-gap-1 w-dyn-items"><div role="listitem" class="w-dyn-item"><a href="https://claude.com/product/tag" class="u-text-style-body-3 u-rich-text">Claude Tag</a></div></div></div></div></li><li class="hero_blog_post_details_item"><div class="hero_blog_post_details_icon"><div class="icon_wrap"></div></div><div class="hero_blog_post_details_content"><div class="u-text-style-caption u-foreground-tertiary">Date</div><div class="u-text-style-body-3"></div></div></li><li class="hero_blog_post_details_item"><div class="hero_blog_post_details_icon"><div class="icon_wrap u-display-contents"></div></div><div class="hero_blog_post_details_content"><div class="u-text-style-caption u-foreground-tertiary">Reading time</div><div class="u-flex-horizontal-wrap u-gap-0-25"><div data-readtime="minutes" class="u-text-style-body-3">5</div><div class="u-text-style-body-3">min</div></div></div></li><li class="hero_blog_post_details_item"><div class="hero_blog_post_details_icon"><div class="icon_wrap"></div></div><div class="hero_blog_post_details_content"><div class="u-text-style-caption u-foreground-tertiary">Share</div><a fs-copyclip-message="Copied!" fs-copyclip-element="click" href="#" class="u-rich-text u-text-style-body-3">Copy link</a><div fs-copyclip-element="copy-sibling" class="u-display-none w-embed">https://claude.com/blog/ai-ci-cd-on-call</div></div></li><li class="hero_blog_post_details_item"><div class="hero_blog_post_details_icon"><div class="icon_wrap"></div></div><div class="hero_blog_post_details_content"><div class="u-text-style-caption u-foreground-tertiary">Author(s)</div><div class="w-dyn-list"><div role="list" class="blog_author_wrap w-dyn-items"><div role="listitem" class="u-display-inline-flex w-dyn-item"><div class="blog_author_text u-text-style-body-3 u-display-inline-flex">Sachin Malhotra</div></div></div></div></div></li></ul></div></div></div><div data-wf--spacer--section-space="main" class="u-section-spacer w-variant-60a7ad7d-02b0-6682-95a5-2218e6fd1490 u-ignore-trim"></div></section><section id="customer-stories" class="blog_post_section_wrap u-section u-zindex-2"><div data-wf--background-color--background-color="background-primary" class="background_wrap w-variant-cd5f9287-5b9f-b1bf-cfe9-3449eb06f297 u-cover-absolute"></div><div data-wf--spacer--section-space="main" class="u-section-spacer w-variant-60a7ad7d-02b0-6682-95a5-2218e6fd1490 u-ignore-trim"></div><div class="blog_post_contain u-container"><div class="blog_post_component"><div class="blog_post_wrap u-grid-custom"><div class="blog_post_layout u-column-custom"><div class="blog_post_content_wrap"><div data-readtime="content" class="u-rich-text-blog u-margin-trim w-richtext"><p><a href="https://github.com/anthropics/oncall-kit"><em>Set up your own Claude on-call with our setup kit</em></a><em>.</em></p>
