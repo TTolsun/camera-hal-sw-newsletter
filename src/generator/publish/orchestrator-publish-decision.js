@@ -183,8 +183,12 @@ async function decidePublishReadinessAndWriteStatus({
   // 나온 결과가 아닐 수 있다는 신호를 조용히 finalPublishReady=true 뒤에 숨기지 않는다.
   const carryForwardNeedsReview =
     ['missing_expected', 'invalid', 'overflow'].includes(shortlistReport.carry_forward_status);
+  // weekly upsert가 계약 4(coverage mismatch)로 거부되면 weeklyOutputStatus가 'failed'로
+  // 남는다(147행). carryForwardNeedsReview와 같은 방식으로 무조건 OR해 finalPublishReady=true
+  // 뒤에 조용히 숨지 않게 하고 사람 검토를 강제한다.
   const finalEditorReviewRequired =
     carryForwardNeedsReview ||
+    weeklyOutputStatus === 'failed' ||
     (finalPublishReady === true
       ? false
       : editorialReviewable ||
