@@ -52,6 +52,25 @@ test('정본이 읽어낸 날짜가 창 밖이면 35일 풀에서 빠진다(날�
   }
 });
 
+// #927 fix round 1: hasPublishedDate가 "publishedAt이 비어있지 않다"에서
+// "정본이 실제로 파싱한다"로 좁아진 지점(evidenceMetadata :787)은 그 자체를 겨냥한
+// 테스트가 없어서, line 787을 예전 Boolean(raw.publishedAt) 식으로 되돌려도 전체
+// 스위트가 그대로 초록이었다. hasDatedEvidence(rss_item/blog_post_item 레인에서
+// metadata.has_published_date를 그대로 물려받는 필드, :573-575)가 이 좁아짐이
+// 관측 가능하게 드러나는 지점이다.
+test('발행일이 파싱 불가능한 문자열이면 dated evidence로 인정하지 않는다', () => {
+  for (const stamp of ['TBD', 'Unknown', 'coming soon']) {
+    const candidate = normalizeCandidate(raw({ publishedAt: stamp }));
+    assert.equal(candidate.hasDatedEvidence, false,
+      `비어있지 않지만 못 읽는 날짜가 dated evidence로 인정됐다: ${stamp}`);
+  }
+});
+
+test('실제 날짜가 있으면 여전히 dated evidence로 인정한다(위 테스트가 잘못된 이유로 통과하지 않는 대조군)', () => {
+  const candidate = normalizeCandidate(raw({ publishedAt: '2026-08-20' }));
+  assert.equal(candidate.hasDatedEvidence, true);
+});
+
 test('source_change_event는 effective_date가 창 밖이어도 35일 풀에 남는다', () => {
   const now = newsletterDateWindowEnd('2026-06-18');
   const event = {
