@@ -1818,6 +1818,7 @@ module.exports = {
   partitionByCoverageEligibility,
   renderCandidateMarkdown: markdown,
   resolveLinkedReleaseNoteEvidenceItems,
+  urlDedupeKey,
   withinLookback,
   writeNotYetEligibleOverflowIfNeeded,
   writeCollectArtifactsThenAccrueDeepDiveTopics
