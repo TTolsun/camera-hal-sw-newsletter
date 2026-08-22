@@ -174,6 +174,12 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
       min_non_fallback_publish_ready_articles: selectionDiagnostics.min_non_fallback_publish_ready_articles,
       selected_article_count: selectionDiagnostics.selected_article_count
     },
+    // coverage lineage(대상 주·생성 anchor)는 allow-list라 여기 명시하지 않으면 이 리포트에
+    // 실리지 않는다. shortlistReport가 수집 payload에서 이미 옮겨 둔 값을 그대로 옮긴다.
+    coverage_week_key: report.coverage_week_key || '',
+    coverage_start_date: report.coverage_start_date || '',
+    coverage_end_date: report.coverage_end_date || '',
+    generation_anchor_date: report.generation_anchor_date || '',
     composition_mode: selectionDiagnostics.composition_mode,
     composition_reason: selectionDiagnostics.composition_reason,
     composition_summary: selectionDiagnostics.composition_summary || {},

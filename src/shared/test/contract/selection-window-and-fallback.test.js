@@ -744,3 +744,46 @@ test('#124 acceptance: reference window remains context-only', () => {
       .exclusion_reasons.includes('selection_window=reference_not_main')
   );
 });
+
+// 수집(01)/병합 단계가 후보 payload의 top-level에 실어 온 coverage lineage(대상 주·생성
+// anchor·carry-forward 판정)는 buildShortlistReport를 거쳐 shortlistReport로 그대로
+// 옮겨져야 한다 — generation-status·selection-report.json·PR 본문이 전부 이 값을 인용한다.
+test('shortlist report carries the coverage lineage from the collected-candidates payload', () => {
+  const report = buildShortlistReport('2026-08-19', {
+    candidates: [],
+    coverage: {
+      coverage_week_key: '2026-W33',
+      coverage_start_date: '2026-08-10',
+      coverage_end_date: '2026-08-16'
+    },
+    generation_anchor_date: '2026-08-19',
+    carry_forward_status: 'overflow',
+    carry_source: { path: 'articles/content/newsroom/2026-08-12/merged-candidates.json', sha256: 'abc', run_mode: 'scheduled' },
+    not_yet_eligible_overflow: true
+  }, { minArticles: 1 });
+
+  assert.equal(report.coverage_week_key, '2026-W33');
+  assert.equal(report.coverage_start_date, '2026-08-10');
+  assert.equal(report.coverage_end_date, '2026-08-16');
+  assert.equal(report.generation_anchor_date, '2026-08-19');
+  assert.equal(report.carry_forward_status, 'overflow');
+  assert.deepEqual(report.carry_source, { path: 'articles/content/newsroom/2026-08-12/merged-candidates.json', sha256: 'abc', run_mode: 'scheduled' });
+  assert.equal(report.not_yet_eligible_overflow, true);
+});
+
+// collectedCandidates가 후보 배열 그대로인 레거시/테스트 호출부(top-level 메타데이터가
+// 애초에 없는 경우)에서는 coverage lineage가 조용히 빈 값으로 떨어져야 한다 — 존재하지
+// 않는 payload 필드를 읽다가 throw하면 이 파일의 다른 테스트가 전부 깨진다.
+test('shortlist report defaults coverage lineage to empty values when the payload carries none', () => {
+  const report = buildShortlistReport('2026-08-19', [
+    policyPrimaryCandidate(0)
+  ], { minArticles: 1, catchUpPolicy: { enabled: false } });
+
+  assert.equal(report.coverage_week_key, '');
+  assert.equal(report.coverage_start_date, '');
+  assert.equal(report.coverage_end_date, '');
+  assert.equal(report.generation_anchor_date, '');
+  assert.equal(report.carry_forward_status, '');
+  assert.equal(report.carry_source, null);
+  assert.equal(report.not_yet_eligible_overflow, false);
+});

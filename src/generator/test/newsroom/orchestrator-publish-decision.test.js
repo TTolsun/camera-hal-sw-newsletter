@@ -396,6 +396,55 @@ test('editor가 기록한 hard block을 status coverage 입력으로 넘긴다',
   });
 });
 
+// carry-forward가 이번 주 후보 풀을 완전히 채우지 못했으면(missing_expected/invalid/overflow)
+// 나머지 조건이 전부 강한 PASS라도 편집자 검토를 강제로 켠다. 발행 산출물 자체(공개 파일
+// 기록 여부·finalPublishReady)는 이 게이트가 손대지 않는다 — review-only 강등이지 발행
+// 차단이 아니다(게이트 약화 금지: 추가만 한다).
+test('carry_forward_status가 overflow면 강한 PASS 입력에서도 editor_review_required를 강제로 켠다', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    const out = await decide(baseArgs(newsroomDir, newsletterDir, {
+      shortlistReport: {
+        underfilled: false,
+        publish_ready: true,
+        composition_mode: 'normal',
+        editor_review_required: false,
+        carry_forward_status: 'overflow'
+      }
+    }));
+
+    assert.equal(calls.selectionStatusExtraOptions.length, 1);
+    const options = calls.selectionStatusExtraOptions[0];
+    assert.equal(options.editorReviewRequired, true);
+    // finalPublishReady·공개 산출물 기록은 이 게이트가 손대지 않는다.
+    assert.equal(options.finalPublishReady, true);
+    assert.equal(out.shouldWritePublicArtifacts, true);
+    assert.ok(fs.existsSync(path.join(newsletterDir, 'newsletter.md')));
+  });
+});
+
+test('carry_forward_status가 loaded/not_applicable이면 editor_review_required를 건드리지 않는다', async () => {
+  for (const carryForwardStatus of ['loaded', 'not_applicable']) {
+    await withStubbedCollaborators(async (decide, calls) => {
+      const newsroomDir = tempRoot('publish-decision-newsroom-');
+      const newsletterDir = tempRoot('publish-decision-newsletter-');
+      await decide(baseArgs(newsroomDir, newsletterDir, {
+        shortlistReport: {
+          underfilled: false,
+          publish_ready: true,
+          composition_mode: 'normal',
+          editor_review_required: false,
+          carry_forward_status: carryForwardStatus
+        }
+      }));
+
+      const options = calls.selectionStatusExtraOptions[0];
+      assert.equal(options.editorReviewRequired, false);
+    });
+  }
+});
+
 // #870: weekly 병합 검증기에 (1) 병합 전 원본과 (2) 오늘 editor draft의 계약 마커가 실제로
 // 전달되는지 잠근다. weekly writer는 stub이라 이 배선은 다른 어떤 테스트에도 잡히지 않는다.
 // 원본이 없으면 지어낸 출처를 가려낼 수 없고, 마커가 없으면 story 계약 기사가 항상

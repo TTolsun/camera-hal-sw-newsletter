@@ -18,6 +18,7 @@ const fs = require('fs');
 const path = require('path');
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { writeJson } = require('../../shared/common/common');
+const { readRuntimeConfig } = require('../../shared/common/runtime-config');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { COMPOSITION_MODES } = require('../select/newsroom-selection');
 const {
@@ -52,6 +53,11 @@ const {
 } = require('./orchestrator-recovery-writers');
 
 const root = process.cwd();
+// god-file과 동일하게 process.cwd()/readRuntimeConfig로 파생한다(orchestrator-artifact-writers.js
+// 등 이미 분리된 협력자와 같은 패턴). weekly upsert가 계산하는 대상 주(coverage)가 이번 실행의
+// coverageWeekKeyOverride와 어긋나면 안 되므로, god-file이 newsroom-selection에 넘기는 것과
+// 같은 override 값을 여기서도 그대로 읽는다.
+const runtimeConfig = readRuntimeConfig(process.env);
 const FAILURE_KIND_EDITORIAL_REVIEWABLE = 'editorial_reviewable';
 
 async function decidePublishReadinessAndWriteStatus({
@@ -110,7 +116,11 @@ async function decidePublishReadinessAndWriteStatus({
         })
       });
       const weeklyResult = await writeWeeklyNewsletterArtifacts({
-        root, date, editor, ...weeklyMerge
+        root,
+        date,
+        editor,
+        coverageWeekKeyOverride: runtimeConfig.coverageWeekKeyOverride || undefined,
+        ...weeklyMerge
       });
       weeklyArtifactFiles = weeklyResult.files;
       weeklyFinalArticles = ensureArray(weeklyResult.articles);
@@ -167,12 +177,19 @@ async function decidePublishReadinessAndWriteStatus({
     : generationStatus === 'UNDERFILLED_NEEDS_FIX'
       ? COMPOSITION_MODES.THIN_WEEK_REVIEW
       : COMPOSITION_MODES.NEEDS_FIX;
+  // carry-forward가 이번 주 후보 풀을 완전히 채우지 못했으면([E, U) 스캔 실패·형식 불량·
+  // 캡 초과) 발행 산출물 자체는 기존 review-only 의미대로 그대로 쓰되(finalPublishReady는
+  // 손대지 않는다), 편집자 검토는 강제로 켠다 — 그 주의 선정이 완전한 후보 풀 위에서
+  // 나온 결과가 아닐 수 있다는 신호를 조용히 finalPublishReady=true 뒤에 숨기지 않는다.
+  const carryForwardNeedsReview =
+    ['missing_expected', 'invalid', 'overflow'].includes(shortlistReport.carry_forward_status);
   const finalEditorReviewRequired =
-    finalPublishReady === true
+    carryForwardNeedsReview ||
+    (finalPublishReady === true
       ? false
       : editorialReviewable ||
         shortlistReport.editor_review_required === true ||
-        finalCompositionMode !== COMPOSITION_MODES.NORMAL;
+        finalCompositionMode !== COMPOSITION_MODES.NORMAL);
   const files = shouldWritePublicArtifacts
     ? baseFiles.concat([
         // changedArtifacts/review-inventory에 쓰이는 디스크-상대 경로(articles/ 아래).

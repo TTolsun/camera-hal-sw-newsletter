@@ -768,8 +768,28 @@ function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = 
   });
 }
 
+// 수집(01) 또는 병합 단계가 만든 후보 payload가 top-level에 실어 온 coverage lineage다.
+// collectedCandidates가 배열(레거시 호출부·테스트 fixture)이면 이 필드들은 애초에 없으므로
+// 전부 빈 값으로 떨어진다 — buildShortlistReport 자체는 그 값 없이도 동작해 왔으므로 안전하다.
+function collectedCoverageLineage(collectedCandidates) {
+  const coverage = collectedCandidates && typeof collectedCandidates === 'object' && !Array.isArray(collectedCandidates)
+    ? collectedCandidates.coverage
+    : null;
+  const hasCoverage = coverage && typeof coverage === 'object';
+  return {
+    coverage_week_key: hasCoverage ? String(coverage.coverage_week_key || '') : '',
+    coverage_start_date: hasCoverage ? String(coverage.coverage_start_date || '') : '',
+    coverage_end_date: hasCoverage ? String(coverage.coverage_end_date || '') : '',
+    generation_anchor_date: String(collectedCandidates?.generation_anchor_date || ''),
+    carry_forward_status: String(collectedCandidates?.carry_forward_status || ''),
+    carry_source: collectedCandidates?.carry_source || null,
+    not_yet_eligible_overflow: collectedCandidates?.not_yet_eligible_overflow === true
+  };
+}
+
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const rawCandidates = ensureArray(collectedCandidates?.candidates || collectedCandidates);
+  const coverageLineage = collectedCoverageLineage(collectedCandidates);
   const cap = options.cap ?? SHORTLIST_CAP;
   const selectionWindowPolicy = options.selectionWindowPolicy || getSelectionWindowPolicy();
   const {
@@ -1006,6 +1026,10 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     fallback_candidates_promoted: windowDiagnostics.fallback_candidates_promoted,
     selection_window_candidate_counts: windowCandidateCounts,
     not_yet_eligible_count: notYetEligibleCount,
+    // 수집 단계가 계산한 대상 주(coverage)와 carry-forward 판정을 그대로 옮긴다(coverage
+    // lineage). generation-status·selection-report·PR 본문이 이 값을 그대로 인용하므로,
+    // 여기서 빠지면 하류 전부가 다시 'unknown'으로 샌다.
+    ...coverageLineage,
     selection_window_exclusion_summary: summarizeSelectionWindowExclusions(excluded),
     candidate_pool_preflight_passed: shortageReasonCodes.length === 0,
     candidate_shortage_reviewable: shortageReasonCodes.length > 0,

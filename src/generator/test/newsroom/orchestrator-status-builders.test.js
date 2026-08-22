@@ -81,12 +81,40 @@ test('selectionStatusExtra는 sample shortlistReport를 selection 진단 extra�
   assert.ok(Array.isArray(extra.selection_errors));
 });
 
+// coverage lineage(대상 주·carry-forward 판정)는 shortlistReport가 이미 옮겨 둔 값을 그대로
+// generation-status extra로 실어야 한다 — 이 allow-list에서 빠지면 커밋되는 generation-status.json
+// 에는 그 값이 전혀 남지 않는다.
+test('selectionStatusExtra는 shortlistReport의 coverage lineage를 그대로 노출한다', () => {
+  const extra = selectionStatusExtra({
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-16',
+    generation_anchor_date: '2026-08-19',
+    carry_forward_status: 'invalid',
+    carry_source: { path: 'x', sha256: 'y', run_mode: 'scheduled' },
+    not_yet_eligible_count: 3,
+    not_yet_eligible_overflow: true
+  });
+  assert.equal(extra.coverage_week_key, '2026-W33');
+  assert.equal(extra.coverage_start_date, '2026-08-10');
+  assert.equal(extra.coverage_end_date, '2026-08-16');
+  assert.equal(extra.generation_anchor_date, '2026-08-19');
+  assert.equal(extra.carry_forward_status, 'invalid');
+  assert.deepEqual(extra.carry_source, { path: 'x', sha256: 'y', run_mode: 'scheduled' });
+  assert.equal(extra.not_yet_eligible_count, 3);
+  assert.equal(extra.not_yet_eligible_overflow, true);
+});
+
 test('selectionStatusExtra는 빈 report에서 정책 기본값(min_final_articles)을 사용한다', () => {
   const extra = selectionStatusExtra({});
   assert.equal(extra.min_final_articles, articlePolicy.mainArticleCount.min);
   assert.equal(extra.max_final_articles, articlePolicy.mainArticleCount.max);
   assert.equal(extra.selected_article_count, null);
   assert.equal(extra.publish_ready, null);
+  assert.equal(extra.coverage_week_key, '');
+  assert.equal(extra.carry_forward_status, '');
+  assert.equal(extra.carry_source, null);
+  assert.equal(extra.not_yet_eligible_overflow, false);
 });
 
 test('recordEditorSemanticStatus와 editorSemanticStatusExtra는 run state를 경유해 왕복한다', () => {

@@ -26,6 +26,25 @@ function mustFixSummaryText(status) {
   ].join('; ');
 }
 
+// 이번 실행이 다룬 대상 주(coverage_week_key)와 그 기간. 셋 중 하나라도 없으면 lineage가
+// 안 실린 옛 이슈이거나 배선이 빠진 상태이므로 'unknown'을 그대로 보여준다.
+function coverageWeekLine(status) {
+  const key = valueOrUnknown(status.coverage_week_key);
+  const startDate = valueOrUnknown(status.coverage_start_date);
+  const endDate = valueOrUnknown(status.coverage_end_date);
+  return `대상 주차: ${key} (${startDate} ~ ${endDate})`;
+}
+
+// carry_forward_status가 'loaded'/'not_applicable'이 아니면 이번 실행의 후보 풀이 완전하지
+// 않을 수 있다는 뜻이다 — editor_review_required를 강제로 켠 사유를 리뷰어가 여기서 바로
+// 읽을 수 있어야 한다.
+function carryForwardStatusLine(status) {
+  const carryStatus = String(status.carry_forward_status || '');
+  const base = `carry 상태: ${valueOrUnknown(carryStatus || null)}`;
+  if (!carryStatus || ['loaded', 'not_applicable'].includes(carryStatus)) return base;
+  return `${base} — 경고: carry-forward가 이번 주 후보 풀을 완전히 채우지 못했습니다. 편집자 검토가 강제로 켜졌습니다.`;
+}
+
 function recommendedEditorAction(status) {
   if (ensureArray(status.consistency_errors).length > 0) {
     return 'status artifact와 현재 산출물 재계산 결과가 다릅니다. PR 생성 전에 status artifact와 review artifact를 함께 확인하세요.';
@@ -72,6 +91,8 @@ function renderStatusSection(status, handoff = null) {
     `전체 상태: ${valueOrUnknown(status.status)}`,
     `생성 실행 상태: ${valueOrUnknown(status.generation_status)}`,
     `failure_kind=${valueOrUnknown(status.failure_kind || 'none')}`,
+    coverageWeekLine(status),
+    carryForwardStatusLine(status),
     `팩트체크 상태: ${valueOrUnknown(status.fact_check_status)}`,
     `팩트체크 must_fix_count: ${valueOrUnknown(status.must_fix_count ?? 0)}`,
     `팩트체크 source_gap_count: ${valueOrUnknown(status.source_gap_count ?? 0)}`,
@@ -190,6 +211,8 @@ function renderStatusCompositionLines(status = {}) {
 module.exports = {
   countFromStatus,
   mustFixSummaryText,
+  coverageWeekLine,
+  carryForwardStatusLine,
   recommendedEditorAction,
   renderStatusSection,
   renderCompositionNotes,

@@ -129,7 +129,15 @@ function statusSummary(status) {
     'publish_ready',
     'headline_decision',
     'headline_latest_inclusion',
-    'article_exposure_coverage'
+    'article_exposure_coverage',
+    // coverage lineage(대상 주·carry-forward 판정)를 요약에도 싣는다 — 이 요약만 보고도
+    // 이번 실행이 어느 대상 주를 다뤘는지, 후보 carry-forward가 정상이었는지 알 수 있어야
+    // 전체 generation-status.json을 열지 않고도 리뷰할 수 있다.
+    'coverage_week_key',
+    'coverage_start_date',
+    'coverage_end_date',
+    'generation_anchor_date',
+    'carry_forward_status'
   ];
   return Object.fromEntries(fields.filter(field => status[field] !== undefined).map(field => [field, status[field]]));
 }

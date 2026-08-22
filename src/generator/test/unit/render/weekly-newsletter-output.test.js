@@ -226,13 +226,16 @@ test('coverage 필드는 upsert를 통과해 issue.json과 index entry에 남는
 
 test('coverage 필드가 없는 draft로 같은 주에 재실행해도 기존 이슈의 coverage 값이 보존된다', async () => {
   const root = tempRoot();
+  // 2026-06-04와 2026-06-01은 같은 identity 주(2026-W23)이면서 coverageForAnchorDate가
+  // 계산하는 대상 주(2026-W22)도 같다 — 두 번째 실행에서 hard-fail 불일치 검사에 걸리지
+  // 않으면서 "editor가 명시한 값이 계산값과 같아도 그대로 보존된다"를 증명한다.
   const editorDraft = {
     ...draft([section('coverage-first', 'https://example.com/coverage-first')]),
-    coverage_week_key: '2026-W33',
-    coverage_start_date: '2026-08-10',
-    coverage_end_date: '2026-08-16',
+    coverage_week_key: '2026-W22',
+    coverage_start_date: '2026-05-25',
+    coverage_end_date: '2026-05-31',
     coverage_mode: 'iso_week',
-    generation_anchor_date: '2026-08-17'
+    generation_anchor_date: '2026-06-04'
   };
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: editorDraft, tags: [] });
 
@@ -246,9 +249,12 @@ test('coverage 필드가 없는 draft로 같은 주에 재실행해도 기존 �
   });
 
   const issue = readIssue(root, '2026-W23');
-  assert.equal(issue.coverage_week_key, '2026-W33');
+  assert.equal(issue.coverage_week_key, '2026-W22');
+  // generation_anchor_date는 hard-fail 비교 대상이 아니라 순수 pass-through다 — 두 번째
+  // 실행의 draft가 값을 안 줬으므로 첫 실행이 남긴 값이 그대로 보존된다.
+  assert.equal(issue.generation_anchor_date, '2026-06-04');
   const indexEntry = readWeeklyIndexFile(root)[0];
-  assert.equal(indexEntry.coverage_week_key, '2026-W33');
+  assert.equal(indexEntry.coverage_week_key, '2026-W22');
 });
 
 test('a single run cannot add more than the daily intake limit of new articles', async () => {
