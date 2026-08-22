@@ -176,23 +176,48 @@ function validateNewsletterIndex(root, relativePath, errors) {
       }
     }
 
-    const hasAnyCoverageDisplayField = COVERAGE_DISPLAY_FIELDS.some(field => item[field] !== undefined);
-    if (hasAnyCoverageDisplayField) {
-      const missingCoverageDisplayFields = COVERAGE_DISPLAY_FIELDS.filter(field => item[field] === undefined);
-      if (missingCoverageDisplayFields.length) {
+    // coverage_mode는 discriminated union이다(리뷰 fix 3). legacy_rolling은 실제 ISO 주가
+    // 아닌 rolling 조회 범위를 담을 뿐이라 coverage_week_key를 붙일 근거가 없다 — 있으면 잘못된
+    // 주 라벨을 보여주는 셈이므로 오류다. 대신 날짜 2개(coverage_start_date/coverage_end_date)는
+    // 표시에 반드시 필요하므로 필수다. 그 외(iso_week 또는 coverage_mode 부재)는 표시 계층
+    // (coverageDisplayBounds 등)이 3필드를 원자적으로 판단하는 것과 같은 단위로, 하나라도 있으면
+    // 셋 다 있어야 한다는 기존 규칙을 그대로 유지한다.
+    if (item.coverage_mode === 'legacy_rolling') {
+      if (item.coverage_week_key !== undefined) {
         errors.push(
-          `${relativePath} entry ${index} has partial coverage display fields ` +
-          `(missing ${missingCoverageDisplayFields.join(', ')})`
+          `${relativePath} entry ${index} coverage_mode=legacy_rolling must not include coverage_week_key`
         );
       }
-      if (item.coverage_week_key !== undefined && !COVERAGE_WEEK_KEY_PATTERN.test(item.coverage_week_key)) {
-        errors.push(`${relativePath} entry ${index} has invalid coverage_week_key: ${item.coverage_week_key}`);
+      if (item.coverage_start_date === undefined || item.coverage_end_date === undefined) {
+        errors.push(
+          `${relativePath} entry ${index} coverage_mode=legacy_rolling requires coverage_start_date and coverage_end_date`
+        );
       }
       if (item.coverage_start_date !== undefined && !DATE_PATTERN.test(item.coverage_start_date)) {
         errors.push(`${relativePath} entry ${index} has invalid coverage_start_date: ${item.coverage_start_date}`);
       }
       if (item.coverage_end_date !== undefined && !DATE_PATTERN.test(item.coverage_end_date)) {
         errors.push(`${relativePath} entry ${index} has invalid coverage_end_date: ${item.coverage_end_date}`);
+      }
+    } else {
+      const hasAnyCoverageDisplayField = COVERAGE_DISPLAY_FIELDS.some(field => item[field] !== undefined);
+      if (hasAnyCoverageDisplayField) {
+        const missingCoverageDisplayFields = COVERAGE_DISPLAY_FIELDS.filter(field => item[field] === undefined);
+        if (missingCoverageDisplayFields.length) {
+          errors.push(
+            `${relativePath} entry ${index} has partial coverage display fields ` +
+            `(missing ${missingCoverageDisplayFields.join(', ')})`
+          );
+        }
+        if (item.coverage_week_key !== undefined && !COVERAGE_WEEK_KEY_PATTERN.test(item.coverage_week_key)) {
+          errors.push(`${relativePath} entry ${index} has invalid coverage_week_key: ${item.coverage_week_key}`);
+        }
+        if (item.coverage_start_date !== undefined && !DATE_PATTERN.test(item.coverage_start_date)) {
+          errors.push(`${relativePath} entry ${index} has invalid coverage_start_date: ${item.coverage_start_date}`);
+        }
+        if (item.coverage_end_date !== undefined && !DATE_PATTERN.test(item.coverage_end_date)) {
+          errors.push(`${relativePath} entry ${index} has invalid coverage_end_date: ${item.coverage_end_date}`);
+        }
       }
     }
     if (item.coverage_mode !== undefined && !COVERAGE_MODE_VALUES.includes(item.coverage_mode)) {

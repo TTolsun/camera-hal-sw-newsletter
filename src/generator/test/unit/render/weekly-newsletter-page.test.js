@@ -127,3 +127,32 @@ test('coverage_week_key만 있고 날짜가 없으면 깨진 문자열 없이 �
   assert.doesNotMatch(page.issue.title, /ined/);
   assert.doesNotMatch(page.html, /ined/);
 });
+
+// 리뷰 fix 3: legacy_rolling은 ISO 주 라벨을 붙일 근거가 없다(실제 rolling 조회 범위일 뿐이라).
+// 주 라벨(및 발행 identity)은 발행 주(2026-W34)를 그대로 쓰고, 괄호 안 날짜 range만 실제 rolling
+// 범위(coverage_start_date~coverage_end_date)로 바꾼다 — 라벨과 range가 서로 다른 근거의
+// 날짜를 섞어 보여주지 않는다.
+test('coverage_mode가 legacy_rolling이면 주 라벨은 발행 주, range만 rolling 범위로 표시한다', () => {
+  const page = buildWeeklyNewsletterPage({
+    sections: [],
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-17',
+    coverage_mode: 'legacy_rolling',
+    generation_anchor_date: '2026-08-17'
+    // coverage_week_key 없음 — legacy_rolling은 의도적으로 기록하지 않는다.
+  }, { date: '2026-08-17' });
+  assert.equal(page.weeklyKey, '2026-W34');                       // 발행 identity 불변
+  assert.equal(page.issue.title, '2026 W34 (08.10 ~ 08.17)');     // 라벨=발행 주, range=rolling
+  assert.match(page.html, /2026\.08\.10 – 08\.17/);
+  assert.match(page.html, />2026 W34</);
+  assert.doesNotMatch(page.html, /08\.17 ~ 08\.23/);
+});
+
+test('coverage_mode가 legacy_rolling인데 날짜가 없으면 완전히 발행 주 표시로 폴백한다(추측하지 않는다)', () => {
+  const page = buildWeeklyNewsletterPage({
+    sections: [],
+    coverage_mode: 'legacy_rolling'
+    // coverage_start_date/coverage_end_date 누락
+  }, { date: '2026-08-17' });
+  assert.equal(page.issue.title, '2026 W34 (08.17 ~ 08.23)');
+});
