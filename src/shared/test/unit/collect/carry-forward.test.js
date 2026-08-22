@@ -113,18 +113,47 @@ test('invalid: merged-candidates는 있으나 not_yet_eligible 항목에 title/u
 });
 
 // 자동 lineage 스캔은 coverage_week_key/run_mode를 읽어야 매치 여부를 판단할 수 있는데,
-// 파싱조차 안 되는 파일은 그 값을 읽을 수 없어 애초에 "이 파일이 매치였는지" 판정이 불가능하다
-// (어느 날짜 폴더가 매치였을지 추측하지 않는다 — 안전 기본값). 그래서 자동 스캔에서는 파싱 실패
-// 파일을 조용히 건너뛰고, generation-status 흔적 유무로만 not_applicable/missing_expected를
-// 가른다. invalid는 lineage 매치가 실제로 성사된 뒤(coverage_week_key/run_mode를 읽어냄) 그
-// 안의 not_yet_eligible 스키마가 깨졌을 때만 보고한다(schema invalid 테스트 참고) — override
-// 경로처럼 대상이 하나로 고정된 경우엔 파싱 실패 자체도 invalid로 보고한다(아래 override 테스트).
-test('자동 lineage 스캔: 파싱 실패한 파일은 매치 여부를 알 수 없어 건너뛰고, 흔적이 없으면 not_applicable로 남는다', () => {
-  const root = tempRoot('carry-forward-invalid-parse-');
-  writeText(mergedCandidatesPath(root, '2026-08-10'), '{ this is not json');
+// 파싱조차 안 되는 파일은 그 값을 읽을 수 없어 애초에 "이 파일이 매치였는지" 스캔 시점엔 판정할
+// 수 없다. 스캔은 멈추지 않고 계속 진행해 다른 날짜의 정상 artifact를 찾되(아래 "정상 매치가
+// 따로 있으면" 테스트), 끝까지 매치가 하나도 안 나왔는데 파싱 실패가 있었다면 "이 파일이 실제
+// 직전 주 원천이었을 가능성"을 배제할 수 없으므로 not_applicable로 조용히 넘기지 않고 invalid로
+// 승격한다(fix round 1 — 03단계가 아직 안 돌아 generation-status 흔적조차 없는 주에서 손상된
+// 직전 주 원천을 영구히 침묵시키던 구멍 수정).
+test('직전 주로 추정되는 파일이 파싱 불가 + generation-status 흔적도 없으면 invalid + 실패 경로 기록', () => {
+  const root = tempRoot('carry-forward-invalid-parse-no-match-');
+  const filePath = mergedCandidatesPath(root, '2026-08-10');
+  writeText(filePath, '{ this is not json');
+
+  const result = loadCarryForward({ root, coverage: COVERAGE });
+
+  assert.equal(result.status, 'invalid');
+  assert.deepEqual(result.candidates, []);
+  assert.deepEqual(
+    result.carrySource.scan_parse_failures,
+    ['articles/content/collected-news/2026-08-10/merged-candidates.json']
+  );
+});
+
+test('파싱 불가 파일이 섞여 있어도 다른 날짜에 정상 lineage 매치가 있으면 loaded + scan_parse_failures 기록', () => {
+  const root = tempRoot('carry-forward-invalid-parse-with-match-');
+  writeText(mergedCandidatesPath(root, 'run-corrupt'), '{ this is not json');
+  writeJson(mergedCandidatesPath(root, 'run-good'), scheduledPayload([carryItem('good')], '2026-08-11'));
+
+  const result = loadCarryForward({ root, coverage: COVERAGE });
+
+  assert.equal(result.status, 'loaded');
+  assert.deepEqual(result.candidates.map(c => c.title), ['carried-good']);
+  assert.equal(result.carrySource.path, 'articles/content/collected-news/run-good/merged-candidates.json');
+  assert.deepEqual(
+    result.carrySource.scan_parse_failures,
+    ['articles/content/collected-news/run-corrupt/merged-candidates.json']
+  );
+});
+
+test('파싱 실패도 없고 매치도 없으면 기존대로 generation-status 흔적 유무로 not_applicable/missing_expected를 가른다', () => {
+  const root = tempRoot('carry-forward-no-failure-no-match-');
   const result = loadCarryForward({ root, coverage: COVERAGE });
   assert.equal(result.status, 'not_applicable');
-  assert.deepEqual(result.candidates, []);
   assert.equal(result.carrySource, null);
 });
 
