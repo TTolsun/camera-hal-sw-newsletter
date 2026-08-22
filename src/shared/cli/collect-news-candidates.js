@@ -16,7 +16,13 @@ const {
 } = require('../common/candidate-artifacts');
 const { parseManualSourceUrls } = require('../collect/collection-intent');
 const { readRuntimeConfig, resolveRunMode } = require('../common/runtime-config');
-const { monthRangeOverlapsWindow } = require('../common/date-signals');
+const {
+  dateSourceConfidence,
+  displayDate,
+  isKnownDateSource,
+  monthRangeOverlapsWindow,
+  resolveCandidateDateEvidence
+} = require('../common/date-signals');
 const { coverageForAnchorDate, classifyCoverageWindow } = require('../common/coverage-week');
 const { loadCarryForward, resolveCarryForwardStatus } = require('../collect/carry-forward');
 const {
@@ -72,7 +78,8 @@ const {
 } = require('../collect/source-quality-classifier');
 const {
   canonicalContentUrl,
-  fetchUrlForContent
+  fetchUrlForContent,
+  normalizeUrl
 } = require('../collect/source-intelligence-utils');
 const {
   commitSourceSnapshotWrites,
@@ -782,7 +789,10 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
     firstBehavior(summary || title) ||
     (toolingEvidence.eligible ? 'Official Android tooling article describes native Android app workflow behavior.' : '')
   ).trim();
-  const hasPublishedDate = Boolean(String(raw.publishedAt || raw.published_date || '').trim());
+  // 정본이 판정한다. raw.published_date/publishedAt/published_at 중 실제로 파싱되는 값만
+  // "발행일 있음"으로 인정한다(resolveCandidateDateEvidence가 못 읽으면 effective_date로
+  // 넘어가는데, 여기서는 그것도 publish_ready_date_evidence 기준으로 함께 본다).
+  const hasPublishedDate = resolveCandidateDateEvidence(raw).publish_ready_date_evidence;
   const hasVersionOrRelease = Boolean(versionOrRelease);
   const hasApiOrComponent = Boolean(apiOrComponent);
   const hasBehaviorChange = Boolean(behaviorChange && hasBehaviorChangeForRaw(raw, behaviorChange));
@@ -1120,6 +1130,26 @@ function normalizeCandidate(raw) {
     url,
     publishedAt: raw.publishedAt || '',
     published_date: raw.publishedAt || '',
+    // 날짜 정본이 두 번째로 보는 필드들. 화이트리스트에 없으면 정규화 단계에서 사라져
+    // withinLookback/withinPrimarySelectionWindow와 선정 단계가 목록 fallback 후보의
+    // 날짜를 영영 못 본다.
+    //
+    // 여기 실을 수 있는 것은 raw가 실제로 측정해 온 값뿐이다. resolveCandidateDateEvidence가
+    // 돌려주는 date_source는 못 찾았을 때 'visible_date'/'missing'으로 메운 기본값이라,
+    // 그걸 후보 레코드에 굳히면 측정하지 않은 출처를 후보가 주장하게 된다. 실제로
+    // deep-dive-topic-accrual.candidateDateFields는 candidate.date_source가 있으면 그대로
+    // 믿고 신뢰도를 표에서 뽑으므로, 기본값 'visible_date'가 심층 큐 state에 신뢰도 100으로
+    // 굳는다(실측 32일 강등 후보 44건 전부 0→100). 파생값은 읽는 쪽이 정본으로 다시 구한다.
+    //
+    // 날짜 문자열은 displayDate로만 옮긴다. normalizeDate는 'August 14, 2026'을 로컬 자정으로
+    // 해석해 Asia/Seoul에서 하루 앞당기고(실측 -> '2026-08-13'), '2026-08'을 '2026-08-01'로
+    // 조작한다. 아는 형식이 아니면 ''를 돌려 날짜를 지어내지 않는다.
+    effective_date: displayDate(raw.effective_date || raw.effectiveDate),
+    date_source: String(raw.date_source || raw.dateSource || ''),
+    date_confidence: Number(raw.date_confidence || raw.dateConfidence || 0),
+    // normalizeUrl이 http(s)가 아니거나 파싱 불가한 값을 ''로 만든다. canonicalContentUrl만
+    // 쓰면 '/blog'나 'javascript:...'가 그대로 통과해 근거 URL 자리에 실린다(실측).
+    date_evidence_url: canonicalContentUrl(normalizeUrl(raw.date_evidence_url || raw.dateEvidenceUrl || '')),
     summary,
     relevanceScore: score,
     relevance_score: score,
@@ -1206,8 +1236,32 @@ function newsletterDateWindowEnd(value) {
   return parseDate(`${dateText}T23:59:59.999Z`);
 }
 
+// 창 계산에 쓸 시각. 어느 필드를 볼지는 정본이 정하고, 시각은 그 필드의 원문에서 읽는다.
+// 원문을 먼저 읽는 이유는 타임스탬프를 살리기 위해서다(정본이 돌려주는 date는 YYYY-MM-DD로
+// 잘려 있어, publishedAt '2026-08-22T20:00:00-08:00'처럼 실제 UTC가 하루 뒤인 값이 창
+// 경계에서 밀린다).
+//
+// 폴백이 필요한 이유: 정본은 normalizeDate로 문자열 안의 ISO 날짜를 정규식으로 뽑아내지만
+// parseDate는 new Date()라, 'Posted on 2024-01-05 by staff' 같은 값은 정본만 날짜로 읽는다.
+// 폴백이 없으면 withinPrimarySelectionWindow의 가드는 "날짜 있음"으로 통과시키고
+// withinLookback은 "날짜 없음"으로 무조건 통과시켜, 2년 지난 후보가 이번 주 창 가점을 받는다.
+function candidateWindowDate(candidate) {
+  const evidence = resolveCandidateDateEvidence(candidate);
+  if (!evidence.date) return null;
+  if (evidence.date_field === 'published_date') {
+    return parseDate(candidate.published_date || candidate.publishedAt || candidate.published_at) ||
+      parseDate(evidence.date);
+  }
+  return parseDate(evidence.date);
+}
+
 function withinLookback(candidate, now, lookbackDays) {
-  const date = parseDate(candidate.publishedAt);
+  // source_change_event lane의 effective_date는 "발행일"이 아니라 "문서 변경 유효일"이라
+  // 몇 달 전 값이 들어온다(실측 2026-06-18 CameraX: 감지는 이번 주, 릴리스 행 날짜는 3개월 전).
+  // 이 lane을 창으로 자르면 같은 문서 변경이 매주 재발화·재탈락하는 기아 루프가 된다.
+  // 지금까지는 publishedAt이 항상 ''라 우연히 통과하던 것을 명시로 바꾼다.
+  if (isSourceChangeEventCandidate(candidate)) return true;
+  const date = candidateWindowDate(candidate);
   if (!date) return true;
   const windowEndMs = now.getTime();
   const windowStartMs = windowEndMs - lookbackDays * DAY_MS;
@@ -1242,16 +1296,23 @@ function withinLookback(candidate, now, lookbackDays) {
 // 않는다. 다만 전역 캡(MAX_FINAL_CANDIDATES)은 그 뒤에 한 번 더 걸리므로, 순위가 밀린 nodate
 // 후보가 최종 후보 파일에서 빠질 수는 있다.
 //
-// primary 판정은 coverage-week.js의 classifyCoverageWindow로 통일한다(Task 8) — "이번 주
-// 신호"는 이제 now로부터 뒤로 며칠이 아니라, coverage 주(직전 완결 ISO 주) 안(0~6일)인지로
-// 정의된다. source_change_event 후보는 여전히 가드 밖에 둔다: publishedAt이 항상 빈 문자열
-// 이라 classifyCoverageWindow가 이 후보를 절대 'primary'로 분류할 수 없으므로, 위 주석이
-// 설명하는 "이 lane의 순위는 이번 변경으로 달라지지 않는다"를 지키려면 무조건 true를
-// 유지해야 한다.
+// primary 판정은 coverage-week.js의 classifyCoverageWindow로 통일한다 — "이번 주 신호"는
+// now로부터 뒤로 며칠이 아니라, coverage 주(직전 완결 ISO 주) 안(0~6일)인지로 정의된다.
+// source_change_event 후보는 여전히 가드 밖에 둔다: publishedAt이 항상 빈 문자열이라
+// classifyCoverageWindow가 이 후보를 절대 'primary'로 분류할 수 없으므로, 위 주석이 설명하는
+// "이 lane의 순위는 이번 변경으로 달라지지 않는다"를 지키려면 무조건 true를 유지해야 한다.
+//
+// 분류에 넘기는 날짜는 raw publishedAt이 아니라 날짜 정본이 읽어낸 값이다. publishedAt만 보면
+// 목록 fallback 후보(effective_date만 있고 publishedAt은 '')가 이 가드에서 영영 막힌다.
+// 정본은 publishedAt/published_date/effective_date를 정해진 우선순위로 보므로, raw publishedAt
+// 대비 판정이 넓어지는 경우는 (a) publishedAt이 없고 effective_date가 있는 후보와
+// (b) publishedAt이 new Date()로는 못 읽히지만 정본의 정규식은 읽어내는 후보뿐이다.
+// 날짜 문자열(YYYY-MM-DD)을 넘기는 것으로 충분하다 — coverage 분류는 일 단위다.
 function withinPrimarySelectionWindow(candidate, coverage) {
   if (isSourceChangeEventCandidate(candidate)) return true;
-  if (!parseDate(candidate.publishedAt)) return false;
-  return classifyCoverageWindow(candidate.publishedAt, coverage) === 'primary';
+  const evidence = resolveCandidateDateEvidence(candidate);
+  if (!evidence.date) return false;
+  return classifyCoverageWindow(evidence.date, coverage) === 'primary';
 }
 
 // coverage를 생략한 호출부(테스트 포함)를 위해 now의 날짜를 anchor로 삼아 기본 coverage를

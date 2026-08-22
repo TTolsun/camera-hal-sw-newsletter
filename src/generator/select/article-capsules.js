@@ -402,6 +402,7 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
     effective_date: text(candidate.effective_date || candidate.effectiveDate),
     date_source: text(candidate.date_source),
     date_confidence: number(candidate.date_confidence),
+    date_evidence_url: text(candidate.date_evidence_url),
     source_event_id: text(candidate.source_event_id),
     evidence_id: text(candidate.evidence_id),
     event_type: text(candidate.event_type),
@@ -537,6 +538,7 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
     delete capsule.date_source;
     delete capsule.date_confidence;
   }
+  if (!capsule.date_evidence_url) delete capsule.date_evidence_url;
   if (!capsule.source_event_id) delete capsule.source_event_id;
   if (!capsule.evidence_id) delete capsule.evidence_id;
   if (!capsule.event_type) delete capsule.event_type;
