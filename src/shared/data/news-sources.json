@@ -1865,6 +1865,35 @@
       ]
     },
     {
+      "id": "claude-blog",
+      "name": "Claude Blog",
+      "sourceUrl": "https://claude.com/blog",
+      "rssUrl": null,
+      "category": "ai",
+      "priority": "medium",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "Claude 제품 소식과 개발 workflow 사례 확인",
+      "keywords": [
+        "Claude",
+        "Claude Code",
+        "agent",
+        "CI",
+        "code review",
+        "incident response"
+      ],
+      "sourceRole": "generic_trend_source",
+      "sourceUrlQualityHint": "generic_ai_or_it_trend",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ]
+    },
+    {
       "id": "claude-code-changelog",
       "name": "Claude Code Changelog",
       "sourceUrl": "https://code.claude.com/docs/en/changelog",

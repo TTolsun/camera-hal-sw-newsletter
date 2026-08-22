@@ -89,6 +89,29 @@ const {
 const {
   accrueDeepDiveTopicsFromCollect
 } = require('../collect/deep-dive-topic-accrual');
+const {
+  createBoundedFetchClient,
+  MAX_BYTES_PER_INDEX_PAGE,
+  MAX_BYTES_PER_SOURCE_RUN
+} = require('../collect/bounded-fetch-client');
+// 사유 어휘의 정본은 resolver 모듈이다. 여기서 복제하면 두 목록이 갈라지고,
+// 갈라진 쪽이 조용히 'unknown'으로 떨어진다.
+const { FAIL_CLOSED_REASONS } = require('../collect/dated-article-index-resolver');
+
+const DATED_ARTICLE_SOURCE_IDS = ['claude-blog', 'anthropic-news'];
+// 어휘를 닫아 둔다. 요약이 세는 kind와 resolver가 내는 kind가 갈라지면
+// 사건은 났는데 집계는 0으로 남는다.
+const DATED_ARTICLE_DIAGNOSTIC_KINDS = [
+  'skipped_index_budget',
+  'skipped_article_budget',
+  'article_fetch_failed',
+  'recent_window_budget_exhausted',
+  'fail_closed'
+];
+
+function usesDatedArticleResolver(source) {
+  return DATED_ARTICLE_SOURCE_IDS.includes(String(source?.id || ''));
+}
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -1699,6 +1722,155 @@ function writeCollectArtifactsThenAccrueDeepDiveTopics({
   return deepDiveAccrual;
 }
 
+// 목록 fetch는 collector가, 기사 fetch와 fail-closed 판정은 resolver가 소유한다.
+// 두 곳이 같은 콜백을 받아야 다섯 kind가 한 배열에 모인다. 각자 만들면
+// skipped_index_budget이 요약에서 통째로 빠진다.
+//
+// 누적 바이트도 여기에 모은다. 소스가 예외로 끝나도 collectFromSource의 finally가
+// recordSourceBytes를 부르므로, 예산 초과로 실패한 소스의 수신량이 요약에 남는다.
+function createSourceCollectionDiagnostics() {
+  const events = [];
+  const bytesBySource = {};
+  return {
+    record(event) { events.push({ ...event }); },
+    recordSourceBytes(sourceId, bytes) { bytesBySource[String(sourceId)] = Number(bytes) || 0; },
+    events() { return events.slice(); },
+    receivedBytesBySource() { return { ...bytesBySource }; }
+  };
+}
+
+// 목록도 예산 안에서 받아야 maxBytesPerIndexPage가 실제로 강제된다.
+// 다만 전역 fetchText를 바꾸면 다른 기존 소스의 수집 결과가 달라지므로
+// dated-article resolver를 쓰는 두 소스에만 적용한다.
+//
+// fetchTextImpl을 인자로 받는다. 전역 fetchText를 직접 부르면 호출자가 주입한 stub이
+// 무시돼 dated-article 아닌 소스의 테스트가 실제 네트워크를 탄다.
+async function fetchSourceIndexText(source, target, fetchClient, onDiagnostic, fetchTextImpl = fetchText) {
+  if (!fetchClient) return fetchTextImpl(target);
+  const response = await fetchClient.fetchBounded(target, { maxBytes: MAX_BYTES_PER_INDEX_PAGE });
+
+  // 판정 순서가 곧 진단의 정확도다. 예산 초과를 먼저 본다 —
+  // Task 3은 상한에 걸린 2xx의 ok를 false로 두므로(Step 3 주석 (4)),
+  // ok를 먼저 보면 예산 초과가 http 오류로 둔갑한다. 반대로 이 검사를
+  // "body가 비었는가"로 두면 404·503·timeout까지 예산 초과로 잡힌다.
+  // 예산 진단은 예산을 올려야 고쳐지는 사건에만 붙어야 한다.
+  if (response.truncated || response.sourceBudgetExhausted) {
+    // 목록 fetch는 resolver 호출 전에 끝난다. 이 사건을 볼 수 있는 것은 collector뿐이므로
+    // 여기서 내지 않으면 skipped_index_budget이 어디에도 남지 않는다.
+    if (typeof onDiagnostic === 'function') {
+      onDiagnostic({
+        kind: 'skipped_index_budget',
+        url: target,
+        receivedBytes: response.receivedBytes || 0,
+        limitedBy: response.limitedBy || '',
+        detail: `index exceeded the byte budget (status ${response.status}); truncated index is not parsed`
+      });
+    }
+    throw new Error(`skipped_index_budget: ${target}, status ${response.status}`);
+  }
+  // HTTP/전송 실패는 원래 오류 그대로 올린다.
+  if (!response.ok) {
+    throw new Error(response.error || `http_${response.status}`);
+  }
+  // 예산에도 안 걸리고 2xx인데 body가 비었다. '기사 없음'이 아니라 수집 실패다.
+  // 빈 인덱스를 파싱하면 후보 0건이 진단 없이 지나간다(리졸버 등록 후에는
+  // shouldSuppressGenericFallback이 true라 generic 폴백도 없다).
+  if (!response.body) {
+    throw new Error(`empty_index_body: ${target}, status ${response.status}`);
+  }
+  return response.body;
+}
+
+async function collectFromSource(source, {
+  now,
+  lookbackDays,
+  fetchTextImpl = fetchText,
+  createClient = createBoundedFetchClient,
+  onDiagnostic,
+  onSourceBytes
+} = {}) {
+  const feed = sourceFeed(source);
+  const target = feed || fetchUrlForContent(source.url);
+  // 소스당 client 하나. 인덱스 fetch와 resolver가 같은 객체를 공유해야 6MiB 누적
+  // 카운터가 하나로 유지된다. 별도 인스턴스를 만들면 실제로는 최대 12MiB가 흐른다.
+  const fetchClient = usesDatedArticleResolver(source)
+    ? createClient({ maxBytesPerSourceRun: MAX_BYTES_PER_SOURCE_RUN })
+    : null;
+  try {
+    const text = await fetchSourceIndexText(source, target, fetchClient, onDiagnostic, fetchTextImpl);
+    const indexItems = parseSourceSpecificItems(text, source);
+    // 일부 공식 소스는 인덱스 페이지(월별/아카이브 링크)만 연결돼 있어 인덱스 파싱만으로는
+    // dated 증거를 못 만든다(source-gap). 최신 상세 페이지를 따라가 dated 후보를 만들고,
+    // 만들지 못하면 기존 인덱스 동작을 유지한다.
+    // 수집 창(now/lookbackDays)도 함께 넘긴다. 릴리스 드롭처럼 "창 안일 때만 상세를 따라가는"
+    // 리졸버가 창을 따로 하드코딩하면 catch-up run(LOOKBACK_DAYS 조정)이나 과거 날짜 재수집에서
+    // 파이프라인 창과 어긋나 조용히 누락된다.
+    const followedItems = await resolveFollowedSourceItems(source, {
+      indexItems,
+      text,
+      fetchTextImpl,
+      fetchClient,
+      now,
+      lookbackDays,
+      onDiagnostic
+    });
+    const sourceSpecificItems = followedItems.length > 0 ? followedItems : indexItems;
+    const resolvedSourceSpecificItems = sourceSpecificItems.length > 0
+      ? await resolveLinkedReleaseNoteEvidenceItems(sourceSpecificItems, source, { fetchTextImpl })
+      : [];
+    // followed-resolver 소스는 큐레이션 추출이 비면 신호 없음이므로 제너릭 폴백을 막는다
+    // (pipermail/bulletin 인덱스 나비링크를 후보로 만들던 origin).
+    const candidates = resolvedSourceSpecificItems.length > 0
+      ? resolvedSourceSpecificItems.map(item => normalizeCandidate(item))
+      : shouldSuppressGenericFallback(source) ? []
+      : feed ? parseRss(text, source) : parseHtmlPage(text, source);
+    return { candidates, receivedBytes: fetchClient ? fetchClient.consumedBytes() : 0 };
+  } finally {
+    // finally인 이유: 인덱스가 예산에 걸리면 fetchSourceIndexText가 throw하고 return에
+    // 도달하지 못한다. 그러면 skipped_index_budget이 난 소스가 정작 received_bytes_by_source에서
+    // 빠져, "예산을 넘겼다"는 진단과 "0바이트 받았다"는 요약이 서로 모순된다.
+    if (fetchClient && typeof onSourceBytes === 'function') {
+      onSourceBytes(source.id, fetchClient.consumedBytes());
+    }
+  }
+}
+
+// 설계서 §4.12: 누적 수신 바이트, date_source 분포, 예산 skip 건수, fail-closed 사유별 건수.
+// candidates는 dedupe/cap을 지난 최종 후보라 분포도 "살아남은 후보 기준"이다. 그게
+// 알고 싶은 값이다 — 수집 직후 분포는 뒤에서 잘려나간 것까지 세어 실제와 어긋난다.
+function summarizeDatedArticleCollection({
+  events = [],
+  candidates = [],
+  receivedBytesBySource = {}
+} = {}) {
+  const kindCounts = {};
+  for (const kind of DATED_ARTICLE_DIAGNOSTIC_KINDS) kindCounts[kind] = 0;
+  const failClosedReasons = {};
+  for (const event of events) {
+    if (kindCounts[event.kind] === undefined) continue;
+    kindCounts[event.kind] += 1;
+    if (event.kind !== 'fail_closed') continue;
+    // 어휘 밖 사유는 'unknown'으로 정규화한다. 자유 문자열을 그대로 세면 오타 하나가
+    // 새 사유로 잡혀 사유별 집계가 조용히 흩어지고, "닫힌 어휘"라는 계약이 이름만 남는다.
+    const reason = String(event.reason || '');
+    const key = FAIL_CLOSED_REASONS.includes(reason) ? reason : 'unknown';
+    failClosedReasons[key] = (failClosedReasons[key] || 0) + 1;
+  }
+  const dateSourceCounts = {};
+  for (const candidate of candidates) {
+    if (!usesDatedArticleResolver({ id: candidate.source_id })) continue;
+    const key = String(candidate.date_source || '') || 'missing';
+    dateSourceCounts[key] = (dateSourceCounts[key] || 0) + 1;
+  }
+  return {
+    events,
+    kind_counts: kindCounts,
+    fail_closed_reasons: failClosedReasons,
+    date_source_counts: dateSourceCounts,
+    received_bytes_by_source: receivedBytesBySource
+  };
+}
+
 async function main() {
   // Fail fast on a malformed manual_source_urls input before doing any
   // collection work, so we never leave a manifest-less candidate artifact.
@@ -1710,39 +1882,19 @@ async function main() {
     : new Date();
   const sources = parseSources();
   const failures = [];
+  const collectionDiagnostics = createSourceCollectionDiagnostics();
   let candidates = [];
   let sourceMonitorResult = null;
 
   for (const source of sources) {
     try {
-      const feed = sourceFeed(source);
-      const target = feed || fetchUrlForContent(source.url);
-      const text = await fetchText(target);
-      const indexItems = parseSourceSpecificItems(text, source);
-      // 일부 공식 소스는 인덱스 페이지(월별/아카이브 링크)만 연결돼 있어 인덱스 파싱만으로는
-      // dated 증거를 못 만든다(source-gap). 최신 상세 페이지를 따라가 dated 후보를 만들고,
-      // 만들지 못하면 기존 인덱스 동작을 유지한다.
-      // 수집 창(now/lookbackDays)도 함께 넘긴다. 릴리스 드롭처럼 "창 안일 때만 상세를 따라가는"
-      // 리졸버가 창을 따로 하드코딩하면 catch-up run(LOOKBACK_DAYS 조정)이나 과거 날짜 재수집에서
-      // 파이프라인 창과 어긋나 조용히 누락된다.
-      const followedItems = await resolveFollowedSourceItems(source, {
-        indexItems,
-        text,
-        fetchTextImpl: fetchText,
+      const result = await collectFromSource(source, {
         now,
-        lookbackDays
+        lookbackDays,
+        onDiagnostic: collectionDiagnostics.record,
+        onSourceBytes: collectionDiagnostics.recordSourceBytes
       });
-      const sourceSpecificItems = followedItems.length > 0 ? followedItems : indexItems;
-      const resolvedSourceSpecificItems = sourceSpecificItems.length > 0
-        ? await resolveLinkedReleaseNoteEvidenceItems(sourceSpecificItems, source, { fetchTextImpl: fetchText })
-        : [];
-      // followed-resolver 소스는 큐레이션 추출이 비면 신호 없음이므로 제너릭 폴백을 막는다
-      // (pipermail/bulletin 인덱스 나비링크를 후보로 만들던 origin).
-      const parsed = resolvedSourceSpecificItems.length > 0
-        ? resolvedSourceSpecificItems.map(item => normalizeCandidate(item))
-        : shouldSuppressGenericFallback(source) ? []
-        : feed ? parseRss(text, source) : parseHtmlPage(text, source);
-      candidates.push(...parsed);
+      candidates.push(...result.candidates);
     } catch (error) {
       failures.push({ source: source.name, message: error.message });
     }
@@ -1831,7 +1983,12 @@ async function main() {
     }),
     carry_source: carryForward.carrySource,
     candidates,
-    failures
+    failures,
+    dated_article_collection: summarizeDatedArticleCollection({
+      events: collectionDiagnostics.events(),
+      candidates,
+      receivedBytesBySource: collectionDiagnostics.receivedBytesBySource()
+    })
   };
   writeCollectArtifactsThenAccrueDeepDiveTopics({
     root,
@@ -1866,7 +2023,9 @@ module.exports = {
   capNotYetEligible,
   capPerSource,
   collapseSeriesRepresentatives,
+  collectFromSource,
   componentFromText,
+  createSourceCollectionDiagnostics,
   decisionFromCandidate,
   dedupe,
   evidenceMetadata,
@@ -1879,7 +2038,9 @@ module.exports = {
   partitionByCoverageEligibility,
   renderCandidateMarkdown: markdown,
   resolveLinkedReleaseNoteEvidenceItems,
+  summarizeDatedArticleCollection,
   urlDedupeKey,
+  usesDatedArticleResolver,
   withinLookback,
   writeNotYetEligibleOverflowIfNeeded,
   writeCollectArtifactsThenAccrueDeepDiveTopics

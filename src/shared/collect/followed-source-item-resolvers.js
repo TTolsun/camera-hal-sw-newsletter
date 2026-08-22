@@ -8,6 +8,7 @@ const { resolveLibcameraReleaseAnnouncementItems } = require('./libcamera-releas
 const { resolveRaspberryPiLibcameraReleaseItems } = require('./raspberrypi-libcamera-releases');
 const { resolvePatchworkLibcameraPatchItems } = require('./patchwork-libcamera-patches');
 const { resolveAospReleaseCameraChangeItems } = require('./aosp-release-camera-changes');
+const { resolveDatedArticleIndexItems } = require('./dated-article-index-resolver');
 
 // 각 리졸버의 첫 인자가 다르다(security-bulletin은 indexItems, libcamera는 text/indexHtml,
 // raspberrypi는 text/atom, patchwork는 text/JSON). 그래서 레지스트리 항목이 공통 컨텍스트
@@ -42,6 +43,22 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     id: 'aosp-release-camera-changes',
     resolve: ({ text, source, fetchTextImpl, now, lookbackDays }) =>
       resolveAospReleaseCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays })
+  },
+  {
+    id: 'claude-blog',
+    resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic }) =>
+      resolveDatedArticleIndexItems({
+        html: text, source, fetchClient, now, lookbackDays, onDiagnostic,
+        config: { pathPrefix: '/blog', origin: 'https://claude.com', componentLabel: 'Claude Code / AI coding agent' }
+      })
+  },
+  {
+    id: 'anthropic-news',
+    resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic }) =>
+      resolveDatedArticleIndexItems({
+        html: text, source, fetchClient, now, lookbackDays, onDiagnostic,
+        config: { pathPrefix: '/news', origin: 'https://www.anthropic.com', componentLabel: 'Anthropic product announcement' }
+      })
   }
 ];
 
@@ -53,10 +70,10 @@ function followedSourceResolverIds() {
  * source.id에 맞는 followed-source 리졸버를 찾아 호출하고 그 결과(후보 배열)를 반환한다.
  * 등록된 리졸버가 없으면 빈 배열을 반환한다(기존 `let followedItems = []` 기본값과 동일).
  */
-async function resolveFollowedSourceItems(source, { indexItems = [], text = '', fetchTextImpl, now, lookbackDays } = {}) {
+async function resolveFollowedSourceItems(source, { indexItems = [], text = '', fetchTextImpl, fetchClient, now, lookbackDays, onDiagnostic } = {}) {
   const entry = FOLLOWED_SOURCE_RESOLVERS.find(candidate => candidate.id === source.id);
   if (!entry) return [];
-  return entry.resolve({ indexItems, text, source, fetchTextImpl, now, lookbackDays });
+  return entry.resolve({ indexItems, text, source, fetchTextImpl, fetchClient, now, lookbackDays, onDiagnostic });
 }
 
 /**
