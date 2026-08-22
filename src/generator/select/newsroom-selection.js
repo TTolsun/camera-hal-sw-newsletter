@@ -31,9 +31,15 @@ const {
   selectionDateEvidence,
   selectionDate,
   datePrecision,
+  freshnessAnchorDate,
   candidateUrl,
   candidateSource
 } = require('./selection-candidate-fields');
+const {
+  coverageForAnchorDate,
+  coverageAgeDays,
+  classifyCoverageWindow
+} = require('../../shared/common/coverage-week');
 const {
   candidateScope,
   isForbiddenMainScope,
@@ -122,24 +128,6 @@ const {
 
 const publishReadyCompositionPolicy = getPublishReadyCompositionPolicy();
 
-function utcDayStart(date) {
-  if (!date || Number.isNaN(date.getTime())) return null;
-  return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
-}
-
-function newsletterDayStart(newsletterDate) {
-  return utcDayStart(newsletterDate ? new Date(`${newsletterDate}T00:00:00Z`) : new Date());
-}
-
-function daysSincePublished(candidate, newsletterDate) {
-  const rawDate = selectionDate(candidate);
-  const published = rawDate ? new Date(rawDate) : null;
-  const publishedDay = utcDayStart(published);
-  const baseDay = newsletterDayStart(newsletterDate);
-  if (publishedDay === null || baseDay === null) return null;
-  return Math.max(0, Math.floor((baseDay - publishedDay) / (24 * 60 * 60 * 1000)));
-}
-
 // month 정밀도 후보(AOSP Site Updates의 월별 묶음 행)는 그 달 어느 날의 변경인지 알 수 없어
 // 날짜가 달의 1일로 채워진다. 나이는 계속 1일 기준(가장 오래된 쪽)으로 보수적으로 재서 main
 // 선정 창 등급을 느슨하게 만들지 않는다. 다만 stale 탈락만은 달 범위 겹침으로 구제한다 —
@@ -149,22 +137,35 @@ function daysSincePublished(candidate, newsletterDate) {
 // 창(35일) 밖으로 밀려 참고 섹션에도 남지 않았다.
 // 겹침 판정 방식만 같고 창 길이는 서로 다른 knob이다(수집=runtimeConfig.lookbackDays,
 // 선정=policy.referenceContextDays). 두 값을 계약으로 묶지는 않는다.
-function monthRangeStillInReferenceWindow(candidate, newsletterDate, policy) {
+// 창 상한만 coverage 주의 끝(E, coverage_end_exclusive_at)으로 바꾼다 — 실행일(오늘)을
+// 상한으로 쓰면 같은 후보가 실행 요일에 따라 구제 여부가 흔들린다. coverage 앵커는 실행
+// 요일과 무관하게 고정되므로 이 겹침 판정도 고정된다.
+function monthRangeStillInReferenceWindow(candidate, coverage, policy) {
   if (datePrecision(candidate) !== 'month') return false;
-  const baseDay = newsletterDayStart(newsletterDate);
-  if (baseDay === null) return false;
-  const windowStartMs = baseDay - policy.referenceContextDays * 24 * 60 * 60 * 1000;
-  return monthRangeOverlapsWindow(selectionDate(candidate), windowStartMs, baseDay);
+  const windowEndMs = new Date(coverage.coverage_end_exclusive_at).getTime();
+  const windowStartMs = windowEndMs - policy.referenceContextDays * 24 * 60 * 60 * 1000;
+  return monthRangeOverlapsWindow(selectionDate(candidate), windowStartMs, windowEndMs);
 }
 
-function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectionWindowPolicy()) {
-  const ageDays = daysSincePublished(candidate, newsletterDate);
+// 선정 창(primary/fallback/reference/stale)의 시간 anchor는 실행일(오늘)이 아니라 직전
+// 완결 UTC ISO 주(coverage)다 — 같은 기사가 실행 요일에 따라 다른 창에 떨어지는 mislabel을
+// 막는다. classifyCoverageWindow가 나이 등급을 매기고, 여기서는 문구·month 겹침 구제만 얹는다.
+// newsletterDate가 비었거나 형식이 안 맞으면(레거시 호출부 호환) 오늘(KST)로 채운다 — 이
+// 함수 자체는 항상 이렇게 동작했고, anchor 누락을 막는 책임은 상위 진입점
+// (selectFinalArticlesWithDiagnostics)의 throw가 진다.
+function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectionWindowPolicy(), options = {}) {
+  const anchorDate = freshnessAnchorDate(newsletterDate);
+  const coverage = coverageForAnchorDate(anchorDate, options.coverageWeekKeyOverride);
+  const publishedAt = selectionDate(candidate);
+  const ageDays = coverageAgeDays(publishedAt, coverage);
+  const classification = classifyCoverageWindow(publishedAt, coverage);
   const precision = datePrecision(candidate);
   const precisionNote = precision === 'month' ? 'month-level date precision; ' : '';
   const dateEvidence = selectionDateEvidence(candidate);
   const dateLabel = dateEvidence.date_field === 'effective_date' ? 'effective_date' : 'published';
+  const coverageWeekLabel = `coverage week ${coverage.coverage_week_key} (${coverage.coverage_start_date} to ${coverage.coverage_end_date})`;
 
-  if (ageDays === null) {
+  if (classification === 'unknown') {
     return {
       freshness_window: 'unknown',
       days_since_published: null,
@@ -172,42 +173,50 @@ function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectio
     };
   }
 
-  if (ageDays <= policy.primarySelectionDays) {
+  if (classification === 'not_yet_eligible') {
+    return {
+      freshness_window: 'not_yet_eligible',
+      days_since_published: ageDays,
+      selection_window_reason: `${precisionNote}${dateLabel} date is after ${coverageWeekLabel} ends; not yet eligible for this coverage week`
+    };
+  }
+
+  if (classification === 'primary') {
     return {
       freshness_window: 'primary',
       days_since_published: ageDays,
-      selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; within primary ${policy.primarySelectionDays} day window`
+      selection_window_reason: `${precisionNote}within ${coverageWeekLabel} (based on ${dateLabel})`
     };
   }
 
-  if (ageDays <= policy.fallbackSelectionDays) {
+  if (classification === 'fallback') {
     return {
       freshness_window: 'fallback',
       days_since_published: ageDays,
-      selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; within fallback ${policy.fallbackSelectionDays} day window`
+      selection_window_reason: `${precisionNote}${ageDays} day(s) before ${coverageWeekLabel}; within fallback window (based on ${dateLabel})`
     };
   }
 
-  if (ageDays <= policy.referenceContextDays) {
+  if (classification === 'reference') {
     return {
       freshness_window: 'reference',
       days_since_published: ageDays,
-      selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; within reference ${policy.referenceContextDays} day window`
+      selection_window_reason: `${precisionNote}${ageDays} day(s) before ${coverageWeekLabel}; within reference window (based on ${dateLabel})`
     };
   }
 
-  if (monthRangeStillInReferenceWindow(candidate, newsletterDate, policy)) {
+  if (monthRangeStillInReferenceWindow(candidate, coverage, policy)) {
     return {
       freshness_window: 'reference',
       days_since_published: ageDays,
-      selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; month range still overlaps the reference ${policy.referenceContextDays} day window`
+      selection_window_reason: `${precisionNote}month range still overlaps ${coverageWeekLabel}'s reference window (based on ${dateLabel})`
     };
   }
 
   return {
     freshness_window: 'stale',
     days_since_published: ageDays,
-    selection_window_reason: `${precisionNote}${ageDays} day(s) since ${dateLabel}; older than reference ${policy.referenceContextDays} day window`
+    selection_window_reason: `${precisionNote}older than ${coverageWeekLabel}'s reference window (based on ${dateLabel})`
   };
 }
 
@@ -260,14 +269,16 @@ function decorateCandidate(rawCandidate, newsletterDate, options = {}) {
   );
   const selectionWindowPolicy = options.selectionWindowPolicy || getSelectionWindowPolicy();
   const scope = candidateScope(candidate);
-  const score_breakdown = scoreCandidate(candidate, newsletterDate);
+  const score_breakdown = scoreCandidate(candidate, newsletterDate, options.coverageWeekKeyOverride);
   const headline = computeHeadlineScore({
     ...candidate,
     ...scope,
     score_breakdown
   }, options.headlinePolicy || getHeadlinePolicy());
   const score_filter_reasons = scoreFilterReasons(score_breakdown);
-  const windowMetadata = freshnessWindowMetadata(candidate, newsletterDate, selectionWindowPolicy);
+  const windowMetadata = freshnessWindowMetadata(candidate, newsletterDate, selectionWindowPolicy, {
+    coverageWeekKeyOverride: options.coverageWeekKeyOverride
+  });
   return {
     ...candidate,
     ...scope,
@@ -338,6 +349,7 @@ function selectionWindowExclusionReason(candidate) {
   if (window === 'reference') return 'reference_not_main';
   if (window === 'stale') return 'stale_not_main';
   if (window === 'unknown') return 'unknown_not_main';
+  if (window === 'not_yet_eligible') return 'not_yet_eligible_not_main';
   return '';
 }
 
@@ -361,6 +373,7 @@ function partitionSelectionWindows(candidates) {
   const fallback = [];
   const reference = [];
   const windowExcluded = [];
+  const notYetEligible = [];
 
   for (const candidate of ensureArray(candidates)) {
     const window = text(candidate.freshness_window);
@@ -368,6 +381,12 @@ function partitionSelectionWindows(candidates) {
       primary.push(candidate);
     } else if (window === 'fallback') {
       fallback.push(candidate);
+    } else if (window === 'not_yet_eligible') {
+      // E(coverage 주 끝) 이후에 발행된 후보는 stale/reference와 다른 이유로 제외된다 —
+      // 오래된 게 아니라 아직 이 coverage 주에 들어오지 않았을 뿐이다. 참고 섹션에도
+      // 넣지 않는다(참고는 지난 신호를 보여주는 자리이지, 아직 오지 않은 다음 주 신호를
+      // 미리 보여주는 자리가 아니다). 별도 진단 카운트(not_yet_eligible_count)로만 남긴다.
+      notYetEligible.push(appendSelectionWindowExclusion(candidate));
     } else {
       const excluded = appendSelectionWindowExclusion(candidate);
       windowExcluded.push(excluded);
@@ -381,7 +400,8 @@ function partitionSelectionWindows(candidates) {
     primary,
     fallback,
     reference,
-    windowExcluded
+    windowExcluded,
+    notYetEligible
   };
 }
 
@@ -400,7 +420,10 @@ function summarizeSelectionWindowExclusions(excluded) {
 function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_CAP, options = {}) {
   const excluded = [];
   const eligible = [];
-  const decorateOptions = { selectionWindowPolicy: options.selectionWindowPolicy };
+  const decorateOptions = {
+    selectionWindowPolicy: options.selectionWindowPolicy,
+    coverageWeekKeyOverride: options.coverageWeekKeyOverride
+  };
   for (const candidate of ensureArray(rawCandidates).map(item => decorateCandidate(item, newsletterDate, decorateOptions))) {
     if (candidate.exclusion_reasons.length > 0) {
       excluded.push(appendSelectionWindowExclusion(candidate));
@@ -435,14 +458,16 @@ function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_C
       primary: windows.primary,
       fallback: windows.fallback
     },
-    excluded: excluded.concat(windows.windowExcluded),
+    excluded: excluded.concat(windows.windowExcluded).concat(windows.notYetEligible),
     referenceContextCandidates: windows.reference.slice(0, cap),
     windowCandidateCounts: {
       primary: windows.primary.length,
       fallback: windows.fallback.length,
       reference: windows.reference.length,
-      excluded: windows.windowExcluded.length
-    }
+      excluded: windows.windowExcluded.length,
+      not_yet_eligible: windows.notYetEligible.length
+    },
+    notYetEligibleCount: windows.notYetEligible.length
   };
 }
 
@@ -516,7 +541,8 @@ function selectFinalArticlesFromPool(shortlist, options = {}) {
   const maxArticles = options.maxArticles ?? MAX_FINAL_ARTICLES;
   const candidates = ensureArray(shortlist).map(candidate =>
     candidate.score_breakdown ? candidate : decorateCandidate(candidate, options.date || '', {
-      selectionWindowPolicy: options.selectionWindowPolicy
+      selectionWindowPolicy: options.selectionWindowPolicy,
+      coverageWeekKeyOverride: options.coverageWeekKeyOverride
     })
   );
   const selected = [];
@@ -567,8 +593,19 @@ function fallbackWindowReason(primarySelectedCount, minArticles) {
 function selectFinalArticlesWithDiagnostics(shortlist, options = {}) {
   const minArticles = options.minArticles ?? MIN_FINAL_ARTICLES;
   const rawCandidates = ensureArray(shortlist);
-  const enforceSelectionWindow = rawCandidates.some(candidate => text(candidate.freshness_window)) ||
-    Boolean(options.date);
+  const alreadyWindowed = rawCandidates.some(candidate => text(candidate.freshness_window));
+  const hasCoverageAnchor = Boolean(options.date) || Boolean(options.coverageWeekKeyOverride);
+  // coverage 앵커 없이 조용히 오늘로 폴백하면 같은 후보가 실행 요일에 따라 다른
+  // freshness_window로 mislabel된다 — coverage 정합의 전제가 깨진다. 후보가 이미
+  // freshness_window를 갖고 있으면(상위에서 decorate를 마쳤으면) 여기서 다시 anchor가
+  // 필요하지 않으므로 그 경우는 통과시킨다.
+  if (!alreadyWindowed && rawCandidates.length > 0 && !hasCoverageAnchor) {
+    throw new Error(
+      'selectFinalArticlesWithDiagnostics requires options.date (coverage anchor, YYYY-MM-DD) ' +
+      'or options.coverageWeekKeyOverride; silently defaulting to the run date risks mislabeling the coverage week.'
+    );
+  }
+  const enforceSelectionWindow = alreadyWindowed || hasCoverageAnchor;
   if (!enforceSelectionWindow) {
     const selected = selectFinalArticlesFromPool(rawCandidates, options);
     return {
@@ -588,7 +625,8 @@ function selectFinalArticlesWithDiagnostics(shortlist, options = {}) {
     candidate.score_breakdown && text(candidate.freshness_window)
       ? candidate
       : decorateCandidate(candidate, options.date || '', {
-        selectionWindowPolicy: options.selectionWindowPolicy
+        selectionWindowPolicy: options.selectionWindowPolicy,
+        coverageWeekKeyOverride: options.coverageWeekKeyOverride
       })
   );
   const primaryCandidates = decoratedCandidates.filter(candidate => text(candidate.freshness_window) === 'primary');
@@ -734,8 +772,12 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     selectionPools,
     excluded,
     referenceContextCandidates,
-    windowCandidateCounts
-  } = buildEligibleShortlist(rawCandidates, date, cap, { selectionWindowPolicy });
+    windowCandidateCounts,
+    notYetEligibleCount
+  } = buildEligibleShortlist(rawCandidates, date, cap, {
+    selectionWindowPolicy,
+    coverageWeekKeyOverride: options.coverageWeekKeyOverride
+  });
   const selectionCandidatePool = [
     ...ensureArray(selectionPools?.primary),
     ...ensureArray(selectionPools?.fallback)
@@ -957,6 +999,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     fallback_window_reason: windowDiagnostics.fallback_window_reason,
     fallback_candidates_promoted: windowDiagnostics.fallback_candidates_promoted,
     selection_window_candidate_counts: windowCandidateCounts,
+    not_yet_eligible_count: notYetEligibleCount,
     selection_window_exclusion_summary: summarizeSelectionWindowExclusions(excluded),
     candidate_pool_preflight_passed: shortageReasonCodes.length === 0,
     candidate_shortage_reviewable: shortageReasonCodes.length > 0,
@@ -1145,6 +1188,7 @@ module.exports = {
   reporterInputFromShortlist,
   scoreCandidate,
   selectFinalArticles,
+  selectFinalArticlesWithDiagnostics,
   selectionErrors,
   selectionShortageHints,
   selectionWarnings,

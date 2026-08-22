@@ -25,7 +25,7 @@ const {
 
 test('one supporting main article can be public-ready without primary coverage', () => {
   const supportingCount = articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired;
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     ...Array.from({ length: articlePolicy.primaryCameraStack.minRequired }, (_, index) => policyPrimaryCandidate(index)),
     ...Array.from({ length: supportingCount }, (_, index) => policySupportingCandidate(index))
   ]);
@@ -66,7 +66,7 @@ test('one mixed supporting bucket article is public-ready when hard gates pass',
     }
     return policySupportingCandidate(index);
   });
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     ...primaryCandidates,
     ...supportingCandidates
   ]);
@@ -83,7 +83,7 @@ test('one mixed supporting bucket article is public-ready when hard gates pass',
 });
 
 test('publish-ready composition passes with two primary topics and at most one supporting article', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     policyPrimaryCandidate(0, {
       title: 'AOSP Camera direct publish-ready source',
       url: 'https://example.com/publish-ready-direct',
@@ -117,7 +117,7 @@ test('publish-ready composition passes with two primary topics and at most one s
 });
 
 test('direct AOSP Camera or driver shortage no longer blocks one-article policy', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     policyPrimaryCandidate(0, {
       title: 'Android platform adjacent source A',
       url: 'https://example.com/publish-ready-adjacent-a',
@@ -150,7 +150,7 @@ test('direct AOSP Camera or driver shortage no longer blocks one-article policy'
 });
 
 test('raw direct bucket is normalized for Jetpack Compose CameraX-adjacent candidates', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     policyPrimaryCandidate(0, {
       title: 'Google I/O Jetpack Compose adaptive CameraX preview guidance',
       url: 'https://example.com/compose-camerax-adjacent',
@@ -173,7 +173,7 @@ test('raw direct bucket is normalized for Jetpack Compose CameraX-adjacent candi
 });
 
 test('publish-ready supporting max applies across all supporting buckets', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     policyPrimaryCandidate(0, {
       title: 'AOSP Camera direct with too much support',
       url: 'https://example.com/supporting-limit-direct',
@@ -212,7 +212,7 @@ test('publish-ready supporting max applies across all supporting buckets', () =>
 
 test('below configured minimum remains a hard deterministic selection error', () => {
   const belowMinimumCount = Math.max(0, articlePolicy.mainArticleCount.min - 1);
-  const report = buildShortlistReport('2026-05-03',
+  const report = buildShortlistReport('2026-05-10',
     Array.from({ length: belowMinimumCount }, (_, index) => policyPrimaryCandidate(index))
   );
 
@@ -225,7 +225,7 @@ test('below configured minimum remains a hard deterministic selection error', ()
 });
 
 test('supporting-only composition is public-ready with one publishable article', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     ...Array.from({ length: articlePolicy.mainArticleCount.min }, (_, index) => policySupportingCandidate(index))
   ]);
 
@@ -288,7 +288,7 @@ test('supporting fallback-only candidate can satisfy one-article policy', () => 
     `https://example.com/supporting-only-${index}`,
     fallbackTopics[index % fallbackTopics.length]
   ]);
-  const report = buildShortlistReport('2026-05-03', fallbackItems.map(([title, url, component]) => candidate({
+  const report = buildShortlistReport('2026-05-10', fallbackItems.map(([title, url, component]) => candidate({
     title,
     url,
     summary: `${title} changes native build and sanitizer workflow behavior.`,
@@ -362,7 +362,7 @@ test('official Android native tooling is selected as one supporting group with r
       summary: 'Android Studio updates device execution, Gradle sync, profiling, and debugging workflow for Android apps.'
     }
   ].map(item => normalizeCandidate(item));
-  const report = buildShortlistReport('2026-05-22', [
+  const report = buildShortlistReport('2026-05-29', [
     policyPrimaryCandidate(1, {
       title: 'CameraX primary release for grouping regression',
       url: 'https://example.com/camerax-grouping-primary',
@@ -421,7 +421,7 @@ test('native tooling support does not displace a full primary camera selection',
     collectionMode: 'article-item',
     summary: 'Android CLI 1.0 helps agents build, test, debug, and run native Android apps on devices.'
   });
-  const report = buildShortlistReport('2026-05-22', [
+  const report = buildShortlistReport('2026-05-29', [
     ...[
       'CameraX release updates preview stream validation',
       'AOSP Camera provider changes buffer metadata handling',
@@ -522,7 +522,7 @@ test('fallback composition with one supporting article is accepted by one-articl
       camera_hal_relevance_score: 0
     });
   });
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     ...Array.from({ length: articlePolicy.primaryCameraStack.minRequired }, (_, index) => policyPrimaryCandidate(index)),
     ...supportingCandidates
   ]);
@@ -539,7 +539,7 @@ test('fallback composition with one supporting article is accepted by one-articl
 });
 
 test('generic watchlist-only pool remains needs-fix instead of fallback composition', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     candidate({
       title: 'Generic technology market roundup',
       url: 'https://example.com/generic-1',
@@ -591,7 +591,7 @@ test('generic watchlist-only pool remains needs-fix instead of fallback composit
 });
 
 test('non-AI HAL candidates are publish-ready without an AI requirement', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/a' }),
     candidate({ title: 'AOSP Camera change B updates stream compatibility', url: 'https://example.com/b' }),
     candidate({ title: 'Android Camera API change C fixes metadata behavior', url: 'https://example.com/c' }),
@@ -605,7 +605,7 @@ test('non-AI HAL candidates are publish-ready without an AI requirement', () => 
 });
 
 test('generic AI does not displace sufficient Camera HAL candidates', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     candidate({ title: 'Camera HAL update A changes metadata handling', url: 'https://example.com/a', api_or_component: 'Camera HAL metadata' }),
     candidate({ title: 'CameraX release B improves Android Camera validation', url: 'https://example.com/b', api_or_component: 'CameraX' }),
     candidate({ title: 'AOSP Camera provider C updates stream behavior', url: 'https://example.com/c', api_or_component: 'camera provider stream' }),
@@ -625,7 +625,7 @@ test('generic AI does not displace sufficient Camera HAL candidates', () => {
 });
 
 test('#124 acceptance: one primary plus one supporting article is publish-ready', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     policyPrimaryCandidate(0, {
       title: 'Single primary camera stack source',
       url: 'https://example.com/124-single-primary'
@@ -640,7 +640,7 @@ test('#124 acceptance: one primary plus one supporting article is publish-ready'
 });
 
 test('#124 acceptance: publish-ready rejects more than one supporting main article', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     policyPrimaryCandidate(0, {
       title: 'AOSP Camera HAL API publish-ready source',
       url: 'https://example.com/124-direct-primary',

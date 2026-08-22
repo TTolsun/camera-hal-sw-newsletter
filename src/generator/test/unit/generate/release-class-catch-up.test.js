@@ -62,7 +62,8 @@ function freshWeek() {
   ];
 }
 
-// 실측 v0.7.2 모양: 2026-07-27 기준 17일령 → fallback 창(8~21일), release 채널 소스.
+// 실측 v0.7.2 모양: coverage 앵커(2026-07-27, coverage 주 2026-07-20~07-26) 기준 16일령 →
+// fallback 창(7~20일), release 채널 소스.
 function releaseCandidate(overrides = {}) {
   return strongCandidate({
     title: 'v0.7.2', url: 'https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2',
@@ -90,7 +91,7 @@ test('a fallback-window release fills a slot under max even when the week alread
   assert.equal(release.title, 'v0.7.2');
   assert.equal(release.catch_up_lane, 'release_class');
   assert.equal(release.catch_up_origin_window, 'fallback');
-  assert.equal(release.catch_up_age_days, 17);
+  assert.equal(release.catch_up_age_days, 16);
 });
 
 test('a promoted release is evicted from reserve_candidates (no selected/reserve duplication)', () => {

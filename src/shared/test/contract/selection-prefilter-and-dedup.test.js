@@ -48,7 +48,7 @@ test('Issue #238 scope expansion leaves publication count policy unchanged', () 
 });
 
 test('prefilter excludes source gaps, undated watch pages, missing evidence, and duplicate URLs', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     candidate({ title: 'Android Camera HAL release note', url: 'https://example.com/a' }),
     candidate({ title: 'Duplicate URL', url: 'https://example.com/a?utm=1' }),
     candidate({ title: 'Source gap', url: 'https://example.com/b', source_gap_risk: true }),
@@ -87,13 +87,13 @@ test('effective_date can satisfy selection only with publish-ready date quality'
   assert.deepEqual(exclusionReasons(strongEffectiveDate), []);
   assert.ok(exclusionReasons(weakEffectiveDate).includes('missing dated evidence'));
 
-  const strongWindow = freshnessWindowMetadata(strongEffectiveDate, '2026-05-03');
+  const strongWindow = freshnessWindowMetadata(strongEffectiveDate, '2026-05-10');
   assert.equal(strongWindow.freshness_window, 'primary');
-  assert.match(strongWindow.selection_window_reason, /since effective_date/);
+  assert.match(strongWindow.selection_window_reason, /based on effective_date/);
 });
 
 test('near-duplicate titles are prevented', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     candidate({ title: 'CameraX 1.5 release improves compatibility', url: 'https://example.com/a' }),
     candidate({ title: 'CameraX 1.5 release improves Android compatibility', url: 'https://example.com/b' })
   ], { minArticles: 1 });
@@ -127,7 +127,7 @@ test('two camera sections of one roundup stay separate candidates after the hone
   });
   assert.equal(children.length, 2);
 
-  const report = buildShortlistReport('2026-05-21', children.map(child => candidate({
+  const report = buildShortlistReport('2026-05-28', children.map(child => candidate({
     title: child.title,
     url: child.url,
     source: 'Android Developers Blog',

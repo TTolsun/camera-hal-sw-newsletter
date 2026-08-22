@@ -443,12 +443,18 @@ test('generation path passes runtime selection window policy into shortlist repo
     'selectionWindowPolicy: runtimeConfig.selectionWindowPolicy',
     shortlistIndex
   );
+  const coverageWeekKeyOverrideIndex = generator.indexOf(
+    'coverageWeekKeyOverride: runtimeConfig.coverageWeekKeyOverride',
+    shortlistIndex
+  );
 
   assert.notEqual(runtimeConfigIndex, -1);
   assert.notEqual(shortlistIndex, -1);
   assert.notEqual(selectionWindowPolicyIndex, -1);
+  assert.notEqual(coverageWeekKeyOverrideIndex, -1);
   assert.ok(runtimeConfigIndex < shortlistIndex);
   assert.ok(shortlistIndex < selectionWindowPolicyIndex);
+  assert.ok(shortlistIndex < coverageWeekKeyOverrideIndex);
 });
 
 test('validate-site uses shared rendered issue structural validator', () => {

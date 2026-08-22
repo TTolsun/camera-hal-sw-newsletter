@@ -32,7 +32,7 @@ function strongRelease(overrides = {}) {
 }
 
 function report(candidates, policyOverrides = {}) {
-  return buildShortlistReport('2026-06-03', { candidates }, {
+  return buildShortlistReport('2026-06-10', { candidates }, {
     exposureHistory: { articles: [] },
     homepageHeadlineState: EMPTY_HEADLINE_STATE,
     catchUpPolicy: { ...CATCH_UP_POLICY, ...policyOverrides }
@@ -61,8 +61,9 @@ test('catch-up does not promote a second main article from an already-selected C
     strongRelease({
       title: 'CameraX VideoCapture concurrent recording',
       url: `${CAMERA_RELEASE_PAGE}#1.6.0`,
-      // 28일 전(ref 2026-06-03) → reference 윈도우(21<28≤35). catch-up 레인으로 들어가
-      // 같은 릴리스 페이지 dedup이 실제로 동작하는지 검증한다(#574 reference 35일 단축 후에도).
+      // coverage 앵커(2026-06-10, coverage 주 2026-06-01~06-07) 기준 32일 전 → reference
+      // 윈도우(21~34일). catch-up 레인으로 들어가 같은 릴리스 페이지 dedup이 실제로 동작하는지
+      // 검증한다(#574 reference 35일 단축 후에도).
       published_date: '2026-05-06', version_or_release: '1.6.0', behavior_change: 'VideoCapture concurrent recording'
     })
   ]);
