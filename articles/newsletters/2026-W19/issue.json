@@ -247,5 +247,6 @@
   "tags": [
     "Camera HAL",
     "Android"
-  ]
+  ],
+  "coverage_mode": "unverified"
 }

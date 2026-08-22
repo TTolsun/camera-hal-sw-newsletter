@@ -202,5 +202,6 @@
     "Tooling Watch",
     "Camera HAL",
     "Android"
-  ]
+  ],
+  "coverage_mode": "unverified"
 }
