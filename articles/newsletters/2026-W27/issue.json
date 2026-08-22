@@ -603,5 +603,9 @@
   "tags": [
     "Camera HAL",
     "Android"
-  ]
+  ],
+  "coverage_start_date": "2026-06-22",
+  "coverage_end_date": "2026-06-29",
+  "coverage_mode": "legacy_rolling",
+  "generation_anchor_date": "2026-06-29"
 }
