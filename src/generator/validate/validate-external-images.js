@@ -21,7 +21,8 @@ const {
 } = require('../../shared/domain/newsletter-domain-normalize');
 const { ensureArray } = require('../../shared/common/value-coercion');
 const {
-  changedFilesFromGit,
+  changedEntriesFromGit,
+  generatedTargetDatesFromInputs,
   readNewsletterDate,
   strictTargetDatesFromInputs
 } = require('../reporter/validation-targets');
@@ -88,13 +89,18 @@ function changedPublicNewsletterDates(changedFiles = []) {
 // 스텝은 continue-on-error라 job은 계속 진행되고, 리포트 없는 PR에서 카운트만 읽는 게이트는 조용히
 // 통과한다. 그러면 "감사가 아예 돌지 않은 주"가 기계적 차단 없이 머지된다(publish-ready 라벨은
 // 라벨일 뿐 머지를 막지 않는다). 그래서 부재도 위 changedPublicNewsletterDates 스코프에서 막는다.
-function failOnPublishBlockingImageAudit(date, strictDates, committedPublicDates) {
+function failOnPublishBlockingImageAudit(date, strictDates, committedPublicDates, generatedDates) {
   if (!strictDates.has(date)) return;
 
   const relPath = newsroomRelPath(date, 'image-audit-report.json');
   const auditPath = path.join(newsroomDir(root, date), 'image-audit-report.json');
   if (!fs.existsSync(auditPath)) {
-    if (committedPublicDates.has(date)) {
+    // 리포트 **부재**는 그 호를 이번 변경이 만들어 냈을 때만 막는다. 이미 발행된 페이지를
+    // 고치는 변경(예: 과거 호에서 잘못된 캡션 한 줄 삭제)은 이 요구를 사후에 만족시킬 수
+    // 없다 — 감사의 정본 editor-draft.json이 커밋되지 않아 뒤늦게 진실한 리포트를 만들 수
+    // 없기 때문이다. 아래 카운트 검사는 strictDates 그대로라, 리포트가 있으면 아카이브
+    // 수정에서도 publish 차단 조건을 계속 강제한다.
+    if (committedPublicDates.has(date) && generatedDates.has(date)) {
       fail([
         `Newsletter image lineage audit report is missing: newsletter ${date}`,
         `  expected: ${relPath}`,
@@ -294,16 +300,16 @@ function fallbackWarningsFromEditor(date, editor) {
 
 async function main() {
   // changed-file 목록을 한 번만 읽어 strict target 스코프와 커밋 존재 판정에 함께 쓴다.
-  const changedFiles = changedFilesFromGit({ root });
-  const strictDates = strictTargetDatesFromInputs({
-    changedFiles,
-    newsletterDate: readNewsletterDate(newsletterDatePath)
-  });
+  const changedEntries = changedEntriesFromGit({ root });
+  const changedFiles = changedEntries.map(entry => entry.path);
+  const newsletterDate = readNewsletterDate(newsletterDatePath);
+  const strictDates = strictTargetDatesFromInputs({ changedFiles, newsletterDate });
+  const generatedDates = generatedTargetDatesFromInputs({ changedEntries, newsletterDate });
   const committedPublicDates = changedPublicNewsletterDates(changedFiles);
   const images = [];
   for (const item of newsletterItems()) {
     fallbackWarningsFromEditor(item.date, readEditor(item.date));
-    failOnPublishBlockingImageAudit(item.date, strictDates, committedPublicDates);
+    failOnPublishBlockingImageAudit(item.date, strictDates, committedPublicDates, generatedDates);
 
     for (const key of ['html', 'md']) {
       if (!item[key]) continue;
