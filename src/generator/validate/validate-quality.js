@@ -13,8 +13,8 @@ const {
   seedEvidencePackRelPath
 } = require('../../shared/common/artifact-paths');
 const {
-  historicalPolicyWarningReason,
-  strictTargetDates
+  generatedTargetDates,
+  historicalPolicyWarningReason
 } = require('../reporter/validation-targets');
 const {
   PUBLICATION_MODES
@@ -232,7 +232,11 @@ function validateQualityReport(item, { requireReport = false, strictPolicy = fal
   }
 }
 
-const strictDates = strictTargetDates({ root, newsletterDatePath });
+// 품질 재판정은 그 실행이 **만들어 낸** 호에만 건다. 저장된 quality-report는 생성 실행의
+// 산출물이라, 이미 발행된 페이지를 고치는 변경은 이 요구를 사후에 만족시킬 수 없다 — 내용이
+// 바뀌지 않았는데도 그 호가 변경 집합에 들었다는 이유만으로 hard fail이 난다. 실제로
+// 2026-05-05가 그렇게 막혔고, 상태·점수·차감 범주가 동일한 2026-05-20은 경고에 그쳤다.
+const strictDates = generatedTargetDates({ root, newsletterDatePath });
 const currentGenerationDate = currentGenerationStatusDate(generationStatusPath);
 if (currentGenerationDate) strictDates.add(currentGenerationDate);
 const items = newsletterItems();
